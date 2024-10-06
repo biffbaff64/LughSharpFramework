@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Graphics.FrameBuffers;
 
 [PublicAPI]
@@ -33,7 +30,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// <summary>
     /// cubemap sides cache
     /// </summary>
-    private readonly static Cubemap.CubemapSide[] _cubemapSides = Cubemap.CubemapSide.Values();
+    private static readonly Cubemap.CubemapSide[] _cubemapSides = Cubemap.CubemapSide.Values();
 
     /// <summary>
     /// the zero-based index of the active side

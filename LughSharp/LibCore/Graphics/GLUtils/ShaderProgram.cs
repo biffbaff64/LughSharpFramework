@@ -74,21 +74,21 @@ public class ShaderProgram
     /// <summary>
     /// flag indicating whether attributes & uniforms must be present at all times.
     /// </summary>
-    public readonly static bool Pedantic = true;
+    public static readonly bool Pedantic = true;
 
     /// <summary>
     /// code that is always added to the vertex shader code, typically used to
     /// inject a #version line. Note that this is added as-is, you should include
     /// a newline (`\n`) if needed.
     /// </summary>
-    public readonly static string PrependVertexCode = "";
+    public static readonly string PrependVertexCode = "";
 
     /// <summary>
     /// code that is always added to every fragment shader code, typically used
     /// to inject a #version line. Note that this is added as-is, you should
     /// include a newline (`\n`) if needed.
     /// </summary>
-    public readonly static string PrependFragmentCode = "";
+    public static readonly string PrependFragmentCode = "";
     
     // ------------------------------------------------------------------------
 
@@ -105,7 +105,7 @@ public class ShaderProgram
     /// <summary>
     /// the list of currently available shaders
     /// </summary>
-    private readonly static Dictionary< IApplication, List< ShaderProgram >? > _shaders = new();
+    private static readonly Dictionary< IApplication, List< ShaderProgram >? > _shaders = new();
 
     private readonly Dictionary< string, int > _attributes     = new();
     private readonly Dictionary< string, int > _attributeSizes = new();

@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.LibCore.Utils.Exceptions;
 using Matrix4 = LughSharp.LibCore.Maths.Matrix4;
 
 namespace LughSharp.LibCore.Graphics.G2D;
@@ -386,25 +385,25 @@ public class SpriteBatch : IBatch
 
         Vertices[ Idx ]     = x1;
         Vertices[ Idx + 1 ] = y1;
-        Vertices[ Idx + 2 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 2 ] = ColorPackedABGR;
         Vertices[ Idx + 3 ] = u;
         Vertices[ Idx + 4 ] = v;
 
         Vertices[ Idx + 5 ] = x2;
         Vertices[ Idx + 6 ] = y2;
-        Vertices[ Idx + 7 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 7 ] = ColorPackedABGR;
         Vertices[ Idx + 8 ] = u;
         Vertices[ Idx + 9 ] = v2;
 
         Vertices[ Idx + 10 ] = x3;
         Vertices[ Idx + 11 ] = y3;
-        Vertices[ Idx + 12 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 12 ] = ColorPackedABGR;
         Vertices[ Idx + 13 ] = u2;
         Vertices[ Idx + 14 ] = v2;
 
         Vertices[ Idx + 15 ] = x4;
         Vertices[ Idx + 16 ] = y4;
-        Vertices[ Idx + 17 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 17 ] = ColorPackedABGR;
         Vertices[ Idx + 18 ] = u2;
         Vertices[ Idx + 19 ] = v;
 
@@ -451,25 +450,25 @@ public class SpriteBatch : IBatch
 
         Vertices[ Idx ]     = region.X;
         Vertices[ Idx + 1 ] = region.Y;
-        Vertices[ Idx + 2 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 2 ] = ColorPackedABGR;
         Vertices[ Idx + 3 ] = u;
         Vertices[ Idx + 4 ] = v;
 
         Vertices[ Idx + 5 ] = region.X;
         Vertices[ Idx + 6 ] = fy2;
-        Vertices[ Idx + 7 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 7 ] = ColorPackedABGR;
         Vertices[ Idx + 8 ] = u;
         Vertices[ Idx + 9 ] = v2;
 
         Vertices[ Idx + 10 ] = fx2;
         Vertices[ Idx + 11 ] = fy2;
-        Vertices[ Idx + 12 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 12 ] = ColorPackedABGR;
         Vertices[ Idx + 13 ] = u2;
         Vertices[ Idx + 14 ] = v2;
 
         Vertices[ Idx + 15 ] = fx2;
         Vertices[ Idx + 16 ] = region.Y;
-        Vertices[ Idx + 17 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 17 ] = ColorPackedABGR;
         Vertices[ Idx + 18 ] = u2;
         Vertices[ Idx + 19 ] = v;
 
@@ -505,25 +504,25 @@ public class SpriteBatch : IBatch
 
         Vertices[ Idx ]     = x;
         Vertices[ Idx + 1 ] = y;
-        Vertices[ Idx + 2 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 2 ] = ColorPackedABGR;
         Vertices[ Idx + 3 ] = u;
         Vertices[ Idx + 4 ] = v;
 
         Vertices[ Idx + 5 ] = x;
         Vertices[ Idx + 6 ] = fy2;
-        Vertices[ Idx + 7 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 7 ] = ColorPackedABGR;
         Vertices[ Idx + 8 ] = u;
         Vertices[ Idx + 9 ] = v2;
 
         Vertices[ Idx + 10 ] = fx2;
         Vertices[ Idx + 11 ] = fy2;
-        Vertices[ Idx + 12 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 12 ] = ColorPackedABGR;
         Vertices[ Idx + 13 ] = u2;
         Vertices[ Idx + 14 ] = v2;
 
         Vertices[ Idx + 15 ] = fx2;
         Vertices[ Idx + 16 ] = y;
-        Vertices[ Idx + 17 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 17 ] = ColorPackedABGR;
         Vertices[ Idx + 18 ] = u2;
         Vertices[ Idx + 19 ] = v;
 
@@ -562,25 +561,25 @@ public class SpriteBatch : IBatch
 
         Vertices[ Idx ]     = region.X;
         Vertices[ Idx + 1 ] = region.Y;
-        Vertices[ Idx + 2 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 2 ] = ColorPackedABGR;
         Vertices[ Idx + 3 ] = u;
         Vertices[ Idx + 4 ] = v;
 
         Vertices[ Idx + 5 ] = region.X;
         Vertices[ Idx + 6 ] = fy2;
-        Vertices[ Idx + 7 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 7 ] = ColorPackedABGR;
         Vertices[ Idx + 8 ] = u;
         Vertices[ Idx + 9 ] = v2;
 
         Vertices[ Idx + 10 ] = fx2;
         Vertices[ Idx + 11 ] = fy2;
-        Vertices[ Idx + 12 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 12 ] = ColorPackedABGR;
         Vertices[ Idx + 13 ] = u2;
         Vertices[ Idx + 14 ] = v2;
 
         Vertices[ Idx + 15 ] = fx2;
         Vertices[ Idx + 16 ] = region.Y;
-        Vertices[ Idx + 17 ] = Color.ToFloatBitsABGR();
+        Vertices[ Idx + 17 ] = ColorPackedABGR;
         Vertices[ Idx + 18 ] = u2;
         Vertices[ Idx + 19 ] = v;
 

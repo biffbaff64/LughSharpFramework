@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Maths;
 
 [PublicAPI]
@@ -132,16 +129,16 @@ public class Matrix4
     /// </summary>
     public const int M33 = 15;
 
-    public readonly static Quaternion Quat       = new();
-    public readonly static Quaternion Quat2      = new();
-    public readonly static Vector3    LVez       = new();
-    public readonly static Vector3    LVex       = new();
-    public readonly static Vector3    LVey       = new();
-    public readonly static Vector3    TmpVec     = new();
-    public readonly static Matrix4    TmpMat     = new();
-    public readonly static Vector3    Right      = new();
-    public readonly static Vector3    TmpForward = new();
-    public readonly static Vector3    TmpUp      = new();
+    public static readonly Quaternion Quat       = new();
+    public static readonly Quaternion Quat2      = new();
+    public static readonly Vector3    LVez       = new();
+    public static readonly Vector3    LVex       = new();
+    public static readonly Vector3    LVey       = new();
+    public static readonly Vector3    TmpVec     = new();
+    public static readonly Matrix4    TmpMat     = new();
+    public static readonly Vector3    Right      = new();
+    public static readonly Vector3    TmpForward = new();
+    public static readonly Vector3    TmpUp      = new();
 
     public readonly float[] Val = new float[ 16 ];
 

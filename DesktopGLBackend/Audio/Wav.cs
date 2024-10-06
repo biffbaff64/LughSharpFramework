@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace DesktopGLBackend.Audio;
 
 [PublicAPI]

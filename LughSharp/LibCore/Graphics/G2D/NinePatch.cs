@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Graphics.G2D;
 
 /// <summary>
@@ -57,7 +54,7 @@ public class NinePatch
 
     private const float TOLERANCE = 0.1f;
 
-    private readonly static Color _tmpDrawColor = new();
+    private static readonly Color _tmpDrawColor = new();
 
     private float _padBottom = -1;
     private float _padLeft   = -1;

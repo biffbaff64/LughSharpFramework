@@ -33,8 +33,8 @@ public class Quaternion
 {
     // ------------------------------------------------------------------------
 
-    private readonly static Quaternion _tmp1 = new( 0, 0, 0, 0 );
-    private readonly static Quaternion _tmp2 = new( 0, 0, 0, 0 );
+    private static readonly Quaternion _tmp1 = new( 0, 0, 0, 0 );
+    private static readonly Quaternion _tmp2 = new( 0, 0, 0, 0 );
 
     // ------------------------------------------------------------------------
 

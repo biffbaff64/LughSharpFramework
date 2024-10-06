@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
 using Exception = System.Exception;
 
 namespace LughSharp.LibCore.Graphics.G2D;
@@ -31,7 +29,7 @@ namespace LughSharp.LibCore.Graphics.G2D;
 [PublicAPI]
 public partial record TextureAtlasData
 {
-    internal readonly static bool[] HasIndexes = [ false ];
+    internal static readonly bool[] HasIndexes = [ false ];
 
     // ------------------------------------------------------------------------
 

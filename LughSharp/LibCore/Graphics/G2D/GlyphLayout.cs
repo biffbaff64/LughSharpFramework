@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Graphics.G2D;
 
 /// <summary>
@@ -56,7 +53,7 @@ public class GlyphLayout : IPoolable
 
     // ------------------------------------------------------------------------
 
-    private readonly static float            _epsilon      = 0.0001f;
+    private static readonly float            _epsilon      = 0.0001f;
     private readonly        Pool< Color >    _colorPool    = Pools< Color >.Get();
     private readonly        List< Color >    _colorStack   = new( 4 );
     private readonly        Pool< GlyphRun > _glyphRunPool = Pools< GlyphRun >.Get();

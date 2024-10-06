@@ -32,7 +32,7 @@ public class ALC
 {
     // ------------------------------------------------------------------------
 
-    public readonly static int[] AttrList =
+    public static readonly int[] AttrList =
     [
         FREQUENCY,
         REFRESH,

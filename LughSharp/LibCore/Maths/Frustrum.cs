@@ -32,7 +32,7 @@ namespace LughSharp.LibCore.Maths;
 [PublicAPI]
 public class Frustrum
 {
-    protected readonly static Vector3[] ClipSpacePlanePoints =
+    protected static readonly Vector3[] ClipSpacePlanePoints =
     [
         new( -1, -1, -1 ),
         new( 1, -1, -1 ),
@@ -44,7 +44,7 @@ public class Frustrum
         new( -1, 1, 1 )
     ];
 
-    protected readonly static float[] ClipSpacePlanePointsArray = new float[ 8 * 3 ];
+    protected static readonly float[] ClipSpacePlanePointsArray = new float[ 8 * 3 ];
 
     /// <system>
     /// eight points making up the near and far clipping "rectangles".

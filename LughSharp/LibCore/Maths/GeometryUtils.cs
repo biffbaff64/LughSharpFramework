@@ -28,9 +28,9 @@ namespace LughSharp.LibCore.Maths;
 [PublicAPI]
 public class GeometryUtils
 {
-    private readonly static Vector2 _tmp1 = new();
-    private readonly static Vector2 _tmp2 = new();
-    private readonly static Vector2 _tmp3 = new();
+    private static readonly Vector2 _tmp1 = new();
+    private static readonly Vector2 _tmp2 = new();
+    private static readonly Vector2 _tmp3 = new();
 
     /// <summary>
     /// Computes the barycentric coordinates v,w for the specified point in the triangle.

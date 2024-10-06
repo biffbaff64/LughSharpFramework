@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
 using Platform = LughSharp.LibCore.Core.Platform;
 
 namespace LughSharp.LibCore.Graphics.FrameBuffers;

@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Utils.Buffers;
 
 /// <summary>
@@ -34,7 +31,7 @@ namespace LughSharp.LibCore.Utils.Buffers;
 [PublicAPI]
 public static partial class BufferUtils
 {
-    private readonly static List< ByteBuffer > _unsafeBuffers = [ ];
+    private static readonly List< ByteBuffer > _unsafeBuffers = [ ];
 
     private static int _allocatedUnsafe = 0;
 
@@ -72,8 +69,8 @@ public static partial class BufferUtils
     public static ByteBuffer NewByteBuffer( int numBytes, bool isUnsafe = false )
     {
         var buffer = isUnsafe
-                         ? NewDisposableByteBuffer( numBytes )
-                         : ByteBuffer.Allocate( numBytes );
+                        ? NewDisposableByteBufferJni( numBytes )
+                        : ByteBuffer.Allocate( numBytes );
 
         buffer.Order( ByteOrder.NativeOrder );
 
@@ -89,15 +86,6 @@ public static partial class BufferUtils
 
         return buffer;
     }
-    
-//    public static ByteBuffer NewByteBuffer( int numBytes )
-//    {
-////TODO:
-////        var buffer = ByteBuffer.AllocateDirect( numBytes );
-//        buffer.Order( ByteOrder.NativeOrder );
-//
-//        return buffer;
-//    }
 
     /// <summary>
     /// Creates a new <see cref="ShortBuffer"/> with the specified capacity.
@@ -146,17 +134,17 @@ public static partial class BufferUtils
 
         return buffer;
     }
-    
+
     /// <summary>
     /// Copies the contents of src to dst, starting from src[srcOffset], copying numElements
     /// elements. The <see cref="Buffer"/> instance's <see cref="Buffer.Position()"/> is
     /// used to define the offset into the Buffer itself. The position and limit will stay
     /// the same.
     /// </summary>
-    /// <param name="src"> the source array. </param>
-    /// <param name="srcOffset"> the offset into the source array. </param>
-    /// <param name="numElements"> the number of elements to copy. </param>
-    /// <param name="dst"> the destination Buffer, its position is used as an offset. </param>
+    /// <param name="src"> The source array. </param>
+    /// <param name="srcOffset"> The offset into the source array. </param>
+    /// <param name="numElements"> The number of elements to copy. </param>
+    /// <param name="dst"> The destination Buffer, its position is used as an offset. </param>
     public static void Copy( float[] src, int srcOffset, int numElements, Buffer dst )
     {
         CopyJni( src, srcOffset, dst, PositionInBytes( dst ), numElements << 2 );
@@ -167,27 +155,27 @@ public static partial class BufferUtils
     /// be a direct buffer. The method will crash if that is not the case. The position
     /// and limit of the buffer are ignored, the copy is placed at position 0 in the
     /// buffer. After the copying process the position of the buffer is set to 0 and its
-    /// limit is set to numFloats * 4 if it is a ByteBuffer and numFloats if it is a
+    /// limit set to numFloats * 4 if it is a ByteBuffer and numFloats if it is a
     /// FloatBuffer. In case the Buffer is neither a ByteBuffer nor a FloatBuffer the
     /// limit is not set. This is an expert method, use at your own risk.
     /// </summary>
-    /// <param name="src"> the source array </param>
-    /// <param name="dst"> the destination buffer, has to be a direct Buffer </param>
-    /// <param name="numElements"> the number of floats to copy </param>
-    /// <param name="offset"> the offset in src to start copying from </param>
+    /// <param name="src"> The source array </param>
+    /// <param name="dst"> The destination buffer, has to be a direct Buffer </param>
+    /// <param name="numElements"> The number of floats to copy </param>
+    /// <param name="offset"> The offset in src to start copying from </param>
     public static void Copy( float[] src, Buffer dst, int numElements, int offset )
     {
-        if ( dst is ByteBuffer )
+        dst.Limit = dst switch
         {
-            dst.Limit = numElements << 2;
-        }
-        else if ( dst is FloatBuffer )
-        {
-            dst.Limit = numElements;
-        }
+                        ByteBuffer  => numElements << 2,
+                        FloatBuffer => numElements,
+                        _           => dst.Limit
+        };
 
-        CopyJni( src, dst, numElements, offset );
+        Array.Copy( src, offset, dst.Hb, 0, numElements );
         
+//        CopyJni( src, dst, numElements, offset );
+
         dst.Position = 0;
     }
 
@@ -200,12 +188,12 @@ public static partial class BufferUtils
     {
         return dst switch
         {
-            ByteBuffer                 => dst.Position,
-            ShortBuffer or CharBuffer  => dst.Position << 1,
-            IntBuffer or FloatBuffer   => dst.Position << 2,
-            LongBuffer or DoubleBuffer => dst.Position << 3,
-            var _ => throw new GdxRuntimeException
-                         ( $"Can't get position for {dst.GetType().Name} instance" )
+                        ByteBuffer                 => dst.Position,
+                        ShortBuffer or CharBuffer  => dst.Position << 1,
+                        IntBuffer or FloatBuffer   => dst.Position << 2,
+                        LongBuffer or DoubleBuffer => dst.Position << 3,
+                        var _ => throw new GdxRuntimeException
+                                        ( $"Can't get position for {dst.GetType().Name} instance" )
         };
     }
 
@@ -219,12 +207,12 @@ public static partial class BufferUtils
     {
         return dst switch
         {
-            ByteBuffer                 => bytes,
-            ShortBuffer or CharBuffer  => bytes >>> 1,
-            IntBuffer or FloatBuffer   => bytes >>> 2,
-            LongBuffer or DoubleBuffer => bytes >>> 3,
-            var _ => throw new GdxRuntimeException
-                         ( $"Can't copy to a {dst.GetType().Name} instance" )
+                        ByteBuffer                 => bytes,
+                        ShortBuffer or CharBuffer  => bytes >>> 1,
+                        IntBuffer or FloatBuffer   => bytes >>> 2,
+                        LongBuffer or DoubleBuffer => bytes >>> 3,
+                        var _ => throw new GdxRuntimeException
+                                        ( $"Can't copy to a {dst.GetType().Name} instance" )
         };
     }
 
@@ -238,12 +226,12 @@ public static partial class BufferUtils
     {
         return dst switch
         {
-            ByteBuffer                 => elements,
-            ShortBuffer or CharBuffer  => elements << 1,
-            IntBuffer or FloatBuffer   => elements << 2,
-            LongBuffer or DoubleBuffer => elements << 3,
-            var _ => throw new GdxRuntimeException
-                         ( $"Can't copy to a {dst.GetType().Name} instance" )
+                        ByteBuffer                 => elements,
+                        ShortBuffer or CharBuffer  => elements << 1,
+                        IntBuffer or FloatBuffer   => elements << 2,
+                        LongBuffer or DoubleBuffer => elements << 3,
+                        var _ => throw new GdxRuntimeException
+                                        ( $"Can't copy to a {dst.GetType().Name} instance" )
         };
     }
 
@@ -260,13 +248,13 @@ public static partial class BufferUtils
             if ( !_unsafeBuffers.Remove( buffer ) )
             {
                 throw new ArgumentException
-                    ( "buffer not allocated with NewUnsafeByteBuffer, or is already disposed" );
+                                ( "buffer not allocated with NewUnsafeByteBuffer, or is already disposed" );
             }
         }
 
         _allocatedUnsafe -= size;
-        
-        FreeMemory( buffer );
+
+        FreeMemoryJni( buffer );
     }
 
     // ------------------------------------------------------------------------
@@ -276,24 +264,24 @@ public static partial class BufferUtils
     public static char GetChar( ByteBuffer bb, int bi, bool bigEndian )
     {
         return bigEndian
-                   ? MakeChar( bb.Hb![ ( byte ) bi ],
-                               bb.Hb![ ( byte ) ( bi + 1 ) ] )
+                        ? MakeChar( bb.Hb![ ( byte )bi ],
+                                        bb.Hb![ ( byte )( bi + 1 ) ] )
 
-                   // ---------------------------------------
-                   : MakeChar( bb.Hb![ ( byte ) ( bi + 1 ) ],
-                               bb.Hb![ ( byte ) bi ] );
+                        // ---------------------------------------
+                        : MakeChar( bb.Hb![ ( byte )( bi + 1 ) ],
+                                        bb.Hb![ ( byte )bi ] );
     }
 
     public static void PutChar( ByteBuffer bb, int bi, char x, bool bigEndian )
     {
         if ( bigEndian )
         {
-            bb.Hb![ bi ]     = ( byte ) ( x >> 8 );
-            bb.Hb![ bi + 1 ] = ( byte ) x;
+            bb.Hb![ bi ]     = ( byte )( x >> 8 );
+            bb.Hb![ bi + 1 ] = ( byte )x;
         }
 
-        bb.Hb![ bi ]     = ( byte ) x;
-        bb.Hb![ bi + 1 ] = ( byte ) ( x >> 8 );
+        bb.Hb![ bi ]     = ( byte )x;
+        bb.Hb![ bi + 1 ] = ( byte )( x >> 8 );
     }
 
     // ------------------------------------------------------------------------
@@ -303,24 +291,24 @@ public static partial class BufferUtils
     public static short GetShort( ByteBuffer bb, int bi, bool bigEndian )
     {
         return bigEndian
-                   ? MakeShort( bb.Hb![ ( byte ) bi ],
-                                bb.Hb![ ( byte ) ( bi + 1 ) ] )
+                        ? MakeShort( bb.Hb![ ( byte )bi ],
+                                        bb.Hb![ ( byte )( bi + 1 ) ] )
 
-                   // ---------------------------------------
-                   : MakeShort( bb.Hb![ ( byte ) ( bi + 1 ) ],
-                                bb.Hb![ ( byte ) bi ] );
+                        // ---------------------------------------
+                        : MakeShort( bb.Hb![ ( byte )( bi + 1 ) ],
+                                        bb.Hb![ ( byte )bi ] );
     }
 
     public static void PutShort( ByteBuffer bb, int bi, short x, bool bigEndian )
     {
         if ( bigEndian )
         {
-            bb.Hb![ bi ]     = ( byte ) ( x >> 8 );
-            bb.Hb![ bi + 1 ] = ( byte ) x;
+            bb.Hb![ bi ]     = ( byte )( x >> 8 );
+            bb.Hb![ bi + 1 ] = ( byte )x;
         }
 
-        bb.Hb![ bi ]     = ( byte ) x;
-        bb.Hb![ bi + 1 ] = ( byte ) ( x >> 8 );
+        bb.Hb![ bi ]     = ( byte )x;
+        bb.Hb![ bi + 1 ] = ( byte )( x >> 8 );
     }
 
     // ------------------------------------------------------------------------
@@ -344,34 +332,34 @@ public static partial class BufferUtils
 
     private static int GetIntByte( ByteBuffer bb, int bi )
     {
-        return MakeInt( bb.Hb![ ( byte ) bi ],
-                        bb.Hb![ ( byte ) ( bi + 1 ) ],
-                        bb.Hb![ ( byte ) ( bi + 2 ) ],
-                        bb.Hb![ ( byte ) ( bi + 3 ) ] );
+        return MakeInt( bb.Hb![ ( byte )bi ],
+                        bb.Hb![ ( byte )( bi + 1 ) ],
+                        bb.Hb![ ( byte )( bi + 2 ) ],
+                        bb.Hb![ ( byte )( bi + 3 ) ] );
     }
 
     private static int GetIntLong( ByteBuffer bb, int bi )
     {
-        return MakeInt( bb.Hb![ ( byte ) ( bi + 3 ) ],
-                        bb.Hb![ ( byte ) ( bi + 2 ) ],
-                        bb.Hb![ ( byte ) ( bi + 1 ) ],
-                        bb.Hb![ ( byte ) bi ] );
+        return MakeInt( bb.Hb![ ( byte )( bi + 3 ) ],
+                        bb.Hb![ ( byte )( bi + 2 ) ],
+                        bb.Hb![ ( byte )( bi + 1 ) ],
+                        bb.Hb![ ( byte )bi ] );
     }
 
     private static void PutIntByte( ByteBuffer bb, int bi, int x )
     {
-        bb.Hb![ bi ]     = ( byte ) ( x >> 24 );
-        bb.Hb![ bi + 1 ] = ( byte ) ( x >> 16 );
-        bb.Hb![ bi + 2 ] = ( byte ) ( x >> 8 );
-        bb.Hb![ bi + 3 ] = ( byte ) x;
+        bb.Hb![ bi ]     = ( byte )( x >> 24 );
+        bb.Hb![ bi + 1 ] = ( byte )( x >> 16 );
+        bb.Hb![ bi + 2 ] = ( byte )( x >> 8 );
+        bb.Hb![ bi + 3 ] = ( byte )x;
     }
 
     private static void PutIntLong( ByteBuffer bb, int bi, int x )
     {
-        bb.Hb![ bi ]     = ( byte ) x;
-        bb.Hb![ bi + 1 ] = ( byte ) ( x >> 8 );
-        bb.Hb![ bi + 2 ] = ( byte ) ( x >> 16 );
-        bb.Hb![ bi + 3 ] = ( byte ) ( x >> 24 );
+        bb.Hb![ bi ]     = ( byte )x;
+        bb.Hb![ bi + 1 ] = ( byte )( x >> 8 );
+        bb.Hb![ bi + 2 ] = ( byte )( x >> 16 );
+        bb.Hb![ bi + 3 ] = ( byte )( x >> 24 );
     }
 
     // ------------------------------------------------------------------------
@@ -395,50 +383,50 @@ public static partial class BufferUtils
 
     private static long GetLongByte( ByteBuffer bb, int bi )
     {
-        return MakeLong( bb.Hb![ ( byte ) bi ],
-                         bb.Hb![ ( byte ) ( bi + 1 ) ],
-                         bb.Hb![ ( byte ) ( bi + 2 ) ],
-                         bb.Hb![ ( byte ) ( bi + 3 ) ],
-                         bb.Hb![ ( byte ) ( bi + 4 ) ],
-                         bb.Hb![ ( byte ) ( bi + 5 ) ],
-                         bb.Hb![ ( byte ) ( bi + 6 ) ],
-                         bb.Hb![ ( byte ) ( bi + 7 ) ] );
+        return MakeLong( bb.Hb![ ( byte )bi ],
+                        bb.Hb![ ( byte )( bi + 1 ) ],
+                        bb.Hb![ ( byte )( bi + 2 ) ],
+                        bb.Hb![ ( byte )( bi + 3 ) ],
+                        bb.Hb![ ( byte )( bi + 4 ) ],
+                        bb.Hb![ ( byte )( bi + 5 ) ],
+                        bb.Hb![ ( byte )( bi + 6 ) ],
+                        bb.Hb![ ( byte )( bi + 7 ) ] );
     }
 
     private static long GetLongLong( ByteBuffer bb, int bi )
     {
-        return MakeLong( bb.Hb![ ( byte ) ( bi + 7 ) ],
-                         bb.Hb![ ( byte ) ( bi + 6 ) ],
-                         bb.Hb![ ( byte ) ( bi + 5 ) ],
-                         bb.Hb![ ( byte ) ( bi + 4 ) ],
-                         bb.Hb![ ( byte ) ( bi + 3 ) ],
-                         bb.Hb![ ( byte ) ( bi + 2 ) ],
-                         bb.Hb![ ( byte ) ( bi + 1 ) ],
-                         bb.Hb![ ( byte ) bi ] );
+        return MakeLong( bb.Hb![ ( byte )( bi + 7 ) ],
+                        bb.Hb![ ( byte )( bi + 6 ) ],
+                        bb.Hb![ ( byte )( bi + 5 ) ],
+                        bb.Hb![ ( byte )( bi + 4 ) ],
+                        bb.Hb![ ( byte )( bi + 3 ) ],
+                        bb.Hb![ ( byte )( bi + 2 ) ],
+                        bb.Hb![ ( byte )( bi + 1 ) ],
+                        bb.Hb![ ( byte )bi ] );
     }
 
     private static void PutLongByte( ByteBuffer bb, int bi, long x )
     {
-        bb.Hb![ bi ]     = ( byte ) ( x >> 56 );
-        bb.Hb![ bi + 1 ] = ( byte ) ( x >> 48 );
-        bb.Hb![ bi + 2 ] = ( byte ) ( x >> 40 );
-        bb.Hb![ bi + 3 ] = ( byte ) ( x >> 32 );
-        bb.Hb![ bi + 4 ] = ( byte ) ( x >> 24 );
-        bb.Hb![ bi + 5 ] = ( byte ) ( x >> 16 );
-        bb.Hb![ bi + 6 ] = ( byte ) ( x >> 8 );
-        bb.Hb![ bi + 7 ] = ( byte ) x;
+        bb.Hb![ bi ]     = ( byte )( x >> 56 );
+        bb.Hb![ bi + 1 ] = ( byte )( x >> 48 );
+        bb.Hb![ bi + 2 ] = ( byte )( x >> 40 );
+        bb.Hb![ bi + 3 ] = ( byte )( x >> 32 );
+        bb.Hb![ bi + 4 ] = ( byte )( x >> 24 );
+        bb.Hb![ bi + 5 ] = ( byte )( x >> 16 );
+        bb.Hb![ bi + 6 ] = ( byte )( x >> 8 );
+        bb.Hb![ bi + 7 ] = ( byte )x;
     }
 
     private static void PutLongLong( ByteBuffer bb, int bi, long x )
     {
-        bb.Hb![ bi ]     = ( byte ) x;
-        bb.Hb![ bi + 1 ] = ( byte ) ( x >> 8 );
-        bb.Hb![ bi + 2 ] = ( byte ) ( x >> 16 );
-        bb.Hb![ bi + 3 ] = ( byte ) ( x >> 24 );
-        bb.Hb![ bi + 4 ] = ( byte ) ( x >> 32 );
-        bb.Hb![ bi + 5 ] = ( byte ) ( x >> 40 );
-        bb.Hb![ bi + 6 ] = ( byte ) ( x >> 48 );
-        bb.Hb![ bi + 7 ] = ( byte ) ( x >> 56 );
+        bb.Hb![ bi ]     = ( byte )x;
+        bb.Hb![ bi + 1 ] = ( byte )( x >> 8 );
+        bb.Hb![ bi + 2 ] = ( byte )( x >> 16 );
+        bb.Hb![ bi + 3 ] = ( byte )( x >> 24 );
+        bb.Hb![ bi + 4 ] = ( byte )( x >> 32 );
+        bb.Hb![ bi + 5 ] = ( byte )( x >> 40 );
+        bb.Hb![ bi + 6 ] = ( byte )( x >> 48 );
+        bb.Hb![ bi + 7 ] = ( byte )( x >> 56 );
     }
 
     // ------------------------------------------------------------------------
@@ -463,49 +451,49 @@ public static partial class BufferUtils
     private static double GetDoubleByte( ByteBuffer bb, int bi )
     {
         return BitConverter.DoubleToInt64Bits( MakeLong( bb.Hb![ bi ],
-                                                         bb.Hb[ bi + 1 ],
-                                                         bb.Hb[ bi + 2 ],
-                                                         bb.Hb[ bi + 3 ],
-                                                         bb.Hb[ bi + 4 ],
-                                                         bb.Hb[ bi + 5 ],
-                                                         bb.Hb[ bi + 6 ],
-                                                         bb.Hb[ bi + 7 ] ) );
+                        bb.Hb[ bi + 1 ],
+                        bb.Hb[ bi + 2 ],
+                        bb.Hb[ bi + 3 ],
+                        bb.Hb[ bi + 4 ],
+                        bb.Hb[ bi + 5 ],
+                        bb.Hb[ bi + 6 ],
+                        bb.Hb[ bi + 7 ] ) );
     }
 
     private static double GetDoubleLong( ByteBuffer bb, int bi )
     {
         return BitConverter.DoubleToInt64Bits( MakeLong( bb.Hb![ bi + 7 ],
-                                                         bb.Hb[ bi + 6 ],
-                                                         bb.Hb[ bi + 5 ],
-                                                         bb.Hb[ bi + 4 ],
-                                                         bb.Hb[ bi + 3 ],
-                                                         bb.Hb[ bi + 2 ],
-                                                         bb.Hb[ bi + 1 ],
-                                                         bb.Hb[ bi ] ) );
+                        bb.Hb[ bi + 6 ],
+                        bb.Hb[ bi + 5 ],
+                        bb.Hb[ bi + 4 ],
+                        bb.Hb[ bi + 3 ],
+                        bb.Hb[ bi + 2 ],
+                        bb.Hb[ bi + 1 ],
+                        bb.Hb[ bi ] ) );
     }
 
     private static void PutDoubleByte( ByteBuffer bb, int bi, long x )
     {
-        bb.Hb![ bi ]    = ( byte ) ( x >> 56 );
-        bb.Hb[ bi + 1 ] = ( byte ) ( x >> 48 );
-        bb.Hb[ bi + 2 ] = ( byte ) ( x >> 40 );
-        bb.Hb[ bi + 3 ] = ( byte ) ( x >> 32 );
-        bb.Hb[ bi + 4 ] = ( byte ) ( x >> 24 );
-        bb.Hb[ bi + 5 ] = ( byte ) ( x >> 16 );
-        bb.Hb[ bi + 6 ] = ( byte ) ( x >> 8 );
-        bb.Hb[ bi + 7 ] = ( byte ) x;
+        bb.Hb![ bi ]    = ( byte )( x >> 56 );
+        bb.Hb[ bi + 1 ] = ( byte )( x >> 48 );
+        bb.Hb[ bi + 2 ] = ( byte )( x >> 40 );
+        bb.Hb[ bi + 3 ] = ( byte )( x >> 32 );
+        bb.Hb[ bi + 4 ] = ( byte )( x >> 24 );
+        bb.Hb[ bi + 5 ] = ( byte )( x >> 16 );
+        bb.Hb[ bi + 6 ] = ( byte )( x >> 8 );
+        bb.Hb[ bi + 7 ] = ( byte )x;
     }
 
     private static void PutDoubleLong( ByteBuffer bb, int bi, long x )
     {
-        bb.Hb![ bi ]    = ( byte ) x;
-        bb.Hb[ bi + 1 ] = ( byte ) ( x >> 8 );
-        bb.Hb[ bi + 2 ] = ( byte ) ( x >> 16 );
-        bb.Hb[ bi + 3 ] = ( byte ) ( x >> 24 );
-        bb.Hb[ bi + 4 ] = ( byte ) ( x >> 32 );
-        bb.Hb[ bi + 5 ] = ( byte ) ( x >> 40 );
-        bb.Hb[ bi + 6 ] = ( byte ) ( x >> 48 );
-        bb.Hb[ bi + 7 ] = ( byte ) ( x >> 56 );
+        bb.Hb![ bi ]    = ( byte )x;
+        bb.Hb[ bi + 1 ] = ( byte )( x >> 8 );
+        bb.Hb[ bi + 2 ] = ( byte )( x >> 16 );
+        bb.Hb[ bi + 3 ] = ( byte )( x >> 24 );
+        bb.Hb[ bi + 4 ] = ( byte )( x >> 32 );
+        bb.Hb[ bi + 5 ] = ( byte )( x >> 40 );
+        bb.Hb[ bi + 6 ] = ( byte )( x >> 48 );
+        bb.Hb[ bi + 7 ] = ( byte )( x >> 56 );
     }
 
     // ------------------------------------------------------------------------
@@ -556,7 +544,7 @@ public static partial class BufferUtils
     /// <returns> The result. </returns>
     private static char MakeChar( byte b1, byte b0 )
     {
-        return ( char ) ( ( b1 << 8 ) | ( b0 & 0xff ) );
+        return ( char )( ( b1 << 8 ) | ( b0 & 0xff ) );
     }
 
     /// <summary>
@@ -565,7 +553,7 @@ public static partial class BufferUtils
     /// <returns> The result. </returns>
     private static short MakeShort( byte b1, byte b0 )
     {
-        return ( short ) ( ( b1 << 8 ) | ( b0 & 0xff ) );
+        return ( short )( ( b1 << 8 ) | ( b0 & 0xff ) );
     }
 
     /// <summary>
@@ -575,9 +563,9 @@ public static partial class BufferUtils
     private static int MakeInt( byte b3, byte b2, byte b1, byte b0 )
     {
         return ( b3 << 24 )
-             | ( ( b2 & 0xff ) << 16 )
-             | ( ( b1 & 0xff ) << 8 )
-             | ( b0 & 0xff );
+               | ( ( b2 & 0xff ) << 16 )
+               | ( ( b1 & 0xff ) << 8 )
+               | ( b0 & 0xff );
     }
 
     /// <summary>
@@ -586,14 +574,14 @@ public static partial class BufferUtils
     /// <returns> The result. </returns>
     private static long MakeLong( byte b7, byte b6, byte b5, byte b4, byte b3, byte b2, byte b1, byte b0 )
     {
-        return ( ( long ) b7 << 56 )
-             | ( ( ( long ) b6 & 0xff ) << 48 )
-             | ( ( ( long ) b5 & 0xff ) << 40 )
-             | ( ( ( long ) b4 & 0xff ) << 32 )
-             | ( ( ( long ) b3 & 0xff ) << 24 )
-             | ( ( ( long ) b2 & 0xff ) << 16 )
-             | ( ( ( long ) b1 & 0xff ) << 8 )
-             | ( ( long ) b0 & 0xff );
+        return ( ( long )b7 << 56 )
+               | ( ( ( long )b6 & 0xff ) << 48 )
+               | ( ( ( long )b5 & 0xff ) << 40 )
+               | ( ( ( long )b4 & 0xff ) << 32 )
+               | ( ( ( long )b3 & 0xff ) << 24 )
+               | ( ( ( long )b2 & 0xff ) << 16 )
+               | ( ( ( long )b1 & 0xff ) << 8 )
+               | ( ( long )b0 & 0xff );
     }
 
     // ------------------------------------------------------------------------

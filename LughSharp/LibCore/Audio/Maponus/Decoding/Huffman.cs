@@ -35,15 +35,15 @@ public class Huffman
 {
     private const           int     MXOFF    = 250;
     private const           int     HTN      = 34;
-    private readonly static int[][] _valTab0 = [ [ 0, 0 ] ];
+    private static readonly int[][] _valTab0 = [ [ 0, 0 ] ];
 
-    private readonly static int[][] _valTab1 =
+    private static readonly int[][] _valTab1 =
     [
         [ 2, 1 ], [ 0, 0 ], [ 2, 1 ],
         [ 0, 16 ], [ 2, 1 ], [ 0, 1 ], [ 0, 17 ]
     ];
 
-    private readonly static int[][] _valTab2 =
+    private static readonly int[][] _valTab2 =
     [
         [ 2, 1 ], [ 0, 0 ], [ 4, 1 ],
         [ 2, 1 ], [ 0, 16 ], [ 0, 1 ], [ 2, 1 ], [ 0, 17 ], [ 4, 1 ],
@@ -51,7 +51,7 @@ public class Huffman
         [ 2, 1 ], [ 0, 2 ], [ 0, 34 ]
     ];
 
-    private readonly static int[][] _valTab3 =
+    private static readonly int[][] _valTab3 =
     [
         [ 4, 1 ], [ 2, 1 ], [ 0, 0 ],
         [ 0, 1 ], [ 2, 1 ], [ 0, 17 ], [ 2, 1 ], [ 0, 16 ], [ 4, 1 ],
@@ -59,9 +59,9 @@ public class Huffman
         [ 2, 1 ], [ 0, 2 ], [ 0, 34 ]
     ];
 
-    private readonly static int[][] _valTab4 = [ [ 0, 0 ] ]; // dummy
+    private static readonly int[][] _valTab4 = [ [ 0, 0 ] ]; // dummy
 
-    private readonly static int[][] _valTab5 =
+    private static readonly int[][] _valTab5 =
     [
         [ 2, 1 ], [ 0, 0 ], [ 4, 1 ],
         [ 2, 1 ], [ 0, 16 ], [ 0, 1 ], [ 2, 1 ], [ 0, 17 ], [ 8, 1 ],
@@ -72,7 +72,7 @@ public class Huffman
         [ 0, 51 ]
     ];
 
-    private readonly static int[][] _valTab6 =
+    private static readonly int[][] _valTab6 =
     [
         [ 6, 1 ], [ 4, 1 ], [ 2, 1 ],
         [ 0, 0 ], [ 0, 16 ], [ 0, 17 ], [ 6, 1 ], [ 2, 1 ], [ 0, 1 ],
@@ -83,7 +83,7 @@ public class Huffman
         [ 0, 51 ]
     ];
 
-    private readonly static int[][] _valTab7 =
+    private static readonly int[][] _valTab7 =
     [
         [ 2, 1 ], [ 0, 0 ], [ 4, 1 ],
         [ 2, 1 ], [ 0, 16 ], [ 0, 1 ], [ 8, 1 ], [ 2, 1 ], [ 0, 17 ],
@@ -101,7 +101,7 @@ public class Huffman
         [ 0, 83 ], [ 0, 84 ], [ 2, 1 ], [ 0, 69 ], [ 0, 85 ]
     ];
 
-    private readonly static int[][] _valTab8 =
+    private static readonly int[][] _valTab8 =
     [
         [ 6, 1 ], [ 2, 1 ], [ 0, 0 ],
         [ 2, 1 ], [ 0, 16 ], [ 0, 1 ], [ 2, 1 ], [ 0, 17 ], [ 4, 1 ],
@@ -119,7 +119,7 @@ public class Huffman
         [ 2, 1 ], [ 0, 69 ], [ 2, 1 ], [ 0, 84 ], [ 0, 85 ]
     ];
 
-    private readonly static int[][] _valTab9 =
+    private static readonly int[][] _valTab9 =
     [
         [ 8, 1 ], [ 4, 1 ], [ 2, 1 ],
         [ 0, 0 ], [ 0, 16 ], [ 2, 1 ], [ 0, 1 ], [ 0, 17 ],
@@ -137,7 +137,7 @@ public class Huffman
         [ 2, 1 ], [ 0, 53 ], [ 2, 1 ], [ 0, 69 ], [ 0, 85 ]
     ];
 
-    private readonly static int[][] _valTab10 =
+    private static readonly int[][] _valTab10 =
     [
         [ 2, 1 ], [ 0, 0 ], [ 4, 1 ], [ 2, 1 ], [ 0, 16 ], [ 0, 1 ],
         [ 10, 1 ], [ 2, 1 ], [ 0, 17 ], [ 4, 1 ], [ 2, 1 ],
@@ -166,7 +166,7 @@ public class Huffman
         [ 2, 1 ], [ 0, 103 ], [ 0, 119 ]
     ];
 
-    private readonly static int[][] _valTab11 =
+    private static readonly int[][] _valTab11 =
     [
         [ 6, 1 ], [ 2, 1 ], [ 0, 0 ], [ 2, 1 ], [ 0, 16 ], [ 0, 1 ],
         [ 8, 1 ], [ 2, 1 ], [ 0, 17 ], [ 4, 1 ], [ 2, 1 ], [ 0, 32 ],
@@ -195,7 +195,7 @@ public class Huffman
         [ 2, 1 ], [ 0, 103 ], [ 0, 119 ]
     ];
 
-    private readonly static int[][] _valTab12 =
+    private static readonly int[][] _valTab12 =
     [
         [ 12, 1 ], [ 4, 1 ], [ 2, 1 ], [ 0, 16 ], [ 0, 1 ], [ 2, 1 ],
         [ 0, 17 ], [ 2, 1 ], [ 0, 0 ], [ 2, 1 ], [ 0, 32 ], [ 0, 2 ],
@@ -224,7 +224,7 @@ public class Huffman
         [ 2, 1 ], [ 0, 103 ], [ 0, 119 ]
     ];
 
-    private readonly static int[][] _valTab13 =
+    private static readonly int[][] _valTab13 =
     [
         [ 2, 1 ], [ 0, 0 ], [ 6, 1 ], [ 2, 1 ], [ 0, 16 ], [ 2, 1 ],
         [ 0, 1 ], [ 0, 17 ], [ 28, 1 ], [ 8, 1 ], [ 4, 1 ], [ 2, 1 ],
@@ -329,9 +329,9 @@ public class Huffman
         [ 0, 252 ], [ 0, 254 ]
     ];
 
-    private readonly static int[][] _valTab14 = [ [ 0, 0 ] ];
+    private static readonly int[][] _valTab14 = [ [ 0, 0 ] ];
 
-    private readonly static int[][] _valTab15 =
+    private static readonly int[][] _valTab15 =
     [
         [ 16, 1 ], [ 6, 1 ], [ 2, 1 ], [ 0, 0 ], [ 2, 1 ], [ 0, 16 ],
         [ 0, 1 ], [ 2, 1 ], [ 0, 17 ], [ 4, 1 ], [ 2, 1 ], [ 0, 32 ],
@@ -438,7 +438,7 @@ public class Huffman
         [ 0, 239 ], [ 0, 255 ]
     ];
 
-    private readonly static int[][] _valTab16 =
+    private static readonly int[][] _valTab16 =
     [
         [ 2, 1 ], [ 0, 0 ], [ 6, 1 ], [ 2, 1 ], [ 0, 16 ], [ 2, 1 ],
         [ 0, 1 ], [ 0, 17 ], [ 42, 1 ], [ 8, 1 ], [ 4, 1 ], [ 2, 1 ],
@@ -548,7 +548,7 @@ public class Huffman
         [ 0, 254 ], [ 0, 239 ]
     ];
 
-    private readonly static int[][] _valTab24 =
+    private static readonly int[][] _valTab24 =
     [
         [ 60, 1 ], [ 8, 1 ], [ 4, 1 ], [ 2, 1 ], [ 0, 0 ], [ 0, 16 ],
         [ 2, 1 ], [ 0, 1 ], [ 0, 17 ], [ 14, 1 ], [ 6, 1 ], [ 4, 1 ],
@@ -657,7 +657,7 @@ public class Huffman
         [ 2, 1 ], [ 0, 254 ], [ 0, 239 ]
     ];
 
-    private readonly static int[][] _valTab32 =
+    private static readonly int[][] _valTab32 =
     [
         [ 2, 1 ], [ 0, 0 ], [ 8, 1 ],
         [ 4, 1 ], [ 2, 1 ], [ 0, 8 ], [ 0, 4 ], [ 2, 1 ], [ 0, 1 ],
@@ -667,7 +667,7 @@ public class Huffman
         [ 0, 13 ], [ 2, 1 ], [ 0, 15 ], [ 0, 11 ]
     ];
 
-    private readonly static int[][] _valTab33 =
+    private static readonly int[][] _valTab33 =
     [
         [ 16, 1 ], [ 8, 1 ], [ 4, 1 ],
         [ 2, 1 ], [ 0, 0 ], [ 0, 1 ], [ 2, 1 ], [ 0, 2 ], [ 0, 3 ],

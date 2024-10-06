@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
 using Blendmode = LughSharp.LibCore.Maps.Tiled.ITiledMapTile.Blendmode;
 
 namespace LughSharp.LibCore.Maps.Tiled.Tiles;
@@ -37,7 +35,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     public int       ID        { get; set; }
     public Blendmode BlendMode { get; set; } = Blendmode.Alpha;
 
-    private readonly static long _initialTimeOffset = DateTime.Now.Millisecond;
+    private static readonly long _initialTimeOffset = DateTime.Now.Millisecond;
 
     private static   long                 _lastTiledMapRenderTime = 0;
     private readonly int[]                _animationIntervals;

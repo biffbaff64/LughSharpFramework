@@ -22,16 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Window;
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace DesktopGLBackend.Utils;
 
 [PublicAPI]
 public class DesktopGLCursor : ICursor, IDisposable
 {
-    public readonly static List< DesktopGLCursor >                    Cursors       = new();
-    public readonly static Dictionary< ICursor.SystemCursor, Cursor > SystemCursors = new();
+    public static readonly List< DesktopGLCursor >                    Cursors       = new();
+    public static readonly Dictionary< ICursor.SystemCursor, Cursor > SystemCursors = new();
 
     public DesktopGLWindow Window     { get; set; }
     public Pixmap          PixmapCopy { get; set; }

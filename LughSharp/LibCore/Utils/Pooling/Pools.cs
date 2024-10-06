@@ -31,7 +31,7 @@ namespace LughSharp.LibCore.Utils.Pooling;
 [PublicAPI]
 public static class Pools< T >
 {
-    private readonly static Dictionary< Type, Pool< T >? > _typePools = new();
+    private static readonly Dictionary< Type, Pool< T >? > _typePools = new();
 
     /// <summary>
     /// Returns a new or existing pool for the specified type, stored in a Class

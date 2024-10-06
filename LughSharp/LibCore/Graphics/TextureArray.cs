@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Graphics;
 
 /// <summary>
@@ -33,7 +30,7 @@ namespace LughSharp.LibCore.Graphics;
 [PublicAPI]
 public class TextureArray : GLTexture, IManageable
 {
-    private readonly static Dictionary< IApplication, List< TextureArray > > _managedTextureArrays = new();
+    private static readonly Dictionary< IApplication, List< TextureArray > > _managedTextureArrays = new();
 
     private ITextureArrayData _data;
 

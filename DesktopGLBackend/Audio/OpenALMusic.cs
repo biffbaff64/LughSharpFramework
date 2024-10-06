@@ -22,9 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.LibCore.Audio;
 using LughSharp.LibCore.Audio.OpenAL;
-using LughSharp.LibCore.Utils.Exceptions;
 
 namespace DesktopGLBackend.Audio;
 
@@ -34,11 +32,11 @@ public abstract class OpenALMusic : IMusic
 
     protected readonly FileInfo File;
 
-    private readonly static int           _bufferSize     = 4096 * 10;
-    private readonly static int           _bufferCount    = 3;
-    private readonly static int           _bytesPerSample = 2;
-    private readonly static byte[]        _tempBytes      = new byte[ _bufferSize ];
-    private readonly static byte[]        _tempBuffer     = new byte[ _bufferSize ];
+    private static readonly int           _bufferSize     = 4096 * 10;
+    private static readonly int           _bufferCount    = 3;
+    private static readonly int           _bytesPerSample = 2;
+    private static readonly byte[]        _tempBytes      = new byte[ _bufferSize ];
+    private static readonly byte[]        _tempBuffer     = new byte[ _bufferSize ];
     private readonly        OpenALAudio   _audio;
     private readonly        float         _pan                  = 0;
     private readonly        List< float > _renderedSecondsQueue = new( _bufferCount );

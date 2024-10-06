@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.LibCore.Maths.Collision;
-using LughSharp.LibCore.Utils.Exceptions;
 using Matrix3 = LughSharp.LibCore.Maths.Matrix3;
 using Matrix4 = LughSharp.LibCore.Maths.Matrix4;
 
@@ -50,7 +49,7 @@ public class Mesh
 
     // ------------------------------------------------------------------------
 
-    private readonly static Dictionary< IApplication, List< Mesh >? > _meshes = new();
+    private static readonly Dictionary< IApplication, List< Mesh >? > _meshes = new();
 
     private readonly ShortBuffer _shortBuffer = BufferUtils.NewShortBuffer( 100 );
     private readonly Vector3     _tmpV        = new();

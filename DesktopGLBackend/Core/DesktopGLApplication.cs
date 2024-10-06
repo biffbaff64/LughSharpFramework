@@ -22,26 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Audio;
-using DesktopGLBackend.Audio.Mock;
-using DesktopGLBackend.Files;
-using DesktopGLBackend.Input;
-using DesktopGLBackend.Utils;
-using DesktopGLBackend.Window;
-using DotGL;
-using DotGLFW;
-using JetBrains.Annotations;
-using LughSharp.LibCore.Core;
-using LughSharp.LibCore.Graphics.GLUtils;
-using LughSharp.LibCore.Graphics.OpenGL;
-using LughSharp.LibCore.Utils;
-using LughSharp.LibCore.Utils.Collections;
-using LughSharp.LibCore.Utils.Exceptions;
 using Exception = System.Exception;
 using Monitor = DotGLFW.Monitor;
 using Platform = LughSharp.LibCore.Core.Platform;
 
-namespace DesktopGLBackend;
+namespace DesktopGLBackend.Core;
 
 [PublicAPI]
 public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
@@ -80,12 +65,11 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     private          bool               _running = true;
 
     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /// <summary>
     /// Creates a new Desktop Gl Application.
-    /// <para>
     /// Uses the provided <see cref="DesktopGLApplicationConfiguration"/>.
-    /// </para>
     /// </summary>
     /// <param name="listener"> The <see cref="IApplicationListener"/> to use. </param>
     /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration"/> to use.</param>

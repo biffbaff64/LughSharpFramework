@@ -27,7 +27,6 @@ using System.Reflection.Metadata;
 using LughSharp.LibCore.Graphics.Viewport;
 using LughSharp.LibCore.Scenes.Scene2D.Listeners;
 using LughSharp.LibCore.Scenes.Scene2D.UI;
-using LughSharp.LibCore.Utils.Exceptions;
 using Matrix4 = LughSharp.LibCore.Maths.Matrix4;
 using Platform = LughSharp.LibCore.Core.Platform;
 

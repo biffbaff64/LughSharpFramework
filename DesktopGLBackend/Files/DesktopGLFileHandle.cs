@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.LibCore.Files;
-using LughSharp.LibCore.Utils.Exceptions;
 
 namespace DesktopGLBackend.Files;
 

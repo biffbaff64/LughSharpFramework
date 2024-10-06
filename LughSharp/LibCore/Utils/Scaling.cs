@@ -28,16 +28,16 @@ namespace LughSharp.LibCore.Utils;
 [PublicAPI]
 public abstract class Scaling
 {
-    protected readonly static Vector2 Temp = new();
+    protected static readonly Vector2 Temp = new();
 
-    public readonly static Scaling Fit      = new FitScaling();
-    public readonly static Scaling Fill     = new FillScaling();
-    public readonly static Scaling FillX    = new FillXScaling();
-    public readonly static Scaling FillY    = new FillYScaling();
-    public readonly static Scaling Stretch  = new StretchScaling();
-    public readonly static Scaling StretchX = new StretchXScaling();
-    public readonly static Scaling StretchY = new StretchYScaling();
-    public readonly static Scaling None     = new NoScaling();
+    public static readonly Scaling Fit      = new FitScaling();
+    public static readonly Scaling Fill     = new FillScaling();
+    public static readonly Scaling FillX    = new FillXScaling();
+    public static readonly Scaling FillY    = new FillYScaling();
+    public static readonly Scaling Stretch  = new StretchScaling();
+    public static readonly Scaling StretchX = new StretchXScaling();
+    public static readonly Scaling StretchY = new StretchYScaling();
+    public static readonly Scaling None     = new NoScaling();
 
     // ----------------------------------------------------------------------------
 

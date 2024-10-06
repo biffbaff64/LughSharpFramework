@@ -141,7 +141,7 @@ public abstract class Buffer
     /// The characteristics of Spliterators that traverse and split elements
     /// maintained in Buffers.
     /// </summary>
-    internal readonly static int SpliteratorCharacteristics =
+    internal static readonly int SpliteratorCharacteristics =
         Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.ORDERED;
 #endif
 

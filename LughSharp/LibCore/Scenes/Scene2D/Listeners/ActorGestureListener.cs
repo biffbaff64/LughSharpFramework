@@ -39,8 +39,8 @@ public class ActorGestureListener : IEventListener
     private const float DEFAULT_LONG_PRESS_DURATION  = 1.1f;
     private const float DEFAULT_MAX_FLING_DELAY      = int.MaxValue;
 
-    private readonly static Vector2 _tmpCoords  = new();
-    private readonly static Vector2 _tmpCoords2 = new();
+    private static readonly Vector2 _tmpCoords  = new();
+    private static readonly Vector2 _tmpCoords2 = new();
 
     public ActorGestureDetector Detector        { get; set; }
     public Actor?               TouchDownTarget { get; set; }

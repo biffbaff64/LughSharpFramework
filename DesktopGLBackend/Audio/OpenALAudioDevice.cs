@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.LibCore.Audio;
-
 namespace DesktopGLBackend.Audio;
 
 public class OpenALAudioDevice : IAudioDevice

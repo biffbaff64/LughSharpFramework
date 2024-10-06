@@ -38,15 +38,15 @@ public sealed class LayerIIIDecoder : IFrameDecoder
     private const int SSLIMIT = 18;
     private const int SBLIMIT = 32;
 
-    private readonly static int[][] _slen =
+    private static readonly int[][] _slen =
     [
         [ 0, 0, 0, 0, 3, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4 ],
         [ 0, 1, 2, 3, 0, 1, 2, 3, 1, 2, 3, 1, 2, 3, 2, 3 ]
     ];
 
-    public readonly static int[] Pretab = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 2, 0 ];
+    public static readonly int[] Pretab = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3, 3, 2, 0 ];
 
-    public readonly static float[] TwoToNegativeHalfPow =
+    public static readonly float[] TwoToNegativeHalfPow =
     [
         1.0000000000e+00f, 7.0710678119e-01f, 5.0000000000e-01f, 3.5355339059e-01f, 2.5000000000e-01f,
         1.7677669530e-01f, 1.2500000000e-01f, 8.8388347648e-02f, 6.2500000000e-02f, 4.4194173824e-02f,
@@ -63,9 +63,9 @@ public sealed class LayerIIIDecoder : IFrameDecoder
         9.3132257462e-10f, 6.5854450798e-10f, 4.6566128731e-10f, 3.2927225399e-10f
     ];
 
-    public readonly static float[] PowerTable;
+    public static readonly float[] PowerTable;
 
-    public readonly static float[][] Io =
+    public static readonly float[][] Io =
     [
         [
             1.0000000000e+00f, 8.4089641526e-01f, 7.0710678119e-01f, 5.9460355751e-01f, 5.0000000001e-01f,
@@ -87,7 +87,7 @@ public sealed class LayerIIIDecoder : IFrameDecoder
         ]
     ];
 
-    public readonly static float[] Tan12 =
+    public static readonly float[] Tan12 =
     [
         0.0f, 0.26794919f, 0.57735027f, 1.0f, 1.73205081f, 3.73205081f, 9.9999999e10f, -3.73205081f, -1.73205081f,
         -1.0f, -0.57735027f, -0.26794919f, 0.0f, 0.26794919f, 0.57735027f, 1.0f
@@ -95,19 +95,19 @@ public sealed class LayerIIIDecoder : IFrameDecoder
 
     private static int[][]? _reorderTable; // Generated on demand
 
-    private readonly static float[] _cs =
+    private static readonly float[] _cs =
     [
         0.857492925712f, 0.881741997318f, 0.949628649103f, 0.983314592492f, 0.995517816065f, 0.999160558175f,
         0.999899195243f, 0.999993155067f
     ];
 
-    private readonly static float[] _ca =
+    private static readonly float[] _ca =
     [
         -0.5144957554270f, -0.4717319685650f, -0.3133774542040f, -0.1819131996110f, -0.0945741925262f,
         -0.0409655828852f, -0.0141985685725f, -0.00369997467375f
     ];
 
-    public readonly static float[][] Win =
+    public static readonly float[][] Win =
     [
         [
             -1.6141214951e-02f, -5.3603178919e-02f, -1.0070713296e-01f, -1.6280817573e-01f, -4.9999999679e-01f,
@@ -151,7 +151,7 @@ public sealed class LayerIIIDecoder : IFrameDecoder
         ]
     ];
 
-    public readonly static int[][][] NrOfSfbBlock =
+    public static readonly int[][][] NrOfSfbBlock =
     [
         [ [ 6, 5, 5, 5 ], [ 9, 9, 9, 9 ], [ 6, 9, 9, 9 ] ],
         [ [ 6, 5, 7, 3 ], [ 9, 9, 12, 6 ], [ 6, 9, 12, 6 ] ],

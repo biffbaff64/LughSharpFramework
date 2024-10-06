@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Graphics;
+using DesktopGLBackend.Core;
 
 namespace DesktopGLBackend.Window;
 
@@ -36,7 +36,7 @@ public interface IDesktopGLWindowListener
     /// <para>
     /// For the main window, this is an immediate callback from inside
     /// <see
-    ///     cref="DesktopGLApplication(LughSharp.LibCore.Core.IApplicationListener,DesktopGLBackend.DesktopGLApplicationConfiguration)"/>
+    ///     cref="DesktopGLApplication(LughSharp.LibCore.Core.IApplicationListener,DesktopGLApplicationConfiguration)"/>
     /// </para>
     /// </summary>
     /// <param name="window">the window instance.</param>

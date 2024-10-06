@@ -33,45 +33,44 @@ public sealed class Color : ICloneable, IEquatable< Color >
 {
     #region colour values
 
-    public readonly static Color Red        = new( 0xff0000ff );
-    public readonly static Color Green      = new( 0x00ff00ff );
-    public readonly static Color Blue       = new( 0x0000ff00 );
-    public readonly static Color Clear      = new( 0x00000000 );
-    public readonly static Color White      = new( 0xffffffff );
-    public readonly static Color Black      = new( 0x000000ff );
-    public readonly static Color Gray       = new( 0x7f7f7fff );
-    public readonly static Color LightGray  = new( 0xbfbfbfff );
-    public readonly static Color DarkGray   = new( 0x3f3f3fff );
-    public readonly static Color Slate      = new( 0x708090ff );
-    public readonly static Color Navy       = new( 0x000080ff );
-    public readonly static Color Royal      = new( 0x4169e1ff );
-    public readonly static Color Sky        = new( 0x87ceebff );
-    public readonly static Color Cyan       = new( 0x00ffffff );
-    public readonly static Color Teal       = new( 0x007f7fff );
-    public readonly static Color Chartreuse = new( 0x7fff00ff );
-    public readonly static Color Lime       = new( 0x32cd32ff );
-    public readonly static Color Forest     = new( 0x228b22ff );
-    public readonly static Color Olive      = new( 0x6b8e23ff );
-    public readonly static Color Yellow     = new( 0xffff00ff );
-    public readonly static Color Gold       = new( 0xffd700ff );
-    public readonly static Color Goldenrod  = new( 0xdaa520ff );
-    public readonly static Color Orange     = new( 0xffa500ff );
-    public readonly static Color Brown      = new( 0x8b4513ff );
-    public readonly static Color Tan        = new( 0xd2b48cff );
-    public readonly static Color Firebrick  = new( 0xb22222ff );
-    public readonly static Color Scarlet    = new( 0xff341cff );
-    public readonly static Color Coral      = new( 0xff7f50ff );
-    public readonly static Color Salmon     = new( 0xfa8072ff );
-    public readonly static Color Pink       = new( 0xff69b4ff );
-    public readonly static Color Magenta    = new( 0xff00ffff );
-    public readonly static Color Purple     = new( 0xa020f0ff );
-    public readonly static Color Violet     = new( 0xee82eeff );
-    public readonly static Color Maroon     = new( 0xb03060ff );
+    public static readonly Color Red        = new( 0xff0000ff );
+    public static readonly Color Green      = new( 0x00ff00ff );
+    public static readonly Color Blue       = new( 0x0000ff00 );
+    public static readonly Color Clear      = new( 0x00000000 );
+    public static readonly Color White      = new( 0xffffffff );
+    public static readonly Color Black      = new( 0x000000ff );
+    public static readonly Color Gray       = new( 0x7f7f7fff );
+    public static readonly Color LightGray  = new( 0xbfbfbfff );
+    public static readonly Color DarkGray   = new( 0x3f3f3fff );
+    public static readonly Color Slate      = new( 0x708090ff );
+    public static readonly Color Navy       = new( 0x000080ff );
+    public static readonly Color Royal      = new( 0x4169e1ff );
+    public static readonly Color Sky        = new( 0x87ceebff );
+    public static readonly Color Cyan       = new( 0x00ffffff );
+    public static readonly Color Teal       = new( 0x007f7fff );
+    public static readonly Color Chartreuse = new( 0x7fff00ff );
+    public static readonly Color Lime       = new( 0x32cd32ff );
+    public static readonly Color Forest     = new( 0x228b22ff );
+    public static readonly Color Olive      = new( 0x6b8e23ff );
+    public static readonly Color Yellow     = new( 0xffff00ff );
+    public static readonly Color Gold       = new( 0xffd700ff );
+    public static readonly Color Goldenrod  = new( 0xdaa520ff );
+    public static readonly Color Orange     = new( 0xffa500ff );
+    public static readonly Color Brown      = new( 0x8b4513ff );
+    public static readonly Color Tan        = new( 0xd2b48cff );
+    public static readonly Color Firebrick  = new( 0xb22222ff );
+    public static readonly Color Scarlet    = new( 0xff341cff );
+    public static readonly Color Coral      = new( 0xff7f50ff );
+    public static readonly Color Salmon     = new( 0xfa8072ff );
+    public static readonly Color Pink       = new( 0xff69b4ff );
+    public static readonly Color Magenta    = new( 0xff00ffff );
+    public static readonly Color Purple     = new( 0xa020f0ff );
+    public static readonly Color Violet     = new( 0xee82eeff );
+    public static readonly Color Maroon     = new( 0xb03060ff );
 
     /// <summary>
     /// Convenience for frequently used <tt>White.ToFloatBits()</tt>
     /// </summary>
-
     public static float WhiteFloatBits => White.ToFloatBitsABGR();
 
     #endregion colour values
@@ -84,49 +83,41 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <summary>
     /// Red Color Component
     /// </summary>
-
     public float R { get; set; }
 
     /// <summary>
     /// Green Color Component
     /// </summary>
-
     public float G { get; set; }
 
     /// <summary>
     /// Blue Color Component
     /// </summary>
-
     public float B { get; set; }
 
     /// <summary>
     /// Alpha Color Component
     /// </summary>
-
     public float A { get; set; }
 
     /// <summary>
     /// Color Components packed into a <b>uint</b>, stored in RGBA format.
     /// </summary>
-
     public uint RGBAPackedColor { get; private set; }
 
     /// <summary>
     /// Color Components packed into a <b>uint</b>, stored in ABGR format.
     /// </summary>
-
     public uint ABGRPackedColor { get; private set; }
 
     /// <summary>
     /// Color Components packed into a <b>float</b>, stored in RGBA format.
     /// </summary>
-
     public double RGBAFloatPack { get; private set; }
 
     /// <summary>
     /// Color Components packed into a <b>float</b>, stored in ABGR format.
     /// </summary>
-
     public double ABGRFloatPack { get; private set; }
 
     #endregion Colour Components
@@ -155,10 +146,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="rgba8888"> An uint color value in RGBA8888 format. </param>
     public Color( uint rgba8888 )
     {
-        this.R = ( float ) ( ( rgba8888 & 0xff000000 ) >> 24 ) / 255.0f;
-        this.G = ( float ) ( ( rgba8888 & 0x00ff0000 ) >> 16 ) / 255.0f;
-        this.B = ( float ) ( ( rgba8888 & 0x0000ff00 ) >> 8 ) / 255.0f;
-        this.A = ( float ) ( rgba8888 & 0x000000ff ) / 255.0f;
+        this.R = ( float )( ( rgba8888 & 0xff000000 ) >> 24 ) / 255.0f;
+        this.G = ( float )( ( rgba8888 & 0x00ff0000 ) >> 16 ) / 255.0f;
+        this.B = ( float )( ( rgba8888 & 0x0000ff00 ) >> 8 ) / 255.0f;
+        this.A = ( float )( rgba8888 & 0x000000ff ) / 255.0f;
 
         Clamp();
     }
@@ -184,7 +175,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// Constructs a new color using the components from the supplied color.
     /// </summary>
     public Color( Color color )
-        : this( color.R, color.G, color.B, color.A )
+                    : this( color.R, color.G, color.B, color.A )
     {
     }
 
@@ -247,8 +238,8 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Multiplies each of this colors components by the corresponding components
-    /// in the supplied Color.
+    /// Multiplies each of this color objects components by the corresponding
+    /// components in the supplied Color.
     /// </summary>
     /// <param name="color"> The supplied color. </param>
     /// <returns> This Color for chaining. </returns>
@@ -277,7 +268,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Multiplies each of this colors components by the corresponding
+    /// Multiplies each of this color objects components by the corresponding
     /// supplied components.
     /// </summary>
     /// <param name="r"> Red component </param>
@@ -383,9 +374,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     public Color AddNew( Color color )
     {
         return new Color( this.R + color.R,
-                          this.G + color.G,
-                          this.B + color.B,
-                          this.A + color.A ).Clamp();
+                        this.G + color.G,
+                        this.B + color.B,
+                        this.A + color.A ).Clamp();
     }
 
     /// <summary>
@@ -396,9 +387,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     public Color SubNew( Color color )
     {
         return new Color( this.R - color.R,
-                          this.G - color.G,
-                          this.B - color.B,
-                          this.A - color.A ).Clamp();
+                        this.G - color.G,
+                        this.B - color.B,
+                        this.A - color.A ).Clamp();
     }
 
     /// <summary>
@@ -409,9 +400,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     public Color MulNew( Color color )
     {
         return new Color( this.R * color.R,
-                          this.G * color.G,
-                          this.B * color.B,
-                          this.A * color.A ).Clamp();
+                        this.G * color.G,
+                        this.B * color.B,
+                        this.A * color.A ).Clamp();
     }
 
     /// <summary>
@@ -455,7 +446,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
         if ( interpolationCoefficient is < 0.0f or > 1.0f )
         {
             throw new ArgumentOutOfRangeException
-                ( nameof( interpolationCoefficient ), "Interpolation coefficient must be between 0f and 1f." );
+                            ( nameof( interpolationCoefficient ), "Interpolation coefficient must be between 0f and 1f." );
         }
 
         this.R += interpolationCoefficient * ( target.R - this.R );
@@ -482,7 +473,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
         if ( interpolationCoefficient is < 0.0f or > 1.0f )
         {
             throw new ArgumentOutOfRangeException( nameof( interpolationCoefficient ),
-                                                   "Interpolation coefficient must be between 0f and 1f." );
+                            "Interpolation coefficient must be between 0f and 1f." );
         }
 
         this.R += interpolationCoefficient * ( r - this.R );
@@ -572,7 +563,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns> The uint result. </returns>
     public static uint AlphaToInt( float alpha )
     {
-        return ( uint ) ( alpha * 255.0f );
+        return ( uint )( alpha * 255.0f );
     }
 
     /// <summary>
@@ -583,7 +574,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns></returns>
     public static uint LuminanceAlpha( float luminance, float alpha )
     {
-        return ( ( uint ) ( luminance * 255.0f ) << 8 ) | ( uint ) ( alpha * 255 );
+        return ( ( uint )( luminance * 255.0f ) << 8 ) | ( uint )( alpha * 255 );
     }
 
     #endregion general methods
@@ -611,12 +602,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <seealso cref="NumberUtils.UIntToFloatColor(uint)"/>
     public float ToFloatBitsRGBA()
     {
-        var r = ( ( uint ) ( 255f * R ) << 24 );
-        var g = ( ( uint ) ( 255f * G ) << 16 );
-        var b = ( ( uint ) ( 255f * B ) << 8 );
-        var a = ( uint ) ( 255f * A );
+        var r = ( ( uint )( 255f * R ) << 24 );
+        var g = ( ( uint )( 255f * G ) << 16 );
+        var b = ( ( uint )( 255f * B ) << 8 );
+        var a = ( uint )( 255f * A );
 
-        var intBits = ( uint ) ( r | g | b | a );
+        var intBits = ( uint )( r | g | b | a );
 
         return NumberUtils.UIntToFloatColor( intBits );
     }
@@ -636,14 +627,14 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns></returns>
     public static float ToFloatBitsRGBA( float r, float g, float b, float a )
     {
-        var rf = ( ( uint ) ( 255f * r ) << 24 );
-        var gf = ( ( uint ) ( 255f * g ) << 16 );
-        var bf = ( ( uint ) ( 255f * b ) << 8 );
-        var af = ( uint ) ( 255f * a );
+        var rf = ( ( uint )( 255f * r ) << 24 );
+        var gf = ( ( uint )( 255f * g ) << 16 );
+        var bf = ( ( uint )( 255f * b ) << 8 );
+        var af = ( uint )( 255f * a );
 
-        var intBits = ( uint ) ( rf | gf | bf | af );
+        var intBits = ( uint )( rf | gf | bf | af );
 
-        return ( float ) intBits;
+        return ( float )intBits;
     }
 
     /// <summary>
@@ -652,10 +643,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns> the packed color as a 32-bit int. </returns>
     public uint PackedColorRGBA()
     {
-        return ( ( ( uint ) ( 255f * R ) ) << 24 )
-             | ( ( ( uint ) ( 255f * G ) ) << 16 )
-             | ( ( ( uint ) ( 255f * B ) ) << 8 )
-             | ( ( uint ) ( 255f * A ) );
+        return ( ( ( uint )( 255f * R ) ) << 24 )
+               | ( ( ( uint )( 255f * G ) ) << 16 )
+               | ( ( ( uint )( 255f * B ) ) << 8 )
+               | ( ( uint )( 255f * A ) );
     }
 
     /// <summary>
@@ -668,10 +659,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns></returns>
     public uint RGBA8888ToInt( float r, float g, float b, float a )
     {
-        return ( ( ( uint ) ( 255f * r ) ) << 24 )
-             | ( ( ( uint ) ( 255f * g ) ) << 16 )
-             | ( ( ( uint ) ( 255f * b ) ) << 8 )
-             | ( ( uint ) ( 255f * a ) );
+        return ( ( ( uint )( 255f * r ) ) << 24 )
+               | ( ( ( uint )( 255f * g ) ) << 16 )
+               | ( ( ( uint )( 255f * b ) ) << 8 )
+               | ( ( uint )( 255f * a ) );
     }
 
     /// <summary>
@@ -687,7 +678,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     public static uint RGB565( float r, float g, float b )
     {
-        return ( ( uint ) ( r * 31 ) << 11 ) | ( ( uint ) ( g * 63 ) << 5 ) | ( uint ) ( b * 31 );
+        return ( ( uint )( r * 31 ) << 11 ) | ( ( uint )( g * 63 ) << 5 ) | ( uint )( b * 31 );
     }
 
     /// <summary>
@@ -705,10 +696,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="a"> Alpha component </param>
     public static uint RGBA4444( float r, float g, float b, float a )
     {
-        return ( ( uint ) ( r * 15 ) << 12 )
-             | ( ( uint ) ( g * 15 ) << 8 )
-             | ( ( uint ) ( b * 15 ) << 4 )
-             | ( uint ) ( a * 15 );
+        return ( ( uint )( r * 15 ) << 12 )
+               | ( ( uint )( g * 15 ) << 8 )
+               | ( ( uint )( b * 15 ) << 4 )
+               | ( uint )( a * 15 );
     }
 
     /// <summary>
@@ -724,7 +715,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     public static uint RGB888( float r, float g, float b )
     {
-        return ( ( uint ) ( r * 255 ) << 16 ) | ( ( uint ) ( g * 255 ) << 8 ) | ( uint ) ( b * 255 );
+        return ( ( uint )( r * 255 ) << 16 ) | ( ( uint )( g * 255 ) << 8 ) | ( uint )( b * 255 );
     }
 
     /// <summary>
@@ -741,10 +732,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="a"> Alpha component </param>
     public static uint RGBA8888( float r, float g, float b, float a )
     {
-        return ( ( uint ) ( r * 255 ) << 24 )
-             | ( ( uint ) ( g * 255 ) << 16 )
-             | ( ( uint ) ( b * 255 ) << 8 )
-             | ( uint ) ( a * 255 );
+        return ( ( uint )( r * 255 ) << 24 )
+               | ( ( uint )( g * 255 ) << 16 )
+               | ( ( uint )( b * 255 ) << 8 )
+               | ( uint )( a * 255 );
     }
 
     /// <summary>
@@ -758,9 +749,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="color"> The colour. </param>
     public static uint RGB565( Color color )
     {
-        return ( ( uint ) ( color.R * 31 ) << 11 )
-             | ( ( uint ) ( color.G * 63 ) << 5 )
-             | ( uint ) ( color.B * 31 );
+        return ( ( uint )( color.R * 31 ) << 11 )
+               | ( ( uint )( color.G * 63 ) << 5 )
+               | ( uint )( color.B * 31 );
     }
 
     /// <summary>
@@ -775,10 +766,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="color"> The colour. </param>
     public static uint RGBA4444( Color color )
     {
-        return ( ( uint ) ( color.R * 15 ) << 12 )
-             | ( ( uint ) ( color.G * 15 ) << 8 )
-             | ( ( uint ) ( color.B * 15 ) << 4 )
-             | ( uint ) ( color.A * 15 );
+        return ( ( uint )( color.R * 15 ) << 12 )
+               | ( ( uint )( color.G * 15 ) << 8 )
+               | ( ( uint )( color.B * 15 ) << 4 )
+               | ( uint )( color.A * 15 );
     }
 
     /// <summary>
@@ -792,9 +783,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="color"> The colour. </param>
     public static uint RGB888( Color color )
     {
-        return ( ( uint ) ( color.R * 255 ) << 16 )
-             | ( ( uint ) ( color.G * 255 ) << 8 )
-             | ( uint ) ( color.B * 255 );
+        return ( ( uint )( color.R * 255 ) << 16 )
+               | ( ( uint )( color.G * 255 ) << 8 )
+               | ( uint )( color.B * 255 );
     }
 
     /// <summary>
@@ -808,10 +799,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="color"> The colour. </param>
     public static uint RGBA8888( Color color )
     {
-        return ( ( uint ) ( color.R * 255 ) << 24 )
-             | ( ( uint ) ( color.G * 255 ) << 16 )
-             | ( ( uint ) ( color.B * 255 ) << 8 )
-             | ( uint ) ( color.A * 255 );
+        return ( ( uint )( color.R * 255 ) << 24 )
+               | ( ( uint )( color.G * 255 ) << 16 )
+               | ( ( uint )( color.B * 255 ) << 8 )
+               | ( uint )( color.A * 255 );
     }
 
     /// <summary>
@@ -838,7 +829,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
         if ( value > 0xFFFF )
         {
             throw new ArgumentOutOfRangeException( nameof( value ),
-                                                   "Value must be a 16-bit integer." );
+                            "Value must be a 16-bit integer." );
         }
 
         color.R = ( ( value & 0xF800 ) >> 11 ) / 31f;
@@ -889,12 +880,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <seealso cref="NumberUtils.UIntToFloatColor(uint)"/>
     public float ToFloatBitsABGR()
     {
-        var a = ( ( uint ) ( 255f * A ) << 24 );
-        var b = ( ( uint ) ( 255f * B ) << 16 );
-        var g = ( ( uint ) ( 255f * G ) << 8 );
-        var r = ( uint ) ( 255f * R );
+        var a = ( ( uint )( 255f * A ) << 24 );
+        var b = ( ( uint )( 255f * B ) << 16 );
+        var g = ( ( uint )( 255f * G ) << 8 );
+        var r = ( uint )( 255f * R );
 
-        var intBits = ( uint ) ( a | b | g | r );
+        var intBits = ( uint )( a | b | g | r );
 
         return NumberUtils.UIntToFloatColor( intBits );
     }
@@ -914,14 +905,14 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns></returns>
     public static float ToFloatBitsABGR( float a, float b, float g, float r )
     {
-        var af = ( ( uint ) ( a * 255f ) ) << 24;
-        var bf = ( ( uint ) ( b * 255f ) ) << 16;
-        var gf = ( ( uint ) ( g * 255f ) ) << 8;
-        var rf = ( uint ) ( r * 255f );
+        var af = ( ( uint )( a * 255f ) ) << 24;
+        var bf = ( ( uint )( b * 255f ) ) << 16;
+        var gf = ( ( uint )( g * 255f ) ) << 8;
+        var rf = ( uint )( r * 255f );
 
-        var intBits = ( uint ) ( af | bf | gf | rf );
+        var intBits = ( uint )( af | bf | gf | rf );
 
-        return ( float ) intBits;
+        return ( float )intBits;
     }
 
     /// <summary>
@@ -930,10 +921,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns> the packed color as a 32-bit int. </returns>
     public uint PackedColorABGR()
     {
-        return ( ( uint ) ( 255f * A ) << 24 )
-             | ( ( uint ) ( 255f * B ) << 16 )
-             | ( ( uint ) ( 255f * G ) << 8 )
-             | ( uint ) ( 255f * R );
+        return ( ( uint )( 255f * A ) << 24 )
+               | ( ( uint )( 255f * B ) << 16 )
+               | ( ( uint )( 255f * G ) << 8 )
+               | ( uint )( 255f * R );
     }
 
     /// <summary>
@@ -950,10 +941,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="a"> Alpha component </param>
     public static uint ABGR8888( float a, float b, float g, float r )
     {
-        return ( ( uint ) ( a * 255 ) << 24 )
-             | ( ( uint ) ( b * 255 ) << 16 )
-             | ( ( uint ) ( g * 255 ) << 8 )
-             | ( uint ) ( r * 255 );
+        return ( ( uint )( a * 255 ) << 24 )
+               | ( ( uint )( b * 255 ) << 16 )
+               | ( ( uint )( g * 255 ) << 8 )
+               | ( uint )( r * 255 );
     }
 
     /// <summary>
@@ -1032,10 +1023,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="r"> Red component </param>
     public static uint ARGB8888( float a, float r, float g, float b )
     {
-        return ( ( uint ) ( a * 255 ) << 24 )
-             | ( ( uint ) ( r * 255 ) << 16 )
-             | ( ( uint ) ( g * 255 ) << 8 )
-             | ( uint ) ( b * 255 );
+        return ( ( uint )( a * 255 ) << 24 )
+               | ( ( uint )( r * 255 ) << 16 )
+               | ( ( uint )( g * 255 ) << 8 )
+               | ( uint )( b * 255 );
     }
 
     /// <summary>
@@ -1049,10 +1040,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="color"> The colour. </param>
     public static uint ARGB8888( Color color )
     {
-        return ( ( uint ) ( color.A * 255 ) << 24 )
-             | ( ( uint ) ( color.R * 255 ) << 16 )
-             | ( ( uint ) ( color.G * 255 ) << 8 )
-             | ( uint ) ( color.B * 255 );
+        return ( ( uint )( color.A * 255 ) << 24 )
+               | ( ( uint )( color.R * 255 ) << 16 )
+               | ( ( uint )( color.G * 255 ) << 8 )
+               | ( uint )( color.B * 255 );
     }
 
     #endregion ARGB Methods
@@ -1083,7 +1074,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
             h += 360;
         }
 
-        var i = ( uint ) ( h / 60 ) % 6;
+        var i = ( uint )( h / 60 ) % 6;
         var f = ( h / 60 ) - i;
         var p = v * ( 1 - s );
         var q = v * ( 1 - ( s * f ) );
@@ -1091,12 +1082,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
         ( this.R, this.G, this.B ) = i switch
         {
-            0 => ( v, t, p ),
-            1 => ( q, v, p ),
-            2 => ( p, v, t ),
-            3 => ( p, q, v ),
-            4 => ( t, p, v ),
-            _ => ( v, p, q )
+                        0 => ( v, t, p ),
+                        1 => ( q, v, p ),
+                        2 => ( p, v, t ),
+                        3 => ( p, q, v ),
+                        4 => ( t, p, v ),
+                        _ => ( v, p, q )
         };
 
         return Clamp();
@@ -1191,7 +1182,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
             return true;
         }
 
-        var color = ( Color ) obj;
+        var color = ( Color )obj;
 
         return this.PackedColorABGR() == color.PackedColorABGR();
     }

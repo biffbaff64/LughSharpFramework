@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Graphics;
+using DesktopGLBackend.Core;
 
 namespace DesktopGLBackend.Window;
 

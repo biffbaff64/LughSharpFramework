@@ -57,7 +57,7 @@ public class DragAndDrop
     /// </summary>
     public bool CancelTouchFocus { get; set; } = true;
 
-    private readonly static Vector2                                _tmpVector       = new();
+    private static readonly Vector2                                _tmpVector       = new();
     private readonly        Dictionary< DragSource, DragListener > _sourceListeners = new();
     private readonly        List< DragTarget >                     _targets         = [ ];
 

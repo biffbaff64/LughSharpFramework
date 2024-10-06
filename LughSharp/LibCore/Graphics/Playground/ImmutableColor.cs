@@ -34,40 +34,40 @@ public sealed class ImmutableColor : ICloneable, IEquatable< ImmutableColor >
 {
     #region colour values
 
-    public readonly static ImmutableColor Red        = new( 0xff0000ff );
-    public readonly static ImmutableColor Green      = new( 0x00ff00ff );
-    public readonly static ImmutableColor Blue       = new( 0x0000ff00 );
-    public readonly static ImmutableColor Clear      = new( 0x00000000 );
-    public readonly static ImmutableColor White      = new( 0xffffffff );
-    public readonly static ImmutableColor Black      = new( 0x000000ff );
-    public readonly static ImmutableColor Gray       = new( 0x7f7f7fff );
-    public readonly static ImmutableColor LightGray  = new( 0xbfbfbfff );
-    public readonly static ImmutableColor DarkGray   = new( 0x3f3f3fff );
-    public readonly static ImmutableColor Slate      = new( 0x708090ff );
-    public readonly static ImmutableColor Navy       = new( 0x000080ff );
-    public readonly static ImmutableColor Royal      = new( 0x4169e1ff );
-    public readonly static ImmutableColor Sky        = new( 0x87ceebff );
-    public readonly static ImmutableColor Cyan       = new( 0x00ffffff );
-    public readonly static ImmutableColor Teal       = new( 0x007f7fff );
-    public readonly static ImmutableColor Chartreuse = new( 0x7fff00ff );
-    public readonly static ImmutableColor Lime       = new( 0x32cd32ff );
-    public readonly static ImmutableColor Forest     = new( 0x228b22ff );
-    public readonly static ImmutableColor Olive      = new( 0x6b8e23ff );
-    public readonly static ImmutableColor Yellow     = new( 0xffff00ff );
-    public readonly static ImmutableColor Gold       = new( 0xffd700ff );
-    public readonly static ImmutableColor Goldenrod  = new( 0xdaa520ff );
-    public readonly static ImmutableColor Orange     = new( 0xffa500ff );
-    public readonly static ImmutableColor Brown      = new( 0x8b4513ff );
-    public readonly static ImmutableColor Tan        = new( 0xd2b48cff );
-    public readonly static ImmutableColor Firebrick  = new( 0xb22222ff );
-    public readonly static ImmutableColor Scarlet    = new( 0xff341cff );
-    public readonly static ImmutableColor Coral      = new( 0xff7f50ff );
-    public readonly static ImmutableColor Salmon     = new( 0xfa8072ff );
-    public readonly static ImmutableColor Pink       = new( 0xff69b4ff );
-    public readonly static ImmutableColor Magenta    = new( 0xff00ffff );
-    public readonly static ImmutableColor Purple     = new( 0xa020f0ff );
-    public readonly static ImmutableColor Violet     = new( 0xee82eeff );
-    public readonly static ImmutableColor Maroon     = new( 0xb03060ff );
+    public static readonly ImmutableColor Red        = new( 0xff0000ff );
+    public static readonly ImmutableColor Green      = new( 0x00ff00ff );
+    public static readonly ImmutableColor Blue       = new( 0x0000ff00 );
+    public static readonly ImmutableColor Clear      = new( 0x00000000 );
+    public static readonly ImmutableColor White      = new( 0xffffffff );
+    public static readonly ImmutableColor Black      = new( 0x000000ff );
+    public static readonly ImmutableColor Gray       = new( 0x7f7f7fff );
+    public static readonly ImmutableColor LightGray  = new( 0xbfbfbfff );
+    public static readonly ImmutableColor DarkGray   = new( 0x3f3f3fff );
+    public static readonly ImmutableColor Slate      = new( 0x708090ff );
+    public static readonly ImmutableColor Navy       = new( 0x000080ff );
+    public static readonly ImmutableColor Royal      = new( 0x4169e1ff );
+    public static readonly ImmutableColor Sky        = new( 0x87ceebff );
+    public static readonly ImmutableColor Cyan       = new( 0x00ffffff );
+    public static readonly ImmutableColor Teal       = new( 0x007f7fff );
+    public static readonly ImmutableColor Chartreuse = new( 0x7fff00ff );
+    public static readonly ImmutableColor Lime       = new( 0x32cd32ff );
+    public static readonly ImmutableColor Forest     = new( 0x228b22ff );
+    public static readonly ImmutableColor Olive      = new( 0x6b8e23ff );
+    public static readonly ImmutableColor Yellow     = new( 0xffff00ff );
+    public static readonly ImmutableColor Gold       = new( 0xffd700ff );
+    public static readonly ImmutableColor Goldenrod  = new( 0xdaa520ff );
+    public static readonly ImmutableColor Orange     = new( 0xffa500ff );
+    public static readonly ImmutableColor Brown      = new( 0x8b4513ff );
+    public static readonly ImmutableColor Tan        = new( 0xd2b48cff );
+    public static readonly ImmutableColor Firebrick  = new( 0xb22222ff );
+    public static readonly ImmutableColor Scarlet    = new( 0xff341cff );
+    public static readonly ImmutableColor Coral      = new( 0xff7f50ff );
+    public static readonly ImmutableColor Salmon     = new( 0xfa8072ff );
+    public static readonly ImmutableColor Pink       = new( 0xff69b4ff );
+    public static readonly ImmutableColor Magenta    = new( 0xff00ffff );
+    public static readonly ImmutableColor Purple     = new( 0xa020f0ff );
+    public static readonly ImmutableColor Violet     = new( 0xee82eeff );
+    public static readonly ImmutableColor Maroon     = new( 0xb03060ff );
 
     /// <summary>
     /// Convenience for frequently used <tt>White.ToFloatBits()</tt>

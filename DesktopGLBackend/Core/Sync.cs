@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 
-namespace DesktopGLBackend;
+namespace DesktopGLBackend.Core;
 
 /// <summary>
 /// A highly accurate sync method that continually adapts to the system

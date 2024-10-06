@@ -37,9 +37,9 @@ namespace LughSharp.LibCore.Scenes.Scene2D.Utils;
 [PublicAPI]
 public class ScissorStack
 {
-    private readonly static List< RectangleShape > _scissors = [ ];
-    private readonly static Vector3                _tmp      = new();
-    private readonly static RectangleShape         _viewport = new();
+    private static readonly List< RectangleShape > _scissors = [ ];
+    private static readonly Vector3                _tmp      = new();
+    private static readonly RectangleShape         _viewport = new();
 
     /// <summary>
     /// Pushes a new scissor <see cref="Rectangle"/> onto the stack, merging it with

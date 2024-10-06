@@ -51,14 +51,14 @@ public class Header
 
     // ------------------------------------------------------------------------
 
-    public readonly static int[][] Frequencies =
+    public static readonly int[][] Frequencies =
     [
         [ 22050, 24000, 16000, 1 ],
         [ 44100, 48000, 32000, 1 ],
         [ 11025, 12000, 8000, 1 ]
     ];
 
-    public readonly static int[][][] Bitrates =
+    public static readonly int[][][] Bitrates =
     [
         [
             [
@@ -104,7 +104,7 @@ public class Header
         ]
     ];
 
-    public readonly static string[][][] BitrateStr =
+    public static readonly string[][][] BitrateStr =
     [
         [
             [

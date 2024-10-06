@@ -41,7 +41,7 @@ public class Equalizer
     /// </summary>
     public const float BAND_NOT_PRESENT = float.NegativeInfinity;
 
-    public readonly static Equalizer PassThruEq = new();
+    public static readonly Equalizer PassThruEq = new();
 
     private const int BANDS = 32;
 

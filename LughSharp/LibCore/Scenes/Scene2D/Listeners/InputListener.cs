@@ -33,7 +33,7 @@ namespace LughSharp.LibCore.Scenes.Scene2D.Listeners;
 [PublicAPI]
 public class InputListener : IEventListener
 {
-    private readonly static Vector2 _tmpCoords = new();
+    private static readonly Vector2 _tmpCoords = new();
 
     /// <summary>
     /// Try to handle the given event, if it is an <see cref="InputEvent"/>.

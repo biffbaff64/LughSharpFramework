@@ -58,7 +58,10 @@ public partial class BufferUtils
     public static void Copy( short[] src, int srcOffset, Buffer dst, int numElements )
     {
         dst.Limit = ( dst.Position + BytesToElements( dst, numElements << 1 ) );
-        CopyJni( src, srcOffset, dst, PositionInBytes( dst ), numElements << 1 );
+
+        Array.Copy( src, srcOffset, dst.BackingArray(), dst.Position, numElements << 1 );
+
+//        CopyJni( src, srcOffset, dst, PositionInBytes( dst ), numElements << 1 );
     }
 
     /// <summary>
@@ -189,11 +192,6 @@ public partial class BufferUtils
         CopyJni( src, srcOffset, dst, PositionInBytes( dst ), numElements << 2 );
     }
 
-    public static void Copy( Buffer src, int srcOffset, Buffer dst, int dstOffset, int numBytes )
-    {
-        //TODO:
-    }
-
     /// <summary>
     /// Copies the contents of src to dst, starting from src[srcOffset], copying numElements
     /// elements. The <see cref="Buffer"/> instance's <see cref="Buffer.Position"/> is used to
@@ -229,7 +227,13 @@ public partial class BufferUtils
 
         dst.Limit = dst.Position + BytesToElements( dst, numBytes );
 
-        Copy( src, PositionInBytes( src ), dst, PositionInBytes( dst ), numBytes );
+        Array.Copy( src.BackingArray(),
+                        PositionInBytes( src ),
+                        dst.BackingArray(),
+                        PositionInBytes( dst ),
+                        numBytes );
+
+//        CopyJni( src, PositionInBytes( src ), dst, PositionInBytes( dst ), numBytes );
     }
 
     /// <summary>
@@ -413,42 +417,42 @@ public partial class BufferUtils
 
     public static long FindFloats( Buffer vertex, int strideInBytes, Buffer vertices, int numVertices )
     {
-        return Find( vertex, PositionInBytes( vertex ), strideInBytes, vertices, PositionInBytes( vertices ), numVertices );
+        return FindJni( vertex, PositionInBytes( vertex ), strideInBytes, vertices, PositionInBytes( vertices ), numVertices );
     }
 
     public static long FindFloats( float[] vertex, int strideInBytes, Buffer vertices, int numVertices )
     {
-        return Find( vertex, 0, strideInBytes, vertices, PositionInBytes( vertices ), numVertices );
+        return FindJni( vertex, 0, strideInBytes, vertices, PositionInBytes( vertices ), numVertices );
     }
 
     public static long FindFloats( Buffer vertex, int strideInBytes, float[] vertices, int numVertices )
     {
-        return Find( vertex, PositionInBytes( vertex ), strideInBytes, vertices, 0, numVertices );
+        return FindJni( vertex, PositionInBytes( vertex ), strideInBytes, vertices, 0, numVertices );
     }
 
     public static long FindFloats( float[] vertex, int strideInBytes, float[] vertices, int numVertices )
     {
-        return Find( vertex, 0, strideInBytes, vertices, 0, numVertices );
+        return FindJni( vertex, 0, strideInBytes, vertices, 0, numVertices );
     }
 
     public static long FindFloats( Buffer vertex, int strideInBytes, Buffer vertices, int numVertices, float epsilon )
     {
-        return Find( vertex, PositionInBytes( vertex ), strideInBytes, vertices, PositionInBytes( vertices ), numVertices, epsilon );
+        return FindJni( vertex, PositionInBytes( vertex ), strideInBytes, vertices, PositionInBytes( vertices ), numVertices, epsilon );
     }
 
     public static long FindFloats( float[] vertex, int strideInBytes, Buffer vertices, int numVertices, float epsilon )
     {
-        return Find( vertex, 0, strideInBytes, vertices, PositionInBytes( vertices ), numVertices, epsilon );
+        return FindJni( vertex, 0, strideInBytes, vertices, PositionInBytes( vertices ), numVertices, epsilon );
     }
 
     public static long FindFloats( Buffer vertex, int strideInBytes, float[] vertices, int numVertices, float epsilon )
     {
-        return Find( vertex, PositionInBytes( vertex ), strideInBytes, vertices, 0, numVertices, epsilon );
+        return FindJni( vertex, PositionInBytes( vertex ), strideInBytes, vertices, 0, numVertices, epsilon );
     }
 
     public static long FindFloats( float[] vertex, int strideInBytes, float[] vertices, int numVertices, float epsilon )
     {
-        return Find( vertex, 0, strideInBytes, vertices, 0, numVertices, epsilon );
+        return FindJni( vertex, 0, strideInBytes, vertices, 0, numVertices, epsilon );
     }
 
     public static bool IsUnsafeByteBuffer( ByteBuffer buffer )
@@ -465,7 +469,7 @@ public partial class BufferUtils
     /// </summary>
     public static ByteBuffer NewUnsafeByteBuffer( int numBytes )
     {
-        var buffer = NewDisposableByteBuffer( numBytes );
+        var buffer = NewDisposableByteBufferJni( numBytes );
         buffer.Order( ByteOrder.NativeOrder );
 
         _allocatedUnsafe += numBytes;
@@ -485,7 +489,7 @@ public partial class BufferUtils
     /// <returns> the address of the Buffer. </returns>
     public static long GetUnsafeBufferAddress( Buffer buffer )
     {
-        return GetBufferAddress( buffer ) + buffer.Position;
+        return GetBufferAddressJni( buffer ) + buffer.Position;
     }
 
     /// <summary>
@@ -493,8 +497,8 @@ public partial class BufferUtils
     /// been allocated in extern code, pointing to a memory region allocated via malloc.
     /// Needs to be disposed with <see cref="DisposeUnsafeByteBuffer(ByteBuffer)"/>.
     /// </summary>
-    /// <param name="buffer"> the <see cref="ByteBuffer"/> to register. </param>
-    /// <returns> the ByteBuffer passed to the method. </returns>
+    /// <param name="buffer"> The <see cref="ByteBuffer"/> to register. </param>
+    /// <returns> The ByteBuffer passed to the method. </returns>
     public static ByteBuffer NewUnsafeByteBuffer( ByteBuffer buffer )
     {
         _allocatedUnsafe += buffer.Capacity;
@@ -518,24 +522,26 @@ public partial class BufferUtils
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
+    #region Jni equivalent methods
+
     /// <summary>
     /// Frees the memory allocated for the ByteBuffer, which MUST have been allocated
     /// via <see cref="NewUnsafeByteBuffer(ByteBuffer)"/> or in extern code.
     /// </summary>
-    private static extern void FreeMemory( ByteBuffer buffer );
+    private static extern void FreeMemoryJni( ByteBuffer buffer );
     /* free(buffer); */
 
-    private static extern ByteBuffer NewDisposableByteBuffer( int numBytes );
+    private static extern ByteBuffer NewDisposableByteBufferJni( int numBytes );
     /* return env->NewDirectByteBuffer((char*)malloc(numBytes), numBytes); */
 
-    private static extern long GetBufferAddress( Buffer buffer );
+    private static extern long GetBufferAddressJni( Buffer buffer );
     /* return (jlong) buffer; */
 
     /// <summary>
     /// Writes the specified number of zeros to the buffer. This is generally faster
     /// than reallocating a new buffer.
     /// </summary>
-    public static extern void Clear( ByteBuffer buffer, int numBytes );
+    public static extern void ClearJni( ByteBuffer buffer, int numBytes );
     /* memset(buffer, 0, numBytes); */
 
     private static extern void CopyJni( float[] src, Buffer dst, int numFloats, int offset );
@@ -547,8 +553,8 @@ public partial class BufferUtils
     private static extern void CopyJni( char[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
     /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
-    private static extern void CopyJni( short[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
-    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
+//    private static extern void CopyJni( short[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
+//    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
     private static extern void CopyJni( int[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
     /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
@@ -562,8 +568,8 @@ public partial class BufferUtils
     private static extern void CopyJni( double[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
     /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
-    private static extern void CopyJni( Buffer src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
-    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
+//    private static extern void CopyJni( Buffer src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
+//    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
     private static extern void TransformV4M4Jni( Buffer data, int strideInBytes, int count, float[] matrix, int offsetInBytes );
     /* transform<4, 4>((float*)data, strideInBytes / 4, count, (float*)matrix, offsetInBytes / 4); */
@@ -595,27 +601,29 @@ public partial class BufferUtils
     private static extern void TransformV2M3Jni( float[] data, int strideInBytes, int count, float[] matrix, int offsetInBytes );
     /* transform<2, 3>((float*)data, strideInBytes / 4, count, (float*)matrix, offsetInBytes / 4); */
 
-    private static extern long Find( Buffer vertex, int vertexOffsetInBytes, int strideInBytes, Buffer vertices, int verticesOffsetInBytes, int numVertices );
+    private static extern long FindJni( Buffer vertex, int vertexOffsetInBytes, int strideInBytes, Buffer vertices, int verticesOffsetInBytes, int numVertices );
     /* return find((float *)&vertex[vertexOffsetInBytes / 4], (unsigned int)(strideInBytes / 4), (float*)&vertices[verticesOffsetInBytes / 4], (unsigned int)numVertices); */
 
-    private static extern long Find( float[] vertex, int vertexOffsetInBytes, int strideInBytes, Buffer vertices, int verticesOffsetInBytes, int numVertices );
+    private static extern long FindJni( float[] vertex, int vertexOffsetInBytes, int strideInBytes, Buffer vertices, int verticesOffsetInBytes, int numVertices );
     /* return find((float *)&vertex[vertexOffsetInBytes / 4], (unsigned int)(strideInBytes / 4), (float*)&vertices[verticesOffsetInBytes / 4], (unsigned int)numVertices); */
 
-    private static extern long Find( Buffer vertex, int vertexOffsetInBytes, int strideInBytes, float[] vertices, int verticesOffsetInBytes, int numVertices );
+    private static extern long FindJni( Buffer vertex, int vertexOffsetInBytes, int strideInBytes, float[] vertices, int verticesOffsetInBytes, int numVertices );
     /* return find((float *)&vertex[vertexOffsetInBytes / 4], (unsigned int)(strideInBytes / 4), (float*)&vertices[verticesOffsetInBytes / 4], (unsigned int)numVertices); */
 
-    private static extern long Find( float[] vertex, int vertexOffsetInBytes, int strideInBytes, float[] vertices, int verticesOffsetInBytes, int numVertices );
+    private static extern long FindJni( float[] vertex, int vertexOffsetInBytes, int strideInBytes, float[] vertices, int verticesOffsetInBytes, int numVertices );
     /* return find((float *)&vertex[vertexOffsetInBytes / 4], (unsigned int)(strideInBytes / 4), (float*)&vertices[verticesOffsetInBytes / 4], (unsigned int)numVertices); */
 
-    private static extern long Find( Buffer vertex, int vertexOffsetInBytes, int strideInBytes, Buffer vertices, int verticesOffsetInBytes, int numVertices, float epsilon );
+    private static extern long FindJni( Buffer vertex, int vertexOffsetInBytes, int strideInBytes, Buffer vertices, int verticesOffsetInBytes, int numVertices, float epsilon );
     /* return find((float *)&vertex[vertexOffsetInBytes / 4], (unsigned int)(strideInBytes / 4), (float*)&vertices[verticesOffsetInBytes / 4], (unsigned int)numVertices, epsilon); */
 
-    private static extern long Find( float[] vertex, int vertexOffsetInBytes, int strideInBytes, Buffer vertices, int verticesOffsetInBytes, int numVertices, float epsilon );
+    private static extern long FindJni( float[] vertex, int vertexOffsetInBytes, int strideInBytes, Buffer vertices, int verticesOffsetInBytes, int numVertices, float epsilon );
     /* return find((float *)&vertex[vertexOffsetInBytes / 4], (unsigned int)(strideInBytes / 4), (float*)&vertices[verticesOffsetInBytes / 4], (unsigned int)numVertices, epsilon); */
 
-    private static extern long Find( Buffer vertex, int vertexOffsetInBytes, int strideInBytes, float[] vertices, int verticesOffsetInBytes, int numVertices, float epsilon );
+    private static extern long FindJni( Buffer vertex, int vertexOffsetInBytes, int strideInBytes, float[] vertices, int verticesOffsetInBytes, int numVertices, float epsilon );
     /* return find((float *)&vertex[vertexOffsetInBytes / 4], (unsigned int)(strideInBytes / 4), (float*)&vertices[verticesOffsetInBytes / 4], (unsigned int)numVertices, epsilon); */
 
-    private static extern long Find( float[] vertex, int vertexOffsetInBytes, int strideInBytes, float[] vertices, int verticesOffsetInBytes, int numVertices, float epsilon );
+    private static extern long FindJni( float[] vertex, int vertexOffsetInBytes, int strideInBytes, float[] vertices, int verticesOffsetInBytes, int numVertices, float epsilon );
     /* return find((float *)&vertex[vertexOffsetInBytes / 4], (unsigned int)(strideInBytes / 4), (float*)&vertices[verticesOffsetInBytes / 4], (unsigned int)numVertices, epsilon); */
+
+    #endregion Jni equivalent methods
 }

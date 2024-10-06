@@ -35,7 +35,7 @@ public class BoundingBox
 {
     // ------------------------------------------------------------------------
 
-    private readonly static Vector3 _tmpVector = new();
+    private static readonly Vector3 _tmpVector = new();
 
     private readonly Vector3 _cnt = new();
     private readonly Vector3 _dim = new();

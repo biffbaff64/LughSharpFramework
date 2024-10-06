@@ -24,7 +24,7 @@
 
 using LughSharp.LibCore.Network;
 
-namespace DesktopGLBackend;
+namespace DesktopGLBackend.Core;
 
 [PublicAPI]
 public class DesktopGLNet : INet

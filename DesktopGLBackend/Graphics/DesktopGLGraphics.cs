@@ -22,9 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Utils;
-using DesktopGLBackend.Window;
-using LughSharp.LibCore.Utils.Exceptions;
+using DesktopGLBackend.Core;
 using Platform = LughSharp.LibCore.Core.Platform;
 
 namespace DesktopGLBackend.Graphics;

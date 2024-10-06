@@ -22,11 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Audio;
-using DesktopGLBackend.Input;
-using DesktopGLBackend.Window;
-
-namespace DesktopGLBackend;
+namespace DesktopGLBackend.Core;
 
 [PublicAPI]
 public interface IDesktopGLApplicationBase : IApplication

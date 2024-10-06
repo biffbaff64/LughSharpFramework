@@ -24,7 +24,6 @@
 
 
 using LughSharp.LibCore.Audio.Maponus.Support;
-using LughSharp.LibCore.Utils.Exceptions;
 
 namespace LughSharp.LibCore.Audio.Maponus.IO;
 

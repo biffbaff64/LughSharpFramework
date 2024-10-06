@@ -35,7 +35,7 @@ public abstract class Attribute : IComparable< Attribute >
     /// <summary>
     /// The registered type aliases
     /// </summary>
-    private readonly static List< string > Types = new();
+    private static readonly List< string > Types = new();
 
     private readonly int _typeBit;
 

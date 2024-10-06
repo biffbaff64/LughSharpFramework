@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.LibCore.Utils.Buffers.ByteBufferAs;
+
 namespace LughSharp.LibCore.Utils.Buffers.DirectBuffers;
 
 [PublicAPI]
@@ -41,7 +43,7 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer Compact()
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
@@ -53,19 +55,19 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer Slice()
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
     public override ByteBuffer Duplicate()
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
     public override ByteBuffer AsReadOnlyBuffer()
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
@@ -77,7 +79,7 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer Put( byte b )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
@@ -89,7 +91,7 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer Put( int index, byte b )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
@@ -101,7 +103,7 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutChar( char value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
@@ -113,13 +115,13 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutChar( int index, char value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
     public override CharBuffer AsCharBuffer()
     {
-        return null;
+        return new HeapCharBuffer( 1, 0 );
     }
 
     /// <inheritdoc />
@@ -131,7 +133,7 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutShort( short value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
@@ -143,13 +145,13 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutShort( int index, short value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
     public override ShortBuffer AsShortBuffer()
     {
-        return null;
+        return new HeapShortBuffer( 1, 0 );
     }
 
     /// <inheritdoc />
@@ -161,7 +163,7 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutInt( int value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
@@ -173,13 +175,13 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutInt( int index, int value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
     public override IntBuffer AsIntBuffer()
     {
-        return null;
+        return new HeapIntBuffer( 1, 0 );
     }
 
     /// <inheritdoc />
@@ -191,7 +193,7 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutLong( long value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
@@ -203,13 +205,13 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutLong( int index, long value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
     public override LongBuffer AsLongBuffer()
     {
-        return null;
+        return new ByteBufferAsLongBufferB( this, 0, 0, 0, 0, 0 );
     }
 
     /// <inheritdoc />
@@ -221,7 +223,7 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutFloat( float value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
@@ -233,13 +235,13 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutFloat( int index, float value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
     public override FloatBuffer AsFloatBuffer()
     {
-        return null;
+        return new HeapFloatBuffer( 1, 0 );
     }
 
     /// <inheritdoc />
@@ -257,18 +259,18 @@ public class DirectByteBuffer : MappedByteBuffer
     /// <inheritdoc />
     public override ByteBuffer PutDouble( double value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
     public override ByteBuffer PutDouble( int index, double value )
     {
-        return null;
+        return this;
     }
 
     /// <inheritdoc />
     public override DoubleBuffer AsDoubleBuffer()
     {
-        return null;
+        return new HeapDoubleBuffer( 1, 0 );
     }
 }

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
 using Exception = System.Exception;
 using Monitor = System.Threading.Monitor;
 
@@ -37,7 +35,7 @@ public class Timer
 {
     protected readonly List< Task? > Tasks = new( 8 );
     
-    private readonly static object _threadLock = new();
+    private static readonly object _threadLock = new();
 
     private static     TimerThread?  _thread;
 

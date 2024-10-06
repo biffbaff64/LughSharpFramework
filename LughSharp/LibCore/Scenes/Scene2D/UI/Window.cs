@@ -47,8 +47,8 @@ public class Window : Table
     private const int DEFAULT_HEIGHT = 150;
     private const int MOVE           = 1 << 5;
 
-    private readonly static Vector2 _tmpPosition = new();
-    private readonly static Vector2 _tmpSize     = new();
+    private static readonly Vector2 _tmpPosition = new();
+    private static readonly Vector2 _tmpSize     = new();
 
     private WindowStyle? _style;
     private Table?       _titleTable;

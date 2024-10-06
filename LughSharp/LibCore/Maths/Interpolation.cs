@@ -151,33 +151,33 @@ public class Interpolation
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
-    public readonly static Pow            Pow2       = new( 2 );
-    public readonly static PowIn          Pow2In     = new( 2 );
-    public readonly static PowOut         Pow2Out    = new( 2 );
-    public readonly static Pow            Pow3       = new( 3 );
-    public readonly static PowIn          Pow3In     = new( 3 );
-    public readonly static PowOut         Pow3Out    = new( 3 );
-    public readonly static Pow            Pow4       = new( 4 );
-    public readonly static PowIn          Pow4In     = new( 4 );
-    public readonly static PowOut         Pow4Out    = new( 4 );
-    public readonly static Pow            Pow5       = new( 5 );
-    public readonly static PowIn          Pow5In     = new( 5 );
-    public readonly static PowOut         Pow5Out    = new( 5 );
-    public readonly static Exp            Exp10      = new( 2, 10 );
-    public readonly static ExpIn          Exp10In    = new( 2, 10 );
-    public readonly static ExpOut         Exp10Out   = new( 2, 10 );
-    public readonly static Exp            Exp5       = new( 2, 5 );
-    public readonly static ExpIn          Exp5In     = new( 2, 5 );
-    public readonly static ExpOut         Exp5Out    = new( 2, 5 );
-    public readonly static ElasticImpl    Elastic    = new( 2, 10, 7, 1 );
-    public readonly static ElasticInImpl  ElasticIn  = new( 2, 10, 6, 1 );
-    public readonly static ElasticOutImpl ElasticOut = new( 2, 10, 7, 1 );
-    public readonly static SwingImpl      Swing      = new( 1.5f );
-    public readonly static SwingInImpl    SwingIn    = new( 2f );
-    public readonly static SwingOutImpl   SwingOut   = new( 2f );
-    public readonly static BounceImpl     Bounce     = new( 4 );
-    public readonly static BounceInImpl   BounceIn   = new( 4 );
-    public readonly static BounceOutImpl  BounceOut  = new( 4 );
+    public static readonly Pow            Pow2       = new( 2 );
+    public static readonly PowIn          Pow2In     = new( 2 );
+    public static readonly PowOut         Pow2Out    = new( 2 );
+    public static readonly Pow            Pow3       = new( 3 );
+    public static readonly PowIn          Pow3In     = new( 3 );
+    public static readonly PowOut         Pow3Out    = new( 3 );
+    public static readonly Pow            Pow4       = new( 4 );
+    public static readonly PowIn          Pow4In     = new( 4 );
+    public static readonly PowOut         Pow4Out    = new( 4 );
+    public static readonly Pow            Pow5       = new( 5 );
+    public static readonly PowIn          Pow5In     = new( 5 );
+    public static readonly PowOut         Pow5Out    = new( 5 );
+    public static readonly Exp            Exp10      = new( 2, 10 );
+    public static readonly ExpIn          Exp10In    = new( 2, 10 );
+    public static readonly ExpOut         Exp10Out   = new( 2, 10 );
+    public static readonly Exp            Exp5       = new( 2, 5 );
+    public static readonly ExpIn          Exp5In     = new( 2, 5 );
+    public static readonly ExpOut         Exp5Out    = new( 2, 5 );
+    public static readonly ElasticImpl    Elastic    = new( 2, 10, 7, 1 );
+    public static readonly ElasticInImpl  ElasticIn  = new( 2, 10, 6, 1 );
+    public static readonly ElasticOutImpl ElasticOut = new( 2, 10, 7, 1 );
+    public static readonly SwingImpl      Swing      = new( 1.5f );
+    public static readonly SwingInImpl    SwingIn    = new( 2f );
+    public static readonly SwingOutImpl   SwingOut   = new( 2f );
+    public static readonly BounceImpl     Bounce     = new( 4 );
+    public static readonly BounceInImpl   BounceIn   = new( 4 );
+    public static readonly BounceOutImpl  BounceOut  = new( 4 );
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------

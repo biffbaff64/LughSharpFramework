@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Graphics;
 
 /// <summary>
@@ -48,7 +45,7 @@ public class Cubemap : GLTexture, IManageable
 
     // ------------------------------------------------------------------------
 
-    private readonly static Dictionary< IApplication, List< Cubemap >? > _managedCubemaps = new();
+    private static readonly Dictionary< IApplication, List< Cubemap >? > _managedCubemaps = new();
 
     // ------------------------------------------------------------------------
 
@@ -352,37 +349,37 @@ public class Cubemap : GLTexture, IManageable
         /// <summary>
         /// The positive X and first side of the cubemap
         /// </summary>
-        public readonly static CubemapSide PositiveX =
+        public static readonly CubemapSide PositiveX =
             new( "PositiveX", InnerEnum.PositiveX, 0, IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, -1, 0, 1, 0, 0 );
 
         /// <summary>
         /// The negative X and second side of the cubemap
         /// </summary>
-        public readonly static CubemapSide NegativeX =
+        public static readonly CubemapSide NegativeX =
             new( "NegativeX", InnerEnum.NegativeX, 1, IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, -1, 0, -1, 0, 0 );
 
         /// <summary>
         /// The positive Y and third side of the cubemap
         /// </summary>
-        public readonly static CubemapSide PositiveY =
+        public static readonly CubemapSide PositiveY =
             new( "PositiveY", InnerEnum.PositiveY, 2, IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, 0, 1, 0, 1, 0 );
 
         /// <summary>
         /// The negative Y and fourth side of the cubemap
         /// </summary>
-        public readonly static CubemapSide NegativeY =
+        public static readonly CubemapSide NegativeY =
             new( "NegativeY", InnerEnum.NegativeY, 3, IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, 0, -1, 0, -1, 0 );
 
         /// <summary>
         /// The positive Z and fifth side of the cubemap
         /// </summary>
-        public readonly static CubemapSide PositiveZ =
+        public static readonly CubemapSide PositiveZ =
             new( "PositiveZ", InnerEnum.PositiveZ, 4, IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, -1, 0, 0, 0, 1 );
 
         /// <summary>
         /// The negative Z and sixth side of the cubemap
         /// </summary>
-        public readonly static CubemapSide NegativeZ =
+        public static readonly CubemapSide NegativeZ =
             new( "NegativeZ", InnerEnum.NegativeZ, 5, IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, -1, 0, 0, 0, -1 );
 
         public InnerEnum InnerEnumValue { get; private set; }

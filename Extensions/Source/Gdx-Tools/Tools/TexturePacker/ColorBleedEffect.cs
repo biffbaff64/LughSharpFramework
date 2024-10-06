@@ -29,7 +29,7 @@ namespace Extensions.Source.Gdx_Tools.Tools.TexturePacker;
 [PublicAPI]
 public class ColorBleedEffect
 {
-    private readonly static int[] _offsets = [ -1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1 ];
+    private static readonly int[] _offsets = [ -1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1 ];
 
 //    public BufferedImage ProcessImage( BufferedImage image, int maxIterations )
 //    {

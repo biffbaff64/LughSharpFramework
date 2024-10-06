@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
 using Matrix4 = LughSharp.LibCore.Maths.Matrix4;
 
 namespace LughSharp.LibCore.Graphics.G2D;
@@ -81,7 +79,7 @@ public class SpriteCache
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
-    private readonly static float[] _tempVertices = new float[ Sprite.VERTEX_SIZE * 6 ];
+    private static readonly float[] _tempVertices = new float[ Sprite.VERTEX_SIZE * 6 ];
 
     private readonly List< Cache >   _caches         = new();
     private readonly Matrix4         _combinedMatrix = new();

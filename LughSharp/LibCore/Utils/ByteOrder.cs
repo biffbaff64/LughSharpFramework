@@ -37,13 +37,13 @@ public class ByteOrder
     /// Constant denoting big-endian byte order. In this order, the bytes of a
     /// multibyte value are ordered from most significant to least significant.
     /// </summary>
-    public readonly static ByteOrder BigEndian = new( "BigEndian" );
+    public static readonly ByteOrder BigEndian = new( "BigEndian" );
 
     /// <summary>
     /// Constant denoting little-endian byte order. In this order, the bytes of
     /// a multibyte value are ordered from least significant to most significant.
     /// </summary>
-    public readonly static ByteOrder LittleEndian = new( "LittleEndian" );
+    public static readonly ByteOrder LittleEndian = new( "LittleEndian" );
 
     private readonly string _name;
 

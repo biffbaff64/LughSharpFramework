@@ -51,7 +51,7 @@ namespace LughSharp.LibCore.Scenes.Scene2D.Listeners;
 [PublicAPI]
 public class DragScrollListener : DragListener
 {
-    private readonly static Vector2             _tmpCoords     = new();
+    private static readonly Vector2             _tmpCoords     = new();
     private readonly        Interpolation.ExpIn _interpolation = Interpolation.Exp5In;
     private readonly        ScrollPane          _scrollPane;
 

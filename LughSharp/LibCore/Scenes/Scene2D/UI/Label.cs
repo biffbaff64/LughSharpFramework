@@ -37,8 +37,8 @@ namespace LughSharp.LibCore.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Label : Widget
 {
-    private readonly static Color       _tempColor      = new();
-    private readonly static GlyphLayout _prefSizeLayout = new();
+    private static readonly Color       _tempColor      = new();
+    private static readonly GlyphLayout _prefSizeLayout = new();
     private readonly        Vector2     _prefSize       = new();
 
     private string?         _ellipsis;

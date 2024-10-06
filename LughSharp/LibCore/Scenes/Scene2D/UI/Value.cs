@@ -36,7 +36,7 @@ namespace LughSharp.LibCore.Scenes.Scene2D.UI;
 [PublicAPI]
 public abstract class Value
 {
-    public readonly static Fixed Zero = new( 0 );
+    public static readonly Fixed Zero = new( 0 );
     public static          Value MinWidth   { get; set; } = new ValueMinWidthInnerClass();
     public static          Value MinHeight  { get; set; } = new ValueMinHeightInnerClass();
     public static          Value MaxWidth   { get; set; } = new ValueMaxWidthInnerClass();
@@ -79,7 +79,7 @@ public abstract class Value
     [PublicAPI]
     public class Fixed : Value
     {
-        private readonly static Fixed?[] _cache = new Fixed[ 111 ];
+        private static readonly Fixed?[] _cache = new Fixed[ 111 ];
 
         public Fixed( float value )
         {

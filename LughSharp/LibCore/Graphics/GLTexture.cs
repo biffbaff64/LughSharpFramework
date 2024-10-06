@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Graphics;
 
 /// <summary>
@@ -113,12 +110,12 @@ public abstract class GLTexture : IDisposable
     /// along its z-axis. For standard 2D textures, this value would typically be 1 or not used at all.
     /// </para>
     /// </summary>
-    public virtual int Depth  { get; }
+    public virtual int Depth { get; }
 
     /// <summary>
     /// The width, in pixels, of this texture.
     /// </summary>
-    public virtual int Width  { get; }
+    public virtual int Width { get; }
 
     /// <summary>
     /// The height, in pixels, of this texture.
@@ -155,7 +152,7 @@ public abstract class GLTexture : IDisposable
     // ------------------------------------------------------------------------
 
     protected GLTexture( int glTarget )
-        : this( glTarget, Gdx.GL.glGenTexture() )
+                    : this( glTarget, Gdx.GL.glGenTexture() )
     {
         Logger.CheckPoint();
     }
@@ -191,7 +188,7 @@ public abstract class GLTexture : IDisposable
     public void Bind( int unit )
     {
         Gdx.GL.glActiveTexture( IGL.GL_TEXTURE0 + unit );
-        Gdx.GL.glBindTexture( GLTarget, ( uint ) GLTextureHandle );
+        Gdx.GL.glBindTexture( GLTarget, ( uint )GLTextureHandle );
     }
 
     /// <summary>
@@ -378,7 +375,7 @@ public abstract class GLTexture : IDisposable
         if ( data == null )
         {
             Logger.Error( "NULL ITextureData supplied!" );
-            
+
             // TODO: remove texture on target?
             return;
         }
@@ -444,20 +441,20 @@ public abstract class GLTexture : IDisposable
             for ( var i = 0; i < 100; i += 10 )
             {
                 Logger.Debug( $"{a[ i + 0 ]},{a[ i + 1 ]},{a[ i + 2 ]},{a[ i + 3 ]},"
-                            + $"{a[ i + 4 ]},{a[ i + 5 ]},{a[ i + 6 ]},{a[ i + 7 ]},"
-                            + $"{a[ i + 8 ]},{a[ i + 9 ]},{a[ i + 10 ]},{a[ i + 11 ]},"
-                            + $"{a[ i + 12 ]},{a[ i + 13 ]},{a[ i + 14 ]},{a[ i + 15 ]}," );
+                              + $"{a[ i + 4 ]},{a[ i + 5 ]},{a[ i + 6 ]},{a[ i + 7 ]},"
+                              + $"{a[ i + 8 ]},{a[ i + 9 ]},{a[ i + 10 ]},{a[ i + 11 ]},"
+                              + $"{a[ i + 12 ]},{a[ i + 13 ]},{a[ i + 14 ]},{a[ i + 15 ]}," );
             }
-            
+
             Gdx.GL.glTexImage2D( target,
-                                 miplevel,
-                                 pixmap.GLInternalFormat,
-                                 pixmap.Width,
-                                 pixmap.Height,
-                                 border: 0,
-                                 pixmap.GLFormat,
-                                 pixmap.GLType,
-                                 pixmap.PixelData );
+                            miplevel,
+                            pixmap.GLInternalFormat,
+                            pixmap.Width,
+                            pixmap.Height,
+                            border: 0,
+                            pixmap.GLFormat,
+                            pixmap.GLType,
+                            pixmap.PixelData );
         }
 
         if ( disposePixmap )
@@ -476,7 +473,7 @@ public abstract class GLTexture : IDisposable
     {
         if ( GLTextureHandle != 0 )
         {
-            Gdx.GL.glDeleteTextures( ( uint ) GLTextureHandle );
+            Gdx.GL.glDeleteTextures( ( uint )GLTextureHandle );
             GLTextureHandle = 0;
         }
     }

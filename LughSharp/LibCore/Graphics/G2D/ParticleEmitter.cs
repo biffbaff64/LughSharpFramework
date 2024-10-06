@@ -24,7 +24,6 @@
 
 
 using LughSharp.LibCore.Maths.Collision;
-using LughSharp.LibCore.Utils.Exceptions;
 using Exception = System.Exception;
 
 namespace LughSharp.LibCore.Graphics.G2D;
@@ -62,14 +61,14 @@ public class ParticleEmitter
 
     private const int DEFAULT_MAX_PARTICLE_COUNT = 4;
 
-    private readonly static int _updateScale    = 1 << 0;
-    private readonly static int _updateAngle    = 1 << 1;
-    private readonly static int _updateRotation = 1 << 2;
-    private readonly static int _updateVelocity = 1 << 3;
-    private readonly static int _updateWind     = 1 << 4;
-    private readonly static int _updateGravity  = 1 << 5;
-    private readonly static int _updateTint     = 1 << 6;
-    private readonly static int _updateSprite   = 1 << 7;
+    private static readonly int _updateScale    = 1 << 0;
+    private static readonly int _updateAngle    = 1 << 1;
+    private static readonly int _updateRotation = 1 << 2;
+    private static readonly int _updateVelocity = 1 << 3;
+    private static readonly int _updateWind     = 1 << 4;
+    private static readonly int _updateGravity  = 1 << 5;
+    private static readonly int _updateTint     = 1 << 6;
+    private static readonly int _updateSprite   = 1 << 7;
 
     private float _accumulator;
     private bool  _allowCompletion;

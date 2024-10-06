@@ -24,7 +24,6 @@
 
 
 using LughSharp.LibCore.Maths.Collision;
-using LughSharp.LibCore.Utils.Exceptions;
 
 namespace LughSharp.LibCore.Maths;
 
@@ -35,34 +34,34 @@ namespace LughSharp.LibCore.Maths;
 [PublicAPI]
 public class Intersector
 {
-    private readonly static Vector3       _v0          = new();
-    private readonly static Vector3       _v1          = new();
-    private readonly static Vector3       _v2          = new();
-    private readonly static List< float > _floatArray  = [ ];
-    private readonly static List< float > _floatArray2 = [ ];
+    private static readonly Vector3       _v0          = new();
+    private static readonly Vector3       _v1          = new();
+    private static readonly Vector3       _v2          = new();
+    private static readonly List< float > _floatArray  = [ ];
+    private static readonly List< float > _floatArray2 = [ ];
 
-    private readonly static Vector2 _ip  = new();
-    private readonly static Vector2 _ep1 = new();
-    private readonly static Vector2 _ep2 = new();
-    private readonly static Vector2 _s   = new();
-    private readonly static Vector2 _e   = new();
+    private static readonly Vector2 _ip  = new();
+    private static readonly Vector2 _ep1 = new();
+    private static readonly Vector2 _ep2 = new();
+    private static readonly Vector2 _s   = new();
+    private static readonly Vector2 _e   = new();
 
-    private readonly static Vector2 _v2A = new();
-    private readonly static Vector2 _v2B = new();
-    private readonly static Vector2 _v2C = new();
-    private readonly static Vector2 _v2D = new();
+    private static readonly Vector2 _v2A = new();
+    private static readonly Vector2 _v2B = new();
+    private static readonly Vector2 _v2C = new();
+    private static readonly Vector2 _v2D = new();
 
-    private readonly static Plane   _plane = new( new Vector3(), 0 );
-    private readonly static Vector3 _vec3  = new();
+    private static readonly Plane   _plane = new( new Vector3(), 0 );
+    private static readonly Vector3 _vec3  = new();
 
     private static Vector3 _dir   = new();
     private static Vector3 _start = new();
 
-    private readonly static Vector3 _best = new();
-    private readonly static Vector3 _tmp  = new();
-    private readonly static Vector3 _tmp1 = new();
-    private readonly static Vector3 _tmp2 = new();
-    private readonly static Vector3 _tmp3 = new();
+    private static readonly Vector3 _best = new();
+    private static readonly Vector3 _tmp  = new();
+    private static readonly Vector3 _tmp1 = new();
+    private static readonly Vector3 _tmp2 = new();
+    private static readonly Vector3 _tmp3 = new();
 
     //TODO:
     // This is a temporary fix for a problem caused by the above method.
@@ -73,7 +72,7 @@ public class Intersector
     // there is a better solution then I will update.
     private static MinimumTranslationVector? _dummyMinimumTranslationVector = new();
 
-    private readonly static Vector3 _intersection = new();
+    private static readonly Vector3 _intersection = new();
 
     private Intersector()
     {

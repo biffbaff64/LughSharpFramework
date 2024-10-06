@@ -22,11 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using System.IO.Hashing;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
-using LughSharp.LibCore.Utils.Exceptions;
 using Exception = System.Exception;
 
 namespace LughSharp.LibCore.Graphics;
@@ -88,7 +86,7 @@ public static class PixmapIO
         try
         {
             // Guess at deflated size.
-            var writer = new PNG( ( int ) ( pixmap.Width * pixmap.Height * 1.5f ) );
+            var writer = new PNG( ( int )( pixmap.Width * pixmap.Height * 1.5f ) );
 
             try
             {
@@ -115,8 +113,8 @@ public static class PixmapIO
     {
         private const int BUFFER_SIZE = 32000;
 
-        private readonly static byte[] _writeBuffer = new byte[ BUFFER_SIZE ];
-        private readonly static byte[] _readBuffer  = new byte[ BUFFER_SIZE ];
+        private static readonly byte[] _writeBuffer = new byte[ BUFFER_SIZE ];
+        private static readonly byte[] _readBuffer  = new byte[ BUFFER_SIZE ];
 
         /// <summary>
         /// </summary>
@@ -224,15 +222,15 @@ public static class PixmapIO
         private readonly Deflater    _deflater;
 
         private readonly byte[] _signature = [ 137, 80, 78, 71, 13, 10, 26, 10 ];
-        private          int    _lastLineLen;
 
-        private ByteArray? _curLineBytes;
-        private ByteArray? _lineOutBytes;
-        private ByteArray? _prevLineBytes;
+//        private int        _lastLineLen;
+//        private ByteArray? _curLineBytes;
+//        private ByteArray? _lineOutBytes;
+//        private ByteArray? _prevLineBytes;
 
         // --------------------------------------------------------------------
         // --------------------------------------------------------------------
-        
+
         /// <summary>
         /// </summary>
         /// <param name="initialBufferSize"></param>

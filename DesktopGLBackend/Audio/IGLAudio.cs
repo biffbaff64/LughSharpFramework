@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-using LughSharp.LibCore.Audio;
-
 namespace DesktopGLBackend.Audio;
 
 /// <summary>

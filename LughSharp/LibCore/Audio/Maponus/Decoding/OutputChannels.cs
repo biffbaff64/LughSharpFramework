@@ -64,10 +64,10 @@ public class OutputChannels
     /// </summary>
     public const int DOWNMIX_CHANNELS = 3;
 
-    public readonly static OutputChannels Left    = new( LEFT_CHANNEL );
-    public readonly static OutputChannels Right   = new( RIGHT_CHANNEL );
-    public readonly static OutputChannels Both    = new( BOTH_CHANNELS );
-    public readonly static OutputChannels DownMix = new( DOWNMIX_CHANNELS );
+    public static readonly OutputChannels Left    = new( LEFT_CHANNEL );
+    public static readonly OutputChannels Right   = new( RIGHT_CHANNEL );
+    public static readonly OutputChannels Both    = new( BOTH_CHANNELS );
+    public static readonly OutputChannels DownMix = new( DOWNMIX_CHANNELS );
 
     private readonly int _outputChannels;
 

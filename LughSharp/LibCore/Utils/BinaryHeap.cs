@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Utils;
 
 /// <summary>
@@ -58,6 +55,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     private readonly bool              _isMaxHeap;
     private          BinaryHeapNode[]? _nodes;
 
+    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
     /// <summary>
@@ -117,7 +115,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// </summary>
     /// <param name="node"> The <see cref="BinaryHeapNode"/> to look for. </param>
     /// <param name="identity">
-    /// If true, == comparison will be used. If false, .Equals() comparison will be used.
+    /// If true, == comparison will be used. If false an Equals() comparison will be used.
     /// </param>
     public bool Contains( T node, bool identity )
     {

@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Window;
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace DesktopGLBackend.Input;
 
 [PublicAPI]

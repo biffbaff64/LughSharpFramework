@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
 using Exception = System.Exception;
 
 namespace LughSharp.LibCore.Maths;
@@ -34,9 +32,9 @@ namespace LughSharp.LibCore.Maths;
 [PublicAPI]
 public class Vector2 : IVector< Vector2 >
 {
-    public readonly static Vector2 XDefault = new( 1, 0 );
-    public readonly static Vector2 YDefault = new( 0, 1 );
-    public readonly static Vector2 Zero     = new( 0, 0 );
+    public static readonly Vector2 XDefault = new( 1, 0 );
+    public static readonly Vector2 YDefault = new( 0, 1 );
+    public static readonly Vector2 Zero     = new( 0, 0 );
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------

@@ -27,7 +27,6 @@ using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using LughSharp.LibCore.Maps.Objects;
 using LughSharp.LibCore.Maps.Tiled.Objects;
 using LughSharp.LibCore.Maps.Tiled.Tiles;
-using LughSharp.LibCore.Utils.Exceptions;
 
 namespace LughSharp.LibCore.Maps.Tiled.Loaders;
 

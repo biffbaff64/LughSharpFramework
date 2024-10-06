@@ -24,7 +24,6 @@
 
 
 using LughSharp.LibCore.Scenes.Scene2D.Utils;
-using LughSharp.LibCore.Utils.Exceptions;
 using Exception = System.Exception;
 
 namespace LughSharp.LibCore.Scenes.Scene2D.UI;
@@ -49,7 +48,7 @@ public class Skin : IDisposable
 {
     // ------------------------------------------------------------------------
 
-    private readonly static Type[] _defaultTagClasses =
+    private static readonly Type[] _defaultTagClasses =
     [
         typeof( BitmapFont ),
         typeof( Color ),

@@ -37,7 +37,7 @@ public partial class Decoder
 {
     private const float DEFAULT_SCALE_FACTOR = 32700.0f;
 
-    private readonly static Parameters _decoderDefaultParams = new();
+    private static readonly Parameters _decoderDefaultParams = new();
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------

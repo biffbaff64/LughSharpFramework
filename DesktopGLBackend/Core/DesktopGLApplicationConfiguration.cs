@@ -22,10 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Graphics;
-using DesktopGLBackend.Window;
-
-namespace DesktopGLBackend;
+namespace DesktopGLBackend.Core;
 
 [PublicAPI]
 public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration

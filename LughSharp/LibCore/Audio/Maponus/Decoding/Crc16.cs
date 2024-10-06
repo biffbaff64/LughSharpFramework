@@ -33,7 +33,7 @@ namespace LughSharp.LibCore.Audio.Maponus.Decoding;
 [PublicAPI]
 public class Crc16
 {
-    private readonly static short _polynomial;
+    private static readonly short _polynomial;
 
     private short _crc = ( short ) SupportClass.Identity( 0xFFFF );
 

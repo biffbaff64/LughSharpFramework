@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
 using Exception = System.Exception;
 
 namespace LughSharp.LibCore.Graphics;
@@ -59,6 +57,7 @@ public class Pixmap : IDisposable
 
     private Filter _filter = Filter.BiLinear;
 
+    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
     /// <summary>
@@ -239,7 +238,7 @@ public class Pixmap : IDisposable
     /// specified <see cref="IDownloadPixmapResponseListener"/>.
     /// </summary>
     /// <param name="url">http url to download the image from.</param>
-    /// <param name="responseListener">the listener to call once the image is available as a Pixmap</param>
+    /// <param name="responseListener"> The listener to call once the image is available as a Pixmap</param>
     /// <remarks> NOT YET IMPLEMENTED. </remarks>
     public static void DownloadFromUrl( string url, IDownloadPixmapResponseListener responseListener )
     {
@@ -249,7 +248,7 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Sets the color for drawing operations.
     /// </summary>
-    /// <param name="color"> the color, encoded as RGBA8888  </param>
+    /// <param name="color"> The color, encoded as RGBA8888. </param>
     public void SetColor( Color color )
     {
         this.Color = color;
@@ -351,7 +350,7 @@ public class Pixmap : IDisposable
     /// <param name="dstx"> The target x-coordinate (top left corner) </param>
     /// <param name="dsty"> The target y-coordinate (top left corner) </param>
     /// <param name="dstWidth"> The target width </param>
-    /// <param name="dstHeight"> the target height  </param>
+    /// <param name="dstHeight"> The target height  </param>
     public void DrawPixmap( Pixmap pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth, int dstHeight )
     {
         ArgumentNullException.ThrowIfNull( nameof( pixmap ), "Source Pixmap cannot be null." );
@@ -441,9 +440,9 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Draws a pixel at the given location with the given color.
     /// </summary>
-    /// <param name="x"> the x-coordinate </param>
-    /// <param name="y"> the y-coordinate </param>
-    /// <param name="color"> the color in RGBA8888 format. </param>
+    /// <param name="x"> The x-coordinate </param>
+    /// <param name="y"> The y-coordinate </param>
+    /// <param name="color"> The color in RGBA8888 format. </param>
     public void DrawPixel( int x, int y, Color color )
     {
         PixmapData.SetPixel( x, y, color );
@@ -461,7 +460,7 @@ public class Pixmap : IDisposable
     /// <param name="y"> Framebuffer region y </param>
     /// <param name="width"> Framebuffer region width </param>
     /// <param name="height"> Framebuffer region height </param>
-    /// <returns>The new Pixmap.</returns>
+    /// <returns> The new Pixmap. </returns>
     public static unsafe Pixmap CreateFromFrameBuffer( int x, int y, int width, int height )
     {
         Gdx.GL.glPixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
@@ -476,6 +475,12 @@ public class Pixmap : IDisposable
         return pixmap;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="file"></param>
+    /// <param name="pixmap"></param>
+    /// <exception cref="GdxRuntimeException"></exception>
     public static void SaveToFile( FileInfo file, Pixmap pixmap )
     {
         try

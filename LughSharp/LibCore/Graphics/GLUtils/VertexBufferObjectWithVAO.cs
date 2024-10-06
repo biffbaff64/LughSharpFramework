@@ -30,7 +30,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 {
     public VertexAttributes Attributes { get; set; }
 
-    private readonly static IntBuffer _tmpHandle = BufferUtils.NewIntBuffer( 1 );
+    private static readonly IntBuffer _tmpHandle = BufferUtils.NewIntBuffer( 1 );
 
     private readonly FloatBuffer _buffer;
 

@@ -166,8 +166,8 @@ public class PixmapPackerIO
         public const int FCIM = 0;
         public const int FPNG = 1;
 
-        public readonly static ImageFormat CIM = new( ".cim", FCIM );
-        public readonly static ImageFormat PNG = new( ".png", FPNG );
+        public static readonly ImageFormat CIM = new( ".cim", FCIM );
+        public static readonly ImageFormat PNG = new( ".png", FPNG );
 
         private ImageFormat( string extension, int ftype )
         {

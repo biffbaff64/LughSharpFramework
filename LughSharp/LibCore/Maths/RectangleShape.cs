@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Maths;
 
 /// <summary>
@@ -34,7 +31,7 @@ namespace LughSharp.LibCore.Maths;
 [PublicAPI]
 public class RectangleShape : IShape2D
 {
-    public readonly static RectangleShape Tmp = new();
+    public static readonly RectangleShape Tmp = new();
 
     /// <summary>
     /// Constructs a new rectangle with all values set to zero

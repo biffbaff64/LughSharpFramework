@@ -33,7 +33,7 @@ namespace LughSharp.LibCore.Audio.Maponus.Decoding.Decoders.LayerI;
 public class SubbandLayer1 : ASubband
 {
     // Factors and offsets for sample requantization
-    public readonly static float[] TableFactor =
+    public static readonly float[] TableFactor =
     [
         0.0f, ( 1.0f / 2.0f ) * ( 4.0f / 3.0f ), ( 1.0f / 4.0f ) * ( 8.0f / 7.0f ), ( 1.0f / 8.0f ) * ( 16.0f / 15.0f ),
         ( 1.0f / 16.0f ) * ( 32.0f / 31.0f ), ( 1.0f / 32.0f ) * ( 64.0f / 63.0f ), ( 1.0f / 64.0f ) * ( 128.0f / 127.0f ),
@@ -42,7 +42,7 @@ public class SubbandLayer1 : ASubband
         ( 1.0f / 8192.0f ) * ( 16384.0f / 16383.0f ), ( 1.0f / 16384.0f ) * ( 32768.0f / 32767.0f )
     ];
 
-    public readonly static float[] TableOffset =
+    public static readonly float[] TableOffset =
     [
         0.0f, ( ( 1.0f / 2.0f ) - 1.0f ) * ( 4.0f / 3.0f ), ( ( 1.0f / 4.0f ) - 1.0f ) * ( 8.0f / 7.0f ),
         ( ( 1.0f / 8.0f ) - 1.0f ) * ( 16.0f / 15.0f ), ( ( 1.0f / 16.0f ) - 1.0f ) * ( 32.0f / 31.0f ),

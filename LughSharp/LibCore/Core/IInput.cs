@@ -383,7 +383,7 @@ public interface IInput
 
         public const int MAX_KEYCODE = 255;
 
-        private readonly static List< string > _keyNames = new();
+        private static readonly List< string > _keyNames = new();
 
         // --------------------------------------------------------------------
 

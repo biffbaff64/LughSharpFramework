@@ -39,21 +39,21 @@ public class TextureWrap
 
     // ------------------------------------------------------------------------
 
-    public readonly static TextureWrap MirroredRepeat = new
+    public static readonly TextureWrap MirroredRepeat = new
         (
          "MirroredRepeat",
          InnerEnum.MirroredRepeat,
          IGL.GL_MIRRORED_REPEAT
         );
 
-    public readonly static TextureWrap ClampToEdge = new
+    public static readonly TextureWrap ClampToEdge = new
         (
          "ClampToEdge",
          InnerEnum.ClampToEdge,
          IGL.GL_CLAMP_TO_EDGE
         );
 
-    public readonly static TextureWrap Repeat = new
+    public static readonly TextureWrap Repeat = new
         (
          "Repeat",
          InnerEnum.Repeat,
@@ -71,7 +71,7 @@ public class TextureWrap
 
     // ------------------------------------------------------------------------
 
-    private readonly static List< TextureWrap > _valueList = new();
+    private static readonly List< TextureWrap > _valueList = new();
 
     private static   int    _nextOrdinal = 0;
     private readonly string _nameValue;

@@ -56,7 +56,7 @@ public class MathUtils
     private const double BIG_ENOUGH_CEIL  = 16384.999999999996;
     private const double BIG_ENOUGH_ROUND = BIG_ENOUGH_INT + 0.5f;
 
-    private readonly static Random _rand = new();
+    private static readonly Random _rand = new();
 
     /// <summary>
     /// Returns the sine in radians from a lookup table.
@@ -554,7 +554,7 @@ public class MathUtils
     /// </summary>
     internal class SinClass
     {
-        public readonly static float[] Table = new float[ SIN_COUNT ];
+        public static readonly float[] Table = new float[ SIN_COUNT ];
 
         public SinClass()
         {

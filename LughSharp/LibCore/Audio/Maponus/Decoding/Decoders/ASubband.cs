@@ -32,7 +32,7 @@ namespace LughSharp.LibCore.Audio.Maponus.Decoding.Decoders;
 public abstract class ASubband
 {
     // Scalefactors for layer I and II, Annex 3-B.1 in ISO/IEC DIS 11172:
-    public readonly static float[] ScaleFactors =
+    public static readonly float[] ScaleFactors =
     [
         2.00000000000000f, 1.58740105196820f, 1.25992104989487f, 1.00000000000000f,
         0.79370052598410f, 0.62996052494744f, 0.50000000000000f, 0.39685026299205f,

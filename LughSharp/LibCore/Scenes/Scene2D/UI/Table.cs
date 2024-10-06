@@ -24,7 +24,6 @@
 
 
 using LughSharp.LibCore.Scenes.Scene2D.Utils;
-using LughSharp.LibCore.Utils.Exceptions;
 
 namespace LughSharp.LibCore.Scenes.Scene2D.UI;
 
@@ -42,9 +41,9 @@ public class Table : WidgetGroup
 
     // ------------------------------------------------------------------------
 
-    public readonly static Color DebugTableColor = new( 0, 0, 1, 1 );
-    public readonly static Color DebugCellColor  = new( 1, 0, 0, 1 );
-    public readonly static Color DebugActorColor = new( 0, 1, 0, 1 );
+    public static readonly Color DebugTableColor = new( 0, 0, 1, 1 );
+    public static readonly Color DebugCellColor  = new( 1, 0, 0, 1 );
+    public static readonly Color DebugActorColor = new( 0, 1, 0, 1 );
 
     // ------------------------------------------------------------------------
 
@@ -2122,22 +2121,22 @@ public class Table : WidgetGroup
     /// <summary>
     /// Value that is the top padding of the table's background.
     /// </summary>
-    public readonly static Value BackgroundTop = new BackgroundTopDelegate();
+    public static readonly Value BackgroundTop = new BackgroundTopDelegate();
 
     /// <summary>
     /// Value that is the bottom padding of the table's background.
     /// </summary>
-    public readonly static Value BackgroundBottom = new BackgroundBottomDelegate();
+    public static readonly Value BackgroundBottom = new BackgroundBottomDelegate();
 
     /// <summary>
     /// Value that is the left padding of the table's background.
     /// </summary>
-    public readonly static Value BackgroundLeft = new BackgroundLeftDelegate();
+    public static readonly Value BackgroundLeft = new BackgroundLeftDelegate();
 
     /// <summary>
     /// Value that is the right padding of the table's background.
     /// </summary>
-    public readonly static Value BackgroundRight = new BackgroundRightDelegate();
+    public static readonly Value BackgroundRight = new BackgroundRightDelegate();
 
     private sealed class BackgroundTopDelegate : Value
     {

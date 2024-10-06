@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndroidBackend", "AndroidBa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "Extensions\Extensions.csproj", "{C1E7A757-B946-42C1-846C-0BFCA30AE973}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "..\..\CSharp\ConsoleApp1\ConsoleApp1.csproj", "{598B4D7A-ADC8-4932-AC10-047D9F063C10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{C1E7A757-B946-42C1-846C-0BFCA30AE973}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1E7A757-B946-42C1-846C-0BFCA30AE973}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1E7A757-B946-42C1-846C-0BFCA30AE973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{598B4D7A-ADC8-4932-AC10-047D9F063C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{598B4D7A-ADC8-4932-AC10-047D9F063C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{598B4D7A-ADC8-4932-AC10-047D9F063C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{598B4D7A-ADC8-4932-AC10-047D9F063C10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

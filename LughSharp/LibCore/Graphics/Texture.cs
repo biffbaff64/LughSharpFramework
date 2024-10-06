@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-using LughSharp.LibCore.Utils.Exceptions;
-
 namespace LughSharp.LibCore.Graphics;
 
 /// <summary>
@@ -52,13 +49,13 @@ namespace LughSharp.LibCore.Graphics;
 public class Texture : GLTexture, IManageable
 {
     public AssetManager? AssetManager { get; set; } = null;
-    public ITextureData TextureData  { get; set; }
+    public ITextureData  TextureData  { get; set; }
 
     // ------------------------------------------------------------------------
 
-    public override int  Width       => TextureData.Width;
-    public override int  Height      => TextureData.Height;
-    public override int  Depth       => 0;
+    public override int Width  => TextureData.Width;
+    public override int Height => TextureData.Height;
+    public override int Depth  => 0;
 
     public bool IsManaged
     {
@@ -81,7 +78,7 @@ public class Texture : GLTexture, IManageable
     /// </summary>
     /// <param name="internalPath"></param>
     public Texture( string internalPath )
-        : this( Gdx.Files.Internal( internalPath ).File, false )
+                    : this( Gdx.Files.Internal( internalPath ).File, false )
     {
         Logger.CheckPoint();
     }
@@ -92,7 +89,7 @@ public class Texture : GLTexture, IManageable
     /// <param name="file"></param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file, bool useMipMaps )
-        : this( file, Pixmap.ColorFormat.Default, useMipMaps )
+                    : this( file, Pixmap.ColorFormat.Default, useMipMaps )
     {
         Logger.CheckPoint();
     }
@@ -108,7 +105,7 @@ public class Texture : GLTexture, IManageable
     public Texture( FileInfo file,
                     Pixmap.ColorFormat format = Pixmap.ColorFormat.Default,
                     bool useMipMaps = false )
-        : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
+                    : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
     {
         Logger.CheckPoint();
     }
@@ -119,10 +116,10 @@ public class Texture : GLTexture, IManageable
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( Pixmap pixmap, bool useMipMaps = false )
-        : this( new PixmapTextureData( pixmap, null, useMipMaps, false ) )
+                    : this( new PixmapTextureData( pixmap, null, useMipMaps, false ) )
     {
         Logger.CheckPoint();
-        
+
         Debug();
     }
 
@@ -133,7 +130,7 @@ public class Texture : GLTexture, IManageable
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( Pixmap pixmap, Pixmap.ColorFormat format, bool useMipMaps = false )
-        : this( new PixmapTextureData( pixmap, format, useMipMaps, false ) )
+                    : this( new PixmapTextureData( pixmap, format, useMipMaps, false ) )
     {
         Logger.CheckPoint();
     }
@@ -145,7 +142,7 @@ public class Texture : GLTexture, IManageable
     /// <param name="height"> The Height in pixels. </param>
     /// <param name="format"> The pixmap <see cref="Pixmap.ColorFormat"/> </param>
     public Texture( int width, int height, Pixmap.ColorFormat format )
-        : this( new PixmapTextureData( new Pixmap( width, height, format ), null, false, true ) )
+                    : this( new PixmapTextureData( new Pixmap( width, height, format ), null, false, true ) )
     {
         Logger.CheckPoint();
     }
@@ -154,7 +151,7 @@ public class Texture : GLTexture, IManageable
     /// Creates a new Texture using the supplied <see cref="ITextureData"/>.
     /// </summary>
     public Texture( ITextureData data )
-        : this( IGL.GL_TEXTURE_2D, Gdx.GL.glGenTexture(), data )
+                    : this( IGL.GL_TEXTURE_2D, Gdx.GL.glGenTexture(), data )
     {
         Logger.CheckPoint();
     }
@@ -167,7 +164,7 @@ public class Texture : GLTexture, IManageable
     /// <param name="glTextureHandle"></param>
     /// <param name="data"></param>
     protected Texture( int glTarget, uint glTextureHandle, ITextureData data )
-        : base( glTarget, glTextureHandle )
+                    : base( glTarget, glTextureHandle )
     {
         ArgumentNullException.ThrowIfNull( data );
 
@@ -176,9 +173,9 @@ public class Texture : GLTexture, IManageable
         Logger.Debug( $"data.TextureDataType: {data.TextureDataType}" );
         Logger.Debug( $"data.Format: {data.Format}" );
         Logger.Debug( $"data.IsPrepared: {data.IsPrepared}" );
-        
+
         TextureData = data;
-        
+
         Load( data );
 
         if ( data.IsManaged )
@@ -252,12 +249,12 @@ public class Texture : GLTexture, IManageable
         Bind();
 
         Gdx.GL.glTexSubImage2D( GLTarget,
-                                0, x, y,
-                                pixmap.Width,
-                                pixmap.Height,
-                                pixmap.GLFormat,
-                                pixmap.GLType,
-                                pixmap.PixelData );
+                        0, x, y,
+                        pixmap.Width,
+                        pixmap.Height,
+                        pixmap.GLFormat,
+                        pixmap.GLType,
+                        pixmap.PixelData );
     }
 
     /// <summary>
@@ -268,8 +265,8 @@ public class Texture : GLTexture, IManageable
     private void AddManagedTexture( IApplication app, Texture texture )
     {
         List< Texture > managedTextureArray = _managedTextures.TryGetValue( app, out List< Texture >? managedTexture )
-                                                  ? managedTexture
-                                                  : [ ];
+                        ? managedTexture
+                        : [ ];
 
         managedTextureArray.Add( texture );
 
@@ -322,14 +319,14 @@ public class Texture : GLTexture, IManageable
                     // well as a callback that sets the ref count.
                     var parameters = new TextureLoader.TextureLoaderParameters
                     {
-                        TextureData    = texture.TextureData,
-                        MinFilter      = texture.MinFilter,
-                        MagFilter      = texture.MagFilter,
-                        WrapU          = texture.UWrap,
-                        WrapV          = texture.VWrap,
-                        GenMipMaps     = texture.TextureData is { UseMipMaps: true },
-                        Texture        = texture,
-                        LoadedCallback = new LoadedCallbackInnerClass( refCount )
+                                    TextureData    = texture.TextureData,
+                                    MinFilter      = texture.MinFilter,
+                                    MagFilter      = texture.MagFilter,
+                                    WrapU          = texture.UWrap,
+                                    WrapV          = texture.VWrap,
+                                    GenMipMaps     = texture.TextureData is { UseMipMaps: true },
+                                    Texture        = texture,
+                                    LoadedCallback = new LoadedCallbackInnerClass( refCount )
                     };
 
                     // unload the texture, create a new gl handle then reload it.

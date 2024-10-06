@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.LibCore.Files;
-using LughSharp.LibCore.Utils.Exceptions;
 using Environment = System.Environment;
 
 namespace DesktopGLBackend.Files;
@@ -31,9 +30,9 @@ namespace DesktopGLBackend.Files;
 [PublicAPI]
 public class DesktopGLFiles : IFiles
 {
-    public readonly static string ExternalPath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile );
-    public readonly static string InternalPath = System.IO.Directory.GetCurrentDirectory();
-    public readonly static string LocalPath    = $"{Path.PathSeparator}";
+    public static readonly string ExternalPath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile );
+    public static readonly string InternalPath = System.IO.Directory.GetCurrentDirectory();
+    public static readonly string LocalPath    = $"{Path.PathSeparator}";
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
