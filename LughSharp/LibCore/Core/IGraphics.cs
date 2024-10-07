@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.LibCore.Core;
 
 [PublicAPI]
@@ -30,17 +29,16 @@ public interface IGraphics
 {
     #region properties
 
-    GLVersion?             GLVersion    { get; set; }
-    GDXVersion.GLType      GraphicsType { get; }
-    BufferFormatDescriptor BufferFormat { get; set; }
-    IGLBindings            GL           { get; set; }
-
-    float DeltaTime        { get; set; }
-    int   Width            { get; }
-    int   Height           { get; }
-    int   BackBufferWidth  { get; }
-    int   BackBufferHeight { get; }
-    bool  IsFullscreen     { get; }
+    GLVersion?             GLVersion        { get; set; }
+    GraphicsBackend.Type   GraphicsType     { get; }
+    BufferFormatDescriptor BufferFormat     { get; set; }
+    IGLBindings            GL               { get; set; }
+    float                  DeltaTime        { get; set; }
+    int                    Width            { get; }
+    int                    Height           { get; }
+    int                    BackBufferWidth  { get; }
+    int                    BackBufferHeight { get; }
+    bool                   IsFullscreen     { get; }
 
     #endregion properties
 
@@ -129,7 +127,7 @@ public interface IGraphics
         public override string ToString()
         {
             return $"r - {R}, g - {G}, b - {B}, a - {A}, depth - {Depth}, stencil - "
-                 + $"{Stencil}, num samples - {Samples}, coverage sampling - {CoverageSampling}";
+                   + $"{Stencil}, num samples - {Samples}, coverage sampling - {CoverageSampling}";
         }
     }
 
@@ -165,7 +163,7 @@ public interface IGraphics
     int GetSafeInsetRight();
 
     long GetFrameID();
-    int  GetFramesPerSecond();
+    int GetFramesPerSecond();
 
     (float X, float Y) GetPpcXY();
     (float X, float Y) GetPpiXY();
@@ -174,9 +172,9 @@ public interface IGraphics
     bool SupportsExtension( string extension );
 
     DisplayMode[] GetDisplayModes();
-    DisplayMode   GetDisplayMode();
+    DisplayMode GetDisplayMode();
     DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
-    DisplayMode   GetDisplayMode( GLFW.Monitor monitor );
+    DisplayMode GetDisplayMode( GLFW.Monitor monitor );
 
     bool SetFullscreenMode( DisplayMode displayMode );
 

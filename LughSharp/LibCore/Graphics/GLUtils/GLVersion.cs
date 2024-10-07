@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using Platform = LughSharp.LibCore.Core.Platform;
 
 namespace LughSharp.LibCore.Graphics.GLUtils;
@@ -30,7 +29,7 @@ namespace LughSharp.LibCore.Graphics.GLUtils;
 /// <summary>
 /// </summary>
 [PublicAPI]
-public class GLVersion : GDXVersion
+public class GLVersion : LughVersion
 {
     /// <summary>
     /// </summary>
@@ -47,26 +46,27 @@ public class GLVersion : GDXVersion
 
         GLtype = appType switch
         {
-            Platform.ApplicationType.Android   => Core.GDXVersion.GLType.GLES,
-            Platform.ApplicationType.WindowsGL => Core.GDXVersion.GLType.OpenGL,
-            Platform.ApplicationType.WebGL     => Core.GDXVersion.GLType.WebGL,
-            var _                              => Core.GDXVersion.GLType.None
+            Platform.ApplicationType.Android   => GraphicsBackend.Type.OpenGLES,
+            Platform.ApplicationType.WindowsGL => GraphicsBackend.Type.OpenGL,
+            Platform.ApplicationType.WebGL     => GraphicsBackend.Type.WebGL,
+
+            var _ => throw new GdxRuntimeException( $"Unknown Platform ApplicationType: {appType}" )
         };
 
-        VendorString   = vendorString == null ? "" : Marshal.PtrToStringUTF8( ( IntPtr ) vendorString );
-        RendererString = rendererString == null ? "" : Marshal.PtrToStringUTF8( ( IntPtr ) rendererString );
+        VendorString   = vendorString == null ? "" : Marshal.PtrToStringUTF8( ( IntPtr )vendorString );
+        RendererString = rendererString == null ? "" : Marshal.PtrToStringUTF8( ( IntPtr )rendererString );
 
-        if ( GLtype == Core.GDXVersion.GLType.GLES )
+        if ( GLtype == GraphicsBackend.Type.OpenGLES )
         {
             //OpenGL<space>ES<space><version number><space><vendor-specific information>.
             ExtractVersion( @"OpenGL ES (\d(\.\d){0,2})", versionString );
         }
-        else if ( GLtype == Core.GDXVersion.GLType.WebGL )
+        else if ( GLtype == GraphicsBackend.Type.WebGL )
         {
             //WebGL<space><version number><space><vendor-specific information>
             ExtractVersion( @"WebGL (\d(\.\d){0,2})", versionString );
         }
-        else if ( GLtype == Core.GDXVersion.GLType.OpenGL )
+        else if ( GLtype == GraphicsBackend.Type.OpenGL )
         {
             //<version number><space><vendor-specific information>
             ExtractVersion( @"(\d(\.\d){0,2})", versionString );
@@ -137,7 +137,7 @@ public class GLVersion : GDXVersion
     public bool IsVersionEqualToOrHigher( int testMajorVersion, int testMinorVersion )
     {
         return ( MajorVersion > testMajorVersion )
-            || ( ( MajorVersion == testMajorVersion ) && ( MinorVersion >= testMinorVersion ) );
+               || ( ( MajorVersion == testMajorVersion ) && ( MinorVersion >= testMinorVersion ) );
     }
 
     /// <summary>
@@ -146,8 +146,8 @@ public class GLVersion : GDXVersion
     public string DebugVersionString()
     {
         return $"Type: {GLtype}\n"
-             + $"Version: {MajorVersion}:{MinorVersion}:{RevisionVersion}\n"
-             + $"Vendor: {VendorString}\n"
-             + $"Renderer: {RendererString}";
+               + $"Version: {MajorVersion}:{MinorVersion}:{RevisionVersion}\n"
+               + $"Vendor: {VendorString}\n"
+               + $"Renderer: {RendererString}";
     }
 }

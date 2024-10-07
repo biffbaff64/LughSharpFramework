@@ -8,208 +8,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f77d403c-9f20-45ae-a8d8-d9b0f6d44bbb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AndroidBackend/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DesktopGLBackend/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Extensions/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LughSharp/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.LughSharpFramework/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.LughSharpFramework/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GraphicsBackend.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.LughSharpFramework/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.LughSharpFramework/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Audio/IGLAudio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Audio/IGLAudio.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Audio/Ogg.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Audio/Ogg.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Audio/OpenALAudio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Audio/OpenALAudio.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Audio/OpenALAudioDevice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Audio/OpenALAudioDevice.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Audio/OpenALMusic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Audio/OpenALMusic.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Audio/OpenALSound.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Audio/OpenALSound.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Audio/Wav.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Audio/Wav.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/DesktopGLApplication.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Core/DesktopGLApplication.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/DesktopGLApplicationConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Core/DesktopGLApplicationConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/DesktopGLNativesLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Core/DesktopGLNativesLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/DesktopGLNet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Core/DesktopGLNet.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Files/DesktopGLFileHandle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Files/DesktopGLFileHandle.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Files/DesktopGLFiles.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Files/DesktopGLFiles.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/GlobalUsings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Core/GlobalUsings.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Graphics/DesktopGLGraphics.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Graphics/DesktopGLGraphics.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/IDesktopGLApplicationBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Core/IDesktopGLApplicationBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Input/DefaultDesktopGLInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Input/DefaultDesktopGLInput.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Sync.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Core/Sync.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/TODO.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Utils/DesktopGLClipboard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Utils/DesktopGLClipboard.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Utils/DesktopGLCursor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Utils/DesktopGLCursor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Window/DesktopGLWindow.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Window/DesktopGLWindow.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Window/DesktopGLWindowConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Window/DesktopGLWindowConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Window/IDesktopGLWindowListener.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Window/IDesktopGLWindowListener.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Documents/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/Documents/TODO.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Extensions/Source/Gdx-Tools/Tools/TexturePacker/ColorBleedEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Extensions/Source/Gdx-Tools/Tools/TexturePacker/ColorBleedEffect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Extensions/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/Extensions/TODO.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetLoadingTask.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetLoadingTask.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/BitmapFontLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/BitmapFontLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/TextureAtlasLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/TextureAtlasLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/IAudio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/IAudio.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Crc16.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Crc16.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Decoder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Decoder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Decoders/ASubband.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Decoders/ASubband.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Decoders/LayerI/SubbandLayer1.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Decoders/LayerI/SubbandLayer1.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Decoders/LayerII/SubbandLayer2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Decoders/LayerII/SubbandLayer2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Decoders/LayerIIIDecoder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Decoders/LayerIIIDecoder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Equalizer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Equalizer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Header.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Header.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Huffman.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/Huffman.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/OutputChannels.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/OutputChannels.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/SynthesisFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/Decoding/SynthesisFilter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/IO/RiffFile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/Maponus/IO/RiffFile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Audio/OpenAL/ALC.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Audio/OpenAL/ALC.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/GDXVersion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/GDXVersion.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/AbstractGraphics.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/AbstractGraphics.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/GDXVersion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/LughVersion.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/Gdx.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/Gdx.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/IFiles.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/IFiles.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/IInput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/IInput.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/IGraphics.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/IGraphics.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/Platform.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/Platform.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Color.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Color.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/ColorWithFloats.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Cubemap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Cubemap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/FloatFrameBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/FloatFrameBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/FrameBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/FrameBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/FrameBufferCubemap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/FrameBufferCubemap.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/GLFrameBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/GLFrameBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/GLFrameBufferBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/GLFrameBufferBuilder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/BitmapFont.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/BitmapFont.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/BitmapFontCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/BitmapFontCache.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/CpuSpriteBatch.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/CpuSpriteBatch.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/Gdx2DPixmap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/Gdx2DPixmap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/GlyphLayout.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/GlyphLayout.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/NinePatch.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/NinePatch.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/ParticleEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/ParticleEffect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/ParticleEmitter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/ParticleEmitter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PixmapPacker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PixmapPacker.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PixmapPackerIO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PixmapPackerIO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PolygonRegionLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PolygonRegionLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PolygonSpriteBatch.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PolygonSpriteBatch.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/RepeatablePolygonSprite.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/RepeatablePolygonSprite.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/SpriteBatch.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/SpriteBatch.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/SpriteCache.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/SpriteCache.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/TextureAtlas.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/TextureAtlas.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/TextureAtlasData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/TextureAtlasData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/TextureAtlasDataExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/TextureAtlasDataExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/TextureRegion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/TextureRegion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G3D/Attribute.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G3D/Attribute.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G3D/Environment.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G3D/Environment.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G3D/Models/Data/ModelData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G3D/Models/Data/ModelData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLTexture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLTexture.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/ETC1.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/ETC1.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/ETC1TextureData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/ETC1TextureData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/FacedCubemapData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/FacedCubemapData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/FileTextureArrayData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/FileTextureArrayData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/FileTextureData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/FileTextureData.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/FloatTextureData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/FloatTextureData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/GLOnlyTextureData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/GLOnlyTextureData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/ImmediateModeRenderer20.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/ImmediateModeRenderer20.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/IndexBufferObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/IndexBufferObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/IndexBufferObjectSubData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/IndexBufferObjectSubData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/InstanceBufferObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/InstanceBufferObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/InstanceBufferObjectSubData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/InstanceBufferObjectSubData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/KTXTextureData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/KTXTextureData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/GLVersion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/GLVersion.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/MipMapGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/MipMapGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/MipMapTextureData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/MipMapTextureData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/PixmapTextureData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/PixmapTextureData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/ShaderProgram.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/ShaderProgram.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/ShapeRenderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/ShapeRenderer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/VertexBufferObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/VertexBufferObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/VertexBufferObjectSubData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/VertexBufferObjectSubData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/VertexBufferObjectWithVAO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/VertexBufferObjectWithVAO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Mesh.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Mesh.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Pixmap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Pixmap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/PixmapFormat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/PixmapFormat.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/PixmapFormatExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/PixmapFormatExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/PixmapIO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/PixmapIO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Playground/ImmutableColor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Playground/ImmutableColor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Profiling/IGLErrorListener.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Profiling/IGLErrorListener.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Texture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Texture.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/TextureArray.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/TextureArray.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/TextureFilter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/TextureFilter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/TextureWrap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/TextureWrap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/IImageResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/IImageResolver.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/MapLayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/MapLayer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/AtlasTmxMapLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/AtlasTmxMapLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/BaseTmxMapLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/BaseTmxMapLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/TmxMapLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/TmxMapLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Renderers/OrthoCachedTiledMapRenderer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Renderers/OrthoCachedTiledMapRenderer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Tiles/AnimatedTiledMapTile.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Tiles/AnimatedTiledMapTile.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Affine2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Affine2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Bezier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Bezier.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Collision/BoundingBox.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Collision/BoundingBox.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Frustrum.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Frustrum.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/GeometryUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/GeometryUtils.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Interpolation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Interpolation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Intersector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Intersector.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/MathUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/MathUtils.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Matrix3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Matrix3.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Matrix4.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Matrix4.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Quaternion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Quaternion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/RectangleShape.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/RectangleShape.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Vector2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Vector2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Vector3.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maths/Vector3.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/AlphaAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/AlphaAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/ColorAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/ColorAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/LayoutAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/LayoutAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/RotateToAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/RotateToAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/RunnableAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/RunnableAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/SizeToAction.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Actions/SizeToAction.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Listeners/ActorGestureListener.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Listeners/ActorGestureListener.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Listeners/DragScrollListener.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Listeners/DragScrollListener.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Listeners/InputListener.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Listeners/InputListener.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Stage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Stage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Button.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Button.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Cell.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Cell.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/HorizontalGroup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/HorizontalGroup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Label.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Label.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/ListBox.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/ListBox.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/ScrollPaneListeners.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/ScrollPaneListeners.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/SelectBox.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/SelectBox.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Skin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Skin.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/SplitPane.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/SplitPane.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Table.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Table.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/TextArea.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/TextArea.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/TextField.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/TextField.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Tree.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Tree.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Value.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Value.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Window.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/UI/Window.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Utils/DragAndDrop.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Utils/DragAndDrop.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Utils/ScissorStack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Scenes/Scene2D/Utils/ScissorStack.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Async/AsyncResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Async/AsyncResult.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/BinaryHeap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/BinaryHeap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/Buffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/Buffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/BufferUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/BufferUtils.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/CharBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/CharBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/DirectBuffers/DirectByteBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/DirectBuffers/DirectByteBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/DoubleBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/DoubleBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/FloatBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/FloatBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/GdxBufferUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/GdxBufferUtils.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapByteBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapByteBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapCharBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapCharBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapCharBufferR.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapCharBufferR.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapDoubleBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapDoubleBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapFloatBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapFloatBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapIntBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapIntBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapShortBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapShortBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapShortBufferR.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapShortBufferR.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/IntBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/IntBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ShortBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ShortBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/StringCharBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/StringCharBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/ByteOrder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/ByteOrder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/Array.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/Array.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/ByteArray.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/ByteArray.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/DelayedRemovalList.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/DelayedRemovalList.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/DeleteCandidates/PredicateIterator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/DeleteCandidates/PredicateIterator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/DictionaryExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/DictionaryExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/ListExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/ListExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/ObjectMap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/ObjectMap.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/SnapshotArray.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/SnapshotArray.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Pooling/Pool.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Pooling/Pool.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Pooling/Pools.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Pooling/Pools.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Scaling.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Scaling.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Selector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Selector.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Timer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Timer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharpFramework.sln" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharpFramework.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LughSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LughSharp.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -228,16 +42,19 @@
     &quot;assignee&quot;: &quot;biffbaff64&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/biffbaff64/LughSharpFramework.git",
-    "accountId": "102d38b6-3001-4d45-a8b2-a7129437f3aa"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/biffbaff64/LughSharpFramework.git&quot;,
+    &quot;accountId&quot;: &quot;102d38b6-3001-4d45-a8b2-a7129437f3aa&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/LughSharp/GlobalUsings.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/939d19470bf2797b6eab6523ee90dfad72d78dcc591d4c2a7af664c01c18b9/ReadOnlySpan.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d35159659d8f5531a9587d0281fdd8b836baa62c4601916c4e8f8de50ccabdb/DataContractAttribute.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/dd26eb91769a319dff8e22feddc63e7c0a3a6212ef3985fa0165ff21f56f/DebuggerDisplayAttribute.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -261,7 +78,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "settings.editor.selected.configurable": "FileHeaderTextPageId",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -295,13 +112,25 @@
       <updated>1728166279964</updated>
       <workItem from="1728166281039" duration="135000" />
       <workItem from="1728228100783" duration="4606000" />
-      <workItem from="1728233196649" duration="14003000" />
+      <workItem from="1728233196649" duration="14135000" />
+      <workItem from="1728298841159" duration="5518000" />
+      <workItem from="1728314218944" duration="7588000" />
     </task>
+    <task id="LOCAL-00001" summary="Essential update">
+      <option name="closed" value="true" />
+      <created>1728255452859</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1728255452859</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="LOCAL_CHANGES_DETAILS_PREVIEW_SHOWN" value="false" />
@@ -309,5 +138,7 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Essential update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Essential update" />
   </component>
 </project>

@@ -185,4 +185,48 @@ public static class Gdx
         "Revive whatever peace & love has died in me.";
 
     // ------------------------------------------------------------------------
+    // Don't Ask...
+
+    /*
+     * Common Carp
+     * Mirror Carp
+     * Leather Carp
+     * Grass Carp
+     * Orfe
+     * Roach
+     * Pike
+     * Perch
+     * Zander
+     * Rudd
+     * Dace
+     * Grayling
+     * Bream
+     * Rainbow Trout
+     * Brown Trout
+     * Sea Trout
+     * Gudgeon
+     * Stone Loach
+     * Spined Loach
+     * Crucian Carp
+     * Tench
+     * Chub
+     * Barbel
+     * Salmon
+     * Ruffe
+     * StickleBack
+     * Minnow
+     * Eel
+     * Silver Bream
+     * Bullhead
+     * Smelt
+     * Catfish
+     * Allis Shad
+     * Twaite Shad
+     * Brook Lamprey
+     * Bitterling
+     * PumpkinSeed
+     * Ide
+     */
+
+    // ------------------------------------------------------------------------
 }

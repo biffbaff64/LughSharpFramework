@@ -27,13 +27,9 @@ using Buffer = LughSharp.LibCore.Utils.Buffers.Buffer;
 namespace LughSharp.LibCore.Graphics.GLUtils;
 
 /// <summary>
-/// <para>
 /// A <see cref="IVertexData"/> implementation based on OpenGL vertex buffer objects.
-/// </para>
-/// <para>
 /// If the OpenGL context was lost you can call <see cref="Invalidate()"/> to recreate
 /// a new OpenGL vertex buffer object.
-/// </para>
 /// <para>
 /// The data is bound via <tt>GLBindings.glVertexAttribPointer</tt> according to the
 /// attribute aliases specified via <see cref="VertexAttributes"/> in the constructor.

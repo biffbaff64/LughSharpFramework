@@ -29,6 +29,7 @@ namespace LughSharp.LibCore.Graphics;
 /// All methods perform clamping on the internal values after execution.
 /// </summary>
 [PublicAPI]
+[DebuggerDisplay("RGBADebugString")]
 public sealed class Color : ICloneable, IEquatable< Color >
 {
     #region colour values
@@ -1266,12 +1267,17 @@ public sealed class Color : ICloneable, IEquatable< Color >
     // ------------------------------------------------------------------------
 
     /// <summary>
+    /// Debug string for DebuggerDisplay attribute.
+    /// </summary>
+    internal string RGBADebugString => $"R: {R}. G: {G}. B: {B}. A: {A}";
+    
+    /// <summary>
     /// Debugs the various methods and properties for this class.
     /// </summary>
     public void Debug()
     {
         Logger.CheckPoint( true );
-        Logger.Debug( $"R: {R}, G: {G}, B: {B}, A: {A}" );
+        Logger.Debug( RGBADebugString );
         Logger.Debug( $"PackedColorABGR: {ABGRPackedColor} :: {ABGRPackedColor:X}" );
         Logger.Debug( $"PackedColorRGBA: {RGBAPackedColor} :: {RGBAPackedColor:X}" );
         Logger.Debug( $"ABGRFloatPack: {ABGRFloatPack}" );

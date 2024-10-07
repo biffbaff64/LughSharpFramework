@@ -94,7 +94,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <inheritdoc />
-    public override GDXVersion.GLType GraphicsType => GDXVersion.GLType.GL20; //TODO
+    public override GraphicsBackend.Type GraphicsType => GraphicsBackend.Type.OpenGL; //TODO
 
     /// <inheritdoc />
     public override bool SupportsDisplayModeChange() => true;

@@ -136,4 +136,9 @@
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="native\" />
+      <Folder Include="ThirdParty\" />
+    </ItemGroup>
+
 </Project>

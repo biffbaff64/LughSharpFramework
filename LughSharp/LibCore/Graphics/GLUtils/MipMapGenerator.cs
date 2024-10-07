@@ -66,7 +66,7 @@ public class MipMapGenerator
 
         if ( ( Gdx.App.AppType == Platform.ApplicationType.Android )
           || ( Gdx.App.AppType == Platform.ApplicationType.WebGL )
-          || ( Gdx.App.AppType == Platform.ApplicationType.IOS ) )
+          || ( Gdx.App.AppType == Platform.ApplicationType.iOS ) )
         {
             GenerateMipMapGLES20( target, pixmap );
         }

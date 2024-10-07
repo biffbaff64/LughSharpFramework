@@ -70,7 +70,7 @@ public class FloatTextureData : ITextureData
         {
             var amountOfFloats = 4;
 
-            if ( Gdx.Graphics.GraphicsType.Equals( GDXVersion.GLType.OpenGL ) )
+            if ( Gdx.Graphics.GraphicsType.Equals( GraphicsBackend.Type.OpenGL ) )
             {
                 if ( _internalFormat is IGL.GL_RGBA16_F or IGL.GL_RGBA32_F )
                 {
@@ -102,7 +102,7 @@ public class FloatTextureData : ITextureData
     public void ConsumeCustomData( int target )
     {
         if ( ( Gdx.App.AppType == Platform.ApplicationType.Android )
-          || ( Gdx.App.AppType == Platform.ApplicationType.IOS )
+          || ( Gdx.App.AppType == Platform.ApplicationType.iOS )
           || ( Gdx.App.AppType == Platform.ApplicationType.WebGL ) )
         {
             if ( !Gdx.Graphics.SupportsExtension( "OES_texture_float" ) )

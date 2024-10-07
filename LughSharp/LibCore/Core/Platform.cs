@@ -35,17 +35,75 @@ public static class Platform
     /// <summary>
     /// Target application backends.
     /// </summary>
+    [PublicAPI]
     public enum ApplicationType : int
     {
-        Unknown,
-        IOS,
-        Android,
+        /// <summary>
+        /// LughSharp Windows32 Platform
+        /// </summary>
+        Windows,
+
+        /// <summary>
+        /// LughSharp Windows Cross Platform Opengl Platform
+        /// </summary>
         WindowsGL,
-        UWP,
+
+        /// <summary>
+        /// LughSharp Windows Vulkan Platform
+        /// </summary>
+        WindowsVK,
+
+        /// <summary>
+        /// LughSharp Windows Game Development Kit Platform
+        /// </summary>
+        WindowsGDK,
+
+        /// <summary>
+        /// LughSharp Windows32 Platform
+        /// </summary>
         WebGL,
-        Linux,
-        XBox,
+
+        /// <summary>
+        /// LughSharp XBox One Platform
+        /// </summary>
+        XBoxOne,
+
+        /// <summary>
+        /// LughSharp XBox Series Platform
+        /// </summary>
+        XBoxSeries,
+
+        /// <summary>
+        /// LughSharp Nintendo Switch Platform
+        /// </summary>
+        NintendoSwitch,
+
+        /// <summary>
+        /// LughSharp PlayStation 4 Platform
+        /// </summary>
+        PlayStation4,
+
+        /// <summary>
+        /// LughSharp PlayStation 5 Platform
+        /// </summary>
+        PlayStation5,
+
+        /// <summary>
+        /// LughSharp Android Platform
+        /// </summary>
+        Android,
+
+        /// <summary>
+        /// LughSharp Apple iOS Platform
+        /// </summary>
+        iOS,
+
+        /// <summary>
+        /// LughSharp Mac OS Platform
+        /// </summary>
         MacOS,
+
+        Default = WindowsGL
     }
 
     /// <summary>
@@ -92,18 +150,22 @@ public static class Platform
             => _targetPlatform = value switch
             {
                 // ----------------------------------------
-                ApplicationType.Android
-                    or ApplicationType.Linux
-                    or ApplicationType.XBox
-                    or ApplicationType.IOS
-                    or ApplicationType.MacOS
-                    or ApplicationType.UWP
+                ApplicationType.Windows
+                    or ApplicationType.WindowsGL
+                    or ApplicationType.WindowsVK
+                    or ApplicationType.WindowsGDK
                     or ApplicationType.WebGL
-                    or ApplicationType.WindowsGL => value,
+                    or ApplicationType.XBoxOne
+                    or ApplicationType.XBoxSeries
+                    or ApplicationType.NintendoSwitch
+                    or ApplicationType.PlayStation4
+                    or ApplicationType.PlayStation5
+                    or ApplicationType.Android
+                    or ApplicationType.iOS
+                    or ApplicationType.MacOS => value,
 
                 // ----------------------------------------
-                ApplicationType.Unknown => throw new GdxRuntimeException( $"Illegal Target Platform: {value.ToString()}" ),
-                var _                   => throw new GdxRuntimeException( $"Illegal Target Platform: {value.ToString()}" )
+                var _ => throw new GdxRuntimeException( $"Illegal Target Platform: {value.ToString()}" )
             };
     }
 
@@ -145,9 +207,5 @@ public static class Platform
     /// <summary>
     /// Returns a string representation of a new GUID structure.
     /// </summary>
-    public static string RandomUUID()
-    {
-        return Guid.NewGuid().ToString();
-    }
+    public static string RandomUUID() => Guid.NewGuid().ToString();
 }
-

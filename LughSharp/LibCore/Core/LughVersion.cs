@@ -29,42 +29,23 @@ namespace LughSharp.LibCore.Core;
 /// <summary>
 /// The current LughSharp Library version.
 /// </summary>
+/// <remarks> Class name changed from GDXVersion 07/10/2024. </remarks>
 [PublicAPI]
-public class GDXVersion
+public class LughVersion
 {
-    [PublicAPI]
-    public enum GLType
-    {
-        None,
-        OpenGL,
-        GLES,
-        WebGL,
-
-        // --------------------------------------
-        Vulkan,
-
-        // --------------------------------------
-        // Sub-Categories for OpenGL
-        GL10,
-        GL20,
-        GL30,
-        GL40
-    }
-
-    // ------------------------------------------------------------------------
-
-    public int     MajorVersion    { get; set; }
-    public int     MinorVersion    { get; set; }
-    public int     RevisionVersion { get; set; }
-    public string? VendorString    { get; set; }
-    public string? RendererString  { get; set; }
-    public GLType  GLtype          { get; set; }
+    public int                  MajorVersion    { get; set; }
+    public int                  MinorVersion    { get; set; }
+    public int                  RevisionVersion { get; set; }
+    public string?              VendorString    { get; set; }
+    public string?              RendererString  { get; set; }
+    public GraphicsBackend.Type GLtype          { get; set; }
 
     private readonly Version? _version;
 
     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
-    public GDXVersion()
+    public LughVersion()
     {
         Logger.CheckPoint();
 
@@ -89,7 +70,7 @@ public class GDXVersion
             MajorVersion    = v.Length < 1 ? 0 : int.Parse( v[ ..1 ] );
             MinorVersion    = v.Length < 2 ? 0 : int.Parse( v[ 1.. ] );
             RevisionVersion = v.Length < 3 ? 0 : int.Parse( v[ 2.. ] );
-            
+
             Logger.Debug( $"GDXVersion : {MajorVersion}.{MinorVersion}.{RevisionVersion}" );
         }
         catch ( Exception e )
@@ -170,3 +151,4 @@ public class GDXVersion
         return RevisionVersion <= revision;
     }
 }
+
