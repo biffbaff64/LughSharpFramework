@@ -22,30 +22,14 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.LibCore.Utils.Buffers.ByteBufferAs;
+namespace LughSharp.LibCore.Utils.Buffers;
 
 [PublicAPI]
-public class ByteBufferAsLongBufferL : LongBuffer
+public class HeapIntBufferR : HeapIntBuffer
 {
-    public ByteBufferAsLongBufferL( ByteBuffer bb, int i, int i1, int size, int size1, int off )
+    public HeapIntBufferR( int capacity, int limit )
+        : base( capacity, limit )
     {
-    }
-
-    /// <inheritdoc />
-    public override bool HasBackingArray()
-    {
-        return false;
-    }
-
-    /// <inheritdoc />
-    public override int ArrayOffset()
-    {
-        return 0;
-    }
-
-    /// <inheritdoc />
-    public override bool IsDirect()
-    {
-        return false;
+        SetBufferStatus( READ_ONLY, NOT_DIRECT );
     }
 }

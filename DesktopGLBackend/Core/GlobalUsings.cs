@@ -53,7 +53,6 @@ global using LughSharp.LibCore.Maths;
 global using LughSharp.LibCore.Scenes.Scene2D;
 global using LughSharp.LibCore.Utils;
 global using LughSharp.LibCore.Utils.Buffers;
-global using LughSharp.LibCore.Utils.Buffers.HeapBuffers;
 global using LughSharp.LibCore.Utils.Collections;
 global using LughSharp.LibCore.Utils.Exceptions;
 global using LughSharp.LibCore.Utils.Pooling;

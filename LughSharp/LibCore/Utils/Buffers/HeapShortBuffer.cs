@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.LibCore.Utils.Buffers.HeapBuffers;
+namespace LughSharp.LibCore.Utils.Buffers;
 
 [PublicAPI]
 public class HeapShortBuffer : ShortBuffer
@@ -30,20 +30,20 @@ public class HeapShortBuffer : ShortBuffer
     public HeapShortBuffer( int capacity, int limit )
         : base( -1, 0, limit, capacity, new short[ capacity ] )
     {
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
     public HeapShortBuffer( short[] buffer, int offset, int length )
         : base( -1, offset, offset + length, buffer.Length, buffer )
     {
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
     protected HeapShortBuffer( short[]? buffer, int mark, int pos, int limit, int capacity, int offset )
         : base( mark, pos, limit, capacity, buffer, offset )
     {
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
-
-    /// <inheritdoc />
-    public override bool IsReadOnly => false;
 
     /// <inheritdoc />
     public override ShortBuffer Slice()
@@ -61,11 +61,6 @@ public class HeapShortBuffer : ShortBuffer
     public override ShortBuffer AsReadOnlyBuffer()
     {
         return new HeapShortBufferR( Hb, Mark, Position, Limit, Capacity, Offset );
-    }
-
-    protected int Ix( int i )
-    {
-        return i + Offset;
     }
 
     /// <inheritdoc />
@@ -100,12 +95,6 @@ public class HeapShortBuffer : ShortBuffer
         SetPosition( Position + length );
 
         return this;
-    }
-
-    /// <inheritdoc />
-    public override bool IsDirect()
-    {
-        return false;
     }
 
     /// <inheritdoc />
@@ -183,7 +172,7 @@ public class HeapShortBuffer : ShortBuffer
             sb.SetPosition( sb.Position + n );
             SetPosition( Position + n );
         }
-        else if ( src.IsDirect() )
+        else if ( src.IsDirect )
         {
             var n = src.Remaining();
 

@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.LibCore.Utils.Buffers;
 
 /// <summary>
@@ -136,6 +135,11 @@ namespace LughSharp.LibCore.Utils.Buffers;
 [PublicAPI]
 public abstract class Buffer
 {
+    public const bool READ_ONLY  = true;
+    public const bool READ_WRITE = false;
+    public const bool DIRECT     = true;
+    public const bool NOT_DIRECT = false;
+
 #if USING_SPLITERATOR //TODO:
     /// <summary>
     /// The characteristics of Spliterators that traverse and split elements
@@ -145,7 +149,8 @@ public abstract class Buffer
         Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.ORDERED;
 #endif
 
-    public int Mark { get; set; } = -1;
+    public    int Mark   { get; set; } = -1;
+    protected int Offset { get; set; }
 
     /// <summary>
     /// Used only by DirectBuffers
@@ -172,13 +177,19 @@ public abstract class Buffer
     /// </summary>
     public virtual bool IsReadOnly { get; set; }
 
+    /// <summary>
+    /// Tells whether or not this buffer is <c>direct</c>.
+    /// </summary>
+    /// <returns> <c>true</c> if, and only if, this buffer is direct </returns>
+    public virtual bool IsDirect { get; set; }
+
     // ------------------------------------------------------------------------
 
     protected Buffer()
     {
         Hb = new object[ 1 ];
     }
-    
+
     /// <summary>
     /// Creates a new buffer with the given mark, position, limit, and capacity,
     /// after checking invariants.
@@ -385,7 +396,23 @@ public abstract class Buffer
         return Position < Limit;
     }
 
+    /// <summary>
+    /// Helper method for creating an index value using the supplied int
+    /// value and any other valid value, depending upon implementation.
+    /// </summary>
+    /// <returns> The calculated index. </returns>
+    public virtual int Ix( int i )
+    {
+        return i + Offset;
+    }
+
     protected bool NativeByteOrder = ByteOrder.NativeOrder == ByteOrder.BigEndian;
+
+    protected void SetBufferStatus( bool readWrite, bool direct )
+    {
+        IsReadOnly = readWrite;
+        IsDirect   = direct;
+    }
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
@@ -441,10 +468,10 @@ public abstract class Buffer
     public abstract int ArrayOffset();
 
     /// <summary>
-    /// Tells whether or not this buffer is <c>direct</c>.
+    /// Performs a NULL check on the <see cref="BackingArray"/>, and throws an exception
+    /// if the array is null.
     /// </summary>
-    /// <returns> <c>true</c> if, and only if, this buffer is direct </returns>
-    public abstract bool IsDirect();
+    protected abstract void ValidateBackingArray();
 
     #endregion abstract methods
 
@@ -458,7 +485,7 @@ public abstract class Buffer
     /// increments the position.
     /// </summary>
     /// <returns> The current position value, before it is incremented </returns>
-    protected private int NextGetIndex()
+    private protected int NextGetIndex()
     {
         if ( Position >= Limit )
         {
@@ -468,7 +495,7 @@ public abstract class Buffer
         return Position++;
     }
 
-    protected private int NextGetIndex( int nb )
+    private protected int NextGetIndex( int nb )
     {
         if ( ( Limit - Position ) < nb )
         {
@@ -488,7 +515,7 @@ public abstract class Buffer
     /// increments the position.
     /// </summary>
     /// <returns> The current position value, before it is incremented </returns>
-    protected private int NextPutIndex()
+    private protected int NextPutIndex()
     {
         if ( Position >= Limit )
         {
@@ -498,7 +525,7 @@ public abstract class Buffer
         return Position++;
     }
 
-    protected private int NextPutIndex( int nb )
+    private protected int NextPutIndex( int nb )
     {
         if ( ( Limit - Position ) < nb )
         {
@@ -517,7 +544,7 @@ public abstract class Buffer
     /// IndexOutOfRangeException} if it is not smaller than the limit
     /// or is smaller than zero.
     /// </summary>
-    protected private int CheckIndex( int i )
+    private protected int CheckIndex( int i )
     {
         if ( ( i < 0 ) || ( i >= Limit ) )
         {
@@ -527,7 +554,7 @@ public abstract class Buffer
         return i;
     }
 
-    protected private int CheckIndex( int i, int nb )
+    private protected int CheckIndex( int i, int nb )
     {
         if ( ( i < 0 ) || ( nb > ( Limit - i ) ) )
         {
@@ -537,7 +564,7 @@ public abstract class Buffer
         return i;
     }
 
-    protected private void Truncate()
+    private protected void Truncate()
     {
         Mark     = -1;
         Position = 0;
@@ -548,7 +575,7 @@ public abstract class Buffer
     /// <summary>
     /// 
     /// </summary>
-    protected private void DiscardMark()
+    private protected void DiscardMark()
     {
         Mark = -1;
     }
@@ -560,7 +587,7 @@ public abstract class Buffer
     /// <param name="len"></param>
     /// <param name="size"></param>
     /// <exception cref="IndexOutOfRangeException"></exception>
-    protected private static void CheckBounds( int off, int len, int size )
+    private protected static void CheckBounds( int off, int len, int size )
     {
         if ( ( off | len | ( off + len ) | ( size - ( off + len ) ) ) < 0 )
         {

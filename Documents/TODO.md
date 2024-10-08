@@ -816,48 +816,49 @@ UTILS/ASYNC
 UTILS/BUFFERS
 -------------
 
-    I only really need the buffers that LibGDX uses, and I OUGHT to be finding .net equivalents.
+    I only really need the buffers that LibGDX uses, and I OUGHT to be finding alternatives.
 
      CODE   DOCUMENT
     ----   --------
     - DONE - DONE - Buffer
     - IP   - IP   - BufferUtils
     - DONE - DONE - ByteBuffer
-    - DONE - IP   - CharBuffer
-    - DONE - IP   - CircularByteBuffer
-    - DONE - DONE - DoubleBuffer
     - DONE - DONE - FloatBuffer
+    - IP   - IP   - GdxBufferUtils
     - DONE - DONE - IntBuffer
-    - IP   - IP   - LongBuffer
-    - IP   - IP   - MappedByteBuffer
     - DONE - IP   - ShortBuffer
-    - DONE - IP   - StringCharBuffer
+
+    - **** - **** - CharBuffer                  Not needed yet
+    - **** - **** - CircularByteBuffer          Not needed yet
+    - **** - **** - DoubleBuffer                Not needed yet
+    - **** - **** - LongBuffer                  Not needed yet
+    - **** - **** - MappedByteBuffer            Not needed yet
+    - **** - **** - StringCharBuffer            Not needed yet
 
 UTILS/BUFFERS/BYTEBUFFERAS
 --------------------------
 
      CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - ByteBufferAsCharBufferB
-    - IP   - IP   - ByteBufferAsCharBufferL
-    - IP   - IP   - ByteBufferAsDoubleBufferB
-    - IP   - IP   - ByteBufferAsDoubleBufferL
-    - IP   - IP   - ByteBufferAsFloatBufferB
-    - IP   - IP   - ByteBufferAsFloatBufferL
-    - IP   - IP   - ByteBufferAsIntBufferB
-    - IP   - IP   - ByteBufferAsIntBufferL
-    - IP   - IP   - ByteBufferAsLongBufferB
-    - IP   - IP   - ByteBufferAsLongBufferL
-    - IP   - IP   - ByteBufferAsShortBufferB
-    - IP   - IP   - ByteBufferAsShortBufferL
+    - **** - **** - ByteBufferAsCharBufferB     Not needed yet
+    - **** - **** - ByteBufferAsCharBufferL     Not needed yet
+    - **** - **** - ByteBufferAsDoubleBufferB   Not needed yet
+    - **** - **** - ByteBufferAsDoubleBufferL   Not needed yet
+    - **** - **** - ByteBufferAsFloatBufferB    Not needed yet
+    - **** - **** - ByteBufferAsFloatBufferL    Not needed yet
+    - **** - **** - ByteBufferAsIntBufferB      Not needed yet
+    - **** - **** - ByteBufferAsIntBufferL      Not needed yet
+    - **** - **** - ByteBufferAsLongBufferB     Not needed yet
+    - **** - **** - ByteBufferAsLongBufferL     Not needed yet
+    - **** - **** - ByteBufferAsShortBufferB    Not needed yet
+    - **** - **** - ByteBufferAsShortBufferL    Not needed yet
 
 UTILS/BUFFERS/DIRECTBUFFERS
 ---------------------------
 
      CODE   DOCUMENT
     ----   --------
-    -      -      -
-    -      -      -
+    - **** - **** - DirectByteBuffer            Not needed yet
 
 UTILS/BUFFERS/HEAPBUFFERS
 -------------------------
@@ -865,17 +866,17 @@ UTILS/BUFFERS/HEAPBUFFERS
      CODE   DOCUMENT
     ----   --------
     - IP   - IP   - HeapByteBuffer
-    - IP   - IP   - HeapCharBuffer
-    - DONE - DONE - HeapDoubleBuffer
+    - **** - **** - HeapCharBuffer              Not needed yet
+    - **** - **** - HeapDoubleBuffer            Not needed yet
     - IP   - IP   - HeapFloatBuffer
-    - DONE - IP   - HeapIntBuffer
-    - DONE - IP   - HeapShortBuffer
+    - IP   - IP   - HeapIntBuffer
+    - IP   - IP   - HeapShortBuffer
     - IP   - IP   - HeapByteBufferR
-    - DONE - DONE - HeapCharBufferR
-    - IP   - IP   - HeapDoubleBufferR
+    - **** - **** - HeapCharBufferR             Not needed yet
+    - **** - **** - HeapDoubleBufferR           Not needed yet
     - IP   - IP   - HeapFloatBufferR
     - IP   - IP   - HeapIntBufferR
-    - DONE - DONE - HeapShortBufferR
+    - IP   - IP   - HeapShortBufferR
 
 UTILS/COLLECTIONS
 -----------------

@@ -22,74 +22,14 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-
-namespace LughSharp.LibCore.Utils.Buffers.ByteBufferAs;
+namespace LughSharp.LibCore.Utils.Buffers;
 
 [PublicAPI]
-public class ByteBufferAsShortBufferL : ShortBuffer
+public class HeapByteBufferR : HeapByteBuffer
 {
-    public ByteBufferAsShortBufferL( ByteBuffer bb, int mark, int pos, int lim, int cap, int off )
-        : base( mark, pos, lim, cap )
+    public HeapByteBufferR( byte[]? buf, int mark, int pos, int lim, int cap, int off )
+        : base( buf, mark, pos, lim, cap, off )
     {
-    }
-
-    /// <inheritdoc />
-    public override bool IsDirect()
-    {
-        return false;
-    }
-
-    /// <inheritdoc />
-    public override ShortBuffer Slice()
-    {
-        return this;
-    }
-
-    /// <inheritdoc />
-    public override ShortBuffer Duplicate()
-    {
-        return this;
-    }
-
-    /// <inheritdoc />
-    public override ShortBuffer AsReadOnlyBuffer()
-    {
-        return this;
-    }
-
-    /// <inheritdoc />
-    public override short Get()
-    {
-        return 0;
-    }
-
-    /// <inheritdoc />
-    public override ShortBuffer Put( short s )
-    {
-        return this;
-    }
-
-    /// <inheritdoc />
-    public override short Get( int index )
-    {
-        return 0;
-    }
-
-    /// <inheritdoc />
-    public override ShortBuffer Put( int index, short s )
-    {
-        return this;
-    }
-
-    /// <inheritdoc />
-    public override ShortBuffer Compact()
-    {
-        return this;
-    }
-
-    /// <inheritdoc />
-    public override ByteOrder Order()
-    {
-        return ByteOrder.NativeOrder;
+        SetBufferStatus( READ_ONLY, NOT_DIRECT );
     }
 }

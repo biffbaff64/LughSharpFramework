@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.LibCore.Utils.Buffers.HeapBuffers;
+namespace LughSharp.LibCore.Utils.Buffers;
 
 [PublicAPI]
 public class HeapFloatBufferR : HeapFloatBuffer
@@ -30,5 +30,12 @@ public class HeapFloatBufferR : HeapFloatBuffer
     public HeapFloatBufferR( int capacity, int limit )
         : base( capacity, limit )
     {
+        SetBufferStatus( READ_ONLY, NOT_DIRECT );
+    }
+
+    public HeapFloatBufferR( float[] hb, int mark, int limit, int position, int capacity, int offset )
+        : base( hb, mark, position, limit, capacity, offset )
+    {
+        SetBufferStatus( READ_ONLY, NOT_DIRECT );
     }
 }

@@ -28,11 +28,13 @@ namespace LughSharp.LibCore.Graphics.GLUtils;
 [PublicAPI]
 public class IndexArray : IIndexData
 {
-    // used to work around bug: https://android-review.googlesource.com/#/c/73175/
     private readonly bool        _empty;
     private          ShortBuffer _buffer;
     private          ByteBuffer  _byteBuffer;
 
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    
     /// <summary>
     /// Creates a new IndexArray to be used with vertex arrays.
     /// </summary>
@@ -43,7 +45,6 @@ public class IndexArray : IIndexData
 
         if ( _empty )
         {
-            // avoid allocating a zero-sized buffer because of a bug in Android's ART < Android 5.0
             maxIndices = 1; 
         }
 
@@ -152,6 +153,7 @@ public class IndexArray : IIndexData
     /// </summary>
     public void Dispose()
     {
+        GC.SuppressFinalize( this );
         Dispose( true );
     }
 

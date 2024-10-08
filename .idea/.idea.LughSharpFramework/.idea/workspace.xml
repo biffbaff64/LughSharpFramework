@@ -8,22 +8,61 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f77d403c-9f20-45ae-a8d8-d9b0f6d44bbb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GraphicsBackend.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapByteBuffer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapByteBufferR.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapFloatBuffer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapFloatBufferR.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapIntBuffer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapIntBufferR.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapShortBuffer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapShortBufferR.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/ConsoleApp1.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/ConsoleApp1.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/DesktopLauncher.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/DesktopLauncher.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.LughSharpFramework/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.LughSharpFramework/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Graphics/DesktopGLGraphics.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Graphics/DesktopGLGraphics.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AndroidBackend/AndroidBackend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/AndroidBackend/AndroidBackend.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/Core/GlobalUsings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/Core/GlobalUsings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DesktopGLBackend/DesktopGLBackend.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/DesktopGLBackend/DesktopGLBackend.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Documents/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/Documents/TODO.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/AbstractGraphics.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/AbstractGraphics.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/GDXVersion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/LughVersion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/Gdx.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/Gdx.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/IGraphics.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/IGraphics.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Core/Platform.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Core/Platform.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Color.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/Color.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/GLFrameBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/FrameBuffers/GLFrameBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/FloatTextureData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/FloatTextureData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/GLVersion.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/GLVersion.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/MipMapGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/MipMapGenerator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/VertexBufferObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/VertexBufferObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LughSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LughSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extensions/Extensions.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Extensions/Extensions.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/GlobalUsings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/GlobalUsings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/IndexArray.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/GLUtils/IndexArray.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/Buffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/Buffer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/BufferUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/BufferUtils.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBuffer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsCharBufferB.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsCharBufferL.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsDoubleBufferB.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsDoubleBufferL.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsFloatBufferB.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsFloatBufferL.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsIntBufferB.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsIntBufferL.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsLongBufferB.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsLongBufferL.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsShortBufferB.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBufferAs/ByteBufferAsShortBufferL.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/CharBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/CircularByteBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/DirectBuffers/DirectByteBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/DoubleBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/FloatBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/FloatBuffer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapByteBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapByteBufferR.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapCharBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapCharBufferR.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapDoubleBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapDoubleBufferR.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapFloatBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapFloatBufferR.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapIntBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapIntBufferR.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapShortBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapBuffers/HeapShortBufferR.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/IntBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/IntBuffer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/LongBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/MappedByteBuffer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ShortBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ShortBuffer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/StringCharBuffer.cs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,8 +89,11 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/LughSharp/GlobalUsings.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Development/Projects/Frameworks/LughSharpFramework/LughSharp/LibCore/Utils/Buffers/HeapByteBuffer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Development/Projects/Frameworks/LughSharpFramework/LughSharp/LibCore/Utils/Buffers/HeapByteBuffer.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/939d19470bf2797b6eab6523ee90dfad72d78dcc591d4c2a7af664c01c18b9/ReadOnlySpan.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d35159659d8f5531a9587d0281fdd8b836baa62c4601916c4e8f8de50ccabdb/DataContractAttribute.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d856066ffe4c59543feec5c19d3d3c8934b5eec93f8cf1358aedcb555825/Boolean.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/dd26eb91769a319dff8e22feddc63e7c0a3a6212ef3985fa0165ff21f56f/DebuggerDisplayAttribute.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -67,21 +109,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.ConsoleApp1.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "FileHeaderTextPageId",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.ConsoleApp1.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;FileHeaderTextPageId&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="ConsoleApp1" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -114,7 +156,8 @@
       <workItem from="1728228100783" duration="4606000" />
       <workItem from="1728233196649" duration="14135000" />
       <workItem from="1728298841159" duration="5518000" />
-      <workItem from="1728314218944" duration="7588000" />
+      <workItem from="1728314218944" duration="14711000" />
+      <workItem from="1728399092672" duration="14845000" />
     </task>
     <task id="LOCAL-00001" summary="Essential update">
       <option name="closed" value="true" />
@@ -124,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728255452859</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Essential update">
+      <option name="closed" value="true" />
+      <created>1728330615150</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1728330615150</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

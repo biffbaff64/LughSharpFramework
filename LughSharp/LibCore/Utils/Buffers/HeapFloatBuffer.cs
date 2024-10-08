@@ -1,4 +1,4 @@
-﻿// ///////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
 // Copyright (c) 2024 Richard Ikin / Red 7 Projects and Contributors.
@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.LibCore.Utils.Buffers.HeapBuffers;
+namespace LughSharp.LibCore.Utils.Buffers;
 
 [PublicAPI]
 public class HeapFloatBuffer : FloatBuffer
@@ -30,47 +30,19 @@ public class HeapFloatBuffer : FloatBuffer
     public HeapFloatBuffer( int cap, int lim )
         : base( -1, 0, lim, cap, new float[ cap ] )
     {
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
     public HeapFloatBuffer( float[] buf, int off, int len )
         : base( -1, off, off + len, buf.Length, buf )
     {
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
     protected HeapFloatBuffer( float[] buf, int mark, int pos, int lim, int cap, int off )
         : base( mark, pos, lim, cap, buf, off )
     {
-    }
-
-    /// <summary>
-    /// Returns the array that backs this buffer <i>(optional operation)</i>.
-    /// <para>
-    /// This method is intended to allow array-backed buffers to be passed to
-    /// native code more efficiently. Concrete subclasses provide more strongly
-    /// typed return values for this method.
-    /// </para>
-    /// <para>
-    /// Modifications to this buffer's content will cause the returned array's
-    /// content to be modified, and vice versa.
-    /// </para>
-    /// <para>
-    /// Invoke the <see cref="Buffer.HasBackingArray"/> method before invoking this method in
-    /// order to ensure that this buffer has an accessible backing array.
-    /// </para>
-    /// </summary>
-    /// <returns>  The array that backs this buffer </returns>
-    public new float[] BackingArray()
-    {
-        return null!;
-    }
-
-    /// <summary>
-    /// Tells whether or not this buffer is <i>direct</i>.
-    /// </summary>
-    /// <returns> <tt>true</tt> if, and only if, this buffer is direct </returns>
-    public override bool IsDirect()
-    {
-        return false;
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
     /// <summary>
@@ -93,7 +65,7 @@ public class HeapFloatBuffer : FloatBuffer
     /// <returns> The new float buffer </returns>
     public override FloatBuffer Slice()
     {
-        return null!;
+        return new HeapFloatBuffer( Hb!, -1, 0, Remaining(), Remaining(), Position + Offset );
     }
 
     /// <summary>
@@ -114,7 +86,7 @@ public class HeapFloatBuffer : FloatBuffer
     /// <returns> The new float buffer </returns>
     public override FloatBuffer Duplicate()
     {
-        return null!;
+        return new HeapFloatBuffer( Hb!, Mark, Position, Limit, Capacity, Offset );
     }
 
     /// <summary>
@@ -139,7 +111,7 @@ public class HeapFloatBuffer : FloatBuffer
     /// <returns> The new, read-only float buffer </returns>
     public override FloatBuffer asReadOnlyBuffer()
     {
-        return null!;
+        return new HeapFloatBufferR( Hb!, Mark, Position, Limit, Capacity, Offset );
     }
 
     /// <summary>

@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.LibCore.Utils.Buffers.HeapBuffers;
+namespace LughSharp.LibCore.Utils.Buffers;
 
 /// <summary>
 /// A read-only HeapShortBuffer.  This class extends the corresponding read/write class,
@@ -36,16 +36,19 @@ public class HeapShortBufferR : HeapShortBuffer
     public HeapShortBufferR( int cap, int lim )
         : base( cap, lim )
     {
+        SetBufferStatus( READ_ONLY, NOT_DIRECT );
     }
 
     public HeapShortBufferR( short[] buf, int off, int len )
         : base( buf, off, len )
     {
+        SetBufferStatus( READ_ONLY, NOT_DIRECT );
     }
 
     public HeapShortBufferR( short[]? buf, int mark, int pos, int lim, int cap, int off )
         : base( buf, mark, pos, lim, cap, off )
     {
+        SetBufferStatus( READ_ONLY, NOT_DIRECT );
     }
 
     /// <inheritdoc />

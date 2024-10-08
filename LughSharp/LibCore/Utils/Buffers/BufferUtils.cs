@@ -50,17 +50,17 @@ public static partial class BufferUtils
         return buffer;
     }
 
-    /// <summary>
-    /// Creates a new <see cref="DoubleBuffer"/> with the specified capacity.
-    /// All elements will be initialised to zero.
-    /// </summary>
-    public static DoubleBuffer NewDoubleBuffer( int numFloats )
-    {
-        var buffer = DoubleBuffer.Allocate( numFloats * 4 );
-        buffer.Order( ByteOrder.NativeOrder );
-
-        return buffer;
-    }
+//    /// <summary>
+//    /// Creates a new <see cref="DoubleBuffer"/> with the specified capacity.
+//    /// All elements will be initialised to zero.
+//    /// </summary>
+//    public static DoubleBuffer NewDoubleBuffer( int numFloats )
+//    {
+//        var buffer = DoubleBuffer.Allocate( numFloats * 4 );
+//        buffer.Order( ByteOrder.NativeOrder );
+//
+//        return buffer;
+//    }
 
     /// <summary>
     /// Creates a new <see cref="ByteBuffer"/> with the specified capacity.
@@ -69,8 +69,8 @@ public static partial class BufferUtils
     public static ByteBuffer NewByteBuffer( int numBytes, bool isUnsafe = false )
     {
         var buffer = isUnsafe
-                        ? NewDisposableByteBufferJni( numBytes )
-                        : ByteBuffer.Allocate( numBytes );
+            ? NewDisposableByteBufferJni( numBytes )
+            : ByteBuffer.Allocate( numBytes );
 
         buffer.Order( ByteOrder.NativeOrder );
 
@@ -99,17 +99,17 @@ public static partial class BufferUtils
         return buffer;
     }
 
-    /// <summary>
-    /// Creates a new <see cref="CharBuffer"/> with the specified capacity.
-    /// All elements will be initialised to zero.
-    /// </summary>
-    public static CharBuffer NewCharBuffer( int numBytes )
-    {
-        var buffer = CharBuffer.Allocate( numBytes );
-        buffer.Order( ByteOrder.NativeOrder );
-
-        return buffer;
-    }
+//    /// <summary>
+//    /// Creates a new <see cref="CharBuffer"/> with the specified capacity.
+//    /// All elements will be initialised to zero.
+//    /// </summary>
+//    public static CharBuffer NewCharBuffer( int numBytes )
+//    {
+//        var buffer = CharBuffer.Allocate( numBytes );
+//        buffer.Order( ByteOrder.NativeOrder );
+//
+//        return buffer;
+//    }
 
     /// <summary>
     /// Creates a new <see cref="IntBuffer"/> with the specified capacity.
@@ -123,17 +123,17 @@ public static partial class BufferUtils
         return buffer;
     }
 
-    /// <summary>
-    /// Creates a new <see cref="LongBuffer"/> with the specified capacity.
-    /// All elements will be initialised to zero.
-    /// </summary>
-    public static LongBuffer NewLongBuffer( int numBytes )
-    {
-        var buffer = LongBuffer.Allocate( numBytes );
-        buffer.Order( ByteOrder.NativeOrder );
-
-        return buffer;
-    }
+//    /// <summary>
+//    /// Creates a new <see cref="LongBuffer"/> with the specified capacity.
+//    /// All elements will be initialised to zero.
+//    /// </summary>
+//    public static LongBuffer NewLongBuffer( int numBytes )
+//    {
+//        var buffer = LongBuffer.Allocate( numBytes );
+//        buffer.Order( ByteOrder.NativeOrder );
+//
+//        return buffer;
+//    }
 
     /// <summary>
     /// Copies the contents of src to dst, starting from src[srcOffset], copying numElements
@@ -167,13 +167,13 @@ public static partial class BufferUtils
     {
         dst.Limit = dst switch
         {
-                        ByteBuffer  => numElements << 2,
-                        FloatBuffer => numElements,
-                        _           => dst.Limit
+            ByteBuffer  => numElements << 2,
+            FloatBuffer => numElements,
+            _           => dst.Limit
         };
 
         Array.Copy( src, offset, dst.Hb, 0, numElements );
-        
+
 //        CopyJni( src, dst, numElements, offset );
 
         dst.Position = 0;
@@ -188,12 +188,11 @@ public static partial class BufferUtils
     {
         return dst switch
         {
-                        ByteBuffer                 => dst.Position,
-                        ShortBuffer or CharBuffer  => dst.Position << 1,
-                        IntBuffer or FloatBuffer   => dst.Position << 2,
-                        LongBuffer or DoubleBuffer => dst.Position << 3,
-                        var _ => throw new GdxRuntimeException
-                                        ( $"Can't get position for {dst.GetType().Name} instance" )
+            ByteBuffer               => dst.Position,
+            ShortBuffer              => dst.Position << 1,
+            IntBuffer or FloatBuffer => dst.Position << 2,
+            var _ => throw new GdxRuntimeException
+                ( $"Can't get position for {dst.GetType().Name} instance" )
         };
     }
 
@@ -207,12 +206,11 @@ public static partial class BufferUtils
     {
         return dst switch
         {
-                        ByteBuffer                 => bytes,
-                        ShortBuffer or CharBuffer  => bytes >>> 1,
-                        IntBuffer or FloatBuffer   => bytes >>> 2,
-                        LongBuffer or DoubleBuffer => bytes >>> 3,
-                        var _ => throw new GdxRuntimeException
-                                        ( $"Can't copy to a {dst.GetType().Name} instance" )
+            ByteBuffer               => bytes,
+            ShortBuffer              => bytes >>> 1,
+            IntBuffer or FloatBuffer => bytes >>> 2,
+            var _ => throw new GdxRuntimeException
+                ( $"Can't copy to a {dst.GetType().Name} instance" )
         };
     }
 
@@ -226,12 +224,11 @@ public static partial class BufferUtils
     {
         return dst switch
         {
-                        ByteBuffer                 => elements,
-                        ShortBuffer or CharBuffer  => elements << 1,
-                        IntBuffer or FloatBuffer   => elements << 2,
-                        LongBuffer or DoubleBuffer => elements << 3,
-                        var _ => throw new GdxRuntimeException
-                                        ( $"Can't copy to a {dst.GetType().Name} instance" )
+            ByteBuffer               => elements,
+            ShortBuffer              => elements << 1,
+            IntBuffer or FloatBuffer => elements << 2,
+            var _ => throw new GdxRuntimeException
+                ( $"Can't copy to a {dst.GetType().Name} instance" )
         };
     }
 
@@ -248,7 +245,7 @@ public static partial class BufferUtils
             if ( !_unsafeBuffers.Remove( buffer ) )
             {
                 throw new ArgumentException
-                                ( "buffer not allocated with NewUnsafeByteBuffer, or is already disposed" );
+                    ( "buffer not allocated with NewUnsafeByteBuffer, or is already disposed" );
             }
         }
 
@@ -264,12 +261,12 @@ public static partial class BufferUtils
     public static char GetChar( ByteBuffer bb, int bi, bool bigEndian )
     {
         return bigEndian
-                        ? MakeChar( bb.Hb![ ( byte )bi ],
-                                        bb.Hb![ ( byte )( bi + 1 ) ] )
+            ? MakeChar( bb.Hb![ ( byte )bi ],
+                bb.Hb![ ( byte )( bi + 1 ) ] )
 
-                        // ---------------------------------------
-                        : MakeChar( bb.Hb![ ( byte )( bi + 1 ) ],
-                                        bb.Hb![ ( byte )bi ] );
+            // ---------------------------------------
+            : MakeChar( bb.Hb![ ( byte )( bi + 1 ) ],
+                bb.Hb![ ( byte )bi ] );
     }
 
     public static void PutChar( ByteBuffer bb, int bi, char x, bool bigEndian )
@@ -291,12 +288,12 @@ public static partial class BufferUtils
     public static short GetShort( ByteBuffer bb, int bi, bool bigEndian )
     {
         return bigEndian
-                        ? MakeShort( bb.Hb![ ( byte )bi ],
-                                        bb.Hb![ ( byte )( bi + 1 ) ] )
+            ? MakeShort( bb.Hb![ ( byte )bi ],
+                bb.Hb![ ( byte )( bi + 1 ) ] )
 
-                        // ---------------------------------------
-                        : MakeShort( bb.Hb![ ( byte )( bi + 1 ) ],
-                                        bb.Hb![ ( byte )bi ] );
+            // ---------------------------------------
+            : MakeShort( bb.Hb![ ( byte )( bi + 1 ) ],
+                bb.Hb![ ( byte )bi ] );
     }
 
     public static void PutShort( ByteBuffer bb, int bi, short x, bool bigEndian )
@@ -333,17 +330,17 @@ public static partial class BufferUtils
     private static int GetIntByte( ByteBuffer bb, int bi )
     {
         return MakeInt( bb.Hb![ ( byte )bi ],
-                        bb.Hb![ ( byte )( bi + 1 ) ],
-                        bb.Hb![ ( byte )( bi + 2 ) ],
-                        bb.Hb![ ( byte )( bi + 3 ) ] );
+            bb.Hb![ ( byte )( bi + 1 ) ],
+            bb.Hb![ ( byte )( bi + 2 ) ],
+            bb.Hb![ ( byte )( bi + 3 ) ] );
     }
 
     private static int GetIntLong( ByteBuffer bb, int bi )
     {
         return MakeInt( bb.Hb![ ( byte )( bi + 3 ) ],
-                        bb.Hb![ ( byte )( bi + 2 ) ],
-                        bb.Hb![ ( byte )( bi + 1 ) ],
-                        bb.Hb![ ( byte )bi ] );
+            bb.Hb![ ( byte )( bi + 2 ) ],
+            bb.Hb![ ( byte )( bi + 1 ) ],
+            bb.Hb![ ( byte )bi ] );
     }
 
     private static void PutIntByte( ByteBuffer bb, int bi, int x )
@@ -384,25 +381,25 @@ public static partial class BufferUtils
     private static long GetLongByte( ByteBuffer bb, int bi )
     {
         return MakeLong( bb.Hb![ ( byte )bi ],
-                        bb.Hb![ ( byte )( bi + 1 ) ],
-                        bb.Hb![ ( byte )( bi + 2 ) ],
-                        bb.Hb![ ( byte )( bi + 3 ) ],
-                        bb.Hb![ ( byte )( bi + 4 ) ],
-                        bb.Hb![ ( byte )( bi + 5 ) ],
-                        bb.Hb![ ( byte )( bi + 6 ) ],
-                        bb.Hb![ ( byte )( bi + 7 ) ] );
+            bb.Hb![ ( byte )( bi + 1 ) ],
+            bb.Hb![ ( byte )( bi + 2 ) ],
+            bb.Hb![ ( byte )( bi + 3 ) ],
+            bb.Hb![ ( byte )( bi + 4 ) ],
+            bb.Hb![ ( byte )( bi + 5 ) ],
+            bb.Hb![ ( byte )( bi + 6 ) ],
+            bb.Hb![ ( byte )( bi + 7 ) ] );
     }
 
     private static long GetLongLong( ByteBuffer bb, int bi )
     {
         return MakeLong( bb.Hb![ ( byte )( bi + 7 ) ],
-                        bb.Hb![ ( byte )( bi + 6 ) ],
-                        bb.Hb![ ( byte )( bi + 5 ) ],
-                        bb.Hb![ ( byte )( bi + 4 ) ],
-                        bb.Hb![ ( byte )( bi + 3 ) ],
-                        bb.Hb![ ( byte )( bi + 2 ) ],
-                        bb.Hb![ ( byte )( bi + 1 ) ],
-                        bb.Hb![ ( byte )bi ] );
+            bb.Hb![ ( byte )( bi + 6 ) ],
+            bb.Hb![ ( byte )( bi + 5 ) ],
+            bb.Hb![ ( byte )( bi + 4 ) ],
+            bb.Hb![ ( byte )( bi + 3 ) ],
+            bb.Hb![ ( byte )( bi + 2 ) ],
+            bb.Hb![ ( byte )( bi + 1 ) ],
+            bb.Hb![ ( byte )bi ] );
     }
 
     private static void PutLongByte( ByteBuffer bb, int bi, long x )
@@ -451,25 +448,25 @@ public static partial class BufferUtils
     private static double GetDoubleByte( ByteBuffer bb, int bi )
     {
         return BitConverter.DoubleToInt64Bits( MakeLong( bb.Hb![ bi ],
-                        bb.Hb[ bi + 1 ],
-                        bb.Hb[ bi + 2 ],
-                        bb.Hb[ bi + 3 ],
-                        bb.Hb[ bi + 4 ],
-                        bb.Hb[ bi + 5 ],
-                        bb.Hb[ bi + 6 ],
-                        bb.Hb[ bi + 7 ] ) );
+            bb.Hb[ bi + 1 ],
+            bb.Hb[ bi + 2 ],
+            bb.Hb[ bi + 3 ],
+            bb.Hb[ bi + 4 ],
+            bb.Hb[ bi + 5 ],
+            bb.Hb[ bi + 6 ],
+            bb.Hb[ bi + 7 ] ) );
     }
 
     private static double GetDoubleLong( ByteBuffer bb, int bi )
     {
         return BitConverter.DoubleToInt64Bits( MakeLong( bb.Hb![ bi + 7 ],
-                        bb.Hb[ bi + 6 ],
-                        bb.Hb[ bi + 5 ],
-                        bb.Hb[ bi + 4 ],
-                        bb.Hb[ bi + 3 ],
-                        bb.Hb[ bi + 2 ],
-                        bb.Hb[ bi + 1 ],
-                        bb.Hb[ bi ] ) );
+            bb.Hb[ bi + 6 ],
+            bb.Hb[ bi + 5 ],
+            bb.Hb[ bi + 4 ],
+            bb.Hb[ bi + 3 ],
+            bb.Hb[ bi + 2 ],
+            bb.Hb[ bi + 1 ],
+            bb.Hb[ bi ] ) );
     }
 
     private static void PutDoubleByte( ByteBuffer bb, int bi, long x )

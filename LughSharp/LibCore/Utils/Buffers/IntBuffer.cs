@@ -28,7 +28,6 @@ namespace LughSharp.LibCore.Utils.Buffers;
 public abstract class IntBuffer : Buffer
 {
     public new int[]? Hb        { get; set; }
-    protected  int    Offset    { get; set; }
     protected  bool   BigEndian { get; set; } = true;
 
     // ------------------------------------------------------------------------
@@ -683,5 +682,14 @@ public abstract class IntBuffer : Buffer
         NativeByteOrder = BigEndian == ( ByteOrder.NativeOrder == ByteOrder.BigEndian );
 
         return this;
+    }
+
+    /// <inheritdoc />
+    protected override void ValidateBackingArray()
+    {
+        if ( Hb == null )
+        {
+            throw new NullReferenceException( "Backing array is null!" );
+        }
     }
 }

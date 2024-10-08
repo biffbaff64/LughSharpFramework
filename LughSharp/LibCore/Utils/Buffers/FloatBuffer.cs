@@ -75,9 +75,9 @@ namespace LughSharp.LibCore.Utils.Buffers;
 public abstract class FloatBuffer : Buffer
 {
     public new float[]? Hb        { get; set; }
-    protected  int      Offset    { get; set; }
     protected  bool     BigEndian { get; set; } = true;
 
+    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
     /// <summary>
@@ -95,6 +95,8 @@ public abstract class FloatBuffer : Buffer
     {
         Hb     = hb ?? new float[ cap ];
         Offset = offset;
+        
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
     /// <summary>
@@ -109,6 +111,8 @@ public abstract class FloatBuffer : Buffer
         : this( mark, pos, lim, cap, null )
     {
         Offset = 0;
+        
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
     /// <summary>
@@ -436,14 +440,14 @@ public abstract class FloatBuffer : Buffer
     /// <exception cref="GdxRuntimeException"> If this buffer is read-only. </exception>
     public FloatBuffer Put( FloatBuffer src )
     {
+        if ( IsReadOnly )
+        {
+            return this;
+        }
+        
         if ( src.Equals( this ) )
         {
             throw new ArgumentException( "src cannot be this buffer!" );
-        }
-
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Buffer is Read Only!" );
         }
 
         var n = src.Remaining();
@@ -504,6 +508,11 @@ public abstract class FloatBuffer : Buffer
     /// </exception>
     public FloatBuffer Put( float[] src, int offset, int length )
     {
+        if ( IsReadOnly )
+        {
+            return this;
+        }
+        
         CheckBounds( offset, length, src.Length );
 
         if ( length > Remaining() )
@@ -577,11 +586,6 @@ public abstract class FloatBuffer : Buffer
     /// </exception>
     public new float[] BackingArray()
     {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Buffer is Read Only!" );
-        }
-
         return Hb!;
     }
 
@@ -609,16 +613,8 @@ public abstract class FloatBuffer : Buffer
     /// </exception>
     public override int ArrayOffset()
     {
-        if ( Hb == null )
-        {
-            throw new GdxRuntimeException( "Backing array os null." );
-        }
-
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Buffer is Read Only!" );
-        }
-
+        ValidateBackingArray();
+        
         return Offset;
     }
 
@@ -829,5 +825,14 @@ public abstract class FloatBuffer : Buffer
         NativeByteOrder = BigEndian == ( ByteOrder.NativeOrder == ByteOrder.BigEndian );
 
         return this;
+    }
+
+    /// <inheritdoc />
+    protected override void ValidateBackingArray()
+    {
+        if ( Hb == null )
+        {
+            throw new NullReferenceException( "Backing array is null!" );
+        }
     }
 }

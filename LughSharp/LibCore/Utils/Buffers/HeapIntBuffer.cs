@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.LibCore.Utils.Buffers.HeapBuffers;
+namespace LughSharp.LibCore.Utils.Buffers;
 
 [PublicAPI]
 public class HeapIntBuffer : IntBuffer
@@ -30,19 +30,20 @@ public class HeapIntBuffer : IntBuffer
     public HeapIntBuffer( int cap, int lim )
         : base( -1, 0, lim, cap, new int[ cap ] )
     {
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
     public HeapIntBuffer( int[] cap, int offset, int length )
         : base( -1, offset, offset + length, cap.Length, cap )
     {
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
     public HeapIntBuffer( int[]? buf, int mark, int pos, int lim, int cap, int off )
         : base( mark, pos, lim, cap, buf, off )
     {
+        SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
-
-    public override bool IsReadOnly => false;
 
     /// <inheritdoc />
     public override IntBuffer Slice()
@@ -74,6 +75,7 @@ public class HeapIntBuffer : IntBuffer
         return Hb?[ Ix( CheckIndex( index ) ) ] ?? throw new NullReferenceException();
     }
 
+    /// <inheritdoc />
     public override IntBuffer Get( int[] dst, int offset, int length )
     {
         if ( Hb == null )
@@ -92,12 +94,6 @@ public class HeapIntBuffer : IntBuffer
         SetPosition( Position + length );
 
         return this;
-    }
-
-    /// <inheritdoc />
-    public override bool IsDirect()
-    {
-        return false;
     }
 
     /// <inheritdoc />
@@ -178,7 +174,7 @@ public class HeapIntBuffer : IntBuffer
             sb.SetPosition( sb.Position + n );
             SetPosition( Position + n );
         }
-        else if ( src.IsDirect() )
+        else if ( src.IsDirect )
         {
             var n = src.Remaining();
 
@@ -220,12 +216,5 @@ public class HeapIntBuffer : IntBuffer
     public override ByteOrder Order()
     {
         return ByteOrder.NativeOrder;
-    }
-
-    // ------------------------------------------------------------------------
-
-    protected int Ix( int i )
-    {
-        return i + Offset;
     }
 }
