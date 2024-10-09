@@ -55,7 +55,7 @@ public class VertexArray : IVertexData
         Logger.CheckPoint();
 
         Attributes  = attributes;
-        _byteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numVertices, false );
+        _byteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numVertices );
         _buffer     = _byteBuffer.AsFloatBuffer();
 
         _buffer.Flip();

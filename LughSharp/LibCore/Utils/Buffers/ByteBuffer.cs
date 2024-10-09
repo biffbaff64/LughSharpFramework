@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Buffers.Binary;
+
 namespace LughSharp.LibCore.Utils.Buffers;
 
 /// <summary>
@@ -124,8 +126,8 @@ namespace LughSharp.LibCore.Utils.Buffers;
 [PublicAPI]
 public abstract class ByteBuffer : Buffer
 {
-    public new byte[]? Hb        { get; set; }
-    protected  bool    BigEndian { get; set; }
+    public new byte[]? Hb          { get; set; }
+    protected  bool    IsBigEndian { get; set; }
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
@@ -137,9 +139,9 @@ public abstract class ByteBuffer : Buffer
     protected ByteBuffer( int mark, int pos, int lim, int cap, byte[]? hb = null, int offset = 0 )
         : base( mark, pos, lim, cap )
     {
-        Hb        = hb ?? new byte[ cap ];
-        Offset    = offset;
-        BigEndian = !BitConverter.IsLittleEndian;
+        Hb          = hb ?? new byte[ cap ];
+        Offset      = offset;
+        IsBigEndian = !BitConverter.IsLittleEndian;
 
         SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
@@ -341,7 +343,7 @@ public abstract class ByteBuffer : Buffer
         {
             return this;
         }
-        
+
         if ( src.Equals( this ) )
         {
             throw new ArgumentException( "Source buffer cannot be this buffer!" );
@@ -417,15 +419,70 @@ public abstract class ByteBuffer : Buffer
     /// <param name="src">The source byte array.</param>
     /// <returns>This buffer.</returns>
     /// <exception cref="GdxRuntimeException">
-    /// If there is insufficient space in this buffer.
-    /// </exception>
-    /// <exception cref="GdxRuntimeException">
-    /// If there is insufficient space in this buffer, or if this buffer is read-only.
-    /// ( With appropriate message ).
+    /// If there is insufficient space in this buffer, with appropriate message.
     /// </exception>
     public ByteBuffer Put( byte[] src )
     {
         return Put( src, 0, src.Length );
+    }
+
+    /// <summary>
+    /// Returns an Integer value from the buffer at the current position.
+    /// </summary>
+    public int GetInt()
+    {
+        return IsBigEndian
+            ? BinaryPrimitives.ReadInt32BigEndian( Hb.AsSpan( Position ) )
+            : BinaryPrimitives.ReadInt32LittleEndian( Hb.AsSpan( Position ) );
+    }
+
+    /// <summary>
+    /// Returns an Integer value from the buffer at the specified index.
+    /// </summary>
+    public int GetInt( int index )
+    {
+        return IsBigEndian
+            ? BinaryPrimitives.ReadInt32BigEndian( Hb.AsSpan( index ) )
+            : BinaryPrimitives.ReadInt32LittleEndian( Hb.AsSpan( index ) );
+    }
+
+    /// <summary>
+    /// Puts the supplied Integer value into the buffer at the <see cref="Buffer.NextPutIndex()"/>.
+    /// </summary>
+    /// <param name="value"> The value to add. </param>
+    /// <returns> This buffer for chaining. </returns>
+    public ByteBuffer PutInt( int value )
+    {
+        if ( IsBigEndian )
+        {
+            BinaryPrimitives.WriteInt32BigEndian( Hb.AsSpan( NextPutIndex( sizeof( int ) ) ), value );
+        }
+        else
+        {
+            BinaryPrimitives.WriteInt32LittleEndian( Hb.AsSpan( NextPutIndex( sizeof( int ) ) ), value );
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Puts the supplied Integer value into the buffer at the supplied index.
+    /// </summary>
+    /// <param name="index"> The required buffer index. </param>
+    /// <param name="value"> The value to add. </param>
+    /// <returns> This buffer for chaining. </returns>
+    public ByteBuffer PutInt( int index, int value )
+    {
+        if ( IsBigEndian )
+        {
+            BinaryPrimitives.WriteInt32BigEndian( Hb.AsSpan( index ), value );
+        }
+        else
+        {
+            BinaryPrimitives.WriteInt32LittleEndian( Hb.AsSpan( index ), value );
+        }
+
+        return this;
     }
 
     // ------------------------------------------------------------------------
@@ -488,7 +545,7 @@ public abstract class ByteBuffer : Buffer
     public override int ArrayOffset()
     {
         ValidateBackingArray();
-        
+
         return Offset;
     }
 
@@ -533,7 +590,7 @@ public abstract class ByteBuffer : Buffer
         }
 
         ValidateBackingArray();
-        
+
         Array.Copy( Hb!, Ix( Position ), Hb!, Ix( 0 ), Remaining() );
 
         SetPosition( Remaining() );
@@ -687,7 +744,7 @@ public abstract class ByteBuffer : Buffer
     /// <returns> This buffer's byte order </returns>
     public ByteOrder Order()
     {
-        return BigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
+        return IsBigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
     }
 
     /// <summary>
@@ -700,14 +757,82 @@ public abstract class ByteBuffer : Buffer
     /// <returns> This buffer </returns>
     public ByteBuffer Order( ByteOrder order )
     {
-        BigEndian       = order == ByteOrder.BigEndian;
-        NativeByteOrder = BigEndian == ( ByteOrder.NativeOrder == ByteOrder.BigEndian );
+        IsBigEndian     = order == ByteOrder.BigEndian;
+        NativeByteOrder = IsBigEndian == ( ByteOrder.NativeOrder == ByteOrder.BigEndian );
 
         return this;
     }
 
     // ------------------------------------------------------------------------
+    
+    public FloatBuffer AsFloatBuffer()
+    {
+        GdxRuntimeException.ThrowIfNull( Hb );
+
+        var floatCount = ( Hb.Length - Position ) / sizeof( float );
+        var floatArray = new float[ floatCount ];
+
+        for ( var i = 0; i < floatCount; i++ )
+        {
+            floatArray[ i ] = IsBigEndian
+                ? BinaryPrimitives.ReadSingleBigEndian( Hb.AsSpan( Position + i * sizeof( float ) ) )
+                : BinaryPrimitives.ReadSingleLittleEndian( Hb.AsSpan( Position + i * sizeof( float ) ) );
+        }
+
+        return FloatBuffer.Wrap( floatArray );
+    }
+    
+    public ShortBuffer AsShortBuffer()
+    {
+        GdxRuntimeException.ThrowIfNull( Hb );
+
+        var shortCount = ( Hb.Length - Position ) / sizeof( short );
+        var shortArray = new short[ shortCount ];
+
+        for ( var i = 0; i < shortCount; i++ )
+        {
+            shortArray[ i ] = IsBigEndian
+                ? BinaryPrimitives.ReadInt16BigEndian( Hb.AsSpan( Position + i * sizeof( short ) ) )
+                : BinaryPrimitives.ReadInt16LittleEndian( Hb.AsSpan( Position + i * sizeof( short ) ) );
+        }
+
+        return ShortBuffer.Wrap( shortArray );
+    }
+
+    public IntBuffer AsIntBuffer()
+    {
+        GdxRuntimeException.ThrowIfNull( Hb );
+
+        var intCount = ( Hb.Length - Position ) / sizeof( int );
+        var intArray = new int[ intCount ];
+
+        for ( var i = 0; i < intCount; i++ )
+        {
+            intArray[ i ] = IsBigEndian
+                ? BinaryPrimitives.ReadInt32BigEndian( Hb.AsSpan( Position + i * sizeof( int ) ) )
+                : BinaryPrimitives.ReadInt32LittleEndian( Hb.AsSpan( Position + i * sizeof( int ) ) );
+        }
+
+        return IntBuffer.Wrap( intArray );
+    }
+
     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    /// <inheritdoc cref="IDisposable"/>>
+    protected override void Dispose( bool disposing )
+    {
+        if ( !disposing ) return;
+        if ( Hb == null ) return;
+        
+        Array.Clear( Hb );
+        Hb = null;
+    }
+    
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    #region abstract methods
 
     /// <summary>
     /// Creates a new byte buffer whose content is a shared subsequence of
@@ -820,6 +945,8 @@ public abstract class ByteBuffer : Buffer
     /// </exception>
     /// <exception cref="GdxRuntimeException"> If this buffer is read-only </exception>
     public abstract ByteBuffer Put( int index, byte b );
+
+    #endregion abstract methods
 
     // ------------------------------------------------------------------------
 }

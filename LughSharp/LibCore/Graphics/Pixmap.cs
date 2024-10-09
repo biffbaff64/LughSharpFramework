@@ -104,7 +104,7 @@ public class Pixmap : IDisposable
     /// <exception cref="GdxRuntimeException"></exception>
     public Pixmap( ByteBuffer encodedData, int offset, int len )
     {
-        if ( !encodedData.IsDirect() )
+        if ( !encodedData.IsDirect )
         {
             throw new GdxRuntimeException( "Couldn't load pixmap from non-direct ByteBuffer" );
         }

@@ -100,7 +100,7 @@ public class HeapByteBuffer : ByteBuffer
             throw new GdxRuntimeException( "Buffer Underflow!" );
         }
 
-        Array.Copy( Hb, Ix( Position ), dst, offset, length );
+        Array.Copy( Hb!, Ix( Position ), dst, offset, length );
         SetPosition( Position + length );
 
         return this;

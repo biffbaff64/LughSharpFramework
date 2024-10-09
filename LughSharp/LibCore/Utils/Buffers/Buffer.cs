@@ -133,7 +133,7 @@ namespace LughSharp.LibCore.Utils.Buffers;
 /// </para>
 /// </summary>
 [PublicAPI]
-public abstract class Buffer
+public abstract class Buffer : IDisposable
 {
     public const bool READ_ONLY  = true;
     public const bool READ_WRITE = false;
@@ -414,6 +414,20 @@ public abstract class Buffer
         IsDirect   = direct;
     }
 
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+    }
+    
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 

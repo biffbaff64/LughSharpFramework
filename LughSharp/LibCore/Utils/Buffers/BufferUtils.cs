@@ -69,7 +69,7 @@ public static partial class BufferUtils
     public static ByteBuffer NewByteBuffer( int numBytes, bool isUnsafe = false )
     {
         var buffer = isUnsafe
-            ? NewDisposableByteBufferJni( numBytes )
+            ? throw new NotImplementedException( "Disposable Byte Buffers not implemented!" ) /* NewDisposableByteBufferJni( numBytes ) */
             : ByteBuffer.Allocate( numBytes );
 
         buffer.Order( ByteOrder.NativeOrder );
@@ -147,7 +147,7 @@ public static partial class BufferUtils
     /// <param name="dst"> The destination Buffer, its position is used as an offset. </param>
     public static void Copy( float[] src, int srcOffset, int numElements, Buffer dst )
     {
-        CopyJni( src, srcOffset, dst, PositionInBytes( dst ), numElements << 2 );
+//        CopyJni( src, srcOffset, dst, PositionInBytes( dst ), numElements << 2 );
     }
 
     /// <summary>
@@ -250,8 +250,8 @@ public static partial class BufferUtils
         }
 
         _allocatedUnsafe -= size;
-
-        FreeMemoryJni( buffer );
+        
+        buffer.Dispose();
     }
 
     // ------------------------------------------------------------------------

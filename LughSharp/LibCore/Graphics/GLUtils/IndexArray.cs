@@ -87,6 +87,10 @@ public class IndexArray : IIndexData
         _byteBuffer.Limit    = count << 1;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="indices"></param>
     public void SetIndices( ShortBuffer indices )
     {
         var pos = indices.Position;
@@ -103,6 +107,13 @@ public class IndexArray : IIndexData
         _byteBuffer.Limit    = _buffer.Limit << 1;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="targetOffset"></param>
+    /// <param name="indices"></param>
+    /// <param name="offset"></param>
+    /// <param name="count"></param>
     public void UpdateIndices( int targetOffset, short[] indices, int offset, int count )
     {
         var pos = _byteBuffer.Position;

@@ -71,6 +71,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     protected GLFrameBufferBuilder< GLFrameBuffer< GLTexture > > BufferBuilder { get; set; }
 
     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /// <summary>
     /// Creates a new GLFrameBuffer. No <see cref="GLFrameBufferBuilder{TU}"/> specifications
@@ -456,7 +457,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
             {
                 var intbuf = ByteBuffer.Allocate
                     ( ( 16 * sizeof( int ) ) / 8 ).Order( ByteOrder.NativeOrder ).AsIntBuffer();
-
+                
                 fixed ( int* ptr = &intbuf.BackingArray()[ 0 ] )
                 {
                     Gdx.GL.glGetIntegerv( IGL.GL_FRAMEBUFFER_BINDING, ptr );
@@ -545,7 +546,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
             throw new GdxRuntimeException( "Buffers is NULL!" );
         }
 
-        List< GLFrameBuffer< T > > managedResources = Buffers[ app ] ?? new List< GLFrameBuffer< T > >();
+        var managedResources = Buffers[ app ] ?? [ ];
 
         managedResources.Add( frameBuffer );
         Buffers.Put( app, managedResources );

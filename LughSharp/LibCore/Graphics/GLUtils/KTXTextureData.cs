@@ -264,7 +264,7 @@ public class KtxTextureData : ITextureData, ICubemapData
 
         _imagePos = _compressedData.Position + bytesOfKeyValueData;
 
-        if ( !_compressedData.IsDirect() )
+        if ( !_compressedData.IsDirect )
         {
             var pos = _imagePos;
 

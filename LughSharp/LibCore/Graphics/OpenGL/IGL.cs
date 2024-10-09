@@ -192,28 +192,31 @@ public interface IGL
     const int GL_SMOOTH_LINE_WIDTH_GRANULARITY = 0x0B23;
 
     // ------------------------------------------------------------------------
+    const int GL_DRAW_BUFFER         = 0x0C01;
     const int GL_READ_BUFFER         = 0x0C02;
     const int GL_SCISSOR_BOX         = 0x0C10;
     const int GL_SCISSOR_TEST        = 0x0C11;
     const int GL_COLOR_CLEAR_VALUE   = 0x0C22;
     const int GL_COLOR_WRITEMASK     = 0x0C23;
-    const int GL_UNPACK_ROW_LENGTH   = 0x0CF2;
-    const int GL_UNPACK_SKIP_ROWS    = 0x0CF3;
-    const int GL_UNPACK_SKIP_PIXELS  = 0x0CF4;
-    const int GL_UNPACK_ALIGNMENT    = 0x0CF5;
-    const int GL_DRAW_BUFFER         = 0x0C01;
     const int GL_DOUBLEBUFFER        = 0x0C32;
     const int GL_STEREO              = 0x0C33;
     const int GL_LINE_SMOOTH_HINT    = 0x0C52;
     const int GL_POLYGON_SMOOTH_HINT = 0x0C53;
     const int GL_UNPACK_SWAP_BYTES   = 0x0CF0;
     const int GL_UNPACK_LSB_FIRST    = 0x0CF1;
+    const int GL_UNPACK_ROW_LENGTH   = 0x0CF2;
+    const int GL_UNPACK_SKIP_ROWS    = 0x0CF3;
+    const int GL_UNPACK_SKIP_PIXELS  = 0x0CF4;
+    const int GL_UNPACK_ALIGNMENT    = 0x0CF5;
 
     // ------------------------------------------------------------------------
+    const int GL_PACK_SWAP_BYTES    = 0x0D00;
+    const int GL_PACK_LSB_FIRST     = 0x0D01;
     const int GL_PACK_ROW_LENGTH    = 0x0D02;
     const int GL_PACK_SKIP_ROWS     = 0x0D03;
     const int GL_PACK_SKIP_PIXELS   = 0x0D04;
     const int GL_PACK_ALIGNMENT     = 0x0D05;
+    const int GL_MAX_CLIP_DISTANCES = 0x0D32;
     const int GL_MAX_TEXTURE_SIZE   = 0x0D33;
     const int GL_MAX_VIEWPORT_DIMS  = 0x0D3A;
     const int GL_SUBPIXEL_BITS      = 0x0D50;
@@ -224,10 +227,7 @@ public interface IGL
     const int GL_DEPTH_BITS         = 0x0D56;
     const int GL_STENCIL_BITS       = 0x0D57;
     const int GL_TEXTURE_2D         = 0x0DE1;
-    const int GL_PACK_SWAP_BYTES    = 0x0D00;
-    const int GL_PACK_LSB_FIRST     = 0x0D01;
     const int GL_TEXTURE_1D         = 0x0DE0;
-    const int GL_MAX_CLIP_DISTANCES = 0x0D32;
 
     // ------------------------------------------------------------------------
     const int GL_TEXTURE_WIDTH           = 0x1000;
