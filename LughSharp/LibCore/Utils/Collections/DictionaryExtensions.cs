@@ -34,8 +34,8 @@ public static class DictionaryExtension
     /// </summary>
     public static TK? FindKey< TK, TV >( this Dictionary< TK, TV > self, TV value ) where TK : notnull
     {
-        TK[] keyTable   = self.Keys.ToArray();
-        TV[] valueTable = self.Values.ToArray();
+        var keyTable   = self.Keys.ToArray();
+        var valueTable = self.Values.ToArray();
 
         if ( value == null )
         {
@@ -83,19 +83,14 @@ public static class DictionaryExtension
     /// <typeparam name="TK"> The Dictionarys Key type. </typeparam>
     /// <typeparam name="TV"> The Dictionarys Value type. </typeparam>
     /// <returns> The value associated with <paramref name="key"/>. </returns>
-    public static TV Get< TK, TV >( this Dictionary< TK, TV > self, TK key ) where TK : notnull
+    public static TV? Get< TK, TV >( this Dictionary< TK, TV > self, TK key ) where TK : notnull
     {
         if ( key == null )
         {
             throw new GdxRuntimeException( "key is null" );
         }
 
-        if ( self.TryGetValue( key, out var value ) )
-        {
-            return value;
-        }
-
-        throw new KeyNotFoundException( key.ToString() );
+        return self.TryGetValue( key, out var value ) ? value : default( TV );
     }
 
     /// <summary>
@@ -115,8 +110,8 @@ public static class DictionaryExtension
     {
         self.EnsureCapacity( map.Count );
 
-        TK[] keyTable   = map.Keys.ToArray();
-        TV[] valueTable = map.Values.ToArray();
+        var keyTable   = map.Keys.ToArray();
+        var valueTable = map.Values.ToArray();
 
         for ( int i = 0, n = keyTable.Length; i < n; i++ )
         {

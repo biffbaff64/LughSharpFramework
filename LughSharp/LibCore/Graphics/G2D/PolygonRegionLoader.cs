@@ -55,9 +55,9 @@ public class PolygonRegionLoader
     {
         ArgumentNullException.ThrowIfNull( file?.Name );
 
-        var texture = manager.Get< Texture >( manager.GetDependencies( file.Name )!.First() );
+        var texture = manager.Get( manager.GetDependencies( file.Name )!.First() ) as Texture;
 
-        return Load( new TextureRegion( texture ), file );
+        return Load( new TextureRegion( texture! ), file );
     }
 
     /// <summary>

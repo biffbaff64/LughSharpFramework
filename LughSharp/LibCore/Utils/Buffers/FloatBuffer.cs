@@ -74,8 +74,7 @@ namespace LughSharp.LibCore.Utils.Buffers;
 [PublicAPI]
 public abstract class FloatBuffer : Buffer
 {
-    public new float[]? Hb        { get; set; }
-    protected  bool     BigEndian { get; set; } = true;
+    public new float[]? Hb { get; set; }
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
@@ -95,7 +94,7 @@ public abstract class FloatBuffer : Buffer
     {
         Hb     = hb ?? new float[ cap ];
         Offset = offset;
-        
+
         SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
@@ -111,7 +110,7 @@ public abstract class FloatBuffer : Buffer
         : this( mark, pos, lim, cap, null )
     {
         Offset = 0;
-        
+
         SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
@@ -444,7 +443,7 @@ public abstract class FloatBuffer : Buffer
         {
             return this;
         }
-        
+
         if ( src.Equals( this ) )
         {
             throw new ArgumentException( "src cannot be this buffer!" );
@@ -512,7 +511,7 @@ public abstract class FloatBuffer : Buffer
         {
             return this;
         }
-        
+
         CheckBounds( offset, length, src.Length );
 
         if ( length > Remaining() )
@@ -614,7 +613,7 @@ public abstract class FloatBuffer : Buffer
     public override int ArrayOffset()
     {
         ValidateBackingArray();
-        
+
         return Offset;
     }
 
@@ -641,14 +640,6 @@ public abstract class FloatBuffer : Buffer
     public abstract FloatBuffer Compact();
 
     /// <summary>
-    /// Returns a string summarizing the state of this buffer.
-    /// </summary>
-    public override string ToString()
-    {
-        return $"{GetType().Name}[pos={Position} lim={Limit} cap={Capacity}]";
-    }
-
-    /// <summary>
     /// Returns the current hash code of this buffer.
     /// <para>
     /// The hash code of a float buffer depends only upon its remaining
@@ -664,11 +655,11 @@ public abstract class FloatBuffer : Buffer
     /// <returns> The current hash code of this buffer </returns>
     public override int GetHashCode()
     {
-        var h = 31 + ( int ) Get( 0 );
+        var h = 31 + ( int )Get( 0 );
 
-        h = ( 31 * h ) + ( int ) Get( 1 );
-        h = ( 31 * h ) + ( int ) Get( 2 );
-        h = ( 31 * h ) + ( int ) Get( 3 );
+        h = ( 31 * h ) + ( int )Get( 1 );
+        h = ( 31 * h ) + ( int )Get( 2 );
+        h = ( 31 * h ) + ( int )Get( 3 );
 
         return h;
     }
@@ -796,37 +787,6 @@ public abstract class FloatBuffer : Buffer
         return -1;
     }
 
-    /// <summary>
-    /// Retrieves this buffer's byte order.
-    /// <para>
-    /// The byte order of a char buffer created by allocation or by wrapping an existing
-    /// <tt>char</tt> array is the <see cref="ByteOrder.NativeOrder"/> of the underlying
-    /// hardware.  The byte order of a char buffer created as a view of a byte buffer is
-    /// that of the byte buffer at the moment that the view is created.
-    /// </para>
-    /// </summary>
-    /// <returns> This buffer's byte order </returns>
-    public virtual ByteOrder Order()
-    {
-        return BigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
-    }
-
-    /// <summary>
-    /// Modifies this buffer's byte order.
-    /// </summary>
-    /// <param name="order">
-    /// The new byte order, either <see cref="ByteOrder.BigEndian"/>
-    /// or <see cref="ByteOrder.LittleEndian"/>
-    /// </param>
-    /// <returns> This buffer </returns>
-    public virtual FloatBuffer Order( ByteOrder order )
-    {
-        BigEndian       = order == ByteOrder.BigEndian;
-        NativeByteOrder = BigEndian == ( ByteOrder.NativeOrder == ByteOrder.BigEndian );
-
-        return this;
-    }
-
     /// <inheritdoc />
     protected override void ValidateBackingArray()
     {
@@ -834,5 +794,18 @@ public abstract class FloatBuffer : Buffer
         {
             throw new NullReferenceException( "Backing array is null!" );
         }
+    }
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    /// <inheritdoc cref="IDisposable"/>>
+    protected override void Dispose( bool disposing )
+    {
+        if ( !disposing ) return;
+        if ( Hb == null ) return;
+
+        Array.Clear( Hb );
+        Hb = null;
     }
 }

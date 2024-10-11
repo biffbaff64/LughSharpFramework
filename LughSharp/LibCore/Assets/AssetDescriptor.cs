@@ -34,9 +34,9 @@ public class AssetDescriptor
     public Type AssetType { get; set; }
 
     /// <summary>
-    /// The path to the asset file.
+    /// The asset name.
     /// </summary>
-    public string Filepath { get; set; }
+    public string AssetName { get; set; }
 
     /// <summary>
     /// Optional parameters for the asset loader.
@@ -63,7 +63,7 @@ public class AssetDescriptor
         Logger.CheckPoint();
 
         AssetType  = null!;
-        Filepath   = string.Empty;
+        AssetName   = string.Empty;
         Parameters = null!;
         File       = null!;
     }
@@ -81,7 +81,7 @@ public class AssetDescriptor
         Logger.CheckPoint();
 
         AssetType  = assetType;
-        Filepath   = filepath.Replace( '\\', '/' );
+        AssetName   = filepath.Replace( '\\', '/' );
         Parameters = parameters;
         File       = new FileInfo( Path.GetFileName( filepath ) );
     }
@@ -98,13 +98,13 @@ public class AssetDescriptor
 
         File       = file ?? throw new ArgumentNullException( nameof( file ) );
         AssetType  = assetType ?? throw new ArgumentNullException( nameof( assetType ) );
-        Filepath   = file.FullName.Replace( '\\', '/' );
+        AssetName   = file.FullName.Replace( '\\', '/' );
         Parameters = parameters;
     }
 
     /// <inheritdoc />
     public override string ToString()
     {
-        return $"{Filepath}, {AssetType.FullName}";
+        return $"{AssetName}, {AssetType.FullName}";
     }
 }

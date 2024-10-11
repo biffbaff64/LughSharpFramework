@@ -63,9 +63,9 @@ public class TextureAtlasLoader
         {
             if ( page.TextureFile != null )
             {
-                var name = page.TextureFile.FullName.Replace( "\\\\", "/" );
+                var name = page.TextureFile.FullName.Replace( @"\\", "/" );
 
-                var texture = assetManager.Get< Texture >( name );
+                var texture = assetManager.Get( name ) as Texture;
 
                 page.Texture = texture;
             }

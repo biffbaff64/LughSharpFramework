@@ -25,6 +25,9 @@
 
 namespace LughSharp.LibCore.Utils;
 
+/// <summary>
+/// Provides utility methods and constants for character-related operations.
+/// </summary>
 [PublicAPI]
 public static class Character
 {

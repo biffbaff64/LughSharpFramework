@@ -126,9 +126,9 @@ public interface IImageResolver
                 throw new AssetNotLoadedException( $"The asset '{name}' is not loaded." );
             }
 
-            var texture = _assetManager.Get< Texture >( name );
+            var texture = _assetManager.Get( name ) as Texture;
 
-            return new TextureRegion( texture );
+            return new TextureRegion( texture! );
         }
     }
 

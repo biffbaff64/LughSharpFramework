@@ -30,16 +30,26 @@ public static partial class Logger
 
     // ------------------------------------------------------------------------
     
+    /// <summary>
+    /// 
+    /// </summary>
     public static void Begin()
     {
         _isBuilding = true;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static void End()
     {
         _isBuilding = false;
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="message"></param>
     public static void Append( string message )
     {
         if ( _isBuilding )
@@ -47,26 +57,50 @@ public static partial class Logger
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="b"></param>
     public static void Append( bool b )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="c"></param>
     public static void Append( char c )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="i"></param>
     public static void Append( int i )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="l"></param>
     public static void Append( long l )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="f"></param>
     public static void Append( float f )
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="d"></param>
     public static void Append( double d )
     {
     }

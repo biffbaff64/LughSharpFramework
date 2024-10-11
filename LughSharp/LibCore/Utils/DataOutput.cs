@@ -130,10 +130,11 @@ public class DataOutput : BinaryWriter
     }
 
     /// <summary>
+    /// Writes a string as UTF8 beyond the first characters that were handled as 8-bit characters.
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="charCount"></param>
-    /// <param name="charIndex"></param>
+    /// <param name="value">The string to write.</param>
+    /// <param name="charCount">The total number of characters in the string.</param>
+    /// <param name="charIndex">The index from which to start writing remaining characters.</param>
     public void WriteStringSlow( string value, int charCount, int charIndex )
     {
         for ( ; charIndex < charCount; charIndex++ )

@@ -28,14 +28,17 @@ namespace LughSharp.LibCore.Utils.Buffers;
 [PublicAPI]
 public class HeapByteBuffer : ByteBuffer
 {
+    /// <summary>
+    /// Represents a byte buffer that is backed by a byte array.
+    /// </summary>
     public HeapByteBuffer()
         : base( -1, 0, 0, 0 )
     {
         SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
-    
+
     /// <summary>
-    /// Creates a new HeapByteBuffer with the given limit and  initial capacity. 
+    /// Represents a byte buffer with a specified capacity and limit.
     /// </summary>
     public HeapByteBuffer( int cap, int lim )
         : base( -1, 0, lim, cap, new byte[ cap ] )
@@ -43,12 +46,18 @@ public class HeapByteBuffer : ByteBuffer
         SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
+    /// <summary>
+    /// Represents a byte buffer that is backed by a byte array.
+    /// </summary>
     public HeapByteBuffer( byte[]? buf, int off, int len )
         : base( -1, off, off + len, buf!.Length, buf )
     {
         SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
+    /// <summary>
+    /// Represents a byte buffer that is backed by a heap-allocated byte array.
+    /// </summary>
     protected HeapByteBuffer( byte[]? buf, int mark, int pos, int lim, int cap, int off )
         : base( mark, pos, lim, cap, buf, off )
     {

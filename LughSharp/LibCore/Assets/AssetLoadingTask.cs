@@ -87,7 +87,7 @@ public class AssetLoadingTask : IAsyncTask< object >
 
         if ( !DependenciesLoaded )
         {
-            Dependencies = asyncLoader?.GetDependencies( AssetDesc.Filepath,
+            Dependencies = asyncLoader?.GetDependencies( AssetDesc.AssetName,
                                                          Resolve( asyncLoader, AssetDesc ),
                                                          AssetDesc.Parameters );
 
@@ -95,7 +95,7 @@ public class AssetLoadingTask : IAsyncTask< object >
             {
                 RemoveDuplicates( Dependencies );
 
-                _manager.InjectDependencies( AssetDesc.Filepath, Dependencies );
+                _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
             }
             else
             {
@@ -159,7 +159,7 @@ public class AssetLoadingTask : IAsyncTask< object >
         if ( !DependenciesLoaded )
         {
             DependenciesLoaded = true;
-            Dependencies       = syncLoader.GetDependencies( AssetDesc.Filepath, Resolve( _loader, AssetDesc ), AssetDesc.Parameters );
+            Dependencies       = syncLoader.GetDependencies( AssetDesc.AssetName, Resolve( _loader, AssetDesc ), AssetDesc.Parameters );
 
             if ( Dependencies == null )
             {
@@ -170,7 +170,7 @@ public class AssetLoadingTask : IAsyncTask< object >
 
             RemoveDuplicates( Dependencies );
 
-            _manager.InjectDependencies( AssetDesc.Filepath, Dependencies );
+            _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
         }
         else
         {
@@ -219,7 +219,7 @@ public class AssetLoadingTask : IAsyncTask< object >
                 }
                 catch ( Exception e )
                 {
-                    throw new GdxRuntimeException( $"Couldn't load dependencies of asset: {AssetDesc.Filepath}", e );
+                    throw new GdxRuntimeException( $"Couldn't load dependencies of asset: {AssetDesc.AssetName}", e );
                 }
 
                 DependenciesLoaded = true;
@@ -258,7 +258,7 @@ public class AssetLoadingTask : IAsyncTask< object >
             }
             catch ( Exception e )
             {
-                throw new GdxRuntimeException( $"Couldn't load asset: {AssetDesc.Filepath}", e );
+                throw new GdxRuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", e );
             }
 
             Asset = asyncLoader.LoadSync( _manager,
@@ -284,7 +284,7 @@ public class AssetLoadingTask : IAsyncTask< object >
             // Use the loader to resolve the file path if the loader is not null.
             if ( loader != null )
             {
-                descriptor.File = loader.Resolve( descriptor.Filepath );
+                descriptor.File = loader.Resolve( descriptor.AssetName );
             }
         }
 
@@ -299,12 +299,12 @@ public class AssetLoadingTask : IAsyncTask< object >
     {
         for ( var i = 0; i < array.Count; ++i )
         {
-            var fn   = array[ i ].Filepath;
+            var fn   = array[ i ].AssetName;
             var type = array[ i ].AssetType;
 
             for ( var j = array.Count - 1; j > i; --j )
             {
-                if ( ( type == array[ j ].AssetType ) && fn.Equals( array[ j ].Filepath ) )
+                if ( ( type == array[ j ].AssetType ) && fn.Equals( array[ j ].AssetName ) )
                 {
                     array.RemoveAt( j );
                 }

@@ -25,12 +25,20 @@
 
 namespace LughSharp.LibCore.Assets;
 
+/// <summary>
+/// An interface that provides reference counting functionality for objects.
+/// Implementations of this interface should allow for the reference count to be
+/// incremented or decremented to track how many times an object is being utilized.
+/// </summary>
 [PublicAPI]
 public interface IRefCountedContainer
 {
     object? Asset    { get; }
     int     RefCount { get; set; }
 }
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 /// <summary>
 /// A class that stores a reference to an object, as well as counts the number
@@ -41,13 +49,19 @@ public interface IRefCountedContainer
 [PublicAPI]
 public class RefCountedContainer : IRefCountedContainer
 {
+    public object? Asset    { get; set; }
+    public int     RefCount { get; set; } = 1;
+
+    // ------------------------------------------------------------------------
+    
     public RefCountedContainer( object obj )
     {
         Logger.CheckPoint();
 
         Asset = obj ?? throw new ArgumentException( "Object must not be null" );
     }
-
-    public object? Asset    { get; set; }
-    public int     RefCount { get; set; } = 1;
 }
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------

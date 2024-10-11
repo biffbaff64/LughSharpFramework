@@ -27,8 +27,7 @@ namespace LughSharp.LibCore.Utils.Buffers;
 [PublicAPI]
 public abstract class IntBuffer : Buffer
 {
-    public new int[]? Hb        { get; set; }
-    protected  bool   BigEndian { get; set; } = true;
+    public new int[]? Hb { get; set; }
 
     // ------------------------------------------------------------------------
 
@@ -510,15 +509,6 @@ public abstract class IntBuffer : Buffer
     public abstract IntBuffer Compact();
 
     /// <summary>
-    /// Returns a string summarizing the state of this buffer.
-    /// </summary>
-    /// <returns> A summary string </returns>
-    public override string ToString()
-    {
-        return $"{GetType().Name}[pos={Position} lim={Limit} cap={Capacity}]";
-    }
-
-    /// <summary>
     /// Returns the current hash code of this buffer.
     /// <para>
     /// The hash code of a int buffer depends only upon its remaining elements; that is,
@@ -648,40 +638,9 @@ public abstract class IntBuffer : Buffer
     /// </summary>
     private static int Compare( int a, int b )
     {
-        return a < b  ? -1 :
-               a > b  ? +1 :
-               a == b ? 0 : -1;
-    }
-
-    /// <summary>
-    /// Retrieves this buffer's byte order.
-    /// <para>
-    /// The byte order of a char buffer created by allocation or by wrapping an existing
-    /// <tt>char</tt> array is the <see cref="ByteOrder.NativeOrder"/> of the underlying
-    /// hardware.  The byte order of a char buffer created as a view of a byte buffer is
-    /// that of the byte buffer at the moment that the view is created.
-    /// </para>
-    /// </summary>
-    /// <returns> This buffer's byte order </returns>
-    public virtual ByteOrder Order()
-    {
-        return BigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
-    }
-
-    /// <summary>
-    /// Modifies this buffer's byte order.
-    /// </summary>
-    /// <param name="order">
-    /// The new byte order, either <see cref="ByteOrder.BigEndian"/>
-    /// or <see cref="ByteOrder.LittleEndian"/>
-    /// </param>
-    /// <returns> This buffer </returns>
-    public virtual IntBuffer Order( ByteOrder order )
-    {
-        BigEndian       = order == ByteOrder.BigEndian;
-        NativeByteOrder = BigEndian == ( ByteOrder.NativeOrder == ByteOrder.BigEndian );
-
-        return this;
+        return a < b ? -1 :
+            a > b    ? +1 :
+            a == b   ? 0 : -1;
     }
 
     /// <inheritdoc />
@@ -691,5 +650,18 @@ public abstract class IntBuffer : Buffer
         {
             throw new NullReferenceException( "Backing array is null!" );
         }
+    }
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    /// <inheritdoc cref="IDisposable"/>>
+    protected override void Dispose( bool disposing )
+    {
+        if ( !disposing ) return;
+        if ( Hb == null ) return;
+
+        Array.Clear( Hb );
+        Hb = null;
     }
 }

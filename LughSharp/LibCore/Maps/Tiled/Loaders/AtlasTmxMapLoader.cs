@@ -147,9 +147,9 @@ public class AtlasTmxMapLoader : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledM
                                             int imageHeight,
                                             FileInfo? image )
     {
-        var atlas = AtlasResolver!.GetAtlas();
+        var atlas = AtlasResolver?.GetAtlas();
 
-        foreach ( var texture in atlas.Textures )
+        foreach ( var texture in atlas!.Textures )
         {
             TrackedTextures.Add( texture );
         }
@@ -286,7 +286,7 @@ public class AtlasTmxMapLoader : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledM
     [PublicAPI]
     protected interface IAtlasResolver : IImageResolver
     {
-        public TextureAtlas GetAtlas();
+        public TextureAtlas? GetAtlas();
 
         public class DirectAtlasResolver : IAtlasResolver
         {
@@ -319,14 +319,14 @@ public class AtlasTmxMapLoader : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledM
                 _atlasName    = atlasName;
             }
 
-            public TextureAtlas GetAtlas()
+            public TextureAtlas? GetAtlas()
             {
-                return _assetManager.Get< TextureAtlas >( _atlasName );
+                return _assetManager.Get( _atlasName ) as TextureAtlas;
             }
 
             public TextureRegion? GetImage( string name )
             {
-                return GetAtlas().FindRegion( name );
+                return GetAtlas()?.FindRegion( name );
             }
         }
     }

@@ -123,10 +123,10 @@ public class BitmapFontLoader : AsynchronousAssetLoader< BitmapFont, BitmapFontP
 
         if ( parameter?.AtlasName != null )
         {
-            var atlas = manager.Get< TextureAtlas >( parameter.AtlasName! );
+            var atlas = manager.Get( parameter.AtlasName! ) as TextureAtlas;
             var name  = Path.GetFileNameWithoutExtension( _data?.ImagePaths?[ 0 ] );
 
-            TextureRegion? region = atlas.FindRegion( name );
+            TextureRegion? region = atlas?.FindRegion( name );
 
             if ( region == null )
             {
@@ -142,7 +142,8 @@ public class BitmapFontLoader : AsynchronousAssetLoader< BitmapFont, BitmapFontP
 
         for ( var i = 0; i < capacity; i++ )
         {
-            regs.Add( new TextureRegion( manager.Get< Texture >( _data.ImagePaths[ i ] ) ) );
+            var texture = manager.Get( _data.ImagePaths[ i ] ) as Texture;
+            regs.Add( new TextureRegion( texture! ) );
         }
 
         return new BitmapFont( _data, regs, true );

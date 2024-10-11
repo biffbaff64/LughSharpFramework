@@ -29,8 +29,7 @@ namespace LughSharp.LibCore.Utils.Buffers;
 [PublicAPI]
 public abstract class ShortBuffer : Buffer
 {
-    public new short[]? Hb        { get; set; }
-    protected  bool     BigEndian { get; set; } = true;
+    public new short[]? Hb { get; set; }
 
     // ------------------------------------------------------------------------
 
@@ -123,94 +122,6 @@ public abstract class ShortBuffer : Buffer
     {
         return Wrap( array, 0, array.Length );
     }
-
-    /// <summary>
-    /// Creates a new short buffer whose content is a shared subsequence of
-    /// this buffer's content.
-    /// <para>
-    /// The content of the new buffer will start at this buffer's current
-    /// position.  Changes to this buffer's content will be visible in the new
-    /// buffer, and vice versa; the two buffers' position, limit, and mark
-    /// values will be independent.
-    /// </para>
-    /// <para>
-    /// The new buffer's position will be zero, its capacity and its limit
-    /// will be the number of shorts remaining in this buffer, and its mark
-    /// will be undefined.  The new buffer will be direct if, and only if, this
-    /// buffer is direct, and it will be read-only if, and only if, this buffer
-    /// is read-only.
-    /// </para>
-    /// </summary>
-    /// @return  The new short buffer
-    public abstract ShortBuffer Slice();
-
-    /// <summary>
-    /// Creates a new short buffer that shares this buffer's content.
-    /// </summary>
-    /// <remarks>
-    /// The content of the new buffer will be that of this buffer.
-    /// Changes to this buffer's content will be visible in the new buffer,
-    /// and vice versa; the two buffers' position, limit, and mark values
-    /// will be independent.
-    /// </remarks>
-    /// <returns>The new short buffer.</returns>
-    public abstract ShortBuffer Duplicate();
-
-    /// <summary>
-    /// Creates a new, read-only short buffer that shares this buffer's content.
-    /// The content of the new buffer will be that of this buffer. Changes to this
-    /// buffer's content will be visible in the new buffer; the new buffer itself,
-    /// however, will be read-only and will not allow the shared content to be
-    /// modified. The two buffers' position, limit, and mark values will be independent.
-    /// </summary>
-    /// <returns>The new, read-only short buffer.</returns>
-    public abstract ShortBuffer AsReadOnlyBuffer();
-
-    /// <summary>
-    /// Relative <i>get</i> method. Reads the short at this buffer's current position,
-    /// and then increments the position.
-    /// </summary>
-    /// <returns>The short at the buffer's current position.</returns>
-    /// <exception cref="GdxRuntimeException">
-    /// If the buffer's current position is not smaller than its limit.
-    /// </exception>
-    public abstract short Get();
-
-    /// <summary>
-    /// Relative <i>put</i> method <i>(optional operation)</i>.
-    /// </summary>
-    /// <param name="s">The short to be written.</param>
-    /// <returns> This buffer.</returns>
-    /// <exception cref="GdxRuntimeException">
-    /// If this buffer's current position is not smaller than its limit.
-    /// </exception>
-    /// <exception cref="GdxRuntimeException">If this buffer is read-only.</exception>
-    public abstract ShortBuffer Put( short s );
-
-    /// <summary>
-    /// Absolute <i>get</i> method. Reads the short at the given index.
-    /// </summary>
-    /// <param name="index">The index from which the short will be read.</param>
-    /// <returns>The short at the given index.</returns>
-    /// <exception cref="IndexOutOfRangeException">
-    /// If <paramref name="index"/> is negative or not smaller than the buffer's limit.
-    /// </exception>
-    public abstract short Get( int index );
-
-    /// <summary>
-    /// Absolute <i>put</i> method <i>(optional operation)</i>.
-    /// </summary>
-    /// <remarks>
-    ///     <para> Writes the given short into this buffer at the given index. </para>
-    /// </remarks>
-    /// <param name="index">The index at which the short will be written.</param>
-    /// <param name="s">The short value to be written.</param>
-    /// <returns>This buffer.</returns>
-    /// <exception cref="IndexOutOfRangeException">
-    /// If <paramref name="index"/> is negative or not smaller than the buffer's limit.
-    /// </exception>
-    /// <exception cref="GdxRuntimeException">If this buffer is read-only.</exception>
-    public abstract ShortBuffer Put( int index, short s );
 
     /// <summary>
     /// Relative bulk <i>get</i> method.
@@ -539,6 +450,98 @@ public abstract class ShortBuffer : Buffer
         return Offset;
     }
 
+    // ------------------------------------------------------------------------
+
+    #region abstract methods
+
+    /// <summary>
+    /// Creates a new short buffer whose content is a shared subsequence of
+    /// this buffer's content.
+    /// <para>
+    /// The content of the new buffer will start at this buffer's current
+    /// position.  Changes to this buffer's content will be visible in the new
+    /// buffer, and vice versa; the two buffers' position, limit, and mark
+    /// values will be independent.
+    /// </para>
+    /// <para>
+    /// The new buffer's position will be zero, its capacity and its limit
+    /// will be the number of shorts remaining in this buffer, and its mark
+    /// will be undefined.  The new buffer will be direct if, and only if, this
+    /// buffer is direct, and it will be read-only if, and only if, this buffer
+    /// is read-only.
+    /// </para>
+    /// </summary>
+    /// @return  The new short buffer
+    public abstract ShortBuffer Slice();
+
+    /// <summary>
+    /// Creates a new short buffer that shares this buffer's content.
+    /// </summary>
+    /// <remarks>
+    /// The content of the new buffer will be that of this buffer.
+    /// Changes to this buffer's content will be visible in the new buffer,
+    /// and vice versa; the two buffers' position, limit, and mark values
+    /// will be independent.
+    /// </remarks>
+    /// <returns>The new short buffer.</returns>
+    public abstract ShortBuffer Duplicate();
+
+    /// <summary>
+    /// Creates a new, read-only short buffer that shares this buffer's content.
+    /// The content of the new buffer will be that of this buffer. Changes to this
+    /// buffer's content will be visible in the new buffer; the new buffer itself,
+    /// however, will be read-only and will not allow the shared content to be
+    /// modified. The two buffers' position, limit, and mark values will be independent.
+    /// </summary>
+    /// <returns>The new, read-only short buffer.</returns>
+    public abstract ShortBuffer AsReadOnlyBuffer();
+
+    /// <summary>
+    /// Relative <i>get</i> method. Reads the short at this buffer's current position,
+    /// and then increments the position.
+    /// </summary>
+    /// <returns>The short at the buffer's current position.</returns>
+    /// <exception cref="GdxRuntimeException">
+    /// If the buffer's current position is not smaller than its limit.
+    /// </exception>
+    public abstract short Get();
+
+    /// <summary>
+    /// Relative <i>put</i> method <i>(optional operation)</i>.
+    /// </summary>
+    /// <param name="s">The short to be written.</param>
+    /// <returns> This buffer.</returns>
+    /// <exception cref="GdxRuntimeException">
+    /// If this buffer's current position is not smaller than its limit.
+    /// </exception>
+    /// <exception cref="GdxRuntimeException">If this buffer is read-only.</exception>
+    public abstract ShortBuffer Put( short s );
+
+    /// <summary>
+    /// Absolute <i>get</i> method. Reads the short at the given index.
+    /// </summary>
+    /// <param name="index">The index from which the short will be read.</param>
+    /// <returns>The short at the given index.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// If <paramref name="index"/> is negative or not smaller than the buffer's limit.
+    /// </exception>
+    public abstract short Get( int index );
+
+    /// <summary>
+    /// Absolute <i>put</i> method <i>(optional operation)</i>.
+    /// </summary>
+    /// <remarks>
+    ///     <para> Writes the given short into this buffer at the given index. </para>
+    /// </remarks>
+    /// <param name="index">The index at which the short will be written.</param>
+    /// <param name="s">The short value to be written.</param>
+    /// <returns>This buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// If <paramref name="index"/> is negative or not smaller than the buffer's limit.
+    /// </exception>
+    /// <exception cref="GdxRuntimeException">If this buffer is read-only.</exception>
+    public abstract ShortBuffer Put( int index, short s );
+    
     /// <summary>
     /// Compacts this buffer  <i>(optional operation)</i>.
     /// <para>
@@ -563,14 +566,80 @@ public abstract class ShortBuffer : Buffer
     /// <exception cref="GdxRuntimeException">If this buffer is read-only</exception>
     public abstract ShortBuffer Compact();
 
+    #endregion abstract methods
+    
+    // ------------------------------------------------------------------------
+
     /// <summary>
-    /// Returns a string summarizing the state of this buffer.
+    /// Compares this buffer to another.
+    /// <para>
+    /// Two short buffers are compared by comparing their sequences of remaining
+    /// elements lexicographically, without regard to the starting position of each
+    /// sequence within its corresponding buffer. Pairs of <tt>short</tt> elements are
+    /// compared as if by invoking <see cref="Compare(short,short)"/>.
+    /// </para>
+    /// <para>
+    /// A short buffer is not comparable to any other type of object.
+    /// </para>
     /// </summary>
-    /// <returns> A summary string </returns>
-    public override string ToString()
+    /// <returns>
+    /// A negative integer, zero, or a positive integer as this buffer is less than,
+    /// equal to, or greater than the given buffer
+    /// </returns>
+    public int CompareTo( ShortBuffer that )
     {
-        return $"{GetType().Name}: [pos={Position} lim={Limit} cap={Capacity}]";
+        var n = Position + Math.Min( Remaining(), that.Remaining() );
+
+        for ( int i = Position, j = that.Position; i < n; i++, j++ )
+        {
+            var cmp = Compare( Get( i ), that.Get( j ) );
+
+            if ( cmp != 0 )
+            {
+                return cmp;
+            }
+        }
+
+        return Remaining() - that.Remaining();
     }
+
+    /// <summary>
+    /// Compares two values.
+    /// <li>If x and y are equal, will return 0. </li>
+    /// <li>If x is greater than y, will return &gt; 0. </li>
+    /// <li>If x is less than y, will return &lt; 0. </li>
+    /// </summary>
+    private static int Compare( short x, short y )
+    {
+        return x - y;
+    }
+
+    // ------------------------------------------------------------------------
+    
+    /// <inheritdoc />
+    protected override void ValidateBackingArray()
+    {
+        if ( Hb == null )
+        {
+            throw new NullReferenceException( "Backing array is null!" );
+        }
+    }
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    /// <inheritdoc cref="IDisposable"/>>
+    protected override void Dispose( bool disposing )
+    {
+        if ( !disposing ) return;
+        if ( Hb == null ) return;
+
+        Array.Clear( Hb );
+        Hb = null;
+    }
+    
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /// <summary>
     /// Returns the current hash code of this buffer.
@@ -651,89 +720,5 @@ public abstract class ShortBuffer : Buffer
     private static bool Equals( short x, short y )
     {
         return x == y;
-    }
-
-    /// <summary>
-    /// Compares this buffer to another.
-    /// <para>
-    /// Two short buffers are compared by comparing their sequences of remaining
-    /// elements lexicographically, without regard to the starting position of each
-    /// sequence within its corresponding buffer. Pairs of <tt>short</tt> elements are
-    /// compared as if by invoking <see cref="Compare(short,short)"/>.
-    /// </para>
-    /// <para>
-    /// A short buffer is not comparable to any other type of object.
-    /// </para>
-    /// </summary>
-    /// <returns>
-    /// A negative integer, zero, or a positive integer as this buffer is less than,
-    /// equal to, or greater than the given buffer
-    /// </returns>
-    public int CompareTo( ShortBuffer that )
-    {
-        var n = Position + Math.Min( Remaining(), that.Remaining() );
-
-        for ( int i = Position, j = that.Position; i < n; i++, j++ )
-        {
-            var cmp = Compare( Get( i ), that.Get( j ) );
-
-            if ( cmp != 0 )
-            {
-                return cmp;
-            }
-        }
-
-        return Remaining() - that.Remaining();
-    }
-
-    /// <summary>
-    /// Compares two values.
-    /// If equal, will return 0.
-    /// If x is greater than y, will return &gt; 0.
-    /// If x is less than y, will return &lt; 0.
-    /// </summary>
-    private static int Compare( short x, short y )
-    {
-        return x - y;
-    }
-
-    /// <summary>
-    /// Retrieves this buffer's byte order.
-    /// <para>
-    /// The byte order of a char buffer created by allocation or by wrapping an existing
-    /// <tt>char</tt> array is the <see cref="ByteOrder.NativeOrder"/> of the underlying
-    /// hardware.  The byte order of a char buffer created as a view of a byte buffer is
-    /// that of the byte buffer at the moment that the view is created.
-    /// </para>
-    /// </summary>
-    /// <returns> This buffer's byte order </returns>
-    public virtual ByteOrder Order()
-    {
-        return BigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
-    }
-
-    /// <summary>
-    /// Modifies this buffer's byte order.
-    /// </summary>
-    /// <param name="order">
-    /// The new byte order, either <see cref="ByteOrder.BigEndian"/>
-    /// or <see cref="ByteOrder.LittleEndian"/>
-    /// </param>
-    /// <returns> This buffer </returns>
-    public virtual ShortBuffer Order( ByteOrder order )
-    {
-        BigEndian       = order == ByteOrder.BigEndian;
-        NativeByteOrder = BigEndian == ( ByteOrder.NativeOrder == ByteOrder.BigEndian );
-
-        return this;
-    }
-
-    /// <inheritdoc />
-    protected override void ValidateBackingArray()
-    {
-        if ( Hb == null )
-        {
-            throw new NullReferenceException( "Backing array is null!" );
-        }
     }
 }

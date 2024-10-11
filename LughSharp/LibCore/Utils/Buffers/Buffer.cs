@@ -140,55 +140,36 @@ public abstract class Buffer : IDisposable
     public const bool DIRECT     = true;
     public const bool NOT_DIRECT = false;
 
-#if USING_SPLITERATOR //TODO:
-    /// <summary>
-    /// The characteristics of Spliterators that traverse and split elements
-    /// maintained in Buffers.
-    /// </summary>
-    internal static readonly int SpliteratorCharacteristics =
-        Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.ORDERED;
-#endif
+    // ------------------------------------------------------------------------
+    
+//    /// <summary>
+//    /// The characteristics of Spliterators that traverse and split elements
+//    /// maintained in Buffers.
+//    /// </summary>
+//    internal static readonly int SpliteratorCharacteristics =
+//        Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.ORDERED;
 
-    public    int Mark   { get; set; } = -1;
-    protected int Offset { get; set; }
+    public         int  Mark        { get; set; } = -1;
+    protected      int  Offset      { get; set; }
+    protected      bool IsBigEndian { get; set; } = true;
+    public virtual int  Capacity    { get; set; }
+    public virtual int  Limit       { get; set; }
+    public virtual int  Position    { get; set; }
+    public virtual bool IsReadOnly  { get; set; }
+    public virtual bool IsDirect    { get; set; }
 
     /// <summary>
     /// Used only by DirectBuffers
     /// </summary>
     public virtual long Address { get; set; }
 
-    /// <summary>
-    /// Returns this buffers capacity
-    /// </summary>
-    public virtual int Capacity { get; set; }
-
-    /// <summary>
-    /// Returns this buffer's limit.
-    /// </summary>
-    public virtual int Limit { get; set; }
-
-    /// <summary>
-    /// Returns this buffers position
-    /// </summary>
-    public virtual int Position { get; set; }
-
-    /// <summary>
-    /// Returns <c>true</c> if, and only if, this buffer is read-only
-    /// </summary>
-    public virtual bool IsReadOnly { get; set; }
-
-    /// <summary>
-    /// Tells whether or not this buffer is <c>direct</c>.
-    /// </summary>
-    /// <returns> <c>true</c> if, and only if, this buffer is direct </returns>
-    public virtual bool IsDirect { get; set; }
-
+    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
-    protected Buffer()
-    {
-        Hb = new object[ 1 ];
-    }
+//    protected Buffer()
+//    {
+//        Hb = new object[ 1 ];
+//    }
 
     /// <summary>
     /// Creates a new buffer with the given mark, position, limit, and capacity,
@@ -200,6 +181,8 @@ public abstract class Buffer : IDisposable
 
         Setup( mark, pos, lim, cap );
     }
+
+    // ------------------------------------------------------------------------
 
     /// <summary>
     /// Setup method to be called from Constructor(s).
@@ -403,15 +386,58 @@ public abstract class Buffer : IDisposable
     /// <returns> The calculated index. </returns>
     public virtual int Ix( int i )
     {
-        return i + Offset;
+        return ( i + Offset );
     }
 
-    protected bool NativeByteOrder = ByteOrder.NativeOrder == ByteOrder.BigEndian;
+    /// <summary>
+    /// Retrieves this buffer's byte order.
+    /// <para>
+    /// The byte order of a char buffer created by allocation or by wrapping an existing
+    /// <tt>char</tt> array is the <see cref="ByteOrder.NativeOrder"/> of the underlying
+    /// hardware.  The byte order of a char buffer created as a view of a byte buffer is
+    /// that of the byte buffer at the moment that the view is created.
+    /// </para>
+    /// </summary>
+    /// <returns> This buffer's byte order </returns>
+    public virtual ByteOrder Order()
+    {
+        return IsBigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
+    }
 
+    /// <summary>
+    /// Modifies this buffer's byte order.
+    /// </summary>
+    /// <param name="order">
+    /// The new byte order, either <see cref="ByteOrder.BigEndian"/>
+    /// or <see cref="ByteOrder.LittleEndian"/>
+    /// </param>
+    /// <returns> This buffer </returns>
+    public virtual Buffer Order( ByteOrder order )
+    {
+        IsBigEndian = order == ByteOrder.BigEndian;
+
+        return this;
+    }
+
+    /// <summary>
+    /// Sets the buffer status, determining whether the buffer is in read/write mode
+    /// and whether it is a direct buffer.
+    /// </summary>
+    /// <param name="readWrite">Indicates if the buffer is in read/write mode.</param>
+    /// <param name="direct">Indicates if the buffer is a direct buffer.</param>
     protected void SetBufferStatus( bool readWrite, bool direct )
     {
         IsReadOnly = readWrite;
         IsDirect   = direct;
+    }
+
+    /// <summary>
+    /// Returns a string summarizing the state of this buffer.
+    /// </summary>
+    /// <returns> A summary string </returns>
+    public override string ToString()
+    {
+        return $"{GetType().Name} [pos={Position} lim={Limit} cap={Capacity}]";
     }
 
     // ------------------------------------------------------------------------
@@ -427,7 +453,7 @@ public abstract class Buffer : IDisposable
     protected virtual void Dispose( bool disposing )
     {
     }
-    
+
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 

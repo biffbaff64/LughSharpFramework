@@ -30,10 +30,12 @@ namespace LughSharp.LibCore.Graphics.G3D.Utils;
 /// <summary>
 /// Used by <see cref="Model"/> to load textures from <see cref="ModelData"/>.
 /// </summary>
+[PublicAPI]
 public interface ITextureProvider
 {
     Texture Load( string fileName );
 
+    [PublicAPI]
     public class FileTextureProvider : ITextureProvider
     {
         private readonly TextureFilter _magFilter;
@@ -79,7 +81,7 @@ public interface ITextureProvider
             AssetManager = assetManager;
         }
 
-        public AssetManager? AssetManager { get; }
+        private AssetManager? AssetManager { get; }
 
         public Texture Load( string fileName )
         {
@@ -88,7 +90,12 @@ public interface ITextureProvider
                 throw new NullReferenceException();
             }
 
-            return AssetManager.Get< Texture >( fileName );
+            if ( AssetManager.Get( fileName ) is not Texture texture )
+            {
+                throw new NullReferenceException( $"Loaded texture {fileName} is null!" );
+            }
+
+            return texture;
         }
     }
 }

@@ -114,20 +114,19 @@ namespace LughSharp.LibCore.Utils.Buffers;
 /// The sequence of statements:-
 /// </para>
 /// <code>
-///         bb.PutInt(0xCAFEBABE);
-///         bb.PutShort(3);
-///         bb.PutShort(45);
+///         bb.PutInt( 0xCAFEBABE );
+///         bb.PutShort( 3 );
+///         bb.PutShort( 45 );
 ///     </code>
 /// can, for example, be replaced by the single statement
 /// <code>
-///     bb.PutInt(0xCAFEBABE).PutShort(3).PutShort(45);
+///     bb.PutInt( 0xCAFEBABE ).PutShort( 3 ).PutShort( 45 );
 /// </code>
 /// </summary>
 [PublicAPI]
 public abstract class ByteBuffer : Buffer
 {
-    public new byte[]? Hb          { get; set; }
-    protected  bool    IsBigEndian { get; set; }
+    public new byte[]? Hb { get; set; }
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
@@ -601,21 +600,20 @@ public abstract class ByteBuffer : Buffer
     }
 
     /// <inheritdoc />
+    public override ByteBuffer Order( ByteOrder order )
+    {
+        IsBigEndian = order == ByteOrder.BigEndian;
+
+        return this;
+    }
+
+    /// <inheritdoc />
     protected override void ValidateBackingArray()
     {
         if ( Hb == null )
         {
             throw new NullReferenceException( "Backing array is null!" );
         }
-    }
-
-    /// <summary>
-    /// Returns a string summarizing the state of this buffer.
-    /// </summary>
-    /// <returns> A summary string </returns>
-    public override string ToString()
-    {
-        return $"{GetType().Name} [pos={Position} lim={Limit} cap={Capacity}]";
     }
 
     /// <summary>
@@ -733,38 +731,13 @@ public abstract class ByteBuffer : Buffer
         return Remaining() - other.Remaining();
     }
 
-    /// <summary>
-    /// Retrieves this buffer's byte order.
-    /// <para>
-    /// The byte order is used when reading or writing multibyte values, and
-    /// when creating buffers that are views of this byte buffer. The order of
-    /// a newly-created byte buffer is always <see cref="ByteOrder.BigEndian"/>.
-    /// </para>
-    /// </summary>
-    /// <returns> This buffer's byte order </returns>
-    public ByteOrder Order()
-    {
-        return IsBigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
-    }
-
-    /// <summary>
-    /// Modifies this buffer's byte order.
-    /// </summary>
-    /// <param name="order">
-    /// The new byte order, either <see cref="ByteOrder.BigEndian"/>
-    /// or <see cref="ByteOrder.LittleEndian"/>
-    /// </param>
-    /// <returns> This buffer </returns>
-    public ByteBuffer Order( ByteOrder order )
-    {
-        IsBigEndian     = order == ByteOrder.BigEndian;
-        NativeByteOrder = IsBigEndian == ( ByteOrder.NativeOrder == ByteOrder.BigEndian );
-
-        return this;
-    }
-
     // ------------------------------------------------------------------------
-    
+    // ------------------------------------------------------------------------
+
+    /// <summary>
+    /// Converts this byte buffer into a float buffer.
+    /// </summary>
+    /// <returns>A float buffer whose content is backed by the byte buffer.</returns>
     public FloatBuffer AsFloatBuffer()
     {
         GdxRuntimeException.ThrowIfNull( Hb );
@@ -781,7 +754,11 @@ public abstract class ByteBuffer : Buffer
 
         return FloatBuffer.Wrap( floatArray );
     }
-    
+
+    /// <summary>
+    /// Converts this byte buffer into a short buffer.
+    /// </summary>
+    /// <returns>A new short buffer backed by this byte buffer.</returns>
     public ShortBuffer AsShortBuffer()
     {
         GdxRuntimeException.ThrowIfNull( Hb );
@@ -799,6 +776,12 @@ public abstract class ByteBuffer : Buffer
         return ShortBuffer.Wrap( shortArray );
     }
 
+    /// <summary>
+    /// Converts the current byte buffer into an equivalent integer buffer representation.
+    /// </summary>
+    /// <return>
+    /// An integer buffer that shares the content of this byte buffer.
+    /// </return>
     public IntBuffer AsIntBuffer()
     {
         GdxRuntimeException.ThrowIfNull( Hb );
@@ -824,11 +807,11 @@ public abstract class ByteBuffer : Buffer
     {
         if ( !disposing ) return;
         if ( Hb == null ) return;
-        
+
         Array.Clear( Hb );
         Hb = null;
     }
-    
+
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 

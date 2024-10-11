@@ -23,8 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 
-using Exception = System.Exception;
-
 namespace LughSharp.LibCore.Assets;
 
 /// <summary>
@@ -33,5 +31,5 @@ namespace LughSharp.LibCore.Assets;
 [PublicAPI]
 public interface IAssetErrorListener
 {
-    void Error( AssetDescriptor asset, Exception throwable );
+    void Error( AssetDescriptor asset, System.Exception throwable );
 }

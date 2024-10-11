@@ -73,9 +73,9 @@ public class ParticleEffectLoader
         switch ( param )
         {
             case { AtlasFile: not null }:
-                effect.Load( file,
-                             am.Get< TextureAtlas >( param.AtlasFile, typeof( TextureAtlas ) ),
-                             param.AtlasPrefix );
+                var atlas = am.Get( param.AtlasFile ) as TextureAtlas;
+                
+                effect.Load( file, atlas!, param.AtlasPrefix );
 
                 break;
 

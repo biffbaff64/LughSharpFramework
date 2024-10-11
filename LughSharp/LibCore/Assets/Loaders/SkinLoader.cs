@@ -95,7 +95,7 @@ public class SkinLoader : AsynchronousAssetLoader< Skin, SkinLoader.SkinLoaderPa
             }
         }
 
-        var atlas = manager.Get< TextureAtlas >( textureAtlasPath! );
+        var atlas = manager.Get( textureAtlasPath! ) as TextureAtlas;
         var skin  = NewSkin( atlas );
 
         if ( resources != null )
@@ -118,8 +118,10 @@ public class SkinLoader : AsynchronousAssetLoader< Skin, SkinLoader.SkinLoaderPa
     /// <returns>
     /// A new Skin (or subclass of Skin) instance based on the provided TextureAtlas.
     /// </returns>
-    protected virtual Skin NewSkin( TextureAtlas atlas )
+    protected virtual Skin NewSkin( TextureAtlas? atlas )
     {
+        ArgumentNullException.ThrowIfNull( atlas );
+        
         return new Skin( atlas );
     }
 

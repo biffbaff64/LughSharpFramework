@@ -180,10 +180,11 @@ public static partial class BufferUtils
     }
 
     /// <summary>
+    /// Returns the current position in bytes of the specified buffer.
     /// </summary>
-    /// <param name="dst"></param>
-    /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <param name="dst">The buffer to get the position from.</param>
+    /// <returns>The position of the buffer in bytes.</returns>
+    /// <exception cref="GdxRuntimeException">Thrown if the buffer type is unsupported.</exception>
     private static int PositionInBytes( Buffer dst )
     {
         return dst switch
