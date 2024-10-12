@@ -8,37 +8,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f77d403c-9f20-45ae-a8d8-d9b0f6d44bbb" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/Tests/AssetManagerTest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/ColorTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/Tests/ColorTest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/MainGame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/MainGame.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/Matrix4Test.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/Tests/Matrix4Test.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/Tests/AssetManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/Tests/AssetManagerTest.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.LughSharpFramework/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.LughSharpFramework/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetDescriptor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetDescriptor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetLoadingTask.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetLoadingTask.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/IAssetErrorListener.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/IAssetErrorListener.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/AsynchronousAssetLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/AsynchronousAssetLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/BitmapFontLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/BitmapFontLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/ParticleEffectLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/ParticleEffectLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/SkinLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/SkinLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/TextureAtlasLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/TextureAtlasLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/RefCountedContainer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/RefCountedContainer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PolygonRegionLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PolygonRegionLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G3D/Utils/ITextureProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G3D/Utils/ITextureProvider.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/IImageResolver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/IImageResolver.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/AtlasTmxMapLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/AtlasTmxMapLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/Buffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/Buffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/BufferUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/BufferUtils.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ByteBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/FloatBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/FloatBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapByteBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/HeapByteBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/IntBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/IntBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ShortBuffer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Buffers/ShortBuffer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Character.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Character.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/DictionaryExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Collections/DictionaryExtensions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/DataOutput.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/DataOutput.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/LogBuilder.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/LogBuilder.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LughSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LughSharp.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,26 +61,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Project.ConsoleApp1.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;FileHeaderTextPageId&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Project.ConsoleApp1.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;Markdown&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "Markdown"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="ConsoleApp1" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -167,7 +140,8 @@
       <workItem from="1728589799648" duration="8292000" />
       <workItem from="1728643906193" duration="24438000" />
       <workItem from="1728681951647" duration="244000" />
-      <workItem from="1728682240324" duration="702000" />
+      <workItem from="1728682240324" duration="2498000" />
+      <workItem from="1728719322982" duration="7520000" />
     </task>
     <task id="LOCAL-00001" summary="Essential update">
       <option name="closed" value="true" />
@@ -201,7 +175,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728518278590</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Asset loading updates">
+      <option name="closed" value="true" />
+      <created>1728683156410</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1728683156410</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,7 +198,8 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Essential update" />
     <MESSAGE value="Buffer updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Buffer updates" />
+    <MESSAGE value="Asset loading updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Asset loading updates" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

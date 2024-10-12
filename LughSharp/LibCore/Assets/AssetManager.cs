@@ -101,6 +101,12 @@ public class AssetManager
 
         _executor          = new AsyncExecutor( 1, "AssetManager" );
         FileHandleResolver = resolver;
+        
+//        Logger.CheckPoint();
+//        foreach ( var loader in _loaders )
+//        {
+//            Logger.Debug( $"key: {loader.Key}" );
+//        }
     }
 
     /// <summary>
@@ -360,8 +366,14 @@ public class AssetManager
     public bool IsLoaded( string fileName, Type type )
     {
         ArgumentNullException.ThrowIfNull( type );
-        
-        return _assets?[ type ]![ fileName ].Asset != null;
+        GdxRuntimeException.ThrowIfNull( _assets );
+
+        // Retrieve all assets of the required type
+        var assetsByType = _assets.Get( type );
+
+        return ( fileName.Length != 0 )
+               && ( assetsByType != null )
+               && assetsByType.ContainsKey( fileName );
     }
 
     /// <summary>
@@ -669,7 +681,6 @@ public class AssetManager
     /// <summary>
     /// Adds an asset to the asset manager with the specified file name and type.
     /// </summary>
-    /// <typeparam name="T">The type of the asset to add.</typeparam>
     /// <param name="fileName">The file name associated with the asset.</param>
     /// <param name="type">The type of the asset.</param>
     /// <param name="asset">The asset to add.</param>
@@ -861,11 +872,12 @@ public class AssetManager
         
         lock ( this )
         {
-            if ( loader == null ) throw new ArgumentNullException( nameof( loader ) );
+            ArgumentNullException.ThrowIfNull( loader );
 
-            var typeLoaders = _loaders.Get( type );
-
-            if ( typeLoaders == null )
+            Dictionary< string, AssetLoader? >? typeLoaders;
+            
+            if ( !_loaders.ContainsKey( type )
+                || ( typeLoaders = _loaders.Get( type ) ) == null )
             {
                 typeLoaders = new Dictionary< string, AssetLoader? >();
                 
@@ -1074,8 +1086,10 @@ public class AssetManager
     /// <param name="parameter"></param>
     public void Load( string? fileName, Type? type, AssetLoaderParameters? parameter )
     {
+        Logger.CheckPoint();
+        
         ArgumentNullException.ThrowIfNull( fileName, "Filename not specified!" );
-
+        
         var loader = GetLoader( type, fileName );
 
         if ( loader == null )
@@ -1091,6 +1105,9 @@ public class AssetManager
             _peakTasks = 0;
         }
 
+        Logger.Debug( $"Load queue: {GetQueuedAssets()}" );
+        Logger.Debug( $"Loader type: {loader.GetType().Name}" );
+        
         // check if an asset with the same name but a
         // different type has already been added.
 

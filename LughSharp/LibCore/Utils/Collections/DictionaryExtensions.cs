@@ -92,7 +92,7 @@ public static class DictionaryExtension
 
         return self.TryGetValue( key, out var value ) ? value : default( TV );
     }
-
+    
     /// <summary>
     /// Adds a new key to the dictionary, even if the dictionary already
     /// contains this key.
