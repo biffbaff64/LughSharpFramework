@@ -181,7 +181,7 @@ public class Cubemap : GLTexture, IManageable
     /// <param name="cubemap"></param>
     private static void AddManagedCubemap( IApplication app, Cubemap cubemap )
     {
-        List< Cubemap > managedCubemapArray = _managedCubemaps[ app ] ?? new List< Cubemap >();
+        var managedCubemapArray = _managedCubemaps[ app ] ?? new List< Cubemap >();
 
         managedCubemapArray.Add( cubemap );
         _managedCubemaps.Put( app, managedCubemapArray );
@@ -198,9 +198,9 @@ public class Cubemap : GLTexture, IManageable
     /// <summary>
     /// Invalidate all managed cubemaps. This is an internal method. Do not use it!
     /// </summary>
-    public static void InvalidateAllCubemaps( IApplication app )
+    public static async void InvalidateAllCubemaps( IApplication app )
     {
-        List< Cubemap >? managedCubemapArray = _managedCubemaps[ app ];
+        var managedCubemapArray = _managedCubemaps[ app ];
 
         if ( managedCubemapArray == null )
         {
@@ -219,7 +219,7 @@ public class Cubemap : GLTexture, IManageable
             // first we have to make sure the AssetManager isn't loading anything anymore,
             // otherwise the ref counting trick below wouldn't work (when a cubemap is
             // currently on the task stack of the manager.)
-            AssetManager.FinishLoading();
+            await AssetManager.FinishLoadingAsync();
 
             // next we go through each cubemap and reload either directly or via the
             // asset manager.
@@ -261,7 +261,8 @@ public class Cubemap : GLTexture, IManageable
                     };
 
                     // unload the c, create a new gl handle then reload it.
-                    AssetManager.Unload( fileName );
+                    await AssetManager.UnloadAsync( fileName );
+
                     cubemap.GLTextureHandle = Gdx.GL.glGenTexture();
                     AssetManager.Load( fileName, typeof( Cubemap ), parameter );
                 }

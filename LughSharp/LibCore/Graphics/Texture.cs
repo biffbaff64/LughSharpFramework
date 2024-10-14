@@ -276,7 +276,7 @@ public class Texture : GLTexture, IManageable
     /// <summary>
     /// Invalidate all managed textures. This is an internal method. Do not use it!
     /// </summary>
-    internal void InvalidateAllTextures( IApplication app )
+    internal async void InvalidateAllTextures( IApplication app )
     {
         if ( AssetManager == null )
         {
@@ -290,7 +290,7 @@ public class Texture : GLTexture, IManageable
             // first we have to make sure the AssetManager isn't loading anything anymore,
             // otherwise the ref counting trick below wouldn't work (when a texture is
             // currently on the task stack of the manager.)
-            AssetManager.FinishLoading();
+            await AssetManager.FinishLoadingAsync();
 
             // next we go through each texture and reload either directly or via the
             // asset manager.
@@ -330,7 +330,7 @@ public class Texture : GLTexture, IManageable
                     };
 
                     // unload the texture, create a new gl handle then reload it.
-                    AssetManager.Unload( fileName );
+                    AssetManager.UnloadAsync( fileName );
                     texture.GLTextureHandle = Gdx.GL.glGenTexture();
                     AssetManager.Load( fileName, typeof( Texture ), parameters );
                 }

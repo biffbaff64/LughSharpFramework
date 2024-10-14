@@ -22,17 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using LughSharp.LibCore.Utils.Async;
 
 namespace LughSharp.LibCore.Assets;
 
 /// <summary>
-/// Responsible for loading an asset through an <see cref="AssetLoader"/> based
-/// on an <see cref="AssetDescriptor"/>.
+/// Represents a task for loading an asset, including managing dependencies and handling cancellation.
 /// </summary>
 [PublicAPI]
-public class AssetLoadingTask : IAsyncTask< object >
+public class AssetLoadingTask
 {
     public bool                     DependenciesLoaded { get; set; }
     public List< AssetDescriptor >? Dependencies       { get; set; }
@@ -40,27 +38,21 @@ public class AssetLoadingTask : IAsyncTask< object >
     public bool                     Cancel             { get; set; }
     public object?                  Asset              { get; set; }
 
-    // ------------------------------------------------------------------------
-
     private readonly AsyncExecutor _executor;
     private readonly AssetLoader   _loader;
     private readonly AssetManager  _manager;
     private readonly long          _startTime;
 
-    private volatile bool _asyncDone = false;
+    private Task< object? >? _loadTask;
 
-    private AsyncResult< object >? _depsFuture;
-    private AsyncResult< object >? _loadFuture;
+    private bool IsAsyncLoader => _loader is AsynchronousAssetLoader< Type, AssetLoaderParameters >;
 
+    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AssetLoadingTask"/> class.
+    /// Represents a task for loading an asset, including managing dependencies and handling cancellation.
     /// </summary>
-    /// <param name="manager">The asset manager responsible for managing assets.</param>
-    /// <param name="assetDesc">The descriptor of the asset to be loaded.</param>
-    /// <param name="loader">The loader used to load the asset.</param>
-    /// <param name="threadPool">The asynchronous executor for handling loading tasks.</param>
     public AssetLoadingTask( AssetManager manager, AssetDescriptor assetDesc, AssetLoader loader, AsyncExecutor threadPool )
     {
         Logger.Checkpoint();
@@ -73,242 +65,155 @@ public class AssetLoadingTask : IAsyncTask< object >
     }
 
     /// <summary>
-    /// Loads parts of the asset asynchronously if the loader is
-    /// an <see cref="AsynchronousAssetLoader{T,TP}"/>.
+    /// Asynchronously loads an asset along with its dependencies based on the type of asset loader provided.
+    /// Can handle both asynchronous and synchronous asset loaders, ensuring dependencies are resolved
+    /// and the asset is either loaded asynchronously or synchronously as required.
     /// </summary>
-    public object? Call()
+    /// <returns>
+    /// A task representing the asynchronous operation. The task contains the loaded asset object or null
+    /// if the loading task was cancelled or the loader was not recognized.
+    /// </returns>
+    public async Task< object? > LoadAsync()
     {
         if ( Cancel )
         {
             return null;
         }
 
-        var asyncLoader = ( AsynchronousAssetLoader< Type, AssetLoaderParameters >? ) _loader;
-
-        if ( !DependenciesLoaded )
+        if ( _loader is AsynchronousAssetLoader< Type, AssetLoaderParameters > asyncLoader )
         {
-            Dependencies = asyncLoader?.GetDependencies( AssetDesc.AssetName,
-                                                         Resolve( asyncLoader, AssetDesc ),
-                                                         AssetDesc.Parameters );
-
-            if ( Dependencies != null )
-            {
-                RemoveDuplicates( Dependencies );
-
-                _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
-            }
-            else
-            {
-                // if we have no dependencies, we load the async part of the task immediately.
-                asyncLoader?.LoadSync( _manager, Resolve( asyncLoader, AssetDesc ), AssetDesc.Parameters! );
-
-                _asyncDone = true;
-            }
+            await LoadDependenciesAsync( asyncLoader );
+            return await LoadAssetAsync( asyncLoader );
         }
-        else
+        
+        if ( _loader is SynchronousAssetLoader< Type, AssetLoaderParameters > syncLoader )
         {
-            asyncLoader?.LoadSync( _manager,
-                                   Resolve( asyncLoader, AssetDesc ),
-                                   AssetDesc.Parameters! );
-
-            _asyncDone = true;
+            return await Task.Run( () => LoadSynchronously( syncLoader ) );
         }
 
         return null;
     }
 
     /// <summary>
-    /// Updates the loading of the asset. In case the asset is loaded with an
-    /// <see cref="AsynchronousAssetLoader{T, TP}"/>, the loaders
-    /// <see cref="AsynchronousAssetLoader{TAssetType,TParameters}.LoadAsync"/> method is first called on a
-    /// worker thread. Once this method returns, the rest of the asset is loaded on the
-    /// rendering thread via <see cref="AsynchronousAssetLoader{TAssetType,TParameters}.LoadAsync"/>.
+    /// Asynchronously loads the dependencies required for an asset using the
+    /// provided asynchronous asset loader. Ensures all dependencies are resolved
+    /// and loaded before continuing to load the actual asset.
     /// </summary>
-    /// <returns> true in case the asset was fully loaded, false otherwise </returns>
-    /// <exception cref="GdxRuntimeException"></exception>
-    public bool Update()
+    /// <param name="loader">
+    /// The asynchronous asset loader responsible for fetching the dependencies
+    /// required by the asset.
+    /// </param>
+    /// <returns>
+    /// A task representing the asynchronous operation. The task contains the resolved
+    /// dependencies or completes when dependencies are loaded.
+    /// </returns>
+    private async Task LoadDependenciesAsync( AsynchronousAssetLoader< Type, AssetLoaderParameters > loader )
     {
-        HandleAsyncLoader();
+        if ( !DependenciesLoaded )
+        {
+            Dependencies = await Task.Run( () => loader.GetDependencies( AssetDesc.AssetName,
+                Resolve( loader, AssetDesc ), AssetDesc.Parameters ) );
 
-        return Asset != null;
+            if ( Dependencies != null )
+            {
+                RemoveDuplicates( Dependencies );
+                _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
+            }
+            else
+            {
+                // If we have no dependencies, we load the async part of the task immediately.
+                await Task.Run( () => loader.LoadAsync( _manager, Resolve( loader, AssetDesc ), AssetDesc.Parameters! ) );
+            }
+
+            DependenciesLoaded = true;
+        }
     }
 
     /// <summary>
-    /// Called when this task is the task that is currently being processed
-    /// and it is unloaded.
+    /// Asynchronously loads an asset using the provided asynchronous asset loader.
+    /// Ensures that dependencies are loaded prior to loading the asset itself.
+    /// </summary>
+    /// <param name="loader">The asynchronous asset loader to be used for loading the asset.</param>
+    /// <returns>
+    /// A task representing the asynchronous operation, containing the loaded
+    /// asset object or null if loading fails.
+    /// </returns>
+    private async Task< object? > LoadAssetAsync( AsynchronousAssetLoader< Type, AssetLoaderParameters > loader )
+    {
+        if ( !DependenciesLoaded )
+        {
+            await LoadDependenciesAsync( loader );
+        }
+
+        await Task.Run( () => loader.LoadAsync( _manager, Resolve( loader, AssetDesc ), AssetDesc.Parameters! ) );
+        return loader.LoadSync( _manager, Resolve( loader, AssetDesc ), AssetDesc.Parameters! );
+    }
+
+    /// <summary>
+    /// Loads an asset synchronously using the provided loader.
+    /// This method handles dependency resolution before loading the asset itself.
+    /// </summary>
+    /// <param name="loader">The synchronous asset loader to be used for loading the asset.</param>
+    /// <returns>The loaded asset object or null if loading fails.</returns>
+    private object? LoadSynchronously( SynchronousAssetLoader< Type, AssetLoaderParameters > loader )
+    {
+        if ( !DependenciesLoaded )
+        {
+            Dependencies = loader.GetDependencies( AssetDesc.AssetName, Resolve( loader, AssetDesc ), AssetDesc.Parameters );
+            if ( Dependencies != null )
+            {
+                RemoveDuplicates( Dependencies );
+                _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
+            }
+
+            DependenciesLoaded = true;
+        }
+
+        return loader.Load( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! );
+    }
+
+    /// <summary>
+    /// Unloads the current asset using the associated asynchronous asset loader,
+    /// if applicable.
     /// </summary>
     public void Unload()
     {
-        if ( !_loader.IsSynchronous )
+        if ( _loader is AsynchronousAssetLoader< Type, AssetLoaderParameters > asyncLoader )
         {
-            ( ( AsynchronousAssetLoader< Type, AssetLoaderParameters > ) _loader )
-               .UnloadAsync( _manager,
-                             Resolve( _loader, AssetDesc ),
-                             AssetDesc.Parameters! );
+            asyncLoader.UnloadAsync( _manager, Resolve( _loader, AssetDesc ), AssetDesc.Parameters! );
         }
     }
 
     /// <summary>
-    /// Handles the loading of assets using a synchronous asset loader.
-    /// It manages dependencies and ensures they are loaded before the main asset.
+    /// Resolves the file information for the given asset descriptor using the
+    /// provided asset loader, if needed.
     /// </summary>
-    private void HandleSyncLoader()
-    {
-        var syncLoader = ( SynchronousAssetLoader< Type, AssetLoaderParameters > ) _loader;
-
-        if ( !DependenciesLoaded )
-        {
-            DependenciesLoaded = true;
-            Dependencies       = syncLoader.GetDependencies( AssetDesc.AssetName, Resolve( _loader, AssetDesc ), AssetDesc.Parameters );
-
-            if ( Dependencies == null )
-            {
-                Asset = syncLoader.Load( _manager, Resolve( _loader, AssetDesc )!, AssetDesc.Parameters! );
-
-                return;
-            }
-
-            RemoveDuplicates( Dependencies );
-
-            _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
-        }
-        else
-        {
-            Asset = syncLoader.Load( _manager, Resolve( _loader, AssetDesc )!, AssetDesc.Parameters! );
-        }
-    }
-
-    /// <summary>
-    /// Handles the loading of assets using an asynchronous asset loader.
-    /// Manages the asynchronous loading process, including dependency
-    /// loading and main asset loading.
-    /// </summary>
-    /// <exception cref="GdxRuntimeException">
-    /// Thrown if the asset description or asynchronous loader is null, or if there
-    /// is an error loading dependencies or the asset.
-    /// </exception>
-    private void HandleAsyncLoader()
-    {
-        if ( AssetDesc == null )
-        {
-            throw new GdxRuntimeException( "Unable to load asset: AssetDesc is null" );
-        }
-
-        var asyncLoader = ( AsynchronousAssetLoader< Type, AssetLoaderParameters >? ) _loader;
-
-        if ( asyncLoader == null )
-        {
-            throw new GdxRuntimeException( "asyncLoader is null" );
-        }
-
-        // Check if dependencies have been loaded.
-        if ( !DependenciesLoaded )
-        {
-            // If the future task for loading dependencies is not started, submit it to the executor.
-            if ( _depsFuture == null )
-            {
-                _depsFuture = _executor.Submit( this );
-            }
-
-            // If the future task is done, process the dependencies.
-            else if ( _depsFuture.IsDone )
-            {
-                try
-                {
-                    _depsFuture.Get();
-                }
-                catch ( Exception e )
-                {
-                    throw new GdxRuntimeException( $"Couldn't load dependencies of asset: {AssetDesc.AssetName}", e );
-                }
-
-                DependenciesLoaded = true;
-
-                // If asynchronous loading is done, load the asset synchronously.
-                if ( _asyncDone )
-                {
-                    Asset = asyncLoader.LoadSync( _manager,
-                                                  Resolve( _loader, AssetDesc ),
-                                                  AssetDesc.Parameters! );
-                }
-            }
-        }
-
-        // If dependencies are loaded and the loading future task is not started
-        // and async loading is not done, submit it to the executor.
-        else if ( ( _loadFuture == null ) && !_asyncDone )
-        {
-            _loadFuture = _executor.Submit( this );
-        }
-
-        // If asynchronous loading is done, load the asset synchronously.
-        else if ( _asyncDone )
-        {
-            Asset = asyncLoader.LoadSync( _manager,
-                                          Resolve( _loader, AssetDesc ),
-                                          AssetDesc.Parameters! );
-        }
-
-        // If the loading future task is done, process the loaded asset.
-        else if ( _loadFuture is { IsDone: true } )
-        {
-            try
-            {
-                _loadFuture.Get();
-            }
-            catch ( Exception e )
-            {
-                throw new GdxRuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", e );
-            }
-
-            Asset = asyncLoader.LoadSync( _manager,
-                                          Resolve( _loader, AssetDesc ),
-                                          AssetDesc.Parameters! );
-        }
-    }
-
-    /// <summary>
-    /// Resolves the file path of an asset descriptor using the provided asset loader.
-    /// </summary>
-    /// <param name="loader">The asset loader used to resolve the file path.</param>
-    /// <param name="assetDesc">The asset descriptor containing the file path to be resolved.</param>
-    /// <returns>
-    /// The resolved <see cref="FileInfo"/> object, or null if the resolution
-    /// fails or the asset descriptor is null.
-    /// </returns>
+    /// <param name="loader">The asset loader to use for resolving the file information.</param>
+    /// <param name="assetDesc">The asset descriptor containing the asset details to resolve.</param>
+    /// <returns>The resolved file information, or null if it cannot be resolved.</returns>
     private static FileInfo? Resolve( AssetLoader? loader, AssetDescriptor? assetDesc )
     {
-        // If the asset descriptor is not null and its File property is null, resolve the file path.
-        if ( assetDesc is { File: null } descriptor )
+        if ( assetDesc?.File == null && loader != null )
         {
-            // Use the loader to resolve the file path if the loader is not null.
-            if ( loader != null )
-            {
-                descriptor.File = loader.Resolve( descriptor.AssetName );
-            }
+            assetDesc!.File = loader.Resolve( assetDesc.AssetName );
         }
 
-        // Return the resolved file or null if resolution did not occur.
         return assetDesc?.File;
     }
 
     /// <summary>
-    /// Removes any duplicate assets from the referenced asset list.
+    /// Removes duplicate asset descriptors from the given list. Duplicates are identified
+    /// based on the asset00000000000000000000000000000000000000000000000000000 name and asset type.
     /// </summary>
+    /// <param name="array">The list of asset descriptors to process for duplicates.</param>
     private static void RemoveDuplicates( List< AssetDescriptor > array )
     {
-        for ( var i = 0; i < array.Count; ++i )
-        {
-            var fn   = array[ i ].AssetName;
-            var type = array[ i ].AssetType;
+        var uniqueAssets = array
+                           .GroupBy( a => new { a.AssetName, a.AssetType } )
+                           .Select( g => g.First() )
+                           .ToList();
 
-            for ( var j = array.Count - 1; j > i; --j )
-            {
-                if ( ( type == array[ j ].AssetType ) && fn.Equals( array[ j ].AssetName ) )
-                {
-                    array.RemoveAt( j );
-                }
-            }
-        }
+        array.Clear();
+        array.AddRange( uniqueAssets );
     }
 }
