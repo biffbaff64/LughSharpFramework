@@ -59,7 +59,7 @@ public class DesktopGLWindow : IDisposable
                             DesktopGLApplicationConfiguration config,
                             IDesktopGLApplicationBase application )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
         
         Listener       = listener;
         WindowListener = config.WindowListener;
@@ -72,7 +72,7 @@ public class DesktopGLWindow : IDisposable
     /// </summary>
     public void Create( GLFW.Window window )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
         
         this.GlfwWindow = window;
         this.Input      = _application.CreateInput( this );
@@ -248,7 +248,7 @@ public class DesktopGLWindow : IDisposable
     /// </param>
     private void SetIcon( GLFW.Window window, Pixmap[] images )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
         
         if ( Platform.IsMac )
         {

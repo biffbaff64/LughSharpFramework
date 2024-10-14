@@ -37,7 +37,7 @@ public class SoundLoader : AsynchronousAssetLoader< ISound, SoundLoader.SoundLoa
     /// <param name="resolver"></param>
     public SoundLoader( IFileHandleResolver resolver ) : base( resolver )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         LoadedSound = null!;
     }

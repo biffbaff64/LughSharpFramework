@@ -69,7 +69,7 @@ public class DefaultLoadedCallback( int refCount ) : ILoadedCallback
 {
     public void FinishedLoading( AssetManager assetManager, string fileName, Type type )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
         
         assetManager.SetReferenceCount( fileName, refCount );
     }

@@ -858,7 +858,7 @@ public class ShaderProgram
 
     private void AddManagedShader( IApplication app, ShaderProgram shaderProgram )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         List< ShaderProgram >? managedResources;
 

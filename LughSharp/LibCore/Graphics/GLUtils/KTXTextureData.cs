@@ -70,7 +70,7 @@ public class KtxTextureData : ITextureData, ICubemapData
 
     public KtxTextureData( FileInfo? file, bool useMipMaps )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _file      = file;
         UseMipMaps = useMipMaps;

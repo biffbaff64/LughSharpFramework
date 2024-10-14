@@ -79,7 +79,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // This MUST be the first call in this constructor
         Gdx.Initialise( this );
 
-        Logger.CheckPoint();
+        Logger.Checkpoint();
         
         // Config.Title becomes the name of the ApplicationListener if
         // it has no value at this point.
@@ -130,7 +130,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     public void Run()
     {
         Logger.Divider( '=' );
-        Logger.CheckPoint();
+        Logger.Checkpoint();
         Logger.Divider( '=' );
         
         try
@@ -160,7 +160,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// </summary>
     protected void Loop()
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
         Logger.Debug( $"_running: {_running}" );
         Logger.Debug( $"Windows.Count: {Windows.Count}" );
         
@@ -293,7 +293,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// </summary>
     public DesktopGLWindow NewWindow( IApplicationListener listener, DesktopGLWindowConfiguration config )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         GdxRuntimeException.ThrowIfNull( Config );
 
@@ -316,7 +316,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
                                          IApplicationListener listener,
                                          long sharedContext )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         var dlgWindow = new DesktopGLWindow( listener, config, this );
 
@@ -353,14 +353,14 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     {
         ArgumentNullException.ThrowIfNull( dglWindow );
 
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         var windowHandle = CreateGLFWWindow( config, sharedContext );
 
         dglWindow.Create( windowHandle );
         dglWindow.SetVisible( config.InitialVisibility );
 
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         for ( var i = 0; i < 2; i++ )
         {
@@ -384,7 +384,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// <exception cref="GdxRuntimeException"></exception>
     private GLFW.Window CreateGLFWWindow( DesktopGLApplicationConfiguration config, long sharedContextWindow )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         GLFW.Window? windowHandle;
 
@@ -493,7 +493,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// <remarks> 14.07.2024 - Merged with InitGLVersion(). </remarks>
     public unsafe void InitialiseGL()
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         // Retrieve OpenGL version
         Glfw.GetVersion( out var glMajor, out var glMinor, out var revision );
@@ -546,7 +546,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// </exception>
     public static void InitialiseGLFW()
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         try
         {
@@ -725,7 +725,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// <param name="config"> The current <see cref="DesktopGLApplicationConfiguration"/>. </param>
     private void SetWindowHints( DesktopGLApplicationConfiguration config )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         Glfw.DefaultWindowHints();
 

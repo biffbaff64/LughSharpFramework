@@ -90,7 +90,7 @@ public class BitmapFont
     public BitmapFont()
         : this( Gdx.Files.Internal( DEFAULT_FONT ).File, Gdx.Files.Internal( DEFAULT_FONT_IMAGE ).File, false )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _fileType = PathTypes.Internal;
     }
@@ -110,7 +110,7 @@ public class BitmapFont
     public BitmapFont( bool flip )
         : this( Gdx.Files.Internal( DEFAULT_FONT ).File, Gdx.Files.Internal( DEFAULT_FONT ).File, flip )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _fileType = PathTypes.Internal;
     }
@@ -134,7 +134,7 @@ public class BitmapFont
     public BitmapFont( FileInfo fontFile, TextureRegion region, bool flip = false )
         : this( new BitmapFontData( fontFile, flip ), region, true )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _fileType = PathTypes.Local;
     }
@@ -151,7 +151,7 @@ public class BitmapFont
     public BitmapFont( FileInfo fontFile, bool flip = false )
         : this( new BitmapFontData( fontFile, flip ), ( TextureRegion? ) null, true )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _fileType = PathTypes.Local;
     }
@@ -172,7 +172,7 @@ public class BitmapFont
                 new TextureRegion( new Texture( imageFile, false ) ),
                 integer )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         OwnsTexture = true;
         _fileType   = PathTypes.Local;
@@ -202,7 +202,7 @@ public class BitmapFont
     public BitmapFont( BitmapFontData data, TextureRegion? region, bool integer )
         : this( data, region != null ? ListExtensions.New( region ) : null, integer )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _fileType = PathTypes.Local;
     }
@@ -220,7 +220,7 @@ public class BitmapFont
     /// </param>
     public BitmapFont( BitmapFontData data, List< TextureRegion >? pageRegions, bool integer )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         Flipped             = data.Flipped;
         Data                = data;
@@ -307,7 +307,7 @@ public class BitmapFont
     /// </param>
     protected virtual void Load( BitmapFontData data )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         // Iterate through each page of glyphs in the font data.
         foreach ( Glyph?[]? page in data.Glyphs )
@@ -1063,7 +1063,7 @@ public class BitmapFont
                     glyph?.SetKerning( second, amount );
                 }
 
-                Logger.CheckPoint();
+                Logger.Checkpoint();
 
                 var hasMetricsOverride = false;
 

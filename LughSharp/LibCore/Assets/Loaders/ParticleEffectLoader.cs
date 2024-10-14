@@ -42,7 +42,7 @@ public class ParticleEffectLoader
     public ParticleEffectLoader( IFileHandleResolver resolver )
         : base( resolver )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     /// <summary>

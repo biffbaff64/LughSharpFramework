@@ -47,9 +47,9 @@ public class AssetManager
     private readonly Dictionary< string, List< string > >?                            _assetDependencies = new();
     private readonly Dictionary< Type, Dictionary< string, IRefCountedContainer >? >? _assets            = new();
     private readonly Dictionary< string, Type? >                                      _assetTypes        = new();
-    private readonly List< string >                                                   _injected          = new();
+    private readonly List< string >                                                   _injected          = [ ];
     private readonly Dictionary< Type, Dictionary< string, AssetLoader? >? >          _loaders           = new();
-    private readonly List< AssetDescriptor >                                          _loadQueue         = new();
+    private readonly List< AssetDescriptor >                                          _loadQueue         = [ ];
     private readonly Stack< AssetLoadingTask >                                        _tasks             = new();
 
     private AsyncExecutor?       _executor;
@@ -66,7 +66,7 @@ public class AssetManager
     /// </summary>
     public AssetManager() : this( new InternalFileHandleResolver() )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public class AssetManager
     /// <param name="defaultLoaders">Whether to add the default loaders (default is true).</param>
     public AssetManager( IFileHandleResolver resolver, bool defaultLoaders = true )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         if ( defaultLoaders )
         {
@@ -101,12 +101,6 @@ public class AssetManager
 
         _executor          = new AsyncExecutor( 1, "AssetManager" );
         FileHandleResolver = resolver;
-        
-//        Logger.CheckPoint();
-//        foreach ( var loader in _loaders )
-//        {
-//            Logger.Debug( $"key: {loader.Key}" );
-//        }
     }
 
     /// <summary>
@@ -425,6 +419,8 @@ public class AssetManager
     {
         try
         {
+            Logger.Debug( $"_tasks.Count: {_tasks.Count}" );
+            
             if ( _tasks.Count == 0 )
             {
                 // loop until we have a new task ready to be processed
@@ -521,14 +517,21 @@ public class AssetManager
         {
             lock ( this )
             {
-                var type = _assetTypes[ fileName ];
+                var type = _assetTypes.Get( fileName );
+
+                Logger.Debug( type == null ? "type: NULL" : $"type: {type!.Name}" );
 
                 if ( type != null )
                 {
-                    var assetsByType = _assets?[ type ];
+                    Logger.Checkpoint();
 
-                    if ( assetsByType?[ fileName ] is { } assetContainer )
+                    var assetsByType   = _assets?.Get( type );
+                    var assetContainer = assetsByType?.Get( fileName );
+
+                    if ( assetContainer != null )
                     {
+                        Logger.Checkpoint();
+
                         var asset = assetContainer.Asset;
 
                         if ( asset != null )
@@ -540,6 +543,8 @@ public class AssetManager
                     }
                 }
 
+                Logger.Checkpoint();
+                
                 Update();
             }
         }
@@ -629,6 +634,8 @@ public class AssetManager
     {
         var assetDesc = _loadQueue.RemoveIndex( 0 );
 
+        Logger.Checkpoint();
+        
         // if the asset is not meant to be reloaded and is already
         // loaded, increase its reference count
         if ( IsLoaded( assetDesc.AssetName ) )
@@ -646,9 +653,7 @@ public class AssetManager
 
             IncrementRefCountedDependencies( assetDesc.AssetName );
 
-            assetDesc.Parameters?.LoadedCallback?.FinishedLoading( this,
-                assetDesc.AssetName,
-                assetDesc.AssetType );
+            assetDesc.Parameters?.LoadedCallback?.FinishedLoading( this, assetDesc.AssetName, assetDesc.AssetType );
 
             _loaded++;
         }
@@ -658,6 +663,8 @@ public class AssetManager
             Logger.Debug( $"Loading: {assetDesc}" );
 
             AddTask( assetDesc );
+            
+            Logger.Checkpoint();
         }
     }
 
@@ -693,7 +700,7 @@ public class AssetManager
         }
 
         // Add the asset to the filename lookup
-        _assetTypes[ fileName ]      = type;
+        _assetTypes[ fileName ]       = type;
         _assets![ type ]![ fileName ] = new RefCountedContainer( asset );
     }
 
@@ -869,21 +876,21 @@ public class AssetManager
     public void SetLoader( Type type, string? suffix, AssetLoader loader )
     {
         GdxRuntimeException.ThrowIfNull( _loaders );
-        
+
         lock ( this )
         {
             ArgumentNullException.ThrowIfNull( loader );
 
             Dictionary< string, AssetLoader? >? typeLoaders;
-            
+
             if ( !_loaders.ContainsKey( type )
-                || ( typeLoaders = _loaders.Get( type ) ) == null )
+                 || ( typeLoaders = _loaders.Get( type ) ) == null )
             {
                 typeLoaders = new Dictionary< string, AssetLoader? >();
-                
+
                 _loaders.Put( type, typeLoaders );
             }
-            
+
             typeLoaders.Put( suffix ?? "", loader );
         }
     }
@@ -1086,10 +1093,10 @@ public class AssetManager
     /// <param name="parameter"></param>
     public void Load( string? fileName, Type? type, AssetLoaderParameters? parameter )
     {
-        Logger.CheckPoint();
-        
+        Logger.Checkpoint();
+
         ArgumentNullException.ThrowIfNull( fileName, "Filename not specified!" );
-        
+
         var loader = GetLoader( type, fileName );
 
         if ( loader == null )
@@ -1107,19 +1114,10 @@ public class AssetManager
 
         Logger.Debug( $"Load queue: {GetQueuedAssets()}" );
         Logger.Debug( $"Loader type: {loader.GetType().Name}" );
-        
-        // check if an asset with the same name but a
-        // different type has already been added.
 
-        // check preload queue
-        foreach ( var desc in _loadQueue )
-        {
-            if ( ( desc.AssetName == fileName ) && ( desc.AssetType != type ) )
-            {
-                throw new GdxRuntimeException
-                    ( $"Asset with name '{fileName}' already in preload queue, but has different type (expected: {type?.Name}, found: {desc.AssetType.Name})" );
-            }
-        }
+        ValidataPreloadQueue( fileName, type );
+
+        Logger.Checkpoint();
 
         // check task list
         for ( var i = 0; i < _tasks.Count; i++ )
@@ -1133,8 +1131,11 @@ public class AssetManager
             }
         }
 
-        // check loaded assets
-        var otherType = _assetTypes[ fileName ];
+        Logger.Checkpoint();
+
+        _assetTypes.TryGetValue( fileName, out var otherType );
+
+        Logger.Checkpoint();
 
         if ( ( otherType != null ) && ( otherType != type ) )
         {
@@ -1144,6 +1145,8 @@ public class AssetManager
         }
 
         _toLoad++;
+
+        Logger.Checkpoint();
 
         var assetDesc = new AssetDescriptor
         {
@@ -1166,6 +1169,23 @@ public class AssetManager
         ArgumentNullException.ThrowIfNull( desc );
 
         Load( desc.AssetName, desc.AssetType, desc.Parameters );
+    }
+
+    /// <summary>
+    /// check if an asset with the same name but a different type has already been added.
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <param name="type"></param>
+    private void ValidataPreloadQueue( string fileName, Type? type )
+    {
+        foreach ( var desc in _loadQueue )
+        {
+            if ( ( desc.AssetName == fileName ) && ( desc.AssetType != type ) )
+            {
+                throw new GdxRuntimeException
+                    ( $"Asset with name '{fileName}' already in preload queue, but has different type (expected: {type?.Name}, found: {desc.AssetType.Name})" );
+            }
+        }
     }
 
     #endregion asset loading

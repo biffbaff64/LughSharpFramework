@@ -57,7 +57,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( bool isStatic, int maxIndices )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2, false );
 
@@ -76,7 +76,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( int maxIndices )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2, false );
 

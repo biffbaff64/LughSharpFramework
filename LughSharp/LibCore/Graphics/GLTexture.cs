@@ -154,12 +154,12 @@ public abstract class GLTexture : IDisposable
     protected GLTexture( int glTarget )
                     : this( glTarget, Gdx.GL.glGenTexture() )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     protected GLTexture( int glTarget, uint glTextureHandle )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         GLTarget        = glTarget;
         GLTextureHandle = glTextureHandle;
@@ -370,7 +370,7 @@ public abstract class GLTexture : IDisposable
     /// <param name="miplevel"></param>
     public static void UploadImageData( int target, ITextureData? data, int miplevel = 0 )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         if ( data == null )
         {
@@ -426,7 +426,7 @@ public abstract class GLTexture : IDisposable
         }
         else
         {
-            Logger.CheckPoint();
+            Logger.Checkpoint();
             Logger.Debug( $"target: {target}" );
             Logger.Debug( $"mipLevel: {miplevel}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalFormat}" );

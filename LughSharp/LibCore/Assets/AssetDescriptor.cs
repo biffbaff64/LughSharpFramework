@@ -60,7 +60,7 @@ public class AssetDescriptor
     /// </summary>
     public AssetDescriptor()
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         AssetType  = null!;
         AssetName   = string.Empty;
@@ -78,7 +78,7 @@ public class AssetDescriptor
     {
         ArgumentNullException.ThrowIfNull( filepath );
 
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         AssetType  = assetType;
         AssetName   = filepath.Replace( '\\', '/' );
@@ -94,7 +94,7 @@ public class AssetDescriptor
     /// <param name="parameters"> Optional parameters for the asset loader. </param>
     public AssetDescriptor( FileInfo file, Type? assetType, AssetLoaderParameters? parameters = null )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         File       = file ?? throw new ArgumentNullException( nameof( file ) );
         AssetType  = assetType ?? throw new ArgumentNullException( nameof( assetType ) );

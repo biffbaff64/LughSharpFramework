@@ -39,7 +39,8 @@ EXTENSIONS/GDX-TOOLS/IMAGEPACKER
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - ImagePacker
+    - DONE - DONE - ImagePacker
+    -      -      - ImagePackerTest
 
 EXTENSIONS/GDX-TOOLS/TILEDMAPPACKER
 -----------------------------------
@@ -59,8 +60,15 @@ EXTENSIONS/GDX-TOOLS/TOOLS/TEXTUREPACKER
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - ColorBleedEffect
+    - DONE - IP   - ColorBleedEffect
+    -      -      - GridPacker
+    -      -      - ImageProcessor
+    -      -      - MaxRectsPacker
     -      -      - TexturePacker
+    -      -      - TexturePackerFileProcessor
+    -      -      - TexturePackerTest
+    -      -      - TexturePackerUpscaleTest
+    -      -      - TextureUnpacker
 
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -42,7 +42,7 @@ public class GLVersion : LughVersion
                              byte* vendorString,
                              byte* rendererString )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         GLtype = appType switch
         {

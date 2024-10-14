@@ -55,7 +55,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     /// </summary>
     public DesktopGLGraphics( DesktopGLWindow glWindow )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         this.GLWindow = glWindow;
 

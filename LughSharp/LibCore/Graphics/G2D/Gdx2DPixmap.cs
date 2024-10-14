@@ -81,7 +81,7 @@ public partial class Gdx2DPixmap : IDisposable
     public Gdx2DPixmap( ByteBuffer encodedData, int offset, int len, int requestedFormat )
         : this( encodedData.BackingArray(), offset, len, requestedFormat )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         ( PixmapBuffer, _pixmapDataType ) = LoadData( buffer, offset, len );
 
@@ -122,7 +122,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     public Gdx2DPixmap( StreamReader inStream, int requestedFormat )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         MemoryStream memoryStream = new( 1024 );
         StreamWriter writer       = new( memoryStream );
@@ -164,7 +164,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="GdxRuntimeException"></exception>
     public Gdx2DPixmap( int width, int height, int format )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         this.Width  = ( uint ) width;
         this.Height = ( uint ) height;
@@ -208,7 +208,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     private ( ByteBuffer, PixmapDataType ) LoadData( byte[] buffer, int offset, int len )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         var image = Stbi.LoadFromMemory( buffer, PixmapFormat.Gdx2dBytesPerPixel( ( int ) Format ) );
 
@@ -267,7 +267,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <param name="requestedFormat"> The new Format. </param>
     private void ConvertFormatTo( int requestedFormat )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         var pixmap = new Gdx2DPixmap( ( int ) Width, ( int ) Height, requestedFormat );
 

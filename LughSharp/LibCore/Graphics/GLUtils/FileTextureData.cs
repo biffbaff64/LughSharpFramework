@@ -50,7 +50,7 @@ public class FileTextureData : ITextureData
 
     public FileTextureData( FileInfo file, Pixmap preloadedPixmap, Pixmap.ColorFormat format, bool useMipMaps )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         this.File       = file;
         this._pixmap    = preloadedPixmap;

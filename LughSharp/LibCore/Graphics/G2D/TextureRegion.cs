@@ -49,7 +49,7 @@ public class TextureRegion
     /// </summary>
     public TextureRegion()
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class TextureRegion
     /// <param name="texture"></param>
     public TextureRegion( Texture texture )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         Texture = texture;
 
@@ -75,7 +75,7 @@ public class TextureRegion
     public TextureRegion( Texture texture, int width, int height )
         : this( texture, 0, 0, width, height )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     /// <param name="texture"></param>
@@ -89,7 +89,7 @@ public class TextureRegion
     /// </param>
     public TextureRegion( Texture texture, int x, int y, int width, int height )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         Texture = texture;
         SetRegion( x, y, width, height );
@@ -104,7 +104,7 @@ public class TextureRegion
     /// <param name="v2"></param>
     public TextureRegion( Texture texture, float u, float v, float u2, float v2 )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         Texture = texture;
         SetRegionNV( u, v, u2, v2 );
@@ -115,7 +115,7 @@ public class TextureRegion
     /// <param name="region"></param>
     public TextureRegion( TextureRegion region )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         SetRegion( region );
     }
@@ -129,7 +129,7 @@ public class TextureRegion
     /// <param name="height"></param>
     public TextureRegion( TextureRegion region, int x, int y, int width, int height )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         SetRegion( region, x, y, width, height );
     }

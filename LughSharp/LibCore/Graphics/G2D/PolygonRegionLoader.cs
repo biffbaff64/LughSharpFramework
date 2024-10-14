@@ -40,13 +40,13 @@ public class PolygonRegionLoader
     public PolygonRegionLoader()
         : this( new InternalFileHandleResolver() )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     public PolygonRegionLoader( IFileHandleResolver resolver )
         : base( resolver )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     public override PolygonRegion Load( AssetManager manager,

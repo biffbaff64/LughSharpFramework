@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Gdx_Tools.Tools.TexturePacker;
@@ -29,43 +32,58 @@ namespace Extensions.Source.Gdx_Tools.Tools.TexturePacker;
 [PublicAPI]
 public class ColorBleedEffect
 {
-    private static readonly int[] _offsets = [ -1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1 ];
+    private static readonly int[] offsets = [ -1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1 ];
 
-//    public BufferedImage ProcessImage( BufferedImage image, int maxIterations )
-//    {
-//        int width  = image.getWidth();
-//        int height = image.getHeight();
-//
-//        BufferedImage processedImage;
-//
-//        if ( image.getType() == BufferedImage.TYPE_INT_ARGB )
-//        {
-//            processedImage = image;
-//        }
-//        else
-//        {
-//            processedImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
-//        }
-//
-//        int[] rgb  = image.getRGB( 0, 0, width, height, null, 0, width );
-//        Mask  mask = new(rgb);
-//
-//        int iterations  = 0;
-//        int lastPending = -1;
-//
-//        while ( ( mask._pendingSize > 0 ) && ( mask._pendingSize != lastPending ) && ( iterations < maxIterations ) )
-//        {
-//            lastPending = mask._pendingSize;
-//            ExecuteIteration( rgb, mask, width, height );
-//            iterations++;
-//        }
-//
-//        processedImage.setRGB( 0, 0, width, height, rgb, 0, width );
-//
-//        return processedImage;
-//    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="image"></param>
+    /// <param name="maxIterations"></param>
+    /// <returns></returns>
+    public static Image< Rgba32 > ProcessImage( Image< Rgba32 > image, int maxIterations )
+    {
+        var width  = image.Width;
+        var height = image.Height;
 
-    private void ExecuteIteration( int[] rgb, Mask mask, int width, int height )
+        var processedImage = image.Clone();
+
+        processedImage.Mutate( context =>
+        {
+            var pixels = new Rgba32[ width * height ];
+            processedImage.CopyPixelDataTo( pixels );
+
+            var mask        = new Mask( pixels );
+            var iterations  = 0;
+            var lastPending = -1;
+            
+            while ( mask.PendingSize > 0 && mask.PendingSize != lastPending && iterations < maxIterations )
+            {
+                lastPending = mask.PendingSize;
+                ExecuteIteration( pixels, mask, width, height );
+                iterations++;
+            }
+
+            // Copy the processed pixels back to the image
+            for ( var y = 0; y < height; y++ )
+            {
+                for ( var x = 0; x < width; x++ )
+                {
+                    processedImage[ x, y ] = pixels[ y * width + x ];
+                }
+            }
+        } );
+
+        return processedImage;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pixels"></param>
+    /// <param name="mask"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    private static void ExecuteIteration( Rgba32[] pixels, Mask mask, int width, int height )
     {
         var iterator = new Mask.MaskIterator( mask );
 
@@ -77,16 +95,15 @@ public class ColorBleedEffect
             int r          = 0, g = 0, b = 0;
             var count      = 0;
 
-            for ( int i = 0, n = _offsets.Length; i < n; i += 2 )
+            for ( var i = 0; i < offsets.Length; i += 2 )
             {
-                var column = x + _offsets[ i ];
-                var row    = y + _offsets[ i + 1 ];
-
-                if ( ( column < 0 ) || ( column >= width ) || ( row < 0 ) || ( row >= height ) )
+                var column = x + offsets[ i ];
+                var row    = y + offsets[ i + 1 ];
+                
+                if ( column < 0 || column >= width || row < 0 || row >= height )
                 {
-//                    column = x;
-//                    row    = y;
-
+                    column = x;
+                    row    = y;
                     continue;
                 }
 
@@ -94,17 +111,19 @@ public class ColorBleedEffect
 
                 if ( !mask.IsBlank( currentPixelIndex ) )
                 {
-                    var argb = rgb[ currentPixelIndex ];
-                    r += Red( argb );
-                    g += Green( argb );
-                    b += Blue( argb );
+                    var pixel = pixels[ currentPixelIndex ];
+                    
+                    r += pixel.R;
+                    g += pixel.G;
+                    b += pixel.B;
+                    
                     count++;
                 }
             }
 
             if ( count != 0 )
             {
-                rgb[ pixelIndex ] = ARGB( 0, r / count, g / count, b / count );
+                pixels[ pixelIndex ] = new Rgba32( ( byte )( r / count ),( byte )( g / count ), ( byte )( b / count ), 0 );
                 iterator.MarkAsInProgress();
             }
         }
@@ -112,138 +131,140 @@ public class ColorBleedEffect
         iterator.Reset();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     private static int GetPixelIndex( int width, int x, int y )
     {
-        return ( y * width ) + x;
+        return y * width + x;
     }
 
-    private static int Red( int argb )
-    {
-        return ( argb >> 16 ) & 0xFF;
-    }
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
-    private static int Green( int argb )
-    {
-        return ( argb >> 8 ) & 0xFF;
-    }
-
-    private static int Blue( int argb )
-    {
-        return ( argb >> 0 ) & 0xFF;
-    }
-
-    private static int ARGB( int a, int r, int g, int b )
-    {
-        if ( ( a < 0 )
-          || ( a > 255 )
-          || ( r < 0 )
-          || ( r > 255 )
-          || ( g < 0 )
-          || ( g > 255 )
-          || ( b < 0 )
-          || ( b > 255 ) )
-        {
-            throw new ArgumentException( "Invalid RGBA: " + r + ", " + g + "," + b + "," + a );
-        }
-
-        return ( ( a & 0xFF ) << 24 ) | ( ( r & 0xFF ) << 16 ) | ( ( g & 0xFF ) << 8 ) | ( ( b & 0xFF ) << 0 );
-    }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    [PublicAPI]
     private class Mask
     {
-        private readonly bool[] _blank;
-        private readonly int[]  _changing;
-        private readonly int[]  _pending;
-        private          int    _changingSize;
+        public int PendingSize { get; private set; }
 
-        private int _pendingSize;
+        private readonly bool[] blank;
+        private readonly int[]  pending;
+        private readonly int[]  changing;
+        private          int    changingSize;
 
-        public Mask( IReadOnlyList< int > rgb )
+        public Mask( Rgba32[] pixels )
         {
-            var n = rgb.Count;
+            var n = pixels.Length;
 
-            _blank    = new bool[ n ];
-            _pending  = new int[ n ];
-            _changing = new int[ n ];
+            blank    = new bool[ n ];
+            pending  = new int[ n ];
+            changing = new int[ n ];
 
             for ( var i = 0; i < n; i++ )
             {
-                if ( Alpha( rgb[ i ] ) == 0 )
+                if ( pixels[ i ].A == 0 )
                 {
-                    _blank[ i ]              = true;
-                    _pending[ _pendingSize ] = i;
-                    _pendingSize++;
+                    blank[ i ]             = true;
+                    pending[ PendingSize ] = i;
+                    PendingSize++;
                 }
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public bool IsBlank( int index )
         {
-            return _blank[ index ];
+            return blank[ index ];
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         private int RemoveIndex( int index )
         {
-            if ( index >= _pendingSize )
+            if ( index >= PendingSize )
             {
                 throw new IndexOutOfRangeException( index.ToString() );
             }
 
-            var value = _pending[ index ];
+            var value = pending[ index ];
 
-            _pendingSize--;
-            _pending[ index ] = _pending[ _pendingSize ];
+            PendingSize--;
+            pending[ index ] = pending[ PendingSize ];
 
             return value;
         }
 
-        private static int Alpha( int argb )
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mask"></param>
+        [PublicAPI]
+        public class MaskIterator( Mask mask )
         {
-            return ( argb >> 24 ) & 0xff;
-        }
+            private int index;
 
-        internal sealed class MaskIterator
-        {
-            private readonly Mask _parent;
-            private          int  _index;
-
-            public MaskIterator( Mask parent )
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <returns></returns>
+            public bool HasNext()
             {
-                _parent = parent;
+                return index < mask.PendingSize;
             }
 
-            internal bool HasNext()
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <returns></returns>
+            /// <exception cref="InvalidOperationException"></exception>
+            public int Next()
             {
-                return _index < _parent._pendingSize;
-            }
-
-            internal int Next()
-            {
-                if ( _index >= _parent._pendingSize )
+                if ( index >= mask.PendingSize )
                 {
-                    throw new IndexOutOfRangeException( _index.ToString() );
+                    throw new InvalidOperationException( index.ToString() );
                 }
 
-                return _parent._pending[ _index++ ];
+                return mask.pending[ index++ ];
             }
 
-            internal void MarkAsInProgress()
+            /// <summary>
+            /// 
+            /// </summary>
+            public void MarkAsInProgress()
             {
-                _index--;
-                _parent._changing[ _parent._changingSize ] = _parent.RemoveIndex( _index );
-                _parent._changingSize++;
+                index--;
+                mask.changing[ mask.changingSize ] = mask.RemoveIndex( index );
+                mask.changingSize++;
             }
 
-            internal void Reset()
+            /// <summary>
+            /// 
+            /// </summary>
+            public void Reset()
             {
-                _index = 0;
+                index = 0;
 
-                for ( int i = 0, n = _parent._changingSize; i < n; i++ )
+                for ( var i = 0; i < mask.changingSize; i++ )
                 {
-                    _parent._blank[ _parent._changing[ i ] ] = false;
+                    mask.blank[ mask.changing[ i ] ] = false;
                 }
 
-                _parent._changingSize = 0;
+                mask.changingSize = 0;
             }
         }
     }

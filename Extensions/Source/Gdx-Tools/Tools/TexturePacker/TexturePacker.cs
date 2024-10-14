@@ -22,9 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 
 namespace Extensions.Source.Gdx_Tools.Tools.TexturePacker;
 
+[PublicAPI]
 public class TexturePacker
 {
 }

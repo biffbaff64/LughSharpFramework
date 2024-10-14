@@ -60,7 +60,7 @@ public class VertexBufferObjectSubData : IVertexData
     public VertexBufferObjectSubData( bool isStatic, int numVertices, params VertexAttribute[] attributes )
         : this( isStatic, numVertices, new VertexAttributes( attributes ) )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// <param name="attributes"> the <see cref="VertexAttributes"/>. </param>
     public VertexBufferObjectSubData( bool isStatic, int numVertices, VertexAttributes attributes )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _isStatic  = isStatic;
         Attributes = attributes;

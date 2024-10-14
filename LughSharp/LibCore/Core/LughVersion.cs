@@ -47,7 +47,7 @@ public class LughVersion
 
     public LughVersion()
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _version = Assembly.GetEntryAssembly()?.GetName().Version;
 

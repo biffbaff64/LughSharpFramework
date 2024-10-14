@@ -640,7 +640,7 @@ public sealed class ImmutableColor : ICloneable, IEquatable< ImmutableColor >
 
     public void Debug()
     {
-        Logger.CheckPoint( true );
+        Logger.Checkpoint( true );
         Logger.Debug( $"R: {R}" );
         Logger.Debug( $"G: {G}" );
         Logger.Debug( $"B: {B}" );

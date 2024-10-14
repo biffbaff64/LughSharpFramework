@@ -56,7 +56,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     public VertexBufferObjectWithVAO( bool isStatic, int numVertices, params VertexAttribute[] attributes )
         : this( isStatic, numVertices, new VertexAttributes( attributes ) )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// <param name="attributes"> the <see cref="VertexAttributes"/>. </param>
     public VertexBufferObjectWithVAO( bool isStatic, int numVertices, VertexAttributes attributes )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _isStatic  = isStatic;
         Attributes = attributes;
@@ -87,7 +87,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
     public VertexBufferObjectWithVAO( bool isStatic, ByteBuffer unmanagedBuffer, VertexAttributes attributes )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _isStatic  = isStatic;
         Attributes = attributes;

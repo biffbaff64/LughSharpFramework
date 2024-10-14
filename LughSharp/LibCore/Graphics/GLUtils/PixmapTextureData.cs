@@ -42,7 +42,7 @@ public class PixmapTextureData : ITextureData
                               bool disposePixmap,
                               bool managed = false )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         Pixmap        = pixmap;
         UseMipMaps    = useMipMaps;

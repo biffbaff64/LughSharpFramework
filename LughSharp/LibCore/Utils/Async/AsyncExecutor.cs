@@ -48,7 +48,7 @@ public class AsyncExecutor : IDisposable
     /// <param name="name"> The name of the threads. Default is "AsyncExecutor-Thread". </param>
     public AsyncExecutor( int maxConcurrent, string name = "AsyncExecutor-Thread" )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _taskQueue = new ConcurrentQueue< Task >();
         _cts       = new CancellationTokenSource();

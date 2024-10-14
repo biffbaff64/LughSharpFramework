@@ -46,7 +46,7 @@ public class TextureLoader
     /// <param name="resolver"> The <see cref="IFileHandleResolver"/> to use. </param>
     public TextureLoader( IFileHandleResolver resolver ) : base( resolver )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _loaderInfo = new TextureLoaderInfo();
     }
@@ -60,7 +60,7 @@ public class TextureLoader
     /// <inheritdoc />
     public override void LoadAsync( AssetManager? manager, FileInfo? file, TextureLoaderParameters? parameter )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         _loaderInfo.Filename = file?.Name;
 
@@ -95,7 +95,7 @@ public class TextureLoader
     /// <inheritdoc />
     public override Texture LoadSync( AssetManager manager, FileInfo? file, TextureLoaderParameters? parameter )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
 
         var texture = _loaderInfo.Texture;
 

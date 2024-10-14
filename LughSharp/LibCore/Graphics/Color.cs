@@ -1276,7 +1276,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// </summary>
     public void Debug()
     {
-        Logger.CheckPoint( true );
+        Logger.Checkpoint( true );
         Logger.Debug( RGBADebugString );
         Logger.Debug( $"PackedColorABGR: {ABGRPackedColor} :: {ABGRPackedColor:X}" );
         Logger.Debug( $"PackedColorRGBA: {RGBAPackedColor} :: {RGBAPackedColor:X}" );

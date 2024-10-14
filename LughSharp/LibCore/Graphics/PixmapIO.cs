@@ -80,7 +80,7 @@ public static class PixmapIO
                                  int compression = Deflater.DEFAULT_COMPRESSION,
                                  bool flipY = false )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
         Logger.Debug( $"File {file.FullName}: File exists: {file.Exists}" );
 
         try
@@ -269,7 +269,7 @@ public static class PixmapIO
         /// <param name="pixmap"></param>
         public void Write( FileInfo file, Pixmap pixmap )
         {
-            Logger.CheckPoint();
+            Logger.Checkpoint();
 
             var output = new MemoryStream();
 

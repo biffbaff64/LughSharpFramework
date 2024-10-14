@@ -53,7 +53,7 @@ public class CubemapLoader : AsynchronousAssetLoader< Cubemap, CubemapLoader.Cub
     /// </summary>
     public CubemapLoader( IFileHandleResolver resolver ) : base( resolver )
     {
-        Logger.CheckPoint();
+        Logger.Checkpoint();
     }
 
     /// <summary>

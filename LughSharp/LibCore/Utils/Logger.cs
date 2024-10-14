@@ -40,7 +40,7 @@ namespace LughSharp.LibCore.Utils;
 /// </para>
 /// </summary>
 [PublicAPI]
-public static partial class Logger
+public static class Logger
 {
     // ------------------------------------------------------------------------
 
@@ -193,7 +193,7 @@ public static partial class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    public static void CheckPoint( bool drawLine = false,
+    public static void Checkpoint( bool drawLine = false,
                                    [CallerFilePath] string callerFilePath = "",
                                    [CallerMemberName] string callerMethod = "",
                                    [CallerLineNumber] int callerLine = 0 )
