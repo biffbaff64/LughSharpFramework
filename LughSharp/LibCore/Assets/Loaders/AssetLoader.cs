@@ -51,7 +51,6 @@ public abstract class AssetLoader
     /// </summary>
     protected AssetLoader( IFileHandleResolver resolver )
     {
-        Logger.Checkpoint();
         Resolver = resolver;
     }
 

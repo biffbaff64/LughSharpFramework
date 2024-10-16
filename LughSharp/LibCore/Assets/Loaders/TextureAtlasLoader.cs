@@ -41,7 +41,6 @@ public class TextureAtlasLoader
     public TextureAtlasLoader( IFileHandleResolver resolver )
         : base( resolver )
     {
-        Logger.Checkpoint();
     }
 
     /// <summary>

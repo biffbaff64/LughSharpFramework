@@ -28,6 +28,9 @@ namespace LughSharp.LibCore.Assets;
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 
+/// <summary>
+/// Interface representing the parameters required for loading assets.
+/// </summary>
 [PublicAPI]
 public interface ILoaderParameters
 {
@@ -51,6 +54,8 @@ public interface ILoadedCallback
 // ----------------------------------------------------------------------------
 
 /// <summary>
+/// Base class for parameters used by asset loaders to define specific
+/// settings or configurations needed for loading an asset.
 /// </summary>
 [PublicAPI]
 public class AssetLoaderParameters : ILoaderParameters
@@ -69,8 +74,6 @@ public class DefaultLoadedCallback( int refCount ) : ILoadedCallback
 {
     public void FinishedLoading( AssetManager assetManager, string fileName, Type type )
     {
-        Logger.Checkpoint();
-        
         assetManager.SetReferenceCount( fileName, refCount );
     }
 }

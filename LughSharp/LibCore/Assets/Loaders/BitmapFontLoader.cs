@@ -50,7 +50,6 @@ public class BitmapFontLoader : AsynchronousAssetLoader< BitmapFont, BitmapFontP
     public BitmapFontLoader( IFileHandleResolver resolver )
         : base( resolver )
     {
-        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -65,8 +64,6 @@ public class BitmapFontLoader : AsynchronousAssetLoader< BitmapFont, BitmapFontP
                                                              AssetLoaderParameters? parameter )
     {
         ArgumentNullException.ThrowIfNull( file );
-
-        Logger.Checkpoint();
 
         var deps = new List< AssetDescriptor >();
 

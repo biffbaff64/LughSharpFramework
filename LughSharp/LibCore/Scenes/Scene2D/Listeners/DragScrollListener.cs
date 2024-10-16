@@ -68,6 +68,9 @@ public class DragScrollListener : DragListener
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
+    /// <summary>
+    /// This class listens for drag events and handles scrolling for a ScrollPane.
+    /// </summary>
     public DragScrollListener( ScrollPane scroll )
     {
         _scrollPane = scroll;
@@ -77,11 +80,12 @@ public class DragScrollListener : DragListener
     }
 
     /// <summary>
+    /// Configures the scrolling speed and timing for the drag scroll listener.
     /// </summary>
-    /// <param name="minSpeedPixels"></param>
-    /// <param name="maxSpeedPixels"></param>
-    /// <param name="tickSecs"></param>
-    /// <param name="rampSecs"></param>
+    /// <param name="minSpeedPixels">The minimum speed in pixels per second.</param>
+    /// <param name="maxSpeedPixels">The maximum speed in pixels per second.</param>
+    /// <param name="tickSecs">The interval in seconds at which the scroll position is updated.</param>
+    /// <param name="rampSecs">The time in seconds it takes to ramp up to the maximum speed.</param>
     public virtual void Setup( float minSpeedPixels, float maxSpeedPixels, float tickSecs, float rampSecs )
     {
         _minSpeed = minSpeedPixels;
@@ -170,6 +174,12 @@ public class DragScrollListener : DragListener
         _scrollPane.SetScrollY( y );
     }
 
+    /// <summary>
+    /// Calculates the current scroll speed in pixels.
+    /// </summary>
+    /// <returns>
+    /// The current scroll speed in pixels based on the interpolation between minimum and maximum speed.
+    /// </returns>
     private float GetScrollPixels()
     {
         return _interpolation.Apply( _minSpeed,
@@ -180,37 +190,28 @@ public class DragScrollListener : DragListener
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
-    public class ScrollUp : Timer.Task
+    [PublicAPI]
+    public class ScrollUp( DragScrollListener dsl, ScrollPane scroll ) : Timer.Task
     {
-        private readonly DragScrollListener _parent;
-        private readonly ScrollPane         _scroll;
-
-        public ScrollUp( DragScrollListener dsl, ScrollPane scroll )
-        {
-            _parent = dsl;
-            _scroll = scroll;
-        }
-
         public override void Run()
         {
-            _parent.SetScroll( _scroll.GetVisualScrollY() - _parent.GetScrollPixels() );
+            dsl.SetScroll( scroll.GetVisualScrollY() - dsl.GetScrollPixels() );
         }
     }
 
-    public class ScrollDown : Timer.Task
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    [PublicAPI]
+    public class ScrollDown( DragScrollListener dsl, ScrollPane scroll ) : Timer.Task
     {
-        private readonly DragScrollListener _parent;
-        private readonly ScrollPane         _scroll;
-
-        public ScrollDown( DragScrollListener dsl, ScrollPane scroll )
-        {
-            _parent = dsl;
-            _scroll = scroll;
-        }
-
         public override void Run()
         {
-            _parent.SetScroll( _scroll.GetVisualScrollY() + _parent.GetScrollPixels() );
+            dsl.SetScroll( scroll.GetVisualScrollY() + dsl.GetScrollPixels() );
         }
     }
 }
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------

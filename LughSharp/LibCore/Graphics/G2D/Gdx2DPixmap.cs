@@ -81,7 +81,6 @@ public partial class Gdx2DPixmap : IDisposable
     public Gdx2DPixmap( ByteBuffer encodedData, int offset, int len, int requestedFormat )
         : this( encodedData.BackingArray(), offset, len, requestedFormat )
     {
-        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -94,8 +93,6 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
-        Logger.Checkpoint();
-
         ( PixmapBuffer, _pixmapDataType ) = LoadData( buffer, offset, len );
 
         if ( ( requestedFormat != 0 ) && ( requestedFormat != Format ) )
@@ -122,8 +119,6 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     public Gdx2DPixmap( StreamReader inStream, int requestedFormat )
     {
-        Logger.Checkpoint();
-
         MemoryStream memoryStream = new( 1024 );
         StreamWriter writer       = new( memoryStream );
 
@@ -164,8 +159,6 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="GdxRuntimeException"></exception>
     public Gdx2DPixmap( int width, int height, int format )
     {
-        Logger.Checkpoint();
-
         this.Width  = ( uint ) width;
         this.Height = ( uint ) height;
         this.Format = ( uint ) format;
@@ -208,8 +201,6 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     private ( ByteBuffer, PixmapDataType ) LoadData( byte[] buffer, int offset, int len )
     {
-        Logger.Checkpoint();
-
         var image = Stbi.LoadFromMemory( buffer, PixmapFormat.Gdx2dBytesPerPixel( ( int ) Format ) );
 
         var pixmapDef = new PixmapDataType

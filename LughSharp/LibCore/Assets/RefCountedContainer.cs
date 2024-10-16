@@ -47,19 +47,12 @@ public interface IRefCountedContainer
 /// using it. AssetManager handles this automatically.
 /// </summary>
 [PublicAPI]
-public class RefCountedContainer : IRefCountedContainer
+public class RefCountedContainer( object obj ) : IRefCountedContainer
 {
-    public object? Asset    { get; set; }
+    public object? Asset    { get; set; } = obj ?? throw new ArgumentException( "Object must not be null" );
     public int     RefCount { get; set; } = 1;
 
     // ------------------------------------------------------------------------
-    
-    public RefCountedContainer( object obj )
-    {
-        Logger.Checkpoint();
-
-        Asset = obj ?? throw new ArgumentException( "Object must not be null" );
-    }
 }
 
 // ----------------------------------------------------------------------------

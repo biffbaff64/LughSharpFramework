@@ -79,8 +79,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // This MUST be the first call in this constructor
         Gdx.Initialise( this );
 
-        Logger.Checkpoint();
-        
         // Config.Title becomes the name of the ApplicationListener if
         // it has no value at this point.
         config.Title ??= listener.GetType().Name;

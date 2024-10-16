@@ -42,8 +42,6 @@ public class MusicLoader : AsynchronousAssetLoader< IMusic, AssetLoaderParameter
     public MusicLoader( IFileHandleResolver resolver )
         : base( resolver )
     {
-        Logger.Checkpoint();
-
         LoadedMusic = null!;
     }
 

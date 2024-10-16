@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.LibCore.Utils.Async;
 
 namespace LughSharp.LibCore.Assets;
 
@@ -32,20 +31,19 @@ namespace LughSharp.LibCore.Assets;
 [PublicAPI]
 public class AssetLoadingTask
 {
-    public bool                     DependenciesLoaded { get; set; }
-    public List< AssetDescriptor >? Dependencies       { get; set; }
+    public bool                     DependenciesLoaded { get; private set; }
+    public List< AssetDescriptor >? Dependencies       { get; private set; }
     public AssetDescriptor          AssetDesc          { get; }
     public bool                     Cancel             { get; set; }
     public object?                  Asset              { get; set; }
+    public bool                     IsAsyncLoader      { get; private set; }
 
-    private readonly AsyncExecutor _executor;
     private readonly AssetLoader   _loader;
     private readonly AssetManager  _manager;
     private readonly long          _startTime;
+    private readonly object        _lock = new();
 
     private Task< object? >? _loadTask;
-
-    private bool IsAsyncLoader => _loader is AsynchronousAssetLoader< Type, AssetLoaderParameters >;
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
@@ -53,15 +51,16 @@ public class AssetLoadingTask
     /// <summary>
     /// Represents a task for loading an asset, including managing dependencies and handling cancellation.
     /// </summary>
-    public AssetLoadingTask( AssetManager manager, AssetDescriptor assetDesc, AssetLoader loader, AsyncExecutor threadPool )
+    public AssetLoadingTask( AssetManager manager, AssetDescriptor assetDesc, AssetLoader loader )
     {
         Logger.Checkpoint();
 
-        _manager   = manager;
-        _executor  = threadPool;
-        AssetDesc  = assetDesc;
-        _loader    = loader;
-        _startTime = Logger.TraceLevel == Logger.LOG_DEBUG ? TimeUtils.NanoTime() : 0;
+        IsAsyncLoader = _loader is AsynchronousAssetLoader< Type, AssetLoaderParameters >;
+        _startTime    = Logger.TraceLevel == Logger.LOG_DEBUG ? TimeUtils.NanoTime() : 0;
+
+        AssetDesc = assetDesc;
+        _manager  = manager;
+        _loader   = loader;
     }
 
     /// <summary>
@@ -75,23 +74,37 @@ public class AssetLoadingTask
     /// </returns>
     public async Task< object? > LoadAsync()
     {
+        Logger.Checkpoint();
+        
         if ( Cancel )
         {
+            Logger.Checkpoint();
+
             return null;
         }
 
-        if ( _loader is AsynchronousAssetLoader< Type, AssetLoaderParameters > asyncLoader )
-        {
-            await LoadDependenciesAsync( asyncLoader );
-            return await LoadAssetAsync( asyncLoader );
-        }
+        Logger.Checkpoint();
         
-        if ( _loader is SynchronousAssetLoader< Type, AssetLoaderParameters > syncLoader )
+        switch ( _loader )
         {
-            return await Task.Run( () => LoadSynchronously( syncLoader ) );
-        }
+            case AsynchronousAssetLoader< Type, AssetLoaderParameters > asyncLoader:
+            {
+                Logger.Debug( "Async loader started." );
+                await LoadDependenciesAsync( asyncLoader );
+                return await LoadAssetAsync( asyncLoader );
+            }
 
-        return null;
+            case SynchronousAssetLoader< Type, AssetLoaderParameters > syncLoader:
+            {
+                Logger.Debug( "Sync loader started." );
+                return LoadSynchronously( syncLoader );
+            }
+
+            default:
+            {
+                throw new GdxRuntimeException( "Unknown asset loader type." );
+            }
+        }
     }
 
     /// <summary>
@@ -155,21 +168,24 @@ public class AssetLoadingTask
     /// </summary>
     /// <param name="loader">The synchronous asset loader to be used for loading the asset.</param>
     /// <returns>The loaded asset object or null if loading fails.</returns>
-    private object? LoadSynchronously( SynchronousAssetLoader< Type, AssetLoaderParameters > loader )
+    private object LoadSynchronously( SynchronousAssetLoader< Type, AssetLoaderParameters > loader )
     {
-        if ( !DependenciesLoaded )
+        lock ( _lock )
         {
-            Dependencies = loader.GetDependencies( AssetDesc.AssetName, Resolve( loader, AssetDesc ), AssetDesc.Parameters );
-            if ( Dependencies != null )
+            if ( !DependenciesLoaded )
             {
-                RemoveDuplicates( Dependencies );
-                _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
+                Dependencies = loader.GetDependencies( AssetDesc.AssetName, Resolve( loader, AssetDesc ), AssetDesc.Parameters );
+                if ( Dependencies != null )
+                {
+                    RemoveDuplicates( Dependencies );
+                    _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
+                }
+
+                DependenciesLoaded = true;
             }
 
-            DependenciesLoaded = true;
+            return loader.Load( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! );
         }
-
-        return loader.Load( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! );
     }
 
     /// <summary>
@@ -203,7 +219,7 @@ public class AssetLoadingTask
 
     /// <summary>
     /// Removes duplicate asset descriptors from the given list. Duplicates are identified
-    /// based on the asset00000000000000000000000000000000000000000000000000000 name and asset type.
+    /// based on the asset name and asset type.
     /// </summary>
     /// <param name="array">The list of asset descriptors to process for duplicates.</param>
     private static void RemoveDuplicates( List< AssetDescriptor > array )

@@ -654,8 +654,8 @@ public class SpriteBatch : IBatch
         Vertices[ Idx + 18 ] = U2;
         Vertices[ Idx + 19 ] = V;
 
-        //TODO: Remove when drawing is fixed
-        DebugVertices();
+//        //TODO: Remove when drawing is fixed
+//        DebugVertices();
 
         Idx += 20;
     }

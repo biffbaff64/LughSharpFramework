@@ -47,8 +47,6 @@ public class OrthographicCamera : Camera
     /// </summary>
     public OrthographicCamera()
     {
-        Logger.Checkpoint();
-
         Near = 0;
         Zoom = 1;
     }
@@ -66,8 +64,6 @@ public class OrthographicCamera : Camera
     /// <param name="viewportHeight"> Height, in pixels, of this cameras viewport. </param>
     public OrthographicCamera( float viewportWidth, float viewportHeight )
     {
-        Logger.Checkpoint();
-
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
         Near           = 0;

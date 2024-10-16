@@ -232,7 +232,7 @@ public class Mesh
         else
         {
             throw new GdxRuntimeException( "Trying to enable InstancedRendering on same Mesh instance twice."
-                                         + " Use disableInstancedRendering to clean up old InstanceData first" );
+                                           + " Use disableInstancedRendering to clean up old InstanceData first" );
         }
 
         return this;
@@ -470,10 +470,10 @@ public class Mesh
         }
 
         if ( ( srcOffset < 0 )
-          || ( count <= 0 )
-          || ( ( srcOffset + count ) > max )
-          || ( destOffset < 0 )
-          || ( destOffset >= vertices.Length ) )
+             || ( count <= 0 )
+             || ( ( srcOffset + count ) > max )
+             || ( destOffset < 0 )
+             || ( destOffset >= vertices.Length ) )
         {
             throw new IndexOutOfRangeException();
         }
@@ -485,8 +485,7 @@ public class Mesh
         }
 
         var verticesBuffer = GetVerticesBuffer();
-
-        var pos = verticesBuffer.Position;
+        var pos            = verticesBuffer.Position;
 
         verticesBuffer.Position = srcOffset;
         verticesBuffer.Get( vertices, destOffset, count );
@@ -701,7 +700,7 @@ public class Mesh
         Render( shader, primitiveType, offset, count, AutoBind );
     }
 
-    private bool _firstTime = true;
+    private bool _firstTime = false;
 
     /// <summary>
     /// Renders the mesh using the given primitive type. offset specifies the offset
@@ -804,8 +803,8 @@ public class Mesh
                 if ( ( count + offset ) > _indices.NumMaxIndices )
                 {
                     throw new GdxRuntimeException( $"Mesh attempting to access memory outside of the "
-                                                 + $"index buffer (count: {count}, offset: {offset}, "
-                                                 + $"max: {_indices.NumMaxIndices})" );
+                                                   + $"index buffer (count: {count}, offset: {offset}, "
+                                                   + $"max: {_indices.NumMaxIndices})" );
                 }
 
                 if ( IsInstanced && ( numInstances > 0 ) )
@@ -813,17 +812,17 @@ public class Mesh
                     unsafe
                     {
                         Gdx.GL.glDrawElementsInstanced( primitiveType,
-                                                        count,
-                                                        IGL.GL_UNSIGNED_SHORT,
-                                                        ( void* ) ( offset * 2 ),
-                                                        numInstances );
+                            count,
+                            IGL.GL_UNSIGNED_SHORT,
+                            ( void* )( offset * 2 ),
+                            numInstances );
                     }
                 }
                 else
                 {
                     unsafe
                     {
-                        Gdx.GL.glDrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ( void* ) ( offset * 2 ) );
+                        Gdx.GL.glDrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ( void* )( offset * 2 ) );
                     }
                 }
             }
@@ -1008,15 +1007,15 @@ public class Mesh
         if ( ( offset < 0 ) || ( count < 1 ) || ( ( offset + count ) > max ) )
         {
             throw new GdxRuntimeException
-                (
-                 "Invalid part specified ( offset="
-               + offset
-               + ", count="
-               + count
-               + ", max="
-               + max
-               + " )"
-                );
+            (
+                "Invalid part specified ( offset="
+                + offset
+                + ", count="
+                + count
+                + ", max="
+                + max
+                + " )"
+            );
         }
 
         var verts      = _vertices.GetBuffer( false );
@@ -1258,7 +1257,7 @@ public class Mesh
                                   int count,
                                   in Matrix4? transform )
     {
-        return ( float ) Math.Sqrt( CalculateRadiusSquared( centerX, centerY, centerZ, offset, count, transform ) );
+        return ( float )Math.Sqrt( CalculateRadiusSquared( centerX, centerY, centerZ, offset, count, transform ) );
     }
 
     /// <summary>
@@ -1658,7 +1657,7 @@ public class Mesh
 
                     for ( var j = 0; j < a.NumComponents; j++ )
                     {
-                        checks[ ++idx ] = ( short ) ( a.Offset + j );
+                        checks[ ++idx ] = ( short )( a.Offset + j );
                     }
 
                     attrs[ ++ai ] =  a.Copy();
@@ -1732,7 +1731,7 @@ public class Mesh
                             tmp[ idx + j ] = vertices[ idx1 + checks[ j ] ];
                         }
 
-                        indices[ i ] = ( short ) size;
+                        indices[ i ] = ( short )size;
                         size++;
                     }
                 }
@@ -1743,8 +1742,8 @@ public class Mesh
         }
 
         var result = attrs == null
-                         ? new Mesh( isStatic, numVertices, indices?.Length ?? 0, VertexAttributes )
-                         : new Mesh( isStatic, numVertices, indices?.Length ?? 0, attrs );
+            ? new Mesh( isStatic, numVertices, indices?.Length ?? 0, VertexAttributes )
+            : new Mesh( isStatic, numVertices, indices?.Length ?? 0, attrs );
 
         result.SetVertices( vertices, 0, numVertices * newVertexSize );
 

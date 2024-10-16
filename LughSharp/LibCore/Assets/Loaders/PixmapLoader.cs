@@ -40,8 +40,6 @@ public class PixmapLoader : AsynchronousAssetLoader< Pixmap, PixmapLoader.Pixmap
     /// <param name="resolver"> The resolver to use. </param>
     public PixmapLoader( IFileHandleResolver resolver ) : base( resolver )
     {
-        Logger.Checkpoint();
-
         _pixmap = default( Pixmap )!;
     }
 

@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.LibCore.Assets;
 
 [PublicAPI]
@@ -49,6 +48,7 @@ public class AssetDescriptor
     public FileInfo File { get; set; }
 
     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /// <summary>
     /// Creates an empty AssetDescriptor object.
@@ -60,10 +60,8 @@ public class AssetDescriptor
     /// </summary>
     public AssetDescriptor()
     {
-        Logger.Checkpoint();
-
         AssetType  = null!;
-        AssetName   = string.Empty;
+        AssetName  = string.Empty;
         Parameters = null!;
         File       = null!;
     }
@@ -78,10 +76,8 @@ public class AssetDescriptor
     {
         ArgumentNullException.ThrowIfNull( filepath );
 
-        Logger.Checkpoint();
-
         AssetType  = assetType;
-        AssetName   = filepath.Replace( '\\', '/' );
+        AssetName  = filepath.Replace( '\\', '/' );
         Parameters = parameters;
         File       = new FileInfo( Path.GetFileName( filepath ) );
     }
@@ -94,11 +90,9 @@ public class AssetDescriptor
     /// <param name="parameters"> Optional parameters for the asset loader. </param>
     public AssetDescriptor( FileInfo file, Type? assetType, AssetLoaderParameters? parameters = null )
     {
-        Logger.Checkpoint();
-
         File       = file ?? throw new ArgumentNullException( nameof( file ) );
         AssetType  = assetType ?? throw new ArgumentNullException( nameof( assetType ) );
-        AssetName   = file.FullName.Replace( '\\', '/' );
+        AssetName  = file.FullName.Replace( '\\', '/' );
         Parameters = parameters;
     }
 
@@ -108,3 +102,7 @@ public class AssetDescriptor
         return $"{AssetName}, {AssetType.FullName}";
     }
 }
+
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------

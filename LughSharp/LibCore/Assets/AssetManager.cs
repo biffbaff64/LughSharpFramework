@@ -23,13 +23,12 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.LibCore.Scenes.Scene2D.UI;
-using LughSharp.LibCore.Utils.Async;
-using Exception = System.Exception;
 
 namespace LughSharp.LibCore.Assets;
 
 /// <summary>
-/// Loads and stores assets like textures, bitmapfonts, tile maps, sounds, music and so on.
+/// Loads and stores assets like textures, bitmapfonts, tile maps, sounds,
+/// music and so on.
 /// </summary>
 [PublicAPI]
 public class AssetManager
@@ -51,11 +50,9 @@ public class AssetManager
 
     private readonly List< string >          _injected    = [ ];
     private readonly List< AssetDescriptor > _loadQueue   = [ ];
-    private readonly List< Task >            _activeTasks = [ ];
 
     private readonly Queue< AssetLoadingTask > _tasks = new();
 
-    private AsyncExecutor?       _executor;
     private IAssetErrorListener? _listener;
     private int                  _loaded;
     private int                  _peakTasks;
@@ -102,20 +99,399 @@ public class AssetManager
             //@formatter:on
         }
 
-        _executor          = new AsyncExecutor( 1, "AssetManager" );
         FileHandleResolver = resolver;
     }
 
     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     // ReSharper disable ConvertToAutoPropertyWhenPossible
-    public Dictionary< string, Type? > AssetTypes  => _assetTypes;
-    public List< AssetDescriptor >     LoadQueue   => _loadQueue;
-    public List< Task >                ActiveTasks => _activeTasks;
-    public Queue< AssetLoadingTask >   TaskQueue   => _tasks;
+    public Dictionary< string, Type? >                                      AssetTypes  => _assetTypes;
+    public List< AssetDescriptor >                                          LoadQueue   => _loadQueue;
+    public Queue< AssetLoadingTask >                                        TaskQueue   => _tasks;
+    public Dictionary< Type, Dictionary< string, IRefCountedContainer >? >? Assets      => _assets;
     // ReSharper enable ConvertToAutoPropertyWhenPossible
 
     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    /// <summary>
+    /// Returns true if an asset with the specified name is loading,
+    /// queued to be loaded, or has been loaded.
+    /// </summary>
+    public bool Contains( string? fileName )
+    {
+        if ( fileName == null ) return false;
+
+        if ( ( _tasks.Count > 0 )
+             && _tasks.First().AssetDesc is { } assetDescriptor
+             && assetDescriptor.AssetName.Equals( fileName ) )
+        {
+            return true;
+        }
+
+        foreach ( var t in _loadQueue )
+        {
+            if ( t.AssetName.Equals( fileName ) )
+            {
+                return true;
+            }
+        }
+
+        return IsLoaded( fileName );
+    }
+
+    /// <summary>
+    /// Returns true if an asset with the specified name and type is loading,
+    /// queued to be loaded, or has been loaded.
+    /// </summary>
+    public bool Contains( string? fileName, Type? type )
+    {
+        if ( ( fileName == null ) || ( type == null ) ) return false;
+
+        if ( _tasks.Count > 0 )
+        {
+            if ( _tasks.First().AssetDesc is { } assetDesc
+                 && ( assetDesc.AssetType == type )
+                 && assetDesc.AssetName.Equals( fileName ) )
+            {
+                return true;
+            }
+        }
+
+        foreach ( var assetDesc in _loadQueue )
+        {
+            if ( ( assetDesc.AssetType == type )
+                 && assetDesc.AssetName.Equals( fileName ) )
+            {
+                return true;
+            }
+        }
+
+        return IsLoaded( fileName, type );
+    }
+
+    /// <summary>
+    /// Returns whether the specified asset is contained in this manager.
+    /// </summary>
+    public bool ContainsAsset< T >( T asset )
+    {
+        if ( asset == null )
+        {
+            return false;
+        }
+
+        var assetsByType = _assets?[ asset.GetType() ] ?? throw new NullReferenceException();
+
+        foreach ( var fileName in assetsByType.Keys )
+        {
+            var otherAsset = ( T? )assetsByType[ fileName ].Asset;
+
+            if ( ( otherAsset?.GetType() == asset.GetType() ) || asset.Equals( otherAsset ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Injects dependencies for a given parent asset by adding the specified
+    /// dependent asset descriptors.
+    /// </summary>
+    /// <param name="parentAssetFilename">The file name of the parent asset.</param>
+    /// <param name="dependendAssetDescs">The list of dependent asset descriptors to inject.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="parentAssetFilename"/> is null.</exception>
+    public void InjectDependencies( string? parentAssetFilename, List< AssetDescriptor > dependendAssetDescs )
+    {
+        ArgumentNullException.ThrowIfNull( parentAssetFilename );
+
+        foreach ( var desc in dependendAssetDescs )
+        {
+            Debug.Assert( desc.AssetName != null, "desc.FilePath is null" );
+
+            if ( _injected.Contains( desc.AssetName ) )
+            {
+                // Ignore subsequent dependencies if there are duplicates.
+                continue;
+            }
+
+            _injected.Add( desc.AssetName );
+
+            InjectDependency( parentAssetFilename, desc );
+        }
+
+        _injected.Clear();
+        _injected.EnsureCapacity( 32 );
+    }
+
+    /// <summary>
+    /// Injects a single dependency for a given parent asset.
+    /// </summary>
+    /// <param name="parentAssetFilename">The file name of the parent asset.</param>
+    /// <param name="dependendAssetDesc">The descriptor of the dependent asset to inject.</param>
+    /// <exception cref="GdxRuntimeException">Thrown if the type of the dependent asset is null.</exception>
+    public void InjectDependency( string parentAssetFilename, AssetDescriptor dependendAssetDesc )
+    {
+        // Add the asset as a dependency of the parent asset
+        var dependencies = _assetDependencies?[ parentAssetFilename ];
+
+        if ( dependencies == null )
+        {
+            dependencies = [ ];
+            _assetDependencies?.Put( parentAssetFilename, dependencies );
+        }
+
+        _assetDependencies?[ parentAssetFilename ].Add( dependendAssetDesc.AssetName );
+
+        // If the asset is already loaded, increase its reference count.
+        if ( IsLoaded( dependendAssetDesc.AssetName ) )
+        {
+            Logger.Debug( $"Dependency already loaded: {dependendAssetDesc}" );
+
+            var type = _assetTypes[ dependendAssetDesc.AssetName ];
+
+            if ( type == null )
+            {
+                throw new GdxRuntimeException( "type cannot be null!" );
+            }
+
+            _assets![ type ]![ dependendAssetDesc.AssetName ].RefCount++;
+
+            IncrementRefCountedDependencies( dependendAssetDesc.AssetName );
+        }
+        else
+        {
+            // else add a new task for the asset.
+            Logger.Debug( $"Loading dependency: {dependendAssetDesc}" );
+
+            AddTask( dependendAssetDesc );
+        }
+    }
+
+    /// <summary>
+    /// Increments the reference count of the dependencies for a given parent asset.
+    /// If the parent asset has dependencies, their reference counts will be incremented recursively.
+    /// </summary>
+    /// <param name="parent">
+    /// The file name of the parent asset whose dependencies' reference counts are to be incremented.
+    /// </param>
+    /// <exception cref="GdxRuntimeException">Thrown if the type of a dependency is null.</exception>
+    public void IncrementRefCountedDependencies( string parent )
+    {
+        if ( _assetDependencies?[ parent ] == null )
+        {
+            return;
+        }
+
+        var stack = new Stack< string >();
+        stack.Push( parent );
+
+        while ( stack.Count > 0 )
+        {
+            var current = stack.Pop();
+
+            if ( _assetDependencies.TryGetValue( current, out var assetDependency ) )
+            {
+                foreach ( var dependency in assetDependency )
+                {
+                    var type = _assetTypes[ dependency ];
+
+                    if ( type == null )
+                    {
+                        throw new GdxRuntimeException( "type cannot be null!" );
+                    }
+
+                    _assets![ type ]![ dependency ].RefCount++;
+
+                    stack.Push( dependency );
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sets an <see cref="IAssetErrorListener"/> to be invoked in case loading an asset failed.
+    /// </summary>
+    public void SetErrorListener( IAssetErrorListener listener )
+    {
+        _listener = listener;
+    }
+
+    /// <summary>
+    /// Sets the reference count of an asset.
+    /// </summary>
+    /// <param name="fileName"> The asset name. </param>
+    /// <param name="refCount"> The new reference count. </param>
+    public void SetReferenceCount( string fileName, int refCount )
+    {
+        var type = _assetTypes[ fileName ];
+
+        if ( type == null )
+        {
+            throw new GdxRuntimeException( $"Asset not loaded: {fileName}" );
+        }
+
+        _assets![ type ]![ fileName ].RefCount = refCount;
+    }
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    #region getters
+
+    /// <summary>
+    /// Returns the reference count of an asset.
+    /// </summary>
+    /// <param name="fileName"> The asset name. </param>
+    public int GetReferenceCount( string fileName )
+    {
+        var type = _assetTypes[ fileName ];
+
+        if ( type == null )
+        {
+            throw new GdxRuntimeException( $"Asset not loaded: {fileName}" );
+        }
+
+        if ( _assets == null )
+        {
+            throw new GdxRuntimeException( "_assets list is null!" );
+        }
+
+        return _assets[ type ]![ fileName ].RefCount;
+    }
+
+    /// <summary>
+    /// Returns the number of currently queued assets.
+    /// </summary>
+    public int GetQueuedAssets()
+    {
+        return _loadQueue.Count + _tasks.Count;
+    }
+
+    /// <summary>
+    /// Returns the progress in percent of completion.
+    /// </summary>
+    public float GetProgress()
+    {
+        if ( _toLoad == 0 )
+        {
+            return 1f;
+        }
+
+        float fractionalLoaded = _loaded;
+
+        if ( _peakTasks > 0 )
+        {
+            fractionalLoaded += ( _peakTasks - _tasks.Count ) / ( float )_peakTasks;
+        }
+
+        return Math.Min( 1f, fractionalLoaded / _toLoad );
+    }
+
+    /// <summary>
+    /// Returns a string containing ref count and dependency
+    /// information for all assets.
+    /// </summary>
+    public string GetDiagnostics()
+    {
+        lock ( this )
+        {
+            var sb = new StringBuilder();
+
+            sb.Append( $"_assets.Length    : {_assets?.Count}\n" );
+            sb.Append( $"_assetTypes.Length: {_assetTypes.Count}\n" );
+            sb.Append( $"_loaders.Length   : {_loaders.Count}\n" );
+            sb.Append( $"_tasks.Length     : {_tasks.Count}\n" );
+            sb.Append( $"_loadQueue.Length : {_loadQueue.Count}\n" );
+            sb.Append( $"_injected.Length  : {_injected.Count}\n" );
+
+            foreach ( var fileName in _assetTypes.Keys )
+            {
+                if ( sb.Length > 0 )
+                {
+                    sb.Append( '\n' );
+                }
+
+                sb.Append( fileName ).Append( ", " );
+
+                var type = _assetTypes[ fileName ];
+
+                if ( type == null )
+                {
+                    sb.Append( "[ NULL type! ]" );
+                }
+                else
+                {
+                    if ( _assets == null )
+                    {
+                        sb.Append( "NULL assets List!" );
+                    }
+                    else
+                    {
+                        var dependencies = _assetDependencies?[ fileName ];
+
+                        if ( dependencies != null )
+                        {
+                            sb.Append( type.Name );
+
+                            sb.Append( ", refs: " ).Append( _assets[ type ]![ fileName ].RefCount );
+
+                            sb.Append( ", deps: [" );
+
+                            foreach ( var dep in dependencies )
+                            {
+                                sb.Append( dep );
+                                sb.Append( ',' );
+                            }
+
+                            sb.Append( ']' );
+                        }
+                    }
+                }
+            }
+
+            return sb.ToString();
+        }
+    }
+
+    /// <summary>
+    /// Returns a list of all asset names.
+    /// </summary>
+    public List< string > GetAssetNames()
+    {
+        lock ( this )
+        {
+            return _assetTypes.Keys.ToList();
+        }
+    }
+
+    /// <summary>
+    /// Returns a list of dependencies for the named asset.
+    /// </summary>
+    /// <param name="name"> Asset name. </param>
+    /// <returns> Dependencies list. </returns>
+    public IEnumerable< string >? GetDependencies( string name )
+    {
+        lock ( this )
+        {
+            return _assetDependencies?[ name ];
+        }
+    }
+
+    /// <summary>
+    /// Returns the asset type for the given asset name.
+    /// </summary>
+    /// <param name="name"> String holding the asset name. </param>
+    /// <returns> The asset type. </returns>
+    public Type? GetAssetType( string name )
+    {
+        lock ( this )
+        {
+            return _assetTypes[ name ];
+        }
+    }
 
     /// <summary>
     /// Retrieves an asset of the specified type by its name.
@@ -201,8 +577,6 @@ public class AssetManager
             return null;
         }
     }
-
-    // ------------------------------------------------------------------------
 
     /// <summary>
     /// Retrieves all assets of the specified type and adds them to the provided list.
@@ -309,93 +683,19 @@ public class AssetManager
         return result;
     }
 
-    /// <summary>
-    /// Returns true if an asset with the specified name is loading,
-    /// queued to be loaded, or has been loaded.
-    /// </summary>
-    public bool Contains( string? fileName )
-    {
-        if ( fileName == null ) return false;
-
-        if ( ( _tasks.Count > 0 )
-             && _tasks.First().AssetDesc is { } assetDescriptor
-             && assetDescriptor.AssetName.Equals( fileName ) )
-        {
-            return true;
-        }
-
-        foreach ( var t in _loadQueue )
-        {
-            if ( t.AssetName.Equals( fileName ) )
-            {
-                return true;
-            }
-        }
-
-        return IsLoaded( fileName );
-    }
-
-    /// <summary>
-    /// Returns true if an asset with the specified name and type is loading,
-    /// queued to be loaded, or has been loaded.
-    /// </summary>
-    public bool Contains( string? fileName, Type? type )
-    {
-        if ( ( fileName == null ) || ( type == null ) ) return false;
-
-        if ( _tasks.Count > 0 )
-        {
-            if ( _tasks.First().AssetDesc is { } assetDesc
-                 && ( assetDesc.AssetType == type )
-                 && assetDesc.AssetName.Equals( fileName ) )
-            {
-                return true;
-            }
-        }
-
-        foreach ( var assetDesc in _loadQueue )
-        {
-            if ( ( assetDesc.AssetType == type )
-                 && assetDesc.AssetName.Equals( fileName ) )
-            {
-                return true;
-            }
-        }
-
-        return IsLoaded( fileName, type );
-    }
-
-    /// <summary>
-    /// Returns whether the specified asset is contained in this manager.
-    /// </summary>
-    public bool ContainsAsset< T >( T asset )
-    {
-        if ( asset == null )
-        {
-            return false;
-        }
-
-        var assetsByType = _assets?[ asset.GetType() ] ?? throw new NullReferenceException();
-
-        foreach ( var fileName in assetsByType.Keys )
-        {
-            var otherAsset = ( T? )assetsByType[ fileName ].Asset;
-
-            if ( ( otherAsset?.GetType() == asset.GetType() ) || asset.Equals( otherAsset ) )
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    #endregion getters
 
     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    #region updates
 
     /// <summary>
-    /// 
+    /// Asynchronously updates the asset manager, loading new assets and processing
+    /// asset loading tasks. Returns true if all assets are loaded, otherwise false.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A task that represents the asynchronous operation. The task result
+    /// contains a boolean value indicating whether all assets are loaded.</returns>
     public async Task< bool > UpdateAsync()
     {
         try
@@ -405,7 +705,7 @@ public class AssetManager
                 // Load next task if there are no active tasks
                 while ( _loadQueue.Count != 0 && _tasks.Count == 0 )
                 {
-                    NextTask();
+                    LoadNextTask();
                 }
 
                 // If we still have no tasks, we're done
@@ -415,9 +715,9 @@ public class AssetManager
             // Process the next task
             await ProcessNextTaskAsync();
 
-            return _loadQueue.Count == 0 && _tasks.Count == 0;
+            return IsFinished();
         }
-        catch ( Exception t )
+        catch ( System.Exception t )
         {
             Logger.Error( $"Error loading asset: {t}" );
 
@@ -433,7 +733,6 @@ public class AssetManager
 
             // Clear tasks and inform listener
             _tasks.Clear();
-            _activeTasks.Clear();
 
             if ( _listener != null )
             {
@@ -449,11 +748,12 @@ public class AssetManager
     }
 
     /// <summary>
-    /// 
+    /// Asynchronously updates the AssetManager by processing queued asset loading
+    /// tasks for a specified amount of time.
     /// </summary>
-    /// <param name="millis"></param>
-    /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <param name="millis">The number of milliseconds to perform updates.</param>
+    /// <returns>A task that represents whether the asset manager finished processing all tasks.</returns>
+    /// <exception cref="GdxRuntimeException">Thrown when an error occurs during asset loading.</exception>
     public async Task< bool > UpdateAsync( int millis )
     {
         try
@@ -467,7 +767,7 @@ public class AssetManager
                     // Load next task if there are no active tasks
                     while ( _loadQueue.Count != 0 && _tasks.Count == 0 )
                     {
-                        NextTask();
+                        LoadNextTask();
                     }
 
                     // If we still have no tasks, we're done
@@ -481,15 +781,18 @@ public class AssetManager
                 await ProcessNextTaskAsync();
 
                 // If we're still in time, go for another round
-                if ( TimeUtils.NanoTime() < endTime ) continue;
+                if ( TimeUtils.NanoTime() < endTime )
+                {
+                    continue;
+                }
 
                 // We ran out of time
                 break;
             }
 
-            return _loadQueue.Count == 0 && _tasks.Count == 0;
+            return IsFinished();
         }
-        catch ( Exception t )
+        catch ( System.Exception t )
         {
             Logger.Error( $"Error loading asset: {t}" );
 
@@ -502,7 +805,6 @@ public class AssetManager
 
             // Clear tasks and inform listener
             _tasks.Clear();
-            _activeTasks.Clear();
 
             if ( _listener != null )
             {
@@ -517,24 +819,55 @@ public class AssetManager
         }
     }
 
+    #endregion updates
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    #region task management
+
     /// <summary>
-    /// 
+    /// Adds a new asset loading task to the queue using the given asset descriptor.
     /// </summary>
+    /// <param name="assetDesc">Descriptor containing information about the asset to be loaded.</param>
+    /// <exception cref="GdxRuntimeException">Thrown if no loader is available for the asset type specified in the asset descriptor.</exception>
+    private void AddTask( AssetDescriptor assetDesc )
+    {
+        Logger.Checkpoint();
+
+        var loader = GetLoader( assetDesc.AssetType, assetDesc.AssetName );
+
+        if ( loader == null )
+        {
+            throw new GdxRuntimeException( $"No loader for type: {assetDesc.AssetType}" );
+        }
+
+        _tasks.Enqueue( new AssetLoadingTask( this, assetDesc, loader ) );
+
+        _peakTasks++;
+    }
+
+    /// <summary>
+    /// Processes the next asset loading task in the queue asynchronously.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation of processing the next asset loading task.
+    /// </returns>
     private async Task ProcessNextTaskAsync()
     {
         if ( _tasks.TryPeek( out var task ) )
         {
-            // Check if the task is already completed
-            var loadTask = task.LoadAsync();
-            _activeTasks.Add( loadTask );
+            Logger.Checkpoint();
 
             try
             {
-                await loadTask;
+                var asset = await task.LoadAsync();
+
+                Logger.Debug( $"task cancelled?: {task.Cancel}" );
 
                 if ( !task.Cancel )
                 {
-                    AddAsset( task.AssetDesc.AssetName, task.AssetDesc.AssetType, task.Asset );
+                    AddAsset( task.AssetDesc.AssetName, task.AssetDesc.AssetType, asset );
 
                     task.AssetDesc.Parameters?
                         .LoadedCallback?
@@ -543,24 +876,31 @@ public class AssetManager
 
                 _loaded++;
             }
-            catch ( Exception )
+            catch ( System.Exception )
             {
-                task.Cancel = true;
                 Logger.Error( $"Error loading asset: {task.AssetDesc.AssetName}" );
+                task.Cancel = true;
             }
             finally
             {
                 _tasks.Dequeue();
-                _activeTasks.Remove( loadTask );
             }
+        }
+        else
+        {
+            Logger.Debug( $"No task to load: {task?.AssetDesc.AssetName}" );
         }
     }
 
     /// <summary>
-    /// 
+    /// Loads the next asset task from the load queue.
+    /// If the asset is already loaded, increment the loaded count for
+    /// use in <see cref="GetProgress"/>.
     /// </summary>
-    private void NextTask()
+    private void LoadNextTask()
     {
+        Logger.Debug( $"LoadQueue size: {_loadQueue.Count}" );
+
         var assetDesc = _loadQueue.RemoveIndex( 0 );
 
         if ( IsLoaded( assetDesc.AssetName ) )
@@ -576,180 +916,14 @@ public class AssetManager
     }
 
     /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="assetDesc"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
-    private void AddTask( AssetDescriptor assetDesc )
-    {
-        Logger.Checkpoint();
-
-        var loader = GetLoader( assetDesc.AssetType, assetDesc.AssetName );
-
-        if ( loader == null )
-        {
-            throw new GdxRuntimeException( $"No loader for type: {assetDesc.AssetType}" );
-        }
-
-        Logger.Debug( $"loader: {loader}, IsSynchronous: {loader!.IsSynchronous}" );
-
-        var task = new AssetLoadingTask( this, assetDesc, loader, _executor! );
-        _tasks.Enqueue( task );
-
-        Logger.Checkpoint();
-
-        // Start the loading task
-        var loadTask = task.LoadAsync();
-        _activeTasks.Add( loadTask );
-
-        Logger.Checkpoint();
-
-        _peakTasks++;
-    }
-
-    /// <summary>
-    /// Injects dependencies for a given parent asset by adding the specified
-    /// dependent asset descriptors.
-    /// </summary>
-    /// <param name="parentAssetFilename">The file name of the parent asset.</param>
-    /// <param name="dependendAssetDescs">The list of dependent asset descriptors to inject.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="parentAssetFilename"/> is null.</exception>
-    public void InjectDependencies( string? parentAssetFilename, List< AssetDescriptor > dependendAssetDescs )
-    {
-        ArgumentNullException.ThrowIfNull( parentAssetFilename );
-
-        foreach ( var desc in dependendAssetDescs )
-        {
-            Debug.Assert( desc.AssetName != null, "desc.FilePath is null" );
-
-            if ( _injected.Contains( desc.AssetName ) )
-            {
-                // Ignore subsequent dependencies if there are duplicates.
-                continue;
-            }
-
-            _injected.Add( desc.AssetName );
-
-            InjectDependency( parentAssetFilename, desc );
-        }
-
-        _injected.Clear();
-        _injected.EnsureCapacity( 32 );
-    }
-
-    /// <summary>
-    /// Injects a single dependency for a given parent asset.
-    /// </summary>
-    /// <param name="parentAssetFilename">The file name of the parent asset.</param>
-    /// <param name="dependendAssetDesc">The descriptor of the dependent asset to inject.</param>
-    /// <exception cref="GdxRuntimeException">Thrown if the type of the dependent asset is null.</exception>
-    public void InjectDependency( string parentAssetFilename, AssetDescriptor dependendAssetDesc )
-    {
-        // Add the asset as a dependency of the parent asset
-        var dependencies = _assetDependencies?[ parentAssetFilename ];
-
-        if ( dependencies == null )
-        {
-            dependencies = [ ];
-            _assetDependencies?.Put( parentAssetFilename, dependencies );
-        }
-
-        _assetDependencies?[ parentAssetFilename ].Add( dependendAssetDesc.AssetName );
-
-        // If the asset is already loaded, increase its reference count.
-        if ( IsLoaded( dependendAssetDesc.AssetName ) )
-        {
-            Logger.Debug( $"Dependency already loaded: {dependendAssetDesc}" );
-
-            var type = _assetTypes[ dependendAssetDesc.AssetName ];
-
-            if ( type == null )
-            {
-                throw new GdxRuntimeException( "type cannot be null!" );
-            }
-
-            _assets![ type ]![ dependendAssetDesc.AssetName ].RefCount++;
-
-            IncrementRefCountedDependencies( dependendAssetDesc.AssetName );
-        }
-        else
-        {
-            // else add a new task for the asset.
-            Logger.Debug( $"Loading dependency: {dependendAssetDesc}" );
-
-            AddTask( dependendAssetDesc );
-        }
-    }
-
-    /// <summary>
-    /// Adds an asset to the asset manager with the specified file name and type.
-    /// </summary>
-    /// <param name="fileName">The file name associated with the asset.</param>
-    /// <param name="type">The type of the asset.</param>
-    /// <param name="asset">The asset to add.</param>
-    /// <exception cref="GdxRuntimeException">Thrown if the asset is null.</exception>
-    public void AddAsset< T >( string fileName, Type type, T asset )
-    {
-        if ( asset == null )
-        {
-            throw new GdxRuntimeException( "No asset to add: null" );
-        }
-
-        // Add the asset to the filename lookup
-        _assetTypes[ fileName ]       = type;
-        _assets![ type ]![ fileName ] = new RefCountedContainer( asset );
-    }
-
-    /// <summary>
     /// Called when a task throws an exception during loading. The default implementation
     /// rethrows the exception and does not use the <tt>assetDesc</tt> parameter.
     /// A subclass may supress the default implementation when loading assets where loading
     /// failure is recoverable.
     /// </summary>
-    public virtual void TaskFailed( AssetDescriptor assetDesc, Exception ex )
+    public virtual void TaskFailed( AssetDescriptor assetDesc, System.Exception ex )
     {
         throw ex;
-    }
-
-    /// <summary>
-    /// Increments the reference count of the dependencies for a given parent asset.
-    /// If the parent asset has dependencies, their reference counts will be incremented recursively.
-    /// </summary>
-    /// <param name="parent">
-    /// The file name of the parent asset whose dependencies' reference counts are to be incremented.
-    /// </param>
-    /// <exception cref="GdxRuntimeException">Thrown if the type of a dependency is null.</exception>
-    public void IncrementRefCountedDependencies( string parent )
-    {
-        if ( _assetDependencies?[ parent ] == null )
-        {
-            return;
-        }
-
-        var stack = new Stack< string >();
-        stack.Push( parent );
-
-        while ( stack.Count > 0 )
-        {
-            var current = stack.Pop();
-
-            if ( _assetDependencies.TryGetValue( current, out var assetDependency ) )
-            {
-                foreach ( var dependency in assetDependency )
-                {
-                    var type = _assetTypes[ dependency ];
-
-                    if ( type == null )
-                    {
-                        throw new GdxRuntimeException( "type cannot be null!" );
-                    }
-
-                    _assets![ type ]![ dependency ].RefCount++;
-
-                    stack.Push( dependency );
-                }
-            }
-        }
     }
 
     /// <summary>
@@ -757,7 +931,7 @@ public class AssetManager
     /// invoking the <see cref="IAssetErrorListener"/>.
     /// </summary>
     /// <param name="t"></param>
-    public async void HandleTaskErrorAsync( Exception t )
+    public async void HandleTaskErrorAsync( System.Exception t )
     {
         Logger.Error( $"Error loading asset: {t}" );
 
@@ -796,225 +970,7 @@ public class AssetManager
         await Task.CompletedTask; // Placeholder for potential async operations
     }
 
-    /// <summary>
-    /// Sets a new <see cref="AssetLoader"/> for the given type.
-    /// </summary>
-    /// <param name="type"> the type of the asset </param>
-    /// <param name="loader"> the loader  </param>
-    public void SetLoader( Type type, AssetLoader loader )
-    {
-        SetLoader( type, null, loader );
-    }
-
-    /// <summary>
-    /// Sets a new <see cref="AssetLoader"/> for the given type.
-    /// </summary>
-    /// <param name="type"> the type of the asset </param>
-    /// <param name="suffix">
-    /// the suffix the filename must have for this loader to be used or null
-    /// to specify the default loader.
-    /// </param>
-    /// <param name="loader"> the loader</param>
-    public void SetLoader( Type type, string? suffix, AssetLoader loader )
-    {
-        GdxRuntimeException.ThrowIfNull( _loaders );
-
-        lock ( this )
-        {
-            ArgumentNullException.ThrowIfNull( loader );
-
-            Dictionary< string, AssetLoader? >? typeLoaders;
-
-            if ( !_loaders.ContainsKey( type )
-                 || ( typeLoaders = _loaders.Get( type ) ) == null )
-            {
-                typeLoaders = new Dictionary< string, AssetLoader? >();
-
-                _loaders.Put( type, typeLoaders );
-            }
-
-            typeLoaders.Put( suffix ?? "", loader );
-        }
-    }
-
-    /// <summary>
-    /// Returns the number of currently queued assets.
-    /// </summary>
-    public int GetQueuedAssets()
-    {
-        return _loadQueue.Count + _tasks.Count;
-    }
-
-    /// <summary>
-    /// Returns the progress in percent of completion.
-    /// </summary>
-    public float GetProgress()
-    {
-        if ( _toLoad == 0 )
-        {
-            return 1f;
-        }
-
-        float fractionalLoaded = _loaded;
-
-        if ( _peakTasks > 0 )
-        {
-            fractionalLoaded += ( _peakTasks - _tasks.Count ) / ( float )_peakTasks;
-        }
-
-        return Math.Min( 1f, fractionalLoaded / _toLoad );
-    }
-
-    /// <summary>
-    /// Sets an <see cref="IAssetErrorListener"/> to be invoked in case loading an asset failed.
-    /// </summary>
-    public void SetErrorListener( IAssetErrorListener listener )
-    {
-        _listener = listener;
-    }
-
-    // ------------------------------------------------------------------------
-
-    /// <summary>
-    /// Returns the reference count of an asset.
-    /// </summary>
-    /// <param name="fileName"> The asset name. </param>
-    public int GetReferenceCount( string fileName )
-    {
-        var type = _assetTypes[ fileName ];
-
-        if ( type == null )
-        {
-            throw new GdxRuntimeException( $"Asset not loaded: {fileName}" );
-        }
-
-        if ( _assets == null )
-        {
-            throw new GdxRuntimeException( "_assets list is null!" );
-        }
-
-        return _assets[ type ]![ fileName ].RefCount;
-    }
-
-    /// <summary>
-    /// Sets the reference count of an asset.
-    /// </summary>
-    /// <param name="fileName"> The asset name. </param>
-    /// <param name="refCount"> The new reference count. </param>
-    public void SetReferenceCount( string fileName, int refCount )
-    {
-        var type = _assetTypes[ fileName ];
-
-        if ( type == null )
-        {
-            throw new GdxRuntimeException( $"Asset not loaded: {fileName}" );
-        }
-
-        _assets![ type ]![ fileName ].RefCount = refCount;
-    }
-
-    /// <summary>
-    /// Returns a string containing ref count and dependency
-    /// information for all assets.
-    /// </summary>
-    public string GetDiagnostics()
-    {
-        lock ( this )
-        {
-            var sb = new StringBuilder();
-
-            sb.Append( $"_assets.Length    : {_assets?.Count}\n" );
-            sb.Append( $"_assetTypes.Length: {_assetTypes.Count}\n" );
-            sb.Append( $"_loaders.Length   : {_loaders.Count}\n" );
-            sb.Append( $"_tasks.Length     : {_tasks.Count}\n" );
-            sb.Append( $"_loadQueue.Length : {_loadQueue.Count}\n" );
-            sb.Append( $"_injected.Length  : {_injected?.Count}\n" );
-
-            foreach ( var fileName in _assetTypes.Keys )
-            {
-                if ( sb.Length > 0 )
-                {
-                    sb.Append( '\n' );
-                }
-
-                sb.Append( fileName ).Append( ", " );
-
-                var type = _assetTypes[ fileName ];
-
-                if ( type == null )
-                {
-                    sb.Append( "[ NULL type! ]" );
-                }
-                else
-                {
-                    if ( _assets == null )
-                    {
-                        sb.Append( "NULL assets List!" );
-                    }
-                    else
-                    {
-                        var dependencies = _assetDependencies?[ fileName ];
-
-                        if ( dependencies != null )
-                        {
-                            sb.Append( type.Name );
-
-                            sb.Append( ", refs: " ).Append( _assets[ type ]![ fileName ].RefCount );
-
-                            sb.Append( ", deps: [" );
-
-                            foreach ( var dep in dependencies )
-                            {
-                                sb.Append( dep );
-                                sb.Append( ',' );
-                            }
-
-                            sb.Append( ']' );
-                        }
-                    }
-                }
-            }
-
-            return sb.ToString();
-        }
-    }
-
-    /// <summary>
-    /// Returns a list of all asset names.
-    /// </summary>
-    public List< string > GetAssetNames()
-    {
-        lock ( this )
-        {
-            return _assetTypes.Keys.ToList();
-        }
-    }
-
-    /// <summary>
-    /// Returns a list of dependencies for the named asset.
-    /// </summary>
-    /// <param name="name"> Asset name. </param>
-    /// <returns> Dependencies list. </returns>
-    public IEnumerable< string >? GetDependencies( string name )
-    {
-        lock ( this )
-        {
-            return _assetDependencies?[ name ];
-        }
-    }
-
-    /// <summary>
-    /// Returns the asset type for the given asset name.
-    /// </summary>
-    /// <param name="name"> String holding the asset name. </param>
-    /// <returns> The asset type. </returns>
-    public Type? GetAssetType( string name )
-    {
-        lock ( this )
-        {
-            return _assetTypes[ name ];
-        }
-    }
+    #endregion task management
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
@@ -1026,8 +982,6 @@ public class AssetManager
     /// </summary>
     public bool IsLoaded( string? fileName )
     {
-        ReportAssetTypes();
-
         var isLoaded = ( fileName != null ) && _assetTypes.ContainsKey( fileName );
 
         Logger.Debug( $"Asset: {fileName} isLoaded: {isLoaded}" );
@@ -1138,6 +1092,27 @@ public class AssetManager
     }
 
     /// <summary>
+    /// Adds an asset to the asset manager with the specified file name and type.
+    /// </summary>
+    /// <param name="fileName">The file name associated with the asset.</param>
+    /// <param name="type">The type of the asset.</param>
+    /// <param name="asset">The asset to add.</param>
+    /// <exception cref="GdxRuntimeException">Thrown if the asset is null.</exception>
+    public void AddAsset( string fileName, Type type, object? asset )
+    {
+        if ( asset == null )
+        {
+            throw new GdxRuntimeException( "No asset to add: null" );
+        }
+
+        // Add the asset to the filename lookup
+        _assetTypes[ fileName ]       = type;
+        _assets![ type ]![ fileName ] = new RefCountedContainer( asset );
+
+        Logger.Debug( $"Asset added: {fileName}" );
+    }
+
+    /// <summary>
     /// Returns true when all assets are loaded. Can be called from any thread but
     /// note <see cref="UpdateAsync()"/> or related methods must be called to process tasks.
     /// </summary>
@@ -1147,8 +1122,9 @@ public class AssetManager
     }
 
     /// <summary>
-    /// 
+    /// Asynchronously waits for all loading tasks in the AssetManager to complete.
     /// </summary>
+    /// <returns>A Task that represents the asynchronous operation.</returns>
     public async Task FinishLoadingAsync()
     {
         Logger.Debug( "Waiting for loading to complete..." );
@@ -1171,10 +1147,10 @@ public class AssetManager
     }
 
     /// <summary>
-    /// 
+    /// Asynchronously waits for the specified asset to be loaded and returns it upon completion.
     /// </summary>
-    /// <param name="fileName"></param>
-    /// <returns></returns>
+    /// <param name="fileName">The name of the file of the asset to finish loading.</param>
+    /// <returns>A task representing the asynchronous operation. The task result contains the loaded asset.</returns>
     public async Task< object > FinishLoadingAssetAsync( string fileName )
     {
         ArgumentNullException.ThrowIfNull( fileName );
@@ -1190,19 +1166,61 @@ public class AssetManager
                 var assetsByType   = _assets?.Get( type );
                 var assetContainer = assetsByType?.Get( fileName );
 
-                if ( assetContainer != null )
-                {
-                    var asset = assetContainer.Asset;
+                var asset = assetContainer?.Asset;
 
-                    if ( asset != null )
-                    {
-                        Logger.Debug( $"Asset loaded: {fileName}" );
-                        return asset;
-                    }
+                Logger.Debug( $"assetsByType: {assetsByType?.Count}" );
+                Logger.Debug( $"asset       : {assetContainer?.Asset}" );
+                Logger.Debug( $"refCount    : {assetContainer?.RefCount}" );
+
+                if ( asset != null )
+                {
+                    Logger.Debug( $"Asset loaded: {fileName}" );
+                    return asset;
                 }
             }
 
             await UpdateAsync();
+        }
+    }
+
+    /// <summary>
+    /// Sets a new <see cref="AssetLoader"/> for the given type.
+    /// </summary>
+    /// <param name="type"> the type of the asset </param>
+    /// <param name="loader"> the loader  </param>
+    public void SetLoader( Type type, AssetLoader loader )
+    {
+        SetLoader( type, null, loader );
+    }
+
+    /// <summary>
+    /// Sets a new <see cref="AssetLoader"/> for the given type.
+    /// </summary>
+    /// <param name="type"> the type of the asset </param>
+    /// <param name="suffix">
+    /// the suffix the filename must have for this loader to be used or null
+    /// to specify the default loader.
+    /// </param>
+    /// <param name="loader"> the loader</param>
+    public void SetLoader( Type type, string? suffix, AssetLoader loader )
+    {
+        GdxRuntimeException.ThrowIfNull( _loaders );
+
+        lock ( this )
+        {
+            ArgumentNullException.ThrowIfNull( loader );
+
+            Dictionary< string, AssetLoader? >? typeLoaders;
+
+            if ( !_loaders.ContainsKey( type )
+                 || ( typeLoaders = _loaders.Get( type ) ) == null )
+            {
+                typeLoaders = new Dictionary< string, AssetLoader? >();
+
+                _loaders.Put( type, typeLoaders );
+            }
+
+            typeLoaders.Put( suffix ?? "", loader );
         }
     }
 
@@ -1226,9 +1244,16 @@ public class AssetManager
     #endregion asset loading
 
     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     #region asset unloading
 
+    /// <summary>
+    /// Asynchronously unloads an asset from the AssetManager.
+    /// </summary>
+    /// <param name="fileName">The name of the asset to be unloaded.</param>
+    /// <returns>A task representing the asynchronous unload operation.</returns>
+    /// <exception cref="GdxRuntimeException">Thrown if the asset is not loaded or cannot be found.</exception>
     public async Task UnloadAsync( string fileName )
     {
         // Convert all Windows path separators to Unix style
@@ -1257,6 +1282,11 @@ public class AssetManager
         await UnloadAssetAsync( fileName, type );
     }
 
+    /// <summary>
+    /// Attempts to cancel the currently processing task if it matches the given file name.
+    /// </summary>
+    /// <param name="fileName">The name of the file to check for cancellation.</param>
+    /// <returns>True if the current task was successfully canceled; otherwise, false.</returns>
     private bool TryCancelCurrentTask( string fileName )
     {
         if ( _tasks.Count > 0 && _tasks.Peek().AssetDesc.AssetName == fileName )
@@ -1273,6 +1303,14 @@ public class AssetManager
         return false;
     }
 
+    /// <summary>
+    /// Attempts to remove an asset from the load queue based on its file name and type.
+    /// </summary>
+    /// <param name="fileName">The name of the file corresponding to the asset to be removed.</param>
+    /// <param name="type">The type of the asset to be removed.</param>
+    /// <returns>
+    /// true if the asset was successfully found and removed from the load queue; otherwise, false.
+    /// </returns>
     private bool TryRemoveFromQueue( string fileName, Type type )
     {
         for ( var i = 0; i < _loadQueue.Count; i++ )
@@ -1295,6 +1333,12 @@ public class AssetManager
         return false;
     }
 
+    /// <summary>
+    /// Asynchronously unloads the specified asset to free up resources.
+    /// </summary>
+    /// <param name="fileName">The name of the asset to unload.</param>
+    /// <param name="type">The type of the asset to unload.</param>
+    /// <returns>A task representing the asynchronous unload operation.</returns>
     private async Task UnloadAssetAsync( string fileName, Type? type )
     {
         if ( type == null )
@@ -1330,6 +1374,11 @@ public class AssetManager
         }
     }
 
+    /// <summary>
+    /// Asynchronously disposes of the assets contained within the provided IRefCountedContainer.
+    /// </summary>
+    /// <param name="container">The container that holds the asset to be disposed.</param>
+    /// <returns>A Task representing the asynchronous operation.</returns>
     private async Task DisposeAssetAsync( IRefCountedContainer container )
     {
         if ( container.Asset is IAsyncDisposable asyncDisposable )
@@ -1342,6 +1391,11 @@ public class AssetManager
         }
     }
 
+    /// <summary>
+    /// Removes all dependencies related to the specified file asynchronously.
+    /// </summary>
+    /// <param name="fileName">The name of the asset file whose dependencies are to be removed.</param>
+    /// <returns>A task representing the asynchronous removal of dependencies.</returns>
     private async Task RemoveDependenciesAsync( string fileName )
     {
         if ( ( _assetDependencies == null )
@@ -1431,16 +1485,15 @@ public class AssetManager
             }
         }
 
-        _assets?.Clear();
-        _assetTypes.Clear();
-        _assetDependencies?.Clear();
         _loaded    = 0;
         _toLoad    = 0;
         _peakTasks = 0;
+
+        _assets?.Clear();
+        _assetTypes.Clear();
+        _assetDependencies?.Clear();
         _loadQueue.Clear();
         _tasks.Clear();
-        _activeTasks.Clear();
-        _executor?.Dispose();
     }
 
     // ------------------------------------------------------------------------
@@ -1456,6 +1509,11 @@ public class AssetManager
         Dispose( true );
     }
 
+    /// <summary>
+    /// Releases all resources used by the AssetManager.
+    /// </summary>
+    /// <param name="disposing">Indicates whether the method call comes from a Dispose
+    /// method (true) or from a finalizer (false).</param>
     protected async void Dispose( bool disposing )
     {
         if ( disposing )
@@ -1469,6 +1527,9 @@ public class AssetManager
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
+    /// <summary>
+    /// Logs the count and names of all asset types currently managed by the AssetManager.
+    /// </summary>
     private void ReportAssetTypes()
     {
         Logger.Debug( $"_assetTypes[].Length: {_assetTypes.Count}" );
