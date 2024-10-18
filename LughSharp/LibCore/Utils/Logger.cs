@@ -189,11 +189,13 @@ public static class Logger
     /// <li> Current time and date. </li>
     /// <li> Calling Class/method/line number information. </li>
     /// </summary>
-    /// <param name="drawLine"> Draws a divider line first, if set to true. </param>
+    /// <param name="lineBefore"> Draws a divider line first, if set to true. </param>
+    /// <param name="lineAfter"> Draws a divider line after checkpoint is logged, if set to true. </param>
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    public static void Checkpoint( bool drawLine = false,
+    public static void Checkpoint( bool lineBefore = false,
+                                   bool lineAfter = false,
                                    [CallerFilePath] string callerFilePath = "",
                                    [CallerMemberName] string callerMethod = "",
                                    [CallerLineNumber] int callerLine = 0 )
@@ -203,10 +205,7 @@ public static class Logger
             return;
         }
 
-        if ( drawLine )
-        {
-            Divider();
-        }
+        if ( lineBefore ) Divider();
         
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
 
@@ -215,6 +214,8 @@ public static class Logger
         Console.WriteLine( message );
 
         WriteToFile( message );
+
+        if ( lineAfter ) Divider();
     }
 
     /// <summary>

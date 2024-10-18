@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.LibCore.Assets;
 
 /// <summary>
@@ -38,10 +37,10 @@ public class AssetLoadingTask
     public object?                  Asset              { get; set; }
     public bool                     IsAsyncLoader      { get; private set; }
 
-    private readonly AssetLoader   _loader;
-    private readonly AssetManager  _manager;
-    private readonly long          _startTime;
-    private readonly object        _lock = new();
+    private readonly AssetLoader  _loader;
+    private readonly AssetManager _manager;
+    private readonly long         _startTime;
+    private readonly object       _lock = new();
 
     private Task< object? >? _loadTask;
 
@@ -56,7 +55,7 @@ public class AssetLoadingTask
         Logger.Checkpoint();
 
         IsAsyncLoader = _loader is AsynchronousAssetLoader< Type, AssetLoaderParameters >;
-        _startTime    = Logger.TraceLevel == Logger.LOG_DEBUG ? TimeUtils.NanoTime() : 0;
+        _startTime    = 0;
 
         AssetDesc = assetDesc;
         _manager  = manager;
@@ -75,15 +74,17 @@ public class AssetLoadingTask
     public async Task< object? > LoadAsync()
     {
         Logger.Checkpoint();
-        
+
         if ( Cancel )
         {
-            Logger.Checkpoint();
+            Logger.Debug( "Loading cancelled!" );
 
             return null;
         }
 
-        Logger.Checkpoint();
+        Logger.Debug( $"_loader: {_loader}" );
+
+        //TODO: This isn't working
         
         switch ( _loader )
         {
@@ -125,7 +126,7 @@ public class AssetLoadingTask
         if ( !DependenciesLoaded )
         {
             Dependencies = await Task.Run( () => loader.GetDependencies( AssetDesc.AssetName,
-                Resolve( loader, AssetDesc ), AssetDesc.Parameters ) );
+                                                                         Resolve( loader, AssetDesc ), AssetDesc.Parameters ) );
 
             if ( Dependencies != null )
             {
@@ -158,7 +159,8 @@ public class AssetLoadingTask
             await LoadDependenciesAsync( loader );
         }
 
-        await Task.Run( () => loader.LoadAsync( _manager, Resolve( loader, AssetDesc ), AssetDesc.Parameters! ) );
+        await Task.Run( () => { loader.LoadAsync( _manager, Resolve( loader, AssetDesc ), AssetDesc.Parameters! ); } );
+
         return loader.LoadSync( _manager, Resolve( loader, AssetDesc ), AssetDesc.Parameters! );
     }
 
@@ -174,7 +176,10 @@ public class AssetLoadingTask
         {
             if ( !DependenciesLoaded )
             {
-                Dependencies = loader.GetDependencies( AssetDesc.AssetName, Resolve( loader, AssetDesc ), AssetDesc.Parameters );
+                Dependencies = loader.GetDependencies( AssetDesc.AssetName,
+                                                       Resolve( loader, AssetDesc ),
+                                                       AssetDesc.Parameters );
+
                 if ( Dependencies != null )
                 {
                     RemoveDuplicates( Dependencies );

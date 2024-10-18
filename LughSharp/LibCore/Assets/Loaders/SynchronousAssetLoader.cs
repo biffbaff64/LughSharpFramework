@@ -40,6 +40,7 @@ public abstract class SynchronousAssetLoader< TAssetType, TParameters >
     /// <param name="resolver">The file resolver to use for resolving asset file paths.</param>
     protected SynchronousAssetLoader( IFileHandleResolver resolver ) : base( resolver )
     {
+        LoaderType = AssetLoaderType.Synchronous;
     }
 
     /// <summary>

@@ -43,7 +43,7 @@ public abstract class AsynchronousAssetLoader< TAssetType, TParameters >
     protected AsynchronousAssetLoader( IFileHandleResolver resolver )
         : base( resolver )
     {
-        IsSynchronous = false;
+        LoaderType = AssetLoaderType.Asynchronous;
     }
 
     /// <summary>

@@ -26,6 +26,16 @@
 namespace LughSharp.LibCore.Assets.Loaders;
 
 /// <summary>
+/// 
+/// </summary>
+[PublicAPI]
+public enum AssetLoaderType : int
+{
+    Synchronous,
+    Asynchronous,
+}
+
+/// <summary>
 /// Abstract base class for asset loaders.
 /// </summary>
 [PublicAPI]
@@ -40,7 +50,7 @@ public abstract class AssetLoader
     /// <summary>
     /// Indicates whether the child loader class is Async or Sync.
     /// </summary>
-    public bool IsSynchronous { get; set; }
+    public AssetLoaderType LoaderType { get; set; }
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
