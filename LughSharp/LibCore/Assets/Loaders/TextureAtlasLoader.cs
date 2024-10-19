@@ -78,17 +78,18 @@ public class TextureAtlasLoader
     }
 
     /// <inheritdoc />
-    public override List< AssetDescriptor > GetDependencies( string? fileName,
-                                                             FileInfo? atlasFile,
-                                                             AssetLoaderParameters? parameter )
+    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+                                                                   FileInfo atlasFile,
+                                                                   TP? parameter ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( atlasFile );
 
+        var p      = parameter as TextureAtlasParameter;
         var imgDir = atlasFile.Directory;
 
-        _data = parameter != null
-                    ? new TextureAtlasData( atlasFile, imgDir, ( ( TextureAtlasParameter ) parameter ).FlipVertically )
-                    : new TextureAtlasData( atlasFile, imgDir );
+        _data = p != null
+            ? new TextureAtlasData( atlasFile, imgDir, p.FlipVertically )
+            : new TextureAtlasData( atlasFile, imgDir );
 
         var dependencies = new List< AssetDescriptor >();
 

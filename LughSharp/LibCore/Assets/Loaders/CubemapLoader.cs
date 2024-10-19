@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.LibCore.Assets.Loaders;
 
 /// <summary>
@@ -36,7 +35,7 @@ namespace LughSharp.LibCore.Assets.Loaders;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class CubemapLoader : AsynchronousAssetLoader< Cubemap, CubemapLoader.CubemapParameter >
+public class CubemapLoader : AsynchronousAssetLoader
 {
     /// <summary>
     /// Information about the cubemap being loaded.
@@ -62,15 +61,17 @@ public class CubemapLoader : AsynchronousAssetLoader< Cubemap, CubemapLoader.Cub
     /// <param name="fileName">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>
     /// <param name="parameter">parameters for loading the asset</param>
-    public override List< AssetDescriptor > GetDependencies( string? fileName,
-                                                             FileInfo? file,
-                                                             AssetLoaderParameters? parameter )
+    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+                                                                   FileInfo file,
+                                                                   TP? parameter ) where TP : class
     {
         return default( List< AssetDescriptor > )!;
     }
 
     /// <inheritdoc />
-    public override void LoadAsync( AssetManager manager, FileInfo? file, CubemapParameter? parameter )
+    public override void LoadAsync< TP >( AssetManager manager,
+                                          FileInfo file,
+                                          TP? parameter ) where TP : class
     {
     }
 
@@ -81,8 +82,9 @@ public class CubemapLoader : AsynchronousAssetLoader< Cubemap, CubemapLoader.Cub
     /// <param name="manager">The AssetManager to use.</param>
     /// <param name="file">The assets FileInfo object.</param>
     /// <param name="parameter">The AssetLoader parameters object.</param>
-    public override object LoadSync( AssetManager? manager, FileInfo? file, CubemapParameter? parameter )
+    public override object LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
+        var p       = parameter as CubemapParameter;
         var cubemap = _loaderInfo.Cubemap;
 
         if ( cubemap != null )
@@ -94,10 +96,10 @@ public class CubemapLoader : AsynchronousAssetLoader< Cubemap, CubemapLoader.Cub
             cubemap = new Cubemap( _loaderInfo.CubemapData! );
         }
 
-        if ( parameter != null )
+        if ( p != null )
         {
-            cubemap.SetFilter( parameter.MinFilter, parameter.MagFilter );
-            cubemap.SetWrap( parameter.WrapU, parameter.WrapV );
+            cubemap.SetFilter( p.MinFilter, p.MagFilter );
+            cubemap.SetWrap( p.WrapU, p.WrapV );
         }
 
         return cubemap;

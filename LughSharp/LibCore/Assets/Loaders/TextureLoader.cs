@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.LibCore.Assets.Loaders;
 
 /// <summary>
@@ -34,10 +33,12 @@ namespace LughSharp.LibCore.Assets.Loaders;
 /// e.g. filtering, whether to generate mipmaps and so on.
 /// </summary>
 [PublicAPI]
-public class TextureLoader
-    : AsynchronousAssetLoader< Texture, TextureLoader.TextureLoaderParameters >, IDisposable
+public class TextureLoader : AsynchronousAssetLoader, IDisposable
 {
     private TextureLoaderInfo _loaderInfo;
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     /// <summary>
     /// Creates a new TextureLoader using the specified <see cref="IFileHandleResolver"/>.
@@ -50,17 +51,23 @@ public class TextureLoader
     }
 
     /// <inheritdoc />
-    public override List< AssetDescriptor > GetDependencies( string? filename, FileInfo? file, AssetLoaderParameters? p )
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
+                                                                   FileInfo file,
+                                                                   TP? p ) where TP : class
     {
-        return null!;
+        return default( List< AssetDescriptor > )!;
     }
 
     /// <inheritdoc />
-    public override void LoadAsync( AssetManager? manager, FileInfo? file, TextureLoaderParameters? parameter )
+    public override void LoadAsync< TP >( AssetManager manager,
+                                          FileInfo file,
+                                          TP? parameter ) where TP : class
     {
-        _loaderInfo.Filename = file?.Name;
+        var p = parameter as TextureLoaderParameters;
 
-        if ( parameter?.TextureData == null )
+        _loaderInfo.Filename = file.Name;
+
+        if ( p?.TextureData == null )
         {
             var format     = Pixmap.ColorFormat.Default;
             var genMipMaps = false;
@@ -69,17 +76,17 @@ public class TextureLoader
 
             if ( parameter != null )
             {
-                format              = parameter.Format;
-                genMipMaps          = parameter.GenMipMaps;
-                _loaderInfo.Texture = parameter.Texture;
+                format              = p!.Format;
+                genMipMaps          = p.GenMipMaps;
+                _loaderInfo.Texture = p.Texture;
             }
 
-            _loaderInfo.Data = TextureDataFactory.LoadFromFile( file!, format, genMipMaps );
+            _loaderInfo.Data = TextureDataFactory.LoadFromFile( file, format, genMipMaps );
         }
         else
         {
-            _loaderInfo.Data    = parameter.TextureData;
-            _loaderInfo.Texture = parameter.Texture;
+            _loaderInfo.Data    = p.TextureData;
+            _loaderInfo.Texture = p.Texture;
         }
 
         if ( _loaderInfo.Data is { IsPrepared: false } )
@@ -89,8 +96,11 @@ public class TextureLoader
     }
 
     /// <inheritdoc />
-    public override Texture LoadSync( AssetManager manager, FileInfo? file, TextureLoaderParameters? parameter )
+    public override Texture LoadSync< TP >( AssetManager manager,
+                                            FileInfo file,
+                                            TP? parameter ) where TP : class
     {
+        var p       = parameter as TextureLoaderParameters;
         var texture = _loaderInfo.Texture;
 
         if ( texture != null )
@@ -104,12 +114,43 @@ public class TextureLoader
 
         if ( parameter != null )
         {
-            texture.SetFilter( parameter.MinFilter, parameter.MagFilter );
-            texture.SetWrap( parameter.WrapU, parameter.WrapV );
+            texture.SetFilter( p!.MinFilter, p.MagFilter );
+            texture.SetWrap( p.WrapU, p.WrapV );
         }
 
         return texture;
     }
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    #region dispose pattern
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing,
+    /// releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+    }
+
+    /// <summary>
+    /// Releases the unmanaged resources used by the texture loader.
+    /// </summary>
+    /// <param name="disposing">
+    /// True to release both managed and unmanaged resources; false to release only unmanaged resources.
+    /// </param>
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            // Dispose managed resources
+            _loaderInfo = null!;
+        }
+    }
+
+    #endregion dispose pattern
 
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
@@ -186,41 +227,8 @@ public class TextureLoader
         /// </summary>
         public ITextureData? TextureData { get; set; } = null;
     }
-
-    // ------------------------------------------------------------------------
-    // ------------------------------------------------------------------------
-    
-    #region dispose pattern
-
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing,
-    /// releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose( true );
-    }
-
-    /// <summary>
-    /// Releases the unmanaged resources used by the texture loader.
-    /// </summary>
-    /// <param name="disposing">
-    /// True to release both managed and unmanaged resources; false to release only unmanaged resources.
-    /// </param>
-    protected virtual void Dispose( bool disposing )
-    {
-        if ( disposing )
-        {
-            // Dispose managed resources
-            _loaderInfo = null!;
-        }
-    }
-
-    #endregion dispose pattern
 }
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-
-

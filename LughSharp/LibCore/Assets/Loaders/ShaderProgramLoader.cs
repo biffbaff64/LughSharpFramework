@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using File = System.IO.File;
 
 namespace LughSharp.LibCore.Assets.Loaders;
@@ -45,8 +44,7 @@ namespace LughSharp.LibCore.Assets.Loaders;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class ShaderProgramLoader
-    : AsynchronousAssetLoader< ShaderProgram, ShaderProgramLoader.ShaderProgramParameter >
+public class ShaderProgramLoader : AsynchronousAssetLoader
 {
     private readonly string _fragmentFileSuffix = ".frag";
     private readonly string _vertexFileSuffix   = ".vert";
@@ -74,36 +72,40 @@ public class ShaderProgramLoader
     }
 
     /// <inheritdoc />
-    public override List< AssetDescriptor > GetDependencies( string? filename, FileInfo? file, AssetLoaderParameters? p )
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
+                                                                   FileInfo file,
+                                                                   TP? p ) where TP : class
     {
         return null!;
     }
 
     /// <inheritdoc />
-    public override void LoadAsync( AssetManager manager, FileInfo? file, ShaderProgramParameter? parameter )
+    public override void LoadAsync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
     }
 
     /// <inheritdoc />
-    public override object LoadSync( AssetManager? manager,
-                                     FileInfo? file,
-                                     ShaderProgramParameter? parameter )
+    public override object LoadSync< TP >( AssetManager manager,
+                                           FileInfo file,
+                                           TP? parameter ) where TP : class
     {
-        ArgumentNullException.ThrowIfNull( file?.Name );
+        ArgumentNullException.ThrowIfNull( file.Name );
+
+        var p = parameter as ShaderProgramParameter;
 
         string? vertFileName = null;
         string? fragFileName = null;
 
-        if ( parameter != null )
+        if ( p != null )
         {
-            if ( parameter.VertexFile != null )
+            if ( p.VertexFile != null )
             {
-                vertFileName = parameter.VertexFile;
+                vertFileName = p.VertexFile;
             }
 
-            if ( parameter.FragmentFile != null )
+            if ( p.FragmentFile != null )
             {
-                fragFileName = parameter.FragmentFile;
+                fragFileName = p.FragmentFile;
             }
         }
 
@@ -123,26 +125,25 @@ public class ShaderProgramLoader
         var vertexCode = File.ReadAllText( Path.GetFullPath( vertexFile.Name ) );
 
         var fragmentCode = vertexFile.Equals( fragmentFile )
-                               ? vertexCode
-                               : File.ReadAllText( Path.GetFullPath( fragmentFile.Name ) );
+            ? vertexCode
+            : File.ReadAllText( Path.GetFullPath( fragmentFile.Name ) );
 
-        if ( parameter != null )
+        if ( p != null )
         {
-            if ( parameter.PrependVertexCode != null )
+            if ( p.PrependVertexCode != null )
             {
-                vertexCode = parameter.PrependVertexCode + vertexCode;
+                vertexCode = p.PrependVertexCode + vertexCode;
             }
 
-            if ( parameter.PrependFragmentCode != null )
+            if ( p.PrependFragmentCode != null )
             {
-                fragmentCode = parameter.PrependFragmentCode + fragmentCode;
+                fragmentCode = p.PrependFragmentCode + fragmentCode;
             }
         }
 
         var shaderProgram = new ShaderProgram( vertexCode, fragmentCode );
 
-        if ( ( ( parameter == null ) || parameter.LogOnCompileFailure )
-          && !shaderProgram.IsCompiled )
+        if ( ( ( p == null ) || p.LogOnCompileFailure ) && !shaderProgram.IsCompiled )
         {
             Logger.Error( $"ShaderProgram {file.Name} failed to compile:\n{shaderProgram.ShaderLog}" );
         }

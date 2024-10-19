@@ -84,5 +84,7 @@ public abstract class AssetLoader
     /// <param name="filename">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>
     /// <param name="p">parameters for loading the asset</param>
-    public abstract List< AssetDescriptor > GetDependencies( string? filename, FileInfo? file, AssetLoaderParameters? p );
+    public abstract List< AssetDescriptor > GetDependencies< TP >( string filename,
+                                                                   FileInfo file,
+                                                                   TP? p ) where TP : AssetLoaderParameters;
 }

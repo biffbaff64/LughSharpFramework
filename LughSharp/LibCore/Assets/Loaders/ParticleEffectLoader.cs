@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.LibCore.Assets.Loaders;
 
 /// <summary>
@@ -73,7 +72,7 @@ public class ParticleEffectLoader
         {
             case { AtlasFile: not null }:
                 var atlas = am.Get( param.AtlasFile ) as TextureAtlas;
-                
+
                 effect.Load( file, atlas!, param.AtlasPrefix );
 
                 break;
@@ -108,20 +107,17 @@ public class ParticleEffectLoader
     /// <returns>
     /// A list of asset descriptors representing the dependencies required for loading the particle effect.
     /// </returns>
-    public override List< AssetDescriptor > GetDependencies( string? fileName,
-                                                             FileInfo? file,
-                                                             AssetLoaderParameters? parameters )
+    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+                                                                   FileInfo file,
+                                                                   TP? parameters ) where TP : class
     {
+        var p = parameters as ParticleEffectParameter;
+        
         List< AssetDescriptor >? deps = null;
 
-        if ( ( ( ParticleEffectParameter? ) parameters )?.AtlasFile != null )
+        if ( p?.AtlasFile != null )
         {
-            deps =
-            [
-                new( ( ( ParticleEffectParameter ) parameters ).AtlasFile!,
-                     typeof( TextureAtlas ),
-                     ( ParticleEffectParameter ) parameters )
-            ];
+            deps = [ new AssetDescriptor( p.AtlasFile!, typeof( TextureAtlas ), p ), ];
         }
 
         return deps!;

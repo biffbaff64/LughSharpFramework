@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using LughSharp.LibCore.Scenes.Scene2D.UI;
 
 namespace LughSharp.LibCore.Assets.Loaders;
@@ -37,7 +36,7 @@ namespace LughSharp.LibCore.Assets.Loaders;
 /// set things like texture filters or whether to flip the glyphs vertically.
 /// </summary>
 [PublicAPI]
-public class BitmapFontLoader : AsynchronousAssetLoader< BitmapFont, BitmapFontParameter >, IDisposable
+public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 {
     private BitmapFont.BitmapFontData? _data;
 
@@ -59,44 +58,41 @@ public class BitmapFontLoader : AsynchronousAssetLoader< BitmapFont, BitmapFontP
     /// <param name="fileName">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>
     /// <param name="parameter">parameters for loading the asset</param>
-    public override List< AssetDescriptor > GetDependencies( string? fileName,
-                                                             FileInfo? file,
-                                                             AssetLoaderParameters? parameter )
+    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+                                                                   FileInfo file,
+                                                                   TP? parameter ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( file );
 
+        var p    = parameter as BitmapFontParameter;
         var deps = new List< AssetDescriptor >();
 
-        if ( ( ( BitmapFontParameter? ) parameter )?.BitmapFontData != null )
+        if ( p?.BitmapFontData != null )
         {
-            _data = ( ( BitmapFontParameter? ) parameter )?.BitmapFontData;
+            _data = p.BitmapFontData;
 
             return deps;
         }
 
-        _data = new BitmapFont.BitmapFontData( file, ( ( BitmapFontParameter? ) parameter )!.Flip );
+        _data = new BitmapFont.BitmapFontData( file, p!.Flip );
 
-        if ( ( ( BitmapFontParameter? ) parameter )?.AtlasName != null )
+        if ( p.AtlasName != null )
         {
-            deps.Add( new AssetDescriptor( ( ( BitmapFontParameter? ) parameter )?.AtlasName,
-                                           typeof( TextureAtlas ),
-                                           parameter ) );
+            deps.Add( new AssetDescriptor( p.AtlasName, typeof( TextureAtlas ), parameter ) );
         }
         else
         {
             for ( var i = 0; i < _data.ImagePaths?.Length; i++ )
             {
-                var path = _data.ImagePaths[ i ];
-
-                var resolved = Resolve( path );
-
+                var path          = _data.ImagePaths[ i ];
+                var resolved      = Resolve( path );
                 var textureParams = new TextureLoader.TextureLoaderParameters();
 
                 if ( parameter != null )
                 {
-                    textureParams.GenMipMaps = ( ( BitmapFontParameter? ) parameter )!.GenMipMaps;
-                    textureParams.MinFilter  = ( ( BitmapFontParameter? ) parameter )!.MinFilter;
-                    textureParams.MagFilter  = ( ( BitmapFontParameter? ) parameter )!.MagFilter;
+                    textureParams.GenMipMaps = p.GenMipMaps;
+                    textureParams.MinFilter  = p.MinFilter;
+                    textureParams.MagFilter  = p.MagFilter;
                 }
 
                 deps.Add( new AssetDescriptor( resolved, typeof( Texture ), textureParams ) );
@@ -107,34 +103,34 @@ public class BitmapFontLoader : AsynchronousAssetLoader< BitmapFont, BitmapFontP
     }
 
     /// <inheritdoc />
-    public override void LoadAsync( AssetManager manager, FileInfo? file, BitmapFontParameter? parameter )
+    public override void LoadAsync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
-        // Not used in this class
     }
 
     /// <inheritdoc />
-    public override object LoadSync( AssetManager manager, FileInfo? file, BitmapFontParameter? parameter )
+    public override object LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( manager );
         ArgumentNullException.ThrowIfNull( file );
 
-        if ( parameter?.AtlasName != null )
+        var p = parameter as BitmapFontParameter;
+
+        if ( p?.AtlasName != null )
         {
-            var atlas = manager.Get( parameter.AtlasName! ) as TextureAtlas;
+            var atlas = manager.Get( p.AtlasName! ) as TextureAtlas;
             var name  = Path.GetFileNameWithoutExtension( _data?.ImagePaths?[ 0 ] );
 
             TextureRegion? region = atlas?.FindRegion( name );
 
             if ( region == null )
             {
-                throw new GdxRuntimeException
-                    ( $"Could not find font region {name} in atlas {parameter.AtlasName}" );
+                throw new GdxRuntimeException( $"Could not find font region {name} in atlas {p.AtlasName}" );
             }
 
             return new BitmapFont( file, region );
         }
 
-        var capacity = ( int ) _data?.ImagePaths?.Length!;
+        var capacity = ( int )_data?.ImagePaths?.Length!;
         var regs     = new List< TextureRegion >( capacity );
 
         for ( var i = 0; i < capacity; i++ )

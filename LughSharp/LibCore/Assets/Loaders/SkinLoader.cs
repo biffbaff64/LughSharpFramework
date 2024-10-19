@@ -22,13 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using LughSharp.LibCore.Scenes.Scene2D.UI;
 
 namespace LughSharp.LibCore.Assets.Loaders;
 
 [PublicAPI]
-public class SkinLoader : AsynchronousAssetLoader< Skin, SkinLoader.SkinLoaderParameters >
+public class SkinLoader : AsynchronousAssetLoader
 {
     public SkinLoader( IFileHandleResolver resolver ) : base( resolver )
     {
@@ -41,56 +40,57 @@ public class SkinLoader : AsynchronousAssetLoader< Skin, SkinLoader.SkinLoaderPa
     /// <param name="fileName">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>
     /// <param name="parameter">parameters for loading the asset</param>
-    public override List< AssetDescriptor > GetDependencies( string? fileName,
-                                                             FileInfo? file,
-                                                             AssetLoaderParameters? parameter )
+    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+                                                                   FileInfo file,
+                                                                   TP? parameter ) where TP : class
     {
-        List< AssetDescriptor > deps = new();
+        var p = parameter as SkinLoaderParameters;
 
-        if ( ( ( SkinLoaderParameters? ) parameter )?.TextureAtlasPath == null )
+        List< AssetDescriptor > deps = [ ];
+
+        if ( p?.TextureAtlasPath == null )
         {
-            var path = Path.ChangeExtension( file?.FullName, ".atlas" );
+            var path = Path.ChangeExtension( file.FullName, ".atlas" );
 
             deps.Add( new AssetDescriptor( path, typeof( TextureAtlas ), new SkinLoaderParameters() ) );
         }
-
-        else if ( ( ( SkinLoaderParameters? ) parameter )?.TextureAtlasPath != null )
+        else if ( p.TextureAtlasPath != null )
         {
-            deps.Add( new AssetDescriptor( ( ( SkinLoaderParameters? ) parameter )?.TextureAtlasPath,
-                                           typeof( TextureAtlas ),
-                                           parameter ) );
+            deps.Add( new AssetDescriptor( p.TextureAtlasPath, typeof( TextureAtlas ), parameter ) );
         }
 
         return deps;
     }
 
     /// <inheritdoc />
-    public override void LoadAsync( AssetManager manager, FileInfo? file, SkinLoaderParameters? parameter )
+    public override void LoadAsync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
     }
 
     /// <inheritdoc />
-    public override object LoadSync( AssetManager manager,
-                                     FileInfo? file,
-                                     SkinLoaderParameters? parameter )
+    public override object LoadSync< TP >( AssetManager manager,
+                                           FileInfo file,
+                                           TP? parameter ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( manager );
         ArgumentNullException.ThrowIfNull( file );
 
+        var p = parameter as SkinLoaderParameters;
+        
         var textureAtlasPath = Path.ChangeExtension( file.FullName, ".atlas" );
 
         Dictionary< string, object >? resources = null;
 
-        if ( parameter != null )
+        if ( p != null )
         {
-            if ( parameter.TextureAtlasPath != null )
+            if ( p.TextureAtlasPath != null )
             {
-                textureAtlasPath = parameter.TextureAtlasPath;
+                textureAtlasPath = p.TextureAtlasPath;
             }
 
-            if ( parameter.Resources != null )
+            if ( p.Resources != null )
             {
-                resources = parameter.Resources;
+                resources = p.Resources;
             }
         }
 
@@ -99,7 +99,7 @@ public class SkinLoader : AsynchronousAssetLoader< Skin, SkinLoader.SkinLoaderPa
 
         if ( resources != null )
         {
-            foreach ( KeyValuePair< string, object > entry in resources )
+            foreach ( var entry in resources )
             {
                 skin.Add( entry.Key, entry.Value );
             }
@@ -120,7 +120,7 @@ public class SkinLoader : AsynchronousAssetLoader< Skin, SkinLoader.SkinLoaderPa
     protected virtual Skin NewSkin( TextureAtlas? atlas )
     {
         ArgumentNullException.ThrowIfNull( atlas );
-        
+
         return new Skin( atlas );
     }
 

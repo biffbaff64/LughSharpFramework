@@ -54,7 +54,7 @@ public class AssetLoadingTask
     {
         Logger.Checkpoint();
 
-        IsAsyncLoader = _loader is AsynchronousAssetLoader< Type, AssetLoaderParameters >;
+        IsAsyncLoader = _loader is AsynchronousAssetLoader;
         _startTime    = 0;
 
         AssetDesc = assetDesc;
@@ -84,11 +84,9 @@ public class AssetLoadingTask
 
         Logger.Debug( $"_loader: {_loader}" );
 
-        //TODO: This isn't working
-        
         switch ( _loader )
         {
-            case AsynchronousAssetLoader< Type, AssetLoaderParameters > asyncLoader:
+            case AsynchronousAssetLoader asyncLoader:
             {
                 Logger.Debug( "Async loader started." );
                 await LoadDependenciesAsync( asyncLoader );
@@ -121,12 +119,13 @@ public class AssetLoadingTask
     /// A task representing the asynchronous operation. The task contains the resolved
     /// dependencies or completes when dependencies are loaded.
     /// </returns>
-    private async Task LoadDependenciesAsync( AsynchronousAssetLoader< Type, AssetLoaderParameters > loader )
+    private async Task LoadDependenciesAsync( AsynchronousAssetLoader loader )
     {
         if ( !DependenciesLoaded )
         {
             Dependencies = await Task.Run( () => loader.GetDependencies( AssetDesc.AssetName,
-                                                                         Resolve( loader, AssetDesc ), AssetDesc.Parameters ) );
+                                                                         Resolve( loader, AssetDesc )!,
+                                                                         AssetDesc.Parameters ) );
 
             if ( Dependencies != null )
             {
@@ -136,7 +135,7 @@ public class AssetLoadingTask
             else
             {
                 // If we have no dependencies, we load the async part of the task immediately.
-                await Task.Run( () => loader.LoadAsync( _manager, Resolve( loader, AssetDesc ), AssetDesc.Parameters! ) );
+                await Task.Run( () => loader.LoadAsync( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! ) );
             }
 
             DependenciesLoaded = true;
@@ -152,16 +151,16 @@ public class AssetLoadingTask
     /// A task representing the asynchronous operation, containing the loaded
     /// asset object or null if loading fails.
     /// </returns>
-    private async Task< object? > LoadAssetAsync( AsynchronousAssetLoader< Type, AssetLoaderParameters > loader )
+    private async Task< object? > LoadAssetAsync( AsynchronousAssetLoader loader )
     {
         if ( !DependenciesLoaded )
         {
             await LoadDependenciesAsync( loader );
         }
 
-        await Task.Run( () => { loader.LoadAsync( _manager, Resolve( loader, AssetDesc ), AssetDesc.Parameters! ); } );
+        await Task.Run( () => { loader.LoadAsync( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! ); } );
 
-        return loader.LoadSync( _manager, Resolve( loader, AssetDesc ), AssetDesc.Parameters! );
+        return loader.LoadSync( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! );
     }
 
     /// <summary>
@@ -177,7 +176,7 @@ public class AssetLoadingTask
             if ( !DependenciesLoaded )
             {
                 Dependencies = loader.GetDependencies( AssetDesc.AssetName,
-                                                       Resolve( loader, AssetDesc ),
+                                                       Resolve( loader, AssetDesc )!,
                                                        AssetDesc.Parameters );
 
                 if ( Dependencies != null )
@@ -199,9 +198,9 @@ public class AssetLoadingTask
     /// </summary>
     public void Unload()
     {
-        if ( _loader is AsynchronousAssetLoader< Type, AssetLoaderParameters > asyncLoader )
+        if ( _loader is AsynchronousAssetLoader asyncLoader )
         {
-            asyncLoader.UnloadAsync( _manager, Resolve( _loader, AssetDesc ), AssetDesc.Parameters! );
+            asyncLoader.UnloadAsync( _manager, Resolve( _loader, AssetDesc )!, AssetDesc.Parameters! );
         }
     }
 

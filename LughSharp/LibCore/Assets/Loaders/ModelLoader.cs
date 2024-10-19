@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using LughSharp.LibCore.Graphics.G3D.Models.Data;
 using LughSharp.LibCore.Graphics.G3D.Utils;
 
@@ -31,16 +30,14 @@ namespace LughSharp.LibCore.Assets.Loaders;
 /// <summary>
 /// Abstract base class for asynchronous model loaders.
 /// </summary>
-/// <typeparam name="TP">The type of parameters for loading the model.</typeparam>
 [PublicAPI]
-public abstract class ModelLoader< TP > : AsynchronousAssetLoader< Model, TP >
-    where TP : ModelLoader< TP >.ModelLoaderParameters
+public abstract class ModelLoader : AsynchronousAssetLoader
 {
     protected readonly ModelLoaderParameters                        DefaultLoaderParameters = new();
-    protected readonly List< ObjectMap< string, ModelData >.Entry > Items                   = new();
+    protected readonly List< ObjectMap< string, ModelData >.Entry > Items                   = [ ];
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ModelLoader{TP}"/> class
+    /// Initializes a new instance of the <see cref="ModelLoader"/> class
     /// with the specified file resolver.
     /// </summary>
     /// <param name="resolver">The file resolver to use for resolving model file paths.</param>
@@ -111,13 +108,15 @@ public abstract class ModelLoader< TP > : AsynchronousAssetLoader< Model, TP >
     /// <param name="fileName">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>
     /// <param name="parameters">parameters for loading the asset</param>
-    public override List< AssetDescriptor > GetDependencies( string? fileName,
-                                                             FileInfo? file,
-                                                             AssetLoaderParameters? parameters )
+    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+                                                                   FileInfo file,
+                                                                   TP? parameters ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( file );
 
-        List< AssetDescriptor > deps = new();
+        var p = parameters as ModelLoaderParameters;
+
+        List< AssetDescriptor > deps = [ ];
 
         var data = LoadModelData( file );
 
@@ -137,9 +136,9 @@ public abstract class ModelLoader< TP > : AsynchronousAssetLoader< Model, TP >
             Items.Add( item );
         }
 
-        var textureLoaderParameters = parameters != null
-                                          ? ( ( ModelLoaderParameters ) parameters ).TextureLoaderParameters
-                                          : DefaultLoaderParameters.TextureLoaderParameters;
+        var textureLoaderParameters = p != null
+            ? p.TextureLoaderParameters
+            : DefaultLoaderParameters.TextureLoaderParameters;
 
         foreach ( var modelMaterial in data.Materials! )
         {
@@ -156,7 +155,7 @@ public abstract class ModelLoader< TP > : AsynchronousAssetLoader< Model, TP >
     }
 
     /// <inheritdoc />
-    public override Model LoadSync( AssetManager? manager, FileInfo? file, TP? parameter )
+    public override Model LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
         ModelData? data = null;
 
@@ -181,8 +180,7 @@ public abstract class ModelLoader< TP > : AsynchronousAssetLoader< Model, TP >
 
         // need to remove the textures from the managed disposables,
         // or ref counting won't work!
-        IEnumerator< IDisposable > disposables = result.GetManagedDisposables()
-                                                       .GetEnumerator();
+        var disposables = result.GetManagedDisposables().GetEnumerator();
 
         while ( disposables.MoveNext() )
         {

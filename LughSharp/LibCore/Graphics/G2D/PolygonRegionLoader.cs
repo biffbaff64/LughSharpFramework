@@ -28,8 +28,8 @@ namespace LughSharp.LibCore.Graphics.G2D;
 /// loads <see cref="PolygonRegion"/>s.
 /// </summary>
 [PublicAPI]
-public class PolygonRegionLoader
-    : SynchronousAssetLoader< PolygonRegion, PolygonRegionLoader.PolygonRegionParameters >
+public class PolygonRegionLoader( IFileHandleResolver resolver )
+    : SynchronousAssetLoader< PolygonRegion, PolygonRegionLoader.PolygonRegionParameters >( resolver )
 {
     private readonly PolygonRegionParameters _defaultParameters = new();
     private readonly EarClippingTriangulator _triangulator      = new();
@@ -39,11 +39,6 @@ public class PolygonRegionLoader
 
     public PolygonRegionLoader()
         : this( new InternalFileHandleResolver() )
-    {
-    }
-
-    public PolygonRegionLoader( IFileHandleResolver resolver )
-        : base( resolver )
     {
     }
 
@@ -65,13 +60,13 @@ public class PolygonRegionLoader
     /// in <see cref="PolygonRegionParameters.TextureExtensions"/>" will be used. If no suitable file is
     /// found, the returned Array will be empty.
     /// </summary>
-    public override List< AssetDescriptor > GetDependencies( string? fileName,
-                                                             FileInfo? file,
-                                                             AssetLoaderParameters? parameters )
+    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+                                                                   FileInfo file,
+                                                                   TP? parameters ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( file );
 
-        parameters ??= _defaultParameters;
+        var p = parameters as PolygonRegionParameters ?? _defaultParameters;
 
         string? image = null;
 
@@ -81,9 +76,9 @@ public class PolygonRegionLoader
 
             for ( var line = reader.ReadLine(); line != null; line = reader.ReadLine() )
             {
-                if ( line.StartsWith( ( ( PolygonRegionParameters ) parameters ).TexturePrefix! ) )
+                if ( line.StartsWith( p.TexturePrefix! ) )
                 {
-                    image = line.Substring( ( ( PolygonRegionParameters ) parameters ).TexturePrefix!.Length );
+                    image = line.Substring( p.TexturePrefix!.Length );
 
                     break;
                 }
@@ -103,7 +98,7 @@ public class PolygonRegionLoader
             var directory = Path.GetDirectoryName( fileName );
             var fileNoExt = Path.GetFileNameWithoutExtension( fileName );
 
-            foreach ( var extension in ( ( PolygonRegionParameters ) parameters ).TextureExtensions )
+            foreach ( var extension in p.TextureExtensions )
             {
                 siblingFilePath = Path.Combine( directory!, fileNoExt + extension );
 
@@ -116,7 +111,7 @@ public class PolygonRegionLoader
 
         if ( image != null )
         {
-            List< AssetDescriptor > deps = [ new AssetDescriptor( new FileInfo( siblingFilePath ), typeof( Texture ) ) ];
+            List< AssetDescriptor > deps = [ new( new FileInfo( siblingFilePath ), typeof( Texture ) ) ];
 
             return deps;
         }

@@ -30,7 +30,7 @@ namespace LughSharp.LibCore.Assets.Loaders;
 /// The Music instance is loaded synchronously.
 /// </summary>
 [PublicAPI]
-public class MusicLoader : AsynchronousAssetLoader< IMusic, AssetLoaderParameters >, IDisposable
+public class MusicLoader : AsynchronousAssetLoader, IDisposable
 {
     public IMusic LoadedMusic { get; set; }
 
@@ -46,22 +46,20 @@ public class MusicLoader : AsynchronousAssetLoader< IMusic, AssetLoaderParameter
     }
 
     /// <inheritdoc />
-    public override List< AssetDescriptor > GetDependencies( string? fileName,
-                                                             FileInfo? file,
-                                                             AssetLoaderParameters? parameter )
+    public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
+                                                             FileInfo file,
+                                                             TP? parameter ) where TP : class
     {
-        // Not used in this class
-        return null!;
+        return default( List< AssetDescriptor > )!;
     }
 
     /// <inheritdoc />
-    public override void LoadAsync( AssetManager manager, FileInfo? file, AssetLoaderParameters? parameter )
+    public override void LoadAsync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
-        // Not used in this class
     }
 
     /// <inheritdeoc/>
-    public override object LoadSync( AssetManager? manager, FileInfo? file, AssetLoaderParameters? parameter )
+    public override object LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
         LoadedMusic = Gdx.Audio.NewMusic( file );
 

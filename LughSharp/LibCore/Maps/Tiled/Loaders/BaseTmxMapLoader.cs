@@ -31,8 +31,8 @@ using LughSharp.LibCore.Maps.Tiled.Tiles;
 namespace LughSharp.LibCore.Maps.Tiled.Loaders;
 
 [PublicAPI]
-public abstract class BaseTmxMapLoader< TP >
-    : AsynchronousAssetLoader< TiledMap, TP > where TP : BaseTmxMapLoader< TP >.BaseTmxLoaderParameters
+public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
+    : AsynchronousAssetLoader( resolver ) where TP : BaseTmxMapLoader< TP >.BaseTmxLoaderParameters
 {
     public int      MapTileWidth      { get; set; }
     public int      MapTileHeight     { get; set; }
@@ -40,6 +40,7 @@ public abstract class BaseTmxMapLoader< TP >
     public int      MapHeightInPixels { get; set; }
     public TiledMap Map               { get; set; } = null!;
 
+    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
     protected const uint FLAG_FLIP_HORIZONTALLY = 0x80000000;
@@ -54,6 +55,7 @@ public abstract class BaseTmxMapLoader< TP >
     private XmlNodeList? _tilesetList;
 
     // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     protected bool ConvertObjectToTileSpace;
     protected bool FlipY = true;
@@ -64,11 +66,6 @@ public abstract class BaseTmxMapLoader< TP >
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
-    protected BaseTmxMapLoader( IFileHandleResolver resolver )
-        : base( resolver )
-    {
-    }
-
     /// <summary>
     /// Loads the map data, given the XML root element.
     /// </summary>
@@ -78,14 +75,14 @@ public abstract class BaseTmxMapLoader< TP >
     /// <returns>The <see cref="TiledMap"/>.</returns>
     protected TiledMap LoadTiledMap( FileInfo tmxFile, TP? parameter, IImageResolver imageResolver )
     {
-        // ----------------------------
+        // --------------------------------------------------------------------
 
         if ( !XmlDocument.HasChildNodes )
         {
             XmlDocument.LoadXml( tmxFile.Name );
         }
 
-        // ----------------------------
+        // --------------------------------------------------------------------
 
         // Extract the main Map node. Everything else is a child of this node.
         XmlRootNode = XmlDocument.SelectSingleNode( "map" );
@@ -121,11 +118,8 @@ public abstract class BaseTmxMapLoader< TP >
             FlipY                    = true;
         }
 
-        // ----------------------------
-
         var mapData = new MapData( XmlRootNode );
 
-        // ----------------------------
         // Fetch the existing MapProperties object from the newly created map,
         // and add the required data to it.
 

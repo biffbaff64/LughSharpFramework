@@ -7,16 +7,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f77d403c-9f20-45ae-a8d8-d9b0f6d44bbb" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/MainGame.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/MainGame.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/Tests/AssetManagerTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../CSharp/ConsoleApp1/Source/Tests/AssetManagerTest.cs" afterDir="false" />
+    <list default="true" id="f77d403c-9f20-45ae-a8d8-d9b0f6d44bbb" name="Changes" comment="Asset Management updates">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.LughSharpFramework/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.LughSharpFramework/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetLoadingTask.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetLoadingTask.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/AssetManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/AssetLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/AssetLoader.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/AsynchronousAssetLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/AsynchronousAssetLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/SynchronousAssetLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/SynchronousAssetLoader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Logger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Utils/Logger.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/BitmapFontLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/BitmapFontLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/CubemapLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/CubemapLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/ModelLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/ModelLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/MusicLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/MusicLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/ParticleEffectLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/ParticleEffectLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/PixmapLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/PixmapLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/ShaderProgramLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/ShaderProgramLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/SkinLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/SkinLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/SoundLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/SoundLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/TextureAtlasLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/TextureAtlasLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/TextureLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Assets/Loaders/TextureLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PolygonRegionLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Graphics/G2D/PolygonRegionLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/AtlasTmxMapLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/AtlasTmxMapLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/BaseTmxMapLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/BaseTmxMapLoader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/TmxMapLoader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LughSharp/LibCore/Maps/Tiled/Loaders/TmxMapLoader.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +176,7 @@
       <workItem from="1729008442049" duration="15923000" />
       <workItem from="1729100746009" duration="17380000" />
       <workItem from="1729186794439" duration="16479000" />
-      <workItem from="1729264959327" duration="20457000" />
+      <workItem from="1729264959327" duration="27702000" />
     </task>
     <task id="LOCAL-00001" summary="Essential update">
       <option name="closed" value="true" />
@@ -240,7 +250,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729118432256</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Asset Management updates">
+      <option name="closed" value="true" />
+      <created>1729289632527</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1729289632527</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

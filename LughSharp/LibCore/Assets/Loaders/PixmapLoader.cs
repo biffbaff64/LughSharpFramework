@@ -30,7 +30,7 @@ namespace LughSharp.LibCore.Assets.Loaders;
 /// The Pixmap is loaded asynchronously.
 /// </summary>
 [PublicAPI]
-public class PixmapLoader : AsynchronousAssetLoader< Pixmap, PixmapLoader.PixmapLoaderParameter >
+public class PixmapLoader : AsynchronousAssetLoader
 {
     private Pixmap? _pixmap;
 
@@ -44,13 +44,17 @@ public class PixmapLoader : AsynchronousAssetLoader< Pixmap, PixmapLoader.Pixmap
     }
 
     /// <inheritdoc />
-    public override List< AssetDescriptor > GetDependencies( string? filename, FileInfo? file, AssetLoaderParameters? p )
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
+                                                                   FileInfo file,
+                                                                   TP? parameter ) where TP : class
     {
         return null!;
     }
 
     /// <inheritdoc />
-    public override void LoadAsync( AssetManager? manager, FileInfo? file, PixmapLoaderParameter? parameter )
+    public override void LoadAsync< TP >( AssetManager manager,
+                                          FileInfo file,
+                                          TP? parameter ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( file );
 
@@ -58,7 +62,9 @@ public class PixmapLoader : AsynchronousAssetLoader< Pixmap, PixmapLoader.Pixmap
     }
 
     /// <inheritdoc />
-    public override object? LoadSync( AssetManager manager, FileInfo? file, PixmapLoaderParameter parameter )
+    public override object? LoadSync< TP >( AssetManager manager,
+                                            FileInfo file,
+                                            TP? parameter ) where TP : class
     {
         var pixmap = _pixmap;
 

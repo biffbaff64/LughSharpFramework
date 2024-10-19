@@ -35,7 +35,8 @@ namespace LughSharp.LibCore.Maps.Tiled.Loaders;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class AtlasTmxMapLoader : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledMapLoaderParameters >
+public class AtlasTmxMapLoader( IFileHandleResolver resolver )
+    : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledMapLoaderParameters >( resolver )
 {
     protected readonly List< Texture > TrackedTextures = [ ];
     protected          IAtlasResolver? AtlasResolver;
@@ -44,12 +45,7 @@ public class AtlasTmxMapLoader : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledM
     // ------------------------------------------------------------------------
     
     public AtlasTmxMapLoader()
-        : base( new InternalFileHandleResolver() )
-    {
-    }
-
-    public AtlasTmxMapLoader( IFileHandleResolver resolver )
-        : base( resolver )
+        : this( new InternalFileHandleResolver() )
     {
     }
 
@@ -84,9 +80,9 @@ public class AtlasTmxMapLoader : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledM
     }
 
     /// <inheritdoc />
-    public override void LoadAsync( AssetManager? manager,
+    public override void LoadAsync< TP >( AssetManager? manager,
                                     FileInfo? tmxFile,
-                                    AtlasTiledMapLoaderParameters? parameter )
+                                    TP? parameter ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( manager );
         ArgumentNullException.ThrowIfNull( tmxFile );
@@ -95,22 +91,26 @@ public class AtlasTmxMapLoader : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledM
 
         AtlasResolver = new IAtlasResolver.AssetManagerAtlasResolver( manager, atlasHandle.Name );
 
-        Map = LoadTiledMap( tmxFile, parameter, AtlasResolver );
+        Map = LoadTiledMap( tmxFile, parameter as AtlasTiledMapLoaderParameters, AtlasResolver );
     }
 
     /// <inheritdoc />
-    public override TiledMap LoadSync( AssetManager manager, FileInfo? file, AtlasTiledMapLoaderParameters? parameter )
+    public override TiledMap LoadSync< TP >( AssetManager manager,
+                                             FileInfo file,
+                                             TP? parameter ) where TP : class
     {
-        if ( parameter != null )
+        if ( parameter is AtlasTiledMapLoaderParameters p )
         {
-            SetTextureFilters( parameter.TextureMinFilter, parameter.TextureMagFilter );
+            SetTextureFilters( p.TextureMinFilter, p.TextureMagFilter );
         }
 
         return Map;
     }
 
     /// <inheritdoc />
-    public override List< AssetDescriptor > GetDependencies( string? filename, FileInfo? file, AssetLoaderParameters? p )
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
+                                                                   FileInfo file,
+                                                                   TP? p ) where TP : class
     {
         return null!;
     }
@@ -288,40 +288,26 @@ public class AtlasTmxMapLoader : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledM
     {
         public TextureAtlas? GetAtlas();
 
-        public class DirectAtlasResolver : IAtlasResolver
+        public class DirectAtlasResolver( TextureAtlas atlas )
+            : IAtlasResolver
         {
-            private readonly TextureAtlas _atlas;
-
-            public DirectAtlasResolver( TextureAtlas atlas )
-            {
-                _atlas = atlas;
-            }
-
             public TextureAtlas GetAtlas()
             {
-                return _atlas;
+                return atlas;
             }
 
             public TextureRegion? GetImage( string name )
             {
-                return _atlas.FindRegion( name );
+                return atlas.FindRegion( name );
             }
         }
 
-        public class AssetManagerAtlasResolver : IAtlasResolver
+        public class AssetManagerAtlasResolver( AssetManager assetManager, string atlasName )
+            : IAtlasResolver
         {
-            private readonly AssetManager _assetManager;
-            private readonly string       _atlasName;
-
-            public AssetManagerAtlasResolver( AssetManager assetManager, string atlasName )
-            {
-                _assetManager = assetManager;
-                _atlasName    = atlasName;
-            }
-
             public TextureAtlas? GetAtlas()
             {
-                return _assetManager.Get( _atlasName ) as TextureAtlas;
+                return assetManager.Get( atlasName ) as TextureAtlas;
             }
 
             public TextureRegion? GetImage( string name )

@@ -29,7 +29,7 @@ namespace LughSharp.LibCore.Assets.Loaders;
 /// <see cref="AssetLoader"/> to load <see cref="ISound"/> instances.
 /// </summary>
 [PublicAPI]
-public class SoundLoader : AsynchronousAssetLoader< ISound, SoundLoader.SoundLoaderParameters >, IDisposable
+public class SoundLoader : AsynchronousAssetLoader, IDisposable
 {
     /// <summary>
     /// Creates a new SoundLoader using the provided <see cref="IFileHandleResolver"/>
@@ -55,7 +55,9 @@ public class SoundLoader : AsynchronousAssetLoader< ISound, SoundLoader.SoundLoa
     }
 
     /// <inheritdoc />
-    public override List< AssetDescriptor > GetDependencies( string? filename, FileInfo? file, AssetLoaderParameters? p )
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
+                                                                   FileInfo file,
+                                                                   TP? p ) where TP : class
     {
         return null!;
     }
@@ -67,7 +69,7 @@ public class SoundLoader : AsynchronousAssetLoader< ISound, SoundLoader.SoundLoa
     /// <param name="manager"> The <see cref="AssetManager"/> to use. </param>
     /// <param name="file"> A <see cref="FileInfo"/> object holding file information. </param>
     /// <param name="parameter"> <see cref="SoundLoaderParameters"/> to use. </param>
-    public override void LoadAsync( AssetManager? manager, FileInfo? file, SoundLoaderParameters? parameter )
+    public override void LoadAsync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
         LoadedSound = Gdx.Audio.NewSound( file );
     }
@@ -79,9 +81,10 @@ public class SoundLoader : AsynchronousAssetLoader< ISound, SoundLoader.SoundLoa
     /// <param name="file">The file information of the sound asset.</param>
     /// <param name="parameter">The parameters for loading the sound asset (ignored).</param>
     /// <returns>The loaded sound asset, or null if no sound is loaded.</returns>
-    public override ISound? LoadSync( AssetManager manager, FileInfo? file, SoundLoaderParameters parameter )
+    public override ISound? LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
         var sound = LoadedSound;
+        
         LoadedSound = null;
 
         return sound;
