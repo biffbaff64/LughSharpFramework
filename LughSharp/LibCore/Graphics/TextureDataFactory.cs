@@ -59,22 +59,40 @@ public static class TextureDataFactory
 
         Logger.Checkpoint();
 
-        ITextureData data = file.Extension.ToLower() switch
+        ITextureData data;
+        
+        switch ( file.Extension.ToLower() )
         {
             // Common Information Model image file format.
-            ".cim" => new FileTextureData( file, PixmapIO.ReadCIM( file ), format, useMipMaps ),
-
+            case ".cim":
+            {
+                data = new FileTextureData( file, PixmapIO.ReadCIM( file ), format, useMipMaps );
+                break;
+            }
+            
             // Compressed Texture format for WebGL and OpenGL ES.
-            ".etc1" => new ETC1TextureData( file, useMipMaps ),
-
+            case ".etc1":
+            {
+                data = new ETC1TextureData( file, useMipMaps );
+                break;
+            }
+            
             // Kronos TeXture image file format for OpenGL and OpenGL ES.
-            ".ktx" or ".zktx" => new KtxTextureData( file, useMipMaps ),
-
+            case ".ktx" or ".zktx":
+            {
+                data = new KtxTextureData( file, useMipMaps );
+                break;
+            }
+            
             // Other supported image file formats, PNG, BMP
             // Unsure about JPG/JPEG and TGA
-            // The call to Pixmap() does the actual loading of the imager
-            var _ => new FileTextureData( file, new Pixmap( file ), format, useMipMaps )
-        };
+            case var _:
+            {
+                var pixmap = new Pixmap( file );
+                data = new FileTextureData( file, pixmap, format, useMipMaps );
+                break;
+            }
+        }
 
         return data;
     }

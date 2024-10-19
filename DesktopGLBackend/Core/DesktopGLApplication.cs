@@ -100,7 +100,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         Gdx.Net   = Network;
         Gdx.GL    = new GLBindings();
 
-        // Gdx.Graphics is set later, on window creation as they are connected.
+        // Gdx.Graphics is set later, on window creation, as they are connected.
 
         Clipboard = new DesktopGLClipboard();
 
@@ -127,9 +127,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// </summary>
     public void Run()
     {
-        Logger.Divider( '=' );
-        Logger.Checkpoint();
-        Logger.Divider( '=' );
+        Logger.Checkpoint( true, true );
         
         try
         {
@@ -577,7 +575,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
         // --------------------------------------------------------------------
 
-        void ErrorCallback( ErrorCode error, string description )
+        static void ErrorCallback( ErrorCode error, string description )
         {
             Logger.Error( $"ErrorCode: {error}, {description}" );
         }
@@ -654,7 +652,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     {
         if ( Preferences.ContainsKey( name ) )
         {
-            return Preferences.Get( name );
+            return Preferences.Get( name )!;
         }
 
         IPreferences prefs = new DesktopGLPreferences( name );
@@ -808,37 +806,29 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     // ------------------------------------------------------------------------
 
 //    #region GLDebug specific
-
+//
 //    [PublicAPI]
-//    public struct Gldms
+//    public struct Gldms( int gl43, int khr, int arb, int amd )
 //    {
-//        public int GL43;
-//        public int Khr;
-//        public int Arb;
-//        public int Amd;
-
-//        public Gldms( int gl43, int khr, int arb, int amd )
-//        {
-//            this.GL43 = gl43;
-//            this.Khr  = khr;
-//            this.Arb  = arb;
-//            this.Amd  = amd;
-//        }
+//        public int GL43 = gl43;
+//        public int Khr  = khr;
+//        public int Arb  = arb;
+//        public int Amd  = amd;
 //    }
-
+//
 //    public record GLDebugMessageSeverity
 //    {
-//        public Gldms High = new( GL43.GL_DEBUG_SEVERITY_HIGH,
+//        public Gldms High = new( IGL.GL_DEBUG_SEVERITY_HIGH,
 //                                 KHRDebug.GL_DEBUG_SEVERITY_HIGH,
 //                                 ARBDebugOutput.GL_DEBUG_SEVERITY_HIGH_ARB,
 //                                 AMDDebugOutput.GL_DEBUG_SEVERITY_HIGH_AMD );
 //
-//        public Gldms Medium = new( GL43.GL_DEBUG_SEVERITY_MEDIUM,
+//        public Gldms Medium = new( IGL.GL_DEBUG_SEVERITY_MEDIUM,
 //                                   KHRDebug.GL_DEBUG_SEVERITY_MEDIUM,
 //                                   ARBDebugOutput.GL_DEBUG_SEVERITY_MEDIUM_ARB,
 //                                   AMDDebugOutput.GL_DEBUG_SEVERITY_MEDIUM_AMD );
 //        
-//        public Gldms Low = new( GL43.GL_DEBUG_SEVERITY_LOW,
+//        public Gldms Low = new( IGL.GL_DEBUG_SEVERITY_LOW,
 //                                KHRDebug.GL_DEBUG_SEVERITY_LOW,
 //                                ARBDebugOutput.GL_DEBUG_SEVERITY_LOW_ARB,
 //                                AMDDebugOutput.GL_DEBUG_SEVERITY_LOW_AMD );
@@ -848,7 +838,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 //                                         -1,
 //                                         -1 );
 //    }
-
+//
 //    /// <summary>
 //    /// Enables or disables GL debug messages for the specified severity level.
 //    /// Returns false if the severity level could not be set (e.g. the NOTIFICATION
@@ -887,6 +877,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 //        }
 //        return false;
 //    }
-
+//
 //    #endregion GLDebug specific
 }

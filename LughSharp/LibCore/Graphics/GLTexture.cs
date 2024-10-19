@@ -151,12 +151,21 @@ public abstract class GLTexture : IDisposable
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="glTarget"></param>
     protected GLTexture( int glTarget )
-                    : this( glTarget, Gdx.GL.glGenTexture() )
+        : this( glTarget, Gdx.GL.glGenTexture() )
     {
         Logger.Checkpoint();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="glTarget"></param>
+    /// <param name="glTextureHandle"></param>
     protected GLTexture( int glTarget, uint glTextureHandle )
     {
         Logger.Checkpoint();
@@ -343,7 +352,7 @@ public abstract class GLTexture : IDisposable
     /// is the extension is not supported.
     /// </summary>
     /// <returns></returns>
-    public float GetMaxAnisotropicFilterLevel()
+    public static float GetMaxAnisotropicFilterLevel()
     {
         if ( _maxAnisotropicFilterLevel > 0 )
         {
@@ -447,14 +456,14 @@ public abstract class GLTexture : IDisposable
             }
 
             Gdx.GL.glTexImage2D( target,
-                            miplevel,
-                            pixmap.GLInternalFormat,
-                            pixmap.Width,
-                            pixmap.Height,
-                            border: 0,
-                            pixmap.GLFormat,
-                            pixmap.GLType,
-                            pixmap.PixelData );
+                                 miplevel,
+                                 pixmap.GLInternalFormat,
+                                 pixmap.Width,
+                                 pixmap.Height,
+                                 border: 0,
+                                 pixmap.GLFormat,
+                                 pixmap.GLType,
+                                 pixmap.PixelData );
         }
 
         if ( disposePixmap )

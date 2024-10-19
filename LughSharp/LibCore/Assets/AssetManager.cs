@@ -257,10 +257,7 @@ public class AssetManager
 
                 var type = _assetTypes[ dependendAssetDesc.AssetName ];
 
-                if ( type == null )
-                {
-                    throw new GdxRuntimeException( "type cannot be null!" );
-                }
+                GdxRuntimeException.ThrowIfNull( type );
 
                 _assets[ type ][ dependendAssetDesc.AssetName ].RefCount++;
 
@@ -691,11 +688,12 @@ public class AssetManager
     /// <returns>
     /// The loader capable of loading the type and filename, or null if none exists.
     /// </returns>
+    /// <exception cref="GdxRuntimeException"> If no loader was found. </exception>
     public AssetLoader? GetLoader( Type? type, string? fileName = null )
     {
         if ( ( type == null ) || ( _loaders[ type ].Count < 1 ) )
         {
-            return null;
+            throw new GdxRuntimeException( $"No loader for type: {type?.Name}" );
         }
 
         if ( fileName == null )
@@ -739,7 +737,7 @@ public class AssetManager
         {
             if ( _tasks.Count == 0 )
             {
-                // Load next task if there are no active tasks
+                // Load next task if there are no active tasks running.
                 while ( _loadQueue.Count != 0 && _tasks.Count == 0 )
                 {
                     if ( LoadNextTask() )
@@ -752,7 +750,6 @@ public class AssetManager
                 if ( _tasks.Count == 0 ) return true;
             }
 
-            // Process the next task
             await ProcessNextTaskAsync();
 
             return IsFinished();
@@ -796,8 +793,6 @@ public class AssetManager
     /// <exception cref="GdxRuntimeException">Thrown when an error occurs during asset loading.</exception>
     public async Task< bool > UpdateAsync( int millis )
     {
-        //TODO: Check LibGDX. This method should call update()
-
         try
         {
             var endTime = TimeUtils.NanoTime() + TimeUtils.MillisToNanos( millis );
@@ -1075,7 +1070,9 @@ public class AssetManager
     /// <summary>
     /// Adds the given asset to the loading queue of the AssetManager.
     /// </summary>
-    /// <param name="fileName"> the file name (interpretation depends on {@link AssetLoader}) </param>
+    /// <param name="fileName">
+    /// The file name (interpretation depends on <see cref="AssetLoader"/>)
+    /// </param>
     /// <param name="type"> the type of the asset. </param>
     public void Load( string fileName, Type type )
     {
@@ -1104,11 +1101,6 @@ public class AssetManager
 
             var loader = GetLoader( type, fileName );
 
-            if ( loader == null )
-            {
-                throw new GdxRuntimeException( $"No loader for type: {type?.Name}" );
-            }
-
             Logger.Debug( $"loader: {loader}" );
 
             if ( _loadQueue.Count == 0 )
@@ -1129,29 +1121,32 @@ public class AssetManager
                 if ( ( desc.AssetName == fileName ) && ( desc.AssetType != type ) )
                 {
                     throw new GdxRuntimeException
-                    ( $"Asset with name '{fileName}' already in preload queue, but has different " +
-                      $"type (expected: {type?.Name}, found: {desc.AssetType.Name})" );
+                        ( $"Asset with name '{fileName}' already in preload queue, but has different " +
+                          $"type (expected: {type?.Name}, found: {desc.AssetType.Name})" );
                 }
             }
 
+            // Try to find an asset in the dictionary that has the same name as this
+            // asset, but which has a different asset type.
+            // This situation should not occur.
             _assetTypes.TryGetValue( fileName, out var otherType );
-
-            Logger.Debug( $"otherType: {otherType?.Name}: {fileName}" );
 
             if ( ( otherType != null ) && ( otherType != type ) )
             {
                 throw new GdxRuntimeException
-                ( $"Asset with name '{fileName}' already loaded, but has different " +
-                  $"type (expected: {type?.Name}, found: {otherType.Name})" );
+                    ( $"Asset with name '{fileName}' already loaded, but has different " +
+                      $"type (expected: {type?.Name}, found: {otherType.Name})" );
             }
 
             _toLoad++;
 
+            Logger.Debug( $"Adding asset to Load Queue: Name:{fileName} Type: {type?.Name}" );
+            
             _loadQueue.Add( new AssetDescriptor
             {
                 AssetName  = fileName,
                 AssetType  = type!,
-                Parameters = parameter
+                Parameters = parameter,
             } );
         }
     }
@@ -1288,7 +1283,7 @@ public class AssetManager
             if ( !_loaders.TryGetValue( type, out var value ) )
             {
                 var typeLoaders = new Dictionary< string, AssetLoader >();
-                
+
                 value            = typeLoaders;
                 _loaders[ type ] = value;
             }
@@ -1306,12 +1301,18 @@ public class AssetManager
     {
         lock ( this )
         {
+            if ( !File.Exists( fileName ) )
+            {
+                throw new GdxRuntimeException( $"File '{fileName}' not found!" );
+            }
+            
             foreach ( var desc in _loadQueue )
             {
                 if ( ( desc.AssetName == fileName ) && ( desc.AssetType != type ) )
                 {
                     throw new GdxRuntimeException
-                        ( $"Asset with name '{fileName}' already in preload queue, but has different type (expected: {type?.Name}, found: {desc.AssetType.Name})" );
+                        ( $"Asset with name '{fileName}' already in preload queue, but has different " +
+                          $"type (expected: {type?.Name}, found: {desc.AssetType.Name})" );
                 }
             }
 

@@ -121,25 +121,38 @@ public class AssetLoadingTask
     /// </returns>
     private async Task LoadDependenciesAsync( AsynchronousAssetLoader loader )
     {
+        Logger.Checkpoint();
+
         if ( !DependenciesLoaded )
         {
-            Dependencies = await Task.Run( () => loader.GetDependencies( AssetDesc.AssetName,
-                                                                         Resolve( loader, AssetDesc )!,
-                                                                         AssetDesc.Parameters ) );
+            Logger.Checkpoint();
+
+            Dependencies = loader.GetDependencies( AssetDesc.AssetName,
+                                                   Resolve( loader, AssetDesc )!,
+                                                   AssetDesc.Parameters );
+
+            Logger.Checkpoint();
 
             if ( Dependencies != null )
             {
+                Logger.Checkpoint();
                 RemoveDuplicates( Dependencies );
+                Logger.Checkpoint();
                 _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
             }
             else
             {
+                Logger.Checkpoint();
                 // If we have no dependencies, we load the async part of the task immediately.
-                await Task.Run( () => loader.LoadAsync( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! ) );
+                loader.LoadAsync( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! );
             }
+
+            Logger.Checkpoint();
 
             DependenciesLoaded = true;
         }
+
+        Logger.Debug( "Finished" );
     }
 
     /// <summary>
@@ -153,6 +166,8 @@ public class AssetLoadingTask
     /// </returns>
     private async Task< object? > LoadAssetAsync( AsynchronousAssetLoader loader )
     {
+        Logger.Checkpoint();
+
         if ( !DependenciesLoaded )
         {
             await LoadDependenciesAsync( loader );
@@ -160,7 +175,11 @@ public class AssetLoadingTask
 
         await Task.Run( () => { loader.LoadAsync( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! ); } );
 
-        return loader.LoadSync( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! );
+        var obj = loader.LoadSync( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! );
+
+        Logger.Debug( "Finished" );
+
+        return obj;
     }
 
     /// <summary>

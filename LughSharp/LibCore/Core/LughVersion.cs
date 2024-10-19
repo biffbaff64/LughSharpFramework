@@ -31,7 +31,7 @@ namespace LughSharp.LibCore.Core;
 /// </summary>
 /// <remarks> Class name changed from GDXVersion 07/10/2024. </remarks>
 [PublicAPI]
-public class LughVersion
+public partial class LughVersion
 {
     public int                  MajorVersion    { get; set; }
     public int                  MinorVersion    { get; set; }
@@ -45,20 +45,23 @@ public class LughVersion
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
+    /// <summary>
+    /// Gets the Library Version from the Assembly.
+    /// </summary>
+    /// <exception cref="GdxRuntimeException"></exception>
     public LughVersion()
     {
         _version = Assembly.GetEntryAssembly()?.GetName().Version;
 
         if ( _version == null )
         {
-            throw new NullReferenceException( "NULL Assembly Version!" );
+            throw new GdxRuntimeException( "NULL Assembly Version!" );
         }
 
         try
         {
-            var matches = Regex.Matches( _version.ToString(), @"\d+" );
-
-            var v = string.Empty;
+            var matches = MyRegex().Matches( _version.ToString() );
+            var v       = string.Empty;
 
             foreach ( var match in matches )
             {
@@ -69,7 +72,7 @@ public class LughVersion
             MinorVersion    = v.Length < 2 ? 0 : int.Parse( v[ 1.. ] );
             RevisionVersion = v.Length < 3 ? 0 : int.Parse( v[ 2.. ] );
 
-            Logger.Debug( $"GDXVersion : {MajorVersion}.{MinorVersion}.{RevisionVersion}" );
+            Logger.Debug( $"Lib Version : {MajorVersion}.{MinorVersion}.{RevisionVersion}" );
         }
         catch ( Exception e )
         {
@@ -92,9 +95,8 @@ public class LughVersion
     }
 
     /// <summary>
-    /// Checks the provided version components against the current
-    /// and reports TRUE if the CURRENT version is GREATER than or
-    /// EQUAL to the provided version.
+    /// Checks the provided version components against the current and reports TRUE if
+    /// the CURRENT version is GREATER than or EQUAL to the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>
@@ -115,8 +117,8 @@ public class LughVersion
     }
 
     /// <summary>
-    /// Checks the provided version components against the current and
-    /// reports TRUE if the CURRENT version is LESS than the provided version.
+    /// Checks the provided version components against the current and reports TRUE if
+    /// the CURRENT version is LESS than the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>
@@ -127,9 +129,8 @@ public class LughVersion
     }
 
     /// <summary>
-    /// Checks the provided version components against the current
-    /// and reports TRUE if the CURRENT version is LESS than or
-    /// EQUAL to the provided version.
+    /// Checks the provided version components against the current and reports TRUE if
+    /// the CURRENT version is LESS than or EQUAL to the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>
@@ -148,5 +149,11 @@ public class LughVersion
 
         return RevisionVersion <= revision;
     }
-}
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    [GeneratedRegex( "\\d+" )]
+    private static partial Regex MyRegex();
+}

@@ -25,6 +25,9 @@
 
 namespace LughSharp.LibCore.Graphics.GLUtils;
 
+/// <summary>
+/// 
+/// </summary>
 [PublicAPI]
 public class VertexBufferObjectWithVAO : IVertexData
 {
@@ -45,6 +48,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     private bool _isStatic;
     private int  _vaoHandle = -1;
 
+    // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     
     /// <summary>
