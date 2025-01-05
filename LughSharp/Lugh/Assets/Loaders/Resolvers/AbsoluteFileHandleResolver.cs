@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Assets.Loaders.Resolvers;
+
 namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 
 [PublicAPI]

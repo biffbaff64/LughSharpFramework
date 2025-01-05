@@ -90,8 +90,8 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
     /// <inheritdoc />
     public override void LoadAsync< TP >( AssetManager? manager,
-                                    FileInfo? tmxFile,
-                                    TP? parameter ) where TP : class
+                                                         FileInfo? tmxFile,
+                                                         TP? parameter ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( manager );
         ArgumentNullException.ThrowIfNull( tmxFile );

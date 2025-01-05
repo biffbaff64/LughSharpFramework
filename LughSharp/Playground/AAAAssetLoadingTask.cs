@@ -26,13 +26,14 @@ using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
+// ReSharper disable once CheckNamespace
 namespace LughSharp.Lugh.Assets;
 
 /// <summary>
 /// Represents a task for loading an asset, including managing dependencies and handling cancellation.
 /// </summary>
 [PublicAPI]
-public class AssetLoadingTask
+public class AAAAssetLoadingTask
 {
     public bool                     DependenciesLoaded { get; private set; }
     public List< AssetDescriptor >? Dependencies       { get; private set; }
@@ -54,7 +55,7 @@ public class AssetLoadingTask
     /// <summary>
     /// Represents a task for loading an asset, including managing dependencies and handling cancellation.
     /// </summary>
-    public AssetLoadingTask( AssetManager manager, AssetDescriptor assetDesc, AssetLoader loader )
+    public AAAAssetLoadingTask( AssetManager manager, AssetDescriptor assetDesc, AssetLoader loader )
     {
         IsAsyncLoader = _loader is AsynchronousAssetLoader;
         _startTime    = Logger.TraceLevel.Equals( Logger.LOG_DEBUG ) ? TimeUtils.NanoTime() : 0;
@@ -207,7 +208,7 @@ public class AssetLoadingTask
     /// <returns>The resolved file information, or null if it cannot be resolved.</returns>
     private static FileInfo? Resolve( AssetLoader? loader, AssetDescriptor? assetDesc )
     {
-        if ( assetDesc?.File == null && loader != null )
+        if ( ( assetDesc?.File == null ) && ( loader != null ) )
         {
             assetDesc!.File = loader.Resolve( assetDesc.AssetName );
         }
@@ -224,10 +225,9 @@ public class AssetLoadingTask
     {
         var uniqueAssets = array.GroupBy( a => new
                                 {
-                                    a.AssetName, a.AssetType
+                                    a.AssetName, a.AssetType,
                                 } )
-                                .Select( g => g.First() )
-                                .ToList();
+                                .Select( g => g.First() ).ToList();
 
         array.Clear();
         array.AddRange( uniqueAssets );

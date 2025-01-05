@@ -252,7 +252,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     public virtual List< AssetDescriptor >? GetDependencyAssetDescriptors( FileInfo tmxFile,
                                                                            TextureLoader.TextureLoaderParameters textureLoaderParameters )
     {
-        return default( List< AssetDescriptor >? );
+        return null;
     }
 
     // ========================================================================

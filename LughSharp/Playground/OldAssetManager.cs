@@ -42,7 +42,7 @@ namespace LughSharp.Lugh.Assets;
 /// C won’t be disposed until A and B have been disposed.
 /// </summary>
 [PublicAPI]
-public class AssetManager
+public class OldAssetManager
 {
     /// <summary>
     /// Returns the <see cref="IFileHandleResolver"/> which this
@@ -59,10 +59,9 @@ public class AssetManager
     private readonly Dictionary< string, Type >                                     _assetTypes        = [ ];
     private readonly Dictionary< Type, Dictionary< string, AssetLoader > >          _loaders           = [ ];
 
-    private readonly List< string >          _injected  = [ ];
-    private readonly List< AssetDescriptor > _loadQueue = [ ];
-
-    private readonly Queue< AssetLoadingTask > _tasks = [ ];
+    private readonly List< string >            _injected  = [ ];
+    private readonly List< AssetDescriptor >   _loadQueue = [ ];
+    private readonly Queue< AssetLoadingTask > _tasks     = [ ];
 
     private IAssetErrorListener? _listener;
 
@@ -76,7 +75,7 @@ public class AssetManager
     /// <summary>
     /// Creates a new AssetManager with all default loaders.
     /// </summary>
-    public AssetManager() : this( new InternalFileHandleResolver() )
+    public OldAssetManager() : this( new InternalFileHandleResolver() )
     {
     }
 
@@ -87,7 +86,7 @@ public class AssetManager
     /// </summary>
     /// <param name="resolver">The dedicated resolver to use.</param>
     /// <param name="defaultLoaders">Whether to add the default loaders (default is true).</param>
-    public AssetManager( IFileHandleResolver resolver, bool defaultLoaders = true )
+    public OldAssetManager( IFileHandleResolver resolver, bool defaultLoaders = true )
     {
         if ( defaultLoaders )
         {
@@ -133,8 +132,8 @@ public class AssetManager
         {
             if ( _tasks.Count == 0 )
             {
-                // Load next task if there are no active tasks running.
-                while ( _loadQueue.Count != 0 && _tasks.Count == 0 )
+                // Load next task if there are tasks available and no active tasks running.
+                while ( ( _loadQueue.Count != 0 ) && ( _tasks.Count == 0 ) )
                 {
                     if ( LoadNextTask() )
                     {
@@ -150,7 +149,7 @@ public class AssetManager
 
             return IsFinished();
         }
-        catch ( System.Exception t )
+        catch ( Exception? t )
         {
             Logger.Error( $"Error loading asset: {t}" );
 
@@ -195,7 +194,7 @@ public class AssetManager
                 if ( _tasks.Count == 0 )
                 {
                     // Load next task if there are no active tasks
-                    while ( _loadQueue.Count != 0 && _tasks.Count == 0 )
+                    while ( ( _loadQueue.Count != 0 ) && ( _tasks.Count == 0 ) )
                     {
                         LoadNextTask();
                     }
@@ -222,7 +221,7 @@ public class AssetManager
 
             return IsFinished();
         }
-        catch ( System.Exception t )
+        catch ( Exception? t )
         {
             Logger.Error( $"Error loading asset: {t}" );
 
@@ -867,7 +866,7 @@ public class AssetManager
             throw new GdxRuntimeException( $"No loader for type: {assetDesc.AssetType}" );
         }
 
-        _tasks.Enqueue( new AssetLoadingTask( this, assetDesc, loader ) );
+//        _tasks.Enqueue( new AssetLoadingTask( this, assetDesc, loader ) );
 
         _peakTasks++;
     }
@@ -890,9 +889,8 @@ public class AssetManager
                 {
                     AddAsset( task.AssetDesc.AssetName, task.AssetDesc.AssetType, asset );
 
-                    task.AssetDesc.Parameters?
-                        .LoadedCallback?
-                        .FinishedLoading( this, task.AssetDesc.AssetName, task.AssetDesc.AssetType );
+//                    task.AssetDesc.Parameters?.LoadedCallback?
+//                        .FinishedLoading( this, task.AssetDesc.AssetName, task.AssetDesc.AssetType );
                 }
 
                 _loaded++;
@@ -950,6 +948,8 @@ public class AssetManager
     /// </summary>
     public virtual void TaskFailed( AssetDescriptor assetDesc, System.Exception ex )
     {
+        //TODO: Report info from assetDesc
+        
         throw ex;
     }
 
@@ -958,7 +958,7 @@ public class AssetManager
     /// invoking the <see cref="IAssetErrorListener"/>.
     /// </summary>
     /// <param name="t"></param>
-    public void HandleTaskError( System.Exception t )
+    public void HandleTaskError( Exception? t )
     {
         Logger.Error( $"Error loading asset: {t}" );
 
@@ -1091,7 +1091,7 @@ public class AssetManager
             }
 
             // Check ths potential asset against assets currently in the preload
-            // queue and the loaded assets dictionary, to make sure its has not
+            // queue and the loaded assets dictionary, to make sure it has not
             // already been loaded.
             ValidatePreloadQueue( fileName, type );
 
@@ -1364,7 +1364,7 @@ public class AssetManager
                 _loadQueue.RemoveAt( i );
 
                 // Notify callback if the asset was already loaded
-                desc.Parameters?.LoadedCallback?.FinishedLoading( this, desc.AssetName, desc.AssetType );
+//                desc.Parameters?.LoadedCallback?.FinishedLoading( this, desc.AssetName, desc.AssetType );
 
                 return true;
             }

@@ -43,7 +43,7 @@ public class PixmapLoader : AsynchronousAssetLoader
     /// <param name="resolver"> The resolver to use. </param>
     public PixmapLoader( IFileHandleResolver resolver ) : base( resolver )
     {
-        _pixmap = default( Pixmap )!;
+        _pixmap = null!;
     }
 
     /// <inheritdoc />

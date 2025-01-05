@@ -83,8 +83,8 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
 
         // ----------------------------------------
 
-        var              textures     = new Dictionary< string, Texture >();
-        List< FileInfo > textureFiles = GetDependencyFileHandles( tmxFile );
+        var textures     = new Dictionary< string, Texture >();
+        var textureFiles = GetDependencyFileHandles( tmxFile );
 
         foreach ( var textureFile in textureFiles )
         {
@@ -113,16 +113,16 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
                                           FileInfo tmxFile,
                                           TP? parameter ) where TP : class
     {
-        Debug.Assert( tmxFile != null );
+        ArgumentNullException.ThrowIfNull( tmxFile );
 
         Map = LoadTiledMap( tmxFile,
                             parameter as LoaderParameters,
-                            new IImageResolver.AssetManagerImageResolver( manager! ) );
+                            new IImageResolver.AssetManagerImageResolver( manager ) );
     }
 
     /// <inheritdoc />
     public override TiledMap LoadSync< TP >( AssetManager manager,
-                                             FileInfo file,
+                                             FileInfo tmxFile,
                                              TP? parameter ) where TP : class
     {
         return Map;
