@@ -165,25 +165,22 @@ public class AssetLoadingTask
     /// <returns>The loaded asset object or null if loading fails.</returns>
     private object LoadSynchronously( SynchronousAssetLoader< Type, AssetLoaderParameters > loader )
     {
-        lock ( _lock )
+        if ( !DependenciesLoaded )
         {
-            if ( !DependenciesLoaded )
+            Dependencies = loader.GetDependencies( AssetDesc.AssetName,
+                                                   Resolve( loader, AssetDesc )!,
+                                                   AssetDesc.Parameters );
+
+            if ( Dependencies != null )
             {
-                Dependencies = loader.GetDependencies( AssetDesc.AssetName,
-                                                       Resolve( loader, AssetDesc )!,
-                                                       AssetDesc.Parameters );
-
-                if ( Dependencies != null )
-                {
-                    RemoveDuplicates( Dependencies );
-                    _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
-                }
-
-                DependenciesLoaded = true;
+                RemoveDuplicates( Dependencies );
+                _manager.InjectDependencies( AssetDesc.AssetName, Dependencies );
             }
 
-            return loader.Load( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! );
+            DependenciesLoaded = true;
         }
+
+        return loader.Load( _manager, Resolve( loader, AssetDesc )!, AssetDesc.Parameters! );
     }
 
     /// <summary>
@@ -207,7 +204,7 @@ public class AssetLoadingTask
     /// <returns>The resolved file information, or null if it cannot be resolved.</returns>
     private static FileInfo? Resolve( AssetLoader? loader, AssetDescriptor? assetDesc )
     {
-        if ( assetDesc?.File == null && loader != null )
+        if ( ( assetDesc?.File == null ) && ( loader != null ) )
         {
             assetDesc!.File = loader.Resolve( assetDesc.AssetName );
         }

@@ -46,21 +46,20 @@ namespace LughSharp.Lugh.Utils.Collections;
 ///     </para>
 /// </summary>
 [PublicAPI]
-public class ObjectMap< TK, TV >
+public class ObjectMap< TK, TV > //: IEnumerable< TK >
 {
-    private readonly   object _dummy = new();
-    protected readonly float  LoadFactor;
+    protected          TK?[] KeyTable;
+    protected          int   Threshold;
+    protected          TV?[] ValueTable;
+    protected readonly float LoadFactor;
 
-    private Entries? _entries1;
-    private Entries? _entries2;
-    private Keys?    _keys1;
-    private Keys?    _keys2;
-    private Values?  _values1;
-    private Values?  _values2;
-
-    protected TK?[] KeyTable;
-    protected int   Threshold;
-    protected TV?[] ValueTable;
+    private readonly object   _dummy = new();
+    private          Entries? _entries1;
+    private          Entries? _entries2;
+    private          Keys?    _keys1;
+    private          Keys?    _keys2;
+    private          Values?  _values1;
+    private          Values?  _values2;
 
     // ========================================================================
 
@@ -86,7 +85,7 @@ public class ObjectMap< TK, TV >
 
         var tableSize = TableSize( initialCapacity, loadFactor );
 
-        Threshold  = ( int ) ( tableSize * loadFactor );
+        Threshold  = ( int )( tableSize * loadFactor );
         Mask       = tableSize - 1;
         Shift      = int.LeadingZeroCount( Mask );
         KeyTable   = new TK[ tableSize ];
@@ -104,10 +103,10 @@ public class ObjectMap< TK, TV >
 
         LoadFactor = map.LoadFactor;
 
-        var tableSize = TableSize( ( int ) ( map.KeyTable.Length * map.LoadFactor ),
+        var tableSize = TableSize( ( int )( map.KeyTable.Length * map.LoadFactor ),
                                    LoadFactor );
 
-        Threshold = ( int ) ( tableSize * LoadFactor );
+        Threshold = ( int )( tableSize * LoadFactor );
         Mask      = tableSize - 1;
         Shift     = int.LeadingZeroCount( Mask );
 
@@ -150,7 +149,7 @@ public class ObjectMap< TK, TV >
     {
         ArgumentNullException.ThrowIfNull( item );
 
-        return ( int ) ( ( ( ulong ) item.GetHashCode() * 0x9E3779B97F4A7C15L ) >>> Shift );
+        return ( int )( ( ( ulong )item.GetHashCode() * 0x9E3779B97F4A7C15L ) >>> Shift );
     }
 
     /// <summary>
@@ -498,7 +497,7 @@ public class ObjectMap< TK, TV >
             throw new ArgumentException( "capacity must be >= 0: " + capacity );
         }
 
-        var tableSize = MathUtils.NextPowerOfTwo( Math.Max( 2, ( int ) Math.Ceiling( capacity / lf ) ) );
+        var tableSize = MathUtils.NextPowerOfTwo( Math.Max( 2, ( int )Math.Ceiling( capacity / lf ) ) );
 
         if ( tableSize > ( 1 << 30 ) )
         {
@@ -536,7 +535,7 @@ public class ObjectMap< TK, TV >
 
                 if ( value == null )
                 {
-                    if ( other.Get( key, ( TV? ) _dummy ) != null )
+                    if ( other.Get( key, ( TV? )_dummy ) != null )
                     {
                         return false;
                     }
@@ -563,7 +562,7 @@ public class ObjectMap< TK, TV >
         var oldCapacity = KeyTable.Length;
 
         // Update the threshold, mask, and shift based on the new size
-        Threshold = ( int ) ( newSize * LoadFactor );
+        Threshold = ( int )( newSize * LoadFactor );
         Mask      = newSize - 1;
         Shift     = int.LeadingZeroCount( Mask );
 
@@ -581,6 +580,7 @@ public class ObjectMap< TK, TV >
             for ( var i = 0; i < oldCapacity; i++ )
             {
                 var key = oldKeyTable[ i ];
+
                 if ( key != null )
                 {
                     PutResize( key, oldValueTable[ i ] );

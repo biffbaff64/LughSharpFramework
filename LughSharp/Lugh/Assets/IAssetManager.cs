@@ -51,7 +51,16 @@ public interface IAssetManager
     /// <returns>
     /// A boolean value indicating whether all assets are loaded.
     /// </returns>
-    Task< bool > Update();
+    bool Update();
+
+    /// <summary>
+    /// Asynchronously updates the AssetManager by processing queued asset loading
+    /// tasks for a specified amount of time.
+    /// </summary>
+    /// <param name="millis">The number of milliseconds to perform updates.</param>
+    /// <returns>A task that represents whether the asset manager finished processing all tasks.</returns>
+    /// <exception cref="GdxRuntimeException">Thrown when an error occurs during asset loading.</exception>
+    bool Update( int millis );
 
     /// <summary>
     /// Returns true if an asset with the specified name is loading,
@@ -318,12 +327,6 @@ public interface IAssetManager
     /// Clears and disposes all assets and the preloading queue.
     /// </summary>
     void ClearAsync();
-
-//    /// <summary>
-//    /// Returns a string containing ref count and dependency
-//    /// information for all assets.
-//    /// </summary>
-//    string GetDiagnostics();
 
     /// <summary>
     /// Disposes all assets in the manager and stops all asynchronous loading.

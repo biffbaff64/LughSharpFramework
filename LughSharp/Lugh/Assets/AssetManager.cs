@@ -42,7 +42,7 @@ namespace LughSharp.Lugh.Assets;
 /// C won’t be disposed until A and B have been disposed.
 /// </summary>
 [PublicAPI]
-public class AssetManager
+public partial class AssetManager
 {
     /// <summary>
     /// Returns the <see cref="IFileHandleResolver"/> which this
@@ -57,12 +57,13 @@ public class AssetManager
     private readonly Dictionary< string, List< string > >                           _assetDependencies = [ ];
     private readonly Dictionary< Type, Dictionary< string, IRefCountedContainer > > _assets            = [ ];
     private readonly Dictionary< string, Type >                                     _assetTypes        = [ ];
-    private readonly Dictionary< Type, Dictionary< string, AssetLoader > >          _loaders           = [ ];
+    private readonly Dictionary< Type, Dictionary< string, AssetLoader > >?         _loaders           = [ ];
 
-    private readonly List< string >          _injected  = [ ];
-    private readonly List< AssetDescriptor > _loadQueue = [ ];
-
-    private readonly Queue< AssetLoadingTask > _tasks = [ ];
+    private readonly List< string >            _injected     = [ ];
+    private readonly List< AssetDescriptor >   _loadQueue    = [ ];
+    private readonly Queue< AssetLoadingTask > _tasks        = [ ];
+    private readonly ReaderWriterLockSlim      _loadersLock  = new(); // Use ReaderWriterLockSlim
+    private readonly object                    _filenameLock = new();
 
     private IAssetErrorListener? _listener;
 
@@ -92,24 +93,23 @@ public class AssetManager
         if ( defaultLoaders )
         {
             Logger.Debug( "Setting default loaders..." );
-            
-            //@formatter:off
-            SetLoader( typeof( BitmapFont ),       new BitmapFontLoader( resolver ) );
-            SetLoader( typeof( IMusic ),           new MusicLoader( resolver ) );
-            SetLoader( typeof( Pixmap ),           new PixmapLoader( resolver ) );
-            SetLoader( typeof( ISound ),           new SoundLoader( resolver ) );
-            SetLoader( typeof( TextureAtlas ),     new TextureAtlasLoader( resolver ) );
-            SetLoader( typeof( Texture ),          new TextureLoader( resolver ) );
-            SetLoader( typeof( Skin ),             new SkinLoader( resolver ) );
-            SetLoader( typeof( ParticleEffect ),   new ParticleEffectLoader( resolver ) );
+
+            SetLoader( typeof( BitmapFont ), new BitmapFontLoader( resolver ) );
+            SetLoader( typeof( IMusic ), new MusicLoader( resolver ) );
+            SetLoader( typeof( Pixmap ), new PixmapLoader( resolver ) );
+            SetLoader( typeof( ISound ), new SoundLoader( resolver ) );
+            SetLoader( typeof( TextureAtlas ), new TextureAtlasLoader( resolver ) );
+            SetLoader( typeof( Texture ), new TextureLoader( resolver ) );
+            SetLoader( typeof( Skin ), new SkinLoader( resolver ) );
+            SetLoader( typeof( ParticleEffect ), new ParticleEffectLoader( resolver ) );
+            SetLoader( typeof( PolygonRegion ), new PolygonRegionLoader( resolver ) );
+            SetLoader( typeof( ShaderProgram ), new ShaderProgramLoader( resolver ) );
+            SetLoader( typeof( Cubemap ), new CubemapLoader( resolver ) );
+
             // 3D Particle effect loader here...
-            SetLoader( typeof( PolygonRegion ),    new PolygonRegionLoader( resolver ) );
             // .g3dj loader here...
             // .g3db loader here...
             // .obj loader here...
-            SetLoader( typeof( ShaderProgram ),    new ShaderProgramLoader( resolver ) );
-            SetLoader( typeof( Cubemap ),          new CubemapLoader( resolver ) );
-            //@formatter:on
         }
 
         FileHandleResolver = resolver;
@@ -117,8 +117,6 @@ public class AssetManager
 
     // ========================================================================
     // ========================================================================
-
-    #region updates
 
     /// <summary>
     /// Updates the asset manager, loading new assets and processing asset loading tasks.
@@ -134,7 +132,7 @@ public class AssetManager
             if ( _tasks.Count == 0 )
             {
                 // Load next task if there are no active tasks running.
-                while ( _loadQueue.Count != 0 && _tasks.Count == 0 )
+                while ( ( _loadQueue.Count != 0 ) && ( _tasks.Count == 0 ) )
                 {
                     if ( LoadNextTask() )
                     {
@@ -146,7 +144,7 @@ public class AssetManager
                 if ( _tasks.Count == 0 ) return true;
             }
 
-            ProcessNextTask();
+            UpdateTask();
 
             return IsFinished();
         }
@@ -195,7 +193,7 @@ public class AssetManager
                 if ( _tasks.Count == 0 )
                 {
                     // Load next task if there are no active tasks
-                    while ( _loadQueue.Count != 0 && _tasks.Count == 0 )
+                    while ( ( _loadQueue.Count != 0 ) && ( _tasks.Count == 0 ) )
                     {
                         LoadNextTask();
                     }
@@ -208,7 +206,7 @@ public class AssetManager
                 }
 
                 // Process the next task
-                ProcessNextTask();
+                UpdateTask();
 
                 // If we're still in time, go for another round
                 if ( TimeUtils.NanoTime() < endTime )
@@ -248,8 +246,6 @@ public class AssetManager
             return _loadQueue.Count == 0;
         }
     }
-
-    #endregion updates
 
     // ========================================================================
     // ========================================================================
@@ -543,63 +539,6 @@ public class AssetManager
     }
 
     /// <summary>
-    /// Returns a string containing ref count and dependency
-    /// information for all assets.
-    /// </summary>
-    public string GetDiagnostics()
-    {
-        lock ( this )
-        {
-            var sb = new StringBuilder();
-
-            sb.Append( $"_assets.Length    : {_assets.Count}\n" );
-            sb.Append( $"_assetTypes.Length: {_assetTypes.Count}\n" );
-            sb.Append( $"_loaders.Length   : {_loaders.Count}\n" );
-            sb.Append( $"_tasks.Length     : {_tasks.Count}\n" );
-            sb.Append( $"_loadQueue.Length : {_loadQueue.Count}\n" );
-            sb.Append( $"_injected.Length  : {_injected.Count}\n" );
-
-            foreach ( var fileName in _assetTypes.Keys )
-            {
-                if ( sb.Length > 0 )
-                {
-                    sb.Append( '\n' );
-                }
-
-                sb.Append( fileName ).Append( ", " );
-
-                var type = _assetTypes[ fileName ];
-
-                if ( _assets == null )
-                {
-                    sb.Append( "NULL assets List!" );
-                }
-                else
-                {
-                    var dependencies = _assetDependencies?[ fileName ];
-
-                    if ( dependencies != null )
-                    {
-                        sb.Append( type.Name );
-                        sb.Append( ", refs: " ).Append( _assets[ type ][ fileName ].RefCount );
-                        sb.Append( ", deps: [" );
-
-                        foreach ( var dep in dependencies )
-                        {
-                            sb.Append( dep );
-                            sb.Append( ',' );
-                        }
-
-                        sb.Append( ']' );
-                    }
-                }
-            }
-
-            return sb.ToString();
-        }
-    }
-
-    /// <summary>
     /// Returns a list of all asset names.
     /// </summary>
     public List< string > GetAssetNames()
@@ -817,29 +756,34 @@ public class AssetManager
     /// <exception cref="GdxRuntimeException"> If no loader was found. </exception>
     public AssetLoader? GetLoader( Type? type, string? fileName = null )
     {
-        if ( ( type == null ) || ( _loaders[ type ].Count < 1 ) )
+        if ( ( type == null ) || ( _loaders?[ type ].Count < 1 ) )
         {
             throw new GdxRuntimeException( $"No loader for type: {type?.Name}" );
         }
 
         AssetLoader? result = null;
 
+        Logger.Debug( $"fileName: {fileName}" );
+
         if ( fileName == null )
         {
-            result = _loaders[ type ][ "" ];
+            Logger.Debug( $"Fetching default loader for {type} : {fileName}" );
+
+            result = _loaders?[ type ][ "" ];
         }
         else
         {
             var len = -1;
 
-            foreach ( var entry in _loaders[ type ] )
+            foreach ( var entry in _loaders![ type ] )
             {
                 if ( ( entry.Key.Length > len ) && fileName.EndsWith( entry.Key ) )
                 {
                     result = entry.Value;
-                }
+                    len    = entry.Key.Length;
 
-                len = entry.Key.Length;
+                    Logger.Debug( $"Fetching loader for {type} : {result.GetType().Name}" );
+                }
             }
         }
 
@@ -878,7 +822,7 @@ public class AssetManager
     /// <returns>
     /// A task that represents the asynchronous operation of processing the next asset loading task.
     /// </returns>
-    private void ProcessNextTask()
+    private void UpdateTask()
     {
         if ( _tasks.TryPeek( out var task ) )
         {
@@ -914,9 +858,8 @@ public class AssetManager
     }
 
     /// <summary>
-    /// Loads the next asset task from the load queue.
-    /// If the asset is already loaded, increment the loaded count for
-    /// use in <see cref="GetProgress"/>.
+    /// Loads the next asset task from the load queue. If the asset is already loaded,
+    /// increment the loaded count for use in <see cref="GetProgress"/>.
     /// </summary>
     private bool LoadNextTask()
     {
@@ -1077,6 +1020,8 @@ public class AssetManager
             ArgumentNullException.ThrowIfNull( fileName );
             ArgumentNullException.ThrowIfNull( type );
 
+            Logger.Debug( $"filename: {fileName}, type: {type}, parameters: {parameters}" );
+
             // The result of GetLoader is discarded here, but the call is made as
             // the method throws an exception if there is no available loader
             // for the supplied asset.
@@ -1097,12 +1042,16 @@ public class AssetManager
 
             _toLoad++;
 
-            _loadQueue.Add( new AssetDescriptor
+            var descriptor = new AssetDescriptor
             {
                 AssetName  = fileName,
                 AssetType  = type,
                 Parameters = parameters,
-            } );
+            };
+
+            _loadQueue.Add( descriptor );
+
+            Logger.Debug( $"Adding asset: {descriptor.AssetName}, Parameters: {descriptor.Parameters}" );
         }
     }
 
@@ -1119,6 +1068,8 @@ public class AssetManager
         ArgumentNullException.ThrowIfNull( fileName );
         ArgumentNullException.ThrowIfNull( type );
         ArgumentNullException.ThrowIfNull( asset );
+
+        Logger.Debug( $"fileName: {fileName}, type: {type}, asset: {asset}" );
 
         // Add the asset to the filename lookup
         _assetTypes[ fileName ] = type;
@@ -1201,27 +1152,34 @@ public class AssetManager
     /// Sets a new <see cref="AssetLoader"/> for the given type.
     /// </summary>
     /// <param name="type"> the type of the asset </param>
-    /// <param name="loader"> the loader</param>
+    /// <param name="loader"> the loader </param>
     /// <param name="suffix">
     /// the suffix the filename must have for this loader to be used or null
     /// to specify the default loader.
     /// </param>
-    public void SetLoader( Type type, AssetLoader loader, string suffix = "" )
+    public void SetLoader( Type type, AssetLoader loader, string? suffix = "" )
     {
-        lock ( this )
+        // Normalize the suffix: Use "" for null or empty strings
+        suffix = string.IsNullOrEmpty( suffix ) ? "" : suffix;
+
+        _loadersLock.EnterWriteLock();
+
+        try
         {
-            ArgumentNullException.ThrowIfNull( type );
-            ArgumentNullException.ThrowIfNull( loader );
-
-            if ( !_loaders.TryGetValue( type, out var value ) )
+            if ( !_loaders!.TryGetValue( type, out var typeLoaders ) )
             {
-                var typeLoaders = new Dictionary< string, AssetLoader >();
-
-                value            = typeLoaders;
-                _loaders[ type ] = value;
+                typeLoaders      = new Dictionary< string, AssetLoader >();
+                _loaders[ type ] = typeLoaders;
             }
 
-            value.Put( suffix, loader );
+            if ( !typeLoaders.TryAdd( suffix, loader ) )
+            {
+                throw new ArgumentException( $"A loader for type {type.Name} with suffix '{suffix}' already exists." );
+            }
+        }
+        finally
+        {
+            _loadersLock.ExitWriteLock();
         }
     }
 
@@ -1543,33 +1501,4 @@ public class AssetManager
     }
 
     #endregion dispose pattern
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Output Assetmanager metrics via the <see cref="Logger"/> class.
-    /// </summary>
-    public void DisplayMetrics()
-    {
-        Logger.Divider();
-        Logger.Debug( $"_assetTypes[].Length: {_assetTypes.Count}" );
-
-        var k = 1;
-
-        if ( _assetTypes.Count > 0 )
-        {
-            foreach ( var key in _assetTypes.Keys )
-            {
-                Logger.Debug( $"Key #{k++}: {key}" );
-            }
-        }
-
-        Logger.Debug( $"_assets Count       : {_assets.Count}" );
-        Logger.Debug( $"_loaded             : {_loaded}" );
-        Logger.Debug( $"_toLoad             : {_toLoad}" );
-        Logger.Debug( $"_loadQueue Count    : {_loadQueue.Count}" );
-        Logger.Debug( $"_tasks Count        : {_tasks.Count}" );
-        Logger.Divider();
-    }
 }
