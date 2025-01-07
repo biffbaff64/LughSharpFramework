@@ -107,6 +107,24 @@ public class PixmapFormat
     }
 
     /// <summary>
+    /// Gets the number of bytes required for 1 pixel of the specified format.
+    /// </summary>
+    public static int Gdx2dBytesPerPixel( Pixmap.ColorFormat? format )
+    {
+        return format switch
+        {
+            Pixmap.ColorFormat.Alpha          => 1,   // GDX_2D_FORMAT_ALPHA,
+            Pixmap.ColorFormat.Intensity      => 1,   // GDX_2D_FORMAT_ALPHA,
+            Pixmap.ColorFormat.LuminanceAlpha => 2,   // GDX_2D_FORMAT_LUMINANCE_ALPHA,
+            Pixmap.ColorFormat.RGB565         => 2,   // GDX_2D_FORMAT_RGB565,
+            Pixmap.ColorFormat.RGBA4444       => 2,   // GDX_2D_FORMAT_RGBA4444,
+            Pixmap.ColorFormat.RGB888         => 3,   // GDX_2D_FORMAT_RGB888,
+            Pixmap.ColorFormat.RGBA8888       => 4,   // GDX_2D_FORMAT_RGBA8888,
+            var _                             => 4,
+        };
+    }
+
+    /// <summary>
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>

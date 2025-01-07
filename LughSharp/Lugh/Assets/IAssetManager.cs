@@ -29,6 +29,8 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Assets;
 
+//TODO: Is this interface REALLY necessary?
+
 [PublicAPI]
 public interface IAssetManager
 {
@@ -48,9 +50,7 @@ public interface IAssetManager
     /// Updates the asset manager, loading new assets and processing asset loading tasks.
     /// Returns true if all assets are loaded, otherwise false.
     /// </summary>
-    /// <returns>
-    /// A boolean value indicating whether all assets are loaded.
-    /// </returns>
+    /// <returns> A boolean value indicating whether all assets are loaded. </returns>
     bool Update();
 
     /// <summary>
@@ -63,8 +63,8 @@ public interface IAssetManager
     bool Update( int millis );
 
     /// <summary>
-    /// Returns true if an asset with the specified name is loading,
-    /// queued to be loaded, or has been loaded.
+    /// Returns true if an asset with the specified name is loading, queued to be loaded,
+    /// or has been loaded.
     /// </summary>
     bool Contains( string? fileName );
 

@@ -76,7 +76,7 @@ public class Pixmap : IDisposable
     public int         Scale       { get; set; }                // 
     public Color       Color       { get; set; } = Color.Clear; // 
     public Gdx2DPixmap Gdx2DPixmap { get; set; }                // 
-
+    
     #endregion properties
 
     // ========================================================================
@@ -200,11 +200,11 @@ public class Pixmap : IDisposable
         {
             var format = Gdx2DPixmap.ToGLFormat( ( int )Gdx2DPixmap.Format );
 
-            if ( format != IGL.GL_RG
-                 && format != IGL.GL_RGB
-                 && format != IGL.GL_RGBA
-                 && format != IGL.GL_DEPTH_COMPONENT
-                 && format != IGL.GL_DEPTH_STENCIL )
+            if ( ( format != IGL.GL_RG )
+                 && ( format != IGL.GL_RGB )
+                 && ( format != IGL.GL_RGBA )
+                 && ( format != IGL.GL_DEPTH_COMPONENT )
+                 && ( format != IGL.GL_DEPTH_STENCIL ) )
             {
                 throw new GdxRuntimeException( "Unsupported GLInternalFormat" );
             }
@@ -296,6 +296,22 @@ public class Pixmap : IDisposable
         Gdx2DPixmap.Clear( this.Color );
     }
 
+    /// <summary>
+    /// Returns the <see cref="ColorFormat"/> of this Pixmap.
+    /// </summary>
+    public ColorFormat GetColorFormat()
+    {
+        return PixmapFormat.ToPixmapColorFormat( ( int )Gdx2DPixmap.Format );        
+    }
+
+    /// <summary>
+    /// Gets the number of bits per pixel.
+    /// </summary>
+    public int GetBitDepth()
+    {
+        return ( int )Gdx2DPixmap.Format * 8;
+    }
+    
     /// <summary>
     /// Draws a line between the given coordinates using the currently set color.
     /// </summary>
@@ -471,11 +487,6 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Returns the <see cref="ColorFormat"/> of this Pixmap.
-    /// </summary>
-    public Pixmap.ColorFormat Format => PixmapFormat.ToPixmapColorFormat( ( int )Gdx2DPixmap.Format );
-
-    /// <summary>
     /// Creates a Pixmap from a part of the current framebuffer.
     /// </summary>
     /// <param name="x"> Framebuffer region x </param>
@@ -568,9 +579,9 @@ public class Pixmap : IDisposable
         if ( GdxApi.DevMode )
         {
             Logger.Debug( $"Width : {Width}, Height: {Height}" );
-            Logger.Debug( $"Format: {Format}, size : {Width * Height}" +
+            Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height}" +
                           $"{PixmapFormat.ToPixmapColorFormat( ( int )Gdx2DPixmap.Format )}:" +
-                          $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DFormat( Format ) )}" );
+                          $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DFormat( GetColorFormat() ) )}" );
             Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
             var a = Gdx2DPixmap.PixmapBuffer.BackingArray();

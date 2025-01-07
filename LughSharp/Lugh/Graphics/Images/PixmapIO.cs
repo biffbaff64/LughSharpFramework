@@ -132,7 +132,7 @@ public static class PixmapIO
 
                 output.Write( pixmap.Width );
                 output.Write( pixmap.Height );
-                output.Write( PixmapFormat.ToGdx2DFormat( pixmap.Format ) );
+                output.Write( PixmapFormat.ToGdx2DFormat( pixmap.GetColorFormat() ) );
 
                 var pixelBuf = pixmap.ByteBuffer;
 
@@ -337,7 +337,7 @@ public static class PixmapIO
             _lastLineLen = lineLen;
 
             var oldPosition = pixmap.ByteBuffer.Position;
-            var isRgba8888  = pixmap.Format == Pixmap.ColorFormat.RGBA8888;
+            var isRgba8888  = pixmap.GetColorFormat() == Pixmap.ColorFormat.RGBA8888;
 
             for ( int y = 0, h = pixmap.Height; y < h; y++ )
             {

@@ -137,7 +137,7 @@ public class FileTextureArrayData : ITextureArrayData
                 Debug.Assert( texData != null, nameof( texData ) + " != null" );
                 Debug.Assert( pixmap != null, nameof( pixmap ) + " != null" );
 
-                if ( texData.Format != pixmap.Format )
+                if ( texData.Format != pixmap.GetColorFormat() )
                 {
                     var temp = new Pixmap( pixmap.Width, pixmap.Height, texData.Format );
 

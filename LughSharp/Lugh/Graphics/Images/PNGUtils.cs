@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Images;
@@ -29,6 +30,165 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public class PNGUtils
 {
+    public static void AnalysePNG( string filename )
+    {
+        try
+        {
+            using var fs = new FileStream( filename, FileMode.Open );
+
+            using var reader = new BinaryReader( fs );
+
+            // PNG Signature (8 bytes)
+            var signature = reader.ReadBytes( 8 );
+
+            if ( !signature.SequenceEqual( new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 } ) )
+            {
+                Logger.Debug( "Not a valid PNG file." );
+
+                return;
+            }
+
+            Logger.Debug( $"PNG Signature: {BitConverter.ToString( signature ).Replace( "-", " " )}" );
+
+            while ( fs.Position < fs.Length )
+            {
+                // Chunk Length (4 bytes)
+                var chunkLength = ReadBigEndianUInt32( reader );
+                Logger.Debug( $"\nChunk Length: {chunkLength}" );
+
+                // Chunk Type (4 bytes)
+                var chunkType       = reader.ReadBytes( 4 );
+                var chunkTypeString = System.Text.Encoding.ASCII.GetString( chunkType );
+                Logger.Debug( $"Chunk Type: {chunkTypeString}" );
+
+                // Chunk Data (chunkLength bytes)
+                var chunkData = reader.ReadBytes( ( int )chunkLength );
+                Logger.Debug( $"Chunk Data: {BitConverter.ToString( chunkData ).Replace( "-", " " )}" );
+
+                // CRC (4 bytes)
+                var crc = ReadBigEndianUInt32( reader );
+                Logger.Debug( $"CRC: {crc}" );
+
+                switch ( chunkTypeString )
+                {
+                    //Special Handling for IHDR
+                    case "IHDR":
+                        ParseIHDR( chunkData );
+
+                        break;
+
+                    //Special Handling for IDAT
+                    case "IDAT":
+                        Logger.Debug( "IDAT Data is image data, not displayed in detail here." );
+
+                        break;
+
+                    //Special Handling for IEND
+                    case "IEND":
+                        Logger.Debug( "End of PNG file" );
+
+                        break;
+                }
+            }
+        }
+        catch ( FileNotFoundException )
+        {
+            Logger.Debug( $"File not found: {filename}" );
+        }
+        catch ( Exception ex )
+        {
+            Logger.Debug( $"An error occurred: {ex.Message}" );
+        }
+    }
+
+    //Helper function to read Big Endian UInt32
+    private static uint ReadBigEndianUInt32( BinaryReader reader )
+    {
+        var bytes = reader.ReadBytes( 4 );
+
+        if ( BitConverter.IsLittleEndian )
+        {
+            Array.Reverse( bytes );
+        }
+
+        return BitConverter.ToUInt32( bytes, 0 );
+    }
+
+    private static void ParseIHDR( byte[] data )
+    {
+        if ( data.Length != 13 )
+        {
+            Logger.Debug( "IHDR chunk is an unexpected size" );
+
+            return;
+        }
+
+        var bitDepth  = data[8];
+        var colorType = data[9];
+
+        Logger.Debug( "IHDR Data Breakdown:" );
+        Logger.Debug( $"Width: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Take( 4 ).ToArray() ) ) )} pixels" );
+        Logger.Debug( $"Height: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Skip( 4 ).Take( 4 ).ToArray() ) ) )} pixels" );
+        Logger.Debug( $"Bit Depth: {bitDepth}" );
+        Logger.Debug( $"Color Type: {ColorTypeName( colorType )}" );
+        var colorFormat = DetermineColorFormat( colorType, bitDepth );
+        Logger.Debug( "Color Format: " + colorFormat );
+        Logger.Debug( $"Compression Method: {data[ 10 ]}" );
+        Logger.Debug( $"Filter Method: {data[ 11 ]}" );
+        Logger.Debug( $"Interlace Method: {data[ 12 ]}" );
+    }
+
+    private static int GetBitsPerPixel( byte colorType, byte bitDepth )
+    {
+        return 0;
+    }
+    
+    private static string DetermineColorFormat( byte colorType, byte bitDepth )
+    {
+        return colorType switch
+        {
+            0 => // Grayscale
+                $"Grayscale {bitDepth}-bit",
+            2 => // Truecolor
+                bitDepth switch
+                {
+                    8     => "RGB888",
+                    16    => "RGB161616",
+                    var _ => $"Truecolor {bitDepth}-bit"
+                },
+            3 => // Indexed-color
+                $"Indexed {bitDepth}-bit",
+            4 => // Grayscale with alpha
+                bitDepth switch
+                {
+                    8     => "Grayscale with Alpha 88",
+                    16    => "Grayscale with Alpha 1616",
+                    var _ => $"Grayscale with Alpha {bitDepth}{bitDepth}"
+                },
+            6 => // Truecolor with alpha
+                bitDepth switch
+                {
+                    8     => "RGBA8888",
+                    16    => "RGBA16161616",
+                    var _ => $"Truecolor with Alpha {bitDepth}{bitDepth}{bitDepth}{bitDepth}"
+                },
+            var _ => "Unknown Color Format"
+        };
+    }
+
+    public static string ColorTypeName( int colortype )
+    {
+        return colortype switch
+        {
+            0     => "Grayscale - Allowed Bit Depths: 1,2,4,8,16",
+            2     => "Truecolor - Allowed Bit Depths: 8,16",
+            3     => "Indexed Color - Allowed Bit Depths: 1,2,4,8",
+            4     => "Grayscale with Alpha - Allowed Bit Depths: 8,16",
+            6     => "Truecolor with Alpha - Allowed Bit Depths: 8,16",
+            var _ => $"Unknow colortype: {colortype}",
+        };
+    }
+
     /// <summary>
     /// Extracts the <c>Width</c> and <c>Height</c> from a PNG file.
     /// </summary>

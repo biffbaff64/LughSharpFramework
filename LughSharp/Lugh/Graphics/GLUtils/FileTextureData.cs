@@ -60,7 +60,7 @@ public class FileTextureData : ITextureData
         this.UseMipMaps = useMipMaps;
         this.Width      = _pixmap.Width;
         this.Height     = _pixmap.Height;
-        this.Format     = _pixmap.Format;
+        this.Format     = _pixmap.GetColorFormat();
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public class FileTextureData : ITextureData
 
             this.Width  = _pixmap.Width;
             this.Height = _pixmap.Height;
-            this.Format = _pixmap.Format;
+            this.Format = _pixmap.GetColorFormat();
         }
 
         IsPrepared = true;

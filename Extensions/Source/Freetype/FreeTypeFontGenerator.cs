@@ -600,7 +600,7 @@ public class FreeTypeFontGenerator : IDisposable
                 var shadowOffsetY = Math.Max( parameter.ShadowOffsetY, 0 );
                 var shadowW       = mainW + Math.Abs( parameter.ShadowOffsetX );
                 var shadowH       = mainH + Math.Abs( parameter.ShadowOffsetY );
-                var shadowPixmap  = new Pixmap( shadowW, shadowH, mainPixmap.Format );
+                var shadowPixmap  = new Pixmap( shadowW, shadowH, mainPixmap.GetColorFormat() );
 
                 var shadowColor = parameter.ShadowColor;
                 var a           = shadowColor.A;
@@ -656,7 +656,7 @@ public class FreeTypeFontGenerator : IDisposable
             {
                 var padPixmap = new Pixmap( mainPixmap.Width + parameter.PadLeft + parameter.PadRight,
                                             mainPixmap.Height + parameter.PadTop + parameter.PadBottom,
-                                            mainPixmap.Format );
+                                            mainPixmap.GetColorFormat() );
 
                 padPixmap.Blending = Pixmap.BlendTypes.None;
                 padPixmap.DrawPixmap( mainPixmap, parameter.PadLeft, parameter.PadTop );

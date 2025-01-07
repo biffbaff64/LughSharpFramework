@@ -134,7 +134,7 @@ public class FacedCubemapData : ICubemapData
                 var pixmap        = _data[ i ]!.ConsumePixmap()!;
                 var disposePixmap = _data[ i ]!.ShouldDisposePixmap();
 
-                if ( _data[ i ]!.Format != pixmap.Format )
+                if ( _data[ i ]!.Format != pixmap.GetColorFormat() )
                 {
                     var tmp = new Pixmap( pixmap.Width, pixmap.Height, _data[ i ]!.Format );
 

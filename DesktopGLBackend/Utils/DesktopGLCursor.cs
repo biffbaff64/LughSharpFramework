@@ -48,7 +48,7 @@ public unsafe class DesktopGLCursor : ICursor, IDisposable
     {
         Window = window;
 
-        if ( pixmap.Format != Pixmap.ColorFormat.RGBA8888 )
+        if ( pixmap.GetColorFormat() != Pixmap.ColorFormat.RGBA8888 )
         {
             throw new GdxRuntimeException( "Cursor image pixmap should be in RGBA8888 format." );
         }

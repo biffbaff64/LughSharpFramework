@@ -262,7 +262,7 @@ public class PixmapPacker : IDisposable
         if ( ( name != null ) && name.EndsWith( ".9" ) )
         {
             rect            = new PixmapPackerRectangle( 0, 0, image.Width - 2, image.Height - 2 );
-            pixmapToDispose = new Pixmap( image.Width - 2, image.Height - 2, image.Format );
+            pixmapToDispose = new Pixmap( image.Width - 2, image.Height - 2, image.GetColorFormat() );
 
             pixmapToDispose.Blending = Pixmap.BlendTypes.None;
 
@@ -369,7 +369,7 @@ public class PixmapPacker : IDisposable
                 var newWidth  = right - left;
                 var newHeight = bottom - top;
 
-                pixmapToDispose          = new Pixmap( newWidth, newHeight, image.Format );
+                pixmapToDispose          = new Pixmap( newWidth, newHeight, image.GetColorFormat() );
                 pixmapToDispose.Blending = Pixmap.BlendTypes.None;
                 pixmapToDispose.DrawPixmap( image, 0, 0, left, top, newWidth, newHeight );
 
@@ -868,7 +868,7 @@ public class PixmapPacker : IDisposable
             }
             else
             {
-                Texture = new Texture( new PixmapTextureData( Image, Image.Format, useMipMaps, false, true ) );
+                Texture = new Texture( new PixmapTextureData( Image, Image.GetColorFormat(), useMipMaps, false, true ) );
 
                 Texture.SetFilter( minFilter, magFilter );
             }

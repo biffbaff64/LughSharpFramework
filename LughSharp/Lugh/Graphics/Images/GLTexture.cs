@@ -411,7 +411,7 @@ public abstract class GLTexture : IDisposable
             throw new GdxRuntimeException( "ConsumePixmap() resulted in a null Pixmap!" );
         }
 
-        if ( data.Format != pixmap.Format )
+        if ( data.Format != pixmap.GetColorFormat() )
         {
             var tmp = new Pixmap( pixmap.Width, pixmap.Height, data.Format );
 
@@ -458,11 +458,14 @@ public abstract class GLTexture : IDisposable
     {
         if ( GdxApi.DevMode )
         {
-            Logger.Debug( $"target: {target}" );
-            Logger.Debug( $"mipLevel: {miplevel}" );
-            Logger.Debug( $"pixmap.GLInternalFormat: {PixmapFormat.GetGLFormatName( pixmap.GLInternalFormat )}" );
             Logger.Debug( $"pixmap.Width: {pixmap.Width}" );
             Logger.Debug( $"pixmap.Height: {pixmap.Height}" );
+            Logger.Debug( $"target: {target}" );
+            Logger.Debug( $"mipLevel: {miplevel}" );
+            Logger.Debug( $"Bit Depth: {pixmap.GetBitDepth()}" );
+            Logger.Debug( $"Number of Pixels: {pixmap.Width*pixmap.Height}" );
+            Logger.Debug( $"pixmap.GLInternalFormat: {PixmapFormat.GetGLFormatName( pixmap.GLInternalFormat )}" );
+            Logger.Debug( $"Pixmap.Format: {pixmap.Gdx2DPixmap.Format}" );
             Logger.Debug( $"pixmap.GLFormat: {PixmapFormat.ToPixmapColorFormat( pixmap.GLFormat )}" );
             Logger.Debug( $"pixmap.GLType: {PixmapFormat.GetGLTypeName( pixmap.GLType )}" );
             Logger.Debug( $"pixmap.PixelData.Length: {pixmap.PixelData.Length}" );

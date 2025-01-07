@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Assets;
 
@@ -80,25 +79,28 @@ public class AssetLoadingTask
             return null;
         }
 
-        switch ( _loader )
+        try
         {
-            case AsynchronousAssetLoader asyncLoader:
+            if ( _loader is AsynchronousAssetLoader asyncLoader )
             {
                 LoadDependenciesAsync( asyncLoader );
 
+                if ( Cancel ) return null; // Check for cancellation after dependencies are loaded.
+
                 return LoadAssetAsync( asyncLoader );
             }
-
-            case SynchronousAssetLoader< Type, AssetLoaderParameters > syncLoader:
+            
+            if ( _loader is SynchronousAssetLoader< Type, AssetLoaderParameters > syncLoader )
             {
                 return LoadSynchronously( syncLoader );
             }
-
-            default:
-            {
-                throw new GdxRuntimeException( "Unknown asset loader type." );
-            }
         }
+        catch ( Exception e )
+        {
+            _manager.HandleTaskError( e );
+        }
+
+        return null;
     }
 
     /// <summary>

@@ -50,7 +50,7 @@ public class PixmapTextureData : ITextureData
         UseMipMaps    = useMipMaps;
         DisposePixmap = disposePixmap;
         IsManaged     = managed;
-        Format        = format ?? pixmap.Format;
+        Format        = format ?? pixmap.GetColorFormat();
     }
 
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;

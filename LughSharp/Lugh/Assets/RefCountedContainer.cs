@@ -45,20 +45,12 @@ public interface IRefCountedContainer
 /// the object, and decrement it after you're done using it. AssetManager handles this automatically.
 /// </summary>
 [PublicAPI]
-public class RefCountedContainer : IRefCountedContainer
+public class RefCountedContainer( object? asset ) : IRefCountedContainer
 {
-    public object? Asset    { get; set; }
-    public int     RefCount { get; set; }
+    public object? Asset    { get; set; } = asset;
+    public int     RefCount { get; set; } = 1;
 
     // ========================================================================
-
-    public RefCountedContainer( object asset )
-    {
-        ArgumentNullException.ThrowIfNull( asset );
-
-        Asset    = asset;
-        RefCount = 1;
-    }
 }
 
 // ====================================================================--------

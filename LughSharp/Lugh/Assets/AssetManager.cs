@@ -478,8 +478,6 @@ public partial class AssetManager
     // ========================================================================
     // ========================================================================
 
-    #region getters
-
     /// <summary>
     /// Returns the reference count of an asset.
     /// </summary>
@@ -790,12 +788,8 @@ public partial class AssetManager
         return result;
     }
 
-    #endregion getters
-
     // ========================================================================
     // ========================================================================
-
-    #region task management
 
     /// <summary>
     /// Adds a new asset loading task to the queue using the given asset descriptor.
@@ -938,12 +932,8 @@ public partial class AssetManager
         }
     }
 
-    #endregion task management
-
     // ========================================================================
     // ========================================================================
-
-    #region asset loading
 
     /// <summary>
     /// Returns TRUE if the asset identified by fileName is loaded.
@@ -1209,7 +1199,6 @@ public partial class AssetManager
 
             // Try to find an asset in the preload queue with the same name as this
             // asset, but with a different asset type.
-            // This situation should not occur.
             for ( var i = 0; i < _tasks.Count; i++ )
             {
                 var desc = _tasks.ElementAt( i ).AssetDesc;
@@ -1224,10 +1213,6 @@ public partial class AssetManager
 
             // Try to find an asset in the loaded assets dictionary that has the same
             // name as this asset, but which has a different asset type.
-            // This situation should not occur.
-            // NB: I don't want to use TryGetValue here because I don't want an exception
-            // thrown if the asset isn't in the _assetTypes Dictionary. Not being present
-            // already means it's ok to be added.
             if ( _assetTypes.ContainsKey( fileName ) )
             {
                 var otherType = _assetTypes.Get( fileName );
@@ -1242,12 +1227,8 @@ public partial class AssetManager
         }
     }
 
-    #endregion asset loading
-
     // ========================================================================
     // ========================================================================
-
-    #region asset unloading
 
     /// <summary>
     /// Asynchronously unloads an asset from the AssetManager.
@@ -1408,8 +1389,6 @@ public partial class AssetManager
         }
     }
 
-    #endregion asset unloading
-
     // ========================================================================
 
     /// <summary>
@@ -1477,8 +1456,6 @@ public partial class AssetManager
     // ========================================================================
     // ========================================================================
 
-    #region dispose pattern
-
     /// <summary>
     /// Disposes all assets in the manager and stops all asynchronous loading.
     /// </summary>
@@ -1499,6 +1476,4 @@ public partial class AssetManager
             ClearAsync();
         }
     }
-
-    #endregion dispose pattern
 }

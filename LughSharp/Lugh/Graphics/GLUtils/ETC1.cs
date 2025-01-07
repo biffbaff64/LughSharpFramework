@@ -56,7 +56,7 @@ public class ETC1
     /// <returns> the <see cref="ETC1Data"/> </returns>
     public ETC1Data EncodeImage( Pixmap pixmap )
     {
-        var pixelSize      = GetPixelSize( pixmap.Format );
+        var pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
         var compressedData = EncodeImage( pixmap.ByteBuffer!, 0, pixmap.Width, pixmap.Height, pixelSize );
 
 //        BufferUtils.NewUnsafeByteBuffer( compressedData );
@@ -73,7 +73,7 @@ public class ETC1
     /// <returns> the <see cref="ETC1Data"/> </returns>
     public ETC1Data EncodeImagePKM( Pixmap pixmap )
     {
-        var pixelSize      = GetPixelSize( pixmap.Format );
+        var pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
         var compressedData = EncodeImagePKM( pixmap.ByteBuffer, 0, pixmap.Width, pixmap.Height, pixelSize );
 
 //        BufferUtils.NewUnsafeByteBuffer( compressedData );
