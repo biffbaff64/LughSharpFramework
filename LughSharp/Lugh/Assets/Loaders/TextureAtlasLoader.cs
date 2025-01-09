@@ -32,7 +32,7 @@ namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
 /// AssetLoader to load TextureAtlas instances. Passing a <see cref="TextureAtlasParameter"/> to
-/// <see cref="AssetManager.AddToLoadqueue"/> allows to specify whether the atlas regions should
+/// <see cref="AssetManager.AddToLoadQueue"/> allows to specify whether the atlas regions should
 /// be flipped on the y-axis or not.
 /// </summary>
 [PublicAPI]

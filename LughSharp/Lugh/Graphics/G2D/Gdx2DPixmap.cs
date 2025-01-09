@@ -211,7 +211,29 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     private ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
+        Logger.Divider();
+        Logger.Debug( $"offset: {offset}, len: {len}" );
+        Logger.Debug( $"Format: {Format}" );
+        Logger.Debug( $"PixmapFormat.Gdx2DBytesPerPixel( Format ): {PixmapFormat.Gdx2dBytesPerPixel( ( int )Format )}" );
+        
+        Logger.Divider();
+        Logger.Divider();
+        Logger.Divider();
+        Logger.Divider();
+        Logger.Divider();
+            
+        Logger.Debug( $"Chunk Data  : {BitConverter.ToString( buffer ).Replace( "-", " " )}" );
+
+        Logger.Divider();
+        Logger.Divider();
+        Logger.Divider();
+        Logger.Divider();
+        Logger.Divider();
+        
         var image = Stbi.LoadFromMemory( buffer, PixmapFormat.Gdx2dBytesPerPixel( ( int )Format ) );
+
+        Logger.Debug( $"image size: {image.Width}, {image.Height}" );
+        Logger.Debug( $"image.NumChannels: {image.NumChannels}" );
 
         var pixmapDef = new PixmapDataType
         {
@@ -273,7 +295,7 @@ public partial class Gdx2DPixmap : IDisposable
         pixmap.SetBlend( PixmapFormat.GDX_2D_BLEND_NONE );
         pixmap.DrawPixmap( this, 0, 0, 0, 0, ( int )Width, ( int )Height );
 
-//        Dispose();
+        Dispose();
 
         this.Width        = pixmap.Width;
         this.Height       = pixmap.Height;
@@ -330,19 +352,13 @@ public partial class Gdx2DPixmap : IDisposable
     /// Sets this pixmaps blending value.
     /// </summary>
     /// <param name="blend"></param>
-    public void SetBlend( int blend )
-    {
-        this.Blend = ( uint )blend;
-    }
+    public void SetBlend( int blend ) => this.Blend = ( uint )blend;
 
     /// <summary>
     /// Sets this pixmaps scaling value.
     /// </summary>
     /// <param name="scale"></param>
-    public void SetScale( int scale )
-    {
-        this.Scale = ( uint )scale;
-    }
+    public void SetScale( int scale ) => this.Scale = ( uint )scale;
 
     // ========================================================================
     // ========================================================================

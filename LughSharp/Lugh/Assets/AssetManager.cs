@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.CompilerServices;
+
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Audio;
@@ -577,7 +579,7 @@ public partial class AssetManager
             return _assetTypes[ name ];
         }
     }
-
+    
     /// <summary>
     /// Retrieves an asset of the specified type by its name.
     /// </summary>
@@ -602,17 +604,13 @@ public partial class AssetManager
     {
         lock ( this )
         {
-            var type = _assetTypes.Get( name );
+            var type           = GetAssetType( name );
+            var assetsByType   = _assets[ type ];
+            var assetContainer = assetsByType.Get( name );
 
-            if ( type != null )
+            if ( assetContainer != null )
             {
-                var assetsByType   = _assets[ type ];
-                var assetContainer = assetsByType.Get( name );
-
-                if ( assetContainer != null )
-                {
-                    return assetContainer.Asset;
-                }
+                return assetContainer.Asset;
             }
 
             if ( required )
@@ -798,6 +796,8 @@ public partial class AssetManager
     /// <exception cref="GdxRuntimeException">Thrown if no loader is available for the asset type specified in the asset descriptor.</exception>
     private void AddTask( AssetDescriptor assetDesc )
     {
+        Logger.Checkpoint();
+        
         var loader = GetLoader( assetDesc.AssetType, assetDesc.AssetName );
 
         if ( loader == null )
@@ -969,13 +969,13 @@ public partial class AssetManager
     /// Adds the given asset to the loading queue of the AssetManager.
     /// </summary>
     /// <param name="desc">the <see cref="AssetDescriptor"/></param>
-    public void AddToLoadqueue( AssetDescriptor desc )
+    public void Load( AssetDescriptor desc )
     {
         lock ( this )
         {
             ArgumentNullException.ThrowIfNull( desc );
 
-            AddToLoadqueue( desc.AssetName, desc.AssetType, desc.Parameters );
+            Load( desc.AssetName, desc.AssetType, desc.Parameters );
         }
     }
 
@@ -986,11 +986,11 @@ public partial class AssetManager
     /// The file name (interpretation depends on <see cref="AssetLoader"/>)
     /// </param>
     /// <param name="type"> the type of the asset. </param>
-    public void AddToLoadqueue( string fileName, Type type )
+    public void Load( string fileName, Type type )
     {
         lock ( this )
         {
-            AddToLoadqueue( fileName, type, null );
+            Load( fileName, type, null );
         }
     }
 
@@ -1003,19 +1003,18 @@ public partial class AssetManager
     /// <param name="type">the type of the asset.</param>
     /// <param name="parameters"></param>
     /// <remarks> Renamed from Load() for clarity during development. </remarks>
-    public void AddToLoadqueue( string? fileName, Type? type, AssetLoaderParameters? parameters )
+    public void Load( string? fileName, Type? type, AssetLoaderParameters? parameters )
     {
+        ArgumentNullException.ThrowIfNull( fileName );
+        ArgumentNullException.ThrowIfNull( type );
+
         lock ( this )
         {
-            ArgumentNullException.ThrowIfNull( fileName );
-            ArgumentNullException.ThrowIfNull( type );
-
             Logger.Debug( $"filename: {fileName}, type: {type}, parameters: {parameters}" );
 
-            // The result of GetLoader is discarded here, but the call is made as
-            // the method throws an exception if there is no available loader
-            // for the supplied asset.
-            GetLoader( type, fileName );
+            // The result of GetLoader is discarded here, but the call is made as the method
+            // throws an exception if there is no available loader for the supplied asset.
+            _ = GetLoader( type, fileName );
 
             if ( _loadQueue.Count == 0 )
             {
@@ -1025,9 +1024,8 @@ public partial class AssetManager
                 _peakTasks = 0;
             }
 
-            // Check ths potential asset against assets currently in the preload
-            // queue and the loaded assets dictionary, to make sure its has not
-            // already been loaded.
+            // Check ths potential asset against assets currently in the preload queue and
+            // the loaded assets dictionary, to make sure its has not already been loaded.
             ValidatePreloadQueue( fileName, type );
 
             _toLoad++;
@@ -1039,9 +1037,8 @@ public partial class AssetManager
                 Parameters = parameters,
             };
 
+            // Add this asset to the load queue
             _loadQueue.Add( descriptor );
-
-            Logger.Debug( $"Adding asset: {descriptor.AssetName}, Parameters: {descriptor.Parameters}" );
         }
     }
 

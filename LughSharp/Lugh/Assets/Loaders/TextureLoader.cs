@@ -56,17 +56,13 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
     }
 
     /// <inheritdoc />
-    public override List< AssetDescriptor > GetDependencies< TP >( string filename,
-                                                                   FileInfo file,
-                                                                   TP? p ) where TP : class
+    public override List< AssetDescriptor > GetDependencies< TP >( string filename, FileInfo file, TP? p ) where TP : class
     {
-        return default( List< AssetDescriptor > )!;
+        return null!;
     }
 
     /// <inheritdoc />
-    public override void LoadAsync< TP >( AssetManager manager,
-                                          FileInfo file,
-                                          TP? parameter ) where TP : class
+    public override void LoadAsync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
         var p = parameter as TextureLoaderParameters;
 
@@ -101,9 +97,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
     }
 
     /// <inheritdoc />
-    public override Texture LoadSync< TP >( AssetManager manager,
-                                            FileInfo file,
-                                            TP? parameter ) where TP : class
+    public override Texture LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
         var p       = parameter as TextureLoaderParameters;
         var texture = _loaderInfo.Texture;
@@ -129,8 +123,6 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
     // ========================================================================
     // ========================================================================
 
-    #region dispose pattern
-
     /// <summary>
     /// Performs application-defined tasks associated with freeing,
     /// releasing, or resetting unmanaged resources.
@@ -138,6 +130,8 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
     public void Dispose()
     {
         Dispose( true );
+        
+        GC.SuppressFinalize( this );
     }
 
     /// <summary>
@@ -154,8 +148,6 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
             _loaderInfo = null!;
         }
     }
-
-    #endregion dispose pattern
 
     // ========================================================================
     // ========================================================================

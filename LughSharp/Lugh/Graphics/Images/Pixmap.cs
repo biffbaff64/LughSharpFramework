@@ -166,6 +166,13 @@ public class Pixmap : IDisposable
         {
             var data = File.ReadAllBytes( file.FullName );
 
+            PNGUtils.AnalysePNG( data );
+            
+            Logger.Debug( $"Width     : {PNGUtils.IHDRchunk.Width}" );
+            Logger.Debug( $"Height    : {PNGUtils.IHDRchunk.Height}" );
+            Logger.Debug( $"Bit Depth : {PNGUtils.IHDRchunk.BitDepth}" );
+            Logger.Debug( $"Color Type: {PNGUtils.IHDRchunk.ColorType}" );            
+            
             Gdx2DPixmap = new Gdx2DPixmap( data, 0, data.Length, 0 );
         }
         catch ( Exception e )

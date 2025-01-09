@@ -736,27 +736,27 @@ public class Mesh
     {
         ArgumentNullException.ThrowIfNull( shader );
 
-        if ( _firstTime )
-        {
-            Logger.Debug( $"shader: {shader}" );
-            Logger.Debug( $"primitiveType: {primitiveType}" );
-            Logger.Debug( $"offset: {offset}" );
-            Logger.Debug( $"count: {count}" );
-            Logger.Debug( $"autoBind: {autoBind}" );
-            Logger.Debug( $"_isVertexArray: {_isVertexArray}" );
-            Logger.Debug( $"_indices.NumIndices: {_indices.NumIndices}" );
-            Logger.Debug( $"IsInstanced: {IsInstanced}" );
+//        if ( _firstTime )
+//        {
+//            Logger.Debug( $"shader: {shader}" );
+//            Logger.Debug( $"primitiveType: {primitiveType}" );
+//            Logger.Debug( $"offset: {offset}" );
+//            Logger.Debug( $"count: {count}" );
+//            Logger.Debug( $"autoBind: {autoBind}" );
+//            Logger.Debug( $"_isVertexArray: {_isVertexArray}" );
+//            Logger.Debug( $"_indices.NumIndices: {_indices.NumIndices}" );
+//            Logger.Debug( $"IsInstanced: {IsInstanced}" );
 
-            if ( _instances == null )
-            {
-                Logger.Debug( "_instances: null" );
-            }
-            else
-            {
-                Logger.Debug( $"_instances: {_instances}" );
-                Logger.Debug( $"_instances.NumInstances: {_instances?.NumInstances}" );
-            }
-        }
+//            if ( _instances == null )
+//            {
+//                Logger.Debug( "_instances: null" );
+//            }
+//            else
+//            {
+//                Logger.Debug( $"_instances: {_instances}" );
+//                Logger.Debug( $"_instances.NumInstances: {_instances?.NumInstances}" );
+//            }
+//        }
 
         if ( count == 0 )
         {

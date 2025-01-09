@@ -318,7 +318,7 @@ public class Texture : GLTexture, IManaged
                     // unload the texture, create a new gl handle then reload it.
                     AssetManager.Unload( fileName );
                     texture.GLTextureHandle = GdxApi.Bindings.GenTexture();
-                    AssetManager.AddToLoadqueue( fileName, typeof( Texture ), parameters );
+                    AssetManager.Load( fileName, typeof( Texture ), parameters );
                 }
             }
 

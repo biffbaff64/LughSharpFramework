@@ -30,7 +30,130 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public class PNGUtils
 {
+    public const int SIGNATURE_LENGTH = 8;
+    public const int IHDR_OFFSET      = 8;
+    public const int IHDR_SIZE        = 4;
+    public const int IHDR_DATA_OFFSET = 16;
+    public const int IHDR_DATA_SIZE   = 13;
+    public const int IHDR_CRC_OFFSET  = 29;
+    public const int IHDR_CRC_SIZE    = 4;
+    public const int IDAT_OFFSET      = 33;
+    public const int IDAT_SIZE        = 4;
+    public const int IDAT_DATA_OFFSET = 37;
+
+    private const int WIDTH_OFFSET       = IHDR_DATA_OFFSET;
+    private const int HEIGHT_OFFSET      = WIDTH_OFFSET + 4;
+    private const int BITDEPTH_OFFSET    = HEIGHT_OFFSET + 4;
+    private const int COLORTYPE_OFFSET   = BITDEPTH_OFFSET + 1;
+    private const int COMPRESSION_OFFSET = COLORTYPE_OFFSET + 1;
+    private const int FILTER_OFFSET      = COMPRESSION_OFFSET + 1;
+    private const int INTERLACE_OFFSET   = FILTER_OFFSET + 1;
+
+    // ( Example... )
+    //  0 -  7 => 89 50 4E 47 0D 0A 1A 0A                  - PNG Signature (8 bytes)
+    //  8 - 11 => 00 00 00 0D                              - IHDR Chunk size (13 bytes)
+    // 12 - 15 => 49 48 44 52                              - IHDR Chunk Type (4 bytes - 'I', 'H', 'D', 'R')
+    // 16 - 28 => 00 00 00 44 00 00 00 44 08 06 00 00 00   - IHDR Data (Width: 68px, Height: 68px, Bit Depth: 8, Color Type: 6 (RGBA), Compression: 0, Filter: 0, Interlace: 0)
+    // 29 - 32 => 38 13 93 B2                              - IHDR CRC (Checksum) (4 bytes)
+    // 33 - 36 => 00 00 24 9E                              - IDAT Chunk size (9310 bytes)
+    // 37 - 40 => 49 44 41 54                              - IDAT Chunk Type (4 bytes - 'I', 'D', 'A', 'T')
+    // ... (IDAT data follows)
+
+    public static PNGSignature PngSignature { get; private set; }
+    public static IHDRChunk    IHDRchunk    { get; private set; }
+    public static IDATChunk    IDATchunk    { get; private set; }
+
+    // ========================================================================
+
+    private PNGUtils()
+    {
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="filename"></param>
     public static void AnalysePNG( string filename )
+    {
+        var data = File.ReadAllBytes( filename );
+        
+        AnalysePNG( data );
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pngData"></param>
+    /// <exception cref="ArgumentException"></exception>
+    public static void AnalysePNG( byte[] pngData )
+    {
+        if ( ( pngData == null ) || ( pngData.Length == 0 ) )
+        {
+            throw new ArgumentException( "Invalid PNG Data" );
+        }
+
+        // --------------------------------------
+        // PNG Signature (8 bytes)
+        PngSignature = new PNGSignature
+        {
+            Signature = new byte[ SIGNATURE_LENGTH ],
+        };
+
+        Array.Copy( pngData, 0, PngSignature.Signature, 0, SIGNATURE_LENGTH );
+
+        if ( !PngSignature.Signature.SequenceEqual( new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 } ) )
+        {
+            Logger.Debug( "Not a valid PNG file, Signature is incorrect" );
+
+            return;
+        }
+
+        // --------------------------------------
+        // IHDR
+        var ihdr       = new byte[ IHDR_SIZE ];
+        var crc        = new byte[ IHDR_CRC_SIZE ];
+        var widthdata  = new byte[ 4 ];
+        var heightdata = new byte[ 4 ];
+
+        Array.Copy( pngData, IHDR_OFFSET, ihdr, 0, IHDR_SIZE );
+        Array.Copy( pngData, IHDR_CRC_OFFSET, crc, 0, IHDR_CRC_SIZE );
+
+        Array.Copy( pngData, WIDTH_OFFSET, widthdata, 0, 4 );
+        Array.Copy( pngData, HEIGHT_OFFSET, heightdata, 0, 4 );
+
+        IHDRchunk = new IHDRChunk
+        {
+            Ihdr        = ihdr,
+            Width       = ReadBigEndianUInt32( widthdata, 4 ),
+            Height      = ReadBigEndianUInt32( heightdata, 4 ),
+            BitDepth    = pngData[ BITDEPTH_OFFSET ],
+            ColorType   = pngData[ COLORTYPE_OFFSET ],
+            Compression = pngData[ COMPRESSION_OFFSET ],
+            Filter      = pngData[ FILTER_OFFSET ],
+            Interlace   = pngData[ INTERLACE_OFFSET ],
+            Crc         = crc,
+        };
+
+        // --------------------------------------
+        // IDAT
+        var tmp = new byte[ IDAT_SIZE ];
+
+        Array.Copy( pngData, IDAT_OFFSET, tmp, 0, IDAT_SIZE );
+        
+        var tmpChunkSize = ReadBigEndianUInt32( tmp, IDAT_SIZE );
+
+        IDATchunk = new IDATChunk
+        {
+            ChunkSize = tmpChunkSize,
+            ChunkType = tmp,
+        };
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="filename"></param>
+    public static void AnalysePNGToOutput( string filename )
     {
         try
         {
@@ -54,7 +177,7 @@ public class PNGUtils
             {
                 // Chunk Length (4 bytes)
                 var chunkLength = ReadBigEndianUInt32( reader );
-                Logger.Debug( $"\nChunk Length: {chunkLength}" );
+                Logger.Debug( $"Chunk Length: {chunkLength}" );
 
                 // Chunk Type (4 bytes)
                 var chunkType       = reader.ReadBytes( 4 );
@@ -63,7 +186,7 @@ public class PNGUtils
 
                 // Chunk Data (chunkLength bytes)
                 var chunkData = reader.ReadBytes( ( int )chunkLength );
-                Logger.Debug( $"Chunk Data: {BitConverter.ToString( chunkData ).Replace( "-", " " )}" );
+                Logger.Debug( $"Chunk Data  : {BitConverter.ToString( chunkData ).Replace( "-", " " )}" );
 
                 // CRC (4 bytes)
                 var crc = ReadBigEndianUInt32( reader );
@@ -102,6 +225,20 @@ public class PNGUtils
     }
 
     //Helper function to read Big Endian UInt32
+    private static uint ReadBigEndianUInt32( byte[] data, int count )
+    {
+        var bytes = new byte[ count ];
+        Array.Copy( data, 0, bytes, 0, count );
+
+        if ( BitConverter.IsLittleEndian )
+        {
+            Array.Reverse( bytes );
+        }
+
+        return BitConverter.ToUInt32( bytes, 0 );
+    }
+
+    //Helper function to read Big Endian UInt32
     private static uint ReadBigEndianUInt32( BinaryReader reader )
     {
         var bytes = reader.ReadBytes( 4 );
@@ -123,8 +260,8 @@ public class PNGUtils
             return;
         }
 
-        var bitDepth  = data[8];
-        var colorType = data[9];
+        var bitDepth  = data[ 8 ];
+        var colorType = data[ 9 ];
 
         Logger.Debug( "IHDR Data Breakdown:" );
         Logger.Debug( $"Width: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Take( 4 ).ToArray() ) ) )} pixels" );
@@ -142,7 +279,7 @@ public class PNGUtils
     {
         return 0;
     }
-    
+
     private static string DetermineColorFormat( byte colorType, byte bitDepth )
     {
         return colorType switch
@@ -232,8 +369,8 @@ public class PNGUtils
     /// used to identify a file or data stream as conforming to the PNG
     /// specification.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
-    public struct PngSignature
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
+    public struct PNGSignature
     {
         public byte[] Signature { get; set; } // Identifier (always 0x89504E470D0A1A0A)
     }
@@ -244,22 +381,34 @@ public class PNGUtils
     /// and immediately follows the PNG signature. The header chunk data area is 13 bytes
     /// in length.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct IHDRChunk
     {
-        public uint Width       { get; set; } // Width of image in pixels
-        public uint Height      { get; set; } // Height of image in pixels
-        public byte BitDepth    { get; set; } // Bits per pixel or per sample
-        public byte ColorType   { get; set; } // Color interpretation indicator
-        public byte Compression { get; set; } // Compression type indicator
-        public byte Filter      { get; set; } // Filter type indicator
-        public byte Interlace   { get; set; } // Type of interlacing scheme used
+        public byte[] Ihdr        { get; set; } // 'I', 'H', 'D', 'R'
+        public uint   Width       { get; set; } // Width of image in pixels
+        public uint   Height      { get; set; } // Height of image in pixels
+        public byte   BitDepth    { get; set; } // Bits per pixel or per sample
+        public byte   ColorType   { get; set; } // Color interpretation indicator
+        public byte   Compression { get; set; } // Compression type indicator
+        public byte   Filter      { get; set; } // Filter type indicator
+        public byte   Interlace   { get; set; } // Type of interlacing scheme used
+        public byte[] Crc         { get; set; } // The CRC for IHDR
+    }
+
+    /// <summary>
+    /// PNG File IDAT Chunk Structure.
+    /// </summary>
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )] // Important for correct byte alignment
+    public struct IDATChunk
+    {
+        public uint   ChunkSize { get; set; } // 4 bytes (unsigned int)
+        public byte[] ChunkType { get; set; } // 4 bytes 'I', 'D', 'A', 'T'
     }
 
     /// <summary>
     /// PNG File Chunk Structure.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct PngChunk
     {
         public uint   DataLength { get; set; } // Size of Data field in bytes
@@ -271,7 +420,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct PaletteChunkEntry
     {
         public byte Red   { get; set; } // Red component (0 = black, 255 = maximum)
@@ -282,7 +431,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct BackgroundChunkEntry
     {
         public byte Index { get; set; } // Index of background color in palette
@@ -291,7 +440,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct GrayScaleBackgroundChunkEntry
     {
         public ushort Value { get; set; } // Background level value
@@ -300,7 +449,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct TrueColorBackgroundChunkEntry
     {
         public ushort Red   { get; set; } // Red background sample value
@@ -311,7 +460,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct ChromaChunkEntry
     {
         public uint WhitePointX { get; set; } // White Point x value
@@ -327,7 +476,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct GammaChunkEntry
     {
         public uint Gamma { get; set; } // Gamma value
@@ -336,7 +485,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct HistogramChunkEntry
     {
         public ushort[] Histogram { get; set; } // Histogram data
@@ -345,7 +494,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct PixelsPerUnitChunkEntry
     {
         public uint PixelsPerUnitX { get; set; } // Pixels per unit, X axis
@@ -356,7 +505,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct SigBitChunkEntry0
     {
         public byte GrayscaleBits { get; set; } // Gray-scale (ColorType 0) significant bits
@@ -365,7 +514,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct SigBitChunkEntry23
     {
         public byte RedBits   { get; set; } // Red significant bits
@@ -376,7 +525,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct SigBitChunkEntry4
     {
         public byte GrayscaleBits { get; set; } // Gray-scale significant bits
@@ -386,7 +535,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct SigBitChunkEntry6
     {
         public byte RedBits   { get; set; } // Red significant bits
@@ -398,7 +547,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct TextChunkEntry
     {
         public char[] Keyword       { get; set; } // Type of information stored in Text
@@ -409,7 +558,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct TimeChunkEntry
     {
         public ushort Year   { get; set; } // Year value (such as 1996)
@@ -423,7 +572,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct TransparencyChunkEntryGrayScale
     {
         public ushort TransparencyValue { get; set; } // Transparent color
@@ -432,7 +581,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct TransparencyChunkEntryTrueColor
     {
         public ushort RedTransValue   { get; set; } // Red sample of transparent color
@@ -443,7 +592,7 @@ public class PNGUtils
     /// <summary>
     /// 
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct TransparencyChunkEntryIndexed
     {
         public byte[] TransparencyValues { get; set; } // Transparent colors

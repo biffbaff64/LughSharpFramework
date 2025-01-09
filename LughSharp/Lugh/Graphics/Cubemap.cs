@@ -268,7 +268,7 @@ public class Cubemap : GLTexture, IManaged
                     AssetManager.Unload( fileName );
 
                     cubemap.GLTextureHandle = GdxApi.Bindings.GenTexture();
-                    AssetManager.AddToLoadqueue( fileName, typeof( Cubemap ), parameter );
+                    AssetManager.Load( fileName, typeof( Cubemap ), parameter );
                 }
             }
 

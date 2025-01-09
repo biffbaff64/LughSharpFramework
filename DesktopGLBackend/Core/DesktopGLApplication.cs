@@ -101,12 +101,10 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // This is set very early in this constructor to avoid any null references.
         if ( _prefs.GetBool( "profiling" ) )
         {
-            Logger.Debug( "Profiling enabled" );
             GdxApi.Bindings = new GLInterceptor( new GLProfiler() );
         }
         else
         {
-            Logger.Debug( "Profiling disabled" );
             GdxApi.Bindings = new GLBindings();
         }
 
@@ -514,11 +512,11 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         Glfw.WindowHint( WindowHint.ContextVersionMajor, glMajor );
         Glfw.WindowHint( WindowHint.ContextVersionMinor, glMinor );
 
-        Logger.Debug( $"Glfw: {glMajor}.{glMinor}.{revision} : glProfile: {OGLProfile}" );
+//        Logger.Debug( $"Glfw: {glMajor}.{glMinor}.{revision} : glProfile: {OGLProfile}" );
 
         Glfw.MakeContextCurrent( windowHandle );
 
-        Logger.Debug( $"OGLVersion: {GdxApi.Bindings.GetOpenGLVersion().major}.{GdxApi.Bindings.GetOpenGLVersion().minor}" );
+//        Logger.Debug( $"OGLVersion: {GdxApi.Bindings.GetOpenGLVersion().major}.{GdxApi.Bindings.GetOpenGLVersion().minor}" );
 
         GLVersion = new GLVersion( LughSharp.Lugh.Core.Platform.ApplicationType.WindowsGL );
     }
@@ -549,7 +547,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
                     System.Environment.Exit( 1 );
                 }
 
-                Logger.Debug( $"Success: Glfw Version: {Glfw.GetVersionString()}", true );
+//                Logger.Debug( $"Success: Glfw Version: {Glfw.GetVersionString()}", true );
 
                 _glfwInitialised = true;
             }
@@ -646,8 +644,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         {
             return Preferences.Get( name )!;
         }
-
-        Logger.Debug( $"Creating new Preferences file: {name}" );
 
         IPreferences prefs = new DesktopGLPreferences( name );
 
@@ -764,8 +760,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
         if ( config.Debug )
         {
-            Logger.Debug( "Setting OpenGL Debug Context" );
-
             Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );
         }
     }
@@ -785,15 +779,15 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     public void Dispose()
     {
         Dispose( true );
+
+        GC.SuppressFinalize( this );
     }
 
-    public void Dispose( bool disposing )
+    public static void Dispose( bool disposing )
     {
         if ( disposing )
         {
             // Release managed resources here
         }
-
-        GC.SuppressFinalize( this );
     }
 }
