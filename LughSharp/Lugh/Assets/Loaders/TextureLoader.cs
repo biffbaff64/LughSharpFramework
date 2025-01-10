@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -70,7 +68,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
         if ( p?.TextureData == null )
         {
-            var format     = Pixmap.ColorFormat.Default;
+            var format     = Pixmap.PixelFormat.Default;
             var genMipMaps = false;
 
             _loaderInfo.Texture = null;
@@ -206,7 +204,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         /// <summary>
         /// Gets or sets the format of the final texture. Uses the source image's format if null.
         /// </summary>
-        public Pixmap.ColorFormat Format { get; set; }
+        public Pixmap.PixelFormat Format { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to generate mipmaps for the texture.

@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -113,7 +113,7 @@ public class Cubemap : GLTexture, IManaged
     /// <summary>
     /// Construct a Cubemap with <see cref="Pixmap"/>s for each side of the specified size.
     /// </summary>
-    public Cubemap( int width, int height, int depth, Pixmap.ColorFormat format )
+    public Cubemap( int width, int height, int depth, int format )
         : this( new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
                 new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
                 new PixmapTextureData( new Pixmap( width, depth, format ), null, false, true ),

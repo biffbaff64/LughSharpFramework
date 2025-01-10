@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / LughSharp Team
+//  Copyright (c) 2024 Richard Ikin
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,7 @@ public static class TextureDataFactory
     /// <exception cref="ArgumentNullException">Thrown when the file parameter is null.</exception>
     public static ITextureData LoadFromFile( FileInfo file, bool useMipMaps = true )
     {
-        return LoadFromFile( file, Pixmap.ColorFormat.RGBA8888, useMipMaps );
+        return LoadFromFile( file, PixelFormat.RGBA8888, useMipMaps );
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public static class TextureDataFactory
     /// <param name="useMipMaps">Specifies whether to use mipmaps.</param>
     /// <returns>The loaded texture data.</returns>
     /// <exception cref="ArgumentNullException">Thrown when the file parameter is null.</exception>
-    public static ITextureData LoadFromFile( FileInfo file, Pixmap.ColorFormat format, bool useMipMaps = true )
+    public static ITextureData LoadFromFile( FileInfo file, int format, bool useMipMaps = true )
     {
         ArgumentNullException.ThrowIfNull( file );
 

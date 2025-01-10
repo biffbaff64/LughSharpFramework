@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / LughSharp Team
+//  Copyright (c) 2024 Richard Ikin
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -37,31 +37,31 @@ public partial class Gdx2DPixmap
     {
         var size = ( uint ) ( _pixmapDataType.Width
                             * _pixmapDataType.Height
-                            * PixmapFormat.Gdx2dBytesPerPixel( ( int ) _pixmapDataType.Format ) );
+                            * PixmapFormat.Gdx2dBytesPerPixel( ( int ) _pixmapDataType.ColorType ) );
 
-        switch ( _pixmapDataType.Format )
+        switch ( _pixmapDataType.ColorType )
         {
-            case PixmapFormat.GDX_2D_FORMAT_ALPHA:
+            case Gdx2DPixmap.GDX_2D_FORMAT_ALPHA:
                 clear_alpha( _pixmapDataType, color, size );
                 break;
 
-            case PixmapFormat.GDX_2D_FORMAT_LUMINANCE_ALPHA:
+            case Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA:
                 clear_luminance_alpha( _pixmapDataType, color, size );
                 break;
 
-            case PixmapFormat.GDX_2D_FORMAT_RGB888:
+            case Gdx2DPixmap.GDX_2D_FORMAT_RGB888:
                 clear_RGB888( _pixmapDataType, color, size );
                 break;
 
-            case PixmapFormat.GDX_2D_FORMAT_RGBA8888:
+            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888:
                 clear_RGBA8888( _pixmapDataType, color, size );
                 break;
 
-            case PixmapFormat.GDX_2D_FORMAT_RGB565:
+            case Gdx2DPixmap.GDX_2D_FORMAT_RGB565:
                 clear_RGB565( _pixmapDataType, color, size );
                 break;
 
-            case PixmapFormat.GDX_2D_FORMAT_RGBA4444:
+            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444:
                 clear_RGBA4444( _pixmapDataType, color, size );
                 break;
 
@@ -182,10 +182,10 @@ public partial class Gdx2DPixmap
 
         switch ( format )
         {
-            case PixmapFormat.GDX_2D_FORMAT_ALPHA:
+            case Gdx2DPixmap.GDX_2D_FORMAT_ALPHA:
                 return color & 0xff;
 
-            case PixmapFormat.GDX_2D_FORMAT_LUMINANCE_ALPHA:
+            case Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA:
                 r = ( color & 0xff000000 ) >> 24;
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
@@ -193,19 +193,19 @@ public partial class Gdx2DPixmap
                 var l = ( ( uint ) ( ( 0.2126f * r ) + ( 0.7152 * g ) + ( 0.0722 * b ) ) & 0xff ) << 8;
                 return ( l & 0xffffff00 ) | a;
 
-            case PixmapFormat.GDX_2D_FORMAT_RGB888:
+            case Gdx2DPixmap.GDX_2D_FORMAT_RGB888:
                 return color >> 8;
 
-            case PixmapFormat.GDX_2D_FORMAT_RGBA8888:
+            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888:
                 return color;
 
-            case PixmapFormat.GDX_2D_FORMAT_RGB565:
+            case Gdx2DPixmap.GDX_2D_FORMAT_RGB565:
                 r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
                 g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
                 b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
                 return r | g | b;
 
-            case PixmapFormat.GDX_2D_FORMAT_RGBA4444:
+            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444:
                 r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
                 g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
                 b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;

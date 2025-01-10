@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / LughSharp Team
+//  Copyright (c) 2024 Richard Ikin
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -30,27 +30,27 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public static class PixmapFormatExtensions
 {
-    public static int ToGLType( this Pixmap.ColorFormat format )
+    public static int ToGLType( this Pixmap.PixelFormat format )
     {
         return Gdx2DPixmap.ToGLType( ToGdx2DPixmapFormat( format ) );
     }
 
-    public static int ToGLFormat( this Pixmap.ColorFormat format )
+    public static int ToGLFormat( this Pixmap.PixelFormat format )
     {
         return Gdx2DPixmap.ToGLFormat( ToGdx2DPixmapFormat( format ) );
     }
 
-    public static int ToGdx2DPixmapFormat( this Pixmap.ColorFormat format )
+    public static int ToGdx2DPixmapFormat( this Pixmap.PixelFormat format )
     {
         return format switch
         {
-            Pixmap.ColorFormat.Alpha          => PixmapFormat.GDX_2D_FORMAT_ALPHA,
-            Pixmap.ColorFormat.Intensity      => PixmapFormat.GDX_2D_FORMAT_ALPHA,
-            Pixmap.ColorFormat.LuminanceAlpha => PixmapFormat.GDX_2D_FORMAT_LUMINANCE_ALPHA,
-            Pixmap.ColorFormat.RGB565         => PixmapFormat.GDX_2D_FORMAT_RGB565,
-            Pixmap.ColorFormat.RGBA4444       => PixmapFormat.GDX_2D_FORMAT_RGBA4444,
-            Pixmap.ColorFormat.RGB888         => PixmapFormat.GDX_2D_FORMAT_RGB888,
-            Pixmap.ColorFormat.RGBA8888       => PixmapFormat.GDX_2D_FORMAT_RGBA8888,
+            Pixmap.PixelFormat.Alpha          => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+            Pixmap.PixelFormat.Intensity      => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+            Pixmap.PixelFormat.LuminanceAlpha => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
+            Pixmap.PixelFormat.RGB565         => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
+            Pixmap.PixelFormat.RGBA4444       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
+            Pixmap.PixelFormat.RGB888         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+            Pixmap.PixelFormat.RGBA8888       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
 
             var _ => throw new GdxRuntimeException( $"Unknown format: {format}" ),
         };

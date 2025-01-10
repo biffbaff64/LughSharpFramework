@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -123,7 +123,7 @@ public class ETC1TextureData : ITextureData
 
         if ( !GdxApi.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
         {
-            var pixmap = _etc1.DecodeImage( _data, Pixmap.ColorFormat.RGB565 );
+            var pixmap = _etc1.DecodeImage( _data, Pixmap.PixelFormat.RGB565 );
 
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
@@ -173,7 +173,7 @@ public class ETC1TextureData : ITextureData
     }
 
     /// <inheritdoc />
-    public Pixmap.ColorFormat Format { get; set; } = Pixmap.ColorFormat.Alpha;
+    public Pixmap.PixelFormat Format { get; set; } = Pixmap.PixelFormat.Alpha;
 
     /// <inheritdoc />
     public bool IsManaged

@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -52,7 +52,7 @@ public class MipMapTextureData : ITextureData
     public bool               UseMipMaps { get; set; }
     public int                Width      { get; set; }
     public int                Height     { get; set; }
-    public Pixmap.ColorFormat Format     { get; set; } = Pixmap.ColorFormat.Alpha;
+    public Pixmap.PixelFormat Format     { get; set; } = Pixmap.PixelFormat.Alpha;
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap"/> or

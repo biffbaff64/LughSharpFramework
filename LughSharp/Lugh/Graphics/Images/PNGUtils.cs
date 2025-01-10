@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / LughSharp Team
+//  Copyright (c) 2024 Richard Ikin
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -30,20 +30,24 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public class PNGUtils
 {
-    public const int SIGNATURE_LENGTH = 8;
-    public const int IHDR_OFFSET      = 8;
-    public const int IHDR_SIZE        = 4;
-    public const int IHDR_DATA_OFFSET = 16;
-    public const int IHDR_DATA_SIZE   = 13;
-    public const int IHDR_CRC_OFFSET  = 29;
-    public const int IHDR_CRC_SIZE    = 4;
-    public const int IDAT_OFFSET      = 33;
-    public const int IDAT_SIZE        = 4;
-    public const int IDAT_DATA_OFFSET = 37;
+    public const int SIGNATURE_LENGTH       = 8;
+    public const int IHDR_START             = 8;
+    public const int IHDR_SIZE              = 4;
+    public const int IHDR_CHUNK_TYPE_OFFSET = ( IHDR_START + IHDR_SIZE );
+    public const int IHDR_DATA_OFFSET       = 16;
+    public const int IHDR_DATA_SIZE         = 13;
+    public const int IHDR_CRC_START         = ( IHDR_DATA_OFFSET + IHDR_DATA_SIZE );
+    public const int IHDR_CRC_SIZE          = 4;
+    public const int IDAT_START             = ( IHDR_CRC_START + IHDR_CRC_SIZE );
+    public const int IDAT_SIZE              = 4;
+    public const int IDAT_CHUNK_TYPE_OFFSET = ( IDAT_START + IDAT_SIZE );
+    public const int IDAT_DATA_OFFSET       = ( IDAT_CHUNK_TYPE_OFFSET + IDAT_SIZE );
 
     private const int WIDTH_OFFSET       = IHDR_DATA_OFFSET;
-    private const int HEIGHT_OFFSET      = WIDTH_OFFSET + 4;
-    private const int BITDEPTH_OFFSET    = HEIGHT_OFFSET + 4;
+    private const int WIDTH_SIZE         = sizeof( uint );
+    private const int HEIGHT_OFFSET      = ( WIDTH_OFFSET + WIDTH_SIZE );
+    private const int HEIGHT_SIZE        = sizeof( uint );
+    private const int BITDEPTH_OFFSET    = ( HEIGHT_OFFSET + HEIGHT_SIZE );
     private const int COLORTYPE_OFFSET   = BITDEPTH_OFFSET + 1;
     private const int COMPRESSION_OFFSET = COLORTYPE_OFFSET + 1;
     private const int FILTER_OFFSET      = COMPRESSION_OFFSET + 1;
@@ -55,7 +59,7 @@ public class PNGUtils
     // 12 - 15 => 49 48 44 52                              - IHDR Chunk Type (4 bytes - 'I', 'H', 'D', 'R')
     // 16 - 28 => 00 00 00 44 00 00 00 44 08 06 00 00 00   - IHDR Data (Width: 68px, Height: 68px, Bit Depth: 8, Color Type: 6 (RGBA), Compression: 0, Filter: 0, Interlace: 0)
     // 29 - 32 => 38 13 93 B2                              - IHDR CRC (Checksum) (4 bytes)
-    // 33 - 36 => 00 00 24 9E                              - IDAT Chunk size (9310 bytes)
+    // 33 - 36 => 00 00 24 9E                              - IDAT Chunk size (9374 bytes)
     // 37 - 40 => 49 44 41 54                              - IDAT Chunk Type (4 bytes - 'I', 'D', 'A', 'T')
     // ... (IDAT data follows)
 
@@ -76,10 +80,10 @@ public class PNGUtils
     public static void AnalysePNG( string filename )
     {
         var data = File.ReadAllBytes( filename );
-        
+
         AnalysePNG( data );
     }
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -112,20 +116,20 @@ public class PNGUtils
         // IHDR
         var ihdr       = new byte[ IHDR_SIZE ];
         var crc        = new byte[ IHDR_CRC_SIZE ];
-        var widthdata  = new byte[ 4 ];
-        var heightdata = new byte[ 4 ];
+        var widthdata  = new byte[ WIDTH_SIZE ];
+        var heightdata = new byte[ HEIGHT_SIZE ];
 
-        Array.Copy( pngData, IHDR_OFFSET, ihdr, 0, IHDR_SIZE );
-        Array.Copy( pngData, IHDR_CRC_OFFSET, crc, 0, IHDR_CRC_SIZE );
+        Array.Copy( pngData, IHDR_START, ihdr, 0, IHDR_SIZE );
+        Array.Copy( pngData, IHDR_CRC_START, crc, 0, IHDR_CRC_SIZE );
 
-        Array.Copy( pngData, WIDTH_OFFSET, widthdata, 0, 4 );
-        Array.Copy( pngData, HEIGHT_OFFSET, heightdata, 0, 4 );
+        Array.Copy( pngData, WIDTH_OFFSET, widthdata, 0, WIDTH_SIZE );
+        Array.Copy( pngData, HEIGHT_OFFSET, heightdata, 0, HEIGHT_SIZE );
 
         IHDRchunk = new IHDRChunk
         {
             Ihdr        = ihdr,
-            Width       = ReadBigEndianUInt32( widthdata, 4 ),
-            Height      = ReadBigEndianUInt32( heightdata, 4 ),
+            Width       = ReadBigEndianUInt32( widthdata, WIDTH_SIZE ),
+            Height      = ReadBigEndianUInt32( heightdata, HEIGHT_SIZE ),
             BitDepth    = pngData[ BITDEPTH_OFFSET ],
             ColorType   = pngData[ COLORTYPE_OFFSET ],
             Compression = pngData[ COMPRESSION_OFFSET ],
@@ -138,8 +142,8 @@ public class PNGUtils
         // IDAT
         var tmp = new byte[ IDAT_SIZE ];
 
-        Array.Copy( pngData, IDAT_OFFSET, tmp, 0, IDAT_SIZE );
-        
+        Array.Copy( pngData, IDAT_START, tmp, 0, IDAT_SIZE );
+
         var tmpChunkSize = ReadBigEndianUInt32( tmp, IDAT_SIZE );
 
         IDATchunk = new IDATChunk
@@ -157,8 +161,7 @@ public class PNGUtils
     {
         try
         {
-            using var fs = new FileStream( filename, FileMode.Open );
-
+            using var fs     = new FileStream( filename, FileMode.Open );
             using var reader = new BinaryReader( fs );
 
             // PNG Signature (8 bytes)
@@ -224,7 +227,7 @@ public class PNGUtils
         }
     }
 
-    //Helper function to read Big Endian UInt32
+    // Helper function to read Big Endian UInt32
     private static uint ReadBigEndianUInt32( byte[] data, int count )
     {
         var bytes = new byte[ count ];
@@ -238,7 +241,7 @@ public class PNGUtils
         return BitConverter.ToUInt32( bytes, 0 );
     }
 
-    //Helper function to read Big Endian UInt32
+    // Helper function to read Big Endian UInt32
     private static uint ReadBigEndianUInt32( BinaryReader reader )
     {
         var bytes = reader.ReadBytes( 4 );
@@ -251,6 +254,7 @@ public class PNGUtils
         return BitConverter.ToUInt32( bytes, 0 );
     }
 
+    // Parse the IHDR data to Logger Debug output.
     private static void ParseIHDR( byte[] data )
     {
         if ( data.Length != 13 )
@@ -267,7 +271,7 @@ public class PNGUtils
         Logger.Debug( $"Width: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Take( 4 ).ToArray() ) ) )} pixels" );
         Logger.Debug( $"Height: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Skip( 4 ).Take( 4 ).ToArray() ) ) )} pixels" );
         Logger.Debug( $"Bit Depth: {bitDepth}" );
-        Logger.Debug( $"Color Type: {ColorTypeName( colorType )}" );
+        Logger.Debug( $"Color Type: {colorType}, {ColorTypeName( colorType )}" );
         var colorFormat = DetermineColorFormat( colorType, bitDepth );
         Logger.Debug( "Color Format: " + colorFormat );
         Logger.Debug( $"Compression Method: {data[ 10 ]}" );
@@ -275,6 +279,7 @@ public class PNGUtils
         Logger.Debug( $"Interlace Method: {data[ 12 ]}" );
     }
 
+    //TODO:
     private static int GetBitsPerPixel( byte colorType, byte bitDepth )
     {
         return 0;
@@ -284,35 +289,45 @@ public class PNGUtils
     {
         return colorType switch
         {
-            0 => // Grayscale
-                $"Grayscale {bitDepth}-bit",
-            2 => // Truecolor
-                bitDepth switch
-                {
-                    8     => "RGB888",
-                    16    => "RGB161616",
-                    var _ => $"Truecolor {bitDepth}-bit"
-                },
-            3 => // Indexed-color
-                $"Indexed {bitDepth}-bit",
-            4 => // Grayscale with alpha
-                bitDepth switch
-                {
-                    8     => "Grayscale with Alpha 88",
-                    16    => "Grayscale with Alpha 1616",
-                    var _ => $"Grayscale with Alpha {bitDepth}{bitDepth}"
-                },
-            6 => // Truecolor with alpha
-                bitDepth switch
-                {
-                    8     => "RGBA8888",
-                    16    => "RGBA16161616",
-                    var _ => $"Truecolor with Alpha {bitDepth}{bitDepth}{bitDepth}{bitDepth}"
-                },
+            0 => $"Grayscale {bitDepth}-bit",
+
+            // --------------------------------------------
+            2 => bitDepth switch
+            {
+                8     => "RGB888",
+                16    => "RGB161616",
+                var _ => $"Truecolor {bitDepth}-bit"
+            },
+
+            // --------------------------------------------
+            3 => $"Indexed {bitDepth}-bit",
+
+            // --------------------------------------------
+            4 => bitDepth switch
+            {
+                8     => "Grayscale with Alpha 88",
+                16    => "Grayscale with Alpha 1616",
+                var _ => $"Grayscale with Alpha {bitDepth}{bitDepth}"
+            },
+
+            // --------------------------------------------
+            6 => bitDepth switch
+            {
+                8     => "RGBA8888",
+                16    => "RGBA16161616",
+                var _ => $"Truecolor with Alpha {bitDepth}{bitDepth}{bitDepth}{bitDepth}"
+            },
+
+            // --------------------------------------------
             var _ => "Unknown Color Format"
         };
     }
 
+    /// <summary>
+    /// Returns a string representation of the Color Type for this PNG, which is held at
+    /// offset 25 into the 41-byte Signature/IHDR/IDAT Png file header.
+    /// </summary>
+    /// <seealso cref="AnalysePNG(byte[])"/>
     public static string ColorTypeName( int colortype )
     {
         return colortype switch
@@ -325,6 +340,32 @@ public class PNGUtils
             var _ => $"Unknow colortype: {colortype}",
         };
     }
+
+//    public static Pixmap.PixelFormat ToPixmapColorFormat( int pngColorType )
+//    {
+//        return pngColorType switch
+//        {
+//            0     => Pixmap.PixelFormat.RGB888,
+//            2     => Pixmap.PixelFormat.RGB888,
+//            3     => throw new GdxRuntimeException( "Indexed Color Format is not supported yet." ),
+//            4     => Pixmap.PixelFormat.RGBA8888,
+//            6     => Pixmap.PixelFormat.RGBA8888,
+//            var _ => throw new GdxRuntimeException( $"unknown format: {pngColorType}" ),
+//        };
+//    }
+    
+//    public static int ToGdx2DColorFormat( int pngColorType )
+//    {
+//        return pngColorType switch
+//        {
+//            0     => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+//            2     => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+//            3     => throw new GdxRuntimeException( "Indexed Color Format is not supported yet." ),
+//            4     => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+//            6     => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+//            var _ => throw new GdxRuntimeException( $"unknown format: {pngColorType}" ),
+//        };
+//    }
 
     /// <summary>
     /// Extracts the <c>Width</c> and <c>Height</c> from a PNG file.
@@ -341,7 +382,6 @@ public class PNGUtils
         }
 
         var br = new BinaryReader( File.OpenRead( file.Name ) );
-
         br.BaseStream.Position = 16;
 
         var widthbytes  = new byte[ sizeof( int ) ];
@@ -403,198 +443,5 @@ public class PNGUtils
     {
         public uint   ChunkSize { get; set; } // 4 bytes (unsigned int)
         public byte[] ChunkType { get; set; } // 4 bytes 'I', 'D', 'A', 'T'
-    }
-
-    /// <summary>
-    /// PNG File Chunk Structure.
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct PngChunk
-    {
-        public uint   DataLength { get; set; } // Size of Data field in bytes
-        public uint   Type       { get; set; } // Code identifying the type of chunk
-        public byte[] Data       { get; set; } // The actual data stored by the chunk
-        public uint   Crc        { get; set; } // CRC-32 value of the Type and Data fields
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct PaletteChunkEntry
-    {
-        public byte Red   { get; set; } // Red component (0 = black, 255 = maximum)
-        public byte Green { get; set; } // Green component (0 = black, 255 = maximum)
-        public byte Blue  { get; set; } // Blue component (0 = black, 255 = maximum)
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct BackgroundChunkEntry
-    {
-        public byte Index { get; set; } // Index of background color in palette
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct GrayScaleBackgroundChunkEntry
-    {
-        public ushort Value { get; set; } // Background level value
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct TrueColorBackgroundChunkEntry
-    {
-        public ushort Red   { get; set; } // Red background sample value
-        public ushort Green { get; set; } // Green background sample value
-        public ushort Blue  { get; set; } // Blue background sample value
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct ChromaChunkEntry
-    {
-        public uint WhitePointX { get; set; } // White Point x value
-        public uint WhitePointY { get; set; } // White Point y value  */
-        public uint RedX        { get; set; } // Red x value
-        public uint RedY        { get; set; } // Red y value
-        public uint GreenX      { get; set; } // Green x value
-        public uint GreenY      { get; set; } // Green y value
-        public uint BlueX       { get; set; } // Blue x value
-        public uint BlueY       { get; set; } // Blue y value
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct GammaChunkEntry
-    {
-        public uint Gamma { get; set; } // Gamma value
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct HistogramChunkEntry
-    {
-        public ushort[] Histogram { get; set; } // Histogram data
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct PixelsPerUnitChunkEntry
-    {
-        public uint PixelsPerUnitX { get; set; } // Pixels per unit, X axis
-        public uint PixelsPerUnitY { get; set; } // Pixels per unit, Y axis
-        public byte UnitSpecifier  { get; set; } // 0 = unknown, 1 = meter
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct SigBitChunkEntry0
-    {
-        public byte GrayscaleBits { get; set; } // Gray-scale (ColorType 0) significant bits
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct SigBitChunkEntry23
-    {
-        public byte RedBits   { get; set; } // Red significant bits
-        public byte GreenBits { get; set; } // Green significant bits
-        public byte BlueBits  { get; set; } // Blue significant bits  */
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct SigBitChunkEntry4
-    {
-        public byte GrayscaleBits { get; set; } // Gray-scale significant bits
-        public byte AlphaBits     { get; set; } // Alpha channel significant bits
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct SigBitChunkEntry6
-    {
-        public byte RedBits   { get; set; } // Red significant bits
-        public byte GreenBits { get; set; } // Green significant bits
-        public byte BlueBits  { get; set; } // Blue significant bits  */
-        public byte AlphaBits { get; set; } // Alpha channel significant bits
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct TextChunkEntry
-    {
-        public char[] Keyword       { get; set; } // Type of information stored in Text
-        public byte   NullSeparator { get; set; } // NULL character used a delimiter
-        public char[] Text          { get; set; } // Textual data
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct TimeChunkEntry
-    {
-        public ushort Year   { get; set; } // Year value (such as 1996)
-        public byte   Month  { get; set; } // Month value (1-12)
-        public byte   Day    { get; set; } // Day value (1-31)
-        public byte   Hour   { get; set; } // Hour value (0-23)
-        public byte   Minute { get; set; } // Minute value (0-59)
-        public byte   Second { get; set; } // Second value (0-60)
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct TransparencyChunkEntryGrayScale
-    {
-        public ushort TransparencyValue { get; set; } // Transparent color
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct TransparencyChunkEntryTrueColor
-    {
-        public ushort RedTransValue   { get; set; } // Red sample of transparent color
-        public ushort GreenTransValue { get; set; } // Green sample of transparent color
-        public ushort BlueTransValue  { get; set; } // Blue sample of transparent color
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
-    public struct TransparencyChunkEntryIndexed
-    {
-        public byte[] TransparencyValues { get; set; } // Transparent colors
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -52,7 +52,7 @@ public class FileTextureData : ITextureData
     // ========================================================================
     // ========================================================================
 
-    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, Pixmap.ColorFormat format, bool useMipMaps )
+    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, int format, bool useMipMaps )
     {
         this.File       = file;
         this._pixmap    = preloadedPixmap;
@@ -135,9 +135,9 @@ public class FileTextureData : ITextureData
     }
 
     /// <summary>
-    /// Returns the <see cref="Pixmap.ColorFormat"/> of the pixel data.
+    /// Returns the <see cref="PixelFormat"/> of the pixel data.
     /// </summary>
-    public Pixmap.ColorFormat Format { get; set; }
+    public int Format { get; set; }
 
     public virtual bool IsManaged
     {

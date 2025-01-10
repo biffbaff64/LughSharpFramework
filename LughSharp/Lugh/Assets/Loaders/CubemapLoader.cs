@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -136,7 +136,7 @@ public class CubemapLoader : AsynchronousAssetLoader
         /// <summary>
         /// the format of the final Texture. Uses the source images format if null
         /// </summary>
-        public Pixmap.ColorFormat? Format = null;
+        public Pixmap.PixelFormat? Format = null;
 
         public Texture.TextureFilter MagFilter = Texture.TextureFilter.Nearest;
         public Texture.TextureFilter MinFilter = Texture.TextureFilter.Nearest;

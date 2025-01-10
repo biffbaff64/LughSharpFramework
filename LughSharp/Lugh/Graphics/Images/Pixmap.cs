@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
 /// A Pixmap represents an image in memory. It has a width and height expressed
-/// in pixels as well as a <see cref="ColorFormat"/> specifying the number and order
+/// in pixels as well as a <see cref="PixelFormat"/> specifying the number and order
 /// of color components per pixel.
 /// <para>
 /// Coordinates of pixels are specified with respect to the top left corner of
@@ -76,7 +76,7 @@ public class Pixmap : IDisposable
     public int         Scale       { get; set; }                // 
     public Color       Color       { get; set; } = Color.Clear; // 
     public Gdx2DPixmap Gdx2DPixmap { get; set; }                // 
-    
+
     #endregion properties
 
     // ========================================================================
@@ -91,8 +91,8 @@ public class Pixmap : IDisposable
     /// </summary>
     /// <param name="width">The width in pixels.</param>
     /// <param name="height">The height in pixels.</param>
-    /// <param name="format">The <see cref="ColorFormat"/></param>
-    public Pixmap( int width, int height, Pixmap.ColorFormat format )
+    /// <param name="format">The <see cref="PixelType.Format"/></param>
+    public Pixmap( int width, int height, PixelType.Format format )
     {
         Gdx2DPixmap = new Gdx2DPixmap( width, height, PixmapFormat.ToGdx2DFormat( format ) );
 
@@ -166,13 +166,6 @@ public class Pixmap : IDisposable
         {
             var data = File.ReadAllBytes( file.FullName );
 
-            PNGUtils.AnalysePNG( data );
-            
-            Logger.Debug( $"Width     : {PNGUtils.IHDRchunk.Width}" );
-            Logger.Debug( $"Height    : {PNGUtils.IHDRchunk.Height}" );
-            Logger.Debug( $"Bit Depth : {PNGUtils.IHDRchunk.BitDepth}" );
-            Logger.Debug( $"Color Type: {PNGUtils.IHDRchunk.ColorType}" );            
-            
             Gdx2DPixmap = new Gdx2DPixmap( data, 0, data.Length, 0 );
         }
         catch ( Exception e )
@@ -195,7 +188,7 @@ public class Pixmap : IDisposable
     /// Returns the OpenGL ES format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, or GL_LUMINANCE_ALPHA.</returns>
-    public int GLFormat => ( int )Gdx2DPixmap.Format;
+    public int GLFormat => ( int )Gdx2DPixmap.ColorType;
 
     /// <summary>
     /// Returns the OpenGL ES internal format of this Pixmap.
@@ -205,7 +198,7 @@ public class Pixmap : IDisposable
     {
         get
         {
-            var format = Gdx2DPixmap.ToGLFormat( ( int )Gdx2DPixmap.Format );
+            var format = Gdx2DPixmap.ToGLFormat( ( int )Gdx2DPixmap.ColorType );
 
             if ( ( format != IGL.GL_RG )
                  && ( format != IGL.GL_RGB )
@@ -224,7 +217,7 @@ public class Pixmap : IDisposable
     /// Returns the OpenGL ES type of this Pixmap.
     /// </summary>
     /// <returns> one of GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT_5_6_5, GL_UNSIGNED_SHORT_4_4_4_4 </returns>
-    public int GLType => Gdx2DPixmap.ToGLType( ( int )Gdx2DPixmap.Format );
+    public int GLType => Gdx2DPixmap.ToGLType( ( int )Gdx2DPixmap.ColorType );
 
     /// <summary>
     /// Returns the byte[] array holding the pixel data. For the format Alpha each
@@ -304,21 +297,15 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Returns the <see cref="ColorFormat"/> of this Pixmap.
+    /// Returns the <see cref="PixelType.Format"/> of this Pixmap.
     /// </summary>
-    public ColorFormat GetColorFormat()
-    {
-        return PixmapFormat.ToPixmapColorFormat( ( int )Gdx2DPixmap.Format );        
-    }
+    public PixelType.Format GetColorFormat() => PixmapFormat.ToPixmapColorFormat( ( int )Gdx2DPixmap.ColorType );
 
     /// <summary>
     /// Gets the number of bits per pixel.
     /// </summary>
-    public int GetBitDepth()
-    {
-        return ( int )Gdx2DPixmap.Format * 8;
-    }
-    
+    public int GetBitDepth() => ( int )Gdx2DPixmap.ColorType;
+
     /// <summary>
     /// Draws a line between the given coordinates using the currently set color.
     /// </summary>
@@ -505,7 +492,7 @@ public class Pixmap : IDisposable
     {
         GdxApi.Bindings.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
-        Pixmap pixmap = new( width, height, Pixmap.ColorFormat.RGBA8888 );
+        Pixmap pixmap = new( width, height, PixelType.Format.RGBA8888 );
 
         fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
         {
@@ -554,28 +541,29 @@ public class Pixmap : IDisposable
             _filter = value;
 
             Scale = _filter == Filter.NearestNeighbour
-                ? PixmapFormat.GDX_2D_SCALE_NEAREST
-                : PixmapFormat.GDX_2D_SCALE_LINEAR;
+                ? Gdx2DPixmap.GDX_2D_SCALE_NEAREST
+                : Gdx2DPixmap.GDX_2D_SCALE_LINEAR;
         }
     }
 
     /// <summary>
     /// Returns the pixel format from a valid named string.
     /// </summary>
-    public static ColorFormat FormatFromString( string str )
+    public static PixelType.Format FormatFromString( string str )
     {
         str = str.ToLower();
 
         return str switch
         {
-            "alpha"          => ColorFormat.Alpha,
-            "intensity"      => ColorFormat.Intensity,
-            "luminancealpha" => ColorFormat.LuminanceAlpha,
-            "rgb565"         => ColorFormat.RGB565,
-            "rgba4444"       => ColorFormat.RGBA4444,
-            "rgb888"         => ColorFormat.RGB888,
-            "rgba8888"       => ColorFormat.RGBA8888,
-            var _            => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
+            "alpha"          => PixelType.Format.Alpha,
+            "intensity"      => PixelType.Format.Intensity,
+            "luminancealpha" => PixelType.Format.LuminanceAlpha,
+            "rgb565"         => PixelType.Format.RGB565,
+            "rgba4444"       => PixelType.Format.RGBA4444,
+            "rgb888"         => PixelType.Format.RGB888,
+            "rgba8888"       => PixelType.Format.RGBA8888,
+
+            var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
         };
     }
 
@@ -587,7 +575,7 @@ public class Pixmap : IDisposable
         {
             Logger.Debug( $"Width : {Width}, Height: {Height}" );
             Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height}" +
-                          $"{PixmapFormat.ToPixmapColorFormat( ( int )Gdx2DPixmap.Format )}:" +
+                          $"{PixmapFormat.ToPixmapColorFormat( ( int )Gdx2DPixmap.ColorType )}:" +
                           $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DFormat( GetColorFormat() ) )}" );
             Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
@@ -633,14 +621,26 @@ public class Pixmap : IDisposable
 
     #region PixmapEnums
 
+    [PublicAPI]
+    public enum ScaleType : int
+    {
+        Nearest  = 0,
+        Linear   = 1,
+        Bilinear = 1,
+
+        Default = Bilinear,
+    }
+
     /// <summary>
     /// Blending functions to be set with <see cref="Pixmap.Blending"/>.
     /// </summary>
     [PublicAPI]
     public enum BlendTypes : int
     {
-        None,
-        SourceOver,
+        None       = 0,
+        SourceOver = 1,
+
+        Default = SourceOver,
     }
 
     /// <summary>
@@ -651,29 +651,31 @@ public class Pixmap : IDisposable
     {
         NearestNeighbour,
         BiLinear,
+
+        Default = BiLinear,
     }
 
-    /// <summary>
-    /// Available Pixmap pixel formats.
-    /// </summary>
-    [PublicAPI]
-    public enum ColorFormat : int
-    {
-        // ----------
-        Dummy,
-
-        // ----------
-        Alpha,
-        LuminanceAlpha,
-        RGB888,
-        RGBA8888,
-        RGB565,
-        RGBA4444,
-        Intensity,
-
-        // ----------
-        Default = RGBA8888,
-    }
+//    /// <summary>
+//    /// Available Pixmap pixel formats.
+//    /// </summary>
+//    [PublicAPI]
+//    public enum PixelFormat : int
+//    {
+//        // ----------
+//        Dummy = 0,
+//
+//        // ----------
+//        Alpha = 1,
+//        LuminanceAlpha = 2,
+//        RGB888 = 3,
+//        RGBA8888 = 4,
+//        RGB565 = 5,
+//        RGBA4444 = 6,
+//        Intensity = 7,
+//
+//        // ----------
+//        Default = RGBA8888,
+//    }
 
     #endregion
 

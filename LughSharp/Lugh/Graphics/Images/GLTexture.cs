@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -465,7 +465,7 @@ public abstract class GLTexture : IDisposable
             Logger.Debug( $"Bit Depth: {pixmap.GetBitDepth()}" );
             Logger.Debug( $"Number of Pixels: {pixmap.Width*pixmap.Height}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {PixmapFormat.GetGLFormatName( pixmap.GLInternalFormat )}" );
-            Logger.Debug( $"Pixmap.Format: {pixmap.Gdx2DPixmap.Format}" );
+            Logger.Debug( $"Pixmap.Format: {pixmap.Gdx2DPixmap.ColorType}" );
             Logger.Debug( $"pixmap.GLFormat: {PixmapFormat.ToPixmapColorFormat( pixmap.GLFormat )}" );
             Logger.Debug( $"pixmap.GLType: {PixmapFormat.GetGLTypeName( pixmap.GLType )}" );
             Logger.Debug( $"pixmap.PixelData.Length: {pixmap.PixelData.Length}" );
@@ -481,7 +481,7 @@ public abstract class GLTexture : IDisposable
 
                 for ( var j = 0; j < BLOCK_SIZE; j++ )
                 {
-                    sb.Append( $"{a[ i + j ]}," );
+                    sb.Append( $"{a[ i + j ]:X2}," );
                 }
 
                 Logger.Debug( sb.ToString() );

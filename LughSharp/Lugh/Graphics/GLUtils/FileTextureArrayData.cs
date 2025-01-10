@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ public class FileTextureArrayData : ITextureArrayData
     private readonly bool            _useMipMaps;
     private          int             _depth;
 
-    public FileTextureArrayData( Pixmap.ColorFormat format, bool useMipMaps, FileInfo[] files )
+    public FileTextureArrayData( Pixmap.PixelFormat format, bool useMipMaps, FileInfo[] files )
     {
         Format      = format;
         _useMipMaps  = useMipMaps;
@@ -63,7 +63,7 @@ public class FileTextureArrayData : ITextureArrayData
     /// <returns> whether this implementation can cope with a EGL context loss. </returns>
     public bool Managed { get; set; }
 
-    public Pixmap.ColorFormat Format { get; set; }
+    public Pixmap.PixelFormat Format { get; set; }
 
     /// <returns> the internal format of this TextureArray </returns>
     public int InternalFormat => PixmapFormat.ToGLFormat( Format );

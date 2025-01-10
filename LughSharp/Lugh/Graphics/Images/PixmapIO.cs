@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -337,7 +337,7 @@ public static class PixmapIO
             _lastLineLen = lineLen;
 
             var oldPosition = pixmap.ByteBuffer.Position;
-            var isRgba8888  = pixmap.GetColorFormat() == Pixmap.ColorFormat.RGBA8888;
+            var isRgba8888  = pixmap.GetColorFormat() == Pixmap.PixelFormat.RGBA8888;
 
             for ( int y = 0, h = pixmap.Height; y < h; y++ )
             {

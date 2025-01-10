@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -97,7 +97,7 @@ public class PixmapPacker : IDisposable
 {
     public int                PageWidth        { get; set; }
     public int                PageHeight       { get; set; }
-    public Pixmap.ColorFormat PageFormat       { get; set; }
+    public Pixmap.PixelFormat PageFormat       { get; set; }
     public Color              TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
     public bool               PackToTexture    { get; set; }
     public bool               DuplicateBorder  { get; set; }
@@ -124,14 +124,14 @@ public class PixmapPacker : IDisposable
     /// <param name="pageWidth"> Page Width in pixels. </param>
     /// <param name="pageHeight"> Page Height in pixels. </param>
     /// <param name="pageFormat">
-    /// The graphics format of pages. See <see cref="Pixmap.ColorFormat"/>
+    /// The graphics format of pages. See <see cref="Pixmap.PixelFormat"/>
     /// </param>
     /// <param name="padding"> the number of blank pixels to insert between pixmaps. </param>
     /// <param name="duplicateBorder">
     /// If TRUE, duplicate the border pixels of the inserted images to avoid
     /// seams when rendering with bi-linear filtering on.
     /// </param>
-    public PixmapPacker( int pageWidth, int pageHeight, Pixmap.ColorFormat pageFormat, int padding, bool duplicateBorder )
+    public PixmapPacker( int pageWidth, int pageHeight, Pixmap.PixelFormat pageFormat, int padding, bool duplicateBorder )
         : this( pageWidth, pageHeight, pageFormat, padding, duplicateBorder, false, false, new GuillotineStrategy() )
     {
     }
@@ -144,7 +144,7 @@ public class PixmapPacker : IDisposable
     /// <param name="pageWidth"> Page Width in pixels. </param>
     /// <param name="pageHeight"> Page Height in pixels. </param>
     /// <param name="pageFormat">
-    /// The graphics format of pages. See <see cref="Pixmap.ColorFormat"/>
+    /// The graphics format of pages. See <see cref="Pixmap.PixelFormat"/>
     /// </param>
     /// <param name="padding"> the number of blank pixels to insert between pixmaps. </param>
     /// <param name="duplicateBorder">
@@ -154,7 +154,7 @@ public class PixmapPacker : IDisposable
     /// <param name="packStrategy"> The <see cref="IPackStrategy"/> to use. </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
-                         Pixmap.ColorFormat pageFormat,
+                         Pixmap.PixelFormat pageFormat,
                          int padding,
                          bool duplicateBorder,
                          IPackStrategy packStrategy )
@@ -170,7 +170,7 @@ public class PixmapPacker : IDisposable
     /// <param name="pageWidth"> Page Width in pixels. </param>
     /// <param name="pageHeight"> Page Height in pixels. </param>
     /// <param name="pageFormat">
-    /// The graphics format of pages. See <see cref="Pixmap.ColorFormat"/>
+    /// The graphics format of pages. See <see cref="Pixmap.PixelFormat"/>
     /// </param>
     /// <param name="padding"> the number of blank pixels to insert between pixmaps. </param>
     /// <param name="duplicateBorder">
@@ -182,7 +182,7 @@ public class PixmapPacker : IDisposable
     /// <param name="packStrategy"> The <see cref="IPackStrategy"/> to use. </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
-                         Pixmap.ColorFormat pageFormat,
+                         Pixmap.PixelFormat pageFormat,
                          int padding,
                          bool duplicateBorder,
                          bool stripWhitespaceX,

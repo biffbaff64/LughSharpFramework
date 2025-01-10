@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -315,7 +315,7 @@ public partial class TextureAtlasData
         public FileInfo? TextureFile { get; set; }
 
         public bool                  UseMipMaps         { get; set; }
-        public Pixmap.ColorFormat    Format             { get; set; } = Pixmap.ColorFormat.RGBA8888;
+        public Pixmap.PixelFormat    Format             { get; set; } = Pixmap.PixelFormat.RGBA8888;
         public Texture.TextureFilter MinFilter          { get; set; } = Texture.TextureFilter.Nearest;
         public Texture.TextureFilter MagFilter          { get; set; } = Texture.TextureFilter.Nearest;
         public Texture.TextureWrap   UWrap              { get; set; } = Texture.TextureWrap.ClampToEdge;

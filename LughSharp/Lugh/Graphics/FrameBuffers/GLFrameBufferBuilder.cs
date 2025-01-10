@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -52,7 +52,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         return this;
     }
 
-    public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( Pixmap.ColorFormat format )
+    public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( Pixmap.PixelFormat format )
     {
         var glFormat = PixmapFormat.ToGLFormat( format );
         var glType   = PixmapFormat.ToGLType( format );

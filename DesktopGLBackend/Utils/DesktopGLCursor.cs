@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ public unsafe class DesktopGLCursor : ICursor, IDisposable
     {
         Window = window;
 
-        if ( pixmap.GetColorFormat() != Pixmap.ColorFormat.RGBA8888 )
+        if ( pixmap.GetColorFormat() != Pixmap.PixelFormat.RGBA8888 )
         {
             throw new GdxRuntimeException( "Cursor image pixmap should be in RGBA8888 format." );
         }
@@ -77,7 +77,7 @@ public unsafe class DesktopGLCursor : ICursor, IDisposable
                                            + $"image height bounds: [0, {pixmap.Height})." );
         }
 
-        PixmapCopy          = new Pixmap( pixmap.Width, pixmap.Height, Pixmap.ColorFormat.RGBA8888 );
+        PixmapCopy          = new Pixmap( pixmap.Width, pixmap.Height, Pixmap.PixelFormat.RGBA8888 );
         PixmapCopy.Blending = Pixmap.BlendTypes.None;
         PixmapCopy.DrawPixmap( pixmap, 0, 0 );
 

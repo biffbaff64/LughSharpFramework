@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -63,7 +63,7 @@ public class TextureArray : GLTexture, IManaged
     /// <param name="useMipMaps"></param>
     /// <param name="files"></param>
     public TextureArray( bool useMipMaps, params FileInfo[] files )
-        : this( useMipMaps, Pixmap.ColorFormat.RGBA8888, files )
+        : this( useMipMaps, Pixmap.PixelFormat.RGBA8888, files )
     {
     }
 
@@ -72,7 +72,7 @@ public class TextureArray : GLTexture, IManaged
     /// <param name="useMipMaps"></param>
     /// <param name="format"></param>
     /// <param name="files"></param>
-    public TextureArray( bool useMipMaps, Pixmap.ColorFormat format, params FileInfo[] files )
+    public TextureArray( bool useMipMaps, Pixmap.PixelFormat format, params FileInfo[] files )
         : this( TextureArrayDataFactory.LoadFromFiles( format, useMipMaps, files ) )
     {
     }

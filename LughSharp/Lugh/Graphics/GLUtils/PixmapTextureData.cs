@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,29 +29,17 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 [PublicAPI]
-public class PixmapTextureData : ITextureData
+public class PixmapTextureData( Pixmap pixmap, int format, bool useMipMaps, bool disposePixmap, bool managed = false )
+    : ITextureData
 {
-    public Pixmap             Pixmap        { get; set; }
-    public Pixmap.ColorFormat Format        { get; set; }
-    public bool               DisposePixmap { get; set; }
-    public bool               IsManaged     { get; set; }
-    public bool               UseMipMaps    { get; set; }
-    public bool               IsPrepared    { get; set; } = true;
+    public Pixmap Pixmap        { get; set; } = pixmap;
+    public int   Format        { get; set; } = format;
+    public bool   DisposePixmap { get; set; } = disposePixmap;
+    public bool   IsManaged     { get; set; } = managed;
+    public bool   UseMipMaps    { get; set; } = useMipMaps;
+    public bool   IsPrepared    { get; set; } = true;
 
     // ========================================================================
-
-    public PixmapTextureData( Pixmap pixmap,
-                              Pixmap.ColorFormat? format,
-                              bool useMipMaps,
-                              bool disposePixmap,
-                              bool managed = false )
-    {
-        Pixmap        = pixmap;
-        UseMipMaps    = useMipMaps;
-        DisposePixmap = disposePixmap;
-        IsManaged     = managed;
-        Format        = format ?? pixmap.GetColorFormat();
-    }
 
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
 

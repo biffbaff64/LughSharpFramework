@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -92,20 +92,20 @@ public class Texture : GLTexture, IManaged
     /// <param name="file"></param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file, bool useMipMaps )
-        : this( file, Pixmap.ColorFormat.Default, useMipMaps )
+        : this( file, PixelFormat.Default, useMipMaps )
     {
     }
 
     /// <summary>
     /// Create a new Texture from the file specified in the given <see cref="FileInfo"/>.
     /// The Texture pixmap format will be set to the given format, which defaults to
-    /// <see cref="Pixmap.ColorFormat.RGBA8888"/>.
+    /// <see cref="PixelFormat.RGBA8888"/>.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file,
-                    Pixmap.ColorFormat format = Pixmap.ColorFormat.Default,
+                    int format = PixelFormat.Default,
                     bool useMipMaps = false )
         : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
     {
@@ -117,17 +117,17 @@ public class Texture : GLTexture, IManaged
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( Pixmap pixmap, bool useMipMaps = false )
-        : this( new PixmapTextureData( pixmap, null, useMipMaps, false ) )
+        : this( new PixmapTextureData( pixmap, PixelFormat.NULL, useMipMaps, false ) )
     {
     }
 
     /// <summary>
-    /// Creates a new Texture from the supplied <see cref="Pixmap"/> and <see cref="Pixmap.ColorFormat"/>
+    /// Creates a new Texture from the supplied <see cref="Pixmap"/> and <see cref="PixelFormat"/>
     /// </summary>
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
-    public Texture( Pixmap pixmap, Pixmap.ColorFormat format, bool useMipMaps = false )
+    public Texture( Pixmap pixmap, int format, bool useMipMaps = false )
         : this( new PixmapTextureData( pixmap, format, useMipMaps, false ) )
     {
     }
@@ -137,9 +137,9 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     /// <param name="width"> The width in pixels. </param>
     /// <param name="height"> The Height in pixels. </param>
-    /// <param name="format"> The pixmap <see cref="Pixmap.ColorFormat"/> </param>
-    public Texture( int width, int height, Pixmap.ColorFormat format )
-        : this( new PixmapTextureData( new Pixmap( width, height, format ), null, false, true ) )
+    /// <param name="format"> The pixmap <see cref="PixelFormat"/> </param>
+    public Texture( int width, int height, int format )
+        : this( new PixmapTextureData( new Pixmap( width, height, format ), PixelFormat.NULL, false, true ) )
     {
     }
 

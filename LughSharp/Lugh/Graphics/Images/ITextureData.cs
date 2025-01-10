@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
-// Copyright (c) 2024 Richard Ikin / LughSharp Team.
+// Copyright (c) 2024 Richard Ikin.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -76,9 +76,9 @@ public interface ITextureData : IManaged
     public int Height { get; set; }
 
     /// <summary>
-    /// Returns the <see cref="Pixmap.ColorFormat"/> of the pixel data.
+    /// Returns the <see cref="PixelFormat"/> of the pixel data.
     /// </summary>
-    public Pixmap.ColorFormat Format { get; set; }
+    public int Format { get; set; }
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ConsumePixmap()"/> or
