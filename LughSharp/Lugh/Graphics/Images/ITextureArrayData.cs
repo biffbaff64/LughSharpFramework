@@ -104,7 +104,7 @@ public interface ITextureArrayData
 [PublicAPI]
 public class TextureArrayDataFactory
 {
-    public static ITextureArrayData LoadFromFiles( Pixmap.PixelFormat format,
+    public static ITextureArrayData LoadFromFiles( PixelType.Format format,
                                                    bool useMipMaps,
                                                    params FileInfo[] files )
     {

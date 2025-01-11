@@ -386,7 +386,7 @@ public class FreeTypeFontGenerator : IDisposable
             }
 
             ownsAtlas = true;
-            packer    = new PixmapPacker( size, size, Pixmap.PixelFormat.RGBA8888, 1, false, packStrategy );
+            packer    = new PixmapPacker( size, size, PixelType.Format.RGBA8888, 1, false, packStrategy );
 
             packer.TransparentColor   = ( parameter.BorderWidth > 0 ) ? parameter.BorderColor : parameter.Color;
             packer.TransparentColor.A = 0;
@@ -560,7 +560,7 @@ public class FreeTypeFontGenerator : IDisposable
         }
 
         var mainBitmap = mainGlyph.GetBitmap();
-        var mainPixmap = mainBitmap.GetPixmap( Pixmap.PixelFormat.RGBA8888, parameter.Color, parameter.Gamma );
+        var mainPixmap = mainBitmap.GetPixmap( PixelType.Format.RGBA8888, parameter.Color, parameter.Gamma );
 
         if ( ( mainBitmap.GetWidth() != 0 ) && ( mainBitmap.GetRows() != 0 ) )
         {
@@ -578,7 +578,7 @@ public class FreeTypeFontGenerator : IDisposable
 
                 // Render border (pixmap is bigger than main).
                 var borderBitmap = borderGlyph.GetBitmap();
-                var borderPixmap = borderBitmap.GetPixmap( Pixmap.PixelFormat.RGBA8888, parameter.BorderColor, parameter.BorderGamma );
+                var borderPixmap = borderBitmap.GetPixmap( PixelType.Format.RGBA8888, parameter.BorderColor, parameter.BorderGamma );
 
                 // Draw main glyph on top of border.
                 for ( int i = 0, n = parameter.RenderCount; i < n; i++ )

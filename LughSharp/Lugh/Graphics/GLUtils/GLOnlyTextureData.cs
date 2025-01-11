@@ -38,14 +38,14 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI]
 public class GLOnlyTextureData : ITextureData
 {
-    public int                MipLevel       { get; set; } = 0;
-    public int                InternalFormat { get; set; }
-    public Pixmap.PixelFormat Format         { get; set; }
-    public int                Type           { get; set; }
-    public int                Width          { get; set; } = 0;
-    public int                Height         { get; set; } = 0;
-    public bool               IsPrepared     { get; set; } = false;
-    public bool               UseMipMaps     { get; set; }
+    public int               MipLevel       { get; set; } = 0;
+    public int               InternalFormat { get; set; }
+    public PixelType.Format? Format         { get; set; }
+    public int               Type           { get; set; }
+    public int               Width          { get; set; } = 0;
+    public int               Height         { get; set; } = 0;
+    public bool              IsPrepared     { get; set; } = false;
+    public bool              UseMipMaps     { get; set; }
 
     // ========================================================================
 
@@ -82,7 +82,7 @@ public class GLOnlyTextureData : ITextureData
         Height         = height;
         MipLevel       = mipMapLevel;
         InternalFormat = internalFormat;
-        Format         = PixmapFormat.ToPixmapColorFormat( format );
+        Format         = PixmapFormat.ToPixmapPixelFormat( format );
         Type           = type;
     }
 
@@ -99,22 +99,22 @@ public class GLOnlyTextureData : ITextureData
     public unsafe void ConsumeCustomData( int target )
     {
         GdxApi.Bindings.TexImage2D( target,
-                             MipLevel,
-                             InternalFormat,
-                             Width,
-                             Height,
-                             0,
-                             PixmapFormat.ToGdx2DFormat( Format ),
-                             Type,
-                             null! );
+                                    MipLevel,
+                                    InternalFormat,
+                                    Width,
+                                    Height,
+                                    0,
+                                    PixmapFormat.ToGdx2DPixelFormat( Format ),
+                                    Type,
+                                    null! );
     }
 
     /// <summary>
-    /// Returns the <see cref="Pixmap.PixelFormat"/> for this GLOnlyTextureData object.
+    /// Returns the <see cref="PixelType.Format"/> for this GLOnlyTextureData object.
     /// </summary>
-    public Pixmap.PixelFormat GetFormat()
+    public PixelType.Format GetFormat()
     {
-        return Pixmap.PixelFormat.RGBA8888;
+        return PixelType.Format.RGBA8888;
     }
 
     /// <summary>

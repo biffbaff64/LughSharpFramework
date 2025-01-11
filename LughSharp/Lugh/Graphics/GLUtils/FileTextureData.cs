@@ -52,7 +52,7 @@ public class FileTextureData : ITextureData
     // ========================================================================
     // ========================================================================
 
-    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, int format, bool useMipMaps )
+    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, PixelType.Format format, bool useMipMaps )
     {
         this.File       = file;
         this._pixmap    = preloadedPixmap;
@@ -135,9 +135,9 @@ public class FileTextureData : ITextureData
     }
 
     /// <summary>
-    /// Returns the <see cref="PixelFormat"/> of the pixel data.
+    /// Returns the <see cref="PixelType.Format"/> of the pixel data.
     /// </summary>
-    public int Format { get; set; }
+    public PixelType.Format? Format { get; set; }
 
     public virtual bool IsManaged
     {

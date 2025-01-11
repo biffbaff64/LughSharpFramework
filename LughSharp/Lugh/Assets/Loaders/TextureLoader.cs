@@ -68,7 +68,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
         if ( p?.TextureData == null )
         {
-            var format     = Pixmap.PixelFormat.Default;
+            var format     = PixelType.Format.Default;
             var genMipMaps = false;
 
             _loaderInfo.Texture = null;
@@ -204,7 +204,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         /// <summary>
         /// Gets or sets the format of the final texture. Uses the source image's format if null.
         /// </summary>
-        public Pixmap.PixelFormat Format { get; set; }
+        public PixelType.Format Format { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to generate mipmaps for the texture.

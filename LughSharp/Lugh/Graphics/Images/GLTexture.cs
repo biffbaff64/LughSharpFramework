@@ -58,10 +58,10 @@ public abstract class GLTexture : IDisposable
     /// by OpenGL to represent a texture object in memory. It is used to reference and
     /// manipulate a specific texture in OpenGL operations.
     /// <para>
-    /// The handle is typically created using a function like <see cref="IGLBindings.glGenTextures(int)"/>.
+    /// The handle is typically created using a function like <see cref="IGLBindings.GenTextures(int)"/>.
     /// Once created, this handle is used in various OpenGL functions to bind, modify,
     /// or delete the texture. The handle remains valid until explicitly deleted using
-    /// a function like <see cref="IGLBindings.glDeleteTextures(uint[])"/> 
+    /// a function like <see cref="IGLBindings.DeleteTextures(uint[])"/> 
     /// </para>
     /// </summary>
     public uint GLTextureHandle { get; set; }
@@ -161,8 +161,7 @@ public abstract class GLTexture : IDisposable
     /// Creates a new GLTexture object using the supplied OpenGL target.
     /// </summary>
     /// <param name="glTarget"></param>
-    protected GLTexture( int glTarget )
-        : this( glTarget, GdxApi.Bindings.GenTexture() )
+    protected GLTexture( int glTarget ) : this( glTarget, GdxApi.Bindings.GenTexture() )
     {
     }
 
@@ -458,16 +457,23 @@ public abstract class GLTexture : IDisposable
     {
         if ( GdxApi.DevMode )
         {
-            Logger.Debug( $"pixmap.Width: {pixmap.Width}" );
-            Logger.Debug( $"pixmap.Height: {pixmap.Height}" );
-            Logger.Debug( $"target: {target}" );
-            Logger.Debug( $"mipLevel: {miplevel}" );
-            Logger.Debug( $"Bit Depth: {pixmap.GetBitDepth()}" );
-            Logger.Debug( $"Number of Pixels: {pixmap.Width*pixmap.Height}" );
-            Logger.Debug( $"pixmap.GLInternalFormat: {PixmapFormat.GetGLFormatName( pixmap.GLInternalFormat )}" );
-            Logger.Debug( $"Pixmap.Format: {pixmap.Gdx2DPixmap.ColorType}" );
-            Logger.Debug( $"pixmap.GLFormat: {PixmapFormat.ToPixmapColorFormat( pixmap.GLFormat )}" );
-            Logger.Debug( $"pixmap.GLType: {PixmapFormat.GetGLTypeName( pixmap.GLType )}" );
+            Logger.Divider();
+            Logger.Debug( $"GL Target              : {target}" );
+            Logger.Debug( $"mipLevel               : {miplevel}" );
+            Logger.Debug( $"pixmap.Width           : {pixmap.Width}" );
+            Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
+            Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
+            Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap.ColorType}" );
+
+            var format = PixmapFormat.PNGColorTypeToPixmapPixelFormat( ( int )pixmap.Gdx2DPixmap.ColorType );
+            Logger.Debug( $"Pixmap Pixel Format    : {PixmapFormat.GetFormatString( ( int )format )}" );
+
+            Logger.Debug( $"pixmap.GLFormat        : {PixmapFormat.GetGLPixelFormatName( pixmap.GLFormat )}" );
+            Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalFormat}" );
+
+            Logger.Debug( $"pixmap.GLType          : {PixmapFormat.GetGLTypeName( pixmap.GLType )}" );
+            
+            Logger.Debug( $"Number of Pixels       : {pixmap.Width * pixmap.Height}" );
             Logger.Debug( $"pixmap.PixelData.Length: {pixmap.PixelData.Length}" );
 
             var a  = pixmap.PixelData;
@@ -486,6 +492,8 @@ public abstract class GLTexture : IDisposable
 
                 Logger.Debug( sb.ToString() );
             }
+
+            Logger.Divider();
         }
     }
 

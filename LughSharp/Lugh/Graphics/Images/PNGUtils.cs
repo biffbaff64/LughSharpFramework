@@ -341,15 +341,15 @@ public class PNGUtils
         };
     }
 
-//    public static Pixmap.PixelFormat ToPixmapColorFormat( int pngColorType )
+//    public static PixelType.Format ToPixmapColorFormat( int pngColorType )
 //    {
 //        return pngColorType switch
 //        {
-//            0     => Pixmap.PixelFormat.RGB888,
-//            2     => Pixmap.PixelFormat.RGB888,
+//            0     => PixelType.Format.RGB888,
+//            2     => PixelType.Format.RGB888,
 //            3     => throw new GdxRuntimeException( "Indexed Color Format is not supported yet." ),
-//            4     => Pixmap.PixelFormat.RGBA8888,
-//            6     => Pixmap.PixelFormat.RGBA8888,
+//            4     => PixelType.Format.RGBA8888,
+//            6     => PixelType.Format.RGBA8888,
 //            var _ => throw new GdxRuntimeException( $"unknown format: {pngColorType}" ),
 //        };
 //    }

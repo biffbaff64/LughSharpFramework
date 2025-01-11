@@ -82,7 +82,7 @@ public class FacedCubemapData : ICubemapData
     /// <summary>
     /// Construct a Cubemap with <see cref="Pixmap"/>s for each side of the specified size.
     /// </summary>
-    public FacedCubemapData( int width, int height, int depth, Pixmap.PixelFormat format )
+    public FacedCubemapData( int width, int height, int depth, PixelType.Format format )
         : this( new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
                 new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
                 new PixmapTextureData( new Pixmap( width, depth, format ), null, false, true ),

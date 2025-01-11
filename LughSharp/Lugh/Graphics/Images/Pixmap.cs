@@ -92,9 +92,9 @@ public class Pixmap : IDisposable
     /// <param name="width">The width in pixels.</param>
     /// <param name="height">The height in pixels.</param>
     /// <param name="format">The <see cref="PixelType.Format"/></param>
-    public Pixmap( int width, int height, PixelType.Format format )
+    public Pixmap( int width, int height, PixelType.Format? format )
     {
-        Gdx2DPixmap = new Gdx2DPixmap( width, height, PixmapFormat.ToGdx2DFormat( format ) );
+        Gdx2DPixmap = new Gdx2DPixmap( width, height, PixmapFormat.ToGdx2DPixelFormat( format ) );
 
         SetColor( Graphics.Color.Red );
         FillWithCurrentColor();
@@ -188,7 +188,7 @@ public class Pixmap : IDisposable
     /// Returns the OpenGL ES format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, or GL_LUMINANCE_ALPHA.</returns>
-    public int GLFormat => ( int )Gdx2DPixmap.ColorType;
+    public int GLFormat => PixmapFormat.ToGLFormat( ( int )Gdx2DPixmap.ColorType );
 
     /// <summary>
     /// Returns the OpenGL ES internal format of this Pixmap.
@@ -198,7 +198,7 @@ public class Pixmap : IDisposable
     {
         get
         {
-            var format = Gdx2DPixmap.ToGLFormat( ( int )Gdx2DPixmap.ColorType );
+            var format = PixmapFormat.ToGLFormat( ( int )Gdx2DPixmap.ColorType );
 
             if ( ( format != IGL.GL_RG )
                  && ( format != IGL.GL_RGB )
@@ -217,7 +217,7 @@ public class Pixmap : IDisposable
     /// Returns the OpenGL ES type of this Pixmap.
     /// </summary>
     /// <returns> one of GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT_5_6_5, GL_UNSIGNED_SHORT_4_4_4_4 </returns>
-    public int GLType => Gdx2DPixmap.ToGLType( ( int )Gdx2DPixmap.ColorType );
+    public int GLType => PixmapFormat.ToGLType( ( int )Gdx2DPixmap.ColorType );
 
     /// <summary>
     /// Returns the byte[] array holding the pixel data. For the format Alpha each
@@ -299,12 +299,12 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Returns the <see cref="PixelType.Format"/> of this Pixmap.
     /// </summary>
-    public PixelType.Format GetColorFormat() => PixmapFormat.ToPixmapColorFormat( ( int )Gdx2DPixmap.ColorType );
+    public PixelType.Format GetColorFormat() => PixmapFormat.ToPixmapPixelFormat( ( int )Gdx2DPixmap.ColorType );
 
     /// <summary>
     /// Gets the number of bits per pixel.
     /// </summary>
-    public int GetBitDepth() => ( int )Gdx2DPixmap.ColorType;
+    public int GetBitDepth() => ( int )Gdx2DPixmap.BitDepth;
 
     /// <summary>
     /// Draws a line between the given coordinates using the currently set color.
@@ -575,8 +575,8 @@ public class Pixmap : IDisposable
         {
             Logger.Debug( $"Width : {Width}, Height: {Height}" );
             Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height}" +
-                          $"{PixmapFormat.ToPixmapColorFormat( ( int )Gdx2DPixmap.ColorType )}:" +
-                          $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DFormat( GetColorFormat() ) )}" );
+                          $"{PixmapFormat.ToPixmapPixelFormat( ( int )Gdx2DPixmap.ColorType )}:" +
+                          $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DPixelFormat( GetColorFormat() ) )}" );
             Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
             var a = Gdx2DPixmap.PixmapBuffer.BackingArray();

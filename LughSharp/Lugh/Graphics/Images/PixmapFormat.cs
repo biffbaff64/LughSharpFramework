@@ -28,6 +28,16 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Images;
 
+//TODO: These method names need reworking into something more self-explanatory.
+// 
+// PNGtoOpenGLPixelFormat
+// OpenGLPixelFormatToPNGPixelFormat
+// 
+// 
+// 
+// 
+// 
+
 [PublicAPI]
 public class PixmapFormat
 {
@@ -81,7 +91,7 @@ public class PixmapFormat
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    public static PixelType.Format PNGColorTypeToPixmapColorFormat( int format )
+    public static PixelType.Format PNGColorTypeToPixmapPixelFormat( int format )
     {
         return format switch
         {
@@ -144,7 +154,7 @@ public class PixmapFormat
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
-    public static string GetGLFormatName( int format )
+    public static string GetGLPixelFormatName( int format )
     {
         return format switch
         {
@@ -179,7 +189,7 @@ public class PixmapFormat
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    public static int ToGdx2DFormat( PixelType.Format format )
+    public static int ToGdx2DPixelFormat( PixelType.Format? format )
     {
         return format switch
         {
@@ -200,7 +210,7 @@ public class PixmapFormat
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    public static PixelType.Format ToPixmapColorFormat( int format )
+    public static PixelType.Format ToPixmapPixelFormat( int format )
     {
         return format switch
         {
@@ -221,7 +231,7 @@ public class PixmapFormat
     /// <returns></returns>
     public static int ToGLFormat( PixelType.Format format )
     {
-        var cformat = ToGdx2DFormat( format );
+        var cformat = ToGdx2DPixelFormat( format );
 
         return cformat switch
         {
@@ -240,9 +250,29 @@ public class PixmapFormat
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
+    /// <exception cref="GdxRuntimeException"></exception>
+    public static int ToGLFormat( int format )
+    {
+        return format switch
+        {
+            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
+            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
+
+            var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
+        };
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
     public static int ToGLType( PixelType.Format format )
     {
-        var cformat = ToGdx2DFormat( format );
+        var cformat = ToGdx2DPixelFormat( format );
 
         return cformat switch
         {
@@ -261,18 +291,36 @@ public class PixmapFormat
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
+    /// <exception cref="GdxRuntimeException"></exception>
+    public static int ToGLType( int format )
+    {
+        return format switch
+        {
+            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
+            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+
+            var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
+        };
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
     public static string GetFormatString( int format )
     {
-        var cformat = OglToPngColor( format );
-
-        return cformat switch
+        return format switch
         {
-            PixelType.Format.Alpha          => "GDX_2D_FORMAT_ALPHA",
-            PixelType.Format.LuminanceAlpha => "GDX_2D_FORMAT_LUMINANCE_ALPHA",
-            PixelType.Format.RGB888         => "GDX_2D_FORMAT_RGB888",
-            PixelType.Format.RGBA8888       => "GDX_2D_FORMAT_RGBA8888",
-            PixelType.Format.RGB565         => "GDX_2D_FORMAT_RGB565",
-            PixelType.Format.RGBA4444       => "GDX_2D_FORMAT_RGBA4444",
+            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => "GDX_2D_FORMAT_ALPHA",
+            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => "GDX_2D_FORMAT_LUMINANCE_ALPHA",
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => "GDX_2D_FORMAT_RGB888",
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => "GDX_2D_FORMAT_RGBA8888",
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => "GDX_2D_FORMAT_RGB565",
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => "GDX_2D_FORMAT_RGBA4444",
 
             var _ => $"Unknown format: {format}",
         };

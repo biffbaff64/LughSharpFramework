@@ -113,7 +113,7 @@ public class Cubemap : GLTexture, IManaged
     /// <summary>
     /// Construct a Cubemap with <see cref="Pixmap"/>s for each side of the specified size.
     /// </summary>
-    public Cubemap( int width, int height, int depth, int format )
+    public Cubemap( int width, int height, int depth, PixelType.Format format )
         : this( new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
                 new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
                 new PixmapTextureData( new Pixmap( width, depth, format ), null, false, true ),

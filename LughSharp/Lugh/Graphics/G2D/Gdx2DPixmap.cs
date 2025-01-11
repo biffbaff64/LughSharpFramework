@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -43,6 +44,7 @@ public class PixmapDataType
 {
     public uint   Width     { get; set; }
     public uint   Height    { get; set; }
+    public uint   BitDepth  { get; set; }
     public uint   ColorType { get; set; }
     public uint   Blend     { get; set; }
     public uint   Scale     { get; set; }
@@ -84,6 +86,7 @@ public partial class Gdx2DPixmap : IDisposable
     public uint       Width        { get; set; }
     public uint       Height       { get; set; }
     public uint       ColorType    { get; set; }
+    public uint       BitDepth     { get; set; }
     public uint       Blend        { get; set; }
     public uint       Scale        { get; set; }
 
@@ -135,6 +138,7 @@ public partial class Gdx2DPixmap : IDisposable
         this.Width     = _pixmapDataType.Width;
         this.Height    = _pixmapDataType.Height;
         this.ColorType = _pixmapDataType.ColorType;
+        this.BitDepth  = _pixmapDataType.BitDepth;
         this.Blend     = _pixmapDataType.Blend;
         this.Scale     = _pixmapDataType.Scale;
     }
@@ -173,6 +177,7 @@ public partial class Gdx2DPixmap : IDisposable
         this.Width     = _pixmapDataType.Width;
         this.Height    = _pixmapDataType.Height;
         this.ColorType = _pixmapDataType.ColorType;
+        this.BitDepth  = _pixmapDataType.BitDepth;
         this.Blend     = _pixmapDataType.Blend;
         this.Scale     = _pixmapDataType.Scale;
     }
@@ -199,6 +204,7 @@ public partial class Gdx2DPixmap : IDisposable
             Width     = this.Width,
             Height    = this.Height,
             ColorType = this.ColorType,
+            BitDepth  = this.BitDepth,
             Blend     = this.Blend,
             Scale     = this.Scale,
             Pixels    = new byte[ length ],
@@ -234,51 +240,21 @@ public partial class Gdx2DPixmap : IDisposable
         {
             Width     = ( uint )PNGUtils.IHDRchunk.Width,
             Height    = ( uint )PNGUtils.IHDRchunk.Height,
-            ColorType = ( uint )PNGUtils.IHDRchunk.ColorType,    // PNGUtils.ToGdx2DColorFormat( PNGUtils.IHDRchunk.ColorType ),
+            BitDepth  = ( uint )PNGUtils.IHDRchunk.BitDepth,
+            ColorType = ( uint )PNGUtils.IHDRchunk.ColorType,
+            Blend     = 0,
+            Scale     = 0,
             Pixels    = new byte[ PNGUtils.IDATchunk.ChunkSize ],
         };
 
+        Logger.Debug( $"Width    : {pixmapDef.Width}" );
+        Logger.Debug( $"Height   : {pixmapDef.Height}" );
+        Logger.Debug( $"BitDepth : {pixmapDef.BitDepth}" );
+        Logger.Debug( $"ColorType: {pixmapDef.ColorType}" );
+        
         Array.Copy( buffer, PNGUtils.IDAT_DATA_OFFSET, pixmapDef.Pixels, 0, PNGUtils.IDATchunk.ChunkSize );
 
         return ( new HeapByteBuffer( pixmapDef.Pixels, 0, pixmapDef.Pixels.Length ), pixmapDef );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
-    public static int ToGLFormat( int format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
-            var _                                      => throw new GdxRuntimeException( $"unknown format: {format}" ),
-        };
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
-    public static int ToGLType( int format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
-            var _                                      => throw new GdxRuntimeException( $"unknown format: {format}" ),
-        };
     }
 
     /// <summary>
@@ -297,6 +273,7 @@ public partial class Gdx2DPixmap : IDisposable
         this.Width        = pixmap.Width;
         this.Height       = pixmap.Height;
         this.ColorType    = pixmap.ColorType;
+        this.BitDepth     = pixmap.BitDepth;
         this.PixmapBuffer = pixmap.PixmapBuffer;
     }
 

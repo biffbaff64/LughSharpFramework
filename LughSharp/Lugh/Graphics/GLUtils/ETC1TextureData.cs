@@ -123,7 +123,7 @@ public class ETC1TextureData : ITextureData
 
         if ( !GdxApi.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
         {
-            var pixmap = _etc1.DecodeImage( _data, Pixmap.PixelFormat.RGB565 );
+            var pixmap = _etc1.DecodeImage( _data, PixelType.Format.RGB565 );
 
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
@@ -173,7 +173,7 @@ public class ETC1TextureData : ITextureData
     }
 
     /// <inheritdoc />
-    public Pixmap.PixelFormat Format { get; set; } = Pixmap.PixelFormat.Alpha;
+    public PixelType.Format? Format { get; set; } = PixelType.Format.Alpha;
 
     /// <inheritdoc />
     public bool IsManaged

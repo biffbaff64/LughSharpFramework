@@ -485,7 +485,7 @@ public class FreeType
             throw new NotImplementedException();
         }
 
-        public Pixmap GetPixmap( Pixmap.PixelFormat rgba8888, Color parameterColor, float parameterGamma )
+        public Pixmap GetPixmap( PixelType.Format rgba8888, Color parameterColor, float parameterGamma )
         {
             throw new NotImplementedException();
         }

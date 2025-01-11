@@ -23,21 +23,20 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 [PublicAPI]
-public class PixmapTextureData( Pixmap pixmap, int format, bool useMipMaps, bool disposePixmap, bool managed = false )
+public class PixmapTextureData( Pixmap pixmap, PixelType.Format? format, bool useMipMaps, bool disposePixmap, bool managed = false )
     : ITextureData
 {
-    public Pixmap Pixmap        { get; set; } = pixmap;
-    public int   Format        { get; set; } = format;
-    public bool   DisposePixmap { get; set; } = disposePixmap;
-    public bool   IsManaged     { get; set; } = managed;
-    public bool   UseMipMaps    { get; set; } = useMipMaps;
-    public bool   IsPrepared    { get; set; } = true;
+    public Pixmap            Pixmap        { get; set; } = pixmap;
+    public PixelType.Format? Format        { get; set; } = format;
+    public bool              DisposePixmap { get; set; } = disposePixmap;
+    public bool              IsManaged     { get; set; } = managed;
+    public bool              UseMipMaps    { get; set; } = useMipMaps;
+    public bool              IsPrepared    { get; set; } = true;
 
     // ========================================================================
 

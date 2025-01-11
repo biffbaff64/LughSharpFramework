@@ -52,7 +52,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         return this;
     }
 
-    public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( Pixmap.PixelFormat format )
+    public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( PixelType.Format format )
     {
         var glFormat = PixmapFormat.ToGLFormat( format );
         var glType   = PixmapFormat.ToGLType( format );

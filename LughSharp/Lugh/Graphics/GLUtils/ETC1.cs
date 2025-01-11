@@ -50,7 +50,7 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="Pixmap.PixelFormat.RGB565"/> and <see cref="Pixmap.PixelFormat.RGB888"/> are supported.
+    /// Only <see cref="PixelType.Format.RGB565"/> and <see cref="PixelType.Format.RGB888"/> are supported.
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap"/> </param>
     /// <returns> the <see cref="ETC1Data"/> </returns>
@@ -66,7 +66,7 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="Pixmap.PixelFormat.RGB565"/> and <see cref="Pixmap.PixelFormat.RGB888"/> are supported.
+    /// Only <see cref="PixelType.Format.RGB565"/> and <see cref="PixelType.Format.RGB888"/> are supported.
     /// Adds a PKM header in front of the compressed image data.
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap"/> </param>
@@ -82,14 +82,14 @@ public class ETC1
     }
 
     /// <summary>
-    /// Takes ETC1 compressed image data and converts it to a <see cref="Pixmap.PixelFormat.RGB565"/> or
-    /// <see cref="Pixmap.PixelFormat.RGB888"/> <see cref="Pixmap"/>.
+    /// Takes ETC1 compressed image data and converts it to a <see cref="PixelType.Format.RGB565"/> or
+    /// <see cref="PixelType.Format.RGB888"/> <see cref="Pixmap"/>.
     /// Does not modify the ByteBuffer's position or limit.
     /// </summary>
     /// <param name="etc1Data"> the <see cref="ETC1Data"/> instance </param>
-    /// <param name="format"> either <see cref="Pixmap.PixelFormat.RGB565"/> or <see cref="Pixmap.PixelFormat.RGB888"/> </param>
+    /// <param name="format"> either <see cref="PixelType.Format.RGB565"/> or <see cref="PixelType.Format.RGB888"/> </param>
     /// <returns> the Pixmap </returns>
-    public Pixmap DecodeImage( ETC1Data? etc1Data, Pixmap.PixelFormat format )
+    public Pixmap DecodeImage( ETC1Data? etc1Data, PixelType.Format format )
     {
         ArgumentNullException.ThrowIfNull( etc1Data );
 
@@ -119,17 +119,17 @@ public class ETC1
     }
 
     /// <summary>
-    /// Gets the pixel size for the given <see cref="Pixmap.PixelFormat"/>, which must be
-    /// one of <see cref="Pixmap.PixelFormat.RGB565"/> or <see cref="Pixmap.PixelFormat.RGB888"/>.
+    /// Gets the pixel size for the given <see cref="PixelType.Format"/>, which must be
+    /// one of <see cref="PixelType.Format.RGB565"/> or <see cref="PixelType.Format.RGB888"/>.
     /// </summary>
-    private int GetPixelSize( Pixmap.PixelFormat? format )
+    private int GetPixelSize( PixelType.Format? format )
     {
-        if ( format == Pixmap.PixelFormat.RGB565 )
+        if ( format == PixelType.Format.RGB565 )
         {
             return RGB565_PIXEL_SIZE;
         }
 
-        if ( format == Pixmap.PixelFormat.RGB888 )
+        if ( format == PixelType.Format.RGB888 )
         {
             return RGB888_PIXEL_SIZE;
         }

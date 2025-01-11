@@ -55,7 +55,7 @@ public class PixelType
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    public static int ToGdx2DPixmapFormat( Format format )
+    public static int ToGdx2DPixmapPixelFormat( Format format )
     {
         return format switch
         {
@@ -77,7 +77,7 @@ public class PixelType
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    public static Format FromGdx2DPixmapFormat( int format )
+    public static Format FromGdx2DPixmapPixelFormat( int format )
     {
         return format switch
         {
@@ -92,15 +92,15 @@ public class PixelType
         };
     }
 
-    /// <inheritdoc cref="Gdx2DPixmap.ToGLFormat"/>
-    public static int toGlFormat( Format format )
+    /// <inheritdoc cref="PixmapFormat.ToGLFormat(Format)"/>
+    public static int ToGLPixelFormat( Format format )
     {
-        return Gdx2DPixmap.ToGLFormat( ToGdx2DPixmapFormat( format ) );
+        return PixmapFormat.ToGLFormat( ToGdx2DPixmapPixelFormat( format ) );
     }
 
-    /// <inheritdoc cref="Gdx2DPixmap.ToGLType"/>
-    public static int toGlType( Format format )
+    /// <inheritdoc cref="PixmapFormat.ToGLType(Format)"/>
+    public static int ToGLType( Format format )
     {
-        return Gdx2DPixmap.ToGLType( ToGdx2DPixmapFormat( format ) );
+        return PixmapFormat.ToGLType( ToGdx2DPixmapPixelFormat( format ) );
     }
 }

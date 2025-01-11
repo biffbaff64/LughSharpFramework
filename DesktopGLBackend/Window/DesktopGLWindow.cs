@@ -341,7 +341,7 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     /// <param name="images">
     /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Pixmap.PixelFormat.RGBA8888"/>
+    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="PixelType.Format.RGBA8888"/>
     /// is preferred so the images will not have to be copied and converted. <b>The chosen image
     /// is copied, and the provided Pixmaps are not disposed.</b>
     /// </param>
@@ -386,7 +386,7 @@ public partial class DesktopGLWindow : IDisposable
     /// <param name="window"> The applicable window. </param>
     /// <param name="images">
     /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Pixmap.PixelFormat.RGBA8888"/>
+    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="PixelType.Format.RGBA8888"/>
     /// is preferred so the images will not have to be copied and converted. <b>The chosen image
     /// is copied, and the provided Pixmaps are not disposed.</b>
     /// </param>
@@ -403,9 +403,9 @@ public partial class DesktopGLWindow : IDisposable
 
         for ( var i = 0; i < images.Length; i++ )
         {
-            if ( images[ i ].GetColorFormat() != Pixmap.PixelFormat.RGBA8888 )
+            if ( images[ i ].GetColorFormat() != PixelType.Format.RGBA8888 )
             {
-                var rgba = new Pixmap( images[ i ].Width, images[ i ].Height, Pixmap.PixelFormat.RGBA8888 );
+                var rgba = new Pixmap( images[ i ].Width, images[ i ].Height, PixelType.Format.RGBA8888 );
 
                 rgba.Blending = Pixmap.BlendTypes.None;
                 rgba.DrawPixmap( images[ i ], 0, 0 );

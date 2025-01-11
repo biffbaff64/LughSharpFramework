@@ -174,7 +174,7 @@ public class FloatTextureData : ITextureData
     // ========================================================================
     // ========================================================================
 
-    public Pixmap.PixelFormat Format
+    public PixelType.Format? Format
     {
         get => throw new NotImplementedException();
         set => throw new NotImplementedException();
