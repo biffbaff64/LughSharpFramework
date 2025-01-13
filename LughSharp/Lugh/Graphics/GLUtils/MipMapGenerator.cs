@@ -88,12 +88,12 @@ public class MipMapGenerator
             {
                 GdxApi.Bindings.TexImage2D( target,
                                      0,
-                                     pixmap.GLInternalFormat,
+                                     pixmap.GLInternalPixelFormat,
                                      pixmap.Width,
                                      pixmap.Height,
                                      0,
-                                     pixmap.GLFormat,
-                                     pixmap.GLType,
+                                     pixmap.GLPixelFormat,
+                                     pixmap.GLDataType,
                                      ptr );
             }
         }
@@ -110,12 +110,12 @@ public class MipMapGenerator
             {
                 GdxApi.Bindings.TexImage2D( target,
                                      0,
-                                     pixmap.GLInternalFormat,
+                                     pixmap.GLInternalPixelFormat,
                                      pixmap.Width,
                                      pixmap.Height,
                                      0,
-                                     pixmap.GLFormat,
-                                     pixmap.GLType,
+                                     pixmap.GLPixelFormat,
+                                     pixmap.GLDataType,
                                      ptr );
             }
 
@@ -133,12 +133,12 @@ public class MipMapGenerator
         {
             GdxApi.Bindings.TexImage2D( target,
                                  0,
-                                 pixmap.GLInternalFormat,
+                                 pixmap.GLInternalPixelFormat,
                                  pixmap.Width,
                                  pixmap.Height,
                                  0,
-                                 pixmap.GLFormat,
-                                 pixmap.GLType,
+                                 pixmap.GLPixelFormat,
+                                 pixmap.GLDataType,
                                  ptr );
         }
 
@@ -169,12 +169,12 @@ public class MipMapGenerator
             {
                 GdxApi.Bindings.TexImage2D( target,
                                      level,
-                                     pixmap.GLInternalFormat,
+                                     pixmap.GLInternalPixelFormat,
                                      pixmap.Width,
                                      pixmap.Height,
                                      0,
-                                     pixmap.GLFormat,
-                                     pixmap.GLType,
+                                     pixmap.GLPixelFormat,
+                                     pixmap.GLDataType,
                                      ptr );
             }
 

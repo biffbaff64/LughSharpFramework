@@ -24,6 +24,8 @@
 
 using System.Numerics;
 
+using LughSharp.Lugh.Graphics.Images;
+
 using static LughSharp.Lugh.Graphics.OpenGL.IGL;
 
 namespace LughSharp.Lugh.Graphics.OpenGL;
@@ -466,7 +468,7 @@ public partial interface IGLBindings
     /// Specifies the pixel data as an array of values. Make sure to match the <paramref name="format"/>
     /// and <paramref name="type"/> parameters.
     /// </param>
-    unsafe void TexImage2D< T >( int target,
+    void TexImage2D< T >( int target,
                                    int level,
                                    int internalformat,
                                    int width,
@@ -476,6 +478,16 @@ public partial interface IGLBindings
                                    int type,
                                    T[] pixels ) where T : unmanaged;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="level"></param>
+    /// <param name="border"></param>
+    /// <param name="pixmap"></param>
+    /// <typeparam name="T"></typeparam>
+    void TexImage2D( int target, int level, int border, Pixmap pixmap );
+    
     /// <summary>
     /// Specify which color buffers are to be drawn into.
     /// </summary>

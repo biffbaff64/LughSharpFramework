@@ -122,20 +122,20 @@ public class Pixmap : IDisposable
     /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded
     /// as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
     /// </summary>
-    /// <param name="encodedData"> A ByteBuffer holding the encoded data. </param>
+    /// <param name="buffer"> A ByteBuffer holding the encoded data. </param>
     /// <param name="offset"> The position in the data to start copying from. </param>
     /// <param name="len"> The size of data to copy. </param>
     /// <exception cref="GdxRuntimeException"></exception>
-    public Pixmap( ByteBuffer encodedData, int offset, int len )
+    public Pixmap( ByteBuffer buffer, int offset, int len )
     {
-        if ( !encodedData.IsDirect )
+        if ( !buffer.IsDirect )
         {
             throw new GdxRuntimeException( "Couldn't load pixmap from non-direct ByteBuffer" );
         }
 
         try
         {
-            Gdx2DPixmap = new Gdx2DPixmap( encodedData, offset, len, 0 );
+            Gdx2DPixmap = new Gdx2DPixmap( buffer, offset, len, 0 );
         }
         catch ( IOException e )
         {
@@ -146,9 +146,9 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Creates a new Pixmap from the supplied encoded data.
     /// </summary>
-    /// <param name="encodedData"> A ByteBuffer holding the encoded data. </param>
-    public Pixmap( ByteBuffer encodedData )
-        : this( encodedData, encodedData.Position, encodedData.Remaining() )
+    /// <param name="buffer"> A ByteBuffer holding the encoded data. </param>
+    public Pixmap( ByteBuffer buffer )
+        : this( buffer, buffer.Position, buffer.Remaining() )
     {
     }
 
@@ -166,7 +166,11 @@ public class Pixmap : IDisposable
         {
             var data = File.ReadAllBytes( file.FullName );
 
+            Logger.Debug( $"File loaded: {data.Length} bytes" );
+            
             Gdx2DPixmap = new Gdx2DPixmap( data, 0, data.Length, 0 );
+
+            Logger.Checkpoint();
         }
         catch ( Exception e )
         {
@@ -185,20 +189,20 @@ public class Pixmap : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Returns the OpenGL ES format of this Pixmap.
+    /// Returns the OpenGL pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, or GL_LUMINANCE_ALPHA.</returns>
-    public int GLFormat => PixmapFormat.ToGLFormat( ( int )Gdx2DPixmap.ColorType );
+    public int GLPixelFormat => PixmapFormat.ToGLPixelFormat( ( int )Gdx2DPixmap.ColorType );
 
     /// <summary>
-    /// Returns the OpenGL ES internal format of this Pixmap.
+    /// Returns the OpenGL ES internal pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_RG, GL_RGB, GL_RGBA, GL_RED, GL_DEPTH_COMPONENT, or GL_DEPTH_STENCIL.</returns>
-    public int GLInternalFormat
+    public int GLInternalPixelFormat
     {
         get
         {
-            var format = PixmapFormat.ToGLFormat( ( int )Gdx2DPixmap.ColorType );
+            var format = PixmapFormat.ToGLPixelFormat( ( int )Gdx2DPixmap.ColorType );
 
             if ( ( format != IGL.GL_RG )
                  && ( format != IGL.GL_RGB )
@@ -214,10 +218,43 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Returns the OpenGL ES type of this Pixmap.
+    /// Returns the OpenGL Data Type of this Pixmap.
     /// </summary>
-    /// <returns> one of GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT_5_6_5, GL_UNSIGNED_SHORT_4_4_4_4 </returns>
-    public int GLType => PixmapFormat.ToGLType( ( int )Gdx2DPixmap.ColorType );
+    /// <returns> one of GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT </returns>
+    public int GLDataType
+    {
+        get
+        {
+            // Determine OpenGL data type based on bit depth and color type
+            return Gdx2DPixmap switch
+            {
+                { ColorType: 0 } or { ColorType: 4 } =>
+                    Gdx2DPixmap.BitDepth switch
+                    {
+                        8  => IGL.GL_UNSIGNED_BYTE,
+                        16 => IGL.GL_UNSIGNED_SHORT,
+
+                        var _ => throw new Exception( "Unsupported bit depth for grayscale." )
+                    },
+                { ColorType: 2 } or { ColorType: 6 } =>
+                    Gdx2DPixmap.BitDepth switch
+                    {
+                        8  => IGL.GL_UNSIGNED_BYTE,
+                        16 => IGL.GL_UNSIGNED_SHORT,
+
+                        var _ => throw new Exception( "Unsupported bit depth for truecolor." )
+                    },
+                { ColorType: 3 } =>
+                    Gdx2DPixmap.BitDepth switch
+                    {
+                        1 or 2 or 4 or 8 => IGL.GL_UNSIGNED_BYTE,
+
+                        var _ => throw new Exception( "Unsupported bit depth for indexed colour." )
+                    },
+                var _ => throw new Exception( "Unknown color type." )
+            };
+        }
+    }
 
     /// <summary>
     /// Returns the byte[] array holding the pixel data. For the format Alpha each

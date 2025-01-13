@@ -25,7 +25,7 @@
 using System.Numerics;
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Graphics.Images;
 
 namespace LughSharp.Lugh.Graphics.Profiling;
 
@@ -4399,6 +4399,11 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
         CheckErrors();
     }
 
+    public void TexImage2D( int target, int level, int border, Pixmap pixmap )
+    {
+        //TODO:
+    }
+    
     /// <inheritdoc />
     public void TexImage2D< T >( int target, int level, int internalformat, int width, int height, int border, int format, int type, T[] pixels )
         where T : unmanaged

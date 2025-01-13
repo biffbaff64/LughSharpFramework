@@ -78,7 +78,7 @@ public interface ITextureData : IManaged
     /// <summary>
     /// Returns the <see cref="PixelType.Format"/> of the pixel data.
     /// </summary>
-    public PixelType.Format? Format { get; set; }
+    public PixelType.Format? PixelFormat { get; set; }
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ConsumePixmap()"/> or

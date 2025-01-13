@@ -34,6 +34,7 @@
 
 using System.Numerics;
 
+using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -301,18 +302,60 @@ public unsafe partial class GLBindings : IGLBindings
     }
 
     /// <inheritdoc/>
+    public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap )
+    {
+        GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
+
+        var pixelFormat   = pixmap.GLPixelFormat;
+        var dataType      = pixmap.GLDataType;
+        var colorType     = pixmap.Gdx2DPixmap.ColorType;
+        var bitDepth      = pixmap.GetBitDepth();
+        var bytesPerPixel = PNGUtils.GetBytesPerPixel( ( int )colorType, bitDepth );
+
+        //Check if the size of the pixel data matches the expected size
+        var expectedSize = pixmap.Width * pixmap.Height * bytesPerPixel;
+
+        if ( ( ( pixmap.PixelData.Length ) != expectedSize ) && ( pixelFormat != IGL.GL_DEPTH_COMPONENT ) )
+        {
+            Logger.Debug( $"Width              : {pixmap.Width}" );
+            Logger.Debug( $"Height             : {pixmap.Height}" );
+            Logger.Debug( $"Width x Height     : {pixmap.PixelData.Length}" );
+            Logger.Debug( $"pixels.Length      : {pixmap.PixelData.Length}" );
+            Logger.Debug( $"width * height     : {pixmap.Width * pixmap.Height}" );
+            Logger.Debug( $"Bytes Per Pixel    : {bytesPerPixel}" );
+            Logger.Debug( $"Bit Depth          : {bitDepth}" );
+            Logger.Debug( $"Expected size      : {expectedSize}" );
+            Logger.Debug( $"totalIDATSize      : {pixmap.Gdx2DPixmap.TotalIDATSize}" );
+
+            throw new ArgumentException( $"Pixel data size does not match image dimensions and format.", nameof( pixmap.PixelData ) );
+        }
+
+        fixed ( void* p = &pixmap.PixelData[ 0 ] )
+        {
+            _glTexImage2D( target,
+                           level,
+                           pixmap.GLInternalPixelFormat,
+                           pixmap.Width,
+                           pixmap.Height,
+                           border,
+                           pixelFormat,
+                           dataType, p );
+        }
+    }
+
+    /// <inheritdoc/>
     public void TexImage2D< T >( GLenum target,
                                  GLint level,
-                                 GLenum internalformat,
+                                 GLenum internalpixelformat,
                                  GLsizei width,
                                  GLsizei height,
                                  GLint border,
-                                 GLenum format,
-                                 GLenum type,
+                                 GLenum pixelFormat,
+                                 GLenum dataType,
                                  T[]? pixels ) where T : unmanaged
     {
         Logger.Checkpoint();
-        
+
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
         if ( ( pixels == null ) || ( pixels.Length == 0 ) )
@@ -321,16 +364,36 @@ public unsafe partial class GLBindings : IGLBindings
         }
 
         //Check if the size of the pixel data matches the expected size
-        var expectedSize = width * height * Marshal.SizeOf<T>();
+        var expectedSize = width * height * Marshal.SizeOf< T >();
+
+        //TODO:
+        var idatIndex     = 0;
+        var totalIDATSize = 0;
+
+        var byteArray = Array.ConvertAll( pixels, i => Convert.ToByte( i ) );
         
-        if (( ( pixels.Length * Marshal.SizeOf<T>() ) != expectedSize ) && ( format != IGL.GL_DEPTH_COMPONENT ))
+        while ( ( idatIndex = PNGUtils.FindChunk( byteArray, "IDAT", idatIndex + 1 ) ) != -1 )
         {
-            throw new ArgumentException("Pixel data size does not match image dimensions and format.", nameof(pixels));
+            totalIDATSize += PNGUtils.ReadIntFromBytes( byteArray, idatIndex + 4 );
+        }
+
+        if ( ( ( pixels.Length * Marshal.SizeOf< T >() ) != expectedSize ) && ( pixelFormat != IGL.GL_DEPTH_COMPONENT ) )
+        {
+            Logger.Debug( $"Width              : {width}" );
+            Logger.Debug( $"Height             : {height}" );
+            Logger.Debug( $"Size               : {pixels.Length * Marshal.SizeOf< T >()}" );
+            Logger.Debug( $"pixels.Length      : {pixels.Length}" );
+            Logger.Debug( $"width * height     : {width * height}" );
+            Logger.Debug( $"Marshal.SizeOf<T>(): {Marshal.SizeOf< T >()}" );
+            Logger.Debug( $"Expected size      : {expectedSize}" );
+            Logger.Debug( $"totalIDATSize      : {totalIDATSize}" );
+
+            throw new ArgumentException( "Pixel data size does not match image dimensions and format.", nameof( pixels ) );
         }
 
         fixed ( void* p = &pixels[ 0 ] )
         {
-            _glTexImage2D( target, level, internalformat, width, height, border, format, type, p );
+            _glTexImage2D( target, level, internalpixelformat, width, height, border, pixelFormat, dataType, p );
         }
     }
 

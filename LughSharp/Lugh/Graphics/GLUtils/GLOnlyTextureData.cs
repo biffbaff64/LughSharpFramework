@@ -40,7 +40,7 @@ public class GLOnlyTextureData : ITextureData
 {
     public int               MipLevel       { get; set; } = 0;
     public int               InternalFormat { get; set; }
-    public PixelType.Format? Format         { get; set; }
+    public PixelType.Format? PixelFormat         { get; set; }
     public int               Type           { get; set; }
     public int               Width          { get; set; } = 0;
     public int               Height         { get; set; } = 0;
@@ -82,7 +82,7 @@ public class GLOnlyTextureData : ITextureData
         Height         = height;
         MipLevel       = mipMapLevel;
         InternalFormat = internalFormat;
-        Format         = PixmapFormat.ToPixmapPixelFormat( format );
+        PixelFormat         = PixmapFormat.ToPixmapPixelFormat( format );
         Type           = type;
     }
 
@@ -104,7 +104,7 @@ public class GLOnlyTextureData : ITextureData
                                     Width,
                                     Height,
                                     0,
-                                    PixmapFormat.ToGdx2DPixelFormat( Format ),
+                                    PixmapFormat.ToGdx2DPixelFormat( PixelFormat ),
                                     Type,
                                     null! );
     }

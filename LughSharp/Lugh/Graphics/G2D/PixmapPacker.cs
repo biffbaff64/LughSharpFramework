@@ -418,8 +418,8 @@ public class PixmapPacker : IDisposable
                                     rectY,
                                     rectWidth,
                                     rectHeight,
-                                    image.GLFormat,
-                                    image.GLType,
+                                    image.GLPixelFormat,
+                                    image.GLDataType,
                                     image.PixelData );
 
 //            image.ByteBuffer = pixels;

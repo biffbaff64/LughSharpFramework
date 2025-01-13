@@ -66,10 +66,10 @@ public class FileTextureArrayData : ITextureArrayData
     public PixelType.Format Format { get; set; }
 
     /// <returns> the internal format of this TextureArray </returns>
-    public int InternalFormat => PixmapFormat.ToGLFormat( Format );
+    public int InternalFormat => PixmapFormat.ToGLPixelFormat( Format );
 
     /// <returns> the GL type of this TextureArray </returns>
-    public int GLType => PixmapFormat.ToGLType( Format );
+    public int GLType => PixmapFormat.ToGLDataType( Format );
 
     /// <summary>
     /// Prepares the TextureArrayData for a call to <see cref="ITextureArrayData.ConsumeTextureArrayData"/>.
@@ -137,9 +137,9 @@ public class FileTextureArrayData : ITextureArrayData
                 Debug.Assert( texData != null, nameof( texData ) + " != null" );
                 Debug.Assert( pixmap != null, nameof( pixmap ) + " != null" );
 
-                if ( texData.Format != pixmap.GetColorFormat() )
+                if ( texData.PixelFormat != pixmap.GetColorFormat() )
                 {
-                    var temp = new Pixmap( pixmap.Width, pixmap.Height, texData.Format );
+                    var temp = new Pixmap( pixmap.Width, pixmap.Height, texData.PixelFormat );
 
                     temp.Blending = Pixmap.BlendTypes.None;
                     temp.DrawPixmap( pixmap, 0, 0, 0, 0, pixmap.Width, pixmap.Height );
@@ -165,8 +165,8 @@ public class FileTextureArrayData : ITextureArrayData
                                                 pixmap.Width,
                                                 pixmap.Height,
                                                 1,
-                                                pixmap.GLInternalFormat,
-                                                pixmap.GLType,
+                                                pixmap.GLInternalPixelFormat,
+                                                pixmap.GLDataType,
                                                 ptr );
                     }
                 }

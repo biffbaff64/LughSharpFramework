@@ -238,8 +238,8 @@ public class Texture : GLTexture, IManaged
                                        0, x, y,
                                        pixmap.Width,
                                        pixmap.Height,
-                                       pixmap.GLFormat,
-                                       pixmap.GLType,
+                                       pixmap.GLPixelFormat,
+                                       pixmap.GLDataType,
                                        pixmap.PixelData );
     }
 
@@ -366,7 +366,7 @@ public class Texture : GLTexture, IManaged
     public void Debug()
     {
         Logger.Debug( $"Dimensions        : {Width} x {Height}" );
-        Logger.Debug( $"Format            : {TextureData.Format}" );
+        Logger.Debug( $"Format            : {TextureData.PixelFormat}" );
         Logger.Debug( $"IsManaged         : {IsManaged}" );
         Logger.Debug( $"Depth             : {Depth}" );
         Logger.Debug( $"GLTarget          : {GLTarget}" );

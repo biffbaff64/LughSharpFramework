@@ -134,9 +134,9 @@ public class FacedCubemapData : ICubemapData
                 var pixmap        = _data[ i ]!.ConsumePixmap()!;
                 var disposePixmap = _data[ i ]!.ShouldDisposePixmap();
 
-                if ( _data[ i ]!.Format != pixmap.GetColorFormat() )
+                if ( _data[ i ]!.PixelFormat != pixmap.GetColorFormat() )
                 {
-                    var tmp = new Pixmap( pixmap.Width, pixmap.Height, _data[ i ]!.Format );
+                    var tmp = new Pixmap( pixmap.Width, pixmap.Height, _data[ i ]!.PixelFormat );
 
                     tmp.Blending = Pixmap.BlendTypes.None;
                     tmp.DrawPixmap( pixmap, 0, 0, 0, 0, pixmap.Width, pixmap.Height );
@@ -154,12 +154,12 @@ public class FacedCubemapData : ICubemapData
 
                 GdxApi.Bindings.TexImage2D( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
                                      0,
-                                     pixmap.GLInternalFormat,
+                                     pixmap.GLInternalPixelFormat,
                                      pixmap.Width,
                                      pixmap.Height,
                                      0,
-                                     pixmap.GLFormat,
-                                     pixmap.GLType,
+                                     pixmap.GLPixelFormat,
+                                     pixmap.GLDataType,
                                      pixmap.ByteBuffer.BackingArray() );
 
                 if ( disposePixmap )

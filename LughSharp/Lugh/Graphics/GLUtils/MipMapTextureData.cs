@@ -52,7 +52,7 @@ public class MipMapTextureData : ITextureData
     public bool              UseMipMaps { get; set; }
     public int               Width      { get; set; }
     public int               Height     { get; set; }
-    public PixelType.Format? Format     { get; set; } = PixelType.Format.Alpha;
+    public PixelType.Format? PixelFormat     { get; set; } = PixelType.Format.Alpha;
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap"/> or

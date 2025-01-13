@@ -35,34 +35,40 @@ public partial class Gdx2DPixmap
     /// <param name="color"> The Color. </param>
     public void Clear( Color color )
     {
-        var size = ( uint ) ( _pixmapDataType.Width
-                            * _pixmapDataType.Height
-                            * PixmapFormat.Gdx2dBytesPerPixel( ( int ) _pixmapDataType.ColorType ) );
+        var size = ( uint )( _pixmapDataType.Width
+                             * _pixmapDataType.Height
+                             * PixmapFormat.Gdx2dBytesPerPixel( ( int )_pixmapDataType.ColorType ) );
 
         switch ( _pixmapDataType.ColorType )
         {
-            case Gdx2DPixmap.GDX_2D_FORMAT_ALPHA:
+            case GDX_2D_FORMAT_ALPHA:
                 clear_alpha( _pixmapDataType, color, size );
+
                 break;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA:
+            case GDX_2D_FORMAT_LUMINANCE_ALPHA:
                 clear_luminance_alpha( _pixmapDataType, color, size );
+
                 break;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGB888:
+            case GDX_2D_FORMAT_RGB888:
                 clear_RGB888( _pixmapDataType, color, size );
+
                 break;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888:
+            case GDX_2D_FORMAT_RGBA8888:
                 clear_RGBA8888( _pixmapDataType, color, size );
+
                 break;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGB565:
+            case GDX_2D_FORMAT_RGB565:
                 clear_RGB565( _pixmapDataType, color, size );
+
                 break;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444:
+            case GDX_2D_FORMAT_RGBA4444:
                 clear_RGBA4444( _pixmapDataType, color, size );
+
                 break;
 
             default:
@@ -80,8 +86,8 @@ public partial class Gdx2DPixmap
 //        int pixels = pixmap->width * pixmap->height;
 //        memset((void*)pixmap->pixels, col, pixels);
 
-         var numPixels = pd.Width * pd.Height;
-         
+        var numPixels = pd.Width * pd.Height;
+
 //         Array.Fill< byte >( pd.Pixels, color.RGBAPackedColor, 0, numPixels );
     }
 
@@ -101,9 +107,9 @@ public partial class Gdx2DPixmap
     internal static void clear_RGB888( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGB888( color );
-        var b   = ( byte ) ( ( col & 0x0000ff00 ) >> 8 );
-        var g   = ( byte ) ( ( col & 0x00ff0000 ) >> 16 );
-        var r   = ( byte ) ( ( col & 0xff000000 ) >> 24 );
+        var b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
+        var g   = ( byte )( ( col & 0x00ff0000 ) >> 16 );
+        var r   = ( byte )( ( col & 0xff000000 ) >> 24 );
 
         for ( var pixel = 0; pixel < size; )
         {
@@ -115,11 +121,11 @@ public partial class Gdx2DPixmap
 
     internal static void clear_RGBA8888( PixmapDataType pd, Color color, uint size )
     {
-        var col  = Color.RGBA8888( color );
-        var a    = ( byte ) ( ( col & 0x000000ff ) );
-        var b    = ( byte ) ( ( col & 0x0000ff00 ) >> 8 );
-        var g    = ( byte ) ( ( col & 0x00ff0000 ) >> 16 );
-        var r    = ( byte ) ( ( col & 0xff000000 ) >> 24 );
+        var col = Color.RGBA8888( color );
+        var a   = ( byte )( ( col & 0x000000ff ) );
+        var b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
+        var g   = ( byte )( ( col & 0x00ff0000 ) >> 16 );
+        var r   = ( byte )( ( col & 0xff000000 ) >> 24 );
 
         for ( var pixel = 0; pixel < size; )
         {
@@ -141,8 +147,8 @@ public partial class Gdx2DPixmap
 //            *ptr = l;
 //            ptr++;
 //        }
-        
-        var col  = Color.RGB565( color );
+
+        var col = Color.RGB565( color );
     }
 
     internal static void clear_RGBA4444( PixmapDataType pd, Color color, uint size )
@@ -169,8 +175,8 @@ public partial class Gdx2DPixmap
             }
         }
 */
-        
-        var col  = Color.RGBA4444( color );
+
+        var col = Color.RGBA4444( color );
     }
 
     // ========================================================================
@@ -182,34 +188,37 @@ public partial class Gdx2DPixmap
 
         switch ( format )
         {
-            case Gdx2DPixmap.GDX_2D_FORMAT_ALPHA:
+            case GDX_2D_FORMAT_ALPHA:
                 return color & 0xff;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA:
+            case GDX_2D_FORMAT_LUMINANCE_ALPHA:
                 r = ( color & 0xff000000 ) >> 24;
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
                 a = ( color & 0xff );
-                var l = ( ( uint ) ( ( 0.2126f * r ) + ( 0.7152 * g ) + ( 0.0722 * b ) ) & 0xff ) << 8;
+                var l = ( ( uint )( ( 0.2126f * r ) + ( 0.7152 * g ) + ( 0.0722 * b ) ) & 0xff ) << 8;
+
                 return ( l & 0xffffff00 ) | a;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGB888:
+            case GDX_2D_FORMAT_RGB888:
                 return color >> 8;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888:
+            case GDX_2D_FORMAT_RGBA8888:
                 return color;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGB565:
+            case GDX_2D_FORMAT_RGB565:
                 r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
                 g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
                 b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
+
                 return r | g | b;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444:
+            case GDX_2D_FORMAT_RGBA4444:
                 r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
                 g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
                 b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;
                 a = ( ( color & 0xff ) >> 4 ) & 0xf;
+
                 return r | g | b | a;
 
             default:

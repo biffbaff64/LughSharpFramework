@@ -56,11 +56,11 @@ public class FileTextureData : ITextureData
     {
         this.File       = file;
         this._pixmap    = preloadedPixmap;
-        this.Format     = format;
+        this.PixelFormat     = format;
         this.UseMipMaps = useMipMaps;
         this.Width      = _pixmap.Width;
         this.Height     = _pixmap.Height;
-        this.Format     = _pixmap.GetColorFormat();
+        this.PixelFormat     = _pixmap.GetColorFormat();
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public class FileTextureData : ITextureData
 
             this.Width  = _pixmap.Width;
             this.Height = _pixmap.Height;
-            this.Format = _pixmap.GetColorFormat();
+            this.PixelFormat = _pixmap.GetColorFormat();
         }
 
         IsPrepared = true;
@@ -137,7 +137,7 @@ public class FileTextureData : ITextureData
     /// <summary>
     /// Returns the <see cref="PixelType.Format"/> of the pixel data.
     /// </summary>
-    public PixelType.Format? Format { get; set; }
+    public PixelType.Format? PixelFormat { get; set; }
 
     public virtual bool IsManaged
     {

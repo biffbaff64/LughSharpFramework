@@ -28,16 +28,6 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Images;
 
-//TODO: These method names need reworking into something more self-explanatory.
-// 
-// PNGtoOpenGLPixelFormat
-// OpenGLPixelFormatToPNGPixelFormat
-// 
-// 
-// 
-// 
-// 
-
 [PublicAPI]
 public class PixmapFormat
 {
@@ -229,7 +219,7 @@ public class PixmapFormat
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
-    public static int ToGLFormat( PixelType.Format format )
+    public static int ToGLPixelFormat( PixelType.Format format )
     {
         var cformat = ToGdx2DPixelFormat( format );
 
@@ -251,7 +241,7 @@ public class PixmapFormat
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    public static int ToGLFormat( int format )
+    public static int ToGLPixelFormat( int format )
     {
         return format switch
         {
@@ -270,7 +260,7 @@ public class PixmapFormat
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
-    public static int ToGLType( PixelType.Format format )
+    public static int ToGLDataType( PixelType.Format format )
     {
         var cformat = ToGdx2DPixelFormat( format );
 
@@ -292,7 +282,7 @@ public class PixmapFormat
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    public static int ToGLType( int format )
+    public static int ToGLDataType( int format )
     {
         return format switch
         {

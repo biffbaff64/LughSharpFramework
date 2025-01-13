@@ -510,12 +510,12 @@ public class KtxTextureData : ITextureData, ICubemapData
                                     {
                                         GdxApi.Bindings.TexImage2D( target + face,
                                                              level,
-                                                             pixmap.GLInternalFormat,
+                                                             pixmap.GLInternalPixelFormat,
                                                              pixmap.Width,
                                                              pixmap.Height,
                                                              0,
-                                                             pixmap.GLFormat,
-                                                             pixmap.GLType,
+                                                             pixmap.GLPixelFormat,
+                                                             pixmap.GLDataType,
                                                              ptr );
                                     }
                                 }
@@ -616,7 +616,7 @@ public class KtxTextureData : ITextureData, ICubemapData
     public int Height { get; set; }
 
     /// <returns> the <see cref="PixelType.Format"/> of the pixel data </returns>
-    public PixelType.Format? Format { get; set; } = PixelType.Format.Alpha;
+    public PixelType.Format? PixelFormat { get; set; } = PixelType.Format.Alpha;
 
     /// <returns> whether to generate mipmaps or not. </returns>
     public bool UseMipMaps { get; set; }

@@ -63,9 +63,10 @@ public class PNGUtils
     // 37 - 40 => 49 44 41 54                              - IDAT Chunk Type (4 bytes - 'I', 'D', 'A', 'T')
     // ... (IDAT data follows)
 
-    public static PNGSignature PngSignature { get; private set; }
-    public static IHDRChunk    IHDRchunk    { get; private set; }
-    public static IDATChunk    IDATchunk    { get; private set; }
+    public static PNGSignature PngSignature  { get; private set; }
+    public static IHDRChunk    IHDRchunk     { get; private set; }
+    public static IDATChunk    IDATchunk     { get; private set; }
+    public static long         TotalIDATSize { get; private set; } = 0;
 
     // ========================================================================
 
@@ -88,8 +89,9 @@ public class PNGUtils
     /// 
     /// </summary>
     /// <param name="pngData"></param>
+    /// <param name="showResults"></param>
     /// <exception cref="ArgumentException"></exception>
-    public static void AnalysePNG( byte[] pngData )
+    public static void AnalysePNG( byte[] pngData, bool showResults = false )
     {
         if ( ( pngData == null ) || ( pngData.Length == 0 ) )
         {
@@ -151,86 +153,97 @@ public class PNGUtils
             ChunkSize = tmpChunkSize,
             ChunkType = tmp,
         };
+
+        TotalIDATSize = CalculateTotalIDATSize( pngData );
+
+        if ( showResults )
+        {
+            Logger.Debug( $"PNG Signature   : {BitConverter.ToString( PngSignature.Signature ).Replace( "-", " " )}" );
+            Logger.Debug( "" );
+            Logger.Debug( $"- Width         : {IHDRchunk.Width}" );
+            Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
+            Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
+            Logger.Debug( $"- ColorType     : {IHDRchunk.ColorType}" );
+            Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
+            Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
+            Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );
+            Logger.Debug( $"- Checksum      : {ReadBigEndianUInt32( IHDRchunk.Crc, 4 )}" );
+            Logger.Debug( "" );
+//            Logger.Debug( $"- IHDR/IDAT Data: {BitConverter.ToString( pngData ).Replace( "-", " " )}" );
+            Logger.Debug( $"- TotalIDATSize : {TotalIDATSize}" );
+            Logger.Debug( "" );
+        }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="filename"></param>
-    public static void AnalysePNGToOutput( string filename )
+    private static long CalculateTotalIDATSize( byte[] pngData )
     {
-        try
+        var totalIDATSize = 0L;
+        var idatIndex     = 0;
+
+        while ( ( idatIndex = FindChunk( pngData, "IDAT", idatIndex + 1 ) ) != -1 )
         {
-            using var fs     = new FileStream( filename, FileMode.Open );
-            using var reader = new BinaryReader( fs );
+            var chunkSize     = ReadIntFromBytes( pngData, idatIndex );
+            var fullChunkSize = chunkSize + 12; // Add 12 bytes for type and CRC
 
-            // PNG Signature (8 bytes)
-            var signature = reader.ReadBytes( 8 );
+            Logger.Debug( $"IDAT Index: {idatIndex}, Chunk Size: {chunkSize}" );
 
-            if ( !signature.SequenceEqual( new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 } ) )
+            if ( ( idatIndex + fullChunkSize ) > pngData.Length )
             {
-                Logger.Debug( "Not a valid PNG file." );
+                Console.WriteLine( $"Error: Invalid Chunk Size or truncated file. Index: {idatIndex}, Chunksize: {fullChunkSize}, File Length: {pngData.Length}" );
 
-                return;
+                break;
             }
 
-            Logger.Debug( $"PNG Signature: {BitConverter.ToString( signature ).Replace( "-", " " )}" );
+            totalIDATSize += chunkSize;
+            idatIndex     += fullChunkSize - 1; //Correctly increment the index. -1 to account for the +1 in the while loop.
+        }
 
-            while ( fs.Position < fs.Length )
+        return totalIDATSize;
+    }
+
+    public static int FindChunk( byte[] bytes, string chunkType, int startIndex = 0 )
+    {
+        var chunkTypeBytes = System.Text.Encoding.ASCII.GetBytes( chunkType );
+
+        if ( ( startIndex < 0 ) || ( startIndex > ( bytes.Length - 8 ) ) ) // Corrected end condition
+        {
+            return -1;
+        }
+
+        for ( var i = startIndex; i <= ( bytes.Length - 8 ); i++ )
+        {
+            if ( ( bytes[ i + 4 ] == chunkTypeBytes[ 0 ] ) &&
+                 ( bytes[ i + 5 ] == chunkTypeBytes[ 1 ] ) &&
+                 ( bytes[ i + 6 ] == chunkTypeBytes[ 2 ] ) &&
+                 ( bytes[ i + 7 ] == chunkTypeBytes[ 3 ] ) )
             {
-                // Chunk Length (4 bytes)
-                var chunkLength = ReadBigEndianUInt32( reader );
-                Logger.Debug( $"Chunk Length: {chunkLength}" );
-
-                // Chunk Type (4 bytes)
-                var chunkType       = reader.ReadBytes( 4 );
-                var chunkTypeString = System.Text.Encoding.ASCII.GetString( chunkType );
-                Logger.Debug( $"Chunk Type: {chunkTypeString}" );
-
-                // Chunk Data (chunkLength bytes)
-                var chunkData = reader.ReadBytes( ( int )chunkLength );
-                Logger.Debug( $"Chunk Data  : {BitConverter.ToString( chunkData ).Replace( "-", " " )}" );
-
-                // CRC (4 bytes)
-                var crc = ReadBigEndianUInt32( reader );
-                Logger.Debug( $"CRC: {crc}" );
-
-                switch ( chunkTypeString )
-                {
-                    //Special Handling for IHDR
-                    case "IHDR":
-                        ParseIHDR( chunkData );
-
-                        break;
-
-                    //Special Handling for IDAT
-                    case "IDAT":
-                        Logger.Debug( "IDAT Data is image data, not displayed in detail here." );
-
-                        break;
-
-                    //Special Handling for IEND
-                    case "IEND":
-                        Logger.Debug( "End of PNG file" );
-
-                        break;
-                }
+                return i; // Return the index of the chunk size
             }
         }
-        catch ( FileNotFoundException )
+
+        return -1;
+    }
+
+    public static int ReadIntFromBytes( byte[] bytes, int startIndex )
+    {
+        if ( ( startIndex < 0 ) || ( ( startIndex + 3 ) >= bytes.Length ) )
         {
-            Logger.Debug( $"File not found: {filename}" );
+            Console.WriteLine( "Error: ReadIntFromBytes out of bounds" );
+
+            return 0; // Or throw an exception
         }
-        catch ( Exception ex )
-        {
-            Logger.Debug( $"An error occurred: {ex.Message}" );
-        }
+
+        return ( bytes[ startIndex ] << 24 )
+               | ( bytes[ startIndex + 1 ] << 16 )
+               | ( bytes[ startIndex + 2 ] << 8 )
+               | bytes[ startIndex + 3 ];
     }
 
     // Helper function to read Big Endian UInt32
     private static uint ReadBigEndianUInt32( byte[] data, int count )
     {
         var bytes = new byte[ count ];
+
         Array.Copy( data, 0, bytes, 0, count );
 
         if ( BitConverter.IsLittleEndian )
@@ -279,13 +292,43 @@ public class PNGUtils
         Logger.Debug( $"Interlace Method: {data[ 12 ]}" );
     }
 
-    //TODO:
-    private static int GetBitsPerPixel( byte colorType, byte bitDepth )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="colorType"></param>
+    /// <param name="bitDepth"></param>
+    /// <returns></returns>
+    public static int GetBytesPerPixel( int colorType, int bitDepth )
     {
-        return 0;
+        return colorType switch
+        {
+            // Grayscale
+            0 => bitDepth == 8 ? 1 : ( bitDepth == 16 ? 2 : -1 ),
+
+            // RGB
+            2 => bitDepth == 8 ? 3 : ( bitDepth == 16 ? 6 : -1 ),
+
+            // Indexed-color
+            // Indexed color uses a palette
+            3 => 1,
+
+            // Grayscale with alpha
+            4 => bitDepth == 8 ? 2 : ( bitDepth == 16 ? 4 : -1 ),
+
+            // RGBA
+            6 => bitDepth == 8 ? 4 : ( bitDepth == 16 ? 8 : -1 ),
+
+            var _ => -1,
+        };
     }
 
-    private static string DetermineColorFormat( byte colorType, byte bitDepth )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="colorType"></param>
+    /// <param name="bitDepth"></param>
+    /// <returns></returns>
+    public static string DetermineColorFormat( byte colorType, byte bitDepth )
     {
         return colorType switch
         {
@@ -332,40 +375,15 @@ public class PNGUtils
     {
         return colortype switch
         {
-            0     => "Grayscale - Allowed Bit Depths: 1,2,4,8,16",
-            2     => "Truecolor - Allowed Bit Depths: 8,16",
-            3     => "Indexed Color - Allowed Bit Depths: 1,2,4,8",
-            4     => "Grayscale with Alpha - Allowed Bit Depths: 8,16",
-            6     => "Truecolor with Alpha - Allowed Bit Depths: 8,16",
+            0 => "Grayscale - Allowed Bit Depths: 1,2,4,8,16",
+            2 => "Truecolor - Allowed Bit Depths: 8,16",
+            3 => "Indexed Color - Allowed Bit Depths: 1,2,4,8",
+            4 => "Grayscale with Alpha - Allowed Bit Depths: 8,16",
+            6 => "Truecolor with Alpha - Allowed Bit Depths: 8,16",
+
             var _ => $"Unknow colortype: {colortype}",
         };
     }
-
-//    public static PixelType.Format ToPixmapColorFormat( int pngColorType )
-//    {
-//        return pngColorType switch
-//        {
-//            0     => PixelType.Format.RGB888,
-//            2     => PixelType.Format.RGB888,
-//            3     => throw new GdxRuntimeException( "Indexed Color Format is not supported yet." ),
-//            4     => PixelType.Format.RGBA8888,
-//            6     => PixelType.Format.RGBA8888,
-//            var _ => throw new GdxRuntimeException( $"unknown format: {pngColorType}" ),
-//        };
-//    }
-    
-//    public static int ToGdx2DColorFormat( int pngColorType )
-//    {
-//        return pngColorType switch
-//        {
-//            0     => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
-//            2     => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
-//            3     => throw new GdxRuntimeException( "Indexed Color Format is not supported yet." ),
-//            4     => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
-//            6     => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
-//            var _ => throw new GdxRuntimeException( $"unknown format: {pngColorType}" ),
-//        };
-//    }
 
     /// <summary>
     /// Extracts the <c>Width</c> and <c>Height</c> from a PNG file.
@@ -400,8 +418,6 @@ public class PNGUtils
         return ( BitConverter.ToInt32( widthbytes, 0 ), BitConverter.ToInt32( heightbytes, 0 ) );
     }
 
-    // Bytes 0 - 7 : Signature. Will always be 0x89504E470D0A1A0A
-    // Bytes 8 -   : A series of chunks //TODO:
     // ========================================================================
 
     /// <summary>

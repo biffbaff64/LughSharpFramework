@@ -40,15 +40,16 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// The <see cref="ColorType"/> is one of the GDX_2D_FORMAT_XXX constants.
 /// </summary>
 [PublicAPI, StructLayout( LayoutKind.Sequential )]
-public class PixmapDataType
+public struct PixmapDataType()
 {
-    public uint   Width     { get; set; }
-    public uint   Height    { get; set; }
-    public uint   BitDepth  { get; set; }
-    public uint   ColorType { get; set; }
-    public uint   Blend     { get; set; }
-    public uint   Scale     { get; set; }
-    public byte[] Pixels    { get; set; } = [ ];
+    public uint   Width         { get; set; } = 0;
+    public uint   Height        { get; set; } = 0;
+    public uint   BitDepth      { get; set; } = 0;
+    public uint   ColorType     { get; set; } = 0;
+    public uint   Blend         { get; set; } = 0;
+    public uint   Scale         { get; set; } = 0;
+    public byte[] Pixels        { get; set; } = [ ];
+    public long   TotalIDATSize { get; set; } = 0;
 }
 
 // ========================================================================
@@ -81,18 +82,17 @@ public partial class Gdx2DPixmap : IDisposable
     // ========================================================================
     // ========================================================================
 
-    //Why???
-    public ByteBuffer PixmapBuffer { get; set; }
-    public uint       Width        { get; set; }
-    public uint       Height       { get; set; }
-    public uint       ColorType    { get; set; }
-    public uint       BitDepth     { get; set; }
-    public uint       Blend        { get; set; }
-    public uint       Scale        { get; set; }
+    public ByteBuffer PixmapBuffer  { get; set; }
+    public uint       Width         { get; set; }
+    public uint       Height        { get; set; }
+    public uint       ColorType     { get; set; }
+    public uint       BitDepth      { get; set; }
+    public uint       Blend         { get; set; }
+    public uint       Scale         { get; set; }
+    public long       TotalIDATSize { get; set; }
 
     // ========================================================================
 
-    //Why???
     private PixmapDataType _pixmapDataType;
 
     // ========================================================================
@@ -102,12 +102,12 @@ public partial class Gdx2DPixmap : IDisposable
 
     /// <summary>
     /// </summary>
-    /// <param name="encodedData"></param>
+    /// <param name="buffer"></param>
     /// <param name="offset"></param>
     /// <param name="len"></param>
     /// <param name="requestedFormat"></param>
-    public Gdx2DPixmap( ByteBuffer encodedData, int offset, int len, int requestedFormat )
-        : this( encodedData.BackingArray(), offset, len, requestedFormat )
+    public Gdx2DPixmap( ByteBuffer buffer, int offset, int len, int requestedFormat )
+        : this( buffer.BackingArray(), offset, len, requestedFormat )
     {
     }
 
@@ -123,11 +123,13 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
+        PNGUtils.AnalysePNG( buffer, true );
+        
         ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, offset, len );
 
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
         {
-            ConvertFormatTo( requestedFormat );
+            ConvertPixelFormatTo( requestedFormat );
         }
 
         if ( PixmapBuffer == null )
@@ -166,7 +168,7 @@ public partial class Gdx2DPixmap : IDisposable
 
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
         {
-            ConvertFormatTo( requestedFormat );
+            ConvertPixelFormatTo( requestedFormat );
         }
 
         if ( PixmapBuffer == null )
@@ -194,20 +196,22 @@ public partial class Gdx2DPixmap : IDisposable
         this.Width     = ( uint )width;
         this.Height    = ( uint )height;
         this.ColorType = ( uint )format;
-        this.Blend     = ( uint )Pixmap.BlendTypes.Default; // Gdx2DPixmap.DEFAULT_BLEND;
-        this.Scale     = ( uint )Pixmap.ScaleType.Default;  // Gdx2DPixmap.DEFAULT_SCALE;
+        this.BitDepth  = 0; //TODO:
+        this.Blend     = ( uint )Pixmap.BlendTypes.Default;
+        this.Scale     = ( uint )Pixmap.ScaleType.Default;
 
         var length = width * height * PixmapFormat.Gdx2dBytesPerPixel( format );
 
         _pixmapDataType = new PixmapDataType
         {
-            Width     = this.Width,
-            Height    = this.Height,
-            ColorType = this.ColorType,
-            BitDepth  = this.BitDepth,
-            Blend     = this.Blend,
-            Scale     = this.Scale,
-            Pixels    = new byte[ length ],
+            Width         = this.Width,
+            Height        = this.Height,
+            ColorType     = this.ColorType,
+            BitDepth      = this.BitDepth,
+            Blend         = this.Blend,
+            Scale         = this.Scale,
+            TotalIDATSize = this.TotalIDATSize,
+            Pixels        = new byte[ length ],
         };
 
         PixmapBuffer = new HeapByteBuffer( _pixmapDataType.Pixels, 0, length );
@@ -234,25 +238,34 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     private ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
+        Logger.Checkpoint();
+
         PNGUtils.AnalysePNG( buffer );
+
+        Logger.Checkpoint();
 
         var pixmapDef = new PixmapDataType
         {
-            Width     = ( uint )PNGUtils.IHDRchunk.Width,
-            Height    = ( uint )PNGUtils.IHDRchunk.Height,
-            BitDepth  = ( uint )PNGUtils.IHDRchunk.BitDepth,
-            ColorType = ( uint )PNGUtils.IHDRchunk.ColorType,
-            Blend     = 0,
-            Scale     = 0,
-            Pixels    = new byte[ PNGUtils.IDATchunk.ChunkSize ],
+            Width         = ( uint )PNGUtils.IHDRchunk.Width,
+            Height        = ( uint )PNGUtils.IHDRchunk.Height,
+            BitDepth      = ( uint )PNGUtils.IHDRchunk.BitDepth,
+            ColorType     = ( uint )PNGUtils.IHDRchunk.ColorType,
+            Blend         = 0,
+            Scale         = 0,
+            TotalIDATSize = PNGUtils.TotalIDATSize,
+            Pixels        = new byte[ PNGUtils.IDATchunk.ChunkSize ],
         };
 
-        Logger.Debug( $"Width    : {pixmapDef.Width}" );
-        Logger.Debug( $"Height   : {pixmapDef.Height}" );
-        Logger.Debug( $"BitDepth : {pixmapDef.BitDepth}" );
-        Logger.Debug( $"ColorType: {pixmapDef.ColorType}" );
-        
+        Logger.Debug( $"Width        : {pixmapDef.Width}" );
+        Logger.Debug( $"Height       : {pixmapDef.Height}" );
+        Logger.Debug( $"BitDepth     : {pixmapDef.BitDepth}" );
+        Logger.Debug( $"ColorType    : {pixmapDef.ColorType}" );
+        Logger.Debug( $"Pixels       : {pixmapDef.Pixels.Length}" );
+        Logger.Debug( $"TotalIDATSize: {pixmapDef.TotalIDATSize}" );
+
         Array.Copy( buffer, PNGUtils.IDAT_DATA_OFFSET, pixmapDef.Pixels, 0, PNGUtils.IDATchunk.ChunkSize );
+
+        Logger.Checkpoint();
 
         return ( new HeapByteBuffer( pixmapDef.Pixels, 0, pixmapDef.Pixels.Length ), pixmapDef );
     }
@@ -261,63 +274,30 @@ public partial class Gdx2DPixmap : IDisposable
     /// Converts this Pixmaps <see cref="ColorType"/> to the requested format.
     /// </summary>
     /// <param name="requestedFormat"> The new Format. </param>
-    private void ConvertFormatTo( int requestedFormat )
+    private void ConvertPixelFormatTo( int requestedFormat )
     {
-        var pixmap = new Gdx2DPixmap( ( int )Width, ( int )Height, requestedFormat );
+        Logger.Checkpoint();
 
-        pixmap.SetBlend( Gdx2DPixmap.GDX_2D_BLEND_NONE );
-        pixmap.DrawPixmap( this, 0, 0, 0, 0, ( int )Width, ( int )Height );
+        // Double-check conditions
+        if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
+        {
+            var pixmap = new Gdx2DPixmap( ( int )Width, ( int )Height, requestedFormat );
 
-        Dispose();
+            pixmap.SetBlend( GDX_2D_BLEND_NONE );
+            pixmap.DrawPixmap( this, 0, 0, 0, 0, ( int )Width, ( int )Height );
 
-        this.Width        = pixmap.Width;
-        this.Height       = pixmap.Height;
-        this.ColorType    = pixmap.ColorType;
-        this.BitDepth     = pixmap.BitDepth;
-        this.PixmapBuffer = pixmap.PixmapBuffer;
+            Dispose();
+
+            this.Width         = pixmap.Width;
+            this.Height        = pixmap.Height;
+            this.ColorType     = pixmap.ColorType;
+            this.BitDepth      = pixmap.BitDepth;
+            this.Blend         = pixmap.Blend;
+            this.Scale         = pixmap.Scale;
+            this.TotalIDATSize = pixmap.TotalIDATSize;
+            this.PixmapBuffer  = pixmap.PixmapBuffer;
+        }
     }
-
-//    /// <summary>
-//    /// 
-//    /// </summary>
-//    /// <param name="inStream"></param>
-//    /// <param name="requestedFormat"></param>
-//    /// <returns></returns>
-//    public static Gdx2DPixmap NewPixmap( StreamReader inStream, int requestedFormat )
-//    {
-//        Logger.CheckPoint();
-//
-//        try
-//        {
-//            return new Gdx2DPixmap( inStream, requestedFormat );
-//        }
-//        catch ( IOException e )
-//        {
-//            throw new GdxRuntimeException( e.Message );
-//        }
-//    }
-//
-//    /// <summary>
-//    /// 
-//    /// </summary>
-//    /// <param name="width"></param>
-//    /// <param name="height"></param>
-//    /// <param name="format"></param>
-//    /// <returns></returns>
-//    /// <exception cref="GdxRuntimeException"></exception>
-//    public static Gdx2DPixmap NewPixmap( int width, int height, int format )
-//    {
-//        Logger.CheckPoint();
-//
-//        try
-//        {
-//            return new Gdx2DPixmap( width, height, format );
-//        }
-//        catch ( ArgumentException e )
-//        {
-//            throw new GdxRuntimeException( e.Message );
-//        }
-//    }
 
     // ========================================================================
     // ========================================================================

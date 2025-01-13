@@ -92,15 +92,15 @@ public class PixelType
         };
     }
 
-    /// <inheritdoc cref="PixmapFormat.ToGLFormat(Format)"/>
+    /// <inheritdoc cref="PixmapFormat.ToGLPixelFormat(LughSharp.Lugh.Graphics.Images.PixelType.Format)"/>
     public static int ToGLPixelFormat( Format format )
     {
-        return PixmapFormat.ToGLFormat( ToGdx2DPixmapPixelFormat( format ) );
+        return PixmapFormat.ToGLPixelFormat( ToGdx2DPixmapPixelFormat( format ) );
     }
 
-    /// <inheritdoc cref="PixmapFormat.ToGLType(Format)"/>
+    /// <inheritdoc cref="PixmapFormat.ToGLDataType"/>
     public static int ToGLType( Format format )
     {
-        return PixmapFormat.ToGLType( ToGdx2DPixmapPixelFormat( format ) );
+        return PixmapFormat.ToGLDataType( ToGdx2DPixmapPixelFormat( format ) );
     }
 }

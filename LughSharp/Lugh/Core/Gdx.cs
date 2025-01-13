@@ -139,7 +139,7 @@ public class Gdx
     {
         App = app;
 
-        Logger.Initialise( enableWriteToFile: false );
+        Logger.Initialise( enableWriteToFile: true );
         Logger.EnableDebugLogging();
         Logger.EnableErrorLogging();
 
@@ -212,6 +212,7 @@ public class Gdx
 
     // ========================================================================
     // ========================================================================
+    
 }
 
 

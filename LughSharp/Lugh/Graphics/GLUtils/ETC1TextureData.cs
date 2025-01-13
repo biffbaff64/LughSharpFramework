@@ -129,12 +129,12 @@ public class ETC1TextureData : ITextureData
             {
                 GdxApi.Bindings.TexImage2D( target,
                                      0,
-                                     pixmap.GLInternalFormat,
+                                     pixmap.GLInternalPixelFormat,
                                      pixmap.Width,
                                      pixmap.Height,
                                      0,
-                                     pixmap.GLFormat,
-                                     pixmap.GLType,
+                                     pixmap.GLPixelFormat,
+                                     pixmap.GLDataType,
                                      ptr );
             }
 
@@ -173,7 +173,7 @@ public class ETC1TextureData : ITextureData
     }
 
     /// <inheritdoc />
-    public PixelType.Format? Format { get; set; } = PixelType.Format.Alpha;
+    public PixelType.Format? PixelFormat { get; set; } = PixelType.Format.Alpha;
 
     /// <inheritdoc />
     public bool IsManaged

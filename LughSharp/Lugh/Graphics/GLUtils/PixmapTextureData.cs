@@ -32,7 +32,7 @@ public class PixmapTextureData( Pixmap pixmap, PixelType.Format? format, bool us
     : ITextureData
 {
     public Pixmap            Pixmap        { get; set; } = pixmap;
-    public PixelType.Format? Format        { get; set; } = format;
+    public PixelType.Format? PixelFormat        { get; set; } = format;
     public bool              DisposePixmap { get; set; } = disposePixmap;
     public bool              IsManaged     { get; set; } = managed;
     public bool              UseMipMaps    { get; set; } = useMipMaps;
