@@ -22,13 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum StringName : int
+public enum ShaderParameterName : int
 {
-    Extensions = IGL.GL_EXTENSIONS,
-    Renderer   = IGL.GL_RENDERER,
-    Vendor     = IGL.GL_VENDOR,
-    Version    = IGL.GL_VERSION,
+    CompileStatus = IGL.GL_COMPILE_STATUS,
+    InfoLogLength = IGL.GL_INFO_LOG_LENGTH,
+    ShaderType    = IGL.GL_SHADER_TYPE,
 }

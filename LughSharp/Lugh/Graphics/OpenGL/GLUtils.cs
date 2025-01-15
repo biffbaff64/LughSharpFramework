@@ -36,25 +36,14 @@ public class GLUtils
 
     // ========================================================================
 
-    [PublicAPI]
-    public enum ShaderParameterName : int
-    {
-        CompileStatus = IGL.GL_COMPILE_STATUS,
-        InfoLogLength = IGL.GL_INFO_LOG_LENGTH,
-        ShaderType    = IGL.GL_SHADER_TYPE,
-    }
-
-    [PublicAPI]
-    public enum ProgramProperty : int
-    {
-        LinkStatus      = IGL.GL_LINK_STATUS,
-        InfoLogLength   = IGL.GL_INFO_LOG_LENGTH,
-        AttachedShaders = IGL.GL_ATTACHED_SHADERS,
-    }
-
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="errorCode"></param>
+    /// <returns></returns>
     public static string GetErrorString( int errorCode )
     {
         return errorCode switch
@@ -71,14 +60,20 @@ public class GLUtils
         };
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static void CreateCapabilities()
     {
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static void SetupGLDebug()
     {
         Logger.Debug( "Setting up GL Debug" );
-            
+
         unsafe
         {
             Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );

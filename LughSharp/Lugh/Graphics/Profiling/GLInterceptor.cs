@@ -26,6 +26,7 @@ using System.Numerics;
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Lugh.Graphics.Profiling;
 
@@ -1869,18 +1870,18 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public unsafe void GetInternalformativ( int target, int internalformat, int pname, int bufSize, int* parameters )
+    public unsafe void GetInternalformativ( int target, int internalFormat, int pname, int bufSize, int* parameters )
     {
         Calls++;
-        Bindings.GetInternalformativ( target, internalformat, pname, bufSize, parameters );
+        Bindings.GetInternalformativ( target, internalFormat, pname, bufSize, parameters );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void GetInternalformativ( int target, int internalformat, int pname, int bufSize, ref int[] parameters )
+    public void GetInternalformativ( int target, int internalFormat, int pname, int bufSize, ref int[] parameters )
     {
         Calls++;
-        Bindings.GetInternalformativ( target, internalformat, pname, bufSize, ref parameters );
+        Bindings.GetInternalformativ( target, internalFormat, pname, bufSize, ref parameters );
         CheckErrors();
     }
 
@@ -1917,26 +1918,26 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public void TexStorage1D( int target, int levels, int internalformat, int width )
+    public void TexStorage1D( int target, int levels, int internalFormat, int width )
     {
         Calls++;
-        Bindings.TexStorage1D( target, levels, internalformat, width );
+        Bindings.TexStorage1D( target, levels, internalFormat, width );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TexStorage2D( int target, int levels, int internalformat, int width, int height )
+    public void TexStorage2D( int target, int levels, int internalFormat, int width, int height )
     {
         Calls++;
-        Bindings.TexStorage2D( target, levels, internalformat, width, height );
+        Bindings.TexStorage2D( target, levels, internalFormat, width, height );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TexStorage3D( int target, int levels, int internalformat, int width, int height, int depth )
+    public void TexStorage3D( int target, int levels, int internalFormat, int width, int height, int depth )
     {
         Calls++;
-        Bindings.TexStorage3D( target, levels, internalformat, width, height, depth );
+        Bindings.TexStorage3D( target, levels, internalFormat, width, height, depth );
         CheckErrors();
     }
 
@@ -1973,34 +1974,34 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public unsafe void ClearBufferData( int target, int internalformat, int format, int type, void* data )
+    public unsafe void ClearBufferData( int target, int internalFormat, int format, int type, void* data )
     {
         Calls++;
-        Bindings.ClearBufferData( target, internalformat, format, type, data );
+        Bindings.ClearBufferData( target, internalFormat, format, type, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void ClearBufferData< T >( int target, int internalformat, int format, int type, T[] data ) where T : unmanaged
+    public void ClearBufferData< T >( int target, int internalFormat, int format, int type, T[] data ) where T : unmanaged
     {
         Calls++;
-        Bindings.ClearBufferData( target, internalformat, format, type, data );
+        Bindings.ClearBufferData( target, internalFormat, format, type, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public unsafe void ClearBufferSubData( int target, int internalformat, int offset, int size, int format, int type, void* data )
+    public unsafe void ClearBufferSubData( int target, int internalFormat, int offset, int size, int format, int type, void* data )
     {
         Calls++;
-        Bindings.ClearBufferSubData( target, internalformat, offset, size, format, type, data );
+        Bindings.ClearBufferSubData( target, internalFormat, offset, size, format, type, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void ClearBufferSubData< T >( int target, int internalformat, int offset, int size, int format, int type, T[] data ) where T : unmanaged
+    public void ClearBufferSubData< T >( int target, int internalFormat, int offset, int size, int format, int type, T[] data ) where T : unmanaged
     {
         Calls++;
-        Bindings.ClearBufferSubData( target, internalformat, offset, size, format, type, data );
+        Bindings.ClearBufferSubData( target, internalFormat, offset, size, format, type, data );
         CheckErrors();
     }
 
@@ -2061,18 +2062,18 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public unsafe void GetInternalformati64v( int target, int internalformat, int pname, int count, long* parameters )
+    public unsafe void GetInternalformati64v( int target, int internalFormat, int pname, int count, long* parameters )
     {
         Calls++;
-        Bindings.GetInternalformati64v( target, internalformat, pname, count, parameters );
+        Bindings.GetInternalformati64v( target, internalFormat, pname, count, parameters );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void GetInternalformati64v( int target, int internalformat, int pname, int count, ref long[] parameters )
+    public void GetInternalformati64v( int target, int internalFormat, int pname, int count, ref long[] parameters )
     {
         Calls++;
-        Bindings.GetInternalformati64v( target, internalformat, pname, count, ref parameters );
+        Bindings.GetInternalformati64v( target, internalFormat, pname, count, ref parameters );
         CheckErrors();
     }
 
@@ -2291,34 +2292,34 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public void TexBufferRange( int target, int internalformat, uint buffer, int offset, int size )
+    public void TexBufferRange( int target, int internalFormat, uint buffer, int offset, int size )
     {
         Calls++;
-        Bindings.TexBufferRange( target, internalformat, buffer, offset, size );
+        Bindings.TexBufferRange( target, internalFormat, buffer, offset, size );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TexStorage2DMultisample( int target, int samples, int internalformat, int width, int height, bool fixedsamplelocations )
+    public void TexStorage2DMultisample( int target, int samples, int internalFormat, int width, int height, bool fixedsamplelocations )
     {
         Calls++;
-        Bindings.TexStorage2DMultisample( target, samples, internalformat, width, height, fixedsamplelocations );
+        Bindings.TexStorage2DMultisample( target, samples, internalFormat, width, height, fixedsamplelocations );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TexStorage3DMultisample( int target, int samples, int internalformat, int width, int height, int depth, bool fixedsamplelocations )
+    public void TexStorage3DMultisample( int target, int samples, int internalFormat, int width, int height, int depth, bool fixedsamplelocations )
     {
         Calls++;
-        Bindings.TexStorage3DMultisample( target, samples, internalformat, width, height, depth, fixedsamplelocations );
+        Bindings.TexStorage3DMultisample( target, samples, internalFormat, width, height, depth, fixedsamplelocations );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TextureView( uint texture, int target, uint origtexture, int internalformat, uint minlevel, uint numlevels, uint minlayer, uint numlayers )
+    public void TextureView( uint texture, int target, uint origtexture, int internalFormat, uint minlevel, uint numlevels, uint minlayer, uint numlayers )
     {
         Calls++;
-        Bindings.TextureView( texture, target, origtexture, internalformat, minlevel, numlevels, minlayer, numlayers );
+        Bindings.TextureView( texture, target, origtexture, internalFormat, minlevel, numlevels, minlayer, numlayers );
         CheckErrors();
     }
 
@@ -2859,34 +2860,34 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public unsafe void ClearNamedBufferData( uint buffer, int internalformat, int format, int type, void* data )
+    public unsafe void ClearNamedBufferData( uint buffer, int internalFormat, int format, int type, void* data )
     {
         Calls++;
-        Bindings.ClearNamedBufferData( buffer, internalformat, format, type, data );
+        Bindings.ClearNamedBufferData( buffer, internalFormat, format, type, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void ClearNamedBufferData< T >( uint buffer, int internalformat, int format, int type, T[] data ) where T : unmanaged
+    public void ClearNamedBufferData< T >( uint buffer, int internalFormat, int format, int type, T[] data ) where T : unmanaged
     {
         Calls++;
-        Bindings.ClearNamedBufferData( buffer, internalformat, format, type, data );
+        Bindings.ClearNamedBufferData( buffer, internalFormat, format, type, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public unsafe void ClearNamedBufferSubData( uint buffer, int internalformat, int offset, int size, int format, int type, void* data )
+    public unsafe void ClearNamedBufferSubData( uint buffer, int internalFormat, int offset, int size, int format, int type, void* data )
     {
         Calls++;
-        Bindings.ClearNamedBufferSubData( buffer, internalformat, offset, size, format, type, data );
+        Bindings.ClearNamedBufferSubData( buffer, internalFormat, offset, size, format, type, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void ClearNamedBufferSubData< T >( uint buffer, int internalformat, int offset, int size, int format, int type, T[] data ) where T : unmanaged
+    public void ClearNamedBufferSubData< T >( uint buffer, int internalFormat, int offset, int size, int format, int type, T[] data ) where T : unmanaged
     {
         Calls++;
-        Bindings.ClearNamedBufferSubData( buffer, internalformat, offset, size, format, type, data );
+        Bindings.ClearNamedBufferSubData( buffer, internalFormat, offset, size, format, type, data );
         CheckErrors();
     }
 
@@ -3273,18 +3274,18 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public void NamedRenderbufferStorage( uint renderbuffer, int internalformat, int width, int height )
+    public void NamedRenderbufferStorage( uint renderbuffer, int internalFormat, int width, int height )
     {
         Calls++;
-        Bindings.NamedRenderbufferStorage( renderbuffer, internalformat, width, height );
+        Bindings.NamedRenderbufferStorage( renderbuffer, internalFormat, width, height );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void NamedRenderbufferStorageMultisample( uint renderbuffer, int samples, int internalformat, int width, int height )
+    public void NamedRenderbufferStorageMultisample( uint renderbuffer, int samples, int internalFormat, int width, int height )
     {
         Calls++;
-        Bindings.NamedRenderbufferStorageMultisample( renderbuffer, samples, internalformat, width, height );
+        Bindings.NamedRenderbufferStorageMultisample( renderbuffer, samples, internalFormat, width, height );
         CheckErrors();
     }
 
@@ -3333,58 +3334,58 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public void TextureBuffer( uint texture, int internalformat, uint buffer )
+    public void TextureBuffer( uint texture, int internalFormat, uint buffer )
     {
         Calls++;
-        Bindings.TextureBuffer( texture, internalformat, buffer );
+        Bindings.TextureBuffer( texture, internalFormat, buffer );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TextureBufferRange( uint texture, int internalformat, uint buffer, int offset, int size )
+    public void TextureBufferRange( uint texture, int internalFormat, uint buffer, int offset, int size )
     {
         Calls++;
-        Bindings.TextureBufferRange( texture, internalformat, buffer, offset, size );
+        Bindings.TextureBufferRange( texture, internalFormat, buffer, offset, size );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TextureStorage1D( uint texture, int levels, int internalformat, int width )
+    public void TextureStorage1D( uint texture, int levels, int internalFormat, int width )
     {
         Calls++;
-        Bindings.TextureStorage1D( texture, levels, internalformat, width );
+        Bindings.TextureStorage1D( texture, levels, internalFormat, width );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TextureStorage2D( uint texture, int levels, int internalformat, int width, int height )
+    public void TextureStorage2D( uint texture, int levels, int internalFormat, int width, int height )
     {
         Calls++;
-        Bindings.TextureStorage2D( texture, levels, internalformat, width, height );
+        Bindings.TextureStorage2D( texture, levels, internalFormat, width, height );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TextureStorage3D( uint texture, int levels, int internalformat, int width, int height, int depth )
+    public void TextureStorage3D( uint texture, int levels, int internalFormat, int width, int height, int depth )
     {
         Calls++;
-        Bindings.TextureStorage3D( texture, levels, internalformat, width, height, depth );
+        Bindings.TextureStorage3D( texture, levels, internalFormat, width, height, depth );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TextureStorage2DMultisample( uint texture, int samples, int internalformat, int width, int height, bool fixedsamplelocations )
+    public void TextureStorage2DMultisample( uint texture, int samples, int internalFormat, int width, int height, bool fixedsamplelocations )
     {
         Calls++;
-        Bindings.TextureStorage2DMultisample( texture, samples, internalformat, width, height, fixedsamplelocations );
+        Bindings.TextureStorage2DMultisample( texture, samples, internalFormat, width, height, fixedsamplelocations );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TextureStorage3DMultisample( uint texture, int samples, int internalformat, int width, int height, int depth, bool fixedsamplelocations )
+    public void TextureStorage3DMultisample( uint texture, int samples, int internalFormat, int width, int height, int depth, bool fixedsamplelocations )
     {
         Calls++;
-        Bindings.TextureStorage3DMultisample( texture, samples, internalformat, width, height, depth, fixedsamplelocations );
+        Bindings.TextureStorage3DMultisample( texture, samples, internalFormat, width, height, depth, fixedsamplelocations );
         CheckErrors();
     }
 
@@ -4375,27 +4376,27 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public unsafe void TexImage1D( int target, int level, int internalformat, int width, int border, int format, int type, void* pixels )
+    public unsafe void TexImage1D( int target, int level, int internalFormat, int width, int border, int format, int type, void* pixels )
     {
         Calls++;
-        Bindings.TexImage1D( target, level, internalformat, width, border, format, type, pixels );
+        Bindings.TexImage1D( target, level, internalFormat, width, border, format, type, pixels );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TexImage1D< T >( int target, int level, int internalformat, int width, int border, int format, int type, T[] pixels )
+    public void TexImage1D< T >( int target, int level, int internalFormat, int width, int border, int format, int type, T[] pixels )
         where T : unmanaged
     {
         Calls++;
-        Bindings.TexImage1D( target, level, internalformat, width, border, format, type, pixels );
+        Bindings.TexImage1D( target, level, internalFormat, width, border, format, type, pixels );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public unsafe void TexImage2D( int target, int level, int internalformat, int width, int height, int border, int format, int type, void* pixels )
+    public unsafe void TexImage2D( int target, int level, int internalFormat, int width, int height, int border, int format, int type, void* pixels )
     {
         Calls++;
-        Bindings.TexImage2D( target, level, internalformat, width, height, border, format, type, pixels );
+        Bindings.TexImage2D( target, level, internalFormat, width, height, border, format, type, pixels );
         CheckErrors();
     }
 
@@ -4405,11 +4406,11 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
     
     /// <inheritdoc />
-    public void TexImage2D< T >( int target, int level, int internalformat, int width, int height, int border, int format, int type, T[] pixels )
+    public void TexImage2D< T >( int target, int level, int internalFormat, int width, int height, int border, int format, int type, T[] pixels )
         where T : unmanaged
     {
         Calls++;
-        Bindings.TexImage2D( target, level, internalformat, width, height, border, format, type, pixels );
+        Bindings.TexImage2D( target, level, internalFormat, width, height, border, format, type, pixels );
         CheckErrors();
     }
 
@@ -4825,18 +4826,18 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public void CopyTexImage1D( int target, int level, int internalformat, int x, int y, int width, int border )
+    public void CopyTexImage1D( int target, int level, int internalFormat, int x, int y, int width, int border )
     {
         Calls++;
-        Bindings.CopyTexImage1D( target, level, internalformat, x, y, width, border );
+        Bindings.CopyTexImage1D( target, level, internalFormat, x, y, width, border );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void CopyTexImage2D( int target, int level, int internalformat, int x, int y, int width, int height, int border )
+    public void CopyTexImage2D( int target, int level, int internalFormat, int x, int y, int width, int height, int border )
     {
         Calls++;
-        Bindings.CopyTexImage2D( target, level, internalformat, x, y, width, height, border );
+        Bindings.CopyTexImage2D( target, level, internalFormat, x, y, width, height, border );
         CheckErrors();
     }
 
@@ -4972,7 +4973,7 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     /// <inheritdoc />
     public unsafe void TexImage3D( int target,
                                    int level,
-                                   int internalformat,
+                                   int internalFormat,
                                    int width,
                                    int height,
                                    int depth,
@@ -4982,14 +4983,14 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
                                    void* pixels )
     {
         Calls++;
-        Bindings.TexImage3D( target, level, internalformat, width, height, depth, border, format, type, pixels );
+        Bindings.TexImage3D( target, level, internalFormat, width, height, depth, border, format, type, pixels );
         CheckErrors();
     }
 
     /// <inheritdoc />
     public void TexImage3D< T >( int target,
                                  int level,
-                                 int internalformat,
+                                 int internalFormat,
                                  int width,
                                  int height,
                                  int depth,
@@ -4999,7 +5000,7 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
                                  T[] pixels ) where T : unmanaged
     {
         Calls++;
-        Bindings.TexImage3D( target, level, internalformat, width, height, depth, border, format, type, pixels );
+        Bindings.TexImage3D( target, level, internalFormat, width, height, depth, border, format, type, pixels );
         CheckErrors();
     }
 
@@ -5048,6 +5049,14 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
+    public void ActiveTexture( TextureUnit texture )
+    {
+        Calls++;
+        Bindings.ActiveTexture( texture );
+        CheckErrors();
+    }
+
+    /// <inheritdoc />
     public void ActiveTexture( int texture )
     {
         Calls++;
@@ -5066,7 +5075,7 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     /// <inheritdoc />
     public unsafe void CompressedTexImage3D( int target,
                                              int level,
-                                             int internalformat,
+                                             int internalFormat,
                                              int width,
                                              int height,
                                              int depth,
@@ -5075,47 +5084,47 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
                                              void* data )
     {
         Calls++;
-        Bindings.CompressedTexImage3D( target, level, internalformat, width, height, depth, border, imageSize, data );
+        Bindings.CompressedTexImage3D( target, level, internalFormat, width, height, depth, border, imageSize, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void CompressedTexImage3D( int target, int level, int internalformat, int width, int height, int depth, int border, byte[] data )
+    public void CompressedTexImage3D( int target, int level, int internalFormat, int width, int height, int depth, int border, byte[] data )
     {
         Calls++;
-        Bindings.CompressedTexImage3D( target, level, internalformat, width, height, depth, border, data );
+        Bindings.CompressedTexImage3D( target, level, internalFormat, width, height, depth, border, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public unsafe void CompressedTexImage2D( int target, int level, int internalformat, int width, int height, int border, int imageSize, void* data )
+    public unsafe void CompressedTexImage2D( int target, int level, int internalFormat, int width, int height, int border, int imageSize, void* data )
     {
         Calls++;
-        Bindings.CompressedTexImage2D( target, level, internalformat, width, height, border, imageSize, data );
+        Bindings.CompressedTexImage2D( target, level, internalFormat, width, height, border, imageSize, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void CompressedTexImage2D( int target, int level, int internalformat, int width, int height, int border, byte[] data )
+    public void CompressedTexImage2D( int target, int level, int internalFormat, int width, int height, int border, byte[] data )
     {
         Calls++;
-        Bindings.CompressedTexImage2D( target, level, internalformat, width, height, border, data );
+        Bindings.CompressedTexImage2D( target, level, internalFormat, width, height, border, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public unsafe void CompressedTexImage1D( int target, int level, int internalformat, int width, int border, int imageSize, void* data )
+    public unsafe void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, int imageSize, void* data )
     {
         Calls++;
-        Bindings.CompressedTexImage1D( target, level, internalformat, width, border, imageSize, data );
+        Bindings.CompressedTexImage1D( target, level, internalFormat, width, border, imageSize, data );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void CompressedTexImage1D( int target, int level, int internalformat, int width, int border, byte[] data )
+    public void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, byte[] data )
     {
         Calls++;
-        Bindings.CompressedTexImage1D( target, level, internalformat, width, border, data );
+        Bindings.CompressedTexImage1D( target, level, internalFormat, width, border, data );
         CheckErrors();
     }
 
@@ -7729,10 +7738,10 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public void RenderbufferStorage( int target, int internalformat, int width, int height )
+    public void RenderbufferStorage( int target, int internalFormat, int width, int height )
     {
         Calls++;
-        Bindings.RenderbufferStorage( target, internalformat, width, height );
+        Bindings.RenderbufferStorage( target, internalFormat, width, height );
         CheckErrors();
     }
 
@@ -7889,10 +7898,10 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public void RenderbufferStorageMultisample( int target, int samples, int internalformat, int width, int height )
+    public void RenderbufferStorageMultisample( int target, int samples, int internalFormat, int width, int height )
     {
         Calls++;
-        Bindings.RenderbufferStorageMultisample( target, samples, internalformat, width, height );
+        Bindings.RenderbufferStorageMultisample( target, samples, internalFormat, width, height );
         CheckErrors();
     }
 
@@ -8021,10 +8030,10 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public void TexBuffer( int target, int internalformat, uint buffer )
+    public void TexBuffer( int target, int internalFormat, uint buffer )
     {
         Calls++;
-        Bindings.TexBuffer( target, internalformat, buffer );
+        Bindings.TexBuffer( target, internalFormat, buffer );
         CheckErrors();
     }
 
@@ -8403,18 +8412,18 @@ public class GLInterceptor( GLProfiler profiler ) : BaseGLInterceptor( profiler 
     }
 
     /// <inheritdoc />
-    public void TexImage2DMultisample( int target, int samples, int internalformat, int width, int height, bool fixedsamplelocations )
+    public void TexImage2DMultisample( int target, int samples, int internalFormat, int width, int height, bool fixedsamplelocations )
     {
         Calls++;
-        Bindings.TexImage2DMultisample( target, samples, internalformat, width, height, fixedsamplelocations );
+        Bindings.TexImage2DMultisample( target, samples, internalFormat, width, height, fixedsamplelocations );
         CheckErrors();
     }
 
     /// <inheritdoc />
-    public void TexImage3DMultisample( int target, int samples, int internalformat, int width, int height, int depth, bool fixedsamplelocations )
+    public void TexImage3DMultisample( int target, int samples, int internalFormat, int width, int height, int depth, bool fixedsamplelocations )
     {
         Calls++;
-        Bindings.TexImage3DMultisample( target, samples, internalformat, width, height, depth, fixedsamplelocations );
+        Bindings.TexImage3DMultisample( target, samples, internalFormat, width, height, depth, fixedsamplelocations );
         CheckErrors();
     }
 

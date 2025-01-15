@@ -201,6 +201,8 @@ public partial class DesktopGLWindow : IDisposable
         GdxApi.Input    = Input;
 
         Glfw.MakeContextCurrent( GlfwWindow );
+
+        Graphics.CurrentContext = Glfw.GetCurrentContext();
     }
 
     /// <summary>

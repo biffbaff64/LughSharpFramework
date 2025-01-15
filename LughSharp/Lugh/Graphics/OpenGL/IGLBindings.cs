@@ -25,6 +25,7 @@
 using System.Numerics;
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 using static LughSharp.Lugh.Graphics.OpenGL.IGL;
 
@@ -270,7 +271,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
     /// <see href="https://docs.gl/gl4/glTexImage1D"/> for a list of possible values.
     /// </param>
@@ -298,7 +299,7 @@ public partial interface IGLBindings
     /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
-    unsafe void TexImage1D( int target, int level, int internalformat, int width, int border, int format, int type, void* pixels );
+    unsafe void TexImage1D( int target, int level, int internalFormat, int width, int border, int format, int type, void* pixels );
 
     /// <summary>
     /// Specify a one-dimensional texture image
@@ -311,7 +312,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
     /// <see href="https://docs.gl/gl4/glTexImage1D"/> for a list of possible values.
     /// </param>
@@ -342,7 +343,7 @@ public partial interface IGLBindings
     /// Specifies the pixel data as an array of values. Make sure to match the generic type with the
     /// <paramref name="type"/> parameter.
     /// </param>
-    unsafe void TexImage1D< T >( int target, int level, int internalformat, int width, int border, int format, int type, T[] pixels )
+    unsafe void TexImage1D< T >( int target, int level, int internalFormat, int width, int border, int format, int type, T[] pixels )
         where T : unmanaged;
 
     /// <summary>
@@ -367,7 +368,7 @@ public partial interface IGLBindings
     /// reduction image. If <paramref name="target"/> is <see cref="GL_TEXTURE_RECTANGLE"/> or
     /// <see cref="GL_PROXY_TEXTURE_RECTANGLE"/>, <paramref name="level"/> must be 0.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
     /// <see href="https://docs.gl/gl4/glTexImage2D"/> for the list of possible values.
     /// </param>
@@ -402,7 +403,7 @@ public partial interface IGLBindings
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     unsafe void TexImage2D( int target,
                               int level,
-                              int internalformat,
+                              int internalFormat,
                               int width,
                               int height,
                               int border,
@@ -432,7 +433,7 @@ public partial interface IGLBindings
     /// reduction image. If <paramref name="target"/> is <see cref="GL_TEXTURE_RECTANGLE"/> or
     /// <see cref="GL_PROXY_TEXTURE_RECTANGLE"/>, <paramref name="level"/> must be 0.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
     /// <see href="https://docs.gl/gl4/glTexImage2D"/> for the list of possible values.
     /// </param>
@@ -470,7 +471,7 @@ public partial interface IGLBindings
     /// </param>
     void TexImage2D< T >( int target,
                                    int level,
-                                   int internalformat,
+                                   int internalFormat,
                                    int width,
                                    int height,
                                    int border,
@@ -1306,7 +1307,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the internal format of the texture. Refer to
     /// <see href="https://docs.gl/gl4/glCopyTexImage1D"/> for a list of supported formats.
     /// </param>
@@ -1320,7 +1321,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="width">Specifies the width of the texture image.</param>
     /// <param name="border">This value must be 0.</param>
-    void CopyTexImage1D( int target, int level, int internalformat, int x, int y, int width, int border );
+    void CopyTexImage1D( int target, int level, int internalFormat, int x, int y, int width, int border );
 
     /// <summary>
     /// Copy pixels into a 2D texture image.
@@ -1335,7 +1336,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the internal format of the texture. Refer to
     /// <see href="https://docs.gl/gl4/glCopyTexImage2D"/> for a list of supported formats.
     /// </param>
@@ -1350,7 +1351,7 @@ public partial interface IGLBindings
     /// <param name="width">Specifies the width of the texture image.</param>
     /// <param name="height">Specifies the height of the texture image.</param>
     /// <param name="border">This value must be 0.</param>
-    void CopyTexImage2D( int target, int level, int internalformat, int x, int y, int width, int height, int border );
+    void CopyTexImage2D( int target, int level, int internalFormat, int x, int y, int width, int height, int border );
 
     /// <summary>
     /// Copy a one-dimensional texture subimage.
@@ -1660,7 +1661,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
     /// <see href="https://docs.gl/gl4/glTexImage3D"/> for the list of possible values.
     /// </param>
@@ -1699,7 +1700,7 @@ public partial interface IGLBindings
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     unsafe void TexImage3D( int target,
                               int level,
-                              int internalformat,
+                              int internalFormat,
                               int width,
                               int height,
                               int depth,
@@ -1719,7 +1720,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the number of color components in the texture. Refer to
     /// <see href="https://docs.gl/gl4/glTexImage3D"/> for the list of possible values.
     /// </param>
@@ -1761,7 +1762,7 @@ public partial interface IGLBindings
     /// </param>
     unsafe void TexImage3D< T >( int target,
                                    int level,
-                                   int internalformat,
+                                   int internalFormat,
                                    int width,
                                    int height,
                                    int depth,
@@ -1908,6 +1909,7 @@ public partial interface IGLBindings
     /// i ranges from 0 to the value of <see cref="GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS"/> minus one. The initial value is
     /// <see cref="GL_TEXTURE0"/>.
     /// </param>
+    void ActiveTexture( TextureUnit texture );
     void ActiveTexture( int texture );
 
     /// <summary>
@@ -1934,7 +1936,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
     /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
     /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
@@ -1959,7 +1961,7 @@ public partial interface IGLBindings
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     unsafe void CompressedTexImage3D( int target,
                                         int level,
-                                        int internalformat,
+                                        int internalFormat,
                                         int width,
                                         int height,
                                         int depth,
@@ -1978,7 +1980,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
     /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
     /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
@@ -1999,7 +2001,7 @@ public partial interface IGLBindings
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
     unsafe void CompressedTexImage3D( int target,
                                         int level,
-                                        int internalformat,
+                                        int internalFormat,
                                         int width,
                                         int height,
                                         int depth,
@@ -2021,7 +2023,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
     /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
     /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
@@ -2042,7 +2044,7 @@ public partial interface IGLBindings
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     unsafe void CompressedTexImage2D( int target,
                                         int level,
-                                        int internalformat,
+                                        int internalFormat,
                                         int width,
                                         int height,
                                         int border,
@@ -2064,7 +2066,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
     /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
     /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
@@ -2079,7 +2081,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="border">This value must be 0.</param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
-    unsafe void CompressedTexImage2D( int target, int level, int internalformat, int width, int height, int border, byte[] data );
+    unsafe void CompressedTexImage2D( int target, int level, int internalFormat, int width, int height, int border, byte[] data );
 
     /// <summary>
     /// Specify a one-dimensional texture image in a compressed format
@@ -2092,7 +2094,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
     /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
     /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
@@ -2107,7 +2109,7 @@ public partial interface IGLBindings
     /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
-    unsafe void CompressedTexImage1D( int target, int level, int internalformat, int width, int border, int imageSize, void* data );
+    unsafe void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, int imageSize, void* data );
 
     /// <summary>
     /// Specify a one-dimensional texture image in a compressed format
@@ -2120,7 +2122,7 @@ public partial interface IGLBindings
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
     /// reduction image.
     /// </param>
-    /// <param name="internalformat">
+    /// <param name="internalFormat">
     /// Specifies the color components in the texture. Must be one of
     /// <see cref="GL_COMPRESSED_RED"/>, <see cref="GL_COMPRESSED_RG"/>, <see cref="GL_COMPRESSED_RGB"/>,
     /// <see cref="GL_COMPRESSED_RGBA"/>, <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
@@ -2131,7 +2133,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="border">This value must be 0.</param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
-    unsafe void CompressedTexImage1D( int target, int level, int internalformat, int width, int border, byte[] data );
+    unsafe void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, byte[] data );
 
     /// <summary>
     /// Specify a three-dimensional texture subimage in a compressed format
@@ -5729,10 +5731,10 @@ public partial interface IGLBindings
     /// Specifies a binding to which the target of the allocation and must be
     /// <see cref="GL_RENDERBUFFER"/>.
     /// </param>
-    /// <param name="internalformat">Specifies the internal format to use for the renderbuffer object's image.</param>
+    /// <param name="internalFormat">Specifies the internal format to use for the renderbuffer object's image.</param>
     /// <param name="width">Specifies the width of the renderbuffer, in pixels.</param>
     /// <param name="height">Specifies the height of the renderbuffer, in pixels.</param>
-    void RenderbufferStorage( int target, int internalformat, int width, int height );
+    void RenderbufferStorage( int target, int internalFormat, int width, int height );
 
     /// <summary>
     /// Return renderbuffer object parameter values.
@@ -5998,10 +6000,10 @@ public partial interface IGLBindings
     /// <see cref="GL_RENDERBUFFER"/>.
     /// </param>
     /// <param name="samples">Specifies the number of samples to be used for the renderbuffer object's storage.</param>
-    /// <param name="internalformat">Specifies the internal format to be used for the renderbuffer object's image.</param>
+    /// <param name="internalFormat">Specifies the internal format to be used for the renderbuffer object's image.</param>
     /// <param name="width">Specifies the width of the renderbuffer, in pixels.</param>
     /// <param name="height">Specifies the height of the renderbuffer, in pixels.</param>
-    void RenderbufferStorageMultisample( int target, int samples, int internalformat, int width, int height );
+    void RenderbufferStorageMultisample( int target, int samples, int internalFormat, int width, int height );
 
     /// <summary>
     /// Attach a single layer of a texture object as a logical buffer to the currently bound framebuffer object.
@@ -6193,12 +6195,12 @@ public partial interface IGLBindings
     /// Specifies the target to which the buffer object's data store is attached for the purposes of the
     /// specified buffer texture object. target​ must be <see cref="GL_TEXTURE_BUFFER"/>.
     /// </param>
-    /// <param name="internalformat">Specifies the internal format of the data in the store belonging to buffer.</param>
+    /// <param name="internalFormat">Specifies the internal format of the data in the store belonging to buffer.</param>
     /// <param name="buffer">
     /// Specifies the name of an existing buffer object whose storage to attach to the specified buffer
     /// texture object.
     /// </param>
-    void TexBuffer( int target, int internalformat, uint buffer );
+    void TexBuffer( int target, int internalFormat, uint buffer );
 
     /// <summary>
     /// Specify the primitive restart index
@@ -6866,7 +6868,7 @@ public partial interface IGLBindings
     /// <see cref="GL_PROXY_TEXTURE_2D_MULTISAMPLE"/>.
     /// </param>
     /// <param name="samples">Specifies the number of samples in the multisample texture's image.</param>
-    /// <param name="internalformat">Specifies the internal format to be used to store texture image data.</param>
+    /// <param name="internalFormat">Specifies the internal format to be used to store texture image data.</param>
     /// <param name="width">Specifies the width of the multisample texture's image, in texels.</param>
     /// <param name="height">Specifies the height of the multisample texture's image, in texels.</param>
     /// <param name="fixedsamplelocations">
@@ -6876,7 +6878,7 @@ public partial interface IGLBindings
     /// </param>
     void TexImage2DMultisample( int target,
                                   int samples,
-                                  int internalformat,
+                                  int internalFormat,
                                   int width,
                                   int height,
                                   bool fixedsamplelocations );
@@ -6889,7 +6891,7 @@ public partial interface IGLBindings
     /// <see cref="GL_PROXY_TEXTURE_3D_MULTISAMPLE"/>.
     /// </param>
     /// <param name="samples">Specifies the number of samples in the multisample texture's image.</param>
-    /// <param name="internalformat">Specifies the internal format to be used to store texture image data.</param>
+    /// <param name="internalFormat">Specifies the internal format to be used to store texture image data.</param>
     /// <param name="width">Specifies the width of the multisample texture's image, in texels.</param>
     /// <param name="height">Specifies the height of the multisample texture's image, in texels.</param>
     /// <param name="depth">Specifies the depth of the multisample texture's image, in texels.</param>
@@ -6900,7 +6902,7 @@ public partial interface IGLBindings
     /// </param>
     void TexImage3DMultisample( int target,
                                   int samples,
-                                  int internalformat,
+                                  int internalFormat,
                                   int width,
                                   int height,
                                   int depth,

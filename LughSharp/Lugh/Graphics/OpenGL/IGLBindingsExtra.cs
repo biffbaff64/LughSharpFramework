@@ -306,23 +306,23 @@ public partial interface IGLBindings
                                                            int instancecount, int basevertex, uint baseinstance )
         where T : unmanaged, IUnsignedNumber< T >;
 
-    unsafe void GetInternalformativ( int target, int internalformat, int pname, int bufSize, int* parameters );
-    void GetInternalformativ( int target, int internalformat, int pname, int bufSize, ref int[] parameters );
+    unsafe void GetInternalformativ( int target, int internalFormat, int pname, int bufSize, int* parameters );
+    void GetInternalformativ( int target, int internalFormat, int pname, int bufSize, ref int[] parameters );
     unsafe void GetActiveAtomicCounterBufferiv( uint program, uint bufferIndex, int pname, int* parameters );
     void GetActiveAtomicCounterBufferiv( uint program, uint bufferIndex, int pname, ref int[] parameters );
     void BindImageTexture( uint unit, uint texture, int level, bool layered, int layer, int access, int format );
     void MemoryBarrier( uint barriers );
-    void TexStorage1D( int target, int levels, int internalformat, int width );
-    void TexStorage2D( int target, int levels, int internalformat, int width, int height );
-    void TexStorage3D( int target, int levels, int internalformat, int width, int height, int depth );
+    void TexStorage1D( int target, int levels, int internalFormat, int width );
+    void TexStorage2D( int target, int levels, int internalFormat, int width, int height );
+    void TexStorage3D( int target, int levels, int internalFormat, int width, int height, int depth );
     void DrawTransformFeedbackInstanced( int mode, uint id, int instancecount );
     void DrawTransformFeedbackStreamInstanced( int mode, uint id, uint stream, int instancecount );
     unsafe void GetPointerv( int pname, void** parameters );
     void GetPointerv( int pname, ref IntPtr[] parameters );
-    unsafe void ClearBufferData( int target, int internalformat, int format, int type, void* data );
-    void ClearBufferData< T >( int target, int internalformat, int format, int type, T[] data ) where T : unmanaged;
-    unsafe void ClearBufferSubData( int target, int internalformat, int offset, int size, int format, int type, void* data );
-    void ClearBufferSubData< T >( int target, int internalformat, int offset, int size, int format, int type, T[] data ) where T : unmanaged;
+    unsafe void ClearBufferData( int target, int internalFormat, int format, int type, void* data );
+    void ClearBufferData< T >( int target, int internalFormat, int format, int type, T[] data ) where T : unmanaged;
+    unsafe void ClearBufferSubData( int target, int internalFormat, int offset, int size, int format, int type, void* data );
+    void ClearBufferSubData< T >( int target, int internalFormat, int offset, int size, int format, int type, T[] data ) where T : unmanaged;
     void DispatchCompute( uint num_groups_x, uint num_groups_y, uint num_groups_z );
     unsafe void DispatchComputeIndirect( void* indirect );
     void DispatchComputeIndirect( GLBindings.DispatchIndirectCommand indirect );
@@ -334,8 +334,8 @@ public partial interface IGLBindings
     void FramebufferParameteri( int target, int pname, int param );
     unsafe void GetFramebufferParameteriv( int target, int pname, int* parameters );
     void GetFramebufferParameteriv( int target, int pname, ref int[] parameters );
-    unsafe void GetInternalformati64v( int target, int internalformat, int pname, int count, Int64* parameters );
-    void GetInternalformati64v( int target, int internalformat, int pname, int count, ref Int64[] parameters );
+    unsafe void GetInternalformati64v( int target, int internalFormat, int pname, int count, Int64* parameters );
+    void GetInternalformati64v( int target, int internalFormat, int pname, int count, ref Int64[] parameters );
     void InvalidateTexSubImage( uint texture, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth );
     void InvalidateTexImage( uint texture, int level );
     void InvalidateBufferSubData( uint buffer, int offset, int length );
@@ -364,16 +364,16 @@ public partial interface IGLBindings
     unsafe int GetProgramResourceLocationIndex( uint program, int programInterface, Byte* name );
     int GetProgramResourceLocationIndex( uint program, int programInterface, string name );
     void ShaderStorageBlockBinding( uint program, uint storageBlockIndex, uint storageBlockBinding );
-    void TexBufferRange( int target, int internalformat, uint buffer, int offset, int size );
-    void TexStorage2DMultisample( int target, int samples, int internalformat, int width, int height, bool fixedsamplelocations );
+    void TexBufferRange( int target, int internalFormat, uint buffer, int offset, int size );
+    void TexStorage2DMultisample( int target, int samples, int internalFormat, int width, int height, bool fixedsamplelocations );
 
-    void TexStorage3DMultisample( int target, int samples, int internalformat, int width,
+    void TexStorage3DMultisample( int target, int samples, int internalFormat, int width,
                                   int height, int depth, bool fixedsamplelocations );
 
     void TextureView( uint texture,
                       int target,
                       uint origtexture,
-                      int internalformat, uint minlevel, uint numlevels, uint minlayer, uint numlayers );
+                      int internalFormat, uint minlevel, uint numlevels, uint minlayer, uint numlayers );
 
     void BindVertexBuffer( uint bindingindex, uint buffer, int offset, int stride );
     void VertexAttribFormat( uint attribindex, int size, int type, bool normalized, uint relativeoffset );
@@ -459,10 +459,10 @@ public partial interface IGLBindings
     unsafe void NamedBufferSubData( uint buffer, int offset, int size, void* data );
     void NamedBufferSubData< T >( uint buffer, int offset, int size, T[] data ) where T : unmanaged;
     void CopyNamedBufferSubData( uint readBuffer, uint writeBuffer, int readOffset, int writeOffset, int size );
-    unsafe void ClearNamedBufferData( uint buffer, int internalformat, int format, int type, void* data );
-    void ClearNamedBufferData< T >( uint buffer, int internalformat, int format, int type, T[] data ) where T : unmanaged;
-    unsafe void ClearNamedBufferSubData( uint buffer, int internalformat, int offset, int size, int format, int type, void* data );
-    void ClearNamedBufferSubData< T >( uint buffer, int internalformat, int offset, int size, int format, int type, T[] data ) where T : unmanaged;
+    unsafe void ClearNamedBufferData( uint buffer, int internalFormat, int format, int type, void* data );
+    void ClearNamedBufferData< T >( uint buffer, int internalFormat, int format, int type, T[] data ) where T : unmanaged;
+    unsafe void ClearNamedBufferSubData( uint buffer, int internalFormat, int offset, int size, int format, int type, void* data );
+    void ClearNamedBufferSubData< T >( uint buffer, int internalFormat, int offset, int size, int format, int type, T[] data ) where T : unmanaged;
     unsafe void* MapNamedBuffer( uint buffer, int access );
     System.Span< T > MapNamedBuffer< T >( uint buffer, int access ) where T : unmanaged;
     unsafe void* MapNamedBufferRange( uint buffer, int offset, int length, uint access );
@@ -511,20 +511,20 @@ public partial interface IGLBindings
     unsafe void CreateRenderbuffers( int n, uint* renderbuffers );
     uint[] CreateRenderbuffers( int n );
     uint CreateRenderbuffer();
-    void NamedRenderbufferStorage( uint renderbuffer, int internalformat, int width, int height );
-    void NamedRenderbufferStorageMultisample( uint renderbuffer, int samples, int internalformat, int width, int height );
+    void NamedRenderbufferStorage( uint renderbuffer, int internalFormat, int width, int height );
+    void NamedRenderbufferStorageMultisample( uint renderbuffer, int samples, int internalFormat, int width, int height );
     unsafe void GetNamedRenderbufferParameteriv( uint renderbuffer, int pname, int* param );
     void GetNamedRenderbufferParameteriv( uint renderbuffer, int pname, ref int[] param );
     unsafe void CreateTextures( int target, int n, uint* textures );
     uint[] CreateTextures( int target, int n );
     uint CreateTexture( int target );
-    void TextureBuffer( uint texture, int internalformat, uint buffer );
-    void TextureBufferRange( uint texture, int internalformat, uint buffer, int offset, int size );
-    void TextureStorage1D( uint texture, int levels, int internalformat, int width );
-    void TextureStorage2D( uint texture, int levels, int internalformat, int width, int height );
-    void TextureStorage3D( uint texture, int levels, int internalformat, int width, int height, int depth );
-    void TextureStorage2DMultisample( uint texture, int samples, int internalformat, int width, int height, bool fixedsamplelocations );
-    void TextureStorage3DMultisample( uint texture, int samples, int internalformat, int width, int height, int depth, bool fixedsamplelocations );
+    void TextureBuffer( uint texture, int internalFormat, uint buffer );
+    void TextureBufferRange( uint texture, int internalFormat, uint buffer, int offset, int size );
+    void TextureStorage1D( uint texture, int levels, int internalFormat, int width );
+    void TextureStorage2D( uint texture, int levels, int internalFormat, int width, int height );
+    void TextureStorage3D( uint texture, int levels, int internalFormat, int width, int height, int depth );
+    void TextureStorage2DMultisample( uint texture, int samples, int internalFormat, int width, int height, bool fixedsamplelocations );
+    void TextureStorage3DMultisample( uint texture, int samples, int internalFormat, int width, int height, int depth, bool fixedsamplelocations );
     unsafe void TextureSubImage1D( uint texture, int level, int xoffset, int width, int format, int type, void* pixels );
     void TextureSubImage1D< T >( uint texture, int level, int xoffset, int width, int format, int type, T[] pixels ) where T : unmanaged;
     unsafe void TextureSubImage2D( uint texture, int level, int xoffset, int yoffset, int width, int height, int format, int type, void* pixels );

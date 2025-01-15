@@ -78,7 +78,7 @@ public interface ITextureArrayData
     /// <summary>
     /// Returns the GL type of this TextureArray .
     /// </summary>
-    int GLType { get; }
+    int GLDataType { get; }
 
     /// <summary>
     /// Prepares the TextureArrayData for a call to <see cref="ConsumeTextureArrayData()"/>.

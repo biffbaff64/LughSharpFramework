@@ -34,16 +34,17 @@ public interface IGraphics
 {
     #region properties
 
-    GLVersion?                  GLVersion             { get; set; }
-    GraphicsBackend.BackendType GraphicsType          { get; }
-    BufferFormatDescriptor      BufferFormat          { get; set; }
-    IGLBindings                 GL                    { get; set; }
-    float                       DeltaTime             { get; set; }
-    int                         Width                 { get; }
-    int                         Height                { get; }
-    int                         BackBufferWidth       { get; set; }
-    int                         BackBufferHeight      { get; set; }
-    bool                        IsFullscreen          { get; }
+    GLVersion?                  GLVersion        { get; set; }
+    GraphicsBackend.BackendType GraphicsType     { get; }
+    BufferFormatDescriptor      BufferFormat     { get; set; }
+    IGLBindings                 GL               { get; set; }
+    float                       DeltaTime        { get; set; }
+    int                         Width            { get; }
+    int                         Height           { get; }
+    int                         BackBufferWidth  { get; set; }
+    int                         BackBufferHeight { get; set; }
+    bool                        IsFullscreen     { get; }
+    GLFW.Window                 CurrentContext   { get; set; }
 
     #endregion properties
 
@@ -145,7 +146,7 @@ public interface IGraphics
 
     // ========================================================================
     // ========================================================================
-    
+
     /// <summary>
     /// Class describing the bits per pixel, depth buffer precision,
     /// stencil precision and number of MSAA samples.
@@ -174,10 +175,10 @@ public interface IGraphics
                    + $"{Stencil}, num samples - {Samples}, coverage sampling - {CoverageSampling}";
         }
     }
-    
+
     // ========================================================================
     // ========================================================================
-    
+
     /// <summary>
     /// Describes a fullscreen display mode, having the properties <see cref="Width"/>,
     /// <see cref="Height"/>, <see cref="RefreshRate"/>, and <see cref="BitsPerPixel"/>.
@@ -212,10 +213,10 @@ public interface IGraphics
             return $"{Width}x{Height}, bpp: {BitsPerPixel}, hz: {RefreshRate}";
         }
     }
-    
+
     // ========================================================================
     // ========================================================================
-    
+
     [PublicAPI]
     public class GdxMonitor
     {
@@ -238,4 +239,3 @@ public interface IGraphics
         }
     }
 }
-

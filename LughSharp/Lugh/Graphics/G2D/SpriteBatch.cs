@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -151,7 +152,6 @@ public class SpriteBatch : IBatch
 
         if ( defaultShader == null )
         {
-//            _shader     = CreateMinimalShader();
             _shader     = CreateDefaultShader();
             _ownsShader = true;
         }
@@ -176,7 +176,6 @@ public class SpriteBatch : IBatch
 
         RenderCalls = 0;
 
-        GdxApi.Bindings.Enable( IGL.GL_TEXTURE_2D );
         GdxApi.Bindings.DepthMask( false );
 
         if ( _customShader != null )
@@ -220,6 +219,8 @@ public class SpriteBatch : IBatch
         {
             GdxApi.Bindings.Disable( IGL.GL_BLEND );
         }
+
+        GdxApi.Bindings.UseProgram( 0 );
     }
 
     /// <summary>
@@ -1193,6 +1194,8 @@ public class SpriteBatch : IBatch
             return;
         }
 
+        GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 );
+
         LastTexture.Bind();
 
         if ( _mesh == null )
@@ -1360,21 +1363,23 @@ public class SpriteBatch : IBatch
     /// </summary>
     public static ShaderProgram CreateMinimalShader()
     {
-        const string VERTEX_SHADER_SOURCE = "layout (location = 0) in vec3 aPosition;" +
-                                            "layout (location = 1) in vec2 aTexCoord;" +
-                                            "out vec2 TexCoord;" +
-                                            "void main() {" +
-                                            "    gl_Position = vec4(aPosition, 1.0);" +
-                                            "    TexCoord    = aTexCoord;" +
-                                            "}";
+        const string VERTEX_SHADER_SOURCE = "layout (location = 0) in vec3 aPosition;\n" +
+                                            "layout (location = 1) in vec2 aTexCoord;\n" +
+                                            "out vec2 TexCoord;\n" +
+                                            "void main()\n" +
+                                            "{\n" +
+                                            "    gl_Position = vec4(aPosition, 1.0);\n" +
+                                            "    TexCoord    = aTexCoord;\n" +
+                                            "}\n";
 
-        const string FRAGMENT_SHADER_SOURCE = "out vec4 FragColor;" +
-                                              "in vec2 TexCoord;" +
-                                              "uniform sampler2D ourTexture;" +
-                                              "void main() {" +
-                                              "    FragColor = texture(ourTexture, TexCoord);" +
-                                              "}";
-        
+        const string FRAGMENT_SHADER_SOURCE = "out vec4 FragColor;\n" +
+                                              "in vec2 TexCoord;\n" +
+                                              "uniform sampler2D ourTexture;\n" +
+                                              "void main()\n" +
+                                              "{\n" +
+                                              "    FragColor = texture(ourTexture, TexCoord);\n" +
+                                              "}\n";
+
         var shader = new ShaderProgram( VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE );
 
         if ( !shader.IsCompiled )
@@ -1391,34 +1396,29 @@ public class SpriteBatch : IBatch
     public static ShaderProgram CreateDefaultShader()
     {
         //@formatter:off
-        const string VERTEX_SHADER =   $"in vec4 {ShaderProgram.POSITION_ATTRIBUTE};\n"
-                                     + $"in vec4 {ShaderProgram.COLOR_ATTRIBUTE};\n"
-                                     + $"in vec2 {ShaderProgram.TEXCOORD_ATTRIBUTE}0;\n"
-                                     +  "uniform mat4 u_projTrans;\n"
-                                     +  "out vec4 v_color;\n"
-                                     +  "out vec2 v_texCoords;\n"
-                                     +  "\n"
-                                     +  "void main()\n"
-                                     +  "{\n"
-                                     + $"   v_color = {ShaderProgram.COLOR_ATTRIBUTE};\n"
-                                     +  "   v_color.a = v_color.a * (255.0/254.0);\n"
-                                     + $"   v_texCoords = {ShaderProgram.TEXCOORD_ATTRIBUTE}0;\n"
-                                     + $"   gl_Position =  u_projTrans * {ShaderProgram.POSITION_ATTRIBUTE};\n"
-                                     +  "}\n";
-
-        const string FRAGMENT_SHADER =   "#ifdef GL_ES\n"
-                                       + "#define LOWP lowp\n"
-                                       + "precision mediump float;\n"
-                                       + "#else\n"
-                                       + "#define LOWP \n"
-                                       + "#endif\n"
-                                       + "in LOWP vec4 v_color;\n"
-                                       + "in vec2 v_texCoords;\n"
-                                       + "uniform sampler2D u_texture;\n"
-                                       + "void main()\n"
-                                       + "{\n"
-                                       + "  vec4 fragColor = v_color * texture(u_texture, v_texCoords);\n"
-                                       + "}";
+        const string VERTEX_SHADER =    "in vec3 a_position;\n"+
+                                        "in vec4 a_color;\n"+
+                                        "in vec2 a_texCoords;\n"+
+                                        "out vec4 v_color;\n"+
+                                        "out vec2 v_texCoords;\n"+
+                                        "uniform mat4 u_projectionMatrix;\n"+
+                                        "uniform mat4 u_viewMatrix;\n"+
+                                        "uniform mat4 u_modelMatrix;\n"+
+                                        "void main()\n"+
+                                        "{\n"+
+                                        "    gl_Position = u_projectionMatrix * u_viewMatrix * u_modelMatrix * vec4(a_position, 1.0);\n"+
+                                        "    v_color = a_color;\n"+
+                                        "    v_texCoords = a_texCoords;\n"+
+                                        "}\n";
+        
+        const string FRAGMENT_SHADER =  "in vec4 v_color;\n"+
+                                        "in vec2 v_texCoords;\n"+
+                                        "out vec4 FragColor;\n"+
+                                        "uniform sampler2D u_texture;\n"+
+                                        "void main()\n"+
+                                        "{\n"+
+                                        "    FragColor = texture(u_texture, v_texCoords) * v_color;\n"+
+                                        "}\n";
         //@formatter:on
 
         var shader = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );

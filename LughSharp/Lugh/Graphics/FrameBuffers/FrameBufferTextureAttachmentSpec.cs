@@ -28,9 +28,9 @@ namespace LughSharp.Lugh.Graphics.FrameBuffers;
 [PublicAPI]
 public class FrameBufferTextureAttachmentSpec
 {
-    public FrameBufferTextureAttachmentSpec( int internalformat, int format, int type )
+    public FrameBufferTextureAttachmentSpec( int internalFormat, int format, int type )
     {
-        InternalFormat = internalformat;
+        InternalFormat = internalFormat;
         Format         = format;
         Type           = type;
     }

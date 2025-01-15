@@ -732,7 +732,7 @@ public class Mesh
     /// <param name="offset"> the offset into the vertex or index buffer </param>
     /// <param name="count"> number of vertices or indices to use </param>
     /// <param name="autoBind"> overrides the autoBind member of this Mesh  </param>
-    public void Render( ShaderProgram? shader, int primitiveType, int offset, int count, bool autoBind )
+    public unsafe void Render( ShaderProgram? shader, int primitiveType, int offset, int count, bool autoBind )
     {
         ArgumentNullException.ThrowIfNull( shader );
 
@@ -758,37 +758,23 @@ public class Mesh
 //            }
 //        }
 
-        if ( count == 0 )
-        {
-            return;
-        }
+        if ( count == 0 ) return;
 
-        if ( autoBind )
-        {
-            Bind( shader );
-        }
+        if ( autoBind ) Bind( shader );
 
         if ( _isVertexArray )
         {
             if ( _indices.NumIndices > 0 )
             {
-                var buffer      = _indices.GetBuffer( false );
-                var oldPosition = buffer.Position;
-                var oldLimit    = buffer.Limit;
+                var buffer = _indices.GetBuffer( false );
 
-                buffer.Position = offset;
-                buffer.Limit    = offset + count;
+                // Use Span for cleaner code (if available, otherwise use fixed)
+                var indicesSpan = MemoryMarshal.CreateSpan( ref buffer.BackingArray()[ 0 ], buffer.BackingArray().Length );
 
-                unsafe
+                fixed ( short* ptr = indicesSpan )
                 {
-                    fixed ( void* ptr = &buffer.BackingArray()[ 0 ] )
-                    {
-                        GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr );
-                    }
+                    GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr + offset );
                 }
-
-                buffer.Position = oldPosition;
-                buffer.Limit    = oldLimit;
             }
             else
             {
@@ -797,46 +783,22 @@ public class Mesh
         }
         else
         {
-            var numInstances = 0;
-
-            if ( IsInstanced )
-            {
-                numInstances = _instances!.NumInstances;
-            }
-
             if ( _indices.NumIndices > 0 )
             {
                 if ( ( count + offset ) > _indices.NumMaxIndices )
                 {
-                    throw new GdxRuntimeException( $"Mesh attempting to access memory outside of the "
-                                                   + $"index buffer (count: {count}, offset: {offset}, "
-                                                   + $"max: {_indices.NumMaxIndices})" );
+                    throw new GdxRuntimeException
+                        ( $"Mesh attempting to access memory outside of the index buffer (count: {count}, offset: {offset}, max: {_indices.NumMaxIndices})" );
                 }
 
-                if ( IsInstanced && ( numInstances > 0 ) )
-                {
-                    unsafe
-                    {
-                        GdxApi.Bindings.DrawElementsInstanced( primitiveType,
-                            count,
-                            IGL.GL_UNSIGNED_SHORT,
-                            ( void* )( offset * 2 ),
-                            numInstances );
-                    }
-                }
-                else
-                {
-                    unsafe
-                    {
-                        GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ( void* )( offset * 2 ) );
-                    }
-                }
+                // Correct way for non vertex arrays
+                GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ( void* )( offset * 2 ) );
             }
             else
             {
-                if ( IsInstanced && ( numInstances > 0 ) )
+                if ( IsInstanced )
                 {
-                    GdxApi.Bindings.DrawArraysInstanced( primitiveType, offset, count, numInstances );
+                    GdxApi.Bindings.DrawArraysInstanced( primitiveType, offset, count, _instances!.NumInstances );
                 }
                 else
                 {
@@ -845,12 +807,7 @@ public class Mesh
             }
         }
 
-        if ( autoBind )
-        {
-            Unbind( shader );
-        }
-
-        _firstTime = false;
+        if ( autoBind ) Unbind( shader );
     }
 
     /// <summary>
@@ -1013,15 +970,15 @@ public class Mesh
         if ( ( offset < 0 ) || ( count < 1 ) || ( ( offset + count ) > max ) )
         {
             throw new GdxRuntimeException
-            (
-                "Invalid part specified ( offset="
-                + offset
-                + ", count="
-                + count
-                + ", max="
-                + max
-                + " )"
-            );
+                (
+                 "Invalid part specified ( offset="
+                 + offset
+                 + ", count="
+                 + count
+                 + ", max="
+                 + max
+                 + " )"
+                );
         }
 
         var verts      = _vertices.GetBuffer( false );

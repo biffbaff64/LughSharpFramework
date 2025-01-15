@@ -48,11 +48,11 @@ public class MipMapTextureData : ITextureData
         Array.Copy( mipMapData, 0, _mips, 0, mipMapData.Length );
     }
 
-    public bool              IsPrepared { get; set; }
-    public bool              UseMipMaps { get; set; }
-    public int               Width      { get; set; }
-    public int               Height     { get; set; }
-    public PixelType.Format? PixelFormat     { get; set; } = PixelType.Format.Alpha;
+    public bool              IsPrepared  { get; set; }
+    public bool              UseMipMaps  { get; set; }
+    public int               Width       { get; set; }
+    public int               Height      { get; set; }
+    public PixelType.Format? PixelFormat { get; set; } = PixelType.Format.Alpha;
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap"/> or

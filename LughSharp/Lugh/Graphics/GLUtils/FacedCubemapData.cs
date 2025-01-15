@@ -268,6 +268,7 @@ public class FacedCubemapData : ICubemapData
 
             return true;
         }
+        // ReSharper disable once ValueParameterNotUsed
         set { }
     }
 

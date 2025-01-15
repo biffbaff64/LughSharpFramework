@@ -375,9 +375,9 @@ GRAPHICS/GLUTILS
     CODE   DOCUMENT
     ----   --------
     - IP   - IP   - ETC1
-    - IP   - IP   - ETC1TextureData
-    - IP   - IP   - FacedCubemapData              Width / Height are incorrect
-    - IP   - IP   - FileTextureArrayData
+    - DONE - IP   - ETC1TextureData
+    - DONE - IP   - FacedCubemapData              Width / Height are incorrect
+    - DONE - IP   - FileTextureArrayData
     - DONE - IP   - FileTextureData
     - DONE - IP   - FloatTextureData
     - DONE - IP   - GLOnlyTextureData
@@ -399,16 +399,18 @@ GRAPHICS/GLUTILS
     - DONE - IP   - MipMapTextureData
     - DONE - IP   - PixmapTextureData
     - DONE - IP   - ShaderProgram
+    - DONE - IP   - ShaderProgramUniforms
+    - DONE - IP   - ShaderProgramUtils
     - DONE - IP   - ShapeRenderer
     - DONE - DONE - VertexArray
     - DONE - DONE - VertexBufferObject
     - DONE - IP   - VertexBufferObjectSubData
     - DONE - IP   - VertexBufferObjectWithVAO
 
-    - The following do not need converting
-
 GRAPHICS/OPENGL
 ---------------
+
+**Currently considering moving over to OpenTK**
 
     Remove the need for so much use of fixed() in code by implementing method overrides,
     and doing the work inside those methods instead?
@@ -417,9 +419,26 @@ GRAPHICS/OPENGL
 
     CODE   DOCUMENT
     ----   --------
+    - DONE - DONE - DebugSeverity
     - DONE - DONE - GLBindings
+    - DONE - DONE - GLFunctionDelegates
+    - DONE - DONE - GLFunctionsLoader
+    - DONE - DONE - GLUtils
     - DONE - DONE - IGL
     - DONE - DONE - IGLBindings
+    - DONE - DONE - IGLBindingsExtra
+
+GRAPHICS/OPENGL/ENUMS
+---------------------
+    CODE   DOCUMENT
+    ----   --------
+    - DONE - DONE - EnableCap
+    - DONE - DONE - ProgramProperty
+    - DONE - DONE - ShaderParameterName
+    - DONE - DONE - StringName
+    - DONE - DONE - TextureUnit
+    - DONE - DONE - TextureWrapMode
+
 
 GRAPHICS/PROFILING
 ------------------

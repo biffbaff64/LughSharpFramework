@@ -57,12 +57,13 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     public List< IRunnable.Runnable >         ExecutedRunnables  { get; set; } = [ ];
     public List< ILifecycleListener >         LifecycleListeners { get; set; } = [ ];
 
-    public IClipboard?   Clipboard  { get; set; }
-    public IGLAudio?     Audio      { get; set; }
-    public INet          Network    { get; set; }
-    public IFiles        Files      { get; set; }
-    public GLVersion?    GLVersion  { get; set; }
-    public OpenGLProfile OGLProfile { get; set; }
+    public IClipboard?      Clipboard     { get; set; }
+    public IGLAudio?        Audio         { get; set; }
+    public INet             Network       { get; set; }
+    public IFiles           Files         { get; set; }
+    public GLVersion?       GLVersion     { get; set; }
+    public OpenGLProfile    OGLProfile    { get; set; }
+    public DesktopGLWindow? CurrentWindow { get; set; }
 
     #endregion public properties
 
@@ -74,7 +75,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
     private static   GlfwErrorCallback? _errorCallback;
     private readonly Sync?              _sync;
-    private          DesktopGLWindow?   _currentWindow;
     private          bool               _running         = true;
     private          bool               _glfwInitialised = false;
     private          IPreferences       _prefs;
@@ -190,7 +190,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
                 {
                     window.MakeCurrent();
 
-                    _currentWindow = window;
+                    CurrentWindow = window;
 
                     if ( targetFramerate == FR_UNINITIALISED )
                     {
@@ -379,7 +379,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // the call above to CreateGlfwWindow switches the OpenGL context to the
         // newly created window, ensure that the invariant "currentWindow is the
         // window with the current active OpenGL context" holds
-        _currentWindow?.MakeCurrent();
+        CurrentWindow?.MakeCurrent();
 
         return dglWindow;
     }
@@ -477,11 +477,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         }
 
         Glfw.MakeContextCurrent( windowHandle );
-
         Glfw.SwapInterval( config.VSyncEnabled ? 1 : 0 );
-
         GLUtils.CreateCapabilities(); // Needed??
-
         InitGLVersion( windowHandle );
 
         if ( config.Debug )
@@ -512,11 +509,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         Glfw.WindowHint( WindowHint.ContextVersionMajor, glMajor );
         Glfw.WindowHint( WindowHint.ContextVersionMinor, glMinor );
 
-//        Logger.Debug( $"Glfw: {glMajor}.{glMinor}.{revision} : glProfile: {OGLProfile}" );
-
         Glfw.MakeContextCurrent( windowHandle );
-
-//        Logger.Debug( $"OGLVersion: {GdxApi.Bindings.GetOpenGLVersion().major}.{GdxApi.Bindings.GetOpenGLVersion().minor}" );
 
         GLVersion = new GLVersion( LughSharp.Lugh.Core.Platform.ApplicationType.WindowsGL );
     }

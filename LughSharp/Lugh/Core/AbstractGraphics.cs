@@ -52,7 +52,8 @@ public abstract class AbstractGraphics : IGraphics
     public virtual bool                        ContinuousRendering { get; set; } = true;
     public virtual bool                        IsFullscreen        { get; }
 
-    public Color WindowBackgroundColor { get; set; } = Color.Blue;
+    public Window CurrentContext        { get; set; } = null!;
+    public Color  WindowBackgroundColor { get; set; } = Color.Blue;
 
     #endregion properties
 

@@ -35,41 +35,67 @@ public class FileTextureArrayData : ITextureArrayData
     private readonly bool            _useMipMaps;
     private          int             _depth;
 
-    public FileTextureArrayData( PixelType.Format format, bool useMipMaps, FileInfo[] files )
+    // ========================================================================
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pixelFormat"></param>
+    /// <param name="useMipMaps"></param>
+    /// <param name="files"></param>
+    public FileTextureArrayData( PixelType.Format pixelFormat, bool useMipMaps, FileInfo[] files )
     {
-        Format      = format;
+        PixelFormat  = pixelFormat;
         _useMipMaps  = useMipMaps;
         _depth       = files.Length;
         _textureData = new ITextureData?[ files.Length ];
 
         for ( var i = 0; i < files.Length; i++ )
         {
-            _textureData[ i ] = TextureDataFactory.LoadFromFile( files[ i ], format, useMipMaps );
+            _textureData[ i ] = TextureDataFactory.LoadFromFile( files[ i ], pixelFormat, useMipMaps );
         }
     }
 
-    /// <returns> whether the TextureArrayData is prepared or not. </returns>
+    // ========================================================================
+
+    /// <summary>
+    /// whether the TextureArrayData is prepared or not.
+    /// </summary>
     public bool Prepared { get; set; }
 
-    /// <returns> the width of this TextureArray </returns>
+    /// <summary>
+    /// the width of this TextureArray
+    /// </summary>
     public int Width => _textureData[ 0 ]!.Width;
 
-    /// <returns> the height of this TextureArray </returns>
+    /// <summary>
+    /// the height of this TextureArray
+    /// </summary>
     public int Height => _textureData[ 0 ]!.Height;
 
-    /// <returns> the layer count of this TextureArray </returns>
+    /// <summary>
+    /// the layer count of this TextureArray
+    /// </summary>
     public int Depth { get; set; }
 
-    /// <returns> whether this implementation can cope with a EGL context loss. </returns>
+    /// <summary>
+    /// whether this implementation can cope with a EGL context loss.
+    /// </summary>
     public bool Managed { get; set; }
 
-    public PixelType.Format Format { get; set; }
+    public PixelType.Format PixelFormat { get; set; }
 
-    /// <returns> the internal format of this TextureArray </returns>
-    public int InternalFormat => PixmapFormat.ToGLPixelFormat( Format );
+    /// <summary>
+    /// the internal format of this TextureArray
+    /// </summary>
+    public int InternalFormat => PixmapFormat.ToGLPixelFormat( PixelFormat );
 
-    /// <returns> the GL type of this TextureArray </returns>
-    public int GLType => PixmapFormat.ToGLDataType( Format );
+    /// <summary>
+    /// the GL Data type of this TextureArray
+    /// </summary>
+    public int GLDataType => PixmapFormat.ToGLDataType( PixelFormat );
+
+    // ========================================================================
 
     /// <summary>
     /// Prepares the TextureArrayData for a call to <see cref="ITextureArrayData.ConsumeTextureArrayData"/>.
@@ -83,10 +109,7 @@ public class FileTextureArrayData : ITextureArrayData
 
         foreach ( var data in _textureData )
         {
-            if ( data == null )
-            {
-                continue;
-            }
+            if ( data == null ) continue;
 
             data.Prepare();
 
@@ -101,7 +124,7 @@ public class FileTextureArrayData : ITextureArrayData
             if ( ( width != data.Width ) || ( height != data.Height ) )
             {
                 throw new GdxRuntimeException( "Error whilst preparing TextureArray:"
-                                             + "TextureArray Textures must have equal dimensions." );
+                                               + "TextureArray Textures must have equal dimensions." );
             }
         }
 
@@ -134,8 +157,8 @@ public class FileTextureArrayData : ITextureArrayData
                 var pixmap        = texData?.ConsumePixmap();
                 var disposePixmap = texData?.ShouldDisposePixmap() ?? false;
 
-                Debug.Assert( texData != null, nameof( texData ) + " != null" );
-                Debug.Assert( pixmap != null, nameof( pixmap ) + " != null" );
+                Debug.Assert( texData != null, nameof( texData ) + " == null" );
+                Debug.Assert( pixmap != null, nameof( pixmap ) + " == null" );
 
                 if ( texData.PixelFormat != pixmap.GetColorFormat() )
                 {
@@ -158,16 +181,16 @@ public class FileTextureArrayData : ITextureArrayData
                     fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
                     {
                         GdxApi.Bindings.TexSubImage3D( IGL.GL_TEXTURE_2D_ARRAY,
-                                                0,
-                                                0,
-                                                0,
-                                                i,
-                                                pixmap.Width,
-                                                pixmap.Height,
-                                                1,
-                                                pixmap.GLInternalPixelFormat,
-                                                pixmap.GLDataType,
-                                                ptr );
+                                                       0,
+                                                       0,
+                                                       0,
+                                                       i,
+                                                       pixmap.Width,
+                                                       pixmap.Height,
+                                                       1,
+                                                       pixmap.GLInternalPixelFormat,
+                                                       pixmap.GLDataType,
+                                                       ptr );
                     }
                 }
 
@@ -195,8 +218,10 @@ public class FileTextureArrayData : ITextureArrayData
                     return false;
                 }
             }
+
             return true;
         }
+
         // ReSharper disable once ValueParameterNotUsed
         set { }
     }

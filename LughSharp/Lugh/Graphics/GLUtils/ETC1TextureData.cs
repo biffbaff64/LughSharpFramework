@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
@@ -176,9 +177,7 @@ public class ETC1TextureData : ITextureData
     public PixelType.Format? PixelFormat { get; set; } = PixelType.Format.Alpha;
 
     /// <inheritdoc />
-    public bool IsManaged
-    {
-        get => false;
-        set { }
-    }
+    bool IManaged.IsManaged => false;
+
+    // ReSharper disable once ValueParameterNotUsed
 }

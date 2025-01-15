@@ -35,6 +35,7 @@
 using System.Numerics;
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -253,7 +254,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void TexImage1D( GLenum target,
                             GLint level,
-                            GLenum internalformat,
+                            GLenum internalFormat,
                             GLsizei width,
                             GLint border,
                             GLenum format,
@@ -262,13 +263,13 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLTEXIMAGE1DPROC >( "glTexImage1D", out _glTexImage1D );
 
-        _glTexImage1D( target, level, internalformat, width, border, format, type, pixels );
+        _glTexImage1D( target, level, internalFormat, width, border, format, type, pixels );
     }
 
     /// <inheritdoc/>
     public void TexImage1D< T >( GLenum target,
                                  GLint level,
-                                 GLenum internalformat,
+                                 GLenum internalFormat,
                                  GLsizei width,
                                  GLint border,
                                  GLenum format,
@@ -279,7 +280,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( void* p = &pixels[ 0 ] )
         {
-            _glTexImage1D( target, level, internalformat, width, border, format, type, p );
+            _glTexImage1D( target, level, internalFormat, width, border, format, type, p );
         }
     }
 
@@ -288,7 +289,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void TexImage2D( GLenum target,
                             GLint level,
-                            GLenum internalformat,
+                            GLenum internalFormat,
                             GLsizei width,
                             GLsizei height,
                             GLint border,
@@ -298,7 +299,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
-        _glTexImage2D( target, level, internalformat, width, height, border, format, type, pixels );
+        _glTexImage2D( target, level, internalFormat, width, height, border, format, type, pixels );
     }
 
     /// <inheritdoc/>
@@ -308,27 +309,6 @@ public unsafe partial class GLBindings : IGLBindings
 
         var pixelFormat   = pixmap.GLPixelFormat;
         var dataType      = pixmap.GLDataType;
-        var colorType     = pixmap.Gdx2DPixmap.ColorType;
-        var bitDepth      = pixmap.GetBitDepth();
-        var bytesPerPixel = PNGUtils.GetBytesPerPixel( ( int )colorType, bitDepth );
-
-        //Check if the size of the pixel data matches the expected size
-        var expectedSize = pixmap.Width * pixmap.Height * bytesPerPixel;
-
-        if ( ( ( pixmap.PixelData.Length ) != expectedSize ) && ( pixelFormat != IGL.GL_DEPTH_COMPONENT ) )
-        {
-            Logger.Debug( $"Width              : {pixmap.Width}" );
-            Logger.Debug( $"Height             : {pixmap.Height}" );
-            Logger.Debug( $"Width x Height     : {pixmap.PixelData.Length}" );
-            Logger.Debug( $"pixels.Length      : {pixmap.PixelData.Length}" );
-            Logger.Debug( $"width * height     : {pixmap.Width * pixmap.Height}" );
-            Logger.Debug( $"Bytes Per Pixel    : {bytesPerPixel}" );
-            Logger.Debug( $"Bit Depth          : {bitDepth}" );
-            Logger.Debug( $"Expected size      : {expectedSize}" );
-            Logger.Debug( $"totalIDATSize      : {pixmap.Gdx2DPixmap.TotalIDATSize}" );
-
-            throw new ArgumentException( $"Pixel data size does not match image dimensions and format.", nameof( pixmap.PixelData ) );
-        }
 
         fixed ( void* p = &pixmap.PixelData[ 0 ] )
         {
@@ -354,42 +334,7 @@ public unsafe partial class GLBindings : IGLBindings
                                  GLenum dataType,
                                  T[]? pixels ) where T : unmanaged
     {
-        Logger.Checkpoint();
-
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
-
-        if ( ( pixels == null ) || ( pixels.Length == 0 ) )
-        {
-            throw new ArgumentNullException( nameof( pixels ), "Pixel data cannot be null or empty" );
-        }
-
-        //Check if the size of the pixel data matches the expected size
-        var expectedSize = width * height * Marshal.SizeOf< T >();
-
-        //TODO:
-        var idatIndex     = 0;
-        var totalIDATSize = 0;
-
-        var byteArray = Array.ConvertAll( pixels, i => Convert.ToByte( i ) );
-        
-        while ( ( idatIndex = PNGUtils.FindChunk( byteArray, "IDAT", idatIndex + 1 ) ) != -1 )
-        {
-            totalIDATSize += PNGUtils.ReadIntFromBytes( byteArray, idatIndex + 4 );
-        }
-
-        if ( ( ( pixels.Length * Marshal.SizeOf< T >() ) != expectedSize ) && ( pixelFormat != IGL.GL_DEPTH_COMPONENT ) )
-        {
-            Logger.Debug( $"Width              : {width}" );
-            Logger.Debug( $"Height             : {height}" );
-            Logger.Debug( $"Size               : {pixels.Length * Marshal.SizeOf< T >()}" );
-            Logger.Debug( $"pixels.Length      : {pixels.Length}" );
-            Logger.Debug( $"width * height     : {width * height}" );
-            Logger.Debug( $"Marshal.SizeOf<T>(): {Marshal.SizeOf< T >()}" );
-            Logger.Debug( $"Expected size      : {expectedSize}" );
-            Logger.Debug( $"totalIDATSize      : {totalIDATSize}" );
-
-            throw new ArgumentException( "Pixel data size does not match image dimensions and format.", nameof( pixels ) );
-        }
 
         fixed ( void* p = &pixels[ 0 ] )
         {
@@ -608,7 +553,8 @@ public unsafe partial class GLBindings : IGLBindings
     }
 
     /// <inheritdoc/>
-    public void ReadPixels< T >( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, ref T[] pixels ) where T : unmanaged
+    public void ReadPixels< T >( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, ref T[] pixels )
+        where T : unmanaged
     {
         GetDelegateForFunction< PFNGLREADPIXELSPROC >( "glReadPixels", out _glReadPixels );
 
@@ -926,21 +872,22 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc/>
-    public void CopyTexImage1D( GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border )
+    public void CopyTexImage1D( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLint border )
     {
         GetDelegateForFunction< PFNGLCOPYTEXIMAGE1DPROC >( "glCopyTexImage1D", out _glCopyTexImage1D );
 
-        _glCopyTexImage1D( target, level, internalformat, x, y, width, border );
+        _glCopyTexImage1D( target, level, internalFormat, x, y, width, border );
     }
 
     // ========================================================================
 
     /// <inheritdoc/>
-    public void CopyTexImage2D( GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border )
+    public void CopyTexImage2D( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLsizei height,
+                                GLint border )
     {
         GetDelegateForFunction< PFNGLCOPYTEXIMAGE2DPROC >( "glCopyTexImage2D", out _glCopyTexImage2D );
 
-        _glCopyTexImage2D( target, level, internalformat, x, y, width, height, border );
+        _glCopyTexImage2D( target, level, internalFormat, x, y, width, height, border );
     }
 
     // ========================================================================
@@ -956,7 +903,8 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc/>
-    public void CopyTexSubImage2D( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height )
+    public void CopyTexSubImage2D( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width,
+                                   GLsizei height )
     {
         GetDelegateForFunction< PFNGLCOPYTEXSUBIMAGE2DPROC >( "glCopyTexSubImage2D", out _glCopyTexSubImage2D );
 
@@ -1121,7 +1069,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void TexImage3D( GLenum target,
                             GLint level,
-                            GLint internalformat,
+                            GLint internalFormat,
                             GLsizei width,
                             GLsizei height,
                             GLsizei depth,
@@ -1132,13 +1080,13 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLTEXIMAGE3DPROC >( "glTexImage3D", out _glTexImage3D );
 
-        _glTexImage3D( target, level, internalformat, width, height, depth, border, format, type, pixels );
+        _glTexImage3D( target, level, internalFormat, width, height, depth, border, format, type, pixels );
     }
 
     /// <inheritdoc/>
     public void TexImage3D< T >( GLenum target,
                                  GLint level,
-                                 GLint internalformat,
+                                 GLint internalFormat,
                                  GLsizei width,
                                  GLsizei height,
                                  GLsizei depth,
@@ -1151,7 +1099,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( T* pPixels = &pixels[ 0 ] )
         {
-            _glTexImage3D( target, level, internalformat, width, height, depth, border, format, type, pPixels );
+            _glTexImage3D( target, level, internalFormat, width, height, depth, border, format, type, pPixels );
         }
     }
 
@@ -1217,6 +1165,9 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc/>
+    public void ActiveTexture( TextureUnit texture ) => ActiveTexture( ( int )texture );
+
+    /// <inheritdoc/>
     public void ActiveTexture( GLenum texture )
     {
         GetDelegateForFunction< PFNGLACTIVETEXTUREPROC >( "glActiveTexture", out _glActiveTexture );
@@ -1239,7 +1190,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void CompressedTexImage3D( GLenum target,
                                       GLint level,
-                                      GLenum internalformat,
+                                      GLenum internalFormat,
                                       GLsizei width,
                                       GLsizei height,
                                       GLsizei depth,
@@ -1249,13 +1200,13 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE3DPROC >( "glCompressedTexImage3D", out _glCompressedTexImage3D );
 
-        _glCompressedTexImage3D( target, level, internalformat, width, height, depth, border, imageSize, data );
+        _glCompressedTexImage3D( target, level, internalFormat, width, height, depth, border, imageSize, data );
     }
 
     /// <inheritdoc/>
     public void CompressedTexImage3D( GLenum target,
                                       GLint level,
-                                      GLenum internalformat,
+                                      GLenum internalFormat,
                                       GLsizei width,
                                       GLsizei height,
                                       GLsizei depth,
@@ -1266,7 +1217,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         fixed ( byte* p = &data[ 0 ] )
         {
-            _glCompressedTexImage3D( target, level, internalformat, width, height, depth, border, data.Length, p );
+            _glCompressedTexImage3D( target, level, internalFormat, width, height, depth, border, data.Length, p );
         }
     }
 
@@ -1275,7 +1226,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void CompressedTexImage2D( GLenum target,
                                       GLint level,
-                                      GLenum internalformat,
+                                      GLenum internalFormat,
                                       GLsizei width,
                                       GLsizei height,
                                       GLint border,
@@ -1284,38 +1235,40 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE2DPROC >( "glCompressedTexImage2D", out _glCompressedTexImage2D );
 
-        _glCompressedTexImage2D( target, level, internalformat, width, height, border, imageSize, data );
+        _glCompressedTexImage2D( target, level, internalFormat, width, height, border, imageSize, data );
     }
 
     /// <inheritdoc/>
-    public void CompressedTexImage2D( GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, byte[] data )
+    public void CompressedTexImage2D( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLint border,
+                                      byte[] data )
     {
         GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE2DPROC >( "glCompressedTexImage2D", out _glCompressedTexImage2D );
 
         fixed ( byte* p = &data[ 0 ] )
         {
-            _glCompressedTexImage2D( target, level, internalformat, width, height, border, data.Length, p );
+            _glCompressedTexImage2D( target, level, internalFormat, width, height, border, data.Length, p );
         }
     }
 
     // ========================================================================
 
     /// <inheritdoc/>
-    public void CompressedTexImage1D( GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, void* data )
+    public void CompressedTexImage1D( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLint border, GLsizei imageSize,
+                                      void* data )
     {
         GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE1DPROC >( "glCompressedTexImage1D", out _glCompressedTexImage1D );
 
-        _glCompressedTexImage1D( target, level, internalformat, width, border, imageSize, data );
+        _glCompressedTexImage1D( target, level, internalFormat, width, border, imageSize, data );
     }
 
     /// <inheritdoc/>
-    public void CompressedTexImage1D( GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, byte[] data )
+    public void CompressedTexImage1D( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLint border, byte[] data )
     {
         GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE1DPROC >( "glCompressedTexImage1D", out _glCompressedTexImage1D );
 
         fixed ( byte* p = &data[ 0 ] )
         {
-            _glCompressedTexImage1D( target, level, internalformat, width, border, data.Length, p );
+            _glCompressedTexImage1D( target, level, internalFormat, width, border, data.Length, p );
         }
     }
 
@@ -1398,7 +1351,8 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc/>
-    public void CompressedTexSubImage1D( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, void* data )
+    public void CompressedTexSubImage1D( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize,
+                                         void* data )
     {
         GetDelegateForFunction< PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC >( "glCompressedTexSubImage1D", out _glCompressedTexSubImage1D );
 
@@ -3900,14 +3854,14 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void TexImage2DMultisample( GLenum target,
                                        GLsizei samples,
-                                       GLenum internalformat,
+                                       GLenum internalFormat,
                                        GLsizei width,
                                        GLsizei height,
                                        GLboolean fixedsamplelocations )
     {
         GetDelegateForFunction< PFNGLTEXIMAGE2DMULTISAMPLEPROC >( "glTexImage2DMultisample", out _glTexImage2DMultisample );
 
-        _glTexImage2DMultisample( target, samples, internalformat, width, height, fixedsamplelocations );
+        _glTexImage2DMultisample( target, samples, internalFormat, width, height, fixedsamplelocations );
     }
 
     // ========================================================================
@@ -3915,7 +3869,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void TexImage3DMultisample( GLenum target,
                                        GLsizei samples,
-                                       GLenum internalformat,
+                                       GLenum internalFormat,
                                        GLsizei width,
                                        GLsizei height,
                                        GLsizei depth,
@@ -3923,7 +3877,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLTEXIMAGE3DMULTISAMPLEPROC >( "glTexImage3DMultisample", out _glTexImage3DMultisample );
 
-        _glTexImage3DMultisample( target, samples, internalformat, width, height, depth, fixedsamplelocations );
+        _glTexImage3DMultisample( target, samples, internalFormat, width, height, depth, fixedsamplelocations );
     }
 
     // ========================================================================
@@ -3962,7 +3916,8 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void BindFragDataLocationIndexed( GLuint program, GLuint colorNumber, GLuint index, GLchar* name )
     {
-        GetDelegateForFunction< PFNGLBINDFRAGDATALOCATIONINDEXEDPROC >( "glBindFragDataLocationIndexed", out _glBindFragDataLocationIndexed );
+        GetDelegateForFunction< PFNGLBINDFRAGDATALOCATIONINDEXEDPROC >( "glBindFragDataLocationIndexed",
+                                                                        out _glBindFragDataLocationIndexed );
 
         _glBindFragDataLocationIndexed( program, colorNumber, index, name );
     }
@@ -3972,7 +3927,8 @@ public unsafe partial class GLBindings : IGLBindings
     {
         var nameBytes = Encoding.UTF8.GetBytes( name );
 
-        GetDelegateForFunction< PFNGLBINDFRAGDATALOCATIONINDEXEDPROC >( "glBindFragDataLocationIndexed", out _glBindFragDataLocationIndexed );
+        GetDelegateForFunction< PFNGLBINDFRAGDATALOCATIONINDEXEDPROC >( "glBindFragDataLocationIndexed",
+                                                                        out _glBindFragDataLocationIndexed );
 
         fixed ( GLchar* p = &nameBytes[ 0 ] )
         {
@@ -4852,7 +4808,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLint GetSubroutineUniformLocation( GLuint program, GLenum shadertype, GLchar* name )
     {
-        GetDelegateForFunction< PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC >( "glGetSubroutineUniformLocation", out _glGetSubroutineUniformLocation );
+        GetDelegateForFunction< PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC >( "glGetSubroutineUniformLocation",
+                                                                         out _glGetSubroutineUniformLocation );
 
         return _glGetSubroutineUniformLocation( program, shadertype, name );
     }
@@ -4861,7 +4818,8 @@ public unsafe partial class GLBindings : IGLBindings
     {
         var nameBytes = Encoding.UTF8.GetBytes( name );
 
-        GetDelegateForFunction< PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC >( "glGetSubroutineUniformLocation", out _glGetSubroutineUniformLocation );
+        GetDelegateForFunction< PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC >( "glGetSubroutineUniformLocation",
+                                                                         out _glGetSubroutineUniformLocation );
 
         fixed ( GLchar* p = &nameBytes[ 0 ] )
         {
@@ -4894,14 +4852,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetActiveSubroutineUniformiv( GLuint program, GLenum shadertype, GLuint index, GLenum pname, GLint* values )
     {
-        GetDelegateForFunction< PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC >( "glGetActiveSubroutineUniformiv", out _glGetActiveSubroutineUniformiv );
+        GetDelegateForFunction< PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC >( "glGetActiveSubroutineUniformiv",
+                                                                         out _glGetActiveSubroutineUniformiv );
 
         _glGetActiveSubroutineUniformiv( program, shadertype, index, pname, values );
     }
 
     public void GetActiveSubroutineUniformiv( GLuint program, GLenum shadertype, GLuint index, GLenum pname, ref GLint[] values )
     {
-        GetDelegateForFunction< PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC >( "glGetActiveSubroutineUniformiv", out _glGetActiveSubroutineUniformiv );
+        GetDelegateForFunction< PFNGLGETACTIVESUBROUTINEUNIFORMIVPROC >( "glGetActiveSubroutineUniformiv",
+                                                                         out _glGetActiveSubroutineUniformiv );
 
         fixed ( GLint* p = &values[ 0 ] )
         {
@@ -4911,9 +4871,11 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void GetActiveSubroutineUniformName( GLuint program, GLenum shadertype, GLuint index, GLsizei bufsize, GLsizei* length, GLchar* name )
+    public void GetActiveSubroutineUniformName( GLuint program, GLenum shadertype, GLuint index, GLsizei bufsize, GLsizei* length,
+                                                GLchar* name )
     {
-        GetDelegateForFunction< PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC >( "glGetActiveSubroutineUniformName", out _glGetActiveSubroutineUniformName );
+        GetDelegateForFunction< PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC >( "glGetActiveSubroutineUniformName",
+                                                                           out _glGetActiveSubroutineUniformName );
 
         _glGetActiveSubroutineUniformName( program, shadertype, index, bufsize, length, name );
     }
@@ -4922,7 +4884,8 @@ public unsafe partial class GLBindings : IGLBindings
     {
         var name = new GLchar[ bufsize ];
 
-        GetDelegateForFunction< PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC >( "glGetActiveSubroutineUniformName", out _glGetActiveSubroutineUniformName );
+        GetDelegateForFunction< PFNGLGETACTIVESUBROUTINEUNIFORMNAMEPROC >( "glGetActiveSubroutineUniformName",
+                                                                           out _glGetActiveSubroutineUniformName );
 
         fixed ( GLchar* p = &name[ 0 ] )
         {
@@ -5140,7 +5103,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void DrawTransformFeedbackStream( GLenum mode, GLuint id, GLuint stream )
     {
-        GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKSTREAMPROC >( "glDrawTransformFeedbackStream", out _glDrawTransformFeedbackStream );
+        GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKSTREAMPROC >( "glDrawTransformFeedbackStream",
+                                                                        out _glDrawTransformFeedbackStream );
 
         _glDrawTransformFeedbackStream( mode, id, stream );
     }
@@ -6587,23 +6551,28 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void DrawArraysInstancedBaseInstance( GLenum mode, GLint first, GLsizei count, GLsizei instancecount, GLuint baseinstance )
     {
-        GetDelegateForFunction< PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC >( "glDrawArraysInstancedBaseInstance", out _glDrawArraysInstancedBaseInstance );
+        GetDelegateForFunction< PFNGLDRAWARRAYSINSTANCEDBASEINSTANCEPROC >( "glDrawArraysInstancedBaseInstance",
+                                                                            out _glDrawArraysInstancedBaseInstance );
 
         _glDrawArraysInstancedBaseInstance( mode, first, count, instancecount, baseinstance );
     }
 
     // ========================================================================
 
-    public void DrawElementsInstancedBaseInstance( GLenum mode, GLsizei count, GLenum type, void* indices, GLsizei instancecount, GLuint baseinstance )
+    public void DrawElementsInstancedBaseInstance( GLenum mode, GLsizei count, GLenum type, void* indices, GLsizei instancecount,
+                                                   GLuint baseinstance )
     {
-        GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC >( "glDrawElementsInstancedBaseInstance", out _glDrawElementsInstancedBaseInstance );
+        GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC >( "glDrawElementsInstancedBaseInstance",
+                                                                              out _glDrawElementsInstancedBaseInstance );
 
         _glDrawElementsInstancedBaseInstance( mode, count, type, indices, instancecount, baseinstance );
     }
 
-    public void DrawElementsInstancedBaseInstance< T >( GLenum mode, GLsizei count, GLenum type, T[] indices, GLsizei instancecount, GLuint baseinstance ) where T : unmanaged, IUnsignedNumber< T >
+    public void DrawElementsInstancedBaseInstance< T >( GLenum mode, GLsizei count, GLenum type, T[] indices, GLsizei instancecount,
+                                                        GLuint baseinstance ) where T : unmanaged, IUnsignedNumber< T >
     {
-        GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC >( "glDrawElementsInstancedBaseInstance", out _glDrawElementsInstancedBaseInstance );
+        GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEINSTANCEPROC >( "glDrawElementsInstancedBaseInstance",
+                                                                              out _glDrawElementsInstancedBaseInstance );
 
         fixed ( void* p = &indices[ 0 ] )
         {
@@ -6638,22 +6607,22 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void GetInternalformativ( GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, GLint* parameters )
+    public void GetInternalformativ( GLenum target, GLenum internalFormat, GLenum pname, GLsizei bufSize, GLint* parameters )
     {
         GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC >( "glDrawElementsInstancedBaseVertexBaseInstance",
                                                                                         out _glDrawElementsInstancedBaseVertexBaseInstance );
 
-        _glGetInternalformativ( target, internalformat, pname, bufSize, parameters );
+        _glGetInternalformativ( target, internalFormat, pname, bufSize, parameters );
     }
 
-    public void GetInternalformativ( GLenum target, GLenum internalformat, GLenum pname, GLsizei bufSize, ref GLint[] parameters )
+    public void GetInternalformativ( GLenum target, GLenum internalFormat, GLenum pname, GLsizei bufSize, ref GLint[] parameters )
     {
         GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC >( "glDrawElementsInstancedBaseVertexBaseInstance",
                                                                                         out _glDrawElementsInstancedBaseVertexBaseInstance );
 
         fixed ( GLint* p = &parameters[ 0 ] )
         {
-            _glGetInternalformativ( target, internalformat, pname, bufSize, p );
+            _glGetInternalformativ( target, internalFormat, pname, bufSize, p );
         }
     }
 
@@ -6661,14 +6630,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetActiveAtomicCounterBufferiv( GLuint program, GLuint bufferIndex, GLenum pname, GLint* parameters )
     {
-        GetDelegateForFunction< PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC >( "glGetActiveAtomicCounterBufferiv", out _glGetActiveAtomicCounterBufferiv );
+        GetDelegateForFunction< PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC >( "glGetActiveAtomicCounterBufferiv",
+                                                                           out _glGetActiveAtomicCounterBufferiv );
 
         _glGetActiveAtomicCounterBufferiv( program, bufferIndex, pname, parameters );
     }
 
     public void GetActiveAtomicCounterBufferiv( GLuint program, GLuint bufferIndex, GLenum pname, ref GLint[] parameters )
     {
-        GetDelegateForFunction< PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC >( "glGetActiveAtomicCounterBufferiv", out _glGetActiveAtomicCounterBufferiv );
+        GetDelegateForFunction< PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC >( "glGetActiveAtomicCounterBufferiv",
+                                                                           out _glGetActiveAtomicCounterBufferiv );
 
         fixed ( GLint* p = &parameters[ 0 ] )
         {
@@ -6696,36 +6667,37 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void TexStorage1D( GLenum target, GLsizei levels, GLenum internalformat, GLsizei width )
+    public void TexStorage1D( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width )
     {
         GetDelegateForFunction< PFNGLTEXSTORAGE1DPROC >( "glTexStorage1D", out _glTexStorage1D );
 
-        _glTexStorage1D( target, levels, internalformat, width );
+        _glTexStorage1D( target, levels, internalFormat, width );
     }
 
     // ========================================================================
 
-    public void TexStorage2D( GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height )
+    public void TexStorage2D( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height )
     {
         GetDelegateForFunction< PFNGLTEXSTORAGE2DPROC >( "glTexStorage2D", out _glTexStorage2D );
 
-        _glTexStorage2D( target, levels, internalformat, width, height );
+        _glTexStorage2D( target, levels, internalFormat, width, height );
     }
 
     // ========================================================================
 
-    public void TexStorage3D( GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth )
+    public void TexStorage3D( GLenum target, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth )
     {
         GetDelegateForFunction< PFNGLTEXSTORAGE3DPROC >( "glTexStorage3D", out _glTexStorage3D );
 
-        _glTexStorage3D( target, levels, internalformat, width, height, depth );
+        _glTexStorage3D( target, levels, internalFormat, width, height, depth );
     }
 
     // ========================================================================
 
     public void DrawTransformFeedbackInstanced( GLenum mode, GLuint id, GLsizei instancecount )
     {
-        GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKINSTANCEDPROC >( "glDrawTransformFeedbackInstanced", out _glDrawTransformFeedbackInstanced );
+        GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKINSTANCEDPROC >( "glDrawTransformFeedbackInstanced",
+                                                                           out _glDrawTransformFeedbackInstanced );
 
         _glDrawTransformFeedbackInstanced( mode, id, instancecount );
     }
@@ -6734,7 +6706,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void DrawTransformFeedbackStreamInstanced( GLenum mode, GLuint id, GLuint stream, GLsizei instancecount )
     {
-        GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC >( "glDrawTransformFeedbackStreamInstanced", out _glDrawTransformFeedbackStreamInstanced );
+        GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKSTREAMINSTANCEDPROC >( "glDrawTransformFeedbackStreamInstanced",
+                                                                                 out _glDrawTransformFeedbackStreamInstanced );
 
         _glDrawTransformFeedbackStreamInstanced( mode, id, stream, instancecount );
     }
@@ -6768,39 +6741,41 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ClearBufferData( GLenum target, GLenum internalformat, GLenum format, GLenum type, void* data )
+    public void ClearBufferData( GLenum target, GLenum internalFormat, GLenum format, GLenum type, void* data )
     {
         GetDelegateForFunction< PFNGLCLEARBUFFERDATAPROC >( "glClearBufferData", out _glClearBufferData );
 
-        _glClearBufferData( target, internalformat, format, type, data );
+        _glClearBufferData( target, internalFormat, format, type, data );
     }
 
-    public void ClearBufferData< T >( GLenum target, GLenum internalformat, GLenum format, GLenum type, T[] data ) where T : unmanaged
+    public void ClearBufferData< T >( GLenum target, GLenum internalFormat, GLenum format, GLenum type, T[] data ) where T : unmanaged
     {
         GetDelegateForFunction< PFNGLCLEARBUFFERDATAPROC >( "glClearBufferData", out _glClearBufferData );
 
         fixed ( T* t = &data[ 0 ] )
         {
-            _glClearBufferData( target, internalformat, format, type, t );
+            _glClearBufferData( target, internalFormat, format, type, t );
         }
     }
 
     // ========================================================================
 
-    public void ClearBufferSubData( GLenum target, GLenum internalformat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type, void* data )
+    public void ClearBufferSubData( GLenum target, GLenum internalFormat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type,
+                                    void* data )
     {
         GetDelegateForFunction< PFNGLCLEARBUFFERSUBDATAPROC >( "glClearBufferSubData", out _glClearBufferSubData );
 
-        _glClearBufferSubData( target, internalformat, offset, size, format, type, data );
+        _glClearBufferSubData( target, internalFormat, offset, size, format, type, data );
     }
 
-    public void ClearBufferSubData< T >( GLenum target, GLenum internalformat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type, T[] data ) where T : unmanaged
+    public void ClearBufferSubData< T >( GLenum target, GLenum internalFormat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type,
+                                         T[] data ) where T : unmanaged
     {
         GetDelegateForFunction< PFNGLCLEARBUFFERSUBDATAPROC >( "glClearBufferSubData", out _glClearBufferSubData );
 
         fixed ( T* t = &data[ 0 ] )
         {
-            _glClearBufferSubData( target, internalformat, offset, size, format, type, t );
+            _glClearBufferSubData( target, internalFormat, offset, size, format, type, t );
         }
     }
 
@@ -6844,7 +6819,8 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLCOPYIMAGESUBDATAPROC >( "glCopyImageSubData", out _glCopyImageSubData );
 
-        _glCopyImageSubData( srcName, srcTarget, srcLevel, srcX, srcY, srcZ, dstName, dstTarget, dstLevel, dstX, dstY, dstZ, srcWidth, srcHeight, srcDepth );
+        _glCopyImageSubData( srcName, srcTarget, srcLevel, srcX, srcY, srcZ, dstName, dstTarget, dstLevel, dstX, dstY, dstZ, srcWidth,
+                             srcHeight, srcDepth );
     }
 
     // ========================================================================
@@ -6877,26 +6853,27 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void GetInternalformati64v( GLenum target, GLenum internalformat, GLenum pname, GLsizei count, GLint64* parameters )
+    public void GetInternalformati64v( GLenum target, GLenum internalFormat, GLenum pname, GLsizei count, GLint64* parameters )
     {
         GetDelegateForFunction< PFNGLGETINTERNALFORMATI64VPROC >( "glGetInternalformati64v", out _glGetInternalformati64v );
 
-        _glGetInternalformati64v( target, internalformat, pname, count, parameters );
+        _glGetInternalformati64v( target, internalFormat, pname, count, parameters );
     }
 
-    public void GetInternalformati64v( GLenum target, GLenum internalformat, GLenum pname, GLsizei count, ref GLint64[] parameters )
+    public void GetInternalformati64v( GLenum target, GLenum internalFormat, GLenum pname, GLsizei count, ref GLint64[] parameters )
     {
         GetDelegateForFunction< PFNGLGETINTERNALFORMATI64VPROC >( "glGetInternalformati64v", out _glGetInternalformati64v );
 
         fixed ( GLint64* pParams = &parameters[ 0 ] )
         {
-            _glGetInternalformati64v( target, internalformat, pname, count, pParams );
+            _glGetInternalformati64v( target, internalFormat, pname, count, pParams );
         }
     }
 
     // ========================================================================
 
-    public void InvalidateTexSubImage( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth )
+    public void InvalidateTexSubImage( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width,
+                                       GLsizei height, GLsizei depth )
     {
         GetDelegateForFunction< PFNGLINVALIDATETEXSUBIMAGEPROC >( "glInvalidateTexSubImage", out _glInvalidateTexSubImage );
 
@@ -6951,14 +6928,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void InvalidateSubFramebuffer( GLenum target, GLsizei numAttachments, GLenum* attachments, GLint x, GLint y, GLsizei width, GLsizei height )
+    public void InvalidateSubFramebuffer( GLenum target, GLsizei numAttachments, GLenum* attachments, GLint x, GLint y, GLsizei width,
+                                          GLsizei height )
     {
         GetDelegateForFunction< PFNGLINVALIDATESUBFRAMEBUFFERPROC >( "glInvalidateSubFramebuffer", out _glInvalidateSubFramebuffer );
 
         _glInvalidateSubFramebuffer( target, numAttachments, attachments, x, y, width, height );
     }
 
-    public void InvalidateSubFramebuffer( GLenum target, GLsizei numAttachments, GLenum[] attachments, GLint x, GLint y, GLsizei width, GLsizei height )
+    public void InvalidateSubFramebuffer( GLenum target, GLsizei numAttachments, GLenum[] attachments, GLint x, GLint y, GLsizei width,
+                                          GLsizei height )
     {
         GetDelegateForFunction< PFNGLINVALIDATESUBFRAMEBUFFERPROC >( "glInvalidateSubFramebuffer", out _glInvalidateSubFramebuffer );
 
@@ -6993,7 +6972,8 @@ public unsafe partial class GLBindings : IGLBindings
         _glMultiDrawElementsIndirect( mode, type, indirect, drawcount, stride );
     }
 
-    public void MultiDrawElementsIndirect( GLenum mode, GLenum type, DrawElementsIndirectCommand indirect, GLsizei drawcount, GLsizei stride )
+    public void MultiDrawElementsIndirect( GLenum mode, GLenum type, DrawElementsIndirectCommand indirect, GLsizei drawcount,
+                                           GLsizei stride )
     {
         GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSINDIRECTPROC >( "glMultiDrawElementsIndirect", out _glMultiDrawElementsIndirect );
 
@@ -7042,7 +7022,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void GetProgramResourceName( GLuint program, GLenum programInterface, GLuint index, GLsizei bufSize, GLsizei* length, GLchar* name )
+    public void GetProgramResourceName( GLuint program, GLenum programInterface, GLuint index, GLsizei bufSize, GLsizei* length,
+                                        GLchar* name )
     {
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName", out _glGetProgramResourceName );
 
@@ -7075,7 +7056,8 @@ public unsafe partial class GLBindings : IGLBindings
         _glGetProgramResourceiv( program, programInterface, index, propCount, props, bufSize, length, parameters );
     }
 
-    public void GetProgramResourceiv( GLuint program, GLenum programInterface, GLuint index, GLenum[] props, GLsizei bufSize, ref GLint[] parameters )
+    public void GetProgramResourceiv( GLuint program, GLenum programInterface, GLuint index, GLenum[] props, GLsizei bufSize,
+                                      ref GLint[] parameters )
     {
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
 
@@ -7114,7 +7096,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLint GetProgramResourceLocationIndex( GLuint program, GLenum programInterface, GLchar* name )
     {
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex", out _glGetProgramResourceLocationIndex );
+        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
+                                                                            out _glGetProgramResourceLocationIndex );
 
         return _glGetProgramResourceLocationIndex( program, programInterface, name );
     }
@@ -7123,7 +7106,8 @@ public unsafe partial class GLBindings : IGLBindings
     {
         var nameBytes = Encoding.UTF8.GetBytes( name );
 
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex", out _glGetProgramResourceLocationIndex );
+        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
+                                                                            out _glGetProgramResourceLocationIndex );
 
         fixed ( GLchar* pName = &nameBytes[ 0 ] )
         {
@@ -7142,30 +7126,31 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void TexBufferRange( GLenum target, GLenum internalformat, GLuint buffer, GLintptr offset, GLsizeiptr size )
+    public void TexBufferRange( GLenum target, GLenum internalFormat, GLuint buffer, GLintptr offset, GLsizeiptr size )
     {
         GetDelegateForFunction< PFNGLTEXBUFFERRANGEPROC >( "glTexBufferRange", out _glTexBufferRange );
 
-        _glTexBufferRange( target, internalformat, buffer, offset, size );
+        _glTexBufferRange( target, internalFormat, buffer, offset, size );
     }
 
     // ========================================================================
 
-    public void TexStorage2DMultisample( GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )
+    public void TexStorage2DMultisample( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height,
+                                         GLboolean fixedsamplelocations )
     {
         GetDelegateForFunction< PFNGLTEXSTORAGE2DMULTISAMPLEPROC >( "glTexStorage2DMultisample", out _glTexStorage2DMultisample );
 
-        _glTexStorage2DMultisample( target, samples, internalformat, width, height, fixedsamplelocations );
+        _glTexStorage2DMultisample( target, samples, internalFormat, width, height, fixedsamplelocations );
     }
 
     // ========================================================================
 
-    public void TexStorage3DMultisample( GLenum target, GLsizei samples, GLenum internalformat, GLsizei width,
+    public void TexStorage3DMultisample( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width,
                                          GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )
     {
         GetDelegateForFunction< PFNGLTEXSTORAGE3DMULTISAMPLEPROC >( "glTexStorage3DMultisample", out _glTexStorage3DMultisample );
 
-        _glTexStorage3DMultisample( target, samples, internalformat, width, height, depth, fixedsamplelocations );
+        _glTexStorage3DMultisample( target, samples, internalFormat, width, height, depth, fixedsamplelocations );
     }
 
     // ========================================================================
@@ -7173,11 +7158,11 @@ public unsafe partial class GLBindings : IGLBindings
     public void TextureView( GLuint texture,
                              GLenum target,
                              GLuint origtexture,
-                             GLenum internalformat, GLuint minlevel, GLuint numlevels, GLuint minlayer, GLuint numlayers )
+                             GLenum internalFormat, GLuint minlevel, GLuint numlevels, GLuint minlayer, GLuint numlayers )
     {
         GetDelegateForFunction< PFNGLTEXTUREVIEWPROC >( "glTextureView", out _glTextureView );
 
-        _glTextureView( texture, target, origtexture, internalformat, minlevel, numlevels, minlayer, numlayers );
+        _glTextureView( texture, target, origtexture, internalFormat, minlevel, numlevels, minlayer, numlayers );
     }
 
     // ========================================================================
@@ -7523,14 +7508,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ClearTexSubImage( GLuint texture, GLint level, GLint xOffset, GLint yOffset, GLint zOffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, void* data )
+    public void ClearTexSubImage( GLuint texture, GLint level, GLint xOffset, GLint yOffset, GLint zOffset, GLsizei width, GLsizei height,
+                                  GLsizei depth, GLenum format, GLenum type, void* data )
     {
         GetDelegateForFunction< PFNGLCLEARTEXSUBIMAGEPROC >( "glClearTexSubImage", out _glClearTexSubImage );
 
         _glClearTexSubImage( texture, level, xOffset, yOffset, zOffset, width, height, depth, format, type, data );
     }
 
-    public void ClearTexSubImage< T >( GLuint texture, GLint level, GLint xOffset, GLint yOffset, GLint zOffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, T[] data )
+    public void ClearTexSubImage< T >( GLuint texture, GLint level, GLint xOffset, GLint yOffset, GLint zOffset, GLsizei width,
+                                       GLsizei height, GLsizei depth, GLenum format, GLenum type, T[] data )
         where T : unmanaged
     {
         GetDelegateForFunction< PFNGLCLEARTEXSUBIMAGEPROC >( "glClearTexSubImage", out _glClearTexSubImage );
@@ -7708,7 +7695,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void TransformFeedbackBufferBase( GLuint xfb, GLuint index, GLuint buffer )
     {
-        GetDelegateForFunction< PFNGLTRANSFORMFEEDBACKBUFFERBASEPROC >( "glTransformFeedbackBufferBase", out _glTransformFeedbackBufferBase );
+        GetDelegateForFunction< PFNGLTRANSFORMFEEDBACKBUFFERBASEPROC >( "glTransformFeedbackBufferBase",
+                                                                        out _glTransformFeedbackBufferBase );
 
         _glTransformFeedbackBufferBase( xfb, index, buffer );
     }
@@ -7717,7 +7705,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void TransformFeedbackBufferRange( GLuint xfb, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size )
     {
-        GetDelegateForFunction< PFNGLTRANSFORMFEEDBACKBUFFERRANGEPROC >( "glTransformFeedbackBufferRange", out _glTransformFeedbackBufferRange );
+        GetDelegateForFunction< PFNGLTRANSFORMFEEDBACKBUFFERRANGEPROC >( "glTransformFeedbackBufferRange",
+                                                                         out _glTransformFeedbackBufferRange );
 
         _glTransformFeedbackBufferRange( xfb, index, buffer, offset, size );
     }
@@ -7875,39 +7864,41 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ClearNamedBufferData( GLuint buffer, GLenum internalformat, GLenum format, GLenum type, void* data )
+    public void ClearNamedBufferData( GLuint buffer, GLenum internalFormat, GLenum format, GLenum type, void* data )
     {
         GetDelegateForFunction< PFNGLCLEARNAMEDBUFFERDATAPROC >( "glClearNamedBufferData", out _glClearNamedBufferData );
 
-        _glClearNamedBufferData( buffer, internalformat, format, type, data );
+        _glClearNamedBufferData( buffer, internalFormat, format, type, data );
     }
 
-    public void ClearNamedBufferData< T >( GLuint buffer, GLenum internalformat, GLenum format, GLenum type, T[] data ) where T : unmanaged
+    public void ClearNamedBufferData< T >( GLuint buffer, GLenum internalFormat, GLenum format, GLenum type, T[] data ) where T : unmanaged
     {
         GetDelegateForFunction< PFNGLCLEARNAMEDBUFFERDATAPROC >( "glClearNamedBufferData", out _glClearNamedBufferData );
 
         fixed ( T* t = &data[ 0 ] )
         {
-            _glClearNamedBufferData( buffer, internalformat, format, type, t );
+            _glClearNamedBufferData( buffer, internalFormat, format, type, t );
         }
     }
 
     // ========================================================================
 
-    public void ClearNamedBufferSubData( GLuint buffer, GLenum internalformat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type, void* data )
+    public void ClearNamedBufferSubData( GLuint buffer, GLenum internalFormat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type,
+                                         void* data )
     {
         GetDelegateForFunction< PFNGLCLEARNAMEDBUFFERSUBDATAPROC >( "glClearNamedBufferSubData", out _glClearNamedBufferSubData );
 
-        _glClearNamedBufferSubData( buffer, internalformat, offset, size, format, type, data );
+        _glClearNamedBufferSubData( buffer, internalFormat, offset, size, format, type, data );
     }
 
-    public void ClearNamedBufferSubData< T >( GLuint buffer, GLenum internalformat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type, T[] data ) where T : unmanaged
+    public void ClearNamedBufferSubData< T >( GLuint buffer, GLenum internalFormat, GLintptr offset, GLsizeiptr size, GLenum format,
+                                              GLenum type, T[] data ) where T : unmanaged
     {
         GetDelegateForFunction< PFNGLCLEARNAMEDBUFFERSUBDATAPROC >( "glClearNamedBufferSubData", out _glClearNamedBufferSubData );
 
         fixed ( T* t = &data[ 0 ] )
         {
-            _glClearNamedBufferSubData( buffer, internalformat, offset, size, format, type, t );
+            _glClearNamedBufferSubData( buffer, internalFormat, offset, size, format, type, t );
         }
     }
 
@@ -7944,7 +7935,8 @@ public unsafe partial class GLBindings : IGLBindings
         return _glMapNamedBufferRange( buffer, offset, length, access );
     }
 
-    public System.Span< T > MapNamedBufferRange< T >( GLuint buffer, GLintptr offset, GLsizeiptr length, GLbitfield access ) where T : unmanaged
+    public System.Span< T > MapNamedBufferRange< T >( GLuint buffer, GLintptr offset, GLsizeiptr length, GLbitfield access )
+        where T : unmanaged
     {
         GetDelegateForFunction< PFNGLMAPNAMEDBUFFERRANGEPROC >( "glMapNamedBufferRange", out _glMapNamedBufferRange );
 
@@ -7966,7 +7958,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void FlushMappedNamedBufferRange( GLuint buffer, GLintptr offset, GLsizeiptr length )
     {
-        GetDelegateForFunction< PFNGLFLUSHMAPPEDNAMEDBUFFERRANGEPROC >( "glFlushMappedNamedBufferRange", out _glFlushMappedNamedBufferRange );
+        GetDelegateForFunction< PFNGLFLUSHMAPPEDNAMEDBUFFERRANGEPROC >( "glFlushMappedNamedBufferRange",
+                                                                        out _glFlushMappedNamedBufferRange );
 
         _glFlushMappedNamedBufferRange( buffer, offset, length );
     }
@@ -7994,14 +7987,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetNamedBufferParameteri64v( GLuint buffer, GLenum pname, GLint64* parameters )
     {
-        GetDelegateForFunction< PFNGLGETNAMEDBUFFERPARAMETERI64VPROC >( "glGetNamedBufferParameteri64v", out _glGetNamedBufferParameteri64v );
+        GetDelegateForFunction< PFNGLGETNAMEDBUFFERPARAMETERI64VPROC >( "glGetNamedBufferParameteri64v",
+                                                                        out _glGetNamedBufferParameteri64v );
 
         _glGetNamedBufferParameteri64v( buffer, pname, parameters );
     }
 
     public void GetNamedBufferParameteri64v( GLuint buffer, GLenum pname, ref GLint64[] parameters )
     {
-        GetDelegateForFunction< PFNGLGETNAMEDBUFFERPARAMETERI64VPROC >( "glGetNamedBufferParameteri64v", out _glGetNamedBufferParameteri64v );
+        GetDelegateForFunction< PFNGLGETNAMEDBUFFERPARAMETERI64VPROC >( "glGetNamedBufferParameteri64v",
+                                                                        out _glGetNamedBufferParameteri64v );
 
         fixed ( GLint64* ptrParameters = &parameters[ 0 ] )
         {
@@ -8095,7 +8090,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void NamedFramebufferRenderbuffer( GLuint framebuffer, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer )
     {
-        GetDelegateForFunction< PFNGLNAMEDFRAMEBUFFERRENDERBUFFERPROC >( "glNamedFramebufferRenderbuffer", out _glNamedFramebufferRenderbuffer );
+        GetDelegateForFunction< PFNGLNAMEDFRAMEBUFFERRENDERBUFFERPROC >( "glNamedFramebufferRenderbuffer",
+                                                                         out _glNamedFramebufferRenderbuffer );
 
         _glNamedFramebufferRenderbuffer( framebuffer, attachment, renderbuffertarget, renderbuffer );
     }
@@ -8122,7 +8118,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void NamedFramebufferTextureLayer( GLuint framebuffer, GLenum attachment, GLuint texture, GLint level, GLint layer )
     {
-        GetDelegateForFunction< PFNGLNAMEDFRAMEBUFFERTEXTURELAYERPROC >( "glNamedFramebufferTextureLayer", out _glNamedFramebufferTextureLayer );
+        GetDelegateForFunction< PFNGLNAMEDFRAMEBUFFERTEXTURELAYERPROC >( "glNamedFramebufferTextureLayer",
+                                                                         out _glNamedFramebufferTextureLayer );
 
         _glNamedFramebufferTextureLayer( framebuffer, attachment, texture, level, layer );
     }
@@ -8140,14 +8137,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void NamedFramebufferDrawBuffers( GLuint framebuffer, GLsizei n, GLenum* bufs )
     {
-        GetDelegateForFunction< PFNGLNAMEDFRAMEBUFFERDRAWBUFFERSPROC >( "glNamedFramebufferDrawBuffers", out _glNamedFramebufferDrawBuffers );
+        GetDelegateForFunction< PFNGLNAMEDFRAMEBUFFERDRAWBUFFERSPROC >( "glNamedFramebufferDrawBuffers",
+                                                                        out _glNamedFramebufferDrawBuffers );
 
         _glNamedFramebufferDrawBuffers( framebuffer, n, bufs );
     }
 
     public void NamedFramebufferDrawBuffers( GLuint framebuffer, GLenum[] bufs )
     {
-        GetDelegateForFunction< PFNGLNAMEDFRAMEBUFFERDRAWBUFFERSPROC >( "glNamedFramebufferDrawBuffers", out _glNamedFramebufferDrawBuffers );
+        GetDelegateForFunction< PFNGLNAMEDFRAMEBUFFERDRAWBUFFERSPROC >( "glNamedFramebufferDrawBuffers",
+                                                                        out _glNamedFramebufferDrawBuffers );
 
         fixed ( GLenum* ptrBufs = &bufs[ 0 ] )
         {
@@ -8168,14 +8167,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void InvalidateNamedFramebufferData( GLuint framebuffer, GLsizei numAttachments, GLenum* attachments )
     {
-        GetDelegateForFunction< PFNGLINVALIDATENAMEDFRAMEBUFFERDATAPROC >( "glInvalidateNamedFramebufferData", out _glInvalidateNamedFramebufferData );
+        GetDelegateForFunction< PFNGLINVALIDATENAMEDFRAMEBUFFERDATAPROC >( "glInvalidateNamedFramebufferData",
+                                                                           out _glInvalidateNamedFramebufferData );
 
         _glInvalidateNamedFramebufferData( framebuffer, numAttachments, attachments );
     }
 
     public void InvalidateNamedFramebufferData( GLuint framebuffer, GLenum[] attachments )
     {
-        GetDelegateForFunction< PFNGLINVALIDATENAMEDFRAMEBUFFERDATAPROC >( "glInvalidateNamedFramebufferData", out _glInvalidateNamedFramebufferData );
+        GetDelegateForFunction< PFNGLINVALIDATENAMEDFRAMEBUFFERDATAPROC >( "glInvalidateNamedFramebufferData",
+                                                                           out _glInvalidateNamedFramebufferData );
 
         fixed ( GLenum* ptrAttachments = &attachments[ 0 ] )
         {
@@ -8185,16 +8186,20 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void InvalidateNamedFramebufferSubData( GLuint framebuffer, GLsizei numAttachments, GLenum* attachments, GLint x, GLint y, GLsizei width, GLsizei height )
+    public void InvalidateNamedFramebufferSubData( GLuint framebuffer, GLsizei numAttachments, GLenum* attachments, GLint x, GLint y,
+                                                   GLsizei width, GLsizei height )
     {
-        GetDelegateForFunction< PFNGLINVALIDATENAMEDFRAMEBUFFERSUBDATAPROC >( "glInvalidateNamedFramebufferSubData", out _glInvalidateNamedFramebufferSubData );
+        GetDelegateForFunction< PFNGLINVALIDATENAMEDFRAMEBUFFERSUBDATAPROC >( "glInvalidateNamedFramebufferSubData",
+                                                                              out _glInvalidateNamedFramebufferSubData );
 
         _glInvalidateNamedFramebufferSubData( framebuffer, numAttachments, attachments, x, y, width, height );
     }
 
-    public void InvalidateNamedFramebufferSubData( GLuint framebuffer, GLenum[] attachments, GLint x, GLint y, GLsizei width, GLsizei height )
+    public void InvalidateNamedFramebufferSubData( GLuint framebuffer, GLenum[] attachments, GLint x, GLint y, GLsizei width,
+                                                   GLsizei height )
     {
-        GetDelegateForFunction< PFNGLINVALIDATENAMEDFRAMEBUFFERSUBDATAPROC >( "glInvalidateNamedFramebufferSubData", out _glInvalidateNamedFramebufferSubData );
+        GetDelegateForFunction< PFNGLINVALIDATENAMEDFRAMEBUFFERSUBDATAPROC >( "glInvalidateNamedFramebufferSubData",
+                                                                              out _glInvalidateNamedFramebufferSubData );
 
         fixed ( GLenum* ptrAttachments = &attachments[ 0 ] )
         {
@@ -8270,7 +8275,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void BlitNamedFramebuffer( GLuint readFramebuffer, GLuint drawFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
+    public void BlitNamedFramebuffer( GLuint readFramebuffer, GLuint drawFramebuffer, GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1,
+                                      GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1,
                                       GLbitfield mask, GLenum filter )
     {
         GetDelegateForFunction< PFNGLBLITNAMEDFRAMEBUFFERPROC >( "glBlitNamedFramebuffer", out _glBlitNamedFramebuffer );
@@ -8282,7 +8288,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLenum CheckNamedFramebufferStatus( GLuint framebuffer, GLenum target )
     {
-        GetDelegateForFunction< PFNGLCHECKNAMEDFRAMEBUFFERSTATUSPROC >( "glCheckNamedFramebufferStatus", out _glCheckNamedFramebufferStatus );
+        GetDelegateForFunction< PFNGLCHECKNAMEDFRAMEBUFFERSTATUSPROC >( "glCheckNamedFramebufferStatus",
+                                                                        out _glCheckNamedFramebufferStatus );
 
         return _glCheckNamedFramebufferStatus( framebuffer, target );
     }
@@ -8291,14 +8298,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetNamedFramebufferParameteriv( GLuint framebuffer, GLenum pname, GLint* param )
     {
-        GetDelegateForFunction< PFNGLGETNAMEDFRAMEBUFFERPARAMETERIVPROC >( "glGetNamedFramebufferParameteriv", out _glGetNamedFramebufferParameteriv );
+        GetDelegateForFunction< PFNGLGETNAMEDFRAMEBUFFERPARAMETERIVPROC >( "glGetNamedFramebufferParameteriv",
+                                                                           out _glGetNamedFramebufferParameteriv );
 
         _glGetNamedFramebufferParameteriv( framebuffer, pname, param );
     }
 
     public void GetNamedFramebufferParameteriv( GLuint framebuffer, GLenum pname, ref GLint[] param )
     {
-        GetDelegateForFunction< PFNGLGETNAMEDFRAMEBUFFERPARAMETERIVPROC >( "glGetNamedFramebufferParameteriv", out _glGetNamedFramebufferParameteriv );
+        GetDelegateForFunction< PFNGLGETNAMEDFRAMEBUFFERPARAMETERIVPROC >( "glGetNamedFramebufferParameteriv",
+                                                                           out _glGetNamedFramebufferParameteriv );
 
         fixed ( GLint* ptrParam = &param[ 0 ] )
         {
@@ -8310,14 +8319,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetNamedFramebufferAttachmentParameteriv( GLuint framebuffer, GLenum attachment, GLenum pname, GLint* parameters )
     {
-        GetDelegateForFunction< PFNGLGETNAMEDFRAMEBUFFERATTACHMENTPARAMETERIVPROC >( "glGetNamedFramebufferAttachmentParameteriv", out _glGetNamedFramebufferAttachmentParameteriv );
+        GetDelegateForFunction< PFNGLGETNAMEDFRAMEBUFFERATTACHMENTPARAMETERIVPROC >( "glGetNamedFramebufferAttachmentParameteriv",
+                                                                                     out _glGetNamedFramebufferAttachmentParameteriv );
 
         _glGetNamedFramebufferAttachmentParameteriv( framebuffer, attachment, pname, parameters );
     }
 
     public void GetNamedFramebufferAttachmentParameteriv( GLuint framebuffer, GLenum attachment, GLenum pname, ref GLint[] parameters )
     {
-        GetDelegateForFunction< PFNGLGETNAMEDFRAMEBUFFERATTACHMENTPARAMETERIVPROC >( "glGetNamedFramebufferAttachmentParameteriv", out _glGetNamedFramebufferAttachmentParameteriv );
+        GetDelegateForFunction< PFNGLGETNAMEDFRAMEBUFFERATTACHMENTPARAMETERIVPROC >( "glGetNamedFramebufferAttachmentParameteriv",
+                                                                                     out _glGetNamedFramebufferAttachmentParameteriv );
 
         fixed ( GLint* ptrParams = &parameters[ 0 ] )
         {
@@ -8355,34 +8366,38 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void NamedRenderbufferStorage( GLuint renderbuffer, GLenum internalformat, GLsizei width, GLsizei height )
+    public void NamedRenderbufferStorage( GLuint renderbuffer, GLenum internalFormat, GLsizei width, GLsizei height )
     {
         GetDelegateForFunction< PFNGLNAMEDRENDERBUFFERSTORAGEPROC >( "glNamedRenderbufferStorage", out _glNamedRenderbufferStorage );
 
-        _glNamedRenderbufferStorage( renderbuffer, internalformat, width, height );
+        _glNamedRenderbufferStorage( renderbuffer, internalFormat, width, height );
     }
 
     // ========================================================================
 
-    public void NamedRenderbufferStorageMultisample( GLuint renderbuffer, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height )
+    public void NamedRenderbufferStorageMultisample( GLuint renderbuffer, GLsizei samples, GLenum internalFormat, GLsizei width,
+                                                     GLsizei height )
     {
-        GetDelegateForFunction< PFNGLNAMEDRENDERBUFFERSTORAGEMULTISAMPLEPROC >( "glNamedRenderbufferStorageMultisample", out _glNamedRenderbufferStorageMultisample );
+        GetDelegateForFunction< PFNGLNAMEDRENDERBUFFERSTORAGEMULTISAMPLEPROC >( "glNamedRenderbufferStorageMultisample",
+                                                                                out _glNamedRenderbufferStorageMultisample );
 
-        _glNamedRenderbufferStorageMultisample( renderbuffer, samples, internalformat, width, height );
+        _glNamedRenderbufferStorageMultisample( renderbuffer, samples, internalFormat, width, height );
     }
 
     // ========================================================================
 
     public void GetNamedRenderbufferParameteriv( GLuint renderbuffer, GLenum pname, GLint* param )
     {
-        GetDelegateForFunction< PFNGLGETNAMEDRENDERBUFFERPARAMETERIVPROC >( "glGetNamedRenderbufferParameteriv", out _glGetNamedRenderbufferParameteriv );
+        GetDelegateForFunction< PFNGLGETNAMEDRENDERBUFFERPARAMETERIVPROC >( "glGetNamedRenderbufferParameteriv",
+                                                                            out _glGetNamedRenderbufferParameteriv );
 
         _glGetNamedRenderbufferParameteriv( renderbuffer, pname, param );
     }
 
     public void GetNamedRenderbufferParameteriv( GLuint renderbuffer, GLenum pname, ref GLint[] param )
     {
-        GetDelegateForFunction< PFNGLGETNAMEDRENDERBUFFERPARAMETERIVPROC >( "glGetNamedRenderbufferParameteriv", out _glGetNamedRenderbufferParameteriv );
+        GetDelegateForFunction< PFNGLGETNAMEDRENDERBUFFERPARAMETERIVPROC >( "glGetNamedRenderbufferParameteriv",
+                                                                            out _glGetNamedRenderbufferParameteriv );
 
         fixed ( GLint* ptrParam = &param[ 0 ] )
         {
@@ -8420,65 +8435,69 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void TextureBuffer( GLuint texture, GLenum internalformat, GLuint buffer )
+    public void TextureBuffer( GLuint texture, GLenum internalFormat, GLuint buffer )
     {
         GetDelegateForFunction< PFNGLTEXTUREBUFFERPROC >( "glTextureBuffer", out _glTextureBuffer );
 
-        _glTextureBuffer( texture, internalformat, buffer );
+        _glTextureBuffer( texture, internalFormat, buffer );
     }
 
     // ========================================================================
 
-    public void TextureBufferRange( GLuint texture, GLenum internalformat, GLuint buffer, GLintptr offset, GLsizeiptr size )
+    public void TextureBufferRange( GLuint texture, GLenum internalFormat, GLuint buffer, GLintptr offset, GLsizeiptr size )
     {
         GetDelegateForFunction< PFNGLTEXTUREBUFFERRANGEPROC >( "glTextureBufferRange", out _glTextureBufferRange );
 
-        _glTextureBufferRange( texture, internalformat, buffer, offset, size );
+        _glTextureBufferRange( texture, internalFormat, buffer, offset, size );
     }
 
     // ========================================================================
 
-    public void TextureStorage1D( GLuint texture, GLsizei levels, GLenum internalformat, GLsizei width )
+    public void TextureStorage1D( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width )
     {
         GetDelegateForFunction< PFNGLTEXTURESTORAGE1DPROC >( "glTextureStorage1D", out _glTextureStorage1D );
 
-        _glTextureStorage1D( texture, levels, internalformat, width );
+        _glTextureStorage1D( texture, levels, internalFormat, width );
     }
 
     // ========================================================================
 
-    public void TextureStorage2D( GLuint texture, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height )
+    public void TextureStorage2D( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height )
     {
         GetDelegateForFunction< PFNGLTEXTURESTORAGE2DPROC >( "glTextureStorage2D", out _glTextureStorage2D );
 
-        _glTextureStorage2D( texture, levels, internalformat, width, height );
+        _glTextureStorage2D( texture, levels, internalFormat, width, height );
     }
 
     // ========================================================================
 
-    public void TextureStorage3D( GLuint texture, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth )
+    public void TextureStorage3D( GLuint texture, GLsizei levels, GLenum internalFormat, GLsizei width, GLsizei height, GLsizei depth )
     {
         GetDelegateForFunction< PFNGLTEXTURESTORAGE3DPROC >( "glTextureStorage3D", out _glTextureStorage3D );
 
-        _glTextureStorage3D( texture, levels, internalformat, width, height, depth );
+        _glTextureStorage3D( texture, levels, internalFormat, width, height, depth );
     }
 
     // ========================================================================
 
-    public void TextureStorage2DMultisample( GLuint texture, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )
+    public void TextureStorage2DMultisample( GLuint texture, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height,
+                                             GLboolean fixedsamplelocations )
     {
-        GetDelegateForFunction< PFNGLTEXTURESTORAGE2DMULTISAMPLEPROC >( "glTextureStorage2DMultisample", out _glTextureStorage2DMultisample );
+        GetDelegateForFunction< PFNGLTEXTURESTORAGE2DMULTISAMPLEPROC >( "glTextureStorage2DMultisample",
+                                                                        out _glTextureStorage2DMultisample );
 
-        _glTextureStorage2DMultisample( texture, samples, internalformat, width, height, fixedsamplelocations );
+        _glTextureStorage2DMultisample( texture, samples, internalFormat, width, height, fixedsamplelocations );
     }
 
     // ========================================================================
 
-    public void TextureStorage3DMultisample( GLuint texture, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )
+    public void TextureStorage3DMultisample( GLuint texture, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height,
+                                             GLsizei depth, GLboolean fixedsamplelocations )
     {
-        GetDelegateForFunction< PFNGLTEXTURESTORAGE3DMULTISAMPLEPROC >( "glTextureStorage3DMultisample", out _glTextureStorage3DMultisample );
+        GetDelegateForFunction< PFNGLTEXTURESTORAGE3DMULTISAMPLEPROC >( "glTextureStorage3DMultisample",
+                                                                        out _glTextureStorage3DMultisample );
 
-        _glTextureStorage3DMultisample( texture, samples, internalformat, width, height, depth, fixedsamplelocations );
+        _glTextureStorage3DMultisample( texture, samples, internalFormat, width, height, depth, fixedsamplelocations );
     }
 
     // ========================================================================
@@ -8490,7 +8509,8 @@ public unsafe partial class GLBindings : IGLBindings
         _glTextureSubImage1D( texture, level, xoffset, width, format, type, pixels );
     }
 
-    public void TextureSubImage1D< T >( GLuint texture, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, T[] pixels ) where T : unmanaged
+    public void TextureSubImage1D< T >( GLuint texture, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, T[] pixels )
+        where T : unmanaged
     {
         GetDelegateForFunction< PFNGLTEXTURESUBIMAGE1DPROC >( "glTextureSubImage1D", out _glTextureSubImage1D );
 
@@ -8502,14 +8522,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void TextureSubImage2D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, void* pixels )
+    public void TextureSubImage2D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format,
+                                   GLenum type, void* pixels )
     {
         GetDelegateForFunction< PFNGLTEXTURESUBIMAGE2DPROC >( "glTextureSubImage2D", out _glTextureSubImage2D );
 
         _glTextureSubImage2D( texture, level, xoffset, yoffset, width, height, format, type, pixels );
     }
 
-    public void TextureSubImage2D< T >( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, T[] pixels ) where T : unmanaged
+    public void TextureSubImage2D< T >( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height,
+                                        GLenum format, GLenum type, T[] pixels ) where T : unmanaged
     {
         GetDelegateForFunction< PFNGLTEXTURESUBIMAGE2DPROC >( "glTextureSubImage2D", out _glTextureSubImage2D );
 
@@ -8521,14 +8543,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void TextureSubImage3D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, void* pixels )
+    public void TextureSubImage3D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height,
+                                   GLsizei depth, GLenum format, GLenum type, void* pixels )
     {
         GetDelegateForFunction< PFNGLTEXTURESUBIMAGE3DPROC >( "glTextureSubImage3D", out _glTextureSubImage3D );
 
         _glTextureSubImage3D( texture, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels );
     }
 
-    public void TextureSubImage3D< T >( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type,
+    public void TextureSubImage3D< T >( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width,
+                                        GLsizei height, GLsizei depth, GLenum format, GLenum type,
                                         T[] pixels ) where T : unmanaged
     {
         GetDelegateForFunction< PFNGLTEXTURESUBIMAGE3DPROC >( "glTextureSubImage3D", out _glTextureSubImage3D );
@@ -8544,7 +8568,8 @@ public unsafe partial class GLBindings : IGLBindings
     public void CompressedTextureSubImage1D( GLuint texture, GLint level, GLint xoffset, GLsizei width,
                                              GLenum format, GLsizei imageSize, void* data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE1DPROC >( "glCompressedTextureSubImage1D", out _glCompressedTextureSubImage1D );
+        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE1DPROC >( "glCompressedTextureSubImage1D",
+                                                                        out _glCompressedTextureSubImage1D );
 
         _glCompressedTextureSubImage1D( texture, level, xoffset, width, format, imageSize, data );
     }
@@ -8552,7 +8577,8 @@ public unsafe partial class GLBindings : IGLBindings
     public void CompressedTextureSubImage1D( GLuint texture, GLint level, GLint xoffset, GLsizei width,
                                              GLenum format, GLsizei imageSize, byte[] data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE1DPROC >( "glCompressedTextureSubImage1D", out _glCompressedTextureSubImage1D );
+        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE1DPROC >( "glCompressedTextureSubImage1D",
+                                                                        out _glCompressedTextureSubImage1D );
 
         fixed ( byte* ptrData = &data[ 0 ] )
         {
@@ -8562,16 +8588,20 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void CompressedTextureSubImage2D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, void* data )
+    public void CompressedTextureSubImage2D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height,
+                                             GLenum format, GLsizei imageSize, void* data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE2DPROC >( "glCompressedTextureSubImage2D", out _glCompressedTextureSubImage2D );
+        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE2DPROC >( "glCompressedTextureSubImage2D",
+                                                                        out _glCompressedTextureSubImage2D );
 
         _glCompressedTextureSubImage2D( texture, level, xoffset, yoffset, width, height, format, imageSize, data );
     }
 
-    public void CompressedTextureSubImage2D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, byte[] data )
+    public void CompressedTextureSubImage2D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height,
+                                             GLenum format, GLsizei imageSize, byte[] data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE2DPROC >( "glCompressedTextureSubImage2D", out _glCompressedTextureSubImage2D );
+        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE2DPROC >( "glCompressedTextureSubImage2D",
+                                                                        out _glCompressedTextureSubImage2D );
 
         fixed ( byte* ptrData = &data[ 0 ] )
         {
@@ -8581,18 +8611,22 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void CompressedTextureSubImage3D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize,
+    public void CompressedTextureSubImage3D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width,
+                                             GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize,
                                              void* data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE3DPROC >( "glCompressedTextureSubImage3D", out _glCompressedTextureSubImage3D );
+        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE3DPROC >( "glCompressedTextureSubImage3D",
+                                                                        out _glCompressedTextureSubImage3D );
 
         _glCompressedTextureSubImage3D( texture, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data );
     }
 
-    public void CompressedTextureSubImage3D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize,
+    public void CompressedTextureSubImage3D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width,
+                                             GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize,
                                              byte[] data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE3DPROC >( "glCompressedTextureSubImage3D", out _glCompressedTextureSubImage3D );
+        GetDelegateForFunction< PFNGLCOMPRESSEDTEXTURESUBIMAGE3DPROC >( "glCompressedTextureSubImage3D",
+                                                                        out _glCompressedTextureSubImage3D );
 
         fixed ( byte* ptrData = &data[ 0 ] )
         {
@@ -8611,7 +8645,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void CopyTextureSubImage2D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height )
+    public void CopyTextureSubImage2D( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width,
+                                       GLsizei height )
     {
         GetDelegateForFunction< PFNGLCOPYTEXTURESUBIMAGE2DPROC >( "glCopyTextureSubImage2D", out _glCopyTextureSubImage2D );
 
@@ -8996,7 +9031,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void VertexArrayAttribFormat( GLuint vaobj, GLuint attribindex, GLint size, GLenum type, GLboolean normalized, GLuint relativeoffset )
+    public void VertexArrayAttribFormat( GLuint vaobj, GLuint attribindex, GLint size, GLenum type, GLboolean normalized,
+                                         GLuint relativeoffset )
     {
         GetDelegateForFunction< PFNGLVERTEXARRAYATTRIBFORMATPROC >( "glVertexArrayAttribFormat", out _glVertexArrayAttribFormat );
 
@@ -9248,18 +9284,22 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void GetCompressedTextureSubImage( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLsizei bufSize, void* pixels )
+    public void GetCompressedTextureSubImage( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width,
+                                              GLsizei height, GLsizei depth, GLsizei bufSize, void* pixels )
     {
-        GetDelegateForFunction< PFNGLGETCOMPRESSEDTEXTURESUBIMAGEPROC >( "glGetCompressedTextureSubImage", out _glGetCompressedTextureSubImage );
+        GetDelegateForFunction< PFNGLGETCOMPRESSEDTEXTURESUBIMAGEPROC >( "glGetCompressedTextureSubImage",
+                                                                         out _glGetCompressedTextureSubImage );
 
         _glGetCompressedTextureSubImage( texture, level, xoffset, yoffset, zoffset, width, height, depth, bufSize, pixels );
     }
 
-    public byte[] GetCompressedTextureSubImage( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLsizei bufSize )
+    public byte[] GetCompressedTextureSubImage( GLuint texture, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width,
+                                                GLsizei height, GLsizei depth, GLsizei bufSize )
     {
         var pixels = new byte[ bufSize ];
 
-        GetDelegateForFunction< PFNGLGETCOMPRESSEDTEXTURESUBIMAGEPROC >( "glGetCompressedTextureSubImage", out _glGetCompressedTextureSubImage );
+        GetDelegateForFunction< PFNGLGETCOMPRESSEDTEXTURESUBIMAGEPROC >( "glGetCompressedTextureSubImage",
+                                                                         out _glGetCompressedTextureSubImage );
 
         fixed ( void* ptrPixels = &pixels[ 0 ] )
         {
@@ -9435,14 +9475,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void SpecializeShader( GLuint shader, GLchar* pEntryPoint, GLuint numSpecializationConstants, GLuint* pConstantIndex, GLuint* pConstantValue )
+    public void SpecializeShader( GLuint shader, GLchar* pEntryPoint, GLuint numSpecializationConstants, GLuint* pConstantIndex,
+                                  GLuint* pConstantValue )
     {
         GetDelegateForFunction< PFNGLSPECIALIZESHADERPROC >( "glSpecializeShader", out _glSpecializeShader );
 
         _glSpecializeShader( shader, pEntryPoint, numSpecializationConstants, pConstantIndex, pConstantValue );
     }
 
-    public void SpecializeShader( GLuint shader, string pEntryPoint, GLuint numSpecializationConstants, GLuint[] pConstantIndex, GLuint[] pConstantValue )
+    public void SpecializeShader( GLuint shader, string pEntryPoint, GLuint numSpecializationConstants, GLuint[] pConstantIndex,
+                                  GLuint[] pConstantValue )
     {
         var pEntryPointBytes = Encoding.UTF8.GetBytes( pEntryPoint );
 
@@ -9460,30 +9502,37 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void MultiDrawArraysIndirectCount( GLenum mode, void* indirect, GLintptr drawcount, GLsizei maxdrawcount, GLsizei stride )
     {
-        GetDelegateForFunction< PFNGLMULTIDRAWARRAYSINDIRECTCOUNTPROC >( "glMultiDrawArraysIndirectCount", out _glMultiDrawArraysIndirectCount );
+        GetDelegateForFunction< PFNGLMULTIDRAWARRAYSINDIRECTCOUNTPROC >( "glMultiDrawArraysIndirectCount",
+                                                                         out _glMultiDrawArraysIndirectCount );
 
         _glMultiDrawArraysIndirectCount( mode, indirect, drawcount, maxdrawcount, stride );
     }
 
-    public void MultiDrawArraysIndirectCount( GLenum mode, DrawArraysIndirectCommand indirect, GLintptr drawcount, GLsizei maxdrawcount, GLsizei stride )
+    public void MultiDrawArraysIndirectCount( GLenum mode, DrawArraysIndirectCommand indirect, GLintptr drawcount, GLsizei maxdrawcount,
+                                              GLsizei stride )
     {
-        GetDelegateForFunction< PFNGLMULTIDRAWARRAYSINDIRECTCOUNTPROC >( "glMultiDrawArraysIndirectCount", out _glMultiDrawArraysIndirectCount );
+        GetDelegateForFunction< PFNGLMULTIDRAWARRAYSINDIRECTCOUNTPROC >( "glMultiDrawArraysIndirectCount",
+                                                                         out _glMultiDrawArraysIndirectCount );
 
         _glMultiDrawArraysIndirectCount( mode, &indirect, drawcount, maxdrawcount, stride );
     }
 
     // ========================================================================
 
-    public void MultiDrawElementsIndirectCount( GLenum mode, GLenum type, void* indirect, GLintptr drawcount, GLsizei maxdrawcount, GLsizei stride )
+    public void MultiDrawElementsIndirectCount( GLenum mode, GLenum type, void* indirect, GLintptr drawcount, GLsizei maxdrawcount,
+                                                GLsizei stride )
     {
-        GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSINDIRECTCOUNTPROC >( "glMultiDrawElementsIndirectCount", out _glMultiDrawElementsIndirectCount );
+        GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSINDIRECTCOUNTPROC >( "glMultiDrawElementsIndirectCount",
+                                                                           out _glMultiDrawElementsIndirectCount );
 
         _glMultiDrawElementsIndirectCount( mode, type, indirect, drawcount, maxdrawcount, stride );
     }
 
-    public void MultiDrawElementsIndirectCount( GLenum mode, GLenum type, DrawElementsIndirectCommand indirect, GLintptr drawcount, GLsizei maxdrawcount, GLsizei stride )
+    public void MultiDrawElementsIndirectCount( GLenum mode, GLenum type, DrawElementsIndirectCommand indirect, GLintptr drawcount,
+                                                GLsizei maxdrawcount, GLsizei stride )
     {
-        GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSINDIRECTCOUNTPROC >( "glMultiDrawElementsIndirectCount", out _glMultiDrawElementsIndirectCount );
+        GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSINDIRECTCOUNTPROC >( "glMultiDrawElementsIndirectCount",
+                                                                           out _glMultiDrawElementsIndirectCount );
 
         _glMultiDrawElementsIndirectCount( mode, type, &indirect, drawcount, maxdrawcount, stride );
     }
@@ -9545,7 +9594,8 @@ public unsafe partial class GLBindings : IGLBindings
                                              GLenum* type,
                                              GLchar* name )
     {
-        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKVARYINGPROC >( "glGetTransformFeedbackVarying", out _glGetTransformFeedbackVarying );
+        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKVARYINGPROC >( "glGetTransformFeedbackVarying",
+                                                                        out _glGetTransformFeedbackVarying );
 
         _glGetTransformFeedbackVarying( program, index, bufSize, length, size, type, name );
     }
@@ -9556,7 +9606,8 @@ public unsafe partial class GLBindings : IGLBindings
     {
         var name = new GLchar[ bufSize ];
 
-        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKVARYINGPROC >( "glGetTransformFeedbackVarying", out _glGetTransformFeedbackVarying );
+        GetDelegateForFunction< PFNGLGETTRANSFORMFEEDBACKVARYINGPROC >( "glGetTransformFeedbackVarying",
+                                                                        out _glGetTransformFeedbackVarying );
 
         fixed ( GLsizei* pSize = &size )
         {
@@ -10373,11 +10424,11 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void RenderbufferStorage( GLenum target, GLenum internalformat, GLsizei width, GLsizei height )
+    public void RenderbufferStorage( GLenum target, GLenum internalFormat, GLsizei width, GLsizei height )
     {
         GetDelegateForFunction< PFNGLRENDERBUFFERSTORAGEPROC >( "glRenderbufferStorage", out _glRenderbufferStorage );
 
-        _glRenderbufferStorage( target, internalformat, width, height );
+        _glRenderbufferStorage( target, internalFormat, width, height );
     }
 
     // ========================================================================
@@ -10511,14 +10562,16 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetFramebufferAttachmentParameteriv( GLenum target, GLenum attachment, GLenum pname, GLint* parameters )
     {
-        GetDelegateForFunction< PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC >( "glGetFramebufferAttachmentParameteriv", out _glGetFramebufferAttachmentParameteriv );
+        GetDelegateForFunction< PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC >( "glGetFramebufferAttachmentParameteriv",
+                                                                                out _glGetFramebufferAttachmentParameteriv );
 
         _glGetFramebufferAttachmentParameteriv( target, attachment, pname, parameters );
     }
 
     public void GetFramebufferAttachmentParameteriv( GLenum target, GLenum attachment, GLenum pname, ref GLint[] parameters )
     {
-        GetDelegateForFunction< PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC >( "glGetFramebufferAttachmentParameteriv", out _glGetFramebufferAttachmentParameteriv );
+        GetDelegateForFunction< PFNGLGETFRAMEBUFFERATTACHMENTPARAMETERIVPROC >( "glGetFramebufferAttachmentParameteriv",
+                                                                                out _glGetFramebufferAttachmentParameteriv );
 
         fixed ( GLint* p = &parameters[ 0 ] )
         {
@@ -10555,11 +10608,12 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void RenderbufferStorageMultisample( GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height )
+    public void RenderbufferStorageMultisample( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width, GLsizei height )
     {
-        GetDelegateForFunction< PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC >( "glRenderbufferStorageMultisample", out _glRenderbufferStorageMultisample );
+        GetDelegateForFunction< PFNGLRENDERBUFFERSTORAGEMULTISAMPLEPROC >( "glRenderbufferStorageMultisample",
+                                                                           out _glRenderbufferStorageMultisample );
 
-        _glRenderbufferStorageMultisample( target, samples, internalformat, width, height );
+        _glRenderbufferStorageMultisample( target, samples, internalFormat, width, height );
     }
 
     // ========================================================================
@@ -10708,11 +10762,11 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void TexBuffer( GLenum target, GLenum internalformat, GLuint buffer )
+    public void TexBuffer( GLenum target, GLenum internalFormat, GLuint buffer )
     {
         GetDelegateForFunction< PFNGLTEXBUFFERPROC >( "glTexBuffer", out _glTexBuffer );
 
-        _glTexBuffer( target, internalformat, buffer );
+        _glTexBuffer( target, internalFormat, buffer );
     }
 
     // ========================================================================
@@ -10877,7 +10931,8 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetActiveUniformBlockName( GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformBlockName )
+    public void GetActiveUniformBlockName( GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei* length,
+                                           GLchar* uniformBlockName )
     {
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName", out _glGetActiveUniformBlockName );
 
@@ -10935,15 +10990,18 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void DrawRangeElementsBaseVertex( GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, void* indices, GLint basevertex )
+    public void DrawRangeElementsBaseVertex( GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, void* indices,
+                                             GLint basevertex )
     {
-        GetDelegateForFunction< PFNGLDRAWRANGEELEMENTSBASEVERTEXPROC >( "glDrawRangeElementsBaseVertex", out _glDrawRangeElementsBaseVertex );
+        GetDelegateForFunction< PFNGLDRAWRANGEELEMENTSBASEVERTEXPROC >( "glDrawRangeElementsBaseVertex",
+                                                                        out _glDrawRangeElementsBaseVertex );
 
         _glDrawRangeElementsBaseVertex( mode, start, end, count, type, indices, basevertex );
     }
 
     /// <inheritdoc />
-    public void DrawRangeElementsBaseVertex< T >( GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, T[] indices, GLint basevertex )
+    public void DrawRangeElementsBaseVertex< T >( GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, T[] indices,
+                                                  GLint basevertex )
         where T : unmanaged, IUnsignedNumber< T >
     {
         fixed ( void* p = &indices[ 0 ] )
@@ -10955,18 +11013,22 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void DrawElementsInstancedBaseVertex( GLenum mode, GLsizei count, GLenum type, void* indices, GLsizei instancecount, GLint basevertex )
+    public void DrawElementsInstancedBaseVertex( GLenum mode, GLsizei count, GLenum type, void* indices, GLsizei instancecount,
+                                                 GLint basevertex )
     {
-        GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXPROC >( "glDrawElementsInstancedBaseVertex", out _glDrawElementsInstancedBaseVertex );
+        GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXPROC >( "glDrawElementsInstancedBaseVertex",
+                                                                            out _glDrawElementsInstancedBaseVertex );
 
         _glDrawElementsInstancedBaseVertex( mode, count, type, indices, instancecount, basevertex );
     }
 
     /// <inheritdoc />
-    public void DrawElementsInstancedBaseVertex< T >( GLenum mode, GLsizei count, GLenum type, T[] indices, GLsizei instancecount, GLint basevertex )
+    public void DrawElementsInstancedBaseVertex< T >( GLenum mode, GLsizei count, GLenum type, T[] indices, GLsizei instancecount,
+                                                      GLint basevertex )
         where T : unmanaged, IUnsignedNumber< T >
     {
-        GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXPROC >( "glDrawElementsInstancedBaseVertex", out _glDrawElementsInstancedBaseVertex );
+        GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXPROC >( "glDrawElementsInstancedBaseVertex",
+                                                                            out _glDrawElementsInstancedBaseVertex );
 
         fixed ( void* p = &indices[ 0 ] )
         {
@@ -10976,14 +11038,17 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void MultiDrawElementsBaseVertex( GLenum mode, GLsizei* count, GLenum type, void** indices, GLsizei drawcount, GLint* basevertex )
+    public void MultiDrawElementsBaseVertex( GLenum mode, GLsizei* count, GLenum type, void** indices, GLsizei drawcount,
+                                             GLint* basevertex )
     {
-        GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSBASEVERTEXPROC >( "glMultiDrawElementsBaseVertex", out _glMultiDrawElementsBaseVertex );
+        GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSBASEVERTEXPROC >( "glMultiDrawElementsBaseVertex",
+                                                                        out _glMultiDrawElementsBaseVertex );
 
         _glMultiDrawElementsBaseVertex( mode, count, type, indices, drawcount, basevertex );
     }
 
-    public void MultiDrawElementsBaseVertex< T >( GLenum mode, GLenum type, T[][] indices, GLint[] basevertex ) where T : unmanaged, IUnsignedNumber< T >
+    public void MultiDrawElementsBaseVertex< T >( GLenum mode, GLenum type, T[][] indices, GLint[] basevertex )
+        where T : unmanaged, IUnsignedNumber< T >
     {
         if ( indices.Length != basevertex.Length )
         {
@@ -11003,7 +11068,8 @@ public unsafe partial class GLBindings : IGLBindings
             }
         }
 
-        GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSBASEVERTEXPROC >( "glMultiDrawElementsBaseVertex", out _glMultiDrawElementsBaseVertex );
+        GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSBASEVERTEXPROC >( "glMultiDrawElementsBaseVertex",
+                                                                        out _glMultiDrawElementsBaseVertex );
 
         fixed ( GLsizei* cp = &counts[ 0 ] )
         {

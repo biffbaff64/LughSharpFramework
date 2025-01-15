@@ -165,7 +165,7 @@ public class TextureArray : GLTexture, IManaged
                                     data.Depth,
                                     0,
                                     data.InternalFormat,
-                                    data.GLType,
+                                    data.GLDataType,
                                     null );
 
         if ( !data.Prepared )

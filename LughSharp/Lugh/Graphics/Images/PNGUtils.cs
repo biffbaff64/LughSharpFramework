@@ -175,7 +175,7 @@ public class PNGUtils
         }
     }
 
-    private static long CalculateTotalIDATSize( byte[] pngData )
+    public static long CalculateTotalIDATSize( byte[] pngData )
     {
         var totalIDATSize = 0L;
         var idatIndex     = 0;

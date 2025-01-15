@@ -40,7 +40,7 @@ public class GLOnlyTextureData : ITextureData
 {
     public int               MipLevel       { get; set; } = 0;
     public int               InternalFormat { get; set; }
-    public PixelType.Format? PixelFormat         { get; set; }
+    public PixelType.Format? PixelFormat    { get; set; }
     public int               Type           { get; set; }
     public int               Width          { get; set; } = 0;
     public int               Height         { get; set; } = 0;
@@ -61,7 +61,7 @@ public class GLOnlyTextureData : ITextureData
     /// <see cref="IGL.GL_RGB"/>, <see cref="IGL.GL_RGBA"/>.
     /// </param>
     /// <param name="format">
-    /// Specifies the format of the texel data. Must match internalformat.
+    /// Specifies the format of the texel data. Must match internalFormat.
     /// The following symbolic values are accepted:
     /// <see cref="IGL.GL_ALPHA"/>, <see cref="IGL.GL_RGB"/>, <see cref="IGL.GL_RGBA"/>,
     /// <see cref="IGL.GL_LUMINANCE"/>, and <see cref="IGL.GL_LUMINANCE_ALPHA"/>.
@@ -82,7 +82,7 @@ public class GLOnlyTextureData : ITextureData
         Height         = height;
         MipLevel       = mipMapLevel;
         InternalFormat = internalFormat;
-        PixelFormat         = PixmapFormat.ToPixmapPixelFormat( format );
+        PixelFormat    = PixmapFormat.ToPixmapPixelFormat( format );
         Type           = type;
     }
 
