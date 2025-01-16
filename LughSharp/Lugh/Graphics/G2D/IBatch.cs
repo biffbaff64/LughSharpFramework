@@ -265,7 +265,7 @@ public interface IBatch : IDisposable
     /// Draws a rectangle with the bottom left corner at x,y and stretching the region
     /// to cover the given width and height.
     /// </summary>
-    void Draw( Texture texture, float posX, float posY, int width, int height );
+    void Draw( Texture texture, float posX, float posY, float width, float height );
 
     /// <summary>
     /// Draws a rectangle using the given vertices. There must be 4 vertices, each made

@@ -24,8 +24,6 @@
 
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
-using System.Numerics;
-
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
@@ -71,17 +69,7 @@ public partial class ShaderProgram
 
     private const int CACHED_NOT_FOUND = -1;
     private const int NOT_CACHED       = -2;
-
-    // ========================================================================
-
-    [PublicAPI]
-    public struct Vertex( Vector3 position, Vector4 colour, Vector2 texCoords )
-    {
-        public Vector3 Position  = position;
-        public Vector4 Colour    = colour;
-        public Vector2 TexCoords = texCoords;
-    }
-
+    
     // ========================================================================
 
     public bool     IsCompiled           { get; set; }
@@ -318,6 +306,12 @@ public partial class ShaderProgram
     {
         CheckManaged();
         GdxApi.Bindings.UseProgram( ( uint )Handle );
+    }
+
+    public void Unbind()
+    {
+        CheckManaged();
+        GdxApi.Bindings.UseProgram( 0 );
     }
 
     /// <summary>

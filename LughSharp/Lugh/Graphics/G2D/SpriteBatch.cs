@@ -74,11 +74,12 @@ public class SpriteBatch : IBatch
     private readonly Matrix4 _combinedMatrix = new();
     private readonly bool    _ownsShader;
 
-    private Mesh?          _mesh;
-    private ShaderProgram? _shader;
-    private Texture?       _lastSuccessfulTexture = null;
-    private int            _nullTextureCount      = 0;
-    private ShaderProgram? _customShader          = null;
+    private        Mesh?          _mesh;
+    private        ShaderProgram? _shader;
+    private        Texture?       _lastSuccessfulTexture = null;
+    private        int            _nullTextureCount      = 0;
+    private        ShaderProgram? _customShader          = null;
+    private unsafe uint*          _vbo;
 
     // ========================================================================
     // ========================================================================
@@ -118,8 +119,24 @@ public class SpriteBatch : IBatch
         }
 
         IsDrawing = false;
+        Vertices  = new float[ size * Sprite.SPRITE_SIZE ];
 
-        var vertexDataType = ( GdxApi.Bindings.GetOpenGLVersion().major >= 3 ) //TODO:
+        Initialise( size );
+
+        if ( defaultShader == null )
+        {
+            _shader     = CreateDefaultShader();
+            _ownsShader = true;
+        }
+        else
+        {
+            _shader = defaultShader;
+        }
+    }
+
+    private unsafe void Initialise( int size )
+    {
+        var vertexDataType = ( GdxApi.Bindings.GetOpenGLVersion().major >= 3 )
             ? Mesh.VertexDataType.VertexBufferObjectWithVAO
             : Mesh.VertexDataType.VertexArray;
 
@@ -132,8 +149,6 @@ public class SpriteBatch : IBatch
                           new VertexAttribute( VertexAttributes.Usage.TEXTURE_COORDINATES, 2, $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" ) );
 
         ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
-
-        Vertices = new float[ size * Sprite.SPRITE_SIZE ];
 
         var len     = size * 6;
         var indices = new short[ len ];
@@ -150,15 +165,46 @@ public class SpriteBatch : IBatch
 
         _mesh.SetIndices( indices );
 
-        if ( defaultShader == null )
+        GdxApi.Bindings.GenBuffers( 1, _vbo );
+
+        fixed ( void* ptr = &Vertices[ 0 ] )
         {
-            _shader     = CreateDefaultShader();
-            _ownsShader = true;
+            GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, *_vbo );
+            GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
+                                        Vertices.Length * sizeof( float ),
+                                        ptr,
+                                        ( int )BufferUsageHint.DynamicDraw );
         }
-        else
-        {
-            _shader = defaultShader;
-        }
+
+        SetupVertexAttributes();
+
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+    }
+
+    private void SetupVertexAttributes()
+    {
+        GdxRuntimeException.ThrowIfNull( _shader );
+
+        _shader.Bind();
+
+        var positionAttribute  = ( uint )_shader.GetAttributeLocation( "a_position" );
+        var colorAttribute     = ( uint )_shader.GetAttributeLocation( "a_colorPacked" );
+        var texCoordsAttribute = ( uint )_shader.GetAttributeLocation( "a_texCoords" );
+
+        var stride = 5 * sizeof( float );
+
+        GdxApi.Bindings.EnableVertexAttribArray( positionAttribute );
+        GdxApi.Bindings.VertexAttribPointer( positionAttribute, 2, IGL.GL_FLOAT, false, stride, 0 );
+
+        GdxApi.Bindings.EnableVertexAttribArray( colorAttribute );
+        GdxApi.Bindings.VertexAttribPointer( colorAttribute, 1, IGL.GL_FLOAT, false, stride, 2 * sizeof( float ) );
+
+        GdxApi.Bindings.EnableVertexAttribArray( texCoordsAttribute );
+        GdxApi.Bindings.VertexAttribPointer( texCoordsAttribute, 2, IGL.GL_FLOAT, false, stride, 3 * sizeof( float ) );
+
+        _shader.Unbind();
+
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
     }
 
     /// <summary>
@@ -220,7 +266,7 @@ public class SpriteBatch : IBatch
             GdxApi.Bindings.Disable( IGL.GL_BLEND );
         }
 
-        GdxApi.Bindings.UseProgram( 0 );
+        _shader?.Unbind();
     }
 
     /// <summary>
@@ -616,7 +662,7 @@ public class SpriteBatch : IBatch
     /// <param name="posY"> Y coordinate in pixels. </param>
     /// <param name="width"> Width of Texture in pixels. </param>
     /// <param name="height"> Height of Texture in pixerls. </param>
-    public virtual void Draw( Texture texture, float posX, float posY, int width, int height )
+    public virtual void Draw( Texture texture, float posX, float posY, float width, float height )
     {
         Validate( texture );
 
@@ -1391,7 +1437,7 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// Returns a new instance of the default shader used by SpriteBatch when no shader is specified.
+    /// Returns a new instance of the default shader used by SpriteBatch for GL2 when no shader is specified.
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
@@ -1445,7 +1491,7 @@ public class SpriteBatch : IBatch
                 Logger.Debug( "Custom Shader is not compiled." );
             }
 
-            _customShader.SetUniformMatrix( "u_projectionMatrix", _combinedMatrix );
+            _customShader.SetUniformMatrix( "u_projTrans", _combinedMatrix );
             _customShader.SetUniformi( "u_texture", 0 );
         }
         else
@@ -1455,7 +1501,7 @@ public class SpriteBatch : IBatch
                 Logger.Debug( "Custom Shader is not compiled." );
             }
 
-            _shader?.SetUniformMatrix( "u_projectionMatrix", _combinedMatrix );
+            _shader?.SetUniformMatrix( "u_projTrans", _combinedMatrix );
             _shader?.SetUniformi( "u_texture", 0 );
         }
     }
