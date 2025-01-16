@@ -45,12 +45,13 @@ public interface IPolygonBatch : IBatch
     /// </summary>
     void Draw( PolygonRegion region, float x, float y, float width, float height );
 
-    /// Draws the polygon region with the bottom left corner at x,y and stretching
-    /// the region to cover the given width and height. The polygon region is offset
-    /// by originX, originY relative to the origin. Scale specifies the scaling factor
-    /// by which the polygon region should be scaled around originX, originY. Rotation
-    /// specifies the angle of counter clockwise rotation of the rectangle around originX
-    /// originY.
+    /// <summary>
+    /// Draws the polygon region with the bottom left corner at x,y and stretching the region to
+    /// cover the given width and height. The polygon region is offset by originX, originY relative
+    /// to the origin. Scale specifies the scaling factor by which the polygon region should be
+    /// scaled around originX, originY. Rotation specifies the angle of counter clockwise rotation
+    /// of the rectangle around originX originY.
+    /// </summary>
     void Draw( PolygonRegion region,
                float x,
                float y,

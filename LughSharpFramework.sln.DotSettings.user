@@ -11,4 +11,5 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\richi\.nuget\packages\dotglfw\1.2.0\lib\netstandard2.0\DotGLFW.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Development\Projects\CSharp\ConsoleApp1\bin\Debug\net7.0\SixLabors.ImageSharp.dll" /&gt;&#xD;
-&lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
+&lt;/AssemblyExplorer&gt;</s:String>
+	</wpf:ResourceDictionary>

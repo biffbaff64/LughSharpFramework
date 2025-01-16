@@ -360,9 +360,9 @@ GRAPHICS/G2D
     --------
     - IP   - IP   - CpuSpriteBatch                  Some methods have too many parameters
     - DONE - DONE - IBatch
-    - IP   - IP   - IPolygonBatch                   Some methods have too many parameters
+    - DONE - IP   - IPolygonBatch                   Some methods have too many parameters
     - IP   - IP   - PolygonSpriteBatch              Some methods have too many parameters
-    - IP   - IP   - SpriteBatch                     Some methods have too many parameters
+    - IP   - IP   - SpriteBatch
 
 GRAPHICS/G3D
 ------------

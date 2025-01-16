@@ -1391,7 +1391,7 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// Returns a new instance of the default shader used by SpriteBatch for GL2 when no shader is specified.
+    /// Returns a new instance of the default shader used by SpriteBatch when no shader is specified.
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
@@ -1445,7 +1445,7 @@ public class SpriteBatch : IBatch
                 Logger.Debug( "Custom Shader is not compiled." );
             }
 
-            _customShader.SetUniformMatrix( "u_projTrans", _combinedMatrix );
+            _customShader.SetUniformMatrix( "u_projectionMatrix", _combinedMatrix );
             _customShader.SetUniformi( "u_texture", 0 );
         }
         else
@@ -1455,7 +1455,7 @@ public class SpriteBatch : IBatch
                 Logger.Debug( "Custom Shader is not compiled." );
             }
 
-            _shader?.SetUniformMatrix( "u_projTrans", _combinedMatrix );
+            _shader?.SetUniformMatrix( "u_projectionMatrix", _combinedMatrix );
             _shader?.SetUniformi( "u_texture", 0 );
         }
     }
