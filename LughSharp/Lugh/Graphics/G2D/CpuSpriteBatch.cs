@@ -25,7 +25,6 @@
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 
@@ -348,7 +347,7 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <inheritdoc />
-    public override void Draw( Texture? texture, float posX, float posY, int width, int height )
+    public override void Draw( Texture? texture, float posX, float posY, float width, float height )
     {
         ArgumentNullException.ThrowIfNull( texture );
 

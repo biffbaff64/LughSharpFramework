@@ -763,7 +763,8 @@ public class PolygonSpriteBatch : IPolygonBatch
         Draw( texture, x, y, texture.Width, texture.Height );
     }
 
-    public void Draw( Texture texture, float posX, float posY, int width, int height )
+    /// <inheritdoc/>
+    public void Draw( Texture texture, float posX, float posY, float width, float height )
     {
         if ( !IsDrawing )
         {
