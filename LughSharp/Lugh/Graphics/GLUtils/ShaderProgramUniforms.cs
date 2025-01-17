@@ -274,7 +274,7 @@ public partial class ShaderProgram
     /// </summary>
     /// <param name="location"></param>
     /// <param name="value"></param>
-    public void SetUniformf( int location, int value )
+    public void SetUniformf( int location, float value )
     {
         CheckManaged();
         GdxApi.Bindings.Uniform1f( location, value );

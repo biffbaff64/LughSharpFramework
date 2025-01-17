@@ -78,7 +78,7 @@ public class SelectBox< T > : Widget, IDisableable
 
     public SelectBox( SelectBoxStyle style )
     {
-        _alignment = Align.LEFT;
+        _alignment = Alignment.LEFT;
         _items     = [ ];
 
         _selection = new ArraySelection< T >( _items )
@@ -395,7 +395,7 @@ public class SelectBox< T > : Widget, IDisableable
     /// and <see cref="SetAlignment(int)"/> to set the alignment in the list shown when the
     /// select box is open.
     /// </summary>
-    /// <param name="alignment"> See <see cref="Align"/>. </param>
+    /// <param name="alignment"> See <see cref="Alignment"/>. </param>
     public void SetAlignment( int alignment )
     {
         _alignment = alignment;

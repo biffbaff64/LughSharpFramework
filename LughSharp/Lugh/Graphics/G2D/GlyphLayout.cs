@@ -138,7 +138,7 @@ public class GlyphLayout : IResetable
     /// <param name="str"> A string holding the text. </param>
     public void SetText( BitmapFont font, string str )
     {
-        SetText( font, str, 0, str.Length, font.GetColor(), 0, Align.LEFT, false, null );
+        SetText( font, str, 0, str.Length, font.GetColor(), 0, Alignment.LEFT, false, null );
     }
 
     /// <summary>
@@ -172,7 +172,7 @@ public class GlyphLayout : IResetable
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="halign">
-    /// Horizontal alignment of the text, see also <see cref="Align"/>.
+    /// Horizontal alignment of the text, see also <see cref="Alignment"/>.
     /// </param>
     /// <param name="targetWidth">
     /// The width used for alignment, line wrapping, and truncation. May be zero if
@@ -574,7 +574,7 @@ public class GlyphLayout : IResetable
 
         CalculateRunWidths( fontData );
 
-        if ( ( halign & Align.LEFT ) == 0 )
+        if ( ( halign & Alignment.LEFT ) == 0 )
         {
             AlignRuns( targetWidth, halign );
         }
@@ -615,7 +615,7 @@ public class GlyphLayout : IResetable
     /// <param name="halign">Horizontal alignment option.</param>
     private void AlignRuns( float targetWidth, int halign )
     {
-        var isCenterAligned = ( halign & Align.CENTER ) != 0;
+        var isCenterAligned = ( halign & Alignment.CENTER ) != 0;
         var lineWidth       = 0f;
         var lineY           = float.MinValue;
         var lineStart       = 0;

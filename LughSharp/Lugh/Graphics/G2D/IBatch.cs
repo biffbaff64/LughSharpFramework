@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
+
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 
 namespace LughSharp.Lugh.Graphics.G2D;
@@ -97,12 +98,9 @@ public interface IBatch : IDisposable
     /// </returns>
     float ColorPackedABGR { get; set; }
 
-    int BlendSrcFunc { get; }
-
-    int BlendDstFunc { get; }
-
+    int BlendSrcFunc      { get; }
+    int BlendDstFunc      { get; }
     int BlendSrcFuncAlpha { get; }
-
     int BlendDstFuncAlpha { get; }
 
     /// <summary>

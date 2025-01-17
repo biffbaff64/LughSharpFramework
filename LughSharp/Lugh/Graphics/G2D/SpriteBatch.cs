@@ -76,12 +76,12 @@ public class SpriteBatch : IBatch
     private          Matrix4 _combinedMatrix = new();
     private readonly bool    _ownsShader;
 
-    private        Mesh?          _mesh;
-    private        ShaderProgram? _shader;
-    private        Texture?       _lastSuccessfulTexture = null;
-    private        int            _nullTextureCount      = 0;
-    private        ShaderProgram? _customShader          = null;
-    private unsafe uint*          _vbo;
+    private Mesh?          _mesh;
+    private ShaderProgram? _shader;
+    private Texture?       _lastSuccessfulTexture = null;
+    private int            _nullTextureCount      = 0;
+    private ShaderProgram? _customShader          = null;
+    private uint           _vbo;
 
     // ========================================================================
     // ========================================================================
@@ -123,8 +123,6 @@ public class SpriteBatch : IBatch
         IsDrawing = false;
         Vertices  = new float[ size * Sprite.SPRITE_SIZE ];
 
-        Initialise( size );
-
         if ( defaultShader == null )
         {
             _shader     = CreateDefaultShader();
@@ -134,6 +132,20 @@ public class SpriteBatch : IBatch
         {
             _shader = defaultShader;
         }
+
+        unsafe
+        {
+            // Initialize the VBO
+            var vboArray = new uint[ 1 ];
+
+            fixed ( uint* ptr = &vboArray[ 0 ] )
+            {
+                GdxApi.Bindings.GenBuffers( 1, ptr );
+                _vbo = *ptr;
+            }
+        }
+
+        Initialise( size );
     }
 
     /// <summary>
@@ -151,9 +163,9 @@ public class SpriteBatch : IBatch
                           false,
                           size * 4,
                           size * 6,
-                          new VertexAttribute( VertexAttributes.Usage.POSITION, 2, ShaderProgram.POSITION_ATTRIBUTE ),
-                          new VertexAttribute( VertexAttributes.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE ),
-                          new VertexAttribute( VertexAttributes.Usage.TEXTURE_COORDINATES, 2, $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" ) );
+                          new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 2, ShaderProgram.POSITION_ATTRIBUTE ),
+                          new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE ),
+                          new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2, $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" ) );
 
         ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
 
@@ -172,11 +184,11 @@ public class SpriteBatch : IBatch
 
         _mesh.SetIndices( indices );
 
-        GdxApi.Bindings.GenBuffers( 1, _vbo );
+        _vbo = GdxApi.Bindings.GenBuffer();
 
         fixed ( void* ptr = &Vertices[ 0 ] )
         {
-            GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, *_vbo );
+            GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
             GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
                                         Vertices.Length * sizeof( float ),
                                         ptr,
@@ -1219,10 +1231,7 @@ public class SpriteBatch : IBatch
     /// </summary>
     public void Flush()
     {
-        if ( Idx == 0 )
-        {
-            return;
-        }
+        if ( Idx == 0 ) return;
 
         RenderCalls++;
         TotalRenderCalls++;
@@ -1291,10 +1300,7 @@ public class SpriteBatch : IBatch
     /// </summary>
     public void DisableBlending()
     {
-        if ( BlendingDisabled )
-        {
-            return;
-        }
+        if ( BlendingDisabled ) return;
 
         Flush();
         BlendingDisabled = true;
@@ -1305,10 +1311,7 @@ public class SpriteBatch : IBatch
     /// </summary>
     public void EnableBlending()
     {
-        if ( !BlendingDisabled )
-        {
-            return;
-        }
+        if ( !BlendingDisabled ) return;
 
         Flush();
         BlendingDisabled = false;
@@ -1425,12 +1428,12 @@ public class SpriteBatch : IBatch
                                         "in vec2 a_texCoords;\n"+
                                         "out float v_colorPacked;\n"+
                                         "out vec2 v_texCoords;\n"+
-                                        "uniform mat4 u_projectionMatrix;\n"+
+                                        "uniform mat4 u_projTrans;\n"+
                                         "uniform mat4 u_viewMatrix;\n"+
                                         "uniform mat4 u_modelMatrix;\n"+
                                         "void main()\n"+
                                         "{\n"+
-                                        "    gl_Position = u_projectionMatrix * u_viewMatrix * u_modelMatrix * vec4(a_position, 0.0, 1.0);\n"+
+                                        "    gl_Position = u_projTrans * u_viewMatrix * u_modelMatrix * vec4(a_position, 0.0, 1.0);\n"+
                                         "    v_colorPacked = a_colorPacked;\n"+
                                         "    v_texCoords = a_texCoords;\n"+
                                         "}\n";
@@ -1441,10 +1444,10 @@ public class SpriteBatch : IBatch
                                         "uniform sampler2D u_texture;\n"+
                                         "vec4 unpackColor(float packedColor) {\n"+
                                         "    uint color = uint(packedColor);\n"+
-                                        "    float b = float((color >> 0) & 0xFF) / 255.0;\n"+
-                                        "    float g = float((color >> 8) & 0xFF) / 255.0;\n"+
-                                        "    float r = float((color >> 16) & 0xFF) / 255.0;\n"+
-                                        "    float a = float((color >> 24) & 0xFF) / 255.0;\n"+
+                                        "    float b = float((color >> 0) & 0xFFu) / 255.0;\n"+
+                                        "    float g = float((color >> 8) & 0xFFu) / 255.0;\n"+
+                                        "    float r = float((color >> 16) & 0xFFu) / 255.0;\n"+
+                                        "    float a = float((color >> 24) & 0xFFu) / 255.0;\n"+
                                         "    return vec4(r, g, b, a);\n"+
                                         "}\n"+
                                         "void main()\n"+
@@ -1586,7 +1589,9 @@ public class SpriteBatch : IBatch
 
             for ( var i = 0; i < 20; i++ )
             {
-                Logger.Debug( $"Vertices[{i}]: {Vertices[ i ]}" );
+                Logger.Debug( i is 2 or 7 or 12 or 17
+                                  ? $"Vertices[{i}]: {NumberUtils.FloatToHexString( Vertices[ i ] )}"
+                                  : $"Vertices[{i}]: {Vertices[ i ]}" );
             }
 
             Logger.Debug( "End DebugVertices()" );

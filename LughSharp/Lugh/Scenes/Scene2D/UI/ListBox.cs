@@ -93,7 +93,7 @@ public class ListBox< T > : Widget
     public ArraySelection< T > Selection    { get; set; } = null!;
     public List< T >           Items        { get; set; } = new();
     public float               ItemHeight   { get; set; }
-    public int                 Alignment    { get; set; } = Align.LEFT;
+    public int                 Alignment    { get; set; } = Lugh.Utils.Alignment.LEFT;
     public bool                TypeToSelect { get; set; }
 
     public override float PrefWidth

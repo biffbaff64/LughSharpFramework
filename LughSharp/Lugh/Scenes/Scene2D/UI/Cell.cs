@@ -39,10 +39,10 @@ public class Cell : IResetable
     private const int   ZEROI   = 0;
     private const int   ONEI    = 1;
     private const int   CENTERI = ONEI;
-    private const int   TOPI    = Align.TOP;
-    private const int   BOTTOMI = Align.BOTTOM;
-    private const int   LEFTI   = Align.LEFT;
-    private const int   RIGHTI  = Align.RIGHT;
+    private const int   TOPI    = Lugh.Utils.Alignment.TOP;
+    private const int   BOTTOMI = Lugh.Utils.Alignment.BOTTOM;
+    private const int   LEFTI   = Lugh.Utils.Alignment.LEFT;
+    private const int   RIGHTI  = Lugh.Utils.Alignment.RIGHT;
 
     // ========================================================================
 
@@ -60,7 +60,7 @@ public class Cell : IResetable
     public Value? PadLeft     { get; set; }
     public Value? PadBottom   { get; set; }
     public Value? PadRight    { get; set; }
-    public int    Alignment   { get; set; } = Align.NONE;
+    public int    Alignment   { get; set; } = Lugh.Utils.Alignment.NONE;
     public int    ExpandX     { get; set; }
     public int    ExpandY     { get; set; }
     public int    Colspan     { get; set; }
@@ -974,9 +974,9 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the cell. Set to <see cref="Align.CENTER"/>,
-    /// <see cref="Align.TOP"/>, <see cref="Align.BOTTOM"/>, <see cref="Align.LEFT"/>,
-    /// <see cref="Align.RIGHT"/>, or any combination of those.
+    /// Sets the alignment of the actor within the cell. Set to <see cref="Lugh.Utils.Alignment.CENTER"/>,
+    /// <see cref="Lugh.Utils.Alignment.TOP"/>, <see cref="Lugh.Utils.Alignment.BOTTOM"/>, <see cref="Lugh.Utils.Alignment.LEFT"/>,
+    /// <see cref="Lugh.Utils.Alignment.RIGHT"/>, or any combination of those.
     /// </summary>
     public Cell SetAlignment( int align )
     {
@@ -986,7 +986,7 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Sets the alignment of the actor within the cell to <see cref="Align.CENTER"/>.
+    /// Sets the alignment of the actor within the cell to <see cref="Lugh.Utils.Alignment.CENTER"/>.
     /// This clears any other alignment.
     /// </summary>
     public Cell Center()
@@ -997,72 +997,72 @@ public class Cell : IResetable
     }
 
     /// <summary>
-    /// Adds <see cref="Align.TOP"/> and clears <see cref="Align.BOTTOM"/> for
+    /// Adds <see cref="Lugh.Utils.Alignment.TOP"/> and clears <see cref="Lugh.Utils.Alignment.BOTTOM"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Top()
     {
-        if ( Alignment == Align.NONE )
+        if ( Alignment == Lugh.Utils.Alignment.NONE )
         {
             Alignment = TOPI;
         }
         else
         {
-            Alignment = ( Alignment | Align.TOP ) & ~Align.BOTTOM;
+            Alignment = ( Alignment | Lugh.Utils.Alignment.TOP ) & ~Lugh.Utils.Alignment.BOTTOM;
         }
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Align.LEFT"/> and clears <see cref="Align.RIGHT"/> for
+    /// Adds <see cref="Lugh.Utils.Alignment.LEFT"/> and clears <see cref="Lugh.Utils.Alignment.RIGHT"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Left()
     {
-        if ( Alignment == Align.NONE )
+        if ( Alignment == Lugh.Utils.Alignment.NONE )
         {
             Alignment = LEFTI;
         }
         else
         {
-            Alignment = ( Alignment | Align.LEFT ) & ~Align.RIGHT;
+            Alignment = ( Alignment | Lugh.Utils.Alignment.LEFT ) & ~Lugh.Utils.Alignment.RIGHT;
         }
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Align.BOTTOM"/> and clears <see cref="Align.TOP"/> for
+    /// Adds <see cref="Lugh.Utils.Alignment.BOTTOM"/> and clears <see cref="Lugh.Utils.Alignment.TOP"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Bottom()
     {
-        if ( Alignment == Align.NONE )
+        if ( Alignment == Lugh.Utils.Alignment.NONE )
         {
             Alignment = BOTTOMI;
         }
         else
         {
-            Alignment = ( Alignment | Align.BOTTOM ) & ~Align.TOP;
+            Alignment = ( Alignment | Lugh.Utils.Alignment.BOTTOM ) & ~Lugh.Utils.Alignment.TOP;
         }
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Align.RIGHT"/> and clears <see cref="Align.LEFT"/> for
+    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT"/> and clears <see cref="Lugh.Utils.Alignment.LEFT"/> for
     /// the alignment of the actor within the cell.
     /// </summary>
     public Cell Right()
     {
-        if ( Alignment == Align.NONE )
+        if ( Alignment == Lugh.Utils.Alignment.NONE )
         {
             Alignment = RIGHTI;
         }
         else
         {
-            Alignment = ( Alignment | Align.RIGHT ) & ~Align.LEFT;
+            Alignment = ( Alignment | Lugh.Utils.Alignment.RIGHT ) & ~Lugh.Utils.Alignment.LEFT;
         }
 
         return this;
@@ -1280,7 +1280,7 @@ public class Cell : IResetable
         PadRight    = null;
         FillX       = 0f;
         FillY       = 0f;
-        Alignment   = Align.NONE;
+        Alignment   = Lugh.Utils.Alignment.NONE;
         ExpandX     = default( int );
         ExpandY     = default( int );
         Colspan     = default( int );

@@ -76,6 +76,8 @@ public class VertexAttribute
     /// </summary>
     public int Offset { get; set; }
 
+    // ========================================================================
+
     private readonly int _usageIndex;
 
     // ========================================================================
@@ -103,8 +105,8 @@ public class VertexAttribute
     public VertexAttribute( int usage, int numComponents, string alias, int unit = 0 )
         : this( usage,
                 numComponents,
-                ( usage == VertexAttributes.Usage.COLOR_PACKED ? IGL.GL_UNSIGNED_BYTE : IGL.GL_FLOAT ),
-                ( usage == VertexAttributes.Usage.COLOR_PACKED ),
+                ( usage == ( int )VertexAttributes.Usage.COLOR_PACKED ? IGL.GL_UNSIGNED_BYTE : IGL.GL_FLOAT ),
+                ( usage == ( int )VertexAttributes.Usage.COLOR_PACKED ),
                 alias,
                 unit )
     {
@@ -120,28 +122,20 @@ public class VertexAttribute
     /// The number of components of this attribute, must be between 1 and 4.
     /// </param>
     /// <param name="type">
-    /// The OpenGL type of each component, e.g. <see cref="IGL.GL_FLOAT"/>
-    /// or <see cref="IGL.GL_UNSIGNED_BYTE"/>. Since <see cref="Mesh"/>
-    /// stores vertex data in 32bit floats, the total size of this attribute
+    /// The OpenGL type of each component, e.g. <see cref="IGL.GL_FLOAT"/> or <see cref="IGL.GL_UNSIGNED_BYTE"/>.
+    /// Since <see cref="Mesh"/> stores vertex data in 32bit floats, the total size of this attribute
     /// (type size times number of components) must be a multiple of four bytes.
     /// </param>
     /// <param name="normalized">
-    /// For fixed types, whether the values are normalized to either -1f and
-    /// +1f (signed) or 0f and +1f (unsigned)
+    /// For fixed types, whether the values are normalized to either -1f and +1f (signed) or 0f and +1f (unsigned)
     /// </param>
     /// <param name="alias">
-    /// The alias used in a shader for this attribute. Can be changed after
-    /// construction.
+    /// The alias used in a shader for this attribute. Can be changed after construction.
     /// </param>
     /// <param name="unit">
     /// Optional unit/index specifier, used for texture coordinates and bone weights
     /// </param>
-    public VertexAttribute( int usage,
-                            int numComponents,
-                            int type,
-                            bool normalized,
-                            string alias,
-                            int unit = 0 )
+    public VertexAttribute( int usage, int numComponents, int type, bool normalized, string alias, int unit = 0 )
     {
         this.Usage         = usage;
         this.NumComponents = numComponents;
@@ -153,73 +147,98 @@ public class VertexAttribute
     }
 
     /// <returns>
-    /// A copy of this VertexAttribute with the same parameters.
-    /// The <see cref="Offset"/> is not copied and must be recalculated,
-    /// as is typically done by the <see cref="VertexAttributes"/> that
-    /// owns the VertexAttribute.
+    /// A copy of this VertexAttribute with the same parameters. The <see cref="Offset"/> is not copied
+    /// and must be recalculated, as is typically done by the <see cref="VertexAttributes"/> that owns
+    /// the VertexAttribute.
     /// </returns>
     public VertexAttribute Copy()
     {
         return new VertexAttribute( Usage, NumComponents, Type, Normalized, Alias, Unit );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public static VertexAttribute Position()
     {
-        return new VertexAttribute( VertexAttributes.Usage.POSITION,
-                                    3,
-                                    ShaderProgram.POSITION_ATTRIBUTE );
+        return new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 3, ShaderProgram.POSITION_ATTRIBUTE );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="unit"></param>
+    /// <returns></returns>
     public static VertexAttribute TexCoords( int unit )
     {
-        return new VertexAttribute( VertexAttributes.Usage.TEXTURE_COORDINATES,
+        return new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES,
                                     2,
                                     ShaderProgram.TEXCOORD_ATTRIBUTE + unit,
                                     unit );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public static VertexAttribute Normal()
     {
-        return new VertexAttribute( VertexAttributes.Usage.NORMAL,
-                                    3,
-                                    ShaderProgram.NORMAL_ATTRIBUTE );
+        return new VertexAttribute( ( int )VertexAttributes.Usage.NORMAL, 3, ShaderProgram.NORMAL_ATTRIBUTE );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public static VertexAttribute ColorPacked()
     {
-        return new VertexAttribute( VertexAttributes.Usage.COLOR_PACKED,
+        return new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED,
                                     4,
                                     IGL.GL_UNSIGNED_BYTE,
                                     true,
                                     ShaderProgram.COLOR_ATTRIBUTE );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public static VertexAttribute ColorUnpacked()
     {
-        return new VertexAttribute( VertexAttributes.Usage.COLOR_UNPACKED,
+        return new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_UNPACKED,
                                     4,
                                     IGL.GL_FLOAT,
                                     false,
                                     ShaderProgram.COLOR_ATTRIBUTE );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public static VertexAttribute Tangent()
     {
-        return new VertexAttribute( VertexAttributes.Usage.TANGENT,
-                                    3,
-                                    ShaderProgram.TANGENT_ATTRIBUTE );
+        return new VertexAttribute( ( int )VertexAttributes.Usage.TANGENT, 3, ShaderProgram.TANGENT_ATTRIBUTE );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public static VertexAttribute Binormal()
     {
-        return new VertexAttribute( VertexAttributes.Usage.BI_NORMAL,
-                                    3,
-                                    ShaderProgram.BINORMAL_ATTRIBUTE );
+        return new VertexAttribute( ( int )VertexAttributes.Usage.BI_NORMAL, 3, ShaderProgram.BINORMAL_ATTRIBUTE );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="unit"></param>
+    /// <returns></returns>
     public static VertexAttribute BoneWeight( int unit )
     {
-        return new VertexAttribute( VertexAttributes.Usage.BONE_WEIGHT,
+        return new VertexAttribute( ( int )VertexAttributes.Usage.BONE_WEIGHT,
                                     2,
                                     ShaderProgram.BONEWEIGHT_ATTRIBUTE + unit,
                                     unit );
@@ -266,6 +285,11 @@ public class VertexAttribute
         return Equals( attribute );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     public bool Equals( VertexAttribute? other )
     {
         return ( other != null )

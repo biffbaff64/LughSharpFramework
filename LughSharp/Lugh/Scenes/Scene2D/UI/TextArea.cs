@@ -443,7 +443,7 @@ public class TextArea : TextField
               ( i < ( ( FirstLineShowing + LinesShowing ) * 2 ) ) && ( i < LinesBreak.Count );
               i += 2 )
         {
-            font.Draw( batch, DisplayText!, x, y + ( offsetY ?? 0 ), LinesBreak[ i ], LinesBreak[ i + 1 ], 0, Align.LEFT, false );
+            font.Draw( batch, DisplayText!, x, y + ( offsetY ?? 0 ), LinesBreak[ i ], LinesBreak[ i + 1 ], 0, Alignment.LEFT, false );
             offsetY -= font.GetLineHeight();
         }
     }

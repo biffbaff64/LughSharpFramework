@@ -72,7 +72,7 @@ public class TextField : Widget
     private readonly IClipboard           _clipboard;
     private readonly KeyRepeatTaskManager _keyRepeat;
     private readonly bool                 _onlyFontChars = true;
-    private readonly int                  _textAlign     = Align.LEFT;
+    private readonly int                  _textAlign     = Alignment.LEFT;
     private readonly Vector2              _tmp1          = new();
     private readonly Vector2              _tmp2          = new();
     private readonly Vector2              _tmp3          = new();
@@ -342,11 +342,11 @@ public class TextField : Widget
 
         _visibleTextEnd = Math.Max( 0, end - 1 );
 
-        if ( ( _textAlign & Align.LEFT ) == 0 )
+        if ( ( _textAlign & Alignment.LEFT ) == 0 )
         {
             TextOffset = ( visibleWidth - glyphPositions[ _visibleTextEnd ] - FontOffset ) + startX;
 
-            if ( ( _textAlign & Align.CENTER ) != 0 )
+            if ( ( _textAlign & Alignment.CENTER ) != 0 )
             {
                 TextOffset = ( float ) Math.Round( TextOffset * 0.5f );
             }
@@ -615,7 +615,7 @@ public class TextField : Widget
     {
         if ( DisplayText != null )
         {
-            font.Draw( batch, DisplayText, x + TextOffset, y, _visibleTextStart, _visibleTextEnd, 0, Align.LEFT, false );
+            font.Draw( batch, DisplayText, x + TextOffset, y, _visibleTextStart, _visibleTextEnd, 0, Alignment.LEFT, false );
         }
     }
 

@@ -798,17 +798,17 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Returns the X position of the specified <see cref="Align"/>.
+    /// Returns the X position of the specified <see cref="Alignment"/>.
     /// </summary>
     public float GetX( int alignment )
     {
         var x = _x;
 
-        if ( ( alignment & Align.RIGHT ) != 0 )
+        if ( ( alignment & Alignment.RIGHT ) != 0 )
         {
             x += _width;
         }
-        else if ( ( alignment & Align.LEFT ) == 0 )
+        else if ( ( alignment & Alignment.LEFT ) == 0 )
         {
             x += _width / 2;
         }
@@ -817,16 +817,16 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Sets the x position using the specified <see cref="Align"/>.
+    /// Sets the x position using the specified <see cref="Alignment"/>.
     /// Note this may set the position to non-integer coordinates.
     /// </summary>
     public void SetXWithAlignment( float x, int alignment )
     {
-        if ( ( alignment & Align.RIGHT ) != 0 )
+        if ( ( alignment & Alignment.RIGHT ) != 0 )
         {
             x -= _width;
         }
-        else if ( ( alignment & Align.LEFT ) == 0 )
+        else if ( ( alignment & Alignment.LEFT ) == 0 )
         {
             x -= _width / 2;
         }
@@ -839,17 +839,17 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Sets the y position using the specified <see cref="Align"/>.
+    /// Sets the y position using the specified <see cref="Alignment"/>.
     /// Note this may set the position to non-integer
     /// coordinates.
     /// </summary>
     public void SetYWithAlignment( float y, int alignment )
     {
-        if ( ( alignment & Align.TOP ) != 0 )
+        if ( ( alignment & Alignment.TOP ) != 0 )
         {
             y -= _height;
         }
-        else if ( ( alignment & Align.BOTTOM ) == 0 )
+        else if ( ( alignment & Alignment.BOTTOM ) == 0 )
         {
             y -= _height / 2;
         }
@@ -862,17 +862,17 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Returns the Y position of the specified <see cref="Align"/>.
+    /// Returns the Y position of the specified <see cref="Alignment"/>.
     /// </summary>
     public float GetY( int alignment )
     {
         var y = _y;
 
-        if ( ( alignment & Align.TOP ) != 0 )
+        if ( ( alignment & Alignment.TOP ) != 0 )
         {
             y += _height;
         }
-        else if ( ( alignment & Align.BOTTOM ) == 0 )
+        else if ( ( alignment & Alignment.BOTTOM ) == 0 )
         {
             y += _height / 2;
         }
@@ -894,25 +894,25 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Sets the position using the specified <see cref="Align"/> alignment.
+    /// Sets the position using the specified <see cref="Alignment"/> alignment.
     /// Note this may set the position to non-integer coordinates.
     /// </summary>
     public void SetPosition( float x, float y, int alignment )
     {
-        if ( ( alignment & Align.RIGHT ) != 0 )
+        if ( ( alignment & Alignment.RIGHT ) != 0 )
         {
             x -= Width;
         }
-        else if ( ( alignment & Align.LEFT ) == 0 )
+        else if ( ( alignment & Alignment.LEFT ) == 0 )
         {
             x -= Width / 2;
         }
 
-        if ( ( alignment & Align.TOP ) != 0 )
+        if ( ( alignment & Alignment.TOP ) != 0 )
         {
             y -= Height;
         }
-        else if ( ( alignment & Align.BOTTOM ) == 0 )
+        else if ( ( alignment & Alignment.BOTTOM ) == 0 )
         {
             y -= Height / 2;
         }
@@ -1036,15 +1036,15 @@ public class Actor : IActor, IComparable< Actor >
     }
 
     /// <summary>
-    /// Sets the origin position to the specified <see cref="Align"/> alignment.
+    /// Sets the origin position to the specified <see cref="Alignment"/> alignment.
     /// </summary>
     public virtual void SetOrigin( int alignment )
     {
-        if ( ( alignment & Align.LEFT ) != 0 )
+        if ( ( alignment & Alignment.LEFT ) != 0 )
         {
             OriginX = 0;
         }
-        else if ( ( alignment & Align.RIGHT ) != 0 )
+        else if ( ( alignment & Alignment.RIGHT ) != 0 )
         {
             OriginX = Width;
         }
@@ -1053,11 +1053,11 @@ public class Actor : IActor, IComparable< Actor >
             OriginX = Width / 2;
         }
 
-        if ( ( alignment & Align.BOTTOM ) != 0 )
+        if ( ( alignment & Alignment.BOTTOM ) != 0 )
         {
             OriginY = 0;
         }
-        else if ( ( alignment & Align.TOP ) != 0 )
+        else if ( ( alignment & Alignment.TOP ) != 0 )
         {
             OriginY = Height;
         }

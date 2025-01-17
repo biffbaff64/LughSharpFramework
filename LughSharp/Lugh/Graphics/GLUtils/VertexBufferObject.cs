@@ -77,8 +77,8 @@ public class VertexBufferObject : IVertexData
     /// <param name="attributes"> the <see cref="VertexAttributes"/>.  </param>
     public VertexBufferObject( bool isStatic, int numVertices, VertexAttributes attributes )
     {
-        _buffer    = default( FloatBuffer? )!;
-        Attributes = default( VertexAttributes )!;
+        _buffer    = null!;
+        Attributes = null!;
 
         _bufferHandle = ( int ) GdxApi.Bindings.GenBuffer();
 
@@ -103,9 +103,8 @@ public class VertexBufferObject : IVertexData
     /// <param name="attributes">The vertex attributes that define the structure of the vertex data.</param>
     public VertexBufferObject( int usage, ByteBuffer data, bool ownsBuffer, VertexAttributes attributes )
     {
-        // Initialize the _buffer and Attributes fields to default values.
-        _buffer    = default( FloatBuffer? )!;
-        Attributes = default( VertexAttributes )!;
+        _buffer    = null!;
+        Attributes = null!;
 
         // Generate a new buffer handle using OpenGL and assign it to _bufferHandle.
         _bufferHandle = ( int ) GdxApi.Bindings.GenBuffer();

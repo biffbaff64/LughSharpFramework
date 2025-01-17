@@ -27,8 +27,24 @@ namespace LughSharp.Lugh.Utils;
 /// <summary>
 /// Provides bit flag constants for alignment.
 /// </summary>
+[PublicAPI, Flags]
+public enum Align
+{
+    None   = 0,
+    Center = ( 1 << 0 ),
+    Top    = ( 1 << 1 ),
+    Bottom = ( 1 << 2 ),
+    Left   = ( 1 << 3 ),
+    Right  = ( 1 << 4 ),
+
+    TopLeft     = ( Top | Left ),
+    TopRight    = ( Top | Right ),
+    BottomLeft  = ( Bottom | Left ),
+    BottomRight = ( Bottom | Right ),
+}
+
 [PublicAPI]
-public sealed class Align
+public sealed class Alignment
 {
     // ========================================================================
 

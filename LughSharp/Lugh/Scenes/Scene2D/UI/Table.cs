@@ -63,7 +63,7 @@ public class Table : WidgetGroup
     private readonly float[]      _columnWidth;
     private readonly float[]      _rowHeight;
 
-    private int _alignment = Align.CENTER;
+    private int _alignment = Alignment.CENTER;
 
     private IDrawable?         _background;
     private bool               _clip;
@@ -535,7 +535,7 @@ public class Table : WidgetGroup
         _padBottom = BackgroundBottom;
         _padRight  = BackgroundRight;
 
-        _alignment = Align.CENTER;
+        _alignment = Alignment.CENTER;
 
         DebugLines( DebugType.None );
 
@@ -891,8 +891,8 @@ public class Table : WidgetGroup
 
     /// <summary>
     /// Alignment of the logical table within the table actor.
-    /// Set to <see cref="Align.CENTER"/>, <see cref="Align.TOP"/>, <see cref="Align.BOTTOM"/>,
-    /// <see cref="Align.LEFT"/>, <see cref="Align.RIGHT"/>, or any combination of those.
+    /// Set to <see cref="Alignment.CENTER"/>, <see cref="Alignment.TOP"/>, <see cref="Alignment.BOTTOM"/>,
+    /// <see cref="Alignment.LEFT"/>, <see cref="Alignment.RIGHT"/>, or any combination of those.
     /// </summary>
     /// <param name="align"></param>
     /// <returns></returns>
@@ -905,62 +905,62 @@ public class Table : WidgetGroup
 
     /// <summary>
     /// Sets the alignment of the logical table within the table actor to
-    /// <see cref="Align.CENTER"/>. This clears any other alignment.
+    /// <see cref="Alignment.CENTER"/>. This clears any other alignment.
     /// </summary>
     /// <returns></returns>
     public Table Center()
     {
-        _alignment = Align.CENTER;
+        _alignment = Alignment.CENTER;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Align.TOP"/> and clears <see cref="Align.BOTTOM"/> for
+    /// Adds <see cref="Alignment.TOP"/> and clears <see cref="Alignment.BOTTOM"/> for
     /// the alignment of the logical table within the table actor.
     /// </summary>
     /// <returns></returns>
     public Table AddTopAlignment()
     {
-        _alignment |= Align.TOP;
-        _alignment &= ~Align.BOTTOM;
+        _alignment |= Alignment.TOP;
+        _alignment &= ~Alignment.BOTTOM;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Align.LEFT"/> and clears <see cref="Align.RIGHT"/> for
+    /// Adds <see cref="Alignment.LEFT"/> and clears <see cref="Alignment.RIGHT"/> for
     /// the alignment of the logical table within the table actor.
     /// </summary>
     /// <returns></returns>
     public Table AddLeftAlignment()
     {
-        _alignment |= Align.LEFT;
-        _alignment &= ~Align.RIGHT;
+        _alignment |= Alignment.LEFT;
+        _alignment &= ~Alignment.RIGHT;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Align.BOTTOM"/> and clears <see cref="Align.TOP"/> for the
+    /// Adds <see cref="Alignment.BOTTOM"/> and clears <see cref="Alignment.TOP"/> for the
     /// alignment of the logical table within the table actor.
     /// </summary>
     public Table AddBottomAlignment()
     {
-        _alignment |= Align.BOTTOM;
-        _alignment &= ~Align.TOP;
+        _alignment |= Alignment.BOTTOM;
+        _alignment &= ~Alignment.TOP;
 
         return this;
     }
 
     /// <summary>
-    /// Adds <see cref="Align.RIGHT"/> and clears <see cref="Align.LEFT"/> for
+    /// Adds <see cref="Alignment.RIGHT"/> and clears <see cref="Alignment.LEFT"/> for
     /// the alignment of the logical table within the table actor.
     /// </summary>
     public Table AddRightAlignment()
     {
-        _alignment |= Align.RIGHT;
-        _alignment &= ~Align.LEFT;
+        _alignment |= Alignment.RIGHT;
+        _alignment &= ~Alignment.LEFT;
 
         return this;
     }
@@ -1690,22 +1690,22 @@ public class Table : WidgetGroup
         // Position table within the container.
         var x = padLeft;
 
-        if ( ( _alignment & Align.RIGHT ) != 0 )
+        if ( ( _alignment & Alignment.RIGHT ) != 0 )
         {
             x += layoutWidth - tableWidth;
         }
-        else if ( ( _alignment & Align.LEFT ) == 0 ) // Center
+        else if ( ( _alignment & Alignment.LEFT ) == 0 ) // Center
         {
             x += ( layoutWidth - tableWidth ) / 2;
         }
 
         var y = padTop;
 
-        if ( ( _alignment & Align.BOTTOM ) != 0 )
+        if ( ( _alignment & Alignment.BOTTOM ) != 0 )
         {
             y += layoutHeight - tableHeight;
         }
-        else if ( ( _alignment & Align.TOP ) == 0 ) // Center
+        else if ( ( _alignment & Alignment.TOP ) == 0 ) // Center
         {
             y += ( layoutHeight - tableHeight ) / 2;
         }
@@ -1760,11 +1760,11 @@ public class Table : WidgetGroup
 
             _alignment = c.Alignment;
 
-            if ( ( _alignment & Align.LEFT ) != 0 )
+            if ( ( _alignment & Alignment.LEFT ) != 0 )
             {
                 c.ActorX = currentX;
             }
-            else if ( ( _alignment & Align.RIGHT ) != 0 )
+            else if ( ( _alignment & Alignment.RIGHT ) != 0 )
             {
                 c.ActorX = ( currentX + spannedCellWidth ) - c.ActorWidth;
             }
@@ -1773,11 +1773,11 @@ public class Table : WidgetGroup
                 c.ActorX = currentX + ( ( spannedCellWidth - c.ActorWidth ) / 2 );
             }
 
-            if ( ( _alignment & Align.TOP ) != 0 )
+            if ( ( _alignment & Alignment.TOP ) != 0 )
             {
                 c.ActorY = c.ComputedPadTop;
             }
-            else if ( ( _alignment & Align.BOTTOM ) != 0 )
+            else if ( ( _alignment & Alignment.BOTTOM ) != 0 )
             {
                 c.ActorY = rowHeight[ c.Row ] - c.ActorHeight - c.ComputedPadBottom;
             }

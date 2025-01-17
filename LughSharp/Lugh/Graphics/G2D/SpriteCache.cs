@@ -143,13 +143,13 @@ public class SpriteCache
         _mesh = new Mesh( true,
                           size * ( useIndices ? 4 : 6 ),
                           useIndices ? size * 6 : 0,
-                          new VertexAttribute( VertexAttributes.Usage.POSITION,
+                          new VertexAttribute( ( int )VertexAttributes.Usage.POSITION,
                                                2,
                                                ShaderProgram.POSITION_ATTRIBUTE ),
-                          new VertexAttribute( VertexAttributes.Usage.COLOR_PACKED,
+                          new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED,
                                                4,
                                                ShaderProgram.COLOR_ATTRIBUTE ),
-                          new VertexAttribute( VertexAttributes.Usage.TEXTURE_COORDINATES,
+                          new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES,
                                                2,
                                                ShaderProgram.TEXCOORD_ATTRIBUTE + "0" ) )
         {

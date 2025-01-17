@@ -86,7 +86,7 @@ public class Image : Widget
     {
     }
 
-    public Image( IDrawable? drawable, Scaling scaling, int align = Align.CENTER )
+    public Image( IDrawable? drawable, Scaling scaling, int align = Lugh.Utils.Alignment.CENTER )
     {
         SetDrawable( drawable );
 
@@ -133,11 +133,11 @@ public class Image : Widget
         ImageWidth  = size.X;
         ImageHeight = size.Y;
 
-        if ( ( Alignment & Align.LEFT ) != 0 )
+        if ( ( Alignment & Lugh.Utils.Alignment.LEFT ) != 0 )
         {
             ImageX = 0;
         }
-        else if ( ( Alignment & Align.RIGHT ) != 0 )
+        else if ( ( Alignment & Lugh.Utils.Alignment.RIGHT ) != 0 )
         {
             ImageX = ( int ) ( width - ImageWidth );
         }
@@ -146,11 +146,11 @@ public class Image : Widget
             ImageX = ( int ) ( ( width / 2 ) - ( ImageWidth / 2 ) );
         }
 
-        if ( ( Alignment & Align.TOP ) != 0 )
+        if ( ( Alignment & Lugh.Utils.Alignment.TOP ) != 0 )
         {
             ImageY = ( int ) ( height - ImageHeight );
         }
-        else if ( ( Alignment & Align.BOTTOM ) != 0 )
+        else if ( ( Alignment & Lugh.Utils.Alignment.BOTTOM ) != 0 )
         {
             ImageY = 0;
         }

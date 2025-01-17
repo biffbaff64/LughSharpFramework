@@ -28,18 +28,18 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public class VertexAttributes
 {
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
-    public struct Usage
+    [PublicAPI, Flags]
+    public enum Usage
     {
-        public const int POSITION            = 1;
-        public const int COLOR_UNPACKED      = 2;
-        public const int COLOR_PACKED        = 4;
-        public const int NORMAL              = 8;
-        public const int TEXTURE_COORDINATES = 16;
-        public const int GENERIC             = 32;
-        public const int BONE_WEIGHT         = 64;
-        public const int TANGENT             = 128;
-        public const int BI_NORMAL           = 256;
+        POSITION            = 1,
+        COLOR_UNPACKED      = 2,
+        COLOR_PACKED        = 4,
+        NORMAL              = 8,
+        TEXTURE_COORDINATES = 16,
+        GENERIC             = 32,
+        BONE_WEIGHT         = 64,
+        TANGENT             = 128,
+        BI_NORMAL           = 256,
     }
 
     /// <summary>

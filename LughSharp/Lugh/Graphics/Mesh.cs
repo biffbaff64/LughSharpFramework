@@ -873,7 +873,7 @@ public class Mesh
 
         bbox.ToInfinity();
 
-        var posAttrib = GetVertexAttribute( VertexAttributes.Usage.POSITION );
+        var posAttrib = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
 
         var offset     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
@@ -983,7 +983,7 @@ public class Mesh
 
         var verts      = _vertices.GetBuffer( false );
         var index      = _indices.GetBuffer( false );
-        var posAttrib  = GetVertexAttribute( VertexAttributes.Usage.POSITION );
+        var posAttrib  = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
         var posoff     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
         var end        = offset + count;
@@ -1127,7 +1127,7 @@ public class Mesh
 
         var verts      = _vertices.GetBuffer( false );
         var index      = _indices.GetBuffer( false );
-        var posAttrib  = GetVertexAttribute( VertexAttributes.Usage.POSITION );
+        var posAttrib  = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
         var posoff     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
         var end        = offset + count;
@@ -1334,7 +1334,7 @@ public class Mesh
     /// <param name="scaleZ"> scale on z  </param>
     public void Scale( float scaleX, float scaleY, float scaleZ )
     {
-        var posAttr       = GetVertexAttribute( VertexAttributes.Usage.POSITION );
+        var posAttr       = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
         var offset        = posAttr!.Offset / 4;
         var numComponents = posAttr.NumComponents;
         var numVertices   = NumVertices;
@@ -1394,7 +1394,7 @@ public class Mesh
 
     protected void Transform( in Matrix4 matrix, in int start, in int count )
     {
-        var posAttr = GetVertexAttribute( VertexAttributes.Usage.POSITION );
+        var posAttr = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
 
         var posOffset     = posAttr!.Offset / 4;
         var stride        = VertexSize / 4;
@@ -1501,7 +1501,7 @@ public class Mesh
     /// <param name="count"></param>
     protected void TransformUV( in Matrix3 matrix, in int start, in int count )
     {
-        var posAttr = GetVertexAttribute( VertexAttributes.Usage.TEXTURE_COORDINATES );
+        var posAttr = GetVertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES );
 
         var offset   = posAttr!.Offset / 4;
         var vertices = new float[ NumVertices * ( VertexSize / 4 ) ];

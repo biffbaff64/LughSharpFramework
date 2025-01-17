@@ -68,7 +68,7 @@ public class TextButton : Button
         Style = style;
 
         _label = new Label( text, new Label.LabelStyle( style.Font!, style.FontColor! ) );
-        _label.SetAlignment( Align.CENTER );
+        _label.SetAlignment( Alignment.CENTER );
 
         Add( _label ).Expand().SetFill();
 

@@ -272,30 +272,15 @@ GRAPHICS
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - BMPFormatStructs
     - DONE - DONE - Color
     - DONE - DONE - Colors
     - DONE - DONE - Cubemap
     - DONE - DONE - FPSLogger
-    - DONE - IP   - GLTexture
     - DONE - IP   - GraphicsBackend
     - DONE - DONE - GStructs
     - DONE - DONE - ICubemapData
     - DONE - DONE - ICursor
-    - DONE - DONE - ITextureArrayData
-    - DONE - DONE - ITextureData
     - DONE - IP   - Mesh
-    - DONE - IP   - Pixel
-    - DONE - DONE - Pixmap
-    - DONE - IP   - PixmapFormat
-    - DONE - IP   - PixmapFormatExtensions
-    - DONE - IP   - PixmapIO                            Not working
-    - DONE - IP   - PNGFormatStructs
-    - DONE - IP   - Texture
-    - DONE - IP   - TextureArray
-    - DONE - DONE - TextureDataFactory
-    - DONE - IP   - TextureFilter
-    - DONE - IP   - TextureWrap
     - DONE - IP   - VertexAttribute
     - DONE - IP   - VertexAttributes
 
@@ -402,10 +387,29 @@ GRAPHICS/GLUTILS
     - DONE - IP   - ShaderProgramUniforms
     - DONE - IP   - ShaderProgramUtils
     - DONE - IP   - ShapeRenderer
+    - DONE - DONE - Vertex
     - DONE - DONE - VertexArray
     - DONE - DONE - VertexBufferObject
     - DONE - IP   - VertexBufferObjectSubData
     - DONE - IP   - VertexBufferObjectWithVAO
+
+GRAPHICS/IMAGES
+---------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - DONE - DONE - BMPFormatStructs
+    - DONE - IP   - GLTexture
+    - DONE - DONE - ITextureArrayData
+    - DONE - DONE - ITextureData
+    - DONE - IP   - PixelType
+    - DONE - DONE - Pixmap
+    - DONE - IP   - PixmapFormat
+    - IP   - IP   - PixmapIO
+    - DONE - IP   - PNGUtils
+    - DONE - IP   - Texture
+    - DONE - IP   - TextureArray
+    - DONE - DONE - TextureDataFactory
 
 GRAPHICS/OPENGL
 ---------------
@@ -432,6 +436,7 @@ GRAPHICS/OPENGL/ENUMS
 ---------------------
     CODE   DOCUMENT
     ----   --------
+    - DONE - DONE - BufferEnums
     - DONE - DONE - EnableCap
     - DONE - DONE - ProgramProperty
     - DONE - DONE - ShaderParameterName
@@ -792,7 +797,8 @@ UTILS
     - DONE - DONE - FloatConstants
     - DONE - DONE - IClipboard                      Convert - Interface, clipboard handled in backends.
     - DONE - DONE - ICloseable
-    - DONE - DONE - IManageable
+    - DONE - DONE - IManaged
+    - IP   - IP   - InTestingAttribute
     - DONE - DONE - IReadable
     - DONE - DONE - IResetable
     - DONE - DONE - IRunnable                       Done, but is it needed?
@@ -945,6 +951,7 @@ UTILS/EXCEPTIONS
     - DONE - DONE - BufferUnderflowException
     - DONE - DONE - GdxRuntimeException
     - DONE - DONE - ReadOnlyBufferException
+    - DONE - DONE - SpriteBatchException
 
 UTILS/POOLING
 -------------

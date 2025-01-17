@@ -22,12 +22,15 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.GLUtils;
 
-[PublicAPI]
-public struct Vertex( Vector3 position, float color, Vector2 texCoords )
+namespace LughSharp.Lugh.Utils;
+
+[PublicAPI,
+ AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct, Inherited = false),
+ Conditional("DEBUG")]
+public sealed class InTestingAttribute( string message ) : Attribute
 {
-    public Vector3 Position  = position;
-    public float   Color     = color;
-    public Vector2 TexCoords = texCoords;
+    public string Message { get; } = message;
+
+    public InTestingAttribute() : this("This member is currently in testing and may change or be removed.") { }
 }
