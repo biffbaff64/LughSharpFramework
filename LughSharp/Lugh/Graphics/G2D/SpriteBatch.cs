@@ -34,6 +34,8 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 
 namespace LughSharp.Lugh.Graphics.G2D;
 
+// ============================================================================
+
 [PublicAPI]
 public class SpriteBatch : IBatch
 {
@@ -71,7 +73,7 @@ public class SpriteBatch : IBatch
     private const int MAX_SPRITES      = 8191;
 
     private readonly Color   _color          = Graphics.Color.Red;
-    private readonly Matrix4 _combinedMatrix = new();
+    private          Matrix4 _combinedMatrix = new();
     private readonly bool    _ownsShader;
 
     private        Mesh?          _mesh;
@@ -134,6 +136,11 @@ public class SpriteBatch : IBatch
         }
     }
 
+    /// <summary>
+    /// Takes away messy vertex attributes initialisation from the constructor, the GL side of
+    /// which is done inside <see cref="SetupVertexAttributes"/>, 
+    /// </summary>
+    /// <param name="size"></param>
     private unsafe void Initialise( int size )
     {
         var vertexDataType = ( GdxApi.Bindings.GetOpenGLVersion().major >= 3 )
@@ -181,6 +188,9 @@ public class SpriteBatch : IBatch
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
     }
 
+    /// <summary>
+    /// Performs the OpenGL side of Vertex Attribute initialisation.
+    /// </summary>
     private void SetupVertexAttributes()
     {
         GdxRuntimeException.ThrowIfNull( _shader );
@@ -300,7 +310,7 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
+    /// This batch's Color packed into a float ABGR format.
     /// </summary>
     public float ColorPackedABGR
     {
@@ -1405,65 +1415,41 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// Returns a new instance of a minimal shader used by SpriteBatch for GL2 when testing.
-    /// </summary>
-    public static ShaderProgram CreateMinimalShader()
-    {
-        const string VERTEX_SHADER_SOURCE = "layout (location = 0) in vec3 aPosition;\n" +
-                                            "layout (location = 1) in vec2 aTexCoord;\n" +
-                                            "out vec2 TexCoord;\n" +
-                                            "void main()\n" +
-                                            "{\n" +
-                                            "    gl_Position = vec4(aPosition, 1.0);\n" +
-                                            "    TexCoord    = aTexCoord;\n" +
-                                            "}\n";
-
-        const string FRAGMENT_SHADER_SOURCE = "out vec4 FragColor;\n" +
-                                              "in vec2 TexCoord;\n" +
-                                              "uniform sampler2D ourTexture;\n" +
-                                              "void main()\n" +
-                                              "{\n" +
-                                              "    FragColor = texture(ourTexture, TexCoord);\n" +
-                                              "}\n";
-
-        var shader = new ShaderProgram( VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE );
-
-        if ( !shader.IsCompiled )
-        {
-            throw new GdxRuntimeException( "Error compiling shader: " + shader.ShaderLog );
-        }
-
-        return shader;
-    }
-
-    /// <summary>
     /// Returns a new instance of the default shader used by SpriteBatch for GL2 when no shader is specified.
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
         //@formatter:off
-        const string VERTEX_SHADER =    "in vec3 a_position;\n"+
-                                        "in vec4 a_color;\n"+
+        const string VERTEX_SHADER =    "in vec2 a_position;\n"+
+                                        "in float a_colorPacked;\n"+
                                         "in vec2 a_texCoords;\n"+
-                                        "out vec4 v_color;\n"+
+                                        "out float v_colorPacked;\n"+
                                         "out vec2 v_texCoords;\n"+
                                         "uniform mat4 u_projectionMatrix;\n"+
                                         "uniform mat4 u_viewMatrix;\n"+
                                         "uniform mat4 u_modelMatrix;\n"+
                                         "void main()\n"+
                                         "{\n"+
-                                        "    gl_Position = u_projectionMatrix * u_viewMatrix * u_modelMatrix * vec4(a_position, 1.0);\n"+
-                                        "    v_color = a_color;\n"+
+                                        "    gl_Position = u_projectionMatrix * u_viewMatrix * u_modelMatrix * vec4(a_position, 0.0, 1.0);\n"+
+                                        "    v_colorPacked = a_colorPacked;\n"+
                                         "    v_texCoords = a_texCoords;\n"+
                                         "}\n";
         
-        const string FRAGMENT_SHADER =  "in vec4 v_color;\n"+
+        const string FRAGMENT_SHADER =  "in float v_colorPacked;\n"+
                                         "in vec2 v_texCoords;\n"+
                                         "out vec4 FragColor;\n"+
                                         "uniform sampler2D u_texture;\n"+
+                                        "vec4 unpackColor(float packedColor) {\n"+
+                                        "    uint color = uint(packedColor);\n"+
+                                        "    float b = float((color >> 0) & 0xFF) / 255.0;\n"+
+                                        "    float g = float((color >> 8) & 0xFF) / 255.0;\n"+
+                                        "    float r = float((color >> 16) & 0xFF) / 255.0;\n"+
+                                        "    float a = float((color >> 24) & 0xFF) / 255.0;\n"+
+                                        "    return vec4(r, g, b, a);\n"+
+                                        "}\n"+
                                         "void main()\n"+
                                         "{\n"+
-                                        "    FragColor = texture(u_texture, v_texCoords) * v_color;\n"+
+                                        "    FragColor = texture(u_texture, v_texCoords) * unpackColor(v_colorPacked);\n"+
                                         "}\n";
         //@formatter:on
 
@@ -1489,16 +1475,20 @@ public class SpriteBatch : IBatch
             if ( !_customShader.IsCompiled )
             {
                 Logger.Debug( "Custom Shader is not compiled." );
+
+                return; // Return early if not compiled
             }
 
             _customShader.SetUniformMatrix( "u_projTrans", _combinedMatrix );
             _customShader.SetUniformi( "u_texture", 0 );
         }
-        else
+        else if ( _shader != null )
         {
-            if ( _shader is { IsCompiled: false } )
+            if ( !_shader.IsCompiled )
             {
                 Logger.Debug( "Custom Shader is not compiled." );
+
+                return; // Return early if not compiled
             }
 
             _shader?.SetUniformMatrix( "u_projTrans", _combinedMatrix );

@@ -2415,6 +2415,21 @@ public class Matrix4
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public Matrix4f ToMatrix4f()
+    {
+        return new Matrix4f
+        {
+            M11 = Val[ M00 ], M12 = Val[ M01 ], M13 = Val[ M02 ], M14 = Val[ M03 ],
+            M21 = Val[ M10 ], M22 = Val[ M11 ], M23 = Val[ M12 ], M24 = Val[ M13 ],
+            M31 = Val[ M20 ], M32 = Val[ M21 ], M33 = Val[ M22 ], M34 = Val[ M23 ],
+            M41 = Val[ M30 ], M42 = Val[ M31 ], M43 = Val[ M32 ], M44 = Val[ M33 ],
+        };
+    }
+    
     // ========================================================================
     // ========================================================================
 }
