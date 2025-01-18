@@ -178,6 +178,4 @@ public class ETC1TextureData : ITextureData
 
     /// <inheritdoc />
     bool IManaged.IsManaged => false;
-
-    // ReSharper disable once ValueParameterNotUsed
 }

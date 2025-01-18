@@ -114,7 +114,7 @@ public class CubemapLoader : AsynchronousAssetLoader
     /// <summary>
     /// Contains information about the Cubemap being loaded.
     /// </summary>
-    [PublicAPI]
+    [PublicAPI, StructLayout( LayoutKind.Sequential )]
     public struct CubemapLoaderInfo
     {
         public string?       Filename    { get; set; }

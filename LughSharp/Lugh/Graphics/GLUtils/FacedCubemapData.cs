@@ -249,6 +249,7 @@ public class FacedCubemapData : ICubemapData
     /// <summary>
     /// Returns true if this implementation can cope with a EGL context loss.
     /// </summary>
+    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
     public bool IsManaged
     {
         get
@@ -268,7 +269,6 @@ public class FacedCubemapData : ICubemapData
 
             return true;
         }
-        // ReSharper disable once ValueParameterNotUsed
         set { }
     }
 

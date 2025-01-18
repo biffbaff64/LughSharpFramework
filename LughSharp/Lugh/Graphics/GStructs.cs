@@ -36,7 +36,7 @@ namespace LughSharp.Lugh.Graphics;
 /// </code>
 /// </example>
 /// </summary>
-[PublicAPI]
+[PublicAPI, StructLayout( LayoutKind.Sequential )]
 public struct GRect
 {
     public int X;
@@ -58,7 +58,7 @@ public struct GRect
 /// </code>
 /// </example>
 /// </summary>
-[PublicAPI]
+[PublicAPI, StructLayout( LayoutKind.Sequential )]
 public struct GPoint
 {
     public int X;
@@ -78,7 +78,7 @@ public struct GPoint
 /// </code>
 /// </example>
 /// </summary>
-[PublicAPI]
+[PublicAPI, StructLayout( LayoutKind.Sequential )]
 public struct GSize
 {
     public int Width;

@@ -120,7 +120,7 @@ public static class Platform
         Unknown,
         Mobile,  // Android, IOS
         Desktop, // WindowsGL, UWP, WebGL, Linux, MacOS
-        Console, // XBox
+        Console, // XBox, Playstation, Nintendo
     }
 
     // ========================================================================
@@ -158,6 +158,7 @@ public static class Platform
                 // ----------------------------------------
                 ApplicationType.Windows
                     or ApplicationType.WindowsGL
+                    or ApplicationType.WindowsGles
                     or ApplicationType.WindowsVK
                     or ApplicationType.WindowsGdk
                     or ApplicationType.WebGL
@@ -171,7 +172,7 @@ public static class Platform
                     or ApplicationType.MacOS => value,
 
                 // ----------------------------------------
-                var _ => throw new GdxRuntimeException( $"Illegal Target Platform: {value.ToString()}" ),
+                var _ => throw new GdxRuntimeException( $"Unsupported Target Platform: {value.ToString()}" ),
             };
     }
 
@@ -192,8 +193,8 @@ public static class Platform
                     or Family.Mobile => value,
 
                 // ----------------------------------------
-                Family.Unknown => throw new GdxRuntimeException( $"Illegal Family Group: {value.ToString()}" ),
-                var _          => throw new GdxRuntimeException( $"Illegal Family Group: {value.ToString()}" ),
+                Family.Unknown => throw new GdxRuntimeException( $"Unsupported Family Group: {value.ToString()}" ),
+                var _          => throw new GdxRuntimeException( $"Unsupported Family Group: {value.ToString()}" ),
             };
     }
 

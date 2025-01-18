@@ -424,11 +424,14 @@ public sealed class Color : ICloneable, IEquatable< Color >
         RGBAFloatPack = ToFloatBitsABGR( R, G, B, A );
         ABGRFloatPack = ToFloatBitsABGR( A, B, G, R );
 
-        Logger.Debug( $"R: {R}, G: {G}, B: {B}, A: {A}" );
-        Logger.Debug( $"RGBAPackedColor: {RGBAPackedColor}, {RGBAPackedColor:X8}" );
-        Logger.Debug( $"ABGRPackedColor: {ABGRPackedColor}, {ABGRPackedColor:X8}" );
-        Logger.Debug( $"RGBAFloatPack  : {RGBAFloatPack}" );
-        Logger.Debug( $"ABGRFloatPack  : {ABGRFloatPack}" );
+        if ( GdxApi.DevMode )
+        {
+            Logger.Debug( $"R: {R}, G: {G}, B: {B}, A: {A}" );
+            Logger.Debug( $"RGBAPackedColor: {RGBAPackedColor}, {RGBAPackedColor:X8}" );
+            Logger.Debug( $"ABGRPackedColor: {ABGRPackedColor}, {ABGRPackedColor:X8}" );
+            Logger.Debug( $"RGBAFloatPack  : {RGBAFloatPack}" );
+            Logger.Debug( $"ABGRFloatPack  : {ABGRFloatPack}" );
+        }
 
         return this;
     }

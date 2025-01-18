@@ -41,7 +41,7 @@ namespace LughSharp.Lugh.Maths;
 /// }
 /// </code>
 /// </example>
-[PublicAPI]
+[PublicAPI, StructLayout( LayoutKind.Sequential )]
 public struct Point2D< T >( T x, T y )
 {
     /// <summary>
@@ -59,7 +59,7 @@ public struct Point2D< T >( T x, T y )
 /// Simple struct with X and Y members of type int, and absolutely nothing else.
 /// For use when no 'padding' is needed, such as methods or constructors.
 /// </summary>
-[PublicAPI]
+[PublicAPI, StructLayout( LayoutKind.Sequential )]
 public struct Point2D( int x, int y )
 {
     /// <summary>
@@ -77,7 +77,7 @@ public struct Point2D( int x, int y )
 /// Simple struct with X and Y members of type float, and absolutely nothing else.
 /// For use when no 'padding' is needed, such as methods or constructors.
 /// </summary>
-[PublicAPI]
+[PublicAPI, StructLayout( LayoutKind.Sequential )]
 public struct Point2Df( float x, float y )
 {
     /// <summary>

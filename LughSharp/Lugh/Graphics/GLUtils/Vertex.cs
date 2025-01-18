@@ -24,7 +24,7 @@
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
-[PublicAPI]
+[PublicAPI, StructLayout( LayoutKind.Sequential )]
 public struct Vertex( Vector3 position, float color, Vector2 texCoords )
 {
     public Vector3 Position  = position;

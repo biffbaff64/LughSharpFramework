@@ -143,6 +143,7 @@ public class VertexAttribute
         this.Normalized    = normalized;
         this.Alias         = alias;
         this.Unit          = unit;
+        
         _usageIndex        = int.TrailingZeroCount( usage );
     }
 

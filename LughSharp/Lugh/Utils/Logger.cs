@@ -421,6 +421,7 @@ public static class Logger
 /// Object used for creating debug messages which include
 /// the calling file and method.
 /// </summary>
+[StructLayout( LayoutKind.Sequential )]
 internal struct CallerID
 {
     public string FileName;

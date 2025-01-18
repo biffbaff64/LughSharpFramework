@@ -837,6 +837,7 @@ public class Skin : IDisposable
 
     /// <summary>
     /// </summary>
+    [PublicAPI, StructLayout( LayoutKind.Sequential )]
     public struct TintedDrawable
     {
         public string Name  { get; set; }

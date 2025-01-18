@@ -35,8 +35,7 @@ public interface IIntToByte
     byte B3 { get; }
 }
 
-[PublicAPI]
-[StructLayout( LayoutKind.Explicit )]
+[PublicAPI, StructLayout( LayoutKind.Explicit )]
 public struct IntToByteLE : IIntToByte
 {
     [FieldOffset( 0 )]
@@ -66,8 +65,7 @@ public struct IntToByteLE : IIntToByte
     public byte B3 => b3;
 }
 
-[PublicAPI]
-[StructLayout( LayoutKind.Explicit )]
+[PublicAPI, StructLayout( LayoutKind.Explicit )]
 public struct IntToByteBE : IIntToByte  //TODO:
 {
     [FieldOffset( 0 )]

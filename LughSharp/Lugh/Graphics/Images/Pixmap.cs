@@ -73,7 +73,7 @@ public class Pixmap : IDisposable
     public BlendTypes Blending { get; set; } = BlendTypes.SourceOver;
 
     public bool        IsDisposed  { get; set; } = false;       // 
-    public int         Scale       { get; set; }                // 
+    public int         Scale       { get; set; } = 1;           // 
     public Color       Color       { get; set; } = Color.Clear; // 
     public Gdx2DPixmap Gdx2DPixmap { get; set; }                // 
 

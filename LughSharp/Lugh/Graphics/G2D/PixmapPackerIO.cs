@@ -187,7 +187,7 @@ public partial class PixmapPackerIO
     /// <summary>
     /// Additional parameters which will be used when writing a PixmapPacker.
     /// </summary>
-    [PublicAPI]
+    [PublicAPI, StructLayout( LayoutKind.Sequential )]
     public struct SaveParameters
     {
         public ImageFormat           Format     { get; set; }

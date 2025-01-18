@@ -44,7 +44,6 @@ public partial class GLBindings
     // ========================================================================
     // ========================================================================
 
-    // Import wglGetProcAddress
     [DllImport( "opengl32.dll", EntryPoint = "wglGetProcAddress", CallingConvention = CallingConvention.StdCall )]
     private static extern IntPtr wglGetProcAddress( string procname );
 

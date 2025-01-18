@@ -68,10 +68,9 @@ public abstract class AbstractGraphics : IGraphics
     public virtual float GetRawDeltaTime() => DeltaTime;
 
     /// <summary>
-    /// This is a scaling factor for the Density Independent Pixel unit, following
-    /// the convention where one DIP is one pixel on an approximately 160 dpi screen.
-    /// Thus on a 160dpi screen this density value will be 1; on a 120 dpi screen it
-    /// would be .75; etc.
+    /// This is a scaling factor for the Density Independent Pixel unit, following the convention
+    /// where one DIP is one pixel on an approximately 160 dpi screen. Thus on a 160dpi screen this
+    /// density value will be 1; on a 120 dpi screen it would be .75; etc.
     /// </summary>
     /// <returns>the Density Independent Pixel factor of the display.</returns>
     public virtual float GetDensity() => GetPpiXY().X / 160f;

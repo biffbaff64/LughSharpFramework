@@ -37,8 +37,8 @@ public abstract class Game : IApplicationListener
     private IScreen? _screen;
 
     /// <summary>
-    /// Sets the current screen. Screen.hide() is called on any old screen,
-    /// and Screen.show() is called on the new screen, if any.
+    /// Sets the current screen. Screen.hide() is called on any old screen, and Screen.show()
+    /// is called on the new screen, if any.
     /// </summary>
     public IScreen? Screen
     {
@@ -46,13 +46,11 @@ public abstract class Game : IApplicationListener
         set
         {
             _screen?.Hide();
-
             _screen = value;
 
             if ( _screen != null )
             {
                 _screen.Show();
-
                 _screen.Resize( GdxApi.Graphics.Width, GdxApi.Graphics.Height );
             }
         }
@@ -82,9 +80,8 @@ public abstract class Game : IApplicationListener
     }
 
     /// <summary>
-    /// Called when the <see cref="IApplication"/> is resized. This can
-    /// happen at any point during a non-paused state but will never happen
-    /// before a call to <see cref="Create"/>
+    /// Called when the <see cref="IApplication"/> is resized. This can happen at any point
+    /// during a non-paused state but will never happen before a call to <see cref="Create"/>
     /// </summary>
     /// <param name="width">The new width in pixels.</param>
     /// <param name="height">The new height in pixels.</param>
@@ -94,9 +91,8 @@ public abstract class Game : IApplicationListener
     }
 
     /// <summary>
-    /// Called when the <see cref="IApplication"/> is paused, usually when
-    /// it's not active or visible on-screen. An Application is also
-    /// paused before it is destroyed.
+    /// Called when the <see cref="IApplication"/> is paused, usually when it's not active or
+    /// visible on-screen. An Application is also paused before it is destroyed.
     /// </summary>
     public virtual void Pause()
     {
@@ -113,11 +109,11 @@ public abstract class Game : IApplicationListener
     }
 
     /// <summary>
-    /// Called when the <see cref="IApplication"/> is destroyed.
-    /// Preceded by a call to <see cref="Pause"/>.
+    /// Called when the <see cref="IApplication"/> is destroyed. Preceded by a call to <see cref="Pause"/>.
     /// </summary>
     public virtual void Dispose()
     {
         Screen?.Hide();
+        GC.SuppressFinalize( this );
     }
 }

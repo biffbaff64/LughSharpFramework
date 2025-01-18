@@ -52,7 +52,6 @@ public enum EnableCap : int
     Dither = IGL.GL_DITHER,
 
     // --------------------------------
-//    AlphaTest   = IGL.GL_ALPHA_TEST,
     ScissorTest = IGL.GL_SCISSOR_TEST,
     StencilTest = IGL.GL_STENCIL_TEST,
     DepthTest   = IGL.GL_DEPTH_TEST,

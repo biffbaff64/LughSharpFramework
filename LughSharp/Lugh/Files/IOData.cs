@@ -22,10 +22,16 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Files;
 
 [PublicAPI]
-public class Glexth
+public class IOData
 {
+    // ========================================================================
+
+    public static string? assemblyPath      = Assembly.GetExecutingAssembly().Location;
+    public static string? assemblyDirectory = Path.GetDirectoryName( assemblyPath );
+    public static string? assetsPath        = Path.Combine( assemblyDirectory ?? "", "Assets" );
     
+    // ========================================================================
 }

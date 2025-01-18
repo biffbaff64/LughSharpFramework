@@ -48,11 +48,6 @@ public class InputStream : Stream
     // ========================================================================
 
     /// <inheritdoc />
-    public override void Flush()
-    {
-    }
-
-    /// <inheritdoc />
     public override int Read( byte[] buffer, int offset, int count )
     {
         return 0;
@@ -65,12 +60,18 @@ public class InputStream : Stream
     }
 
     /// <inheritdoc />
+    public override void Write( byte[] buffer, int offset, int count )
+    {
+    }
+
+    /// <inheritdoc />
     public override void SetLength( long value )
     {
     }
 
     /// <inheritdoc />
-    public override void Write( byte[] buffer, int offset, int count )
+    public override void Flush()
     {
     }
 }
+

@@ -33,18 +33,18 @@ public class PixelType
     public enum Format : int
     {
         Dummy = 0,
-        
+
         // ----------
-        Alpha = 1,
+        Alpha          = 1,
         LuminanceAlpha = 2,
-        RGB888 = 3,
-        RGBA8888 = 4,
-        RGB565 = 5,
-        RGBA4444 = 6,
-        Intensity = 7,
-        
+        RGB888         = 3,
+        RGBA8888       = 4,
+        RGB565         = 5,
+        RGBA4444       = 6,
+        Intensity      = 7,
+
         // ----------
-        Default = RGBA8888,        
+        Default = RGBA8888,
     }
 
     // ========================================================================
@@ -98,8 +98,8 @@ public class PixelType
         return PixmapFormat.ToGLPixelFormat( ToGdx2DPixmapPixelFormat( format ) );
     }
 
-    /// <inheritdoc cref="PixmapFormat.ToGLDataType"/>
-    public static int ToGLType( Format format )
+    /// <inheritdoc cref="PixmapFormat.ToGLDataType(Format)"/>
+    public static int ToGLDataType( Format format )
     {
         return PixmapFormat.ToGLDataType( ToGdx2DPixmapPixelFormat( format ) );
     }

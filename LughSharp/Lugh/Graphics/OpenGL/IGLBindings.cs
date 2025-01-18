@@ -161,7 +161,7 @@ public partial interface IGLBindings
     /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
     /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/> is also acceptable.
     /// </param>
-    /// <param name="params">Specifies the values of pname.</param>
+    /// <param name="parameters">Specifies the values of pname.</param>
     unsafe void TexParameterfv( int target, int pname, float* parameters );
 
     /// <summary>
@@ -185,8 +185,8 @@ public partial interface IGLBindings
     /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
     /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/> is also acceptable.
     /// </param>
-    /// <param name="params">Specifies the values of pname.</param>
-    unsafe void TexParameterfv( int target, int pname, float[] parameters );
+    /// <param name="parameters">Specifies the values of pname.</param>
+    void TexParameterfv( int target, int pname, float[] parameters );
 
     /// <summary>
     /// Set texture parameters
@@ -258,7 +258,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_SWIZZLE_RGBA"/> is also acceptable.
     /// </param>
     /// <param name="params">Specifies the values of pname.</param>
-    unsafe void TexParameteriv( int target, int pname, int[] parameters );
+    void TexParameteriv( int target, int pname, int[] parameters );
 
     /// <summary>
     /// Specify a one-dimensional texture image
@@ -343,7 +343,7 @@ public partial interface IGLBindings
     /// Specifies the pixel data as an array of values. Make sure to match the generic type with the
     /// <paramref name="type"/> parameter.
     /// </param>
-    unsafe void TexImage1D< T >( int target, int level, int internalFormat, int width, int border, int format, int type, T[] pixels )
+    void TexImage1D< T >( int target, int level, int internalFormat, int width, int border, int format, int type, T[] pixels )
         where T : unmanaged;
 
     /// <summary>
@@ -402,14 +402,14 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     unsafe void TexImage2D( int target,
-                              int level,
-                              int internalFormat,
-                              int width,
-                              int height,
-                              int border,
-                              int format,
-                              int type,
-                              void* pixels );
+                            int level,
+                            int internalFormat,
+                            int width,
+                            int height,
+                            int border,
+                            int format,
+                            int type,
+                            void* pixels );
 
     /// <summary>
     /// Specify a two-dimensional texture image
@@ -470,14 +470,14 @@ public partial interface IGLBindings
     /// and <paramref name="type"/> parameters.
     /// </param>
     void TexImage2D< T >( int target,
-                                   int level,
-                                   int internalFormat,
-                                   int width,
-                                   int height,
-                                   int border,
-                                   int format,
-                                   int type,
-                                   T[] pixels ) where T : unmanaged;
+                          int level,
+                          int internalFormat,
+                          int width,
+                          int height,
+                          int border,
+                          int format,
+                          int type,
+                          T[] pixels ) where T : unmanaged;
 
     /// <summary>
     /// 
@@ -488,7 +488,7 @@ public partial interface IGLBindings
     /// <param name="pixmap"></param>
     /// <typeparam name="T"></typeparam>
     void TexImage2D( int target, int level, int border, Pixmap pixmap );
-    
+
     /// <summary>
     /// Specify which color buffers are to be drawn into.
     /// </summary>
@@ -799,7 +799,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array of <typeparamref name="T"/>s where the pixel data will be
     /// returned. Make sure to match the type of the data with the type in <paramref name="type"/>.
     /// </param>
-    unsafe void ReadPixels< T >( int x, int y, int width, int height, int format, int type, ref T[] pixels ) where T : unmanaged;
+    void ReadPixels< T >( int x, int y, int width, int height, int format, int type, ref T[] pixels ) where T : unmanaged;
 
     /// <summary>
     /// Return the boolean value or values of a selected parameter.
@@ -822,7 +822,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array of <see langword="bool"/>s where the boolean value or values
     /// will be returned.
     /// </param>
-    unsafe void GetBooleanv( int pname, ref bool[] data );
+    void GetBooleanv( int pname, ref bool[] data );
 
     /// <summary>
     /// Return the double value or values of a selected parameter.
@@ -845,7 +845,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array of <see langword="double"/>s where the double value or values
     /// will be returned.
     /// </param>
-    unsafe void GetDoublev( int pname, ref double[] data );
+    void GetDoublev( int pname, ref double[] data );
 
     /// <summary>
     /// Return error information.
@@ -874,7 +874,7 @@ public partial interface IGLBindings
     /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
-    unsafe void GetFloatv( int pname, ref float[] data );
+    void GetFloatv( int pname, ref float[] data );
 
     /// <summary>
     /// Return the integer value or values of a selected parameter.
@@ -897,7 +897,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array of <see langword="int"/>s where the integer value or values
     /// will be returned.
     /// </param>
-    unsafe void GetIntegerv( int pname, ref int[] data );
+    void GetIntegerv( int pname, ref int[] data );
 
     /// <summary>
     /// Return a string describing the current  connection.
@@ -919,7 +919,7 @@ public partial interface IGLBindings
     /// accepts <see cref="GL_EXTENSIONS"/>.
     /// </param>
     /// <returns>The requested string as a managed string.</returns>
-    unsafe string GetStringSafe( int name );
+    string GetStringSafe( int name );
 
     /// <summary>
     /// Return a texture image.
@@ -1004,7 +1004,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array of <typeparamref name="T"/>s where the pixel data will be
     /// returned.
     /// </param>
-    unsafe void GetTexImage< T >( int target, int level, int format, int type, ref T[] pixels ) where T : unmanaged;
+    void GetTexImage< T >( int target, int level, int format, int type, ref T[] pixels ) where T : unmanaged;
 
     /// <summary>
     /// Return texture parameter (float) values.
@@ -1056,7 +1056,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_WRAP_T"/> are accepted.
     /// </param>
     /// <param name="params">A <see langword="ref"/> to a float array where the values will be returned.</param>
-    unsafe void GetTexParameterfv( int target, int pname, ref float[] parameters );
+    void GetTexParameterfv( int target, int pname, ref float[] parameters );
 
     /// <summary>
     /// Return texture parameter (integer) values.
@@ -1108,7 +1108,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_WRAP_T"/> are accepted.
     /// </param>
     /// <param name="params">A <see langword="ref"/> to an integer array where the values will be returned.</param>
-    unsafe void GetTexParameteriv( int target, int pname, ref int[] parameters );
+    void GetTexParameteriv( int target, int pname, ref int[] parameters );
 
     /// <summary>
     /// Return texture parameter (float) values for a specific level of detail.
@@ -1154,7 +1154,7 @@ public partial interface IGLBindings
     /// reduction image.
     /// </param>
     /// <param name="params">A <see langword="ref"/> to a float array where the values will be returned.</param>
-    unsafe void GetTexLevelParameterfv( int target, int level, int pname, ref float[] parameters );
+    void GetTexLevelParameterfv( int target, int level, int pname, ref float[] parameters );
 
     /// <summary>
     /// Return texture parameter (integer) values for a specific level of detail.
@@ -1200,7 +1200,7 @@ public partial interface IGLBindings
     /// reduction image.
     /// </param>
     /// <param name="params">A <see langword="ref"/> to an integer array where the values will be returned.</param>
-    unsafe void GetTexLevelParameteriv( int target, int level, int pname, ref int[] parameters );
+    void GetTexLevelParameteriv( int target, int level, int pname, ref int[] parameters );
 
     /// <summary>
     /// Test whether a capability is enabled.
@@ -1284,7 +1284,7 @@ public partial interface IGLBindings
     /// Specifies an array of indices to be rendererd. Make sure to match the type
     /// <typeparamref name="T"/> with the type specified by <paramref name="type"/>.
     /// </param>
-    unsafe void DrawElements< T >( int mode, int count, int type, T[] indices ) where T : unmanaged, IUnsignedNumber< T >;
+    void DrawElements< T >( int mode, int count, int type, T[] indices ) where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
     /// Set the scale and units used to calculate depth values.
@@ -1460,7 +1460,7 @@ public partial interface IGLBindings
     /// Specifies an array of <typeparamref name="T"/>s containing the image data. Make sure to match
     /// this with the type specified in <paramref name="type"/>.
     /// </param>
-    unsafe void TexSubImage1D< T >( int target, int level, int xoffset, int width, int format, int type, T[] pixels )
+    void TexSubImage1D< T >( int target, int level, int xoffset, int width, int format, int type, T[] pixels )
         where T : unmanaged;
 
     /// <summary>
@@ -1499,14 +1499,14 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     unsafe void TexSubImage2D( int target,
-                                 int level,
-                                 int xoffset,
-                                 int yoffset,
-                                 int width,
-                                 int height,
-                                 int format,
-                                 int type,
-                                 void* pixels );
+                               int level,
+                               int xoffset,
+                               int yoffset,
+                               int width,
+                               int height,
+                               int format,
+                               int type,
+                               void* pixels );
 
     /// <summary>
     /// Specify a two-dimensional texture subimage.
@@ -1546,15 +1546,15 @@ public partial interface IGLBindings
     /// Specifies an array of <typeparamref name="T"/>s containing the image data. Make sure to match
     /// this with the type specified in <paramref name="type"/>.
     /// </param>
-    unsafe void TexSubImage2D< T >( int target,
-                                      int level,
-                                      int xoffset,
-                                      int yoffset,
-                                      int width,
-                                      int height,
-                                      int format,
-                                      int type,
-                                      T[] pixels ) where T : unmanaged;
+    void TexSubImage2D< T >( int target,
+                             int level,
+                             int xoffset,
+                             int yoffset,
+                             int width,
+                             int height,
+                             int format,
+                             int type,
+                             T[] pixels ) where T : unmanaged;
 
     /// <summary>
     /// Bind a named texture to a texturing target.
@@ -1580,7 +1580,7 @@ public partial interface IGLBindings
     /// Delete named textures.
     /// </summary>
     /// <param name="textures">Specifies an array of textures to be deleted.</param>
-    unsafe void DeleteTextures( params uint[] textures );
+    void DeleteTextures( params uint[] textures );
 
     /// <summary>
     /// Generate texture names.
@@ -1594,7 +1594,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="n">Specifies the number of texture names to be generated.</param>
     /// <returns>An array containing the generated texture names.</returns>
-    unsafe uint[] GenTextures( int n );
+    uint[] GenTextures( int n );
 
     /// <summary>
     /// Generate a single texture name.
@@ -1647,7 +1647,7 @@ public partial interface IGLBindings
     /// An array of indices to render. Make sure to match the type <typeparamref name="T"/> with the
     /// type specified for <paramref name="type"/>.
     /// </param>
-    unsafe void DrawRangeElements< T >( int mode, uint start, uint end, int count, int type, T[] indices )
+    void DrawRangeElements< T >( int mode, uint start, uint end, int count, int type, T[] indices )
         where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
@@ -1699,15 +1699,15 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     unsafe void TexImage3D( int target,
-                              int level,
-                              int internalFormat,
-                              int width,
-                              int height,
-                              int depth,
-                              int border,
-                              int format,
-                              int type,
-                              void* pixels );
+                            int level,
+                            int internalFormat,
+                            int width,
+                            int height,
+                            int depth,
+                            int border,
+                            int format,
+                            int type,
+                            void* pixels );
 
     /// <summary>
     /// Specify a three-dimensional texture image.
@@ -1760,16 +1760,16 @@ public partial interface IGLBindings
     /// Specifies an array of <typeparamref name="T"/> containing the image data. Make sure to match the
     /// <paramref name="type"/> parameter with <typeparamref name="T"/>.
     /// </param>
-    unsafe void TexImage3D< T >( int target,
-                                   int level,
-                                   int internalFormat,
-                                   int width,
-                                   int height,
-                                   int depth,
-                                   int border,
-                                   int format,
-                                   int type,
-                                   T[] pixels ) where T : unmanaged;
+    void TexImage3D< T >( int target,
+                          int level,
+                          int internalFormat,
+                          int width,
+                          int height,
+                          int depth,
+                          int border,
+                          int format,
+                          int type,
+                          T[] pixels ) where T : unmanaged;
 
     /// <summary>
     /// Specify a three-dimensional texture subimage.
@@ -1806,16 +1806,16 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
     unsafe void TexSubImage3D( int target,
-                                 int level,
-                                 int xoffset,
-                                 int yoffset,
-                                 int zoffset,
-                                 int width,
-                                 int height,
-                                 int depth,
-                                 int format,
-                                 int type,
-                                 void* pixels );
+                               int level,
+                               int xoffset,
+                               int yoffset,
+                               int zoffset,
+                               int width,
+                               int height,
+                               int depth,
+                               int format,
+                               int type,
+                               void* pixels );
 
     /// <summary>
     /// Specify a three-dimensional texture subimage.
@@ -1854,17 +1854,17 @@ public partial interface IGLBindings
     /// Specifies an array of <typeparamref name="T"/> containing the image data. Make sure to match the
     /// <paramref name="type"/> parameter with <typeparamref name="T"/>.
     /// </param>
-    unsafe void TexSubImage3D< T >( int target,
-                                      int level,
-                                      int xoffset,
-                                      int yoffset,
-                                      int zoffset,
-                                      int width,
-                                      int height,
-                                      int depth,
-                                      int format,
-                                      int type,
-                                      T[] pixels ) where T : unmanaged;
+    void TexSubImage3D< T >( int target,
+                             int level,
+                             int xoffset,
+                             int yoffset,
+                             int zoffset,
+                             int width,
+                             int height,
+                             int depth,
+                             int format,
+                             int type,
+                             T[] pixels ) where T : unmanaged;
 
     /// <summary>
     /// Copy a three-dimensional texture subimage.
@@ -1891,14 +1891,14 @@ public partial interface IGLBindings
     /// <param name="width">Specifies the width of the texture subimage.</param>
     /// <param name="height">Specifies the height of the texture subimage.</param>
     void CopyTexSubImage3D( int target,
-                              int level,
-                              int xoffset,
-                              int yoffset,
-                              int zoffset,
-                              int x,
-                              int y,
-                              int width,
-                              int height );
+                            int level,
+                            int xoffset,
+                            int yoffset,
+                            int zoffset,
+                            int x,
+                            int y,
+                            int width,
+                            int height );
 
     /// <summary>
     /// Select active texture unit
@@ -1910,6 +1910,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE0"/>.
     /// </param>
     void ActiveTexture( TextureUnit texture );
+
     void ActiveTexture( int texture );
 
     /// <summary>
@@ -1960,14 +1961,14 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     unsafe void CompressedTexImage3D( int target,
-                                        int level,
-                                        int internalFormat,
-                                        int width,
-                                        int height,
-                                        int depth,
-                                        int border,
-                                        int imageSize,
-                                        void* data );
+                                      int level,
+                                      int internalFormat,
+                                      int width,
+                                      int height,
+                                      int depth,
+                                      int border,
+                                      int imageSize,
+                                      void* data );
 
     /// <summary>
     /// Specify a three-dimensional texture image in a compressed format
@@ -1999,14 +2000,14 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="border">This value must be 0.</param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
-    unsafe void CompressedTexImage3D( int target,
-                                        int level,
-                                        int internalFormat,
-                                        int width,
-                                        int height,
-                                        int depth,
-                                        int border,
-                                        byte[] data );
+    void CompressedTexImage3D( int target,
+                               int level,
+                               int internalFormat,
+                               int width,
+                               int height,
+                               int depth,
+                               int border,
+                               byte[] data );
 
     /// <summary>
     /// Specify a two-dimensional texture image in a compressed format
@@ -2043,13 +2044,13 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     unsafe void CompressedTexImage2D( int target,
-                                        int level,
-                                        int internalFormat,
-                                        int width,
-                                        int height,
-                                        int border,
-                                        int imageSize,
-                                        void* data );
+                                      int level,
+                                      int internalFormat,
+                                      int width,
+                                      int height,
+                                      int border,
+                                      int imageSize,
+                                      void* data );
 
     /// <summary>
     /// Specify a two-dimensional texture image in a compressed format
@@ -2081,7 +2082,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="border">This value must be 0.</param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
-    unsafe void CompressedTexImage2D( int target, int level, int internalFormat, int width, int height, int border, byte[] data );
+    void CompressedTexImage2D( int target, int level, int internalFormat, int width, int height, int border, byte[] data );
 
     /// <summary>
     /// Specify a one-dimensional texture image in a compressed format
@@ -2133,7 +2134,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="border">This value must be 0.</param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
-    unsafe void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, byte[] data );
+    void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, byte[] data );
 
     /// <summary>
     /// Specify a three-dimensional texture subimage in a compressed format
@@ -2172,16 +2173,16 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     unsafe void CompressedTexSubImage3D( int target,
-                                           int level,
-                                           int xoffset,
-                                           int yoffset,
-                                           int zoffset,
-                                           int width,
-                                           int height,
-                                           int depth,
-                                           int format,
-                                           int imageSize,
-                                           void* data );
+                                         int level,
+                                         int xoffset,
+                                         int yoffset,
+                                         int zoffset,
+                                         int width,
+                                         int height,
+                                         int depth,
+                                         int format,
+                                         int imageSize,
+                                         void* data );
 
     /// <summary>
     /// Specify a three-dimensional texture subimage in a compressed format
@@ -2215,16 +2216,16 @@ public partial interface IGLBindings
     /// <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
-    unsafe void CompressedTexSubImage3D( int target,
-                                           int level,
-                                           int xoffset,
-                                           int yoffset,
-                                           int zoffset,
-                                           int width,
-                                           int height,
-                                           int depth,
-                                           int format,
-                                           byte[] data );
+    void CompressedTexSubImage3D( int target,
+                                  int level,
+                                  int xoffset,
+                                  int yoffset,
+                                  int zoffset,
+                                  int width,
+                                  int height,
+                                  int depth,
+                                  int format,
+                                  byte[] data );
 
     /// <summary>
     /// Specify a two-dimensional texture subimage in a compressed format
@@ -2261,14 +2262,14 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
     unsafe void CompressedTexSubImage2D( int target,
-                                           int level,
-                                           int xoffset,
-                                           int yoffset,
-                                           int width,
-                                           int height,
-                                           int format,
-                                           int imageSize,
-                                           void* data );
+                                         int level,
+                                         int xoffset,
+                                         int yoffset,
+                                         int width,
+                                         int height,
+                                         int format,
+                                         int imageSize,
+                                         void* data );
 
     /// <summary>
     /// Specify a two-dimensional texture subimage in a compressed format
@@ -2300,14 +2301,14 @@ public partial interface IGLBindings
     /// <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
-    unsafe void CompressedTexSubImage2D( int target,
-                                           int level,
-                                           int xoffset,
-                                           int yoffset,
-                                           int width,
-                                           int height,
-                                           int format,
-                                           byte[] data );
+    void CompressedTexSubImage2D( int target,
+                                  int level,
+                                  int xoffset,
+                                  int yoffset,
+                                  int width,
+                                  int height,
+                                  int format,
+                                  byte[] data );
 
     /// <summary>
     /// Specify a one-dimensional texture subimage in a compressed format
@@ -2353,7 +2354,7 @@ public partial interface IGLBindings
     /// <see cref="GL_COMPRESSED_SRGB"/>, <see cref="GL_COMPRESSED_SRGB_ALPHA"/>.
     /// </param>
     /// <param name="data">Specifies an array of bytes containing the compressed image data.</param>
-    unsafe void CompressedTexSubImage1D( int target, int level, int xoffset, int width, int format, byte[] data );
+    void CompressedTexSubImage1D( int target, int level, int xoffset, int width, int format, byte[] data );
 
     /// <summary>
     /// Return a compressed texture image
@@ -2391,7 +2392,7 @@ public partial interface IGLBindings
     /// is the nth mipmap reduction image.
     /// </param>
     /// <param name="img">Specifies a <see langword="ref"/> byte array into which the compressed image data will be placed.</param>
-    unsafe void GetCompressedTexImage( int target, int level, ref byte[] img );
+    void GetCompressedTexImage( int target, int level, ref byte[] img );
 
     /// <summary>
     /// Specify pixel arithmetic for RGB and alpha components separately. Refer to
@@ -2442,7 +2443,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="first">Specifies an array of starting indices in the enabled arrays.</param>
     /// <param name="count">Specifies an array of the number of indices to be rendered.</param>
-    unsafe void MultiDrawArrays( int mode, int[] first, int[] count );
+    void MultiDrawArrays( int mode, int[] first, int[] count );
 
     /// <summary>
     /// Render multiple sets of primitives by specifying indices of array data elements.
@@ -2479,7 +2480,7 @@ public partial interface IGLBindings
     /// <see cref="GL_UNSIGNED_BYTE"/>, <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies a two-dimensional array of indices of the vertices that are to be rendered.</param>
-    unsafe void MultiDrawElements< T >( int mode, int[] count, int type, T[][] indices ) where T : unmanaged, IUnsignedNumber< T >;
+    void MultiDrawElements< T >( int mode, int[] count, int type, T[][] indices ) where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
     /// Specify point parameters.
@@ -2512,7 +2513,7 @@ public partial interface IGLBindings
     /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN"/> are accepted.
     /// </param>
     /// <param name="params">Specifies an array of values that will be used to update the current point parameters.</param>
-    unsafe void PointParameterfv( int pname, float[] parameters );
+    void PointParameterfv( int pname, float[] parameters );
 
     /// <summary>
     /// Specify point parameters.
@@ -2545,7 +2546,7 @@ public partial interface IGLBindings
     /// and <see cref="GL_POINT_SPRITE_COORD_ORIGIN"/> are accepted.
     /// </param>
     /// <param name="params">Specifies an array of values that will be used to update the current point parameters.</param>
-    unsafe void PointParameteriv( int pname, int[] parameters );
+    void PointParameteriv( int pname, int[] parameters );
 
     /// <summary>
     /// Set the blend color.
@@ -2578,7 +2579,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="n">Specifies the number of query object names to generate.</param>
     /// <returns>Array of generated query object names.</returns>
-    unsafe uint[] GenQueries( int n );
+    uint[] GenQueries( int n );
 
     /// <summary>
     /// Generate a single query object name.
@@ -2597,7 +2598,7 @@ public partial interface IGLBindings
     /// Delete named query objects.
     /// </summary>
     /// <param name="ids">Specifies an array of query objects to be deleted.</param>
-    unsafe void DeleteQueries( params uint[] ids );
+    void DeleteQueries( params uint[] ids );
 
     /// <summary>
     /// Determine if a name corresponds to a query object.
@@ -2663,7 +2664,7 @@ public partial interface IGLBindings
     /// <see cref="GL_QUERY_COUNTER_BITS"/> are accepted.
     /// </param>
     /// <param name="params">A <see langword="ref"/> to an integer array where the integer value or values are to be returned.</param>
-    unsafe void GetQueryiv( int target, int pname, ref int[] parameters );
+    void GetQueryiv( int target, int pname, ref int[] parameters );
 
     /// <summary>
     /// Return parameters of a query object.
@@ -2685,7 +2686,7 @@ public partial interface IGLBindings
     /// <see cref="GL_QUERY_RESULT_NO_WAIT"/> or <see cref="GL_QUERY_RESULT_AVAILABLE"/> are accepted.
     /// </param>
     /// <param name="params">A <see langword="ref"/> to an integer array where the integer value or values are to be returned.</param>
-    unsafe void GetQueryObjectiv( uint id, int pname, ref int[] parameters );
+    void GetQueryObjectiv( uint id, int pname, ref int[] parameters );
 
     /// <summary>
     /// Return parameters of a query object.
@@ -2710,7 +2711,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an unsigned integer array where the integer value or values are to be
     /// returned.
     /// </param>
-    unsafe void GetQueryObjectuiv( uint id, int pname, ref uint[] parameters );
+    void GetQueryObjectuiv( uint id, int pname, ref uint[] parameters );
 
     /// <summary>
     /// Bind a named buffer object.
@@ -2737,7 +2738,7 @@ public partial interface IGLBindings
     /// Delete named buffer objects.
     /// </summary>
     /// <param name="buffers">An array of buffer objects to be deleted.</param>
-    unsafe void DeleteBuffers( params uint[] buffers );
+    void DeleteBuffers( params uint[] buffers );
 
     /// <summary>
     /// Generate buffer object names.
@@ -2751,7 +2752,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="n">Specifies the number of buffer object names to generate.</param>
     /// <returns>An array of generated buffer object names.</returns>
-    unsafe uint[] GenBuffers( int n );
+    uint[] GenBuffers( int n );
 
     /// <summary>
     /// Generate a single buffer object name.
@@ -2812,7 +2813,7 @@ public partial interface IGLBindings
     /// <see cref="GL_STATIC_DRAW"/>, <see cref="GL_STATIC_READ"/>, <see cref="GL_STATIC_COPY"/>,
     /// <see cref="GL_DYNAMIC_DRAW"/>, <see cref="GL_DYNAMIC_READ"/> or <see cref="GL_DYNAMIC_COPY"/>.
     /// </param>
-    unsafe void BufferData< T >( int target, T[] data, int usage ) where T : unmanaged;
+    void BufferData< T >( int target, T[] data, int usage ) where T : unmanaged;
 
     /// <summary>
     /// Update a subset of a buffer object's data store.
@@ -2847,7 +2848,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="offsetCount">Specifies the offset into the buffer object's data store where data replacement will begin.</param>
     /// <param name="data">An array of <typeparamref name="T"/>s that will be copied into the data store for replacement.</param>
-    unsafe void BufferSubData< T >( int target, int offsetCount, T[] data ) where T : unmanaged;
+    void BufferSubData< T >( int target, int offsetCount, T[] data ) where T : unmanaged;
 
     /// <summary>
     /// Return a subset of a buffer object's data store.
@@ -2883,7 +2884,7 @@ public partial interface IGLBindings
     /// <param name="offsetCount">Specifies the offset into the buffer object's data store from which data will be returned.</param>
     /// <param name="count">Specifies the number of <typeparamref name="T"/>s to be returned.</param>
     /// <param name="data">An array of <typeparamref name="T"/>s that will be filled with the data from the buffer object.</param>
-    unsafe void GetBufferSubData< T >( int target, int offsetCount, int count, ref T[] data ) where T : unmanaged;
+    void GetBufferSubData< T >( int target, int offsetCount, int count, ref T[] data ) where T : unmanaged;
 
     /// <summary>
     /// Map a buffer object's data store into the client's address space.
@@ -2921,7 +2922,7 @@ public partial interface IGLBindings
     /// <see cref="GL_READ_WRITE"/>.
     /// </param>
     /// <returns>Returns a type-safe and memory-safe <see cref="System.Span{T}"/> of the buffers data.</returns>
-    unsafe Span< T > MapBuffer< T >( int target, int access ) where T : unmanaged;
+    Span< T > MapBuffer< T >( int target, int access ) where T : unmanaged;
 
     /// <summary>
     /// Release a mapped buffer object's data store.
@@ -2971,7 +2972,7 @@ public partial interface IGLBindings
     /// <see cref="GL_BUFFER_USAGE"/>.
     /// </param>
     /// <param name="params">A <see langword="ref"/> to an integer array where the returned data will be placed.</param>
-    unsafe void GetBufferParameteriv( int target, int pname, ref int[] parameters );
+    void GetBufferParameteriv( int target, int pname, ref int[] parameters );
 
     /// <summary>
     /// Return the pointer to a mapped buffer object's data store.
@@ -3004,7 +3005,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array of <see cref="IntPtr"/>s where the returned pointer(s) will
     /// be placed.
     /// </param>
-    unsafe void GetBufferPointerv( int target, int pname, ref IntPtr[] parameters );
+    void GetBufferPointerv( int target, int pname, ref IntPtr[] parameters );
 
     /// <summary>
     /// Set the RGB blend equation and alpha blend equation separately
@@ -3042,7 +3043,7 @@ public partial interface IGLBindings
     /// <see cref="GL_FRONT_RIGHT"/>, <see cref="GL_BACK_LEFT"/>, <see cref="GL_BACK_RIGHT"/>,
     /// <see cref="GL_COLOR_ATTACHMENT0"/> through <see cref="GL_COLOR_ATTACHMENT31"/>.
     /// </param>
-    unsafe void DrawBuffers( params int[] bufs );
+    void DrawBuffers( params int[] bufs );
 
     /// <summary>
     /// Set front and back stencil test actions
@@ -3132,7 +3133,7 @@ public partial interface IGLBindings
     /// Specifies a string containing the name of the vertex shader attribute variable to which index is to
     /// be bound.
     /// </param>
-    unsafe void BindAttribLocation( uint program, uint index, string name );
+    void BindAttribLocation( uint program, uint index, string name );
 
     /// <summary>
     /// Compiles a shader object
@@ -3224,7 +3225,7 @@ public partial interface IGLBindings
     /// <param name="size">Returns the size of the attribute variable.</param>
     /// <param name="type">Returns the data type of the attribute variable.</param>
     /// <returns>Returns a managed string containing the name of the attribute variable.</returns>
-    unsafe string GetActiveAttrib( uint program, uint index, int bufSize, out int size, out int type );
+    string GetActiveAttrib( uint program, uint index, int bufSize, out int size, out int type );
 
     /// <summary>
     /// Returns information about an active uniform variable for the specified program object
@@ -3262,7 +3263,7 @@ public partial interface IGLBindings
     /// <param name="size">Returns the size of the uniform variable.</param>
     /// <param name="type">Returns the data type of the uniform variable.</param>
     /// <returns>Returns a managed string containing the name of the uniform variable.</returns>
-    unsafe string GetActiveUniform( uint program, uint index, int bufSize, out int size, out int type );
+    string GetActiveUniform( uint program, uint index, int bufSize, out int size, out int type );
 
     /// <summary>
     /// Returns the shader objects attached to program
@@ -3279,7 +3280,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="maxCount">Specifies a maximum amount of shaders to return.</param>
     /// <returns>Returns an array of shader objects attached to program resized to the amount of shaders actually attached.</returns>
-    unsafe uint[] GetAttachedShaders( uint program, int maxCount );
+    uint[] GetAttachedShaders( uint program, int maxCount );
 
     /// <summary>
     /// Returns the location of an attribute variable
@@ -3301,7 +3302,7 @@ public partial interface IGLBindings
     /// Returns the location of the attribute variable name if it is found in program. If name starts with the
     /// reserved prefix "gl_", a location of -1 is returned.
     /// </returns>
-    unsafe int GetAttribLocation( uint program, string name );
+    int GetAttribLocation( uint program, string name );
 
     /// <summary>
     /// Returns a parameter from a program object
@@ -3323,7 +3324,7 @@ public partial interface IGLBindings
     /// for a list of possible values.
     /// </param>
     /// <param name="parameters">A <see langword="ref"/> to an integer array where the returned value(s) will be placed.</param>
-    unsafe void GetProgramiv( uint program, int pname, ref int[] parameters );
+    void GetProgramiv( uint program, int pname, ref int[] parameters );
 
     /// <summary>
     /// Returns the information log for a program object
@@ -3340,7 +3341,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object whose information log is to be queried.</param>
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned information log.</param>
     /// <returns>Returns the information log for <paramref name="program"/>, resized to the correct length.</returns>
-    unsafe string GetProgramInfoLog( uint program, int bufSize );
+    string GetProgramInfoLog( uint program, int bufSize );
 
     /// <summary>
     /// Returns a parameter from a shader object
@@ -3364,7 +3365,7 @@ public partial interface IGLBindings
     /// <see cref="GL_SHADER_SOURCE_LENGTH"/>.
     /// </param>
     /// <param name="params">A <see langword="ref"/> to an integer array where the returned value(s) will be placed.</param>
-    unsafe void GetShaderiv( uint shader, int pname, ref int[] parameters );
+    void GetShaderiv( uint shader, int pname, ref int[] parameters );
 
     /// <summary>
     /// Returns the information log for a shader object
@@ -3381,7 +3382,7 @@ public partial interface IGLBindings
     /// <param name="shader">Specifies the shader object whose information log is to be queried.</param>
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned information log.</param>
     /// <returns>Returns the information log for <paramref name="shader"/>, resized to the correct length.</returns>
-    unsafe string GetShaderInfoLog( uint shader, int bufSize );
+    string GetShaderInfoLog( uint shader, int bufSize );
 
     /// <summary>
     /// Returns the source code string from a shader object
@@ -3398,7 +3399,7 @@ public partial interface IGLBindings
     /// <param name="shader">Specifies the shader object to be queried.</param>
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned source code string.</param>
     /// <returns>Returns the source code string for <paramref name="shader"/>, resized to the correct length.</returns>
-    unsafe string GetShaderSource( uint shader, int bufSize = 4096 );
+    string GetShaderSource( uint shader, int bufSize = 4096 );
 
     /// <summary>
     /// Returns the location of a uniform variable
@@ -3415,7 +3416,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="name">A string containing the name of the uniform variable whose location is to be queried.</param>
-    unsafe int GetUniformLocation( uint program, string name );
+    int GetUniformLocation( uint program, string name );
 
     /// <summary>
     /// Returns the value of a uniform variable
@@ -3434,7 +3435,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array to receive the value of the uniform variable at the location
     /// specified by location.
     /// </param>
-    unsafe void GetUniformfv( uint program, int location, ref float[] parameters );
+    void GetUniformfv( uint program, int location, ref float[] parameters );
 
     /// <summary>
     /// Returns the value of a uniform variable
@@ -3453,7 +3454,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array to receive the value of the uniform variable at the location
     /// specified by location.
     /// </param>
-    unsafe void GetUniformiv( uint program, int location, ref int[] parameters );
+    void GetUniformiv( uint program, int location, ref int[] parameters );
 
     /// <summary>
     /// Returns the value of a generic vertex attribute parameter
@@ -3489,7 +3490,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array to receive the value of the generic vertex attribute
     /// parameter specified by pname for the vertex attribute specified by index.
     /// </param>
-    unsafe void GetVertexAttribdv( uint index, int pname, ref double[] parameters );
+    void GetVertexAttribdv( uint index, int pname, ref double[] parameters );
 
     /// <summary>
     /// Returns the value of a generic vertex attribute parameter
@@ -3525,7 +3526,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array to receive the value of the generic vertex attribute
     /// parameter specified by pname for the vertex attribute specified by index.
     /// </param>
-    unsafe void GetVertexAttribfv( uint index, int pname, ref float[] parameters );
+    void GetVertexAttribfv( uint index, int pname, ref float[] parameters );
 
     /// <summary>
     /// Returns the value of a generic vertex attribute parameter
@@ -3561,7 +3562,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array to receive the value of the generic vertex attribute
     /// parameter specified by pname for the vertex attribute specified by index.
     /// </param>
-    unsafe void GetVertexAttribiv( uint index, int pname, ref int[] parameters );
+    void GetVertexAttribiv( uint index, int pname, ref int[] parameters );
 
     /// <summary>
     /// Return the address of the specified generic vertex attribute pointer
@@ -3586,7 +3587,7 @@ public partial interface IGLBindings
     /// A <see langword="ref"/> to an array to receive the address of the specified generic vertex
     /// attribute pointer.
     /// </param>
-    unsafe void GetVertexAttribPointerv( uint index, int pname, ref uint[] pointer );
+    void GetVertexAttribPointerv( uint index, int pname, ref uint[] pointer );
 
     /// <summary>
     /// Determines if a name corresponds to a program object
@@ -3631,7 +3632,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="shader">Specifies the handle of the shader object whose source code is to be replaced.</param>
     /// <param name="string">Specifies an array of strings containing the source code to be loaded into the shader.</param>
-    unsafe void ShaderSource( uint shader, params string[] @string );
+    void ShaderSource( uint shader, params string[] @string );
 
     /// <summary>
     /// Installs a program object as part of current rendering state
@@ -3780,7 +3781,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="count">Specifies the number of elements that are to be modified.</param>
-    unsafe void Uniform1fv( int location, params float[] value );
+    void Uniform1fv( int location, params float[] value );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object
@@ -3798,7 +3799,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform2fv( int location, params float[] value );
+    void Uniform2fv( int location, params float[] value );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object
@@ -3816,7 +3817,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform3fv( int location, params float[] value );
+    void Uniform3fv( int location, params float[] value );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object
@@ -3834,7 +3835,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform4fv( int location, params float[] value );
+    void Uniform4fv( int location, params float[] value );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object
@@ -3852,7 +3853,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform1iv( int location, params int[] value );
+    void Uniform1iv( int location, params int[] value );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object
@@ -3870,7 +3871,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform2iv( int location, params int[] value );
+    void Uniform2iv( int location, params int[] value );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object
@@ -3888,7 +3889,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform3iv( int location, params int[] value );
+    void Uniform3iv( int location, params int[] value );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object
@@ -3906,7 +3907,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform value to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform4iv( int location, params int[] value );
+    void Uniform4iv( int location, params int[] value );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object
@@ -3929,7 +3930,7 @@ public partial interface IGLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. Needs 4
     /// values per matrix.
     /// </param>
-    unsafe void UniformMatrix2fv( int location, bool transpose, params float[] value );
+    void UniformMatrix2fv( int location, bool transpose, params float[] value );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object
@@ -3952,7 +3953,7 @@ public partial interface IGLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. Needs 9
     /// values per matrix.
     /// </param>
-    unsafe void UniformMatrix3fv( int location, bool transpose, params float[] value );
+    void UniformMatrix3fv( int location, bool transpose, params float[] value );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object
@@ -3975,7 +3976,7 @@ public partial interface IGLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. Needs 16
     /// values per matrix.
     /// </param>
-    unsafe void UniformMatrix4fv( int location, bool transpose, params float[] value );
+    void UniformMatrix4fv( int location, bool transpose, params float[] value );
 
 //TODO: Unsupported method    
 //    unsafe void UniformMatrix4fv( int location, int count, bool transpose, Buffer buffer );
@@ -4006,7 +4007,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib1dv( uint index, params double[] v );
+    void VertexAttrib1dv( uint index, params double[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4027,7 +4028,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib1fv( uint index, params float[] v );
+    void VertexAttrib1fv( uint index, params float[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4048,7 +4049,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib1sv( uint index, params Int16[] v );
+    void VertexAttrib1sv( uint index, params Int16[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4070,7 +4071,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib2dv( uint index, params double[] v );
+    void VertexAttrib2dv( uint index, params double[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4092,7 +4093,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib2fv( uint index, params float[] v );
+    void VertexAttrib2fv( uint index, params float[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4114,7 +4115,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib2sv( uint index, params Int16[] v );
+    void VertexAttrib2sv( uint index, params Int16[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4137,7 +4138,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib3dv( uint index, params double[] v );
+    void VertexAttrib3dv( uint index, params double[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4160,7 +4161,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib3fv( uint index, params float[] v );
+    void VertexAttrib3fv( uint index, params float[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4183,7 +4184,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib3sv( uint index, params Int16[] v );
+    void VertexAttrib3sv( uint index, params Int16[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4197,7 +4198,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4Nbv( uint index, params SByte[] v );
+    void VertexAttrib4Nbv( uint index, params SByte[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4211,7 +4212,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4Niv( uint index, params int[] v );
+    void VertexAttrib4Niv( uint index, params int[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4225,7 +4226,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4Nsv( uint index, params Int16[] v );
+    void VertexAttrib4Nsv( uint index, params Int16[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4249,7 +4250,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4Nubv( uint index, params Byte[] v );
+    void VertexAttrib4Nubv( uint index, params Byte[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4263,7 +4264,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4Nuiv( uint index, params uint[] v );
+    void VertexAttrib4Nuiv( uint index, params uint[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4277,7 +4278,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4Nusv( uint index, params UInt16[] v );
+    void VertexAttrib4Nusv( uint index, params UInt16[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4291,7 +4292,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4bv( uint index, params SByte[] v );
+    void VertexAttrib4bv( uint index, params SByte[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4327,7 +4328,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4dv( uint index, params double[] v );
+    void VertexAttrib4dv( uint index, params double[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4363,7 +4364,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4fv( uint index, params float[] v );
+    void VertexAttrib4fv( uint index, params float[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4377,7 +4378,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4iv( uint index, params int[] v );
+    void VertexAttrib4iv( uint index, params int[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4413,7 +4414,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4sv( uint index, params Int16[] v );
+    void VertexAttrib4sv( uint index, params Int16[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4427,7 +4428,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4ubv( uint index, params Byte[] v );
+    void VertexAttrib4ubv( uint index, params Byte[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4441,7 +4442,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4uiv( uint index, params uint[] v );
+    void VertexAttrib4uiv( uint index, params uint[] v );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute
@@ -4455,7 +4456,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified</param>
     /// <param name="v">Specifies an array that contains the new values for the generic vertex attribute</param>
-    unsafe void VertexAttrib4usv( uint index, params UInt16[] v );
+    void VertexAttrib4usv( uint index, params UInt16[] v );
 
     /// <summary>
     /// Define an array of generic vertex attribute data
@@ -4509,7 +4510,7 @@ public partial interface IGLBindings
     /// Specifies an offset of the first component in the first generic vertex attribute in the array in
     /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER"/> target. The initial value is 0.
     /// </param>
-    unsafe void VertexAttribPointer( uint index, int size, int type, bool normalized, int stride, uint pointer );
+    void VertexAttribPointer( uint index, int size, int type, bool normalized, int stride, uint pointer );
 
 //TODO: Unsupported method    
 //    unsafe void VertexAttribPointer( int location, int size, int type, bool normalized, int stride, Buffer buffer );
@@ -4538,7 +4539,7 @@ public partial interface IGLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. 6 values
     /// per matrix.
     /// </param>
-    unsafe void UniformMatrix2x3fv( int location, bool transpose, params float[] value );
+    void UniformMatrix2x3fv( int location, bool transpose, params float[] value );
 
     /// <summary>
     /// Specify the value of a uniform variable for the current program object
@@ -4564,7 +4565,7 @@ public partial interface IGLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. 6 values
     /// per matrix.
     /// </param>
-    unsafe void UniformMatrix3x2fv( int location, bool transpose, params float[] value );
+    void UniformMatrix3x2fv( int location, bool transpose, params float[] value );
 
     /// <summary>
     /// Specify the value of a uniform variable for the current program object
@@ -4590,7 +4591,7 @@ public partial interface IGLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. 8 values
     /// per matrix.
     /// </param>
-    unsafe void UniformMatrix2x4fv( int location, bool transpose, params float[] value );
+    void UniformMatrix2x4fv( int location, bool transpose, params float[] value );
 
     /// <summary>
     /// Specify the value of a uniform variable for the current program object
@@ -4616,7 +4617,7 @@ public partial interface IGLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. 8 values
     /// per matrix.
     /// </param>
-    unsafe void UniformMatrix4x2fv( int location, bool transpose, params float[] value );
+    void UniformMatrix4x2fv( int location, bool transpose, params float[] value );
 
     /// <summary>
     /// Specify the value of a uniform variable for the current program object
@@ -4642,7 +4643,7 @@ public partial interface IGLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. 12 values
     /// per matrix.
     /// </param>
-    unsafe void UniformMatrix3x4fv( int location, bool transpose, params float[] value );
+    void UniformMatrix3x4fv( int location, bool transpose, params float[] value );
 
     /// <summary>
     /// Specify the value of a uniform variable for the current program object
@@ -4668,7 +4669,7 @@ public partial interface IGLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. 12 values
     /// per matrix.
     /// </param>
-    unsafe void UniformMatrix4x3fv( int location, bool transpose, params float[] value );
+    void UniformMatrix4x3fv( int location, bool transpose, params float[] value );
 
     /// <summary>
     /// Enable and disable writing of frame buffer color components
@@ -4700,7 +4701,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="index">Specifies the index of the indexed state variable to be queried.</param>
     /// <param name="data">A <see langword="ref"/> to an array to receive the data.</param>
-    unsafe void GetBooleani_v( int target, uint index, ref bool[] data );
+    void GetBooleani_v( int target, uint index, ref bool[] data );
 
     /// <summary>
     /// Return the integer value of a selected indexed state variable
@@ -4722,7 +4723,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="index">Specifies the index of the indexed state variable to be queried.</param>
     /// <param name="data">A <see langword="ref"/> to an array to receive the data.</param>
-    unsafe void GetIntegeri_v( int target, uint index, ref int[] data );
+    void GetIntegeri_v( int target, uint index, ref int[] data );
 
     /// <summary>
     /// Enable capabilities for a specific indexed target
@@ -4830,7 +4831,7 @@ public partial interface IGLBindings
     /// <paramref name="bufferMode"/> must be one of <see cref="GL_INTERLEAVED_ATTRIBS"/> or
     /// <see cref="GL_SEPARATE_ATTRIBS"/>.
     /// </param>
-    unsafe void TransformFeedbackVaryings( uint program, string[] varyings, int bufferMode );
+    void TransformFeedbackVaryings( uint program, string[] varyings, int bufferMode );
 
     /// <summary>
     /// Retrieve information about a varying variable from a program object's active transform feedback varyings
@@ -4846,12 +4847,12 @@ public partial interface IGLBindings
     /// <param name="type">Returns the data type of the requested varying variable.</param>
     /// <param name="name">Returns a null-terminated string containing the name of the requested varying variable.</param>
     unsafe void GetTransformFeedbackVarying( uint program,
-                                               uint index,
-                                               int bufSize,
-                                               int* length,
-                                               int* size,
-                                               int* type,
-                                               Byte* name );
+                                             uint index,
+                                             int bufSize,
+                                             int* length,
+                                             int* size,
+                                             int* type,
+                                             Byte* name );
 
     /// <summary>
     /// Retrieve information about a varying variable from a program object's active transform feedback varyings
@@ -4865,7 +4866,7 @@ public partial interface IGLBindings
     /// <param name="size">Returns the size of the requested varying variable.</param>
     /// <param name="type">Returns the data type of the requested varying variable.</param>
     /// <returns>Returns a managed string containing the name of the requested varying variable.</returns>
-    unsafe string GetTransformFeedbackVarying( uint program, uint index, int bufSize, out int size, out int type );
+    string GetTransformFeedbackVarying( uint program, uint index, int bufSize, out int size, out int type );
 
     /// <summary>
     /// Specify whether data read via <see cref="GLBindings.glReadPixels"/> should be clamped.
@@ -4933,7 +4934,7 @@ public partial interface IGLBindings
     /// Specifies an offset of the first component of the first generic vertex attribute in the array in
     /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER"/> target. The initial value is 0.
     /// </param>
-    unsafe void VertexAttribIPointer( uint index, int size, int type, int stride, uint pointer );
+    void VertexAttribIPointer( uint index, int size, int type, int stride, uint pointer );
 
     /// <summary>
     /// Return the integer value of a generic vertex attribute parameter
@@ -4963,7 +4964,7 @@ public partial interface IGLBindings
     /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>.
     /// </param>
     /// <param name="parameters">A <see langword="ref"/> to an array into which the returned values will be placed.</param>
-    unsafe void GetVertexAttribIiv( uint index, int pname, ref int[] parameters );
+    void GetVertexAttribIiv( uint index, int pname, ref int[] parameters );
 
     /// <summary>
     /// Return the unsigned integer value of a generic vertex attribute parameter
@@ -4993,7 +4994,7 @@ public partial interface IGLBindings
     /// <see cref="GL_CURRENT_VERTEX_ATTRIB"/>.
     /// </param>
     /// <param name="parameters">A <see langword="ref"/> to an array into which the returned values will be placed.</param>
-    unsafe void GetVertexAttribIuiv( uint index, int pname, ref uint[] parameters );
+    void GetVertexAttribIuiv( uint index, int pname, ref uint[] parameters );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5075,7 +5076,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI1iv( uint index, int[] v );
+    void VertexAttribI1iv( uint index, int[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5089,7 +5090,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI2iv( uint index, int[] v );
+    void VertexAttribI2iv( uint index, int[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5103,7 +5104,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI3iv( uint index, int[] v );
+    void VertexAttribI3iv( uint index, int[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5117,7 +5118,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI4iv( uint index, int[] v );
+    void VertexAttribI4iv( uint index, int[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5131,7 +5132,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI1uiv( uint index, uint[] v );
+    void VertexAttribI1uiv( uint index, uint[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5145,7 +5146,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI2uiv( uint index, uint[] v );
+    void VertexAttribI2uiv( uint index, uint[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5159,7 +5160,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI3uiv( uint index, uint[] v );
+    void VertexAttribI3uiv( uint index, uint[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5173,7 +5174,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI4uiv( uint index, uint[] v );
+    void VertexAttribI4uiv( uint index, uint[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5187,7 +5188,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI4bv( uint index, SByte[] v );
+    void VertexAttribI4bv( uint index, SByte[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5201,7 +5202,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI4sv( uint index, Int16[] v );
+    void VertexAttribI4sv( uint index, Int16[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5215,7 +5216,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI4ubv( uint index, Byte[] v );
+    void VertexAttribI4ubv( uint index, Byte[] v );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -5229,7 +5230,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="v">Specifies an array that contains the new values for the vertex attribute.</param>
-    unsafe void VertexAttribI4usv( uint index, UInt16[] v );
+    void VertexAttribI4usv( uint index, UInt16[] v );
 
     /// <summary>
     /// Return the value of a uniform variable of type unsigned int
@@ -5245,7 +5246,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object containing the uniform variable to be queried.</param>
     /// <param name="location">Specifies the location of the uniform variable to be queried.</param>
     /// <param name="params">A <see langword="ref"/> to an array to receive the value of the specified uniform variable.</param>
-    unsafe void GetUniformuiv( uint program, int location, ref uint[] parameters );
+    void GetUniformuiv( uint program, int location, ref uint[] parameters );
 
     /// <summary>
     /// Bind a user-defined varying out variable to a fragment shader color number
@@ -5261,7 +5262,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object in which the binding is to occur.</param>
     /// <param name="color">Specifies the color number to which the user-defined varying out variable is to be bound.</param>
     /// <param name="name">Specifies the name of the user-defined varying out variable to whose bound location to set.</param>
-    unsafe void BindFragDataLocation( uint program, uint color, string name );
+    void BindFragDataLocation( uint program, uint color, string name );
 
     /// <summary>
     /// Return the location of a user-defined varying out variable
@@ -5277,7 +5278,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="name">Specifies the name of the user-defined varying out variable whose location is to be queried.</param>
     /// <returns>The location of the user-defined varying out variable specified by <paramref name="name"/> is returned.</returns>
-    unsafe int GetFragDataLocation( uint program, string name );
+    int GetFragDataLocation( uint program, string name );
 
     /// <summary>
     /// Specify the value of an unsigned int uniform variable for the current program object
@@ -5329,7 +5330,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform1uiv( int location, uint[] value );
+    void Uniform1uiv( int location, uint[] value );
 
     /// <summary>
     /// Specify the value of an unsigned int uniform variable for the current program object
@@ -5347,7 +5348,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform2uiv( int location, uint[] value );
+    void Uniform2uiv( int location, uint[] value );
 
     /// <summary>
     /// Specify the value of an unsigned int uniform variable for the current program object
@@ -5365,7 +5366,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform3uiv( int location, uint[] value );
+    void Uniform3uiv( int location, uint[] value );
 
     /// <summary>
     /// Specify the value of an unsigned int uniform variable for the current program object
@@ -5383,7 +5384,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="location">Specifies the location of the uniform variable to be modified.</param>
     /// <param name="value">Specifies an array of values that will be used to update the specified uniform variable.</param>
-    unsafe void Uniform4uiv( int location, uint[] value );
+    void Uniform4uiv( int location, uint[] value );
 
     /// <summary>
     /// Set the value of a texture parameter for the current texture unit, with integer values
@@ -5427,7 +5428,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
     /// <param name="param">Specifies an array of values that will be used to update the specified texture parameter.</param>
-    unsafe void TexParameterIiv( int target, int pname, int[] param );
+    void TexParameterIiv( int target, int pname, int[] param );
 
     /// <summary>
     /// Set the value of a texture parameter for the current texture unit, with unsigned integer values
@@ -5471,7 +5472,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
     /// <param name="param">Specifies an array of values that will be used to update the specified texture parameter.</param>
-    unsafe void TexParameterIuiv( int target, int pname, uint[] param );
+    void TexParameterIuiv( int target, int pname, uint[] param );
 
     /// <summary>
     /// Get the value of a texture parameter for the current texture unit, with signed integer values
@@ -5515,7 +5516,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
     /// <param name="parameters">A <see langword="ref"/> to an array to receive the texture parameter value.</param>
-    unsafe void GetTexParameterIiv( int target, int pname, ref int[] parameters );
+    void GetTexParameterIiv( int target, int pname, ref int[] parameters );
 
     /// <summary>
     /// Get the value of a texture parameter for the current texture unit, with unsigned integer values
@@ -5559,7 +5560,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_WRAP_S"/>, <see cref="GL_TEXTURE_WRAP_T"/> or <see cref="GL_TEXTURE_WRAP_R"/>.
     /// </param>
     /// <param name="parameters">A <see langword="ref"/> to an array to receive the texture parameter value.</param>
-    unsafe void GetTexParameterIuiv( int target, int pname, ref uint[] parameters );
+    void GetTexParameterIuiv( int target, int pname, ref uint[] parameters );
 
     /// <summary>
     /// Clear a buffer to an integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on how to
@@ -5583,7 +5584,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
     /// <param name="value">Specifies the value to clear the buffer to.</param>
-    unsafe void ClearBufferiv( int buffer, int drawbuffer, int[] value );
+    void ClearBufferiv( int buffer, int drawbuffer, int[] value );
 
     /// <summary>
     /// Clear a buffer to an unsigned integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details
@@ -5607,7 +5608,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
     /// <param name="value">Specifies the value to clear the buffer to.</param>
-    unsafe void ClearBufferuiv( int buffer, int drawbuffer, uint[] value );
+    void ClearBufferuiv( int buffer, int drawbuffer, uint[] value );
 
     /// <summary>
     /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on
@@ -5631,7 +5632,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
     /// <param name="value">Specifies the value to clear the buffer to.</param>
-    unsafe void ClearBufferfv( int buffer, int drawbuffer, float[] value );
+    void ClearBufferfv( int buffer, int drawbuffer, float[] value );
 
     /// <summary>
     /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on
@@ -5666,7 +5667,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="index">Specifies the index of the string to return.</param>
     /// <returns>The requested string.</returns>
-    unsafe string GetStringiSafe( int name, uint index );
+    string GetStringiSafe( int name, uint index );
 
     /// <summary>
     /// Determine if a name corresponds to a renderbuffer object.
@@ -5702,7 +5703,7 @@ public partial interface IGLBindings
     /// Delete named renderbuffer objects.
     /// </summary>
     /// <param name="renderbuffers">Specifies an array of renderbuffer object names to be deleted.</param>
-    unsafe void DeleteRenderbuffers( params uint[] renderbuffers );
+    void DeleteRenderbuffers( params uint[] renderbuffers );
 
     /// <summary>
     /// Generate renderbuffer object names.
@@ -5716,7 +5717,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="n">Specifies the number of renderbuffer object names to generate.</param>
     /// <returns>Array of generated renderbuffer object names.</returns>
-    unsafe uint[] GenRenderbuffers( int n );
+    uint[] GenRenderbuffers( int n );
 
     /// <summary>
     /// Generate a single renderbuffer object name.
@@ -5770,7 +5771,7 @@ public partial interface IGLBindings
     /// <see cref="GL_RENDERBUFFER_DEPTH_SIZE"/>, or <see cref="GL_RENDERBUFFER_STENCIL_SIZE"/>.
     /// </param>
     /// <param name="parameters">A <see langword="ref"/> to an array which will receive the value of the queried parameter.</param>
-    unsafe void GetRenderbufferParameteriv( int target, int pname, ref int[] parameters );
+    void GetRenderbufferParameteriv( int target, int pname, ref int[] parameters );
 
     /// <summary>
     /// Determine if a name corresponds to a framebuffer object.
@@ -5803,7 +5804,7 @@ public partial interface IGLBindings
     /// Delete named framebuffer objects.
     /// </summary>
     /// <param name="framebuffers">Specifies an array of framebuffer objects to be deleted.</param>
-    unsafe void DeleteFramebuffers( params uint[] framebuffers );
+    void DeleteFramebuffers( params uint[] framebuffers );
 
     /// <summary>
     /// Generate framebuffer object names.
@@ -5817,7 +5818,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="n">Specifies the number of framebuffer object names to generate.</param>
     /// <returns>An array in which the generated framebuffer object names are stored.</returns>
-    unsafe uint[] GenFramebuffers( int n );
+    uint[] GenFramebuffers( int n );
 
     /// <summary>
     /// Generate a single framebuffer object name.
@@ -5948,7 +5949,7 @@ public partial interface IGLBindings
     /// <see href="https://docs.gl/gl4/glGetFramebufferAttachmentParameter"/> for details.
     /// </param>
     /// <param name="parameters">A <see langword="ref"/> to an array which will receive the returned value(s).</param>
-    unsafe void GetFramebufferAttachmentParameteriv( int target, int attachment, int pname, ref int[] parameters );
+    void GetFramebufferAttachmentParameteriv( int target, int attachment, int pname, ref int[] parameters );
 
     /// <summary>
     /// Generate mipmaps for a specified texture object.
@@ -5982,15 +5983,15 @@ public partial interface IGLBindings
     /// <see cref="GL_NEAREST"/> or <see cref="GL_LINEAR"/>.
     /// </param>
     void BlitFramebuffer( int srcX0,
-                            int srcY0,
-                            int srcX1,
-                            int srcY1,
-                            int dstX0,
-                            int dstY0,
-                            int dstX1,
-                            int dstY1,
-                            uint mask,
-                            int filter );
+                          int srcY0,
+                          int srcX1,
+                          int srcY1,
+                          int dstX0,
+                          int dstY0,
+                          int dstX1,
+                          int dstY1,
+                          uint mask,
+                          int filter );
 
     /// <summary>
     /// Establish data storage, format and dimensions of a renderbuffer object's image.
@@ -6055,7 +6056,7 @@ public partial interface IGLBindings
     /// <param name="length">Specifies the length of the range to be mapped.</param>
     /// <param name="access">Specifies a combination of access flags indicating the desired access to the range.</param>
     /// <returns>Returns a type-safe and memory-safe <see cref="System.Span{T}"/> of the entire mapped memory.</returns>
-    unsafe Span< T > MapBufferRange< T >( int target, int offset, int length, uint access ) where T : unmanaged;
+    Span< T > MapBufferRange< T >( int target, int offset, int length, uint access ) where T : unmanaged;
 
     /// <summary>
     /// Invalidate portions of the buffer object's data store.
@@ -6093,7 +6094,7 @@ public partial interface IGLBindings
     /// Delete vertex array objects.
     /// </summary>
     /// <param name="arrays">Specifies an array of vertex array objects to be deleted.</param>
-    unsafe void DeleteVertexArrays( params uint[] arrays );
+    void DeleteVertexArrays( params uint[] arrays );
 
     /// <summary>
     /// Generate vertex array object names.
@@ -6107,13 +6108,13 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="n">Specifies the number of vertex array object names to generate.</param>
     /// <returns>Returns an array of <paramref name="n"/> generated vertex array object names.</returns>
-    unsafe uint[] GenVertexArrays( int n );
+    uint[] GenVertexArrays( int n );
 
     /// <summary>
     /// Generate a single vertex array object name.
     /// </summary>
     /// <returns>Returns a generated vertex array object name.</returns>
-    unsafe uint GenVertexArray();
+    uint GenVertexArray();
 
     /// <summary>
     /// Determine if a name corresponds to a vertex array object.
@@ -6185,7 +6186,7 @@ public partial interface IGLBindings
     /// type of the indices.
     /// </param>
     /// <param name="instancecount">Specifies the number of instances of the specified range of indices to be rendered.</param>
-    unsafe void DrawElementsInstanced< T >( int mode, int count, int type, T[] indices, int instancecount )
+    void DrawElementsInstanced< T >( int mode, int count, int type, T[] indices, int instancecount )
         where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
@@ -6247,7 +6248,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the name of a program containing uniforms whose indices to retrieve.</param>
     /// <param name="uniformNames">Specifies an array of strings containing the names of the queried uniforms.</param>
     /// <returns>An array of indices of the uniforms specified in uniformNames.</returns>
-    unsafe uint[] GetUniformIndices( uint program, params string[] uniformNames );
+    uint[] GetUniformIndices( uint program, params string[] uniformNames );
 
     /// <summary>
     /// Returns information about several active uniform variables for the specified program object
@@ -6284,7 +6285,7 @@ public partial interface IGLBindings
     /// An array of integers to receive the information requested about each uniform variable specified in
     /// <paramref name="uniformIndices"/>.
     /// </returns>
-    unsafe int[] GetActiveUniformsiv( uint program, int pname, params uint[] uniformIndices );
+    int[] GetActiveUniformsiv( uint program, int pname, params uint[] uniformIndices );
 
     /// <summary>
     /// Returns the name of an active uniform variable at the specified index within a program object
@@ -6318,7 +6319,7 @@ public partial interface IGLBindings
     /// The name of the uniform variable at the specified index in the program object specified by
     /// <paramref name="program"/>, in the correct size.
     /// </returns>
-    unsafe string GetActiveUniformName( uint program, uint uniformIndex, int bufSize );
+    string GetActiveUniformName( uint program, uint uniformIndex, int bufSize );
 
     /// <summary>
     /// Returns the index of a uniform block within a program
@@ -6339,7 +6340,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="uniformBlockName">Contains the name of the uniform block whose index to query.</param>
-    unsafe uint GetUniformBlockIndex( uint program, string uniformBlockName );
+    uint GetUniformBlockIndex( uint program, string uniformBlockName );
 
     /// <summary>
     /// Returns information about an active uniform block
@@ -6363,7 +6364,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pname">Specifies the specific information to query about the active uniform block.</param>
     /// <param name="parameters">Returns the requested information about the uniform block.</param>
-    unsafe void GetActiveUniformBlockiv( uint program, uint uniformBlockIndex, int pname, ref int[] parameters );
+    void GetActiveUniformBlockiv( uint program, uint uniformBlockIndex, int pname, ref int[] parameters );
 
     /// <summary>
     /// Returns the name of an active uniform block at the specified index within a program object
@@ -6394,7 +6395,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="bufSize">Specifies a maximum amount of characters OpenGL is allowed to write in the character buffer.</param>
     /// <param name="length">Returns the length of the uniform block name.</param>
-    unsafe string GetActiveUniformBlockName( uint program, uint uniformBlockIndex, int bufSize );
+    string GetActiveUniformBlockName( uint program, uint uniformBlockIndex, int bufSize );
 
     /// <summary>
     /// Assigns a binding point to an active uniform block
@@ -6455,7 +6456,7 @@ public partial interface IGLBindings
     /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
-    unsafe void DrawElementsBaseVertex< T >( int mode, int count, int type, T[] indices, int basevertex )
+    void DrawElementsBaseVertex< T >( int mode, int count, int type, T[] indices, int basevertex )
         where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
@@ -6507,7 +6508,7 @@ public partial interface IGLBindings
     /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
-    unsafe void DrawRangeElementsBaseVertex< T >( int mode, uint start, uint end, int count, int type, T[] indices, int basevertex )
+    void DrawRangeElementsBaseVertex< T >( int mode, uint start, uint end, int count, int type, T[] indices, int basevertex )
         where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
@@ -6557,7 +6558,7 @@ public partial interface IGLBindings
     /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
-    unsafe void DrawElementsInstancedBaseVertex< T >( int mode, int count, int type, T[] indices, int instancecount, int basevertex )
+    void DrawElementsInstancedBaseVertex< T >( int mode, int count, int type, T[] indices, int instancecount, int basevertex )
         where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
@@ -6605,7 +6606,7 @@ public partial interface IGLBindings
     /// Specifies an array of the constants that should be added to each element of
     /// <paramref name="indices"/> when choosing elements from the enabled vertex arrays.
     /// </param>
-    unsafe void MultiDrawElementsBaseVertex< T >( int mode, int type, T[][] indices, int[] basevertex ) where T : unmanaged, IUnsignedNumber< T >;
+    void MultiDrawElementsBaseVertex< T >( int mode, int type, T[][] indices, int[] basevertex ) where T : unmanaged, IUnsignedNumber< T >;
 
     /// <summary>
     /// Specify the vertex to be used as the source of data for flat shaded varyings.
@@ -6642,7 +6643,7 @@ public partial interface IGLBindings
     /// presently defined for this operation and <paramref name="flags"/> must be zero.
     /// </param>
     /// <returns>The sync object.</returns>
-    unsafe IntPtr FenceSyncSafe( int condition, uint flags );
+    IntPtr FenceSyncSafe( int condition, uint flags );
 
     /// <summary>
     /// Determines if a name corresponds to a sync object.
@@ -6662,7 +6663,7 @@ public partial interface IGLBindings
     /// <see langword="true"/> if <paramref name="sync"/> is a name of a sync object. Otherwise,
     /// <see langword="false"/>.
     /// </returns>
-    unsafe bool IsSyncSafe( IntPtr sync );
+    bool IsSyncSafe( IntPtr sync );
 
     /// <summary>
     /// Deletes a sync object.
@@ -6674,7 +6675,7 @@ public partial interface IGLBindings
     /// Deletes a sync object.
     /// </summary>
     /// <param name="sync">Specifies the sync object to be deleted.</param>
-    unsafe void DeleteSyncSafe( IntPtr sync );
+    void DeleteSyncSafe( IntPtr sync );
 
     /// <summary>
     /// Causes the client to block and wait for a sync object to become signaled.
@@ -6710,7 +6711,7 @@ public partial interface IGLBindings
     /// One of <see cref="GL_ALREADY_SIGNALED"/>, <see cref="GL_TIMEOUT_EXPIRED"/>,
     /// <see cref="GL_CONDITION_SATISFIED"/>, or <see cref="GL_WAIT_FAILED"/>.
     /// </returns>
-    unsafe int ClientWaitSyncSafe( IntPtr sync, uint flags, UInt64 timeout );
+    int ClientWaitSyncSafe( IntPtr sync, uint flags, UInt64 timeout );
 
     /// <summary>
     /// Causes the server to block and wait for a sync object to become signaled.
@@ -6732,7 +6733,7 @@ public partial interface IGLBindings
     /// The timeout, specified in nanoseconds, for which the implementation should wait for
     /// <paramref name="sync"/> to become signaled.
     /// </param>
-    unsafe void WaitSyncSafe( IntPtr sync, uint flags, UInt64 timeout );
+    void WaitSyncSafe( IntPtr sync, uint flags, UInt64 timeout );
 
     /// <summary>
     /// Returns the 64bit integer value or values of a selected parameter.
@@ -6752,7 +6753,7 @@ public partial interface IGLBindings
     /// a list of possible values.
     /// </param>
     /// <param name="data">Returns the value or values of the specified parameter.</param>
-    unsafe void GetInteger64v( int pname, ref Int64[] data );
+    void GetInteger64v( int pname, ref Int64[] data );
 
     /// <summary>
     /// Query the properties of a sync object.
@@ -6779,7 +6780,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="bufSize">Specifies the size of the buffer whose address is given by <paramref name="values"/>.</param>
     /// <returns>Returns the requested parameter(s).</returns>
-    unsafe int[] GetSynciv( IntPtr sync, int pname, int bufSize );
+    int[] GetSynciv( IntPtr sync, int pname, int bufSize );
 
     /// <summary>
     /// Returns the 64bit integer value or values of a selected parameter.
@@ -6801,7 +6802,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="index">Specifies the index of the value to be returned.</param>
     /// <param name="data">Returns the value or values of the specified parameter.</param>
-    unsafe void GetInteger64i_v( int target, uint index, ref Int64[] data );
+    void GetInteger64i_v( int target, uint index, ref Int64[] data );
 
     /// <summary>
     /// Returns the value or values of a selected parameter.
@@ -6841,7 +6842,7 @@ public partial interface IGLBindings
     /// <see cref="GL_BUFFER_SIZE"/>, <see cref="GL_BUFFER_STORAGE_FLAGS"/>, <see cref="GL_BUFFER_USAGE"/>.
     /// </param>
     /// <param name="parameters">Returns the requested parameter.</param>
-    unsafe void GetBufferParameteri64v( int target, int pname, ref Int64[] parameters );
+    void GetBufferParameteri64v( int target, int pname, ref Int64[] parameters );
 
     /// <summary>
     /// Attaches a level of a texture object as a logical buffer to the currently bound framebuffer object.
@@ -6877,18 +6878,18 @@ public partial interface IGLBindings
     /// the image.
     /// </param>
     void TexImage2DMultisample( int target,
-                                  int samples,
-                                  int internalFormat,
-                                  int width,
-                                  int height,
-                                  bool fixedsamplelocations );
+                                int samples,
+                                int internalFormat,
+                                int width,
+                                int height,
+                                bool fixedsamplelocations );
 
     /// <summary>
     /// Establishes the data storage, format, dimensions, and number of samples of a multisample texture's image.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target of the operation. Must be <see cref="GL_TEXTURE_3D_MULTISAMPLE"/> or
-    /// <see cref="GL_PROXY_TEXTURE_3D_MULTISAMPLE"/>.
+    /// Specifies the target of the operation. Must be <see cref="IGL.GL_TEXTURE_2D_MULTISAMPLE"/> or
+    /// <see cref="IGL.GL_PROXY_TEXTURE_2D_MULTISAMPLE"/>.
     /// </param>
     /// <param name="samples">Specifies the number of samples in the multisample texture's image.</param>
     /// <param name="internalFormat">Specifies the internal format to be used to store texture image data.</param>
@@ -6901,12 +6902,12 @@ public partial interface IGLBindings
     /// the image.
     /// </param>
     void TexImage3DMultisample( int target,
-                                  int samples,
-                                  int internalFormat,
-                                  int width,
-                                  int height,
-                                  int depth,
-                                  bool fixedsamplelocations );
+                                int samples,
+                                int internalFormat,
+                                int width,
+                                int height,
+                                int depth,
+                                bool fixedsamplelocations );
 
     /// <summary>
     /// Returns the location of a sample.
@@ -6922,7 +6923,7 @@ public partial interface IGLBindings
     /// <param name="pname">Specifies the sample parameter to query. Must be <see cref="GL_SAMPLE_POSITION"/>.</param>
     /// <param name="index">Specifies the index of the sample.</param>
     /// <param name="val">Specifies the address of an array to receive the location of the sample.</param>
-    unsafe void GetMultisamplefvSafe( int pname, uint index, ref float[] val );
+    void GetMultisamplefvSafe( int pname, uint index, ref float[] val );
 
     /// <summary>
     /// Controls the writing of individual bits in a logical multisample color sample.
@@ -6947,7 +6948,7 @@ public partial interface IGLBindings
     /// <param name="colorNumber">Specifies the color number to bind the user-defined varying out variable to.</param>
     /// <param name="index">Specifies the index of the color number to bind the user-defined varying out variable to.</param>
     /// <param name="name">Specifies the name of the user-defined varying out variable whose binding to modify.</param>
-    unsafe void BindFragDataLocationIndexed( uint program, uint colorNumber, uint index, string name );
+    void BindFragDataLocationIndexed( uint program, uint colorNumber, uint index, string name );
 
     /// <summary>
     /// Return the index of a user-defined varying out variable.
@@ -6963,7 +6964,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the name of the program containing varying out variable whose index to query.</param>
     /// <param name="name">Specifies the name of the user-defined varying out variable whose index to query.</param>
     /// <returns>The index of the user-defined varying out variable.</returns>
-    unsafe int GetFragDataIndex( uint program, string name );
+    int GetFragDataIndex( uint program, string name );
 
     /// <summary>
     /// Generate sampler object names.
@@ -6977,7 +6978,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="count">Specifies the number of sampler object names to generate.</param>
     /// <returns>An array in which the generated sampler object names are stored.</returns>
-    unsafe uint[] GenSamplers( int count );
+    uint[] GenSamplers( int count );
 
     /// <summary>
     /// Generate a single sampler object name.
@@ -6996,7 +6997,7 @@ public partial interface IGLBindings
     /// Delete named sampler objects.
     /// </summary>
     /// <param name="samplers">Specifies an array of sampler objects to be deleted.</param>
-    unsafe void DeleteSamplers( params uint[] samplers );
+    void DeleteSamplers( params uint[] samplers );
 
     /// <summary>
     /// Determine if a name corresponds to a sampler object.
@@ -7055,7 +7056,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
     /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
-    unsafe void SamplerParameteriv( uint sampler, int pname, int[] param );
+    void SamplerParameteriv( uint sampler, int pname, int[] param );
 
     /// <summary>
     /// Set the float value of a sampler parameter.
@@ -7097,7 +7098,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
     /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
-    unsafe void SamplerParameterfv( uint sampler, int pname, float[] param );
+    void SamplerParameterfv( uint sampler, int pname, float[] param );
 
     /// <summary>
     /// Set the integer value of a sampler parameter.
@@ -7125,7 +7126,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
     /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
-    unsafe void SamplerParameterIiv( uint sampler, int pname, int[] param );
+    void SamplerParameterIiv( uint sampler, int pname, int[] param );
 
     /// <summary>
     /// Set the unsigned integer value of a sampler parameter.
@@ -7153,7 +7154,7 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
     /// <param name="param">Specifies the value of <paramref name="pname"/>.</param>
-    unsafe void SamplerParameterIuiv( uint sampler, int pname, uint[] param );
+    void SamplerParameterIuiv( uint sampler, int pname, uint[] param );
 
     /// <summary>
     /// Return the integer value of a sampler parameter.
@@ -7181,25 +7182,25 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_COMPARE_MODE"/>, <see cref="GL_TEXTURE_COMPARE_FUNC"/>.
     /// </param>
     /// <param name="param">Returns the value of <paramref name="pname"/>.</param>
-    unsafe void GetSamplerParameteriv( uint sampler, int pname, ref int[] param );
+    void GetSamplerParameteriv( uint sampler, int pname, ref int[] param );
 
     /// <inheritdoc cref="GLBindings.glGetSamplerParameteriv(GLuint,GLenum,GLint*)"/>
     unsafe void GetSamplerParameterIiv( uint sampler, int pname, int* param );
 
     /// <inheritdoc cref="GLBindings.glGetSamplerParameteriv(GLuint,GLenum,ref int[])"/>
-    unsafe void GetSamplerParameterIiv( uint sampler, int pname, ref int[] param );
+    void GetSamplerParameterIiv( uint sampler, int pname, ref int[] param );
 
     /// <inheritdoc cref="GLBindings.glGetSamplerParameteriv(GLuint,GLenum,GLint*)"/>
     unsafe void GetSamplerParameterfv( uint sampler, int pname, float* param );
 
     /// <inheritdoc cref="GLBindings.glGetSamplerParameteriv(GLuint,GLenum,ref int[])"/>
-    unsafe void GetSamplerParameterfv( uint sampler, int pname, ref float[] param );
+    void GetSamplerParameterfv( uint sampler, int pname, ref float[] param );
 
     /// <inheritdoc cref="GLBindings.glGetSamplerParameteriv(GLuint,GLenum,GLint*)"/>
     unsafe void GetSamplerParameterIuiv( uint sampler, int pname, uint* param );
 
     /// <inheritdoc cref="GLBindings.glGetSamplerParameteriv(GLuint,GLenum,ref int[])"/>
-    unsafe void GetSamplerParameterIuiv( uint sampler, int pname, ref uint[] param );
+    void GetSamplerParameterIuiv( uint sampler, int pname, ref uint[] param );
 
     /// <summary>
     /// Record the  time into a query object after all previous commands have reached the  server but have not yet
@@ -7221,7 +7222,7 @@ public partial interface IGLBindings
     unsafe void GetQueryObjecti64v( uint id, int pname, Int64* param );
 
     /// <inheritdoc cref="GLBindings.glGetQueryObjecti64v(GLuint,GLenum,GLint64*)"/>
-    unsafe void GetQueryObjecti64v( uint id, int pname, ref Int64[] param );
+    void GetQueryObjecti64v( uint id, int pname, ref Int64[] param );
 
     /// <summary>
     /// Return the 64bit unsigned integer value of a query object parameter.
@@ -7235,7 +7236,7 @@ public partial interface IGLBindings
     unsafe void GetQueryObjectui64v( uint id, int pname, UInt64* param );
 
     /// <inheritdoc cref="GLBindings.glGetQueryObjectui64v(GLuint,GLenum,GLuint64*)"/>
-    unsafe void GetQueryObjectui64v( uint id, int pname, ref UInt64[] param );
+    void GetQueryObjectui64v( uint id, int pname, ref UInt64[] param );
 
     /// <summary>
     /// Modify the reate at which generic vertex attributes advance during instanced rendering
@@ -7281,7 +7282,7 @@ public partial interface IGLBindings
     /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
-    unsafe void VertexAttribP1uiv( uint index, int type, bool normalized, uint[] value );
+    void VertexAttribP1uiv( uint index, int type, bool normalized, uint[] value );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -7317,7 +7318,7 @@ public partial interface IGLBindings
     /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
-    unsafe void VertexAttribP2uiv( uint index, int type, bool normalized, uint[] value );
+    void VertexAttribP2uiv( uint index, int type, bool normalized, uint[] value );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -7353,7 +7354,7 @@ public partial interface IGLBindings
     /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
-    unsafe void VertexAttribP3uiv( uint index, int type, bool normalized, uint[] value );
+    void VertexAttribP3uiv( uint index, int type, bool normalized, uint[] value );
 
     /// <summary>
     /// Specify the value of a generic vertex attribute
@@ -7389,7 +7390,7 @@ public partial interface IGLBindings
     /// converted directly as fixed-point values (<see langword="false"/>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
-    unsafe void VertexAttribP4uiv( uint index, int type, bool normalized, uint[] value );
+    void VertexAttribP4uiv( uint index, int type, bool normalized, uint[] value );
 
     /// <summary>
     /// Loads OpenGL functions using the specified loader delegate.

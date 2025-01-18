@@ -42,6 +42,8 @@ public class Cubemap : GLTexture, IManaged
     public static AssetManager? AssetManager { get; set; }
     public        ICubemapData  Data         { get; set; }
 
+    // ========================================================================
+
     public override int  Width     => Data.Width;
     public override int  Height    => Data.Height;
     public override int  Depth     => 0;

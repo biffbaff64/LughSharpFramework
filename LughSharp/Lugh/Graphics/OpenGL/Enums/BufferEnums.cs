@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum BufferTarget
+public enum BufferTarget : int
 {
     ArrayBuffer        = IGL.GL_ARRAY_BUFFER,
     ElementArrayBuffer = IGL.GL_ELEMENT_ARRAY_BUFFER,
@@ -34,7 +34,7 @@ public enum BufferTarget
 }
 
 [PublicAPI]
-public enum BufferUsageHint
+public enum BufferUsageHint : int
 {
     StaticDraw  = IGL.GL_STATIC_DRAW,
     DynamicDraw = IGL.GL_DYNAMIC_DRAW,

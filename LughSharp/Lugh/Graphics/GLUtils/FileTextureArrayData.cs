@@ -207,6 +207,7 @@ public class FileTextureArrayData : ITextureArrayData
         }
     }
 
+    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
     public bool IsManaged
     {
         get
@@ -221,8 +222,6 @@ public class FileTextureArrayData : ITextureArrayData
 
             return true;
         }
-
-        // ReSharper disable once ValueParameterNotUsed
         set { }
     }
 }

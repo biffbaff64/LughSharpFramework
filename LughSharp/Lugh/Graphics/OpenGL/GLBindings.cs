@@ -334,6 +334,8 @@ public unsafe partial class GLBindings : IGLBindings
                                  GLenum dataType,
                                  T[]? pixels ) where T : unmanaged
     {
+        if ( pixels == null ) return;
+        
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
         fixed ( void* p = &pixels[ 0 ] )
@@ -4161,7 +4163,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void GetSamplerParameterIiv( GLuint sampler, GLenum pname, GLint* param )
     {
-        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIVPROC >( "glGetSamplerParameteriv", out _glGetSamplerParameteriv );
+        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIIVPROC >( "glGetSamplerParameterIiv", out _glGetSamplerParameterIiv );
 
         _glGetSamplerParameterIiv( sampler, pname, param );
     }
@@ -4169,7 +4171,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void GetSamplerParameterIiv( GLuint sampler, GLenum pname, ref GLint[] param )
     {
-        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIVPROC >( "glGetSamplerParameteriv", out _glGetSamplerParameteriv );
+        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIIVPROC >( "glGetSamplerParameterIiv", out _glGetSamplerParameterIiv );
 
         fixed ( GLint* dp = &param[ 0 ] )
         {
@@ -4453,7 +4455,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    [PublicAPI]
+    [PublicAPI, StructLayout( LayoutKind.Sequential )]
     public struct DrawArraysIndirectCommand
     {
         public GLuint Count         { get; set; }
@@ -4478,7 +4480,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    [PublicAPI]
+    [PublicAPI, StructLayout( LayoutKind.Sequential )]
     public struct DrawElementsIndirectCommand
     {
         public GLuint Count;
@@ -6609,16 +6611,14 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetInternalformativ( GLenum target, GLenum internalFormat, GLenum pname, GLsizei bufSize, GLint* parameters )
     {
-        GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC >( "glDrawElementsInstancedBaseVertexBaseInstance",
-                                                                                        out _glDrawElementsInstancedBaseVertexBaseInstance );
+        GetDelegateForFunction< PFNGLGETINTERNALFORMATIVPROC >( "glGetInternalformativ", out _glGetInternalformativ );
 
         _glGetInternalformativ( target, internalFormat, pname, bufSize, parameters );
     }
 
     public void GetInternalformativ( GLenum target, GLenum internalFormat, GLenum pname, GLsizei bufSize, ref GLint[] parameters )
     {
-        GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXBASEINSTANCEPROC >( "glDrawElementsInstancedBaseVertexBaseInstance",
-                                                                                        out _glDrawElementsInstancedBaseVertexBaseInstance );
+        GetDelegateForFunction< PFNGLGETINTERNALFORMATIVPROC >( "glGetInternalformativ", out _glGetInternalformativ );
 
         fixed ( GLint* p = &parameters[ 0 ] )
         {
@@ -6790,6 +6790,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
+    [PublicAPI, StructLayout( LayoutKind.Sequential )]
     public struct DispatchIndirectCommand
     {
         public uint NumGroupsX;
@@ -9752,7 +9753,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void VertexAttribI1ui( GLuint index, GLuint x )
     {
-        GetDelegateForFunction< PFNGLVERTEXATTRIBI2UIPROC >( "glVertexAttribI2ui", out _glVertexAttribI2ui );
+        GetDelegateForFunction< PFNGLVERTEXATTRIBI1UIPROC >( "glVertexAttribI1ui", out _glVertexAttribI1ui );
 
         _glVertexAttribI1ui( index, x );
     }

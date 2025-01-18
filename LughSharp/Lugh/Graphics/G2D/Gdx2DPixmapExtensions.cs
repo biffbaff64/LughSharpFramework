@@ -26,7 +26,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 
 public partial class Gdx2DPixmap
 {
-    private const string DLL_PATH = "lib/gdx2d.dll";
+    private const string DLL_PATH = "lib/net8.0/gdx2d.dll";
 
     /// <summary>
     /// Gets the pixel at the specified X and Y coordinates.

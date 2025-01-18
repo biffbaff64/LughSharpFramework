@@ -123,7 +123,6 @@ public class PNGUtils
 
         Array.Copy( pngData, IHDR_START, ihdr, 0, IHDR_SIZE );
         Array.Copy( pngData, IHDR_CRC_START, crc, 0, IHDR_CRC_SIZE );
-
         Array.Copy( pngData, WIDTH_OFFSET, widthdata, 0, WIDTH_SIZE );
         Array.Copy( pngData, HEIGHT_OFFSET, heightdata, 0, HEIGHT_SIZE );
 
@@ -370,7 +369,7 @@ public class PNGUtils
     /// Returns a string representation of the Color Type for this PNG, which is held at
     /// offset 25 into the 41-byte Signature/IHDR/IDAT Png file header.
     /// </summary>
-    /// <seealso cref="AnalysePNG(byte[])"/>
+    /// <seealso cref="AnalysePNG(byte[], bool)"/>
     public static string ColorTypeName( int colortype )
     {
         return colortype switch
@@ -388,22 +387,18 @@ public class PNGUtils
     /// <summary>
     /// Extracts the <c>Width</c> and <c>Height</c> from a PNG file.
     /// </summary>
-    /// <remarks>
-    /// Adapted from code obtained elsewhere. I'm not sure of where, and will credit
-    /// the original author when I have corrected this.
-    /// </remarks>
-    public static ( int width, int height ) GetPNGWidthHeight( FileInfo file )
+    public static ( int width, int height ) GetPNGDimensions( FileInfo file )
     {
         if ( file.Extension.ToLower() != ".png" )
         {
             throw new GdxRuntimeException( $"PNG files ONLY!: ({file.Name})" );
         }
 
-        var br = new BinaryReader( File.OpenRead( file.Name ) );
-        br.BaseStream.Position = 16;
-
         var widthbytes  = new byte[ sizeof( int ) ];
         var heightbytes = new byte[ sizeof( int ) ];
+
+        var br = new BinaryReader( File.OpenRead( file.Name ) );
+        br.BaseStream.Position = 16;
 
         for ( var i = 0; i < sizeof( int ); i++ )
         {

@@ -25,7 +25,6 @@
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths.Collision;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -705,8 +704,6 @@ public class Mesh
     {
         Render( shader, primitiveType, offset, count, AutoBind );
     }
-
-    private bool _firstTime = false;
 
     /// <summary>
     /// Renders the mesh using the given primitive type. offset specifies the offset

@@ -123,10 +123,8 @@ public class FileHandle
     public string NameWithoutExtension() => Path.GetFileNameWithoutExtension( File.Name );
 
     /// <summary>
-    /// Returns the path and filename without the extension,
-    /// <para>
-    /// e.g. dir/dir2/file.png -> dir/dir2/file.
-    /// </para>
+    /// Returns the path and filename without the extension, eg.
+    /// <code>dir/dir2/file.png -> dir/dir2/file.</code>
     /// Backward slashes will be returned as forward slashes.
     /// </summary>
     public string PathWithoutExtension() => Path.GetFileNameWithoutExtension( File.FullName );

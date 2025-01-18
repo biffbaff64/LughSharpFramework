@@ -49,9 +49,7 @@ public class GraphicsBackend
         /// Microsoft DirectX 11 graphics backend.
         /// </summary>
         DirectX,
-
-        // Possible: Apple Metal ?
-        // Possible: DirectX12, seperately from DirectX ?
+        DirectX12,
     }
 
     /// <summary>

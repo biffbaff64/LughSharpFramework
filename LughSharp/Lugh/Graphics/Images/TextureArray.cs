@@ -45,16 +45,14 @@ public class TextureArray : GLTexture, IManaged
     /// <summary>
     /// </summary>
     /// <param name="internalPaths"></param>
-    public TextureArray( params string[] internalPaths )
-        : this( GetInternalHandles( internalPaths ) )
+    public TextureArray( params string[] internalPaths ) : this( GetInternalHandles( internalPaths ) )
     {
     }
 
     /// <summary>
     /// </summary>
     /// <param name="files"></param>
-    public TextureArray( params FileInfo[] files )
-        : this( false, files )
+    public TextureArray( params FileInfo[] files ) : this( false, files )
     {
     }
 
@@ -211,23 +209,18 @@ public class TextureArray : GLTexture, IManaged
 
     // ========================================================================
 
-    #region aliases
-
     public override int Width  => _data.Width;
     public override int Height => _data.Height;
     public override int Depth  => _data.Depth;
 
+    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
     public bool IsManaged
     {
         get => _data.Managed;
         set { }
     }
 
-    #endregion aliases
-
     // ========================================================================
-
-    #region internal methods
 
     /// <summary>
     /// Clears all managed TextureArrays.
@@ -247,6 +240,4 @@ public class TextureArray : GLTexture, IManaged
             textureArray.Reload();
         }
     }
-
-    #endregion internal methods
 }

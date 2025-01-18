@@ -26,7 +26,6 @@ using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Core;
 
@@ -40,8 +39,8 @@ public class Gdx
     // ========================================================================
     // ========================================================================
 
-    private IGLBindings?  _glBindings;
-    
+    private IGLBindings? _glBindings;
+
     /// <summary>
     /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings"/> interface.
     /// Initially initialised as an instance of <see cref="GLBindings"/>, it can be modified to
@@ -56,10 +55,10 @@ public class Gdx
             if ( _glBindings == null )
             {
                 _glBindings = new GLBindings();
-                
+
                 Logger.Debug( "Gdx.Bindings is null, initialised to reference GLBindings." );
             }
-            
+
             return _glBindings;
         }
         set => _glBindings = value;
@@ -70,7 +69,7 @@ public class Gdx
     /// running backend.
     /// </summary>
     public IApplication App { get; set; } = null!;
-    
+
     public IAudio    Audio    { get; set; } = null!;
     public IInput    Input    { get; set; } = null!;
     public IFiles    Files    { get; set; } = null!;
@@ -154,10 +153,15 @@ public class Gdx
     public Gdx CheckEnableDevMode()
     {
         DevMode = CheckEnvironmentVar( "DEV_MODE", "TRUE" );
-        
+
+        if ( !DevMode )
+        {
+            DevMode = CheckEnvironmentVar( "DEVMODE", "TRUE" );
+        }
+
         return this;
     }
-    
+
     /// <summary>
     /// Enables <see cref="GodMode"/> if the environment variable "GOD_MODE" is
     /// available and is set to "TRUE" or "true".
@@ -168,8 +172,13 @@ public class Gdx
         if ( DevMode )
         {
             GodMode = CheckEnvironmentVar( "GOD_MODE", "TRUE" );
+
+            if ( !GodMode )
+            {
+                GodMode = CheckEnvironmentVar( "GODMODE", "TRUE" );
+            }
         }
-        
+
         return this;
     }
 
@@ -179,13 +188,16 @@ public class Gdx
         {
             return Environment.GetEnvironmentVariable( envVar )!.ToUpper() == value;
         }
-        
+
         return false;
     }
-    
+
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void GLErrorCheck()
     {
         int error;
@@ -212,7 +224,4 @@ public class Gdx
 
     // ========================================================================
     // ========================================================================
-    
 }
-
-

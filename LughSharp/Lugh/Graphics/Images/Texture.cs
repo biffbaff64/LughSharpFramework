@@ -26,6 +26,7 @@ using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -43,7 +44,8 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// <para>
 /// A Texture has to be bound via the <see cref="Texture.Bind()"/> method in order
 /// for it to be applied to geometry. The texture will be bound to the currently
-/// active texture unit specified via <see cref="GLBindings.ActiveTexture"/>.
+/// active texture unit specified via <see cref="GLBindings.ActiveTexture(int)"/>,
+/// or <see cref="GLBindings.ActiveTexture(TextureUnit)"/>.
 /// </para>
 /// <para>
 /// You can draw <see cref="Pixmap"/>s to a texture at any time. The changes will

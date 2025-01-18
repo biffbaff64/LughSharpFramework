@@ -32,8 +32,6 @@ namespace LughSharp.Lugh.Core;
 [PublicAPI]
 public interface IGraphics
 {
-    #region properties
-
     GLVersion?                  GLVersion        { get; set; }
     GraphicsBackend.BackendType GraphicsType     { get; }
     BufferFormatDescriptor      BufferFormat     { get; set; }
@@ -45,8 +43,6 @@ public interface IGraphics
     int                         BackBufferHeight { get; set; }
     bool                        IsFullscreen     { get; }
     GLFW.Window                 CurrentContext   { get; set; }
-
-    #endregion properties
 
     // ========================================================================
     // ========================================================================
@@ -217,6 +213,9 @@ public interface IGraphics
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
     [PublicAPI]
     public class GdxMonitor
     {

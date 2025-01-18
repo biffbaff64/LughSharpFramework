@@ -33,7 +33,7 @@ namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 /// encountered during decoding. The error codes are built upon the base error code
 /// defined in <see cref="BitstreamErrors.DECODER_ERROR"/>.
 /// </remarks>
-[PublicAPI]
+[PublicAPI, StructLayout( LayoutKind.Sequential )]
 public struct DecoderErrors
 {
     /// <summary>

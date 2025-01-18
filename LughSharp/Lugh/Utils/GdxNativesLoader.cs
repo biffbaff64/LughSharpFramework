@@ -51,7 +51,8 @@ public class GdxNativesLoader
                 return;
             }
 
-            NativeLibrary.Load( "lib/gdx2d" );
+// e.g.     NativeLibrary.Load( "lib/net8.0/gdx2d" );
+
             _nativesLoaded = true;
         }
     }

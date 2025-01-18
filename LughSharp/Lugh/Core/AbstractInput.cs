@@ -61,8 +61,7 @@ public abstract class AbstractInput : IInput
     // ========================================================================
 
     /// <summary>
-    /// Returns TRUE if the key identified by the supplied <see cref="IInput.Keys"/>
-    /// key code is pressed.
+    /// Returns TRUE if the key identified by the supplied <see cref="IInput.Keys"/> key code is pressed.
     /// </summary>
     public virtual bool IsKeyPressed( int key )
     {
@@ -95,6 +94,7 @@ public abstract class AbstractInput : IInput
     //TODO: What are 'catch keys' in LibGDX???
     //TODO: Are these just for mobile devices???
     //TODO: Do I need to keep these???
+    //
     
     /// <summary>
     /// Either <b>adds</b> or <b>removes</b> the specified keycode to the
