@@ -27,7 +27,7 @@
         <PackageTags>CSharp;2D;Framework;OpenGL;</PackageTags>
         <Copyright>Copyright 2024 Richard Ikin</Copyright>
         <Company>Richard Ikin</Company>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <PackageReleaseNotes>This update contains a considerable number of code updates. This is still TESTING ONLY.</PackageReleaseNotes>
         <UserSecretsId>15077a63-55d3-46e9-b882-0b5cf985e7cc</UserSecretsId>
         <AssemblyName>LughSharp</AssemblyName>
@@ -158,6 +158,10 @@
         </Content>
         <None Remove="Assets\rover_wheel.png" />
         <Content Include="Assets\rover_wheel.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\gdx2d.dll" />
+        <Content Include="lib\net8.0\gdx2d.dll">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

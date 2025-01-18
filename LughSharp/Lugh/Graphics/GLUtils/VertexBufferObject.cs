@@ -178,15 +178,8 @@ public class VertexBufferObject : IVertexData
     /// <param name="count"> the number of floats to copy  </param>
     public void SetVertices( float[] vertices, int offset, int count )
     {
-        if ( _byteBuffer == null )
-        {
-            throw new GdxRuntimeException( "Byte buffer cannot be null!" );
-        }
-
-        if ( _buffer == null )
-        {
-            throw new GdxRuntimeException( "Buffer cannot be null!" );
-        }
+        GdxRuntimeException.ThrowIfNull( _byteBuffer );
+        GdxRuntimeException.ThrowIfNull( _buffer );
 
         _isDirty = true;
 

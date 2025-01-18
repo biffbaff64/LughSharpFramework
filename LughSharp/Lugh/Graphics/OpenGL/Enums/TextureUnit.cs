@@ -27,6 +27,7 @@ namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum TextureUnit : int
 {
+    None          = 0,
     ActiveTexture = IGL.GL_ACTIVE_TEXTURE,
     Texture0      = IGL.GL_TEXTURE0,
     Texture1      = IGL.GL_TEXTURE1,

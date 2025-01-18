@@ -56,7 +56,8 @@ public interface ITextureData : IManaged
     public TextureType TextureDataType { get; }
 
     /// <summary>
-    ///     <returns> whether the TextureData is prepared or not.</returns>
+    /// Returns whether the TextureData is prepared or not.
+    /// See <see cref="Prepare"/>.
     /// </summary>
     public bool IsPrepared { get; set; }
 

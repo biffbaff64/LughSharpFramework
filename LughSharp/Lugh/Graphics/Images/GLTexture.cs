@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -45,8 +46,8 @@ public abstract class GLTexture : IDisposable
     /// operations will affect.
     /// <para>
     /// Common GL targets include:
-    /// <li>GL_TEXTURE_2D: For standard 2D textures</li>
-    /// <li>GL_TEXTURE_3D: For 3D textures</li>
+    /// <li>GL_TEXTURE_2D:       For standard 2D textures</li>
+    /// <li>GL_TEXTURE_3D:       For 3D textures</li>
     /// <li>GL_TEXTURE_CUBE_MAP: For cube map textures</li>
     /// <li>GL_TEXTURE_2D_ARRAY: For 2D texture arrays</li>
     /// </para>
@@ -130,7 +131,8 @@ public abstract class GLTexture : IDisposable
 
     // ========================================================================
 
-    private static float _maxAnisotropicFilterLevel = 0;
+    private static float       _maxAnisotropicFilterLevel = 0;
+    private        TextureUnit _activeTextureUnit         = TextureUnit.None;
 
     // ========================================================================
 
@@ -183,11 +185,25 @@ public abstract class GLTexture : IDisposable
     public abstract void Reload();
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="textureUnit"></param>
+    public void ActivateTexture( TextureUnit textureUnit )
+    {
+        if ( _activeTextureUnit != textureUnit )
+        {
+            GdxApi.Bindings.ActiveTexture( textureUnit );
+            _activeTextureUnit = textureUnit;
+        }
+    }
+
+    /// <summary>
     /// Binds this texture. The texture will be bound to the currently active
     /// texture unit.
     /// </summary>
     public void Bind()
     {
+        ActivateTexture( TextureUnit.Texture0 );
         GdxApi.Bindings.BindTexture( GLTarget, GLTextureHandle );
     }
 
@@ -197,7 +213,7 @@ public abstract class GLTexture : IDisposable
     /// <param name="unit"> the unit (0 to MAX_TEXTURE_UNITS).  </param>
     public void Bind( int unit )
     {
-        GdxApi.Bindings.ActiveTexture( IGL.GL_TEXTURE0 + unit );
+        ActivateTexture( TextureUnit.Texture0 + unit ); // IGL.GL_TEXTURE0 + unit );
         GdxApi.Bindings.BindTexture( GLTarget, ( uint )GLTextureHandle );
     }
 
@@ -437,7 +453,7 @@ public abstract class GLTexture : IDisposable
             DebugUploadImageData( target, miplevel, pixmap );
 
             GdxApi.Bindings.TexImage2D( target, miplevel, 0, pixmap );
-            
+
 //            GdxApi.Bindings.TexImage2D( target,
 //                                        miplevel,
 //                                        pixmap.GLInternalPixelFormat,
@@ -476,7 +492,7 @@ public abstract class GLTexture : IDisposable
 
             Logger.Debug( $"pixmap.GLType          : {pixmap.GLDataType}" );
             Logger.Debug( $"pixmap.GLType Name     : {PixmapFormat.GetGLTypeName( pixmap.GLDataType )}" );
-            
+
             Logger.Debug( $"Number of Pixels       : {pixmap.Width * pixmap.Height}" );
             Logger.Debug( $"pixmap.PixelData.Length: {pixmap.PixelData.Length}" );
 

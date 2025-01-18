@@ -10,6 +10,9 @@
         <tags>CSharp;2D;Framework;OpenGL</tags>
         <description>C# 2D/3D Game Framework based on the Java Framework LibGDX.</description>
         <repository url="https://github.com/biffbaff64/LughSharp"/>
+        <contentFiles>
+            <files include="LughSharp/lib/net8.0/gdx2d.dll"/>
+        </contentFiles>
         <dependencies>
             <group targetFramework="net7.0">
                 <dependency id="DotGLFW" version="1.0.2" exclude="Build,Analyzers"/>
