@@ -22,8 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils.Buffers;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
@@ -57,18 +60,15 @@ public class VertexArray : IVertexData
         Attributes  = attributes;
         _byteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numVertices );
         _buffer     = _byteBuffer.AsFloatBuffer();
-
-        _buffer.Flip();
-        _byteBuffer.Flip();
     }
 
     /// <summary>
     /// Returns the number of vertices this VertexData stores.
     /// </summary>
-    public int NumVertices => ( _buffer.Limit * 4 ) / Attributes.VertexSize;
+    public int NumVertices => _byteBuffer.Position / Attributes.VertexSize;
 
     /// <summary>
-    /// Returns the number of vertices this VertedData can store.
+    /// Returns the maximum number of vertices this VertexData can store.
     /// </summary>
     public int NumMaxVertices => _byteBuffer.Capacity / Attributes.VertexSize;
 
@@ -102,12 +102,21 @@ public class VertexArray : IVertexData
     /// <param name="vertices"> the vertex data </param>
     /// <param name="offset"> the offset to start copying the data from </param>
     /// <param name="count"> the number of floats to copy  </param>
-    public void SetVertices( float[] vertices, int offset, int count )
+    public unsafe void SetVertices( float[] vertices, int offset, int count )
     {
-        BufferUtils.Copy( vertices, _byteBuffer, count, offset );
+        if ( _byteBuffer.Capacity < ( count * 4 ) )
+        {
+            throw new ArgumentException( "Buffer capacity is too small." );
+        }
 
-        _buffer.Position = 0;
-        _buffer.Limit    = count;
+        fixed ( float* sourcePtr = &vertices[ offset ] )
+        fixed ( byte* destPtr = _byteBuffer.BackingArray() )
+        {
+            Unsafe.CopyBlock( destPtr + _byteBuffer.Position, sourcePtr, ( uint )( count * sizeof( float ) ) );
+            _byteBuffer.Position += count * 4;
+            _buffer.Position     =  0;
+            _buffer.Limit        =  count;
+        }
     }
 
     /// <summary>
@@ -117,15 +126,18 @@ public class VertexArray : IVertexData
     /// <param name="vertices"> the vertex data </param>
     /// <param name="sourceOffset"> the offset to start copying the data from </param>
     /// <param name="count"> the number of floats to copy  </param>
-    public void UpdateVertices( int targetOffset, float[] vertices, int sourceOffset, int count )
+    public unsafe void UpdateVertices( int targetOffset, float[] vertices, int sourceOffset, int count )
     {
-        var pos = _byteBuffer.Position;
+        if ( _byteBuffer.Capacity < ( ( targetOffset + count ) * 4 ) )
+        {
+            throw new ArgumentException( "Buffer capacity is too small." );
+        }
 
-        _byteBuffer.Position = targetOffset * 4;
-
-        BufferUtils.Copy( vertices, sourceOffset, count, _byteBuffer );
-
-        _byteBuffer.Position = pos;
+        fixed ( float* sourcePtr = &vertices[ sourceOffset ] )
+        fixed ( byte* destPtr = _byteBuffer.BackingArray() )
+        {
+            Unsafe.CopyBlock( destPtr + ( targetOffset * sizeof( float ) ), sourcePtr, ( uint )( count * sizeof( float ) ) );
+        }
     }
 
     /// <summary>
@@ -135,85 +147,35 @@ public class VertexArray : IVertexData
     /// <param name="locations"> array containing the attribute locations.</param>
     public void Bind( ShaderProgram shader, int[]? locations = null )
     {
+        _byteBuffer.Position = 0;
+        _buffer.Position     = 0;
+
         var numAttributes = Attributes.Size;
 
-        _byteBuffer.Limit = _buffer.Limit * 4;
-
-        if ( locations == null )
+        for ( var i = 0; i < numAttributes; i++ )
         {
-            for ( var i = 0; i < numAttributes; i++ )
+            var attribute = Attributes.Get( i );
+            var location  = locations?[ i ] ?? shader.GetAttributeLocation( attribute.Alias );
+
+            if ( location < 0 )
             {
-                var attribute = Attributes.Get( i );
-                var location  = shader.GetAttributeLocation( attribute.Alias );
-
-                if ( location < 0 )
-                {
-                    continue;
-                }
-
-                shader.EnableVertexAttribute( location );
-
-                if ( attribute.Type == IGL.GL_FLOAT )
-                {
-                    _buffer.Position = attribute.Offset / 4;
-
-                    shader.SetVertexAttribute( location,
-                                               attribute.NumComponents,
-                                               attribute.Type,
-                                               attribute.Normalized,
-                                               Attributes.VertexSize,
-                                               _buffer );
-                }
-                else
-                {
-                    _byteBuffer.Position = attribute.Offset;
-
-                    shader.SetVertexAttribute( location,
-                                               attribute.NumComponents,
-                                               attribute.Type,
-                                               attribute.Normalized,
-                                               Attributes.VertexSize,
-                                               _byteBuffer );
-                }
+                continue;
             }
-        }
-        else
-        {
-            for ( var i = 0; i < numAttributes; i++ )
-            {
-                var attribute = Attributes.Get( i );
-                var location  = locations[ i ];
 
-                if ( location < 0 )
-                {
-                    continue;
-                }
+            GdxApi.Bindings.EnableVertexAttribArray( ( uint )location );
 
-                shader.EnableVertexAttribute( location );
+            var byteOffset    = attribute.Offset;
+            var type          = attribute.Type;
+            var numComponents = attribute.NumComponents;
+            var normalized    = attribute.Normalized;
+            var stride        = Attributes.VertexSize;
 
-                if ( attribute.Type == IGL.GL_FLOAT )
-                {
-                    _buffer.Position = attribute.Offset / 4;
-
-                    shader.SetVertexAttribute( location,
-                                               attribute.NumComponents,
-                                               attribute.Type,
-                                               attribute.Normalized,
-                                               Attributes.VertexSize,
-                                               _buffer );
-                }
-                else
-                {
-                    _byteBuffer.Position = attribute.Offset;
-
-                    shader.SetVertexAttribute( location,
-                                               attribute.NumComponents,
-                                               attribute.Type,
-                                               attribute.Normalized,
-                                               Attributes.VertexSize,
-                                               _byteBuffer );
-                }
-            }
+            GdxApi.Bindings.VertexAttribPointer( ( uint )location,
+                                                 numComponents,
+                                                 type,
+                                                 normalized,
+                                                 stride,
+                                                 ( uint )byteOffset );
         }
     }
 
@@ -226,23 +188,13 @@ public class VertexArray : IVertexData
     {
         var numAttributes = Attributes.Size;
 
-        if ( locations == null )
+        for ( int i = 0; i < numAttributes; i++ )
         {
-            for ( var i = 0; i < numAttributes; i++ )
-            {
-                shader?.DisableVertexAttribute( Attributes.Get( i ).Alias );
-            }
-        }
-        else
-        {
-            for ( var i = 0; i < numAttributes; i++ )
-            {
-                var location = locations[ i ];
+            var location = locations?[ i ] ?? shader?.GetAttributeLocation( Attributes.Get( i ).Alias ) ?? -1;
 
-                if ( location >= 0 )
-                {
-                    shader?.DisableVertexAttribute( location );
-                }
+            if ( location >= 0 )
+            {
+                GdxApi.Bindings.DisableVertexAttribArray( ( uint )location );
             }
         }
     }
@@ -250,7 +202,7 @@ public class VertexArray : IVertexData
     /// <summary>
     /// Invalidates the VertexData if applicable. Use this in case of a context loss.
     /// </summary>
-    public void Invalidate()
+    public virtual void Invalidate()
     {
     }
 

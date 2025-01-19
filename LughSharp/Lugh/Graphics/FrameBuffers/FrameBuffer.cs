@@ -30,15 +30,14 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.FrameBuffers;
 
 /// <summary>
-/// Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper
-/// class which should cover most FBO uses. It will automatically create a
-/// texture for the color attachment and a renderbuffer for the depth buffer.
+/// Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper class which should
+/// cover most FBO uses. It will automatically create a texture for the color attachment and a
+/// renderbuffer for the depth buffer.
 /// You can get a hold of the texture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture"/>.
-/// This class will only work with OpenGL ES 2.0.
 /// <para>
-/// FrameBuffers are managed. In case of an OpenGL context loss, which only happens
-/// on Android when a user switches to another application or receives an incoming
-/// call, the framebuffer will be automatically recreated.
+/// FrameBuffers are managed. In case of an OpenGL context loss, which only happens on Android
+/// when a user switches to another application or receives an incoming call, the framebuffer
+/// will be automatically recreated.
 /// </para>
 /// <para>
 /// A FrameBuffer must be disposed if it is no longer needed.

@@ -45,6 +45,15 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     public bool HasDepthRenderBuffer              { get; set; }
     public bool HasPackedStencilDepthRenderBuffer { get; set; }
 
+    // ========================================================================
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="internalFormat"></param>
+    /// <param name="format"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddColorTextureAttachment( int internalFormat, int format, int type )
     {
         TextureAttachmentSpecs.Add( new FrameBufferTextureAttachmentSpec( internalFormat, format, type ) );
@@ -52,6 +61,11 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( PixelType.Format format )
     {
         var glFormat = PixmapFormat.ToGLPixelFormat( format );
@@ -60,6 +74,14 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         return AddColorTextureAttachment( glFormat, glFormat, glType );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="internalFormat"></param>
+    /// <param name="format"></param>
+    /// <param name="type"></param>
+    /// <param name="gpuOnly"></param>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddFloatAttachment( int internalFormat,
                                                           int format,
                                                           int type,
@@ -76,6 +98,12 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="internalFormat"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddDepthTextureAttachment( int internalFormat, int type )
     {
         var spec = new FrameBufferTextureAttachmentSpec( internalFormat, IGL.GL_DEPTH_COMPONENT, type )
@@ -88,6 +116,12 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="internalFormat"></param>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddStencilTextureAttachment( int internalFormat, int type )
     {
         var spec = new FrameBufferTextureAttachmentSpec( internalFormat, IGL.GL_STENCIL_ATTACHMENT, type )
@@ -100,6 +134,11 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="internalFormat"></param>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddDepthRenderBuffer( int internalFormat )
     {
         DepthRenderBufferSpec = new FrameBufferRenderBufferAttachmentSpec( internalFormat );
@@ -108,6 +147,11 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="internalFormat"></param>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddStencilRenderBuffer( int internalFormat )
     {
         StencilRenderBufferSpec = new FrameBufferRenderBufferAttachmentSpec( internalFormat );
@@ -116,6 +160,11 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="internalFormat"></param>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddStencilDepthPackedRenderBuffer( int internalFormat )
     {
         PackedStencilDepthRenderBufferSpec = new FrameBufferRenderBufferAttachmentSpec( internalFormat );
@@ -124,21 +173,38 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicDepthRenderBuffer()
     {
         return AddDepthRenderBuffer( IGL.GL_DEPTH_COMPONENT16 );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicStencilRenderBuffer()
     {
         return AddStencilRenderBuffer( IGL.GL_STENCIL_INDEX8 );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicStencilDepthPackedRenderBuffer()
     {
         return AddStencilDepthPackedRenderBuffer( IGL.GL_DEPTH24_STENCIL8 );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="GdxRuntimeException"></exception>
     public virtual object Build()
     {
         throw new GdxRuntimeException( "This method must be overriden by derived class(es)" );

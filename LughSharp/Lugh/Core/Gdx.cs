@@ -159,6 +159,8 @@ public class Gdx
             DevMode = CheckEnvironmentVar( "DEVMODE", "TRUE" );
         }
 
+        Logger.Debug( $"DevMode: {DevMode}" );
+        
         return this;
     }
 
@@ -179,6 +181,8 @@ public class Gdx
             }
         }
 
+        Logger.Debug( $"GodMode: {GodMode}" );
+        
         return this;
     }
 

@@ -47,13 +47,13 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI]
 public class VertexBufferObject : IVertexData
 {
-    private FloatBuffer _buffer;
-    private int         _bufferHandle;
-    private ByteBuffer? _byteBuffer;
-    private bool        _isBound = false;
-    private bool        _isDirty = false;
-    private bool        _ownsBuffer;
-    private int         _usage;
+    private ByteBuffer?  _byteBuffer;
+    private FloatBuffer? _buffer;
+    private int          _bufferHandle;
+    private bool         _isBound = false;
+    private bool         _isDirty = true;
+    private bool         _ownsBuffer;
+    private int          _usage;
 
     // ========================================================================
     // ========================================================================
@@ -77,16 +77,11 @@ public class VertexBufferObject : IVertexData
     /// <param name="attributes"> the <see cref="VertexAttributes"/>.  </param>
     public VertexBufferObject( bool isStatic, int numVertices, VertexAttributes attributes )
     {
-        _buffer    = null!;
-        Attributes = null!;
+        _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
+        _byteBuffer   = BufferUtils.NewByteBuffer( attributes.VertexSize * numVertices );
 
-        _bufferHandle = ( int ) GdxApi.Bindings.GenBuffer();
+        SetBuffer( _byteBuffer, true, attributes );
 
-        var data = BufferUtils.NewByteBuffer( attributes.VertexSize * numVertices, false );
-
-        data.Limit = 0;
-
-        SetBuffer( data, true, attributes );
         Usage = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
     }
 
@@ -103,11 +98,8 @@ public class VertexBufferObject : IVertexData
     /// <param name="attributes">The vertex attributes that define the structure of the vertex data.</param>
     public VertexBufferObject( int usage, ByteBuffer data, bool ownsBuffer, VertexAttributes attributes )
     {
-        _buffer    = null!;
-        Attributes = null!;
-
         // Generate a new buffer handle using OpenGL and assign it to _bufferHandle.
-        _bufferHandle = ( int ) GdxApi.Bindings.GenBuffer();
+        _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
 
         // Set the buffer data, ownership flag, and attributes using the provided parameters.
         SetBuffer( data, ownsBuffer, attributes );
@@ -147,7 +139,7 @@ public class VertexBufferObject : IVertexData
     /// <summary>
     /// Returns the <see cref="VertexAttributes"/> as specified during construction.
     /// </summary>
-    public VertexAttributes Attributes { get; set; }
+    public VertexAttributes? Attributes { get; set; }
 
     /// <summary>
     /// Returns the underlying FloatBuffer and marks it as dirty, causing the buffer
@@ -160,7 +152,7 @@ public class VertexBufferObject : IVertexData
     {
         _isDirty |= forWriting;
 
-        return _buffer;
+        return _buffer ?? throw new GdxRuntimeException( "_buffer is null" );
     }
 
     /// <summary>
@@ -224,7 +216,7 @@ public class VertexBufferObject : IVertexData
         _byteBuffer.Position = pos;
 
         // Reset the main buffer's position to the beginning.
-        _buffer.Position = 0;
+        _buffer!.Position = 0;
 
         // Signal that the buffer has changed.
         BufferChanged();
@@ -237,7 +229,7 @@ public class VertexBufferObject : IVertexData
     /// <param name="locations"> array containing the attribute locations.  </param>
     public void Bind( ShaderProgram shader, int[]? locations = null )
     {
-        GdxApi.Bindings.BindBuffer( IGL.GL_ARRAY_BUFFER, ( uint ) _bufferHandle );
+        GdxApi.Bindings.BindBuffer( IGL.GL_ARRAY_BUFFER, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -259,15 +251,15 @@ public class VertexBufferObject : IVertexData
             }
         }
 
-        var numAttributes = Attributes.Size;
+        var numAttributes = Attributes?.Size;
 
         for ( var i = 0; i < numAttributes; i++ )
         {
-            var attribute = Attributes.Get( i );
+            var attribute = Attributes!.Get( i );
 
             var location = locations == null
-                               ? shader.GetAttributeLocation( attribute.Alias )
-                               : locations[ i ];
+                ? shader.GetAttributeLocation( attribute.Alias )
+                : locations[ i ];
 
             if ( location < 0 )
             {
@@ -298,7 +290,7 @@ public class VertexBufferObject : IVertexData
     public void Unbind( ShaderProgram shader, int[]? locations = null )
     {
         // Get the number of attributes in the vertex attributes.
-        var numAttributes = Attributes.Size;
+        var numAttributes = Attributes?.Size;
 
         // If no specific locations are provided, disable attributes using their aliases.
         if ( locations == null )
@@ -306,7 +298,7 @@ public class VertexBufferObject : IVertexData
             for ( var i = 0; i < numAttributes; i++ )
             {
                 // Disable the vertex attribute for the alias of each attribute.
-                shader.DisableVertexAttribute( Attributes.Get( i ).Alias );
+                shader.DisableVertexAttribute( Attributes!.Get( i ).Alias );
             }
         }
         else
@@ -336,7 +328,7 @@ public class VertexBufferObject : IVertexData
     /// </summary>
     public void Invalidate()
     {
-        _bufferHandle = ( int ) GdxApi.Bindings.GenBuffer();
+        _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
         _isDirty      = true;
     }
 
@@ -347,7 +339,7 @@ public class VertexBufferObject : IVertexData
     public void Dispose()
     {
         GdxApi.Bindings.BindBuffer( IGL.GL_ARRAY_BUFFER, 0 );
-        GdxApi.Bindings.DeleteBuffers( ( uint ) _bufferHandle );
+        GdxApi.Bindings.DeleteBuffers( ( uint )_bufferHandle );
 
         _bufferHandle = 0;
 

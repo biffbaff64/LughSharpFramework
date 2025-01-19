@@ -25,7 +25,7 @@
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Graphics.G2D;
+namespace LughSharp.Lugh.Graphics.Atlases;
 
 // ============================================================================
 // ============================================================================

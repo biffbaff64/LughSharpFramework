@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
@@ -34,12 +33,11 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI]
 public class VertexBufferObjectWithVAO : IVertexData
 {
-    public VertexAttributes Attributes { get; set; }
+    public VertexAttributes? Attributes { get; set; }
 
     private static readonly IntBuffer _tmpHandle = BufferUtils.NewIntBuffer( 1 );
 
     private readonly FloatBuffer _buffer;
-
     private readonly ByteBuffer  _byteBuffer;
     private readonly List< int > _cachedLocations = new();
     private readonly bool        _ownsBuffer;

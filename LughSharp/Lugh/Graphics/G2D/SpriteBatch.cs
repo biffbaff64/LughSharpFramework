@@ -459,29 +459,10 @@ public class SpriteBatch : IBatch
             ( v, v2 ) = ( v2, v );
         }
 
-        Vertices[ Idx ]     = x1;
-        Vertices[ Idx + 1 ] = y1;
-        Vertices[ Idx + 2 ] = ColorPackedABGR;
-        Vertices[ Idx + 3 ] = u;
-        Vertices[ Idx + 4 ] = v;
-
-        Vertices[ Idx + 5 ] = x2;
-        Vertices[ Idx + 6 ] = y2;
-        Vertices[ Idx + 7 ] = ColorPackedABGR;
-        Vertices[ Idx + 8 ] = u;
-        Vertices[ Idx + 9 ] = v2;
-
-        Vertices[ Idx + 10 ] = x3;
-        Vertices[ Idx + 11 ] = y3;
-        Vertices[ Idx + 12 ] = ColorPackedABGR;
-        Vertices[ Idx + 13 ] = u2;
-        Vertices[ Idx + 14 ] = v2;
-
-        Vertices[ Idx + 15 ] = x4;
-        Vertices[ Idx + 16 ] = y4;
-        Vertices[ Idx + 17 ] = ColorPackedABGR;
-        Vertices[ Idx + 18 ] = u2;
-        Vertices[ Idx + 19 ] = v;
+        SetVertices( x1, y1, ColorPackedABGR, u, v,
+                     x2, y2, ColorPackedABGR, u, v2,
+                     x3, y3, ColorPackedABGR, u2, v2,
+                     x4, y4, ColorPackedABGR, u2, v );
 
         Idx += Sprite.SPRITE_SIZE;
     }
@@ -524,29 +505,10 @@ public class SpriteBatch : IBatch
             ( v, v2 ) = ( v2, v );
         }
 
-        Vertices[ Idx ]     = region.X;
-        Vertices[ Idx + 1 ] = region.Y;
-        Vertices[ Idx + 2 ] = ColorPackedABGR;
-        Vertices[ Idx + 3 ] = u;
-        Vertices[ Idx + 4 ] = v;
-
-        Vertices[ Idx + 5 ] = region.X;
-        Vertices[ Idx + 6 ] = fy2;
-        Vertices[ Idx + 7 ] = ColorPackedABGR;
-        Vertices[ Idx + 8 ] = u;
-        Vertices[ Idx + 9 ] = v2;
-
-        Vertices[ Idx + 10 ] = fx2;
-        Vertices[ Idx + 11 ] = fy2;
-        Vertices[ Idx + 12 ] = ColorPackedABGR;
-        Vertices[ Idx + 13 ] = u2;
-        Vertices[ Idx + 14 ] = v2;
-
-        Vertices[ Idx + 15 ] = fx2;
-        Vertices[ Idx + 16 ] = region.Y;
-        Vertices[ Idx + 17 ] = ColorPackedABGR;
-        Vertices[ Idx + 18 ] = u2;
-        Vertices[ Idx + 19 ] = v;
+        SetVertices( region.X, region.Y, ColorPackedABGR, u, v,
+                     region.X, fy2, ColorPackedABGR, u, v2,
+                     fx2, fy2, ColorPackedABGR, u2, v2,
+                     fx2, region.Y, ColorPackedABGR, u2, v );
 
         Idx += Sprite.SPRITE_SIZE;
     }
@@ -578,29 +540,10 @@ public class SpriteBatch : IBatch
         var fx2 = x + src.Width;
         var fy2 = y + src.Height;
 
-        Vertices[ Idx ]     = x;
-        Vertices[ Idx + 1 ] = y;
-        Vertices[ Idx + 2 ] = ColorPackedABGR;
-        Vertices[ Idx + 3 ] = u;
-        Vertices[ Idx + 4 ] = v;
-
-        Vertices[ Idx + 5 ] = x;
-        Vertices[ Idx + 6 ] = fy2;
-        Vertices[ Idx + 7 ] = ColorPackedABGR;
-        Vertices[ Idx + 8 ] = u;
-        Vertices[ Idx + 9 ] = v2;
-
-        Vertices[ Idx + 10 ] = fx2;
-        Vertices[ Idx + 11 ] = fy2;
-        Vertices[ Idx + 12 ] = ColorPackedABGR;
-        Vertices[ Idx + 13 ] = u2;
-        Vertices[ Idx + 14 ] = v2;
-
-        Vertices[ Idx + 15 ] = fx2;
-        Vertices[ Idx + 16 ] = y;
-        Vertices[ Idx + 17 ] = ColorPackedABGR;
-        Vertices[ Idx + 18 ] = u2;
-        Vertices[ Idx + 19 ] = v;
+        SetVertices( x, y, ColorPackedABGR, u, v,
+                     x, fy2, ColorPackedABGR, u, v2,
+                     fx2, fy2, ColorPackedABGR, u2, v2,
+                     fx2, y, ColorPackedABGR, u2, v );
 
         Idx += Sprite.SPRITE_SIZE;
     }
@@ -635,29 +578,10 @@ public class SpriteBatch : IBatch
         var fx2 = region.X + region.Width;
         var fy2 = region.Y + region.Height;
 
-        Vertices[ Idx ]     = region.X;
-        Vertices[ Idx + 1 ] = region.Y;
-        Vertices[ Idx + 2 ] = ColorPackedABGR;
-        Vertices[ Idx + 3 ] = u;
-        Vertices[ Idx + 4 ] = v;
-
-        Vertices[ Idx + 5 ] = region.X;
-        Vertices[ Idx + 6 ] = fy2;
-        Vertices[ Idx + 7 ] = ColorPackedABGR;
-        Vertices[ Idx + 8 ] = u;
-        Vertices[ Idx + 9 ] = v2;
-
-        Vertices[ Idx + 10 ] = fx2;
-        Vertices[ Idx + 11 ] = fy2;
-        Vertices[ Idx + 12 ] = ColorPackedABGR;
-        Vertices[ Idx + 13 ] = u2;
-        Vertices[ Idx + 14 ] = v2;
-
-        Vertices[ Idx + 15 ] = fx2;
-        Vertices[ Idx + 16 ] = region.Y;
-        Vertices[ Idx + 17 ] = ColorPackedABGR;
-        Vertices[ Idx + 18 ] = u2;
-        Vertices[ Idx + 19 ] = v;
+        SetVertices( region.X, region.Y, ColorPackedABGR, u, v,
+                     region.X, fy2, ColorPackedABGR, u, v2,
+                     fx2, fy2, ColorPackedABGR, u2, v2,
+                     fx2, region.Y, ColorPackedABGR, u2, v );
 
         Idx += Sprite.SPRITE_SIZE;
     }
@@ -706,29 +630,10 @@ public class SpriteBatch : IBatch
         const float U2 = 1;
         const float V2 = 0;
 
-        Vertices[ Idx + 0 ] = posX;
-        Vertices[ Idx + 1 ] = posY;
-        Vertices[ Idx + 2 ] = ColorPackedABGR;
-        Vertices[ Idx + 3 ] = U;
-        Vertices[ Idx + 4 ] = V;
-
-        Vertices[ Idx + 5 ] = posX;
-        Vertices[ Idx + 6 ] = fy2;
-        Vertices[ Idx + 7 ] = ColorPackedABGR;
-        Vertices[ Idx + 8 ] = U;
-        Vertices[ Idx + 9 ] = V2;
-
-        Vertices[ Idx + 10 ] = fx2;
-        Vertices[ Idx + 11 ] = fy2;
-        Vertices[ Idx + 12 ] = ColorPackedABGR;
-        Vertices[ Idx + 13 ] = U2;
-        Vertices[ Idx + 14 ] = V2;
-
-        Vertices[ Idx + 15 ] = fx2;
-        Vertices[ Idx + 16 ] = posY;
-        Vertices[ Idx + 17 ] = ColorPackedABGR;
-        Vertices[ Idx + 18 ] = U2;
-        Vertices[ Idx + 19 ] = V;
+        SetVertices( posX, posY, ColorPackedABGR, U, V,
+                     posX, fy2, ColorPackedABGR, U, V2,
+                     fx2, fy2, ColorPackedABGR, U2, V2,
+                     fx2, posY, ColorPackedABGR, U2, V );
 
         //TODO: Remove when drawing is fixed
         DebugVertices();
@@ -830,29 +735,10 @@ public class SpriteBatch : IBatch
         var u2  = region.U2;
         var v2  = region.V;
 
-        Vertices[ Idx ]     = x;
-        Vertices[ Idx + 1 ] = y;
-        Vertices[ Idx + 2 ] = ColorPackedABGR;
-        Vertices[ Idx + 3 ] = u;
-        Vertices[ Idx + 4 ] = v;
-
-        Vertices[ Idx + 5 ] = x;
-        Vertices[ Idx + 6 ] = fy2;
-        Vertices[ Idx + 7 ] = ColorPackedABGR;
-        Vertices[ Idx + 8 ] = u;
-        Vertices[ Idx + 9 ] = v2;
-
-        Vertices[ Idx + 10 ] = fx2;
-        Vertices[ Idx + 11 ] = fy2;
-        Vertices[ Idx + 12 ] = ColorPackedABGR;
-        Vertices[ Idx + 13 ] = u2;
-        Vertices[ Idx + 14 ] = v2;
-
-        Vertices[ Idx + 15 ] = fx2;
-        Vertices[ Idx + 16 ] = y;
-        Vertices[ Idx + 17 ] = ColorPackedABGR;
-        Vertices[ Idx + 18 ] = u2;
-        Vertices[ Idx + 19 ] = v;
+        SetVertices( x, y, ColorPackedABGR, u, v,
+                     x, fy2, ColorPackedABGR, u, v2,
+                     fx2, fy2, ColorPackedABGR, u2, v2,
+                     fx2, y, ColorPackedABGR, u2, v );
 
         Idx += Sprite.SPRITE_SIZE;
     }
@@ -967,29 +853,10 @@ public class SpriteBatch : IBatch
         var u2 = textureRegion.U2;
         var v2 = textureRegion.V;
 
-        Vertices[ Idx ]     = x1;
-        Vertices[ Idx + 1 ] = y1;
-        Vertices[ Idx + 2 ] = ColorPackedABGR;
-        Vertices[ Idx + 3 ] = u;
-        Vertices[ Idx + 4 ] = v;
-
-        Vertices[ Idx + 5 ] = x2;
-        Vertices[ Idx + 6 ] = y2;
-        Vertices[ Idx + 7 ] = ColorPackedABGR;
-        Vertices[ Idx + 8 ] = u;
-        Vertices[ Idx + 9 ] = v2;
-
-        Vertices[ Idx + 10 ] = x3;
-        Vertices[ Idx + 11 ] = y3;
-        Vertices[ Idx + 12 ] = ColorPackedABGR;
-        Vertices[ Idx + 13 ] = u2;
-        Vertices[ Idx + 14 ] = v2;
-
-        Vertices[ Idx + 15 ] = x4;
-        Vertices[ Idx + 16 ] = y4;
-        Vertices[ Idx + 17 ] = ColorPackedABGR;
-        Vertices[ Idx + 18 ] = u2;
-        Vertices[ Idx + 19 ] = v;
+        SetVertices( x1, y1, ColorPackedABGR, u, v,
+                     x2, y2, ColorPackedABGR, u, v2,
+                     x3, y3, ColorPackedABGR, u2, v2,
+                     x4, y4, ColorPackedABGR, u2, v );
 
         Idx += Sprite.SPRITE_SIZE;
     }
@@ -1135,29 +1002,10 @@ public class SpriteBatch : IBatch
             v4 = textureRegion.V2;
         }
 
-        Vertices[ Idx ]     = x1;
-        Vertices[ Idx + 1 ] = y1;
-        Vertices[ Idx + 2 ] = ColorPackedABGR;
-        Vertices[ Idx + 3 ] = u1;
-        Vertices[ Idx + 4 ] = v1;
-
-        Vertices[ Idx + 5 ] = x2;
-        Vertices[ Idx + 6 ] = y2;
-        Vertices[ Idx + 7 ] = ColorPackedABGR;
-        Vertices[ Idx + 8 ] = u2;
-        Vertices[ Idx + 9 ] = v2;
-
-        Vertices[ Idx + 10 ] = x3;
-        Vertices[ Idx + 11 ] = y3;
-        Vertices[ Idx + 12 ] = ColorPackedABGR;
-        Vertices[ Idx + 13 ] = u3;
-        Vertices[ Idx + 14 ] = v3;
-
-        Vertices[ Idx + 15 ] = x4;
-        Vertices[ Idx + 16 ] = y4;
-        Vertices[ Idx + 17 ] = ColorPackedABGR;
-        Vertices[ Idx + 18 ] = u4;
-        Vertices[ Idx + 19 ] = v4;
+        SetVertices( x1, y1, ColorPackedABGR, u1, v1,
+                     x2, y2, ColorPackedABGR, u2, v2,
+                     x3, y3, ColorPackedABGR, u3, v3,
+                     x4, y4, ColorPackedABGR, u4, v4 );
 
         Idx += Sprite.SPRITE_SIZE;
     }
@@ -1197,29 +1045,10 @@ public class SpriteBatch : IBatch
         var u2 = region.U2;
         var v2 = region.V;
 
-        Vertices[ Idx ]     = x1;
-        Vertices[ Idx + 1 ] = y1;
-        Vertices[ Idx + 2 ] = ColorPackedABGR;
-        Vertices[ Idx + 3 ] = u;
-        Vertices[ Idx + 4 ] = v;
-
-        Vertices[ Idx + 5 ] = x2;
-        Vertices[ Idx + 6 ] = y2;
-        Vertices[ Idx + 7 ] = ColorPackedABGR;
-        Vertices[ Idx + 8 ] = u;
-        Vertices[ Idx + 9 ] = v2;
-
-        Vertices[ Idx + 10 ] = x3;
-        Vertices[ Idx + 11 ] = y3;
-        Vertices[ Idx + 12 ] = ColorPackedABGR;
-        Vertices[ Idx + 13 ] = u2;
-        Vertices[ Idx + 14 ] = v2;
-
-        Vertices[ Idx + 15 ] = x4;
-        Vertices[ Idx + 16 ] = y4;
-        Vertices[ Idx + 17 ] = ColorPackedABGR;
-        Vertices[ Idx + 18 ] = u2;
-        Vertices[ Idx + 19 ] = v;
+        SetVertices( x1, y1, ColorPackedABGR, u, v,
+                     x2, y2, ColorPackedABGR, u, v2,
+                     x3, y3, ColorPackedABGR, u2, v2,
+                     x4, y4, ColorPackedABGR, u2, v );
 
         Idx += Sprite.SPRITE_SIZE;
     }
@@ -1227,6 +1056,36 @@ public class SpriteBatch : IBatch
     #endregion Drawing methods
 
     // ========================================================================
+
+    private void SetVertices( float x1, float y1, float colorPackedABGR, float u1, float v1,
+                              float x2, float y2, float colorPackedABGR1, float u2, float v2,
+                              float x3, float y3, float colorPackedABGR2, float u3, float v3,
+                              float x4, float y4, float colorPackedABGR3, float u4, float v4 )
+    {
+        Vertices[ Idx ]     = x1;
+        Vertices[ Idx + 1 ] = y1;
+        Vertices[ Idx + 2 ] = ColorPackedABGR;
+        Vertices[ Idx + 3 ] = u1;
+        Vertices[ Idx + 4 ] = v1;
+
+        Vertices[ Idx + 5 ] = x2;
+        Vertices[ Idx + 6 ] = y2;
+        Vertices[ Idx + 7 ] = ColorPackedABGR;
+        Vertices[ Idx + 8 ] = u2;
+        Vertices[ Idx + 9 ] = v2;
+
+        Vertices[ Idx + 10 ] = x3;
+        Vertices[ Idx + 11 ] = y3;
+        Vertices[ Idx + 12 ] = ColorPackedABGR;
+        Vertices[ Idx + 13 ] = u3;
+        Vertices[ Idx + 14 ] = v3;
+
+        Vertices[ Idx + 15 ] = x4;
+        Vertices[ Idx + 16 ] = y4;
+        Vertices[ Idx + 17 ] = ColorPackedABGR;
+        Vertices[ Idx + 18 ] = u4;
+        Vertices[ Idx + 19 ] = v4;
+    }
 
     /// <summary>
     /// </summary>
@@ -1239,10 +1098,7 @@ public class SpriteBatch : IBatch
 
         var spritesInBatch = Idx / 20;
 
-        if ( spritesInBatch > MaxSpritesInBatch )
-        {
-            MaxSpritesInBatch = spritesInBatch;
-        }
+        if ( spritesInBatch > MaxSpritesInBatch ) MaxSpritesInBatch = spritesInBatch;
 
         var count = spritesInBatch * 6;
 
@@ -1250,8 +1106,7 @@ public class SpriteBatch : IBatch
         {
             _nullTextureCount++;
 
-            Logger.Error( $"Attempt to flush with null texture. " +
-                          $"This batch will be skipped. " +
+            Logger.Error( $"Attempt to flush with null texture. This batch will be skipped. " +
                           $"Null texture count: {_nullTextureCount}. " +
                           $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
 
@@ -1266,8 +1121,6 @@ public class SpriteBatch : IBatch
 
         if ( _mesh == null )
         {
-            Logger.Error( "Mesh is NULL" );
-
             Idx = 0;
 
             return;
@@ -1358,33 +1211,21 @@ public class SpriteBatch : IBatch
     /// <inheritdoc />
     public void SetProjectionMatrix( Matrix4 projection )
     {
-        if ( IsDrawing )
-        {
-            Flush();
-        }
+        if ( IsDrawing ) Flush();
 
         ProjectionMatrix.Set( projection );
 
-        if ( IsDrawing )
-        {
-            SetupMatrices();
-        }
+        if ( IsDrawing ) SetupMatrices();
     }
 
     /// <inheritdoc />
     public virtual void SetTransformMatrix( Matrix4 transform )
     {
-        if ( IsDrawing )
-        {
-            Flush();
-        }
+        if ( IsDrawing ) Flush();
 
         TransformMatrix.Set( transform );
 
-        if ( IsDrawing )
-        {
-            SetupMatrices();
-        }
+        if ( IsDrawing ) SetupMatrices();
     }
 
     /// <summary>
@@ -1395,10 +1236,7 @@ public class SpriteBatch : IBatch
         get => _customShader ?? _shader;
         set
         {
-            if ( IsDrawing )
-            {
-                Flush();
-            }
+            if ( IsDrawing ) Flush();
 
             _customShader = value;
 
@@ -1458,11 +1296,6 @@ public class SpriteBatch : IBatch
         //@formatter:on
 
         var shader = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
-
-        if ( !shader.IsCompiled )
-        {
-            throw new GdxRuntimeException( "Error compiling shader: " + shader.ShaderLog );
-        }
 
         return shader;
     }
@@ -1551,22 +1384,16 @@ public class SpriteBatch : IBatch
     {
         if ( texture is not Texture or TextureRegion )
         {
-            Logger.Debug( $"Supplied texture is not a valid Texture or TextureRegion" );
-
             throw new GdxRuntimeException( "Invalid Texture or TextureRegion" );
         }
 
         if ( texture == null )
         {
-            Logger.Debug( $"Texture is null: {texture}" );
-
             throw new ArgumentException( $"Texture is null: {texture}" );
         }
 
         if ( !IsDrawing )
         {
-            Logger.Debug( "Draw Error: Begin() must be called before Draw()" );
-
             throw new InvalidOperationException( "Begin() must be called before Draw()." );
         }
     }

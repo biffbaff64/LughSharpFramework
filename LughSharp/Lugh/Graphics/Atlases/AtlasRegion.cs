@@ -22,13 +22,22 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 
-namespace LughSharp.Lugh.Graphics.G2D;
+namespace LughSharp.Lugh.Graphics.Atlases;
 
 [PublicAPI]
 public class AtlasRegion : TextureRegion
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
     public AtlasRegion( Texture? texture, int x, int y, int width, int height )
         : base( texture!, x, y, width, height )
     {
@@ -38,6 +47,10 @@ public class AtlasRegion : TextureRegion
         PackedHeight   = height;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="region"></param>
     public AtlasRegion( AtlasRegion region )
     {
         SetRegion( region );
@@ -56,6 +69,10 @@ public class AtlasRegion : TextureRegion
         Values         = region.Values;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="region"></param>
     public AtlasRegion( TextureRegion region )
     {
         SetRegion( region );
@@ -153,6 +170,11 @@ public class AtlasRegion : TextureRegion
     /// </summary>
     public float RotatedPackedHeight => Rotate ? PackedWidth : PackedHeight;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
     public override void Flip( bool x, bool y )
     {
         base.Flip( x, y );
@@ -168,6 +190,11 @@ public class AtlasRegion : TextureRegion
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public int[]? FindValue( string name )
     {
         if ( Names != null )
@@ -184,6 +211,7 @@ public class AtlasRegion : TextureRegion
         return null;
     }
 
+    /// <inheritdoc/>
     public override string? ToString()
     {
         return Name;

@@ -143,10 +143,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// <summary>
     /// The entry point for running code using this framework. At this point at least one window
     /// will have been created, Glfw will have been set up, and the framework properly initialised.
-    /// <para>
     /// This passes control to <see cref="Loop()"/> and stays there until the app is finished. At
     /// this point <see cref="CleanupWindows"/> is called, followed by <see cref="Cleanup"/>.
-    /// </para>
     /// </summary>
     public void Run()
     {

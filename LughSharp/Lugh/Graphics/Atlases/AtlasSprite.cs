@@ -22,8 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.G2D;
 
-namespace LughSharp.Lugh.Graphics.G2D;
+namespace LughSharp.Lugh.Graphics.Atlases;
 
 /// <summary>
 /// A sprite that, if whitespace was stripped from the region when it was packed,
@@ -117,12 +118,10 @@ public class AtlasSprite : Sprite
         var packedWidth  = Region.Rotate ? Region.PackedHeight : Region.PackedWidth;
         var packedHeight = Region.Rotate ? Region.PackedWidth : Region.PackedHeight;
 
-        base.SetBounds(
-                       x + Region.OffsetX,
-                       y + Region.OffsetY,
-                       packedWidth * widthRatio,
-                       packedHeight * heightRatio
-                      );
+        base.SetBounds( x + Region.OffsetX,
+                        y + Region.OffsetY,
+                        packedWidth * widthRatio,
+                        packedHeight * heightRatio );
     }
 
     /// <inheritdoc />
