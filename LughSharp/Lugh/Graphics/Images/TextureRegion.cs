@@ -22,11 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Graphics.G2D;
+namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
 /// Defines a rectangular area of a texture. The coordinate system used has

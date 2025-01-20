@@ -22,9 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Images;
-
-namespace LughSharp.Lugh.Graphics.G2D;
+namespace LughSharp.Lugh.Graphics.Images;
 
 public partial class Gdx2DPixmap
 {

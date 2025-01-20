@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Images;
 
 namespace LughSharp.Lugh.Maps.Tiled.Tiles;
 
