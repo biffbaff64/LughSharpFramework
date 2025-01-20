@@ -149,8 +149,7 @@ public class SpriteBatch : IBatch
                           size * 6,
                           new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 2, ShaderProgram.POSITION_ATTRIBUTE ),
                           new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE ),
-                          new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2,
-                                               $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" ) );
+                          new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2, $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" ) );
 
         ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
 
@@ -377,14 +376,7 @@ public class SpriteBatch : IBatch
         var p4X = fx2;
         var p4Y = fy;
 
-        float x1;
-        float y1;
-        float x2;
-        float y2;
-        float x3;
-        float y3;
-        float x4;
-        float y4;
+        float x1, y1, x2, y2, x3, y3, x4, y4;
 
         // rotate
         if ( rotation != 0 )
@@ -762,14 +754,7 @@ public class SpriteBatch : IBatch
         var p4X = fx2;
         var p4Y = fy;
 
-        float x1;
-        float y1;
-        float x2;
-        float y2;
-        float x3;
-        float y3;
-        float x4;
-        float y4;
+        float x1, y1, x2, y2, x3, y3, x4, y4;
 
         // rotate
         if ( rotation != 0 )
@@ -885,14 +870,7 @@ public class SpriteBatch : IBatch
         var p4X = fx2;
         var p4Y = fy;
 
-        float x1;
-        float y1;
-        float x2;
-        float y2;
-        float x3;
-        float y3;
-        float x4;
-        float y4;
+        float x1, y1, x2, y2, x3, y3, x4, y4;
 
         // rotate
         if ( rotation != 0 )
