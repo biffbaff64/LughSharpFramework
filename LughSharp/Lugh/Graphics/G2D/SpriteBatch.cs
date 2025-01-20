@@ -50,16 +50,10 @@ public class SpriteBatch : IBatch
     public Matrix4 TransformMatrix   { get; }              = new();
     public bool    IsDrawing         { get; set; }         = false;
 
-    // Number of render calls since the last call to Begin()
-    public int RenderCalls { get; set; } = 0;
+    public int  RenderCalls       { get; set; } = 0; // Number of render calls since the last call to Begin()
+    public long TotalRenderCalls  { get; set; } = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
+    public int  MaxSpritesInBatch { get; set; } = 0; // The maximum number of sprites rendered in one batch so far.
 
-    // Number of rendering calls, ever. Will not be reset unless set manually.
-    public long TotalRenderCalls { get; set; } = 0;
-
-    // The maximum number of sprites rendered in one batch so far.
-    public int MaxSpritesInBatch { get; set; } = 0;
-
-    // ========================================================================
     // ========================================================================
 
     protected Texture? LastTexture { get; set; } = null;
@@ -67,15 +61,14 @@ public class SpriteBatch : IBatch
     protected int      Idx         { get; set; } = 0;
 
     // ========================================================================
-    // ========================================================================
 
     private const int MAX_VERTEX_INDEX = 32767;
-    private const int MAX_SPRITES      = 8191;
+    private const int MAX_SPRITES      = 8191; // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
 
-    private readonly Color   _color          = Graphics.Color.Red;
-    private          Matrix4 _combinedMatrix = new();
-    private readonly bool    _ownsShader;
+    private readonly Color _color = Graphics.Color.Red;
+    private readonly bool  _ownsShader;
 
+    private Matrix4        _combinedMatrix = new();
     private Mesh?          _mesh;
     private ShaderProgram? _shader;
     private Texture?       _lastSuccessfulTexture = null;
@@ -84,39 +77,30 @@ public class SpriteBatch : IBatch
     private uint           _vbo;
 
     // ========================================================================
-    // ========================================================================
 
     /// <summary>
-    /// Constructs a new SpriteBatch with a size of 1000, one buffer,
-    /// and the default shader.
+    /// Constructs a new SpriteBatch with a size of 1000, one buffer, and the default shader.
     /// </summary>
     public SpriteBatch() : this( 1000 )
     {
     }
 
     /// <summary>
-    /// Constructs a new SpriteBatch. Sets the projection matrix to an orthographic
-    /// projection with y-axis point upwards, x-axis point to the right and the origin
-    /// being in the bottom left corner of the screen. The projection will be pixel
-    /// perfect with respect to the current screen resolution.
-    /// <para>
-    /// The defaultShader specifies the shader to use. Note that the names for uniforms
-    /// for this default shader are different than the ones expect for shaders set with
-    /// <see cref="Shader"/>. See <see cref="CreateDefaultShader()"/>.
-    /// </para>
+    /// Constructs a new SpriteBatch. Sets the projection matrix to an orthographic projection with
+    /// y-axis point upwards, x-axis point to the right and the origin being in the bottom left corner
+    /// of the screen. The projection will be pixel perfect with respect to the current screen resolution.
+    /// The defaultShader specifies the shader to use. Note that the names for uniforms for this default
+    /// shader are different than the ones expect for shaders set with <see cref="Shader"/>.
+    /// See <see cref="CreateDefaultShader()"/>.
     /// </summary>
-    /// <param name="size">
-    /// The max number of sprites in a single batch. Max of 8191.
-    /// </param>
+    /// <param name="size"> The max number of sprites in a single batch. Max of 8191. </param>
     /// <param name="defaultShader">
-    /// The default shader to use. This is not owned by the SpriteBatch and must
-    /// be disposed separately.
+    /// The default shader to use. This is not owned by the SpriteBatch and must be disposed separately.
     /// </param>
     protected SpriteBatch( int size, ShaderProgram? defaultShader = null )
     {
         if ( size > MAX_SPRITES )
         {
-            // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
             throw new ArgumentException( $"Can't have more than 8191 sprites per batch: {size}" );
         }
 
@@ -468,7 +452,6 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="texture"></param>
     /// <param name="region"></param>
@@ -514,7 +497,6 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="texture"></param>
     /// <param name="x"></param>
@@ -549,7 +531,6 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="texture"></param>
     /// <param name="region"></param>
@@ -557,12 +538,7 @@ public class SpriteBatch : IBatch
     /// <param name="v"></param>
     /// <param name="u2"></param>
     /// <param name="v2"></param>
-    public virtual void Draw( Texture texture,
-                              GRect region,
-                              float u,
-                              float v,
-                              float u2,
-                              float v2 )
+    public virtual void Draw( Texture texture, GRect region, float u, float v, float u2, float v2 )
     {
         Validate( texture );
 
@@ -594,9 +570,6 @@ public class SpriteBatch : IBatch
     /// <param name="y"> Y coordinate in pixels. </param>
     public virtual void Draw( Texture texture, float x, float y )
     {
-        // This method doesn't need to call Validate() because
-        // that is done in the Draw() method called from here.
-
         Draw( texture, x, y, texture.Width, texture.Height );
     }
 
@@ -642,7 +615,6 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="texture"></param>
     /// <param name="spriteVertices"></param>
@@ -693,7 +665,6 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="region"></param>
     /// <param name="x"></param>
@@ -706,7 +677,6 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="region"></param>
     /// <param name="x"></param>
@@ -744,18 +714,13 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="textureRegion"></param>
     /// <param name="region"></param>
     /// <param name="origin"></param>
     /// <param name="scale"></param>
     /// <param name="rotation"></param>
-    public virtual void Draw( TextureRegion? textureRegion,
-                              GRect region,
-                              Point2D origin,
-                              Point2D scale,
-                              float rotation )
+    public virtual void Draw( TextureRegion? textureRegion, GRect region, Point2D origin, Point2D scale, float rotation )
     {
         Validate( textureRegion );
 
@@ -848,21 +813,15 @@ public class SpriteBatch : IBatch
         x4 += worldOriginX;
         y4 += worldOriginY;
 
-        var u  = textureRegion.U;
-        var v  = textureRegion.V2;
-        var u2 = textureRegion.U2;
-        var v2 = textureRegion.V;
-
-        SetVertices( x1, y1, ColorPackedABGR, u, v,
-                     x2, y2, ColorPackedABGR, u, v2,
-                     x3, y3, ColorPackedABGR, u2, v2,
-                     x4, y4, ColorPackedABGR, u2, v );
+        SetVertices( x1, y1, ColorPackedABGR, textureRegion.U, textureRegion.V2,
+                     x2, y2, ColorPackedABGR, textureRegion.U, textureRegion.V,
+                     x3, y3, ColorPackedABGR, textureRegion.U2, textureRegion.V,
+                     x4, y4, ColorPackedABGR, textureRegion.U2, textureRegion.V2 );
 
         Idx += Sprite.SPRITE_SIZE;
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="textureRegion"></param>
     /// <param name="region"></param>
@@ -1011,7 +970,6 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="region"></param>
     /// <param name="width"></param>
@@ -1040,15 +998,10 @@ public class SpriteBatch : IBatch
         var x4 = ( transform.M00 * width ) + transform.M02;
         var y4 = ( transform.M10 * width ) + transform.M12;
 
-        var u  = region.U;
-        var v  = region.V2;
-        var u2 = region.U2;
-        var v2 = region.V;
-
-        SetVertices( x1, y1, ColorPackedABGR, u, v,
-                     x2, y2, ColorPackedABGR, u, v2,
-                     x3, y3, ColorPackedABGR, u2, v2,
-                     x4, y4, ColorPackedABGR, u2, v );
+        SetVertices( x1, y1, ColorPackedABGR, region.U, region.V2,
+                     x2, y2, ColorPackedABGR, region.U, region.V,
+                     x3, y3, ColorPackedABGR, region.U2, region.V,
+                     x4, y4, ColorPackedABGR, region.U2, region.V2 );
 
         Idx += Sprite.SPRITE_SIZE;
     }
@@ -1261,47 +1214,40 @@ public class SpriteBatch : IBatch
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-        //@formatter:off
-        const string VERTEX_SHADER =    "in vec2 a_position;\n"+
-                                        "in float a_colorPacked;\n"+
-                                        "in vec2 a_texCoords;\n"+
-                                        "out float v_colorPacked;\n"+
-                                        "out vec2 v_texCoords;\n"+
-                                        "uniform mat4 u_projTrans;\n"+
-                                        "uniform mat4 u_viewMatrix;\n"+
-                                        "uniform mat4 u_modelMatrix;\n"+
-                                        "void main()\n"+
-                                        "{\n"+
-                                        "    gl_Position = u_projTrans * u_viewMatrix * u_modelMatrix * vec4(a_position, 0.0, 1.0);\n"+
-                                        "    v_colorPacked = a_colorPacked;\n"+
-                                        "    v_texCoords = a_texCoords;\n"+
-                                        "}\n";
-        
-        const string FRAGMENT_SHADER =  "in float v_colorPacked;\n"+
-                                        "in vec2 v_texCoords;\n"+
-                                        "out vec4 FragColor;\n"+
-                                        "uniform sampler2D u_texture;\n"+
-                                        "vec4 unpackColor(float packedColor) {\n"+
-                                        "    uint color = uint(packedColor);\n"+
-                                        "    float b = float((color >> 0) & 0xFFu) / 255.0;\n"+
-                                        "    float g = float((color >> 8) & 0xFFu) / 255.0;\n"+
-                                        "    float r = float((color >> 16) & 0xFFu) / 255.0;\n"+
-                                        "    float a = float((color >> 24) & 0xFFu) / 255.0;\n"+
-                                        "    return vec4(r, g, b, a);\n"+
-                                        "}\n"+
-                                        "void main()\n"+
-                                        "{\n"+
-                                        "    FragColor = texture(u_texture, v_texCoords) * unpackColor(v_colorPacked);\n"+
-                                        "}\n";
-        //@formatter:on
+        const string VERTEX_SHADER = "in vec2 a_position;\n" +
+                                     "in float a_colorPacked;\n" +
+                                     "in vec2 a_texCoords;\n" +
+                                     "out float v_colorPacked;\n" +
+                                     "out vec2 v_texCoords;\n" +
+                                     "uniform mat4 u_projTrans;\n" +
+                                     "uniform mat4 u_viewMatrix;\n" +
+                                     "uniform mat4 u_modelMatrix;\n" +
+                                     "void main() {\n" +
+                                     "    gl_Position = u_projTrans * u_viewMatrix * u_modelMatrix * vec4(a_position, 0.0, 1.0);\n" +
+                                     "    v_colorPacked = a_colorPacked;\n" +
+                                     "    v_texCoords = a_texCoords;\n" +
+                                     "}\n";
 
-        var shader = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
+        const string FRAGMENT_SHADER = "in float v_colorPacked;\n" +
+                                       "in vec2 v_texCoords;\n" +
+                                       "out vec4 FragColor;\n" +
+                                       "uniform sampler2D u_texture;\n" +
+                                       "vec4 unpackColor(float packedColor) {\n" +
+                                       "    uint color = uint(packedColor);\n" +
+                                       "    float b = float((color >> 0) & 0xFFu) / 255.0;\n" +
+                                       "    float g = float((color >> 8) & 0xFFu) / 255.0;\n" +
+                                       "    float r = float((color >> 16) & 0xFFu) / 255.0;\n" +
+                                       "    float a = float((color >> 24) & 0xFFu) / 255.0;\n" +
+                                       "    return vec4(r, g, b, a);\n" +
+                                       "}\n" +
+                                       "void main() {\n" +
+                                       "    FragColor = texture(u_texture, v_texCoords) * unpackColor(v_colorPacked);\n" +
+                                       "}\n";
 
-        return shader;
+        return new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
     }
 
     /// <summary>
-    /// 
     /// </summary>
     public virtual void SetupMatrices()
     {
@@ -1323,7 +1269,7 @@ public class SpriteBatch : IBatch
         {
             if ( !_shader.IsCompiled )
             {
-                Logger.Debug( "Custom Shader is not compiled." );
+                Logger.Debug( "Shader is not compiled." );
 
                 return; // Return early if not compiled
             }
@@ -1334,7 +1280,6 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="texture"></param>
     protected void SwitchTexture( Texture? texture )
