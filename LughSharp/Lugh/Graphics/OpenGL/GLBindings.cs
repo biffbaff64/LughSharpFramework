@@ -1772,8 +1772,21 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData ) )
         {
+            var ptr = new IntPtr( data );
+            
+            Logger.Debug( $"target: {target}" );
+            Logger.Debug( $"size  : {size}" );
+            Logger.Debug( $"data  : 0x{ptr.ToInt64():X}" );
+            Logger.Debug( $"usage : {usage}" );
             
             _glBufferData( target, size, data, usage );
+        }
+
+        var errorCode = GetError();
+
+        if ( errorCode != ( int )ErrorCode.NoError )
+        {
+            Logger.Error( $"BufferData error: {errorCode}" );
         }
     }
 

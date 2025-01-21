@@ -137,19 +137,54 @@ public class SpriteBatch : IBatch
             ? Mesh.VertexDataType.VertexBufferObjectWithVAO
             : Mesh.VertexDataType.VertexArray;
 
-        _mesh = new Mesh( vertexDataType,
-                          false,
-                          size * 4,
-                          size * 6,
-                          new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 2, ShaderProgram.POSITION_ATTRIBUTE ),
-                          new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE ),
-                          new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2,
-                                               $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" ) );
+        // Initialize the mesh with vertex attributes for position,
+        // color, and texture coordinates
+        _mesh = new Mesh(
+                         vertexDataType,
+                         false,
+                         size * 4,
+                         size * 6,
+                         new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 2, ShaderProgram.POSITION_ATTRIBUTE ),
+                         new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE ),
+                         new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2, $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" )
+                        );
 
+        // Set up an orthographic projection matrix for 2D rendering
         ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
 
-        var len     = size * INDICES_PER_SPRITE;
-        var indices = new short[ len ];
+        GenerateIndexBuffer( size, out short[] indices );
+
+        // Set the indices on the mesh
+        _mesh.SetIndices( indices );
+
+        // Calculate the vertex size in floats
+        _vertexSizeInFloats = _mesh.VertexAttributes.VertexSize / sizeof( float );
+
+        // Generate and bind the Vertex Array Object (VAO)
+        _vao = GdxApi.Bindings.GenVertexArray();
+        GdxApi.Bindings.BindVertexArray( _vao );
+
+        // Generate and bind the Vertex Buffer Object (VBO)
+        _vbo = GdxApi.Bindings.GenBuffer();
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+
+        CheckBufferBinding( _vbo );
+
+        CheckGLError( "Initialise" );
+
+        GdxApi.Bindings.BufferData( target: ( int )BufferTarget.ArrayBuffer,
+                                    size: Vertices.Length * sizeof( float ),
+                                    data: ( void* )0,
+                                    usage: ( int )BufferUsageHint.DynamicDraw );
+
+        GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
+    }
+
+    private static void GenerateIndexBuffer( int size, out short[] indices )
+    {
+        var len = size * INDICES_PER_SPRITE;
+        indices = new short[ len ];
 
         for ( short i = 0, j = 0; i < len; i += INDICES_PER_SPRITE, j += 4 )
         {
@@ -160,17 +195,10 @@ public class SpriteBatch : IBatch
             indices[ i + 4 ] = ( short )( j + 3 );
             indices[ i + 5 ] = j;
         }
+    }
 
-        _mesh.SetIndices( indices );
-        _vertexSizeInFloats = _mesh.VertexAttributes.VertexSize / sizeof( float );
-
-        _vao = GdxApi.Bindings.GenVertexArray(); // Generate VAO
-        GdxApi.Bindings.BindVertexArray( _vao ); // Bind VAO
-
-        _vbo = GdxApi.Bindings.GenBuffer();
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-
-        // *** ADD THIS CHECK ***
+    private unsafe void CheckBufferBinding( uint expectedBuffer )
+    {
         var currentBuffer = new int[ 1 ];
 
         fixed ( int* ptr = &currentBuffer[ 0 ] )
@@ -178,20 +206,20 @@ public class SpriteBatch : IBatch
             GdxApi.Bindings.GetIntegerv( IGL.GL_ARRAY_BUFFER_BINDING, ptr );
         }
 
-        if ( currentBuffer[ 0 ] != _vbo )
+        if ( currentBuffer[ 0 ] != expectedBuffer )
         {
-            Logger.Error( $"Buffer not bound correctly! Expected {_vbo}, got {currentBuffer[ 0 ]}" );
+            Logger.Error( $"Buffer not bound correctly! Expected {expectedBuffer}, got {currentBuffer[ 0 ]}" );
         }
+    }
 
-        // *** END OF CHECK ***
+    private void CheckGLError( string stage )
+    {
+        var error = GdxApi.Bindings.GetError();
 
-        GdxApi.Bindings.BufferData( target: ( int )BufferTarget.ArrayBuffer,
-                                    size: Vertices.Length * sizeof( float ),
-                                    data: ( void* )0,
-                                    usage: ( int )BufferUsageHint.DynamicDraw );
-
-        GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
+        if ( error != ( int )ErrorCode.NoError )
+        {
+            throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
+        }
     }
 
     /// <summary>
@@ -1063,6 +1091,8 @@ public class SpriteBatch : IBatch
 
             return;
         }
+
+        Logger.Debug( $"BufferData size: {Vertices.Length * sizeof( float )} bytes" );
 
         // Only allocate initial storage once
         if ( Vertices.Length > 0 )
