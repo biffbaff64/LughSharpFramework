@@ -1770,9 +1770,11 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void BufferData( GLenum target, GLsizeiptr size, void* data, GLenum usage )
     {
-        GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
-
-        _glBufferData( target, size, data, usage );
+        if ( GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData ) )
+        {
+            
+            _glBufferData( target, size, data, usage );
+        }
     }
 
     /// <inheritdoc/>
