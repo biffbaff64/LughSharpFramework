@@ -917,6 +917,11 @@ public sealed class Color : ICloneable, IEquatable< Color >
         return ( float )intBits;
     }
 
+    public static float ToFloatBitsABGR(byte a, byte b, byte g, byte r)
+    {
+        return BitConverter.Int32BitsToSingle((a << 24) | (b << 16) | (g << 8) | r);
+    }
+    
     /// <summary>
     /// Packs the color components into a 32-bit integer with the format ABGR.
     /// </summary>
