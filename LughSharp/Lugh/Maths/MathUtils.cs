@@ -503,12 +503,12 @@ public class MathUtils
     /// </summary>
     /// <param name="value">the value to test.</param>
     /// <param name="tolerance"> represent an upper bound below which the value is considered zero.</param>
-    public static bool IsZero( float value, float tolerance = FloatConstants.FLOAT_TOLERANCE )
+    public static bool IsZero( float value, float tolerance = Constants.FLOAT_TOLERANCE )
     {
         return Math.Abs( value ) <= tolerance;
     }
 
-    public static bool IsNotEqual( float a, float b, float tolerance = FloatConstants.FLOAT_TOLERANCE )
+    public static bool IsNotEqual( float a, float b, float tolerance = Constants.FLOAT_TOLERANCE )
     {
         return !IsEqual( a, b, tolerance );
     }
@@ -521,7 +521,7 @@ public class MathUtils
     /// <param name="tolerance">
     /// represent an upper bound below which the two values are considered equal.
     /// </param>
-    public static bool IsEqual( float a, float b, float tolerance = FloatConstants.FLOAT_TOLERANCE )
+    public static bool IsEqual( float a, float b, float tolerance = Constants.FLOAT_TOLERANCE )
     {
         return Math.Abs( a - b ) <= tolerance;
     }

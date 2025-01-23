@@ -146,7 +146,7 @@ public class GeometryUtils
         float dx32 = x3 - x2, dy32 = y3 - y2;
         var   det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
 
-        return Math.Abs( det ) < FloatConstants.FLOAT_TOLERANCE;
+        return Math.Abs( det ) < Constants.FLOAT_TOLERANCE;
     }
 
     public static Vector2 TriangleCentroid( float x1,
@@ -179,7 +179,7 @@ public class GeometryUtils
         float dx13 = x1 - x3, dy13 = y1 - y3;
         var   det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
 
-        if ( Math.Abs( det ) < FloatConstants.FLOAT_TOLERANCE )
+        if ( Math.Abs( det ) < Constants.FLOAT_TOLERANCE )
         {
             throw new ArgumentException( "Triangle points must not be colinear." );
         }
@@ -199,7 +199,7 @@ public class GeometryUtils
     {
         float m1, m2, mx1, mx2, my1, my2, x, y;
 
-        if ( Math.Abs( y2 - y1 ) < FloatConstants.FLOAT_TOLERANCE )
+        if ( Math.Abs( y2 - y1 ) < Constants.FLOAT_TOLERANCE )
         {
             m2  = -( x3 - x2 ) / ( y3 - y2 );
             mx2 = ( x2 + x3 ) / 2;
@@ -207,7 +207,7 @@ public class GeometryUtils
             x   = ( x2 + x1 ) / 2;
             y   = ( m2 * ( x - mx2 ) ) + my2;
         }
-        else if ( Math.Abs( y3 - y2 ) < FloatConstants.FLOAT_TOLERANCE )
+        else if ( Math.Abs( y3 - y2 ) < Constants.FLOAT_TOLERANCE )
         {
             m1  = -( x2 - x1 ) / ( y2 - y1 );
             mx1 = ( x1 + x2 ) / 2;

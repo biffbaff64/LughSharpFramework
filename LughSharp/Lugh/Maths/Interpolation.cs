@@ -82,7 +82,7 @@ public class Interpolation
     {
         Interp = a =>
         {
-            if ( a < FloatConstants.FLOAT_TOLERANCE )
+            if ( a < Constants.FLOAT_TOLERANCE )
             {
                 return 0;
             }

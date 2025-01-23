@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths.Collision;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -36,6 +37,8 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public class Mesh
 {
+    // ========================================================================
+
     public enum VertexDataType
     {
         VertexArray,
@@ -45,12 +48,11 @@ public class Mesh
     }
 
     // ========================================================================
-    // ========================================================================
 
     /// <summary>
     /// Returns the vertex attributes of this Mesh.
     /// </summary>
-    public VertexAttributes VertexAttributes => _vertices.Attributes;
+    public VertexAttributes? VertexAttributes => _vertices.Attributes;
 
     // ========================================================================
 
@@ -67,8 +69,6 @@ public class Mesh
     // ========================================================================
     // ========================================================================
 
-    #region constructors
-
     /// <summary>
     /// Creates a new mesh with the given attrributes.
     /// </summary>
@@ -77,6 +77,10 @@ public class Mesh
     /// <param name="isVertexArray"></param>
     protected Mesh( IVertexData vertices, IIndexData indices, bool isVertexArray )
     {
+        Logger.Debug( $"vertices: {vertices.GetType().Name}, " +
+                      $"indices: {indices.GetType().Name}, " +
+                      $"isVertexArray: {isVertexArray}" );
+
         _vertices      = vertices;
         _indices       = indices;
         _isVertexArray = isVertexArray;
@@ -96,6 +100,11 @@ public class Mesh
     /// </param>
     public Mesh( bool isStatic, int maxVertices, int maxIndices, params VertexAttribute[] attributes )
     {
+        Logger.Debug( $"isStatic: {isStatic}, " +
+                      $"maxVertices: {maxVertices}, " +
+                      $"maxIndices: {maxIndices}, " +
+                      $"attributes: {attributes.Length}" );
+
         _vertices      = MakeVertexBuffer( isStatic, maxVertices, new VertexAttributes( attributes ) );
         _indices       = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
@@ -115,6 +124,11 @@ public class Mesh
     /// </param>
     public Mesh( bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
+        Logger.Debug( $"isStatic: {isStatic}, " +
+                      $"maxVertices: {maxVertices}, " +
+                      $"maxIndices: {maxIndices}, " +
+                      $"attributes: {attributes.Size}" );
+
         _vertices      = MakeVertexBuffer( isStatic, maxVertices, attributes );
         _indices       = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
@@ -123,8 +137,8 @@ public class Mesh
     }
 
     /// <summary>
-    /// Creates a new Mesh with the given attributes. Adds extra optimizations
-    /// for dynamic (frequently modified) meshes.
+    /// Creates a new Mesh with the given attributes. Adds extra optimizations for dynamic
+    /// (frequently modified) meshes.
     /// </summary>
     /// <param name="staticVertices">
     /// whether vertices of this mesh are static or not. Allows for internal optimizations.
@@ -144,6 +158,12 @@ public class Mesh
                  int maxIndices,
                  VertexAttributes attributes )
     {
+        Logger.Debug( $"staticVertices: {staticVertices}, " +
+                      $"staticIndices: {staticIndices}, " +
+                      $"maxVertices: {maxVertices}, " +
+                      $"maxIndices: {maxIndices}, " +
+                      $"attributes: {attributes.Size}" );
+
         _vertices      = MakeVertexBuffer( staticVertices, maxVertices, attributes );
         _indices       = new IndexBufferObject( staticIndices, maxIndices );
         _isVertexArray = false;
@@ -170,6 +190,10 @@ public class Mesh
                  params VertexAttribute[] attributes )
         : this( type, isStatic, maxVertices, maxIndices, new VertexAttributes( attributes ) )
     {
+        Logger.Debug( $"isStatic: {isStatic}, " +
+                      $"maxVertices: {maxVertices}, " +
+                      $"maxIndices: {maxIndices}, " +
+                      $"attributes: {attributes.Length}" );
     }
 
     /// <summary>
@@ -185,6 +209,12 @@ public class Mesh
     /// <param name="attributes">the <see cref="VertexAttributes"/>.</param>
     public Mesh( VertexDataType type, bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
+        Logger.Debug( $"type: {type}, " +
+                      $"isStatic: {isStatic}, " +
+                      $"maxVertices: {maxVertices}, " +
+                      $"maxIndices: {maxIndices}, " +
+                      $"attributes: {attributes.Size}" );
+
         switch ( type )
         {
             case VertexDataType.VertexBufferObject:
@@ -219,8 +249,6 @@ public class Mesh
 
         AddManagedMesh( GdxApi.App, this );
     }
-
-    #endregion constructors
 
     // ========================================================================
 
@@ -436,7 +464,7 @@ public class Mesh
     /// <param name="vertices"> the array to copy the vertices to  </param>
     public float[] GetVertices( float[] vertices )
     {
-        return GetVertices( 0, -1, vertices );
+        return GetVertices( 0, Constants.NOT_SET, vertices );
     }
 
     /// <summary>
@@ -449,7 +477,7 @@ public class Mesh
     /// <param name="vertices"> the array to copy the vertices to  </param>
     public float[] GetVertices( int srcOffset, float[] vertices )
     {
-        return GetVertices( srcOffset, -1, vertices );
+        return GetVertices( srcOffset, Constants.NOT_SET, vertices );
     }
 
     /// <summary>
@@ -462,16 +490,11 @@ public class Mesh
     /// <param name="destOffset"> the offset (in floats) in the vertices array to start copying  </param>
     public float[] GetVertices( int srcOffset, int count, float[] vertices, int destOffset = 0 )
     {
-        var max = ( NumVertices * VertexSize ) / 4;
+        var max = ( NumVertices * VertexSize );
 
-        if ( count == -1 )
+        if ( count == Constants.NOT_SET )
         {
-            count = max - srcOffset;
-
-            if ( count > ( vertices.Length - destOffset ) )
-            {
-                count = vertices.Length - destOffset;
-            }
+            count = Math.Min( max - srcOffset, vertices.Length - destOffset );
         }
 
         if ( ( srcOffset < 0 )
@@ -567,14 +590,12 @@ public class Mesh
 
         if ( ( srcOffset < 0 ) || ( srcOffset >= max ) || ( ( srcOffset + count ) > max ) )
         {
-            throw new ArgumentException
-                ( $"Invalid range specified, offset: {srcOffset}, count: {count}, max: {max}" );
+            throw new ArgumentException( $"Invalid range specified, offset: {srcOffset}, count: {count}, max: {max}" );
         }
 
         if ( ( indices.Length - destOffset ) < count )
         {
-            throw new ArgumentException
-                ( $"not enough room in indices array, has {indices.Length} shorts, needs {count}" );
+            throw new ArgumentException( $"not enough room in indices array, has {indices.Length} shorts, needs {count}" );
         }
 
         var pos = IndicesBuffer.Position;
@@ -705,6 +726,8 @@ public class Mesh
         Render( shader, primitiveType, offset, count, AutoBind );
     }
 
+    private bool _firstTime = true;
+
     /// <summary>
     /// Renders the mesh using the given primitive type. offset specifies the offset
     /// into either the vertex buffer or the index buffer depending on whether indices
@@ -733,27 +756,27 @@ public class Mesh
     {
         ArgumentNullException.ThrowIfNull( shader );
 
-//        if ( _firstTime )
-//        {
-//            Logger.Debug( $"shader: {shader}" );
-//            Logger.Debug( $"primitiveType: {primitiveType}" );
-//            Logger.Debug( $"offset: {offset}" );
-//            Logger.Debug( $"count: {count}" );
-//            Logger.Debug( $"autoBind: {autoBind}" );
-//            Logger.Debug( $"_isVertexArray: {_isVertexArray}" );
-//            Logger.Debug( $"_indices.NumIndices: {_indices.NumIndices}" );
-//            Logger.Debug( $"IsInstanced: {IsInstanced}" );
+        if ( _firstTime )
+        {
+            Logger.Debug( $"shader: {shader}" );
+            Logger.Debug( $"primitiveType: {primitiveType}" );
+            Logger.Debug( $"offset: {offset}" );
+            Logger.Debug( $"count: {count}" );
+            Logger.Debug( $"autoBind: {autoBind}" );
+            Logger.Debug( $"_isVertexArray: {_isVertexArray}" );
+            Logger.Debug( $"_indices.NumIndices: {_indices.NumIndices}" );
+            Logger.Debug( $"IsInstanced: {IsInstanced}" );
 
-//            if ( _instances == null )
-//            {
-//                Logger.Debug( "_instances: null" );
-//            }
-//            else
-//            {
-//                Logger.Debug( $"_instances: {_instances}" );
-//                Logger.Debug( $"_instances.NumInstances: {_instances?.NumInstances}" );
-//            }
-//        }
+            if ( _instances == null )
+            {
+                Logger.Debug( "_instances: null" );
+            }
+            else
+            {
+                Logger.Debug( $"_instances: {_instances}" );
+                Logger.Debug( $"_instances.NumInstances: {_instances?.NumInstances}" );
+            }
+        }
 
         if ( count == 0 ) return;
 
@@ -765,10 +788,7 @@ public class Mesh
             {
                 var buffer = _indices.GetBuffer( false );
 
-                // Use Span for cleaner code (if available, otherwise use fixed)
-                var indicesSpan = MemoryMarshal.CreateSpan( ref buffer.BackingArray()[ 0 ], buffer.BackingArray().Length );
-
-                fixed ( short* ptr = indicesSpan )
+                fixed ( short* ptr = &buffer.BackingArray()[ 0 ] ) // Simplified fixed statement
                 {
                     GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr + offset );
                 }
@@ -784,12 +804,18 @@ public class Mesh
             {
                 if ( ( count + offset ) > _indices.NumMaxIndices )
                 {
-                    throw new GdxRuntimeException
-                        ( $"Mesh attempting to access memory outside of the index buffer (count: {count}, offset: {offset}, max: {_indices.NumMaxIndices})" );
+                    throw new GdxRuntimeException( $"Mesh attempting to access memory outside " +
+                                                   $"of the index buffer (count: {count}, offset: " +
+                                                   $"{offset}, max: {_indices.NumMaxIndices})" );
                 }
 
-                // Correct way for non vertex arrays
-                GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ( void* )( offset * 2 ) );
+                var buffer      = _indices.GetBuffer( false );
+                var indicesSpan = MemoryMarshal.CreateSpan( ref buffer.BackingArray()[ 0 ], buffer.BackingArray().Length );
+
+                fixed ( short* ptr = indicesSpan )
+                {
+                    GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr + offset );
+                }
             }
             else
             {
@@ -816,11 +842,11 @@ public class Mesh
     {
         var attributes = _vertices.Attributes;
 
-        var len = attributes.Size;
+        var len = attributes?.Size;
 
         for ( var i = 0; i < len; i++ )
         {
-            if ( attributes.Get( i ).Usage == usage )
+            if ( attributes!.Get( i ).Usage == usage )
             {
                 return attributes.Get( i );
             }
@@ -873,7 +899,7 @@ public class Mesh
         var posAttrib = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
 
         var offset     = posAttrib!.Offset / 4;
-        var vertexSize = _vertices.Attributes.VertexSize / 4;
+        var vertexSize = _vertices.Attributes!.VertexSize / 4;
         var idx        = offset;
 
         switch ( posAttrib.NumComponents )
@@ -966,23 +992,14 @@ public class Mesh
 
         if ( ( offset < 0 ) || ( count < 1 ) || ( ( offset + count ) > max ) )
         {
-            throw new GdxRuntimeException
-                (
-                 "Invalid part specified ( offset="
-                 + offset
-                 + ", count="
-                 + count
-                 + ", max="
-                 + max
-                 + " )"
-                );
+            throw new GdxRuntimeException( $"Invalid part specified ( offset={offset}, count={count}, max={max} )" );
         }
 
         var verts      = _vertices.GetBuffer( false );
         var index      = _indices.GetBuffer( false );
         var posAttrib  = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
         var posoff     = posAttrib!.Offset / 4;
-        var vertexSize = _vertices.Attributes.VertexSize / 4;
+        var vertexSize = _vertices.Attributes?.VertexSize / 4;
         var end        = offset + count;
 
         switch ( posAttrib.NumComponents )
@@ -992,7 +1009,7 @@ public class Mesh
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+                        var idx = ( int )( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), 0, 0 );
 
@@ -1008,7 +1025,7 @@ public class Mesh
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( i * vertexSize ) + posoff;
+                        var idx = ( int )( i * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), 0, 0 );
 
@@ -1028,7 +1045,7 @@ public class Mesh
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+                        var idx = ( int )( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
 
@@ -1044,7 +1061,7 @@ public class Mesh
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( i * vertexSize ) + posoff;
+                        var idx = ( int )( i * vertexSize )! + posoff;
 
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
 
@@ -1064,7 +1081,8 @@ public class Mesh
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+                        var idx = ( int )( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
+
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
 
                         if ( transform != null )
@@ -1079,7 +1097,8 @@ public class Mesh
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( i * vertexSize ) + posoff;
+                        var idx = ( int )( i * vertexSize )! + posoff;
+
                         _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
 
                         if ( transform != null )
@@ -1126,7 +1145,7 @@ public class Mesh
         var index      = _indices.GetBuffer( false );
         var posAttrib  = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
         var posoff     = posAttrib!.Offset / 4;
-        var vertexSize = _vertices.Attributes.VertexSize / 4;
+        var vertexSize = _vertices.Attributes!.VertexSize / 4;
         var end        = offset + count;
 
         float result = 0;
@@ -1137,6 +1156,7 @@ public class Mesh
                 for ( var i = offset; i < end; i++ )
                 {
                     var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+
                     _tmpV.Set( verts.Get( idx ), 0, 0 );
 
                     if ( transform != null )
@@ -1158,6 +1178,7 @@ public class Mesh
                 for ( var i = offset; i < end; i++ )
                 {
                     var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+
                     _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
 
                     if ( transform != null )
@@ -1179,6 +1200,7 @@ public class Mesh
                 for ( var i = offset; i < end; i++ )
                 {
                     var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+
                     _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
 
                     if ( transform != null )
@@ -1702,7 +1724,7 @@ public class Mesh
         }
 
         var result = attrs == null
-            ? new Mesh( isStatic, numVertices, indices?.Length ?? 0, VertexAttributes )
+            ? new Mesh( isStatic, numVertices, indices?.Length ?? 0, VertexAttributes! )
             : new Mesh( isStatic, numVertices, indices?.Length ?? 0, attrs );
 
         result.SetVertices( vertices, 0, numVertices * newVertexSize );
@@ -1765,7 +1787,7 @@ public class Mesh
     /// <summary>
     /// the size of a single vertex in bytes
     /// </summary>
-    public int VertexSize => _vertices.Attributes.VertexSize;
+    public int VertexSize => _vertices.Attributes!.VertexSize;
 
     /// <summary>
     /// the backing shortbuffer holding the _indices.
@@ -1773,18 +1795,18 @@ public class Mesh
     /// </summary>
     public ShortBuffer IndicesBuffer => _indices.GetBuffer( false );
 
-    public string ManagedStatus
+    public static string ManagedStatus
     {
         get
         {
             var builder = new StringBuilder( "Managed meshes/app: { " );
 
             //TODO:
-//            foreach ( var app in _meshes.Keys )
-//            {
-//                builder.Append( _meshes[ app ]?.Count );
-//                builder.Append( ' ' );
-//            }
+            foreach ( var app in _meshes.Keys )
+            {
+                builder.Append( _meshes[ app ]?.Count );
+                builder.Append( ' ' );
+            }
 
             builder.Append( '}' );
 

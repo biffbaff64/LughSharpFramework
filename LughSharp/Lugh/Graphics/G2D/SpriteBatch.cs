@@ -122,8 +122,6 @@ public class SpriteBatch : IBatch
         if ( defaultShader == null )
         {
             _shader = CreateDefaultShader();
-
-//            _shader     = CreateMinimalShader();
             _ownsShader = true;
         }
         else
@@ -177,16 +175,23 @@ public class SpriteBatch : IBatch
         // Calculate the vertex size in floats
         _vertexSizeInFloats = _mesh.VertexAttributes.VertexSize / sizeof( float );
 
+        // ------------------------------------------------
         // Generate and bind the Vertex Array Object (VAO)
         _vao = GdxApi.Bindings.GenVertexArray();
+        var error = GdxApi.Bindings.GetError();
+        if ( error != ( int )ErrorCode.NoError ) Logger.Error( $"GenBuffers Error: {error}" );
+        Logger.Debug( $"VBO ID: {_vbo}" ); // Log the VBO ID
         GdxApi.Bindings.BindVertexArray( _vao );
 
+        // ------------------------------------------------
         // Generate and bind the Vertex Buffer Object (VBO)
         _vbo = GdxApi.Bindings.GenBuffer();
+        error = GdxApi.Bindings.GetError();
+        if ( error != ( int )ErrorCode.NoError ) Logger.Error( $"GenBuffers Error: {error}" );
+        Logger.Debug( $"VBO ID: {_vbo}" ); // Log the VBO ID
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-
+        
         CheckBufferBinding( _vbo );
-
         CheckGLError( "Initialise" );
 
         Logger.Debug( $"BufferData size: {Vertices.Length * sizeof( float )} bytes" );
@@ -195,7 +200,10 @@ public class SpriteBatch : IBatch
                                     size: Vertices.Length * sizeof( float ),
                                     data: ( void* )0,
                                     usage: ( int )BufferUsageHint.DynamicDraw );
-
+        error = GdxApi.Bindings.GetError();
+        if ( error != ( int )ErrorCode.NoError ) Logger.Error( $"BufferData Error: {error}" );
+        Logger.Debug( $"BufferData size: {Vertices.Length * sizeof( float )} bytes" );
+        
         GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
     }
@@ -1296,7 +1304,6 @@ public class SpriteBatch : IBatch
             }
 
             Logger.Debug( vertexData );
-
             // *** END LOGGING ***
 
             GdxApi.Bindings.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ptr );
@@ -1430,15 +1437,15 @@ public class SpriteBatch : IBatch
 
     public static ShaderProgram CreateMinimalShader()
     {
-        const string VERTEX_SHADER = "layout (location = 0) in vec2 a_position;\n" +
-                                     "layout (location = 1) in vec4 a_color;\n" +
+        const string VERTEX_SHADER = $"layout (location = 0) in vec2 {ShaderProgram.TEXCOORD_ATTRIBUTE};\n" +
+                                     $"layout (location = 1) in vec4 {ShaderProgram.COLOR_ATTRIBUTE};\n" +
                                      "\n" +
                                      "out vec4 v_color;\n" +
                                      "\n" +
                                      "void main()\n" +
                                      "{\n" +
                                      "    gl_Position = vec4(a_position, 0.0, 1.0);\n" +
-                                     "    v_color = a_color;\n" +
+                                     $"    v_color = {ShaderProgram.COLOR_ATTRIBUTE};\n" +
                                      "}";
 
         const string FRAGMENT_SHADER = "in vec4 v_color;\n" +
@@ -1457,9 +1464,9 @@ public class SpriteBatch : IBatch
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-        const string VERTEX_SHADER = "in vec2 a_position;\n" +
-                                     "in vec4 a_colorPacked;\n" +
-                                     "in vec2 a_texCoords;\n" +
+        const string VERTEX_SHADER = $"in vec2 {ShaderProgram.POSITION_ATTRIBUTE};\n" +
+                                     $"in vec4 {ShaderProgram.COLOR_ATTRIBUTE};\n" +
+                                     $"in vec2 {ShaderProgram.TEXCOORD_ATTRIBUTE};\n" +
                                      "out vec4 v_colorPacked;\n" +
                                      "out vec2 v_texCoords;\n" +
                                      "uniform mat4 u_projTrans;\n" +
@@ -1467,24 +1474,15 @@ public class SpriteBatch : IBatch
                                      "uniform mat4 u_modelMatrix;\n" +
                                      "void main() {\n" +
                                      "    gl_Position = u_projTrans * u_viewMatrix * u_modelMatrix * vec4(a_position, 0.0, 1.0);\n" +
-                                     "    v_colorPacked = a_colorPacked;\n" +
-                                     "    v_texCoords = a_texCoords;\n" +
+                                     $"    v_colorPacked = {ShaderProgram.COLOR_ATTRIBUTE};\n" +
+                                     $"    v_texCoords = {ShaderProgram.TEXCOORD_ATTRIBUTE};\n" +
                                      "}\n";
 
         const string FRAGMENT_SHADER = "in vec4 v_colorPacked;\n" +
                                        "in vec2 v_texCoords;\n" +
                                        "out vec4 FragColor;\n" +
                                        "uniform sampler2D u_texture;\n" +
-//                                       "vec4 unpackColor(float packedColor) {\n" +
-//                                       "    uint color = uint(packedColor);\n" +
-//                                       "    float b = float((color >> 0) & 0xFFu) / 255.0;\n" +
-//                                       "    float g = float((color >> 8) & 0xFFu) / 255.0;\n" +
-//                                       "    float r = float((color >> 16) & 0xFFu) / 255.0;\n" +
-//                                       "    float a = float((color >> 24) & 0xFFu) / 255.0;\n" +
-//                                       "    return vec4(r, g, b, a);\n" +
-//                                       "}\n" +
                                        "void main() {\n" +
-//                                       "    FragColor = texture(u_texture, v_texCoords) * unpackColor(v_colorPacked);\n" +
                                        "    FragColor = texture(u_texture, v_texCoords) * v_colorPacked;\n" +
                                        "}\n";
 

@@ -97,12 +97,12 @@ public abstract class Camera
             // up and direction must ALWAYS be orthonormal vectors
             var dot = _tmpVec.Dot( Up );
 
-            if ( Math.Abs( dot - 1 ) < FloatConstants.FLOAT_TOLERANCE )
+            if ( Math.Abs( dot - 1 ) < Constants.FLOAT_TOLERANCE )
             {
                 // Collinear
                 Up.Set( Direction ).Scale( -1 );
             }
-            else if ( Math.Abs( dot + 1 ) < FloatConstants.FLOAT_TOLERANCE )
+            else if ( Math.Abs( dot + 1 ) < Constants.FLOAT_TOLERANCE )
             {
                 // Collinear opposite
                 Up.Set( Direction );

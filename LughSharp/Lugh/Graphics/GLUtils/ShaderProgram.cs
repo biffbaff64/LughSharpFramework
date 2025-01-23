@@ -57,7 +57,7 @@ public partial class ShaderProgram
 
     public const string POSITION_ATTRIBUTE   = "a_position";
     public const string NORMAL_ATTRIBUTE     = "a_normal";
-    public const string COLOR_ATTRIBUTE      = "a_color";
+    public const string COLOR_ATTRIBUTE      = "a_colorPacked";
     public const string TEXCOORD_ATTRIBUTE   = "a_texCoord";
     public const string TANGENT_ATTRIBUTE    = "a_tangent";
     public const string BINORMAL_ATTRIBUTE   = "a_binormal";
