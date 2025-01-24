@@ -89,13 +89,13 @@ public partial class ShaderProgram
     /// code that is always added to the vertex shader code, typically used to inject a #version
     /// line. Note that this is added as-is, you should include a newline (`\n`) if needed.
     /// </summary>
-    public static readonly string PrependVertexCode = "#version 330 core\n";
+    public static readonly string PrependVertexCode = "#version 460 core\n";
 
     /// <summary>
     /// code that is always added to every fragment shader code, typically used to inject a #version
     /// line. Note that this is added as-is, you should include a newline (`\n`) if needed.
     /// </summary>
-    public static readonly string PrependFragmentCode = "#version 330 core\n";
+    public static readonly string PrependFragmentCode = "#version 460 core\n";
 
     // ========================================================================
     // ========================================================================

@@ -101,10 +101,12 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // This is set very early in this constructor to avoid any null references.
         if ( _prefs.GetBool( "profiling" ) )
         {
+            Logger.Debug( "Using GLInterceptor for profiling" );
             GdxApi.Bindings = new GLInterceptor( new GLProfiler() );
         }
         else
         {
+            Logger.Debug( "Using GLBindings" );
             GdxApi.Bindings = new GLBindings();
         }
 
@@ -481,7 +483,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
         if ( config.Debug )
         {
-            GLUtils.SetupGLDebug();
+            GLUtils.GLDebug();
         }
 
         return windowHandle;
@@ -506,7 +508,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
         Glfw.WindowHint( WindowHint.ContextVersionMajor, glMajor );
         Glfw.WindowHint( WindowHint.ContextVersionMinor, glMinor );
-
+        
         Glfw.MakeContextCurrent( windowHandle );
 
         GLVersion = new GLVersion( LughSharp.Lugh.Core.Platform.ApplicationType.WindowsGL );

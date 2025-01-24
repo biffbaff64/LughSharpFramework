@@ -35,7 +35,7 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics;
 
 [PublicAPI]
-public class Mesh
+public class Mesh : IDisposable
 {
     // ========================================================================
 
@@ -1442,8 +1442,8 @@ public class Mesh
     /// <param name="count"> the amount of vertices to transform  </param>
     public static void Transform( in Matrix4 matrix,
                                   in float[] vertices,
-                                  int vertexSize,
-                                  int offset,
+                                  float vertexSize,
+                                  float offset,
                                   int dimensions,
                                   int start,
                                   int count )
@@ -1461,17 +1461,20 @@ public class Mesh
                                                 $"length = {vertices.Length}" );
         }
 
-        var tmp = new Vector3();
-        var idx = offset + ( start * vertexSize );
+        var tmp      = new Vector3();
+        var idxFloat = ( offset + ( start * vertexSize ) );
 
         switch ( dimensions )
         {
             case 1:
                 for ( var i = 0; i < count; i++ )
                 {
+                    var idx = ( int )Math.Truncate( idxFloat );
+
                     tmp.Set( vertices[ idx ], 0, 0 ).Mul( matrix );
+
                     vertices[ idx ] =  tmp.X;
-                    idx             += vertexSize;
+                    idxFloat        += vertexSize;
                 }
 
                 break;
@@ -1479,10 +1482,13 @@ public class Mesh
             case 2:
                 for ( var i = 0; i < count; i++ )
                 {
+                    var idx = ( int )Math.Truncate( idxFloat );
+
                     tmp.Set( vertices[ idx ], vertices[ idx + 1 ], 0 ).Mul( matrix );
+
                     vertices[ idx ]     =  tmp.X;
                     vertices[ idx + 1 ] =  tmp.Y;
-                    idx                 += vertexSize;
+                    idxFloat            += vertexSize;
                 }
 
                 break;
@@ -1490,11 +1496,14 @@ public class Mesh
             case 3:
                 for ( var i = 0; i < count; i++ )
                 {
+                    var idx = ( int )Math.Truncate( idxFloat );
+
                     tmp.Set( vertices[ idx ], vertices[ idx + 1 ], vertices[ idx + 2 ] ).Mul( matrix );
+
                     vertices[ idx ]     =  tmp.X;
                     vertices[ idx + 1 ] =  tmp.Y;
                     vertices[ idx + 2 ] =  tmp.Z;
-                    idx                 += vertexSize;
+                    idxFloat            += vertexSize;
                 }
 
                 break;
@@ -1518,16 +1527,31 @@ public class Mesh
     /// <param name="matrix"></param>
     /// <param name="start"></param>
     /// <param name="count"></param>
-    protected void TransformUV( in Matrix3 matrix, in int start, in int count )
+    protected void TransformUV( in Matrix3 matrix, int start, int count )
     {
         var posAttr = GetVertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES );
 
-        var offset   = posAttr!.Offset / 4;
-        var vertices = new float[ NumVertices * ( VertexSize / 4 ) ];
+        if ( posAttr == null ) return;
 
-        GetVertices( 0, vertices.Length, vertices );
-        TransformUV( matrix, vertices, VertexSize / 4, offset, start, count );
-        SetVertices( vertices, 0, vertices.Length );
+        var offset      = posAttr.Offset / 4;
+        var vertexSize  = VertexSize / 4;
+        var numVertices = NumVertices;
+        var verts       = _vertices.GetBuffer( false );
+
+        if ( ( start < 0 ) || ( count < 0 ) || ( ( start + count ) > numVertices ) )
+        {
+            throw new IndexOutOfRangeException( "Invalid start or count values." );
+        }
+
+        for ( var i = 0; i < count; i++ )
+        {
+            var index = offset + ( ( start + i ) * vertexSize );
+            var uv    = new Vector2( verts.Get( index ), verts.Get( index + 1 ) );
+            uv = matrix.Transform( uv );
+
+            verts.Put( index, uv.X );
+            verts.Put( index + 1, uv.Y );
+        }
     }
 
     /// <summary>
@@ -1561,6 +1585,7 @@ public class Mesh
         for ( var i = 0; i < count; i++ )
         {
             tmp.Set( vertices[ idx ], vertices[ idx + 1 ] ).Mul( matrix );
+
             vertices[ idx ]     =  tmp.X;
             vertices[ idx + 1 ] =  tmp.Y;
             idx                 += vertexSize;
@@ -1594,70 +1619,67 @@ public class Mesh
     /// <returns> the copy of this mesh  </returns>
     public Mesh Copy( bool isStatic, bool removeDuplicates, in int[]? usage )
     {
-        var vertexSize  = VertexSize / 4;
-        var numVertices = NumVertices;
-        var vertices    = new float[ numVertices * vertexSize ];
+        var vertexSizeFloats = VertexSize / 4; // Vertex size in floats
+        var numVertices      = NumVertices;
+        var vertices         = new float[ numVertices * vertexSizeFloats ];
 
         GetVertices( 0, vertices.Length, vertices );
 
-        short[]?           checks        = null;
-        VertexAttribute[]? attrs         = null;
-        var                newVertexSize = 0;
+        VertexAttribute[]? attrs               = null;
+        var                newVertexSizeFloats = 0;
+        int[]?             checks              = null; // Store float offsets
 
         if ( usage != null )
         {
-            var size    = 0;
-            var asCount = 0;
+            var sizeFloats = 0;
+            var asCount    = 0;
 
-            // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach ( var t in usage )
             {
-                if ( GetVertexAttribute( t ) != null )
+                var a = GetVertexAttribute( t );
+
+                if ( a != null )
                 {
-                    size += GetVertexAttribute( t )!.NumComponents;
+                    sizeFloats += a.NumComponents;
                     asCount++;
                 }
             }
 
-            if ( size > 0 )
+            if ( sizeFloats > 0 )
             {
                 attrs  = new VertexAttribute[ asCount ];
-                checks = new short[ size ];
+                checks = new int[ sizeFloats ]; // Store float offsets
 
                 var idx = -1;
                 var ai  = -1;
 
-                // ReSharper disable once LoopCanBePartlyConvertedToQuery
                 foreach ( var t in usage )
                 {
                     var a = GetVertexAttribute( t );
 
-                    if ( a == null )
-                    {
-                        continue;
-                    }
+                    if ( a == null ) continue;
 
                     for ( var j = 0; j < a.NumComponents; j++ )
                     {
-                        checks[ ++idx ] = ( short )( a.Offset + j );
+                        checks[ ++idx ] = ( a.Offset / 4 ) + j; // Store float offsets!
                     }
 
-                    attrs[ ++ai ] =  a.Copy();
-                    newVertexSize += a.NumComponents;
+                    attrs[ ++ai ]       =  a.Copy();
+                    newVertexSizeFloats += a.NumComponents;
                 }
             }
         }
 
         if ( checks == null )
         {
-            checks = new short[ vertexSize ];
+            checks = new int[ vertexSizeFloats ];
 
-            for ( short i = 0; i < vertexSize; i++ )
+            for ( var i = 0; i < vertexSizeFloats; i++ )
             {
                 checks[ i ] = i;
             }
 
-            newVertexSize = vertexSize;
+            newVertexSizeFloats = vertexSizeFloats;
         }
 
         var      numIndices = NumIndices;
@@ -1668,21 +1690,21 @@ public class Mesh
             indices = new short[ numIndices ];
             GetIndices( indices );
 
-            if ( removeDuplicates || ( newVertexSize != vertexSize ) )
+            if ( removeDuplicates || ( newVertexSizeFloats != vertexSizeFloats ) )
             {
-                var tmp  = new float[ vertices.Length ];
+                var tmp  = new float[ numVertices * newVertexSizeFloats ]; // Correct size for tmp
                 var size = 0;
 
                 for ( var i = 0; i < numIndices; i++ )
                 {
-                    var   idx1     = indices[ i ] * vertexSize;
+                    var   idx1     = indices[ i ] * vertexSizeFloats; // Use float vertex size
                     short newIndex = -1;
 
                     if ( removeDuplicates )
                     {
-                        for ( short j = 0; ( j < size ) && ( newIndex < 0 ); j++ )
+                        for ( var j = 0; ( j < size ) && ( newIndex < 0 ); j++ )
                         {
-                            var idx2  = j * newVertexSize;
+                            var  idx2  = j * newVertexSizeFloats; // Use float vertex size
                             var found = true;
 
                             for ( var k = 0; ( k < checks.Length ) && found; k++ )
@@ -1695,18 +1717,18 @@ public class Mesh
 
                             if ( found )
                             {
-                                newIndex = j;
+                                newIndex = ( short )j;
                             }
                         }
                     }
 
-                    if ( newIndex > 0 )
+                    if ( newIndex >= 0 ) // Check if newIndex was found
                     {
                         indices[ i ] = newIndex;
                     }
                     else
                     {
-                        var idx = size * newVertexSize;
+                        var idx = size * newVertexSizeFloats; // Use float vertex size
 
                         for ( var j = 0; j < checks.Length; j++ )
                         {
@@ -1723,11 +1745,11 @@ public class Mesh
             }
         }
 
-        var result = attrs == null
+        var result = ( attrs == null )
             ? new Mesh( isStatic, numVertices, indices?.Length ?? 0, VertexAttributes! )
             : new Mesh( isStatic, numVertices, indices?.Length ?? 0, attrs );
 
-        result.SetVertices( vertices, 0, numVertices * newVertexSize );
+        result.SetVertices( vertices, 0, numVertices * newVertexSizeFloats ); // Use float vertex size
 
         if ( indices != null )
         {
@@ -1750,9 +1772,20 @@ public class Mesh
         _vertices.Dispose();
         _instances?.Dispose();
         _indices.Dispose();
+
+        GC.SuppressFinalize( this );
     }
 
-    private IVertexData MakeVertexBuffer( bool isStatic, int maxVertices, VertexAttributes vertexAttributes )
+    /// <summary>
+    /// Creates a new vertex buffer object with the specified attributes.
+    /// </summary>
+    /// <param name="isStatic">Indicates whether the vertex buffer is static or dynamic.</param>
+    /// <param name="maxVertices">The maximum number of vertices the buffer can hold.</param>
+    /// <param name="vertexAttributes">The attributes of the vertices stored in the buffer.</param>
+    /// <returns>
+    /// A new instance of <see cref="VertexBufferObjectWithVAO"/> configured with the specified parameters.
+    /// </returns>
+    private static VertexBufferObjectWithVAO MakeVertexBuffer( bool isStatic, int maxVertices, VertexAttributes vertexAttributes )
     {
         return new VertexBufferObjectWithVAO( isStatic, maxVertices, vertexAttributes );
     }
@@ -1760,9 +1793,14 @@ public class Mesh
     // ========================================================================
     // ========================================================================
 
-    #region properties
-
     public bool IsInstanced { get; set; } = false;
+
+    /// <summary>
+    /// Whether to bind the underlying <see cref="VertexArray"/> or <see cref="VertexBufferObject"/>
+    /// automatically on a call to one of the render methods. Default setting is <c>TRUE</c>
+    /// </summary>
+    /// <param name="value"> whether to autobind meshes.  </param>
+    public bool AutoBind { get; set; } = true;
 
     /// <summary>
     /// the number of defined indices.
@@ -1801,7 +1839,6 @@ public class Mesh
         {
             var builder = new StringBuilder( "Managed meshes/app: { " );
 
-            //TODO:
             foreach ( var app in _meshes.Keys )
             {
                 builder.Append( _meshes[ app ]?.Count );
@@ -1813,20 +1850,4 @@ public class Mesh
             return builder.ToString();
         }
     }
-
-    /// <summary>
-    /// Sets whether to bind the underlying <see cref="VertexArray"/> or
-    /// <see cref="VertexBufferObject"/> automatically on a call to one of the
-    /// render methods. Usually you want to use autobind. Manual binding is an
-    /// expert functionality.
-    /// <para>
-    /// There is a driver bug on the MSM720xa chips that will corrupt memory if
-    /// you manipulate the vertices and indices of a Mesh multiple times while
-    /// it is bound. Keep this in mind.
-    /// </para>
-    /// </summary>
-    /// <param name="value"> whether to autobind meshes.  </param>
-    public bool AutoBind { get; init; } = true;
-
-    #endregion properties
 }

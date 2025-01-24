@@ -70,7 +70,7 @@ public class GLUtils
     /// <summary>
     /// 
     /// </summary>
-    public static void SetupGLDebug()
+    public static void GLDebug()
     {
         Logger.Debug( "Setting up GL Debug" );
 

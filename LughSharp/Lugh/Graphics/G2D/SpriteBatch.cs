@@ -121,7 +121,7 @@ public class SpriteBatch : IBatch
 
         if ( defaultShader == null )
         {
-            _shader = CreateDefaultShader();
+            _shader     = CreateDefaultShader();
             _ownsShader = true;
         }
         else
@@ -155,14 +155,11 @@ public class SpriteBatch : IBatch
 
         // Initialize the mesh with vertex attributes for position,
         // color, and texture coordinates
-        _mesh = new Mesh( vertexDataType,
-                          false,
-                          size * 4,
-                          size * 6,
-                          new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 2, ShaderProgram.POSITION_ATTRIBUTE ),
-                          new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE ),
-                          new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2,
-                                               $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" ) );
+        var va1 = new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 2, ShaderProgram.POSITION_ATTRIBUTE );
+        var va2 = new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE );
+        var va3 = new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2, $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" );
+
+        _mesh = new Mesh( vertexDataType, false, size * 4, size * 6, va1, va2, va3 );
 
         // Set up an orthographic projection matrix for 2D rendering
         ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
@@ -173,24 +170,24 @@ public class SpriteBatch : IBatch
         _mesh.SetIndices( indices );
 
         // Calculate the vertex size in floats
-        _vertexSizeInFloats = _mesh.VertexAttributes.VertexSize / sizeof( float );
+        _vertexSizeInFloats = _mesh.VertexAttributes!.VertexSize / sizeof( float );
 
         // ------------------------------------------------
         // Generate and bind the Vertex Array Object (VAO)
         _vao = GdxApi.Bindings.GenVertexArray();
         var error = GdxApi.Bindings.GetError();
         if ( error != ( int )ErrorCode.NoError ) Logger.Error( $"GenBuffers Error: {error}" );
-        Logger.Debug( $"VBO ID: {_vbo}" ); // Log the VBO ID
+        Logger.Debug( $"VAO ID: {_vao}" ); // Log the VAO ID
         GdxApi.Bindings.BindVertexArray( _vao );
 
         // ------------------------------------------------
         // Generate and bind the Vertex Buffer Object (VBO)
-        _vbo = GdxApi.Bindings.GenBuffer();
+        _vbo  = GdxApi.Bindings.GenBuffer();
         error = GdxApi.Bindings.GetError();
         if ( error != ( int )ErrorCode.NoError ) Logger.Error( $"GenBuffers Error: {error}" );
         Logger.Debug( $"VBO ID: {_vbo}" ); // Log the VBO ID
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-        
+
         CheckBufferBinding( _vbo );
         CheckGLError( "Initialise" );
 
@@ -203,7 +200,7 @@ public class SpriteBatch : IBatch
         error = GdxApi.Bindings.GetError();
         if ( error != ( int )ErrorCode.NoError ) Logger.Error( $"BufferData Error: {error}" );
         Logger.Debug( $"BufferData size: {Vertices.Length * sizeof( float )} bytes" );
-        
+
         GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
     }
@@ -246,6 +243,8 @@ public class SpriteBatch : IBatch
             indices[ i + 3 ] = ( short )( j + 2 );
             indices[ i + 4 ] = ( short )( j + 3 );
             indices[ i + 5 ] = j;
+            
+            Logger.Debug( $"{indices[ i ]}, {indices[ i + 1 ]}, {indices[ i + 2 ]}, {indices[ i + 3]}, {indices[ i + 4 ]}, {indices[ i + 5 ]}" );
         }
     }
 
@@ -256,26 +255,26 @@ public class SpriteBatch : IBatch
     {
         // --------------------------------------------------------------------
 
-        var stride = VERTEX_SIZE * sizeof(float);
+        var stride = VERTEX_SIZE * sizeof( float );
 
         var positionOffset = 0;
-        var colorOffset    = 2 * sizeof(float);
-        var texCoordOffset = 6 * sizeof(float);
+        var colorOffset    = 2 * sizeof( float );
+        var texCoordOffset = 6 * sizeof( float );
 
         // Position Attribute
         // ... SetVertexAttribute(..., stride, positionOffset);
-        Logger.Debug($"Position Offset: {positionOffset}, Stride: {stride}");
+        Logger.Debug( $"Position Offset: {positionOffset}, Stride: {stride}" );
 
         // Color Attribute
         // ... SetVertexAttribute(..., stride, colorOffset);
-        Logger.Debug($"Color Offset: {colorOffset}, Stride: {stride}");
+        Logger.Debug( $"Color Offset: {colorOffset}, Stride: {stride}" );
 
         // Texture Coordinates Attribute
         // ... SetVertexAttribute(..., stride, texCoordOffset);
-        Logger.Debug($"Texture Coord Offset: {texCoordOffset}, Stride: {stride}");
+        Logger.Debug( $"Texture Coord Offset: {texCoordOffset}, Stride: {stride}" );
 
         // --------------------------------------------------------------------
-        
+
         // Add this check at the beginning of Initialise(), Flush(), and SetupVertexAttributes()
         var currentContext = Glfw.GetCurrentContext(); // Or your equivalent for getting the current context
 
@@ -440,11 +439,11 @@ public class SpriteBatch : IBatch
         {
             SwitchTexture( texture );
         }
-        else if (Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VERTEX_SIZE ) ))
+        else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VERTEX_SIZE ) ) )
         {
             Flush();
         }
-        
+
         var fx2 = posX + width;
         var fy2 = posY + height;
 
@@ -456,9 +455,9 @@ public class SpriteBatch : IBatch
         Logger.Debug( $"Packed color before SetVertices: {ColorPackedABGR}" );
 
         SetVertices( posX, posY, Color.A, Color.B, Color.G, Color.R, U, V,
-                     posX, fy2,  Color.A, Color.B, Color.G, Color.R, U, V2,
-                     fx2, fy2,   Color.A, Color.B, Color.G, Color.R, U2, V2,
-                     fx2, posY,  Color.A, Color.B, Color.G, Color.R, U2, V );
+                     posX, fy2, Color.A, Color.B, Color.G, Color.R, U, V2,
+                     fx2, fy2, Color.A, Color.B, Color.G, Color.R, U2, V2,
+                     fx2, posY, Color.A, Color.B, Color.G, Color.R, U2, V );
     }
 
     /// <summary>
@@ -622,9 +621,9 @@ public class SpriteBatch : IBatch
         }
 
         SetVertices( region.X, region.Y, Color.A, Color.B, Color.G, Color.R, u, v,
-                     region.X, fy2,      Color.A, Color.B, Color.G, Color.R, u, v2,
-                     fx2, fy2,           Color.A, Color.B, Color.G, Color.R, u2, v2,
-                     fx2, region.Y,      Color.A, Color.B, Color.G, Color.R, u2, v );
+                     region.X, fy2, Color.A, Color.B, Color.G, Color.R, u, v2,
+                     fx2, fy2, Color.A, Color.B, Color.G, Color.R, u2, v2,
+                     fx2, region.Y, Color.A, Color.B, Color.G, Color.R, u2, v );
     }
 
     /// <summary>
@@ -653,10 +652,10 @@ public class SpriteBatch : IBatch
         var fx2 = x + src.Width;
         var fy2 = y + src.Height;
 
-        SetVertices( x, y,     Color.A, Color.B, Color.G, Color.R, u, v,
-                     x, fy2,   Color.A, Color.B, Color.G, Color.R, u, v2,
+        SetVertices( x, y, Color.A, Color.B, Color.G, Color.R, u, v,
+                     x, fy2, Color.A, Color.B, Color.G, Color.R, u, v2,
                      fx2, fy2, Color.A, Color.B, Color.G, Color.R, u2, v2,
-                     fx2, y,   Color.A, Color.B, Color.G, Color.R, u2, v );
+                     fx2, y, Color.A, Color.B, Color.G, Color.R, u2, v );
     }
 
     /// <summary>
@@ -684,9 +683,9 @@ public class SpriteBatch : IBatch
         var fy2 = region.Y + region.Height;
 
         SetVertices( region.X, region.Y, Color.A, Color.B, Color.G, Color.R, u, v,
-                     region.X, fy2,      Color.A, Color.B, Color.G, Color.R, u, v2,
-                     fx2, fy2,           Color.A, Color.B, Color.G, Color.R, u2, v2,
-                     fx2, region.Y,      Color.A, Color.B, Color.G, Color.R, u2, v );
+                     region.X, fy2, Color.A, Color.B, Color.G, Color.R, u, v2,
+                     fx2, fy2, Color.A, Color.B, Color.G, Color.R, u2, v2,
+                     fx2, region.Y, Color.A, Color.B, Color.G, Color.R, u2, v );
     }
 
     /// <summary>
@@ -791,10 +790,10 @@ public class SpriteBatch : IBatch
         var u2  = region.U2;
         var v2  = region.V;
 
-        SetVertices( x, y,     Color.A, Color.B, Color.G, Color.R, u, v,
-                     x, fy2,   Color.A, Color.B, Color.G, Color.R, u, v2,
+        SetVertices( x, y, Color.A, Color.B, Color.G, Color.R, u, v,
+                     x, fy2, Color.A, Color.B, Color.G, Color.R, u, v2,
                      fx2, fy2, Color.A, Color.B, Color.G, Color.R, u2, v2,
-                     fx2, y,   Color.A, Color.B, Color.G, Color.R, u2, v );
+                     fx2, y, Color.A, Color.B, Color.G, Color.R, u2, v );
     }
 
     /// <summary>
@@ -1083,22 +1082,13 @@ public class SpriteBatch : IBatch
         Logger.Debug( $"Vertices.Length: {Vertices.Length}" );
         Logger.Debug( $"Idx: {Idx}" );
         Logger.Debug( $"( int )( Idx + ( long )( VERTICES_PER_SPRITE * VERTEX_SIZE ) ): {Idx + ( long )( VERTICES_PER_SPRITE * VERTEX_SIZE )}" );
-        
-//        if ( ( int )( Idx + ( long )( VERTICES_PER_SPRITE * VERTEX_SIZE ) ) > Vertices.Length )
-//        {
-//            Logger.Debug( $"Idx out of bounds: {Idx} + {VERTICES_PER_SPRITE * VERTEX_SIZE} > {Vertices.Length} " );
-//
-////            Handle the overflow, Flush the batch and reset Idx:
-//            Flush();
-//            Idx = 0;
-//        }
 
         Vertices[ Idx ]     = x1; // X
         Vertices[ Idx + 1 ] = y1; // Y
-        Vertices[ Idx + 2 ] = r1;  // Store the unpacked red component
-        Vertices[ Idx + 3 ] = g1;  // Store the unpacked green component
-        Vertices[ Idx + 4 ] = b1;  // Store the unpacked blue component
-        Vertices[ Idx + 5 ] = a1;  // Store the unpacked alpha component
+        Vertices[ Idx + 2 ] = r1; // Store the unpacked red component
+        Vertices[ Idx + 3 ] = g1; // Store the unpacked green component
+        Vertices[ Idx + 4 ] = b1; // Store the unpacked blue component
+        Vertices[ Idx + 5 ] = a1; // Store the unpacked alpha component
         Vertices[ Idx + 6 ] = u1; // Texture U
         Vertices[ Idx + 7 ] = v1; // Texture V
 
@@ -1132,8 +1122,7 @@ public class SpriteBatch : IBatch
         Idx += ( VERTICES_PER_SPRITE * VERTEX_SIZE );
 
         // *** DEBUGGING ***
-        Logger.Debug( $"Idx after increment: {Idx}" );
-
+//        Logger.Debug( $"Idx after increment: {Idx}" );
 //        DebugVertices();
         // *** DEBUGGING ***
     }
@@ -1192,45 +1181,31 @@ public class SpriteBatch : IBatch
     /// </summary>
     public unsafe void Flush()
     {
-        Logger.Checkpoint();
+        // *** Debugging ***
+        Logger.Debug( "Flush() start." );
 
-        var currentContext = Glfw.GetCurrentContext(); // Or your equivalent for getting the current context
+        if ( Glfw.GetCurrentContext() == null ) throw new GdxRuntimeException( "No OpenGL context on this thread!" );
 
-        if ( currentContext == null )
-        {
-            Logger.Error( "No OpenGL context is current on this thread!" );
-
-            // Breakpoint or throw an exception here
-        }
-
-        Logger.Checkpoint();
         Logger.Debug( $"LastTexture: {LastTexture}, Idx: {Idx}, Vertices.Length: {Vertices.Length}" );
-        Logger.Checkpoint();
+        Logger.Debug( $"Idx: {Idx}, VERTICES_PER_SPRITE: {VERTICES_PER_SPRITE}, VERTEX_SIZE: {VERTEX_SIZE}" );
+
+        // *** Debugging ***
 
         if ( Idx == 0 ) return;
+
+        if ( Idx < 0 ) throw new GdxRuntimeException( "Idx is less than zero!" );
+
+        if ( _mesh == null )
+        {
+            Idx = 0;
+
+            return;
+        }
 
         RenderCalls++;
         TotalRenderCalls++;
 
-        Logger.Checkpoint();
-
-        Logger.Debug( $"Idx: {Idx}, VERTICES_PER_SPRITE: {VERTICES_PER_SPRITE}, VERTEX_SIZE: {VERTEX_SIZE}" );
-
-        if ( Idx == 0 )
-        {
-            Logger.Debug( "Idx is zero. No sprites to draw." );
-
-            return; // Early exit
-        }
-
-        if ( Idx < 0 )
-        {
-            Logger.Error( "Idx is negative. This is unexpected." );
-        }
-
         var spritesInBatch = ( int )( Idx / ( long )( VERTICES_PER_SPRITE * VERTEX_SIZE ) );
-
-        Logger.Checkpoint();
 
         if ( spritesInBatch > MaxSpritesInBatch ) MaxSpritesInBatch = spritesInBatch;
 
@@ -1245,19 +1220,8 @@ public class SpriteBatch : IBatch
             return;
         }
 
-        Logger.Checkpoint();
-
         GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 );
         LastTexture.Bind();
-
-        Logger.Checkpoint();
-
-        if ( _mesh == null )
-        {
-            Idx = 0;
-
-            return;
-        }
 
         Logger.Debug( $"BufferData size: {Vertices.Length * sizeof( float )} bytes" );
 
@@ -1266,16 +1230,12 @@ public class SpriteBatch : IBatch
         {
             fixed ( float* ptr = Vertices ) // Pin the Vertices array
             {
-                Logger.Debug( $"BufferData size: {Vertices.Length * sizeof( float )} bytes" );
-
                 GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
                                             Vertices.Length * sizeof( float ),
                                             ( void* )ptr,
                                             ( int )BufferUsageHint.DynamicDraw );
             }
         }
-
-        Logger.Checkpoint();
 
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
 
@@ -1287,7 +1247,6 @@ public class SpriteBatch : IBatch
 
         fixed ( float* ptr = Vertices )
         {
-            // *** LOG ALL VERTEX DATA ***
             Logger.Debug( $"Idx: {Idx}, BufferSubData size: {Idx * sizeof( float )}, Buffer Size: {Vertices.Length * sizeof( float )}" ); // Log these values
 
             var vertexData = "Vertices Data: \n";
@@ -1296,7 +1255,6 @@ public class SpriteBatch : IBatch
                 vertexData += $"Vertex {i / VERTEX_SIZE}: ";
                 for (var j = 0; j < VERTEX_SIZE; j++)
                 {
-                    // Correct way to log the address and value
                     var address = (IntPtr)(ptr + i + j);
                     vertexData += $"[{address:X}]={Vertices[i + j]}, "; // Log address in hex
                 }
@@ -1304,7 +1262,6 @@ public class SpriteBatch : IBatch
             }
 
             Logger.Debug( vertexData );
-            // *** END LOGGING ***
 
             GdxApi.Bindings.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ptr );
         }
@@ -1312,20 +1269,17 @@ public class SpriteBatch : IBatch
         var errorAfter = GdxApi.Bindings.GetError();
         if ( errorAfter != ( int )ErrorCode.NoError ) Logger.Error( $"OpenGL Error Before BufferSubData: {errorAfter}" );
 
-        Logger.Checkpoint();
-
         SetupVertexAttributes( _customShader ?? _shader );
-
-        Logger.Checkpoint();
 
         GdxApi.Bindings.BindVertexArray( _vao ); // Bind VAO before rendering
         _mesh.Render( _customShader ?? _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
+
         GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
 
         Idx = 0;
 
-        Logger.Debug( "Flush() complete." );
+        Logger.Debug( "Flush() end." );
     }
 
     /// <summary>

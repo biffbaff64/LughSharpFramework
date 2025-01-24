@@ -42,8 +42,8 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI]
 public class VertexBufferObjectSubData : IVertexData
 {
-    public ByteBuffer       ByteBuffer { get; set; }
-    public VertexAttributes Attributes { get; set; }
+    public ByteBuffer        ByteBuffer { get; set; }
+    public VertexAttributes? Attributes { get; set; }
 
     private readonly FloatBuffer _buffer;
     private readonly bool        _isDirect;

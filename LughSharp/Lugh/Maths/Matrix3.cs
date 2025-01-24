@@ -39,9 +39,9 @@ public class Matrix3
     public const int M21 = 5;
     public const int M22 = 8;
 
-    private readonly float[] _tmp = new float[ 9 ];
-
     public readonly float[] Val = new float[ 9 ];
+
+    private readonly float[] _tmp = new float[ 9 ];
 
     // ========================================================================
 
@@ -419,6 +419,37 @@ public class Matrix3
         Array.Copy( values, 0, Val, 0, Val.Length );
 
         return this;
+    }
+
+    /// <summary>
+    /// Transforms the given 2D vector using this matrix.
+    /// </summary>
+    /// <param name="vector">
+    /// The 2D vector to be transformed. This vector contains the X and Y coordinates
+    /// to be multiplied by the matrix.
+    /// </param>
+    /// <returns>A new <see cref="Vector2"/> instance representing the transformed vector.</returns>
+    public Vector2 Transform( Vector2 vector )
+    {
+        return new Vector2( ( M00 * vector.X ) + ( M01 * vector.Y ) + M02,
+                            ( M10 * vector.X ) + ( M11 * vector.Y ) + M12 );
+    }
+
+    /// <summary>
+    /// Transforms the specified vector using this matrix.
+    /// The transformation includes translation, scaling, and rotation operations
+    /// represented by the matrix.
+    /// </summary>
+    /// <param name="vector">
+    /// The vector to be transformed. Its X and Y coordinates will be updated with the result
+    /// of the transformation.
+    /// </param>
+    public void Transform( ref Vector2 vector )
+    {
+        var x = ( M00 * vector.X ) + ( M01 * vector.Y ) + M02;
+        var y = ( M10 * vector.X ) + ( M11 * vector.Y ) + M12;
+        vector.X = x;
+        vector.Y = y;
     }
 
     /// <summary>

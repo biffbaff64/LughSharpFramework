@@ -41,6 +41,13 @@ public class VertexAttributes
         TANGENT             = 128,
         BI_NORMAL           = 256,
     }
+    
+    // ========================================================================
+
+    /// <summary>
+    /// the size of a single vertex in bytes
+    /// </summary>
+    public int VertexSize { get; private set; }
 
     /// <summary>
     /// the attributes in the order they were specified
@@ -75,11 +82,6 @@ public class VertexAttributes
         _attributes = list;
         VertexSize  = CalculateOffsets();
     }
-
-    /// <summary>
-    /// the size of a single vertex in bytes
-    /// </summary>
-    public int VertexSize { get; private set; }
 
     /// <summary>
     /// Gets the number of attributes.
@@ -165,6 +167,13 @@ public class VertexAttributes
         return null;
     }
 
+    /// <summary>
+    /// Calculates and sets the offsets for the vertex attributes and determines the
+    /// total vertex size in bytes.
+    /// </summary>
+    /// <returns>
+    /// The total size of the vertex structure in bytes.
+    /// </returns>
     private int CalculateOffsets()
     {
         var count = 0;
@@ -255,10 +264,16 @@ public class VertexAttributes
     }
 
     /// <summary>
-    /// 
+    /// Compares the current <see cref="VertexAttributes"/> instance to another <see cref="VertexAttributes"/>
+    /// instance to determine their relative order based on the number of attributes, mask values, and individual
+    /// attribute properties.
     /// </summary>
-    /// <param name="o"></param>
-    /// <returns></returns>
+    /// <param name="o">The <see cref="VertexAttributes"/> instance to compare with the current instance.</param>
+    /// <returns>
+    /// A signed integer that indicates the relative order of the objects being compared. Returns a value less
+    /// than zero if this instance precedes <paramref name="o"/> in the sort order, zero if they are equivalent,
+    /// and a value greater than zero if this instance follows <paramref name="o"/> in the sort order.
+    /// </returns>
     public int CompareTo( VertexAttributes o )
     {
         if ( _attributes.Length != o._attributes.Length )
