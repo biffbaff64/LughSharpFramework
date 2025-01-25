@@ -1181,7 +1181,7 @@ public class SpriteBatch : IBatch
     /// </summary>
     public unsafe void Flush()
     {
-        // *** Debugging ***
+        // *** DEBUGGING ***
         Logger.Debug( "Flush() start." );
 
         if ( Glfw.GetCurrentContext() == null ) throw new GdxRuntimeException( "No OpenGL context on this thread!" );
@@ -1189,7 +1189,7 @@ public class SpriteBatch : IBatch
         Logger.Debug( $"LastTexture: {LastTexture}, Idx: {Idx}, Vertices.Length: {Vertices.Length}" );
         Logger.Debug( $"Idx: {Idx}, VERTICES_PER_SPRITE: {VERTICES_PER_SPRITE}, VERTEX_SIZE: {VERTEX_SIZE}" );
 
-        // *** Debugging ***
+        // *** DEBUGGING ***
 
         if ( Idx == 0 ) return;
 
@@ -1211,11 +1211,12 @@ public class SpriteBatch : IBatch
 
         if ( LastTexture == null )
         {
+            Idx = 0;
             _nullTextureCount++;
+
             Logger.Error( $"Attempt to flush with null texture. This batch will be skipped. " +
                           $"Null texture count: {_nullTextureCount}. " +
                           $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
-            Idx = 0;
 
             return;
         }
@@ -1242,11 +1243,9 @@ public class SpriteBatch : IBatch
         Logger.Debug( $"Idx: {Idx}" );
         Logger.Debug( $"Vertices.Length: {Vertices.Length}" );
 
-        var errorBefore = GdxApi.Bindings.GetError();
-        if ( errorBefore != ( int )ErrorCode.NoError ) Logger.Error( $"OpenGL Error Before BufferSubData: {errorBefore}" );
-
         fixed ( float* ptr = Vertices )
         {
+            // *** DEBUGGING ***
             Logger.Debug( $"Idx: {Idx}, BufferSubData size: {Idx * sizeof( float )}, Buffer Size: {Vertices.Length * sizeof( float )}" ); // Log these values
 
             var vertexData = "Vertices Data: \n";
@@ -1262,24 +1261,21 @@ public class SpriteBatch : IBatch
             }
 
             Logger.Debug( vertexData );
+            // *** DEBUGGING ***
 
             GdxApi.Bindings.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ptr );
         }
 
-        var errorAfter = GdxApi.Bindings.GetError();
-        if ( errorAfter != ( int )ErrorCode.NoError ) Logger.Error( $"OpenGL Error Before BufferSubData: {errorAfter}" );
-
         SetupVertexAttributes( _customShader ?? _shader );
 
         GdxApi.Bindings.BindVertexArray( _vao ); // Bind VAO before rendering
+
         _mesh.Render( _customShader ?? _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
 
         GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
 
         Idx = 0;
-
-        Logger.Debug( "Flush() end." );
     }
 
     /// <summary>

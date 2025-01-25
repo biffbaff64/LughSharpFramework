@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -105,6 +106,8 @@ public class IndexBufferObject : IIndexData
         _usage = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
     }
 
+    public int BufferID => _bufferHandle;
+    
     /// <inheritdoc />
     public int NumIndices => _empty ? 0 : _buffer.Limit;
 
@@ -193,7 +196,7 @@ public class IndexBufferObject : IIndexData
 
         return _buffer;
     }
-
+    
     /// <inheritdoc />
     public void Bind()
     {

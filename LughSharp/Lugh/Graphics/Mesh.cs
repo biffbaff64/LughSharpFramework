@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
@@ -252,9 +253,32 @@ public class Mesh : IDisposable
 
     // ========================================================================
 
+//    public unsafe void Xxxx()
+//    {
+//        // In your Mesh constructor or initialization:
+//        GdxApi.Bindings.GenBuffers( 1, out _ibo );
+//        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ibo );
+//        GdxApi.Bindings.BufferData( ( int )BufferTarget.ElementArrayBuffer, _indices.NumIndices * sizeof( short ),
+//                                    _indices.GetBuffer( false ).BackingArray(),
+//                                    ( int )BufferUsageHint.StaticDraw ); // Or DynamicDraw if needed
+//
+//        var error = GdxApi.Bindings.GetError();
+//
+//        if ( error != ( int )ErrorCode.NoError )
+//        {
+//            Logger.Error( $"Index Buffer Creation Error: {error}" );
+//        }
+//
+//        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, 0 ); // Unbind the index buffer
+//    }
+
     /// <summary>
-    /// 
+    /// Enables instanced rendering for the mesh by initializing an instance buffer object with the given attributes.
     /// </summary>
+    /// <param name="isStatic">Indicates whether the instance data should be static or dynamic.</param>
+    /// <param name="maxInstances">The maximum number of instances to render.</param>
+    /// <param name="attributes">Specifies the vertex attributes for the instance data.</param>
+    /// <returns>The current <see cref="Mesh"/> instance with instanced rendering enabled.</returns>
     public Mesh EnableInstancedRendering( bool isStatic, int maxInstances, params VertexAttribute[] attributes )
     {
         if ( !IsInstanced )
@@ -726,8 +750,6 @@ public class Mesh : IDisposable
         Render( shader, primitiveType, offset, count, AutoBind );
     }
 
-    private bool _firstTime = true;
-
     /// <summary>
     /// Renders the mesh using the given primitive type. offset specifies the offset
     /// into either the vertex buffer or the index buffer depending on whether indices
@@ -756,28 +778,6 @@ public class Mesh : IDisposable
     {
         ArgumentNullException.ThrowIfNull( shader );
 
-        if ( _firstTime )
-        {
-            Logger.Debug( $"shader: {shader}" );
-            Logger.Debug( $"primitiveType: {primitiveType}" );
-            Logger.Debug( $"offset: {offset}" );
-            Logger.Debug( $"count: {count}" );
-            Logger.Debug( $"autoBind: {autoBind}" );
-            Logger.Debug( $"_isVertexArray: {_isVertexArray}" );
-            Logger.Debug( $"_indices.NumIndices: {_indices.NumIndices}" );
-            Logger.Debug( $"IsInstanced: {IsInstanced}" );
-
-            if ( _instances == null )
-            {
-                Logger.Debug( "_instances: null" );
-            }
-            else
-            {
-                Logger.Debug( $"_instances: {_instances}" );
-                Logger.Debug( $"_instances.NumInstances: {_instances?.NumInstances}" );
-            }
-        }
-
         if ( count == 0 ) return;
 
         if ( autoBind ) Bind( shader );
@@ -786,16 +786,37 @@ public class Mesh : IDisposable
         {
             if ( _indices.NumIndices > 0 )
             {
+                if ( ( count + offset ) > _indices.NumMaxIndices )
+                {
+                    throw new AccessViolationException( $"Mesh attempting to access memory outside of the " +
+                                                        $"index buffer (count: {count}, offset: {offset}, " +
+                                                        $"max: {_indices.NumMaxIndices})" );
+                }
+
                 var buffer = _indices.GetBuffer( false );
 
                 fixed ( short* ptr = &buffer.BackingArray()[ 0 ] ) // Simplified fixed statement
                 {
                     GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr + offset );
+
+                    var error = GdxApi.Bindings.GetError();
+
+                    if ( error != ( int )ErrorCode.NoError )
+                    {
+                        Logger.Error($"DrawArrays Error: {error}");
+                    }
                 }
             }
             else
             {
                 GdxApi.Bindings.DrawArrays( primitiveType, offset, count );
+
+                var error = GdxApi.Bindings.GetError();
+
+                if ( error != ( int )ErrorCode.NoError )
+                {
+                    Logger.Error($"DrawArrays Error: {error}");
+                }
             }
         }
         else
@@ -809,13 +830,24 @@ public class Mesh : IDisposable
                                                    $"{offset}, max: {_indices.NumMaxIndices})" );
                 }
 
+                _indices.Bind();
+                
                 var buffer      = _indices.GetBuffer( false );
                 var indicesSpan = MemoryMarshal.CreateSpan( ref buffer.BackingArray()[ 0 ], buffer.BackingArray().Length );
 
                 fixed ( short* ptr = indicesSpan )
                 {
                     GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr + offset );
+
+                    var error = GdxApi.Bindings.GetError();
+
+                    if ( error != ( int )ErrorCode.NoError )
+                    {
+                        Logger.Error($"DrawArrays Error: {error}");
+                    }
                 }
+                
+                _indices.Unbind();
             }
             else
             {
@@ -826,6 +858,13 @@ public class Mesh : IDisposable
                 else
                 {
                     GdxApi.Bindings.DrawArrays( primitiveType, offset, count );
+                }
+
+                var error = GdxApi.Bindings.GetError();
+
+                if ( error != ( int )ErrorCode.NoError )
+                {
+                    Logger.Error($"DrawArrays Error: {error}");
                 }
             }
         }
@@ -1704,7 +1743,7 @@ public class Mesh : IDisposable
                     {
                         for ( var j = 0; ( j < size ) && ( newIndex < 0 ); j++ )
                         {
-                            var  idx2  = j * newVertexSizeFloats; // Use float vertex size
+                            var idx2  = j * newVertexSizeFloats; // Use float vertex size
                             var found = true;
 
                             for ( var k = 0; ( k < checks.Length ) && found; k++ )
