@@ -29,10 +29,11 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 [PublicAPI]
 public class GLUtils
 {
-    public const int           DEFAULT_GL_MAJOR       = 3;
-    public const int           DEFAULT_GL_MINOR       = 3;
-    public const ClientAPI     DEFAULT_CLIENT_API     = ClientAPI.OpenGLAPI;
-    public const OpenGLProfile DEFAULT_OPENGL_PROFILE = OpenGLProfile.CoreProfile;
+    public const int           DEFAULT_GL_MAJOR             = 4;
+    public const int           DEFAULT_GL_MINOR             = 5;
+    public const ClientAPI     DEFAULT_CLIENT_API           = ClientAPI.OpenGLAPI;
+    public const OpenGLProfile DEFAULT_OPENGL_PROFILE       = OpenGLProfile.CoreProfile;
+    public const bool          DEFAULT_OPENGL_FORWARDCOMPAT = true;
 
     // ========================================================================
 

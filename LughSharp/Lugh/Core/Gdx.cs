@@ -61,7 +61,12 @@ public class Gdx
 
             return _glBindings;
         }
-        set => _glBindings = value;
+        set
+        {
+            _glBindings = value;
+            
+            Logger.Debug( $"Gdx.Bindings set to reference {value.GetType().Name}" );
+        }
     }
 
     /// <summary>

@@ -26,15 +26,14 @@ namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 public enum VertexAttribPointerType
 {
-    Byte          = 0x1400,
-    UnsignedByte  = 0x1401,
-    Short         = 0x1402,
-    UnsignedShort = 0x1403,
-    Int           = 0x1404,
-    UnsignedInt   = 0x1405,
-    Float         = 0x1406,
-    Double        = 0x140a,
-    HalfFloat     = 0x140B,
-    Fixed         = 0x140c,
+    Byte          = IGL.GL_BYTE,
+    UnsignedByte  = IGL.GL_UNSIGNED_BYTE,
+    Short         = IGL.GL_SHORT,
+    UnsignedShort = IGL.GL_UNSIGNED_SHORT,
+    Int           = IGL.GL_INT,
+    UnsignedInt   = IGL.GL_UNSIGNED_INT,
+    Float         = IGL.GL_FLOAT,
+    Double        = IGL.GL_DOUBLE,
+    HalfFloat     = IGL.GL_HALF_FLOAT,
+    Fixed         = IGL.GL_FIXED,
 }
-

@@ -98,25 +98,12 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         _prefs.PutBool( "profiling", config.GLProfilingEnabled );
         _prefs.Flush();
 
-        // This is set very early in this constructor to avoid any null references.
-        if ( _prefs.GetBool( "profiling" ) )
-        {
-            Logger.Debug( "Using GLInterceptor for profiling" );
-            GdxApi.Bindings = new GLInterceptor( new GLProfiler() );
-        }
-        else
-        {
-            Logger.Debug( "Using GLBindings" );
-            GdxApi.Bindings = new GLBindings();
-        }
+        Logger.Debug( "Using GLBindings" );
+        GdxApi.Bindings = new GLBindings();
 
         // Config.Title becomes the name of the ApplicationListener if it has no value at this point.
         Config       =   DesktopGLApplicationConfiguration.Copy( config );
         Config.Title ??= listener.GetType().Name;
-
-        Config.SetOpenGLEmulation( DesktopGLApplicationConfiguration.GLEmulationType.GL30,
-                                   GLUtils.DEFAULT_GL_MAJOR,
-                                   GLUtils.DEFAULT_GL_MINOR );
 
         // Initialise the global environment shortcuts. 'GdxApi.Audio', 'GdxApi.Files', and 'GdxApi.Net'
         // are instances of classes implementing IAudio, IFiles, and INet resprectively, and are used to
@@ -500,16 +487,18 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// <param name="windowHandle"></param>
     private void InitGLVersion( GLFW.Window windowHandle )
     {
-        OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
-
-        Glfw.GetVersion( out var glMajor, out var glMinor, out var revision );
-
-        Glfw.WindowHint( WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
-        Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
-        Glfw.WindowHint( WindowHint.ContextVersionMajor, glMajor );
-        Glfw.WindowHint( WindowHint.ContextVersionMinor, glMinor );
+//        OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
+//
+//        Glfw.GetVersion( out var glMajor, out var glMinor, out var revision );
+//
+//        Logger.Debug( $"OpenGL Version: {glMajor}.{glMinor}.{revision}" );
+//        
+//        Glfw.WindowHint( WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
+//        Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
+//        Glfw.WindowHint( WindowHint.ContextVersionMajor, glMajor );
+//        Glfw.WindowHint( WindowHint.ContextVersionMinor, glMinor );
         
-        Glfw.MakeContextCurrent( windowHandle );
+//        Glfw.MakeContextCurrent( windowHandle );
 
         GLVersion = new GLVersion( LughSharp.Lugh.Core.Platform.ApplicationType.WindowsGL );
     }
@@ -707,7 +696,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// elsewhere, but this is where most are initialised.
     /// </summary>
     /// <param name="config"> The current <see cref="DesktopGLApplicationConfiguration"/>. </param>
-    private static void SetWindowHints( DesktopGLApplicationConfiguration config )
+    private void SetWindowHints( DesktopGLApplicationConfiguration config )
     {
         ArgumentNullException.ThrowIfNull( config );
 
@@ -727,22 +716,13 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         Glfw.WindowHint( WindowHint.DepthBits, config.Depth );
         Glfw.WindowHint( WindowHint.Samples, config.Samples );
 
-//        if ( config.GLEmulation == DesktopGLApplicationConfiguration.GLEmulationType.GL30
-//             || config.GLEmulation == DesktopGLApplicationConfiguration.GLEmulationType.GL31
-//             || config.GLEmulation == DesktopGLApplicationConfiguration.GLEmulationType.GL32 )
-        {
-            Glfw.WindowHint( WindowHint.ContextVersionMajor, config.GLContextMajorVersion );
-            Glfw.WindowHint( WindowHint.ContextVersionMinor, config.GLContextMinorVersion );
+        OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
 
-//            if ( Platform.IsMac )
-            {
-                // hints mandatory on OS X for GL 3.2+ context creation, but fail on Windows if the
-                // WGL_ARB_create_context extension is not available
-                // see: http://www.glfw.org/docs/latest/compat.html
-                Glfw.WindowHint( WindowHint.OpenGLForwardCompat, true );
-                Glfw.WindowHint( WindowHint.OpenGLProfile, GLUtils.DEFAULT_OPENGL_PROFILE );
-            }
-        }
+        Glfw.WindowHint( WindowHint.ContextVersionMajor, config.GLContextMajorVersion );
+        Glfw.WindowHint( WindowHint.ContextVersionMinor, config.GLContextMinorVersion );
+        Glfw.WindowHint( WindowHint.OpenGLForwardCompat, GLUtils.DEFAULT_OPENGL_FORWARDCOMPAT );
+        Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
+        Glfw.WindowHint( WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
 
         Glfw.WindowHint( WindowHint.DoubleBuffer, true );
 

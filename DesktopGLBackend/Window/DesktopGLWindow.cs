@@ -26,14 +26,11 @@ using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
 
 using DesktopGLBackend.Core;
 using DesktopGLBackend.Graphics;
 using DesktopGLBackend.Input;
 using DesktopGLBackend.Utils;
-
-using LughSharp.Lugh.Graphics.OpenGL;
 
 using Platform = LughSharp.Lugh.Core.Platform;
 
