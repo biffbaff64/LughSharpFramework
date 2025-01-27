@@ -64,22 +64,17 @@ public class Gdx
         set
         {
             _glBindings = value;
-            
+
             Logger.Debug( $"Gdx.Bindings set to reference {value.GetType().Name}" );
         }
     }
 
-    /// <summary>
-    /// Globally accessible reference to the Main <see cref="IApplication"/> class for the
-    /// running backend.
-    /// </summary>
-    public IApplication App { get; set; } = null!;
-
-    public IAudio    Audio    { get; set; } = null!;
-    public IInput    Input    { get; set; } = null!;
-    public IFiles    Files    { get; set; } = null!;
-    public IGraphics Graphics { get; set; } = null!;
-    public INet      Net      { get; set; } = null!;
+    public IApplication App      { get; set; } = null!;
+    public IAudio       Audio    { get; set; } = null!;
+    public IInput       Input    { get; set; } = null!;
+    public IFiles       Files    { get; set; } = null!;
+    public IGraphics    Graphics { get; set; } = null!;
+    public INet         Net      { get; set; } = null!;
 
     // ========================================================================
 
@@ -148,6 +143,8 @@ public class Gdx
         Logger.EnableErrorLogging();
 
         Colors.Reset();
+
+        Bindings = new GLBindings();
     }
 
     /// <summary>
@@ -165,7 +162,7 @@ public class Gdx
         }
 
         Logger.Debug( $"DevMode: {DevMode}" );
-        
+
         return this;
     }
 
@@ -187,7 +184,7 @@ public class Gdx
         }
 
         Logger.Debug( $"GodMode: {GodMode}" );
-        
+
         return this;
     }
 

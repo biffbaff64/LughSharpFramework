@@ -178,7 +178,7 @@ public class OldSpriteBatch : IBatch
             GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
                                         Vertices.Length * sizeof( float ),
                                         ptr,
-                                        ( int )BufferUsageHint.DynamicDraw );
+                                        ( int )BufferUsageHint.StaticDraw );
         }
 
         SetupVertexAttributes();

@@ -73,7 +73,7 @@ public class SpriteBatch : IBatch
     private const int MAX_SPRITES         = 8191; // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
 
     private readonly Color _color = Graphics.Color.Red;
-    private readonly bool  _ownsShader;
+    private          bool  _ownsShader;
 
     private Matrix4        _combinedMatrix = new();
     private Mesh?          _mesh;
@@ -83,6 +83,7 @@ public class SpriteBatch : IBatch
     private ShaderProgram? _customShader          = null;
     private uint           _vao;
     private uint           _vbo;
+    private uint           _ibo;
 
     private int _vertexSizeInFloats;
 
@@ -117,19 +118,7 @@ public class SpriteBatch : IBatch
         IsDrawing = false;
         Vertices  = new float[ size * VERTICES_PER_SPRITE * VERTEX_SIZE ];
 
-        Logger.Debug( $"Vertices.Length: {Vertices.Length} bytes ( size: {size} sprites )" );
-
-        if ( defaultShader == null )
-        {
-            _shader     = CreateDefaultShader();
-            _ownsShader = true;
-        }
-        else
-        {
-            _shader = defaultShader;
-        }
-
-        Initialise( size );
+        Initialise( size, defaultShader );
     }
 
     /// <summary>
@@ -137,18 +126,11 @@ public class SpriteBatch : IBatch
     /// which is done inside <see cref="SetupVertexAttributes"/>, 
     /// </summary>
     /// <param name="size"></param>
-    private unsafe void Initialise( int size )
+    /// <param name="defaultShader"></param>
+    private unsafe void Initialise( int size, ShaderProgram? defaultShader )
     {
-        // Add this check at the beginning of Initialise(), Flush(), and SetupVertexAttributes()
-        var currentContext = Glfw.GetCurrentContext(); // Or your equivalent for getting the current context
-
-        if ( currentContext == null )
-        {
-            Logger.Error( "No OpenGL context is current on this thread!" );
-
-            // Breakpoint or throw an exception here
-        }
-
+        OpenGL.GLUtils.CheckOpenGLContext();
+        
         var vertexDataType = ( GdxApi.Bindings.GetOpenGLVersion().major >= 3 )
             ? Mesh.VertexDataType.VertexBufferObjectWithVAO
             : Mesh.VertexDataType.VertexArray;
@@ -159,12 +141,12 @@ public class SpriteBatch : IBatch
         var va2 = new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE );
         var va3 = new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2, $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" );
 
-        _mesh = new Mesh( vertexDataType, false, size * 4, size * 6, va1, va2, va3 );
+        _mesh = new Mesh( vertexDataType, false, size * VERTICES_PER_SPRITE, size * INDICES_PER_SPRITE, va1, va2, va3 );
 
         // Set up an orthographic projection matrix for 2D rendering
         ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
 
-        GenerateIndexBuffer( size, out var indices );
+        PopulateIndexBuffer( size, out var indices );
 
         // Set the indices on the mesh
         _mesh.SetIndices( indices );
@@ -175,62 +157,37 @@ public class SpriteBatch : IBatch
         // ------------------------------------------------
         // Generate and bind the Vertex Array Object (VAO)
         _vao = GdxApi.Bindings.GenVertexArray();
-        var error = GdxApi.Bindings.GetError();
-        if ( error != ( int )ErrorCode.NoError ) Logger.Error( $"GenBuffers Error: {error}" );
-        Logger.Debug( $"VAO ID: {_vao}" ); // Log the VAO ID
         GdxApi.Bindings.BindVertexArray( _vao );
 
         // ------------------------------------------------
         // Generate and bind the Vertex Buffer Object (VBO)
         _vbo  = GdxApi.Bindings.GenBuffer();
-        error = GdxApi.Bindings.GetError();
-        if ( error != ( int )ErrorCode.NoError ) Logger.Error( $"GenBuffers Error: {error}" );
-        Logger.Debug( $"VBO ID: {_vbo}" ); // Log the VBO ID
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+        GdxApi.Bindings.BindBuffer( ( int ) BufferTarget.ArrayBuffer, _vbo );
 
         CheckBufferBinding( _vbo );
-        CheckGLError( "Initialise" );
 
-        Logger.Debug( $"BufferData size: {Vertices.Length * sizeof( float )} bytes" );
-
+        // ------------------------------------------------
+        // 
         GdxApi.Bindings.BufferData( target: ( int )BufferTarget.ArrayBuffer,
                                     size: Vertices.Length * sizeof( float ),
                                     data: ( void* )0,
-                                    usage: ( int )BufferUsageHint.DynamicDraw );
-        error = GdxApi.Bindings.GetError();
-        if ( error != ( int )ErrorCode.NoError ) Logger.Error( $"BufferData Error: {error}" );
-        Logger.Debug( $"BufferData size: {Vertices.Length * sizeof( float )} bytes" );
+                                    usage: ( int )BufferUsageHint.StaticDraw );
 
         GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
-    }
 
-    private unsafe void CheckBufferBinding( uint expectedBuffer )
-    {
-        var currentBuffer = new int[ 1 ];
-
-        fixed ( int* ptr = &currentBuffer[ 0 ] )
+        if ( defaultShader == null )
         {
-            GdxApi.Bindings.GetIntegerv( IGL.GL_ARRAY_BUFFER_BINDING, ptr );
+            _shader     = CreateDefaultShader();
+            _ownsShader = true;
         }
-
-        if ( currentBuffer[ 0 ] != expectedBuffer )
+        else
         {
-            Logger.Error( $"Buffer not bound correctly! Expected {expectedBuffer}, got {currentBuffer[ 0 ]}" );
+            _shader = defaultShader;
         }
     }
 
-    private void CheckGLError( string stage )
-    {
-        var error = GdxApi.Bindings.GetError();
-
-        if ( error != ( int )ErrorCode.NoError )
-        {
-            throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
-        }
-    }
-
-    private static void GenerateIndexBuffer( int size, out short[] indices )
+    private static void PopulateIndexBuffer( int size, out short[] indices )
     {
         var len = size * INDICES_PER_SPRITE;
         indices = new short[ len ];
@@ -243,8 +200,6 @@ public class SpriteBatch : IBatch
             indices[ i + 3 ] = ( short )( j + 2 );
             indices[ i + 4 ] = ( short )( j + 3 );
             indices[ i + 5 ] = j;
-            
-            Logger.Debug( $"{indices[ i ]}, {indices[ i + 1 ]}, {indices[ i + 2 ]}, {indices[ i + 3]}, {indices[ i + 4 ]}, {indices[ i + 5 ]}" );
         }
     }
 
@@ -253,41 +208,21 @@ public class SpriteBatch : IBatch
     /// </summary>
     private void SetupVertexAttributes( ShaderProgram? program )
     {
-        // --------------------------------------------------------------------
-
-        var stride = VERTEX_SIZE * sizeof( float );
-
-        var positionOffset = 0;
-        var colorOffset    = 2 * sizeof( float );
-        var texCoordOffset = 6 * sizeof( float );
-
-        // Position Attribute
-        // ... SetVertexAttribute(..., stride, positionOffset);
-        Logger.Debug( $"Position Offset: {positionOffset}, Stride: {stride}" );
-
-        // Color Attribute
-        // ... SetVertexAttribute(..., stride, colorOffset);
-        Logger.Debug( $"Color Offset: {colorOffset}, Stride: {stride}" );
-
-        // Texture Coordinates Attribute
-        // ... SetVertexAttribute(..., stride, texCoordOffset);
-        Logger.Debug( $"Texture Coord Offset: {texCoordOffset}, Stride: {stride}" );
+        OpenGL.GLUtils.CheckOpenGLContext();
 
         // --------------------------------------------------------------------
 
-        // Add this check at the beginning of Initialise(), Flush(), and SetupVertexAttributes()
-        var currentContext = Glfw.GetCurrentContext(); // Or your equivalent for getting the current context
+        const int stride         = VERTEX_SIZE * sizeof( float );
+        const int positionOffset = 0;
+        const int colorOffset    = 2 * sizeof( float );
+        const int texCoordOffset = 6 * sizeof( float );
 
-        if ( currentContext == null )
-        {
-            Logger.Error( "No OpenGL context is current on this thread!" );
-
-            // Breakpoint or throw an exception here
-        }
+        // --------------------------------------------------------------------
 
         if ( ( program == null ) || ( _mesh == null ) ) return;
 
         program.Bind();
+        
         GdxApi.Bindings.BindVertexArray( _vao );
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
 
@@ -452,8 +387,6 @@ public class SpriteBatch : IBatch
         const float U2 = 1;
         const float V2 = 0;
 
-        Logger.Debug( $"Packed color before SetVertices: {ColorPackedABGR}" );
-
         SetVertices( posX, posY, Color.A, Color.B, Color.G, Color.R, U, V,
                      posX, fy2, Color.A, Color.B, Color.G, Color.R, U, V2,
                      fx2, fy2, Color.A, Color.B, Color.G, Color.R, U2, V2,
@@ -461,16 +394,16 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// 
+    /// Draws a textured region with specified transformations such as position, scale, rotation, and flipping options.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="region"></param>
-    /// <param name="origin"></param>
-    /// <param name="scale"></param>
-    /// <param name="rotation"></param>
-    /// <param name="src"></param>
-    /// <param name="flipX"></param>
-    /// <param name="flipY"></param>
+    /// <param name="texture">The texture to be drawn.</param>
+    /// <param name="region">The region where the texture will be drawn on the target.</param>
+    /// <param name="origin">The origin point of the region for transformations like rotation and scaling.</param>
+    /// <param name="scale">The scaling factor for the texture in the X and Y axes.</param>
+    /// <param name="rotation">The rotation angle of the texture in radians.</param>
+    /// <param name="src">The source rectangle of the texture to be drawn.</param>
+    /// <param name="flipX">Indicates whether the texture should be flipped horizontally.</param>
+    /// <param name="flipY">Indicates whether the texture should be flipped vertically.</param>
     public virtual void Draw( Texture texture,
                               GRect region,
                               Point2D origin,
@@ -584,12 +517,13 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
+    /// Draws a specified texture within a defined region, with optional flipping along both axes.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="region"></param>
-    /// <param name="src"></param>
-    /// <param name="flipX"></param>
-    /// <param name="flipY"></param>
+    /// <param name="texture">The texture to be drawn.</param>
+    /// <param name="region">The destination rectangle on the target surface.</param>
+    /// <param name="src">The source rectangle in the texture to be drawn.</param>
+    /// <param name="flipX">Indicates whether to flip the texture horizontally.</param>
+    /// <param name="flipY">Indicates whether to flip the texture vertically.</param>
     public virtual void Draw( Texture texture, GRect region, GRect src, bool flipX, bool flipY )
     {
         Validate( texture );
@@ -627,11 +561,12 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
+    /// Draws a specified texture at the given position using the defined source rectangle.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="src"></param>
+    /// <param name="texture">The texture to be drawn.</param>
+    /// <param name="x">The x-coordinate where the texture should be drawn.</param>
+    /// <param name="y">The y-coordinate where the texture should be drawn.</param>
+    /// <param name="src">The source rectangle portion of the texture to be drawn.</param>
     public virtual void Draw( Texture texture, float x, float y, GRect src )
     {
         Validate( texture );
@@ -659,13 +594,14 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
+    /// Draws a textured rectangle on the screen using specified texture coordinates.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="region"></param>
-    /// <param name="u"></param>
-    /// <param name="v"></param>
-    /// <param name="u2"></param>
-    /// <param name="v2"></param>
+    /// <param name="texture">The texture to use for rendering.</param>
+    /// <param name="region">The rectangular region where the texture will be drawn.</param>
+    /// <param name="u">The U coordinate of the texture's top-left corner.</param>
+    /// <param name="v">The V coordinate of the texture's top-left corner.</param>
+    /// <param name="u2">The U coordinate of the texture's bottom-right corner.</param>
+    /// <param name="v2">The V coordinate of the texture's bottom-right corner.</param>
     public virtual void Draw( Texture texture, GRect region, float u, float v, float u2, float v2 )
     {
         Validate( texture );
@@ -700,11 +636,12 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
+    /// Renders a set of sprite vertices using the specified texture.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="spriteVertices"></param>
-    /// <param name="offset"></param>
-    /// <param name="count"></param>
+    /// <param name="texture">The texture to be used for rendering. Can be null if not needed.</param>
+    /// <param name="spriteVertices">An array of vertex data describing the sprites to be rendered.</param>
+    /// <param name="offset">The starting index in the vertex array from which to begin processing.</param>
+    /// <param name="count">The number of vertices to process starting from the specified offset.</param>
     public virtual void Draw( Texture? texture, float[] spriteVertices, int offset, int count )
     {
         Validate( texture );
@@ -750,10 +687,11 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
+    /// Draws the specified texture region at the given position.
     /// </summary>
-    /// <param name="region"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="region">The texture region to be drawn. Can be null.</param>
+    /// <param name="x">The x-coordinate of the position to draw the texture.</param>
+    /// <param name="y">The y-coordinate of the position to draw the texture.</param>
     public virtual void Draw( TextureRegion? region, float x, float y )
     {
         Validate( region );
@@ -762,12 +700,13 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
+    /// Draws a texture region onto the batch with specified position and dimensions.
     /// </summary>
-    /// <param name="region"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
+    /// <param name="region">The texture region to be drawn, which includes the texture and UV coordinates.</param>
+    /// <param name="x">The X-coordinate of the bottom-left corner where the texture will be drawn.</param>
+    /// <param name="y">The Y-coordinate of the bottom-left corner where the texture will be drawn.</param>
+    /// <param name="width">The width of the texture region to be drawn.</param>
+    /// <param name="height">The height of the texture region to be drawn.</param>
     public virtual void Draw( TextureRegion? region, float x, float y, float width, float height )
     {
         Validate( region );
@@ -797,12 +736,14 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
+    /// Draws a texture region onto a specified region with transformations such as origin offset,
+    /// scaling, and rotation.
     /// </summary>
-    /// <param name="textureRegion"></param>
-    /// <param name="region"></param>
-    /// <param name="origin"></param>
-    /// <param name="scale"></param>
-    /// <param name="rotation"></param>
+    /// <param name="textureRegion">The texture region to be drawn.</param>
+    /// <param name="region">The rectangular region where the texture will be drawn.</param>
+    /// <param name="origin">The origin point for transformations such as scaling and rotation.</param>
+    /// <param name="scale">The scale factor to be applied to the texture region.</param>
+    /// <param name="rotation">The rotation angle in radians to be applied to the texture region.</param>
     public virtual void Draw( TextureRegion? textureRegion, GRect region, Point2D origin, Point2D scale, float rotation )
     {
         Validate( textureRegion );
@@ -1120,22 +1061,19 @@ public class SpriteBatch : IBatch
         Vertices[ Idx + 31 ] = v4;
 
         Idx += ( VERTICES_PER_SPRITE * VERTEX_SIZE );
-
-        // *** DEBUGGING ***
-//        Logger.Debug( $"Idx after increment: {Idx}" );
-//        DebugVertices();
-        // *** DEBUGGING ***
     }
 
     private static void UnpackColor( float packedColor, out float r, out float g, out float b, out float a )
     {
         if ( float.IsNaN( packedColor ) || float.IsInfinity( packedColor ) )
         {
-            Logger.Error( $"Invalid packed color: {packedColor}. Setting color to default (white)." );
-            r = g = b = a = 1.0f; // Set a default color (white)
-            Logger.Checkpoint();
+            // Set a default color (white)
+            r = 1.0f;
+            g = 1.0f;
+            b = 1.0f;
+            a = 1.0f;
 
-            return; // Important: Return early to prevent the cast
+            return;
         }
 
         packedColor = Math.Clamp( packedColor, 0, uint.MaxValue );
@@ -1178,29 +1116,27 @@ public class SpriteBatch : IBatch
     // ========================================================================
 
     /// <summary>
+    /// Flushes the current batch, sending all rendered vertices to the GPU for drawing.
+    /// This method handles binding the appropriate Vertex Buffer Object (VBO), Vertex Array Object (VAO),
+    /// textures, shaders, and performs the actual rendering of the accumulated sprites.
     /// </summary>
+    /// <exception cref="GdxRuntimeException">
+    /// Thrown if there is no OpenGL context available on the current thread, if
+    /// the index buffer (`Idx`) is less than zero, or if certain rendering conditions are not met.
+    /// </exception>
     public unsafe void Flush()
     {
-        // *** DEBUGGING ***
-        Logger.Debug( "Flush() start." );
+        OpenGL.GLUtils.CheckOpenGLContext();
 
-        if ( Glfw.GetCurrentContext() == null ) throw new GdxRuntimeException( "No OpenGL context on this thread!" );
-
-        Logger.Debug( $"LastTexture: {LastTexture}, Idx: {Idx}, Vertices.Length: {Vertices.Length}" );
-        Logger.Debug( $"Idx: {Idx}, VERTICES_PER_SPRITE: {VERTICES_PER_SPRITE}, VERTEX_SIZE: {VERTEX_SIZE}" );
-
-        // *** DEBUGGING ***
-
-        if ( Idx == 0 ) return;
-
-        if ( Idx < 0 ) throw new GdxRuntimeException( "Idx is less than zero!" );
-
-        if ( _mesh == null )
+        if ( ( Idx == 0 ) || ( _mesh == null ) )
         {
+            // Ensure that Idx is zero, to cover the case where checking _mesh gets here.
             Idx = 0;
 
             return;
         }
+
+        if ( Idx < 0 ) throw new GdxRuntimeException( "Idx is less than zero!" );
 
         RenderCalls++;
         TotalRenderCalls++;
@@ -1224,12 +1160,18 @@ public class SpriteBatch : IBatch
         GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 );
         LastTexture.Bind();
 
-        Logger.Debug( $"BufferData size: {Vertices.Length * sizeof( float )} bytes" );
+        SetupVertexAttributes( _customShader ?? _shader );
+
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+        GdxApi.Bindings.BindVertexArray( _vao );
 
         // Only allocate initial storage once
         if ( Vertices.Length > 0 )
         {
-            fixed ( float* ptr = Vertices ) // Pin the Vertices array
+            _mesh.SetVertices( Vertices );
+
+            // Pin the Vertices array
+            fixed ( float* ptr = Vertices )
             {
                 GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
                                             Vertices.Length * sizeof( float ),
@@ -1238,37 +1180,10 @@ public class SpriteBatch : IBatch
             }
         }
 
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-
-        Logger.Debug( $"Idx: {Idx}" );
-        Logger.Debug( $"Vertices.Length: {Vertices.Length}" );
-
         fixed ( float* ptr = Vertices )
         {
-            // *** DEBUGGING ***
-            Logger.Debug( $"Idx: {Idx}, BufferSubData size: {Idx * sizeof( float )}, Buffer Size: {Vertices.Length * sizeof( float )}" ); // Log these values
-
-            var vertexData = "Vertices Data: \n";
-            for (var i = 0; i < Idx; i += VERTEX_SIZE)
-            {
-                vertexData += $"Vertex {i / VERTEX_SIZE}: ";
-                for (var j = 0; j < VERTEX_SIZE; j++)
-                {
-                    var address = (IntPtr)(ptr + i + j);
-                    vertexData += $"[{address:X}]={Vertices[i + j]}, "; // Log address in hex
-                }
-                vertexData += "\n";
-            }
-
-            Logger.Debug( vertexData );
-            // *** DEBUGGING ***
-
             GdxApi.Bindings.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ptr );
         }
-
-        SetupVertexAttributes( _customShader ?? _shader );
-
-        GdxApi.Bindings.BindVertexArray( _vao ); // Bind VAO before rendering
 
         _mesh.Render( _customShader ?? _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
 
@@ -1544,4 +1459,39 @@ public class SpriteBatch : IBatch
             throw new InvalidOperationException( "Begin() must be called before Draw()." );
         }
     }
+
+    /// <summary>
+    /// Verifies whether the currently bound buffer matches the expected buffer ID.
+    /// Logs an error if there is a mismatch.
+    /// </summary>
+    /// <param name="expectedBuffer">The identifier of the buffer that is expected to be currently bound.</param>
+    private unsafe void CheckBufferBinding( uint expectedBuffer )
+    {
+        var currentBuffer = new int[ 1 ];
+
+        fixed ( int* ptr = &currentBuffer[ 0 ] )
+        {
+            GdxApi.Bindings.GetIntegerv( IGL.GL_ARRAY_BUFFER_BINDING, ptr );
+        }
+
+        if ( currentBuffer[ 0 ] != expectedBuffer )
+        {
+            Logger.Error( $"Buffer not bound correctly! Expected {expectedBuffer}, got {currentBuffer[ 0 ]}" );
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="stage"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    private void CheckGLError( string stage )
+    {
+        var error = GdxApi.Bindings.GetError();
+
+        if ( error != ( int ) ErrorCode.NoError )
+        {
+            throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
+        }
+    }
 }
+

@@ -41,7 +41,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
 {
     public DesktopGLWindow? GLWindow { get; set; }
 
-    // ========================================================================
+    private const long NANOSECONDS_PER_SECOND = 1_000_000_000;
 
     private IGraphics.DisplayMode? _displayModeBeforeFullscreen;
 
@@ -65,28 +65,22 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     public DesktopGLGraphics( DesktopGLWindow glWindow )
     {
         this.GLWindow = glWindow;
-        this.GL       = new GLBindings();
 
         UpdateFramebufferInfo();
-
         UpdateGLVersion();
 
         Glfw.SetWindowSizeCallback( GLWindow.GlfwWindow, ResizeCallback );
     }
 
-    //@formatter:off
-    
     /// <inheritdoc />
     public override int Width => GLWindow?.AppConfig.HdpiMode == HdpiMode.Pixels
-                           ? BackBufferWidth
-                           : LogicalWidth;
+        ? BackBufferWidth
+        : LogicalWidth;
 
     /// <inheritdoc />
     public override int Height => GLWindow?.AppConfig.HdpiMode == HdpiMode.Pixels
-                           ? BackBufferHeight
-                           : LogicalHeight;
-    
-    //@formatter:on
+        ? BackBufferHeight
+        : LogicalHeight;
 
     /// <summary>
     /// Whether the app is full screen or not.
@@ -102,22 +96,26 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <inheritdoc />
-    public override GraphicsBackend.BackendType GraphicsType => GraphicsBackend.BackendType.OpenGles; //TODO
+    public override GraphicsBackend.BackendType GraphicsType => GraphicsBackend.BackendType.OpenGL;
 
     /// <inheritdoc />
     public override bool SupportsDisplayModeChange() => true;
 
     /// <summary>
+    /// Handles the resize event for the GLFW window.
     /// </summary>
-    /// <param name="windowHandle"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
+    /// <param name="windowHandle">The handle to the GLFW window being resized.</param>
+    /// <param name="width">The new width of the window after resizing.</param>
+    /// <param name="height">The new height of the window after resizing.</param>
     public void ResizeCallback( GLFW.Window windowHandle, int width, int height )
     {
         RenderWindow( windowHandle, width, height );
     }
 
     /// <summary>
+    /// Updates the framebuffer information based on the current state of the window.
+    /// This method queries the framebuffer size and logical window size, updating
+    /// attributes such as backbuffer dimensions, logical dimensions, and buffer format.
     /// </summary>
     private void UpdateFramebufferInfo()
     {
@@ -150,6 +148,9 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <summary>
+    /// Updates the current graphics state by calculating the frame delta time,
+    /// updating frames per second (FPS), and incrementing the frame identifier.
+    /// This method is typically called on each render loop iteration.
     /// </summary>
     public void Update()
     {
@@ -160,10 +161,10 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
             _lastFrameTime = time;
         }
 
-        DeltaTime      = ( time - _lastFrameTime ) / 1000000000.0f;
+        DeltaTime      = ( time - _lastFrameTime ) / ( float )NANOSECONDS_PER_SECOND;
         _lastFrameTime = time;
 
-        if ( ( time - _frameCounterStart ) >= 1000000000 )
+        if ( ( time - _frameCounterStart ) >= NANOSECONDS_PER_SECOND )
         {
             _fps               = _frames;
             _frames            = 0;
@@ -177,11 +178,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     /// <summary>
     /// Returns whether cubemap seamless feature is supported.
     /// </summary>
-    public bool SupportsCubeMapSeamless()
-    {
-        return /*( bool )GLVersion!.IsVersionEqualToOrHigher( 3, 2 )
-               ||*/ SupportsExtension( "GL_ARB_seamless_cube_map" );
-    }
+    public bool SupportsCubeMapSeamless() => SupportsExtension( "GL_ARB_seamless_cube_map" );
 
     /// <summary>
     /// Enable or disable cubemap seamless feature. Default is true if supported.
@@ -449,13 +446,13 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         }
 
         GLWindow.MakeCurrent();
-        
+
         GdxApi.Bindings.Viewport( 0, 0, BackBufferWidth, BackBufferHeight );
 
         GLWindow.ApplicationListener.Resize( Width, Height );
         GLWindow.ApplicationListener.Update();
         GLWindow.ApplicationListener.Render();
-        
+
         Glfw.SwapBuffers( windowHandle );
     }
 
@@ -476,7 +473,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         _displayModeBeforeFullscreen  = GetDisplayMode();
     }
 
-    private void UpdateGLVersion()
+    private static void UpdateGLVersion()
     {
 //        var vendorString   = GdxApi.GL.GetString( IGL.GL_VENDOR );
 //        var rendererString = GdxApi.GL.GetString( IGL.GL_RENDERER );
@@ -495,11 +492,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     public override int GetSafeInsetTop() => 0;
     public override int GetSafeInsetBottom() => 0;
     public override int GetSafeInsetRight() => 0;
-
-    /// <inheritdoc />
     public override long GetFrameID() => _frameId;
-
-    /// <inheritdoc />
     public override int GetFramesPerSecond() => _fps;
 
     // ========================================================================
@@ -508,7 +501,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     /// Describes a Display Mode for a <see cref="GLFW.Monitor"/>
     /// </summary>
     [PublicAPI]
-    public unsafe class DesktopGLDisplayMode : IGraphics.DisplayMode
+    public class DesktopGLDisplayMode : IGraphics.DisplayMode
     {
         /// <summary>
         /// The <see cref="GLFW.Monitor"/> this <see cref="IGraphics.DisplayMode"/> applies to.

@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
@@ -87,11 +88,16 @@ public class VertexBufferObjectWithVAO : IVertexData
         CreateVAO();
     }
 
+    /// <summary>
+    /// Constructs a new interleaved VertexBufferObjectWithVAO.
+    /// </summary>
+    /// <param name="isStatic">Indicates whether the vertex data is static.</param>
+    /// <param name="unmanagedBuffer">The unmanaged byte buffer to store vertex data.</param>
+    /// <param name="attributes">The vertex attributes associated with this buffer.</param>
     public VertexBufferObjectWithVAO( bool isStatic, ByteBuffer unmanagedBuffer, VertexAttributes attributes )
     {
-        _isStatic  = isStatic;
-        Attributes = attributes;
-
+        _isStatic   = isStatic;
+        Attributes  = attributes;
         _byteBuffer = unmanagedBuffer;
         _ownsBuffer = false;
         _buffer     = _byteBuffer.AsFloatBuffer();
@@ -107,14 +113,46 @@ public class VertexBufferObjectWithVAO : IVertexData
     }
 
     /// <summary>
+    /// Gets the number of vertices contained in the vertex buffer.
+    /// If the vertex attributes have no associated size, a warning is logged, and the value will be 0.
+    /// Otherwise, the number of vertices is calculated based on the buffer's limit
+    /// and the size of each vertex.
     /// </summary>
-    /// <returns> the number of vertices this VertexData stores </returns>
-    public int NumVertices => ( _buffer.Limit * 4 ) / Attributes.VertexSize;
+    public int NumVertices
+    {
+        get
+        {
+            if ( Attributes?.VertexSize == 0 )
+            {
+                Logger.Error( "WARNING: VertexData has no attributes!" );
+
+                return 0;
+            }
+
+            return ( _buffer.Limit * 4 ) / Attributes!.VertexSize;
+        }
+    }
 
     /// <summary>
+    /// Gets the maximum number of vertices that can be stored in the vertex buffer.
+    /// If the vertex attributes have no defined size, a warning is logged, and the returned value will be 0.
+    /// Otherwise, the maximum number of vertices is determined by dividing the buffer's capacity
+    /// by the size of each vertex.
     /// </summary>
-    /// <returns> the number of vertices this VertedData can store </returns>
-    public int NumMaxVertices => _byteBuffer.Capacity / Attributes.VertexSize;
+    public int NumMaxVertices
+    {
+        get
+        {
+            if ( Attributes?.VertexSize == 0 )
+            {
+                Logger.Error( "WARNING: VertexData has no attributes!" );
+
+                return 0;
+            }
+
+            return _byteBuffer.Capacity / Attributes!.VertexSize;
+        }
+    }
 
     /// <summary>
     /// Sets the vertices of this VertexData, discarding the old vertex data. The

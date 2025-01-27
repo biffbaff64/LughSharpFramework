@@ -36,14 +36,20 @@ public abstract class AbstractGraphics : IGraphics
 
     #region properties
 
-    public IGraphics.BufferFormatDescriptor BufferFormat { get; set; } = null!;
-    public IGLBindings                      GL           { get; set; } = null!;
+    public IGraphics.BufferFormatDescriptor BufferFormat          { get; set; } = null!;
+    public int                              BackBufferWidth       { get; set; } = 0;
+    public int                              BackBufferHeight      { get; set; } = 0;
+    public int                              LogicalWidth          { get; set; } = 0;
+    public int                              LogicalHeight         { get; set; } = 0;
+    public Window                           CurrentContext        { get; set; } = null!;
+    public Color                            WindowBackgroundColor { get; set; } = Color.Blue;
 
-    public int BackBufferWidth  { get; set; } = 0;
-    public int BackBufferHeight { get; set; } = 0;
-    public int LogicalWidth     { get; set; } = 0;
-    public int LogicalHeight    { get; set; } = 0;
+    #endregion properties
 
+    // ========================================================================
+
+    #region virtual properties
+    
     public virtual int                         Width               { get; }
     public virtual int                         Height              { get; }
     public virtual float                       DeltaTime           { get; set; }
@@ -52,10 +58,7 @@ public abstract class AbstractGraphics : IGraphics
     public virtual bool                        ContinuousRendering { get; set; } = true;
     public virtual bool                        IsFullscreen        { get; }
 
-    public Window CurrentContext        { get; set; } = null!;
-    public Color  WindowBackgroundColor { get; set; } = Color.Blue;
-
-    #endregion properties
+    #endregion virtual properties
 
     // ========================================================================
 

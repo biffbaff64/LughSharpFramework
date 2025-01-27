@@ -194,7 +194,6 @@ public partial class DesktopGLWindow : IDisposable
     public void MakeCurrent()
     {
         GdxApi.Graphics = Graphics;
-        GdxApi.Bindings = Graphics.GL;
         GdxApi.Input    = Input;
 
         Glfw.MakeContextCurrent( GlfwWindow );

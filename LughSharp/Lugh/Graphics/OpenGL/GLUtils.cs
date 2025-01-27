@@ -23,11 +23,12 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
 [PublicAPI]
-public class GLUtils
+public static class GLUtils
 {
     public const int           DEFAULT_GL_MAJOR             = 4;
     public const int           DEFAULT_GL_MINOR             = 5;
@@ -41,10 +42,15 @@ public class GLUtils
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Converts a specified OpenGL error code into a corresponding descriptive error string.
     /// </summary>
-    /// <param name="errorCode"></param>
-    /// <returns></returns>
+    /// <param name="errorCode">
+    /// The error code to be translated, typically returned from OpenGL functions.
+    /// </param>
+    /// <returns>
+    /// A string that describes the given OpenGL error code. If the error code is unrecognized,
+    /// a generic message including the code is returned.
+    /// </returns>
     public static string GetErrorString( int errorCode )
     {
         return errorCode switch
@@ -69,6 +75,23 @@ public class GLUtils
     }
 
     /// <summary>
+    /// Checks if there is a current OpenGL context bound to the calling thread.
+    /// Throws a <see cref="GdxRuntimeException"/> if no OpenGL context is active.
+    /// </summary>
+    /// <exception cref="GdxRuntimeException">
+    /// Thrown when no OpenGL context is currently bound to the thread.
+    /// </exception>
+    public static void CheckOpenGLContext()
+    {
+        var currentContext = Glfw.GetCurrentContext();
+
+        if ( currentContext == null )
+        {
+            throw new GdxRuntimeException( "No OpenGL context is current on this thread!" );
+        }
+    }
+
+    /// <summary>
     /// 
     /// </summary>
     public static void GLDebug()
@@ -83,18 +106,17 @@ public class GLUtils
             {
                 var msg = Marshal.PtrToStringAnsi( ( IntPtr )message, length );
 
-                Logger.Debug( $"OpenGL Debug Message:\n" +
-                              $"Source: {source}\n" +
-                              $"Type: {type}\n" +
-                              $"ID: {id}\n" +
-                              $"Severity: {severity}\n" +
-                              $"Message: {msg}" );
+                Logger.Debug( $"\nOpenGL Debug Message:\n" +
+                              $"Source  : 0x{source:X}\n" +
+                              $"Type    : 0x{type:X}\n" +
+                              $"ID      : 0x{id:X}\n" +
+                              $"Severity: 0x{severity:X}\n" +
+                              $"Message : {msg}" );
 
-                if ( severity == DebugSeverity.DEBUG_SEVERITY_HIGH )
-                {
-                    //Break on high severity errors
-                    System.Diagnostics.Debugger.Break();
-                }
+//                if ( severity == DebugSeverity.DEBUG_SEVERITY_HIGH )
+//                {
+//                    System.Diagnostics.Debugger.Break();
+//                }
             } );
 
             GdxApi.Bindings.DebugMessageCallback( debugProc, null );

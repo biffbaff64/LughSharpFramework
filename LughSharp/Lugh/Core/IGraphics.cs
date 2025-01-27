@@ -35,7 +35,6 @@ public interface IGraphics
     GLVersion?                  GLVersion        { get; set; }
     GraphicsBackend.BackendType GraphicsType     { get; }
     BufferFormatDescriptor      BufferFormat     { get; set; }
-    IGLBindings                 GL               { get; set; }
     float                       DeltaTime        { get; set; }
     int                         Width            { get; }
     int                         Height           { get; }

@@ -78,10 +78,6 @@ public class Mesh : IDisposable
     /// <param name="isVertexArray"></param>
     protected Mesh( IVertexData vertices, IIndexData indices, bool isVertexArray )
     {
-        Logger.Debug( $"vertices: {vertices.GetType().Name}, " +
-                      $"indices: {indices.GetType().Name}, " +
-                      $"isVertexArray: {isVertexArray}" );
-
         _vertices      = vertices;
         _indices       = indices;
         _isVertexArray = isVertexArray;
@@ -101,11 +97,6 @@ public class Mesh : IDisposable
     /// </param>
     public Mesh( bool isStatic, int maxVertices, int maxIndices, params VertexAttribute[] attributes )
     {
-        Logger.Debug( $"isStatic: {isStatic}, " +
-                      $"maxVertices: {maxVertices}, " +
-                      $"maxIndices: {maxIndices}, " +
-                      $"attributes: {attributes.Length}" );
-
         _vertices      = MakeVertexBuffer( isStatic, maxVertices, new VertexAttributes( attributes ) );
         _indices       = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
@@ -125,11 +116,6 @@ public class Mesh : IDisposable
     /// </param>
     public Mesh( bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
-        Logger.Debug( $"isStatic: {isStatic}, " +
-                      $"maxVertices: {maxVertices}, " +
-                      $"maxIndices: {maxIndices}, " +
-                      $"attributes: {attributes.Size}" );
-
         _vertices      = MakeVertexBuffer( isStatic, maxVertices, attributes );
         _indices       = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
@@ -159,12 +145,6 @@ public class Mesh : IDisposable
                  int maxIndices,
                  VertexAttributes attributes )
     {
-        Logger.Debug( $"staticVertices: {staticVertices}, " +
-                      $"staticIndices: {staticIndices}, " +
-                      $"maxVertices: {maxVertices}, " +
-                      $"maxIndices: {maxIndices}, " +
-                      $"attributes: {attributes.Size}" );
-
         _vertices      = MakeVertexBuffer( staticVertices, maxVertices, attributes );
         _indices       = new IndexBufferObject( staticIndices, maxIndices );
         _isVertexArray = false;
@@ -173,8 +153,7 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Creates a new Mesh with the given attributes. This is an expert method
-    /// with no error checking. Use at your own risk.
+    /// Creates a new Mesh with the given attributes.
     /// </summary>
     /// <param name="type">the <see cref="VertexDataType"/> to be used, VBO or VA.</param>
     /// <param name="isStatic">whether this mesh is static or not. Allows for internal optimizations.</param>
@@ -191,15 +170,10 @@ public class Mesh : IDisposable
                  params VertexAttribute[] attributes )
         : this( type, isStatic, maxVertices, maxIndices, new VertexAttributes( attributes ) )
     {
-        Logger.Debug( $"isStatic: {isStatic}, " +
-                      $"maxVertices: {maxVertices}, " +
-                      $"maxIndices: {maxIndices}, " +
-                      $"attributes: {attributes.Length}" );
     }
 
     /// <summary>
-    /// Creates a new Mesh with the given attributes. This is an expert method
-    /// with no error checking. Use at your own risk.
+    /// Creates a new Mesh with the given attributes.
     /// </summary>
     /// <param name="type">the <see cref="VertexDataType"/> to be used, VBO or VA.</param>
     /// <param name="isStatic">
@@ -210,10 +184,10 @@ public class Mesh : IDisposable
     /// <param name="attributes">the <see cref="VertexAttributes"/>.</param>
     public Mesh( VertexDataType type, bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
-        Logger.Debug( $"type: {type}, " +
-                      $"isStatic: {isStatic}, " +
-                      $"maxVertices: {maxVertices}, " +
-                      $"maxIndices: {maxIndices}, " +
+        Logger.Debug( $"type: {type}\n" +
+                      $"isStatic: {isStatic}\n" +
+                      $"maxVertices: {maxVertices}\n" +
+                      $"maxIndices: {maxIndices}\n" +
                       $"attributes: {attributes.Size}" );
 
         switch ( type )
@@ -236,7 +210,7 @@ public class Mesh : IDisposable
                 _vertices      = new VertexBufferObjectWithVAO( isStatic, maxVertices, attributes );
                 _indices       = new IndexBufferObjectSubData( isStatic, maxIndices );
                 _isVertexArray = false;
-
+                
                 break;
 
             case VertexDataType.VertexArray:
@@ -252,25 +226,6 @@ public class Mesh : IDisposable
     }
 
     // ========================================================================
-
-//    public unsafe void Xxxx()
-//    {
-//        // In your Mesh constructor or initialization:
-//        GdxApi.Bindings.GenBuffers( 1, out _ibo );
-//        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ibo );
-//        GdxApi.Bindings.BufferData( ( int )BufferTarget.ElementArrayBuffer, _indices.NumIndices * sizeof( short ),
-//                                    _indices.GetBuffer( false ).BackingArray(),
-//                                    ( int )BufferUsageHint.StaticDraw ); // Or DynamicDraw if needed
-//
-//        var error = GdxApi.Bindings.GetError();
-//
-//        if ( error != ( int )ErrorCode.NoError )
-//        {
-//            Logger.Error( $"Index Buffer Creation Error: {error}" );
-//        }
-//
-//        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, 0 ); // Unbind the index buffer
-//    }
 
     /// <summary>
     /// Enables instanced rendering for the mesh by initializing an instance buffer object with the given attributes.
@@ -780,7 +735,10 @@ public class Mesh : IDisposable
 
         if ( count == 0 ) return;
 
-        if ( autoBind ) Bind( shader );
+        if ( autoBind )
+        {
+            Bind( shader );
+        }
 
         if ( _isVertexArray )
         {
@@ -798,25 +756,11 @@ public class Mesh : IDisposable
                 fixed ( short* ptr = &buffer.BackingArray()[ 0 ] ) // Simplified fixed statement
                 {
                     GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr + offset );
-
-                    var error = GdxApi.Bindings.GetError();
-
-                    if ( error != ( int )ErrorCode.NoError )
-                    {
-                        Logger.Error($"DrawArrays Error: {error}");
-                    }
                 }
             }
             else
             {
                 GdxApi.Bindings.DrawArrays( primitiveType, offset, count );
-
-                var error = GdxApi.Bindings.GetError();
-
-                if ( error != ( int )ErrorCode.NoError )
-                {
-                    Logger.Error($"DrawArrays Error: {error}");
-                }
             }
         }
         else
@@ -831,22 +775,42 @@ public class Mesh : IDisposable
                 }
 
                 _indices.Bind();
-                
-                var buffer      = _indices.GetBuffer( false );
-                var indicesSpan = MemoryMarshal.CreateSpan( ref buffer.BackingArray()[ 0 ], buffer.BackingArray().Length );
 
-                fixed ( short* ptr = indicesSpan )
+//                var buffer      = _indices.GetBuffer( false );
+//                var indicesSpan = MemoryMarshal.CreateSpan( ref buffer.BackingArray()[ 0 ], buffer.BackingArray().Length );
+
+                var offsetInBytes = offset * sizeof( short ); // Calculate byte offset
+
+                // Debugging: Print index information
+                Logger.Debug( $"Offset: {offset}, Count: {count}, OffsetInBytes: {offsetInBytes}" );
+
+                var indexData = _indices.GetBuffer( false ).BackingArray(); // Get the index data
+
+                Logger.Debug( $"NumVertices: {_vertices.NumVertices}" );
+                Logger.Debug( $"NumIndices : {_indices.NumIndices}" );
+
+                var vertexData = _vertices.GetBuffer( false ).BackingArray();
+                Logger.Debug( $"Vertex Data Length: {vertexData.Length}" );
+
+                for ( int i = offset; i < ( offset + count ); i++ )
                 {
-                    GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr + offset );
-
-                    var error = GdxApi.Bindings.GetError();
-
-                    if ( error != ( int )ErrorCode.NoError )
+                    if ( ( i < 0 ) || ( i >= indexData.Length ) )
                     {
-                        Logger.Error($"DrawArrays Error: {error}");
+                        Logger.Debug( $"Index out of range: i={i}, indexData.Length={indexData.Length}" );
+
+                        break;
                     }
+
+                    Logger.Debug( $"Index[{i}]: {indexData[ i ]}" );
                 }
-                
+
+                GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ( void* )offsetInBytes );
+
+//                fixed ( short* ptr = &indicesSpan[ offset ] )
+//                {
+//                    GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr );
+//                }
+
                 _indices.Unbind();
             }
             else
@@ -858,13 +822,6 @@ public class Mesh : IDisposable
                 else
                 {
                     GdxApi.Bindings.DrawArrays( primitiveType, offset, count );
-                }
-
-                var error = GdxApi.Bindings.GetError();
-
-                if ( error != ( int )ErrorCode.NoError )
-                {
-                    Logger.Error($"DrawArrays Error: {error}");
                 }
             }
         }
@@ -1799,23 +1756,6 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Frees all resources associated with this Mesh
-    /// </summary>
-    public void Dispose()
-    {
-        if ( _meshes[ GdxApi.App ] != null )
-        {
-            _meshes[ GdxApi.App ]?.Remove( this );
-        }
-
-        _vertices.Dispose();
-        _instances?.Dispose();
-        _indices.Dispose();
-
-        GC.SuppressFinalize( this );
-    }
-
-    /// <summary>
     /// Creates a new vertex buffer object with the specified attributes.
     /// </summary>
     /// <param name="isStatic">Indicates whether the vertex buffer is static or dynamic.</param>
@@ -1872,7 +1812,12 @@ public class Mesh : IDisposable
     /// </summary>
     public ShortBuffer IndicesBuffer => _indices.GetBuffer( false );
 
-    public static string ManagedStatus
+    // ========================================================================
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static string RepoprtManagedStatus
     {
         get
         {
@@ -1888,5 +1833,24 @@ public class Mesh : IDisposable
 
             return builder.ToString();
         }
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Frees all resources associated with this Mesh
+    /// </summary>
+    public void Dispose()
+    {
+        if ( _meshes[ GdxApi.App ] != null )
+        {
+            _meshes[ GdxApi.App ]?.Remove( this );
+        }
+
+        _vertices.Dispose();
+        _instances?.Dispose();
+        _indices.Dispose();
+
+        GC.SuppressFinalize( this );
     }
 }

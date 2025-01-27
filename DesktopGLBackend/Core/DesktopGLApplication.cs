@@ -98,9 +98,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         _prefs.PutBool( "profiling", config.GLProfilingEnabled );
         _prefs.Flush();
 
-        Logger.Debug( "Using GLBindings" );
-        GdxApi.Bindings = new GLBindings();
-
         // Config.Title becomes the name of the ApplicationListener if it has no value at this point.
         Config       =   DesktopGLApplicationConfiguration.Copy( config );
         Config.Title ??= listener.GetType().Name;
@@ -109,7 +106,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // are instances of classes implementing IAudio, IFiles, and INet resprectively, and are used to
         // access LughSharp members 'Audio', 'Files', and 'Network' are instances of classes which extend
         // the aforementioned// classes, and are used in backend code only.
-        // Note: GdxApi.Graphics is set later, during window creation.
+        // Note: GdxApi.Graphics is set later, during window creation as each window that is created will
+        // have its own IGraphics instance.
         Audio     = CreateAudio( Config );
         Files     = new DesktopGLFiles();
         Network   = new DesktopGLNet( Config );
@@ -163,8 +161,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
         while ( _running && ( Windows.Count > 0 ) )
         {
-            Glfw.PollEvents();
-
             var haveWindowsRendered = false;
             var targetFramerate     = FR_UNINITIALISED;
 
@@ -275,6 +271,9 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
             }
 
             Audio?.Update();
+            
+            // Glfw.SwapBuffers is called in window.Update().
+            Glfw.PollEvents();
         }
 
         Logger.Debug( "Ending framework loop" );

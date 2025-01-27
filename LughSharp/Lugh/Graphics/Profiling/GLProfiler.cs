@@ -77,7 +77,8 @@ public class GLProfiler
             return;
         }
 
-        GdxApi.Graphics.GL = ( IGLBindings )BaseGLInterceptor;
+        //TODO:
+//        GdxApi.Graphics.GL = ( IGLBindings )BaseGLInterceptor;
 
         Enabled = true;
     }
@@ -92,7 +93,8 @@ public class GLProfiler
             return;
         }
 
-        GdxApi.Graphics.GL = _glBindingsStore;
+        //TODO:
+//        GdxApi.Graphics.GL = _glBindingsStore;
 
         Enabled = false;
     }
