@@ -28,12 +28,11 @@ using LughSharp.Lugh.Graphics.OpenGL;
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-/// A single vertex attribute defined by its <see cref="Usage"/>, its number
-/// of components and its shader alias. The Usage is used for uniquely identifying
-/// the vertex attribute from among its <see cref="VertexAttributes"/> siblings.
-/// The number of components  defines how many components the attribute has. The
-/// alias defines to which shader attribute this attribute should bind. The alias
-/// is used by a <see cref="Mesh"/> when drawing with a <see cref="ShaderProgram"/>.
+/// A single vertex attribute defined by its <see cref="Usage"/>, its number of components and
+/// its shader alias. The Usage is used for uniquely identifying the vertex attribute from among
+/// its <see cref="VertexAttributes"/> siblings. The number of components  defines how many
+/// components the attribute has. The alias defines to which shader attribute this attribute
+/// should bind. The alias is used by a <see cref="Mesh"/> when drawing with a <see cref="ShaderProgram"/>.
 /// The alias can be changed at any time.
 /// </summary>
 [PublicAPI]
@@ -158,19 +157,28 @@ public class VertexAttribute
     }
 
     /// <summary>
-    /// 
+    /// Creates a new VertexAttribute configured for position data with 3 components.
+    /// The alias corresponds to the default shader attribute for position.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// A VertexAttribute representing position data, with usage set to POSITION and alias set to "a_position".
+    /// </returns>
     public static VertexAttribute Position()
     {
         return new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 3, ShaderProgram.POSITION_ATTRIBUTE );
     }
 
     /// <summary>
-    /// 
+    /// Creates a VertexAttribute for texture coordinates.
     /// </summary>
-    /// <param name="unit"></param>
-    /// <returns></returns>
+    /// <param name="unit">
+    /// The texture coordinate unit index. Determines the target texture unit
+    /// for this attribute, commonly used in shaders.
+    /// </param>
+    /// <returns>
+    /// A new instance of the <see cref="VertexAttribute"/> class configured
+    /// for texture coordinates with 2 components.
+    /// </returns>
     public static VertexAttribute TexCoords( int unit )
     {
         return new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES,
@@ -180,18 +188,24 @@ public class VertexAttribute
     }
 
     /// <summary>
-    /// 
+    /// Creates a VertexAttribute configured for normals.
+    /// The attribute uses the NORMAL usage type, with 3 components, and a predefined alias.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// A new instance of <see cref="VertexAttribute"/> configured for normals.
+    /// </returns>
     public static VertexAttribute Normal()
     {
         return new VertexAttribute( ( int )VertexAttributes.Usage.NORMAL, 3, ShaderProgram.NORMAL_ATTRIBUTE );
     }
 
     /// <summary>
-    /// 
+    /// Creates and returns a predefined VertexAttribute configured for use with packed color data.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// A VertexAttribute with four components, associated with the color attribute in shaders,
+    /// using the unsigned byte OpenGL data type and normalized.
+    /// </returns>
     public static VertexAttribute ColorPacked()
     {
         return new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED,
@@ -202,9 +216,13 @@ public class VertexAttribute
     }
 
     /// <summary>
-    /// 
+    /// Creates and returns a new VertexAttribute instance configured for unpacked color data.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// A VertexAttribute instance with the usage set to color unpacked, 4 components,
+    /// type set to GL_FLOAT, not normalized, and with the alias set to the color attribute
+    /// used in shader programs.
+    /// </returns>
     public static VertexAttribute ColorUnpacked()
     {
         return new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_UNPACKED,
@@ -215,28 +233,43 @@ public class VertexAttribute
     }
 
     /// <summary>
-    /// 
+    /// Creates a vertex attribute for tangent data used in shaders. The tangent attribute
+    /// consists of three components and is associated with the shader attribute name defined
+    /// by <see cref="ShaderProgram.TANGENT_ATTRIBUTE"/>.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// A new vertex attribute representing tangent data, configured for use in a shader.
+    /// </returns>
     public static VertexAttribute Tangent()
     {
         return new VertexAttribute( ( int )VertexAttributes.Usage.TANGENT, 3, ShaderProgram.TANGENT_ATTRIBUTE );
     }
 
     /// <summary>
-    /// 
+    /// Creates a VertexAttribute configured as a binormal vector, typically used in 3D graphics
+    /// for normal mapping and related operations. The attribute uses 3 components and
+    /// is assigned the alias defined by the shader's binormal attribute name.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// A new instance of <see cref="VertexAttribute"/> with usage set to binormal,
+    /// 3 components, and the appropriate shader alias.
+    /// </returns>
     public static VertexAttribute Binormal()
     {
         return new VertexAttribute( ( int )VertexAttributes.Usage.BI_NORMAL, 3, ShaderProgram.BINORMAL_ATTRIBUTE );
     }
 
     /// <summary>
-    /// 
+    /// Creates a new VertexAttribute representing a bone weight.
+    /// The attribute is associated with a specific unit/index.
     /// </summary>
-    /// <param name="unit"></param>
-    /// <returns></returns>
+    /// <param name="unit">
+    /// The unit or index specifier for the bone weight attribute.
+    /// It determines which specific set of bone weights this attribute represents in the shader program.
+    /// </param>
+    /// <returns>
+    /// A new instance of <see cref="VertexAttribute"/> configured for bone weight usage.
+    /// </returns>
     public static VertexAttribute BoneWeight( int unit )
     {
         return new VertexAttribute( ( int )VertexAttributes.Usage.BONE_WEIGHT,
@@ -254,8 +287,10 @@ public class VertexAttribute
     }
 
     /// <summary>
+    /// Calculates the size in bytes of the vertex attribute based on its type and
+    /// the number of components.
     /// </summary>
-    /// <returns>How many bytes this attribute uses.</returns>
+    /// <returns>The size in bytes required by the vertex attribute.</returns>
     public int GetSizeInBytes()
     {
         return Type switch
@@ -287,19 +322,23 @@ public class VertexAttribute
     }
 
     /// <summary>
-    /// 
+    /// Checks whether the specified <see cref="VertexAttribute"/> object is equal to the current instance.
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
+    /// <param name="other">
+    /// The <see cref="VertexAttribute"/> object to compare with the current instance.
+    /// </param>
+    /// <returns>
+    /// true if the specified object is equal to the current instance; otherwise, false.
+    /// </returns>
     public bool Equals( VertexAttribute? other )
     {
         return ( other != null )
-            && ( Usage == other.Usage )
-            && ( NumComponents == other.NumComponents )
-            && ( Type == other.Type )
-            && ( Normalized == other.Normalized )
-            && Alias.Equals( other.Alias )
-            && ( Unit == other.Unit );
+               && ( Usage == other.Usage )
+               && ( NumComponents == other.NumComponents )
+               && ( Type == other.Type )
+               && ( Normalized == other.Normalized )
+               && Alias.Equals( other.Alias )
+               && ( Unit == other.Unit );
     }
 
     /// <inheritdoc />

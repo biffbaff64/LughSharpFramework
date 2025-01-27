@@ -277,13 +277,13 @@ GRAPHICS
     - DONE - DONE - Colors
     - DONE - DONE - Cubemap
     - DONE - DONE - FPSLogger
-    - DONE - IP   - GraphicsBackend
+    - DONE - DONE - GraphicsBackend
     - DONE - DONE - GStructs
     - DONE - DONE - ICubemapData
     - DONE - DONE - ICursor
-    - DONE - IP   - Mesh
-    - DONE - IP   - VertexAttribute
-    - DONE - IP   - VertexAttributes
+    - DONE - DONE - Mesh
+    - DONE - DONE - VertexAttribute
+    - DONE - DONE - VertexAttributes
 
 GRAPHICS/CAMERAS
 ----------------

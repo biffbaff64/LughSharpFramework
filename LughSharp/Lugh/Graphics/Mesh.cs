@@ -184,12 +184,6 @@ public class Mesh : IDisposable
     /// <param name="attributes">the <see cref="VertexAttributes"/>.</param>
     public Mesh( VertexDataType type, bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
-        Logger.Debug( $"type: {type}\n" +
-                      $"isStatic: {isStatic}\n" +
-                      $"maxVertices: {maxVertices}\n" +
-                      $"maxIndices: {maxIndices}\n" +
-                      $"attributes: {attributes.Size}" );
-
         switch ( type )
         {
             case VertexDataType.VertexBufferObject:
@@ -251,9 +245,9 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Disables instanced rendering for the mesh, releasing any instance data resources associated with it.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The current instance of the Mesh with instanced rendering disabled.</returns>
     public Mesh DisableInstancedRendering()
     {
         if ( IsInstanced )
@@ -776,40 +770,9 @@ public class Mesh : IDisposable
 
                 _indices.Bind();
 
-//                var buffer      = _indices.GetBuffer( false );
-//                var indicesSpan = MemoryMarshal.CreateSpan( ref buffer.BackingArray()[ 0 ], buffer.BackingArray().Length );
-
                 var offsetInBytes = offset * sizeof( short ); // Calculate byte offset
 
-                // Debugging: Print index information
-                Logger.Debug( $"Offset: {offset}, Count: {count}, OffsetInBytes: {offsetInBytes}" );
-
-                var indexData = _indices.GetBuffer( false ).BackingArray(); // Get the index data
-
-                Logger.Debug( $"NumVertices: {_vertices.NumVertices}" );
-                Logger.Debug( $"NumIndices : {_indices.NumIndices}" );
-
-                var vertexData = _vertices.GetBuffer( false ).BackingArray();
-                Logger.Debug( $"Vertex Data Length: {vertexData.Length}" );
-
-                for ( int i = offset; i < ( offset + count ); i++ )
-                {
-                    if ( ( i < 0 ) || ( i >= indexData.Length ) )
-                    {
-                        Logger.Debug( $"Index out of range: i={i}, indexData.Length={indexData.Length}" );
-
-                        break;
-                    }
-
-                    Logger.Debug( $"Index[{i}]: {indexData[ i ]}" );
-                }
-
                 GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ( void* )offsetInBytes );
-
-//                fixed ( short* ptr = &indicesSpan[ offset ] )
-//                {
-//                    GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr );
-//                }
 
                 _indices.Unbind();
             }
@@ -1300,6 +1263,11 @@ public class Mesh : IDisposable
         return CalculateRadius( center.X, center.Y, center.Z, 0, NumIndices, null );
     }
 
+    /// <summary>
+    /// Adds a managed mesh associated with the specified application.
+    /// </summary>
+    /// <param name="app">The application instance to associate the mesh with.</param>
+    /// <param name="mesh">The mesh to be added and managed.</param>
     private static void AddManagedMesh( IApplication app, Mesh mesh )
     {
         List< Mesh >? managedResources;
@@ -1407,6 +1375,12 @@ public class Mesh : IDisposable
         Transform( matrix, 0, NumVertices );
     }
 
+    /// <summary>
+    /// Applies a transformation to a subset of the vertex data using the specified matrix.
+    /// </summary>
+    /// <param name="matrix">The transformation matrix to be applied.</param>
+    /// <param name="start">The starting index of the vertices to be transformed.</param>
+    /// <param name="count">The number of vertices to be transformed.</param>
     protected void Transform( in Matrix4 matrix, in int start, in int count )
     {
         var posAttr = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
@@ -1518,11 +1492,12 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Transforms the UV coordinates of the vertices using the provided transformation matrix,
+    /// starting at the specified vertex and processing the given number of vertices.
     /// </summary>
-    /// <param name="matrix"></param>
-    /// <param name="start"></param>
-    /// <param name="count"></param>
+    /// <param name="matrix">The transformation matrix to apply to the UV coordinates.</param>
+    /// <param name="start">The index of the first vertex to transform.</param>
+    /// <param name="count">The number of vertices to transform.</param>
     protected void TransformUV( in Matrix3 matrix, int start, int count )
     {
         var posAttr = GetVertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES );
@@ -1815,8 +1790,9 @@ public class Mesh : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// 
-    /// </summary>
+    /// Provides a summary of the managed status of meshes within the application.
+    /// Returns a string that indicates the number of managed meshes for each application context.
+    /// </summary
     public static string RepoprtManagedStatus
     {
         get

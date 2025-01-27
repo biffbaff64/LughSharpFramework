@@ -28,6 +28,9 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public class VertexAttributes
 {
+    /// <summary>
+    /// Enumerates the various types of vertex attribute usage in a graphics application.
+    /// </summary>
     [PublicAPI, Flags]
     public enum Usage
     {

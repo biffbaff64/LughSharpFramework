@@ -28,7 +28,6 @@ using System.Runtime.InteropServices;
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Profiling;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;

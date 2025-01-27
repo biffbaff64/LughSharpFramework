@@ -75,7 +75,7 @@ public class VertexArray : IVertexData
     /// <summary>
     /// Returns the <see cref="VertexAttributes"/> as specified during construction.
     /// </summary>
-    public VertexAttributes Attributes { get; set; }
+    public VertexAttributes? Attributes { get; set; }
 
     /// <summary>
     /// Returns the underlying FloatBuffer and marks it as dirty, causing the buffer

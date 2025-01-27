@@ -24,6 +24,10 @@
 
 namespace LughSharp.Lugh.Graphics;
 
+/// <summary>
+/// Provides an abstraction layer for managing graphics backends, enabling support
+/// for multiple rendering technologies.
+/// </summary>
 [PublicAPI]
 public class GraphicsBackend
 {
@@ -67,13 +71,21 @@ public class GraphicsBackend
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Represents detailed information about a graphics backend, including the backend type
+    /// and any subcategories associated with it.
+    /// </summary>
     [PublicAPI, StructLayout( LayoutKind.Sequential )]
     public struct BackendInfo
     {
         public BackendType         Type        { get; set; }
         public OpenGLSubCategories SubCategory { get; set; }
     }
-    
+
+    /// <summary>
+    /// Gets or sets information about a graphics backend, including its type
+    /// and any associated subcategories.
+    /// </summary>
     public BackendInfo Data { get; set; }
 }
 

@@ -36,7 +36,6 @@ using System.Numerics;
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
-using LughSharp.Lugh.Graphics.Profiling;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -85,11 +84,6 @@ public unsafe partial class GLBindings : IGLBindings
     /// The null pointer, just like in C/C++.
     /// </summary>
     public readonly void* NULL = ( void* )0;
-
-    // ========================================================================
-
-    public bool             IsGLProfiling { get; set; } = false;
-    public IGLErrorListener ErrorListener { get; set; } = new GLLoggingListener();
 
     // ========================================================================
     // ========================================================================
@@ -11200,7 +11194,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         while ( error != IGL.GL_NO_ERROR )
         {
-            ErrorListener.OnError( error );
+//            ErrorListener.OnError( error );
 
             error = _glGetError();
         }

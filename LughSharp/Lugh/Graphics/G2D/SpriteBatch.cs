@@ -36,23 +36,26 @@ namespace LughSharp.Lugh.Graphics.G2D;
 
 // ============================================================================
 
+/// <summary>
+/// The SpriteBatch class is used for efficient, batched rendering of 2D sprites.
+/// It minimizes the number of draw calls by buffering sprite data and rendering all at once.
+/// </summary>
 [PublicAPI]
 public class SpriteBatch : IBatch
 {
-    public bool    BlendingDisabled  { get; set; }         = false;
-    public float   InvTexHeight      { get; set; }         = 0;
-    public float   InvTexWidth       { get; set; }         = 0;
     public int     BlendSrcFunc      { get; private set; } = ( int )BlendingFactor.SrcColor;
     public int     BlendDstFunc      { get; private set; } = ( int )BlendingFactor.DstColor;
     public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusSrcAlpha;
     public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusDstAlpha;
+    public bool    BlendingDisabled  { get; set; }         = false;
+    public float   InvTexHeight      { get; set; }         = 0;
+    public float   InvTexWidth       { get; set; }         = 0;
     public Matrix4 ProjectionMatrix  { get; }              = new();
     public Matrix4 TransformMatrix   { get; }              = new();
     public bool    IsDrawing         { get; set; }         = false;
-
-    public int  RenderCalls       { get; set; } = 0; // Number of render calls since the last call to Begin()
-    public long TotalRenderCalls  { get; set; } = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
-    public int  MaxSpritesInBatch { get; set; } = 0; // The maximum number of sprites rendered in one batch so far.
+    public int     RenderCalls       { get; set; }         = 0; // Number of render calls since the last call to Begin()
+    public long    TotalRenderCalls  { get; set; }         = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
+    public int     MaxSpritesInBatch { get; set; }         = 0; // The maximum number of sprites rendered in one batch so far.
 
     // ========================================================================
 
@@ -70,11 +73,11 @@ public class SpriteBatch : IBatch
     private const int INDICES_PER_SPRITE  = 6; // Number of indices per sprite (two triangles)
     private const int VERTEX_SIZE         = 8; // Number of floats per vertex (x, y, color, u, v)
     private const int MAX_VERTEX_INDEX    = 32767;
-    private const int MAX_SPRITES         = 8191; // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
+    private const int MAX_SPRITES         = 8191;
 
     private readonly Color _color = Graphics.Color.Red;
-    private          bool  _ownsShader;
 
+    private bool           _ownsShader;
     private Matrix4        _combinedMatrix = new();
     private Mesh?          _mesh;
     private ShaderProgram? _shader;
@@ -83,9 +86,7 @@ public class SpriteBatch : IBatch
     private ShaderProgram? _customShader          = null;
     private uint           _vao;
     private uint           _vbo;
-    private uint           _ibo;
-
-    private int _vertexSizeInFloats;
+    private int            _vertexSizeInFloats;
 
     // ========================================================================
 
@@ -110,6 +111,7 @@ public class SpriteBatch : IBatch
     /// </param>
     protected SpriteBatch( int size, ShaderProgram? defaultShader = null )
     {
+        // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
         if ( size > MAX_SPRITES )
         {
             throw new ArgumentException( $"Can't have more than 8191 sprites per batch: {size}" );
@@ -125,18 +127,19 @@ public class SpriteBatch : IBatch
     /// Takes away messy vertex attributes initialisation from the constructor, the GL side of
     /// which is done inside <see cref="SetupVertexAttributes"/>, 
     /// </summary>
-    /// <param name="size"></param>
-    /// <param name="defaultShader"></param>
+    /// <param name="size"> The max number of sprites in a single batch. Max of 8191. </param>
+    /// <param name="defaultShader">
+    /// The default shader to use. This is not owned by the SpriteBatch and must be disposed separately.
+    /// </param>
     private unsafe void Initialise( int size, ShaderProgram? defaultShader )
     {
         OpenGL.GLUtils.CheckOpenGLContext();
-        
+
         var vertexDataType = ( GdxApi.Bindings.GetOpenGLVersion().major >= 3 )
             ? Mesh.VertexDataType.VertexBufferObjectWithVAO
             : Mesh.VertexDataType.VertexArray;
 
-        // Initialize the mesh with vertex attributes for position,
-        // color, and texture coordinates
+        // Initialize the mesh with vertex attributes for position, color, and texture coordinates
         var va1 = new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 2, ShaderProgram.POSITION_ATTRIBUTE );
         var va2 = new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE );
         var va3 = new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2, $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" );
@@ -161,8 +164,8 @@ public class SpriteBatch : IBatch
 
         // ------------------------------------------------
         // Generate and bind the Vertex Buffer Object (VBO)
-        _vbo  = GdxApi.Bindings.GenBuffer();
-        GdxApi.Bindings.BindBuffer( ( int ) BufferTarget.ArrayBuffer, _vbo );
+        _vbo = GdxApi.Bindings.GenBuffer();
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
 
         CheckBufferBinding( _vbo );
 
@@ -187,6 +190,11 @@ public class SpriteBatch : IBatch
         }
     }
 
+    /// <summary>
+    /// Populates an index buffer with indices required to render a specified number of sprites.
+    /// </summary>
+    /// <param name="size">The number of sprites for which to generate indices.</param>
+    /// <param name="indices">An array to hold the generated indices for the specified number of sprites.</param>
     private static void PopulateIndexBuffer( int size, out short[] indices )
     {
         var len = size * INDICES_PER_SPRITE;
@@ -222,7 +230,7 @@ public class SpriteBatch : IBatch
         if ( ( program == null ) || ( _mesh == null ) ) return;
 
         program.Bind();
-        
+
         GdxApi.Bindings.BindVertexArray( _vao );
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
 
@@ -1019,11 +1027,6 @@ public class SpriteBatch : IBatch
                               float x3, float y3, float a3, float b3, float g3, float r3, float u3, float v3,
                               float x4, float y4, float a4, float b4, float g4, float r4, float u4, float v4 )
     {
-        Logger.Debug( $"VERTICES_PER_SPRITE * VERTEX_SIZE: {VERTICES_PER_SPRITE * VERTEX_SIZE}" );
-        Logger.Debug( $"Vertices.Length: {Vertices.Length}" );
-        Logger.Debug( $"Idx: {Idx}" );
-        Logger.Debug( $"( int )( Idx + ( long )( VERTICES_PER_SPRITE * VERTEX_SIZE ) ): {Idx + ( long )( VERTICES_PER_SPRITE * VERTEX_SIZE )}" );
-
         Vertices[ Idx ]     = x1; // X
         Vertices[ Idx + 1 ] = y1; // Y
         Vertices[ Idx + 2 ] = r1; // Store the unpacked red component
@@ -1088,33 +1091,6 @@ public class SpriteBatch : IBatch
 
     // ========================================================================
 
-    private bool _once = true;
-
-    private void DebugVertices()
-    {
-        if ( _once )
-        {
-            Logger.Debug( "Begin DebugVertices()" );
-
-            Logger.Debug( $"ColorPacked ABGR: {Color.ToFloatBitsABGR():F1}" );
-            Logger.Debug( $"ColorPacked RGBA: {Color.ToFloatBitsRGBA():F1}" );
-            Logger.Debug( $"FloatToHexString ABGR: {NumberUtils.FloatToHexString( Color.ToFloatBitsABGR() )}" );
-            Logger.Debug( $"FloatToHexString RGBA: {NumberUtils.FloatToHexString( Color.ToFloatBitsRGBA() )}" );
-            Logger.Debug( $"Color: {Color.RGBAToString()}" );
-
-            for ( var i = 0; i < ( VERTICES_PER_SPRITE * VERTEX_SIZE ); i++ )
-            {
-                Logger.Debug( $"Vertices[{i}]: {Vertices[ i ]}" );
-            }
-
-            Logger.Debug( "End DebugVertices()" );
-
-            _once = false;
-        }
-    }
-
-    // ========================================================================
-
     /// <summary>
     /// Flushes the current batch, sending all rendered vertices to the GPU for drawing.
     /// This method handles binding the appropriate Vertex Buffer Object (VBO), Vertex Array Object (VAO),
@@ -1174,7 +1150,7 @@ public class SpriteBatch : IBatch
             fixed ( float* ptr = Vertices )
             {
                 GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
-                                            Vertices.Length * sizeof( float ),
+                                            Idx * sizeof( float ),
                                             ( void* )ptr,
                                             ( int )BufferUsageHint.DynamicDraw );
             }
@@ -1190,6 +1166,7 @@ public class SpriteBatch : IBatch
         GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
 
+        Array.Clear( Vertices, 0, Idx );
         Idx = 0;
     }
 
@@ -1488,10 +1465,36 @@ public class SpriteBatch : IBatch
     {
         var error = GdxApi.Bindings.GetError();
 
-        if ( error != ( int ) ErrorCode.NoError )
+        if ( error != ( int )ErrorCode.NoError )
         {
             throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
         }
     }
-}
 
+    // ========================================================================
+
+    private bool _once = true;
+
+    private void DebugVertices()
+    {
+        if ( _once )
+        {
+            Logger.Debug( "Begin DebugVertices()" );
+
+            Logger.Debug( $"ColorPacked ABGR: {Color.ToFloatBitsABGR():F1}" );
+            Logger.Debug( $"ColorPacked RGBA: {Color.ToFloatBitsRGBA():F1}" );
+            Logger.Debug( $"FloatToHexString ABGR: {NumberUtils.FloatToHexString( Color.ToFloatBitsABGR() )}" );
+            Logger.Debug( $"FloatToHexString RGBA: {NumberUtils.FloatToHexString( Color.ToFloatBitsRGBA() )}" );
+            Logger.Debug( $"Color: {Color.RGBAToString()}" );
+
+            for ( var i = 0; i < ( VERTICES_PER_SPRITE * VERTEX_SIZE ); i++ )
+            {
+                Logger.Debug( $"Vertices[{i}]: {Vertices[ i ]}" );
+            }
+
+            Logger.Debug( "End DebugVertices()" );
+
+            _once = false;
+        }
+    }
+}

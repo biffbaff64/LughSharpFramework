@@ -107,21 +107,16 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         var attribs = BuildVertexAttributes( hasNormals, hasColors, numTexCoords );
 
         _mesh       = new Mesh( false, maxVertices, 0, attribs );
-        _vertices   = new float[ maxVertices * ( _mesh.VertexAttributes.VertexSize / 4 ) ];
+        _vertices   = new float[ maxVertices * ( _mesh.VertexAttributes!.VertexSize / 4 ) ];
         _vertexSize = _mesh.VertexAttributes.VertexSize / 4;
 
         var attribute = _mesh.GetVertexAttribute( ( int )VertexAttributes.Usage.NORMAL );
 
-        _normalOffset = attribute != null ? attribute.Offset / 4 : 0;
-
-        attribute = _mesh.GetVertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED );
-
-        _colorOffset = attribute != null ? attribute.Offset / 4 : 0;
-
-        attribute = _mesh.GetVertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES );
-
-        _texCoordOffset = attribute != null ? attribute.Offset / 4 : 0;
-
+        _normalOffset       = attribute != null ? attribute.Offset / 4 : 0;
+        attribute           = _mesh.GetVertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED );
+        _colorOffset        = attribute != null ? attribute.Offset / 4 : 0;
+        attribute           = _mesh.GetVertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES );
+        _texCoordOffset     = attribute != null ? attribute.Offset / 4 : 0;
         _shaderUniformNames = new string[ numTexCoords ];
 
         for ( var i = 0; i < numTexCoords; i++ )
