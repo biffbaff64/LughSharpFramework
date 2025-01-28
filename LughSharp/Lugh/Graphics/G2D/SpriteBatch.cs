@@ -220,19 +220,19 @@ public class SpriteBatch : IBatch
 
         // --------------------------------------------------------------------
 
-        const int stride         = VERTEX_SIZE * sizeof( float );
-        const int positionOffset = 0;
-        const int colorOffset    = 2 * sizeof( float );
-        const int texCoordOffset = 6 * sizeof( float );
-
-        // --------------------------------------------------------------------
-
         if ( ( program == null ) || ( _mesh == null ) ) return;
 
         program.Bind();
 
         GdxApi.Bindings.BindVertexArray( _vao );
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+
+        const int stride         = VERTEX_SIZE * sizeof( float );
+        const int positionOffset = 0;
+        const int colorOffset    = 2 * sizeof( float );
+        const int texCoordOffset = 6 * sizeof( float );
+
+        // --------------------------------------------------------------------
 
         // Position Attribute
         var positionLocation = program.GetAttributeLocation( "a_position" );
@@ -312,6 +312,8 @@ public class SpriteBatch : IBatch
 
         if ( Idx > 0 )
         {
+            // Flush this batch to ensure all pending drawing operations
+            // are completed before ending the batch
             Flush();
         }
 
@@ -329,36 +331,101 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// Sets the Color for this SpriteBatch to the supplied Color.
+    /// Flushes the current batch, sending all rendered vertices to the GPU for drawing.
+    /// This method handles binding the appropriate Vertex Buffer Object (VBO), Vertex Array Object (VAO),
+    /// textures, shaders, and performs the actual rendering of the accumulated sprites.
     /// </summary>
-    public void SetColor( Color tint ) => SetColor( tint.R, tint.G, tint.B, tint.A );
-
-    /// <summary>
-    /// Sets the Color for this SpriteBatch using the supplied
-    /// RGBA Color components.
-    /// </summary>
-    /// <param name="r"> Red. </param>
-    /// <param name="g"> Green. </param>
-    /// <param name="b"> Blue. </param>
-    /// <param name="a"> Alpha. </param>
-    public void SetColor( float r, float g, float b, float a ) => _color.Set( r, g, b, a );
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public Color Color
+    /// <exception cref="GdxRuntimeException">
+    /// Thrown if there is no OpenGL context available on the current thread, if
+    /// the index buffer (`Idx`) is less than zero, or if certain rendering conditions are not met.
+    /// </exception>
+    public unsafe void Flush()
     {
-        get => _color;
-        set => SetColor( value.R, value.G, value.B, value.A );
-    }
+        OpenGL.GLUtils.CheckOpenGLContext();
 
-    /// <summary>
-    /// This batch's Color packed into a float ABGR format.
-    /// </summary>
-    public float ColorPackedABGR
-    {
-        get => Color.ToFloatBitsABGR( Color.A, Color.B, Color.G, Color.R );
-        set { }
+        if ( Idx <= 0 )
+        {
+            Logger.Error( $"Flush cancelled: Idx: {Idx}" );
+            
+            // Ensure that Idx is zero
+            Idx = 0;
+
+            return;
+        }
+
+        RenderCalls++;
+        TotalRenderCalls++;
+
+        var spritesInBatch = ( int )( Idx / ( long )( VERTICES_PER_SPRITE * VERTEX_SIZE ) );
+
+        MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
+
+        if ( LastTexture == null )
+        {
+            Idx = 0;
+            _nullTextureCount++;
+
+            Logger.Error( $"Attempt to flush with null texture. This batch will be skipped. " +
+                          $"Null texture count: {_nullTextureCount}. " +
+                          $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
+
+            return;
+        }
+
+        GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 );
+        LastTexture.Bind();
+
+        SetupVertexAttributes( _customShader ?? _shader );
+
+        var tmpInt = new int[ 1 ];
+
+        fixed ( int* ptr = tmpInt )
+        {
+            GdxApi.Bindings.GetIntegerv( ( int )BufferBindings.ArrayBufferBinding, ptr );
+
+            if ( *ptr != _vbo )
+            {
+                GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+            }
+        }
+
+        fixed ( int* ptr = tmpInt )
+        {
+            GdxApi.Bindings.GetIntegerv( ( int )BufferBindings.VertexArrayBinding, ptr );
+
+            if ( *ptr != _vao )
+            {
+                GdxApi.Bindings.BindVertexArray( _vao );
+            }
+        }
+
+        // Only allocate initial storage once
+        if ( Vertices.Length > 0 )
+        {
+            _mesh?.SetVertices( Vertices );
+
+            // Pin the Vertices array
+            fixed ( float* ptr = Vertices )
+            {
+                GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
+                                            Idx * sizeof( float ),
+                                            ( void* )ptr,
+                                            ( int )BufferUsageHint.DynamicDraw );
+            }
+        }
+
+        fixed ( float* ptr = Vertices )
+        {
+            GdxApi.Bindings.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ptr );
+        }
+
+        _mesh?.Render( _customShader ?? _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
+
+        GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
+
+        Array.Clear( Vertices, 0, Idx );
+        Idx = 0;
     }
 
     // ========================================================================
@@ -661,36 +728,26 @@ public class SpriteBatch : IBatch
         {
             SwitchTexture( texture );
         }
-        else
+        else if ( remainingVertices == 0 )
         {
-            remainingVertices -= Idx;
+            Flush();
+            remainingVertices = verticesLength;
+        }
 
-            if ( remainingVertices == 0 )
+        while (count > 0)
+        {
+            var copyCount = Math.Min(remainingVertices, count);
+            Array.Copy(spriteVertices, offset, Vertices, Idx, copyCount);
+
+            Idx    += copyCount;
+            count  -= copyCount;
+            offset += copyCount;
+
+            if (count > 0)
             {
                 Flush();
                 remainingVertices = verticesLength;
             }
-        }
-
-        var copyCount = Math.Min( remainingVertices, count );
-
-        Array.Copy( spriteVertices, offset, Vertices, Idx, copyCount );
-
-        Idx   += copyCount;
-        count -= copyCount;
-
-        while ( count > 0 )
-        {
-            offset += copyCount;
-
-            Flush();
-
-            copyCount = Math.Min( verticesLength, count );
-
-            Array.Copy( spriteVertices, offset, Vertices, 0, copyCount );
-
-            Idx   += copyCount;
-            count -= copyCount;
         }
     }
 
@@ -1022,6 +1079,41 @@ public class SpriteBatch : IBatch
 
     // ========================================================================
 
+    /// <summary>
+    /// Sets the vertex attributes for a quad, including positional, color, and texture coordinate data.
+    /// </summary>
+    /// <param name="x1">The X-coordinate of the first vertex.</param>
+    /// <param name="y1">The Y-coordinate of the first vertex.</param>
+    /// <param name="a1">The alpha component of the color for the first vertex.</param>
+    /// <param name="b1">The blue component of the color for the first vertex.</param>
+    /// <param name="g1">The green component of the color for the first vertex.</param>
+    /// <param name="r1">The red component of the color for the first vertex.</param>
+    /// <param name="u1">The U texture coordinate for the first vertex.</param>
+    /// <param name="v1">The V texture coordinate for the first vertex.</param>
+    /// <param name="x2">The X-coordinate of the second vertex.</param>
+    /// <param name="y2">The Y-coordinate of the second vertex.</param>
+    /// <param name="a2">The alpha component of the color for the second vertex.</param>
+    /// <param name="b2">The blue component of the color for the second vertex.</param>
+    /// <param name="g2">The green component of the color for the second vertex.</param>
+    /// <param name="r2">The red component of the color for the second vertex.</param>
+    /// <param name="u2">The U texture coordinate for the second vertex.</param>
+    /// <param name="v2">The V texture coordinate for the second vertex.</param>
+    /// <param name="x3">The X-coordinate of the third vertex.</param>
+    /// <param name="y3">The Y-coordinate of the third vertex.</param>
+    /// <param name="a3">The alpha component of the color for the third vertex.</param>
+    /// <param name="b3">The blue component of the color for the third vertex.</param>
+    /// <param name="g3">The green component of the color for the third vertex.</param>
+    /// <param name="r3">The red component of the color for the third vertex.</param>
+    /// <param name="u3">The U texture coordinate for the third vertex.</param>
+    /// <param name="v3">The V texture coordinate for the third vertex.</param>
+    /// <param name="x4">The X-coordinate of the fourth vertex.</param>
+    /// <param name="y4">The Y-coordinate of the fourth vertex.</param>
+    /// <param name="a4">The alpha component of the color for the fourth vertex.</param>
+    /// <param name="b4">The blue component of the color for the fourth vertex.</param>
+    /// <param name="g4">The green component of the color for the fourth vertex.</param>
+    /// <param name="r4">The red component of the color for the fourth vertex.</param>
+    /// <param name="u4">The U texture coordinate for the fourth vertex.</param>
+    /// <param name="v4">The V texture coordinate for the fourth vertex.</param>
     private void SetVertices( float x1, float y1, float a1, float b1, float g1, float r1, float u1, float v1,
                               float x2, float y2, float a2, float b2, float g2, float r2, float u2, float v2,
                               float x3, float y3, float a3, float b3, float g3, float r3, float u3, float v3,
@@ -1066,6 +1158,51 @@ public class SpriteBatch : IBatch
         Idx += ( VERTICES_PER_SPRITE * VERTEX_SIZE );
     }
 
+    // ========================================================================
+    
+    #region Color handling
+    
+    /// <summary>
+    /// Represents the current drawing color for the SpriteBatch.
+    /// This property is used to tint textures and shapes drawn by the SpriteBatch.
+    /// </summary>
+    public Color Color
+    {
+        get => _color;
+        set => SetColor( value.R, value.G, value.B, value.A );
+    }
+
+    /// <summary>
+    /// Sets the Color for this SpriteBatch to the supplied Color.
+    /// </summary>
+    public void SetColor( Color tint ) => SetColor( tint.R, tint.G, tint.B, tint.A );
+
+    /// <summary>
+    /// Sets the Color for this SpriteBatch using the supplied RGBA Color components.
+    /// </summary>
+    /// <param name="r"> Red. </param>
+    /// <param name="g"> Green. </param>
+    /// <param name="b"> Blue. </param>
+    /// <param name="a"> Alpha. </param>
+    public void SetColor( float r, float g, float b, float a ) => _color.Set( r, g, b, a );
+
+    /// <summary>
+    /// This batch's Color packed into a float ABGR format.
+    /// </summary>
+    public float ColorPackedABGR
+    {
+        get => Color.ToFloatBitsABGR( Color.A, Color.B, Color.G, Color.R );
+        set { }
+    }
+
+    /// <summary>
+    /// Unpacks a packed color value into its red, green, blue, and alpha components.
+    /// </summary>
+    /// <param name="packedColor">The packed color value in ABGR format as a float.</param>
+    /// <param name="r">The output red component, normalized between 0.0 and 1.0.</param>
+    /// <param name="g">The output green component, normalized between 0.0 and 1.0.</param>
+    /// <param name="b">The output blue component, normalized between 0.0 and 1.0.</param>
+    /// <param name="a">The output alpha component, normalized between 0.0 and 1.0.</param>
     private static void UnpackColor( float packedColor, out float r, out float g, out float b, out float a )
     {
         if ( float.IsNaN( packedColor ) || float.IsInfinity( packedColor ) )
@@ -1089,85 +1226,25 @@ public class SpriteBatch : IBatch
         a = ( ( color >> 24 ) & 0xFFu ) / 255.0f;
     }
 
+    #endregion Color handling
+
     // ========================================================================
 
     /// <summary>
-    /// Flushes the current batch, sending all rendered vertices to the GPU for drawing.
-    /// This method handles binding the appropriate Vertex Buffer Object (VBO), Vertex Array Object (VAO),
-    /// textures, shaders, and performs the actual rendering of the accumulated sprites.
+    /// Enables blending for textures.
     /// </summary>
-    /// <exception cref="GdxRuntimeException">
-    /// Thrown if there is no OpenGL context available on the current thread, if
-    /// the index buffer (`Idx`) is less than zero, or if certain rendering conditions are not met.
-    /// </exception>
-    public unsafe void Flush()
+    public void EnableBlending()
     {
-        OpenGL.GLUtils.CheckOpenGLContext();
+        if ( !BlendingDisabled ) return;
 
-        if ( ( Idx == 0 ) || ( _mesh == null ) )
+        if ( Idx > 0 )
         {
-            // Ensure that Idx is zero, to cover the case where checking _mesh gets here.
-            Idx = 0;
-
-            return;
+            // Necessary call to Flush() to ensure blending
+            // state changes are handled correctly
+            Flush();
         }
 
-        if ( Idx < 0 ) throw new GdxRuntimeException( "Idx is less than zero!" );
-
-        RenderCalls++;
-        TotalRenderCalls++;
-
-        var spritesInBatch = ( int )( Idx / ( long )( VERTICES_PER_SPRITE * VERTEX_SIZE ) );
-
-        if ( spritesInBatch > MaxSpritesInBatch ) MaxSpritesInBatch = spritesInBatch;
-
-        if ( LastTexture == null )
-        {
-            Idx = 0;
-            _nullTextureCount++;
-
-            Logger.Error( $"Attempt to flush with null texture. This batch will be skipped. " +
-                          $"Null texture count: {_nullTextureCount}. " +
-                          $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
-
-            return;
-        }
-
-        GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 );
-        LastTexture.Bind();
-
-        SetupVertexAttributes( _customShader ?? _shader );
-
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-        GdxApi.Bindings.BindVertexArray( _vao );
-
-        // Only allocate initial storage once
-        if ( Vertices.Length > 0 )
-        {
-            _mesh.SetVertices( Vertices );
-
-            // Pin the Vertices array
-            fixed ( float* ptr = Vertices )
-            {
-                GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
-                                            Idx * sizeof( float ),
-                                            ( void* )ptr,
-                                            ( int )BufferUsageHint.DynamicDraw );
-            }
-        }
-
-        fixed ( float* ptr = Vertices )
-        {
-            GdxApi.Bindings.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ptr );
-        }
-
-        _mesh.Render( _customShader ?? _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
-
-        GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
-
-        Array.Clear( Vertices, 0, Idx );
-        Idx = 0;
+        BlendingDisabled = false;
     }
 
     /// <summary>
@@ -1177,20 +1254,20 @@ public class SpriteBatch : IBatch
     {
         if ( BlendingDisabled ) return;
 
-        Flush();
+        if ( Idx > 0 )
+        {
+            // Necessary call to Flush() to ensure blending
+            // state changes are handled correctly
+            Flush();
+        }
+        
         BlendingDisabled = true;
     }
 
     /// <summary>
-    /// Enables blending for textures.
+    /// Convenience property. Returns TRUE if blending is not disabled.
     /// </summary>
-    public void EnableBlending()
-    {
-        if ( !BlendingDisabled ) return;
-
-        Flush();
-        BlendingDisabled = false;
-    }
+    public bool IsBlendingEnabled => !BlendingDisabled;
 
     /// <summary>
     /// Sets the Blend Functions to use when rendering. The provided
@@ -1221,7 +1298,12 @@ public class SpriteBatch : IBatch
             return;
         }
 
-        Flush();
+        if ( Idx > 0 )
+        {
+            // Necessary call to Flush() to ensure blending
+            // function changes are handled correctly
+            Flush();
+        }
 
         BlendSrcFunc      = srcFuncColor;
         BlendDstFunc      = dstFuncColor;
@@ -1229,20 +1311,36 @@ public class SpriteBatch : IBatch
         BlendDstFuncAlpha = dstFuncAlpha;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Sets the projection matrix used for drawing.
+    /// </summary>
+    /// <param name="projection">The new projection matrix to be applied.</param>
     public void SetProjectionMatrix( Matrix4 projection )
     {
-        if ( IsDrawing ) Flush();
+        if ( IsDrawing && ( Idx > 0 ) )
+        {
+            // Necessary call to Flush() to ensure projection
+            // matrix changes are handled correctly
+            Flush();
+        }
 
         ProjectionMatrix.Set( projection );
 
         if ( IsDrawing ) SetupMatrices();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Sets the transformation matrix to be applied to the SpriteBatch during the rendering process.
+    /// </summary>
+    /// <param name="transform">A Matrix4 representing the new transformation to be applied.</param>
     public virtual void SetTransformMatrix( Matrix4 transform )
     {
-        if ( IsDrawing ) Flush();
+        if ( IsDrawing && ( Idx > 0 ) )
+        {
+            // Necessary call to Flush() to ensure transformation
+            // matrix changes are handled correctly
+            Flush();
+        }
 
         TransformMatrix.Set( transform );
 
@@ -1250,14 +1348,17 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// Shader property for this SpriteBatch.
+    /// Gets or sets the custom shader used by the SpriteBatch for rendering.
+    /// When a custom shader is set, it replaces the default shader provided by the SpriteBatch.
+    /// If the custom shader is null, the SpriteBatch falls back to using its default shader.
+    /// Modifying this property while the SpriteBatch is actively drawing will flush the current batch.
     /// </summary>
     public ShaderProgram? Shader
     {
         get => _customShader ?? _shader;
         set
         {
-            if ( IsDrawing ) Flush();
+            if ( IsDrawing && ( Idx > 0 ) ) Flush();
 
             _customShader = value;
 
@@ -1275,30 +1376,6 @@ public class SpriteBatch : IBatch
                 SetupMatrices();
             }
         }
-    }
-
-    public static ShaderProgram CreateMinimalShader()
-    {
-        const string VERTEX_SHADER = $"layout (location = 0) in vec2 {ShaderProgram.TEXCOORD_ATTRIBUTE};\n" +
-                                     $"layout (location = 1) in vec4 {ShaderProgram.COLOR_ATTRIBUTE};\n" +
-                                     "\n" +
-                                     "out vec4 v_color;\n" +
-                                     "\n" +
-                                     "void main()\n" +
-                                     "{\n" +
-                                     "    gl_Position = vec4(a_position, 0.0, 1.0);\n" +
-                                     $"    v_color = {ShaderProgram.COLOR_ATTRIBUTE};\n" +
-                                     "}";
-
-        const string FRAGMENT_SHADER = "in vec4 v_color;\n" +
-                                       "out vec4 frag_color;\n" +
-                                       "\n" +
-                                       "void main()\n" +
-                                       "{\n" +
-                                       "    frag_color = v_color;\n" +
-                                       "}";
-
-        return new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
     }
 
     /// <summary>
@@ -1364,13 +1441,20 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
+    /// Switches the current texture to the specified texture and updates internal properties
+    /// related to the texture dimensions. Also flushes any pending batched render operations.
     /// </summary>
-    /// <param name="texture"></param>
+    /// <param name="texture">The new texture to switch to. If null, no action is taken.</param>
     protected void SwitchTexture( Texture? texture )
     {
         if ( texture == null ) return;
 
-        Flush();
+        if ( Idx > 0 )
+        {
+            // Necessary call to Flush() to ensure texture
+            // switching is handled correctly
+            Flush();
+        }
 
         LastTexture            = texture;
         _lastSuccessfulTexture = texture;
@@ -1406,11 +1490,6 @@ public class SpriteBatch : IBatch
     }
 
     // ========================================================================
-
-    /// <summary>
-    /// Convenience property. Returns TRUE if blending is not disabled.
-    /// </summary>
-    public bool IsBlendingEnabled => !BlendingDisabled;
 
     /// <summary>
     /// Performs validation checks for Draw methods.
@@ -1457,44 +1536,5 @@ public class SpriteBatch : IBatch
         }
     }
 
-    /// <summary>
-    /// </summary>
-    /// <param name="stage"></param>
-    /// <exception cref="InvalidOperationException"></exception>
-    private void CheckGLError( string stage )
-    {
-        var error = GdxApi.Bindings.GetError();
-
-        if ( error != ( int )ErrorCode.NoError )
-        {
-            throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
-        }
-    }
-
     // ========================================================================
-
-    private bool _once = true;
-
-    private void DebugVertices()
-    {
-        if ( _once )
-        {
-            Logger.Debug( "Begin DebugVertices()" );
-
-            Logger.Debug( $"ColorPacked ABGR: {Color.ToFloatBitsABGR():F1}" );
-            Logger.Debug( $"ColorPacked RGBA: {Color.ToFloatBitsRGBA():F1}" );
-            Logger.Debug( $"FloatToHexString ABGR: {NumberUtils.FloatToHexString( Color.ToFloatBitsABGR() )}" );
-            Logger.Debug( $"FloatToHexString RGBA: {NumberUtils.FloatToHexString( Color.ToFloatBitsRGBA() )}" );
-            Logger.Debug( $"Color: {Color.RGBAToString()}" );
-
-            for ( var i = 0; i < ( VERTICES_PER_SPRITE * VERTEX_SIZE ); i++ )
-            {
-                Logger.Debug( $"Vertices[{i}]: {Vertices[ i ]}" );
-            }
-
-            Logger.Debug( "End DebugVertices()" );
-
-            _once = false;
-        }
-    }
 }

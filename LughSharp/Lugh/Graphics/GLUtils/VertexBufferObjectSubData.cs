@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -42,8 +41,8 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI]
 public class VertexBufferObjectSubData : IVertexData
 {
-    public ByteBuffer        ByteBuffer { get; set; }
-    public VertexAttributes? Attributes { get; set; }
+    public ByteBuffer       ByteBuffer { get; set; }
+    public VertexAttributes Attributes { get; set; }
 
     private readonly FloatBuffer _buffer;
     private readonly bool        _isDirect;
@@ -55,7 +54,7 @@ public class VertexBufferObjectSubData : IVertexData
     private bool _isStatic;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Constructs a new interleaved VertexBufferObject.
     /// </summary>
@@ -78,7 +77,7 @@ public class VertexBufferObjectSubData : IVertexData
         _isStatic  = isStatic;
         Attributes = attributes;
 
-        ByteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numVertices, false );
+        ByteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numVertices );
         _isDirect  = true;
 
         _usage  = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
@@ -185,7 +184,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// <param name="locations"> array containing the attribute locations.</param>
     public unsafe void Bind( ShaderProgram shader, int[]? locations = null )
     {
-        GdxApi.Bindings.BindBuffer( IGL.GL_ARRAY_BUFFER, ( uint ) _bufferHandle );
+        GdxApi.Bindings.BindBuffer( IGL.GL_ARRAY_BUFFER, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -295,7 +294,7 @@ public class VertexBufferObjectSubData : IVertexData
         GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, ByteBuffer.Capacity, null!, _usage );
         GdxApi.Bindings.BindBuffer( IGL.GL_ARRAY_BUFFER, 0 );
 
-        return ( int ) result;
+        return ( int )result;
     }
 
     private unsafe void BufferChanged()
@@ -327,7 +326,7 @@ public class VertexBufferObjectSubData : IVertexData
     public void Dispose()
     {
         GdxApi.Bindings.BindBuffer( IGL.GL_ARRAY_BUFFER, 0 );
-        GdxApi.Bindings.DeleteBuffers( ( uint ) _bufferHandle );
+        GdxApi.Bindings.DeleteBuffers( ( uint )_bufferHandle );
         _bufferHandle = 0;
     }
 }

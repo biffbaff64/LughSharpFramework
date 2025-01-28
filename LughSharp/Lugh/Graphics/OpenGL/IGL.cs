@@ -514,6 +514,10 @@ public interface IGL
     const int GL_ELEMENT_ARRAY_BUFFER                               = 0x8893;
     const int GL_ARRAY_BUFFER_BINDING                               = 0x8894;
     const int GL_ELEMENT_ARRAY_BUFFER_BINDING                       = 0x8895;
+    const int GL_VERTEX_ARRAY_BUFFER_BINDING                        = 0x8896;
+    const int GL_NORMAL_ARRAY_BUFFER_BINDING                        = 0x8897;
+    const int GL_COLOR_ARRAY_BUFFER_BINDING                         = 0x8898;
+    const int GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING                 = 0x889A;
     const int GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING                 = 0x889F;
     const int GL_STREAM_DRAW                                        = 0x88E0;
     const int GL_STATIC_DRAW                                        = 0x88E4;

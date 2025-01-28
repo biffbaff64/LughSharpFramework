@@ -92,7 +92,25 @@ public static class GLUtils
     }
 
     /// <summary>
-    /// 
+    /// Checks for OpenGL errors after a given stage of rendering or processing.
+    /// Throws an <see cref="InvalidOperationException"/> if an OpenGL error is detected.
+    /// </summary>
+    /// <param name="stage">The description of the stage at which the error occurred.</param>
+    /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>
+    public static void CheckGLError( string stage )
+    {
+        var error = GdxApi.Bindings.GetError();
+
+        if ( error != ( int )ErrorCode.NoError )
+        {
+            throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
+        }
+    }
+
+    /// <summary>
+    /// Sets up OpenGL's debug message callback and enables debug output. This helps capture and log
+    /// OpenGL debug messages during runtime, providing details about issues such as errors, warnings,
+    /// or performance bottlenecks in OpenGL operations.
     /// </summary>
     public static void GLDebug()
     {
@@ -113,10 +131,10 @@ public static class GLUtils
                               $"Severity: 0x{severity:X}\n" +
                               $"Message : {msg}" );
 
-//                if ( severity == DebugSeverity.DEBUG_SEVERITY_HIGH )
-//                {
-//                    System.Diagnostics.Debugger.Break();
-//                }
+                if ( severity == DebugSeverity.DEBUG_SEVERITY_HIGH )
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
             } );
 
             GdxApi.Bindings.DebugMessageCallback( debugProc, null );

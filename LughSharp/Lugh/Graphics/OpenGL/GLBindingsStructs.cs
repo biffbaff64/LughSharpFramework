@@ -22,41 +22,51 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
+using GLenum = System.Int32;
+using GLfloat = System.Single;
+using GLint = System.Int32;
+using GLsizei = System.Int32;
+using GLbitfield = System.UInt32;
+using GLdouble = System.Double;
+using GLuint = System.UInt32;
+using GLboolean = System.Boolean;
+using GLubyte = System.Byte;
+using GLsizeiptr = System.Int32;
+using GLintptr = System.Int32;
+using GLshort = System.Int16;
+using GLbyte = System.SByte;
+using GLushort = System.UInt16;
+using GLchar = System.Byte;
+using GLuint64 = System.UInt64;
+using GLint64 = System.Int64;
 
-[PublicAPI]
-public enum BufferTarget : int
+namespace LughSharp.Lugh.Graphics.OpenGL;
+
+public partial class GLBindings
 {
-    ArrayBuffer        = IGL.GL_ARRAY_BUFFER,
-    ElementArrayBuffer = IGL.GL_ELEMENT_ARRAY_BUFFER,
+    /// <summary>
+    /// 
+    /// </summary>
+    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    public struct DrawElementsIndirectCommand
+    {
+        public GLuint Count;
+        public GLuint PrimCount;
+        public GLuint FirstIndex;
+        public GLuint BaseVertex;
+        public GLuint BaseInstance;
+    }
 
-    // ... other buffer targets
+    /// <summary>
+    /// 
+    /// </summary>
+    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    public struct DrawArraysIndirectCommand
+    {
+        public GLuint Count         { get; set; }
+        public GLuint InstanceCount { get; set; }
+        public GLuint First         { get; set; }
+        public GLuint BaseInstance  { get; set; }
+    }
 }
 
-[PublicAPI]
-public enum BufferUsageHint : int
-{
-    StaticDraw  = IGL.GL_STATIC_DRAW,
-    DynamicDraw = IGL.GL_DYNAMIC_DRAW,
-    StreamDraw  = IGL.GL_STREAM_DRAW,
-
-    // ... other usage hints
-}
-
-[PublicAPI]
-public enum BufferBindings : int
-{
-    ArrayBuffer                    = IGL.GL_ARRAY_BUFFER,
-    ArrayBufferBinding             = IGL.GL_ARRAY_BUFFER_BINDING,
-    BufferSize                     = IGL.GL_BUFFER_SIZE,
-    BufferUsage                    = IGL.GL_BUFFER_USAGE,
-    ColorArrayBufferBinding        = IGL.GL_COLOR_ARRAY_BUFFER_BINDING,
-    DynamicDraw                    = IGL.GL_DYNAMIC_DRAW,
-    ElementArrayBuffer             = IGL.GL_ELEMENT_ARRAY_BUFFER,
-    ElementArrayBufferBinding      = IGL.GL_ELEMENT_ARRAY_BUFFER_BINDING,
-    NormalArrayBufferBinding       = IGL.GL_NORMAL_ARRAY_BUFFER_BINDING,
-    StaticDraw                     = IGL.GL_STATIC_DRAW,
-    TextureCoordArrayBufferBinding = IGL.GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING,
-    VertexArrayBinding             = IGL.GL_VERTEX_ARRAY_BINDING,
-    VertexArrayBufferBinding       = IGL.GL_VERTEX_ARRAY_BUFFER_BINDING,
-}

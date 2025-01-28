@@ -4475,15 +4475,6 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
-    public struct DrawArraysIndirectCommand
-    {
-        public GLuint Count         { get; set; }
-        public GLuint InstanceCount { get; set; }
-        public GLuint First         { get; set; }
-        public GLuint BaseInstance  { get; set; }
-    }
-
     public void DrawArraysIndirect( GLenum mode, void* indirect )
     {
         GetDelegateForFunction< PFNGLDRAWARRAYSINDIRECTPROC >( "glDrawArraysIndirect", out _glDrawArraysIndirect );
@@ -4499,16 +4490,6 @@ public unsafe partial class GLBindings : IGLBindings
     }
 
     // ========================================================================
-
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
-    public struct DrawElementsIndirectCommand
-    {
-        public GLuint Count;
-        public GLuint PrimCount;
-        public GLuint FirstIndex;
-        public GLuint BaseVertex;
-        public GLuint BaseInstance;
-    }
 
     public void DrawElementsIndirect( GLenum mode, GLenum type, void* indirect )
     {
@@ -7005,6 +6986,13 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetProgramInterfaceiv( GLuint program, GLenum programInterface, GLenum pname, GLint* parameters )
     {
+        Logger.Checkpoint();
+
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv", out _glGetProgramInterfaceiv );
 
         _glGetProgramInterfaceiv( program, programInterface, pname, parameters );
@@ -7012,6 +7000,13 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void GetProgramInterfaceiv( GLuint program, GLenum programInterface, GLenum pname, ref GLint[] parameters )
     {
+        Logger.Checkpoint();
+        
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv", out _glGetProgramInterfaceiv );
 
         fixed ( GLint* pParameters = &parameters[ 0 ] )
@@ -7024,6 +7019,11 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLuint GetProgramResourceIndex( GLuint program, GLenum programInterface, GLchar* name )
     {
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex", out _glGetProgramResourceIndex );
 
         return _glGetProgramResourceIndex( program, programInterface, name );
@@ -7031,6 +7031,11 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLuint GetProgramResourceIndex( GLuint program, GLenum programInterface, string name )
     {
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         var nameBytes = Encoding.UTF8.GetBytes( name );
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex", out _glGetProgramResourceIndex );
@@ -7046,6 +7051,11 @@ public unsafe partial class GLBindings : IGLBindings
     public void GetProgramResourceName( GLuint program, GLenum programInterface, GLuint index, GLsizei bufSize, GLsizei* length,
                                         GLchar* name )
     {
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName", out _glGetProgramResourceName );
 
         _glGetProgramResourceName( program, programInterface, index, bufSize, length, name );
@@ -7053,6 +7063,11 @@ public unsafe partial class GLBindings : IGLBindings
 
     public string GetProgramResourceName( GLuint program, GLenum programInterface, GLuint index, GLsizei bufSize )
     {
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         var name = new GLchar[ bufSize ];
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName", out _glGetProgramResourceName );
@@ -7072,6 +7087,11 @@ public unsafe partial class GLBindings : IGLBindings
     public void GetProgramResourceiv( GLuint program, GLenum programInterface, GLuint index, GLsizei propCount,
                                       GLenum* props, GLsizei bufSize, GLsizei* length, GLint* parameters )
     {
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
 
         _glGetProgramResourceiv( program, programInterface, index, propCount, props, bufSize, length, parameters );
@@ -7080,6 +7100,11 @@ public unsafe partial class GLBindings : IGLBindings
     public void GetProgramResourceiv( GLuint program, GLenum programInterface, GLuint index, GLenum[] props, GLsizei bufSize,
                                       ref GLint[] parameters )
     {
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
 
         fixed ( GLenum* pProps = &props[ 0 ] )
@@ -7103,6 +7128,11 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLint GetProgramResourceLocation( GLuint program, GLenum programInterface, string name )
     {
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         var nameBytes = Encoding.UTF8.GetBytes( name );
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONPROC >( "glGetProgramResourceLocation", out _glGetProgramResourceLocation );
@@ -7117,6 +7147,11 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLint GetProgramResourceLocationIndex( GLuint program, GLenum programInterface, GLchar* name )
     {
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
                                                                             out _glGetProgramResourceLocationIndex );
 
@@ -7125,6 +7160,11 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLint GetProgramResourceLocationIndex( GLuint program, GLenum programInterface, string name )
     {
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         var nameBytes = Encoding.UTF8.GetBytes( name );
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
@@ -7140,6 +7180,11 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void ShaderStorageBlockBinding( GLuint program, GLuint storageBlockIndex, GLuint storageBlockBinding )
     {
+        if ( !IsProgram( program ) )
+        {
+            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
+        }
+        
         GetDelegateForFunction< PFNGLSHADERSTORAGEBLOCKBINDINGPROC >( "glShaderStorageBlockBinding", out _glShaderStorageBlockBinding );
 
         _glShaderStorageBlockBinding( program, storageBlockIndex, storageBlockBinding );

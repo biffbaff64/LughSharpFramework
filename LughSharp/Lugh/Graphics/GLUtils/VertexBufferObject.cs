@@ -79,7 +79,8 @@ public class VertexBufferObject : IVertexData
     {
         _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
         _byteBuffer   = BufferUtils.NewByteBuffer( attributes.VertexSize * numVertices );
-
+        Attributes    = attributes;
+        
         SetBuffer( _byteBuffer, true, attributes );
 
         Usage = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
@@ -100,7 +101,8 @@ public class VertexBufferObject : IVertexData
     {
         // Generate a new buffer handle using OpenGL and assign it to _bufferHandle.
         _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
-
+        Attributes    = attributes;
+        
         // Set the buffer data, ownership flag, and attributes using the provided parameters.
         SetBuffer( data, ownsBuffer, attributes );
 
@@ -139,7 +141,7 @@ public class VertexBufferObject : IVertexData
     /// <summary>
     /// Returns the <see cref="VertexAttributes"/> as specified during construction.
     /// </summary>
-    public VertexAttributes? Attributes { get; set; }
+    public VertexAttributes Attributes { get; set; }
 
     /// <summary>
     /// Returns the underlying FloatBuffer and marks it as dirty, causing the buffer
@@ -251,11 +253,11 @@ public class VertexBufferObject : IVertexData
             }
         }
 
-        var numAttributes = Attributes?.Size;
+        var numAttributes = Attributes.Size;
 
         for ( var i = 0; i < numAttributes; i++ )
         {
-            var attribute = Attributes!.Get( i );
+            var attribute = Attributes.Get( i );
 
             var location = locations == null
                 ? shader.GetAttributeLocation( attribute.Alias )
@@ -290,7 +292,7 @@ public class VertexBufferObject : IVertexData
     public void Unbind( ShaderProgram shader, int[]? locations = null )
     {
         // Get the number of attributes in the vertex attributes.
-        var numAttributes = Attributes?.Size;
+        var numAttributes = Attributes.Size;
 
         // If no specific locations are provided, disable attributes using their aliases.
         if ( locations == null )
@@ -298,7 +300,7 @@ public class VertexBufferObject : IVertexData
             for ( var i = 0; i < numAttributes; i++ )
             {
                 // Disable the vertex attribute for the alias of each attribute.
-                shader.DisableVertexAttribute( Attributes!.Get( i ).Alias );
+                shader.DisableVertexAttribute( Attributes.Get( i ).Alias );
             }
         }
         else
@@ -376,14 +378,11 @@ public class VertexBufferObject : IVertexData
             throw new GdxRuntimeException( "Only ByteBuffer is currently supported" );
         }
 
-        _ownsBuffer = ownsBuffer;
-
         var lim = _byteBuffer.Limit;
 
+        _ownsBuffer       = ownsBuffer;
         _byteBuffer.Limit = _byteBuffer.Capacity;
-
-        _buffer = _byteBuffer.AsFloatBuffer();
-
+        _buffer           = _byteBuffer.AsFloatBuffer();
         _byteBuffer.Limit = lim;
         _buffer.Limit     = lim / 4;
     }

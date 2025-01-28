@@ -83,6 +83,13 @@ namespace LughSharp.Lugh.Graphics.G2D;
 [PublicAPI]
 public class SpriteCache
 {
+    public int     RenderCallsSinceBegin { get; set; } = 0;
+    public int     TotalRenderCalls      { get; set; } = 0;
+    public Color   Color                 { get; set; } = new( 1, 1, 1, 1 );
+    public Matrix4 ProjectionMatrix      { get; set; } = new();
+    public Matrix4 TransformMatrix       { get; set; } = new();
+    public bool    IsDrawing             { get; private set; }
+
     // ========================================================================
     // ========================================================================
 
@@ -91,9 +98,9 @@ public class SpriteCache
     private readonly List< Cache >   _caches         = new();
     private readonly Matrix4         _combinedMatrix = new();
     private readonly List< int >     _counts         = new( 8 );
+    private readonly List< Texture > _textures       = new( 8 );
     private readonly Mesh            _mesh;
     private readonly ShaderProgram?  _shader;
-    private readonly List< Texture > _textures = new( 8 );
 
     private float  _colorPacked = Color.WhiteFloatBits;
     private Cache? _currentCache;
@@ -109,8 +116,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Creates a cache with the specified size, using a default shader if
-    /// OpenGL ES 2.0 is being used.
+    /// Creates a cache with the specified size, using a default shader.
     /// </summary>
     /// <param name="size">
     /// The maximum number of images this cache can hold. The memory required
@@ -165,10 +171,10 @@ public class SpriteCache
             for ( var i = 0; i < length; i += 6, j += 4 )
             {
                 indices[ i + 0 ] = j;
-                indices[ i + 1 ] = ( short ) ( j + 1 );
-                indices[ i + 2 ] = ( short ) ( j + 2 );
-                indices[ i + 3 ] = ( short ) ( j + 2 );
-                indices[ i + 4 ] = ( short ) ( j + 3 );
+                indices[ i + 1 ] = ( short )( j + 1 );
+                indices[ i + 2 ] = ( short )( j + 2 );
+                indices[ i + 3 ] = ( short )( j + 2 );
+                indices[ i + 4 ] = ( short )( j + 3 );
                 indices[ i + 5 ] = j;
             }
 
@@ -180,13 +186,6 @@ public class SpriteCache
 
     // ========================================================================
     // ========================================================================
-
-    public int     RenderCallsSinceBegin { get; set; } = 0;
-    public int     TotalRenderCalls      { get; set; } = 0;
-    public Color   Color                 { get; set; } = new( 1, 1, 1, 1 );
-    public Matrix4 ProjectionMatrix      { get; set; } = new();
-    public Matrix4 TransformMatrix       { get; set; } = new();
-    public bool    IsDrawing             { get; private set; }
 
     /// <summary>
     /// The color of this sprite cache, expanding the alpha from 0-254 to 0-255.
@@ -312,8 +311,8 @@ public class SpriteCache
             if ( cacheCount > cache.MaxCount )
             {
                 throw new GdxRuntimeException( $"If a cache is not the last created, it cannot be redefined"
-                                             + $"with more entries than when it was first created: "
-                                             + $"{cacheCount} ({cache.MaxCount} max)" );
+                                               + $"with more entries than when it was first created: "
+                                               + $"{cacheCount} ({cache.MaxCount} max)" );
             }
 
             cache.TextureCount = _textures.Count;
@@ -1251,6 +1250,24 @@ public class SpriteCache
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Represents a low-level cached asset for efficient reuse in rendering
+    /// operations. The Cache class is designed to store information related
+    /// to textures and their associated drawing metadata. It is used internally
+    /// by higher-level rendering systems to optimize rendering by avoiding
+    /// redundant computations or data transfers.
+    /// <para>
+    /// A Cache object holds texture references, their counts, and offsets to
+    /// manage batches of drawable content. It allows for batch rendering by
+    /// associating multiple textures and their respective geometries, reducing
+    /// overhead during rendering processes.
+    /// </para>
+    /// <para>
+    /// Note that Cache instances are created and managed internally, and they
+    /// serve as fundamental units for grouping rendering data. They are not
+    /// intended to be accessed or modified directly by consumers.
+    /// </para>
+    /// </summary>
     private sealed class Cache
     {
         internal readonly int    ID;
@@ -1276,43 +1293,43 @@ public class SpriteCache
     private static ShaderProgram CreateDefaultShader()
     {
         const string VERTEX_SHADER = "in vec4 "
-                                   + ShaderProgram.POSITION_ATTRIBUTE
-                                   + ";\n" //
-                                   + "in vec4 "
-                                   + ShaderProgram.COLOR_ATTRIBUTE
-                                   + ";\n" //
-                                   + "in vec2 "
-                                   + ShaderProgram.TEXCOORD_ATTRIBUTE
-                                   + "0;\n"                                   //
-                                   + "uniform mat4 u_projectionViewMatrix;\n" //
-                                   + "out vec4 v_color;\n"                //
-                                   + "out vec2 v_texCoords;\n"            //
-                                   + "\n"                                     //
-                                   + "void main()\n"                          //
-                                   + "{\n"                                    //
-                                   + "   v_color = "
-                                   + ShaderProgram.COLOR_ATTRIBUTE
-                                   + ";\n"                                         //
-                                   + "   v_color.a = v_color.a * (255.0/254.0);\n" //
-                                   + "   v_texCoords = "
-                                   + ShaderProgram.TEXCOORD_ATTRIBUTE
-                                   + "0;\n" //
-                                   + "   gl_Position =  u_projectionViewMatrix * "
-                                   + ShaderProgram.POSITION_ATTRIBUTE
-                                   + ";\n" //
-                                   + "}\n";
+                                     + ShaderProgram.POSITION_ATTRIBUTE
+                                     + ";\n" //
+                                     + "in vec4 "
+                                     + ShaderProgram.COLOR_ATTRIBUTE
+                                     + ";\n" //
+                                     + "in vec2 "
+                                     + ShaderProgram.TEXCOORD_ATTRIBUTE
+                                     + "0;\n"                                   //
+                                     + "uniform mat4 u_projectionViewMatrix;\n" //
+                                     + "out vec4 v_color;\n"                    //
+                                     + "out vec2 v_texCoords;\n"                //
+                                     + "\n"                                     //
+                                     + "void main()\n"                          //
+                                     + "{\n"                                    //
+                                     + "   v_color = "
+                                     + ShaderProgram.COLOR_ATTRIBUTE
+                                     + ";\n"                                         //
+                                     + "   v_color.a = v_color.a * (255.0/254.0);\n" //
+                                     + "   v_texCoords = "
+                                     + ShaderProgram.TEXCOORD_ATTRIBUTE
+                                     + "0;\n" //
+                                     + "   gl_Position =  u_projectionViewMatrix * "
+                                     + ShaderProgram.POSITION_ATTRIBUTE
+                                     + ";\n" //
+                                     + "}\n";
 
         const string FRAGMENT_SHADER = "#ifdef GL_ES\n"
-                                     + "#define LOWP lowp\n"
-                                     + "precision mediump float;\n"
-                                     + "#endif\n"
-                                     + "in vec4 v_color;\n"
-                                     + "in vec2 v_texCoords;\n"
-                                     + "uniform sampler2D u_texture;\n"
-                                     + "void main()\n"
-                                     + "{\n"                                                             //
-                                     + "  vec4 fragColor = v_color * texture(u_texture, v_texCoords);\n" //
-                                     + "}";
+                                       + "#define LOWP lowp\n"
+                                       + "precision mediump float;\n"
+                                       + "#endif\n"
+                                       + "in vec4 v_color;\n"
+                                       + "in vec2 v_texCoords;\n"
+                                       + "uniform sampler2D u_texture;\n"
+                                       + "void main()\n"
+                                       + "{\n"                                                             //
+                                       + "  vec4 fragColor = v_color * texture(u_texture, v_texCoords);\n" //
+                                       + "}";
 
         var shader = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
 
@@ -1325,6 +1342,7 @@ public class SpriteCache
     }
 
     //TODO: Update this documentation, this is GL not GLES
+    //
     /// <summary>
     /// Sets the shader to be used in a GLES 2.0 environment. Vertex position
     /// attribute is called "a_position", the texture coordinates attribute is

@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI]
 public class VertexBufferObjectWithVAO : IVertexData
 {
-    public VertexAttributes? Attributes { get; set; }
+    public VertexAttributes Attributes { get; set; }
 
     private static readonly IntBuffer _tmpHandle = BufferUtils.NewIntBuffer( 1 );
 
@@ -72,10 +72,9 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// <param name="attributes"> the <see cref="VertexAttributes"/>. </param>
     public VertexBufferObjectWithVAO( bool isStatic, int numVertices, VertexAttributes attributes )
     {
-        _isStatic  = isStatic;
-        Attributes = attributes;
-
-        _byteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numVertices, false );
+        _isStatic   = isStatic;
+        Attributes  = attributes;
+        _byteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numVertices );
         _buffer     = _byteBuffer.AsFloatBuffer();
         _ownsBuffer = true;
 
@@ -106,8 +105,7 @@ public class VertexBufferObjectWithVAO : IVertexData
         _byteBuffer.Flip();
 
         _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
-
-        _usage = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
+        _usage        = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
 
         CreateVAO();
     }
@@ -122,14 +120,14 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         get
         {
-            if ( Attributes?.VertexSize == 0 )
+            if ( Attributes.VertexSize == 0 )
             {
                 Logger.Error( "WARNING: VertexData has no attributes!" );
 
                 return 0;
             }
 
-            return ( _buffer.Limit * 4 ) / Attributes!.VertexSize;
+            return ( _buffer.Limit * 4 ) / Attributes.VertexSize;
         }
     }
 
@@ -143,14 +141,14 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         get
         {
-            if ( Attributes?.VertexSize == 0 )
+            if ( Attributes.VertexSize == 0 )
             {
                 Logger.Error( "WARNING: VertexData has no attributes!" );
 
                 return 0;
             }
 
-            return _byteBuffer.Capacity / Attributes!.VertexSize;
+            return _byteBuffer.Capacity / Attributes.VertexSize;
         }
     }
 
