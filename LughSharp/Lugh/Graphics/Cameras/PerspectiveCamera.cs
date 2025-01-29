@@ -82,7 +82,7 @@ public class PerspectiveCamera : Camera
         {
             InvProjectionView.Set( Combined );
             Matrix4.Invert( InvProjectionView.Val );
-            Frustum.Update( InvProjectionView );
+            Frustrum.Update( InvProjectionView );
         }
     }
 }

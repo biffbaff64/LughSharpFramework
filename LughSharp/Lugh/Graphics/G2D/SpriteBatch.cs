@@ -457,6 +457,8 @@ public class SpriteBatch : IBatch
         var fx2 = posX + width;
         var fy2 = posY + height;
 
+        Logger.Debug( $"X: {posX}, Y: {posY}, W: {width}, H: {height}" );
+        
         const float U  = 0;
         const float V  = 1;
         const float U2 = 1;
@@ -1405,7 +1407,9 @@ public class SpriteBatch : IBatch
                                        "    FragColor = texture(u_texture, v_texCoords) * v_colorPacked;\n" +
                                        "}\n";
 
-        return new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
+        var shaderProgram = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
+
+        return shaderProgram;
     }
 
     /// <summary>
@@ -1418,9 +1422,7 @@ public class SpriteBatch : IBatch
         {
             if ( !_customShader.IsCompiled )
             {
-                Logger.Debug( "Custom Shader is not compiled." );
-
-                return; // Return early if not compiled
+                return;
             }
 
             _customShader.SetUniformMatrix( "u_projTrans", _combinedMatrix );
@@ -1430,13 +1432,11 @@ public class SpriteBatch : IBatch
         {
             if ( !_shader.IsCompiled )
             {
-                Logger.Debug( "Shader is not compiled." );
-
-                return; // Return early if not compiled
+                return;
             }
 
-            _shader?.SetUniformMatrix( "u_projTrans", _combinedMatrix );
-            _shader?.SetUniformi( "u_texture", 0 );
+            _shader.SetUniformMatrix( "u_projTrans", _combinedMatrix );
+            _shader.SetUniformi( "u_texture", 0 );
         }
     }
 

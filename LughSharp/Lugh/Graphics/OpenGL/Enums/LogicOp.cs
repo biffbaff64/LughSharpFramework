@@ -22,35 +22,26 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using GLuint = uint;
+namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
-
-public partial class GLBindings
+[PublicAPI]
+public enum LogicOp : int
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
-    public struct DrawElementsIndirectCommand
-    {
-        public GLuint Count;
-        public GLuint PrimCount;
-        public GLuint FirstIndex;
-        public GLuint BaseVertex;
-        public GLuint BaseInstance;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
-    public struct DrawArraysIndirectCommand
-    {
-        public GLuint Count         { get; set; }
-        public GLuint InstanceCount { get; set; }
-        public GLuint First         { get; set; }
-        public GLuint BaseInstance  { get; set; }
-    }
+    And             = IGL.GL_AND,
+    AndInverted     = IGL.GL_AND_INVERTED,
+    AndReverse      = IGL.GL_AND_REVERSE,
+    Clear           = IGL.GL_CLEAR,
+    Copy            = IGL.GL_COPY,
+    CopyInverted    = IGL.GL_COPY_INVERTED,
+    Equiv           = IGL.GL_EQUIV,
+    Invert          = IGL.GL_INVERT,
+    Nand            = IGL.GL_NAND,
+    Noop            = IGL.GL_NOOP,
+    Nor             = IGL.GL_NOR,
+    Or              = IGL.GL_OR,
+    OrInverted      = IGL.GL_OR_INVERTED,
+    OrReversed      = IGL.GL_OR_REVERSE,
+    Set             = IGL.GL_SET,
+    Xor             = IGL.GL_XOR,
 }
 

@@ -823,4 +823,24 @@ public class Vector3 : IVector< Vector3 >
 
         throw new GdxRuntimeException( "Malformed Vector3: " + v );
     }
+    
+    // ========================================================================
+
+    public static Vector3 operator +( Vector3 left, Vector3 right )
+    {
+        left.X += right.X;
+        left.Y += right.Y;
+        left.Z += right.Z;
+        
+        return left;
+    }
+
+    public static Vector3 operator -( Vector3 left, Vector3 right )
+    {
+        left.X -= right.X;
+        left.Y -= right.Y;
+        left.Z -= right.Z;
+
+        return left;
+    }
 }

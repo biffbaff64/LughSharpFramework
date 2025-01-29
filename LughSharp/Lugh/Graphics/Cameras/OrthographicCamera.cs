@@ -50,6 +50,7 @@ public class OrthographicCamera : Camera
     public OrthographicCamera()
     {
         Near = 0;
+        Far  = 1;
         Zoom = 1;
     }
 
@@ -68,6 +69,7 @@ public class OrthographicCamera : Camera
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
         Near           = 0;
+        Far            = 1;
         Zoom           = 1;
 
         SafeUpdate();
@@ -105,7 +107,7 @@ public class OrthographicCamera : Camera
         {
             InvProjectionView.Set( Combined );
             Matrix4.Invert( InvProjectionView.Val );
-            Frustum.Update( InvProjectionView );
+            Frustrum.Update( InvProjectionView );
         }
     }
 

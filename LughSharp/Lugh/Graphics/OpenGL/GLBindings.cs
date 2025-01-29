@@ -39,6 +39,8 @@ using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
+// ============================================================================
+
 using GLenum = System.Int32;
 using GLfloat = System.Single;
 using GLint = System.Int32;

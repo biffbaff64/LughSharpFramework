@@ -41,26 +41,43 @@ public abstract class Camera
 {
     // ========================================================================
 
+    public Matrix4 Projection { get; set; } = new();
+    public Matrix4 View       { get; set; } = new();
+    public Matrix4 Combined   { get; set; } = new();
+
     public Vector3 Position       { get; set; } = new();          // the position of the camera
     public Vector3 Up             { get; set; } = new( 0, 1, 0 ); // the unit length up vector of the camera
-    public Matrix4 Combined       { get; set; } = new();
     public float   ViewportWidth  { get; set; } = 0;
     public float   ViewportHeight { get; set; } = 0;
 
     // ========================================================================
 
-    protected Matrix4  Projection        { get; set; } = new();
-    protected Matrix4  View              { get; set; } = new();
     protected Matrix4  InvProjectionView { get; set; } = new();
-    protected float    Near              { get; set; } = 1;               // the near clipping plane distance, has to be positive
-    protected float    Far               { get; set; } = 100;             // the far clipping plane distance, has to be positive
     protected Vector3  Direction         { get; set; } = new( 0, 0, -1 ); // the unit length direction vector of the camera
-    protected Frustrum Frustum           { get; set; } = new();
+    protected Frustrum Frustrum          { get; set; } = new();
+
+    /// <summary>
+    /// the far clipping plane distance, has to be positive
+    /// </summary>
+    protected float Far
+    {
+        get => _far;
+        set => _far = ( value > Near ) ? value : throw new ArgumentException( "Far must be > Near" );
+    }
+
+    /// <summary>
+    /// the near clipping plane distance, has to be positive
+    /// </summary>
+    protected float Near
+    {
+        get => _near;
+        set => _near = ( value >= 0 ) ? value : throw new ArgumentException( "Near must be >= 0" );
+    }
 
     // ========================================================================
 
-    private readonly Ray     _ray    = new( new Vector3(), new Vector3() );
-    private readonly Vector3 _tmpVec = new();
+    private float _near = 1.0f;
+    private float _far  = 100.0f;
 
     // ========================================================================
     // ========================================================================
@@ -70,7 +87,17 @@ public abstract class Camera
     /// planes. Use this after you've manipulated any of the attributes of the camera.
     /// The default implementation does nothing.
     /// </summary>
-    public abstract void Update( bool updateFrustrum = true );
+    public virtual void Update( bool updateFrustrum = true )
+    {
+        View.SetToLookAt( Position, Position + Direction, Up );
+
+        Combined.Set( Projection ).Mul( View );
+
+        if ( updateFrustrum )
+        {
+            Frustrum.Update( Combined );
+        }
+    }
 
     /// <summary>
     /// Recalculates the direction of the camera to look at the point (x, y, z).
@@ -90,7 +117,7 @@ public abstract class Camera
     /// <param name="z"> the z-coordinate of the point to look at.</param>
     protected void LookAt( float x, float y, float z )
     {
-        _tmpVec.Set( x, y, z ).Sub( Position ).Nor();
+        var _tmpVec = new Vector3().Set( x, y, z ).Sub( Position ).Nor();
 
         if ( !_tmpVec.IsZero() )
         {
@@ -120,7 +147,7 @@ public abstract class Camera
     /// </summary>
     protected void NormalizeUp()
     {
-        _tmpVec.Set( Direction ).Crs( Up );
+        var _tmpVec = new Vector3().Set( Direction ).Crs( Up );
         Up.Set( _tmpVec ).Crs( Direction ).Nor();
     }
 
@@ -184,8 +211,7 @@ public abstract class Camera
     /// <param name="angle"> the angle, in degrees  </param>
     public void RotateAround( Vector3 point, Vector3 axis, float angle )
     {
-        _tmpVec.Set( point );
-        _tmpVec.Sub( Position );
+        var _tmpVec = new Vector3().Set( point ).Sub( Position );
 
         Translate( _tmpVec );
         Rotate( axis, angle );
@@ -287,7 +313,7 @@ public abstract class Camera
     /// and similar classes.
     /// </summary>
     /// <returns>The mutated and projected worldCoords <see cref="Vector3"/>.</returns>
-    public Vector3? Project( Vector3? worldCoords )
+    public Vector3 Project( Vector3 worldCoords )
     {
         Project( worldCoords, 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
 
@@ -315,7 +341,7 @@ public abstract class Camera
     /// <param name="viewportWidth"> the width of the viewport in pixels.</param>
     /// <param name="viewportHeight"> the height of the viewport in pixels.</param>
     /// <returns> the mutated and projected worldCoords <see cref="Vector3"/>.</returns>
-    public Vector3 Project( Vector3? worldCoords, float viewportX, float viewportY, float viewportWidth, float viewportHeight )
+    public Vector3 Project( Vector3 worldCoords, float viewportX, float viewportY, float viewportWidth, float viewportHeight )
     {
         ArgumentNullException.ThrowIfNull( worldCoords );
 
@@ -351,21 +377,14 @@ public abstract class Camera
                            float viewportWidth,
                            float viewportHeight )
     {
-        Unproject( _ray.Origin.Set( screenX, screenY, 0 ),
-                   viewportX,
-                   viewportY,
-                   viewportWidth,
-                   viewportHeight );
+        var ray = new Ray( new Vector3( screenX, screenY, 0 ), new Vector3( screenX, screenY, 1 ) );
+        
+        Unproject( ray.Origin, viewportX, viewportY, viewportWidth, viewportHeight );
+        Unproject( ray.Direction, viewportX, viewportY, viewportWidth, viewportHeight );
 
-        Unproject( _ray.Direction.Set( screenX, screenY, 1 ),
-                   viewportX,
-                   viewportY,
-                   viewportWidth,
-                   viewportHeight );
+        ray.Direction.Sub( ray.Origin ).Nor();
 
-        _ray.Direction.Sub( _ray.Origin ).Nor();
-
-        return _ray;
+        return ray;
     }
 
     /// <summary>
@@ -379,4 +398,8 @@ public abstract class Camera
     {
         return GetPickRay( screenX, screenY, 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
     }
+
+    public Vector3 GetForward() => Direction;
+    public Vector3 GetRight() => Direction.Crs( Up ).Nor();
+    public Vector3 GetUp() => Up;
 }

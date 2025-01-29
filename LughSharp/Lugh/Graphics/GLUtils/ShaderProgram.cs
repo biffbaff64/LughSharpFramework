@@ -55,6 +55,12 @@ public partial class ShaderProgram
 {
     #region default attribute names
 
+    /// <summary>
+    /// code that is always added to the vertex and fragments shaders, to
+    /// inject a #version line.
+    /// </summary>
+    public const string PREPEND_VERSION_CODE = "#version 450 core\n";
+
     public const string POSITION_ATTRIBUTE   = "a_position";
     public const string NORMAL_ATTRIBUTE     = "a_normal";
     public const string COLOR_ATTRIBUTE      = "a_colorPacked";
@@ -69,7 +75,7 @@ public partial class ShaderProgram
 
     private const int CACHED_NOT_FOUND = -1;
     private const int NOT_CACHED       = -2;
-    
+
     // ========================================================================
 
     public bool     IsCompiled           { get; set; }
@@ -84,18 +90,6 @@ public partial class ShaderProgram
     /// flag indicating whether attributes & uniforms must be present at all times.
     /// </summary>
     public static readonly bool Pedantic = true;
-
-    /// <summary>
-    /// code that is always added to the vertex shader code, typically used to inject a #version
-    /// line. Note that this is added as-is, you should include a newline (`\n`) if needed.
-    /// </summary>
-    public static readonly string PrependVertexCode = "#version 460 core\n";
-
-    /// <summary>
-    /// code that is always added to every fragment shader code, typically used to inject a #version
-    /// line. Note that this is added as-is, you should include a newline (`\n`) if needed.
-    /// </summary>
-    public static readonly string PrependFragmentCode = "#version 460 core\n";
 
     // ========================================================================
     // ========================================================================
@@ -112,10 +106,10 @@ public partial class ShaderProgram
     private readonly Dictionary< string, int > _uniformSizes   = new();
     private readonly Dictionary< string, int > _uniformTypes   = new();
 
+    private int    _vertexShaderHandle;
     private int    _fragmentShaderHandle;
     private bool   _invalidated;
     private string _shaderLog = "";
-    private int    _vertexShaderHandle;
 
     // ========================================================================
     // ========================================================================
@@ -127,24 +121,14 @@ public partial class ShaderProgram
     /// <param name="fragmentShader"> the fragment shader </param>
     public ShaderProgram( string vertexShader, string fragmentShader )
     {
-        if ( !string.IsNullOrEmpty( PrependVertexCode ) )
-        {
-            vertexShader = PrependVertexCode + vertexShader;
-        }
+        VertexShaderSource   = PREPEND_VERSION_CODE + vertexShader;
+        FragmentShaderSource = PREPEND_VERSION_CODE + fragmentShader;
 
-        if ( !string.IsNullOrEmpty( PrependFragmentCode ) )
-        {
-            fragmentShader = PrependFragmentCode + fragmentShader;
-        }
-
-        VertexShaderSource   = vertexShader;
-        FragmentShaderSource = fragmentShader;
-
-        CompileShaders( vertexShader, fragmentShader );
+        CompileShaders( VertexShaderSource, FragmentShaderSource );
 
         if ( !IsCompiled )
         {
-            Logger.Debug( $"Shader program {vertexShader} has not been compiled." );
+            Logger.Debug( $"Shader program {VertexShaderSource} has not been compiled." );
 
             return;
         }
@@ -156,7 +140,6 @@ public partial class ShaderProgram
     }
 
     /// <summary>
-    /// Constructs a new shaderprgram.
     /// </summary>
     /// <param name="vertexShader"> the vertex shader </param>
     /// <param name="fragmentShader"> the fragment shader </param>
@@ -221,20 +204,15 @@ public partial class ShaderProgram
     /// The <see cref="ShaderProgram"/> must be bound for this to work.
     /// </summary>
     /// <param name="name">The attribute name.</param>
-    /// <param name="size">
-    /// The number of components, must be >= 1 and &lt;= 4.
-    /// </param>
+    /// <param name="size"> The number of components, must be >= 1 and &lt;= 4. </param>
     /// <param name="type">
-    /// The type, must be one of IGL.GL_Byte, IGL.GL_Unsigned_Byte, IGL.GL_Short,
-    /// IGL.GL_Unsigned_Short, IGL.GL_Fixed, or IGL.GL_Float.
-    /// <para>GL_F will not work on the desktop.</para>
+    /// The type, must be one of IGL.GL_BYTE, IGL.GL_UNSIGNED_BYTE, IGL.GL_SHORT, IGL.GL_UNSIGNED_SHORT,
+    /// IGL.GL_FIXED, or IGL.GL_FLOAT.
     /// </param>
-    /// <param name="normalize">
-    /// Whether fixed point data should be normalized. Will not work on the desktop.
-    /// </param>
+    /// <param name="normalize"> Whether fixed point data should be normalized. Will not work on the desktop. </param>
     /// <param name="stride">The stride in bytes between successive attributes.</param>
     /// <param name="buffer">The buffer containing the vertex attributes.</param>
-    public void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, Buffer buffer )
+    public unsafe void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, Buffer buffer )
     {
         CheckManaged();
 
@@ -245,15 +223,21 @@ public partial class ShaderProgram
             return;
         }
 
-        unsafe
+        fixed ( void* ptr = &buffer.BackingArray()[ 0 ] )
         {
-            fixed ( void* ptr = &buffer.BackingArray()[ 0 ] )
-            {
-                GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ptr );
-            }
+            GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ptr );
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="location"></param>
+    /// <param name="size"></param>
+    /// <param name="type"></param>
+    /// <param name="normalize"></param>
+    /// <param name="stride"></param>
+    /// <param name="buffer"></param>
     public unsafe void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, Buffer buffer )
     {
         CheckManaged();
@@ -413,7 +397,7 @@ public partial class ShaderProgram
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Loads and compiles the shaders, creates a new program and links the shaders.
     /// </summary>
@@ -570,4 +554,3 @@ public partial class ShaderProgram
         _shaders[ GdxApi.App ]?.Remove( this );
     }
 }
-

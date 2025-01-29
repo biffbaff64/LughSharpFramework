@@ -22,35 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using GLuint = uint;
+namespace LughSharp.Lugh.Maths.Collision;
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
-
-public partial class GLBindings
+[PublicAPI]
+public class Area2D : Vector2
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
-    public struct DrawElementsIndirectCommand
-    {
-        public GLuint Count;
-        public GLuint PrimCount;
-        public GLuint FirstIndex;
-        public GLuint BaseVertex;
-        public GLuint BaseInstance;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
-    public struct DrawArraysIndirectCommand
-    {
-        public GLuint Count         { get; set; }
-        public GLuint InstanceCount { get; set; }
-        public GLuint First         { get; set; }
-        public GLuint BaseInstance  { get; set; }
-    }
+    public float Width  { get; private set; }
+    public float Height { get; private set; }
 }
 

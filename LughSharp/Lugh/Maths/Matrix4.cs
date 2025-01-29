@@ -142,7 +142,7 @@ public class Matrix4
     public static readonly Vector3    TmpForward = new();
     public static readonly Vector3    TmpUp      = new();
 
-    public readonly float[] Val = new float[ 16 ];
+    public float[] Val = new float[ 16 ];
 
     // ========================================================================
     // ========================================================================
@@ -856,9 +856,8 @@ public class Matrix4
     }
 
     /// <summary>
-    /// Sets this matrix to an orthographic projection matrix with the origin at (x,y) extending by width and height. The
-    /// near plane
-    /// is Set to 0, the far plane is Set to 1.
+    /// Sets this matrix to an orthographic projection matrix with the origin at (x,y) extending by
+    /// width and height. The near plane is Set to 0, the far plane is Set to 1.
     /// </summary>
     /// <param name="x"> The x-coordinate of the origin </param>
     /// <param name="y"> The y-coordinate of the origin </param>
@@ -867,15 +866,14 @@ public class Matrix4
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
     public Matrix4 SetToOrtho2D( float x, float y, float width, float height )
     {
-        SetToOrtho( x, x + width, y, y + height, 0, 1 );
+        SetToOrtho( x, x + width, y, y + height, 0f, 1f );
 
         return this;
     }
 
     /// <summary>
-    /// Sets this matrix to an orthographic projection matrix with the origin at (x,y) extending by width and height,
-    /// having a near
-    /// and far plane.
+    /// Sets this matrix to an orthographic projection matrix with the origin at (x,y) extending
+    /// by width and height, having a near and far plane.
     /// </summary>
     /// <param name="x"> The x-coordinate of the origin </param>
     /// <param name="y"> The y-coordinate of the origin </param>
@@ -2275,7 +2273,7 @@ public class Matrix4
     /// array is supposed to be a column major matrix.
     /// </summary>
     /// <param name="dst"> the destination matrix </param>
-    public void Extract4X3Matrix( float[] dst )
+    public void Extract4X3Matrix( ref float[] dst )
     {
         dst[ 0 ]  = Val[ M00 ];
         dst[ 1 ]  = Val[ M10 ];
@@ -2311,14 +2309,13 @@ public class Matrix4
     // ========================================================================
 
     /// <summary>
-    /// Multiplies the vectors with the given matrix. The matrix array is assumed to
-    /// hold a 4x4 column major matrix as you can get from <see cref="Val"/>.
-    /// The vectors array is assumed to hold 3-component vectors. Offset specifies
-    /// the offset into the array where the x-component of the first vector is located.
-    /// The numVecs parameter specifies the number of vectors stored in the vectors
-    /// array. The stride parameter specifies the number of floats between subsequent
-    /// vectors and must be >= 3. This is the same as <see cref="Vector3.Mul(Matrix4)"/>
-    /// applied to multiple vectors.
+    /// Multiplies the vectors with the given matrix. The matrix array is assumed to hold a 4x4
+    /// column major matrix as you can get from <see cref="Val"/>. The vectors array is assumed
+    /// to hold 3-component vectors. Offset specifies the offset into the array where the x-component
+    /// of the first vector is located. The numVecs parameter specifies the number of vectors stored
+    /// in the vectors array. The stride parameter specifies the number of floats between subsequent
+    /// vectors and must be >= 3. This is the same as <see cref="Vector3.Mul(Matrix4)"/> applied to
+    /// multiple vectors.
     /// </summary>
     /// <param name="mat"> the matrix </param>
     /// <param name="vecs"> the vectors </param>
@@ -2415,10 +2412,6 @@ public class Matrix4
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
     public Matrix4f ToMatrix4f()
     {
         return new Matrix4f
