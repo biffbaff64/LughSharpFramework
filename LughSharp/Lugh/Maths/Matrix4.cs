@@ -152,6 +152,8 @@ public class Matrix4
     /// </summary>
     public Matrix4()
     {
+        Array.Fill( Val, 0 );
+        
         Val[ M00 ] = 1f;
         Val[ M11 ] = 1f;
         Val[ M22 ] = 1f;
@@ -891,8 +893,7 @@ public class Matrix4
 
     /// <summary>
     /// Sets the matrix to an orthographic projection like glOrtho (http://www.opengl.org/sdk/docs/man/xhtml/glOrtho.xml)
-    /// following
-    /// the OpenGL equivalent
+    /// following the OpenGL equivalent
     /// </summary>
     /// <param name="left"> The left clipping plane </param>
     /// <param name="right"> The right clipping plane </param>
@@ -903,6 +904,21 @@ public class Matrix4
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
     public Matrix4 SetToOrtho( float left, float right, float bottom, float top, float near, float far )
     {
+        if (right - left == 0)
+        {
+            throw new ArgumentException("Right and left cannot be equal.");
+        }
+
+        if (top - bottom == 0)
+        {
+            throw new ArgumentException("Top and bottom cannot be equal.");
+        }
+
+        if (far - near == 0)
+        {
+            throw new ArgumentException("Far and near cannot be equal.");
+        }
+
         var xOrth = 2 / ( right - left );
         var yOrth = 2 / ( top - bottom );
         var zOrth = -2 / ( far - near );
@@ -1717,14 +1733,17 @@ public class Matrix4
         mata[ M10 ] = m10;
         mata[ M20 ] = m20;
         mata[ M30 ] = m30;
+        // ---------------
         mata[ M01 ] = m01;
         mata[ M11 ] = m11;
         mata[ M21 ] = m21;
         mata[ M31 ] = m31;
+        // ---------------
         mata[ M02 ] = m02;
         mata[ M12 ] = m12;
         mata[ M22 ] = m22;
         mata[ M32 ] = m32;
+        // ---------------
         mata[ M03 ] = m03;
         mata[ M13 ] = m13;
         mata[ M23 ] = m23;

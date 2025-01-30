@@ -59,7 +59,7 @@ public partial class ShaderProgram
     /// code that is always added to the vertex and fragments shaders, to
     /// inject a #version line.
     /// </summary>
-    public const string PREPEND_VERSION_CODE = "#version 450 core\n";
+    public const string SHADER_VERSION_CODE = "#version 450 core";
 
     public const string POSITION_ATTRIBUTE   = "a_position";
     public const string NORMAL_ATTRIBUTE     = "a_normal";
@@ -121,8 +121,8 @@ public partial class ShaderProgram
     /// <param name="fragmentShader"> the fragment shader </param>
     public ShaderProgram( string vertexShader, string fragmentShader )
     {
-        VertexShaderSource   = PREPEND_VERSION_CODE + vertexShader;
-        FragmentShaderSource = PREPEND_VERSION_CODE + fragmentShader;
+        VertexShaderSource   = vertexShader;
+        FragmentShaderSource = fragmentShader;
 
         CompileShaders( VertexShaderSource, FragmentShaderSource );
 

@@ -3423,7 +3423,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="location">Specifies the location of the uniform variable to be queried.</param>
-    /// <param name="params">Returns the value of the uniform variable at the location specified by location.</param>
+    /// <param name="parameters">Returns the value of the uniform variable at the location specified by location.</param>
     unsafe void GetUniformfv( uint program, int location, float* parameters );
 
     /// <summary>

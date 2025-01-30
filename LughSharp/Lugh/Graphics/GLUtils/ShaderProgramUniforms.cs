@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Collections;
 
@@ -362,94 +363,6 @@ public partial class ShaderProgram
         GdxApi.Bindings.Uniform4f( location, x, y, z, w );
     }
 
-//    /// <summary>
-//    /// 
-//    /// </summary>
-//    /// <param name="name"></param>
-//    /// <param name="value"></param>
-//    public void SetUniform1Fv( string name, params float[] value )
-//    {
-//        CheckManaged();
-//        GdxApi.Bindings.Uniform1fv( FetchUniformLocation( name ), value );
-//    }
-//
-//    /// <summary>
-//    /// 
-//    /// </summary>
-//    /// <param name="location"></param>
-//    /// <param name="value"></param>
-//    public void SetUniform1Fv( int location, params float[] value )
-//    {
-//        CheckManaged();
-//        GdxApi.Bindings.Uniform1fv( location, value );
-//    }
-//
-//    /// <summary>
-//    /// 
-//    /// </summary>
-//    /// <param name="name"></param>
-//    /// <param name="values"></param>
-//    public void SetUniform2Fv( string name, params float[] values )
-//    {
-//        CheckManaged();
-//        GdxApi.Bindings.Uniform2fv( FetchUniformLocation( name ), values );
-//    }
-//
-//    /// <summary>
-//    /// 
-//    /// </summary>
-//    /// <param name="location"></param>
-//    /// <param name="values"></param>
-//    public void SetUniform2Fv( int location, params float[] values )
-//    {
-//        CheckManaged();
-//        GdxApi.Bindings.Uniform2fv( location, values );
-//    }
-//
-//    /// <summary>
-//    /// 
-//    /// </summary>
-//    /// <param name="name"></param>
-//    /// <param name="values"></param>
-//    public void SetUniform3Fv( string name, params float[] values )
-//    {
-//        CheckManaged();
-//        GdxApi.Bindings.Uniform3fv( FetchUniformLocation( name ), values );
-//    }
-//
-//    /// <summary>
-//    /// 
-//    /// </summary>
-//    /// <param name="location"></param>
-//    /// <param name="values"></param>
-//    public void SetUniform3Fv( int location, params float[] values )
-//    {
-//        CheckManaged();
-//        GdxApi.Bindings.Uniform3fv( location, values );
-//    }
-//
-//    /// <summary>
-//    /// 
-//    /// </summary>
-//    /// <param name="name"></param>
-//    /// <param name="values"></param>
-//    public void SetUniform4Fv( string name, params float[] values )
-//    {
-//        CheckManaged();
-//        GdxApi.Bindings.Uniform4fv( FetchUniformLocation( name ), values );
-//    }
-//
-//    /// <summary>
-//    /// 
-//    /// </summary>
-//    /// <param name="location"></param>
-//    /// <param name="values"></param>
-//    public void SetUniform4Fv( int location, params float[] values )
-//    {
-//        CheckManaged();
-//        GdxApi.Bindings.Uniform4fv( location, values );
-//    }
-
     /// <summary>
     /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram"/>
     /// must be bound for this to work.
@@ -585,6 +498,9 @@ public partial class ShaderProgram
     /// <param name="values"></param>
     public void SetUniformMatrix4Fv( int location, params float[] values )
     {
+        Logger.Debug( $"location: {location}" );
+        Logger.Debug( $"values: {string.Join( ", ", values )}" );
+        
         CheckManaged();
         GdxApi.Bindings.UniformMatrix4fv( location, false, values );
     }

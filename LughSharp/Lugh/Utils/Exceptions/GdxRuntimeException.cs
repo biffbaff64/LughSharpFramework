@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.CompilerServices;
+
 using Exception = System.Exception;
 using NotNull = System.Diagnostics.CodeAnalysis.NotNullAttribute;
 
@@ -95,6 +96,21 @@ public class GdxRuntimeException : ApplicationException
                                     string? message = null )
     {
         if ( condition )
+        {
+            Throw( message );
+        }
+    }
+
+    /// <summary>
+    /// Throws an GdxRuntimeException if the supplied reference type is ZERO.
+    /// </summary>
+    /// <param name="argument">The reference type argument to validate as zero.</param>
+    /// <param name="message"> A message to display when/if the exception is thrown </param>
+    public static void ThrowIfZero< T >( T argument,
+                                         [CallerArgumentExpression( "argument" )]
+                                         string? message = null )
+    {
+        if ( EqualityComparer< T >.Default.Equals( argument, default( T ) ) )
         {
             Throw( message );
         }

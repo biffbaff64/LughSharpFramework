@@ -66,16 +66,36 @@ public class Texture : GLTexture, IManaged
 
     // ========================================================================
 
-    public override int  Width              => TextureData.Width;
-    public override int  Height             => TextureData.Height;
-    public override int  Depth              => 0;
-    public          int  NumManagedTextures => _managedTextures[ GdxApi.App ].Count;
-    public          bool IsManaged          => TextureData is { IsManaged: true };
+    public override int    Width              => TextureData.Width;
+    public override int    Height             => TextureData.Height;
+    public override int    Depth              => 0;
+    public          int    NumManagedTextures => _managedTextures[ GdxApi.App ].Count;
+    public          bool   IsManaged          => TextureData is { IsManaged: true };
+
+    /// <summary>
+    /// The Texture name, usually the filename but can be something else.
+    /// Name will be set to 'Not Set' if null or empty.
+    /// </summary>
+    public string Name
+    {
+        get
+        {
+            if ( string.IsNullOrEmpty( _name ) )
+            {
+                _name = "Not Set";
+            }
+            
+            return _name;
+        }
+        private set => _name = value;
+    }
 
     // ========================================================================
 
     private readonly Dictionary< IApplication, List< Texture > > _managedTextures = [ ];
 
+    private string? _name;
+    
     // ========================================================================
     // ========================================================================
 
@@ -111,6 +131,7 @@ public class Texture : GLTexture, IManaged
                     bool useMipMaps = false )
         : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
     {
+        Name = file.Name;
     }
 
     /// <summary>

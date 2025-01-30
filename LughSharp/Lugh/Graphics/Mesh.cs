@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
@@ -65,7 +64,7 @@ public class Mesh : IDisposable
     private readonly IIndexData  _indices;
     private readonly bool        _isVertexArray;
 
-    private IInstanceData? _instances;
+    private InstanceBufferObject? _instances;
 
     // ========================================================================
     // ========================================================================

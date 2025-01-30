@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Exceptions;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 
@@ -34,15 +35,26 @@ namespace LughSharp.Lugh.Graphics.Cameras;
 [PublicAPI]
 public class OrthographicCamera : Camera
 {
-    public float Zoom { get; set; }
+    public float Zoom
+    {
+        get
+        {
+            _zoom = Math.Max( 0.0001f, _zoom );
+
+            return _zoom;
+        }
+        set => _zoom = value;
+    }
 
     // ========================================================================
 
     private readonly Vector3 _tmp = new();
 
+    private float _zoom = 1.0f;
+
     // ========================================================================
     // ========================================================================
-    
+
     /// <summary>
     /// Constructs a default OrthographicCamera.
     /// All properties, such as viewport size etc, will need setting up before use.
@@ -64,8 +76,6 @@ public class OrthographicCamera : Camera
     /// <param name="viewportHeight"> Height, in pixels, of this cameras viewport. </param>
     public OrthographicCamera( float viewportWidth, float viewportHeight )
     {
-        Logger.Checkpoint();
-
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
         Near           = 0;
@@ -83,7 +93,7 @@ public class OrthographicCamera : Camera
     {
         Update();
     }
-    
+
     /// <summary>
     /// Updates the camera.
     /// Also updates the frustrum if <paramref name="updateFrustrum"/> is true.
@@ -91,6 +101,8 @@ public class OrthographicCamera : Camera
     /// <param name="updateFrustrum"></param>
     public override void Update( bool updateFrustrum = true )
     {
+        GdxRuntimeException.ThrowIfZero< float >( Zoom );
+
         Projection.SetToOrtho( ( Zoom * -ViewportWidth ) / 2,
                                Zoom * ( ViewportWidth / 2 ),
                                Zoom * -( ViewportHeight / 2 ),
@@ -99,7 +111,7 @@ public class OrthographicCamera : Camera
                                Far );
 
         View.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
-        
+
         Combined.Set( Projection );
         Matrix4.Mul( Combined.Val, View.Val );
 
@@ -133,10 +145,10 @@ public class OrthographicCamera : Camera
     public void SetToOrtho( float viewportWidth, float viewportHeight, bool yDown )
     {
         Up.Set( 0, ( yDown ? -1 : 1 ), 0 );
-        Direction.Set( 0, 0, ( yDown ? 1 : -1 ) );        
-        
+        Direction.Set( 0, 0, ( yDown ? 1 : -1 ) );
+
         Position.Set( ( Zoom * viewportWidth ) / 2.0f, ( Zoom * viewportHeight ) / 2.0f, 0 );
-        
+
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
 
