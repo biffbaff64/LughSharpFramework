@@ -26,6 +26,7 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Collections;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
@@ -63,7 +64,6 @@ public partial class ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
@@ -73,7 +73,6 @@ public partial class ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
@@ -93,7 +92,6 @@ public partial class ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="name"></param>
     /// <param name="pedant"></param>
@@ -127,7 +125,6 @@ public partial class ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="name"></param>
     /// <param name="matrix"></param>
@@ -142,7 +139,6 @@ public partial class ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="matrix"></param>
@@ -184,14 +180,14 @@ public partial class ShaderProgram
     }
 
     /// <summary>
-    /// Sets the uniform with the given name. The <see cref="ShaderProgram"/>
-    /// must be bound for this to work.
+    /// Sets the uniform with the given name. The <see cref="ShaderProgram"/> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="value"> the value  </param>
     public void SetUniformi( string name, int value )
     {
         CheckManaged();
+
         GdxApi.Bindings.Uniform1i( FetchUniformLocation( name ), value );
     }
 
@@ -216,6 +212,7 @@ public partial class ShaderProgram
     public void SetUniformi( string name, int count, int value )
     {
         CheckManaged();
+
         GdxApi.Bindings.Uniform2i( FetchUniformLocation( name ), count, value );
     }
 
@@ -242,6 +239,7 @@ public partial class ShaderProgram
     public void SetUniformi( string name, int value1, int value2, int value3 )
     {
         CheckManaged();
+
         GdxApi.Bindings.Uniform3i( FetchUniformLocation( name ), value1, value2, value3 );
     }
 
@@ -267,6 +265,7 @@ public partial class ShaderProgram
     public void SetUniformf( string name, float value )
     {
         CheckManaged();
+
         GdxApi.Bindings.Uniform1f( FetchUniformLocation( name ), value );
     }
 
@@ -291,6 +290,7 @@ public partial class ShaderProgram
     public void SetUniformf( string name, float value1, float value2 )
     {
         CheckManaged();
+
         GdxApi.Bindings.Uniform2f( FetchUniformLocation( name ), value1, value2 );
     }
 
@@ -499,7 +499,7 @@ public partial class ShaderProgram
     {
         Logger.Debug( $"location: {location}" );
         Logger.Debug( $"values: {string.Join( ", ", values )}" );
-        
+
         CheckManaged();
         GdxApi.Bindings.UniformMatrix4fv( location, false, values );
     }

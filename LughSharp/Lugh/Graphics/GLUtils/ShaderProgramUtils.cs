@@ -22,7 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
+
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Utils.Collections;
+
+using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
@@ -46,7 +51,7 @@ public partial class ShaderProgram
         CheckManaged();
 
         var location = FetchAttributeLocation( name );
-
+        
         if ( location == -1 )
         {
             return;
@@ -59,7 +64,6 @@ public partial class ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="size"></param>
@@ -96,7 +100,7 @@ public partial class ShaderProgram
         CheckManaged();
 
         var location = FetchAttributeLocation( name );
-
+        
         if ( location == -1 )
         {
             return;
@@ -106,7 +110,6 @@ public partial class ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="size"></param>
@@ -129,7 +132,7 @@ public partial class ShaderProgram
         CheckManaged();
 
         var location = FetchAttributeLocation( name );
-
+        
         if ( location == -1 )
         {
             return;
@@ -138,6 +141,9 @@ public partial class ShaderProgram
         GdxApi.Bindings.DisableVertexAttribArray( ( uint )location );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="location"></param>
     public void DisableVertexAttribute( int location )
     {
         CheckManaged();
@@ -194,6 +200,8 @@ public partial class ShaderProgram
         return _attributes.ContainsKey( name );
     }
 
+    /// <summary>
+    /// </summary>
     /// <param name="name"> the name of the attribute </param>
     /// <returns>
     /// the type of the attribute, one of <see cref="IGL.GL_FLOAT"/>,
@@ -204,6 +212,8 @@ public partial class ShaderProgram
         return _attributeTypes.GetValueOrDefault( name, 0 );
     }
 
+    /// <summary>
+    /// </summary>
     /// <param name="name"> the name of the attribute </param>
     /// <returns> the location of the attribute or -1.  </returns>
     public int GetAttributeLocation( string name )
@@ -211,6 +221,8 @@ public partial class ShaderProgram
         return _attributes.GetValueOrDefault( name, 0 );
     }
 
+    /// <summary>
+    /// </summary>
     /// <param name="name"> the name of the attribute </param>
     /// <returns> the size of the attribute or 0.</returns>
     public int GetAttributeSize( string name )
@@ -218,8 +230,6 @@ public partial class ShaderProgram
         return _attributeSizes.GetValueOrDefault( name, 0 );
     }
 
-    /// <summary>
-    /// </summary>
     private unsafe void FetchUniforms()
     {
         var numUniforms = stackalloc int[ 1 ];
@@ -245,8 +255,6 @@ public partial class ShaderProgram
         }
     }
 
-    /// <summary>
-    /// </summary>
     private unsafe void FetchAttributes()
     {
         var numAttributes = stackalloc int[ 1 ];
@@ -273,48 +281,38 @@ public partial class ShaderProgram
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="app"></param>
-    /// <param name="shaderProgram"></param>
     private void AddManagedShader( IApplication app, ShaderProgram shaderProgram )
     {
         List< ShaderProgram >? managedResources;
 
-        if ( !_shaders.ContainsKey( app ) || ( _shaders[ app ] == null ) )
+        if ( !_availableShaders.ContainsKey( app ) || ( _availableShaders[ app ] == null ) )
         {
             managedResources = new List< ShaderProgram >();
         }
         else
         {
-            managedResources = _shaders[ app ];
+            managedResources = _availableShaders[ app ];
         }
 
         managedResources?.Add( shaderProgram );
 
-        _shaders.Put( app, managedResources );
+        _availableShaders.Put( app, managedResources );
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="app"></param>
     public static void ClearAllShaderPrograms( IApplication app )
     {
-        _shaders.Remove( app );
+        _availableShaders.Remove( app );
     }
 
     /// <summary>
-    /// Invalidates all shaders so the next time they are used new
-    /// handles are generated.
+    /// Invalidates all shaders so the next time they are used new handles are generated.
     /// </summary>
     /// <param name="app">  </param>
     public static void InvalidateAllShaderPrograms( IApplication app )
     {
         List< ShaderProgram >? shaderArray;
 
-        if ( !_shaders.TryGetValue( app, out var value ) || ( value == null ) )
+        if ( !_availableShaders.TryGetValue( app, out var value ) || ( value == null ) )
         {
             shaderArray = [ ];
         }
@@ -323,16 +321,13 @@ public partial class ShaderProgram
             shaderArray = value;
         }
 
-        foreach ( var sp in shaderArray! )
+        foreach ( var sp in shaderArray )
         {
             sp._invalidated = true;
             sp.CheckManaged();
         }
     }
     
-    /// <summary>
-    /// 
-    /// </summary>
     private void CheckManaged()
     {
         if ( _invalidated )

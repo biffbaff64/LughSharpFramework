@@ -22,33 +22,24 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Collections;
-
-using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-/// A shader program encapsulates a vertex and fragment shader pairlinked to
-/// form a shader program. After construction a ShaderProgram can be used to
-/// draw <see cref="Mesh"/>. To make the GPU use a specific ShaderProgram the
-/// programs <see cref="Bind()"/> method must be used which effectively binds
-/// the program. When a ShaderProgram is bound one can set uniforms, vertex
-/// attributes and attributes as needed via the respective methods.
+/// A shader program encapsulates a vertex and fragment shader pairlinked to form a shader program.
+/// After construction a ShaderProgram can be used to draw <see cref="Mesh"/>. To make the GPU use
+/// a specific ShaderProgram the programs <see cref="Bind()"/> method must be used which effectively
+/// binds the program. When a ShaderProgram is bound one can set uniforms, vertex attributes and
+/// attributes as needed via the respective methods.
 /// <para>
-/// A ShaderProgram must be disposed via a call to <see cref="Dispose()"/>
-/// when it is no longer needed
+/// A ShaderProgram must be disposed via a call to <see cref="Dispose()"/> when it is no longer needed
 /// </para>
 /// <para>
-/// ShaderPrograms are managed. In case the OpenGL context is lost all shaders
-/// get invalidated and have to be reloaded. Managed ShaderPrograms are
-/// automatically reloaded when the OpenGL context is recreated so you don't
-/// have to do this manually.
+/// ShaderPrograms are managed. In case the OpenGL context is lost all shaders get invalidated and
+/// have to be reloaded. Managed ShaderPrograms are automatically reloaded when the OpenGL context is
+/// recreated so you don't have to do this manually.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -78,9 +69,9 @@ public partial class ShaderProgram
 
     // ========================================================================
 
+    public string[] Attributes           { get; private set; } = null!;
+    public string[] Uniforms             { get; private set; } = null!;
     public bool     IsCompiled           { get; set; }
-//    public string[] Attributes           { get; private set; } = null!;
-//    public string[] Uniforms             { get; private set; } = null!;
     public string   VertexShaderSource   { get; }
     public string   FragmentShaderSource { get; }
     public int      Handle               { get; private set; }
@@ -94,17 +85,14 @@ public partial class ShaderProgram
     // ========================================================================
     // ========================================================================
 
-    /// <summary>
-    /// the list of currently available shaders
-    /// </summary>
-//    private static readonly Dictionary< IApplication, List< ShaderProgram >? > _shaders = new();
-//
-//    private readonly Dictionary< string, int > _attributes     = new();
-//    private readonly Dictionary< string, int > _attributeSizes = new();
-//    private readonly Dictionary< string, int > _attributeTypes = new();
-//    private readonly Dictionary< string, int > _uniforms       = new();
-//    private readonly Dictionary< string, int > _uniformSizes   = new();
-//    private readonly Dictionary< string, int > _uniformTypes   = new();
+    private static readonly Dictionary< IApplication, List< ShaderProgram >? > _availableShaders = new();
+
+    private readonly Dictionary< string, int > _attributes     = new();
+    private readonly Dictionary< string, int > _attributeSizes = new();
+    private readonly Dictionary< string, int > _attributeTypes = new();
+    private readonly Dictionary< string, int > _uniforms       = new();
+    private readonly Dictionary< string, int > _uniformSizes   = new();
+    private readonly Dictionary< string, int > _uniformTypes   = new();
 
     private int    _vertexShaderHandle;
     private int    _fragmentShaderHandle;
@@ -137,10 +125,6 @@ public partial class ShaderProgram
         FetchUniforms();
 
         AddManagedShader( GdxApi.App, this );
-
-        Logger.Debug( $"POSITION_ATTRIBUTE  : {GdxApi.Bindings.GetAttribLocation( ( uint )Handle, POSITION_ATTRIBUTE )}" );
-        Logger.Debug( $"COLOR_ATTRIBUTE     : {GdxApi.Bindings.GetAttribLocation( ( uint )Handle, COLOR_ATTRIBUTE )}" );
-        Logger.Debug( $"TEXCOORD_ATTRIBUTE  : {GdxApi.Bindings.GetAttribLocation( ( uint )Handle, TEXCOORD_ATTRIBUTE )}" );
     }
 
     /// <summary>
@@ -155,17 +139,6 @@ public partial class ShaderProgram
     // ========================================================================
 
     /// <summary>
-    /// Trys to create a program object for this ShaderProgram.
-    /// </summary>
-    /// <returns>The program ID if created, otherwise -1.</returns>
-    protected static int CreateProgram()
-    {
-        var program = ( int )GdxApi.Bindings.CreateProgram();
-
-        return program != 0 ? program : -1;
-    }
-
-    /// <summary>
     /// Loads and compiles the shaders, creates a new program and links the shaders.
     /// </summary>
     /// <param name="vertexShader"> the vertex shader </param>
@@ -174,9 +147,6 @@ public partial class ShaderProgram
     {
         _vertexShaderHandle   = LoadShader( IGL.GL_VERTEX_SHADER, vertexShader );
         _fragmentShaderHandle = LoadShader( IGL.GL_FRAGMENT_SHADER, fragmentShader );
-
-        Logger.Debug( $"_vertexShaderHandle: {_vertexShaderHandle}, " +
-                      $"_fragmentShaderHandle: {_fragmentShaderHandle}" );
 
         if ( ( _vertexShaderHandle == -1 ) || ( _fragmentShaderHandle == -1 ) )
         {
@@ -211,8 +181,6 @@ public partial class ShaderProgram
 
         GdxApi.Bindings.GetProgramiv( ( uint )program, IGL.GL_LINK_STATUS, status );
 
-        Logger.Debug( $"Link Status: {status[ 0 ]}" );
-
         if ( *status == IGL.GL_FALSE )
         {
             var length = stackalloc int[ 1 ];
@@ -230,6 +198,17 @@ public partial class ShaderProgram
         GdxApi.Bindings.DeleteShader( ( uint )_fragmentShaderHandle );                  // Delete fragment shader
 
         return program;
+    }
+
+    /// <summary>
+    /// Trys to create a program object for this ShaderProgram.
+    /// </summary>
+    /// <returns>The program ID if created, otherwise -1.</returns>
+    protected static int CreateProgram()
+    {
+        var program = ( int )GdxApi.Bindings.CreateProgram();
+
+        return program != 0 ? program : -1;
     }
 
     // ========================================================================
@@ -255,45 +234,25 @@ public partial class ShaderProgram
         }
     }
 
-//    public static string ManagedStatus
-//    {
-//        get
-//        {
-//            var builder = new StringBuilder( "Managed shaders/app: { " );
-//
-//            foreach ( var app in _shaders.Keys )
-//            {
-//                builder.Append( _shaders[ app ]?.Count );
-//                builder.Append( ' ' );
-//            }
-//
-//            builder.Append( '}' );
-//
-//            return builder.ToString();
-//        }
-//    }
-
-//    public static int NumManagedShaderPrograms => _shaders[ GdxApi.App ]!.Count;
-
-    // ========================================================================
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public void Bind()
+    public static string ManagedStatus
     {
-        CheckManaged();
-        GdxApi.Bindings.UseProgram( ( uint )Handle );
+        get
+        {
+            var builder = new StringBuilder( "Managed shaders/app: { " );
+
+            foreach ( var app in _availableShaders.Keys )
+            {
+                builder.Append( _availableShaders[ app ]?.Count );
+                builder.Append( ' ' );
+            }
+
+            builder.Append( '}' );
+
+            return builder.ToString();
+        }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public void Unbind()
-    {
-        CheckManaged();
-        GdxApi.Bindings.UseProgram( 0 );
-    }
+    public static int NumManagedShaderPrograms => _availableShaders[ GdxApi.App ]!.Count;
 
     // ========================================================================
 
@@ -303,7 +262,6 @@ public partial class ShaderProgram
     /// <param name="shaderType"></param>
     /// <param name="source"></param>
     /// <returns></returns>
-    /// <exception cref="Exception"></exception>
     private unsafe int LoadShader( int shaderType, string source )
     {
         var shader = GdxApi.Bindings.CreateShader( shaderType );
@@ -339,6 +297,28 @@ public partial class ShaderProgram
         return ( int )shader;
     }
 
+    // ========================================================================
+
+    /// <summary>
+    /// Bind this shader to the renderer.
+    /// </summary>
+    public void Bind()
+    {
+        CheckManaged();
+        GdxApi.Bindings.UseProgram( ( uint )Handle );
+    }
+
+    /// <summary>
+    /// Unbind this shader from the renderer.
+    /// </summary>
+    public void Unbind()
+    {
+        CheckManaged();
+        GdxApi.Bindings.UseProgram( 0 );
+    }
+
+    // ========================================================================
+    
     /// <summary>
     /// Disposes all resources associated with this shader.
     /// Must be called when the shader is no longer used.
@@ -350,6 +330,6 @@ public partial class ShaderProgram
         GdxApi.Bindings.DeleteShader( ( uint )_fragmentShaderHandle );
         GdxApi.Bindings.DeleteProgram( ( uint )Handle );
 
-        _shaders[ GdxApi.App ]?.Remove( this );
+        _availableShaders[ GdxApi.App ]?.Remove( this );
     }
 }
