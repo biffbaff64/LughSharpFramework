@@ -186,11 +186,6 @@ public class SpriteBatch : IBatch
             Logger.Debug( "Using Default Shader" );
             _shader = defaultShader;
         }
-
-//        _uCombinedMatrixLocation = _shader?.GetAttributeLocation( "u_combinedMatrix" ) ?? -1;
-//        Logger.Debug( _uCombinedMatrixLocation == -1
-//                          ? "ERROR: Could not find uniform location for u_combinedMatrix"
-//                          : $"uniform location for u_combinedMatrix found: {_uCombinedMatrixLocation}" );
     }
 
     /// <summary>
@@ -238,7 +233,7 @@ public class SpriteBatch : IBatch
         // --------------------------------------------------------------------
 
         // Position Attribute
-        var positionLocation = program.GetAttributeLocation( "a_position" );
+        var positionLocation = program.GetAttributeLocation( ShaderProgram.POSITION_ATTRIBUTE );
 
         if ( positionLocation >= 0 )
         {
@@ -1374,6 +1369,25 @@ public class SpriteBatch : IBatch
         }
     }
 
+    public static ShaderProgram CreateMinimalTestShader()
+    {
+        const string VERTEX_SHADER = $"{ShaderProgram.SHADER_VERSION_CODE}\n" +
+                                     $"in vec4 {ShaderProgram.COLOR_ATTRIBUTE};\n" +
+                                     "out vec4 v_colorPacked;\n" +
+                                     "void main() {\n" +
+                                     $"    v_colorPacked = {ShaderProgram.COLOR_ATTRIBUTE};\n" +
+                                     "}\n";
+
+        const string FRAGMENT_SHADER = $"{ShaderProgram.SHADER_VERSION_CODE}\n" +
+                                       "in vec4 v_colorPacked;\n" +
+                                       "void main() {\n" +
+                                       "}\n";
+
+        var shaderProgram = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
+
+        return shaderProgram;
+    }
+    
     /// <summary>
     /// Returns a new instance of the default shader used by SpriteBatch when no shader is specified.
     /// </summary>

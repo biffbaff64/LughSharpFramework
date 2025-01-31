@@ -57,8 +57,7 @@ public partial class ShaderProgram
     #region default attribute names
 
     /// <summary>
-    /// code that is always added to the vertex and fragments shaders, to
-    /// inject a #version line.
+    /// code that is always added to the vertex and fragments shaders, to inject a #version line.
     /// </summary>
     public const string SHADER_VERSION_CODE = "#version 450 core";
 
@@ -80,8 +79,8 @@ public partial class ShaderProgram
     // ========================================================================
 
     public bool     IsCompiled           { get; set; }
-    public string[] Attributes           { get; private set; } = null!;
-    public string[] Uniforms             { get; private set; } = null!;
+//    public string[] Attributes           { get; private set; } = null!;
+//    public string[] Uniforms             { get; private set; } = null!;
     public string   VertexShaderSource   { get; }
     public string   FragmentShaderSource { get; }
     public int      Handle               { get; private set; }
@@ -98,14 +97,14 @@ public partial class ShaderProgram
     /// <summary>
     /// the list of currently available shaders
     /// </summary>
-    private static readonly Dictionary< IApplication, List< ShaderProgram >? > _shaders = new();
-
-    private readonly Dictionary< string, int > _attributes     = new();
-    private readonly Dictionary< string, int > _attributeSizes = new();
-    private readonly Dictionary< string, int > _attributeTypes = new();
-    private readonly Dictionary< string, int > _uniforms       = new();
-    private readonly Dictionary< string, int > _uniformSizes   = new();
-    private readonly Dictionary< string, int > _uniformTypes   = new();
+//    private static readonly Dictionary< IApplication, List< ShaderProgram >? > _shaders = new();
+//
+//    private readonly Dictionary< string, int > _attributes     = new();
+//    private readonly Dictionary< string, int > _attributeSizes = new();
+//    private readonly Dictionary< string, int > _attributeTypes = new();
+//    private readonly Dictionary< string, int > _uniforms       = new();
+//    private readonly Dictionary< string, int > _uniformSizes   = new();
+//    private readonly Dictionary< string, int > _uniformTypes   = new();
 
     private int    _vertexShaderHandle;
     private int    _fragmentShaderHandle;
@@ -138,13 +137,10 @@ public partial class ShaderProgram
         FetchUniforms();
 
         AddManagedShader( GdxApi.App, this );
-        
-        Logger.Debug( $"POSITION_ATTRIBUTE  : {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, POSITION_ATTRIBUTE)}");
-        Logger.Debug( $"NORMAL_ATTRIBUTE    : {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, NORMAL_ATTRIBUTE)}");
-        Logger.Debug( $"COLOR_ATTRIBUTE     : {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, COLOR_ATTRIBUTE)}");
-        Logger.Debug( $"TANGENT_ATTRIBUTE   : {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, TANGENT_ATTRIBUTE)}");
-        Logger.Debug( $"BINORMAL_ATTRIBUTE  : {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, BINORMAL_ATTRIBUTE)}");
-        Logger.Debug( $"BONEWEIGHT_ATTRIBUTE: {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, BONEWEIGHT_ATTRIBUTE)}");
+
+        Logger.Debug( $"POSITION_ATTRIBUTE  : {GdxApi.Bindings.GetAttribLocation( ( uint )Handle, POSITION_ATTRIBUTE )}" );
+        Logger.Debug( $"COLOR_ATTRIBUTE     : {GdxApi.Bindings.GetAttribLocation( ( uint )Handle, COLOR_ATTRIBUTE )}" );
+        Logger.Debug( $"TEXCOORD_ATTRIBUTE  : {GdxApi.Bindings.GetAttribLocation( ( uint )Handle, TEXCOORD_ATTRIBUTE )}" );
     }
 
     /// <summary>
@@ -159,8 +155,9 @@ public partial class ShaderProgram
     // ========================================================================
 
     /// <summary>
+    /// Trys to create a program object for this ShaderProgram.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The program ID if created, otherwise -1.</returns>
     protected static int CreateProgram()
     {
         var program = ( int )GdxApi.Bindings.CreateProgram();
@@ -214,8 +211,8 @@ public partial class ShaderProgram
 
         GdxApi.Bindings.GetProgramiv( ( uint )program, IGL.GL_LINK_STATUS, status );
 
-        Logger.Debug( $"Link Status: {status[0]}" );
-        
+        Logger.Debug( $"Link Status: {status[ 0 ]}" );
+
         if ( *status == IGL.GL_FALSE )
         {
             var length = stackalloc int[ 1 ];
@@ -227,11 +224,16 @@ public partial class ShaderProgram
             throw new Exception( $"Failed to link shader program {program}: {_shaderLog}" );
         }
 
+        GdxApi.Bindings.DetachShader( ( uint )program, ( uint )_vertexShaderHandle );   // Detach vertex shader
+        GdxApi.Bindings.DetachShader( ( uint )program, ( uint )_fragmentShaderHandle ); // Detach fragment shader
+        GdxApi.Bindings.DeleteShader( ( uint )_vertexShaderHandle );                    // Delete vertex shader
+        GdxApi.Bindings.DeleteShader( ( uint )_fragmentShaderHandle );                  // Delete fragment shader
+
         return program;
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// the log info for the shader compilation and program linking stage.
     /// The shader needs to be bound for this method to have an effect.
@@ -253,125 +255,27 @@ public partial class ShaderProgram
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public static string ManagedStatus
-    {
-        get
-        {
-            var builder = new StringBuilder( "Managed shaders/app: { " );
+//    public static string ManagedStatus
+//    {
+//        get
+//        {
+//            var builder = new StringBuilder( "Managed shaders/app: { " );
+//
+//            foreach ( var app in _shaders.Keys )
+//            {
+//                builder.Append( _shaders[ app ]?.Count );
+//                builder.Append( ' ' );
+//            }
+//
+//            builder.Append( '}' );
+//
+//            return builder.ToString();
+//        }
+//    }
 
-            foreach ( var app in _shaders.Keys )
-            {
-                builder.Append( _shaders[ app ]?.Count );
-                builder.Append( ' ' );
-            }
-
-            builder.Append( '}' );
-
-            return builder.ToString();
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public static int NumManagedShaderPrograms => _shaders[ GdxApi.App ]!.Count;
+//    public static int NumManagedShaderPrograms => _shaders[ GdxApi.App ]!.Count;
 
     // ========================================================================
-
-    /// <summary>
-    /// Sets the vertex attribute with the given name.
-    /// The <see cref="ShaderProgram"/> must be bound for this to work.
-    /// </summary>
-    /// <param name="name">The attribute name.</param>
-    /// <param name="size"> The number of components, must be >= 1 and &lt;= 4. </param>
-    /// <param name="type">
-    /// The type, must be one of IGL.GL_BYTE, IGL.GL_UNSIGNED_BYTE, IGL.GL_SHORT, IGL.GL_UNSIGNED_SHORT,
-    /// IGL.GL_FIXED, or IGL.GL_FLOAT.
-    /// </param>
-    /// <param name="normalize"> Whether fixed point data should be normalized. Will not work on the desktop. </param>
-    /// <param name="stride">The stride in bytes between successive attributes.</param>
-    /// <param name="buffer">The buffer containing the vertex attributes.</param>
-    public unsafe void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, Buffer buffer )
-    {
-        CheckManaged();
-
-        var location = FetchAttributeLocation( name );
-
-        if ( location == -1 )
-        {
-            return;
-        }
-
-        fixed ( void* ptr = &buffer.BackingArray()[ 0 ] )
-        {
-            GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ptr );
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="location"></param>
-    /// <param name="size"></param>
-    /// <param name="type"></param>
-    /// <param name="normalize"></param>
-    /// <param name="stride"></param>
-    /// <param name="buffer"></param>
-    public unsafe void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, Buffer buffer )
-    {
-        CheckManaged();
-
-        fixed ( void* ptr = &buffer.BackingArray()[ 0 ] )
-        {
-            GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ptr );
-        }
-    }
-
-    /// <summary>
-    /// Sets the vertex attribute with the given name. The <see cref="ShaderProgram"/> must
-    /// be bound for this to work.
-    /// </summary>
-    /// <param name="name">The attribute name.</param>
-    /// <param name="size">The number of components, must be >= 1 and &lt;= 4.</param>
-    /// <param name="type">
-    /// The type, must be one of IGL.GL_Byte, IGL.GL_Unsigned_Byte, IGL.GL_Short, IGL.GL_Unsigned_Short,
-    /// IGL.GL_Fixed, or IGL.GL_Float.
-    /// <para>GL_Fixed will not work on the desktop.</para>
-    /// </param>
-    /// <param name="normalize"> Whether fixed point data should be normalized. Will not work on the desktop.</param>
-    /// <param name="stride">The stride in bytes between successive attributes.</param>
-    /// <param name="offset"> Byte offset into the vertex buffer object bound to IGL.GL_Array_Buffer. </param>
-    public void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, int offset )
-    {
-        CheckManaged();
-
-        var location = FetchAttributeLocation( name );
-
-        if ( location == -1 )
-        {
-            return;
-        }
-
-        GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( uint )offset );
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="location"></param>
-    /// <param name="size"></param>
-    /// <param name="type"></param>
-    /// <param name="normalize"></param>
-    /// <param name="stride"></param>
-    /// <param name="offset"></param>
-    public void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, int offset )
-    {
-        CheckManaged();
-        GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( uint )offset );
-    }
 
     /// <summary>
     /// 
@@ -389,104 +293,6 @@ public partial class ShaderProgram
     {
         CheckManaged();
         GdxApi.Bindings.UseProgram( 0 );
-    }
-
-    /// <summary>
-    /// Disables the vertex attribute with the given name
-    /// </summary>
-    /// <param name="name"> the vertex attribute name  </param>
-    public void DisableVertexAttribute( string name )
-    {
-        CheckManaged();
-
-        var location = FetchAttributeLocation( name );
-
-        if ( location == -1 )
-        {
-            return;
-        }
-
-        GdxApi.Bindings.DisableVertexAttribArray( ( uint )location );
-    }
-
-    public void DisableVertexAttribute( int location )
-    {
-        CheckManaged();
-        GdxApi.Bindings.DisableVertexAttribArray( ( uint )location );
-    }
-
-    /// <summary>
-    /// Enables the vertex attribute with the given name
-    /// </summary>
-    /// <param name="name"> the vertex attribute name  </param>
-    public void EnableVertexAttribute( string name )
-    {
-        CheckManaged();
-
-        var location = FetchAttributeLocation( name );
-
-        if ( location == -1 )
-        {
-            return;
-        }
-
-        GdxApi.Bindings.EnableVertexAttribArray( ( uint )location );
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="location"></param>
-    public void EnableVertexAttribute( int location )
-    {
-        CheckManaged();
-        GdxApi.Bindings.EnableVertexAttribArray( ( uint )location );
-    }
-
-    /// <summary>
-    /// Sets the given attribute
-    /// </summary>
-    /// <param name="name"> the name of the attribute </param>
-    /// <param name="value1"> the first value </param>
-    /// <param name="value2"> the second value </param>
-    /// <param name="value3"> the third value </param>
-    /// <param name="value4"> the fourth value  </param>
-    public void SetAttributef( string name, float value1, float value2, float value3, float value4 )
-    {
-        GdxApi.Bindings.VertexAttrib4f( ( uint )FetchAttributeLocation( name ), value1, value2, value3, value4 );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="name"> the name of the attribute </param>
-    /// <returns> whether the attribute is available in the shader  </returns>
-    public bool HasAttribute( string name )
-    {
-        return _attributes.ContainsKey( name );
-    }
-
-    /// <param name="name"> the name of the attribute </param>
-    /// <returns>
-    /// the type of the attribute, one of <see cref="IGL.GL_FLOAT"/>,
-    /// <see cref="IGL.GL_FLOAT_VEC2"/> etc.
-    /// </returns>
-    public int GetAttributeType( string name )
-    {
-        return _attributeTypes.GetValueOrDefault( name, 0 );
-    }
-
-    /// <param name="name"> the name of the attribute </param>
-    /// <returns> the location of the attribute or -1.  </returns>
-    public int GetAttributeLocation( string name )
-    {
-        return _attributes.GetValueOrDefault( name, 0 );
-    }
-
-    /// <param name="name"> the name of the attribute </param>
-    /// <returns> the size of the attribute or 0.</returns>
-    public int GetAttributeSize( string name )
-    {
-        return _attributeSizes.GetValueOrDefault( name, 0 );
     }
 
     // ========================================================================
@@ -531,84 +337,6 @@ public partial class ShaderProgram
         }
 
         return ( int )shader;
-    }
-
-    /// <summary>
-    /// </summary>
-    private unsafe void FetchUniforms()
-    {
-        var numUniforms = stackalloc int[ 1 ];
-
-        GdxApi.Bindings.GetProgramiv( ( uint )Handle, IGL.GL_ACTIVE_UNIFORMS, numUniforms );
-
-        Uniforms = new string[ *numUniforms ];
-
-        for ( uint i = 0; i < *numUniforms; i++ )
-        {
-            var name = GdxApi.Bindings.GetActiveUniform( ( uint )Handle,
-                                                         i,
-                                                         IGL.GL_ACTIVE_UNIFORM_MAX_LENGTH,
-                                                         out var size,
-                                                         out var type );
-
-            var location = GdxApi.Bindings.GetUniformLocation( ( uint )Handle, name );
-
-            _uniforms[ name ]     = location;
-            _uniformSizes[ name ] = size;
-            _uniformTypes[ name ] = type;
-            Uniforms[ i ]         = name;
-        }
-    }
-
-    /// <summary>
-    /// </summary>
-    private unsafe void FetchAttributes()
-    {
-        var numAttributes = stackalloc int[ 1 ];
-
-        GdxApi.Bindings.GetProgramiv( ( uint )Handle, IGL.GL_ACTIVE_ATTRIBUTES, numAttributes );
-
-        Attributes = new string[ *numAttributes ];
-
-        for ( var index = 0; index < *numAttributes; index++ )
-        {
-            var name = GdxApi.Bindings.GetActiveAttrib( ( uint )Handle,
-                                                        ( uint )index,
-                                                        IGL.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
-                                                        out var size,
-                                                        out var type );
-
-            var location = GdxApi.Bindings.GetAttribLocation( ( uint )Handle, name );
-
-            _attributes[ name ]     = location;
-            _attributeSizes[ name ] = size;
-            _attributeTypes[ name ] = type;
-
-            Attributes[ index ] = name;
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="app"></param>
-    /// <param name="shaderProgram"></param>
-    private void AddManagedShader( IApplication app, ShaderProgram shaderProgram )
-    {
-        List< ShaderProgram >? managedResources;
-
-        if ( !_shaders.ContainsKey( app ) || ( _shaders[ app ] == null ) )
-        {
-            managedResources = new List< ShaderProgram >();
-        }
-        else
-        {
-            managedResources = _shaders[ app ];
-        }
-
-        managedResources?.Add( shaderProgram );
-
-        _shaders.Put( app, managedResources );
     }
 
     /// <summary>
