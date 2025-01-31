@@ -40,15 +40,16 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI, DebuggerDisplay( "DebugVersionString" )]
 public class GLVersion
 {
-    public string?                     VendorString   { get; set; } = "Unknown";
-    public string?                     RendererString { get; set; } = "Unknown";
-    public GraphicsBackend.BackendType BackendType    { get; set; }
+    public GraphicsBackend.BackendType BackendType { get; set; }
 
     // ========================================================================
 
     private int _majorVersion    = 0;
     private int _minorVersion    = 0;
     private int _revisionVersion = 0;
+
+    private string _vendor   = "";
+    private string _renderer = "";
 
     // ========================================================================
     // ========================================================================
@@ -68,9 +69,6 @@ public class GLVersion
             var _ => throw new GdxRuntimeException( $"Unknown Platform ApplicationType: {appType}" ),
         };
 
-        VendorString   ??= BytePointerToString.Convert( GdxApi.Bindings.GetString( ( int )StringName.Vendor ) );
-        RendererString ??= BytePointerToString.Convert( GdxApi.Bindings.GetString( ( int )StringName.Renderer ) );
-
         var version = BytePointerToString.Convert( GdxApi.Bindings.GetString( ( int )StringName.Version ) );
 
         _majorVersion    = ( int )char.GetNumericValue( version[ 0 ] );
@@ -78,6 +76,24 @@ public class GLVersion
         _revisionVersion = ( int )char.GetNumericValue( version[ 4 ] );
 
         Logger.Debug( DebugVersionString() );
+    }
+
+    public unsafe string VendorString
+    {
+        get
+        {
+            _vendor = BytePointerToString.Convert( GdxApi.Bindings.GetString( ( int )StringName.Vendor ) );
+            return _vendor;
+        }
+    }
+
+    public unsafe string RendererString
+    {
+        get
+        {
+            _renderer = BytePointerToString.Convert( GdxApi.Bindings.GetString( ( int )StringName.Renderer ) );
+            return _renderer;
+        }
     }
 
     /// <summary>

@@ -61,45 +61,6 @@ public partial class ShaderProgram
             sp.CheckManaged();
         }
     }
-
-    /// <summary>
-    /// </summary>
-    /// <returns></returns>
-    protected static int CreateProgram()
-    {
-        var program = ( int )GdxApi.Bindings.CreateProgram();
-
-        return program != 0 ? program : -1;
-    }
-
-    private unsafe int LinkProgram( int program )
-    {
-        if ( program == -1 )
-        {
-            return -1;
-        }
-
-        GdxApi.Bindings.AttachShader( ( uint )program, ( uint )_vertexShaderHandle );
-        GdxApi.Bindings.AttachShader( ( uint )program, ( uint )_fragmentShaderHandle );
-        GdxApi.Bindings.LinkProgram( ( uint )program );
-
-        var status = stackalloc int[ 1 ];
-
-        GdxApi.Bindings.GetProgramiv( ( uint )program, IGL.GL_LINK_STATUS, status );
-
-        if ( *status == IGL.GL_FALSE )
-        {
-            var length = stackalloc int[ 1 ];
-
-            GdxApi.Bindings.GetProgramiv( ( uint )program, IGL.GL_INFO_LOG_LENGTH, length );
-
-            _shaderLog = GdxApi.Bindings.GetProgramInfoLog( ( uint )program, *length );
-
-            throw new Exception( $"Failed to link shader program {program}: {_shaderLog}" );
-        }
-
-        return program;
-    }
     
     /// <summary>
     /// 

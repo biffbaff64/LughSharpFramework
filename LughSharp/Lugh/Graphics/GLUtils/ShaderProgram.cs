@@ -25,6 +25,7 @@
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 
@@ -133,24 +134,17 @@ public partial class ShaderProgram
             return;
         }
 
-// After compiling and linking the shader program:
-        string compilationLog = GdxApi.Bindings.GetShaderInfoLog( ( uint )Handle, 100 ); 
-        string linkingLog     = GetShaderProgramLinkLog(); 
-
-        if (!string.IsNullOrEmpty(compilationLog))
-        {
-            Console.WriteLine("Shader Compilation Errors:\n" + compilationLog); 
-        }
-
-        if (!string.IsNullOrEmpty(linkingLog))
-        {
-            Console.WriteLine("Shader Linking Errors:\n" + linkingLog);
-        }
-        
         FetchAttributes();
         FetchUniforms();
 
         AddManagedShader( GdxApi.App, this );
+        
+        Logger.Debug( $"POSITION_ATTRIBUTE  : {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, POSITION_ATTRIBUTE)}");
+        Logger.Debug( $"NORMAL_ATTRIBUTE    : {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, NORMAL_ATTRIBUTE)}");
+        Logger.Debug( $"COLOR_ATTRIBUTE     : {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, COLOR_ATTRIBUTE)}");
+        Logger.Debug( $"TANGENT_ATTRIBUTE   : {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, TANGENT_ATTRIBUTE)}");
+        Logger.Debug( $"BINORMAL_ATTRIBUTE  : {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, BINORMAL_ATTRIBUTE)}");
+        Logger.Debug( $"BONEWEIGHT_ATTRIBUTE: {GdxApi.Bindings.GetAttribLocation( (  uint )Handle, BONEWEIGHT_ATTRIBUTE)}");
     }
 
     /// <summary>
@@ -164,6 +158,80 @@ public partial class ShaderProgram
 
     // ========================================================================
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
+    protected static int CreateProgram()
+    {
+        var program = ( int )GdxApi.Bindings.CreateProgram();
+
+        return program != 0 ? program : -1;
+    }
+
+    /// <summary>
+    /// Loads and compiles the shaders, creates a new program and links the shaders.
+    /// </summary>
+    /// <param name="vertexShader"> the vertex shader </param>
+    /// <param name="fragmentShader"> the fragment shader </param>
+    private void CompileShaders( string vertexShader, string fragmentShader )
+    {
+        _vertexShaderHandle   = LoadShader( IGL.GL_VERTEX_SHADER, vertexShader );
+        _fragmentShaderHandle = LoadShader( IGL.GL_FRAGMENT_SHADER, fragmentShader );
+
+        Logger.Debug( $"_vertexShaderHandle: {_vertexShaderHandle}, " +
+                      $"_fragmentShaderHandle: {_fragmentShaderHandle}" );
+
+        if ( ( _vertexShaderHandle == -1 ) || ( _fragmentShaderHandle == -1 ) )
+        {
+            IsCompiled = false;
+
+            return;
+        }
+
+        Handle = LinkProgram( CreateProgram() );
+
+        IsCompiled = ( Handle != -1 );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="program"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    private unsafe int LinkProgram( int program )
+    {
+        if ( program == -1 )
+        {
+            return -1;
+        }
+
+        GdxApi.Bindings.AttachShader( ( uint )program, ( uint )_vertexShaderHandle );
+        GdxApi.Bindings.AttachShader( ( uint )program, ( uint )_fragmentShaderHandle );
+        GdxApi.Bindings.LinkProgram( ( uint )program );
+
+        var status = stackalloc int[ 1 ];
+
+        GdxApi.Bindings.GetProgramiv( ( uint )program, IGL.GL_LINK_STATUS, status );
+
+        Logger.Debug( $"Link Status: {status[0]}" );
+        
+        if ( *status == IGL.GL_FALSE )
+        {
+            var length = stackalloc int[ 1 ];
+
+            GdxApi.Bindings.GetProgramiv( ( uint )program, IGL.GL_INFO_LOG_LENGTH, length );
+
+            _shaderLog = GdxApi.Bindings.GetProgramInfoLog( ( uint )program, *length );
+
+            throw new Exception( $"Failed to link shader program {program}: {_shaderLog}" );
+        }
+
+        return program;
+    }
+
+    // ========================================================================
+    
     /// <summary>
     /// the log info for the shader compilation and program linking stage.
     /// The shader needs to be bound for this method to have an effect.
@@ -263,23 +331,19 @@ public partial class ShaderProgram
     }
 
     /// <summary>
-    /// Sets the vertex attribute with the given name.
-    /// The <see cref="ShaderProgram"/> must be bound for this to work.
+    /// Sets the vertex attribute with the given name. The <see cref="ShaderProgram"/> must
+    /// be bound for this to work.
     /// </summary>
     /// <param name="name">The attribute name.</param>
     /// <param name="size">The number of components, must be >= 1 and &lt;= 4.</param>
     /// <param name="type">
-    /// The type, must be one of IGL.GL_Byte, IGL.GL_Unsigned_Byte, IGL.GL_Short,
-    /// IGL.GL_Unsigned_Short, IGL.GL_Fixed, or IGL.GL_Float.
+    /// The type, must be one of IGL.GL_Byte, IGL.GL_Unsigned_Byte, IGL.GL_Short, IGL.GL_Unsigned_Short,
+    /// IGL.GL_Fixed, or IGL.GL_Float.
     /// <para>GL_Fixed will not work on the desktop.</para>
     /// </param>
-    /// <param name="normalize">
-    /// Whether fixed point data should be normalized. Will not work on the desktop.
-    /// </param>
+    /// <param name="normalize"> Whether fixed point data should be normalized. Will not work on the desktop.</param>
     /// <param name="stride">The stride in bytes between successive attributes.</param>
-    /// <param name="offset">
-    /// Byte offset into the vertex buffer object bound to IGL.GL_Array_Buffer.
-    /// </param>
+    /// <param name="offset"> Byte offset into the vertex buffer object bound to IGL.GL_Array_Buffer. </param>
     public void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, int offset )
     {
         CheckManaged();
@@ -294,18 +358,33 @@ public partial class ShaderProgram
         GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( uint )offset );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="location"></param>
+    /// <param name="size"></param>
+    /// <param name="type"></param>
+    /// <param name="normalize"></param>
+    /// <param name="stride"></param>
+    /// <param name="offset"></param>
     public void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, int offset )
     {
         CheckManaged();
         GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( uint )offset );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void Bind()
     {
         CheckManaged();
         GdxApi.Bindings.UseProgram( ( uint )Handle );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void Unbind()
     {
         CheckManaged();
@@ -411,28 +490,6 @@ public partial class ShaderProgram
     }
 
     // ========================================================================
-
-    /// <summary>
-    /// Loads and compiles the shaders, creates a new program and links the shaders.
-    /// </summary>
-    /// <param name="vertexShader"> the vertex shader </param>
-    /// <param name="fragmentShader"> the fragment shader </param>
-    private void CompileShaders( string vertexShader, string fragmentShader )
-    {
-        _vertexShaderHandle   = LoadShader( IGL.GL_VERTEX_SHADER, vertexShader );
-        _fragmentShaderHandle = LoadShader( IGL.GL_FRAGMENT_SHADER, fragmentShader );
-
-        if ( ( _vertexShaderHandle == -1 ) || ( _fragmentShaderHandle == -1 ) )
-        {
-            IsCompiled = false;
-
-            return;
-        }
-
-        Handle = LinkProgram( CreateProgram() );
-
-        IsCompiled = ( Handle != -1 );
-    }
 
     /// <summary>
     /// Loads the supplied shader into the relvant shader type.
