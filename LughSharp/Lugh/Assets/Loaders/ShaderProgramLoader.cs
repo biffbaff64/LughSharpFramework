@@ -37,7 +37,7 @@ namespace LughSharp.Lugh.Assets.Loaders;
 /// in the ShaderProgramLoader constructor.
 /// <para>
 /// For all other file suffixes, the same file is used for both (and therefore should
-/// internally distinguish between the programs using preprocessor directives and
+/// internally distinguish between the programs using preprocessor directives. and
 /// <see cref="ShaderProgram.PrependVertexCode"/> and <see cref="ShaderProgram.PrependFragmentCode"/>).
 /// </para>
 /// <para>

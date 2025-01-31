@@ -3352,7 +3352,7 @@ public partial interface IGLBindings
     /// <see cref="GL_DELETE_STATUS"/>, <see cref="GL_COMPILE_STATUS"/>, <see cref="GL_INFO_LOG_LENGTH"/>,
     /// <see cref="GL_SHADER_SOURCE_LENGTH"/>.
     /// </param>
-    /// <param name="params">Returns the requested object parameter.</param>
+    /// <param name="parameters">Returns the requested object parameter.</param>
     unsafe void GetShaderiv( uint shader, int pname, int* parameters );
 
     /// <summary>
@@ -3364,7 +3364,7 @@ public partial interface IGLBindings
     /// <see cref="GL_DELETE_STATUS"/>, <see cref="GL_COMPILE_STATUS"/>, <see cref="GL_INFO_LOG_LENGTH"/>,
     /// <see cref="GL_SHADER_SOURCE_LENGTH"/>.
     /// </param>
-    /// <param name="params">A <see langword="ref"/> to an integer array where the returned value(s) will be placed.</param>
+    /// <param name="parameters">A <see langword="ref"/> to an integer array where the returned value(s) will be placed.</param>
     void GetShaderiv( uint shader, int pname, ref int[] parameters );
 
     /// <summary>

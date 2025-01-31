@@ -133,6 +133,20 @@ public partial class ShaderProgram
             return;
         }
 
+// After compiling and linking the shader program:
+        string compilationLog = GdxApi.Bindings.GetShaderInfoLog( ( uint )Handle, 100 ); 
+        string linkingLog     = GetShaderProgramLinkLog(); 
+
+        if (!string.IsNullOrEmpty(compilationLog))
+        {
+            Console.WriteLine("Shader Compilation Errors:\n" + compilationLog); 
+        }
+
+        if (!string.IsNullOrEmpty(linkingLog))
+        {
+            Console.WriteLine("Shader Linking Errors:\n" + linkingLog);
+        }
+        
         FetchAttributes();
         FetchUniforms();
 
