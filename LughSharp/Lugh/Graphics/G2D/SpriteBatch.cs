@@ -409,7 +409,7 @@ public class SpriteBatch : IBatch
             GdxApi.Bindings.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ptr );
         }
 
-        if ( _uCombinedMatrixLocation <= 0 ) // != -1 ) // Check if the location was found
+        if ( _uCombinedMatrixLocation != -1 ) // Check if the location was found
         {
             Logger.Checkpoint();
             _shader?.SetUniformMatrix4Fv( _uCombinedMatrixLocation, _combinedMatrix.Val );
