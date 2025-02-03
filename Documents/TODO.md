@@ -415,12 +415,9 @@ GRAPHICS/IMAGES
 GRAPHICS/OPENGL
 ---------------
 
-**Currently considering moving over to OpenTK**
-
-    Remove the need for so much use of fixed() in code by implementing method overrides,
-    and doing the work inside those methods instead?
-
-    Work on reducing the amount of casting to uint.
+    Change uint parameters in Bindings methods to int, and do conversion to uint
+    inside those methods when necessary. This will remove the amount of casting to
+    uint in the code.
 
     CODE   DOCUMENT
     ----   --------

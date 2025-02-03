@@ -3291,17 +3291,9 @@ public partial interface IGLBindings
     /// Returns the location of the attribute variable name if it is found in program. If name starts with the
     /// reserved prefix "gl_", a location of -1 is returned.
     /// </returns>
-    unsafe int GetAttribLocation( uint program, Byte* name );
+    unsafe int GetAttribLocation( uint program, byte* name );
 
-    /// <summary>
-    /// Returns the location of an attribute variable
-    /// </summary>
-    /// <param name="program">Specifies the program object to be queried.</param>
-    /// <param name="name">Specifies the name of the attribute variable whose location is to be queried.</param>
-    /// <returns>
-    /// Returns the location of the attribute variable name if it is found in program. If name starts with the
-    /// reserved prefix "gl_", a location of -1 is returned.
-    /// </returns>
+    /// <inheritdoc cref="IGLBindings.GetAttribLocation(uint, byte*)"/>
     int GetAttribLocation( uint program, string name );
 
     /// <summary>

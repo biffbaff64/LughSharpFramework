@@ -43,19 +43,19 @@ namespace LughSharp.Lugh.Graphics.G2D;
 [PublicAPI]
 public class SpriteBatch : IBatch
 {
-    public int     BlendSrcFunc      { get; private set; } = ( int )BlendingFactor.SrcColor;
-    public int     BlendDstFunc      { get; private set; } = ( int )BlendingFactor.DstColor;
-    public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusSrcAlpha;
-    public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusDstAlpha;
-    public bool    BlendingDisabled  { get; set; }         = false;
-    public float   InvTexHeight      { get; set; }         = 0;
-    public float   InvTexWidth       { get; set; }         = 0;
-    public Matrix4 ProjectionMatrix  { get; set; }         = new();
-    public Matrix4 TransformMatrix   { get; set; }         = new();
-    public bool    IsDrawing         { get; set; }         = false;
-    public int     RenderCalls       { get; set; }         = 0; // Number of render calls since the last call to Begin()
-    public long    TotalRenderCalls  { get; set; }         = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
-    public int     MaxSpritesInBatch { get; set; }         = 0; // The maximum number of sprites rendered in one batch so far.
+    public int     BlendSrcFunc           { get; private set; } = ( int )BlendingFactor.SrcColor;
+    public int     BlendDstFunc           { get; private set; } = ( int )BlendingFactor.DstColor;
+    public int     BlendSrcFuncAlpha      { get; private set; } = ( int )BlendingFactor.OneMinusSrcAlpha;
+    public int     BlendDstFuncAlpha      { get; private set; } = ( int )BlendingFactor.OneMinusDstAlpha;
+    public bool    BlendingDisabled       { get; set; } = false;
+    public float   InvTexHeight           { get; set; } = 0;
+    public float   InvTexWidth            { get; set; } = 0;
+    public Matrix4 ProjectionMatrix       { get; set; } = new();
+    public Matrix4 TransformMatrix        { get; set; } = new();
+    public bool    IsDrawing              { get; set; } = false;
+    public int     RenderCalls            { get; set; } = 0; // Number of render calls since the last call to Begin()
+    public long    TotalRenderCalls       { get; set; } = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
+    public int     MaxSpritesInBatch      { get; set; } = 0; // The maximum number of sprites rendered in one batch so far.
 
     // ========================================================================
 
@@ -82,7 +82,7 @@ public class SpriteBatch : IBatch
     private uint           _vao;
     private uint           _vbo;
     private int            _vertexSizeInFloats;
-    private int            _uCombinedMatrixLocation;
+    private int            _combinedMatrixLocation;
 
     // ========================================================================
 
@@ -186,6 +186,12 @@ public class SpriteBatch : IBatch
             Logger.Debug( "Using Default Shader" );
             _shader = defaultShader;
         }
+
+        Logger.Debug( $"_shader.Handle: {_shader.Handle}, IsProgram: {GdxApi.Bindings.IsProgram( ( uint )_shader.Handle )}"  );
+        GdxApi.Bindings.UseProgram( ( uint )_shader.Handle );
+        _combinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( ( uint )_shader.Handle, ShaderProgram.COMBINED_MATRIX_UNIFORM );
+        
+        Logger.Debug( $"_combinedMatrixLocation: {_combinedMatrixLocation}" );
     }
 
     /// <summary>
@@ -278,12 +284,10 @@ public class SpriteBatch : IBatch
         RenderCalls = 0;
 
         GdxApi.Bindings.DepthMask( false );
+
         _shader.Bind();
         SetupMatrices();
 
-        _uCombinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( ( uint )_shader.Handle, "u_combinedMatrix" );
-        Logger.Debug( $"_uCombinedMatrixLocation: {_uCombinedMatrixLocation}" );
-        
         IsDrawing = true;
     }
 
@@ -350,6 +354,9 @@ public class SpriteBatch : IBatch
 
         MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
 
+        Logger.Debug( $"spritesInBatch: {spritesInBatch}" );
+        Logger.Debug( $"MaxSpritesInBatch: {MaxSpritesInBatch}" );
+
         if ( LastTexture == null )
         {
             Idx = 0;
@@ -364,7 +371,6 @@ public class SpriteBatch : IBatch
 
         GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 );
         LastTexture.Bind();
-
         SetupVertexAttributes( _shader );
 
         var tmpInt = new int[ 1 ];
@@ -409,12 +415,10 @@ public class SpriteBatch : IBatch
             GdxApi.Bindings.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ptr );
         }
 
-        if ( _uCombinedMatrixLocation != -1 ) // Check if the location was found
+        if ( _combinedMatrixLocation != -1 )
         {
-            Logger.Checkpoint();
-            _shader?.SetUniformMatrix4Fv( _uCombinedMatrixLocation, _combinedMatrix.Val );
+            _shader?.SetUniformMatrix4Fv( _combinedMatrixLocation, _combinedMatrix.Val );
         }
-        Logger.Checkpoint();
 
         _mesh?.Render( _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
 
@@ -1372,14 +1376,14 @@ public class SpriteBatch : IBatch
     public static ShaderProgram CreateMinimalTestShader()
     {
         const string VERTEX_SHADER = $"{ShaderProgram.SHADER_VERSION_CODE}\n" +
-                                     $"in vec4 {ShaderProgram.COLOR_ATTRIBUTE};\n" +
-                                     "out vec4 v_colorPacked;\n" +
+                                     $"in vec2 {ShaderProgram.POSITION_ATTRIBUTE};\n" +
+                                     $"uniform mat4 {ShaderProgram.COMBINED_MATRIX_UNIFORM};\n" +
                                      "void main() {\n" +
-                                     $"    v_colorPacked = {ShaderProgram.COLOR_ATTRIBUTE};\n" +
+                                     $"    gl_Position = {ShaderProgram.COMBINED_MATRIX_UNIFORM} * vec4({ShaderProgram.POSITION_ATTRIBUTE}, 0.0, 1.0);\n" +
                                      "}\n";
 
         const string FRAGMENT_SHADER = $"{ShaderProgram.SHADER_VERSION_CODE}\n" +
-                                       "in vec4 v_colorPacked;\n" +
+                                       "uniform sampler2D u_texture;\n" +
                                        "void main() {\n" +
                                        "}\n";
 
@@ -1387,7 +1391,7 @@ public class SpriteBatch : IBatch
 
         return shaderProgram;
     }
-    
+
     /// <summary>
     /// Returns a new instance of the default shader used by SpriteBatch when no shader is specified.
     /// </summary>
@@ -1399,8 +1403,8 @@ public class SpriteBatch : IBatch
                                      $"in vec2 {ShaderProgram.TEXCOORD_ATTRIBUTE};\n" +
                                      "out vec4 v_colorPacked;\n" +
                                      "out vec2 v_texCoords;\n" +
-                                     "uniform mat4 u_dummyMatrix;\n" +
-                                     "uniform mat4 u_combinedMatrix;\n" +
+                                     $"uniform mat4 {ShaderProgram.COMBINED_MATRIX_UNIFORM}Temp;\n" +
+                                     $"uniform mat4 {ShaderProgram.COMBINED_MATRIX_UNIFORM};\n" +
                                      "void main() {\n" +
                                      $"    gl_Position = u_combinedMatrix * vec4({ShaderProgram.POSITION_ATTRIBUTE}, 0.0, 1.0);\n" +
                                      $"    v_colorPacked = {ShaderProgram.COLOR_ATTRIBUTE};\n" +
@@ -1434,7 +1438,7 @@ public class SpriteBatch : IBatch
                 return;
             }
 
-            _shader.SetUniformMatrix( "u_combinedMatrix", _combinedMatrix );
+            _shader.SetUniformMatrix( ShaderProgram.COMBINED_MATRIX_UNIFORM, _combinedMatrix );
             _shader.SetUniformi( "u_texture", 0 );
         }
     }

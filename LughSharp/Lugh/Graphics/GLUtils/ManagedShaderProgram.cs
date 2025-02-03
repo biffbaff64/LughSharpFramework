@@ -50,16 +50,10 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 /// </para>
 /// </summary>
 [PublicAPI]
-public partial class ManagedShaderProgram : ShaderProgram
+public class ManagedShaderProgram : ShaderProgram
 {
     public string[] Attributes { get; private set; } = null!;
     public string[] Uniforms   { get; private set; } = null!;
-
-    // ========================================================================
-    /// <summary>
-    /// flag indicating whether attributes & uniforms must be present at all times.
-    /// </summary>
-    public static readonly bool Pedantic = true;
 
     // ========================================================================
     // ========================================================================
@@ -102,34 +96,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     // ========================================================================
 
     /// <summary>
-    /// Bind this shader to the renderer.
     /// </summary>
-    public override void Bind()
-    {
-        CheckManaged();
-        GdxApi.Bindings.UseProgram( ( uint )Handle );
-    }
-
-    /// <summary>
-    /// Unbind this shader from the renderer.
-    /// </summary>
-    public override void Unbind()
-    {
-        CheckManaged();
-        GdxApi.Bindings.UseProgram( 0 );
-    }
-    
-    private void CheckManaged()
-    {
-        if ( Invalidated )
-        {
-            CompileShaders( VertexShaderSource, FragmentShaderSource );
-            Invalidated = false;
-        }
-    }
-
-    // ========================================================================
-
     public static string ManagedStatus
     {
         get
@@ -148,6 +115,9 @@ public partial class ManagedShaderProgram : ShaderProgram
         }
     }
 
+    /// <summary>
+    /// Returns the number of Managed Shaders in the managed array.
+    /// </summary>
     public static int NumManagedShaderPrograms => _availableShaders[ GdxApi.App ]!.Count;
 
     // ========================================================================
@@ -177,7 +147,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the attribute </param>
     /// <returns> the location of the attribute or -1.  </returns>
-    public int GetAttributeLocation( string name )
+    public override int GetAttributeLocation( string name )
     {
         return _attributes.GetValueOrDefault( name, 0 );
     }
@@ -274,6 +244,8 @@ public partial class ManagedShaderProgram : ShaderProgram
     
     // ========================================================================
     
+    /// <summary>
+    /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <returns> the location of the uniform or -1.</returns>
     public int GetUniformLocation( string name )
@@ -281,6 +253,8 @@ public partial class ManagedShaderProgram : ShaderProgram
         return _uniforms.GetValueOrDefault( name, -1 );
     }
 
+    /// <summary>
+    /// </summary>
     /// <param name="name">The name of the uniform</param>
     /// <returns> the size of the uniform or 0.</returns>
     public int GetUniformSize( string name )
@@ -292,7 +266,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    private int FetchUniformLocation( string name )
+    public override int FetchUniformLocation( string name )
     {
         return FetchUniformLocation( name, Pedantic );
     }
@@ -301,7 +275,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    private int FetchAttributeLocation( string name )
+    public override int FetchAttributeLocation( string name )
     {
         // -2 == not yet cached
         // -1 == cached but not found
@@ -326,10 +300,28 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
+    /// Disables the vertex attribute with the given name
+    /// </summary>
+    /// <param name="name"> the vertex attribute name  </param>
+    public override void DisableVertexAttribute( string name )
+    {
+        CheckManaged();
+
+        var location = FetchAttributeLocation( name );
+
+        if ( location == -1 )
+        {
+            return;
+        }
+
+        GdxApi.Bindings.DisableVertexAttribArray( ( uint ) location );
+    }
+
+    /// <summary>
     /// Enables the vertex attribute with the given name
     /// </summary>
     /// <param name="name"> the vertex attribute name  </param>
-    public override void EnableVertexAttribute( string name )
+    public void EnableVertexAttribute( string name )
     {
         CheckManaged();
 
@@ -416,7 +408,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix  </param>
-    public void SetUniformMatrix( string name, Matrix4 matrix )
+    public override void SetUniformMatrix( string name, Matrix4 matrix )
     {
         SetUniformMatrix( name, matrix, false );
     }
@@ -428,17 +420,16 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix </param>
     /// <param name="transpose"> whether the matrix should be transposed  </param>
-    public void SetUniformMatrix( string name, Matrix4 matrix, bool transpose )
+    public override void SetUniformMatrix( string name, Matrix4 matrix, bool transpose )
     {
         SetUniformMatrix( FetchUniformLocation( name ), matrix, transpose );
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="matrix"></param>
-    public void SetUniformMatrix( int location, Matrix4 matrix )
+    public override void SetUniformMatrix( int location, Matrix4 matrix )
     {
         SetUniformMatrix( location, matrix, false );
     }
@@ -467,7 +458,6 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="matrix"></param>
@@ -477,11 +467,10 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="name"></param>
     /// <param name="values"></param>
-    public void SetUniformMatrix4Fv( string name, params float[] values )
+    public override void SetUniformMatrix4Fv( string name, params float[] values )
     {
         SetUniformMatrix4Fv( FetchUniformLocation( name ), values );
     }
@@ -522,8 +511,8 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// Sets the vertex attribute with the given name.
-    /// The <see cref="ShaderProgram"/> must be bound for this to work.
+    /// Sets the vertex attribute with the given name. The <see cref="ShaderProgram"/> must
+    /// be bound for this to work.
     /// </summary>
     /// <param name="name">The attribute name.</param>
     /// <param name="size"> The number of components, must be >= 1 and &lt;= 4. </param>
@@ -534,7 +523,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// <param name="normalize"> Whether fixed point data should be normalized. Will not work on the desktop. </param>
     /// <param name="stride">The stride in bytes between successive attributes.</param>
     /// <param name="buffer">The buffer containing the vertex attributes.</param>
-    public override unsafe void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, Buffer buffer )
+    public unsafe void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, Buffer buffer )
     {
         CheckManaged();
 
@@ -559,7 +548,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// <param name="normalize"></param>
     /// <param name="stride"></param>
     /// <param name="buffer"></param>
-    public override unsafe void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, Buffer buffer )
+    public unsafe void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, Buffer buffer )
     {
         CheckManaged();
 
@@ -583,7 +572,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// <param name="normalize"> Whether fixed point data should be normalized. Will not work on the desktop.</param>
     /// <param name="stride">The stride in bytes between successive attributes.</param>
     /// <param name="offset"> Byte offset into the vertex buffer object bound to IGL.GL_Array_Buffer. </param>
-    public override void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, int offset )
+    public void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, int offset )
     {
         CheckManaged();
 
@@ -612,23 +601,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// Disables the vertex attribute with the given name
     /// </summary>
-    /// <param name="name"> the vertex attribute name  </param>
-    public override void DisableVertexAttribute( string name )
-    {
-        CheckManaged();
-
-        var location = FetchAttributeLocation( name );
-
-        if ( location == -1 )
-        {
-            return;
-        }
-
-        GdxApi.Bindings.DisableVertexAttribArray( ( uint ) location );
-    }
-
     /// <param name="name"> the name of the uniform.</param>
     /// <returns> whether the uniform is available in the shader.</returns>
     public bool HasUniform( string name )
@@ -636,6 +609,8 @@ public partial class ManagedShaderProgram : ShaderProgram
         return _uniforms.ContainsKey( name );
     }
 
+    /// <summary>
+    /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <returns>
     /// the type of the uniform, one of <see cref="IGL.GL_FLOAT"/>,
@@ -651,7 +626,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="value"> the value  </param>
-    public void SetUniformi( string name, int value )
+    public override void SetUniformi( string name, int value )
     {
         CheckManaged();
 
@@ -659,7 +634,6 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="value"></param>
@@ -684,7 +658,6 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="count"></param>
@@ -711,7 +684,6 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="x"></param>
@@ -729,15 +701,13 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="value"> the value  </param>
-    public void SetUniformf( string name, float value )
+    public override void SetUniformf( string name, float value )
     {
         CheckManaged();
-
         GdxApi.Bindings.Uniform1f( FetchUniformLocation( name ), value );
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="value"></param>
@@ -762,7 +732,6 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="value1"></param>
@@ -788,7 +757,6 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="value1"></param>
@@ -816,7 +784,6 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="x"></param>
@@ -830,7 +797,6 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="matrix"></param>
@@ -842,12 +808,11 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="matrix"></param>
     /// <param name="transpose"></param>
-    public override void SetUniformMatrix( int location, Matrix3 matrix, bool transpose )
+    public void SetUniformMatrix( int location, Matrix3 matrix, bool transpose )
     {
         CheckManaged();
         GdxApi.Bindings.UniformMatrix3fv( location, transpose, matrix.Val );
@@ -861,7 +826,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// <param name="buffer">buffer containing the matrix data </param>
     /// <param name="count"></param>
     /// <param name="transpose">whether the uniform matrix should be transposed  </param>
-    public override unsafe void SetUniformMatrix3Fv( string name, FloatBuffer buffer, int count, bool transpose )
+    public unsafe void SetUniformMatrix3Fv( string name, FloatBuffer buffer, int count, bool transpose )
     {
         CheckManaged();
         buffer.Position = 0;
@@ -880,7 +845,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// <param name="buffer"> buffer containing the matrix data </param>
     /// <param name="count"></param>
     /// <param name="transpose"> whether the uniform matrix should be transposed  </param>
-    public override unsafe void SetUniformMatrix4Fv( string name, FloatBuffer buffer, int count, bool transpose )
+    public unsafe void SetUniformMatrix4Fv( string name, FloatBuffer buffer, int count, bool transpose )
     {
         ArgumentNullException.ThrowIfNull( buffer );
 
@@ -894,7 +859,6 @@ public partial class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="location"></param>
     /// <param name="values"></param>
@@ -912,7 +876,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="values"> x and y as the first and second values respectively  </param>
-    public override void SetUniformf( string name, Vector2 values )
+    public void SetUniformf( string name, Vector2 values )
     {
         CheckManaged();
         GdxApi.Bindings.Uniform2f( FetchUniformLocation( name ), values.X, values.Y );
@@ -923,7 +887,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="location"></param>
     /// <param name="values"></param>
-    public override void SetUniformf( int location, Vector2 values )
+    public void SetUniformf( int location, Vector2 values )
     {
         CheckManaged();
         GdxApi.Bindings.Uniform2f( location, values.X, values.Y );
@@ -934,7 +898,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="values"> x, y and z as the first, second and third values respectively  </param>
-    public override void SetUniformf( string name, Vector3 values )
+    public void SetUniformf( string name, Vector3 values )
     {
         CheckManaged();
         GdxApi.Bindings.Uniform3f( FetchUniformLocation( name ), values.X, values.Y, values.Z );
@@ -945,7 +909,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="location"></param>
     /// <param name="values"></param>
-    public override void SetUniformf( int location, Vector3 values )
+    public void SetUniformf( int location, Vector3 values )
     {
         CheckManaged();
         GdxApi.Bindings.Uniform3f( location, values.X, values.Y, values.Z );
@@ -956,7 +920,7 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="values"> r, g, b and a as the first through fourth values respectively  </param>
-    public override void SetUniformf( string name, Color values )
+    public void SetUniformf( string name, Color values )
     {
         GdxApi.Bindings.Uniform4f( FetchUniformLocation( name ), values.R, values.G, values.B, values.A );
     }
@@ -966,9 +930,38 @@ public partial class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="location"></param>
     /// <param name="values"></param>
-    public override void SetUniformf( int location, Color values )
+    public void SetUniformf( int location, Color values )
     {
         GdxApi.Bindings.Uniform4f( location, values.R, values.G, values.B, values.A );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Bind this shader to the renderer.
+    /// </summary>
+    public override void Bind()
+    {
+        CheckManaged();
+        GdxApi.Bindings.UseProgram( ( uint )Handle );
+    }
+
+    /// <summary>
+    /// Unbind this shader from the renderer.
+    /// </summary>
+    public override void Unbind()
+    {
+        CheckManaged();
+        GdxApi.Bindings.UseProgram( 0 );
+    }
+    
+    private void CheckManaged()
+    {
+        if ( Invalidated )
+        {
+            CompileShaders( VertexShaderSource, FragmentShaderSource );
+            Invalidated = false;
+        }
     }
 
     // ========================================================================

@@ -22,10 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Numerics;
+
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Maths;
 
+/// <summary>
+/// Column-Major Matrix4 class.
+/// </summary>
 [PublicAPI]
 public class Matrix4
 {
@@ -904,17 +909,17 @@ public class Matrix4
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
     public Matrix4 SetToOrtho( float left, float right, float bottom, float top, float near, float far )
     {
-        if (right - left == 0)
+        if (( right - left ) == 0)
         {
             throw new ArgumentException("Right and left cannot be equal.");
         }
 
-        if (top - bottom == 0)
+        if (( top - bottom ) == 0)
         {
             throw new ArgumentException("Top and bottom cannot be equal.");
         }
 
-        if (far - near == 0)
+        if (( far - near ) == 0)
         {
             throw new ArgumentException("Far and near cannot be equal.");
         }

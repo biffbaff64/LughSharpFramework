@@ -81,14 +81,18 @@ public static class GLUtils
     /// <exception cref="GdxRuntimeException">
     /// Thrown when no OpenGL context is currently bound to the thread.
     /// </exception>
-    public static void CheckOpenGLContext()
+    public static bool CheckOpenGLContext()
     {
-        var currentContext = Glfw.GetCurrentContext();
-
-        if ( currentContext == null )
+        if ( Glfw.GetCurrentContext() == null )
         {
             throw new GdxRuntimeException( "No OpenGL context is current on this thread!" );
         }
+
+        #if DEBUG
+        Logger.Debug( "Context found on current thread." );
+        #endif
+        
+        return true;
     }
 
     /// <summary>

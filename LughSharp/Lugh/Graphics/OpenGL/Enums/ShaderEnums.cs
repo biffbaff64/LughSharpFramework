@@ -25,6 +25,13 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
+public enum ShaderType : int
+{
+    VertexShader   = IGL.GL_VERTEX_SHADER,
+    FragmentShader = IGL.GL_FRAGMENT_SHADER,
+}
+
+[PublicAPI]
 public enum ShaderParameterName : int
 {
     CompileStatus = IGL.GL_COMPILE_STATUS,
