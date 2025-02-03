@@ -450,8 +450,6 @@ public abstract class GLTexture : IDisposable
         }
         else
         {
-            DebugUploadImageData( target, miplevel, pixmap );
-
             GdxApi.Bindings.TexImage2D( target, miplevel, 0, pixmap );
 
 //            GdxApi.Bindings.TexImage2D( target,
@@ -471,6 +469,7 @@ public abstract class GLTexture : IDisposable
         }
     }
 
+    #if DEBUG
     private static void DebugUploadImageData( int target, int miplevel, Pixmap pixmap )
     {
         if ( GdxApi.DevMode )
@@ -516,7 +515,8 @@ public abstract class GLTexture : IDisposable
             Logger.Divider();
         }
     }
-
+    #endif
+    
     // ========================================================================
     // ========================================================================
 

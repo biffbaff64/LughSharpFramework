@@ -121,8 +121,10 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
+        #if PNG_ANALYSIS
         PNGUtils.AnalysePNG( buffer, true );
-        
+        #endif
+
         ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, offset, len );
 
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
@@ -236,12 +238,10 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     private ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
-        Logger.Checkpoint();
-
+        #if PNG_ANALYSIS
         PNGUtils.AnalysePNG( buffer );
-
-        Logger.Checkpoint();
-
+        #endif
+        
         var pixmapDef = new PixmapDataType
         {
             Width         = ( uint )PNGUtils.IHDRchunk.Width,
@@ -254,16 +254,14 @@ public partial class Gdx2DPixmap : IDisposable
             Pixels        = new byte[ PNGUtils.IDATchunk.ChunkSize ],
         };
 
-        Logger.Debug( $"Width        : {pixmapDef.Width}" );
-        Logger.Debug( $"Height       : {pixmapDef.Height}" );
-        Logger.Debug( $"BitDepth     : {pixmapDef.BitDepth}" );
-        Logger.Debug( $"ColorType    : {pixmapDef.ColorType}" );
-        Logger.Debug( $"Pixels       : {pixmapDef.Pixels.Length}" );
-        Logger.Debug( $"TotalIDATSize: {pixmapDef.TotalIDATSize}" );
+//        Logger.Debug( $"Width        : {pixmapDef.Width}" );
+//        Logger.Debug( $"Height       : {pixmapDef.Height}" );
+//        Logger.Debug( $"BitDepth     : {pixmapDef.BitDepth}" );
+//        Logger.Debug( $"ColorType    : {pixmapDef.ColorType}" );
+//        Logger.Debug( $"Pixels       : {pixmapDef.Pixels.Length}" );
+//        Logger.Debug( $"TotalIDATSize: {pixmapDef.TotalIDATSize}" );
 
         Array.Copy( buffer, PNGUtils.IDAT_DATA_OFFSET, pixmapDef.Pixels, 0, PNGUtils.IDATchunk.ChunkSize );
-
-        Logger.Checkpoint();
 
         return ( new HeapByteBuffer( pixmapDef.Pixels, 0, pixmapDef.Pixels.Length ), pixmapDef );
     }
@@ -274,8 +272,6 @@ public partial class Gdx2DPixmap : IDisposable
     /// <param name="requestedFormat"> The new Format. </param>
     private void ConvertPixelFormatTo( int requestedFormat )
     {
-        Logger.Checkpoint();
-
         // Double-check conditions
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
         {

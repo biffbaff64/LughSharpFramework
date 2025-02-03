@@ -348,22 +348,22 @@ public partial interface IGLBindings
     void MultiDrawArraysIndirect( int mode, GLBindings.DrawArraysIndirectCommand indirect, int drawcount, int stride );
     unsafe void MultiDrawElementsIndirect( int mode, int type, void* indirect, int drawcount, int stride );
     void MultiDrawElementsIndirect( int mode, int type, GLBindings.DrawElementsIndirectCommand indirect, int drawcount, int stride );
-    unsafe void GetProgramInterfaceiv( uint program, int programInterface, int pname, int* parameters );
-    void GetProgramInterfaceiv( uint program, int programInterface, int pname, ref int[] parameters );
-    unsafe uint GetProgramResourceIndex( uint program, int programInterface, Byte* name );
-    uint GetProgramResourceIndex( uint program, int programInterface, string name );
-    unsafe void GetProgramResourceName( uint program, int programInterface, uint index, int bufSize, int* length, Byte* name );
-    string GetProgramResourceName( uint program, int programInterface, uint index, int bufSize );
+    unsafe void GetProgramInterfaceiv( int program, int programInterface, int pname, int* parameters );
+    void GetProgramInterfaceiv( int program, int programInterface, int pname, ref int[] parameters );
+    unsafe uint GetProgramResourceIndex( int program, int programInterface, Byte* name );
+    uint GetProgramResourceIndex( int program, int programInterface, string name );
+    unsafe void GetProgramResourceName( int program, int programInterface, uint index, int bufSize, int* length, Byte* name );
+    string GetProgramResourceName( int program, int programInterface, uint index, int bufSize );
 
-    unsafe void GetProgramResourceiv( uint program, int programInterface, uint index, int propCount,
+    unsafe void GetProgramResourceiv( int program, int programInterface, uint index, int propCount,
                                       int* props, int bufSize, int* length, int* parameters );
 
-    void GetProgramResourceiv( uint program, int programInterface, uint index, int[] props, int bufSize, ref int[] parameters );
-    unsafe int GetProgramResourceLocation( uint program, int programInterface, Byte* name );
-    int GetProgramResourceLocation( uint program, int programInterface, string name );
-    unsafe int GetProgramResourceLocationIndex( uint program, int programInterface, Byte* name );
-    int GetProgramResourceLocationIndex( uint program, int programInterface, string name );
-    void ShaderStorageBlockBinding( uint program, uint storageBlockIndex, uint storageBlockBinding );
+    void GetProgramResourceiv( int program, int programInterface, uint index, int[] props, int bufSize, ref int[] parameters );
+    unsafe int GetProgramResourceLocation( int program, int programInterface, Byte* name );
+    int GetProgramResourceLocation( int program, int programInterface, string name );
+    unsafe int GetProgramResourceLocationIndex( int program, int programInterface, Byte* name );
+    int GetProgramResourceLocationIndex( int program, int programInterface, string name );
+    void ShaderStorageBlockBinding( int program, uint storageBlockIndex, uint storageBlockBinding );
     void TexBufferRange( int target, int internalFormat, uint buffer, int offset, int size );
     void TexStorage2DMultisample( int target, int samples, int internalFormat, int width, int height, bool fixedsamplelocations );
 

@@ -3109,7 +3109,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies the program object to which a shader object will be attached.</param>
     /// <param name="shader">Specifies the shader object that is to be attached.</param>
-    void AttachShader( uint program, uint shader );
+    void AttachShader( int program, int shader );
 
     /// <summary>
     /// Associates a generic vertex attribute index with a named attribute variable. This is typically replaced with the
@@ -3139,7 +3139,7 @@ public partial interface IGLBindings
     /// Compiles a shader object
     /// </summary>
     /// <param name="shader">Specifies the shader object to be compiled.</param>
-    void CompileShader( uint shader );
+    void CompileShader( int shader );
 
     /// <summary>
     /// Creates a program object
@@ -3162,20 +3162,20 @@ public partial interface IGLBindings
     /// Deletes a program object
     /// </summary>
     /// <param name="program">Specifies the program object to be deleted.</param>
-    void DeleteProgram( uint program );
+    void DeleteProgram( int program );
 
     /// <summary>
     /// Deletes a shader object
     /// </summary>
     /// <param name="shader">Specifies the shader object to be deleted.</param>
-    void DeleteShader( uint shader );
+    void DeleteShader( int shader );
 
     /// <summary>
     /// Detaches a shader object from a program object
     /// </summary>
     /// <param name="program">Specifies the program object from which to detach the shader object.</param>
     /// <param name="shader">Specifies the shader object to be detached.</param>
-    void DetachShader( uint program, uint shader );
+    void DetachShader( int program, int shader );
 
     /// <summary>
     /// Disables a generic vertex attribute array
@@ -3211,7 +3211,7 @@ public partial interface IGLBindings
     /// is passed.
     /// </param>
     /// <param name="name">Returns a null-terminated string containing the name of the attribute variable.</param>
-    unsafe void GetActiveAttrib( uint program, uint index, int bufSize, int* length, int* size, int* type, Byte* name );
+    unsafe void GetActiveAttrib( int program, uint index, int bufSize, int* length, int* size, int* type, Byte* name );
 
     /// <summary>
     /// Returns information about an active attribute variable for the specified program object
@@ -3225,7 +3225,7 @@ public partial interface IGLBindings
     /// <param name="size">Returns the size of the attribute variable.</param>
     /// <param name="type">Returns the data type of the attribute variable.</param>
     /// <returns>Returns a managed string containing the name of the attribute variable.</returns>
-    string GetActiveAttrib( uint program, uint index, int bufSize, out int size, out int type );
+    string GetActiveAttrib( int program, uint index, int bufSize, out int size, out int type );
 
     /// <summary>
     /// Returns information about an active uniform variable for the specified program object
@@ -3249,7 +3249,7 @@ public partial interface IGLBindings
     /// is passed.
     /// </param>
     /// <param name="name">Returns a null-terminated string containing the name of the uniform variable.</param>
-    unsafe void GetActiveUniform( uint program, uint index, int bufSize, int* length, int* size, int* type, Byte* name );
+    unsafe void GetActiveUniform( int program, uint index, int bufSize, int* length, int* size, int* type, Byte* name );
 
     /// <summary>
     /// Returns information about an active uniform variable for the specified program object
@@ -3263,7 +3263,7 @@ public partial interface IGLBindings
     /// <param name="size">Returns the size of the uniform variable.</param>
     /// <param name="type">Returns the data type of the uniform variable.</param>
     /// <returns>Returns a managed string containing the name of the uniform variable.</returns>
-    string GetActiveUniform( uint program, uint index, int bufSize, out int size, out int type );
+    string GetActiveUniform( int program, uint index, int bufSize, out int size, out int type );
 
     /// <summary>
     /// Returns the shader objects attached to program
@@ -3291,10 +3291,10 @@ public partial interface IGLBindings
     /// Returns the location of the attribute variable name if it is found in program. If name starts with the
     /// reserved prefix "gl_", a location of -1 is returned.
     /// </returns>
-    unsafe int GetAttribLocation( uint program, byte* name );
+    unsafe int GetAttribLocation( int program, byte* name );
 
-    /// <inheritdoc cref="IGLBindings.GetAttribLocation(uint, byte*)"/>
-    int GetAttribLocation( uint program, string name );
+    /// <inheritdoc cref="IGLBindings.GetAttribLocation(int, byte*)"/>
+    int GetAttribLocation( int program, string name );
 
     /// <summary>
     /// Returns a parameter from a program object
@@ -3305,7 +3305,7 @@ public partial interface IGLBindings
     /// for a list of possible values.
     /// </param>
     /// <param name="parameters">Returns the requested object parameter.</param>
-    unsafe void GetProgramiv( uint program, int pname, int* parameters );
+    unsafe void GetProgramiv( int program, int pname, int* parameters );
 
     /// <summary>
     /// Returns a parameter from a program object
@@ -3316,7 +3316,7 @@ public partial interface IGLBindings
     /// for a list of possible values.
     /// </param>
     /// <param name="parameters">A <see langword="ref"/> to an integer array where the returned value(s) will be placed.</param>
-    void GetProgramiv( uint program, int pname, ref int[] parameters );
+    void GetProgramiv( int program, int pname, ref int[] parameters );
 
     /// <summary>
     /// Returns the information log for a program object
@@ -3325,7 +3325,7 @@ public partial interface IGLBindings
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned information log.</param>
     /// <param name="length">Returns the length of the string returned in infoLog (excluding the null terminator).</param>
     /// <param name="infoLog">Specifies an array of characters that is used to return the information log.</param>
-    unsafe void GetProgramInfoLog( uint program, int bufSize, int* length, Byte* infoLog );
+    unsafe void GetProgramInfoLog( int program, int bufSize, int* length, Byte* infoLog );
 
     /// <summary>
     /// Returns the information log for a program object
@@ -3333,7 +3333,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object whose information log is to be queried.</param>
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned information log.</param>
     /// <returns>Returns the information log for <paramref name="program"/>, resized to the correct length.</returns>
-    string GetProgramInfoLog( uint program, int bufSize );
+    string GetProgramInfoLog( int program, int bufSize );
 
     /// <summary>
     /// Returns a parameter from a shader object
@@ -3345,7 +3345,7 @@ public partial interface IGLBindings
     /// <see cref="GL_SHADER_SOURCE_LENGTH"/>.
     /// </param>
     /// <param name="parameters">Returns the requested object parameter.</param>
-    unsafe void GetShaderiv( uint shader, int pname, int* parameters );
+    unsafe void GetShaderiv( int shader, int pname, int* parameters );
 
     /// <summary>
     /// Returns a parameter from a shader object
@@ -3357,7 +3357,7 @@ public partial interface IGLBindings
     /// <see cref="GL_SHADER_SOURCE_LENGTH"/>.
     /// </param>
     /// <param name="parameters">A <see langword="ref"/> to an integer array where the returned value(s) will be placed.</param>
-    void GetShaderiv( uint shader, int pname, ref int[] parameters );
+    void GetShaderiv( int shader, int pname, ref int[] parameters );
 
     /// <summary>
     /// Returns the information log for a shader object
@@ -3366,7 +3366,7 @@ public partial interface IGLBindings
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned information log.</param>
     /// <param name="length">Returns the length of the string returned in infoLog (excluding the null terminator).</param>
     /// <param name="infoLog">Specifies an array of characters that is used to return the information log.</param>
-    unsafe void GetShaderInfoLog( uint shader, int bufSize, int* length, Byte* infoLog );
+    unsafe void GetShaderInfoLog( int shader, int bufSize, int* length, Byte* infoLog );
 
     /// <summary>
     /// Returns the information log for a shader object
@@ -3374,7 +3374,7 @@ public partial interface IGLBindings
     /// <param name="shader">Specifies the shader object whose information log is to be queried.</param>
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned information log.</param>
     /// <returns>Returns the information log for <paramref name="shader"/>, resized to the correct length.</returns>
-    string GetShaderInfoLog( uint shader, int bufSize );
+    string GetShaderInfoLog( int shader, int bufSize );
 
     /// <summary>
     /// Returns the source code string from a shader object
@@ -3383,7 +3383,7 @@ public partial interface IGLBindings
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned source code string.</param>
     /// <param name="length">Returns the length of the string returned in source (excluding the null terminator).</param>
     /// <param name="source">Specifies an array of characters that is used to return the source code string.</param>
-    unsafe void GetShaderSource( uint shader, int bufSize, int* length, Byte* source );
+    unsafe void GetShaderSource( int shader, int bufSize, int* length, Byte* source );
 
     /// <summary>
     /// Returns the source code string from a shader object
@@ -3391,7 +3391,7 @@ public partial interface IGLBindings
     /// <param name="shader">Specifies the shader object to be queried.</param>
     /// <param name="bufSize">Specifies the size of the character buffer for storing the returned source code string.</param>
     /// <returns>Returns the source code string for <paramref name="shader"/>, resized to the correct length.</returns>
-    string GetShaderSource( uint shader, int bufSize = 4096 );
+    string GetShaderSource( int shader, int bufSize = 4096 );
 
     /// <summary>
     /// Returns the location of a uniform variable
@@ -3401,14 +3401,14 @@ public partial interface IGLBindings
     /// Points to a null terminated string containing the name of the uniform variable whose location is to
     /// be queried.
     /// </param>
-    unsafe int GetUniformLocation( uint program, Byte* name );
+    unsafe int GetUniformLocation( int program, Byte* name );
 
     /// <summary>
     /// Returns the location of a uniform variable
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="name">A string containing the name of the uniform variable whose location is to be queried.</param>
-    int GetUniformLocation( uint program, string name );
+    int GetUniformLocation( int program, string name );
 
     /// <summary>
     /// Returns the value of a uniform variable
@@ -3416,18 +3416,18 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="location">Specifies the location of the uniform variable to be queried.</param>
     /// <param name="parameters">Returns the value of the uniform variable at the location specified by location.</param>
-    unsafe void GetUniformfv( uint program, int location, float* parameters );
+    unsafe void GetUniformfv( int program, int location, float* parameters );
 
     /// <summary>
     /// Returns the value of a uniform variable
     /// </summary>
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="location">Specifies the location of the uniform variable to be queried.</param>
-    /// <param name="params">
+    /// <param name="parameters">
     /// A <see langword="ref"/> to an array to receive the value of the uniform variable at the location
     /// specified by location.
     /// </param>
-    void GetUniformfv( uint program, int location, ref float[] parameters );
+    void GetUniformfv( int program, int location, ref float[] parameters );
 
     /// <summary>
     /// Returns the value of a uniform variable
@@ -3589,7 +3589,7 @@ public partial interface IGLBindings
     /// <see langword="true"/> if program is currently the name of a program object. <see langword="false"/>
     /// otherwise.
     /// </returns>
-    bool IsProgram( uint program );
+    bool IsProgram( int program );
 
     /// <summary>
     /// Determines if a name corresponds to a shader object
@@ -3599,13 +3599,13 @@ public partial interface IGLBindings
     /// <see langword="true"/> if shader is currently the name of a shader object. <see langword="false"/>
     /// otherwise.
     /// </returns>
-    bool IsShader( uint shader );
+    bool IsShader( int shader );
 
     /// <summary>
     /// Links a program object
     /// </summary>
     /// <param name="program">Specifies the handle of the program object to be linked.</param>
-    void LinkProgram( uint program );
+    void LinkProgram( int program );
 
     /// <summary>
     /// Replaces the source code in a shader object
@@ -3617,14 +3617,14 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="str">Specifies an array of pointers to strings containing the source code to be loaded into the shader.</param>
     /// <param name="length">Specifies an array of string lengths.</param>
-    unsafe void ShaderSource( uint shader, int count, Byte** str, int* length );
+    unsafe void ShaderSource( int shader, int count, Byte** str, int* length );
 
     /// <summary>
     /// Replaces the source code in a shader object
     /// </summary>
     /// <param name="shader">Specifies the handle of the shader object whose source code is to be replaced.</param>
     /// <param name="string">Specifies an array of strings containing the source code to be loaded into the shader.</param>
-    void ShaderSource( uint shader, params string[] @string );
+    void ShaderSource( int shader, params string[] @string );
 
     /// <summary>
     /// Installs a program object as part of current rendering state
@@ -3633,7 +3633,7 @@ public partial interface IGLBindings
     /// Specifies the handle of the program object whose executables are to be used as part of current
     /// rendering state.
     /// </param>
-    void UseProgram( uint program );
+    void UseProgram( int program );
 
     /// <summary>
     /// Specifies the value of a uniform variable for the current program object

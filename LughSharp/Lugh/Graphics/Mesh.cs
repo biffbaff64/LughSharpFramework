@@ -52,8 +52,10 @@ public class Mesh : IDisposable
     /// <summary>
     /// Returns the vertex attributes of this Mesh.
     /// </summary>
-    public VertexAttributes? VertexAttributes => _vertices.Attributes;
+    public VertexAttributes VertexAttributes => _vertices.Attributes;
 
+    public IIndexData IndexData() => _indices;
+    
     // ========================================================================
 
     private static readonly Dictionary< IApplication, List< Mesh >? > _meshes = new();
