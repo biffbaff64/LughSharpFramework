@@ -169,19 +169,19 @@ public class ManagedShaderProgram : ShaderProgram
     {
         var numUniforms = stackalloc int[ 1 ];
 
-        GdxApi.Bindings.GetProgramiv( Handle, IGL.GL_ACTIVE_UNIFORMS, numUniforms );
+        GdxApi.Bindings.GetProgramiv( ShaderHandle, IGL.GL_ACTIVE_UNIFORMS, numUniforms );
 
         Uniforms = new string[ *numUniforms ];
 
         for ( uint i = 0; i < *numUniforms; i++ )
         {
-            var name = GdxApi.Bindings.GetActiveUniform( Handle,
+            var name = GdxApi.Bindings.GetActiveUniform( ShaderHandle,
                                                          i,
                                                          IGL.GL_ACTIVE_UNIFORM_MAX_LENGTH,
                                                          out var size,
                                                          out var type );
 
-            var location = GdxApi.Bindings.GetUniformLocation( Handle, name );
+            var location = GdxApi.Bindings.GetUniformLocation( ShaderHandle, name );
 
             _uniforms[ name ]     = location;
             _uniformSizes[ name ] = size;
@@ -196,19 +196,19 @@ public class ManagedShaderProgram : ShaderProgram
     {
         var numAttributes = stackalloc int[ 1 ];
 
-        GdxApi.Bindings.GetProgramiv( Handle, IGL.GL_ACTIVE_ATTRIBUTES, numAttributes );
+        GdxApi.Bindings.GetProgramiv( ShaderHandle, IGL.GL_ACTIVE_ATTRIBUTES, numAttributes );
 
         Attributes = new string[ *numAttributes ];
 
         for ( var index = 0; index < *numAttributes; index++ )
         {
-            var name = GdxApi.Bindings.GetActiveAttrib( Handle,
+            var name = GdxApi.Bindings.GetActiveAttrib( ShaderHandle,
                                                         ( uint )index,
                                                         IGL.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
                                                         out var size,
                                                         out var type );
 
-            var location = GdxApi.Bindings.GetAttribLocation( Handle, name );
+            var location = GdxApi.Bindings.GetAttribLocation( ShaderHandle, name );
 
             _attributes[ name ]     = location;
             _attributeSizes[ name ] = size;
@@ -283,7 +283,7 @@ public class ManagedShaderProgram : ShaderProgram
 
         if ( ( location = _attributes.Get( name, NOT_CACHED ) ) == NOT_CACHED )
         {
-            location            = GdxApi.Bindings.GetAttribLocation( Handle, name );
+            location            = GdxApi.Bindings.GetAttribLocation( ShaderHandle, name );
             _attributes[ name ] = location;
         }
 
@@ -492,7 +492,7 @@ public class ManagedShaderProgram : ShaderProgram
 
         if ( ( location = _uniforms.Get( name, NOT_CACHED ) ) == NOT_CACHED )
         {
-            location = GdxApi.Bindings.GetUniformLocation( Handle, name );
+            location = GdxApi.Bindings.GetUniformLocation( ShaderHandle, name );
 
             if ( ( location == CACHED_NOT_FOUND ) && pedant )
             {
@@ -943,7 +943,7 @@ public class ManagedShaderProgram : ShaderProgram
     public override void Bind()
     {
         CheckManaged();
-        GdxApi.Bindings.UseProgram( Handle );
+        GdxApi.Bindings.UseProgram( ShaderHandle );
     }
 
     /// <summary>

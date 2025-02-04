@@ -28,6 +28,7 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
@@ -65,7 +66,7 @@ public class ShaderProgram : IDisposable
     public bool   IsCompiled             { get; set; }
     public string VertexShaderSource     { get; }
     public string FragmentShaderSource   { get; }
-    public int    Handle                 { get; private set; }
+    public int    ShaderHandle           { get; private set; }
     public bool   Invalidated            { get; protected set; }
     public int    CombinedMatrixLocation { get; set; }
 
@@ -109,96 +110,39 @@ public class ShaderProgram : IDisposable
     /// <summary>
     /// Loads and compiles the shaders, creates a new program and links the shaders.
     /// </summary>
-    /// <param name="vertexShader"> the vertex shader </param>
-    /// <param name="fragmentShader"> the fragment shader </param>
-    public void CompileShaders( string vertexShader, string fragmentShader )
+    /// <param name="vertexShaderSource"> the vertex shader </param>
+    /// <param name="fragmentShaderSource"> the fragment shader </param>
+    public void CompileShaders( string vertexShaderSource, string fragmentShaderSource )
     {
-        _vertexShaderHandle   = LoadShader( ( int )ShaderType.VertexShader, vertexShader );
-        _fragmentShaderHandle = LoadShader( ( int )ShaderType.FragmentShader, fragmentShader );
+        _vertexShaderHandle = ( int )GdxApi.Bindings.CreateShader( ( int )ShaderType.VertexShader );
+        GdxApi.Bindings.ShaderSource( _vertexShaderHandle, vertexShaderSource );
+        GdxApi.Bindings.CompileShader( _vertexShaderHandle );
+        CheckShaderLoadError( _vertexShaderHandle, ( int )ShaderType.VertexShader );
+        
+        _fragmentShaderHandle = ( int )GdxApi.Bindings.CreateShader( ( int )ShaderType.FragmentShader );
+        GdxApi.Bindings.ShaderSource( _fragmentShaderHandle, fragmentShaderSource );
+        GdxApi.Bindings.CompileShader( _fragmentShaderHandle );
+        CheckShaderLoadError( _fragmentShaderHandle, ( int )ShaderType.FragmentShader );
 
-        if ( ( _vertexShaderHandle == -1 ) || ( _fragmentShaderHandle == -1 ) )
-        {
-            IsCompiled = false;
+        ShaderHandle = ( int )GdxApi.Bindings.CreateProgram();
 
-            return;
-        }
+        GdxApi.Bindings.AttachShader( ShaderHandle, _vertexShaderHandle );
+        GdxApi.Bindings.AttachShader( ShaderHandle, _fragmentShaderHandle );
+        GdxApi.Bindings.LinkProgram( ShaderHandle );
 
-        Handle = LinkProgram( CreateProgram() );
-
-        IsCompiled = ( Handle != -1 );
+        GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
+        GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
+        
+        IsCompiled = ( ShaderHandle != -1 );
     }
 
     /// <summary>
     /// </summary>
-    /// <param name="program"></param>
-    /// <returns></returns>
-    /// <exception cref="Exception"></exception>
-    public unsafe int LinkProgram( int program )
-    {
-        if ( program == -1 )
-        {
-            return -1;
-        }
-
-        GdxApi.Bindings.AttachShader( program, _vertexShaderHandle );
-        GdxApi.Bindings.AttachShader( program, _fragmentShaderHandle );
-        GdxApi.Bindings.LinkProgram( program );
-
-        var status = stackalloc int[ 1 ];
-
-        GdxApi.Bindings.UseProgram( program );
-        GdxApi.Bindings.GetProgramiv( program, IGL.GL_LINK_STATUS, status );
-
-        if ( *status == IGL.GL_FALSE )
-        {
-            var length = stackalloc int[ 1 ];
-
-            GdxApi.Bindings.GetProgramiv( program, IGL.GL_INFO_LOG_LENGTH, length );
-
-            _shaderLog = GdxApi.Bindings.GetProgramInfoLog( program, *length );
-
-            throw new Exception( $"Failed to link shader program {program}: {_shaderLog}" );
-        }
-
-        GdxApi.Bindings.DetachShader( program, _vertexShaderHandle );   // Detach vertex shader
-        GdxApi.Bindings.DetachShader( program, _fragmentShaderHandle ); // Detach fragment shader
-        GdxApi.Bindings.DeleteShader( _vertexShaderHandle );            // Delete vertex shader
-        GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );          // Delete fragment shader
-
-        return program;
-    }
-
-    /// <summary>
-    /// Trys to create a program object for this ShaderProgram.
-    /// </summary>
-    /// <returns>The program ID if created, otherwise -1.</returns>
-    protected static int CreateProgram()
-    {
-        var program = ( int )GdxApi.Bindings.CreateProgram();
-
-        return program != 0 ? program : -1;
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Loads the supplied shader into the relvant shader type.
-    /// </summary>
+    /// <param name="shader"></param>
     /// <param name="shaderType"></param>
-    /// <param name="source"></param>
-    /// <returns></returns>
-    public unsafe int LoadShader( int shaderType, string source )
+    /// <exception cref="Exception"></exception>
+    private unsafe void CheckShaderLoadError( int shader, int shaderType )
     {
-        var shader = ( int )GdxApi.Bindings.CreateShader( shaderType );
-
-        if ( shader == 0 )
-        {
-            return -1;
-        }
-
-        GdxApi.Bindings.ShaderSource( shader, source );
-        GdxApi.Bindings.CompileShader( shader );
-
         var status = stackalloc int[ 1 ];
 
         GdxApi.Bindings.GetShaderiv( shader, IGL.GL_COMPILE_STATUS, status );
@@ -218,8 +162,6 @@ public class ShaderProgram : IDisposable
 
             throw new Exception( $"Failed to loader shader {shader}: {infoLog}" );
         }
-
-        return ( int )shader;
     }
 
     // ========================================================================
@@ -233,7 +175,7 @@ public class ShaderProgram : IDisposable
     public virtual void SetUniformMatrix< T >( string name, ref T matrix, bool transpose = false )
         where T : unmanaged
     {
-        var location = GdxApi.Bindings.GetUniformLocation( Handle, name );
+        var location = GdxApi.Bindings.GetUniformLocation( ShaderHandle, name );
 
         SetUniformMatrix( location, ref matrix, transpose );
     }
@@ -279,7 +221,7 @@ public class ShaderProgram : IDisposable
 
     public virtual int GetAttributeLocation( string name )
     {
-        return GdxApi.Bindings.GetAttribLocation( Handle, name );
+        return GdxApi.Bindings.GetAttribLocation( ShaderHandle, name );
     }
 
     public virtual void SetUniformi( string name, int value )
@@ -327,12 +269,12 @@ public class ShaderProgram : IDisposable
 
     public virtual int FetchUniformLocation( string name )
     {
-        return GdxApi.Bindings.GetUniformLocation( Handle, name );
+        return GdxApi.Bindings.GetUniformLocation( ShaderHandle, name );
     }
 
     public virtual int FetchAttributeLocation( string name )
     {
-        return GdxApi.Bindings.GetAttribLocation( Handle, name );
+        return GdxApi.Bindings.GetAttribLocation( ShaderHandle, name );
     }
 
     public virtual void EnableVertexAttribute( int location )
@@ -377,7 +319,7 @@ public class ShaderProgram : IDisposable
     /// </summary>
     public virtual void Bind()
     {
-        GdxApi.Bindings.UseProgram( Handle );
+        GdxApi.Bindings.UseProgram( ShaderHandle );
     }
 
     /// <summary>
@@ -402,9 +344,9 @@ public class ShaderProgram : IDisposable
             {
                 var length = stackalloc int[ 1 ];
 
-                GdxApi.Bindings.GetProgramiv( Handle, IGL.GL_INFO_LOG_LENGTH, length );
+                GdxApi.Bindings.GetProgramiv( ShaderHandle, IGL.GL_INFO_LOG_LENGTH, length );
 
-                _shaderLog = GdxApi.Bindings.GetProgramInfoLog( Handle, *length );
+                _shaderLog = GdxApi.Bindings.GetProgramInfoLog( ShaderHandle, *length );
             }
 
             return _shaderLog;
@@ -420,7 +362,7 @@ public class ShaderProgram : IDisposable
         GdxApi.Bindings.UseProgram( 0 );
         GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
         GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
-        GdxApi.Bindings.DeleteProgram( Handle );
+        GdxApi.Bindings.DeleteProgram( ShaderHandle );
 
         GC.SuppressFinalize( this );
     }

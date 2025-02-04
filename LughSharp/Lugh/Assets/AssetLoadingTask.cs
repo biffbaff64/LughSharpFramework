@@ -85,9 +85,8 @@ public class AssetLoadingTask
             {
                 LoadDependenciesAsync( asyncLoader );
 
-                if ( Cancel ) return null; // Check for cancellation after dependencies are loaded.
-
-                return LoadAssetAsync( asyncLoader );
+                return Cancel ? null : // Check for cancellation after dependencies are loaded.
+                    LoadAssetAsync( asyncLoader );
             }
             
             if ( _loader is SynchronousAssetLoader< Type, AssetLoaderParameters > syncLoader )
