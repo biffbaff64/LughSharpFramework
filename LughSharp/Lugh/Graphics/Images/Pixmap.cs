@@ -165,12 +165,7 @@ public class Pixmap : IDisposable
         try
         {
             var data = File.ReadAllBytes( file.FullName );
-
-            Logger.Debug( $"File loaded: {data.Length} bytes" );
-            
             Gdx2DPixmap = new Gdx2DPixmap( data, 0, data.Length, 0 );
-
-            Logger.Checkpoint();
         }
         catch ( Exception e )
         {
@@ -420,7 +415,8 @@ public class Pixmap : IDisposable
     /// <param name="dsty"> The target y-coordinate (top left corner) </param>
     /// <param name="dstWidth"> The target width </param>
     /// <param name="dstHeight"> The target height  </param>
-    public void DrawPixmap( Pixmap pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth, int dstHeight )
+    public void DrawPixmap( Pixmap pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth,
+                            int dstHeight )
     {
         ArgumentNullException.ThrowIfNull( nameof( pixmap ), "Source Pixmap cannot be null." );
 

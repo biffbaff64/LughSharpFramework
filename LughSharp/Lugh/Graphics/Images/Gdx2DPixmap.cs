@@ -121,9 +121,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
-        #if PNG_ANALYSIS
-        PNGUtils.AnalysePNG( buffer, true );
-        #endif
+        PNGUtils.AnalysePNG( buffer, PNGUtils.NO_OUTPUT );
 
         ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, offset, len );
 
@@ -236,11 +234,9 @@ public partial class Gdx2DPixmap : IDisposable
     /// <param name="len"></param>
     /// <returns></returns>
     /// <exception cref="IOException"></exception>
-    private ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
+    private static ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
-        #if PNG_ANALYSIS
-        PNGUtils.AnalysePNG( buffer );
-        #endif
+        PNGUtils.AnalysePNG( buffer, PNGUtils.NO_OUTPUT );
         
         var pixmapDef = new PixmapDataType
         {
@@ -253,13 +249,6 @@ public partial class Gdx2DPixmap : IDisposable
             TotalIDATSize = PNGUtils.TotalIDATSize,
             Pixels        = new byte[ PNGUtils.IDATchunk.ChunkSize ],
         };
-
-//        Logger.Debug( $"Width        : {pixmapDef.Width}" );
-//        Logger.Debug( $"Height       : {pixmapDef.Height}" );
-//        Logger.Debug( $"BitDepth     : {pixmapDef.BitDepth}" );
-//        Logger.Debug( $"ColorType    : {pixmapDef.ColorType}" );
-//        Logger.Debug( $"Pixels       : {pixmapDef.Pixels.Length}" );
-//        Logger.Debug( $"TotalIDATSize: {pixmapDef.TotalIDATSize}" );
 
         Array.Copy( buffer, PNGUtils.IDAT_DATA_OFFSET, pixmapDef.Pixels, 0, PNGUtils.IDATchunk.ChunkSize );
 

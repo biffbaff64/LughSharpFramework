@@ -195,10 +195,7 @@ public class SpriteBatch : IBatch
             _mesh.IndexData().Unbind();
         }
 
-        Logger.Debug( $"_shader.Handle: {_shader.ShaderHandle}, IsProgram: {GdxApi.Bindings.IsProgram( _shader.ShaderHandle )}" );
-        GdxApi.Bindings.UseProgram( _shader.ShaderHandle );
-        _combinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( _shader.ShaderHandle, ShaderProgram.COMBINED_MATRIX_UNIFORM );
-        Logger.Debug( $"_combinedMatrixLocation: {_combinedMatrixLocation}" );
+        TestUniformLocation();
     }
 
     /// <summary>
@@ -1394,16 +1391,32 @@ public class SpriteBatch : IBatch
         }
     }
 
+    private void TestUniformLocation()
+    {
+        GdxRuntimeException.ThrowIfNull( _shader );
+        
+        Logger.Debug( $"_shader.Handle: {_shader.ShaderHandle}, " +
+                      $"IsProgram: {GdxApi.Bindings.IsProgram( _shader.ShaderHandle )}" );
+        
+        GdxApi.Bindings.UseProgram( _shader.ShaderHandle );
+        _combinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( _shader.ShaderHandle,
+                                                                      ShaderProgram.COMBINED_MATRIX_UNIFORM );
+        
+        Logger.Debug( $"_combinedMatrixLocation: {_combinedMatrixLocation}" );
+    }
+    
     public static ShaderProgram CreateMinimalTestShader()
     {
-        const string VERTEX_SHADER = $"#version 450 core\n" +
+        const string VERTEX_SHADER = "#version 450 core\n" +
                                      "layout (location = 0) in vec3 aPosition;\n" +
+                                     $"layout (location = 1) uniform mat4 {ShaderProgram.COMBINED_MATRIX_UNIFORM};\n" +
                                      "void main() {\n" +
                                      "    gl_Position = vec4(aPosition, 1.0);\n" +
                                      "}\n";
 
-        const string FRAGMENT_SHADER = $"#version 450 core\n" +
+        const string FRAGMENT_SHADER = "#version 450 core\n" +
                                        "out vec4 FragColor;\n" +
+                                       "uniform sampler2D u_texture;\n" +
                                        "void main() {\n" +
                                        "    FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
                                        "}\n";
@@ -1419,13 +1432,12 @@ public class SpriteBatch : IBatch
     public static ShaderProgram CreateDefaultShader()
     {
         const string VERTEX_SHADER = $"{ShaderProgram.SHADER_VERSION_CODE}\n" +
-                                     $"in vec2 {ShaderProgram.POSITION_ATTRIBUTE};\n" +
-                                     $"in vec4 {ShaderProgram.COLOR_ATTRIBUTE};\n" +
-                                     $"in vec2 {ShaderProgram.TEXCOORD_ATTRIBUTE};\n" +
+                                     $"layout (location = 0) in vec2 {ShaderProgram.POSITION_ATTRIBUTE};\n" +
+                                     $"layout (location = 1) in vec4 {ShaderProgram.COLOR_ATTRIBUTE};\n" +
+                                     $"layout (location = 2) in vec2 {ShaderProgram.TEXCOORD_ATTRIBUTE};\n" +
+                                     $"layout (location = 3) uniform mat4 u_combinedMatrix;\n" +
                                      "out vec4 v_colorPacked;\n" +
                                      "out vec2 v_texCoords;\n" +
-                                     $"uniform mat4 {ShaderProgram.COMBINED_MATRIX_UNIFORM}Temp;\n" +
-                                     $"uniform mat4 {ShaderProgram.COMBINED_MATRIX_UNIFORM};\n" +
                                      "void main() {\n" +
                                      $"    gl_Position = u_combinedMatrix * vec4({ShaderProgram.POSITION_ATTRIBUTE}, 0.0, 1.0);\n" +
                                      $"    v_colorPacked = {ShaderProgram.COLOR_ATTRIBUTE};\n" +

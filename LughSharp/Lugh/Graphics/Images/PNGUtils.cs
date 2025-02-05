@@ -43,6 +43,13 @@ public class PNGUtils
     public const int IDAT_CHUNK_TYPE_OFFSET = ( IDAT_START + IDAT_SIZE );
     public const int IDAT_DATA_OFFSET       = ( IDAT_CHUNK_TYPE_OFFSET + IDAT_SIZE );
 
+    // ------------------------------------------------------------------------
+    
+    public const bool SHOW_OUTPUT = true;
+    public const bool NO_OUTPUT   = false;
+
+    // ------------------------------------------------------------------------
+
     private const int WIDTH_OFFSET       = IHDR_DATA_OFFSET;
     private const int WIDTH_SIZE         = sizeof( uint );
     private const int HEIGHT_OFFSET      = ( WIDTH_OFFSET + WIDTH_SIZE );
@@ -63,6 +70,8 @@ public class PNGUtils
     // 37 - 40 => 49 44 41 54                              - IDAT Chunk Type (4 bytes - 'I', 'D', 'A', 'T')
     // ... (IDAT data follows)
 
+    // ========================================================================
+    
     public static PNGSignature PngSignature  { get; private set; }
     public static IHDRChunk    IHDRchunk     { get; private set; }
     public static IDATChunk    IDATchunk     { get; private set; }
@@ -168,12 +177,18 @@ public class PNGUtils
             Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );
             Logger.Debug( $"- Checksum      : {ReadBigEndianUInt32( IHDRchunk.Crc, 4 )}" );
             Logger.Debug( "" );
+
 //            Logger.Debug( $"- IHDR/IDAT Data: {BitConverter.ToString( pngData ).Replace( "-", " " )}" );
             Logger.Debug( $"- TotalIDATSize : {TotalIDATSize}" );
             Logger.Debug( "" );
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pngData"></param>
+    /// <returns></returns>
     public static long CalculateTotalIDATSize( byte[] pngData )
     {
         var totalIDATSize = 0L;
@@ -183,8 +198,6 @@ public class PNGUtils
         {
             var chunkSize     = ReadIntFromBytes( pngData, idatIndex );
             var fullChunkSize = chunkSize + 12; // Add 12 bytes for type and CRC
-
-            Logger.Debug( $"IDAT Index: {idatIndex}, Chunk Size: {chunkSize}" );
 
             if ( ( idatIndex + fullChunkSize ) > pngData.Length )
             {
@@ -200,6 +213,13 @@ public class PNGUtils
         return totalIDATSize;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="bytes"></param>
+    /// <param name="chunkType"></param>
+    /// <param name="startIndex"></param>
+    /// <returns></returns>
     public static int FindChunk( byte[] bytes, string chunkType, int startIndex = 0 )
     {
         var chunkTypeBytes = System.Text.Encoding.ASCII.GetBytes( chunkType );
@@ -223,6 +243,12 @@ public class PNGUtils
         return -1;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="bytes"></param>
+    /// <param name="startIndex"></param>
+    /// <returns></returns>
     public static int ReadIntFromBytes( byte[] bytes, int startIndex )
     {
         if ( ( startIndex < 0 ) || ( ( startIndex + 3 ) >= bytes.Length ) )

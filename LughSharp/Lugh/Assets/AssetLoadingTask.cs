@@ -85,10 +85,10 @@ public class AssetLoadingTask
             {
                 LoadDependenciesAsync( asyncLoader );
 
-                return Cancel ? null : // Check for cancellation after dependencies are loaded.
-                    LoadAssetAsync( asyncLoader );
+                // Check for cancellation after dependencies are loaded.
+                return Cancel ? null : LoadAssetAsync( asyncLoader );
             }
-            
+
             if ( _loader is SynchronousAssetLoader< Type, AssetLoaderParameters > syncLoader )
             {
                 return LoadSynchronously( syncLoader );
@@ -164,13 +164,11 @@ public class AssetLoadingTask
     /// </summary>
     /// <param name="loader">The synchronous asset loader to be used for loading the asset.</param>
     /// <returns>The loaded asset object or null if loading fails.</returns>
-    private object LoadSynchronously( SynchronousAssetLoader< Type, AssetLoaderParameters > loader )
+    private Type LoadSynchronously( SynchronousAssetLoader< Type, AssetLoaderParameters > loader )
     {
         if ( !DependenciesLoaded )
         {
-            Dependencies = loader.GetDependencies( AssetDesc.AssetName,
-                                                   Resolve( loader, AssetDesc )!,
-                                                   AssetDesc.Parameters );
+            Dependencies = loader.GetDependencies( AssetDesc.AssetName, Resolve( loader, AssetDesc )!, AssetDesc.Parameters );
 
             if ( Dependencies != null )
             {

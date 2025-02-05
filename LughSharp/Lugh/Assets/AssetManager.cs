@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.CompilerServices;
-
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Audio;
@@ -650,7 +648,6 @@ public partial class AssetManager
 
     #region dependency injection and ref counting
 
-    
     /// <summary>
     /// Injects dependencies for a given parent asset by adding the specified
     /// dependent asset descriptors.
