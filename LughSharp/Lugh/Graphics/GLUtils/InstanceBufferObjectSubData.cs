@@ -108,7 +108,7 @@ public class InstanceBufferObjectSubData : IInstanceData
 
         if ( _isDirect )
         {
-            BufferUtils.Copy( data, _byteBuffer, count, offset );
+            _byteBuffer.AddFloats( data, offset, count );
 
             _buffer.Position = 0;
             _buffer.Limit    = count;

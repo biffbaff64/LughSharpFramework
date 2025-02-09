@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -34,16 +33,20 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI]
 public class InstanceBufferObject : IInstanceData
 {
+    public VertexAttributes Attributes { get; set; } = null!;
+
+    // ========================================================================
+
     private FloatBuffer _buffer = null!;
-    private int         _bufferHandle;
     private ByteBuffer? _byteBuffer;
     private bool        _isBound = false;
     private bool        _isDirty = false;
     private bool        _ownsBuffer;
+    private int         _bufferHandle;
     private int         _usage;
 
     // ========================================================================
-    
+
     public InstanceBufferObject( bool isStatic, int numVertices, params VertexAttribute[] attributes )
         : this( isStatic, numVertices, new VertexAttributes( attributes ) )
     {
@@ -51,9 +54,9 @@ public class InstanceBufferObject : IInstanceData
 
     public InstanceBufferObject( bool isStatic, int numVertices, VertexAttributes instanceAttributes )
     {
-        _bufferHandle = ( int ) GdxApi.Bindings.GenBuffer();
+        _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
 
-        var data = BufferUtils.NewByteBuffer( instanceAttributes.VertexSize * numVertices, false );
+        var data = BufferUtils.NewByteBuffer( instanceAttributes.VertexSize * numVertices );
 
         data.Limit = 0;
 
@@ -63,7 +66,7 @@ public class InstanceBufferObject : IInstanceData
     }
 
     /// <summary>
-    /// The GL enum used in the call to <see cref="GLBindings.GLBufferData(int, int, Buffer, int)"/>",
+    /// The GL enum used in the call to <see cref="GLBindings.BufferData"/>",
     /// e.g. GL_STATIC_DRAW or GL_DYNAMIC_DRAW. It can only be called when the VBO is not bound.
     /// </summary>
     public int Usage
@@ -83,8 +86,6 @@ public class InstanceBufferObject : IInstanceData
     public int NumInstances    => ( _buffer.Limit * 4 ) / Attributes.VertexSize;
     public int NumMaxInstances => _byteBuffer!.Capacity / Attributes.VertexSize;
 
-    public VertexAttributes Attributes { get; set; } = null!;
-
     public FloatBuffer GetBuffer( bool forWriting = true )
     {
         _isDirty |= forWriting;
@@ -98,7 +99,7 @@ public class InstanceBufferObject : IInstanceData
 
         _isDirty = true;
 
-        BufferUtils.Copy( data, _byteBuffer, count, offset );
+        _byteBuffer.AddFloats( data, offset, count );
 
         _buffer.Position = 0;
         _buffer.Limit    = count;
@@ -168,7 +169,7 @@ public class InstanceBufferObject : IInstanceData
     {
         Debug.Assert( _byteBuffer != null, "Bind(ShaderProgram, int[]) fail: _byteBuffer is NULL" );
 
-        GdxApi.Bindings.BindBuffer( IGL.GL_ARRAY_BUFFER, ( uint ) _bufferHandle );
+        GdxApi.Bindings.BindBuffer( IGL.GL_ARRAY_BUFFER, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -207,7 +208,7 @@ public class InstanceBufferObject : IInstanceData
                                            Attributes.VertexSize,
                                            attribute.Offset );
 
-                GdxApi.Bindings.VertexAttribDivisor( ( uint ) ( location + unitOffset ), 1 );
+                GdxApi.Bindings.VertexAttribDivisor( ( uint )( location + unitOffset ), 1 );
             }
         }
         else
@@ -232,7 +233,7 @@ public class InstanceBufferObject : IInstanceData
                                            Attributes.VertexSize,
                                            attribute.Offset );
 
-                GdxApi.Bindings.VertexAttribDivisor( ( uint ) ( location + unitOffset ), 1 );
+                GdxApi.Bindings.VertexAttribDivisor( ( uint )( location + unitOffset ), 1 );
             }
         }
 
@@ -289,7 +290,7 @@ public class InstanceBufferObject : IInstanceData
     /// </summary>
     public void Invalidate()
     {
-        _bufferHandle = ( int ) GdxApi.Bindings.GenBuffer();
+        _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
         _isDirty      = true;
     }
 
@@ -299,7 +300,7 @@ public class InstanceBufferObject : IInstanceData
     public void Dispose()
     {
         GdxApi.Bindings.BindBuffer( IGL.GL_ARRAY_BUFFER, 0 );
-        GdxApi.Bindings.DeleteBuffers( ( uint ) _bufferHandle );
+        GdxApi.Bindings.DeleteBuffers( ( uint )_bufferHandle );
 
         _bufferHandle = 0;
 

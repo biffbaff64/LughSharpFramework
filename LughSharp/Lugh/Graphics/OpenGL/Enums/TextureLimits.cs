@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin.
+//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,24 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Utils.Buffers;
+namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public class HeapFloatBufferR : HeapFloatBuffer
+public enum TextureLimits
 {
-    public HeapFloatBufferR( int capacity, int limit )
-        : base( capacity, limit )
-    {
-        SetBufferStatus( READ_ONLY, NOT_DIRECT );
-    }
+    // The above would return a value such as 16 or 32 or above. That is the number of image samplers that your GPU supports in the fragment shader.
+    MaxTextureImageUnits = IGL.GL_MAX_TEXTURE_IMAGE_UNITS,
 
-    public HeapFloatBufferR( float[] hb, int mark, int limit, int position, int capacity, int offset )
-        : base( hb, mark, position, limit, capacity, offset )
-    {
-        SetBufferStatus( READ_ONLY, NOT_DIRECT );
-    }
+    // The following is for the vertex shader (available since GL 2.0). This might return 0 for certain GPUs.
+    MaxVertexTextureImageUnits = IGL.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,
+
+    // The following is for the geometry shader (available since GL 3.2)
+    MaxGeometryTextureImageUnits = IGL.GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS,
+
+    // The following is VS + GS + FS (available since GL 2.0)
+    MaxCombinedTextureImageUnits = IGL.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
+
+    // The following is the number of texture coordinates available which usually is 8
+    MaxTextureCoords = IGL.GL_MAX_TEXTURE_COORDS,
 }
+

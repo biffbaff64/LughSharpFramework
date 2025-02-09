@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Buffers;
+namespace LughSharp.Lugh.Utils.Buffers.HeapBuffers;
 
 [PublicAPI]
 public class HeapFloatBuffer : FloatBuffer
@@ -126,7 +126,7 @@ public class HeapFloatBuffer : FloatBuffer
     /// </exception>
     public override float Get()
     {
-        return 0;
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -146,7 +146,7 @@ public class HeapFloatBuffer : FloatBuffer
     /// </exception>
     public override FloatBuffer Put( float f )
     {
-        return null!;
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -159,7 +159,7 @@ public class HeapFloatBuffer : FloatBuffer
     /// </exception>
     public override float Get( int index )
     {
-        return 0;
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ public class HeapFloatBuffer : FloatBuffer
     /// <exception cref="GdxRuntimeException"> If this buffer is read-only </exception>
     public override FloatBuffer Put( int index, float f )
     {
-        return null!;
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -203,7 +203,7 @@ public class HeapFloatBuffer : FloatBuffer
     /// <exception cref="GdxRuntimeException">If this buffer is read-only</exception>
     public override FloatBuffer Compact()
     {
-        return null!;
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -217,6 +217,6 @@ public class HeapFloatBuffer : FloatBuffer
     /// <returns> This buffer's byte order </returns>
     public override ByteOrder Order()
     {
-        return null!;
+        throw new NotImplementedException();
     }
 }

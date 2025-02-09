@@ -437,6 +437,7 @@ public interface IGL
     const int GL_TEXTURE_IMMUTABLE_LEVELS                           = 0x82DF;
     const int GL_UNSIGNED_SHORT_5_6_5                               = 0x8363;
     const int GL_UNSIGNED_INT_2_10_10_10_REV                        = 0x8368;
+    const int GL_UNSIGNED_INT_10F_11F_11F_REV                       = 0x8C3B;
     const int GL_MIRRORED_REPEAT                                    = 0x8370;
     const int GL_ALIASED_POINT_SIZE_RANGE                           = 0x846D;
     const int GL_ALIASED_LINE_WIDTH_RANGE                           = 0x846E;
@@ -570,6 +571,7 @@ public interface IGL
     const int GL_FLOAT_MAT4                                         = 0x8B5C;
     const int GL_SAMPLER_2D                                         = 0x8B5E;
     const int GL_SAMPLER_CUBE                                       = 0x8B60;
+    const int GL_MAX_TEXTURE_COORDS                                 = 0x8871;
     const int GL_MAX_TEXTURE_IMAGE_UNITS                            = 0x8872;
     const int GL_SHADER_TYPE                                        = 0x8B4F;
     const int GL_DELETE_STATUS                                      = 0x8B80;

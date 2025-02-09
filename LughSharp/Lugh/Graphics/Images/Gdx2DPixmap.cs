@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.HeapBuffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Images;

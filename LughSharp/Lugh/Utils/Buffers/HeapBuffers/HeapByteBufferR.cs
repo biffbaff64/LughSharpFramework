@@ -22,13 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Utils.Buffers;
+namespace LughSharp.Lugh.Utils.Buffers.HeapBuffers;
 
 [PublicAPI]
-public class HeapIntBufferR : HeapIntBuffer
+public class HeapByteBufferR : HeapByteBuffer
 {
-    public HeapIntBufferR( int capacity, int limit )
-        : base( capacity, limit )
+    public HeapByteBufferR( byte[]? buf, int mark, int pos, int lim, int cap, int off )
+        : base( buf, mark, pos, lim, cap, off )
     {
         SetBufferStatus( READ_ONLY, NOT_DIRECT );
     }

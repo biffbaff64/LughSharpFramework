@@ -442,7 +442,14 @@ public abstract class GLTexture : IDisposable
             disposePixmap = true;
         }
 
-        GdxApi.Bindings.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, 1 );
+        var alignment = pixmap.GLPixelFormat switch
+        {
+            IGL.GL_RGB or IGL.GL_RGBA or IGL.GL_RGBA4 or IGL.GL_RGB565 => 4,
+            IGL.GL_ALPHA or IGL.GL_LUMINANCE                           => 1,
+            var _                                                      => 1,
+        };
+
+        GdxApi.Bindings.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
 
         if ( data.UseMipMaps )
         {
@@ -450,17 +457,7 @@ public abstract class GLTexture : IDisposable
         }
         else
         {
-            GdxApi.Bindings.TexImage2D( target, miplevel, 0, pixmap );
-
-//            GdxApi.Bindings.TexImage2D( target,
-//                                        miplevel,
-//                                        pixmap.GLInternalPixelFormat,
-//                                        pixmap.Width,
-//                                        pixmap.Height,
-//                                        border: 0,
-//                                        pixmap.GLPixelFormat,
-//                                        pixmap.GLDataType,
-//                                        pixmap.PixelData );
+//            GdxApi.Bindings.TexImage2D( target, miplevel, 0, pixmap );
         }
 
         if ( disposePixmap )
@@ -516,7 +513,7 @@ public abstract class GLTexture : IDisposable
         }
     }
     #endif
-    
+
     // ========================================================================
     // ========================================================================
 

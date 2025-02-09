@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Buffers;
+namespace LughSharp.Lugh.Utils.Buffers.HeapBuffers;
 
 [PublicAPI]
 public class HeapIntBuffer : IntBuffer
@@ -145,6 +145,7 @@ public class HeapIntBuffer : IntBuffer
         return this;
     }
 
+    /// <exception cref="ArgumentException"></exception>
     /// <inheritdoc />
     public override IntBuffer Put( IntBuffer src )
     {

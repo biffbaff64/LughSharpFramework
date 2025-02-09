@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Buffers;
+namespace LughSharp.Lugh.Utils.Buffers.HeapBuffers;
 
 /// <summary>
 /// A read-only HeapShortBuffer.  This class extends the corresponding read/write class,
@@ -52,9 +52,6 @@ public class HeapShortBufferR : HeapShortBuffer
     {
         SetBufferStatus( READ_ONLY, NOT_DIRECT );
     }
-
-    /// <inheritdoc />
-    public override bool IsReadOnly => true;
 
     /// <override/>
     public override ShortBuffer Slice()

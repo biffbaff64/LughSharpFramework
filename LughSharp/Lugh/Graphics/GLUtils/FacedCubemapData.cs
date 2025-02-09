@@ -150,17 +150,16 @@ public class FacedCubemapData : ICubemapData
                     disposePixmap = true;
                 }
 
-                GdxApi.Bindings.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, 1 );
+                var alignment = pixmap.GLPixelFormat switch
+                {
+                    IGL.GL_RGB or IGL.GL_RGBA or IGL.GL_RGBA4 or IGL.GL_RGB565 => 4,
+                    IGL.GL_ALPHA or IGL.GL_LUMINANCE                           => 1,
+                    var _                                                      => 1,
+                };
 
-                GdxApi.Bindings.TexImage2D( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                                     0,
-                                     pixmap.GLInternalPixelFormat,
-                                     pixmap.Width,
-                                     pixmap.Height,
-                                     0,
-                                     pixmap.GLPixelFormat,
-                                     pixmap.GLDataType,
-                                     pixmap.ByteBuffer.BackingArray() );
+                GdxApi.Bindings.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
+
+                GdxApi.Bindings.TexImage2D( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, 0, pixmap );
 
                 if ( disposePixmap )
                 {

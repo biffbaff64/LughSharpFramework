@@ -108,6 +108,11 @@ public class FileTextureData : ITextureData
         var pixmap = _pixmap;
         _pixmap = null;
 
+        if ( pixmap == null )
+        {
+            throw new GdxRuntimeException( "ConsumePixmap() resulted in a null Pixmap!" );
+        }
+
         return pixmap;
     }
 

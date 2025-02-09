@@ -177,7 +177,7 @@ public class VertexBufferObject : IVertexData
 
         _isDirty = true;
 
-        BufferUtils.Copy( vertices, _byteBuffer, count, offset );
+        _byteBuffer.AddFloats( vertices, offset, count );
 
         _buffer.Position = 0;
         _buffer.Limit    = count;

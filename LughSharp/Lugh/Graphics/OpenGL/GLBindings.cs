@@ -326,11 +326,8 @@ public unsafe partial class GLBindings : IGLBindings
     public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap )
     {
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
-
-        var pixelFormat = pixmap.GLPixelFormat;
-        var dataType    = pixmap.GLDataType;
-
-        fixed ( void* p = &pixmap.PixelData[ 0 ] )
+        
+        fixed ( byte* p = &pixmap.PixelData[ 0 ] )
         {
             _glTexImage2D( target,
                            level,
@@ -338,8 +335,9 @@ public unsafe partial class GLBindings : IGLBindings
                            pixmap.Width,
                            pixmap.Height,
                            border,
-                           pixelFormat,
-                           dataType, p );
+                           pixmap.GLPixelFormat,
+                           pixmap.GLDataType,
+                           p );
         }
     }
 
@@ -358,7 +356,7 @@ public unsafe partial class GLBindings : IGLBindings
 
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
-        fixed ( void* p = &pixels[ 0 ] )
+        fixed ( T* p = &pixels[ 0 ] )
         {
             _glTexImage2D( target, level, internalpixelformat, width, height, border, pixelFormat, dataType, p );
         }

@@ -74,7 +74,7 @@ public class Texture : GLTexture, IManaged
 
     /// <summary>
     /// The Texture name, usually the filename but can be something else.
-    /// Name will be set to 'Not Set' if null or empty.
+    /// Name will be set to 'Name Not Set' if null or empty.
     /// </summary>
     public string Name
     {
@@ -82,7 +82,7 @@ public class Texture : GLTexture, IManaged
         {
             if ( string.IsNullOrEmpty( _name ) )
             {
-                _name = "Not Set";
+                _name = "Name Not Set";
             }
             
             return _name;

@@ -72,13 +72,19 @@ public class SpriteBatch : IBatch
     private const int MAX_VERTEX_INDEX    = 32767;
     private const int MAX_SPRITES         = 8191;
 
+    // ========================================================================
+
     private readonly Color _color = Graphics.Color.Red;
+    private readonly int   _maxTextureUnits;
+
+    // ========================================================================
 
     private ShaderProgram? _shader;
     private bool           _ownsShader;
     private Mesh?          _mesh;
     private Texture?       _lastSuccessfulTexture = null;
     private int            _nullTextureCount      = 0;
+    private int            _currentTextureIndex   = 0;
     private uint           _vao;
     private uint           _vbo;
     private int            _vertexSizeInFloats;
@@ -115,6 +121,8 @@ public class SpriteBatch : IBatch
 
         IsDrawing = false;
         Vertices  = new float[ size * VERTICES_PER_SPRITE * VERTEX_SIZE ];
+
+        _maxTextureUnits = SetMaxTextureUnits();
 
         Initialise( size, defaultShader );
     }
@@ -179,7 +187,6 @@ public class SpriteBatch : IBatch
         {
             Logger.Debug( "Creating Default Shader" );
             _shader     = CreateDefaultShader();
-//            _shader     = CreateMinimalTestShader();
             _ownsShader = true;
         }
         else
@@ -195,7 +202,7 @@ public class SpriteBatch : IBatch
             _mesh.IndexData().Unbind();
         }
 
-        TestUniformLocation();
+        GetCombinedMatrixUniformLocation();
     }
 
     /// <summary>
@@ -326,6 +333,10 @@ public class SpriteBatch : IBatch
         }
 
         _shader?.Unbind();
+
+        Array.Clear( Vertices, 0, Idx );
+        _currentTextureIndex = 0;
+        Idx                  = 0;
     }
 
     /// <summary>
@@ -358,6 +369,9 @@ public class SpriteBatch : IBatch
 
         MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
 
+        Logger.Debug( $"Idx: {Idx}" );
+        Logger.Debug( $"_currentTextureIndex: {_currentTextureIndex}" );
+        Logger.Debug( $"_maxTextureUnits: {_maxTextureUnits}" );
         Logger.Debug( $"spritesInBatch: {spritesInBatch}" );
         Logger.Debug( $"MaxSpritesInBatch: {MaxSpritesInBatch}" );
 
@@ -373,13 +387,13 @@ public class SpriteBatch : IBatch
             return;
         }
 
-        GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 );
+        GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
         LastTexture.Bind();
         SetupVertexAttributes( _shader );
 
         var tmpInt = new int[ 1 ];
 
-        fixed ( int* ptr = tmpInt )
+        fixed ( int* ptr = &tmpInt[ 0 ] )
         {
             GdxApi.Bindings.GetIntegerv( ( int )BufferBindings.ArrayBufferBinding, ptr );
 
@@ -405,7 +419,7 @@ public class SpriteBatch : IBatch
             _mesh?.SetVertices( Vertices );
 
             // Pin the Vertices array
-            fixed ( float* ptr = Vertices )
+            fixed ( float* ptr = &Vertices[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
                                             Idx * sizeof( float ),
@@ -443,8 +457,7 @@ public class SpriteBatch : IBatch
         GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
 
-        Array.Clear( Vertices, 0, Idx );
-        Idx = 0;
+        _currentTextureIndex = ( _currentTextureIndex + 1 ) % _maxTextureUnits;
     }
 
     // ========================================================================
@@ -1391,25 +1404,32 @@ public class SpriteBatch : IBatch
         }
     }
 
-    private void TestUniformLocation()
+    /// <summary>
+    /// Fetches the location of the CombinedMatrix uniform in the shader and
+    /// stores it in <see cref="_combinedMatrixLocation"/>
+    /// </summary>
+    private void GetCombinedMatrixUniformLocation()
     {
         GdxRuntimeException.ThrowIfNull( _shader );
-        
+
+        #if DEBUG
         Logger.Debug( $"_shader.Handle: {_shader.ShaderHandle}, " +
                       $"IsProgram: {GdxApi.Bindings.IsProgram( _shader.ShaderHandle )}" );
+        #endif
         
         GdxApi.Bindings.UseProgram( _shader.ShaderHandle );
         _combinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( _shader.ShaderHandle,
                                                                       ShaderProgram.COMBINED_MATRIX_UNIFORM );
-        
+        #if DEBUG
         Logger.Debug( $"_combinedMatrixLocation: {_combinedMatrixLocation}" );
+        #endif
     }
-    
-    public static ShaderProgram CreateMinimalTestShader()
+
+    private static ShaderProgram CreateMinimalTestShader()
     {
         const string VERTEX_SHADER = "#version 450 core\n" +
                                      "layout (location = 0) in vec3 aPosition;\n" +
-                                     $"layout (location = 1) uniform mat4 {ShaderProgram.COMBINED_MATRIX_UNIFORM};\n" +
+                                     "layout (location = 1) uniform mat4 u_combinedMatrix;\n" +
                                      "void main() {\n" +
                                      "    gl_Position = vec4(aPosition, 1.0);\n" +
                                      "}\n";
@@ -1569,6 +1589,30 @@ public class SpriteBatch : IBatch
         {
             Logger.Error( $"Buffer not bound correctly! Expected {expectedBuffer}, got {currentBuffer[ 0 ]}" );
         }
+    }
+
+    /// <summary>
+    /// Query OpenGL for the maximum number of texture units that can be
+    /// supported 
+    /// </summary>
+    /// <returns></returns>
+    private unsafe int SetMaxTextureUnits()
+    {
+        var maxTextureUnits = new int[ 1 ];
+
+        fixed ( int* ptr = &maxTextureUnits[ 0 ] )
+        {
+            GdxApi.Bindings.GetIntegerv( ( int )TextureLimits.MaxTextureImageUnits, ptr );
+        }
+
+        if ( maxTextureUnits[ 0 ] < 32 )
+        {
+            Logger.Divider( '#', 100 );
+            Logger.Error( $"Warning: Low MaxTextureUnits detected ({maxTextureUnits[ 0 ]}." );
+            Logger.Divider( '#', 100 );
+        }
+
+        return maxTextureUnits[ 0 ];
     }
 
     // ========================================================================

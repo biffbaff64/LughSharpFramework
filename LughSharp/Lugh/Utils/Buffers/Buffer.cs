@@ -32,12 +32,12 @@ namespace LughSharp.Lugh.Utils.Buffers;
 /// A buffer is a linear, finite sequence of elements of a specific primitive type.
 /// Aside from its content, the essential properties of a buffer are its capacity,
 /// limit, and position:
-/// A buffer's <c>capacity</c> is the number of elements it contains. The
+/// A buffer's <see cref="Capacity"/> is the number of elements it contains. The
 /// capacity of a buffer is never negative and never changes.
-/// A buffer's <c>limit</c> is the index of the first element that should
+/// A buffer's <see cref="Limit"/> is the index of the first element that should
 /// not be read or written.  A buffer's limit is never negative and is never
 /// greater than its capacity.
-/// A buffer's <c>position</c> is the index of the next element to be
+/// A buffer's <see cref="Position"/> is the index of the next element to be
 /// read or written.  A buffer's position is never negative and is never
 /// greater than its limit.
 /// There is one subclass of this class for each non-bool primitive type.
@@ -168,18 +168,13 @@ public abstract class Buffer : IDisposable
     // ========================================================================
     // ========================================================================
 
-//    protected Buffer()
-//    {
-//        Hb = new object[ 1 ];
-//    }
-
     /// <summary>
     /// Creates a new buffer with the given mark, position, limit, and capacity,
     /// after checking invariants.
     /// </summary>
     protected Buffer( int mark, int pos, int lim, int cap )
     {
-        Hb = new object[ cap ];
+        Hb = new List< object >( cap );
 
         Setup( mark, pos, lim, cap );
     }
@@ -271,7 +266,7 @@ public abstract class Buffer : IDisposable
 
         return this;
     }
-
+    
     /// <summary>
     /// Resets this buffer's position to the previously-marked position.
     /// Invoking this method neither changes nor discards the mark's value.
@@ -485,12 +480,12 @@ public abstract class Buffer : IDisposable
     /// </para>
     /// </summary>
     /// <returns>  The array that backs this buffer </returns>
-    public object[] BackingArray() => Hb;
+    public object[] BackingArray() => Hb.ToArray();
 
     /// <summary>
     /// The backing array.
     /// </summary>
-    public object[] Hb { get; set; }
+    protected List< object > Hb { get; set; }
 
     /// <summary>
     /// Returns the offset within this buffer's backing array of the first

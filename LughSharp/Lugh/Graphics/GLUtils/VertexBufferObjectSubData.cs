@@ -118,7 +118,7 @@ public class VertexBufferObjectSubData : IVertexData
 
         if ( _isDirect )
         {
-            BufferUtils.Copy( vertices, ByteBuffer, count, offset );
+            this.ByteBuffer.AddFloats( vertices, offset, count );
 
             _buffer.Position = 0;
             _buffer.Limit    = count;

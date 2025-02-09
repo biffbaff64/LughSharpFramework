@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Maths;
+using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Utils.Buffers;
 
@@ -42,8 +43,8 @@ public partial class BufferUtils
     public static void Copy( byte[] src, int srcOffset, Buffer dst, int numElements )
     {
         dst.Limit = ( dst.Position + BytesToElements( dst, numElements ) );
-        
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements );
+
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements );
     }
 
     /// <summary>
@@ -61,7 +62,7 @@ public partial class BufferUtils
     {
         dst.Limit = ( dst.Position + BytesToElements( dst, numElements << 1 ) );
 
-        Array.Copy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 1 );
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 1 );
     }
 
     /// <summary>
@@ -76,7 +77,7 @@ public partial class BufferUtils
     /// <param name="dst"> the destination Buffer, its position is used as an offset. </param>
     public static void Copy( char[] src, int srcOffset, int numElements, Buffer dst )
     {
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements << 1 );
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 1 );
     }
 
     /// <summary>
@@ -91,7 +92,7 @@ public partial class BufferUtils
     /// <param name="dst"> the destination Buffer, its position is used as an offset. </param>
     public static void Copy( int[] src, int srcOffset, int numElements, Buffer dst )
     {
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements << 2 );
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 2 );
     }
 
     /// <summary>
@@ -106,7 +107,7 @@ public partial class BufferUtils
     /// <param name="dst"> the destination Buffer, its position is used as an offset. </param>
     public static void Copy( long[] src, int srcOffset, int numElements, Buffer dst )
     {
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements << 3 );
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 3 );
     }
 
     /// <summary>
@@ -121,7 +122,7 @@ public partial class BufferUtils
     /// <param name="dst"> the destination Buffer, its position is used as an offset. </param>
     public static void Copy( double[] src, int srcOffset, int numElements, Buffer dst )
     {
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements << 3 );
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 3 );
     }
 
     /// <summary>
@@ -138,8 +139,8 @@ public partial class BufferUtils
     public static void Copy( char[] src, int srcOffset, Buffer dst, int numElements )
     {
         dst.Limit = ( dst.Position + BytesToElements( dst, numElements << 1 ) );
-        
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements << 1 );
+
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 1 );
     }
 
     /// <summary>
@@ -156,8 +157,8 @@ public partial class BufferUtils
     public static void Copy( int[] src, int srcOffset, Buffer dst, int numElements )
     {
         dst.Limit = ( dst.Position + BytesToElements( dst, numElements << 2 ) );
-        
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements << 2 );
+
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 2 );
     }
 
     /// <summary>
@@ -174,8 +175,8 @@ public partial class BufferUtils
     public static void Copy( long[] src, int srcOffset, Buffer dst, int numElements )
     {
         dst.Limit = ( dst.Position + BytesToElements( dst, numElements << 3 ) );
-        
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements << 3 );
+
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 3 );
     }
 
     /// <summary>
@@ -192,8 +193,8 @@ public partial class BufferUtils
     public static void Copy( float[] src, int srcOffset, Buffer dst, int numElements )
     {
         dst.Limit = ( dst.Position + BytesToElements( dst, numElements << 2 ) );
-        
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements << 2 );
+
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 2 );
     }
 
     /// <summary>
@@ -210,8 +211,8 @@ public partial class BufferUtils
     public static void Copy( double[] src, int srcOffset, Buffer dst, int numElements )
     {
         dst.Limit = ( dst.Position + BytesToElements( dst, numElements << 3 ) );
-        
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements << 3 );
+
+        System.Buffer.BlockCopy( src, srcOffset, dst.BackingArray(), PositionInBytes( dst ), numElements << 3 );
     }
 
     /// <summary>
@@ -232,13 +233,17 @@ public partial class BufferUtils
 
         dst.Limit = dst.Position + BytesToElements( dst, numBytes );
 
-        Array.Copy( src.BackingArray(),
-                        PositionInBytes( src ),
-                        dst.BackingArray(),
-                        PositionInBytes( dst ),
-                        numBytes );
+        System.Buffer.BlockCopy( src.BackingArray(),
+                                 PositionInBytes( src ),
+                                 dst.BackingArray(),
+                                 PositionInBytes( dst ),
+                                 numBytes );
 
-        Array.Copy( src.Hb, PositionInBytes( src ), dst.Hb, PositionInBytes( dst ), numBytes );
+        System.Buffer.BlockCopy( src.BackingArray(),
+                                 PositionInBytes( src ),
+                                 dst.BackingArray(),
+                                 PositionInBytes( dst ),
+                                 numBytes );
     }
 
     /// <summary>
@@ -297,6 +302,7 @@ public partial class BufferUtils
     public static void Transform( Buffer data, int dimensions, int strideInBytes, int count, Matrix4 matrix, int offset )
     {
         //TODO:
+        //
 //        switch ( dimensions )
 //        {
 //            case 4:
@@ -328,6 +334,7 @@ public partial class BufferUtils
     public static void Transform( float[] data, int dimensions, int strideInBytes, int count, Matrix4 matrix, int offset )
     {
         //TODO:
+        //
 //        switch ( dimensions )
 //        {
 //            case 4:
@@ -385,6 +392,7 @@ public partial class BufferUtils
     public static void Transform( Buffer data, int dimensions, int strideInBytes, int count, Matrix3 matrix, int offset )
     {
         //TODO:
+        //
 //        switch ( dimensions )
 //        {
 //            case 3:
@@ -411,6 +419,7 @@ public partial class BufferUtils
     public static void Transform( float[] data, int dimensions, int strideInBytes, int count, Matrix3 matrix, int offset )
     {
         //TODO:
+        //
 //        switch ( dimensions )
 //        {
 //            case 3:
@@ -545,31 +554,31 @@ public partial class BufferUtils
 //    private static extern void ClearJni( ByteBuffer buffer, int numBytes );
 //    /* memset(buffer, 0, numBytes); */
 
-//    private static extern void Array.Copy( float[] src, Buffer dst, int numFloats, int offset );
+//    private static extern void System.Buffer.BlockCopy( float[] src, Buffer dst, int numFloats, int offset );
 //    /* memcpy(dst, src + offset, numFloats << 2 ); */
 
-//    private static extern void Array.Copy( byte[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
+//    private static extern void System.Buffer.BlockCopy( byte[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
 //    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
-//    private static extern void Array.Copy( char[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
+//    private static extern void System.Buffer.BlockCopy( char[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
 //    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
-//    private static extern void Array.Copy( short[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
+//    private static extern void System.Buffer.BlockCopy( short[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
 //    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
-//    private static extern void Array.Copy( int[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
+//    private static extern void System.Buffer.BlockCopy( int[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
 //    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
-//    private static extern void Array.Copy( long[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
+//    private static extern void System.Buffer.BlockCopy( long[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
 //    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
-//    private static extern void Array.Copy( float[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
+//    private static extern void System.Buffer.BlockCopy( float[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
 //    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
-//    private static extern void Array.Copy( double[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
+//    private static extern void System.Buffer.BlockCopy( double[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
 //    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
-//    private static extern void Array.Copy( Buffer src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
+//    private static extern void System.Buffer.BlockCopy( Buffer src, int srcOffset, Buffer dst, int dstOffset, int numBytes );
 //    /* memcpy(dst + dstOffset, src + srcOffset, numBytes); */
 
 //    private static extern void TransformV4M4Jni( Buffer data, int strideInBytes, int count, float[] matrix, int offsetInBytes );

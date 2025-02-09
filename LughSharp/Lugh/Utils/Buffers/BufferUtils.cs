@@ -51,18 +51,6 @@ public static partial class BufferUtils
         return buffer;
     }
 
-//    /// <summary>
-//    /// Creates a new <see cref="DoubleBuffer"/> with the specified capacity.
-//    /// All elements will be initialised to zero.
-//    /// </summary>
-//    public static DoubleBuffer NewDoubleBuffer( int numFloats )
-//    {
-//        var buffer = DoubleBuffer.Allocate( numFloats * 4 );
-//        buffer.Order( ByteOrder.NativeOrder );
-//
-//        return buffer;
-//    }
-
     /// <summary>
     /// Creates a new <see cref="ByteBuffer"/> with the specified capacity.
     /// All elements will be initialised to zero.
@@ -70,7 +58,7 @@ public static partial class BufferUtils
     public static ByteBuffer NewByteBuffer( int numBytes, bool isUnsafe = false )
     {
         var buffer = isUnsafe
-            ? throw new NotImplementedException( "Disposable Byte Buffers not implemented!" ) /* NewDisposableByteBufferJni( numBytes ) */
+            ? throw new NotImplementedException( "Disposable Byte Buffers not yet implemented!" ) /* NewDisposableByteBufferJni( numBytes ) */
             : ByteBuffer.Allocate( numBytes );
 
         buffer.Order( ByteOrder.NativeOrder );
@@ -100,6 +88,20 @@ public static partial class BufferUtils
         return buffer;
     }
 
+    /// <summary>
+    /// Creates a new <see cref="IntBuffer"/> with the specified capacity.
+    /// All elements will be initialised to zero.
+    /// </summary>
+    public static IntBuffer NewIntBuffer( int numBytes )
+    {
+        var buffer = IntBuffer.Allocate( numBytes );
+        buffer.Order( ByteOrder.NativeOrder );
+
+        return buffer;
+    }
+
+    // ========================================================================
+
 //    /// <summary>
 //    /// Creates a new <see cref="CharBuffer"/> with the specified capacity.
 //    /// All elements will be initialised to zero.
@@ -112,17 +114,17 @@ public static partial class BufferUtils
 //        return buffer;
 //    }
 
-    /// <summary>
-    /// Creates a new <see cref="IntBuffer"/> with the specified capacity.
-    /// All elements will be initialised to zero.
-    /// </summary>
-    public static IntBuffer NewIntBuffer( int numBytes )
-    {
-        var buffer = IntBuffer.Allocate( numBytes );
-        buffer.Order( ByteOrder.NativeOrder );
-
-        return buffer;
-    }
+//    /// <summary>
+//    /// Creates a new <see cref="DoubleBuffer"/> with the specified capacity.
+//    /// All elements will be initialised to zero.
+//    /// </summary>
+//    public static DoubleBuffer NewDoubleBuffer( int numFloats )
+//    {
+//        var buffer = DoubleBuffer.Allocate( numFloats * 4 );
+//        buffer.Order( ByteOrder.NativeOrder );
+//
+//        return buffer;
+//    }
 
 //    /// <summary>
 //    /// Creates a new <see cref="LongBuffer"/> with the specified capacity.
@@ -136,6 +138,40 @@ public static partial class BufferUtils
 //        return buffer;
 //    }
 
+//    /// <summary>
+//    /// Copies numFloats floats from src starting at offset to dst. Dst is assumed to
+//    /// be a direct buffer. The method will crash if that is not the case. The position
+//    /// and limit of the buffer are ignored, the copy is placed at position 0 in the
+//    /// buffer. After the copying process the position of the buffer is set to 0 and its
+//    /// limit set to numFloats * 4 if it is a ByteBuffer and numFloats if it is a
+//    /// FloatBuffer. In case the Buffer is neither a ByteBuffer nor a FloatBuffer the
+//    /// limit is not set. This is an expert method, use at your own risk.
+//    /// </summary>
+//    /// <param name="src"> The source array </param>
+//    /// <param name="dst"> The destination buffer, has to be a direct Buffer </param>
+//    /// <param name="numElements"> The number of floats to copy </param>
+//    /// <param name="offset"> The offset in src to start copying from </param>
+//    public static void Copy( float[] src, Buffer dst, int numElements, int offset )
+//    {
+//        if ( dst.Capacity < numElements )
+//        {
+//            throw new ArgumentException( "Destination buffer capacity is too small.", nameof( dst ) );
+//        }
+//
+//        dst.Limit = dst switch
+//        {
+//            ByteBuffer  => numElements << 2,
+//            FloatBuffer => numElements,
+//            var _       => dst.Limit,
+//        };
+//
+//        System.Buffer.BlockCopy( src, offset, dst.Hb, 0, numElements );
+//
+//        dst.Position = 0;
+//    }
+
+    // ========================================================================
+
     /// <summary>
     /// Copies the contents of src to dst, starting from src[srcOffset], copying numElements
     /// elements. The <see cref="Buffer"/> instance's <see cref="Buffer.Position()"/> is
@@ -146,54 +182,86 @@ public static partial class BufferUtils
     /// <param name="srcOffset"> The offset into the source array. </param>
     /// <param name="numElements"> The number of elements to copy. </param>
     /// <param name="dst"> The destination Buffer, its position is used as an offset. </param>
-    public static void Copy( float[] src, int srcOffset, int numElements, Buffer dst )
+    public static void Copy( byte[] src, int srcOffset, int numElements, ByteBuffer dst )
     {
-        Array.Copy( src, srcOffset, dst.Hb, PositionInBytes( dst ), numElements );
-        
-//        CopyJni( src, srcOffset, dst, PositionInBytes( dst ), numElements << 2 );
-//        
-//        return;
-//        
-//        /*
-//            memcpy(dst + dstOffset, src + srcOffset, numBytes);
-//        */
-//        static void CopyJni( float[] src, int srcOffset, Buffer dst, int dstOffset, int numBytes )
-//        {
-//            for ( int source = srcOffset, dest = dstOffset; numBytes > 0; source++, dest++ )
-//            {
-//                dst.Hb[ dest ] = src[ source ];
-//                numBytes--;
-//            }
-//        }
-    }
-    
-    /// <summary>
-    /// Copies numFloats floats from src starting at offset to dst. Dst is assumed to
-    /// be a direct buffer. The method will crash if that is not the case. The position
-    /// and limit of the buffer are ignored, the copy is placed at position 0 in the
-    /// buffer. After the copying process the position of the buffer is set to 0 and its
-    /// limit set to numFloats * 4 if it is a ByteBuffer and numFloats if it is a
-    /// FloatBuffer. In case the Buffer is neither a ByteBuffer nor a FloatBuffer the
-    /// limit is not set. This is an expert method, use at your own risk.
-    /// </summary>
-    /// <param name="src"> The source array </param>
-    /// <param name="dst"> The destination buffer, has to be a direct Buffer </param>
-    /// <param name="numElements"> The number of floats to copy </param>
-    /// <param name="offset"> The offset in src to start copying from </param>
-    public static void Copy( float[] src, Buffer dst, int numElements, int offset )
-    {
-        dst.Limit = dst switch
+        if ( dst.Capacity < numElements )
         {
-            ByteBuffer  => numElements << 2,
-            FloatBuffer => numElements,
-            var _       => dst.Limit,
-        };
+            throw new ArgumentException( "Destination buffer capacity is too small.", nameof( dst ) );
+        }
 
-        Array.Copy( src, offset, dst.Hb, 0, numElements );
+        dst.Put( src, srcOffset, numElements );
+    }
 
-//        CopyJni( src, dst, numElements, offset );
+    /// <summary>
+    /// Copies the contents of src to dst, starting from src[srcOffset], copying numElements
+    /// elements. The <see cref="Buffer"/> instance's <see cref="Buffer.Position()"/> is
+    /// used to define the offset into the Buffer itself. The position and limit will stay
+    /// the same.
+    /// </summary>
+    /// <param name="src"> The source array. </param>
+    /// <param name="srcOffset"> The offset into the source array. </param>
+    /// <param name="numElements"> The number of elements to copy. </param>
+    /// <param name="dst"> The destination Buffer, its position is used as an offset. </param>
+    public static void Copy( int[] src, int srcOffset, int numElements, IntBuffer dst )
+    {
+        if ( dst.Capacity < numElements )
+        {
+            throw new ArgumentException( "Destination buffer capacity is too small.", nameof( dst ) );
+        }
 
-        dst.Position = 0;
+        dst.Put( src, srcOffset, numElements );
+    }
+
+    /// <summary>
+    /// Copies the contents of src to dst, starting from src[srcOffset], copying numElements
+    /// elements. The <see cref="Buffer"/> instance's <see cref="Buffer.Position()"/> is
+    /// used to define the offset into the Buffer itself. The position and limit will stay
+    /// the same.
+    /// </summary>
+    /// <param name="src"> The source array. </param>
+    /// <param name="srcOffset"> The offset into the source array. </param>
+    /// <param name="numElements"> The number of elements to copy. </param>
+    /// <param name="dst"> The destination Buffer, its position is used as an offset. </param>
+    public static void Copy( short[] src, int srcOffset, int numElements, ShortBuffer dst )
+    {
+        if ( dst.Capacity < numElements )
+        {
+            throw new ArgumentException( "Destination buffer capacity is too small.", nameof( dst ) );
+        }
+
+        dst.Put( src, srcOffset, numElements );
+    }
+
+    /// <summary>
+    /// Copies the contents of src to dst, starting from src[srcOffset], copying numElements
+    /// elements. The <see cref="Buffer"/> instance's <see cref="Buffer.Position()"/> is
+    /// used to define the offset into the Buffer itself. The position and limit will stay
+    /// the same.
+    /// </summary>
+    /// <param name="src"> The source array. </param>
+    /// <param name="srcOffset"> The offset into the source array. </param>
+    /// <param name="numElements"> The number of elements to copy. </param>
+    /// <param name="dst"> The destination Buffer, its position is used as an offset. </param>
+    public static void Copy( float[] src, int srcOffset, int numElements, FloatBuffer dst )
+    {
+        if ( dst.Capacity < numElements )
+        {
+            throw new ArgumentException( "Destination buffer capacity is too small.", nameof( dst ) );
+        }
+
+        dst.Put( src, srcOffset, numElements );
+    }
+
+    public static void Copy( float[] src, int srcOffset, int numElements, ByteBuffer dst )
+    {
+        if ( dst.Capacity < numElements )
+        {
+            throw new ArgumentException( "Destination buffer capacity is too small.", nameof( dst ) );
+        }
+
+        dst.Capacity = src.Length * sizeof( float );
+        
+        System.Buffer.BlockCopy( src, 0, dst.Hb!, 0, numElements );
     }
 
     /// <summary>
@@ -249,7 +317,7 @@ public static partial class BufferUtils
 
     public static ByteBuffer NewUnsafeByteBuffer( int numBytes )
     {
-        ByteBuffer buffer = NewByteBuffer( numBytes );    // _newDisposableByteBuffer( numBytes );
+        var buffer = NewByteBuffer( numBytes ); // _newDisposableByteBuffer( numBytes );
 
         buffer.Order( ByteOrder.NativeOrder );
         _allocatedUnsafe += numBytes;

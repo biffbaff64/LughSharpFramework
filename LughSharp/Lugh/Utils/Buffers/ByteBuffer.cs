@@ -23,7 +23,9 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Buffers.Binary;
+
 using LughSharp.Lugh.Maths;
+using LughSharp.Lugh.Utils.Buffers.HeapBuffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Utils.Buffers;
@@ -128,7 +130,7 @@ namespace LughSharp.Lugh.Utils.Buffers;
 [PublicAPI]
 public abstract class ByteBuffer : Buffer
 {
-    public new byte[]? Hb { get; set; }
+    public new List< byte >? Hb { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -140,9 +142,14 @@ public abstract class ByteBuffer : Buffer
     protected ByteBuffer( int mark, int pos, int lim, int cap, byte[]? hb = null, int offset = 0 )
         : base( mark, pos, lim, cap )
     {
-        Hb          = hb ?? new byte[ cap ];
+        Hb          = new List< byte >( cap );
         Offset      = offset;
         IsBigEndian = !BitConverter.IsLittleEndian;
+
+        if ( hb != null )
+        {
+            Hb.AddRange( hb );
+        }
 
         SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
@@ -342,7 +349,7 @@ public abstract class ByteBuffer : Buffer
     {
         if ( IsReadOnly )
         {
-            return this;
+            throw new GdxRuntimeException( "Buffer is read-only!" );
         }
 
         if ( src.Equals( this ) )
@@ -354,7 +361,7 @@ public abstract class ByteBuffer : Buffer
 
         if ( n > Remaining() )
         {
-            throw new GdxRuntimeException( "Buffer Overflow!" );
+            throw new GdxRuntimeException( "Buffer underflow!" );
         }
 
         for ( var i = 0; i < n; i++ )
@@ -412,6 +419,23 @@ public abstract class ByteBuffer : Buffer
         return this;
     }
 
+    public ByteBuffer AddFloats( float[] src, int offset, int length )
+    {
+        if ( IsReadOnly ) return this;
+
+        if ( length > Remaining() )
+        {
+            throw new GdxRuntimeException( "Buffer Overflow!" );
+        }
+
+        foreach ( var value in src )
+        {
+            PutFloat( value );
+        }
+
+        return this;
+    }
+
     /// <summary>
     /// Transfers the entire content of the given source byte array into this buffer.
     /// An invocation of this method with the source byte array <paramref name="src"/>
@@ -432,9 +456,11 @@ public abstract class ByteBuffer : Buffer
     /// </summary>
     public int GetInt()
     {
+        GdxRuntimeException.ThrowIfNull( Hb );
+        
         return IsBigEndian
-            ? BinaryPrimitives.ReadInt32BigEndian( Hb.AsSpan( Position ) )
-            : BinaryPrimitives.ReadInt32LittleEndian( Hb.AsSpan( Position ) );
+            ? BinaryPrimitives.ReadInt32BigEndian( Hb.ToArray().AsSpan( Position ) )
+            : BinaryPrimitives.ReadInt32LittleEndian( Hb.ToArray().AsSpan( Position ) );
     }
 
     /// <summary>
@@ -442,11 +468,13 @@ public abstract class ByteBuffer : Buffer
     /// </summary>
     public int GetInt( int index )
     {
-        return IsBigEndian
-            ? BinaryPrimitives.ReadInt32BigEndian( Hb.AsSpan( index ) )
-            : BinaryPrimitives.ReadInt32LittleEndian( Hb.AsSpan( index ) );
-    }
+        GdxRuntimeException.ThrowIfNull( Hb );
 
+        return IsBigEndian
+            ? BinaryPrimitives.ReadInt32BigEndian( Hb.ToArray().AsSpan( index ) )
+            : BinaryPrimitives.ReadInt32LittleEndian( Hb.ToArray().AsSpan( index ) );
+    }
+    
     /// <summary>
     /// Puts the supplied Integer value into the buffer at the <see cref="Buffer.NextPutIndex()"/>.
     /// </summary>
@@ -454,13 +482,36 @@ public abstract class ByteBuffer : Buffer
     /// <returns> This buffer for chaining. </returns>
     public ByteBuffer PutInt( int value )
     {
+        GdxRuntimeException.ThrowIfNull( Hb );
+
         if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteInt32BigEndian( Hb.AsSpan( NextPutIndex( sizeof( int ) ) ), value );
+            BinaryPrimitives.WriteInt32BigEndian( Hb.ToArray().AsSpan( NextPutIndex( sizeof( int ) ) ), value );
         }
         else
         {
-            BinaryPrimitives.WriteInt32LittleEndian( Hb.AsSpan( NextPutIndex( sizeof( int ) ) ), value );
+            BinaryPrimitives.WriteInt32LittleEndian( Hb.ToArray().AsSpan( NextPutIndex( sizeof( int ) ) ), value );
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Puts the supplied Float value into the buffer at the <see cref="Buffer.NextPutIndex()"/>.
+    /// </summary>
+    /// <param name="value"> The value to add. </param>
+    /// <returns> This buffer for chaining. </returns>
+    public ByteBuffer PutFloat( float value )
+    {
+        GdxRuntimeException.ThrowIfNull( Hb );
+
+        if ( IsBigEndian )
+        {
+            BinaryPrimitives.WriteSingleBigEndian( Hb.ToArray().AsSpan( NextPutIndex( sizeof( float ) ) ), value );
+        }
+        else
+        {
+            BinaryPrimitives.WriteSingleLittleEndian( Hb.ToArray().AsSpan( NextPutIndex( sizeof( float ) ) ), value );
         }
 
         return this;
@@ -474,13 +525,15 @@ public abstract class ByteBuffer : Buffer
     /// <returns> This buffer for chaining. </returns>
     public ByteBuffer PutInt( int index, int value )
     {
+        GdxRuntimeException.ThrowIfNull( Hb );
+
         if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteInt32BigEndian( Hb.AsSpan( index ), value );
+            BinaryPrimitives.WriteInt32BigEndian( Hb.ToArray().AsSpan( index ), value );
         }
         else
         {
-            BinaryPrimitives.WriteInt32LittleEndian( Hb.AsSpan( index ), value );
+            BinaryPrimitives.WriteInt32LittleEndian( Hb.ToArray().AsSpan( index ), value );
         }
 
         return this;
@@ -498,22 +551,21 @@ public abstract class ByteBuffer : Buffer
     /// </returns>
     public override bool HasBackingArray()
     {
-        return ( Hb != null ) && !IsReadOnly;
+        return ( Hb?.Count > 0 ) && !IsReadOnly;
     }
 
     /// <summary>
-    /// Returns the byte array that backs this buffer <i>(optional operation)</i>.
-    /// Modifications to this buffer's content will cause the returned array's
-    /// content to be modified, and vice versa.
+    /// Returns the byte array that backs this buffer <i>(optional operation)</i>. Modifications
+    /// to this buffer's content will cause the returned array's content to be modified, and vice
+    /// versa.
     /// <para>
-    /// Invoke the <see cref="HasBackingArray"/> method before invoking this method in
-    /// order to ensure that this buffer has an accessible backing array.
+    /// Invoke the <see cref="HasBackingArray"/> method before invoking this method in order to
+    /// ensure that this buffer has an accessible backing array.
     /// </para>
     /// </summary>
     /// <returns>  The array that backs this buffer </returns>
     /// <exception cref="GdxRuntimeException">
-    /// If this buffer is backed by an array but is read-only, or
-    /// If this buffer is not backed by an accessible array
+    /// If this buffer is backed by an array but is read-only, or If this buffer is not backed by an accessible array
     /// </exception>
     public new byte[] BackingArray()
     {
@@ -522,7 +574,9 @@ public abstract class ByteBuffer : Buffer
             throw new GdxRuntimeException( "Buffer is Read Only!" );
         }
 
-        return Hb!;
+        GdxRuntimeException.ThrowIfNull( Hb );
+
+        return Hb.ToArray();
     }
 
     /// <summary>
@@ -553,23 +607,21 @@ public abstract class ByteBuffer : Buffer
     /// <summary>
     /// Compacts this buffer  <i>(optional operation)</i>.
     /// <para>
-    /// The bytes between the buffer's current position and its limit, if any,
-    /// are copied to the beginning of the buffer. That is, the byte at index
-    /// <c>p = Position()</c> is copied to index zero, the byte at index
-    /// <c>p + 1</c> is copied to index one, and so forth until the byte at
-    /// index <c>limit() - 1</c> is copied to index <c>n = Limit() - 1 - p</c>.
-    /// The buffer's position is then set to <i>n+1</i> and its limit is set to
-    /// its capacity. The mark, if defined, is discarded.
+    /// The bytes between the buffer's current position and its limit, if any, are copied to the
+    /// beginning of the buffer. That is, the byte at index <c>p = Position()</c> is copied to
+    /// index zero, the byte at index <c>p + 1</c> is copied to index one, and so forth until the
+    /// byte at index <c>limit() - 1</c> is copied to index <c>n = Limit() - 1 - p</c>. The buffers
+    /// position is then set to <i>n+1</i> and its limit is set to its capacity. The mark, if defined,
+    /// is discarded.
     /// </para>
     /// <para>
-    /// The buffer's position is set to the number of bytes copied, rather than
-    /// to zero, so that an invocation of this method can be followed immediately
-    /// by an invocation of another relative <c>put</c> method.
+    /// The buffer's position is set to the number of bytes copied, rather than to zero, so that an
+    /// invocation of this method can be followed immediately by an invocation of another relative
+    /// <c>put</c> method.
     /// </para>
     /// <para>
-    /// Invoke this method after writing data from a buffer in case the write was
-    /// incomplete. The following loop, for example, copies bytes from one channel
-    /// to another via the buffer <c>buf</c>:
+    /// Invoke this method after writing data from a buffer in case the write was incomplete. The
+    /// following loop, for example, copies bytes from one channel to another via the buffer <c>buf</c>:
     /// <code>
     ///   buf.clear();          // Prepare buffer for use
     ///   while( in.read(buf) >= 0 || buf.position != 0 )
@@ -587,12 +639,23 @@ public abstract class ByteBuffer : Buffer
     {
         if ( IsReadOnly )
         {
-            return this;
+            throw new GdxRuntimeException( "Buffer is Read Only!" );
         }
+
+        GdxRuntimeException.ThrowIfNull( Hb );
 
         ValidateBackingArray();
 
-        Array.Copy( Hb!, Ix( Position ), Hb!, Ix( 0 ), Remaining() );
+        // ----------------------------
+        //TODO: Improve this
+        
+        var array = Hb.ToArray();
+
+        Hb.Clear();
+        Array.Copy( array, Ix( Position ), array, Ix( 0 ), Remaining() );
+        Hb.AddRange( array );
+
+        // ----------------------------
 
         SetPosition( Remaining() );
         SetLimit( Capacity );
@@ -621,14 +684,12 @@ public abstract class ByteBuffer : Buffer
     /// <summary>
     /// Returns the current hash code of this buffer.
     /// <para>
-    /// The hash code of a byte buffer depends only upon its remaining elements;
-    /// that is, upon the elements from <c>position()</c> up to, and including,
-    /// the element at <c>limit()</c> - <c>1</c>.
+    /// The hash code of a byte buffer depends only upon its remaining elements; that is, upon the
+    /// elements from <c>position()</c> up to, and including, the element at <c>limit()</c> - <c>1</c>.
     /// </para>
     /// <para>
-    /// Because buffer hash codes are content-dependent, it is inadvisable to use
-    /// buffers as keys in hash maps or similar data structures unless it is known
-    /// that their contents will not change.
+    /// Because buffer hash codes are content-dependent, it is inadvisable to use buffers as keys in
+    /// hash maps or similar data structures unless it is known that their contents will not change.
     /// </para>
     /// </summary>
     /// <returns> The current hash code of this buffer </returns>
@@ -683,6 +744,7 @@ public abstract class ByteBuffer : Buffer
 
         for ( int i = Limit - 1, j = other.Limit - 1; i >= p; i--, j-- )
         {
+            //TODO: Fix "Boxing allocation: conversion from 'byte' to 'object' requires boxing of the value type"
             if ( !Equals( Get( i ), other.Get( j ) ) )
             {
                 return false;
@@ -704,9 +766,8 @@ public abstract class ByteBuffer : Buffer
     /// <summary>
     /// Compares this buffer to another.
     /// <para>
-    /// Two byte buffers are compared by comparing their sequences of remaining
-    /// elements lexicographically, without regard to the starting position of
-    /// each sequence within its corresponding buffer.
+    /// Two byte buffers are compared by comparing their sequences of remaining elements lexicographically,
+    /// without regard to the starting position of each sequence within its corresponding buffer.
     /// </para>
     /// <para>
     /// A byte buffer is not comparable to any other type of object.
@@ -744,14 +805,14 @@ public abstract class ByteBuffer : Buffer
     {
         GdxRuntimeException.ThrowIfNull( Hb );
 
-        var floatCount = ( Hb.Length - Position ) / sizeof( float );
+        var floatCount = ( Hb.Count - Position ) / sizeof( float );
         var floatArray = new float[ floatCount ];
 
         for ( var i = 0; i < floatCount; i++ )
         {
             floatArray[ i ] = IsBigEndian
-                ? BinaryPrimitives.ReadSingleBigEndian( Hb.AsSpan( Position + i * sizeof( float ) ) )
-                : BinaryPrimitives.ReadSingleLittleEndian( Hb.AsSpan( Position + i * sizeof( float ) ) );
+                ? BinaryPrimitives.ReadSingleBigEndian( Hb.ToArray().AsSpan( Position + ( i * sizeof( float ) ) ) )
+                : BinaryPrimitives.ReadSingleLittleEndian( Hb.ToArray().AsSpan( Position + ( i * sizeof( float ) ) ) );
         }
 
         return FloatBuffer.Wrap( floatArray );
@@ -765,14 +826,14 @@ public abstract class ByteBuffer : Buffer
     {
         GdxRuntimeException.ThrowIfNull( Hb );
 
-        var shortCount = ( Hb.Length - Position ) / sizeof( short );
+        var shortCount = ( Hb.Count - Position ) / sizeof( short );
         var shortArray = new short[ shortCount ];
 
         for ( var i = 0; i < shortCount; i++ )
         {
             shortArray[ i ] = IsBigEndian
-                ? BinaryPrimitives.ReadInt16BigEndian( Hb.AsSpan( Position + i * sizeof( short ) ) )
-                : BinaryPrimitives.ReadInt16LittleEndian( Hb.AsSpan( Position + i * sizeof( short ) ) );
+                ? BinaryPrimitives.ReadInt16BigEndian( Hb.ToArray().AsSpan( Position + ( i * sizeof( short ) ) ) )
+                : BinaryPrimitives.ReadInt16LittleEndian( Hb.ToArray().AsSpan( Position + ( i * sizeof( short ) ) ) );
         }
 
         return ShortBuffer.Wrap( shortArray );
@@ -788,14 +849,14 @@ public abstract class ByteBuffer : Buffer
     {
         GdxRuntimeException.ThrowIfNull( Hb );
 
-        var intCount = ( Hb.Length - Position ) / sizeof( int );
+        var intCount = ( Hb.Count - Position ) / sizeof( int );
         var intArray = new int[ intCount ];
 
         for ( var i = 0; i < intCount; i++ )
         {
             intArray[ i ] = IsBigEndian
-                ? BinaryPrimitives.ReadInt32BigEndian( Hb.AsSpan( Position + i * sizeof( int ) ) )
-                : BinaryPrimitives.ReadInt32LittleEndian( Hb.AsSpan( Position + i * sizeof( int ) ) );
+                ? BinaryPrimitives.ReadInt32BigEndian( Hb.ToArray().AsSpan( Position + ( i * sizeof( int ) ) ) )
+                : BinaryPrimitives.ReadInt32LittleEndian( Hb.ToArray().AsSpan( Position + ( i * sizeof( int ) ) ) );
         }
 
         return IntBuffer.Wrap( intArray );
@@ -810,7 +871,7 @@ public abstract class ByteBuffer : Buffer
         if ( !disposing ) return;
         if ( Hb == null ) return;
 
-        Array.Clear( Hb );
+        Hb.Clear();
         Hb = null;
     }
 

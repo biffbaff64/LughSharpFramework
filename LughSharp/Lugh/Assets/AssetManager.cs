@@ -895,7 +895,7 @@ public partial class AssetManager
 
         lock ( this )
         {
-            Logger.Debug( $"filename: {fileName}, type: {type}, parameters: {parameters}" );
+            Logger.Debug( $"filename: {fileName}" );
 
             // The result of GetLoader is discarded here, but the call is made as the method
             // throws an exception if there is no available loader for the supplied asset.
