@@ -120,16 +120,4 @@ public class NewByteBuffer : NewBuffer
     public override int Capacity => _backingArray.Length;
 
     // ========================================================================
-
-    public void Reset()
-    {
-    }
-
-    public void Flip()
-    {
-    }
-
-    public void Clear()
-    {
-    }
 }

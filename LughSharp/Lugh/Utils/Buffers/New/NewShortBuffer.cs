@@ -31,6 +31,8 @@ public class NewShortBuffer : NewBuffer
 {
     private readonly NewByteBuffer _byteBuffer;
 
+    // ========================================================================
+    
     public NewShortBuffer( NewByteBuffer byteBuffer )
     {
         _byteBuffer = byteBuffer;
@@ -144,4 +146,6 @@ public class NewShortBuffer : NewBuffer
             BinaryPrimitives.WriteSingleLittleEndian( byteSpan.Slice( byteOffset ), value );
         }
     }
+    
+    public override·int Capacity => _byteBuffer.Length
 }

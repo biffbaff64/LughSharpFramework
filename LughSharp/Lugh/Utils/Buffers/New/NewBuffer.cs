@@ -48,9 +48,17 @@ public class NewBuffer : IDisposable
     {
     }
     
-    public NewBuffer( int offset, int mark, int position, int limit,
-                      bool isBigEndian = false, bool isReadOnly = false, bool isDirect = false )
+    /// <summary>
+    /// Creates a new Buffer object, using the supplied parameters.
+    /// By default, Buffers are <see cref="ByteOrder.LittleEndian"/>, Read/Write and
+    /// non-direct.
+    /// </summary>
+    /// <param name="isBigEndian"></param>
+    /// <param name="isReadOnly"></param>
+    /// <param name="isDirect"></param>
+    public NewBuffer( bool isBigEndian = false, bool isReadOnly = false, bool isDirect = false )
     {
+        SetBufferStatus( isReadOnly, isDirect );
     }
 
     /// <summary>
@@ -85,13 +93,14 @@ public class NewBuffer : IDisposable
     
     // ========================================================================
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );
         GC.SuppressFinalize( this );
     }
 
-    public void Dispose( bool disposing )
+    public static void Dispose( bool disposing )
     {
         if ( disposing )
         {
