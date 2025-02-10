@@ -97,13 +97,13 @@ public abstract class FloatBuffer : Buffer
     {
         Hb     = hb ?? new float[ cap ];
         Offset = offset;
-
+        
         SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FloatBuffer"/> class with the
-    /// specified parameters and no backing array.
+    /// specified parameters.
     /// </summary>
     /// <param name="mark"> The mark position. </param>
     /// <param name="pos"> The current position. </param>
@@ -117,6 +117,17 @@ public abstract class FloatBuffer : Buffer
         SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FloatBuffer"/> class with the
+    /// specified parameters.
+    /// </summary>
+    /// <param name="cap"> The capacity of the buffer. </param>
+    /// <param name="lim"> The limit of the buffer. </param>
+    protected FloatBuffer( int cap, int lim )
+        : this( -1, 0, lim, cap, new float[ cap ] )
+    {
+    }
+    
     /// <summary>
     /// Allocates a new float buffer.
     /// <para>
@@ -588,7 +599,14 @@ public abstract class FloatBuffer : Buffer
     /// </exception>
     public new float[] BackingArray()
     {
-        return Hb!;
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Buffer is Read Only!" );
+        }
+
+        GdxRuntimeException.ThrowIfNull( Hb );
+
+        return Hb.ToArray();
     }
 
     /// <summary>

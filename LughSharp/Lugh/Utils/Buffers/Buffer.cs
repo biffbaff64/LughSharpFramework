@@ -174,7 +174,7 @@ public abstract class Buffer : IDisposable
     /// </summary>
     protected Buffer( int mark, int pos, int lim, int cap )
     {
-        Hb = new List< object >( cap );
+        Hb = new object[ cap ];
 
         Setup( mark, pos, lim, cap );
     }
@@ -480,12 +480,12 @@ public abstract class Buffer : IDisposable
     /// </para>
     /// </summary>
     /// <returns>  The array that backs this buffer </returns>
-    public object[] BackingArray() => Hb.ToArray();
+    public object[]? BackingArray() => Hb;
 
     /// <summary>
     /// The backing array.
     /// </summary>
-    protected List< object > Hb { get; set; }
+    protected object[]? Hb { get; set; }
 
     /// <summary>
     /// Returns the offset within this buffer's backing array of the first

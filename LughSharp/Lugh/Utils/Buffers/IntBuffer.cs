@@ -456,7 +456,9 @@ public abstract class IntBuffer : Buffer
             throw new GdxRuntimeException( "Readonly Buffer!" );
         }
 
-        return Hb!;
+        GdxRuntimeException.ThrowIfNull( Hb );
+        
+        return Hb.ToArray();
     }
 
     /// <summary>

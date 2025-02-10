@@ -414,7 +414,9 @@ public abstract class ShortBuffer : Buffer
             throw new GdxRuntimeException( "Buffer is Read Only!" );
         }
 
-        return Hb!;
+        GdxRuntimeException.ThrowIfNull( Hb );
+        
+        return Hb.ToArray();
     }
 
     /// <summary>
