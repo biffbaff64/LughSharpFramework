@@ -128,7 +128,7 @@ namespace LughSharp.Lugh.Utils.Buffers;
 /// </code>
 /// </summary>
 [PublicAPI]
-public abstract class ByteBuffer : Buffer
+public class ByteBuffer : Buffer
 {
     public new byte[]? Hb { get; set; }
 
@@ -868,8 +868,6 @@ public abstract class ByteBuffer : Buffer
     // ========================================================================
     // ========================================================================
 
-    #region abstract methods
-
     /// <summary>
     /// Creates a new byte buffer whose content is a shared subsequence of
     /// this buffer's content.
@@ -888,7 +886,11 @@ public abstract class ByteBuffer : Buffer
     /// </para>
     /// </summary>
     /// <returns> The new byte buffer </returns>
-    public abstract ByteBuffer Slice();
+    public virtual ByteBuffer Slice()
+    {
+        //TODO:
+        return this;
+    }
 
     /// <summary>
     /// Creates a new byte buffer that shares this buffer's content.
@@ -906,7 +908,11 @@ public abstract class ByteBuffer : Buffer
     /// </para>
     /// </summary>
     /// <returns> The new byte buffer. </returns>
-    public abstract ByteBuffer Duplicate();
+    public virtual ByteBuffer Duplicate()
+    {
+        //TODO:
+        return this;
+    }
 
     /// <summary>
     /// Creates a new, read-only byte buffer that shares this buffer's
@@ -928,9 +934,11 @@ public abstract class ByteBuffer : Buffer
     /// </para>
     /// </summary>
     /// <returns> The new, read-only byte buffer </returns>
-    public abstract ByteBuffer AsReadOnlyBuffer();
-
-    // -- Singleton get/put methods --
+    public virtual ByteBuffer AsReadOnlyBuffer()
+    {
+        //TODO:
+        return this;
+    }
 
     /// <summary>
     /// Relative <c>get</c> method.  Reads the byte at this buffer's
@@ -940,7 +948,11 @@ public abstract class ByteBuffer : Buffer
     /// <exception cref="GdxRuntimeException">
     /// If the buffer's current position is not smaller than its limit
     /// </exception>
-    public abstract byte Get();
+    public virtual byte Get()
+    {
+        //TODO:
+        return Hb[ Position ];
+    }
 
     /// <summary>
     /// Relative <i>put</i> method  <i>(optional operation)</i>.
@@ -955,7 +967,10 @@ public abstract class ByteBuffer : Buffer
     /// If this buffer's current position is not smaller than its limit,
     /// or if this buffer is read-only
     /// </exception>
-    public abstract ByteBuffer Put( byte b );
+    public virtual ByteBuffer Put( byte b )
+    {
+        return this;
+    }
 
     /// <summary>
     /// Absolute <i>get</i> method.  Reads the byte at the given index.
@@ -965,7 +980,15 @@ public abstract class ByteBuffer : Buffer
     /// <exception cref="IndexOutOfRangeException">
     /// If <c>index</c> is negative or not smaller than the buffer's limit
     /// </exception>
-    public abstract byte Get( int index );
+    public virtual byte Get( int index )
+    {
+        if ( Hb == null )
+        {
+            throw new NullReferenceException( "Backing buffer is NULL." );
+        }
+        
+        return Hb[ index ];
+    }
 
     /// <summary>
     /// Absolute <i>put</i> method  <i>(optional operation)</i>.
@@ -980,9 +1003,10 @@ public abstract class ByteBuffer : Buffer
     /// If <c>index</c> is negative or not smaller than the buffer's limit
     /// </exception>
     /// <exception cref="GdxRuntimeException"> If this buffer is read-only </exception>
-    public abstract ByteBuffer Put( int index, byte b );
-
-    #endregion abstract methods
+    public virtual ByteBuffer Put( int index, byte b )
+    {
+        return this;
+    }
 
     // ========================================================================
 }

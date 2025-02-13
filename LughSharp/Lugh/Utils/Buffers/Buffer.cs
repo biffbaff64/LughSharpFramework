@@ -143,7 +143,7 @@ public abstract class Buffer : IDisposable
     public const bool NOT_DIRECT = false;
 
     // ========================================================================
-    
+
 //    /// <summary>
 //    /// The characteristics of Spliterators that traverse and split elements
 //    /// maintained in Buffers.
@@ -151,19 +151,14 @@ public abstract class Buffer : IDisposable
 //    internal static readonly int SpliteratorCharacteristics =
 //        Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.ORDERED;
 
-    public         int  Mark        { get; set; } = -1;
-    protected      int  Offset      { get; set; }
-    protected      bool IsBigEndian { get; set; } = true;
-    public virtual int  Capacity    { get; set; }
-    public virtual int  Limit       { get; set; }
-    public virtual int  Position    { get; set; }
-    public virtual bool IsReadOnly  { get; set; }
-    public virtual bool IsDirect    { get; set; }
-
-    /// <summary>
-    /// Used only by DirectBuffers
-    /// </summary>
-    public virtual long Address { get; set; }
+    protected int  Mark        { get; set; } = -1;
+    protected int  Offset      { get; set; }
+    protected bool IsBigEndian { get; set; } = true;
+    protected int  Capacity    { get; set; }
+    protected int  Limit       { get; set; }
+    protected int  Position    { get; set; }
+    protected bool IsReadOnly  { get; set; }
+    protected bool IsDirect    { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -172,37 +167,36 @@ public abstract class Buffer : IDisposable
     /// Creates a new buffer with the given mark, position, limit, and capacity,
     /// after checking invariants.
     /// </summary>
-    protected Buffer( int mark, int pos, int lim, int cap )
+    protected Buffer( int mark, int position, int limit, int capacity )
     {
-        Hb = new object[ cap ];
+        Hb = new object[ capacity ];
 
-        Setup( mark, pos, lim, cap );
+        Setup( mark, position, limit, capacity );
     }
 
     // ========================================================================
 
     /// <summary>
-    /// Setup method to be called from Constructor(s).
-    /// This is implemented because of the need to call virtual methods,
-    /// which is not wise to do from constructors.
+    /// Setup method to be called from Constructor(s). This is implemented because of the
+    /// need to call virtual methods, which is not wise to do from constructors.
     /// </summary>
-    private void Setup( int mark, int pos, int lim, int cap )
+    private void Setup( int mark, int position, int limit, int capacity )
     {
-        if ( cap < 0 )
+        if ( capacity < 0 )
         {
-            throw new ArgumentException( $"Negative capacity: {cap}" );
+            throw new ArgumentException( $"Negative capacity: {capacity}" );
         }
 
-        Capacity = cap;
+        Capacity = capacity;
 
-        SetLimit( lim );
-        SetPosition( pos );
+        SetLimit( limit );
+        SetPosition( position );
 
         if ( mark >= 0 )
         {
-            if ( mark > pos )
+            if ( mark > position )
             {
-                throw new ArgumentException( $"mark > position: ({mark} > {pos})" );
+                throw new ArgumentException( $"mark > position: ({mark} > {position})" );
             }
 
             Mark = mark;
@@ -210,8 +204,8 @@ public abstract class Buffer : IDisposable
     }
 
     /// <summary>
-    /// Sets this buffer's position.  If the mark is defined and larger than the
-    /// new position then it is discarded.
+    /// Sets this buffer's position.  If the mark is defined and larger than the new position
+    /// then it is discarded.
     /// </summary>
     /// <param name="newPosition">
     /// The new position value; must be non-negative and no larger than the current limit
@@ -266,40 +260,36 @@ public abstract class Buffer : IDisposable
 
         return this;
     }
-    
+
     /// <summary>
-    /// Resets this buffer's position to the previously-marked position.
-    /// Invoking this method neither changes nor discards the mark's value.
+    /// Resets this buffer's position to the previously-marked position. Invoking this method
+    /// neither changes nor discards the mark's value.
     /// </summary>
     /// <returns> This buffer </returns>
     /// <exception cref="GdxRuntimeException">If the mark has not been set</exception>
     public virtual Buffer Reset()
     {
-        int m;
-
-        if ( ( m = Mark ) < 0 )
+        if ( Mark < 0 )
         {
             throw new GdxRuntimeException( "Mark has not been set" );
         }
 
-        Position = m;
+        Position = Mark;
 
         return this;
     }
 
     /// <summary>
-    /// Clears this buffer. The position is set to zero, the limit is set to
-    /// the capacity, and the mark is discarded. Invoke this method before
-    /// using a sequence of channel-read or <c>put</c> operations to fill
-    /// this buffer. For example:
+    /// Clears this buffer. The position is set to zero, the limit is set to the capacity,
+    /// and the mark is discarded. Invoke this method before using a sequence of channel-read
+    /// or <c>put</c> operations to fill this buffer. For example:
     /// <code>
     ///     buf.Clear();     // Prepare buffer for reading
     ///     in.Read(buf);    // Read data
     /// </code>
     /// <para>
-    /// This method does not actually erase the data in the buffer, but it
-    /// is named as if it did because it will most often be used in situations
-    /// in which that might as well be the case.
+    /// This method does not actually erase the data in the buffer, but it is named as if it did
+    /// because it will most often be used in situations in which that might as well be the case.
     /// </para>
     /// </summary>
     /// <returns>  This buffer </returns>
@@ -438,81 +428,6 @@ public abstract class Buffer : IDisposable
     }
 
     // ========================================================================
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        Dispose( true );
-        GC.SuppressFinalize( this );
-    }
-
-    protected virtual void Dispose( bool disposing )
-    {
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    #region abstract methods
-
-    /// <summary>
-    /// Tells whether or not this buffer is backed by an accessible array. If this method
-    /// returns <c>true</c> then the <see cref="Array"/> and <see cref="ArrayOffset"/>
-    /// methods may safely be invoked.
-    /// </summary>
-    /// <returns>
-    /// <c>true</c> if, and only if, this buffer is backed by an array and is not read-only
-    /// </returns>
-    public abstract bool HasBackingArray();
-
-    /// <summary>
-    /// Returns the array that backs this buffer <c>(optional operation)</c>. This method
-    /// is intended to allow array-backed buffers to be passed to native code more efficiently.
-    /// Concrete subclasses provide more strongly typed return values for this method.
-    /// <para>
-    /// Modifications to this buffer's content will cause the returned array's content to be
-    /// modified, and vice versa.
-    /// </para>
-    /// <para>
-    /// Invoke the <see cref="HasBackingArray"/> method before invoking this method in order
-    /// to ensure that this buffer has an accessible backing array.
-    /// </para>
-    /// </summary>
-    /// <returns>  The array that backs this buffer </returns>
-    public object[]? BackingArray() => Hb;
-
-    /// <summary>
-    /// The backing array.
-    /// </summary>
-    protected object[]? Hb { get; set; }
-
-    /// <summary>
-    /// Returns the offset within this buffer's backing array of the first
-    /// element of the buffer <c>(optional operation)</c>.
-    /// <para>
-    /// If this buffer is backed by an array then buffer position <b><c>p</c></b>
-    /// corresponds to array index <b><c>p</c> + <c>arrayOffset()</c></b>.
-    /// </para>
-    /// <para>
-    /// Invoke the <see cref="HasBackingArray"/> method before invoking this method
-    /// in order to ensure that this buffer has an accessible backing array.
-    /// </para>
-    /// </summary>
-    /// <returns>
-    /// The offset within this buffer's array of the first element of the buffer
-    /// </returns>
-    public abstract int ArrayOffset();
-
-    /// <summary>
-    /// Performs a NULL check on the <see cref="BackingArray"/>, and throws an exception
-    /// if the array is null.
-    /// </summary>
-    protected abstract void ValidateBackingArray();
-
-    #endregion abstract methods
-
-    // ========================================================================
     // -- Package-private methods for bounds checking, etc. --
     // ========================================================================
 
@@ -591,16 +506,6 @@ public abstract class Buffer : IDisposable
         return i;
     }
 
-    private protected int CheckIndex( int i, int nb )
-    {
-        if ( ( i < 0 ) || ( nb > ( Limit - i ) ) )
-        {
-            throw new IndexOutOfRangeException();
-        }
-
-        return i;
-    }
-
     private protected void Truncate()
     {
         Mark     = -1;
@@ -631,4 +536,79 @@ public abstract class Buffer : IDisposable
             throw new IndexOutOfRangeException();
         }
     }
+
+    /// <summary>
+    /// Returns the array that backs this buffer <c>(optional operation)</c>. This method
+    /// is intended to allow array-backed buffers to be passed to native code more efficiently.
+    /// Concrete subclasses provide more strongly typed return values for this method.
+    /// <para>
+    /// Modifications to this buffer's content will cause the returned array's content to be
+    /// modified, and vice versa.
+    /// </para>
+    /// <para>
+    /// Invoke the <see cref="HasBackingArray"/> method before invoking this method in order
+    /// to ensure that this buffer has an accessible backing array.
+    /// </para>
+    /// </summary>
+    /// <returns>  The array that backs this buffer </returns>
+    public object[]? BackingArray() => Hb;
+
+    /// <summary>
+    /// The backing array.
+    /// </summary>
+    protected object[]? Hb { get; set; }
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    #region abstract methods
+
+    /// <summary>
+    /// Tells whether or not this buffer is backed by an accessible array. If this method
+    /// returns <c>true</c> then the <see cref="Array"/> and <see cref="ArrayOffset"/>
+    /// methods may safely be invoked.
+    /// </summary>
+    /// <returns>
+    /// <c>true</c> if, and only if, this buffer is backed by an array and is not read-only
+    /// </returns>
+    public abstract bool HasBackingArray();
+
+    /// <summary>
+    /// Returns the offset within this buffer's backing array of the first
+    /// element of the buffer <c>(optional operation)</c>.
+    /// <para>
+    /// If this buffer is backed by an array then buffer position <b><c>p</c></b>
+    /// corresponds to array index <b><c>p</c> + <c>arrayOffset()</c></b>.
+    /// </para>
+    /// <para>
+    /// Invoke the <see cref="HasBackingArray"/> method before invoking this method
+    /// in order to ensure that this buffer has an accessible backing array.
+    /// </para>
+    /// </summary>
+    /// <returns>
+    /// The offset within this buffer's array of the first element of the buffer
+    /// </returns>
+    public abstract int ArrayOffset();
+
+    /// <summary>
+    /// Performs a NULL check on the <see cref="BackingArray"/>, and throws an exception
+    /// if the array is null.
+    /// </summary>
+    protected abstract void ValidateBackingArray();
+
+    #endregion abstract methods
 }

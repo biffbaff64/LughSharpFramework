@@ -68,9 +68,10 @@ public class NewByteBuffer : IDisposable
         _byteBuffer = new byte[ capacityInBytes ];
         Memory      = _byteBuffer.AsMemory();
 
-        Capacity = capacityInBytes;
-        Length   = 0;
-        Position = 0;
+        IsBigEndian = !BitConverter.IsLittleEndian;
+        Capacity    = capacityInBytes;
+        Length      = 0;
+        Position    = 0;
 
         SetBufferStatus( READ_WRITE, NOT_DIRECT );
     }
