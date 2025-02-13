@@ -24,7 +24,41 @@
 
 namespace LughSharp.Lugh.Utils.Buffers.New;
 
+[PublicAPI]
 public class NewFloatBuffer
 {
-    
+    private NewByteBuffer _byteBuffer;
+
+    public NewFloatBuffer( int capacityInFloats )
+    {
+        var byteCapacity = capacityInFloats * sizeof( float );
+        
+        _byteBuffer = new NewByteBuffer( byteCapacity );
+
+        _byteBuffer.Length   = 0;
+        _byteBuffer.Position = 0;
+        
+        _byteBuffer.SetBufferStatus( NewByteBuffer.READ_WRITE, NewByteBuffer.NOT_DIRECT );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public float GetFloat( int index )
+    {
+        var floatOffset = index  * sizeof( float );
+        
+        return _byteBuffer.GetFloat( floatOffset );
+    }
+
+    public void PutFloat( int index, float value )
+    {
+        var floatOffset = index * sizeof( float );
+        
+        _byteBuffer.PutFloat( floatOffset, value );
+    }
 }

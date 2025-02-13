@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Buffers.Binary;
+
 namespace LughSharp.Lugh.Utils.Buffers.New;
 
 [PublicAPI]
@@ -31,9 +33,16 @@ public class NewIntBuffer
 
     // ========================================================================
 
-    public NewIntBuffer( int capacity )
+    public NewIntBuffer( int capacityInInts )
     {
-        _byteBuffer = new NewByteBuffer( capacity );
+        var byteCapacity = capacityInInts * sizeof( int );
+
+        _byteBuffer = new NewByteBuffer( byteCapacity );
+
+        _byteBuffer.Length   = 0;
+        _byteBuffer.Position = 0;
+        
+        _byteBuffer.SetBufferStatus( NewByteBuffer.READ_WRITE, NewByteBuffer.NOT_DIRECT );
     }
 
     // ========================================================================

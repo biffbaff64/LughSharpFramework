@@ -22,130 +22,60 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Buffers.Binary;
-
 namespace LughSharp.Lugh.Utils.Buffers.New;
 
 [PublicAPI]
-public class NewShortBuffer : NewBuffer
+public class NewShortBuffer
 {
     private readonly NewByteBuffer _byteBuffer;
 
     // ========================================================================
-    
-    public NewShortBuffer( NewByteBuffer byteBuffer )
+
+    /// <summary>
+    /// Creates a new ShortBuffer with the specified capacity.
+    /// </summary>
+    /// <param name="capacityInShorts">
+    /// The number of shorts to be made available in the buffer. As the backing buffer is a
+    /// ByteBuffer, this capacity will need to be translated into bytes from shorts.
+    /// </param>
+    public NewShortBuffer( int capacityInShorts )
     {
-        _byteBuffer = byteBuffer;
+        var byteCapacity = capacityInShorts * sizeof( short );
         
-        SetBufferStatus( READ_WRITE, NOT_DIRECT );
+        _byteBuffer = new NewByteBuffer( byteCapacity );
+        
+        _byteBuffer.Length   = 0;
+        _byteBuffer.Position = 0;
+        
+        _byteBuffer.SetBufferStatus( NewByteBuffer.READ_WRITE, NewByteBuffer.NOT_DIRECT );
     }
-    
+
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
     public short GetShort( int index )
     {
         var byteOffset = index * sizeof( short );
-        var byteSpan   = _byteBuffer.Memory.Span;
-
-        if ( ( ( byteOffset + sizeof( short ) ) > byteSpan.Length ) || ( byteOffset < 0 ) )
-        {
-            throw new IndexOutOfRangeException( "ShortBuffer index out of range." );
-        }
-
-        return _byteBuffer.IsBigEndian
-            ? BinaryPrimitives.ReadInt16BigEndian( byteSpan.Slice( byteOffset ) )
-            : BinaryPrimitives.ReadInt16LittleEndian( byteSpan.Slice( byteOffset ) );
+        
+        return _byteBuffer.GetShort( byteOffset );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="value"></param>
     public void PutShort( int index, short value )
     {
         var byteOffset = index * sizeof( short );
-        var byteSpan   = _byteBuffer.Memory.Span;
 
-        if ( ( ( byteOffset + sizeof( short ) ) > byteSpan.Length ) || ( byteOffset < 0 ) )
-        {
-            throw new IndexOutOfRangeException( "ShortBuffer index out of range." );
-        }
-
-        if ( _byteBuffer.IsBigEndian )
-        {
-            BinaryPrimitives.WriteInt16BigEndian( byteSpan.Slice( byteOffset ), value );
-        }
-        else
-        {
-            BinaryPrimitives.WriteInt16LittleEndian( byteSpan.Slice( byteOffset ), value );
-        }
+        _byteBuffer.PutShort( byteOffset, value );
+        
+        //TODO: Update length?
     }
+ }
 
-    public int GetInt( int index )
-    {
-        var byteOffset = index * sizeof( short );
-        var byteSpan   = _byteBuffer.Memory.Span;
-
-        if ( ( ( byteOffset + sizeof( int ) ) > byteSpan.Length ) || ( byteOffset < 0 ) )
-        {
-            throw new IndexOutOfRangeException( "ShortBuffer index out of range." );
-        }
-
-        return _byteBuffer.IsBigEndian
-            ? BinaryPrimitives.ReadInt32BigEndian( byteSpan.Slice( byteOffset ) )
-            : BinaryPrimitives.ReadInt32LittleEndian( byteSpan.Slice( byteOffset ) );
-    }
-
-    public void PutInt( int index, int value )
-    {
-        var byteOffset = index * sizeof( short );
-        var byteSpan   = _byteBuffer.Memory.Span;
-
-        if ( ( ( byteOffset + sizeof( int ) ) > byteSpan.Length ) || ( byteOffset < 0 ) )
-        {
-            throw new IndexOutOfRangeException( "ShortBuffer index out of range." );
-        }
-
-        if ( _byteBuffer.IsBigEndian )
-        {
-            BinaryPrimitives.WriteInt32BigEndian( byteSpan.Slice( byteOffset ), value );
-        }
-        else
-        {
-            BinaryPrimitives.WriteInt32LittleEndian( byteSpan.Slice( byteOffset ), value );
-        }
-    }
-
-    public float GetFloat( int index )
-    {
-        var byteOffset = index * sizeof( short );
-        var byteSpan   = _byteBuffer.Memory.Span;
-
-        if ( ( ( byteOffset + sizeof( float ) ) > byteSpan.Length ) || ( byteOffset < 0 ) )
-        {
-            throw new IndexOutOfRangeException( "ShortBuffer index out of range." );
-        }
-
-        return _byteBuffer.IsBigEndian
-            ? BinaryPrimitives.ReadSingleBigEndian( byteSpan.Slice( byteOffset ) )
-            : BinaryPrimitives.ReadSingleLittleEndian( byteSpan.Slice( byteOffset ) );
-    }
-
-    public void PutFloat( int index, float value )
-    {
-        var byteOffset = index * sizeof( short );
-        var byteSpan   = _byteBuffer.Memory.Span;
-
-        if ( ( ( byteOffset + sizeof( float ) ) > byteSpan.Length ) || ( byteOffset < 0 ) )
-        {
-            throw new IndexOutOfRangeException( "ShortBuffer index out of range." );
-        }
-
-        if ( _byteBuffer.IsBigEndian )
-        {
-            BinaryPrimitives.WriteSingleBigEndian( byteSpan.Slice( byteOffset ), value );
-        }
-        else
-        {
-            BinaryPrimitives.WriteSingleLittleEndian( byteSpan.Slice( byteOffset ), value );
-        }
-    }
-    
-    public override·int Capacity => _byteBuffer.Length
-}
