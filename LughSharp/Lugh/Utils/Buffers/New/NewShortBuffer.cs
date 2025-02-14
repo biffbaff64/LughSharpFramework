@@ -24,11 +24,19 @@
 
 namespace LughSharp.Lugh.Utils.Buffers.New;
 
+/// <summary>
+/// Provides a type-safe view of an underlying ByteBuffer, specialized for short values.
+/// This buffer holds a reference to a ByteBuffer instance (_byteBuffer), and does
+/// not have its own backing arrays.
+/// </summary>
 [PublicAPI]
 public class NewShortBuffer
 {
     private readonly NewByteBuffer _byteBuffer;
 
+    private int _length;
+    private int _capacity;
+    
     // ========================================================================
 
     /// <summary>
@@ -41,41 +49,98 @@ public class NewShortBuffer
     public NewShortBuffer( int capacityInShorts )
     {
         var byteCapacity = capacityInShorts * sizeof( short );
-        
+
         _byteBuffer = new NewByteBuffer( byteCapacity );
-        
+
         _byteBuffer.Length   = 0;
         _byteBuffer.Position = 0;
-        
+
         _byteBuffer.SetBufferStatus( NewByteBuffer.READ_WRITE, NewByteBuffer.NOT_DIRECT );
     }
 
     // ========================================================================
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
+    /// <inheritdoc cref="NewByteBuffer.GetShort(int)"/>
     public short GetShort( int index )
     {
         var byteOffset = index * sizeof( short );
-        
+
         return _byteBuffer.GetShort( byteOffset );
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <param name="value"></param>
+    /// <inheritdoc cref="NewByteBuffer.PutShort(int,short)"/>
     public void PutShort( int index, short value )
     {
         var byteOffset = index * sizeof( short );
 
         _byteBuffer.PutShort( byteOffset, value );
-        
-        //TODO: Update length?
-    }
- }
 
+        if ( index > Length )
+        {
+            Length = index + 1;
+        }
+    }
+
+    /// <summary>
+    /// Clear the buffer.
+    /// </summary>
+    public void Clear()
+    {
+        Length = 0;
+        _byteBuffer.Clear();
+    }
+
+    /// <summary>
+    /// This sets the <see cref="NewByteBuffer.Limit"/> to the current value of Position. At this
+    /// point, Position typically indicates the position after the last byte written. So, setting
+    /// Limit to Position effectively marks the extent of the valid data that has been written into
+    /// the buffer. <see cref="NewByteBuffer.Position"/> is then reset to 0. Now, when you start using
+    /// GetByte() or other read methods on the ByteBuffer, you will begin reading from the very
+    /// beginning of the data (from index 0) up to the Limit.
+    /// </summary>
+    public void Flip()
+    {
+        _byteBuffer.Flip();
+    }
+
+    /// <inheritdoc cref="NewByteBuffer.IsBigEndian"/>
+    public bool IsBigEndian => _byteBuffer.IsBigEndian;
+    
+    /// <summary>
+    /// Boundary for read operations (read-write). Set to Capacity initially (or 0), set to
+    /// the value held in <see cref="NewByteBuffer.Position"/> by <see cref="Flip()"/>.
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException"> If Limit exceeds the buffer capacity. </exception>
+    public int Length
+    {
+        get => _length;
+        private set
+        {
+            _length = value;
+
+            if ( _length < 0 )
+            {
+                throw new IndexOutOfRangeException( "Length cannot be < 0" );
+            }
+            
+            //TODO: range checking for > capacity or limit?
+        }
+    }
+
+    /// <summary>
+    /// Total capacity in units of <c>Int16 (short)</c> type (read-only, calculated from ByteBuffer.Capacity).
+    /// </summary>
+    public int Capacity
+    {
+        get => _capacity;
+        set
+        {
+            _capacity = value;
+
+            if ( _capacity < 0 )
+            {
+                throw new IndexOutOfRangeException( "Capacity cannot be < 0" );
+            }
+        }
+    }
+}

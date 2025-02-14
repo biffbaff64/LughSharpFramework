@@ -22,17 +22,31 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Buffers.Binary;
 
 namespace LughSharp.Lugh.Utils.Buffers.New;
 
+/// <summary>
+/// Provides a type-safe view of an underlying ByteBuffer, specialized for Int32 values.
+/// This buffer holds a reference to a ByteBuffer instance (_byteBuffer), and does
+/// not have its own backing arrays.
+/// </summary>
 [PublicAPI]
 public class NewIntBuffer
 {
     private NewByteBuffer _byteBuffer;
 
+    private int _length;
+    private int _capacity;
+
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new IntBuffer with the specified capacity.
+    /// </summary>
+    /// <param name="capacityInInts">
+    /// The number of ints to be made available in the buffer. As the backing buffer is a
+    /// ByteBuffer, this capacity will need to be translated into bytes from ints.
+    /// </param>
     public NewIntBuffer( int capacityInInts )
     {
         var byteCapacity = capacityInInts * sizeof( int );
@@ -47,6 +61,7 @@ public class NewIntBuffer
 
     // ========================================================================
 
+    /// <inheritdoc cref="NewByteBuffer.GetInt(int)"/>
     public int GetInt( int index )
     {
         var intSpan = MemoryMarshal.Cast< byte, int >( _byteBuffer.Memory.Span );
@@ -54,9 +69,78 @@ public class NewIntBuffer
         return intSpan[ index ];
     }
 
+    /// <inheritdoc cref="NewByteBuffer.PutInt(int,int)"/>
     public void PutInt( int index, int value )
     {
         var intSpan = MemoryMarshal.Cast< byte, int >( _byteBuffer.Memory.Span );
         intSpan[ index ] = value;
+
+        if ( index > Length )
+        {
+            Length = index + 1;
+        }
+    }
+
+    /// <summary>
+    /// Clear the buffer.
+    /// </summary>
+    public void Clear()
+    {
+        Length = 0;
+        _byteBuffer.Clear();
+    }
+
+    /// <summary>
+    /// This sets the <see cref="NewByteBuffer.Limit"/> to the current value of Position. At this
+    /// point, Position typically indicates the position after the last byte written. So, setting
+    /// Limit to Position effectively marks the extent of the valid data that has been written into
+    /// the buffer. <see cref="NewByteBuffer.Position"/> is then reset to 0. Now, when you start using
+    /// GetByte() or other read methods on the ByteBuffer, you will begin reading from the very
+    /// beginning of the data (from index 0) up to the Limit.
+    /// </summary>
+    public void Flip()
+    {
+        _byteBuffer.Flip();
+    }
+
+    /// <inheritdoc cref="NewByteBuffer.IsBigEndian"/>
+    public bool IsBigEndian => _byteBuffer.IsBigEndian;
+    
+    /// <summary>
+    /// Boundary for read operations (read-write). Set to Capacity initially (or 0), set to
+    /// the value held in <see cref="NewByteBuffer.Position"/> by <see cref="Flip()"/>.
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException"> If Limit exceeds the buffer capacity. </exception>
+    public int Length
+    {
+        get => _length;
+        private set
+        {
+            _length = value;
+
+            if ( _length < 0 )
+            {
+                throw new IndexOutOfRangeException( "Length cannot be < 0" );
+            }
+            
+            //TODO: range checking for > capacity or limit?
+        }
+    }
+
+    /// <summary>
+    /// Total capacity in units of <c>Int32</c> type (read-only, calculated from ByteBuffer.Capacity).
+    /// </summary>
+    public int Capacity
+    {
+        get => _capacity;
+        set
+        {
+            _capacity = value;
+
+            if ( _capacity < 0 )
+            {
+                throw new IndexOutOfRangeException( "Capacity cannot be < 0" );
+            }
+        }
     }
 }
