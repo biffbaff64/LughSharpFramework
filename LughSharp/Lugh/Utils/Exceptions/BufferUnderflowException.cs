@@ -25,4 +25,14 @@
 namespace LughSharp.Lugh.Utils.Exceptions;
 
 [PublicAPI]
-public class BufferUnderflowException : ApplicationException;
+public class BufferUnderflowException : ApplicationException
+{
+    /// <summary>
+    /// Initializes a new GdxRuntimeException with a specified error message.
+    /// </summary>
+    /// <param name="message"> The message that describes the error. </param>
+    public BufferUnderflowException( string? message = "" )
+        : base( message )
+    {
+    }
+}

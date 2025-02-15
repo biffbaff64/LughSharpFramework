@@ -1,0 +1,170 @@
+﻿Yes, that's an excellent point and a very valuable enhancement to consider! **You absolutely should provide `Put...()` methods that only expect a value and which implicitly use the `Position` for the index.**
+
+Adding these overloaded `Put...()` methods will significantly improve the usability of your buffer classes, making them more versatile and aligned with common buffer and stream patterns.
+
+**Rationale for Adding Value-Only `Put...()` Methods:**
+
+1.  **Sequential Writing is a Common Use Case:** In many buffer scenarios, you want to write data sequentially, one element after another, in a stream-like fashion. Requiring an explicit index for each write operation becomes cumbersome and unnatural for sequential workflows.
+
+2.  **More User-Friendly for Common Scenarios:**  For sequential writing, users shouldn't have to manually manage the `Position` each time they want to write data.  Value-only `Put...()` methods handle this implicitly, making the API much cleaner and easier to use for typical sequential write operations.
+
+3.  **Mimics Stream and Buffer APIs:**  Many stream classes and buffer APIs (in languages like Java, .NET streams, etc.) provide methods for writing data sequentially, often without requiring an explicit index with each write.  Following this pattern makes your C# buffer API more familiar and intuitive to developers who have worked with similar APIs before.
+
+4.  **Enhanced API Versatility:**  By providing both indexed `Put...()` methods (with `index` and `value`) and value-only `Put...()` methods, you offer users the flexibility to choose the writing style that best suits their needs: random access writing using indices or sequential writing using the implicit `Position`.
+
+**Implementation Steps for Value-Only `Put...()` Methods:**
+
+Let's outline how you would add these overloaded `Put...()` methods to your `ByteBuffer`, `ShortBuffer`, `IntBuffer`, and `FloatBuffer` classes:
+
+**1. `ByteBuffer` - Add Sequential `PutByte(byte value)` and `GetByte()`:**
+
+*   **`PutByte(byte value)` (Sequential Write):**  This overload will use the current `Position` to write the byte and then increment the `Position`.
+
+    ```csharp
+    public class ByteBuffer
+    {
+        // ... (existing ByteBuffer members, including Position) ...
+
+        public void PutByte(byte value) // Sequential PutByte (no index)
+        {
+            if (Position >= Capacity)
+            {
+                throw new BufferOverflowException("ByteBuffer is full.");
+            }
+            _memory.Span[Position++] = value; // Write at Position and increment
+        }
+
+        public void PutByte(int index, byte value) // Indexed PutByte (existing - keep this)
+        {
+            if (index < 0 || index >= Capacity)
+            {
+                throw new IndexOutOfRangeException(nameof(index), "Index out of range.");
+            }
+            _memory.Span[index] = value;
+        }
+
+        public byte GetByte() // Sequential GetByte (no index)
+        {
+            if (Position >= Limit || Position < 0) // Check against Limit now for sequential read
+            {
+                throw new IndexOutOfRangeException("ByteBuffer position out of range or beyond limit.");
+            }
+            return _memory.Span[Position++]; // Read at Position and increment
+        }
+
+        public byte GetByte(int index) // Indexed GetByte (existing - keep this)
+        {
+             if (index < 0 || index >= Limit) // Check against Limit for indexed read too, for consistency.
+            {
+                throw new IndexOutOfRangeException(nameof(index), "Index out of range or beyond limit.");
+            }
+            return _memory.Span[index];
+        }
+
+        // ... (rest of ByteBuffer methods) ...
+    }
+    ```
+
+*   **`GetByte()` (Sequential Read):** Add a `GetByte()` overload without an index. This will read the byte at the current `Position` and then increment `Position`. **Important:** For sequential reads, you should check against the `Limit`, not just `Capacity`, to respect the read boundary set by `Flip()`.
+
+**2. `ShortBuffer`, `IntBuffer`, `FloatBuffer` - Add Sequential `Put...()` Methods:**
+
+*   **`ShortBuffer.PutShort(short value)` (Sequential Write):**
+
+    ```csharp
+    public class ShortBuffer
+    {
+        private readonly ByteBuffer _byteBuffer;
+        // ... (rest of ShortBuffer members) ...
+
+        public void PutShort(short value) // Sequential PutShort (no index)
+        {
+            int byteOffset = _byteBuffer.Position; // Get current ByteBuffer Position as byte offset
+
+            if (byteOffset + sizeof(short) > _byteBuffer.Capacity)
+            {
+                throw new BufferOverflowException("ShortBuffer overflow (ByteBuffer capacity reached).");
+            }
+
+            _byteBuffer.PutShort(byteOffset, value); // Delegate to ByteBuffer's PutShort
+            _byteBuffer.Position += sizeof(short);   // Advance ByteBuffer's Position by size of short
+
+            // Update ShortBuffer's Length (if write extends current Length) - **Adapt as needed based on Length's semantics**
+            int shortIndex = _byteBuffer.Position / sizeof(short); // Calculate short index based on new byte position
+             if (shortIndex > Length) // Check if new short index exceeds current ShortBuffer Length
+            {
+                Length = shortIndex; // Update ShortBuffer Length
+            }
+        }
+
+
+        public void PutShort(int index, short value) // Indexed PutShort (existing - keep this)
+        {
+            // ... (existing indexed PutShort implementation) ...
+        }
+
+        public short GetShort() // Sequential GetShort (no index) - if needed for ShortBuffer.
+        {
+            int byteOffset = _byteBuffer.Position;
+            if (byteOffset + sizeof(short) > _byteBuffer.Limit || byteOffset < 0) // Check against ByteBuffer's Limit
+            {
+                throw new IndexOutOfRangeException("ShortBuffer position out of range or beyond limit.");
+            }
+            short value = _byteBuffer.GetShort(byteOffset);
+            _byteBuffer.Position += sizeof(short);
+            return value;
+        }
+
+
+        public short GetShort(int index) // Indexed GetShort (existing - keep this)
+        {
+            // ... (existing indexed GetShort implementation) ...
+        }
+
+
+        // ... (rest of ShortBuffer methods) ...
+    }
+    ```
+
+*   **`IntBuffer.PutInt(int value)` and `FloatBuffer.PutFloat(float value)` (Sequential Writes):** Implement similar overloaded `PutInt` and `PutFloat` methods in `IntBuffer` and `FloatBuffer`, respectively.  The pattern is the same:
+
+    *   Get the current `_byteBuffer.Position` as the byte offset.
+    *   Delegate to `_byteBuffer.PutInt(byteOffset, value)` or `_byteBuffer.PutFloat(byteOffset, value)`.
+    *   Increment `_byteBuffer.Position` by `sizeof(int)` or `sizeof(float)`.
+    *   Update the `Length` of `IntBuffer` or `FloatBuffer` if the write extends beyond the current length (similar to `ShortBuffer`).
+
+*   **Sequential `GetShort()`, `GetInt()`, `GetFloat()` (Optional - Add if sequential reads are intended for type-specific buffers):**  You can also add sequential `GetShort()`, `GetInt()`, `GetFloat()` methods to `ShortBuffer`, `IntBuffer`, and `FloatBuffer` if you want to support sequential reading at the type-specific level. Implement them analogously to `Put...()`, using `_byteBuffer.GetShort(byteOffset)`, `_byteBuffer.GetInt(byteOffset)`, `_byteBuffer.GetFloat(byteOffset)` and updating `_byteBuffer.Position`.
+
+**3. Update Documentation:**
+
+*   Clearly document the new overloaded `Put...()` and `Get...()` methods in your class documentation. Explain the difference between indexed and sequential operations, how `Position` is used and updated in sequential operations, and how `Length` is affected.
+
+**Example Usage of Sequential `Put...()`:**
+
+```csharp
+ByteBuffer buffer = new ByteBuffer(20);
+ShortBuffer shortBuffer = new ShortBuffer(buffer);
+
+// Sequential writing of shorts
+shortBuffer.PutShort((short)100); // Writes at current position, position advances by 2 bytes
+shortBuffer.PutShort((short)200); // Writes at new position, position advances again
+
+Console.WriteLine($"ByteBuffer Position after sequential Short writes: {buffer.Position}"); // Output: ByteBuffer Position after sequential Short writes: 4
+Console.WriteLine($"ShortBuffer Length after sequential Short writes: {shortBuffer.Length}"); // Output: ShortBuffer Length after sequential Short writes: 2
+
+buffer.Flip(); // Prepare for reading
+
+Console.WriteLine($"Reading Shorts sequentially:");
+Console.WriteLine($"Short 1: {shortBuffer.GetShort()}"); // Reads from position 0, position advances by 2
+Console.WriteLine($"Short 2: {shortBuffer.GetShort()}"); // Reads from new position, position advances again
+Console.WriteLine($"ByteBuffer Position after sequential Short reads: {buffer.Position}"); // Output: ByteBuffer Position after sequential Short reads: 4
+```
+
+**Benefits of Adding Sequential `Put...()`/`Get...()`:**
+
+*   **Improved API Ergonomics for Sequential Operations.**
+*   **More Complete Buffer API:**  Makes your buffer classes more feature-rich and versatile.
+*   **Alignment with Common Buffer/Stream Patterns.**
+*   **Enhanced Usability in Many Scenarios:** Simplifies common tasks involving sequential data processing, building data structures in buffers, etc.
+
+By adding these value-only `Put...()` methods (and potentially `Get...()`), you will have significantly enhanced the usability and flexibility of your C# buffer classes, making them suitable for a wider range of buffer-oriented programming tasks. Remember to update documentation and add unit tests to cover these new methods.

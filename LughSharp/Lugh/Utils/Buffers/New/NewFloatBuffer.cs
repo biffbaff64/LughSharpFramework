@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils.Exceptions;
+
 namespace LughSharp.Lugh.Utils.Buffers.New;
 
 /// <summary>
@@ -73,7 +75,7 @@ public class NewFloatBuffer
     {
         var floatOffset = _byteBuffer.Position;
 
-        if ( floatOffset + sizeof( float ) > _byteBuffer.Limit || floatOffset < 0 )
+        if ( ( ( floatOffset + sizeof( float ) ) > _byteBuffer.Limit ) || ( floatOffset < 0 ) )
         {
             throw new IndexOutOfRangeException( "FloatBuffer position out of range" );
         }
@@ -90,7 +92,13 @@ public class NewFloatBuffer
     {
         var floatOffset = index * sizeof( float );
         
+        if ( ( floatOffset + sizeof( float ) ) > _byteBuffer.Capacity )
+        {
+            throw new BufferOverflowException( "FloatBuffer overflow (ByteBuffer capacity reached)" );
+        }
+
         _byteBuffer.PutFloat( floatOffset, value );
+        _byteBuffer.Position += sizeof( float );
 
         if ( index > Length )
         {
@@ -103,9 +111,7 @@ public class NewFloatBuffer
     {
         var floatOffset = _byteBuffer.Position;
         
-        _byteBuffer.PutFloat( floatOffset, value );
-
-        if ( floatOffset + sizeof( float ) > _byteBuffer.Capacity )
+        if ( ( floatOffset + sizeof( float ) ) > _byteBuffer.Capacity )
         {
             throw new BufferOverflowException( "FloatBuffer overflow (ByteBuffer capacity reached)" );
         }

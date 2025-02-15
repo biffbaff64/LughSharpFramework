@@ -200,7 +200,7 @@ public class ByteBuffer : Buffer
 
         if ( length > Remaining() )
         {
-            throw new GdxRuntimeException( "Buffer Overflow!" );
+            throw new GdxRuntimeException( $"Buffer Overflow! Length: {length} Remaining(): {Remaining()}" );
         }
 
         foreach ( var value in src )
