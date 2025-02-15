@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Utils.Buffers.New;
 
@@ -61,6 +62,23 @@ public class NewIntBuffer
 
     // ========================================================================
 
+    /// <inheritdoc cref="NewByteBuffer.GetInt()"/>
+    public int GetInt()
+    {
+        var byteOffset = _byteBuffer.Position;
+
+        if ( ( ( byteOffset + sizeof( int ) ) > _byteBuffer.Limit ) || ( byteOffset < 0 ) )
+        {
+            throw new IndexOutOfRangeException( "IntBuffer position out of range" );
+        }
+
+        var value = _byteBuffer.GetInt( byteOffset );
+
+        _byteBuffer.Position += sizeof( int   );
+
+        return value;
+    }
+
     /// <inheritdoc cref="NewByteBuffer.GetInt(int)"/>
     public int GetInt( int index )
     {
@@ -69,10 +87,32 @@ public class NewIntBuffer
         return intSpan[ index ];
     }
 
+    /// <inheritdoc cref="NewByteBuffer.PutInt(int)"/>
+    public void PutInt( int value )
+    {
+        var intOffset = _byteBuffer.Position;
+        
+        if ( ( intOffset + sizeof( int ) ) > _byteBuffer.Capacity )
+        {
+            throw new BufferOverflowException( "IntBuffer overflow (ByteBuffer capacity reached)" );
+        }
+
+        _byteBuffer.PutInt( intOffset, value );
+        _byteBuffer.Position += sizeof( int );
+
+        var intIndex = _byteBuffer.Position / sizeof( int );
+
+        if ( intIndex > Length )
+        {
+            Length = intIndex;
+        }
+    }
+    
     /// <inheritdoc cref="NewByteBuffer.PutInt(int,int)"/>
     public void PutInt( int index, int value )
     {
         var intSpan = MemoryMarshal.Cast< byte, int >( _byteBuffer.Memory.Span );
+        
         intSpan[ index ] = value;
 
         if ( index > Length )
@@ -81,6 +121,8 @@ public class NewIntBuffer
         }
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// Clear the buffer.
     /// </summary>

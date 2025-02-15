@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils.Exceptions;
+
 namespace LughSharp.Lugh.Utils.Buffers.New;
 
 /// <summary>
@@ -36,7 +38,7 @@ public class NewShortBuffer
 
     private int _length;
     private int _capacity;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -60,12 +62,51 @@ public class NewShortBuffer
 
     // ========================================================================
 
+    /// <inheritdoc cref="NewByteBuffer.GetShort()"/>
+    public short GetShort()
+    {
+        var byteOffset = _byteBuffer.Position;
+
+        if ( ( ( byteOffset + sizeof( short ) ) > _byteBuffer.Limit ) || ( byteOffset < 0 ) )
+        {
+            throw new IndexOutOfRangeException( "IntBuffer position out of range" );
+        }
+
+        var value = _byteBuffer.GetShort( byteOffset );
+
+        _byteBuffer.Position += sizeof( short );
+
+        return value;
+    }
+
     /// <inheritdoc cref="NewByteBuffer.GetShort(int)"/>
     public short GetShort( int index )
     {
         var byteOffset = index * sizeof( short );
 
         return _byteBuffer.GetShort( byteOffset );
+    }
+
+    /// <inheritdoc cref="NewByteBuffer.PutShort(short)"/>
+    public void PutShort( short value )
+    {
+        int byteOffset = _byteBuffer.Position; // Get current ByteBuffer Position as byte offset
+
+        if ( ( byteOffset + sizeof( short ) ) > _byteBuffer.Capacity )
+        {
+            throw new BufferOverflowException( "ShortBuffer overflow (ByteBuffer capacity reached)." );
+        }
+
+        _byteBuffer.PutShort( byteOffset, value ); // Delegate to ByteBuffer's PutShort
+        _byteBuffer.Position += sizeof( short );   // Advance ByteBuffer's Position by size of short
+
+        // Update ShortBuffer's Length (if write extends current Length)
+        int shortIndex = _byteBuffer.Position / sizeof( short ); // Calculate short index based on new byte position
+
+        if ( shortIndex > Length ) // Check if new short index exceeds current ShortBuffer Length
+        {
+            Length = shortIndex; // Update ShortBuffer Length
+        }
     }
 
     /// <inheritdoc cref="NewByteBuffer.PutShort(int,short)"/>
@@ -80,6 +121,8 @@ public class NewShortBuffer
             Length = index + 1;
         }
     }
+
+    // ========================================================================
 
     /// <summary>
     /// Clear the buffer.
@@ -105,7 +148,7 @@ public class NewShortBuffer
 
     /// <inheritdoc cref="NewByteBuffer.IsBigEndian"/>
     public bool IsBigEndian => _byteBuffer.IsBigEndian;
-    
+
     /// <summary>
     /// Boundary for read operations (read-write). Set to Capacity initially (or 0), set to
     /// the value held in <see cref="NewByteBuffer.Position"/> by <see cref="Flip()"/>.
@@ -122,7 +165,7 @@ public class NewShortBuffer
             {
                 throw new IndexOutOfRangeException( "Length cannot be < 0" );
             }
-            
+
             //TODO: range checking for > capacity or limit?
         }
     }

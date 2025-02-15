@@ -62,48 +62,29 @@ public class NewFloatBuffer
 
     // ========================================================================
 
-    /// <inheritdoc cref="NewByteBuffer.GetFloat(int)"/>
-    public float GetFloat( int index )
-    {
-        var floatOffset = index  * sizeof( float );
-        
-        return _byteBuffer.GetFloat( floatOffset );
-    }
-
     /// <inheritdoc cref="NewByteBuffer.GetFloat()"/>
     public float GetFloat()
     {
-        var floatOffset = _byteBuffer.Position;
+        var byteOffset = _byteBuffer.Position;
 
-        if ( ( ( floatOffset + sizeof( float ) ) > _byteBuffer.Limit ) || ( floatOffset < 0 ) )
+        if ( ( ( byteOffset + sizeof( float ) ) > _byteBuffer.Limit ) || ( byteOffset < 0 ) )
         {
             throw new IndexOutOfRangeException( "FloatBuffer position out of range" );
         }
 
-        var value = _byteBuffer.GetFloat( floatOffset );
+        var value = _byteBuffer.GetFloat( byteOffset );
 
         _byteBuffer.Position += sizeof( float );
 
         return value;
     }
 
-    /// <inheritdoc cref="NewByteBuffer.PutFloat(int,float)"/>
-    public void PutFloat( int index, float value )
+    /// <inheritdoc cref="NewByteBuffer.GetFloat(int)"/>
+    public float GetFloat( int index )
     {
-        var floatOffset = index * sizeof( float );
+        var floatOffset = index  * sizeof( float );
         
-        if ( ( floatOffset + sizeof( float ) ) > _byteBuffer.Capacity )
-        {
-            throw new BufferOverflowException( "FloatBuffer overflow (ByteBuffer capacity reached)" );
-        }
-
-        _byteBuffer.PutFloat( floatOffset, value );
-        _byteBuffer.Position += sizeof( float );
-
-        if ( index > Length )
-        {
-            Length = index + 1;
-        }
+        return _byteBuffer.GetFloat( floatOffset );
     }
 
     /// <inheritdoc cref="NewByteBuffer.PutFloat(float)"/>
@@ -124,6 +105,25 @@ public class NewFloatBuffer
         if ( floatIndex > Length )
         {
             Length = floatIndex;
+        }
+    }
+
+    /// <inheritdoc cref="NewByteBuffer.PutFloat(int,float)"/>
+    public void PutFloat( int index, float value )
+    {
+        var floatOffset = index * sizeof( float );
+        
+        if ( ( floatOffset + sizeof( float ) ) > _byteBuffer.Capacity )
+        {
+            throw new BufferOverflowException( "FloatBuffer overflow (ByteBuffer capacity reached)" );
+        }
+
+        _byteBuffer.PutFloat( floatOffset, value );
+        _byteBuffer.Position += sizeof( float );
+
+        if ( index > Length )
+        {
+            Length = index + 1;
         }
     }
 

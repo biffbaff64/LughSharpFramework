@@ -34,20 +34,28 @@ public class NewBufferTests
 
     public NewBufferTests()
     {
+        Logger.Checkpoint();
+        
         TestNewByteBuffer();
         TestNewFloatBuffer();
         TestNewIntBuffer();
         TestNewShortBuffer();
+        
+        Logger.Debug( "Done" );
     }
 
     public void TestNewByteBuffer()
     {
         _newByteBuffer = new NewByteBuffer( 20 );
-        
+
+        Logger.Debug( $"Position before Put(): {_newByteBuffer.Position}" );
+
         _newByteBuffer.PutByte( 5 );
         _newByteBuffer.PutFloat( 16.0f );
         _newByteBuffer.PutInt( 768 );
-        _newByteBuffer.PutShort( 23 );
+        _newByteBuffer.PutShort( ( short )23 );
+        
+        Logger.Debug( $"Position after Put(): {_newByteBuffer.Position}" );
     }
 
     public void TestNewFloatBuffer()
