@@ -28,10 +28,6 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Utils.Buffers.New;
 
-/// <summary>
-/// Serves as the base, byte-level buffer. It manages the underlying byte[] and Memory&lt;byte&gt;.
-/// Uses a byte[] as its backing array and exposes it through <see cref="Memory{T}"/>.
-/// </summary>
 [PublicAPI]
 public class NewByteBuffer : IDisposable
 {
@@ -92,6 +88,7 @@ public class NewByteBuffer : IDisposable
         {
             throw new IndexOutOfRangeException("ByteBuffer position out of range or beyond limit.");
         }
+        
         return Memory.Span[Position++]; // Read at Position and increment
     }
 
@@ -101,7 +98,7 @@ public class NewByteBuffer : IDisposable
     /// <param name="index"> The buffer position from which to return the byte value. </param>
     public byte GetByte( int index )
     {
-        if ( ( index < 0 ) || ( index > Length ) )
+        if ( ( index < 0 ) || ( index > Limit ) )
         {
             throw new IndexOutOfRangeException( "Buffer position out of range." );
         }
@@ -116,7 +113,7 @@ public class NewByteBuffer : IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutByte( byte value )
     {
-        PutByte( Position++, value );
+        PutByte( Position, value );
     }
 
     /// <summary>
@@ -126,12 +123,18 @@ public class NewByteBuffer : IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutByte( int index, byte value )
     {
-        if ( index >= Capacity )
+        if ( ( index < 0 ) || ( index >= Capacity ) )
         {
-            throw new BufferOverflowException();
+            throw new IndexOutOfRangeException( "Index out of range." );
         }
 
         Memory.Span[ index ] = value;
+
+        if ( index >= Position )
+        {
+            Position++;
+            Length++;
+        }
     }
 
     // ========================================================================
@@ -161,8 +164,6 @@ public class NewByteBuffer : IDisposable
     public void PutShort( short value )
     {
         PutShort( Position, value );
-
-        Position += sizeof( short );
     }
 
     /// <summary>
@@ -179,6 +180,12 @@ public class NewByteBuffer : IDisposable
         else
         {
             BinaryPrimitives.WriteInt16LittleEndian( Memory.Span.Slice( index ), value );
+        }
+
+        if ( index >= Position )
+        {
+            Position += sizeof( short );
+            Length++;
         }
     }
 
@@ -209,8 +216,6 @@ public class NewByteBuffer : IDisposable
     public void PutInt( int value )
     {
         PutInt( Position, value );
-
-        Position += sizeof( int );
     }
 
     /// <summary>
@@ -227,6 +232,12 @@ public class NewByteBuffer : IDisposable
         else
         {
             BinaryPrimitives.WriteInt32LittleEndian( Memory.Span.Slice( index ), value );
+        }
+
+        if ( index >= Position )
+        {
+            Position += sizeof( int );
+            Length++;
         }
     }
 
@@ -257,8 +268,6 @@ public class NewByteBuffer : IDisposable
     public void PutFloat( float value )
     {
         PutFloat( Position, value );
-        
-        Position += sizeof( float );
     }
 
     /// <summary>
@@ -275,6 +284,12 @@ public class NewByteBuffer : IDisposable
         else
         {
             BinaryPrimitives.WriteSingleLittleEndian( Memory.Span.Slice( index ), value );
+        }
+
+        if ( index >= Position )
+        {
+            Position += sizeof( float );
+            Length++;
         }
     }
 
@@ -393,13 +408,12 @@ public class NewByteBuffer : IDisposable
     public ByteOrder Order() => IsBigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
 
     /// <summary>
-    /// Total allocated byte size (read-only after constructor).
+    /// Total allocated byte size (read-only after constructor). Can be modified by <see cref="Resize(int)"/>.
     /// </summary>
     public int Capacity { get; private set; }
 
     /// <summary>
     /// Current position within the buffer. Any new values will be added at this position.
-    /// This is effectively the length of the occupied buffer.
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">
     /// Thrown if the new position is no longer within the buffer bounds.
