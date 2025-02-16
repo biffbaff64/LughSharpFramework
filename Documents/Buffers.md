@@ -9,7 +9,6 @@ ByteBuffer:
  - Capacity: Measured in bytes. Represents the total allocated byte size.
  - Position: _position (int) tracks the current read/write position (in bytes).
  - Limit: _limit (int) marks the boundary for read operations (set by Flip()).
-   Length: _length (int) tracks the number of elements of their specific type currently "valid" or "written".
  - Endianness: IsBigEndian (bool) flag to indicate byte order (Big-Endian or Little-Endian).
 
 Key Responsibilities:
@@ -70,7 +69,6 @@ ByteBuffer:
 -----------
 
 Capacity: Total allocated byte size (read-only after constructor).
-Length: Number of bytes currently considered valid/written (read-write, managed by Put... and Clear()). Starts at 0.
 Position: Current byte read/write position (read-write). Starts at 0, incremented by PutByte, GetByte (sequential
 versions). Reset to 0 by Clear() and Flip().
 Limit: Boundary for read operations (read-write). Set to Capacity initially (or 0), set to Position by Flip().

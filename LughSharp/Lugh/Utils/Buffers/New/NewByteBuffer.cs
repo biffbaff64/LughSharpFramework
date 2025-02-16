@@ -26,6 +26,8 @@ using System.Buffers.Binary;
 
 using LughSharp.Lugh.Utils.Exceptions;
 
+using IndexOutOfRangeException = System.IndexOutOfRangeException;
+
 namespace LughSharp.Lugh.Utils.Buffers.New;
 
 [PublicAPI]
@@ -84,12 +86,16 @@ public class NewByteBuffer : IDisposable
     /// </summary>
     public byte GetByte()
     {
-        if (( Position >= Limit ) || ( Position < 0 )) // Check against Limit now for sequential read
+        if ( ( Position >= Limit ) || ( Position < 0 ) ) // Check against Limit now for sequential read
         {
-            throw new IndexOutOfRangeException("ByteBuffer position out of range or beyond limit.");
+            throw new IndexOutOfRangeException( "ByteBuffer position out of range or beyond limit." );
         }
+
+        var value = Memory.Span[ Position ];
+
+        Position++;
         
-        return Memory.Span[Position++]; // Read at Position and increment
+        return value;
     }
 
     /// <summary>
@@ -113,7 +119,13 @@ public class NewByteBuffer : IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutByte( byte value )
     {
-        PutByte( Position, value );
+        if ( Position >= Capacity )
+        {
+            throw new BufferOverflowException();
+        }
+
+        Memory.Span[ Position ] = value;
+        Position++; // Increment position AFTER write
     }
 
     /// <summary>
@@ -129,14 +141,9 @@ public class NewByteBuffer : IDisposable
         }
 
         Memory.Span[ index ] = value;
-
-        if ( index >= Position )
-        {
-            Position++;
-            Length++;
-        }
     }
 
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -144,7 +151,9 @@ public class NewByteBuffer : IDisposable
     /// </summary>
     public short GetShort()
     {
-        return GetShort( Position );
+        return IsBigEndian
+            ? BinaryPrimitives.ReadInt16BigEndian( Memory.Span.Slice( Position ) )
+            : BinaryPrimitives.ReadInt16LittleEndian( Memory.Span.Slice( Position ) );
     }
 
     /// <summary>
@@ -163,7 +172,14 @@ public class NewByteBuffer : IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutShort( short value )
     {
-        PutShort( Position, value );
+        if ( IsBigEndian )
+        {
+            BinaryPrimitives.WriteInt16BigEndian( Memory.Span.Slice( Position ), value );
+        }
+        else
+        {
+            BinaryPrimitives.WriteInt16LittleEndian( Memory.Span.Slice( Position ), value );
+        }
     }
 
     /// <summary>
@@ -184,11 +200,11 @@ public class NewByteBuffer : IDisposable
 
         if ( index >= Position )
         {
-            Position += sizeof( short );
-            Length++;
+            Length = index + 1;
         }
     }
 
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -196,7 +212,9 @@ public class NewByteBuffer : IDisposable
     /// </summary>
     public int GetInt()
     {
-        return GetInt( Position );
+        return IsBigEndian
+            ? BinaryPrimitives.ReadInt32BigEndian( Memory.Span.Slice( Position ) )
+            : BinaryPrimitives.ReadInt32LittleEndian( Memory.Span.Slice( Position ) );
     }
 
     /// <summary>
@@ -215,7 +233,14 @@ public class NewByteBuffer : IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutInt( int value )
     {
-        PutInt( Position, value );
+        if ( IsBigEndian )
+        {
+            BinaryPrimitives.WriteInt32BigEndian( Memory.Span.Slice( Position ), value );
+        }
+        else
+        {
+            BinaryPrimitives.WriteInt32LittleEndian( Memory.Span.Slice( Position ), value );
+        }
     }
 
     /// <summary>
@@ -236,11 +261,11 @@ public class NewByteBuffer : IDisposable
 
         if ( index >= Position )
         {
-            Position += sizeof( int );
-            Length++;
+            Length = index + 1;
         }
     }
 
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -248,7 +273,9 @@ public class NewByteBuffer : IDisposable
     /// </summary>
     public float GetFloat()
     {
-        return GetFloat( Position );
+        return IsBigEndian
+            ? BinaryPrimitives.ReadSingleBigEndian( Memory.Span.Slice( Position ) )
+            : BinaryPrimitives.ReadSingleLittleEndian( Memory.Span.Slice( Position ) );
     }
 
     /// <summary>
@@ -267,7 +294,14 @@ public class NewByteBuffer : IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutFloat( float value )
     {
-        PutFloat( Position, value );
+        if ( IsBigEndian )
+        {
+            BinaryPrimitives.WriteSingleBigEndian( Memory.Span.Slice( Position ), value );
+        }
+        else
+        {
+            BinaryPrimitives.WriteSingleLittleEndian( Memory.Span.Slice( Position ), value );
+        }
     }
 
     /// <summary>
@@ -288,11 +322,11 @@ public class NewByteBuffer : IDisposable
 
         if ( index >= Position )
         {
-            Position += sizeof( float );
-            Length++;
+            Length = index + 1;
         }
     }
 
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
