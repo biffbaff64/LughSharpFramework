@@ -67,6 +67,40 @@ public class NewBufferTests
         {
             Logger.Debug( $"{newByteBuffer.GetByte( i )}, " );
         }
+        
+        newByteBuffer.Flip();
+        newByteBuffer.PutFloat( 32.0f );
+        
+        Logger.Debug( "AFTER FLIP:" );
+        Logger.Debug( $"Length  : {newByteBuffer.Length}" );
+        Logger.Debug( $"Capacity: {newByteBuffer.Capacity}" );
+
+        for ( var i = 0; i < newByteBuffer.Length; i++ )
+        {
+            Logger.Debug( $"{newByteBuffer.GetFloat( i )}, " );
+        }
+
+        newByteBuffer.Resize( 20 );
+        
+        Logger.Debug( "AFTER RESIZE:" );
+        Logger.Debug( $"Length  : {newByteBuffer.Length}" );
+        Logger.Debug( $"Capacity: {newByteBuffer.Capacity}" );
+
+        for ( var i = 0; i < newByteBuffer.Length; i++ )
+        {
+            Logger.Debug( $"{newByteBuffer.GetFloat( i )}, " );
+        }
+        
+        newByteBuffer.Clear();
+
+        Logger.Debug( "AFTER CLEAR:" );
+        Logger.Debug( $"Length  : {newByteBuffer.Length}" );
+        Logger.Debug( $"Capacity: {newByteBuffer.Capacity}" );
+
+        for ( var i = 0; i < newByteBuffer.Length; i++ )
+        {
+            Logger.Debug( $"{newByteBuffer.GetFloat( i )}, " );
+        }
 
         Logger.Debug( "Done" );
     }

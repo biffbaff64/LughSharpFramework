@@ -90,6 +90,8 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public override void PutByte( byte value )
     {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        
         if ( Position >= Capacity )
         {
             throw new BufferOverflowException();
@@ -107,6 +109,8 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public override void PutByte( int index, byte value )
     {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
         if ( ( index < 0 ) || ( index >= Capacity ) )
         {
             throw new IndexOutOfRangeException( "Index out of range." );
@@ -118,6 +122,46 @@ public class ByteBuffer : Buffer, IDisposable
         {
             Length = index + 1;
         }
+    }
+
+    // ----- Bulk Get/Put operations -----
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="result"></param>
+    /// <param name="offset"></param>
+    /// <param name="length"></param>
+    public override void GetBytes( out byte[] result, int offset, int length )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="offset"></param>
+    /// <param name="length"></param>
+    public override void PutBytes( byte[] src, int offset, int length )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public override void GetBytes( out byte[] byteArray )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public override void PutBytes( byte[] byteArray )
+    {
+        throw new NotImplementedException();
     }
 
     // ========================================================================
@@ -143,13 +187,15 @@ public class ByteBuffer : Buffer, IDisposable
             ? BinaryPrimitives.ReadInt16BigEndian( _memory.Span.Slice( index ) )
             : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( index ) );
     }
-
+    
     /// <summary>
     /// Puts the provided Short value into the backing array at the current <see cref="Buffer.Position"/>.
     /// </summary>
     /// <param name="value"> The value to put. </param>
     public void PutShort( short value )
     {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( Position ), value );
@@ -170,6 +216,8 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutShort( int index, short value )
     {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( index ), value );
@@ -183,6 +231,24 @@ public class ByteBuffer : Buffer, IDisposable
         {
             Length = index + 1;
         }
+    }
+
+    // ----- Bulk Get/Put operations -----
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public void GetShorts( out short[] shortArray )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void PutShorts( short[] shortArray )
+    {
+        throw new NotImplementedException();
     }
 
     // ========================================================================
@@ -215,6 +281,8 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutInt( int value )
     {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( Position ), value );
@@ -235,6 +303,8 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutInt( int index, int value )
     {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( index ), value );
@@ -248,6 +318,24 @@ public class ByteBuffer : Buffer, IDisposable
         {
             Length = index + 1;
         }
+    }
+
+    // ----- Bulk Get/Put operations -----
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public void GetInts( out int[] intArray )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void PutInts( int[] intArray )
+    {
+        throw new NotImplementedException();
     }
 
     // ========================================================================
@@ -280,6 +368,8 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutFloat( float value )
     {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteSingleBigEndian( _memory.Span.Slice( Position ), value );
@@ -300,6 +390,8 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutFloat( int index, float value )
     {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteSingleBigEndian( _memory.Span.Slice( index ), value );
@@ -313,6 +405,24 @@ public class ByteBuffer : Buffer, IDisposable
         {
             Length = index + 1;
         }
+    }
+
+    // ----- Bulk Get/Put operations -----
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public void GetFloats( out float[] floatArray )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void PutFloats( float[] floatArray )
+    {
+        throw new NotImplementedException();
     }
 
     // ========================================================================
@@ -360,6 +470,12 @@ public class ByteBuffer : Buffer, IDisposable
 
         Position = 0;
         Length   = 0;
+    }
+
+    /// <inheritdoc />
+    public override int Remaining()
+    {
+        return ( Limit - Position ) / sizeof( byte );
     }
 
     // ========================================================================

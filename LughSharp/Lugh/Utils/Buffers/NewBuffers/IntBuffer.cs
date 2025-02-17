@@ -80,6 +80,8 @@ public class IntBuffer : Buffer, IDisposable
 
     public void PutInt( int value )
     {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
         var intOffset = Position;
 
         if ( ( intOffset + sizeof( int ) ) > Capacity )
@@ -100,6 +102,8 @@ public class IntBuffer : Buffer, IDisposable
 
     public void PutInt( int index, int value )
     {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
         var byteOffset = index * sizeof( int );
 
         if ( ( index < 0 ) || ( index >= Capacity ) )
@@ -142,6 +146,12 @@ public class IntBuffer : Buffer, IDisposable
         Limit    = Capacity;         // Reset IntBuffer Limit
     }
 
+    /// <inheritdoc />
+    public override int Remaining()
+    {
+        return ( Limit - Position ) / sizeof( int );
+    }
+
     // ========================================================================
 
     /// <inheritdoc />
@@ -151,10 +161,20 @@ public class IntBuffer : Buffer, IDisposable
     public override byte GetByte( int index ) => _byteBufferDelegate.GetByte( index );
 
     /// <inheritdoc />
-    public override void PutByte( byte value ) => _byteBufferDelegate.PutByte( value );
+    public override void PutByte( byte value )
+    {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
+        _byteBufferDelegate.PutByte( value );
+    }
 
     /// <inheritdoc />
-    public override void PutByte( int index, byte value ) => _byteBufferDelegate.PutByte( index, value );
+    public override void PutByte( int index, byte value )
+    {
+        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+
+        _byteBufferDelegate.PutByte( index, value );
+    }
 
     // ========================================================================
 

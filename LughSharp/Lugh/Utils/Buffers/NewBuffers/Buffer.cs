@@ -24,6 +24,12 @@
 
 namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
 
+/// <summary>
+/// The base class for buffers. This holds all the essential shared data for IntBuffers, ShortBuffers,
+/// ByteBuffers, FloatBuffers, and any other buffer types.
+/// This class DOES NOT contain any buffer arrays, merely propereties for defining capacity,
+/// length, limit, etc. Thiose buffer arrays must be defined in extending classes.
+/// </summary>
 [PublicAPI]
 public abstract class Buffer : IDisposable
 {
@@ -39,20 +45,24 @@ public abstract class Buffer : IDisposable
 
     // ========================================================================
 
-    public bool IsReadOnly  { get; protected set; } // Protected setter
-    public bool IsDirect    { get; protected set; } // Protected setter
-    public int  Capacity    { get; protected set; } // Protected setter
+    public bool IsReadOnly  { get; protected set; }
+    public bool IsDirect    { get; protected set; }
+    public int  Capacity    { get; protected set; }
     public int  Position    { get; set; }
     public int  Limit       { get; set; }
-    public int  Length      { get; protected set; } // Protected setter
+    public int  Length      { get; protected set; }
     public bool IsBigEndian { get; set; }
+
+    private int _markPosition = -1;
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new Buffer object 
+    /// </summary>
+    /// <param name="capacityInBytes"></param>
     protected Buffer( int capacityInBytes )
     {
-        Logger.Checkpoint();
-
         Capacity = capacityInBytes;
         Limit    = capacityInBytes;
         Length   = 0;
@@ -66,12 +76,16 @@ public abstract class Buffer : IDisposable
     }
 
     // ========================================================================
-    // Abstract methods - to be implemented in derived classes for type-specific operations
+    // Byte type abstract methods - to be implemented in derived classes for type-specific operations
     //
     public abstract byte GetByte();
     public abstract byte GetByte( int index );
     public abstract void PutByte( byte value );
     public abstract void PutByte( int index, byte value );
+    public abstract void GetBytes( out byte[] result, int offset, int length );
+    public abstract void PutBytes( byte[] src, int offset, int length );
+    public abstract void GetBytes( out byte[] byteArray );
+    public abstract void PutBytes( byte[] byteArray );
 
     // ========================================================================
 
@@ -111,12 +125,128 @@ public abstract class Buffer : IDisposable
         Position = 0;        // Reset Position to 0
     }
 
-    // ========================================================================
+    /// <summary>
+    /// Rewinds this buffer. The position is set to zero and the mark is discarded.
+    /// Invoke this method before a sequence of <c>Put</c> or <c>Get</c> operations, assuming
+    /// that the limit has already been set appropriately.
+    /// <br/>
+    /// <para>
+    /// <b>Usefulness:</b>
+    /// <li>
+    /// Re-reading Data: Allows you to reread the same data from the buffer multiple times without
+    /// needing to create a new buffer or copy data. This is very efficient when you need to process
+    /// the same data in different ways or multiple passes.
+    /// </li>
+    /// <li>
+    /// Reprocessing: Useful in parsing, data analysis, or network protocols where you might need to
+    /// re-examine the beginning of a buffer after some initial processing.
+    /// </li>
+    /// </para>
+    /// </summary>
+    public virtual void Rewind()
+    {
+        Position = 0;
+    }
+
+    /// <summary>
+    /// Concept: Remaining() returns the number of elements (or bytes in ByteBuffer) remaining in the
+    /// buffer between the current Position and the Limit. This tells you how much data is available
+    /// to be read from the current position onward.
+    /// <br/>
+    /// <para>
+    /// <b>Usefulness:</b>
+    /// <li>
+    /// Read Boundary Check: Essential for preventing IndexOutOfRangeException errors when reading
+    /// sequentially. Before a Get...() operation, you can call Remaining() to check if there are enough
+    /// elements/bytes left to read.
+    /// </li>
+    /// <li>
+    /// Loop Control: Useful for loops that process data from the buffer sequentially. The loop can
+    /// continue as long as Remaining() is greater than zero (or greater than the size of the element
+    /// being read).
+    /// </li>
+    /// <li>
+    /// Size Indication: Provides a dynamic indication of the amount of unread data within the buffer's
+    /// current read window (between Position and Limit).
+    /// </li>
+    /// </para>
+    /// </summary>
+    public abstract int Remaining();
 
     /// <summary>
     /// Retrieves this buffer's byte order.
     /// </summary>
     public ByteOrder Order() => IsBigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
+
+    /// <summary>
+    /// Concept: Shrink() (or sometimes called Compact() in other buffer APIs) is about reducing the
+    /// buffer's Capacity to be closer to the amount of data it actually holds (up to the Limit). It's
+    /// often used to reclaim memory if a buffer was allocated with a large capacity but is now holding
+    /// a smaller amount of data.
+    /// The data currently between position 0 and Limit should be preserved. The Position and Limit might
+    /// need to be adjusted after shrinking to remain valid within the new, smaller capacity.
+    /// <br/>
+    /// <para>
+    /// <b>Usefulness:</b>
+    /// <li>
+    /// Memory Optimization: Important in memory-constrained environments or when dealing with long-lived
+    /// buffers that might hold varying amounts of data over time. Reduces memory footprint by releasing
+    /// unused capacity.
+    /// </li>
+    /// </para>
+    /// </summary>
+    public virtual void Shrink()
+    {
+        // Default implementation - potentially shrink to Limit?
+        // Or leave empty and make subclasses override?
+
+        var newCapacityInBytes = Limit; // Shrink to Limit (in bytes - for ByteBuffer)
+
+        if ( Capacity > newCapacityInBytes )
+        {
+            Resize( newCapacityInBytes - Capacity ); // Resize by the *difference* to shrink
+
+            Limit = newCapacityInBytes;
+
+            Rewind(); // Rewind after shrink for typical shrink behavior
+        }
+    }
+
+    /// <summary>
+    /// Saves the current <see cref="Position"/> of the buffer as a "mark."
+    /// </summary>
+    public virtual void Mark()
+    {
+        _markPosition = Position;
+    }
+
+    /// <summary>
+    /// Sets the Position back to the last saved "mark." The mark is typically discarded after
+    /// Reset() is called. If Mark() has not been called, Reset() might have undefined behavior.
+    /// <br/>
+    /// <para>
+    /// <b>Usefulness:</b>
+    /// <li>
+    /// Backtracking/Navigation: Allows you to temporarily explore data in the buffer (read ahead),
+    /// and then easily return to a previously saved position to continue processing from there.
+    /// Useful in parsing scenarios where you might need to "peek ahead" but then backtrack if a
+    /// certain condition is not met.
+    /// </li>
+    /// <li>
+    /// State Management: Provides a way to save and restore the read/write position within the buffer.
+    /// </li>
+    /// </para>
+    /// </summary>
+    public virtual void Reset()
+    {
+        if ( _markPosition == -1 )
+        {
+            throw new InvalidOperationException( "Mark not set." ); // Or decide on different behavior if no mark
+        }
+
+        Position      = _markPosition; // Restore Position to the marked position
+        _markPosition = -1;            // Clear the mark after reset (one-time use mark)
+    }
 
     // ========================================================================
 
@@ -152,4 +282,3 @@ public abstract class Buffer : IDisposable
         }
     }
 }
-
