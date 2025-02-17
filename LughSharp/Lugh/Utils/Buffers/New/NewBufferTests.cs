@@ -81,7 +81,9 @@ public class NewBufferTests
         Logger.Debug( $"Capacity: {newFloatBuffer.Capacity}" );
 
         newFloatBuffer.PutFloat( 16.0f );
-
+        newFloatBuffer.PutFloat( 16.0f );
+        newFloatBuffer.PutFloat( 24.0f );
+        
         Logger.Debug( "AFTER:" );
         Logger.Debug( $"Length  : {newFloatBuffer.Length}" );
         Logger.Debug( $"Capacity: {newFloatBuffer.Capacity}" );
@@ -90,7 +92,31 @@ public class NewBufferTests
         {
             Logger.Debug( $"{newFloatBuffer.GetFloat( i )}, " );
         }
+        
+        newFloatBuffer.Flip();
+        newFloatBuffer.PutFloat( 32.0f );
+        
+        Logger.Debug( "AFTER FLIP:" );
+        Logger.Debug( $"Length  : {newFloatBuffer.Length}" );
+        Logger.Debug( $"Capacity: {newFloatBuffer.Capacity}" );
 
+        for ( var i = 0; i < newFloatBuffer.Length; i++ )
+        {
+            Logger.Debug( $"{newFloatBuffer.GetFloat( i )}, " );
+        }
+
+        //TODO:
+        
+        Logger.Debug( "AFTER RESIZE:" );
+        Logger.Debug( $"Length  : {newFloatBuffer.Length}" );
+        Logger.Debug( $"Capacity: {newFloatBuffer.Capacity}" );
+
+        for ( var i = 0; i < newFloatBuffer.Length; i++ )
+        {
+            Logger.Debug( $"{newFloatBuffer.GetFloat( i )}, " );
+        }
+
+        
         Logger.Debug( "Done" );
     }
 

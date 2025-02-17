@@ -24,116 +24,110 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Buffers.New;
+namespace LughSharp.Lugh.Utils.Buffers.New2;
 
 /// <summary>
-/// Provides a type-safe view of an underlying ByteBuffer, specialized for short values.
+/// Provides a type-safe view of an underlying ByteBuffer, specialized for Int32 values.
 /// This buffer holds a reference to a ByteBuffer instance (_byteBuffer), and does
 /// not have its own backing arrays.
-/// Properties <see cref="ByteBuffer.Limit"/> and <see cref="ByteBuffer.Capacity"/> are
-/// delegated to the <see cref="ByteBuffer"/> class, as it is that cass which handles
-/// the underlying byte buffer.
 /// </summary>
 [PublicAPI]
-public class NewShortBuffer
+public class NewIntBuffer
 {
-    private readonly NewByteBuffer _byteBuffer;
+    private NewByteBuffer _byteBuffer;
 
     private int _length;
 
     // ========================================================================
 
     /// <summary>
-    /// Creates a new ShortBuffer with the specified capacity.
+    /// Creates a new IntBuffer with the specified capacity.
     /// </summary>
-    /// <param name="capacityInShorts">
-    /// The number of shorts to be made available in the buffer. As the backing buffer is a
-    /// ByteBuffer, this capacity will need to be translated into bytes from shorts.
+    /// <param name="capacityInInts">
+    /// The number of ints to be made available in the buffer. As the backing buffer is a
+    /// ByteBuffer, this capacity will need to be translated into bytes from ints.
     /// </param>
-    public NewShortBuffer( int capacityInShorts )
+    public NewIntBuffer( int capacityInInts )
     {
-        var byteCapacity = capacityInShorts * sizeof( short );
+        var byteCapacity = capacityInInts * sizeof( int );
 
         _byteBuffer = new NewByteBuffer( byteCapacity );
         _byteBuffer.Position = 0;
 
         Length   = 0;
-        Capacity = capacityInShorts;
-
-        _byteBuffer.SetBufferStatus( NewByteBuffer.READ_WRITE, NewByteBuffer.NOT_DIRECT );
+        Capacity = capacityInInts;
+        
+        _byteBuffer.SetBufferStatus( NewBuffer.READ_WRITE, NewBuffer.NOT_DIRECT );
     }
 
     // ========================================================================
 
-    /// <inheritdoc cref="NewByteBuffer.GetShort()"/>
-    public short GetShort()
+    /// <inheritdoc cref="NewByteBuffer.GetInt()"/>
+    public int GetInt()
     {
         var byteOffset = _byteBuffer.Position;
 
-        if ( ( ( byteOffset + sizeof( short ) ) > _byteBuffer.Limit ) || ( byteOffset < 0 ) )
+        if ( ( ( byteOffset + sizeof( int ) ) > _byteBuffer.Limit ) || ( byteOffset < 0 ) )
         {
             throw new IndexOutOfRangeException( "IntBuffer position out of range" );
         }
 
-        var value = _byteBuffer.GetShort( byteOffset );
+        var value = _byteBuffer.GetInt( byteOffset );
 
-        _byteBuffer.Position += sizeof( short );
+        _byteBuffer.Position += sizeof( int );
 
         return value;
     }
 
-    /// <inheritdoc cref="NewByteBuffer.GetShort(int)"/>
-    public short GetShort( int index )
+    /// <inheritdoc cref="NewByteBuffer.GetInt(int)"/>
+    public int GetInt( int index )
     {
-        var byteOffset = index * sizeof( short );
-
-        return _byteBuffer.GetShort( byteOffset );
+        var byteOffset = index  * sizeof( int );
+        
+        return _byteBuffer.GetInt( byteOffset );
     }
 
-    /// <inheritdoc cref="NewByteBuffer.PutShort(short)"/>
-    public void PutShort( short value )
+    /// <inheritdoc cref="NewByteBuffer.PutInt(int)"/>
+    public void PutInt( int value )
     {
-        var byteOffset = _byteBuffer.Position; // Get current ByteBuffer Position as byte offset
-
-        if ( ( byteOffset + sizeof( short ) ) > _byteBuffer.Capacity )
+        var intOffset = _byteBuffer.Position;
+        
+        if ( ( intOffset + sizeof( int ) ) > _byteBuffer.Capacity )
         {
-            throw new BufferOverflowException( "ShortBuffer overflow (ByteBuffer capacity reached)." );
+            throw new BufferOverflowException( "IntBuffer overflow (ByteBuffer capacity reached)" );
         }
 
-        _byteBuffer.PutShort( byteOffset, value ); // Delegate to ByteBuffer's PutShort
-        _byteBuffer.Position += sizeof( short );   // Advance ByteBuffer's Position by size of short
+        _byteBuffer.PutInt( intOffset, value );
+        _byteBuffer.Position += sizeof( int );
 
-        // Update ShortBuffer's Length (if write extends current Length)
-        var shortIndex = _byteBuffer.Position / sizeof( short ); // Calculate short index based on new byte position
+        var intIndex = _byteBuffer.Position / sizeof( int );
 
-        if ( shortIndex > Length ) // Check if new short index exceeds current ShortBuffer Length
+        if ( intIndex > Length )
         {
-            Length = shortIndex; // Update ShortBuffer Length
+            Length = intIndex;
         }
     }
-
-    /// <inheritdoc cref="NewByteBuffer.PutShort(int,short)"/>
-    public void PutShort( int index, short value )
+    
+    /// <inheritdoc cref="NewByteBuffer.PutInt(int,int)"/>
+    public void PutInt( int index, int value )
     {
-        var byteOffset = index * sizeof( short );
-
+        var byteOffset = index * sizeof( int );
+        
         if (( index < 0 ) || ( index >= Capacity ))
         {
             throw new IndexOutOfRangeException();
         }
 
-        _byteBuffer.PutShort( byteOffset, value );
-        
-        var shortIndex = _byteBuffer.Position / sizeof( short );
-        
+        _byteBuffer.PutInt( byteOffset, value );
+
         if ( index > Length )
         {
-            Length = shortIndex;
+            Length = index + 1;
         }
     }
 
     // ========================================================================
-
+    
     /// <summary>
     /// Clear the buffer.
     /// </summary>
@@ -158,7 +152,7 @@ public class NewShortBuffer
 
     /// <inheritdoc cref="NewByteBuffer.IsBigEndian"/>
     public bool IsBigEndian => _byteBuffer.IsBigEndian;
-
+    
     /// <summary>
     /// Boundary for read operations (read-write). Set to Capacity initially (or 0), set to
     /// the value held in <see cref="NewByteBuffer.Position"/> by <see cref="Flip()"/>.
@@ -184,7 +178,7 @@ public class NewShortBuffer
     }
 
     /// <summary>
-    /// Total capacity in units of <c>Int16 (short)</c> type (read-only, calculated from ByteBuffer.Capacity).
+    /// Total capacity in units of <c>Int32</c> type (read-only, calculated from ByteBuffer.Capacity).
     /// </summary>
     public int Capacity { get; private set; }
 }

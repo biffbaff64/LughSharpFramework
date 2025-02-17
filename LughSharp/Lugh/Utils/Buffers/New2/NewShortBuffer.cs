@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Buffers.New;
+namespace LughSharp.Lugh.Utils.Buffers.New2;
 
 /// <summary>
 /// Provides a type-safe view of an underlying ByteBuffer, specialized for short values.
@@ -60,7 +60,7 @@ public class NewShortBuffer
         Length   = 0;
         Capacity = capacityInShorts;
 
-        _byteBuffer.SetBufferStatus( NewByteBuffer.READ_WRITE, NewByteBuffer.NOT_DIRECT );
+        _byteBuffer.SetBufferStatus( NewBuffer.READ_WRITE, NewBuffer.NOT_DIRECT );
     }
 
     // ========================================================================
