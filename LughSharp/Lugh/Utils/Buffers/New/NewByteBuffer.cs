@@ -47,7 +47,6 @@ public class NewByteBuffer : IDisposable
 
     public bool           IsReadOnly { get; set; }
     public bool           IsDirect   { get; set; }
-    public int            Length     { get; set; }
     public Memory< byte > Memory     { get; set; }
 
     // ========================================================================
@@ -55,6 +54,7 @@ public class NewByteBuffer : IDisposable
     private byte[] _byteBuffer;
     private int    _position;
     private int    _limit;
+    private int    _length;
 
     // ========================================================================
 
@@ -94,7 +94,7 @@ public class NewByteBuffer : IDisposable
         var value = Memory.Span[ Position ];
 
         Position++;
-        
+
         return value;
     }
 
@@ -126,6 +126,7 @@ public class NewByteBuffer : IDisposable
 
         Memory.Span[ Position ] = value;
         Position++; // Increment position AFTER write
+        Length = Position;
     }
 
     /// <summary>
@@ -141,6 +142,11 @@ public class NewByteBuffer : IDisposable
         }
 
         Memory.Span[ index ] = value;
+
+        if ( index > Length )
+        {
+            Length = index + 1;
+        }
     }
 
     // ========================================================================
@@ -180,6 +186,9 @@ public class NewByteBuffer : IDisposable
         {
             BinaryPrimitives.WriteInt16LittleEndian( Memory.Span.Slice( Position ), value );
         }
+
+        Position += sizeof( short );
+        Length   =  Position;
     }
 
     /// <summary>
@@ -241,6 +250,9 @@ public class NewByteBuffer : IDisposable
         {
             BinaryPrimitives.WriteInt32LittleEndian( Memory.Span.Slice( Position ), value );
         }
+
+        Position += sizeof( int );
+        Length   =  Position;
     }
 
     /// <summary>
@@ -302,6 +314,9 @@ public class NewByteBuffer : IDisposable
         {
             BinaryPrimitives.WriteSingleLittleEndian( Memory.Span.Slice( Position ), value );
         }
+
+        Position += sizeof( float );
+        Length   =  Position;
     }
 
     /// <summary>
@@ -482,6 +497,20 @@ public class NewByteBuffer : IDisposable
             }
 
             _limit = value;
+        }
+    }
+
+    public int Length
+    {
+        get => _length;
+        private set
+        {
+            if ( value < 0 ) // Validation to prevent negative Length
+            {
+                throw new ArgumentOutOfRangeException( nameof( Length ), "Length cannot be negative." );
+            }
+
+            _length = value;
         }
     }
 

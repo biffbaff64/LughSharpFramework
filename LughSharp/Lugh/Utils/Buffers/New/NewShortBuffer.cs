@@ -37,7 +37,6 @@ public class NewShortBuffer
     private readonly NewByteBuffer _byteBuffer;
 
     private int _length;
-    private int _capacity;
 
     // ========================================================================
 
@@ -53,9 +52,10 @@ public class NewShortBuffer
         var byteCapacity = capacityInShorts * sizeof( short );
 
         _byteBuffer = new NewByteBuffer( byteCapacity );
-
-        _byteBuffer.Length   = 0;
         _byteBuffer.Position = 0;
+
+        Length   = 0;
+        Capacity = capacityInShorts;
 
         _byteBuffer.SetBufferStatus( NewByteBuffer.READ_WRITE, NewByteBuffer.NOT_DIRECT );
     }
@@ -90,7 +90,7 @@ public class NewShortBuffer
     /// <inheritdoc cref="NewByteBuffer.PutShort(short)"/>
     public void PutShort( short value )
     {
-        int byteOffset = _byteBuffer.Position; // Get current ByteBuffer Position as byte offset
+        var byteOffset = _byteBuffer.Position; // Get current ByteBuffer Position as byte offset
 
         if ( ( byteOffset + sizeof( short ) ) > _byteBuffer.Capacity )
         {
@@ -101,7 +101,7 @@ public class NewShortBuffer
         _byteBuffer.Position += sizeof( short );   // Advance ByteBuffer's Position by size of short
 
         // Update ShortBuffer's Length (if write extends current Length)
-        int shortIndex = _byteBuffer.Position / sizeof( short ); // Calculate short index based on new byte position
+        var shortIndex = _byteBuffer.Position / sizeof( short ); // Calculate short index based on new byte position
 
         if ( shortIndex > Length ) // Check if new short index exceeds current ShortBuffer Length
         {
@@ -114,11 +114,18 @@ public class NewShortBuffer
     {
         var byteOffset = index * sizeof( short );
 
-        _byteBuffer.PutShort( byteOffset, value );
+        if (( index < 0 ) || ( index >= Capacity ))
+        {
+            throw new IndexOutOfRangeException();
+        }
 
+        _byteBuffer.PutShort( byteOffset, value );
+        
+        var shortIndex = _byteBuffer.Position / sizeof( short );
+        
         if ( index > Length )
         {
-            Length = index + 1;
+            Length = shortIndex;
         }
     }
 
@@ -166,24 +173,15 @@ public class NewShortBuffer
                 throw new IndexOutOfRangeException( "Length cannot be < 0" );
             }
 
-            //TODO: range checking for > capacity or limit?
+            if ( _length > Capacity )
+            {
+                throw new IndexOutOfRangeException( "Length cannot be > Capacity" );
+            }
         }
     }
 
     /// <summary>
     /// Total capacity in units of <c>Int16 (short)</c> type (read-only, calculated from ByteBuffer.Capacity).
     /// </summary>
-    public int Capacity
-    {
-        get => _capacity;
-        set
-        {
-            _capacity = value;
-
-            if ( _capacity < 0 )
-            {
-                throw new IndexOutOfRangeException( "Capacity cannot be < 0" );
-            }
-        }
-    }
+    public int Capacity { get; private set; }
 }

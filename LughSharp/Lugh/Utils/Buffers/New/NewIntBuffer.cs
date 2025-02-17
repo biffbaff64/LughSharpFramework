@@ -37,7 +37,6 @@ public class NewIntBuffer
     private NewByteBuffer _byteBuffer;
 
     private int _length;
-    private int _capacity;
 
     // ========================================================================
 
@@ -53,9 +52,10 @@ public class NewIntBuffer
         var byteCapacity = capacityInInts * sizeof( int );
 
         _byteBuffer = new NewByteBuffer( byteCapacity );
-
-        _byteBuffer.Length   = 0;
         _byteBuffer.Position = 0;
+
+        Length   = 0;
+        Capacity = capacityInInts;
         
         _byteBuffer.SetBufferStatus( NewByteBuffer.READ_WRITE, NewByteBuffer.NOT_DIRECT );
     }
@@ -74,7 +74,7 @@ public class NewIntBuffer
 
         var value = _byteBuffer.GetInt( byteOffset );
 
-        _byteBuffer.Position += sizeof( int   );
+        _byteBuffer.Position += sizeof( int );
 
         return value;
     }
@@ -82,9 +82,9 @@ public class NewIntBuffer
     /// <inheritdoc cref="NewByteBuffer.GetInt(int)"/>
     public int GetInt( int index )
     {
-        var intSpan = MemoryMarshal.Cast< byte, int >( _byteBuffer.Memory.Span );
-
-        return intSpan[ index ];
+        var byteOffset = index  * sizeof( int );
+        
+        return _byteBuffer.GetInt( byteOffset );
     }
 
     /// <inheritdoc cref="NewByteBuffer.PutInt(int)"/>
@@ -111,9 +111,14 @@ public class NewIntBuffer
     /// <inheritdoc cref="NewByteBuffer.PutInt(int,int)"/>
     public void PutInt( int index, int value )
     {
-        var intSpan = MemoryMarshal.Cast< byte, int >( _byteBuffer.Memory.Span );
+        var byteOffset = index * sizeof( int );
         
-        intSpan[ index ] = value;
+        if (( index < 0 ) || ( index >= Capacity ))
+        {
+            throw new IndexOutOfRangeException();
+        }
+
+        _byteBuffer.PutInt( byteOffset, value );
 
         if ( index > Length )
         {
@@ -164,25 +169,16 @@ public class NewIntBuffer
             {
                 throw new IndexOutOfRangeException( "Length cannot be < 0" );
             }
-            
-            //TODO: range checking for > capacity or limit?
+
+            if ( _length > Capacity )
+            {
+                throw new IndexOutOfRangeException( "Length cannot be > Capacity" );
+            }
         }
     }
 
     /// <summary>
     /// Total capacity in units of <c>Int32</c> type (read-only, calculated from ByteBuffer.Capacity).
     /// </summary>
-    public int Capacity
-    {
-        get => _capacity;
-        set
-        {
-            _capacity = value;
-
-            if ( _capacity < 0 )
-            {
-                throw new IndexOutOfRangeException( "Capacity cannot be < 0" );
-            }
-        }
-    }
+    public int Capacity { get; private set; }
 }

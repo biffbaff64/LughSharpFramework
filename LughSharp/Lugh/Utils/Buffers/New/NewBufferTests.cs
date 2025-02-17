@@ -27,11 +27,6 @@ namespace LughSharp.Lugh.Utils.Buffers.New;
 [PublicAPI]
 public class NewBufferTests
 {
-    private NewByteBuffer?  _newByteBuffer;
-    private NewFloatBuffer? _newFloatBuffer;
-    private NewIntBuffer?   _newIntBuffer;
-    private NewShortBuffer? _newShortBuffer;
-
     public NewBufferTests()
     {
         Logger.Checkpoint();
@@ -44,44 +39,68 @@ public class NewBufferTests
         Logger.Debug( "Done" );
     }
 
-    public void TestNewByteBuffer()
+    private static void TestNewByteBuffer()
     {
-        _newByteBuffer = new NewByteBuffer( 20 );
+        Logger.Checkpoint();
+        
+        var newByteBuffer = new NewByteBuffer( 20 );
 
         Logger.Debug( "BEFORE:" );
-        Logger.Debug( $"Position: {_newByteBuffer.Position}" );
-        Logger.Debug( $"Length  : {_newByteBuffer.Length}" );
-        Logger.Debug( $"Capacity: {_newByteBuffer.Capacity}" );
-        Logger.Debug( $"Limit   : {_newByteBuffer.Limit}" );
+        Logger.Debug( $"Position: {newByteBuffer.Position}" );
+        Logger.Debug( $"Length  : {newByteBuffer.Length}" );
+        Logger.Debug( $"Capacity: {newByteBuffer.Capacity}" );
+        Logger.Debug( $"Limit   : {newByteBuffer.Limit}" );
 
-        _newByteBuffer.PutByte( 5 );
-        _newByteBuffer.PutFloat( 16.0f );
-        _newByteBuffer.PutInt( 768 );
-        _newByteBuffer.PutShort( ( short )23 );
+        newByteBuffer.PutByte( 5 );
+        newByteBuffer.PutFloat( 16.0f );
+        newByteBuffer.PutInt( 768 );
+        newByteBuffer.PutShort( ( short )23 );
 
         Logger.Debug( "AFTER:" );
-        Logger.Debug( $"Position: {_newByteBuffer.Position}" );
-        Logger.Debug( $"Length  : {_newByteBuffer.Length}" );
-        Logger.Debug( $"Capacity: {_newByteBuffer.Capacity}" );
-        Logger.Debug( $"Limit   : {_newByteBuffer.Limit}" );
+        Logger.Debug( $"Position: {newByteBuffer.Position}" );
+        Logger.Debug( $"Length  : {newByteBuffer.Length}" );
+        Logger.Debug( $"Capacity: {newByteBuffer.Capacity}" );
+        Logger.Debug( $"Limit   : {newByteBuffer.Limit}" );
 
-        for ( var i = 0; i < _newByteBuffer.Capacity; i++ )
+        for ( var i = 0; i < newByteBuffer.Length; i++ )
         {
-            Logger.Debug( $"{_newByteBuffer.GetByte( i )}, " );
+            Logger.Debug( $"{newByteBuffer.GetByte( i )}, " );
         }
 
         Logger.Debug( "Done" );
     }
 
-    public void TestNewFloatBuffer()
+    private static void TestNewFloatBuffer()
     {
+        Logger.Checkpoint();
+
+        var newFloatBuffer = new NewFloatBuffer( 20 );
+
+        Logger.Debug( "BEFORE:" );
+        Logger.Debug( $"Length  : {newFloatBuffer.Length}" );
+        Logger.Debug( $"Capacity: {newFloatBuffer.Capacity}" );
+
+        newFloatBuffer.PutFloat( 16.0f );
+
+        Logger.Debug( "AFTER:" );
+        Logger.Debug( $"Length  : {newFloatBuffer.Length}" );
+        Logger.Debug( $"Capacity: {newFloatBuffer.Capacity}" );
+
+        for ( var i = 0; i < newFloatBuffer.Length; i++ )
+        {
+            Logger.Debug( $"{newFloatBuffer.GetFloat( i )}, " );
+        }
+
+        Logger.Debug( "Done" );
     }
 
-    public void TestNewIntBuffer()
+    private static void TestNewIntBuffer()
     {
+        Logger.Checkpoint();
     }
 
-    public void TestNewShortBuffer()
+    private static void TestNewShortBuffer()
     {
+        Logger.Checkpoint();
     }
 }

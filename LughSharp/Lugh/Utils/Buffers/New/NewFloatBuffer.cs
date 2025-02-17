@@ -37,10 +37,9 @@ public class NewFloatBuffer
     private NewByteBuffer _byteBuffer;
 
     private int _length;
-    private int _capacity;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Creates a new FloatBuffer with the specified capacity.
     /// </summary>
@@ -51,12 +50,13 @@ public class NewFloatBuffer
     public NewFloatBuffer( int capacityInFloats )
     {
         var byteCapacity = capacityInFloats * sizeof( float );
-        
-        _byteBuffer = new NewByteBuffer( byteCapacity );
 
-        _byteBuffer.Length   = 0;
+        _byteBuffer          = new NewByteBuffer( byteCapacity );
         _byteBuffer.Position = 0;
-        
+
+        Length   = 0;
+        Capacity = capacityInFloats;
+
         _byteBuffer.SetBufferStatus( NewByteBuffer.READ_WRITE, NewByteBuffer.NOT_DIRECT );
     }
 
@@ -82,22 +82,22 @@ public class NewFloatBuffer
     /// <inheritdoc cref="NewByteBuffer.GetFloat(int)"/>
     public float GetFloat( int index )
     {
-        var floatOffset = index  * sizeof( float );
-        
-        return _byteBuffer.GetFloat( floatOffset );
+        var byteOffset = index * sizeof( float );
+
+        return _byteBuffer.GetFloat( byteOffset );
     }
 
     /// <inheritdoc cref="NewByteBuffer.PutFloat(float)"/>
     public void PutFloat( float value )
     {
-        var floatOffset = _byteBuffer.Position;
-        
-        if ( ( floatOffset + sizeof( float ) ) > _byteBuffer.Capacity )
+        var byteOffset = _byteBuffer.Position;
+
+        if ( ( byteOffset + sizeof( float ) ) > _byteBuffer.Capacity )
         {
             throw new BufferOverflowException( "FloatBuffer overflow (ByteBuffer capacity reached)" );
         }
 
-        _byteBuffer.PutFloat( floatOffset, value );
+        _byteBuffer.PutFloat( byteOffset, value );
         _byteBuffer.Position += sizeof( float );
 
         var floatIndex = _byteBuffer.Position / sizeof( float );
@@ -111,15 +111,14 @@ public class NewFloatBuffer
     /// <inheritdoc cref="NewByteBuffer.PutFloat(int,float)"/>
     public void PutFloat( int index, float value )
     {
-        var floatOffset = index * sizeof( float );
-        
-        if ( ( floatOffset + sizeof( float ) ) > _byteBuffer.Capacity )
+        var byteOffset = index * sizeof( float );
+
+        if ( ( index < 0 ) || ( index >= Capacity ) )
         {
-            throw new BufferOverflowException( "FloatBuffer overflow (ByteBuffer capacity reached)" );
+            throw new IndexOutOfRangeException();
         }
 
-        _byteBuffer.PutFloat( floatOffset, value );
-        _byteBuffer.Position += sizeof( float );
+        _byteBuffer.PutFloat( byteOffset, value );
 
         if ( index > Length )
         {
@@ -128,7 +127,7 @@ public class NewFloatBuffer
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Clear the buffer.
     /// </summary>
@@ -137,7 +136,7 @@ public class NewFloatBuffer
         Length = 0;
         _byteBuffer.Clear();
     }
-    
+
     /// <summary>
     /// This sets the <see cref="NewByteBuffer.Limit"/> to the current value of Position. At this
     /// point, Position typically indicates the position after the last byte written. So, setting
@@ -153,7 +152,7 @@ public class NewFloatBuffer
 
     /// <inheritdoc cref="NewByteBuffer.IsBigEndian"/>
     public bool IsBigEndian => _byteBuffer.IsBigEndian;
-    
+
     /// <summary>
     /// Boundary for read operations (read-write). Set to Capacity initially (or 0), set to
     /// the value held in <see cref="NewByteBuffer.Position"/> by <see cref="Flip()"/>.
@@ -170,26 +169,16 @@ public class NewFloatBuffer
             {
                 throw new IndexOutOfRangeException( "Length cannot be < 0" );
             }
-            
-            //TODO: range checking for > capacity or limit?
+
+            if ( _length > Capacity )
+            {
+                throw new IndexOutOfRangeException( "Length cannot be > Capacity" );
+            }
         }
     }
 
     /// <summary>
     /// Total capacity in units of <c>float</c> type (read-only, calculated from ByteBuffer.Capacity).
     /// </summary>
-    public int Capacity
-    {
-        get => _capacity;
-        set
-        {
-            _capacity = value;
-
-            if ( _capacity < 0 )
-            {
-                throw new IndexOutOfRangeException( "Capacity cannot be < 0" );
-            }
-        }
-    }
+    public int Capacity { get; private set; }
 }
-
