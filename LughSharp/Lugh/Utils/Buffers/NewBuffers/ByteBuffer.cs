@@ -28,52 +28,41 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 using IndexOutOfRangeException = System.IndexOutOfRangeException;
 
-namespace LughSharp.Lugh.Utils.Buffers.New2;
+namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
 
 [PublicAPI]
-public class NewByteBuffer : NewBuffer
+public class ByteBuffer : Buffer, IDisposable
 {
-    private byte[] _byteBuffer;
-    private int    _position;
-    private int    _limit;
-    private int    _length;
+    private byte[]         _backingArray;
+    private Memory< byte > _memory;
 
     // ========================================================================
-
+    
     /// <summary>
     /// Creates a new ByteBuffer with the specified capacity.
     /// </summary>
     /// <param name="capacityInBytes"> The number of bytes to be made available in the buffer. </param>
-    public NewByteBuffer( int capacityInBytes )
+    public ByteBuffer( int capacityInBytes ) : base( capacityInBytes )
     {
-        _byteBuffer = new byte[ capacityInBytes ];
-
-        Memory      = _byteBuffer.AsMemory();
-        IsBigEndian = !BitConverter.IsLittleEndian;
-        IsReadOnly  = IS_READ_ONLY_DEFAULT;
-        IsDirect    = IS_DIRECT_DEFAULT;
-
-        Capacity = capacityInBytes;
-        Limit    = capacityInBytes;
-        Length   = 0;
-        Position = 0;
-
-        SetBufferStatus( READ_WRITE, NOT_DIRECT );
+        _backingArray = new byte[ capacityInBytes ];
+        _memory     = _backingArray.AsMemory();
     }
 
     // ========================================================================
+    // Byte Type handling methods
+    // ========================================================================
 
     /// <summary>
-    /// Gets the Byte from the backing array at the current <see cref="Position"/>.
+    /// Gets the Byte from the backing array at the current <see cref="Buffer.Position"/>.
     /// </summary>
-    public byte GetByte()
+    public override byte GetByte()
     {
         if ( ( Position >= Limit ) || ( Position < 0 ) ) // Check against Limit now for sequential read
         {
             throw new IndexOutOfRangeException( "ByteBuffer position out of range or beyond limit." );
         }
 
-        var value = Memory.Span[ Position ];
+        var value = _memory.Span[ Position ];
 
         Position++;
 
@@ -84,29 +73,29 @@ public class NewByteBuffer : NewBuffer
     /// Gets the Byte from the backing array at the specified index.
     /// </summary>
     /// <param name="index"> The buffer position from which to return the byte value. </param>
-    public byte GetByte( int index )
+    public override byte GetByte( int index )
     {
         if ( ( index < 0 ) || ( index > Limit ) )
         {
             throw new IndexOutOfRangeException( "Buffer position out of range." );
         }
 
-        return Memory.Span[ index ];
+        return _memory.Span[ index ];
     }
 
     /// <summary>
-    /// Puts the provided Byte into the backing array at the current <see cref="Position"/>.
+    /// Puts the provided Byte into the backing array at the current <see cref="Buffer.Position"/>.
     /// Position is then updated.
     /// </summary>
     /// <param name="value"> The value to put. </param>
-    public void PutByte( byte value )
+    public override void PutByte( byte value )
     {
         if ( Position >= Capacity )
         {
             throw new BufferOverflowException();
         }
 
-        Memory.Span[ Position ] = value;
+        _memory.Span[ Position ] = value;
         Position++; // Increment position AFTER write
         Length = Position;
     }
@@ -116,14 +105,14 @@ public class NewByteBuffer : NewBuffer
     /// </summary>
     /// <param name="index"> The position in the buffer at which to put the byte value. </param>
     /// <param name="value"> The value to put. </param>
-    public void PutByte( int index, byte value )
+    public override void PutByte( int index, byte value )
     {
         if ( ( index < 0 ) || ( index >= Capacity ) )
         {
             throw new IndexOutOfRangeException( "Index out of range." );
         }
 
-        Memory.Span[ index ] = value;
+        _memory.Span[ index ] = value;
 
         if ( index > Length )
         {
@@ -132,16 +121,17 @@ public class NewByteBuffer : NewBuffer
     }
 
     // ========================================================================
+    // Short Type handling methods
     // ========================================================================
 
     /// <summary>
-    /// Gets a Short value from the backing array at the current <see cref="Position"/>.
+    /// Gets a Short value from the backing array at the current <see cref="Buffer.Position"/>.
     /// </summary>
     public short GetShort()
     {
         return IsBigEndian
-            ? BinaryPrimitives.ReadInt16BigEndian( Memory.Span.Slice( Position ) )
-            : BinaryPrimitives.ReadInt16LittleEndian( Memory.Span.Slice( Position ) );
+            ? BinaryPrimitives.ReadInt16BigEndian( _memory.Span.Slice( Position ) )
+            : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( Position ) );
     }
 
     /// <summary>
@@ -150,23 +140,23 @@ public class NewByteBuffer : NewBuffer
     public short GetShort( int index )
     {
         return IsBigEndian
-            ? BinaryPrimitives.ReadInt16BigEndian( Memory.Span.Slice( index ) )
-            : BinaryPrimitives.ReadInt16LittleEndian( Memory.Span.Slice( index ) );
+            ? BinaryPrimitives.ReadInt16BigEndian( _memory.Span.Slice( index ) )
+            : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( index ) );
     }
 
     /// <summary>
-    /// Puts the provided Short value into the backing array at the current <see cref="Position"/>.
+    /// Puts the provided Short value into the backing array at the current <see cref="Buffer.Position"/>.
     /// </summary>
     /// <param name="value"> The value to put. </param>
     public void PutShort( short value )
     {
         if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteInt16BigEndian( Memory.Span.Slice( Position ), value );
+            BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( Position ), value );
         }
         else
         {
-            BinaryPrimitives.WriteInt16LittleEndian( Memory.Span.Slice( Position ), value );
+            BinaryPrimitives.WriteInt16LittleEndian( _memory.Span.Slice( Position ), value );
         }
 
         Position += sizeof( short );
@@ -182,11 +172,11 @@ public class NewByteBuffer : NewBuffer
     {
         if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteInt16BigEndian( Memory.Span.Slice( index ), value );
+            BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( index ), value );
         }
         else
         {
-            BinaryPrimitives.WriteInt16LittleEndian( Memory.Span.Slice( index ), value );
+            BinaryPrimitives.WriteInt16LittleEndian( _memory.Span.Slice( index ), value );
         }
 
         if ( index >= Position )
@@ -196,16 +186,17 @@ public class NewByteBuffer : NewBuffer
     }
 
     // ========================================================================
+    // Int Type handling methods
     // ========================================================================
 
     /// <summary>
-    /// Gets an Int32 value from the backing array at the current <see cref="Position"/>.
+    /// Gets an Int32 value from the backing array at the current <see cref="Buffer.Position"/>.
     /// </summary>
     public int GetInt()
     {
         return IsBigEndian
-            ? BinaryPrimitives.ReadInt32BigEndian( Memory.Span.Slice( Position ) )
-            : BinaryPrimitives.ReadInt32LittleEndian( Memory.Span.Slice( Position ) );
+            ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( Position ) )
+            : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( Position ) );
     }
 
     /// <summary>
@@ -214,23 +205,23 @@ public class NewByteBuffer : NewBuffer
     public int GetInt( int index )
     {
         return IsBigEndian
-            ? BinaryPrimitives.ReadInt32BigEndian( Memory.Span.Slice( index ) )
-            : BinaryPrimitives.ReadInt32LittleEndian( Memory.Span.Slice( index ) );
+            ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( index ) )
+            : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( index ) );
     }
 
     /// <summary>
-    /// Puts the provided Int32 value into the backing array at the current <see cref="Position"/>.
+    /// Puts the provided Int32 value into the backing array at the current <see cref="Buffer.Position"/>.
     /// </summary>
     /// <param name="value"> The value to put. </param>
     public void PutInt( int value )
     {
         if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteInt32BigEndian( Memory.Span.Slice( Position ), value );
+            BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( Position ), value );
         }
         else
         {
-            BinaryPrimitives.WriteInt32LittleEndian( Memory.Span.Slice( Position ), value );
+            BinaryPrimitives.WriteInt32LittleEndian( _memory.Span.Slice( Position ), value );
         }
 
         Position += sizeof( int );
@@ -246,11 +237,11 @@ public class NewByteBuffer : NewBuffer
     {
         if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteInt32BigEndian( Memory.Span.Slice( index ), value );
+            BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( index ), value );
         }
         else
         {
-            BinaryPrimitives.WriteInt32LittleEndian( Memory.Span.Slice( index ), value );
+            BinaryPrimitives.WriteInt32LittleEndian( _memory.Span.Slice( index ), value );
         }
 
         if ( index >= Position )
@@ -260,16 +251,17 @@ public class NewByteBuffer : NewBuffer
     }
 
     // ========================================================================
+    // Float Type handling methods
     // ========================================================================
 
     /// <summary>
-    /// Gets a Float value from the backing array at the current <see cref="Position"/>.
+    /// Gets a Float value from the backing array at the current <see cref="Buffer.Position"/>.
     /// </summary>
     public float GetFloat()
     {
         return IsBigEndian
-            ? BinaryPrimitives.ReadSingleBigEndian( Memory.Span.Slice( Position ) )
-            : BinaryPrimitives.ReadSingleLittleEndian( Memory.Span.Slice( Position ) );
+            ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( Position ) )
+            : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( Position ) );
     }
 
     /// <summary>
@@ -278,23 +270,23 @@ public class NewByteBuffer : NewBuffer
     public float GetFloat( int index )
     {
         return IsBigEndian
-            ? BinaryPrimitives.ReadSingleBigEndian( Memory.Span.Slice( index ) )
-            : BinaryPrimitives.ReadSingleLittleEndian( Memory.Span.Slice( index ) );
+            ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( index ) )
+            : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( index ) );
     }
 
     /// <summary>
-    /// Puts the provided Float into the backing array at the current <see cref="Position"/>.
+    /// Puts the provided Float into the backing array at the current <see cref="Buffer.Position"/>.
     /// </summary>
     /// <param name="value"> The value to put. </param>
     public void PutFloat( float value )
     {
         if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteSingleBigEndian( Memory.Span.Slice( Position ), value );
+            BinaryPrimitives.WriteSingleBigEndian( _memory.Span.Slice( Position ), value );
         }
         else
         {
-            BinaryPrimitives.WriteSingleLittleEndian( Memory.Span.Slice( Position ), value );
+            BinaryPrimitives.WriteSingleLittleEndian( _memory.Span.Slice( Position ), value );
         }
 
         Position += sizeof( float );
@@ -310,11 +302,11 @@ public class NewByteBuffer : NewBuffer
     {
         if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteSingleBigEndian( Memory.Span.Slice( index ), value );
+            BinaryPrimitives.WriteSingleBigEndian( _memory.Span.Slice( index ), value );
         }
         else
         {
-            BinaryPrimitives.WriteSingleLittleEndian( Memory.Span.Slice( index ), value );
+            BinaryPrimitives.WriteSingleLittleEndian( _memory.Span.Slice( index ), value );
         }
 
         if ( index >= Position )
@@ -324,18 +316,9 @@ public class NewByteBuffer : NewBuffer
     }
 
     // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Resize the backing array by taking the existing capacity and adding the requested
-    /// extra capacity.
-    /// </summary>
-    /// <param name="extraCapacityInBytes">
-    /// The number of extra BYTES to increase Capacity by. The backing array for all buffers is
-    /// always a <see cref="NewByteBuffer"/> so make sure to translate the extra capacity
-    /// requested into the correct number of bytes to add before calling Resize.
-    /// </param>
-    public void Resize( int extraCapacityInBytes )
+    
+    /// <inheritdoc />
+    public override void Resize( int extraCapacityInBytes )
     {
         switch ( extraCapacityInBytes )
         {
@@ -357,10 +340,10 @@ public class NewByteBuffer : NewBuffer
         var newBackingArray = new byte[ newCapacity ];
 
         // Efficiently copy existing data using Array.Copy
-        Array.Copy( _byteBuffer, newBackingArray, _byteBuffer.Length );
+        Array.Copy( _backingArray, newBackingArray, _backingArray.Length );
 
-        _byteBuffer = newBackingArray;
-        Memory      = _byteBuffer.AsMemory();
+        _backingArray = newBackingArray;
+        _memory     = _backingArray.AsMemory();
         Capacity    = newCapacity;
 
         // **Position Handling:** Keep position within the new bounds.
@@ -370,107 +353,27 @@ public class NewByteBuffer : NewBuffer
         }
     }
 
-    /// <summary>
-    /// Clear the buffer.
-    /// </summary>
-    public void Clear()
+    /// <inheritdoc />
+    public override void Clear()
     {
-        Array.Clear( _byteBuffer, 0, _byteBuffer.Length );
+        Array.Clear( _backingArray, 0, _backingArray.Length );
 
         Position = 0;
         Length   = 0;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="extraLength"></param>
-    /// <exception cref="IndexOutOfRangeException"></exception>
-    public virtual void UpdateLength( int extraLength )
-    {
-        // If writing at or beyond current Length, update Length
-        if ( extraLength >= Length )
-        {
-            // Length becomes index + 1 (since index is 0-based)
-            Length = extraLength + 1;
-        }
-        else if ( extraLength >= Capacity )
-        {
-            throw new IndexOutOfRangeException( "Buffer index out of range." );
-        }
-    }
-
-    /// <summary>
-    /// This sets the <see cref="Limit"/> to the current value of Position. At this point,
-    /// Position typically indicates the position after the last byte written. So, setting
-    /// Limit to Position effectively marks the extent of the valid data that has been written
-    /// into the buffer. <see cref="Position"/> is then reset to 0. Now, when you start using
-    /// GetByte() or other read methods on the ByteBuffer, you will begin reading from the
-    /// very beginning of the data (from index 0) up to the Limit.
-    /// </summary>
-    public virtual void Flip()
-    {
-        Limit    = Position; // Set Limit to current Position
-        Position = 0;        // Reset Position to 0
-    }
-
     // ========================================================================
 
     /// <summary>
-    /// Total allocated byte size (read-only after constructor).
+    /// Performs application-defined tasks associated with freeing, releasing, or
+    /// resetting unmanaged resources.
     /// </summary>
-    public int Capacity { get; private set; }
-
-    /// <summary>
-    /// Current position within the buffer. Any new values will be added at this position.
-    /// </summary>
-    /// <exception cref="ArgumentOutOfRangeException">
-    /// Thrown if the new position is no longer within the buffer bounds.
-    /// </exception>
-    public int Position
+    protected override void Dispose( bool disposing )
     {
-        get => _position;
-        set
+        if ( disposing )
         {
-            if ( ( value < 0 ) || ( value > Capacity ) ) // Ensure position is within bounds
-            {
-                throw new ArgumentOutOfRangeException( nameof( Position ), "Position must be within buffer capacity." );
-            }
-
-            _position = value;
-        }
-    }
-
-    /// <summary>
-    /// Boundary for read operations (read-write). Set to Capacity initially (or 0), set to
-    /// the value held in <see cref="Position"/> by <see cref="Flip()"/>.
-    /// </summary>
-    /// <exception cref="ArgumentOutOfRangeException"> If Limit exceeds the buffer capacity. </exception>
-    public int Limit
-    {
-        get => _limit;
-        set
-        {
-            if ( ( value < 0 ) || ( value > Capacity ) )
-            {
-                throw new ArgumentOutOfRangeException( nameof( Limit ), "Limit must be within buffer capacity." );
-            }
-
-            _limit = value;
-        }
-    }
-
-    public int Length
-    {
-        get => _length;
-        private set
-        {
-            if ( value < 0 ) // Validation to prevent negative Length
-            {
-                throw new ArgumentOutOfRangeException( nameof( Length ), "Length cannot be negative." );
-            }
-
-            _length = value;
+            base.Dispose( disposing );
         }
     }
 }
+

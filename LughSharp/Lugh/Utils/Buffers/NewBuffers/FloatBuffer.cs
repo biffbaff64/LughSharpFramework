@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Buffers.New;
+namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
 
 /// <summary>
 /// Provides a type-safe view of an underlying ByteBuffer, specialized float values.
@@ -32,11 +32,9 @@ namespace LughSharp.Lugh.Utils.Buffers.New;
 /// not have its own backing arrays.
 /// </summary>
 [PublicAPI]
-public class NewFloatBuffer
+public class FloatBuffer : Buffer, IDisposable
 {
-    private NewByteBuffer _byteBuffer;
-
-    private int _length;
+    private ByteBuffer _byteBufferDelegate;
 
     // ========================================================================
 
@@ -47,60 +45,55 @@ public class NewFloatBuffer
     /// The number of floats to be made available in the buffer. As the backing buffer is a
     /// ByteBuffer, this capacity will need to be translated into bytes from floats.
     /// </param>
-    public NewFloatBuffer( int capacityInFloats )
+    public FloatBuffer( int capacityInFloats ) : base( capacityInFloats )
     {
-        var byteCapacity = capacityInFloats * sizeof( float );
-
-        _byteBuffer          = new NewByteBuffer( byteCapacity );
-        _byteBuffer.Position = 0;
-
-        Length   = 0;
-        Capacity = capacityInFloats;
-
-        _byteBuffer.SetBufferStatus( NewByteBuffer.READ_WRITE, NewByteBuffer.NOT_DIRECT );
+        _byteBufferDelegate = new ByteBuffer( capacityInFloats * sizeof( float ) );
+        Capacity            = capacityInFloats;
+        Length              = 0;
+        Limit               = capacityInFloats;
     }
 
     // ========================================================================
 
-    /// <inheritdoc cref="NewByteBuffer.GetFloat()"/>
+    /// <inheritdoc cref="ByteBuffer.GetFloat()"/>
     public float GetFloat()
     {
-        var byteOffset = _byteBuffer.Position;
+        var byteOffset = Position;
 
-        if ( ( ( byteOffset + sizeof( float ) ) > _byteBuffer.Limit ) || ( byteOffset < 0 ) )
+        if ( ( ( byteOffset + sizeof( float ) ) > Limit ) || ( byteOffset < 0 ) )
         {
             throw new IndexOutOfRangeException( "FloatBuffer position out of range" );
         }
 
-        var value = _byteBuffer.GetFloat( byteOffset );
+        var value = _byteBufferDelegate.GetFloat( byteOffset );
 
-        _byteBuffer.Position += sizeof( float );
+        Position += sizeof( float );
 
         return value;
     }
 
-    /// <inheritdoc cref="NewByteBuffer.GetFloat(int)"/>
+    /// <inheritdoc cref="ByteBuffer.GetFloat(int)"/>
     public float GetFloat( int index )
     {
         var byteOffset = index * sizeof( float );
 
-        return _byteBuffer.GetFloat( byteOffset );
+        return _byteBufferDelegate.GetFloat( byteOffset );
     }
 
-    /// <inheritdoc cref="NewByteBuffer.PutFloat(float)"/>
+    /// <inheritdoc cref="ByteBuffer.PutFloat(float)"/>
     public void PutFloat( float value )
     {
-        var byteOffset = _byteBuffer.Position;
+        var byteOffset = Position;
 
-        if ( ( byteOffset + sizeof( float ) ) > _byteBuffer.Capacity )
+        if ( ( byteOffset + sizeof( float ) ) > Capacity )
         {
             throw new BufferOverflowException( "FloatBuffer overflow (ByteBuffer capacity reached)" );
         }
 
-        _byteBuffer.PutFloat( byteOffset, value );
-        _byteBuffer.Position += sizeof( float );
+        _byteBufferDelegate.PutFloat( byteOffset, value );
+        Position += sizeof( float );
 
-        var floatIndex = _byteBuffer.Position / sizeof( float );
+        var floatIndex = Position / sizeof( float );
 
         if ( floatIndex > Length )
         {
@@ -108,7 +101,7 @@ public class NewFloatBuffer
         }
     }
 
-    /// <inheritdoc cref="NewByteBuffer.PutFloat(int,float)"/>
+    /// <inheritdoc cref="ByteBuffer.PutFloat(int,float)"/>
     public void PutFloat( int index, float value )
     {
         var byteOffset = index * sizeof( float );
@@ -118,7 +111,7 @@ public class NewFloatBuffer
             throw new IndexOutOfRangeException();
         }
 
-        _byteBuffer.PutFloat( byteOffset, value );
+        _byteBufferDelegate.PutFloat( byteOffset, value );
 
         if ( index > Length )
         {
@@ -128,57 +121,47 @@ public class NewFloatBuffer
 
     // ========================================================================
 
-    /// <summary>
-    /// Clear the buffer.
-    /// </summary>
-    public void Clear()
+    /// <inheritdoc cref="ByteBuffer.Resize(int)"/>
+    public override void Resize( int extraCapacityInBytes )
     {
-        Length = 0;
-        _byteBuffer.Clear();
+        _byteBufferDelegate.Resize( extraCapacityInBytes );
+        Capacity = (int)Math.Ceiling( (double)_byteBufferDelegate.Capacity / sizeof(float) );
     }
 
-    /// <summary>
-    /// This sets the <see cref="NewByteBuffer.Limit"/> to the current value of Position. At this
-    /// point, Position typically indicates the position after the last byte written. So, setting
-    /// Limit to Position effectively marks the extent of the valid data that has been written into
-    /// the buffer. <see cref="NewByteBuffer.Position"/> is then reset to 0. Now, when you start using
-    /// GetByte() or other read methods on the ByteBuffer, you will begin reading from the very
-    /// beginning of the data (from index 0) up to the Limit.
-    /// </summary>
-    public void Flip()
+    /// <inheritdoc cref="ByteBuffer.Clear()"/>
+    public override void Clear()
     {
-        _byteBuffer.Flip();
+        _byteBufferDelegate.Clear(); // Delegate to ByteBuffer's Clear implementation
+        Length   = 0;                // Reset IntBuffer Length
+        Position = 0;                // Reset IntBuffer Position
+        Limit    = Capacity;         // Reset IntBuffer Limit
     }
 
-    /// <inheritdoc cref="NewByteBuffer.IsBigEndian"/>
-    public bool IsBigEndian => _byteBuffer.IsBigEndian;
+    // ========================================================================
+
+    /// <inheritdoc />
+    public override byte GetByte() => _byteBufferDelegate.GetByte();
+
+    /// <inheritdoc />
+    public override byte GetByte( int index ) => _byteBufferDelegate.GetByte( index );
+
+    /// <inheritdoc />
+    public override void PutByte( byte value ) => _byteBufferDelegate.PutByte( value );
+
+    /// <inheritdoc />
+    public override void PutByte( int index, byte value ) => _byteBufferDelegate.PutByte( index, value );
+
+    // ========================================================================
 
     /// <summary>
-    /// Boundary for read operations (read-write). Set to Capacity initially (or 0), set to
-    /// the value held in <see cref="NewByteBuffer.Position"/> by <see cref="Flip()"/>.
+    /// Performs application-defined tasks associated with freeing, releasing, or
+    /// resetting unmanaged resources.
     /// </summary>
-    /// <exception cref="ArgumentOutOfRangeException"> If Limit exceeds the buffer capacity. </exception>
-    public int Length
+    protected override void Dispose( bool disposing )
     {
-        get => _length;
-        private set
+        if ( disposing )
         {
-            _length = value;
-
-            if ( _length < 0 )
-            {
-                throw new IndexOutOfRangeException( "Length cannot be < 0" );
-            }
-
-            if ( _length > Capacity )
-            {
-                throw new IndexOutOfRangeException( "Length cannot be > Capacity" );
-            }
+            base.Dispose( disposing );
         }
     }
-
-    /// <summary>
-    /// Total capacity in units of <c>float</c> type (read-only, calculated from ByteBuffer.Capacity).
-    /// </summary>
-    public int Capacity { get; private set; }
 }

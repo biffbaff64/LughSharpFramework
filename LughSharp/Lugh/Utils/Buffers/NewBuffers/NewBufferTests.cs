@@ -22,7 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Utils.Buffers.New;
+
+namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
 
 [PublicAPI]
 public class NewBufferTests
@@ -43,7 +44,7 @@ public class NewBufferTests
     {
         Logger.Checkpoint();
         
-        var newByteBuffer = new NewByteBuffer( 20 );
+        var newByteBuffer = new ByteBuffer( 20 );
 
         Logger.Debug( "BEFORE:" );
         Logger.Debug( $"Position: {newByteBuffer.Position}" );
@@ -74,7 +75,7 @@ public class NewBufferTests
     {
         Logger.Checkpoint();
 
-        var newFloatBuffer = new NewFloatBuffer( 20 );
+        var newFloatBuffer = new FloatBuffer( 20 );
 
         Logger.Debug( "BEFORE:" );
         Logger.Debug( $"Length  : {newFloatBuffer.Length}" );
@@ -105,7 +106,7 @@ public class NewBufferTests
             Logger.Debug( $"{newFloatBuffer.GetFloat( i )}, " );
         }
 
-        //TODO:
+        newFloatBuffer.Resize( 20 );
         
         Logger.Debug( "AFTER RESIZE:" );
         Logger.Debug( $"Length  : {newFloatBuffer.Length}" );
@@ -115,7 +116,17 @@ public class NewBufferTests
         {
             Logger.Debug( $"{newFloatBuffer.GetFloat( i )}, " );
         }
+        
+        newFloatBuffer.Clear();
 
+        Logger.Debug( "AFTER CLEAR:" );
+        Logger.Debug( $"Length  : {newFloatBuffer.Length}" );
+        Logger.Debug( $"Capacity: {newFloatBuffer.Capacity}" );
+
+        for ( var i = 0; i < newFloatBuffer.Length; i++ )
+        {
+            Logger.Debug( $"{newFloatBuffer.GetFloat( i )}, " );
+        }
         
         Logger.Debug( "Done" );
     }

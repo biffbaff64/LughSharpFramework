@@ -22,10 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Utils.Buffers.New2;
+namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
 
 [PublicAPI]
-public class NewBuffer : IDisposable
+public abstract class Buffer : IDisposable
 {
     public const bool READ_ONLY  = true;
     public const bool READ_WRITE = false;
@@ -39,22 +39,79 @@ public class NewBuffer : IDisposable
 
     // ========================================================================
 
-    public bool           IsReadOnly { get; set; }
-    public bool           IsDirect   { get; set; }
-    public Memory< byte > Memory     { get; set; }
+    public bool IsReadOnly  { get; protected set; } // Protected setter
+    public bool IsDirect    { get; protected set; } // Protected setter
+    public int  Capacity    { get; protected set; } // Protected setter
+    public int  Position    { get; set; }
+    public int  Limit       { get; set; }
+    public int  Length      { get; protected set; } // Protected setter
+    public bool IsBigEndian { get; set; }
 
     // ========================================================================
 
-    public NewBuffer()
+    protected Buffer( int capacityInBytes )
     {
+        Logger.Checkpoint();
+
+        Capacity = capacityInBytes;
+        Limit    = capacityInBytes;
+        Length   = 0;
+        Position = 0;
+
+        IsBigEndian = !BitConverter.IsLittleEndian;
+        IsReadOnly  = IS_READ_ONLY_DEFAULT;
+        IsDirect    = IS_DIRECT_DEFAULT;
+
+        SetBufferStatus( READ_WRITE, NOT_DIRECT ); // Set default status
     }
+
+    // ========================================================================
+    // Abstract methods - to be implemented in derived classes for type-specific operations
+    //
+    public abstract byte GetByte();
+    public abstract byte GetByte( int index );
+    public abstract void PutByte( byte value );
+    public abstract void PutByte( int index, byte value );
 
     // ========================================================================
 
     /// <summary>
-    /// Flag to indicate byte order (Big-Endian or Little-Endian).
+    /// Resize the backing array by taking the existing capacity and adding the requested
+    /// extra capacity.
     /// </summary>
-    public bool IsBigEndian { get; set; }
+    /// <param name="extraCapacityInBytes">
+    /// The number of extra BYTES to increase Capacity by. The backing array for all buffers is
+    /// always a <see cref="ByteBuffer"/> so make sure to translate the extra capacity
+    /// requested into the correct number of bytes to add before calling Resize.
+    /// </param>
+    public virtual void Resize( int extraCapacityInBytes )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Clear the buffer.
+    /// </summary>
+    public virtual void Clear()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// This sets the <see cref="Limit"/> to the current value of Position. At this point,
+    /// Position typically indicates the position after the last byte written. So, setting
+    /// Limit to Position effectively marks the extent of the valid data that has been written
+    /// into the buffer. <see cref="Position"/> is then reset to 0. Now, when you start using
+    /// GetByte() or other read methods on the ByteBuffer, you will begin reading from the
+    /// very beginning of the data (from index 0) up to the Limit.
+    /// </summary>
+    public virtual void Flip()
+    {
+        Limit    = Position; // Set Limit to current Position
+        Position = 0;        // Reset Position to 0
+    }
+
+    // ========================================================================
 
     /// <summary>
     /// Retrieves this buffer's byte order.
@@ -62,14 +119,14 @@ public class NewBuffer : IDisposable
     public ByteOrder Order() => IsBigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Sets the buffer status, determining whether the buffer is in read/write mode
     /// and whether it is a direct buffer.
     /// </summary>
     /// <param name="readWrite">Indicates if the buffer is in read/write mode.</param>
     /// <param name="direct">Indicates if the buffer is a direct buffer.</param>
-    protected internal void SetBufferStatus( bool readWrite, bool direct )
+    protected void SetBufferStatus( bool readWrite, bool direct )
     {
         IsReadOnly = readWrite;
         IsDirect   = direct;
@@ -88,10 +145,11 @@ public class NewBuffer : IDisposable
     /// Performs application-defined tasks associated with freeing, releasing, or
     /// resetting unmanaged resources.
     /// </summary>
-    public void Dispose( bool disposing )
+    protected virtual void Dispose( bool disposing )
     {
         if ( disposing )
         {
         }
     }
 }
+
