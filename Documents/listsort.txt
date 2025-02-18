@@ -1,15 +1,12 @@
 Intro
 -----
-This describes an adaptive, stable, natural mergesort, modestly called
-timsort (hey, I earned it <wink>).  It has supernatural performance on many
-kinds of partially ordered arrays (less than lg(N!) comparisons needed, and
-as few as N-1), yet as fast as Python's previous highly tuned samplesort
-hybrid on random arrays.
+This describes an adaptive, stable, natural mergesort, modestly called timsort (hey, I earned it <wink>).
+It has supernatural performance on many kinds of partially ordered arrays (less than lg(N!) comparisons
+needed, and as few as N-1), yet as fast as Python's previous highly tuned samplesort hybrid on random arrays.
 
-In a nutshell, the main routine marches over the array once, left to right,
-alternately identifying the next run, then merging it into the previous
-runs "intelligently".  Everything else is complication for speed, and some
-hard-won measure of memory efficiency.
+In a nutshell, the main routine marches over the array once, left to right, alternately identifying the next
+run, then merging it into the previous runs "intelligently".  Everything else is complication for speed, and
+some hard-won measure of memory efficiency.
 
 
 Comparison with Python's Samplesort Hybrid

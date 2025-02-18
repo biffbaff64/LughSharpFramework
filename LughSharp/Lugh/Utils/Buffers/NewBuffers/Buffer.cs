@@ -82,9 +82,9 @@ public abstract class Buffer : IDisposable
     public abstract byte GetByte( int index );
     public abstract void PutByte( byte value );
     public abstract void PutByte( int index, byte value );
-    public abstract void GetBytes( out byte[] result, int offset, int length );
-    public abstract void PutBytes( byte[] src, int offset, int length );
-    public abstract void GetBytes( out byte[] byteArray );
+    public abstract void GetBytes( byte[] result, int offset, int length );
+    public abstract void PutBytes( byte[] src, int srcOffset, int dstOffset, int length );
+    public abstract void GetBytes( byte[] byteArray );
     public abstract void PutBytes( byte[] byteArray );
 
     // ========================================================================
@@ -174,6 +174,14 @@ public abstract class Buffer : IDisposable
     public abstract int Remaining();
 
     /// <summary>
+    /// Returns <c>true</c> if, and only if, there is at least one element remaining in this buffer.
+    /// </summary>
+    public virtual bool HasRemaining()
+    {
+        return Position < Limit;
+    }
+
+    /// <summary>
     /// Retrieves this buffer's byte order.
     /// </summary>
     public ByteOrder Order() => IsBigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
@@ -220,6 +228,14 @@ public abstract class Buffer : IDisposable
         _markPosition = Position;
     }
 
+    /// <summary>
+    /// Discards any previously set mark position by setting its value to -1;
+    /// </summary>
+    public virtual void DiscardMark()
+    {
+        _markPosition = -1;
+    }
+    
     /// <summary>
     /// Sets the Position back to the last saved "mark." The mark is typically discarded after
     /// Reset() is called. If Mark() has not been called, Reset() might have undefined behavior.

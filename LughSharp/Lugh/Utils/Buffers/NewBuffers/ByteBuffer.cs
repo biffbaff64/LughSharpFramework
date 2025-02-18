@@ -37,7 +37,7 @@ public class ByteBuffer : Buffer, IDisposable
     private Memory< byte > _memory;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Creates a new ByteBuffer with the specified capacity.
     /// </summary>
@@ -45,7 +45,7 @@ public class ByteBuffer : Buffer, IDisposable
     public ByteBuffer( int capacityInBytes ) : base( capacityInBytes )
     {
         _backingArray = new byte[ capacityInBytes ];
-        _memory     = _backingArray.AsMemory();
+        _memory       = _backingArray.AsMemory();
     }
 
     // ========================================================================
@@ -91,7 +91,7 @@ public class ByteBuffer : Buffer, IDisposable
     public override void PutByte( byte value )
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        
+
         if ( Position >= Capacity )
         {
             throw new BufferOverflowException();
@@ -127,41 +127,134 @@ public class ByteBuffer : Buffer, IDisposable
     // ----- Bulk Get/Put operations -----
 
     /// <summary>
-    /// 
+    /// Gets bytes from this buffer, starting at the current <see cref="Buffer.Position"/>,
+    /// and puts them into the provided destination byte array 'dst'.
+    /// Updates the <see cref="Buffer.Position"/> by the number of bytes read.
     /// </summary>
-    /// <param name="result"></param>
-    /// <param name="offset"></param>
-    /// <param name="length"></param>
-    public override void GetBytes( out byte[] result, int offset, int length )
+    /// <param name="dst">
+    /// The destination array to receive the bytes. Must be large enough to hold 'dstOffset + length' bytes.
+    /// </param>
+    /// <param name="dstOffset"> The starting offset within the destination array to write to. </param>
+    /// <param name="length"> The number of bytes to get. </param>
+    /// <exception cref="IndexOutOfRangeException">
+    /// If there are not enough remaining bytes in the buffer or if dstOffset and length cause overflow in dst.
+    /// </exception>
+    /// <exception cref="ArgumentNullException"> If <paramref name="dst"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// If <paramref name="dstOffset"/> or <paramref name="length"/> is negative.
+    /// </exception>
+    public override void GetBytes( byte[] dst, int dstOffset, int length )
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull( dst );
+
+        if ( dstOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+        }
+
+        if ( length < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
+        }
+
+        // Check if dstOffset + length exceeds dst array bounds
+        if ( ( dstOffset + length ) > dst.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length and destination offset exceed destination array bounds." );
+        }
+
+        // Check if enough bytes remaining in buffer
+        if ( ( Position + length ) > Limit )
+        {
+            throw new IndexOutOfRangeException( "Not enough remaining bytes in buffer to read the requested length." );
+        }
+
+        // Efficient copy to dst array
+        _memory.Span.Slice( Position, length ).CopyTo( dst.AsSpan( dstOffset, length ) );
+
+        // Update Position by the number of bytes read
+        Position += length;
     }
 
     /// <summary>
-    /// 
+    /// Puts bytes from the source byte array 'src' into this buffer, starting at the current
+    /// <see cref="Buffer.Position"/> and writing 'length' bytes. The writing starts at a
+    /// destination offset within the buffer, specified by 'offset'. Also updates the
+    /// <see cref="Buffer.Position"/> by the number of bytes written.
     /// </summary>
-    /// <param name="src"></param>
-    /// <param name="offset"></param>
-    /// <param name="length"></param>
-    public override void PutBytes( byte[] src, int offset, int length )
+    /// <param name="src"> The source byte array to get bytes from. </param>
+    /// <param name="srcOffset"> The starting offset within the source array to read from. </param>
+    /// <param name="dstOffset"> The starting offset within *this buffer* (the destination) to write to. </param>
+    /// <param name="length"> The number of bytes to put. </param>
+    /// <exception cref="IndexOutOfRangeException">
+    /// If there is not enough space remaining in the buffer or if srcOffset and length cause overflow in src.
+    /// </exception>
+    /// <exception cref="ArgumentNullException"> If <paramref name="src"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// If <paramref name="srcOffset"/>, <paramref name="dstOffset"/> or <paramref name="length"/> is negative.
+    /// </exception>
+    public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int length )
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull( src );
+
+        if ( srcOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset cannot be negative." );
+        }
+
+        if ( dstOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+        }
+
+        if ( length < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
+        }
+
+        if ( ( srcOffset + length ) > src.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length and source offset exceed source array bounds." );
+        }
+
+        // Check for space in destination buffer using dstOffset
+        if ( ( dstOffset + length ) > Capacity )
+        {
+            throw new IndexOutOfRangeException( "Not enough space in buffer to put the requested length at the given destination offset." );
+        }
+
+        // Copy from src to buffer at dstOffset
+        src.AsSpan( srcOffset, length ).CopyTo( _memory.Span.Slice( dstOffset, length ) );
+
+        if ( ( dstOffset + length ) > Position )
+        {
+            Position = dstOffset + length;
+        }
+    }
+    
+    /// <summary>
+    /// Transfers the entire contents of this buffer into the provided destination
+    /// array. An invocation of this method with the destination byte array
+    /// <paramref name="dst"/> behaves in exactly the same way as invoking
+    /// <c>dst.GetBytes(src, 0, src.Length)</c>.
+    /// </summary>
+    /// <param name="dst"> The destination byte array. </param>
+    /// <exception cref="ArgumentNullException"> If <paramref name="dst"/> is null.</exception>
+    public override void GetBytes( byte[] dst )
+    {
+        GetBytes( dst, 0, this.Length );
     }
 
     /// <summary>
-    /// 
+    /// Transfers the entire content of the given source byte array into this buffer.
+    /// An invocation of this method with the source byte array <paramref name="src"/>
+    /// behaves in exactly the same way as invoking <c>dst.PutBytes(src, 0, src.Length)</c>.
     /// </summary>
-    public override void GetBytes( out byte[] byteArray )
+    /// <param name="src">The source byte array.</param>
+    /// <exception cref="ArgumentNullException"> If <paramref name="src"/> is null.</exception>
+    public override void PutBytes( byte[] src )
     {
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public override void PutBytes( byte[] byteArray )
-    {
-        throw new NotImplementedException();
+        PutBytes( src, 0, 0, src.Length );
     }
 
     // ========================================================================
@@ -187,7 +280,7 @@ public class ByteBuffer : Buffer, IDisposable
             ? BinaryPrimitives.ReadInt16BigEndian( _memory.Span.Slice( index ) )
             : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( index ) );
     }
-    
+
     /// <summary>
     /// Puts the provided Short value into the backing array at the current <see cref="Buffer.Position"/>.
     /// </summary>
@@ -234,7 +327,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     // ----- Bulk Get/Put operations -----
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -321,7 +414,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     // ----- Bulk Get/Put operations -----
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -408,7 +501,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     // ----- Bulk Get/Put operations -----
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -426,7 +519,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     public override void Resize( int extraCapacityInBytes )
     {
@@ -453,8 +546,8 @@ public class ByteBuffer : Buffer, IDisposable
         Array.Copy( _backingArray, newBackingArray, _backingArray.Length );
 
         _backingArray = newBackingArray;
-        _memory     = _backingArray.AsMemory();
-        Capacity    = newCapacity;
+        _memory       = _backingArray.AsMemory();
+        Capacity      = newCapacity;
 
         // **Position Handling:** Keep position within the new bounds.
         if ( Position > Capacity )
@@ -492,4 +585,3 @@ public class ByteBuffer : Buffer, IDisposable
         }
     }
 }
-

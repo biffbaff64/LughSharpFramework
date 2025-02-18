@@ -181,6 +181,32 @@ public class ShortBuffer : Buffer, IDisposable
         _byteBufferDelegate.PutByte( index, value );
     }
 
+    // ----- Bulk Get/Put operations -----
+
+    /// <inheritdoc />
+    public override void GetBytes( byte[] result, int offset, int length )
+    {
+        _byteBufferDelegate.GetBytes( result, offset, length );
+    }
+
+    /// <inheritdoc />
+    public override void GetBytes( byte[] byteArray )
+    {
+        _byteBufferDelegate.GetBytes( byteArray );
+    }
+
+    /// <inheritdoc />
+    public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int length )
+    {
+        _byteBufferDelegate.PutBytes( src, srcOffset, dstOffset, length );
+    }
+
+    /// <inheritdoc />
+    public override void PutBytes( byte[] byteArray )
+    {
+        _byteBufferDelegate.PutBytes( byteArray );
+    }
+
     // ========================================================================
 
     /// <summary>
