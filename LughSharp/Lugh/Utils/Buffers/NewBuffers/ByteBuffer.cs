@@ -42,10 +42,41 @@ public class ByteBuffer : Buffer, IDisposable
     /// Creates a new ByteBuffer with the specified capacity.
     /// </summary>
     /// <param name="capacityInBytes"> The number of bytes to be made available in the buffer. </param>
-    public ByteBuffer( int capacityInBytes ) : base( capacityInBytes )
+    /// <param name="allowAutoResize">
+    /// If true, the buffer will automatically resize if a buffer overflow is possible. This
+    /// can be disabled, either in the constructor parameter or by setting <see cref="Buffer.AutoResizeEnabled"/>
+    /// to false.
+    /// </param>
+    /// <param name="maxCapacity">
+    /// The value at which to set the maximum allowed buffer capacity. The default for this is 1GB, and
+    /// can be changed to whatever the user requires.
+    /// </param>
+    public ByteBuffer( int capacityInBytes, bool allowAutoResize = true, int maxCapacity = DEFAULT_MAC_1GB )
+        : base( capacityInBytes )
     {
         _backingArray = new byte[ capacityInBytes ];
         _memory       = _backingArray.AsMemory();
+    }
+
+    /// <summary>
+    /// Creates a new ByteBuffer that is backed by the provided Memory&lt;byte&gt;.
+    /// This constructor is intended for creating buffer views and should not allocate new memory.
+    /// </summary>
+    /// <param name="memory">The Memory&lt;byte&gt; to use as the backing store.</param>
+    /// <param name="isBigEndian">Indicates whether the buffer should use big-endian byte order.</param>
+    internal ByteBuffer( Memory< byte > memory, bool isBigEndian )
+    {
+        if ( memory.IsEmpty ) // Check if Memory<byte> is valid (not empty) - you can add more checks if needed
+        {
+            throw new ArgumentException( "Memory<byte> cannot be empty.", nameof( memory ) ); // Or ArgumentNullException if null Memory<byte> is possible
+        }
+
+        _memory = memory;
+        _backingArray = memory.ToArray();
+        IsBigEndian = isBigEndian;
+        Capacity    = memory.Length; // Capacity is now derived from the provided Memory<byte>.Length
+        Length      = 0;             // Initially Length is 0 for a new view
+        Limit       = Capacity;      // Initially Limit is Capacity for a new view
     }
 
     // ========================================================================
@@ -92,10 +123,7 @@ public class ByteBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
-        if ( Position >= Capacity )
-        {
-            throw new BufferOverflowException();
-        }
+        EnsureCapacity( Position + 1 );
 
         _memory.Span[ Position ] = value;
         Position++; // Increment position AFTER write
@@ -111,6 +139,8 @@ public class ByteBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( index + 1 );
+
         if ( ( index < 0 ) || ( index >= Capacity ) )
         {
             throw new IndexOutOfRangeException( "Index out of range." );
@@ -125,6 +155,19 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     // ----- Bulk Get/Put operations -----
+
+    /// <summary>
+    /// Transfers the entire contents of this buffer into the provided destination
+    /// array. An invocation of this method with the destination byte array
+    /// <paramref name="dst"/> behaves in exactly the same way as invoking
+    /// <c>dst.GetBytes(src, 0, src.Length)</c>.
+    /// </summary>
+    /// <param name="dst"> The destination byte array. </param>
+    /// <exception cref="ArgumentNullException"> If <paramref name="dst"/> is null.</exception>
+    public override void GetBytes( byte[] dst )
+    {
+        GetBytes( dst, 0, this.Length );
+    }
 
     /// <summary>
     /// Gets bytes from this buffer, starting at the current <see cref="Buffer.Position"/>,
@@ -177,6 +220,20 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
+    /// Transfers the entire content of the given source byte array into this buffer.
+    /// An invocation of this method with the source byte array <paramref name="src"/>
+    /// behaves in exactly the same way as invoking <c>dst.PutBytes(src, 0, src.Length)</c>.
+    /// </summary>
+    /// <param name="src">The source byte array.</param>
+    /// <exception cref="ArgumentNullException"> If <paramref name="src"/> is null.</exception>
+    public override void PutBytes( byte[] src )
+    {
+        // Does not need a call to EnsureCapacity as it will be called
+        // from PutBytes(byte[],int,int,int).
+        PutBytes( src, 0, 0, src.Length );
+    }
+
+    /// <summary>
     /// Puts bytes from the source byte array 'src' into this buffer, starting at the current
     /// <see cref="Buffer.Position"/> and writing 'length' bytes. The writing starts at a
     /// destination offset within the buffer, specified by 'offset'. Also updates the
@@ -196,6 +253,8 @@ public class ByteBuffer : Buffer, IDisposable
     public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int length )
     {
         ArgumentNullException.ThrowIfNull( src );
+
+        EnsureCapacity( dstOffset + length );
 
         if ( srcOffset < 0 )
         {
@@ -231,31 +290,6 @@ public class ByteBuffer : Buffer, IDisposable
             Position = dstOffset + length;
         }
     }
-    
-    /// <summary>
-    /// Transfers the entire contents of this buffer into the provided destination
-    /// array. An invocation of this method with the destination byte array
-    /// <paramref name="dst"/> behaves in exactly the same way as invoking
-    /// <c>dst.GetBytes(src, 0, src.Length)</c>.
-    /// </summary>
-    /// <param name="dst"> The destination byte array. </param>
-    /// <exception cref="ArgumentNullException"> If <paramref name="dst"/> is null.</exception>
-    public override void GetBytes( byte[] dst )
-    {
-        GetBytes( dst, 0, this.Length );
-    }
-
-    /// <summary>
-    /// Transfers the entire content of the given source byte array into this buffer.
-    /// An invocation of this method with the source byte array <paramref name="src"/>
-    /// behaves in exactly the same way as invoking <c>dst.PutBytes(src, 0, src.Length)</c>.
-    /// </summary>
-    /// <param name="src">The source byte array.</param>
-    /// <exception cref="ArgumentNullException"> If <paramref name="src"/> is null.</exception>
-    public override void PutBytes( byte[] src )
-    {
-        PutBytes( src, 0, 0, src.Length );
-    }
 
     // ========================================================================
     // Short Type handling methods
@@ -289,6 +323,8 @@ public class ByteBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( Position + sizeof( short ) );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( Position ), value );
@@ -311,6 +347,8 @@ public class ByteBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( index + sizeof( short ) );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( index ), value );
@@ -331,17 +369,114 @@ public class ByteBuffer : Buffer, IDisposable
     /// <summary>
     /// 
     /// </summary>
-    public void GetShorts( out short[] shortArray )
+    /// <param name="dst"></param>
+    public void GetShorts( short[] dst )
     {
-        throw new NotImplementedException();
+        GetShorts( dst, 0, dst.Length );
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public void PutShorts( short[] shortArray )
+    /// <param name="dst"></param>
+    /// <param name="dstOffset"></param>
+    /// <param name="length"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="IndexOutOfRangeException"></exception>
+    public void GetShorts( short[] dst, int dstOffset, int length )
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull( dst, nameof( dst ) );
+
+        if ( dstOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+        }
+
+        if ( length < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
+        }
+
+        if ( ( dstOffset + length ) > dst.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Length and destination offset exceed destination array bounds." );
+        }
+
+        var bytesToRead    = length * sizeof( short );
+        var bytesRemaining = Remaining();
+
+        if ( bytesToRead > bytesRemaining )
+        {
+            throw new IndexOutOfRangeException( $"Not enough remaining bytes in buffer to read {length} shorts. " +
+                                                $"Remaining bytes: {bytesRemaining}" );
+        }
+
+        System.Buffer.BlockCopy( src: _backingArray,
+                                 srcOffset: Position,
+                                 dst: dst,
+                                 dstOffset: dstOffset * sizeof( short ), // Destination offset in bytes for short[]
+                                 count: bytesToRead );
+
+        Position += bytesToRead;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    public void PutShorts( short[] src )
+    {
+        PutShorts( src, 0, src.Length );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="srcOffset"></param>
+    /// <param name="length"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="BufferOverflowException"></exception>
+    public void PutShorts( short[] src, int srcOffset, int length )
+    {
+        ArgumentNullException.ThrowIfNull( src, nameof( src ) );
+
+        if ( srcOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset cannot be negative." );
+        }
+
+        if ( length < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
+        }
+
+        if ( ( srcOffset + length ) > src.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Length and source offset exceed source array bounds." );
+        }
+
+        var bytesToWrite   = length * sizeof( short );
+        var bytesRemaining = Capacity - Position; // Space remaining from Position to Capacity
+
+        if ( bytesToWrite > bytesRemaining )
+        {
+            throw new BufferOverflowException( $"Not enough space remaining in buffer to write {length} shorts. " +
+                                               $"Remaining space: {bytesRemaining}" );
+        }
+
+        System.Buffer.BlockCopy( src: src,
+                                 srcOffset: srcOffset * sizeof( short ), // Source offset in bytes for short[]
+                                 dst: _backingArray,
+                                 dstOffset: Position,
+                                 count: bytesToWrite );
+
+        Position += bytesToWrite;
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
     }
 
     // ========================================================================
@@ -376,6 +511,8 @@ public class ByteBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( Position + sizeof( int ) );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( Position ), value );
@@ -398,6 +535,8 @@ public class ByteBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( index + sizeof( int ) );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( index ), value );
@@ -418,17 +557,113 @@ public class ByteBuffer : Buffer, IDisposable
     /// <summary>
     /// 
     /// </summary>
-    public void GetInts( out int[] intArray )
+    /// <param name="dst"></param>
+    public void GetInts( int[] dst )
     {
-        throw new NotImplementedException();
+        GetInts( dst, 0, dst.Length );
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public void PutInts( int[] intArray )
+    /// <param name="dst"></param>
+    /// <param name="dstOffset"></param>
+    /// <param name="length"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="IndexOutOfRangeException"></exception>
+    public void GetInts( int[] dst, int dstOffset, int length )
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull( dst, nameof( dst ) );
+
+        if ( dstOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+        }
+
+        if ( length < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
+        }
+
+        if ( ( dstOffset + length ) > dst.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Length and destination offset exceed destination array bounds." );
+        }
+
+        var bytesToRead    = length * sizeof( int );
+        var bytesRemaining = Remaining();
+
+        if ( bytesToRead > bytesRemaining )
+        {
+            throw new IndexOutOfRangeException( $"Not enough remaining bytes in buffer to read {length} ints. " +
+                                                $"Remaining bytes: {bytesRemaining}" );
+        }
+
+        System.Buffer.BlockCopy( src: _backingArray,
+                                 srcOffset: Position,
+                                 dst: dst,
+                                 dstOffset: dstOffset * sizeof( int ), // Destination offset in bytes for int[]
+                                 count: bytesToRead );
+
+        Position += bytesToRead;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void PutInts( int[] src )
+    {
+        PutInts( src, 0, src.Length );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="srcOffset"></param>
+    /// <param name="length"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="BufferOverflowException"></exception>
+    public void PutInts( int[] src, int srcOffset, int length )
+    {
+        ArgumentNullException.ThrowIfNull( src, nameof( src ) );
+
+        if ( srcOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset cannot be negative." );
+        }
+
+        if ( length < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
+        }
+
+        if ( ( srcOffset + length ) > src.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Length and source offset exceed source array bounds." );
+        }
+
+        var bytesToWrite   = length * sizeof( int );
+        var bytesRemaining = Capacity - Position; // Space remaining from Position to Capacity
+
+        if ( bytesToWrite > bytesRemaining )
+        {
+            throw new BufferOverflowException( $"Not enough space remaining in buffer to write {length} ints. " +
+                                               $"Remaining space: {bytesRemaining}" );
+        }
+
+        System.Buffer.BlockCopy( src: src,
+                                 srcOffset: srcOffset * sizeof( int ), // Source offset in bytes for int[]
+                                 dst: _backingArray,
+                                 dstOffset: Position,
+                                 count: bytesToWrite );
+
+        Position += bytesToWrite;
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
     }
 
     // ========================================================================
@@ -463,6 +698,8 @@ public class ByteBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( Position + sizeof( float ) );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteSingleBigEndian( _memory.Span.Slice( Position ), value );
@@ -485,6 +722,8 @@ public class ByteBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( index + sizeof( float ) );
+
         if ( IsBigEndian )
         {
             BinaryPrimitives.WriteSingleBigEndian( _memory.Span.Slice( index ), value );
@@ -505,17 +744,197 @@ public class ByteBuffer : Buffer, IDisposable
     /// <summary>
     /// 
     /// </summary>
-    public void GetFloats( out float[] floatArray )
+    /// <param name="dst"></param>
+    public void GetFloats( float[] dst )
     {
-        throw new NotImplementedException();
+        GetFloats( dst, 0, dst.Length );
     }
 
     /// <summary>
     /// 
     /// </summary>
-    public void PutFloats( float[] floatArray )
+    /// <param name="dst"></param>
+    /// <param name="dstOffset"></param>
+    /// <param name="length"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="IndexOutOfRangeException"></exception>
+    public void GetFloats( float[] dst, int dstOffset, int length )
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull( dst, nameof( dst ) );
+
+        if ( dstOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+        }
+
+        if ( length < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
+        }
+
+        if ( ( dstOffset + length ) > dst.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Length and destination offset exceed destination array bounds." );
+        }
+
+        var bytesToRead    = length * sizeof( float );
+        var bytesRemaining = Remaining();
+
+        if ( bytesToRead > bytesRemaining )
+        {
+            throw new IndexOutOfRangeException( $"Not enough remaining bytes in buffer to read {length} floats. " +
+                                                $"Remaining bytes: {bytesRemaining}" );
+        }
+
+        System.Buffer.BlockCopy( src: _backingArray,
+                                 srcOffset: Position,
+                                 dst: dst,
+                                 dstOffset: dstOffset * sizeof( float ), // Destination offset in bytes for float[]
+                                 count: bytesToRead );
+
+        Position += bytesToRead;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    public void PutFloats( float[] src )
+    {
+        PutFloats( src, 0, src.Length );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="srcOffset"></param>
+    /// <param name="length"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="BufferOverflowException"></exception>
+    public void PutFloats( float[] src, int srcOffset, int length )
+    {
+        ArgumentNullException.ThrowIfNull( src, nameof( src ) );
+
+        if ( srcOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset cannot be negative." );
+        }
+
+        if ( length < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
+        }
+
+        if ( ( srcOffset + length ) > src.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Length and source offset exceed source array bounds." );
+        }
+
+        var bytesToWrite   = length * sizeof( float );
+        var bytesRemaining = Capacity - Position; // Space remaining from Position to Capacity
+
+        if ( bytesToWrite > bytesRemaining )
+        {
+            throw new BufferOverflowException( $"Not enough space remaining in buffer to write {length} floats. " +
+                                               $"Remaining space: {bytesRemaining}" );
+        }
+
+        System.Buffer.BlockCopy( src: src,
+                                 srcOffset: srcOffset * sizeof( float ), // Source offset in bytes for float[]
+                                 dst: _backingArray,
+                                 dstOffset: Position,
+                                 count: bytesToWrite );
+
+        Position += bytesToWrite;
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public override ByteBuffer Order( ByteOrder order )
+    {
+        base.Order( order );
+
+        return this;
+    }
+    
+    /// <summary>
+    /// Returns the backing array as a byte[].
+    /// </summary>
+    /// <returns></returns>
+    public byte[] ToArray()
+    {
+        return _backingArray;
+    }
+
+    /// <summary>
+    /// Allocates a new ByteBuffer with the specified capacity (in bytes).
+    /// </summary>
+    /// <param name="capacityInBytes">The desired capacity of the ByteBuffer in bytes.</param>
+    /// <returns>A new ByteBuffer instance.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="capacityInBytes"/> is negative.</exception>
+    public static ByteBuffer Allocate( int capacityInBytes )
+    {
+        if ( capacityInBytes < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( capacityInBytes ), "Capacity cannot be negative." );
+        }
+
+        return new ByteBuffer( capacityInBytes );
+    }
+
+    /// <summary>
+    /// Creates a new IntBuffer whose content is a shared subsequence of this ByteBuffer's content.
+    /// Changes to this ByteBuffer's content will be visible in the returned IntBuffer, and vice-versa.
+    /// The position, limit, and mark of the new buffer will be independent of this buffer.
+    /// </summary>
+    /// <returns>A new IntBuffer instance.</returns>
+    public IntBuffer AsIntBuffer()
+    {
+        // Calculate capacity in ints based on ByteBuffer's byte capacity
+        // Floor to avoid partial ints at the end
+        var capacityInInts = ( int )Math.Floor( ( double )Capacity / sizeof( int ) );
+
+        // Create a new IntBuffer, sharing the _byteBuffer array
+        return new IntBuffer( _backingArray, 0, capacityInInts, IsBigEndian );
+    }
+
+    /// <summary>
+    /// Creates a new ShortBuffer whose content is a shared subsequence of this ByteBuffer's content.
+    /// Changes to this ByteBuffer's content will be visible in the returned ShortBuffer, and vice-versa.
+    /// The position, limit, and mark of the new buffer will be independent of this buffer.
+    /// </summary>
+    /// <returns>A new ShortBuffer instance.</returns>
+    public ShortBuffer AsShortBuffer()
+    {
+        // Calculate capacity in shorts based on ByteBuffer's byte capacity
+        // Floor to avoid partial shorts at the end
+        var capacityInShorts = ( int )Math.Floor( ( double )Capacity / sizeof( short ) );
+
+        // Create a new ShortBuffer, sharing the _byteBuffer array
+        return new ShortBuffer( _backingArray, 0, capacityInShorts, IsBigEndian );
+    }
+
+    /// <summary>
+    /// Creates a new FloatBuffer whose content is a shared subsequence of this ByteBuffer's content.
+    /// Changes to this ByteBuffer's content will be visible in the returned FloatBuffer, and vice-versa.
+    /// The position, limit, and mark of the new buffer will be independent of this buffer.
+    /// </summary>
+    /// <returns>A new FloatBuffer instance.</returns>
+    public FloatBuffer AsFloatBuffer()
+    {
+        // Calculate capacity in floats based on ByteBuffer's byte capacity
+        // Floor to avoid partial floats at the end
+        var capacityInFloats = ( int )Math.Floor( ( double )Capacity / sizeof( float ) );
+
+        // Create a new FloatBuffer, sharing the _byteBuffer array
+        return new FloatBuffer( _backingArray, 0, capacityInFloats, IsBigEndian );
     }
 
     // ========================================================================

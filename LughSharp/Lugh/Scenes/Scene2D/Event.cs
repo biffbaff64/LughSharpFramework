@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Pooling;
 

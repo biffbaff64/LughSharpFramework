@@ -29,6 +29,8 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 using DesktopGLBackend.Window;
 
+using LughSharp.Lugh.Input;
+
 namespace DesktopGLBackend.Input;
 
 [PublicAPI]
@@ -198,7 +200,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     }
 
     /// <inheritdoc />
-    public override void SetCursorCaught( bool caught )
+    public override void SetCursorOverridden( bool caught )
     {
         Glfw.SetInputMode( _window.GlfwWindow,
                            InputMode.Cursor,
@@ -206,7 +208,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     }
 
     /// <inheritdoc />
-    public override bool IsCursorCaught()
+    public override bool IsCursorOverridden()
     {
         return Glfw.GetInputMode( _window.GlfwWindow, InputMode.Cursor ) == CursorMode.Disabled;
     }

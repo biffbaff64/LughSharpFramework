@@ -1412,19 +1412,15 @@ public class SpriteBatch : IBatch
     {
         GdxRuntimeException.ThrowIfNull( _shader );
 
-        #if DEBUG
-        Logger.Debug( $"_shader.Handle: {_shader.ShaderHandle}, " +
-                      $"IsProgram: {GdxApi.Bindings.IsProgram( _shader.ShaderHandle )}" );
-        #endif
-        
         GdxApi.Bindings.UseProgram( _shader.ShaderHandle );
         _combinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( _shader.ShaderHandle,
                                                                       ShaderProgram.COMBINED_MATRIX_UNIFORM );
-        #if DEBUG
-        Logger.Debug( $"_combinedMatrixLocation: {_combinedMatrixLocation}" );
-        #endif
     }
-
+    
+    /// <summary>
+    /// Creates a minimal shader for test purposes.
+    /// </summary>
+    /// <returns> The Shader. </returns>
     private static ShaderProgram CreateMinimalTestShader()
     {
         const string VERTEX_SHADER = "#version 450 core\n" +
@@ -1441,9 +1437,7 @@ public class SpriteBatch : IBatch
                                        "    FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
                                        "}\n";
 
-        var shaderProgram = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
-
-        return shaderProgram;
+        return new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
     }
 
     /// <summary>
@@ -1473,9 +1467,7 @@ public class SpriteBatch : IBatch
                                        "    FragColor = texture(u_texture, v_texCoords) * v_colorPacked;\n" +
                                        "}\n";
 
-        var shaderProgram = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
-
-        return shaderProgram;
+        return new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
     }
 
     /// <summary>
@@ -1507,8 +1499,7 @@ public class SpriteBatch : IBatch
 
         if ( Idx > 0 )
         {
-            // Necessary call to Flush() to ensure texture
-            // switching is handled correctly
+            // Necessary call to Flush() to ensure texture switching is handled correctly
             Flush();
         }
 
@@ -1516,32 +1507,6 @@ public class SpriteBatch : IBatch
         _lastSuccessfulTexture = texture;
         InvTexWidth            = 1.0f / texture.Width;
         InvTexHeight           = 1.0f / texture.Height;
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _mesh?.Dispose();
-
-        if ( _ownsShader && ( _shader != null ) )
-        {
-            _shader.Dispose();
-        }
-
-        _mesh   = null;
-        _shader = null;
-
-        unsafe
-        {
-            fixed ( uint* ptr = &_vbo )
-            {
-                GdxApi.Bindings.DeleteBuffers( 1, ptr ); // Correct way to delete a single buffer
-            }
-        }
-
-        GdxApi.Bindings.DeleteVertexArrays( _vao );
-
-        GC.SuppressFinalize( this );
     }
 
     // ========================================================================
@@ -1624,5 +1589,34 @@ public class SpriteBatch : IBatch
         Logger.Debug( $"\nProjection Matrix: {ProjectionMatrix}" );
         Logger.Debug( $"\nTransform Matrix: {TransformMatrix}" );
         Logger.Divider();
+    }
+    
+    // ========================================================================
+    
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _mesh?.Dispose();
+
+        if ( _ownsShader && ( _shader != null ) )
+        {
+            _shader.Dispose();
+        }
+
+        _mesh   = null;
+        _shader = null;
+
+        unsafe
+        {
+            fixed ( uint* ptr = &_vbo )
+            {
+                GdxApi.Bindings.DeleteBuffers( 1, ptr ); // Correct way to delete a single buffer
+            }
+        }
+
+        GdxApi.Bindings.DeleteVertexArrays( _vao );
+
+        GC.SuppressFinalize( this );
     }
 }

@@ -32,6 +32,8 @@ using DesktopGLBackend.Graphics;
 using DesktopGLBackend.Input;
 using DesktopGLBackend.Utils;
 
+using LughSharp.Lugh.Files;
+
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace DesktopGLBackend.Window;

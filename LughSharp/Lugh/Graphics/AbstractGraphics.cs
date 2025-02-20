@@ -22,34 +22,25 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.OpenGL;
 
-namespace LughSharp.Lugh.Core;
+namespace LughSharp.Lugh.Graphics;
 
 [PublicAPI]
 public abstract class AbstractGraphics : IGraphics
 {
-    // ========================================================================
+    public IGraphics.BufferFormatDescriptor BufferFormat { get; set; } = null!;
 
-    #region properties
-
-    public IGraphics.BufferFormatDescriptor BufferFormat          { get; set; } = null!;
-    public int                              BackBufferWidth       { get; set; } = 0;
-    public int                              BackBufferHeight      { get; set; } = 0;
-    public int                              LogicalWidth          { get; set; } = 0;
-    public int                              LogicalHeight         { get; set; } = 0;
-    public Window                           CurrentContext        { get; set; } = null!;
-    public Color                            WindowBackgroundColor { get; set; } = Color.Blue;
-
-    #endregion properties
+    public int    BackBufferWidth       { get; set; } = 0;
+    public int    BackBufferHeight      { get; set; } = 0;
+    public int    LogicalWidth          { get; set; } = 0;
+    public int    LogicalHeight         { get; set; } = 0;
+    public Window CurrentContext        { get; set; } = null!;
+    public Color  WindowBackgroundColor { get; set; } = Color.Blue;
 
     // ========================================================================
 
-    #region virtual properties
-    
     public virtual int                         Width               { get; }
     public virtual int                         Height              { get; }
     public virtual float                       DeltaTime           { get; set; }
@@ -58,11 +49,7 @@ public abstract class AbstractGraphics : IGraphics
     public virtual bool                        ContinuousRendering { get; set; } = true;
     public virtual bool                        IsFullscreen        { get; }
 
-    #endregion virtual properties
-
     // ========================================================================
-
-    #region implemented methods
 
     /// <summary>
     /// Returns the time span between the current frame and the last frame
@@ -83,45 +70,87 @@ public abstract class AbstractGraphics : IGraphics
     /// </summary>
     float IGraphics.GetBackBufferScale() => BackBufferWidth / ( float )Width;
 
-    #endregion implemented methods
-
     // ========================================================================
+    // 
 
-    #region abstract methods
-
-    // ========================================================================
-    public abstract IGraphics.DisplayMode[] GetDisplayModes();
+    /// <inheritdoc/>
     public abstract IGraphics.DisplayMode GetDisplayMode();
-    public abstract IGraphics.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
+
+    /// <inheritdoc/>
     public abstract IGraphics.DisplayMode GetDisplayMode( GLFW.Monitor monitor );
 
+    /// <inheritdoc/>
+    public abstract IGraphics.DisplayMode[] GetDisplayModes();
+
+    /// <inheritdoc/>
+    public abstract IGraphics.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
+
     // ========================================================================
+    // Window properties
+    
+    /// <inheritdoc/>
     public abstract bool SetWindowedMode( int width, int height );
+
+    /// <inheritdoc/>
     public abstract void SetUndecorated( bool undecorated );
+
+    /// <inheritdoc/>
     public abstract void SetResizable( bool resizable );
+
+    /// <inheritdoc/>
     public abstract void SetVSync( bool vsync );
+
+    /// <inheritdoc/>
     public abstract void SetForegroundFps( int fps );
+
+    /// <inheritdoc/>
     public abstract bool SetFullscreenMode( IGraphics.DisplayMode displayMode );
 
     // ========================================================================
+    // 
+    
+    /// <inheritdoc/>
     public abstract bool SupportsExtension( string extension );
+
+    /// <inheritdoc/>
     public abstract bool SupportsDisplayModeChange();
+
+    /// <inheritdoc/>
     public abstract void RequestRendering();
+
+    /// <inheritdoc/>
     public abstract int GetSafeInsetLeft();
+
+    /// <inheritdoc/>
     public abstract int GetSafeInsetTop();
+
+    /// <inheritdoc/>
     public abstract int GetSafeInsetBottom();
+
+    /// <inheritdoc/>
     public abstract int GetSafeInsetRight();
+
+    /// <inheritdoc/>
     public abstract long GetFrameID();
+
+    /// <inheritdoc/>
     public abstract int GetFramesPerSecond();
 
-    // ========================================================================
-    public abstract ICursor NewCursor( Pixmap pixmap, int xHotspot, int yHotspot );
-    public abstract void SetCursor( ICursor cursor );
-    public abstract void SetSystemCursor( ICursor.SystemCursor systemCursor );
-
-    // ========================================================================
+    /// <inheritdoc/>
     public abstract (float X, float Y) GetPpcXY();
+
+    /// <inheritdoc/>
     public abstract (float X, float Y) GetPpiXY();
 
-    #endregion abstract methods
+    // ========================================================================
+    // Cursor / SystemCursor
+
+    /// <inheritdoc/>
+    public abstract ICursor NewCursor( Pixmap pixmap, int xHotspot, int yHotspot );
+
+    /// <inheritdoc/>
+    public abstract void SetCursor( ICursor cursor );
+
+    /// <inheritdoc/>
+    public abstract void SetSystemCursor( ICursor.SystemCursor systemCursor );
 }

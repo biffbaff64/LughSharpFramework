@@ -22,8 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-namespace LughSharp.Lugh.Core;
+namespace LughSharp.Lugh.Input;
 
 /// <summary>
 /// Base class for Input classes.
@@ -56,7 +55,7 @@ public abstract class AbstractInput : IInput
 
     // ========================================================================
 
-    private readonly List< int > _keysToCatch = new();
+    private readonly List< int > _keysToOverride = [ ];
 
     // ========================================================================
 
@@ -89,75 +88,58 @@ public abstract class AbstractInput : IInput
 
     // ========================================================================
 
-    #region catch keys
-
-    //TODO: What are 'catch keys' in LibGDX???
-    //TODO: Are these just for mobile devices???
-    //TODO: Do I need to keep these???
-    //
-    
-    /// <summary>
-    /// Either <b>adds</b> or <b>removes</b> the specified keycode to the
-    /// list of 'Catch Keys'.
-    /// </summary>
-    /// <param name="keycode"> The <see cref="IInput.Keys"/> code. </param>
-    /// <param name="addKey"> True to add, false to remove. </param>
-    public virtual void SetCatchKey( int keycode, bool addKey )
+    /// <inheritdoc/>
+    public virtual void SetOverrideKey( int keycode, bool addKey )
     {
         if ( addKey )
         {
-            _keysToCatch.Add( keycode );
+            _keysToOverride.Add( keycode );
         }
         else
         {
-            _keysToCatch.Remove( keycode );
+            _keysToOverride.Remove( keycode );
         }
     }
 
-    /// <summary>
-    /// Returns <b>true</b> if the list of Catch Keys contains the given key code.
-    /// </summary>
-    /// <param name="keycode"> The <see cref="IInput.Keys"/> code. </param>
-    public virtual bool IsCatchKey( int keycode )
+    /// <inheritdoc/>
+    public virtual bool IsOverrideKey( int keycode )
     {
-        return _keysToCatch.Contains( keycode );
+        return _keysToOverride.Contains( keycode );
     }
 
     /// <summary>
-    /// Returns <b>true</b> if the list of Catch Keys contains <see cref="IInput.Keys.BACK"/>
+    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.BACK"/>
     /// </summary>
-    public virtual bool IsCatchBackKey()
+    public virtual bool IsOverrideBackKey()
     {
-        return _keysToCatch.Contains( IInput.Keys.BACK );
+        return _keysToOverride.Contains( IInput.Keys.BACK );
     }
 
     /// <summary>
     /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.BACK"/> key.
     /// </summary>
     /// <param name="addKey"> True to add, false to remove. </param>
-    public virtual void SetCatchBackKey( bool addKey )
+    public virtual void SetOverrideBackKey( bool addKey )
     {
-        SetCatchKey( IInput.Keys.BACK, addKey );
+        SetOverrideKey( IInput.Keys.BACK, addKey );
     }
 
     /// <summary>
-    /// Returns <b>true</b> if the list of Catch Keys contains <see cref="IInput.Keys.MENU"/>
+    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.MENU"/>
     /// </summary>
-    public virtual bool IsCatchMenuKey()
+    public virtual bool IsOverrideMenuKey()
     {
-        return _keysToCatch.Contains( IInput.Keys.MENU );
+        return _keysToOverride.Contains( IInput.Keys.MENU );
     }
 
     /// <summary>
     /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.MENU"/> key.
     /// </summary>
     /// <param name="addKey"> True to add, false to remove. </param>
-    public virtual void SetCatchMenuKey( bool addKey )
+    public virtual void SetOverrideMenuKey( bool addKey )
     {
-        SetCatchKey( IInput.Keys.MENU, addKey );
+        SetOverrideKey( IInput.Keys.MENU, addKey );
     }
-
-    #endregion catch keys
 
     // ========================================================================
     // Abstract methods to be implemented by any inheriting classes.
@@ -197,8 +179,8 @@ public abstract class AbstractInput : IInput
     public abstract bool  IsButtonPressed( int button );
     public abstract bool  IsButtonJustPressed( int button );
     public abstract bool  IsPeripheralAvailable( IInput.Peripheral peripheral );
-    public abstract void  SetCursorCaught( bool caught );
-    public abstract bool  IsCursorCaught();
+    public abstract void  SetCursorOverridden( bool caught );
+    public abstract bool  IsCursorOverridden();
     public abstract void  SetCursorPosition( int x, int y );
     public abstract void  SetOnscreenKeyboardVisible( bool visible );
     public abstract void  SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType type );

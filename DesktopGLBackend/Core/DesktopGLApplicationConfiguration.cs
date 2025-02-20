@@ -31,6 +31,8 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using DesktopGLBackend.Graphics;
 using DesktopGLBackend.Window;
 
+using LughSharp.Lugh.Files;
+
 namespace DesktopGLBackend.Core;
 
 /// <summary>

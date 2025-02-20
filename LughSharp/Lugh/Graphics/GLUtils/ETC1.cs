@@ -24,7 +24,8 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 using LughSharp.Lugh.Utils.Exceptions;
 using Exception = System.Exception;
 
@@ -322,7 +323,7 @@ public class ETC1
 
                 var fileSize = input.ReadInt32();
 
-                CompressedData = BufferUtils.NewByteBuffer( fileSize, isUnsafe: false );
+                CompressedData = BufferUtils.NewByteBuffer( fileSize );
 
                 int readBytes;
 

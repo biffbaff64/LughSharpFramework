@@ -22,10 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Core;
+namespace LughSharp.Lugh.Files;
 
 [PublicAPI]
 public interface IFiles

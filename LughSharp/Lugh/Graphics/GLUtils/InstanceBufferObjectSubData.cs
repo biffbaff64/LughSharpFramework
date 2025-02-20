@@ -24,7 +24,8 @@
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
@@ -74,7 +75,7 @@ public class InstanceBufferObjectSubData : IInstanceData
     {
         _isStatic   = isStatic;
         Attributes  = instanceAttributes;
-        _byteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numInstances, false );
+        _byteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numInstances );
         _isDirect   = true;
 
         _usage       = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;

@@ -24,7 +24,8 @@
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
@@ -62,7 +63,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( bool isStatic, int maxIndices )
     {
-        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2, false );
+        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2 );
 
         _usage  = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
         _buffer = _byteBuffer.AsShortBuffer();
@@ -79,7 +80,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( int maxIndices )
     {
-        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2, false );
+        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2 );
 
         _usage  = IGL.GL_STATIC_DRAW;
         _buffer = _byteBuffer.AsShortBuffer();

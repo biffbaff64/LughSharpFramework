@@ -25,7 +25,8 @@
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Exception = System.Exception;
@@ -143,7 +144,7 @@ public class KtxTextureData : ITextureData, ICubemapData
 
                 var fileSize = dataInputStream.ReadInt32();
 
-                _compressedData = BufferUtils.NewByteBuffer( fileSize, isUnsafe: false );
+                _compressedData = BufferUtils.NewByteBuffer( fileSize );
 
                 int readBytes;
 
@@ -282,7 +283,7 @@ public class KtxTextureData : ITextureData, ICubemapData
             _compressedData.Limit    = pos;
             _compressedData.Position = 0;
 
-            var directBuffer = BufferUtils.NewByteBuffer( pos, isUnsafe: false );
+            var directBuffer = BufferUtils.NewByteBuffer( pos );
             directBuffer.Order( _compressedData.Order() );
             directBuffer.Put( _compressedData );
 

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Input;
+
 namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 
 /// <summary>

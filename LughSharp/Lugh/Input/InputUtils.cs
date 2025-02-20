@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using Keys = LughSharp.Lugh.Core.IInput.Keys;
+using Keys = LughSharp.Lugh.Input.IInput.Keys;
 
 namespace LughSharp.Lugh.Input;
 

@@ -26,7 +26,8 @@ using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Matrix3 = LughSharp.Lugh.Maths.Matrix3;
@@ -60,7 +61,7 @@ public class Mesh : IDisposable
 
     private static readonly Dictionary< IApplication, List< Mesh >? > _meshes = new();
 
-    private readonly ShortBuffer _shortBuffer = BufferUtils.NewShortBuffer( 100 );
+    private readonly ShortBuffer _shortBuffer = new( 100 );
     private readonly Vector3     _tmpV        = new();
     private readonly IVertexData _vertices;
     private readonly IIndexData  _indices;
@@ -490,7 +491,7 @@ public class Mesh : IDisposable
         var pos            = verticesBuffer.Position;
 
         verticesBuffer.Position = srcOffset;
-        verticesBuffer.Get( vertices, destOffset, count );
+        verticesBuffer.GetFloats( vertices, destOffset, count );
         verticesBuffer.Position = pos;
 
         return vertices;
@@ -575,7 +576,7 @@ public class Mesh : IDisposable
         var pos = IndicesBuffer.Position;
 
         IndicesBuffer.Position = srcOffset;
-        IndicesBuffer.Get( indices, destOffset, count );
+        IndicesBuffer.GetShorts( indices, destOffset, count );
         IndicesBuffer.Position = pos;
     }
 
@@ -748,7 +749,7 @@ public class Mesh : IDisposable
 
                 var buffer = _indices.GetBuffer( false );
 
-                fixed ( short* ptr = &buffer.BackingArray()[ 0 ] ) // Simplified fixed statement
+                fixed ( short* ptr = &buffer.ToArray()[ 0 ] ) // Simplified fixed statement
                 {
                     GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, ptr + offset );
                 }
@@ -802,11 +803,11 @@ public class Mesh : IDisposable
     {
         var attributes = _vertices.Attributes;
 
-        var len = attributes?.Size;
+        var len = attributes.Size;
 
         for ( var i = 0; i < len; i++ )
         {
-            if ( attributes!.Get( i ).Usage == usage )
+            if ( attributes.Get( i ).Usage == usage )
             {
                 return attributes.Get( i );
             }
@@ -859,7 +860,7 @@ public class Mesh : IDisposable
         var posAttrib = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
 
         var offset     = posAttrib!.Offset / 4;
-        var vertexSize = _vertices.Attributes!.VertexSize / 4;
+        var vertexSize = _vertices.Attributes.VertexSize / 4;
         var idx        = offset;
 
         switch ( posAttrib.NumComponents )
@@ -868,7 +869,7 @@ public class Mesh : IDisposable
             {
                 for ( var i = 0; i < numVertices; i++ )
                 {
-                    bbox.Extend( verts.Get( idx ), 0, 0 );
+                    bbox.Extend( verts.GetFloat( idx ), 0, 0 );
                     idx += vertexSize;
                 }
 
@@ -879,7 +880,7 @@ public class Mesh : IDisposable
             {
                 for ( var i = 0; i < numVertices; i++ )
                 {
-                    bbox.Extend( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
+                    bbox.Extend( verts.GetFloat( idx ), verts.GetFloat( idx + 1 ), 0 );
                     idx += vertexSize;
                 }
 
@@ -890,7 +891,7 @@ public class Mesh : IDisposable
             {
                 for ( var i = 0; i < numVertices; i++ )
                 {
-                    bbox.Extend( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
+                    bbox.Extend( verts.GetFloat( idx ), verts.GetFloat( idx + 1 ), verts.GetFloat( idx + 2 ) );
                     idx += vertexSize;
                 }
 
@@ -959,7 +960,7 @@ public class Mesh : IDisposable
         var index      = _indices.GetBuffer( false );
         var posAttrib  = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
         var posoff     = posAttrib!.Offset / 4;
-        var vertexSize = _vertices.Attributes?.VertexSize / 4;
+        var vertexSize = _vertices.Attributes.VertexSize / 4;
         var end        = offset + count;
 
         switch ( posAttrib.NumComponents )
@@ -969,9 +970,9 @@ public class Mesh : IDisposable
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( int )( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
+                        var idx = ( int )( ( index.GetShort( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
-                        _tmpV.Set( verts.Get( idx ), 0, 0 );
+                        _tmpV.Set( verts.GetFloat( idx ), 0, 0 );
 
                         if ( transform != null )
                         {
@@ -987,7 +988,7 @@ public class Mesh : IDisposable
                     {
                         var idx = ( int )( i * vertexSize )! + posoff;
 
-                        _tmpV.Set( verts.Get( idx ), 0, 0 );
+                        _tmpV.Set( verts.GetFloat( idx ), 0, 0 );
 
                         if ( transform != null )
                         {
@@ -1005,9 +1006,9 @@ public class Mesh : IDisposable
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( int )( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
+                        var idx = ( int )( ( index.GetShort( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
-                        _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
+                        _tmpV.Set( verts.GetFloat( idx ), verts.GetFloat( idx + 1 ), 0 );
 
                         if ( transform != null )
                         {
@@ -1023,7 +1024,7 @@ public class Mesh : IDisposable
                     {
                         var idx = ( int )( i * vertexSize )! + posoff;
 
-                        _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
+                        _tmpV.Set( verts.GetFloat( idx ), verts.GetFloat( idx + 1 ), 0 );
 
                         if ( transform != null )
                         {
@@ -1041,9 +1042,9 @@ public class Mesh : IDisposable
                 {
                     for ( var i = offset; i < end; i++ )
                     {
-                        var idx = ( int )( ( index.Get( i ) & 0xFFFF ) * vertexSize )! + posoff;
+                        var idx = ( int )( ( index.GetShort( i ) & 0xFFFF ) * vertexSize )! + posoff;
 
-                        _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
+                        _tmpV.Set( verts.GetFloat( idx ), verts.GetFloat( idx + 1 ), verts.GetFloat( idx + 2 ) );
 
                         if ( transform != null )
                         {
@@ -1059,7 +1060,7 @@ public class Mesh : IDisposable
                     {
                         var idx = ( int )( i * vertexSize )! + posoff;
 
-                        _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
+                        _tmpV.Set( verts.GetFloat( idx ), verts.GetFloat( idx + 1 ), verts.GetFloat( idx + 2 ) );
 
                         if ( transform != null )
                         {
@@ -1105,7 +1106,7 @@ public class Mesh : IDisposable
         var index      = _indices.GetBuffer( false );
         var posAttrib  = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
         var posoff     = posAttrib!.Offset / 4;
-        var vertexSize = _vertices.Attributes!.VertexSize / 4;
+        var vertexSize = _vertices.Attributes.VertexSize / 4;
         var end        = offset + count;
 
         float result = 0;
@@ -1115,9 +1116,9 @@ public class Mesh : IDisposable
             case 1:
                 for ( var i = offset; i < end; i++ )
                 {
-                    var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+                    var idx = ( ( index.GetShort( i ) & 0xFFFF ) * vertexSize ) + posoff;
 
-                    _tmpV.Set( verts.Get( idx ), 0, 0 );
+                    _tmpV.Set( verts.GetFloat( idx ), 0, 0 );
 
                     if ( transform != null )
                     {
@@ -1137,9 +1138,9 @@ public class Mesh : IDisposable
             case 2:
                 for ( var i = offset; i < end; i++ )
                 {
-                    var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+                    var idx = ( ( index.GetShort( i ) & 0xFFFF ) * vertexSize ) + posoff;
 
-                    _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), 0 );
+                    _tmpV.Set( verts.GetFloat( idx ), verts.GetFloat( idx + 1 ), 0 );
 
                     if ( transform != null )
                     {
@@ -1159,9 +1160,9 @@ public class Mesh : IDisposable
             case 3:
                 for ( var i = offset; i < end; i++ )
                 {
-                    var idx = ( ( index.Get( i ) & 0xFFFF ) * vertexSize ) + posoff;
+                    var idx = ( ( index.GetShort( i ) & 0xFFFF ) * vertexSize ) + posoff;
 
-                    _tmpV.Set( verts.Get( idx ), verts.Get( idx + 1 ), verts.Get( idx + 2 ) );
+                    _tmpV.Set( verts.GetFloat( idx ), verts.GetFloat( idx + 1 ), verts.GetFloat( idx + 2 ) );
 
                     if ( transform != null )
                     {
@@ -1518,11 +1519,11 @@ public class Mesh : IDisposable
         for ( var i = 0; i < count; i++ )
         {
             var index = offset + ( ( start + i ) * vertexSize );
-            var uv    = new Vector2( verts.Get( index ), verts.Get( index + 1 ) );
+            var uv    = new Vector2( verts.GetFloat( index ), verts.GetFloat( index + 1 ) );
             uv = matrix.Transform( uv );
 
-            verts.Put( index, uv.X );
-            verts.Put( index + 1, uv.Y );
+            verts.PutFloat( index, uv.X );
+            verts.PutFloat( index + 1, uv.Y );
         }
     }
 
@@ -1718,7 +1719,7 @@ public class Mesh : IDisposable
         }
 
         var result = ( attrs == null )
-            ? new Mesh( isStatic, numVertices, indices?.Length ?? 0, VertexAttributes! )
+            ? new Mesh( isStatic, numVertices, indices?.Length ?? 0, VertexAttributes )
             : new Mesh( isStatic, numVertices, indices?.Length ?? 0, attrs );
 
         result.SetVertices( vertices, 0, numVertices * newVertexSizeFloats ); // Use float vertex size
@@ -1780,7 +1781,7 @@ public class Mesh : IDisposable
     /// <summary>
     /// the size of a single vertex in bytes
     /// </summary>
-    public int VertexSize => _vertices.Attributes!.VertexSize;
+    public int VertexSize => _vertices.Attributes.VertexSize;
 
     /// <summary>
     /// the backing shortbuffer holding the _indices.
@@ -1793,7 +1794,7 @@ public class Mesh : IDisposable
     /// <summary>
     /// Provides a summary of the managed status of meshes within the application.
     /// Returns a string that indicates the number of managed meshes for each application context.
-    /// </summary
+    /// </summary>
     public static string RepoprtManagedStatus
     {
         get

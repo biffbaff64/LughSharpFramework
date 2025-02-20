@@ -25,7 +25,8 @@
 using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Audio.OpenAL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 using JetBrains.Annotations;
 
 namespace DesktopGLBackend.Audio;

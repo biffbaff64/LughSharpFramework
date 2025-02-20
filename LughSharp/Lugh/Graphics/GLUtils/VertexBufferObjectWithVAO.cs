@@ -24,7 +24,8 @@
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
@@ -167,10 +168,15 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// <param name="count"> the number of floats to copy  </param>
     public void SetVertices( float[] vertices, int offset, int count )
     {
+        Logger.Debug( $"vertices length: {vertices.Length} ({vertices.Length << 2}), offset: {offset}, count: {count}" );
+
         _isDirty = true;
 
-        _byteBuffer.AddFloats( vertices, offset, count );
- 
+//        _byteBuffer.Limit = Math.Min( _byteBuffer.Capacity, count << 2 );    // count << 2;
+//        _byteBuffer.AddFloats( vertices, offset, count );
+
+        BufferUtils.CopyFloatsToBufferByteArray( vertices, _byteBuffer, count, offset );
+
         _buffer.Position = 0;
         _buffer.Limit    = count;
 

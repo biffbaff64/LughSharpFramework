@@ -23,8 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
-using LughSharp.Lugh.Utils.Buffers.HeapBuffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Images;
@@ -38,7 +38,8 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// format of the pixmap.
 /// The <see cref="ColorType"/> is one of the GDX_2D_FORMAT_XXX constants.
 /// </summary>
-[PublicAPI, StructLayout( LayoutKind.Sequential )]
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
 public struct PixmapDataType()
 {
     public uint   Width         { get; set; } = 0;
@@ -213,7 +214,7 @@ public partial class Gdx2DPixmap : IDisposable
             Pixels        = new byte[ length ],
         };
 
-        PixmapBuffer = new HeapByteBuffer( _pixmapDataType.Pixels, 0, length );
+        PixmapBuffer = new ByteBuffer( _pixmapDataType.Pixels, 0, length );
 
         if ( PixmapBuffer == null )
         {
@@ -238,7 +239,7 @@ public partial class Gdx2DPixmap : IDisposable
     private static ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
         PNGUtils.AnalysePNG( buffer, PNGUtils.NO_OUTPUT );
-        
+
         var pixmapDef = new PixmapDataType
         {
             Width         = ( uint )PNGUtils.IHDRchunk.Width,
@@ -253,7 +254,7 @@ public partial class Gdx2DPixmap : IDisposable
 
         Array.Copy( buffer, PNGUtils.IDAT_DATA_OFFSET, pixmapDef.Pixels, 0, PNGUtils.IDATchunk.ChunkSize );
 
-        return ( new HeapByteBuffer( pixmapDef.Pixels, 0, pixmapDef.Pixels.Length ), pixmapDef );
+        return ( new ByteBuffer( pixmapDef.Pixels, 0, pixmapDef.Pixels.Length ), pixmapDef );
     }
 
     /// <summary>

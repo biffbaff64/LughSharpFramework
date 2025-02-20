@@ -27,7 +27,8 @@ using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 
 namespace LughSharp.Lugh.Utils;
 
@@ -190,9 +191,9 @@ public class ScreenUtils
 
         GdxApi.Bindings.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
-        var pixels = BufferUtils.NewByteBuffer( numBytes );
+        var pixels = new ByteBuffer( numBytes );
         
-        fixed ( void* ptr = &pixels.Hb!.ToArray()[ 0 ] )
+        fixed ( void* ptr = &pixels.ToArray()[ 0 ] )
         {
             GdxApi.Bindings.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ptr );
         }
@@ -207,14 +208,14 @@ public class ScreenUtils
             {
                 pixels.Position = ( h - i - 1 ) * numBytesPerLine;
 
-                pixels.Get( lines, i * numBytesPerLine, numBytesPerLine );
+                pixels.GetBytes( lines, i * numBytesPerLine, numBytesPerLine );
             }
         }
         else
         {
             pixels.Clear();
 
-            pixels.Get( lines );
+            pixels.GetBytes( lines );
         }
 
         return lines;

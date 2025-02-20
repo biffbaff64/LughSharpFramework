@@ -532,12 +532,15 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     /// </summary>
     [PublicAPI]
     public class DesktopGLMonitor( GLFW.Monitor monitor, int virtualX, int virtualY, string name )
-        : IGraphics.GdxMonitor( virtualX, virtualY, name )
     {
         /// <summary>
         /// The <see cref="GLFW.Monitor"/>.
         /// </summary>
         public GLFW.Monitor MonitorHandle { get; private set; } = monitor;
+
+        public int    VirtualX { get; set; } = virtualX;
+        public int    VirtualY { get; set; } = virtualY;
+        public string Name     { get; set; } = name;
     }
 
     // ========================================================================

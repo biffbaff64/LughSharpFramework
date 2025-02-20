@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils.Exceptions;
+
 namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
 
 /// <summary>
@@ -40,22 +42,35 @@ public abstract class Buffer : IDisposable
 
     // ========================================================================
 
+    public const int DEFAULT_MAC_100MB = ( 100 * 1024 * 1024 );
+    public const int DEFAULT_MAC_500MB = ( 500 * 1024 * 1024 );
+    public const int DEFAULT_MAC_1GB   = ( 1000 * 1024 * 1024 );
+    public const int DEFAULT_MAC_2GB   = ( 2000 * 1024 * 1024 );
+
+    // ========================================================================
+
     protected const bool IS_READ_ONLY_DEFAULT = false;
     protected const bool IS_DIRECT_DEFAULT    = false;
 
     // ========================================================================
 
-    public bool IsReadOnly  { get; protected set; }
-    public bool IsDirect    { get; protected set; }
-    public int  Capacity    { get; protected set; }
-    public int  Position    { get; set; }
-    public int  Limit       { get; set; }
-    public int  Length      { get; protected set; }
-    public bool IsBigEndian { get; set; }
+    public bool      IsReadOnly        { get; protected set; }
+    public bool      IsDirect          { get; protected set; }
+    public int       Capacity          { get; protected set; }
+    public int       Position          { get; set; }
+    public int       Limit             { get; set; }
+    public int       Length            { get; protected set; }
+    public bool      IsBigEndian       { get; set; }
+    public bool      AutoResizeEnabled { get; set; } = true;
 
-    private int _markPosition = -1;
+    private int _markPosition       = -1;
+    private int _maxAllowedCapacity = DEFAULT_MAC_1GB;
 
     // ========================================================================
+
+    internal Buffer()
+    {
+    }
 
     /// <summary>
     /// Creates a new Buffer object 
@@ -63,15 +78,15 @@ public abstract class Buffer : IDisposable
     /// <param name="capacityInBytes"></param>
     protected Buffer( int capacityInBytes )
     {
-        Capacity = capacityInBytes;
-        Limit    = capacityInBytes;
-        Length   = 0;
-        Position = 0;
-
         IsBigEndian = !BitConverter.IsLittleEndian;
         IsReadOnly  = IS_READ_ONLY_DEFAULT;
         IsDirect    = IS_DIRECT_DEFAULT;
 
+        Capacity  = capacityInBytes;
+        Limit     = capacityInBytes;
+        Length    = 0;
+        Position  = 0;
+        
         SetBufferStatus( READ_WRITE, NOT_DIRECT ); // Set default status
     }
 
@@ -90,6 +105,28 @@ public abstract class Buffer : IDisposable
     // ========================================================================
 
     /// <summary>
+    /// Ensures that the buffer has at least the specified capacity (in bytes).
+    /// Resizes the buffer if necessary.
+    /// </summary>
+    /// <param name="requiredCapacityInBytes">The minimum capacity (in bytes) required.</param>
+    protected virtual void EnsureCapacity( int requiredCapacityInBytes )
+    {
+        if ( AutoResizeEnabled )
+        {
+            if ( Capacity < requiredCapacityInBytes )
+            {
+                var extraCapacityNeeded = requiredCapacityInBytes - Capacity;
+
+                Resize( extraCapacityNeeded ); // Use existing Resize method to increase capacity
+            }
+        }
+        else
+        {
+            throw new BufferOverflowException( "Buffer Overflow!" );
+        }
+    }
+
+    /// <summary>
     /// Resize the backing array by taking the existing capacity and adding the requested
     /// extra capacity.
     /// </summary>
@@ -100,7 +137,7 @@ public abstract class Buffer : IDisposable
     /// </param>
     public virtual void Resize( int extraCapacityInBytes )
     {
-        throw new NotImplementedException();
+        throw new GdxRuntimeException( "Resize() is abstract in base class, use extending class!" );
     }
 
     /// <summary>
@@ -108,7 +145,7 @@ public abstract class Buffer : IDisposable
     /// </summary>
     public virtual void Clear()
     {
-        throw new NotImplementedException();
+        throw new GdxRuntimeException( "Clear() is abstract in base class, use extending class!" );
     }
 
     /// <summary>
@@ -187,6 +224,18 @@ public abstract class Buffer : IDisposable
     public ByteOrder Order() => IsBigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="order"></param>
+    /// <returns></returns>
+    public virtual Buffer Order( ByteOrder order )
+    {
+        IsBigEndian = order == ByteOrder.BigEndian;
+
+        return this;
+    }
+
+    /// <summary>
     /// Concept: Shrink() (or sometimes called Compact() in other buffer APIs) is about reducing the
     /// buffer's Capacity to be closer to the amount of data it actually holds (up to the Limit). It's
     /// often used to reclaim memory if a buffer was allocated with a large capacity but is now holding
@@ -235,7 +284,7 @@ public abstract class Buffer : IDisposable
     {
         _markPosition = -1;
     }
-    
+
     /// <summary>
     /// Sets the Position back to the last saved "mark." The mark is typically discarded after
     /// Reset() is called. If Mark() has not been called, Reset() might have undefined behavior.
@@ -262,6 +311,86 @@ public abstract class Buffer : IDisposable
 
         Position      = _markPosition; // Restore Position to the marked position
         _markPosition = -1;            // Clear the mark after reset (one-time use mark)
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// A safeguard against uncontrolled auto-resizing. Without a maximum, a buffer could
+    /// theoretically grow to consume all available memory, potentially leading to out-of-
+    /// memory errors or performance issues.  MaxAllowedCapacity sets a reasonable limit.
+    /// <br></br>
+    /// <para>
+    /// <b>Factors to Consider when Choosing a a value for MaxAllowedCapacity:</b>
+    /// </para>
+    /// <para>
+    /// <b>1. Typical Use Cases and Data Sizes:</b>
+    /// <li>
+    /// Small Buffers (Kilobytes to a few Megabytes): If your library is primarily intended
+    /// for handling relatively small data structures, network packets, or configuration data,
+    /// a smaller MaxAllowedCapacity might be appropriate.
+    /// </li>
+    /// <li>
+    /// Medium Buffers (Megabytes to hundreds of Megabytes): For applications dealing with moderate-
+    /// sized files, images, or intermediate data processing, a medium-sized limit might be suitable.
+    /// </li>
+    /// <li>
+    /// Large Buffers (Gigabytes or more): If your project is designed for high-performance scenarios,
+    /// large data sets, or memory-intensive operations (e.g., large file processing, in-memory databases,
+    /// scientific computing), a larger MaxAllowedCapacity or even no default limit (relying on system
+    /// memory limits) might be considered (with caution).
+    /// </li>
+    /// <br></br>
+    /// <b>2. Memory Constraints of Target Environments:</b>
+    /// <li>
+    /// Resource-Constrained Environments (Mobile, Embedded, IoT): In environments with limited RAM, a
+    /// smaller MaxAllowedCapacity is crucial to prevent out-of-memory errors and ensure efficient
+    /// resource utilization. Defaults in the range of 100MB to 500MB or even lower might be more
+    /// appropriate.
+    /// </li>
+    /// <li>
+    /// Desktop/Server Environments: On systems with more abundant RAM, you can afford to set a higher
+    /// value, but still want a reasonable limit to prevent runaway memory usage in case of programming
+    /// errors or unexpected data growth. Defaults in the range of 1GB to a few GB might be more suitable.
+    /// </li>
+    /// <br></br>
+    /// <b>3. Performance Implications of Resizing:</b>
+    /// <li>
+    /// Frequent resizing, especially of very large buffers, can have performance overhead due to memory
+    /// allocation and data copying. A MaxAllowedCapacity helps to put a bound on how large a buffer can
+    /// grow and potentially limits the worst-case resizing overhead.
+    /// </li>
+    /// <br></br>
+    /// <b>4. Safety and Preventing Runaway Memory Usage:</b>
+    /// <li>
+    /// The primary purpose of MaxAllowedCapacity is to act as a safety net and prevent uncontrolled
+    /// memory growth. A reasonable default should provide this safety without being overly restrictive
+    /// in typical use cases.
+    /// </li>
+    /// </para>
+    /// <para>
+    /// Note: When setting this value, properties <see cref="Capacity"/> and <see cref="Limit"/>
+    /// will be truncated to the new max allowed capacity if they are currently greater.
+    /// If property <see cref="Position"/> is currently greater than the new Limit, it will be reset
+    /// to zero.
+    /// </para>
+    /// </summary>
+    public int MaxAllowedCapacity
+    {
+        get => _maxAllowedCapacity;
+        set
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative( value );
+
+            _maxAllowedCapacity = value;
+            Capacity            = Math.Min( Capacity, _maxAllowedCapacity );
+            Limit               = Math.Min( Limit, _maxAllowedCapacity );
+
+            if ( Position > Limit )
+            {
+                Position = 0;
+            }
+        }
     }
 
     // ========================================================================

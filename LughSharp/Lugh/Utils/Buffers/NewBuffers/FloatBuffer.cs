@@ -53,6 +53,39 @@ public class FloatBuffer : Buffer, IDisposable
         Limit               = capacityInFloats;
     }
 
+    /// <summary>
+    /// Creates a new IntBuffer that is a view of the given byte array.
+    /// This constructor is intended for creating buffer views (e.g., using ByteBuffer.AsIntBuffer()).
+    /// It shares the provided byte array; data is NOT copied.
+    /// </summary>
+    /// <param name="backingArray">The byte array to use as the backing store.</param>
+    /// <param name="offset">The starting offset within the byte array (in bytes).</param>
+    /// <param name="capacityInFloats">The capacity of the IntBuffer in ints.</param>
+    /// <param name="isBigEndian">True if big-endian byte order, false for little-endian.</param>
+    internal FloatBuffer( byte[] backingArray, int offset, int capacityInFloats, bool isBigEndian )
+    {
+        ArgumentNullException.ThrowIfNull( backingArray );
+
+        if ( ( offset < 0 ) || ( capacityInFloats < 0 ) )
+        {
+            throw new GdxRuntimeException( "Offset and capacity must be non-negative." );
+        }
+
+        if ( ( offset + ( capacityInFloats * sizeof( float ) ) ) > backingArray.Length )
+        {
+            throw new GdxRuntimeException( "Capacity and offset exceed backing array bounds." );
+        }
+
+        // Create ByteBuffer delegate with Memory<byte> slice
+        _byteBufferDelegate = new ByteBuffer( backingArray.AsMemory( offset, capacityInFloats * sizeof( float ) ),
+                                              isBigEndian );
+
+        Capacity    = capacityInFloats;
+        Length      = 0;
+        Limit       = capacityInFloats;
+        IsBigEndian = isBigEndian;
+    }
+
     // ========================================================================
 
     /// <inheritdoc cref="ByteBuffer.GetFloat()"/>
@@ -85,6 +118,8 @@ public class FloatBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( Position + sizeof( float ) );
+
         var byteOffset = Position;
 
         if ( ( byteOffset + sizeof( float ) ) > Capacity )
@@ -108,6 +143,8 @@ public class FloatBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( index + sizeof( float ) );
+
         var byteOffset = index * sizeof( float );
 
         if ( ( index < 0 ) || ( index >= Capacity ) )
@@ -123,13 +160,69 @@ public class FloatBuffer : Buffer, IDisposable
         }
     }
 
+    // ----- Bulk Get/Put operations -----
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void GetFloats( float[] floatArray )
+    {
+        _byteBufferDelegate.GetFloats( floatArray );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dst"></param>
+    /// <param name="dstOffset"></param>
+    /// <param name="length"></param>
+    public void GetFloats( float[] dst, int dstOffset, int length )
+    {
+        _byteBufferDelegate.GetFloats( dst, dstOffset, length );
+    }
+
+    /// <summary>
+    /// Adds the contents of the provided float array to this buffer, staring at
+    /// index <see cref="Buffer.Position"/>
+    /// </summary>
+    public void PutFloats( float[] floatArray )
+    {
+        _byteBufferDelegate.PutFloats( floatArray );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="srcOffset"></param>
+    /// <param name="length"></param>
+    public void PutFloats( float[] src, int srcOffset, int length )
+    {
+        _byteBufferDelegate.PutFloats( src, srcOffset, length );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Returns the backing array as a byte[].
+    /// </summary>
+    /// <returns></returns>
+    public float[] ToArray()
+    {
+        var tmpArray = new float[ Length ];
+
+        _byteBufferDelegate.GetFloats( tmpArray );
+
+        return tmpArray;
+    }
+
     // ========================================================================
 
     /// <inheritdoc cref="ByteBuffer.Resize(int)"/>
     public override void Resize( int extraCapacityInBytes )
     {
         _byteBufferDelegate.Resize( extraCapacityInBytes );
-        Capacity = (int)Math.Ceiling( (double)_byteBufferDelegate.Capacity / sizeof(float) );
+        Capacity = ( int )Math.Ceiling( ( double )_byteBufferDelegate.Capacity / sizeof( float ) );
     }
 
     /// <inheritdoc cref="ByteBuffer.Clear()"/>

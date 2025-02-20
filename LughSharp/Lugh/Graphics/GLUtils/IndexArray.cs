@@ -22,7 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
@@ -49,7 +50,7 @@ public class IndexArray : IIndexData
             maxIndices = 1; 
         }
 
-        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2, false );
+        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2 );
 
         _buffer = _byteBuffer.AsShortBuffer();
         _buffer.Flip();

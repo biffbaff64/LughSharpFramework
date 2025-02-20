@@ -21,11 +21,8 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-RULES TO FOLLOW
----------------
-
-- Methods like **Dispose(), ToString(), Equals(), GetHashCode()** should be positioned at the
-  END of source files.
+- Methods like **Dispose(), ToString(), Equals(), GetHashCode() ( Essentially overridden system methods )** 
+- should be positioned at the END of source files.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -62,7 +59,9 @@ ASSETS
     - DONE - DONE - AssetLoaderParameters
     - DONE - DONE - AssetLoadingTask
     - DONE - DONE - AssetManager
+    - DONE - DONE - AssetManagerHelper
     - DONE - DONE - IAssetErrorListener
+    - DONE - DONE - IAssetManager
     - DONE - DONE - RefCountedContainer
 
 ASSETS/LOADERS
@@ -111,13 +110,15 @@ AUDIO
 
     CODE   DOCUMENT
     ----   --------
+    - DONE - DONE - IAudio
     - DONE - DONE - IAudioDevice
+    - DONE - DONE - IAudioDeviceAsync
     - DONE - DONE - IAudioRecorder
     - DONE - DONE - IMusic
     - DONE - DONE - ISound
 
-AUDIO/MAPONUS
--------------
+AUDIO/MAPONUS ( MAPONUS is the God of Music )
+---------------------------------------------
 
     CODE   DOCUMENT
     ----   --------
@@ -230,15 +231,10 @@ CORE
     - DONE - DONE - ApplicationAdapter
     - DONE - DONE - Game
     - DONE - DONE - Gdx
-    - DONE - DONE - GDXVersion
     - DONE - DONE - IApplication
     - DONE - DONE - IApplicationListener
-    - DONE - DONE - IAudio
     - DONE - DONE - IFiles
     - DONE - DONE - IGraphics
-    - DONE - DONE - IGraphics.BufferFormatDescriptor
-    - DONE - DONE - IGraphics.DisplayMode
-    - DONE - DONE - IGraphics.GdxMonitor
     - DONE - DONE - IInput
     - DONE - DONE - IInputProcessor
     - DONE - DONE - ILifecycleListener
@@ -248,6 +244,7 @@ CORE
     - DONE - DONE - InputMultiplexer
     - DONE - DONE - IPreferences
     - DONE - DONE - IScreen
+    - DONE - DONE - LughVersion
     - DONE - DONE - Platform
     - DONE - DONE - ScreenAdapter
 
@@ -276,7 +273,6 @@ GRAPHICS
     - DONE - DONE - Color
     - DONE - DONE - Colors
     - DONE - DONE - Cubemap
-    - DONE - DONE - FPSLogger
     - DONE - DONE - GraphicsBackend
     - DONE - DONE - GStructs
     - DONE - DONE - ICubemapData
@@ -284,6 +280,17 @@ GRAPHICS
     - DONE - DONE - Mesh
     - DONE - DONE - VertexAttribute
     - DONE - DONE - VertexAttributes
+
+GRAPHICS/ATLASES
+----------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - DONE - IP   - AtlasRegion
+    - DONE - IP   - AtlasSprite
+    - DONE - IP   - TextureAtlas
+    - DONE - IP   - TextureAtlasData
+    - DONE - IP   - TextureAtlasDataExtensions
 
 GRAPHICS/CAMERAS
 ----------------
@@ -316,15 +323,13 @@ GRAPHICS/G2D
     CODE   DOCUMENT
     ----   --------
     - DONE - DONE - Animation
-    - DONE - IP   - AtlasRegion
-    - DONE - IP   - AtlasSprite
     - IP   - IP   - BitmapFont                      Much work needed!
     - IP   - IP   - BitmapFontCache                 Relies on the BitmapFont rewrite.
+    - IP   - IP   - CpuSpriteBatch                  Some methods have too many parameters
     - DONE - IP   - DistanceFieldFont
-    - IP   - IP   - Gdx2DPixmap
-    - IP   - IP   - Gdx2DPixmapExtensions
-    - IP   - IP   - Gdx2DUtils
     - DONE - IP   - GlyphLayout
+    - DONE - DONE - IBatch
+    - DONE - IP   - IPolygonBatch                   Some methods have too many parameters
     - DONE - IP   - NinePatch
     - DONE - IP   - ParticleEffect
     - DONE - IP   - ParticleEffectPool
@@ -334,21 +339,11 @@ GRAPHICS/G2D
     - DONE - IP   - PolygonRegion
     - DONE - IP   - PolygonRegionLoader
     - DONE - IP   - PolygonSprite
+    - IP   - IP   - PolygonSpriteBatch              Some methods have too many parameters
     - DONE - IP   - RepeatablePolygonSprite
     - DONE - IP   - Sprite
-    - DONE - IP   - SpriteCache
-    - DONE - IP   - TextureAtlas
-    - DONE - IP   - TextureAtlasData
-    - DONE - IP   - TextureAtlasDataExtensions
-    - DONE - IP   - TextureRegion
-
-    Batching
-    --------
-    - IP   - IP   - CpuSpriteBatch                  Some methods have too many parameters
-    - DONE - DONE - IBatch
-    - DONE - IP   - IPolygonBatch                   Some methods have too many parameters
-    - IP   - IP   - PolygonSpriteBatch              Some methods have too many parameters
     - IP   - IP   - SpriteBatch
+    - DONE - IP   - SpriteCache
 
 GRAPHICS/G3D
 ------------
@@ -381,12 +376,11 @@ GRAPHICS/GLUTILS
     - IP   - IP   - InstanceBufferObjectSubData
     - DONE - DONE - IVertexData
     - DONE - IP   - KTXTTextureData
+    - DONE - IP   - ManagedShaderProgram
     - DONE - IP   - MipMapGenerator
     - DONE - IP   - MipMapTextureData
     - DONE - IP   - PixmapTextureData
     - DONE - IP   - ShaderProgram
-    - DONE - IP   - ShaderProgramUniforms
-    - DONE - IP   - ShaderProgramUtils
     - DONE - IP   - ShapeRenderer
     - DONE - DONE - Vertex
     - DONE - DONE - VertexArray
@@ -400,6 +394,9 @@ GRAPHICS/IMAGES
     CODE   DOCUMENT
     ----   --------
     - DONE - DONE - BMPFormatStructs
+    - DONE - IP   - Gdx2DPixmap
+    - DONE - IP   - Gdx2DPixmapExtensions
+    - DONE - IP   - Gdx2DPixmapUtils
     - DONE - IP   - GLTexture
     - DONE - DONE - ITextureArrayData
     - DONE - DONE - ITextureData
@@ -411,6 +408,7 @@ GRAPHICS/IMAGES
     - DONE - IP   - Texture
     - DONE - IP   - TextureArray
     - DONE - DONE - TextureDataFactory
+    - DONE - IP   - TextureRegion
 
 GRAPHICS/OPENGL
 ---------------
@@ -423,6 +421,7 @@ GRAPHICS/OPENGL
     ----   --------
     - DONE - DONE - DebugSeverity
     - DONE - DONE - GLBindings
+    - DONE - DONE - GLBindingsStructs
     - DONE - DONE - GLFunctionDelegates
     - DONE - DONE - GLFunctionsLoader
     - DONE - DONE - GLUtils
@@ -434,26 +433,17 @@ GRAPHICS/OPENGL/ENUMS
 ---------------------
     CODE   DOCUMENT
     ----   --------
+    - DONE - DONE - BlendingFactor
     - DONE - DONE - BufferEnums
     - DONE - DONE - EnableCap
+    - DONE - DONE - LogicOp
     - DONE - DONE - ProgramProperty
-    - DONE - DONE - ShaderParameterName
+    - DONE - DONE - ShaderEnums
     - DONE - DONE - StringName
+    - DONE - DONE - TextureLimits
     - DONE - DONE - TextureUnit
     - DONE - DONE - TextureWrapMode
-
-
-GRAPHICS/PROFILING
-------------------
-
-    These are profiling classes only. If adding GL/Glfw breaks these update them later on.
-
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - DONE - BaseGLInterceptor
-    - DONE - DONE - GLInterceptor
-    - DONE - DONE - GLProfiler          
-    - DONE - DONE - IGLErrorListener
+    - DONE - DONE - VertexAttribPointerType
 
 GRAPHICS/VIEWPORT
 -----------------
@@ -583,6 +573,7 @@ MATHS
     - IP   - IP   - EarClippingTriangulator     Needs some testing
     - DONE - DONE - Ellipse
     - DONE - IP   - FloatCounter
+    - DONE - IP   - FloatMatrixStructs
     - DONE - IP   - Frustrum
     - DONE - IP   - GeometryUtils
     - DONE - IP   - GridPoint2
@@ -605,8 +596,8 @@ MATHS
     - DONE - IP   - RandomXS128
     - DONE - IP   - RectangleShape
     - DONE - DONE - SimpleVectors
-    - DONE - IP   - Vector2                        Convert, I prefer the way the LibGDX class works.
-    - DONE - IP   - Vector3                        Convert, I prefer the way the LibGDX class works.
+    - DONE - IP   - Vector2
+    - DONE - IP   - Vector3
     - DONE - IP   - WindowedMean
 
 MATH/COLLISION
@@ -614,6 +605,7 @@ MATH/COLLISION
 
     CODE   DOCUMENT
     ----   --------
+    - DONE - IP   - Area2D
     - DONE - IP   - BoundingBox
     - DONE - DONE - Ray
     - DONE - IP   - Segment
@@ -779,20 +771,24 @@ SCENES/SCENE2D/UTILS
 UTILS
 -----
 
-    - Move Utils/Collections and Utils/Viewport out of Utils and into somewhere more appropriate.
+    - Move Utils/Collections out of Utils and into somewhere more appropriate.
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - Align
+    - DONE - DONE - Alignment
     - DONE - DONE - BinaryHeap
     - DONE - DONE - Bits
-    - DONE - DONE - ByteOrder                       Is this still needed? Possible Delete Candidate?
+    - DONE - DONE - ByteOrder
+    - DONE - DONE - BytePointerToString
     - DONE - DONE - Character                       C# System MUST already have this???
     - DONE - IP   - ComparableTimSort
+    - DONE - DONE - Constants
     - DONE - IP   - DataInput                       Check
     - DONE - IP   - DataOutput                      Check
     - DONE - DONE - DataUtils                       Added Class
-    - DONE - DONE - FloatConstants
+    - DONE - DONE - FPSLogger
+    - DONE - IP   - GCSuppressor
+    - DONE - IP   - GdxNativesLoader
     - DONE - DONE - IClipboard                      Convert - Interface, clipboard handled in backends.
     - DONE - DONE - ICloseable
     - DONE - DONE - IManaged
@@ -816,10 +812,9 @@ UTILS
     - DONE - DONE - TimeUtils
     - DONE - IP   - TimSort
 
-    - The following do not need converting
+    - The following do not need converting ( tbc )
 
     - **** - Base64Coder                    Use System.Convert classes
-    - **** - GdxNativesLoader
     - **** - I18NBundle
     - **** - LittleEndianInputStream
     - **** - PauseableThread
@@ -852,31 +847,6 @@ UTILS/BUFFERS
     - **** - **** - MappedByteBuffer            Not needed yet
     - **** - **** - StringCharBuffer            Not needed yet
 
-UTILS/BUFFERS/BYTEBUFFERAS
---------------------------
-
-     CODE   DOCUMENT
-    ----   --------
-    - **** - **** - ByteBufferAsCharBufferB     Not needed yet
-    - **** - **** - ByteBufferAsCharBufferL     Not needed yet
-    - **** - **** - ByteBufferAsDoubleBufferB   Not needed yet
-    - **** - **** - ByteBufferAsDoubleBufferL   Not needed yet
-    - **** - **** - ByteBufferAsFloatBufferB    Not needed yet
-    - **** - **** - ByteBufferAsFloatBufferL    Not needed yet
-    - **** - **** - ByteBufferAsIntBufferB      Not needed yet
-    - **** - **** - ByteBufferAsIntBufferL      Not needed yet
-    - **** - **** - ByteBufferAsLongBufferB     Not needed yet
-    - **** - **** - ByteBufferAsLongBufferL     Not needed yet
-    - **** - **** - ByteBufferAsShortBufferB    Not needed yet
-    - **** - **** - ByteBufferAsShortBufferL    Not needed yet
-
-UTILS/BUFFERS/DIRECTBUFFERS
----------------------------
-
-     CODE   DOCUMENT
-    ----   --------
-    - **** - **** - DirectByteBuffer            Not needed yet
-
 UTILS/BUFFERS/HEAPBUFFERS
 -------------------------
 
@@ -895,6 +865,20 @@ UTILS/BUFFERS/HEAPBUFFERS
     - IP   - IP   - HeapIntBufferR
     - IP   - IP   - HeapShortBufferR
 
+UTILS/BUFFERS/NEWBUFFERS
+------------------------
+
+  *** In development, new Buffer library to replace existing one. ***
+
+     CODE   DOCUMENT
+    ----   --------
+    - IP   - IP   - Buffer
+    - IP   - IP   - BufferTests
+    - IP   - IP   - ByteBuffer
+    - IP   - IP   - FLoatBuffer
+    - IP   - IP   - IntBuffer
+    - IP   - IP   - ShortBuffer
+
 UTILS/COLLECTIONS
 -----------------
 
@@ -902,8 +886,8 @@ UTILS/COLLECTIONS
     ----   --------
     - DONE - DONE - Array<T>                       Converted, but use List<T> for most cases.
     - DONE - IP   - ByteArray                      List< byte > should be fine for most cases.
-    - DONE - DONE - DictionaryExtensions
     - DONE - DONE - DelayedRemovalList             Convert / Extend List<>
+    - DONE - DONE - DictionaryExtensions
     - DONE - DONE - ListExtensions
     - DONE - DONE - ObjectMap                      Converted, but use Dictionary< object, object >
     - DONE - DONE - SnapshotArray<T>
@@ -950,6 +934,13 @@ UTILS/EXCEPTIONS
     - DONE - DONE - GdxRuntimeException
     - DONE - DONE - ReadOnlyBufferException
     - DONE - DONE - SpriteBatchException
+
+UTILS/NUMBERS
+-------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - IP   - IP   - IntToByte
 
 UTILS/POOLING
 -------------

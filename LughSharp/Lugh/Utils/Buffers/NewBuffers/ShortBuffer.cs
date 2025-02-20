@@ -30,8 +30,8 @@ namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
 /// Provides a type-safe view of an underlying ByteBuffer, specialized for short values.
 /// This buffer holds a reference to a ByteBuffer instance (_byteBuffer), and does
 /// not have its own backing arrays.
-/// Properties <see cref="Buffers.ByteBuffer.Limit"/> and <see cref="Buffers.ByteBuffer.Capacity"/> are
-/// delegated to the <see cref="Buffers.ByteBuffer"/> class, as it is that cass which handles
+/// Properties <see cref="ByteBuffer.Limit"/> and <see cref="ByteBuffer.Capacity"/> are
+/// delegated to the <see cref="ByteBuffer"/> class, as it is that cass which handles
 /// the underlying byte buffer.
 /// </summary>
 [PublicAPI]
@@ -54,6 +54,39 @@ public class ShortBuffer : Buffer, IDisposable
         Capacity            = capacityInShorts;
         Length              = 0;
         Limit               = capacityInShorts;
+    }
+
+    /// <summary>
+    /// Creates a new IntBuffer that is a view of the given byte array.
+    /// This constructor is intended for creating buffer views (e.g., using ByteBuffer.AsIntBuffer()).
+    /// It shares the provided byte array; data is NOT copied.
+    /// </summary>
+    /// <param name="backingArray">The byte array to use as the backing store.</param>
+    /// <param name="offset">The starting offset within the byte array (in bytes).</param>
+    /// <param name="capacityInShorts">The capacity of the IntBuffer in ints.</param>
+    /// <param name="isBigEndian">True if big-endian byte order, false for little-endian.</param>
+    internal ShortBuffer( byte[] backingArray, int offset, int capacityInShorts, bool isBigEndian )
+    {
+        ArgumentNullException.ThrowIfNull( backingArray );
+
+        if ( ( offset < 0 ) || ( capacityInShorts < 0 ) )
+        {
+            throw new GdxRuntimeException( "Offset and capacity must be non-negative." );
+        }
+
+        if ( ( offset + ( capacityInShorts * sizeof( short ) ) ) > backingArray.Length )
+        {
+            throw new GdxRuntimeException( "Capacity and offset exceed backing array bounds." );
+        }
+
+        // Create ByteBuffer delegate with Memory<byte> slice
+        _byteBufferDelegate = new ByteBuffer( backingArray.AsMemory( offset, capacityInShorts * sizeof( short ) ),
+                                              isBigEndian );
+
+        Capacity    = capacityInShorts;
+        Length      = 0;
+        Limit       = capacityInShorts;
+        IsBigEndian = isBigEndian;
     }
 
     // ========================================================================
@@ -85,6 +118,8 @@ public class ShortBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( Position + sizeof( short ) );
+
         var byteOffset = Position;
 
         if ( ( byteOffset + sizeof( short ) ) > Capacity )
@@ -108,6 +143,8 @@ public class ShortBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( index + sizeof( short ) );
+
         var byteOffset = index * sizeof( short );
 
         if ( ( index < 0 ) || ( index >= Capacity ) )
@@ -125,18 +162,75 @@ public class ShortBuffer : Buffer, IDisposable
         }
     }
 
+    // ----- Bulk Get/Put operations -----
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void GetShorts( short[] shortArray )
+    {
+        _byteBufferDelegate.GetShorts( shortArray );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dst"></param>
+    /// <param name="dstOffset"></param>
+    /// <param name="length"></param>
+    public void GetShorts( short[] dst, int dstOffset, int length )
+    {
+        _byteBufferDelegate.GetShorts( dst, dstOffset, length );
+    }
+
+    /// <summary>
+    /// Adds the contents of the provided short array to this buffer, staring at
+    /// index <see cref="Buffer.Position"/>
+    /// </summary>
+    public void PutShorts( short[] shortArray )
+    {
+        _byteBufferDelegate.PutShorts( shortArray );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="srcOffset"></param>
+    /// <param name="length"></param>
+    public void PutShorts( short[] src, int srcOffset, int length )
+    {
+        _byteBufferDelegate.PutShorts( src, srcOffset, length );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Returns the backing array as a byte[].
+    /// </summary>
+    /// <returns></returns>
+    public short[] ToArray()
+    {
+        var tmpArray = new short[ Length ];
+
+        _byteBufferDelegate.GetShorts( tmpArray );
+
+        return tmpArray;
+    }
+
     // ========================================================================
 
     /// <inheritdoc cref="ByteBuffer.Resize(int)"/>
     public override void Resize( int extraCapacityInBytes )
     {
-        _byteBufferDelegate.Resize(extraCapacityInBytes); // **1. Delegate Resize to ByteBuffer**
+        _byteBufferDelegate.Resize( extraCapacityInBytes ); // **1. Delegate Resize to ByteBuffer**
 
         // **2. Recalculate ShortBuffer Capacity in *shorts* based on the resized ByteBuffer's byte capacity**
-        Capacity = (int)Math.Ceiling((double)_byteBufferDelegate.Capacity / sizeof(short));
+        Capacity = ( int )Math.Ceiling( ( double )_byteBufferDelegate.Capacity / sizeof( short ) );
 
         // **3. Adjust Limit if it was originally at Capacity** (Optional, but good practice to maintain Limit if it was at full capacity before resize)
-        if (Limit == Capacity - (int)Math.Ceiling((double)extraCapacityInBytes / sizeof(short))) // Check if Limit was at old Capacity
+        if ( Limit == ( Capacity -
+                        ( int )Math.Ceiling( ( double )extraCapacityInBytes / sizeof( short ) ) ) ) // Check if Limit was at old Capacity
         {
             Limit = Capacity; // Reset Limit to the new Capacity if it was at the old Capacity
         }

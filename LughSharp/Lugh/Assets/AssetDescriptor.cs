@@ -54,10 +54,10 @@ public class AssetDescriptor
     /// <summary>
     /// Creates an empty AssetDescriptor object.
     /// Information will need providing before this object can be used.
-    /// <li> AssetType  - The Type of asset ( Texture, TextureAtlas, Sound, Pixmap etc. ) </li>
-    /// <li> Filepath   - The full path, including filename, of the asset. </li>
+    /// <li> AssetType - The Type of asset ( Texture, TextureAtlas, Sound, Pixmap etc. ) </li>
+    /// <li> Filepath - The full path, including filename, of the asset. </li>
     /// <li> Parameters - The <see cref="AssetLoaderParameters"/> to use. </li>
-    /// <li> File       - A <see cref="FileInfo"/> object holding file/path information </li>
+    /// <li> File - A <see cref="FileInfo"/> object holding file/path information </li>
     /// </summary>
     public AssetDescriptor()
     {

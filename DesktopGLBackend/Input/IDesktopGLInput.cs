@@ -26,6 +26,8 @@ using System;
 using LughSharp.Lugh.Core;
 using JetBrains.Annotations;
 
+using LughSharp.Lugh.Input;
+
 namespace DesktopGLBackend.Input;
 
 [PublicAPI]

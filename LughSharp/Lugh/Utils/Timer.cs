@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils.Exceptions;
 using Exception = System.Exception;
 using Monitor = System.Threading.Monitor;

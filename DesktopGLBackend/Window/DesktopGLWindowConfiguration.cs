@@ -28,6 +28,8 @@ using DesktopGLBackend.Core;
 using DesktopGLBackend.Graphics;
 using JetBrains.Annotations;
 
+using LughSharp.Lugh.Files;
+
 namespace DesktopGLBackend.Window;
 
 [PublicAPI]

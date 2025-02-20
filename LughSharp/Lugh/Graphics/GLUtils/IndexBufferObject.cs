@@ -25,7 +25,8 @@
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils.Buffers.NewBuffers
+;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
@@ -87,7 +88,7 @@ public class IndexBufferObject : IIndexData
         }
 
         // Create a new byte buffer to hold the indices. Each index is a short (2 bytes).
-        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2, false );
+        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2 );
 
         // Create a view of the byte buffer as a short buffer.
         _buffer = _byteBuffer.AsShortBuffer();

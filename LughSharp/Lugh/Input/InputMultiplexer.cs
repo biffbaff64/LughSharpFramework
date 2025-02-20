@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils.Collections;
 
-namespace LughSharp.Lugh.Core;
+namespace LughSharp.Lugh.Input;
 
 [PublicAPI]
 public class InputMultiplexer : IInputProcessor

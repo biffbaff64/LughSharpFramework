@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Maths;
 
-namespace LughSharp.Lugh.Core;
+namespace LughSharp.Lugh.Input;
 
 /// <summary>
 /// Queues events that are later passed to an <see cref="IInputProcessor"/>.

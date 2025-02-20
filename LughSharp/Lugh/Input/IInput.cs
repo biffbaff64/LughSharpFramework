@@ -22,8 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
-namespace LughSharp.Lugh.Core;
+namespace LughSharp.Lugh.Input;
 
 /// <summary>
 /// Interface to the input facilities. This allows polling the state of the keyboard, the
@@ -104,8 +103,8 @@ public interface IInput
 
     // ====================================================================
     // ====================================================================
-
-	#region Mobile Devices
+    
+    #region Mobile Devices
 
     float GetAccelerometerX();
     float GetAccelerometerY();
@@ -126,9 +125,9 @@ public interface IInput
     bool IsTouched( int pointer = 0 );
     bool JustTouched();
 
-	#endregion Mobile Devices
+    #endregion Mobile Devices
 
-	// ========================================================================
+    // ========================================================================
 
     int GetMaxPointers();
     int GetX( int pointer = 0 );
@@ -153,22 +152,37 @@ public interface IInput
 
     Orientation GetNativeOrientation();
 
-	// ========================================================================
+    // ========================================================================
 
-	#region catch keys
+    #region override keys
 
-    bool IsCursorCaught();
-    bool IsCatchKey( int keycode );
-    bool IsCatchBackKey();
-    bool IsCatchMenuKey();
+    /// <summary>
+    /// "Override key" refers to a mechanism for overriding the default system actions of specific
+    /// keys (like BACK and MENU), allowing the application to handle them instead. It's used to
+    /// prevent unwanted system behaviors and provide custom input handling for these special keys
+    /// within games and applications.
+    /// </summary>
+    void SetOverrideKey( int keycode, bool addKey );
+    
+    /// <summary>
+    /// Checks to see if the provided keycode applies to a key that is a member of the
+    /// 'Override Key' group of keys.
+    /// </summary>
+    /// <param name="keycode"> The <see cref="Keys"/> code. </param>
+    /// <returns> True if the key is an Override Key, otherwise false. </returns>
+    bool IsOverrideKey( int keycode );
 
+    bool IsCursorOverridden();
+    void SetCursorOverridden( bool caught );
     void SetCursorPosition( int x, int y );
-    void SetCatchKey( int keycode, bool addKey );
-    void SetCatchBackKey( bool catchBack );
-    void SetCatchMenuKey( bool catchMenu );
-    void SetCursorCaught( bool caught );
 
-	#endregion catch keys
+    bool IsOverrideBackKey();
+    void SetOverrideBackKey( bool catchBack );
+
+    bool IsOverrideMenuKey();
+    void SetOverrideMenuKey( bool catchMenu );
+
+    #endregion override keys
 
     // ====================================================================
     // ====================================================================

@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 
-namespace LughSharp.Lugh.Core;
+namespace LughSharp.Lugh.Input;
 
 /// <summary>
 /// An adapter class for <see cref="IInputProcessor"/>.

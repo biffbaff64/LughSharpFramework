@@ -53,6 +53,39 @@ public class IntBuffer : Buffer, IDisposable
         Limit               = capacityInInts;
     }
 
+    /// <summary>
+    /// Creates a new IntBuffer that is a view of the given byte array.
+    /// This constructor is intended for creating buffer views (e.g., using ByteBuffer.AsIntBuffer()).
+    /// It shares the provided byte array; data is NOT copied.
+    /// </summary>
+    /// <param name="backingArray">The byte array to use as the backing store.</param>
+    /// <param name="offset">The starting offset within the byte array (in bytes).</param>
+    /// <param name="capacityInInts">The capacity of the IntBuffer in ints.</param>
+    /// <param name="isBigEndian">True if big-endian byte order, false for little-endian.</param>
+    internal IntBuffer( byte[] backingArray, int offset, int capacityInInts, bool isBigEndian )
+    {
+        ArgumentNullException.ThrowIfNull( backingArray );
+
+        if ( ( offset < 0 ) || ( capacityInInts < 0 ) )
+        {
+            throw new GdxRuntimeException( "Offset and capacity must be non-negative." );
+        }
+
+        if ( ( offset + ( capacityInInts * sizeof( int ) ) ) > backingArray.Length )
+        {
+            throw new GdxRuntimeException( "Capacity and offset exceed backing array bounds." );
+        }
+
+        // Create ByteBuffer delegate with Memory<byte> slice
+        _byteBufferDelegate = new ByteBuffer( backingArray.AsMemory( offset, capacityInInts * sizeof( int ) ),
+                                              isBigEndian );
+
+        Capacity    = capacityInInts;
+        Length      = 0;
+        Limit       = capacityInInts;
+        IsBigEndian = isBigEndian;
+    }
+
     // ========================================================================
 
     public int GetInt()
@@ -82,6 +115,8 @@ public class IntBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( Position + sizeof( int ) );
+
         var intOffset = Position;
 
         if ( ( intOffset + sizeof( int ) ) > Capacity )
@@ -104,6 +139,8 @@ public class IntBuffer : Buffer, IDisposable
     {
         if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
 
+        EnsureCapacity( index + sizeof( int ) );
+
         var byteOffset = index * sizeof( int );
 
         if ( ( index < 0 ) || ( index >= Capacity ) )
@@ -119,19 +156,78 @@ public class IntBuffer : Buffer, IDisposable
         }
     }
 
+    // ----- Bulk Get/Put operations -----
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="intArray"></param>
+    public void GetInts( int[] intArray )
+    {
+        _byteBufferDelegate.GetInts( intArray );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dst"></param>
+    /// <param name="dstOffset"></param>
+    /// <param name="length"></param>
+    public void GetInts( int[] dst, int dstOffset, int length )
+    {
+        _byteBufferDelegate.GetInts( dst, dstOffset, length );
+    }
+
+    /// <summary>
+    /// Adds the contents of the provided int array to this buffer, staring at
+    /// index <see cref="Buffer.Position"/>
+    /// </summary>
+    /// <param name="intArray"></param>
+    public void PutInts( int[] intArray )
+    {
+        _byteBufferDelegate.PutInts( intArray );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="srcOffset"></param>
+    /// <param name="length"></param>
+    public void PutInts( int[] src, int srcOffset, int length )
+    {
+        _byteBufferDelegate.PutInts( src, srcOffset, length );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Returns the backing array as a byte[].
+    /// </summary>
+    /// <returns></returns>
+    public int[] ToArray()
+    {
+        var tmpArray = new int[ Length ];
+
+        _byteBufferDelegate.GetInts( tmpArray );
+
+        return tmpArray;
+    }
+
     // ========================================================================
 
     /// <inheritdoc cref="ByteBuffer.Resize(int)"/>
     public override void Resize( int extraCapacityInBytes )
     {
-        _byteBufferDelegate.Resize( extraCapacityInBytes ); // **1. Delegate Resize to ByteBuffer**
+        // **1. Delegate Resize to ByteBuffer**
+        _byteBufferDelegate.Resize( extraCapacityInBytes );
 
         // **2. Recalculate IntBuffer Capacity in *ints* based on the resized ByteBuffer's byte capacity**
         Capacity = ( int )Math.Ceiling( ( double )_byteBufferDelegate.Capacity / sizeof( int ) );
 
         // **3. Adjust Limit if it was originally at Capacity** (Optional, but good practice to maintain Limit if it was at full capacity before resize)
-        if ( Limit == Capacity -
-            ( int )Math.Ceiling( ( double )extraCapacityInBytes / sizeof( int ) ) ) // Check if Limit was at old Capacity
+        if ( Limit == ( Capacity -
+                        ( int )Math.Ceiling( ( double )extraCapacityInBytes / sizeof( int ) ) ) ) // Check if Limit was at old Capacity
         {
             Limit = Capacity; // Reset Limit to the new Capacity if it was at the old Capacity
         }

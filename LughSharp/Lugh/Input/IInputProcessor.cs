@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 
-namespace LughSharp.Lugh.Core;
+namespace LughSharp.Lugh.Input;
 
 [PublicAPI]
 public interface IInputProcessor
