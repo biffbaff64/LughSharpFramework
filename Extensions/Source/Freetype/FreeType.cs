@@ -156,8 +156,6 @@ public class FreeType
 
         public void Dispose()
         {
-            throw new NotImplementedException();
-
 //            _doneFreeType( Address );
 //
 //            foreach ( var buffer in FontData.Values )
@@ -167,8 +165,8 @@ public class FreeType
 //                    BufferUtils.DisposeUnsafeByteBuffer( buffer );
 //                }
 //            }
-//
-//            GC.SuppressFinalize( this );
+
+            GC.SuppressFinalize( this );
         }
 
         public Face NewFace( FileHandle fontFile, int faceIndex )
@@ -224,8 +222,8 @@ public class FreeType
 
         public Face NewMemoryFace( byte[] data, int dataSize, int faceIndex )
         {
-            var buffer = BufferUtils.NewUnsafeByteBuffer( data.Length );
-            BufferUtils.Copy( data, 0, buffer, data.Length );
+            var buffer = new ByteBuffer( data.Length );
+            BufferUtils.Copy( data, 0, data.Length, buffer );
 
             return NewMemoryFace( buffer, faceIndex );
         }

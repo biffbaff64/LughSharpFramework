@@ -1,0 +1,21 @@
+﻿### Default Character Set (`DefaultChars`)
+
+The `DefaultChars` constant defines a comprehensive set of characters used by the application for 
+FreeType Font Generation.  It includes a wide range of characters to support various languages and symbols.
+
+The character set is composed of the following categories:
+
+*   **Alphanumeric Characters:**  Standard English alphabet (uppercase and lowercase) and digits 0-9.
+*   **Common Punctuation and Symbols:**  Frequently used punctuation marks and symbols like quotes, 
+                                        question marks, commas, parentheses, etc.
+*   **C1 Control Characters:**  A set of control codes from the C1 control character set (Unicode range 
+                                U+0080 to U+009F). These are typically used for control functions in data 
+                                streams and may not be directly visible.
+*   **Latin-1 Supplement:**  Characters from the Latin-1 Supplement Unicode block (U+00A0 to U+00FF).
+        This block includes:
+        *   Additional punctuation and symbols.
+        *   Accented characters used in Western European languages (e.g., French, Spanish, German, etc.).
+
+This extensive character set ensures that the application can handle a broad range of text and input scenarios. 
+If you need to customize the set of supported characters, you might need to modify or replace this `DefaultChars` 
+constant and adjust the parts of the application that depend on it.

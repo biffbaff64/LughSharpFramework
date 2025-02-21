@@ -26,43 +26,37 @@ using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Audio.OpenAL;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers.NewBuffers
-;
+    ;
+
 using JetBrains.Annotations;
 
 namespace DesktopGLBackend.Audio;
 
 [PublicAPI]
-public class OpenALSound : ISound
+public class OpenALSound( OpenALAudio audio ) : ISound
 {
-    private readonly OpenALAudio _audio;
-
     private int _bufferID = -1;
-
-    public OpenALSound( OpenALAudio audio )
-    {
-        _audio = audio;
-    }
 
     public float Duration { get; set; }
 
     public long Play( float volume = 1f )
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return 0;
         }
 
-        var sourceID = _audio.ObtainSource( false );
+        var sourceID = audio.ObtainSource( false );
 
         if ( sourceID == -1 )
         {
             // Attempt to recover by stopping the least recently played sound
-            _audio.Retain( this, true );
-            sourceID = _audio.ObtainSource( false );
+            audio.Retain( this, true );
+            sourceID = audio.ObtainSource( false );
         }
         else
         {
-            _audio.Retain( this, false );
+            audio.Retain( this, false );
         }
 
         // In case it still didn't work
@@ -71,53 +65,53 @@ public class OpenALSound : ISound
             return -1;
         }
 
-        var soundId = _audio.GetSoundId( sourceID );
+        var soundId = audio.GetSoundId( sourceID );
 
-        AL.Sourcei( ( uint ) sourceID, AL.BUFFER, _bufferID );
-        AL.Sourcei( ( uint ) sourceID, AL.LOOPING, AL.FALSE );
-        AL.Sourcef( ( uint ) sourceID, AL.GAIN, volume );
-        AL.SourcePlay( ( uint ) sourceID );
+        AL.Sourcei( ( uint )sourceID, AL.BUFFER, _bufferID );
+        AL.Sourcei( ( uint )sourceID, AL.LOOPING, AL.FALSE );
+        AL.Sourcef( ( uint )sourceID, AL.GAIN, volume );
+        AL.SourcePlay( ( uint )sourceID );
 
         return soundId;
     }
 
     public long Loop( float volume = 1f )
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return 0;
         }
 
-        var sourceID = _audio.ObtainSource( false );
+        var sourceID = audio.ObtainSource( false );
 
         if ( sourceID == -1 )
         {
             return -1;
         }
 
-        var soundId = _audio.GetSoundId( sourceID );
+        var soundId = audio.GetSoundId( sourceID );
 
-        AL.Sourcei( ( uint ) sourceID, AL.BUFFER, _bufferID );
-        AL.Sourcei( ( uint ) sourceID, AL.LOOPING, AL.TRUE );
-        AL.Sourcef( ( uint ) sourceID, AL.GAIN, volume );
-        AL.SourcePlay( ( uint ) sourceID );
+        AL.Sourcei( ( uint )sourceID, AL.BUFFER, _bufferID );
+        AL.Sourcei( ( uint )sourceID, AL.LOOPING, AL.TRUE );
+        AL.Sourcef( ( uint )sourceID, AL.GAIN, volume );
+        AL.SourcePlay( ( uint )sourceID );
 
         return soundId;
     }
 
     public void Stop()
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
 
-        _audio.StopSourcesWithBuffer( _bufferID );
+        audio.StopSourcesWithBuffer( _bufferID );
     }
 
     public void Dispose()
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
@@ -127,103 +121,103 @@ public class OpenALSound : ISound
             return;
         }
 
-        _audio.FreeBuffer( _bufferID );
+        audio.FreeBuffer( _bufferID );
 
 //TODO: AL.DeleteBuffers( _bufferID );
 
         _bufferID = -1;
 
-        _audio.Forget( this );
+        audio.Forget( this );
     }
 
     public void Stop( long soundId )
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
 
-        _audio.StopSound( soundId );
+        audio.StopSound( soundId );
     }
 
     public void Pause()
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
 
-        _audio.PauseSourcesWithBuffer( _bufferID );
+        audio.PauseSourcesWithBuffer( _bufferID );
     }
 
     public void Pause( long soundId )
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
 
-        _audio.PauseSound( soundId );
+        audio.PauseSound( soundId );
     }
 
     public void Resume()
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
 
-        _audio.ResumeSourcesWithBuffer( _bufferID );
+        audio.ResumeSourcesWithBuffer( _bufferID );
     }
 
     public void Resume( long soundId )
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
 
-        _audio.ResumeSound( soundId );
+        audio.ResumeSound( soundId );
     }
 
     public void SetPitch( long soundId, float pitch )
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
 
-        _audio.SetSoundPitch( soundId, pitch );
+        audio.SetSoundPitch( soundId, pitch );
     }
 
     public void SetVolume( long soundId, float volume )
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
 
-        _audio.SetSoundGain( soundId, volume );
+        audio.SetSoundGain( soundId, volume );
     }
 
     public void SetLooping( long soundId, bool looping )
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
 
-        _audio.SetSoundLooping( soundId, looping );
+        audio.SetSoundLooping( soundId, looping );
     }
 
     public void SetPan( long soundId, float pan, float volume )
     {
-        if ( _audio.NoDevice )
+        if ( audio.NoDevice )
         {
             return;
         }
 
-        _audio.SetSoundPan( soundId, pan, volume );
+        audio.SetSoundPan( soundId, pan, volume );
     }
 
     public long Play( float volume, float pitch, float pan )
@@ -251,11 +245,13 @@ public class OpenALSound : ISound
         var bytes   = pcm.Length - ( pcm.Length % ( channels > 1 ? 4 : 2 ) );
         var samples = bytes / ( 2 * channels );
 
-        Duration = samples / ( float ) sampleRate;
+        Duration = samples / ( float )sampleRate;
 
         var buffer = ByteBuffer.Allocate( bytes );
 
-        buffer.Order( ByteOrder.NativeOrder ).Put( pcm, 0, bytes ).Flip();
+        buffer.Order( ByteOrder.NativeOrder );
+        buffer.PutBytes( pcm, 0, 0, bytes );
+        buffer.Flip();
 
 //TODO:
 //        if ( _bufferID == -1 )

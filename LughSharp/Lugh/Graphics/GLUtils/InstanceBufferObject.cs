@@ -27,7 +27,7 @@ using LughSharp.Lugh.Utils.Buffers.NewBuffers
 ;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
+using Buffer = LughSharp.Lugh.Utils.Buffers.NewBuffers.Buffer;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
@@ -100,7 +100,7 @@ public class InstanceBufferObject : IInstanceData
 
         _isDirty = true;
 
-        _byteBuffer.AddFloats( data, offset, count );
+        _byteBuffer.PutFloats( data, offset, count );
 
         _buffer.Position = 0;
         _buffer.Limit    = count;
@@ -114,7 +114,7 @@ public class InstanceBufferObject : IInstanceData
 
         _isDirty = true;
 
-        BufferUtils.Copy( data, _byteBuffer, count );
+        BufferUtils.Copy( data.ToArray(), 0, count, _byteBuffer );
 
         _buffer.Position = 0;
         _buffer.Limit    = count;
@@ -154,7 +154,7 @@ public class InstanceBufferObject : IInstanceData
         _byteBuffer.Position = targetOffset * 4;
         data.Position        = sourceOffset * 4;
 
-        BufferUtils.Copy( data, _byteBuffer, count );
+        BufferUtils.Copy( data.ToArray(), 0, count, _byteBuffer );
 
         _byteBuffer.Position = pos;
         _buffer.Position     = 0;
@@ -307,7 +307,7 @@ public class InstanceBufferObject : IInstanceData
 
         if ( _ownsBuffer && ( _byteBuffer != null ) )
         {
-            BufferUtils.DisposeUnsafeByteBuffer( _byteBuffer );
+            _byteBuffer.Dispose();
         }
     }
 
@@ -324,7 +324,7 @@ public class InstanceBufferObject : IInstanceData
 
         if ( _ownsBuffer && ( _byteBuffer != null ) )
         {
-            BufferUtils.DisposeUnsafeByteBuffer( _byteBuffer );
+            _byteBuffer.Dispose();
         }
 
         Attributes = value;

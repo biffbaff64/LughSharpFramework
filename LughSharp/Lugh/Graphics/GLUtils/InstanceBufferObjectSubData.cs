@@ -98,8 +98,8 @@ public class InstanceBufferObjectSubData : IInstanceData
 
     public FloatBuffer GetBuffer( bool forWriting )
     {
-        _isDirty |= forWriting;
-
+        _isDirty |= forWriting; //TODO: ???
+        
         return _buffer;
     }
 
@@ -109,7 +109,7 @@ public class InstanceBufferObjectSubData : IInstanceData
 
         if ( _isDirect )
         {
-            _byteBuffer.AddFloats( data, offset, count );
+            _byteBuffer.PutFloats( data, offset, count );
 
             _buffer.Position = 0;
             _buffer.Limit    = count;
@@ -118,7 +118,7 @@ public class InstanceBufferObjectSubData : IInstanceData
         {
             _buffer.Clear();
 
-            _buffer.Put( data, offset, count );
+            _buffer.PutFloats( data, offset, count );
 
             _buffer.Flip();
             _byteBuffer.Position = 0;
@@ -134,7 +134,7 @@ public class InstanceBufferObjectSubData : IInstanceData
 
         if ( _isDirect )
         {
-            BufferUtils.Copy( data, _byteBuffer, count );
+            BufferUtils.Copy( data.ToArray(), 0, count, _byteBuffer );
 
             _buffer.Position = 0;
             _buffer.Limit    = count;
@@ -143,7 +143,7 @@ public class InstanceBufferObjectSubData : IInstanceData
         {
             _buffer.Clear();
 
-            _buffer.Put( data );
+            _buffer.PutFloats( data.ToArray() );
 
             _buffer.Flip();
             _byteBuffer.Position = 0;
@@ -186,7 +186,7 @@ public class InstanceBufferObjectSubData : IInstanceData
             _byteBuffer.Position = targetOffset * 4;
             data.Position        = sourceOffset * 4;
 
-            BufferUtils.Copy( data, _byteBuffer, count );
+            BufferUtils.Copy( data.ToArray(), 0, count, _byteBuffer );
 
             _byteBuffer.Position = pos;
         }

@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 /// with VBOs.
 /// <para>
 /// You can also use this to store indices for vertex arrays. Do not call <see cref="Bind()"/>
-/// or <see cref="Unbind()"/> in this case but rather use <see cref="GetBuffer()"/> to use the
+/// or <see cref="Unbind()"/> in this case but rather use <see cref="GetBuffer(bool)"/> to use the
 /// buffer directly with glDrawElements. You must also create the IndexBufferObject with the
 /// second constructor and specify isDirect as true as glDrawElements in conjunction with vertex arrays needs direct buffers.
 /// </para>
@@ -119,7 +119,7 @@ public class IndexBufferObject : IIndexData
         _isDirty = true;
 
         _buffer.Clear();
-        _buffer.Put( indices, offset, count );
+        _buffer.PutShorts( indices, offset, count );
         _buffer.Flip();
 
         _byteBuffer.Position = 0;
@@ -144,7 +144,7 @@ public class IndexBufferObject : IIndexData
         var pos = indices.Position;
 
         _buffer.Clear();
-        _buffer.Put( indices );
+        _buffer.PutShorts( indices.ToArray() );
         _buffer.Flip();
 
         indices.Position = pos;
@@ -172,7 +172,7 @@ public class IndexBufferObject : IIndexData
 
         _byteBuffer.Position = targetOffset * 2;
 
-        BufferUtils.Copy( indices, offset, _byteBuffer, count );
+        BufferUtils.Copy( indices, offset, count, _byteBuffer );
 
         _byteBuffer.Position = pos;
         _buffer.Position     = 0;
@@ -248,7 +248,7 @@ public class IndexBufferObject : IIndexData
 
         if ( _ownsBuffer )
         {
-            BufferUtils.DisposeUnsafeByteBuffer( _byteBuffer );
+            _byteBuffer.Dispose();
         }
 
         GC.SuppressFinalize(this);

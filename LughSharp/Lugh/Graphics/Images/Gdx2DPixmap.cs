@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers.NewBuffers
 ;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -107,7 +106,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <param name="len"></param>
     /// <param name="requestedFormat"></param>
     public Gdx2DPixmap( ByteBuffer buffer, int offset, int len, int requestedFormat )
-        : this( buffer.BackingArray(), offset, len, requestedFormat )
+        : this( buffer.ToArray(), offset, len, requestedFormat )
     {
     }
 
@@ -123,7 +122,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
-        PNGUtils.AnalysePNG( buffer, PNGUtils.NO_OUTPUT );
+        PNGUtils.AnalysePNG( buffer );
 
         ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, offset, len );
 
@@ -214,7 +213,8 @@ public partial class Gdx2DPixmap : IDisposable
             Pixels        = new byte[ length ],
         };
 
-        PixmapBuffer = new ByteBuffer( _pixmapDataType.Pixels, 0, length );
+        PixmapBuffer = new ByteBuffer( length );
+        PixmapBuffer.PutBytes( _pixmapDataType.Pixels );
 
         if ( PixmapBuffer == null )
         {
@@ -238,7 +238,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     private static ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
-        PNGUtils.AnalysePNG( buffer, PNGUtils.NO_OUTPUT );
+        PNGUtils.AnalysePNG( buffer );
 
         var pixmapDef = new PixmapDataType
         {
@@ -254,7 +254,10 @@ public partial class Gdx2DPixmap : IDisposable
 
         Array.Copy( buffer, PNGUtils.IDAT_DATA_OFFSET, pixmapDef.Pixels, 0, PNGUtils.IDATchunk.ChunkSize );
 
-        return ( new ByteBuffer( pixmapDef.Pixels, 0, pixmapDef.Pixels.Length ), pixmapDef );
+        var byteBuffer = new ByteBuffer( pixmapDef.Pixels.Length );
+        byteBuffer.PutBytes( pixmapDef.Pixels );
+        
+        return ( byteBuffer, pixmapDef );
     }
 
     /// <summary>

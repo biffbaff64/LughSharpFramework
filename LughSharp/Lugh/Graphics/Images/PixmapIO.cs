@@ -146,11 +146,11 @@ public static class PixmapIO
                 {
                     for ( var i = 0; i < iterations; i++ )
                     {
-                        pixelBuf.Get( _writeBuffer );
+                        pixelBuf.GetBytes( _writeBuffer );
                         output.Write( _writeBuffer );
                     }
 
-                    pixelBuf.Get( _writeBuffer, 0, remainingBytes );
+                    pixelBuf.GetBytes( _writeBuffer, 0, remainingBytes );
                     output.Write( _writeBuffer, 0, remainingBytes );
                 }
 
@@ -188,7 +188,7 @@ public static class PixmapIO
 
                     while ( ( readBytes = input.Read( _readBuffer ) ) > 0 )
                     {
-                        pixelBuf.Put( _readBuffer, 0, readBytes );
+                        pixelBuf.PutBytes( _readBuffer, 0, 0, readBytes );
                     }
                 }
 
@@ -224,6 +224,11 @@ public static class PixmapIO
         private readonly Deflater    _deflater;
 
         private readonly byte[] _signature = [ 137, 80, 78, 71, 13, 10, 26, 10 ];
+
+        private int        _lastLineLen;
+        private ByteArray? _curLineBytes;
+        private ByteArray? _lineOutBytes;
+        private ByteArray? _prevLineBytes;
 
         // ====================================================================
         // ====================================================================
@@ -261,9 +266,8 @@ public static class PixmapIO
         }
 
         /// <summary>
+        /// Writes the supplied <see cref="Pixmap"/> to the supplied <see cref="FileInfo"/> instance.
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="pixmap"></param>
         public void Write( FileInfo file, Pixmap pixmap )
         {
             var output = new MemoryStream();
@@ -274,13 +278,9 @@ public static class PixmapIO
             }
             catch ( IOException )
             {
+                // ignored
             }
         }
-
-        private int        _lastLineLen;
-        private ByteArray? _curLineBytes;
-        private ByteArray? _lineOutBytes;
-        private ByteArray? _prevLineBytes;
 
         /// <summary>
         /// Writes the pixmap to the stream without closing the stream.
@@ -346,7 +346,7 @@ public static class PixmapIO
                 if ( isRgba8888 )
                 {
                     pixmap.ByteBuffer.Position = py * lineLen;
-                    pixmap.ByteBuffer.Get( curLine, 0, lineLen );
+                    pixmap.ByteBuffer.GetBytes( curLine, 0, lineLen );
                 }
                 else
                 {

@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers.NewBuffers
 ;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -56,6 +55,8 @@ public class IndexBufferObjectSubData : IIndexData
     private          bool        _isBound = false;
     private          bool        _isDirty = true;
 
+    // ========================================================================
+    
     /// <summary>
     /// Creates a new IndexBufferObject.
     /// </summary>
@@ -91,6 +92,8 @@ public class IndexBufferObjectSubData : IIndexData
         _bufferHandle = CreateBufferObject();
     }
 
+    // ========================================================================
+    
     /// <inheritdoc />
     public int NumIndices => _buffer.Limit;
 
@@ -103,7 +106,7 @@ public class IndexBufferObjectSubData : IIndexData
         _isDirty = true;
 
         _buffer.Clear();
-        _buffer.Put( indices, offset, count );
+        _buffer.PutShorts( indices, offset, count );
         _buffer.Flip();
 
         _byteBuffer.Position = 0;
@@ -128,7 +131,7 @@ public class IndexBufferObjectSubData : IIndexData
         _isDirty = true;
 
         _buffer.Clear();
-        _buffer.Put( indices );
+        _buffer.PutShorts( indices.ToArray() );
         _buffer.Flip();
 
         indices.Position = pos;
@@ -156,7 +159,7 @@ public class IndexBufferObjectSubData : IIndexData
 
         _byteBuffer.Position = targetOffset * 2;
 
-        BufferUtils.Copy( indices, offset, _byteBuffer, count );
+        BufferUtils.Copy( indices, offset, count, _byteBuffer );
 
         _byteBuffer.Position = pos;
         _buffer.Position     = 0;

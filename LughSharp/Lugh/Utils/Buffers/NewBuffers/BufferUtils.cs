@@ -110,7 +110,7 @@ public class BufferUtils
     /// <param name="length"></param>
     /// <param name="destination"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public static void Copy( float[] source, int sourceOffset, int length, ByteBuffer destination )
+    public static void Copy( byte[] source, int sourceOffset, int length, ByteBuffer destination )
     {
         ArgumentNullException.ThrowIfNull( source );
         ArgumentNullException.ThrowIfNull( destination );
@@ -120,12 +120,12 @@ public class BufferUtils
             throw new GdxRuntimeException( "Offset and length must be non-negative." );
         }
         
-        destination.EnsureCapacity( length * sizeof( float ) );
+        destination.EnsureCapacity( length * sizeof( byte ) );
 
         for ( var i = 0; i < length; i++ )
         {
             // Indexed byte-by-byte copy - optimize for bulk copy if needed.
-            destination.PutFloat( i, source[ sourceOffset + i ] );
+            destination.PutByte( i, source[ sourceOffset + i ] );
         }
     }
 
@@ -153,6 +153,33 @@ public class BufferUtils
         {
             // Indexed byte-by-byte copy - optimize for bulk copy if needed.
             destination.PutShort( i, source[ sourceOffset + i ] );
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="sourceOffset"></param>
+    /// <param name="length"></param>
+    /// <param name="destination"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public static void Copy( float[] source, int sourceOffset, int length, ByteBuffer destination )
+    {
+        ArgumentNullException.ThrowIfNull( source );
+        ArgumentNullException.ThrowIfNull( destination );
+
+        if ( ( sourceOffset < 0 ) || ( length < 0 ) )
+        {
+            throw new GdxRuntimeException( "Offset and length must be non-negative." );
+        }
+        
+        destination.EnsureCapacity( length * sizeof( float ) );
+
+        for ( var i = 0; i < length; i++ )
+        {
+            // Indexed byte-by-byte copy - optimize for bulk copy if needed.
+            destination.PutFloat( i, source[ sourceOffset + i ] );
         }
     }
 }
