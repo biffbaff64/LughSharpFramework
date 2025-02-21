@@ -359,7 +359,8 @@ public class SpriteCache
     public void Clear()
     {
         _caches.Clear();
-        _mesh.GetVerticesBuffer().Clear().Flip();
+        _mesh.GetVerticesBuffer().Clear();
+        _mesh.GetVerticesBuffer().Flip();
     }
 
     /// <summary>
@@ -389,7 +390,7 @@ public class SpriteCache
             _counts[ lastIndex ] += count;
         }
 
-        _mesh.GetVerticesBuffer().Put( vertices, offset, length );
+        _mesh.GetVerticesBuffer().PutFloats( vertices, offset, length );
     }
 
     /// <summary>

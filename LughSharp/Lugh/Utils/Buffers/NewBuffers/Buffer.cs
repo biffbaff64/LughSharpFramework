@@ -101,7 +101,7 @@ public abstract class Buffer : IDisposable
     public abstract void PutBytes( byte[] src, int srcOffset, int dstOffset, int length );
     public abstract void GetBytes( byte[] byteArray );
     public abstract void PutBytes( byte[] byteArray );
-
+    
     // ========================================================================
 
     /// <summary>
@@ -109,7 +109,7 @@ public abstract class Buffer : IDisposable
     /// Resizes the buffer if necessary.
     /// </summary>
     /// <param name="requiredCapacityInBytes">The minimum capacity (in bytes) required.</param>
-    protected virtual void EnsureCapacity( int requiredCapacityInBytes )
+    public virtual void EnsureCapacity( int requiredCapacityInBytes )
     {
         if ( AutoResizeEnabled )
         {
@@ -147,7 +147,7 @@ public abstract class Buffer : IDisposable
     {
         throw new GdxRuntimeException( "Clear() is abstract in base class, use extending class!" );
     }
-
+    
     /// <summary>
     /// This sets the <see cref="Limit"/> to the current value of Position. At this point,
     /// Position typically indicates the position after the last byte written. So, setting
@@ -211,6 +211,13 @@ public abstract class Buffer : IDisposable
     public abstract int Remaining();
 
     /// <summary>
+    /// Prepares a buffer for subsequent writing after some data has been read from it. Primarily
+    /// used in scenarios where you are processing data in chunks or cycles, and you need to retain
+    /// any unprocessed data while making space for new data at the end of the buffer.
+    /// </summary>
+    public abstract void Compact();
+    
+    /// <summary>
     /// Returns <c>true</c> if, and only if, there is at least one element remaining in this buffer.
     /// </summary>
     public virtual bool HasRemaining()
@@ -268,7 +275,7 @@ public abstract class Buffer : IDisposable
             Rewind(); // Rewind after shrink for typical shrink behavior
         }
     }
-
+    
     /// <summary>
     /// Saves the current <see cref="Position"/> of the buffer as a "mark."
     /// </summary>
@@ -391,6 +398,15 @@ public abstract class Buffer : IDisposable
                 Position = 0;
             }
         }
+    }
+   
+    /// <summary>
+    /// In extendiong classes, this method returns the backing array.
+    /// </summary>
+    /// <returns></returns>
+    public virtual object[] ToArray()
+    {
+        throw new NotImplementedException();
     }
 
     // ========================================================================

@@ -209,7 +209,7 @@ public class ShortBuffer : Buffer, IDisposable
     /// Returns the backing array as a byte[].
     /// </summary>
     /// <returns></returns>
-    public short[] ToArray()
+    public new short[] ToArray()
     {
         var tmpArray = new short[ Length ];
 
@@ -249,6 +249,11 @@ public class ShortBuffer : Buffer, IDisposable
     public override int Remaining()
     {
         return ( Limit - Position ) / sizeof( short );
+    }
+
+    public override void Compact()
+    {
+        _byteBufferDelegate.Compact();
     }
 
     // ========================================================================

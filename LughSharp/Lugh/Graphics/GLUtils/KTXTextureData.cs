@@ -45,15 +45,12 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class KtxTextureData : ITextureData, ICubemapData
+public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, ICubemapData
 {
     private const int GL_TEXTURE_1D           = 0x1234;
     private const int GL_TEXTURE_3D           = 0x1234;
     private const int GL_TEXTURE_1D_ARRAY_EXT = 0x1234;
     private const int GL_TEXTURE_2D_ARRAY_EXT = 0x1234;
-
-    // The file we are loading
-    private readonly FileInfo? _file;
 
     // KTX image data (only available after preparing and before consuming)
     private ByteBuffer? _compressedData;
@@ -75,12 +72,6 @@ public class KtxTextureData : ITextureData, ICubemapData
     // ========================================================================
     // ========================================================================
 
-    public KtxTextureData( FileInfo? file, bool useMipMaps )
-    {
-        _file      = file;
-        UseMipMaps = useMipMaps;
-    }
-
     /// <summary>
     /// Uploads the pixel data for the 6 faces of the cube to the OpenGL ES texture.
     /// The caller must bind an OpenGL ES texture. A call to <see cref="ICubemapData.Prepare"/>
@@ -95,11 +86,7 @@ public class KtxTextureData : ITextureData, ICubemapData
     /// <summary>
     /// Returns true if this implementation can cope with a EGL context loss.
     /// </summary>
-    public bool IsManaged
-    {
-        get => false;
-        set { }
-    }
+    public bool IsManaged => false;
 
     /// <summary>
     /// Returns the <see cref="ITextureData.TextureDataType"/>.
@@ -125,32 +112,31 @@ public class KtxTextureData : ITextureData, ICubemapData
             throw new GdxRuntimeException( "Already prepared!" );
         }
 
-        if ( _file == null )
+        if ( file == null )
         {
             throw new GdxRuntimeException( "Source file not specified!" );
         }
 
         // We support normal ktx files as well as 'zktx' which are gzip ktx
         // file with an int length at the beginning (like ETC1).
-        if ( _file.Name.EndsWith( ".zktx" ) )
+        if ( file.Name.EndsWith( ".zktx" ) )
         {
             var           buffer          = new byte[ 1024 * 10 ];
             BinaryReader? dataInputStream = null;
 
             try
             {
-                dataInputStream = new BinaryReader
-                    ( new BufferedStream( new GZipStream( _file.OpenRead(), CompressionMode.Decompress ) ) );
+                dataInputStream = new BinaryReader( new BufferedStream( new GZipStream( file.OpenRead(), CompressionMode.Decompress ) ) );
 
                 var fileSize = dataInputStream.ReadInt32();
 
-                _compressedData = BufferUtils.NewByteBuffer( fileSize );
+                _compressedData = new ByteBuffer( fileSize );
 
                 int readBytes;
 
                 while ( ( readBytes = dataInputStream.Read( buffer ) ) != -1 )
                 {
-                    _compressedData.Put( buffer, 0, readBytes );
+                    _compressedData.PutBytes( buffer, 0, 0, readBytes );
                 }
 
                 _compressedData.Position = 0;
@@ -158,7 +144,7 @@ public class KtxTextureData : ITextureData, ICubemapData
             }
             catch ( Exception e )
             {
-                throw new GdxRuntimeException( $"Couldn't load zktx file '{_file}'", e );
+                throw new GdxRuntimeException( $"Couldn't load zktx file '{file}'", e );
             }
             finally
             {
@@ -167,65 +153,65 @@ public class KtxTextureData : ITextureData, ICubemapData
         }
         else
         {
-            _compressedData = ByteBuffer.Wrap( File.ReadAllBytes( _file.Name ) );
+            _compressedData = ByteBuffer.Wrap( File.ReadAllBytes( file.Name ) );
         }
 
-        if ( _compressedData.Get() != 0x0AB )
+        if ( _compressedData.GetByte() != 0x0AB )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x04B )
+        if ( _compressedData.GetByte() != 0x04B )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x054 )
+        if ( _compressedData.GetByte() != 0x054 )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x058 )
+        if ( _compressedData.GetByte() != 0x058 )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x020 )
+        if ( _compressedData.GetByte() != 0x020 )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x031 )
+        if ( _compressedData.GetByte() != 0x031 )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x031 )
+        if ( _compressedData.GetByte() != 0x031 )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x0BB )
+        if ( _compressedData.GetByte() != 0x0BB )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x00D )
+        if ( _compressedData.GetByte() != 0x00D )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x00A )
+        if ( _compressedData.GetByte() != 0x00A )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x01A )
+        if ( _compressedData.GetByte() != 0x01A )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
 
-        if ( _compressedData.Get() != 0x00A )
+        if ( _compressedData.GetByte() != 0x00A )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
@@ -283,9 +269,9 @@ public class KtxTextureData : ITextureData, ICubemapData
             _compressedData.Limit    = pos;
             _compressedData.Position = 0;
 
-            var directBuffer = BufferUtils.NewByteBuffer( pos );
+            var directBuffer = new ByteBuffer( pos );
             directBuffer.Order( _compressedData.Order() );
-            directBuffer.Put( _compressedData );
+            directBuffer.PutBytes( _compressedData.ToArray() );
 
             _compressedData = directBuffer;
         }
@@ -330,7 +316,7 @@ public class KtxTextureData : ITextureData, ICubemapData
             throw new GdxRuntimeException( "Call prepare() before calling consumeCompressedData()" );
         }
 
-        var buffer = BufferUtils.NewIntBuffer( 16 );
+        var buffer = new IntBuffer( 16 );
 
         // Check OpenGL type and format, detect compressed data format (no type & format)
         var compressed = false;
@@ -397,8 +383,8 @@ public class KtxTextureData : ITextureData, ICubemapData
 
         if ( glTarget == 0x1234 )
         {
-            throw new GdxRuntimeException
-                ( "Unsupported texture format (only 2D texture are supported in LibGdx for the time being)" );
+            throw new GdxRuntimeException( "Unsupported texture format (only 2D textures " +
+                                           "are supported for the time being)" );
         }
 
         var singleFace = -1;
@@ -409,11 +395,8 @@ public class KtxTextureData : ITextureData, ICubemapData
             if ( !( target is >= IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X
                               and <= IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ) )
             {
-                throw new GdxRuntimeException
-                    (
-                     "You must specify either GL_TEXTURE_CUBE_MAP to bind all 6 faces of the"
-                   + "cube or the requested face GL_TEXTURE_CUBE_MAP_POSITIVE_X and followings."
-                    );
+                throw new GdxRuntimeException( "You must specify either GL_TEXTURE_CUBE_MAP to bind all 6 faces of the"
+                                               + "cube or the requested face GL_TEXTURE_CUBE_MAP_POSITIVE_X and followings." );
             }
 
             singleFace = target - IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X;
@@ -437,13 +420,13 @@ public class KtxTextureData : ITextureData, ICubemapData
         // KTX files require an unpack alignment of 4
         unsafe
         {
-            fixed ( int* ptr = &buffer.BackingArray()[ 0 ] )
+            fixed ( int* ptr = &buffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.GetIntegerv( IGL.GL_UNPACK_ALIGNMENT, ptr );
             }
         }
 
-        var previousUnpackAlignment = buffer.Get( 0 );
+        var previousUnpackAlignment = buffer.GetInt( 0 );
 
         if ( previousUnpackAlignment != 4 )
         {
@@ -507,7 +490,7 @@ public class KtxTextureData : ITextureData, ICubemapData
 
                                 unsafe
                                 {
-                                    fixed ( void* ptr = &pixmap.ByteBuffer.BackingArray()[ 0 ] )
+                                    fixed ( void* ptr = &pixmap.ByteBuffer.ToArray()[ 0 ] )
                                     {
                                         GdxApi.Bindings.TexImage2D( target + face,
                                                              level,
@@ -527,7 +510,7 @@ public class KtxTextureData : ITextureData, ICubemapData
                             {
                                 unsafe
                                 {
-                                    fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
+                                    fixed ( void* dataptr = &data.ToArray()[ 0 ] )
                                     {
                                         GdxApi.Bindings.CompressedTexImage2D( target + face,
                                                                        level,
@@ -546,7 +529,7 @@ public class KtxTextureData : ITextureData, ICubemapData
                             // Try to load (no software unpacking fallback)
                             unsafe
                             {
-                                fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
+                                fixed ( void* dataptr = &data.ToArray()[ 0 ] )
                                 {
                                     GdxApi.Bindings.CompressedTexImage2D( target + face,
                                                                    level,
@@ -564,7 +547,7 @@ public class KtxTextureData : ITextureData, ICubemapData
                     {
                         unsafe
                         {
-                            fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
+                            fixed ( void* dataptr = &data.ToArray()[ 0 ] )
                             {
                                 GdxApi.Bindings.TexImage2D( target + face,
                                                      level,
@@ -620,15 +603,11 @@ public class KtxTextureData : ITextureData, ICubemapData
     public PixelType.Format? PixelFormat { get; set; } = PixelType.Format.Alpha;
 
     /// <returns> whether to generate mipmaps or not. </returns>
-    public bool UseMipMaps { get; set; }
+    public bool UseMipMaps { get; set; } = useMipMaps;
 
     public void DisposePreparedData()
     {
-        if ( _compressedData != null )
-        {
-            BufferUtils.DisposeUnsafeByteBuffer( _compressedData );
-        }
-
+        _compressedData?.Dispose();
         _compressedData = null;
     }
 }

@@ -28,7 +28,7 @@ using LughSharp.Lugh.Utils.Buffers.NewBuffers
 ;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
+using Buffer = LughSharp.Lugh.Utils.Buffers.NewBuffers.Buffer;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
@@ -79,7 +79,7 @@ public class VertexBufferObject : IVertexData
     public VertexBufferObject( bool isStatic, int numVertices, VertexAttributes attributes )
     {
         _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
-        _byteBuffer   = BufferUtils.NewByteBuffer( attributes.VertexSize * numVertices );
+        _byteBuffer   = new ByteBuffer( attributes.VertexSize * numVertices );
         Attributes    = attributes;
         
         SetBuffer( _byteBuffer, true, attributes );
@@ -178,7 +178,7 @@ public class VertexBufferObject : IVertexData
 
         _isDirty = true;
 
-        _byteBuffer.AddFloats( vertices, offset, count );
+        _byteBuffer.PutFloats( vertices, offset, count );
 
         _buffer.Position = 0;
         _buffer.Limit    = count;
@@ -245,7 +245,7 @@ public class VertexBufferObject : IVertexData
             {
                 _byteBuffer.Limit = _buffer.Limit * 4;
 
-                fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+                fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
                 {
                     GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, ptr, Usage );
                 }
@@ -348,7 +348,7 @@ public class VertexBufferObject : IVertexData
 
         if ( _ownsBuffer )
         {
-            BufferUtils.DisposeUnsafeByteBuffer( _byteBuffer! );
+//            BufferUtils.DisposeUnsafeByteBuffer( _byteBuffer! );
         }
     }
 
@@ -365,7 +365,7 @@ public class VertexBufferObject : IVertexData
 
         if ( _ownsBuffer && ( _byteBuffer != null ) )
         {
-            BufferUtils.DisposeUnsafeByteBuffer( _byteBuffer );
+//            BufferUtils.DisposeUnsafeByteBuffer( _byteBuffer );
         }
 
         Attributes = value;
@@ -395,7 +395,7 @@ public class VertexBufferObject : IVertexData
     {
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer!.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer!.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer!.Limit, ptr, Usage );
             }

@@ -149,7 +149,7 @@ public class ETC1TextureData : ITextureData
         }
         else
         {
-            fixed ( void* ptr = &_data.CompressedData.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_data.CompressedData.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.CompressedTexImage2D( target,
                                                0,

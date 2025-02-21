@@ -31,7 +31,7 @@ using LughSharp.Lugh.Utils.Buffers.NewBuffers
 ;
 using LughSharp.Lugh.Utils.Collections;
 
-using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
+using Buffer = LughSharp.Lugh.Utils.Buffers.NewBuffers.Buffer;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
@@ -535,7 +535,7 @@ public class ManagedShaderProgram : ShaderProgram
             return;
         }
 
-        fixed ( void* ptr = &buffer.BackingArray()[ 0 ] )
+        fixed ( void* ptr = &buffer.ToArray()[ 0 ] )
         {
             GdxApi.Bindings.VertexAttribPointer( ( uint ) location, size, type, normalize, stride, ptr );
         }
@@ -553,7 +553,7 @@ public class ManagedShaderProgram : ShaderProgram
     {
         CheckManaged();
 
-        fixed ( void* ptr = &buffer.BackingArray()[ 0 ] )
+        fixed ( void* ptr = &buffer.ToArray()[ 0 ] )
         {
             GdxApi.Bindings.VertexAttribPointer( ( uint ) location, size, type, normalize, stride, ptr );
         }
@@ -832,7 +832,7 @@ public class ManagedShaderProgram : ShaderProgram
         CheckManaged();
         buffer.Position = 0;
 
-        fixed ( float* ptr = &( buffer ).BackingArray()[ 0 ] )
+        fixed ( float* ptr = &( buffer ).ToArray()[ 0 ] )
         {
             GdxApi.Bindings.UniformMatrix3fv( FetchUniformLocation( name ), count, transpose, ptr );
         }
@@ -853,7 +853,7 @@ public class ManagedShaderProgram : ShaderProgram
         CheckManaged();
         buffer.Position = 0;
 
-        fixed ( float* ptr = &buffer.BackingArray()[ 0 ] )
+        fixed ( float* ptr = &buffer.ToArray()[ 0 ] )
         {
             GdxApi.Bindings.UniformMatrix4fv( FetchUniformLocation( name ), count, transpose, ptr );
         }

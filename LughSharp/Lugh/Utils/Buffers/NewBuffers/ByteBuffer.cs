@@ -868,7 +868,7 @@ public class ByteBuffer : Buffer, IDisposable
     /// Returns the backing array as a byte[].
     /// </summary>
     /// <returns></returns>
-    public byte[] ToArray()
+    public new byte[] ToArray()
     {
         return _backingArray;
     }
@@ -975,6 +975,17 @@ public class ByteBuffer : Buffer, IDisposable
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public ByteBuffer Slice()
+    {
+        //TODO:
+        
+        throw new NotImplementedException();
+    }
+    
     /// <inheritdoc />
     public override void Clear()
     {
@@ -988,6 +999,82 @@ public class ByteBuffer : Buffer, IDisposable
     public override int Remaining()
     {
         return ( Limit - Position ) / sizeof( byte );
+    }
+
+    /// <inheritdoc />
+    public override void Compact()
+    {
+        var remaining = Limit - Position;
+
+        if ( remaining > 0 )
+        {
+            System.Buffer.BlockCopy( _backingArray, Position, _backingArray, 0, remaining );
+        }
+        
+        Position = remaining;
+        Limit    = Capacity;
+        
+        DiscardMark();
+    }
+
+    /// <summary>
+    /// Wraps a byte array into a buffer.
+    /// <para>
+    /// The new buffer will be backed by the given byte array; that is, modifications
+    /// to the buffer will cause the array to be modified and vice versa. The new buffer's
+    /// capacity will be <c>array.length</c>, its position will be <c>offset</c>, its
+    /// limit will be <c>offset + length</c>, and its mark will be undefined. Its
+    /// backing array will be the given array.
+    /// </para>
+    /// </summary>
+    /// <param name="array"> The array that will back the new buffer </param>
+    /// <param name="offset">
+    /// The offset of the subarray to be used; must be non-negative and no larger
+    /// than <c>array.length</c>. The new buffer's position will be set to this value.
+    /// </param>
+    /// <param name="length">
+    /// The length of the subarray to be used; must be non-negative and no larger
+    /// than <c>array.length - offset</c>. The new buffer's limit will be set to
+    /// <c>offset + length</c>.
+    /// </param>
+    /// <returns> The new byte buffer </returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// If the preconditions on the <c>offset</c> and <c>length</c> parameters do not hold
+    /// </exception>
+    public static ByteBuffer Wrap( byte[] array, int offset, int length )
+    {
+        try
+        {
+            ArgumentNullException.ThrowIfNull( array );
+        
+            var buffer = new ByteBuffer( length );
+            buffer.PutBytes( array, offset, 0, length );
+
+            return buffer;
+        }
+        catch ( ArgumentException )
+        {
+            throw new IndexOutOfRangeException();
+        }
+    }
+
+    /// <summary>
+    /// Wraps a byte array into a buffer.
+    /// <para>
+    /// The new buffer will be backed by the given byte array; that is, modifications
+    /// to the buffer will cause the array to be modified and vice versa. The new buffer's
+    /// capacity will be <c>array.length</c>, its position will be <c>offset</c>, its
+    /// limit will be <c>offset + length</c>, and its mark will be undefined. Its
+    /// backing array will be the given array.
+    /// </para>
+    /// </summary>
+    /// <param name="array"> The array that will back the new buffer </param>
+    /// <returns> The new byte buffer </returns>
+    public static ByteBuffer Wrap( byte[] array )
+    {
+        ArgumentNullException.ThrowIfNull( array );
+        
+        return Wrap( array, 0, array.Length );
     }
 
     // ========================================================================

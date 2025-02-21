@@ -50,7 +50,7 @@ public class IndexArray : IIndexData
             maxIndices = 1; 
         }
 
-        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2 );
+        _byteBuffer = new ByteBuffer( maxIndices * 2 );
 
         _buffer = _byteBuffer.AsShortBuffer();
         _buffer.Flip();
@@ -82,7 +82,7 @@ public class IndexArray : IIndexData
     public void SetIndices( short[] indices, int offset, int count )
     {
         _buffer.Clear();
-        _buffer.Put( indices, offset, count );
+        _buffer.PutShorts( indices, offset, count );
         _buffer.Flip();
 
         _byteBuffer.Position = 0;
@@ -99,8 +99,7 @@ public class IndexArray : IIndexData
 
         _buffer.Clear();
         _buffer.Limit = indices.Remaining();
-
-        _buffer.Put( indices );
+        _buffer.PutShorts( indices.ToArray() );
         _buffer.Flip();
 
         indices.Position = pos;
@@ -122,7 +121,7 @@ public class IndexArray : IIndexData
 
         _byteBuffer.Position = targetOffset * 2;
 
-        BufferUtils.Copy( indices, offset, _byteBuffer, count );
+        BufferUtils.Copy( indices, offset, count, _byteBuffer );
 
         _byteBuffer.Position = pos;
     }

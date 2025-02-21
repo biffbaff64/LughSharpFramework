@@ -202,10 +202,10 @@ public class IntBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Returns the backing array as a byte[].
+    /// Returns the backing array as a int[].
     /// </summary>
     /// <returns></returns>
-    public int[] ToArray()
+    public new int[] ToArray()
     {
         var tmpArray = new int[ Length ];
 
@@ -246,6 +246,11 @@ public class IntBuffer : Buffer, IDisposable
     public override int Remaining()
     {
         return ( Limit - Position ) / sizeof( int );
+    }
+
+    public override void Compact()
+    {
+        _byteBufferDelegate.Compact();
     }
 
     // ========================================================================

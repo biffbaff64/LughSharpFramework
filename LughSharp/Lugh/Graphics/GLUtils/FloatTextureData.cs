@@ -30,7 +30,7 @@ using LughSharp.Lugh.Utils.Buffers.NewBuffers
 ;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
+using Buffer = LughSharp.Lugh.Utils.Buffers.NewBuffers.Buffer;
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
@@ -99,7 +99,7 @@ public class FloatTextureData : ITextureData
                 }
             }
 
-            Buffer = BufferUtils.NewFloatBuffer( Width * Height * amountOfFloats );
+            Buffer = new FloatBuffer( Width * Height * amountOfFloats );
         }
 
         IsPrepared = true;
@@ -120,7 +120,7 @@ public class FloatTextureData : ITextureData
             // so to get a float texture one needs to supply GL_RGBA and GL_FLOAT there.
             unsafe
             {
-                fixed ( void* ptr = &( ( Buffer ) Buffer ).BackingArray()[ 0 ] )
+                fixed ( void* ptr = &Buffer.ToArray()[ 0 ] )
                 {
                     GdxApi.Bindings.TexImage2D( target,
                                          0,
@@ -145,7 +145,7 @@ public class FloatTextureData : ITextureData
             // hence we need to use GL_RGBA32F there (this constant is unavailable in GLES/WebGL)
             unsafe
             {
-                fixed ( void* ptr = &( ( Buffer ) Buffer ).BackingArray()[ 0 ] )
+                fixed ( void* ptr = &Buffer.ToArray()[ 0 ] )
                 {
                     GdxApi.Bindings.TexImage2D( target,
                                          0,
@@ -166,19 +166,15 @@ public class FloatTextureData : ITextureData
     /// <summary>
     /// FloatTextureData objects are Managed.
     /// </summary>
-    public bool IsManaged
-    {
-        get => true;
-        set { }
-    }
+    public bool IsManaged => true;
 
     // ========================================================================
     // ========================================================================
 
     public PixelType.Format? PixelFormat
     {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
+        get => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
+        set => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
     public Pixmap ConsumePixmap()

@@ -87,9 +87,12 @@ public class BufferUtils
             throw new GdxRuntimeException( "Offsets and length must be non-negative." );
         }
 
-        if ( ( ( sourceOffset + length ) > source.Capacity ) || ( ( destinationOffset + length ) > destination.Capacity ) )
+        //TODO: Update to take into account the type of buffer (float, short, int, etc. )
+        destination.EnsureCapacity( destinationOffset + length );
+        
+        if ( ( sourceOffset + length ) > source.Capacity )
         {
-            throw new GdxRuntimeException( "Copy range exceeds buffer capacities." );
+            throw new GdxRuntimeException( "Cannot copy more than source contents." );
         }
 
         for ( var i = 0; i < length; i++ )
@@ -99,5 +102,57 @@ public class BufferUtils
         }
     }
 
-    // ... (Add other Copy methods as needed: Copy to/from byte arrays, spans, streams, etc.) ...
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="sourceOffset"></param>
+    /// <param name="length"></param>
+    /// <param name="destination"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public static void Copy( float[] source, int sourceOffset, int length, ByteBuffer destination )
+    {
+        ArgumentNullException.ThrowIfNull( source );
+        ArgumentNullException.ThrowIfNull( destination );
+
+        if ( ( sourceOffset < 0 ) || ( length < 0 ) )
+        {
+            throw new GdxRuntimeException( "Offset and length must be non-negative." );
+        }
+        
+        destination.EnsureCapacity( length * sizeof( float ) );
+
+        for ( var i = 0; i < length; i++ )
+        {
+            // Indexed byte-by-byte copy - optimize for bulk copy if needed.
+            destination.PutFloat( i, source[ sourceOffset + i ] );
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="sourceOffset"></param>
+    /// <param name="length"></param>
+    /// <param name="destination"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public static void Copy( short[] source, int sourceOffset, int length, ByteBuffer destination )
+    {
+        ArgumentNullException.ThrowIfNull( source );
+        ArgumentNullException.ThrowIfNull( destination );
+
+        if ( ( sourceOffset < 0 ) || ( length < 0 ) )
+        {
+            throw new GdxRuntimeException( "Offset and length must be non-negative." );
+        }
+        
+        destination.EnsureCapacity( length * sizeof( short ) );
+
+        for ( var i = 0; i < length; i++ )
+        {
+            // Indexed byte-by-byte copy - optimize for bulk copy if needed.
+            destination.PutShort( i, source[ sourceOffset + i ] );
+        }
+    }
 }

@@ -23,10 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils.Buffers.NewBuffers
 ;
 
@@ -59,7 +56,7 @@ public class VertexArray : IVertexData
     public VertexArray( int numVertices, VertexAttributes attributes )
     {
         Attributes  = attributes;
-        _byteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numVertices );
+        _byteBuffer = new ByteBuffer( Attributes.VertexSize * numVertices );
         _buffer     = _byteBuffer.AsFloatBuffer();
     }
 
@@ -111,7 +108,7 @@ public class VertexArray : IVertexData
         }
 
         fixed ( float* sourcePtr = &vertices[ offset ] )
-        fixed ( byte* destPtr = _byteBuffer.BackingArray() )
+        fixed ( byte* destPtr = _byteBuffer.ToArray() )
         {
             Unsafe.CopyBlock( destPtr + _byteBuffer.Position, sourcePtr, ( uint )( count * sizeof( float ) ) );
             _byteBuffer.Position += count * 4;
@@ -135,7 +132,7 @@ public class VertexArray : IVertexData
         }
 
         fixed ( float* sourcePtr = &vertices[ sourceOffset ] )
-        fixed ( byte* destPtr = _byteBuffer.BackingArray() )
+        fixed ( byte* destPtr = _byteBuffer.ToArray() )
         {
             Unsafe.CopyBlock( destPtr + ( targetOffset * sizeof( float ) ), sourcePtr, ( uint )( count * sizeof( float ) ) );
         }
@@ -213,6 +210,6 @@ public class VertexArray : IVertexData
     /// </summary>
     public void Dispose()
     {
-        BufferUtils.DisposeUnsafeByteBuffer( _byteBuffer );
+        GC.SuppressFinalize( this );
     }
 }

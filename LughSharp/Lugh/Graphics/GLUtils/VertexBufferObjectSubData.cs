@@ -78,7 +78,7 @@ public class VertexBufferObjectSubData : IVertexData
         _isStatic  = isStatic;
         Attributes = attributes;
 
-        ByteBuffer = BufferUtils.NewByteBuffer( Attributes.VertexSize * numVertices );
+        ByteBuffer = new ByteBuffer( Attributes.VertexSize * numVertices );
         _isDirect  = true;
 
         _usage  = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
@@ -119,7 +119,8 @@ public class VertexBufferObjectSubData : IVertexData
 
         if ( _isDirect )
         {
-            this.ByteBuffer.AddFloats( vertices, offset, count );
+            //TODO: Check against LibGDX
+            this.ByteBuffer.PutFloats( vertices, offset, count );
 
             _buffer.Position = 0;
             _buffer.Limit    = count;
@@ -127,7 +128,7 @@ public class VertexBufferObjectSubData : IVertexData
         else
         {
             _buffer.Clear();
-            _buffer.Put( vertices, offset, count );
+            _buffer.PutFloats( vertices, offset, count );
 
             _buffer.Flip();
             ByteBuffer.Position = 0;
@@ -191,7 +192,7 @@ public class VertexBufferObjectSubData : IVertexData
         {
             ByteBuffer.Limit = _buffer.Limit * 4;
 
-            fixed ( void* ptr = &ByteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &ByteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, ByteBuffer.Limit, ptr, _usage );
             }
@@ -302,7 +303,7 @@ public class VertexBufferObjectSubData : IVertexData
     {
         if ( _isBound )
         {
-            fixed ( void* ptr = &ByteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &ByteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferSubData( IGL.GL_ARRAY_BUFFER, 0, ByteBuffer.Limit, ptr );
             }

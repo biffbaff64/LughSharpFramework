@@ -57,7 +57,7 @@ public class InstanceBufferObject : IInstanceData
     {
         _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
 
-        var data = BufferUtils.NewByteBuffer( instanceAttributes.VertexSize * numVertices );
+        var data = new ByteBuffer( instanceAttributes.VertexSize * numVertices );
 
         data.Limit = 0;
 
@@ -176,7 +176,7 @@ public class InstanceBufferObject : IInstanceData
         {
             _byteBuffer.Limit = _buffer.Limit * 4;
 
-            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, ptr, Usage );
             }
@@ -357,7 +357,7 @@ public class InstanceBufferObject : IInstanceData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, null!, Usage );
                 GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, ptr, Usage );

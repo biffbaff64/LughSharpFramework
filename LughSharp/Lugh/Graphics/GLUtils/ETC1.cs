@@ -323,13 +323,13 @@ public class ETC1
 
                 var fileSize = input.ReadInt32();
 
-                CompressedData = BufferUtils.NewByteBuffer( fileSize );
+                CompressedData = new ByteBuffer( fileSize );
 
                 int readBytes;
 
                 while ( ( readBytes = input.Read( buffer ) ) != -1 )
                 {
-                    CompressedData.Put( buffer, 0, readBytes );
+                    CompressedData.PutBytes( buffer, 0, 0, readBytes );
                 }
 
                 CompressedData.Position = 0;
@@ -445,7 +445,9 @@ public class ETC1
         /// </summary>
         public void Dispose()
         {
-            BufferUtils.DisposeUnsafeByteBuffer( CompressedData );
+            CompressedData.Dispose();
+
+            GC.SuppressFinalize( this );
         }
     }
 

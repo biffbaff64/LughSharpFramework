@@ -63,7 +63,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( bool isStatic, int maxIndices )
     {
-        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2 );
+        _byteBuffer = new ByteBuffer( maxIndices * 2 );
 
         _usage  = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
         _buffer = _byteBuffer.AsShortBuffer();
@@ -80,7 +80,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( int maxIndices )
     {
-        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2 );
+        _byteBuffer = new ByteBuffer( maxIndices * 2 );
 
         _usage  = IGL.GL_STATIC_DRAW;
         _buffer = _byteBuffer.AsShortBuffer();
@@ -111,7 +111,7 @@ public class IndexBufferObjectSubData : IIndexData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ptr );
             }
@@ -138,7 +138,7 @@ public class IndexBufferObjectSubData : IIndexData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ptr );
             }
@@ -163,7 +163,7 @@ public class IndexBufferObjectSubData : IIndexData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ptr );
             }
@@ -195,7 +195,7 @@ public class IndexBufferObjectSubData : IIndexData
         {
             _byteBuffer.Limit = _buffer.Limit * 2;
 
-            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ptr );
             }

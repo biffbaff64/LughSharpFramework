@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime;
+
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
@@ -207,7 +209,7 @@ public class FloatBuffer : Buffer, IDisposable
     /// Returns the backing array as a byte[].
     /// </summary>
     /// <returns></returns>
-    public float[] ToArray()
+    public new float[] ToArray()
     {
         var tmpArray = new float[ Length ];
 
@@ -240,6 +242,11 @@ public class FloatBuffer : Buffer, IDisposable
         return ( Limit - Position ) / sizeof( float );
     }
 
+    public override void Compact()
+    {
+        _byteBufferDelegate.Compact();
+    }
+    
     // ========================================================================
 
     /// <inheritdoc />

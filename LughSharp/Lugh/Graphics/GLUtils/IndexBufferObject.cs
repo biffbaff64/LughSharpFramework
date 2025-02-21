@@ -23,8 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers.NewBuffers
 ;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -88,7 +86,7 @@ public class IndexBufferObject : IIndexData
         }
 
         // Create a new byte buffer to hold the indices. Each index is a short (2 bytes).
-        _byteBuffer = BufferUtils.NewByteBuffer( maxIndices * 2 );
+        _byteBuffer = new ByteBuffer( maxIndices * 2 );
 
         // Create a view of the byte buffer as a short buffer.
         _buffer = _byteBuffer.AsShortBuffer();
@@ -129,7 +127,7 @@ public class IndexBufferObject : IIndexData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ptr, _usage );
             }
@@ -156,7 +154,7 @@ public class IndexBufferObject : IIndexData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ptr, _usage );
             }
@@ -181,7 +179,7 @@ public class IndexBufferObject : IIndexData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ptr, _usage );
             }
@@ -214,7 +212,7 @@ public class IndexBufferObject : IIndexData
 
             unsafe
             {
-                fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
+                fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
                 {
                     GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ptr, _usage );
                 }
