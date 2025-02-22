@@ -144,9 +144,9 @@ public class SpriteBatch : IBatch
             : Mesh.VertexDataType.VertexArray;
 
         // Initialize the mesh with vertex attributes for position, color, and texture coordinates
-        var va1 = new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 2, ShaderProgram.POSITION_ATTRIBUTE );
-        var va2 = new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE );
-        var va3 = new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2, $"{ShaderProgram.TEXCOORD_ATTRIBUTE}0" );
+        var va1 = new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 2, "a_position" );
+        var va2 = new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, "a_colorPacked" );
+        var va3 = new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2, $"a_texCoord0" );
 
         _mesh = new Mesh( vertexDataType, false, size * VERTICES_PER_SPRITE, size * INDICES_PER_SPRITE, va1, va2, va3 );
 
@@ -235,7 +235,10 @@ public class SpriteBatch : IBatch
 
         // --------------------------------------------------------------------
 
-        if ( ( program == null ) || ( _mesh == null ) ) return;
+        if ( ( program == null ) || ( _mesh == null ) )
+        {
+            throw new NullReferenceException( "program and _mesh cannot be null!" );
+        }
 
         program.Bind();
 
@@ -250,7 +253,7 @@ public class SpriteBatch : IBatch
         // --------------------------------------------------------------------
 
         // Position Attribute
-        var positionLocation = program.GetAttributeLocation( ShaderProgram.POSITION_ATTRIBUTE );
+        var positionLocation = program.GetAttributeLocation( "a_position" );
 
         if ( positionLocation >= 0 )
         {
@@ -1412,9 +1415,8 @@ public class SpriteBatch : IBatch
     {
         GdxRuntimeException.ThrowIfNull( _shader );
 
-        GdxApi.Bindings.UseProgram( _shader.ShaderHandle );
         _combinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( _shader.ShaderHandle,
-                                                                      ShaderProgram.COMBINED_MATRIX_UNIFORM );
+                                                                      "u_combinedMatrix" );
     }
     
     /// <summary>
@@ -1445,20 +1447,20 @@ public class SpriteBatch : IBatch
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-        const string VERTEX_SHADER = $"{ShaderProgram.SHADER_VERSION_CODE}\n" +
-                                     $"layout (location = 0) in vec2 {ShaderProgram.POSITION_ATTRIBUTE};\n" +
-                                     $"layout (location = 1) in vec4 {ShaderProgram.COLOR_ATTRIBUTE};\n" +
-                                     $"layout (location = 2) in vec2 {ShaderProgram.TEXCOORD_ATTRIBUTE};\n" +
+        const string VERTEX_SHADER = $"#version 450 core\n" +
+                                     $"layout (location = 0) in vec2 a_position;\n" +
+                                     $"layout (location = 1) in vec4 a_colorPacked;\n" +
+                                     $"layout (location = 2) in vec2 a_texCoord;\n" +
                                      $"layout (location = 3) uniform mat4 u_combinedMatrix;\n" +
                                      "out vec4 v_colorPacked;\n" +
                                      "out vec2 v_texCoords;\n" +
                                      "void main() {\n" +
-                                     $"    gl_Position = u_combinedMatrix * vec4({ShaderProgram.POSITION_ATTRIBUTE}, 0.0, 1.0);\n" +
-                                     $"    v_colorPacked = {ShaderProgram.COLOR_ATTRIBUTE};\n" +
-                                     $"    v_texCoords = {ShaderProgram.TEXCOORD_ATTRIBUTE};\n" +
+                                     $"    gl_Position = u_combinedMatrix * vec4(a_position, 0.0, 1.0);\n" +
+                                     $"    v_colorPacked = a_colorPacked;\n" +
+                                     $"    v_texCoords = a_texCoord;\n" +
                                      "}\n";
 
-        const string FRAGMENT_SHADER = $"{ShaderProgram.SHADER_VERSION_CODE}\n" +
+        const string FRAGMENT_SHADER = $"#version 450 core\n" +
                                        "in vec4 v_colorPacked;\n" +
                                        "in vec2 v_texCoords;\n" +
                                        "out vec4 FragColor;\n" +
@@ -1483,7 +1485,7 @@ public class SpriteBatch : IBatch
                 return;
             }
 
-            _shader.SetUniformMatrix( ShaderProgram.COMBINED_MATRIX_UNIFORM, CombinedMatrix );
+            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix );
             _shader.SetUniformi( "u_texture", 0 );
         }
     }

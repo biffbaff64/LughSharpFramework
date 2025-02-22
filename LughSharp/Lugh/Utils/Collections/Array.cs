@@ -41,6 +41,7 @@ public class Array< T >
     public int  Size    { get; set; }
     public bool Ordered { get; set; }
 
+    //TODO:
     private PredicateIterable< T >? _predicateIEnumerable;
 
     // ========================================================================
@@ -659,7 +660,7 @@ public class Array< T >
     /// </summary>
     /// <param name="predicate"></param>
     /// <returns></returns>
-    public virtual IEnumerable< T > Select( IPredicate< T > predicate )
+    public virtual IEnumerable< T > Select( IPredicate< T > predicate )    //TODO:
     {
         if ( Items == null )
         {
@@ -668,6 +669,7 @@ public class Array< T >
 
         if ( _predicateIEnumerable == null )
         {
+            //TODO:
             _predicateIEnumerable = new PredicateIterable< T >( Items, predicate );
         }
         else
@@ -715,9 +717,7 @@ public class Array< T >
     {
         var memberInfo = Items.GetType().BaseType;
 
-        return memberInfo != null
-                   ? ToArray( memberInfo )
-                   : ( T[] ) Array.CreateInstance( Items.GetType(), Size );
+        return memberInfo != null ? ToArray( memberInfo ) : ( T[] ) Array.CreateInstance( Items.GetType(), Size );
     }
 
     /// <summary>

@@ -27,8 +27,7 @@ using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils.Buffers.NewBuffers
-;
+using LughSharp.Lugh.Utils.Buffers;
 
 namespace LughSharp.Lugh.Utils;
 

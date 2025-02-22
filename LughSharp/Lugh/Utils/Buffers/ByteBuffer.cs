@@ -28,7 +28,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 using IndexOutOfRangeException = System.IndexOutOfRangeException;
 
-namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
+namespace LughSharp.Lugh.Utils.Buffers;
 
 [PublicAPI]
 public class ByteBuffer : Buffer, IDisposable
@@ -832,12 +832,15 @@ public class ByteBuffer : Buffer, IDisposable
         }
 
         var bytesToWrite   = length * sizeof( float );
+
+        EnsureCapacity( Position + bytesToWrite );
+        
         var bytesRemaining = Capacity - Position; // Space remaining from Position to Capacity
 
         if ( bytesToWrite > bytesRemaining )
         {
             throw new BufferOverflowException( $"Not enough space remaining in buffer to write {length} floats. " +
-                                               $"Remaining space: {bytesRemaining}" );
+                                               $"Remaining space: {bytesRemaining} bytes" );
         }
 
         System.Buffer.BlockCopy( src: src,

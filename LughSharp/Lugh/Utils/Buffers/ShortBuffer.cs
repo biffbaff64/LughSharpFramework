@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
+namespace LughSharp.Lugh.Utils.Buffers;
 
 /// <summary>
 /// Provides a type-safe view of an underlying ByteBuffer, specialized for short values.

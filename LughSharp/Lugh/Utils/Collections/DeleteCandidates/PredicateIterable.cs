@@ -29,6 +29,7 @@ namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [PublicAPI]
+[Obsolete( "Obsolete" )]
 public class PredicateIterable< T > : IEnumerable< T >
 {
     /// <summary>

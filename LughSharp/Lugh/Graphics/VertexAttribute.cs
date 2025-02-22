@@ -165,7 +165,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Position()
     {
-        return new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 3, ShaderProgram.POSITION_ATTRIBUTE );
+        return new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 3, "a_position" );
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ public class VertexAttribute
     {
         return new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES,
                                     2,
-                                    ShaderProgram.TEXCOORD_ATTRIBUTE + unit,
+                                    $"a_texCoord{unit}",
                                     unit );
     }
 
@@ -196,7 +196,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Normal()
     {
-        return new VertexAttribute( ( int )VertexAttributes.Usage.NORMAL, 3, ShaderProgram.NORMAL_ATTRIBUTE );
+        return new VertexAttribute( ( int )VertexAttributes.Usage.NORMAL, 3, "a_normal" );
     }
 
     /// <summary>
@@ -212,7 +212,7 @@ public class VertexAttribute
                                     4,
                                     IGL.GL_UNSIGNED_BYTE,
                                     true,
-                                    ShaderProgram.COLOR_ATTRIBUTE );
+                                    "a_colorPacked" );
     }
 
     /// <summary>
@@ -229,20 +229,19 @@ public class VertexAttribute
                                     4,
                                     IGL.GL_FLOAT,
                                     false,
-                                    ShaderProgram.COLOR_ATTRIBUTE );
+                                    "a_colorPacked" );
     }
 
     /// <summary>
     /// Creates a vertex attribute for tangent data used in shaders. The tangent attribute
-    /// consists of three components and is associated with the shader attribute name defined
-    /// by <see cref="ShaderProgram.TANGENT_ATTRIBUTE"/>.
+    /// consists of three components and is associated with the shader attribute named "a_tangent".
     /// </summary>
     /// <returns>
     /// A new vertex attribute representing tangent data, configured for use in a shader.
     /// </returns>
     public static VertexAttribute Tangent()
     {
-        return new VertexAttribute( ( int )VertexAttributes.Usage.TANGENT, 3, ShaderProgram.TANGENT_ATTRIBUTE );
+        return new VertexAttribute( ( int )VertexAttributes.Usage.TANGENT, 3, "a_tangent" );
     }
 
     /// <summary>
@@ -256,7 +255,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Binormal()
     {
-        return new VertexAttribute( ( int )VertexAttributes.Usage.BI_NORMAL, 3, ShaderProgram.BINORMAL_ATTRIBUTE );
+        return new VertexAttribute( ( int )VertexAttributes.Usage.BI_NORMAL, 3, "a_binormal" );
     }
 
     /// <summary>
@@ -274,7 +273,7 @@ public class VertexAttribute
     {
         return new VertexAttribute( ( int )VertexAttributes.Usage.BONE_WEIGHT,
                                     2,
-                                    ShaderProgram.BONEWEIGHT_ATTRIBUTE + unit,
+                                    $"a_boneWeight{unit}",
                                     unit );
     }
 

@@ -27,8 +27,16 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 
 [PublicAPI]
-public class PredicateIterator< T > : IEnumerator< T >
+[Obsolete( "Obsolete" )]
+public class PredicateIterator< T > : IEnumerator< T >, IDisposable
 {
+    public IEnumerator< T? > Enumerator { get; set; }
+    public IPredicate< T >   Predicate  { get; set; }
+    public bool              End        { get; set; }
+    public bool              Peeked     { get; set; }
+    public T?                NextItem   { get; set; }
+    public T                 Current    { get; }
+
     // ========================================================================
 
     /// <summary>
@@ -54,28 +62,25 @@ public class PredicateIterator< T > : IEnumerator< T >
         Current    = default( T? )!;
     }
 
-    public IEnumerator< T? > Enumerator { get; set; }
-    public IPredicate< T >   Predicate  { get; set; }
-    public bool              End        { get; set; }
-    public bool              Peeked     { get; set; }
-    public T?                NextItem   { get; set; }
-    public T                 Current    { get; }
+    // ========================================================================
 
+   /// <inheritdoc />
     object? IEnumerator.Current => Current;
 
-    public void Dispose()
-    {
-        Remove();
-    }
-
-    // ========================================================================
-    // ========================================================================
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public virtual bool MoveNext()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
     public virtual void Reset()
     {
         throw new NotImplementedException();
@@ -103,6 +108,10 @@ public class PredicateIterator< T > : IEnumerator< T >
         NextItem   = default( T? );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public bool HasNext()
     {
         if ( End )
@@ -134,6 +143,10 @@ public class PredicateIterator< T > : IEnumerator< T >
         return false;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public T? Next()
     {
         if ( ( NextItem == null ) && !HasNext() )
@@ -148,6 +161,10 @@ public class PredicateIterator< T > : IEnumerator< T >
         return result;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <exception cref="GdxRuntimeException"></exception>
     public void Remove()
     {
         if ( Peeked )
@@ -156,5 +173,13 @@ public class PredicateIterator< T > : IEnumerator< T >
         }
 
         Enumerator.Dispose();
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Remove();
+        
+        GC.SuppressFinalize( this );
     }
 }

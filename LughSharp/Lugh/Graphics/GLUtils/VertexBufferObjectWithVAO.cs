@@ -24,8 +24,7 @@
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers.NewBuffers
-;
+using LughSharp.Lugh.Utils.Buffers;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
@@ -41,7 +40,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
     private readonly FloatBuffer _buffer;
     private readonly ByteBuffer  _byteBuffer;
-    private readonly List< int > _cachedLocations = new();
+    private readonly List< int > _cachedLocations = [ ];
     private readonly bool        _ownsBuffer;
     private readonly int         _usage;
 
@@ -172,7 +171,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
         _isDirty = true;
 
-        _byteBuffer.Limit = Math.Min( _byteBuffer.Capacity, count << 2 );    // count << 2;
+        _byteBuffer.Limit = Math.Min( _byteBuffer.Capacity, count << 2 );
         _byteBuffer.PutFloats( vertices, offset, count );
 
         _buffer.Position = 0;
@@ -394,16 +393,9 @@ public class VertexBufferObjectWithVAO : IVertexData
         }
     }
 
-    private unsafe void CreateVAO()
+    private void CreateVAO()
     {
-        _tmpHandle.Clear();
-
-        fixed ( int* intptr = &_tmpHandle.ToArray()[ 0 ] )
-        {
-            GdxApi.Bindings.GenVertexArrays( 1, ( uint* )intptr );
-        }
-
-        _vaoHandle = _tmpHandle.GetInt();
+        _vaoHandle = ( int )GdxApi.Bindings.GenVertexArray();
     }
 
     private unsafe void DeleteVAO()

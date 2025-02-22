@@ -25,10 +25,10 @@
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Utils.Buffers.NewBuffers
-;
 
 using JetBrains.Annotations;
+
+using LughSharp.Lugh.Utils.Buffers;
 
 namespace Extensions.Source.Freetype;
 

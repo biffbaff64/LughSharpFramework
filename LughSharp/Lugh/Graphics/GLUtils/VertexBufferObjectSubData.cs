@@ -23,8 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils.Buffers.NewBuffers
-;
+using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;

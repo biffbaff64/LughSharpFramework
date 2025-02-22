@@ -3974,7 +3974,8 @@ public partial interface IGLBindings
     /// </param>
     void UniformMatrix4fv( int location, bool transpose, params float[] value );
 
-//TODO: Unsupported method    
+//TODO: Unsupported method
+//
 //    unsafe void UniformMatrix4fv( int location, int count, bool transpose, Buffer buffer );
 
     /// <summary>

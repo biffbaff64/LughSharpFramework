@@ -40,7 +40,6 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
-
 using GLenum = System.Int32;
 using GLfloat = System.Single;
 using GLint = System.Int32;
@@ -326,7 +325,7 @@ public unsafe partial class GLBindings : IGLBindings
     public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap )
     {
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
-        
+
         fixed ( byte* p = &pixmap.PixelData[ 0 ] )
         {
             _glTexImage2D( target,
@@ -2206,7 +2205,7 @@ public unsafe partial class GLBindings : IGLBindings
             return _glGetAttribLocation( ( uint )program, pname );
         }
     }
-    
+
     // ========================================================================
 
     /// <inheritdoc/>
@@ -2856,11 +2855,29 @@ public unsafe partial class GLBindings : IGLBindings
     /// <inheritdoc/>
     public void UniformMatrix4fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
+        ArgumentNullException.ThrowIfNull( value );
+
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4FVPROC >( "glUniformMatrix4fv", out _glUniformMatrix4fv );
+        
+        if ( ( value.Length % 16 ) != 0 )
+        {
+            throw new GdxRuntimeException( $"Error: value array length ({value.Length}) is not a multiple " +
+                                           $"of 16.  Must provide a whole number of 4x4 matrices." );
+        }
+
+        var matrixCount = value.Length / 16;
 
         fixed ( GLfloat* p = &value[ 0 ] )
         {
-            _glUniformMatrix4fv( location, value.Length / 16, transpose, p );
+            _glUniformMatrix4fv( location, matrixCount, transpose, p );
+
+            var error = _glGetError();
+            
+            if ( error != IGL.GL_NO_ERROR )
+            {
+                throw new GdxRuntimeException( $"OpenGL Error: {error} after glUniformMatrix4fv. Location: {location}, " +
+                                               $"Matrix Count: {matrixCount}, Transpose: {transpose}" );
+            }
         }
     }
 
@@ -3491,6 +3508,13 @@ public unsafe partial class GLBindings : IGLBindings
 
     /// <inheritdoc/>
     public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, void* pointer )
+    {
+        GetDelegateForFunction< PFNGLVERTEXATTRIBPOINTERPROC >( "glVertexAttribPointer", out _glVertexAttribPointer );
+
+        _glVertexAttribPointer( index, size, type, normalized, stride, pointer );
+    }
+
+    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, IntPtr pointer )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBPOINTERPROC >( "glVertexAttribPointer", out _glVertexAttribPointer );
 
@@ -6791,7 +6815,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential )]
     public struct DispatchIndirectCommand
     {
         public uint NumGroupsX;
@@ -6992,7 +7017,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv", out _glGetProgramInterfaceiv );
 
         _glGetProgramInterfaceiv( ( uint )program, programInterface, pname, parameters );
@@ -7001,12 +7026,12 @@ public unsafe partial class GLBindings : IGLBindings
     public void GetProgramInterfaceiv( GLint program, GLenum programInterface, GLenum pname, ref GLint[] parameters )
     {
         Logger.Checkpoint();
-        
+
         if ( !IsProgram( program ) )
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv", out _glGetProgramInterfaceiv );
 
         fixed ( GLint* pParameters = &parameters[ 0 ] )
@@ -7023,7 +7048,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex", out _glGetProgramResourceIndex );
 
         return _glGetProgramResourceIndex( ( uint )program, programInterface, name );
@@ -7035,7 +7060,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         var nameBytes = Encoding.UTF8.GetBytes( name );
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex", out _glGetProgramResourceIndex );
@@ -7055,7 +7080,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName", out _glGetProgramResourceName );
 
         _glGetProgramResourceName( ( uint )program, programInterface, index, bufSize, length, name );
@@ -7067,7 +7092,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         var name = new GLchar[ bufSize ];
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName", out _glGetProgramResourceName );
@@ -7091,7 +7116,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
 
         _glGetProgramResourceiv( ( uint )program, programInterface, index, propCount, props, bufSize, length, parameters );
@@ -7104,7 +7129,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
 
         fixed ( GLenum* pProps = &props[ 0 ] )
@@ -7132,7 +7157,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         var nameBytes = Encoding.UTF8.GetBytes( name );
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONPROC >( "glGetProgramResourceLocation", out _glGetProgramResourceLocation );
@@ -7151,7 +7176,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
                                                                             out _glGetProgramResourceLocationIndex );
 
@@ -7164,7 +7189,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         var nameBytes = Encoding.UTF8.GetBytes( name );
 
         GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
@@ -7184,7 +7209,7 @@ public unsafe partial class GLBindings : IGLBindings
         {
             throw new GdxRuntimeException( $"Invalid program ID: {program}" );
         }
-        
+
         GetDelegateForFunction< PFNGLSHADERSTORAGEBLOCKBINDINGPROC >( "glShaderStorageBlockBinding", out _glShaderStorageBlockBinding );
 
         _glShaderStorageBlockBinding( ( uint )program, storageBlockIndex, storageBlockBinding );

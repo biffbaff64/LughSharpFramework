@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
+namespace LughSharp.Lugh.Utils.Buffers;
 
 /// <summary>
 /// The base class for buffers. This holds all the essential shared data for IntBuffers, ShortBuffers,
@@ -54,14 +54,14 @@ public abstract class Buffer : IDisposable
 
     // ========================================================================
 
-    public bool      IsReadOnly        { get; protected set; }
-    public bool      IsDirect          { get; protected set; }
-    public int       Capacity          { get; protected set; }
-    public int       Position          { get; set; }
-    public int       Limit             { get; set; }
-    public int       Length            { get; protected set; }
-    public bool      IsBigEndian       { get; set; }
-    public bool      AutoResizeEnabled { get; set; } = true;
+    public bool IsReadOnly        { get; protected set; }
+    public bool IsDirect          { get; protected set; }
+    public int  Capacity          { get; protected set; }
+    public int  Position          { get; set; }
+    public int  Limit             { get; set; }
+    public int  Length            { get; protected set; }
+    public bool IsBigEndian       { get; set; }
+    public bool AutoResizeEnabled { get; set; } = true;
 
     private int _markPosition       = -1;
     private int _maxAllowedCapacity = DEFAULT_MAC_1GB;
@@ -82,11 +82,11 @@ public abstract class Buffer : IDisposable
         IsReadOnly  = IS_READ_ONLY_DEFAULT;
         IsDirect    = IS_DIRECT_DEFAULT;
 
-        Capacity  = capacityInBytes;
-        Limit     = capacityInBytes;
-        Length    = 0;
-        Position  = 0;
-        
+        Capacity = capacityInBytes;
+        Limit    = capacityInBytes;
+        Length   = 0;
+        Position = 0;
+
         SetBufferStatus( READ_WRITE, NOT_DIRECT ); // Set default status
     }
 
@@ -101,7 +101,7 @@ public abstract class Buffer : IDisposable
     public abstract void PutBytes( byte[] src, int srcOffset, int dstOffset, int length );
     public abstract void GetBytes( byte[] byteArray );
     public abstract void PutBytes( byte[] byteArray );
-    
+
     // ========================================================================
 
     /// <summary>
@@ -147,7 +147,7 @@ public abstract class Buffer : IDisposable
     {
         throw new GdxRuntimeException( "Clear() is abstract in base class, use extending class!" );
     }
-    
+
     /// <summary>
     /// This sets the <see cref="Limit"/> to the current value of Position. At this point,
     /// Position typically indicates the position after the last byte written. So, setting
@@ -216,7 +216,7 @@ public abstract class Buffer : IDisposable
     /// any unprocessed data while making space for new data at the end of the buffer.
     /// </summary>
     public abstract void Compact();
-    
+
     /// <summary>
     /// Returns <c>true</c> if, and only if, there is at least one element remaining in this buffer.
     /// </summary>
@@ -275,7 +275,7 @@ public abstract class Buffer : IDisposable
             Rewind(); // Rewind after shrink for typical shrink behavior
         }
     }
-    
+
     /// <summary>
     /// Saves the current <see cref="Position"/> of the buffer as a "mark."
     /// </summary>
@@ -399,7 +399,7 @@ public abstract class Buffer : IDisposable
             }
         }
     }
-   
+
     /// <summary>
     /// In extendiong classes, this method returns the backing array.
     /// </summary>

@@ -94,13 +94,13 @@ public class DistanceFieldFont : BitmapFont
     public ShaderProgram CreateDistanceFieldShader()
     {
         const string VERTEX_SHADER = "in vec4 "
-                                   + ShaderProgram.POSITION_ATTRIBUTE
+                                   + "a_position"
                                    + ";\n" //
                                    + "in vec4 "
-                                   + ShaderProgram.COLOR_ATTRIBUTE
+                                   + "a_colorPacked"
                                    + ";\n" //
                                    + "in vec2 "
-                                   + ShaderProgram.TEXCOORD_ATTRIBUTE
+                                   + "u_texCoord"
                                    + "0;\n"
                                    + "uniform mat4 u_projTrans;\n"
                                    + "out vec4 v_color;\n"
@@ -108,14 +108,14 @@ public class DistanceFieldFont : BitmapFont
                                    + "\n"
                                    + "void main() {\n"
                                    + "	v_color = "
-                                   + ShaderProgram.COLOR_ATTRIBUTE
+                                   + "a_colorPacked"
                                    + ";\n"
                                    + "	v_color.a = v_color.a * (255.0/254.0);\n"
                                    + "	v_texCoords = "
-                                   + ShaderProgram.TEXCOORD_ATTRIBUTE
+                                   + "u_texCoord"
                                    + "0;\n" //
                                    + "	gl_Position =  u_projTrans * "
-                                   + ShaderProgram.POSITION_ATTRIBUTE
+                                   + "a_position"
                                    + ";\n" //
                                    + "}\n";
 

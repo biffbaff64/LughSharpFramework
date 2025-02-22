@@ -1296,7 +1296,7 @@ public class Stage : InputAdapter, IDisposable
         if ( _debugShapes == null )
         {
             _debugShapes = new ShapeRenderer();
-            _debugShapes.SetAutoShapeType( true );
+            _debugShapes.AutoShapeType = true;
         }
 
         if ( _debugUnderMouse || _debugParentUnderMouse || ( _debugTableUnderMouse != Table.DebugType.None ) )

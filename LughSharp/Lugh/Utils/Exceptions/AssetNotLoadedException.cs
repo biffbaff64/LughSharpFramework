@@ -58,8 +58,8 @@ public class AssetNotLoadedException : ApplicationException
     /// </summary>
     /// <param name="message">The error message that explains the reason for the exception.</param>
     /// <param name="exception">
-    /// The exception that is the cause of the current exception, or a null
-    /// reference if no inner exception is specified.
+    /// The exception that is the cause of the current exception, or a null reference if no
+    /// inner exception is specified.
     /// </param>`
     public AssetNotLoadedException( string message, Exception? exception )
         : base( message, exception )

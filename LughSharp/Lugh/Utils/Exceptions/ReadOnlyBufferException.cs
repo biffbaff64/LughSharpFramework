@@ -29,4 +29,14 @@ namespace LughSharp.Lugh.Utils.Exceptions;
 /// put or compact is invoked upon a read-only buffer.
 /// </summary>
 [PublicAPI]
-public class ReadOnlyBufferException : NotSupportedException;
+public class ReadOnlyBufferException : ApplicationException
+{
+    /// <summary>
+    /// Initializes a new ReadOnlyBufferException with a specified error message.
+    /// </summary>
+    /// <param name="message"> The message that describes the error. </param>
+    public ReadOnlyBufferException( string? message = "" )
+        : base( message )
+    {
+    }
+}

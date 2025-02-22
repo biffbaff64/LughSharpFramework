@@ -25,6 +25,8 @@
 
 namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 
+[PublicAPI]
+[Obsolete( "Obsolete" )]
 public interface IPredicate< in T >
 {
     /// <summary>

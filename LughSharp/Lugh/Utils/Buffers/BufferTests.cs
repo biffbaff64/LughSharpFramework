@@ -23,7 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 
-namespace LughSharp.Lugh.Utils.Buffers.NewBuffers;
+namespace LughSharp.Lugh.Utils.Buffers;
 
 [PublicAPI]
 public class BufferTests

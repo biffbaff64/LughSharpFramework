@@ -40,21 +40,6 @@ public class ShaderProgram : IDisposable
 
     // ========================================================================
 
-    /// <summary>
-    /// code that is always added to the vertex and fragments shaders, to inject a #version line.
-    /// </summary>
-    public const string SHADER_VERSION_CODE = "#version 450 core";
-
-    public const string POSITION_ATTRIBUTE   = "a_position";
-    public const string NORMAL_ATTRIBUTE     = "a_normal";
-    public const string COLOR_ATTRIBUTE      = "a_colorPacked";
-    public const string TEXCOORD_ATTRIBUTE   = "a_texCoord";
-    public const string TANGENT_ATTRIBUTE    = "a_tangent";
-    public const string BINORMAL_ATTRIBUTE   = "a_binormal";
-    public const string BONEWEIGHT_ATTRIBUTE = "a_boneWeight";
-
-    public const string COMBINED_MATRIX_UNIFORM = "u_combinedMatrix";
-
     // ========================================================================
     /// <summary>
     /// flag indicating whether attributes & uniforms must be present at all times.
@@ -118,7 +103,7 @@ public class ShaderProgram : IDisposable
         GdxApi.Bindings.ShaderSource( _vertexShaderHandle, vertexShaderSource );
         GdxApi.Bindings.CompileShader( _vertexShaderHandle );
         CheckShaderLoadError( _vertexShaderHandle, ( int )ShaderType.VertexShader );
-        
+
         _fragmentShaderHandle = ( int )GdxApi.Bindings.CreateShader( ( int )ShaderType.FragmentShader );
         GdxApi.Bindings.ShaderSource( _fragmentShaderHandle, fragmentShaderSource );
         GdxApi.Bindings.CompileShader( _fragmentShaderHandle );
@@ -132,7 +117,7 @@ public class ShaderProgram : IDisposable
 
         GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
         GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
-        
+
         IsCompiled = ( ShaderHandle != -1 );
     }
 
@@ -264,6 +249,8 @@ public class ShaderProgram : IDisposable
 
     public virtual void SetUniformMatrix( int location, Matrix4 matrix, bool transpose )
     {
+        Logger.Checkpoint();
+
         GdxApi.Bindings.UniformMatrix4fv( location, transpose, matrix.Val );
     }
 
@@ -319,7 +306,10 @@ public class ShaderProgram : IDisposable
     /// </summary>
     public virtual void Bind()
     {
-        GdxApi.Bindings.UseProgram( ShaderHandle );
+        if ( GdxApi.Bindings.IsProgram( ShaderHandle ) )
+        {
+            GdxApi.Bindings.UseProgram( ShaderHandle );
+        }
     }
 
     /// <summary>
@@ -359,10 +349,10 @@ public class ShaderProgram : IDisposable
     /// </summary>
     public void Dispose()
     {
-        GdxApi.Bindings.UseProgram( 0 );
-        GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
-        GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
-        GdxApi.Bindings.DeleteProgram( ShaderHandle );
+//        GdxApi.Bindings.UseProgram( 0 );
+//        GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
+//        GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
+//        GdxApi.Bindings.DeleteProgram( ShaderHandle );
 
         GC.SuppressFinalize( this );
     }

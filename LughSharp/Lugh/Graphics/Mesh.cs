@@ -26,8 +26,7 @@ using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers.NewBuffers
-;
+using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Matrix3 = LughSharp.Lugh.Maths.Matrix3;

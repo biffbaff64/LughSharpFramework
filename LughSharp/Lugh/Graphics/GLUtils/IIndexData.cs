@@ -22,8 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Buffers.NewBuffers
-;
+using LughSharp.Lugh.Utils.Buffers;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 

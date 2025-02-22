@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
@@ -34,6 +33,7 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 /// specify vertices on the fly and provides a default shader for (unlit) rendering.
 /// </summary>
 [PublicAPI]
+[Obsolete("To be removed")]
 public class ImmediateModeRenderer20 : IImmediateModeRenderer
 {
     public int MaxVertices { get; set; }
@@ -270,28 +270,28 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     {
         var attribs = new List< VertexAttribute >
         {
-            new( ( int )VertexAttributes.Usage.POSITION, 3, ShaderProgram.POSITION_ATTRIBUTE ),
+            new( ( int )VertexAttributes.Usage.POSITION, 3, "a_position" ),
         };
 
         if ( hasNormals )
         {
             attribs.Add( new VertexAttribute( ( int )VertexAttributes.Usage.NORMAL,
                                               3,
-                                              ShaderProgram.NORMAL_ATTRIBUTE ) );
+                                              "a_normal" ) );
         }
 
         if ( hasColor )
         {
             attribs.Add( new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED,
                                               4,
-                                              ShaderProgram.COLOR_ATTRIBUTE ) );
+                                              "a_colorPacked" ) );
         }
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
             attribs.Add( new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES,
                                               2,
-                                              ShaderProgram.TEXCOORD_ATTRIBUTE + i ) );
+                                              $"a_texCoord{i}" ) );
         }
 
         var array = new VertexAttribute[ attribs.Count ];
@@ -313,14 +313,14 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     private static string CreateVertexShader( bool hasNormals, bool hasColors, int numTexCoords )
     {
         var shader = "in vec4 "
-                     + ShaderProgram.POSITION_ATTRIBUTE
+                     + "a_position"
                      + ";\n"
-                     + ( hasNormals ? "in vec3 " + ShaderProgram.NORMAL_ATTRIBUTE + ";\n" : "" )
-                     + ( hasColors ? "in vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" : "" );
+                     + ( hasNormals ? "in vec3 " + "a_normal" + ";\n" : "" )
+                     + ( hasColors ? "in vec4 " + "a_colorPacked" + ";\n" : "" );
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
-            shader += "in vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + i + ";\n";
+            shader += "in vec2 " + "a_texCoord" + i + ";\n";
         }
 
         shader += "uniform mat4 u_projModelView;\n" //
@@ -333,20 +333,20 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
 
         shader += "void main() {\n"
                   + "   gl_Position = u_projModelView * "
-                  + ShaderProgram.POSITION_ATTRIBUTE
+                  + "a_position"
                   + ";\n";
 
         if ( hasColors )
         {
             shader += "   v_col = "
-                      + ShaderProgram.COLOR_ATTRIBUTE
+                      + "a_colorPacked"
                       + ";\n"
                       + "   v_col.a *= 255.0 / 254.0;\n";
         }
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
-            shader += "   v_tex" + i + " = " + ShaderProgram.TEXCOORD_ATTRIBUTE + i + ";\n";
+            shader += "   v_tex" + i + " = " + "a_texCoord" + i + ";\n";
         }
 
         shader += "   gl_PointSize = 1.0;\n" + "}\n";

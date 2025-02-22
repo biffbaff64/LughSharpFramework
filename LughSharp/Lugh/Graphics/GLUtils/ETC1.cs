@@ -24,8 +24,7 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils.Buffers.NewBuffers
-;
+using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 using Exception = System.Exception;
 

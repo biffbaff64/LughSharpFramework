@@ -28,6 +28,7 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 [PublicAPI]
+[Obsolete("To be removed")]
 public interface IImmediateModeRenderer : IDisposable
 {
     public int NumVertices { get; set; }
