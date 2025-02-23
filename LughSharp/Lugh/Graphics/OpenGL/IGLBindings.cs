@@ -31,7 +31,8 @@ using static LughSharp.Lugh.Graphics.OpenGL.IGL;
 
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
-[PublicAPI, SuppressMessage( "ReSharper", "InconsistentNaming" )]
+[PublicAPI]
+[SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial interface IGLBindings
 {
     /// <summary>
@@ -46,7 +47,7 @@ public partial interface IGLBindings
                                  int severity,
                                  int length,
                                  byte* message,
-                                 void* userParam );
+                                 IntPtr userParam );
 
     /// <summary>
     /// Specify whether front- or back-facing facets can be culled
@@ -299,7 +300,7 @@ public partial interface IGLBindings
     /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/>, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
-    unsafe void TexImage1D( int target, int level, int internalFormat, int width, int border, int format, int type, void* pixels );
+    unsafe void TexImage1D( int target, int level, int internalFormat, int width, int border, int format, int type, IntPtr pixels );
 
     /// <summary>
     /// Specify a one-dimensional texture image
@@ -409,7 +410,7 @@ public partial interface IGLBindings
                             int border,
                             int format,
                             int type,
-                            void* pixels );
+                            IntPtr pixels );
 
     /// <summary>
     /// Specify a two-dimensional texture image
@@ -754,7 +755,7 @@ public partial interface IGLBindings
     /// <see cref="GL_UNSIGNED_INT_5_9_9_9_REV"/>, and <see cref="GL_FLOAT_32_UNSIGNED_INT_24_8_REV"/>.
     /// </param>
     /// <param name="pixels">A pointer to somewhere in memory where the pixel data will be returned.</param>
-    unsafe void ReadPixels( int x, int y, int width, int height, int format, int type, void* pixels );
+    unsafe void ReadPixels( int x, int y, int width, int height, int format, int type, IntPtr pixels );
 
     /// <summary>
     /// Read a block of pixels from the frame buffer.
@@ -960,7 +961,7 @@ public partial interface IGLBindings
     /// <see cref="GL_UNSIGNED_INT_5_9_9_9_REV"/>, and <see cref="GL_FLOAT_32_UNSIGNED_INT_24_8_REV"/>.
     /// </param>
     /// <param name="pixels">A pointer to a memory location where the pixel data will be returned.</param>
-    unsafe void GetTexImage( int target, int level, int format, int type, void* pixels );
+    unsafe void GetTexImage( int target, int level, int format, int type, IntPtr pixels );
 
     /// <summary>
     /// Return a texture image.
@@ -1267,7 +1268,7 @@ public partial interface IGLBindings
     /// <see cref="GL_UNSIGNED_SHORT"/>, or <see cref="GL_UNSIGNED_INT"/>.
     /// </param>
     /// <param name="indices">Specifies a pointer to the location where the indices are stored.</param>
-    unsafe void DrawElements( int mode, int count, int type, void* indices );
+    unsafe void DrawElements( int mode, int count, int type, IntPtr indices );
 
     /// <summary>
     /// Render primitives from array data.
@@ -1432,7 +1433,7 @@ public partial interface IGLBindings
     /// <see cref="GL_UNSIGNED_INT_10_10_10_2"/> and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV"/>.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
-    unsafe void TexSubImage1D( int target, int level, int xoffset, int width, int format, int type, void* pixels );
+    unsafe void TexSubImage1D( int target, int level, int xoffset, int width, int format, int type, IntPtr pixels );
 
     /// <summary>
     /// Specify a one-dimensional texture subimage.
@@ -1510,7 +1511,7 @@ public partial interface IGLBindings
                                int height,
                                int format,
                                int type,
-                               void* pixels );
+                               IntPtr pixels );
 
     /// <summary>
     /// Specify a two-dimensional texture subimage.
@@ -1631,7 +1632,7 @@ public partial interface IGLBindings
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">Specifies the type of the values in <paramref name="indices"/>.</param>
     /// <param name="indices">Specifies a pointer to the location where the indices are stored.</param>
-    unsafe void DrawRangeElements( int mode, uint start, uint end, int count, int type, void* indices );
+    unsafe void DrawRangeElements( int mode, uint start, uint end, int count, int type, IntPtr indices );
 
     /// <summary>
     /// Render primitives from array data.
@@ -1711,7 +1712,7 @@ public partial interface IGLBindings
                             int border,
                             int format,
                             int type,
-                            void* pixels );
+                            IntPtr pixels );
 
     /// <summary>
     /// Specify a three-dimensional texture image.
@@ -1819,7 +1820,7 @@ public partial interface IGLBindings
                                int depth,
                                int format,
                                int type,
-                               void* pixels );
+                               IntPtr pixels );
 
     /// <summary>
     /// Specify a three-dimensional texture subimage.
@@ -1972,7 +1973,7 @@ public partial interface IGLBindings
                                       int depth,
                                       int border,
                                       int imageSize,
-                                      void* data );
+                                      IntPtr data );
 
     /// <summary>
     /// Specify a three-dimensional texture image in a compressed format
@@ -2054,7 +2055,7 @@ public partial interface IGLBindings
                                       int height,
                                       int border,
                                       int imageSize,
-                                      void* data );
+                                      IntPtr data );
 
     /// <summary>
     /// Specify a two-dimensional texture image in a compressed format
@@ -2114,7 +2115,7 @@ public partial interface IGLBindings
     /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
-    unsafe void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, int imageSize, void* data );
+    unsafe void CompressedTexImage1D( int target, int level, int internalFormat, int width, int border, int imageSize, IntPtr data );
 
     /// <summary>
     /// Specify a one-dimensional texture image in a compressed format
@@ -2186,7 +2187,7 @@ public partial interface IGLBindings
                                          int depth,
                                          int format,
                                          int imageSize,
-                                         void* data );
+                                         IntPtr data );
 
     /// <summary>
     /// Specify a three-dimensional texture subimage in a compressed format
@@ -2273,7 +2274,7 @@ public partial interface IGLBindings
                                          int height,
                                          int format,
                                          int imageSize,
-                                         void* data );
+                                         IntPtr data );
 
     /// <summary>
     /// Specify a two-dimensional texture subimage in a compressed format
@@ -2337,7 +2338,7 @@ public partial interface IGLBindings
     /// <paramref name="data"/>.
     /// </param>
     /// <param name="data">Specifies a pointer to the compressed image data in memory.</param>
-    unsafe void CompressedTexSubImage1D( int target, int level, int xoffset, int width, int format, int imageSize, void* data );
+    unsafe void CompressedTexSubImage1D( int target, int level, int xoffset, int width, int format, int imageSize, IntPtr data );
 
     /// <summary>
     /// Specify a one-dimensional texture subimage in a compressed format
@@ -2377,7 +2378,7 @@ public partial interface IGLBindings
     /// is the nth mipmap reduction image.
     /// </param>
     /// <param name="img">Specifies a pointer to a buffer into which the compressed image data will be placed.</param>
-    unsafe void GetCompressedTexImage( int target, int level, void* img );
+    unsafe void GetCompressedTexImage( int target, int level, IntPtr img );
 
     /// <summary>
     /// Return a compressed texture image
@@ -2466,7 +2467,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="indices">Specifies a pointer to the location where the indices are stored.</param>
     /// <param name="drawcount">Specifies the size of the <paramref name="count"/> and <paramref name="indices"/> arrays.</param>
-    unsafe void MultiDrawElements( int mode, int* count, int type, void** indices, int drawcount );
+    unsafe void MultiDrawElements( int mode, int* count, int type, IntPtr* indices, int drawcount );
 
     /// <summary>
     /// Render multiple sets of primitives by specifying indices of array data elements.
@@ -2796,7 +2797,7 @@ public partial interface IGLBindings
     /// <see cref="GL_STATIC_DRAW"/>, <see cref="GL_STATIC_READ"/>, <see cref="GL_STATIC_COPY"/>,
     /// <see cref="GL_DYNAMIC_DRAW"/>, <see cref="GL_DYNAMIC_READ"/> or <see cref="GL_DYNAMIC_COPY"/>.
     /// </param>
-    unsafe void BufferData( int target, int size, void* data, int usage );
+    unsafe void BufferData( int target, int size, IntPtr data, int usage );
 
     /// <summary>
     /// Create and initialize a buffer object's data store.
@@ -2836,7 +2837,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="size">Specifies the size in bytes of the data store region being replaced.</param>
     /// <param name="data">Specifies a pointer to the new data that will be copied into the data store.</param>
-    unsafe void BufferSubData( int target, int offset, int size, void* data );
+    unsafe void BufferSubData( int target, int offset, int size, IntPtr data );
 
     /// <summary>
     /// Update a subset of a buffer object's data store.
@@ -2871,7 +2872,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="size">Specifies the size in bytes of the data store region being returned.</param>
     /// <param name="data">Specifies a pointer to the location where buffer object data is returned.</param>
-    unsafe void GetBufferSubData( int target, int offset, int size, void* data );
+    unsafe void GetBufferSubData( int target, int offset, int size, IntPtr data );
 
     /// <summary>
     /// Return a subset of a buffer object's data store.
@@ -2907,7 +2908,7 @@ public partial interface IGLBindings
     /// <see cref="GL_READ_WRITE"/>.
     /// </param>
     /// <returns>Returns a pointer to the beginning of the mapped range.</returns>
-    unsafe void* MapBuffer( int target, int access );
+    unsafe IntPtr MapBuffer( int target, int access );
 
     /// <summary>
     /// Map a buffer object's data store into the client's address space.
@@ -2991,7 +2992,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="pname">Specifies the pointer to be returned. Accepted values are <see cref="GL_BUFFER_MAP_POINTER"/>.</param>
     /// <param name="parameters">A pointer to a memory location where the returned data will be placed.</param>
-    unsafe void GetBufferPointerv( int target, int pname, void** parameters );
+    unsafe void GetBufferPointerv( int target, int pname, IntPtr* parameters );
 
     /// <summary>
     /// Return the pointer to a mapped buffer object's data store.
@@ -3569,7 +3570,7 @@ public partial interface IGLBindings
     /// are: <see cref="GL_VERTEX_ATTRIB_ARRAY_POINTER"/>
     /// </param>
     /// <param name="pointer">Returns the address of the specified generic vertex attribute pointer.</param>
-    unsafe void GetVertexAttribPointerv( uint index, int pname, void** pointer );
+    unsafe void GetVertexAttribPointerv( uint index, int pname, IntPtr* pointer );
 
     /// <summary>
     /// Return the address of the specified generic vertex attribute pointer
@@ -4480,7 +4481,7 @@ public partial interface IGLBindings
     /// Specifies an offset of the first component in the first generic vertex attribute in the array in
     /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER"/> target. The initial value is 0.
     /// </param>
-    unsafe void VertexAttribPointer( uint index, int size, int type, bool normalized, int stride, void* pointer );
+    unsafe void VertexAttribPointer( uint index, int size, int type, bool normalized, int stride, IntPtr pointer );
 
     /// <summary>
     /// Define an array of generic vertex attribute data
@@ -4910,7 +4911,7 @@ public partial interface IGLBindings
     /// Specifies an offset of the first component of the first generic vertex attribute in the array in
     /// the data store of the buffer currently bound to the <see cref="GL_ARRAY_BUFFER"/> target. The initial value is 0.
     /// </param>
-    unsafe void VertexAttribIPointer( uint index, int size, int type, int stride, void* pointer );
+    unsafe void VertexAttribIPointer( uint index, int size, int type, int stride, IntPtr pointer );
 
     /// <summary>
     /// Define an array of generic vertex attribute data
@@ -6034,7 +6035,7 @@ public partial interface IGLBindings
     /// <param name="length">Specifies the length of the range to be mapped.</param>
     /// <param name="access">Specifies a combination of access flags indicating the desired access to the range.</param>
     /// <returns>Returns a pointer to the beginning of the mapped range.</returns>
-    unsafe void* MapBufferRange( int target, int offset, int length, uint access );
+    unsafe IntPtr MapBufferRange( int target, int offset, int length, uint access );
 
     /// <summary>
     /// Map all or part of a buffer object's data store into the client's address space.
@@ -6160,7 +6161,7 @@ public partial interface IGLBindings
     /// Specifies the number of instances of the specified range of indices to be
     /// rendered.
     /// </param>
-    unsafe void DrawElementsInstanced( int mode, int count, int type, void* indices, int instancecount );
+    unsafe void DrawElementsInstanced( int mode, int count, int type, IntPtr indices, int instancecount );
 
     /// <summary>
     /// Draw multiple instances of a set of elements
@@ -6426,7 +6427,7 @@ public partial interface IGLBindings
     /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
-    unsafe void DrawElementsBaseVertex( int mode, int count, int type, void* indices, int basevertex );
+    unsafe void DrawElementsBaseVertex( int mode, int count, int type, IntPtr indices, int basevertex );
 
     /// <summary>
     /// Render primitives from array data with a per-element offset.
@@ -6476,7 +6477,7 @@ public partial interface IGLBindings
     /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
-    unsafe void DrawRangeElementsBaseVertex( int mode, uint start, uint end, int count, int type, void* indices, int basevertex );
+    unsafe void DrawRangeElementsBaseVertex( int mode, uint start, uint end, int count, int type, IntPtr indices, int basevertex );
 
     /// <summary>
     /// Render primitives from array data with a per-element offset.
@@ -6527,7 +6528,7 @@ public partial interface IGLBindings
     /// Specifies a constant that should be added to each element of <paramref name="indices"/> when
     /// choosing elements from the enabled vertex arrays.
     /// </param>
-    unsafe void DrawElementsInstancedBaseVertex( int mode, int count, int type, void* indices, int instancecount, int basevertex );
+    unsafe void DrawElementsInstancedBaseVertex( int mode, int count, int type, IntPtr indices, int instancecount, int basevertex );
 
     /// <summary>
     /// Render multiple instances of a set of primitives from array data with a per-element offset.
@@ -6577,7 +6578,7 @@ public partial interface IGLBindings
     /// Specifies an array of the constants that should be added to each element of
     /// <paramref name="indices"/> when choosing elements from the enabled vertex arrays.
     /// </param>
-    unsafe void MultiDrawElementsBaseVertex( int mode, int* count, int type, void** indices, int drawcount, int* basevertex );
+    unsafe void MultiDrawElementsBaseVertex( int mode, int* count, int type, IntPtr* indices, int drawcount, int* basevertex );
 
     /// <summary>
     /// Render multiple sets of primitives from array data with a per-element offset.
@@ -6624,21 +6625,7 @@ public partial interface IGLBindings
     /// presently defined for this operation and <paramref name="flags"/> must be zero.
     /// </param>
     /// <returns>The sync object.</returns>
-    unsafe void* FenceSync( int condition, uint flags );
-
-    /// <summary>
-    /// Creates a new sync object and inserts it into the  command stream.
-    /// </summary>
-    /// <param name="condition">
-    /// Specifies the condition that must be met to set the sync object's state to signaled. Must be
-    /// <see cref="GL_SYNC_GPU_COMMANDS_COMPLETE"/>.
-    /// </param>
-    /// <param name="flags">
-    /// Specifies a bitwise combination of flags controlling the behavior of the sync object. No flags are
-    /// presently defined for this operation and <paramref name="flags"/> must be zero.
-    /// </param>
-    /// <returns>The sync object.</returns>
-    IntPtr FenceSyncSafe( int condition, uint flags );
+    unsafe IntPtr FenceSync( int condition, uint flags );
 
     /// <summary>
     /// Determines if a name corresponds to a sync object.
@@ -6648,29 +6635,13 @@ public partial interface IGLBindings
     /// <see langword="true"/> if <paramref name="sync"/> is a name of a sync object. Otherwise,
     /// <see langword="false"/>.
     /// </returns>
-    unsafe bool IsSync( void* sync );
-
-    /// <summary>
-    /// Determines if a name corresponds to a sync object.
-    /// </summary>
-    /// <param name="sync">Specifies a value that may be the name of a sync object.</param>
-    /// <returns>
-    /// <see langword="true"/> if <paramref name="sync"/> is a name of a sync object. Otherwise,
-    /// <see langword="false"/>.
-    /// </returns>
-    bool IsSyncSafe( IntPtr sync );
+    unsafe bool IsSync( IntPtr sync );
 
     /// <summary>
     /// Deletes a sync object.
     /// </summary>
     /// <param name="sync">Specifies the sync object to be deleted.</param>
-    unsafe void DeleteSync( void* sync );
-
-    /// <summary>
-    /// Deletes a sync object.
-    /// </summary>
-    /// <param name="sync">Specifies the sync object to be deleted.</param>
-    void DeleteSyncSafe( IntPtr sync );
+    unsafe void DeleteSync( IntPtr sync );
 
     /// <summary>
     /// Causes the client to block and wait for a sync object to become signaled.
@@ -6688,25 +6659,7 @@ public partial interface IGLBindings
     /// One of <see cref="GL_ALREADY_SIGNALED"/>, <see cref="GL_TIMEOUT_EXPIRED"/>,
     /// <see cref="GL_CONDITION_SATISFIED"/>, or <see cref="GL_WAIT_FAILED"/>.
     /// </returns>
-    unsafe int ClientWaitSync( void* sync, uint flags, UInt64 timeout );
-
-    /// <summary>
-    /// Causes the client to block and wait for a sync object to become signaled.
-    /// </summary>
-    /// <param name="sync">Specifies the sync object whose status to wait on.</param>
-    /// <param name="flags">
-    /// A bitfield controlling the command flushing behavior. <paramref name="flags"/> may be
-    /// <see cref="GL_SYNC_FLUSH_COMMANDS_BIT"/> or zero.
-    /// </param>
-    /// <param name="timeout">
-    /// The timeout, specified in nanoseconds, for which the implementation should wait for
-    /// <paramref name="sync"/> to become signaled.
-    /// </param>
-    /// <returns>
-    /// One of <see cref="GL_ALREADY_SIGNALED"/>, <see cref="GL_TIMEOUT_EXPIRED"/>,
-    /// <see cref="GL_CONDITION_SATISFIED"/>, or <see cref="GL_WAIT_FAILED"/>.
-    /// </returns>
-    int ClientWaitSyncSafe( IntPtr sync, uint flags, UInt64 timeout );
+    unsafe int ClientWaitSync( IntPtr sync, uint flags, UInt64 timeout );
 
     /// <summary>
     /// Causes the server to block and wait for a sync object to become signaled.
@@ -6717,18 +6670,7 @@ public partial interface IGLBindings
     /// The timeout, specified in nanoseconds, for which the implementation should wait for
     /// <paramref name="sync"/> to become signaled.
     /// </param>
-    unsafe void WaitSync( void* sync, uint flags, UInt64 timeout );
-
-    /// <summary>
-    /// Causes the server to block and wait for a sync object to become signaled.
-    /// </summary>
-    /// <param name="sync">Specifies the sync object whose status to wait on.</param>
-    /// <param name="flags">A bitfield controlling the command flushing behavior. <paramref name="flags"/> must be zero.</param>
-    /// <param name="timeout">
-    /// The timeout, specified in nanoseconds, for which the implementation should wait for
-    /// <paramref name="sync"/> to become signaled.
-    /// </param>
-    void WaitSyncSafe( IntPtr sync, uint flags, UInt64 timeout );
+    unsafe void WaitSync( IntPtr sync, uint flags, UInt64 timeout );
 
     /// <summary>
     /// Returns the 64bit integer value or values of a selected parameter.
@@ -6762,7 +6704,7 @@ public partial interface IGLBindings
     /// <param name="bufSize">Specifies the size of the buffer whose address is given by <paramref name="values"/>.</param>
     /// <param name="length">Returns the number of integers placed in <paramref name="values"/>.</param>
     /// <param name="values">Returns the requested parameter.</param>
-    unsafe void GetSynciv( void* sync, int pname, int bufSize, int* length, int* values );
+    unsafe void GetSynciv( IntPtr sync, int pname, int bufSize, int* length, int* values );
 
     /// <summary>
     /// Query the properties of a sync object.

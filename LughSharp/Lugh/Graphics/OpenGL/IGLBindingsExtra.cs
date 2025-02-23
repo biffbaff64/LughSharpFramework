@@ -73,17 +73,9 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="mode"></param>
     /// <param name="indirect"></param>
-    unsafe void DrawArraysIndirect( int mode, void* indirect );
+    unsafe void DrawArraysIndirect( int mode, IntPtr indirect );
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="mode"></param>
-    /// <param name="indirect"></param>
-    void DrawArraysIndirect( int mode, GLBindings.DrawArraysIndirectCommand indirect );
-
-    unsafe void DrawElementsIndirect( int mode, int type, void* indirect );
-    void DrawElementsIndirect( int mode, int type, GLBindings.DrawElementsIndirectCommand indirect );
+    unsafe void DrawElementsIndirect( int mode, int type, IntPtr indirect );
     void Uniform1d( int location, Double x );
     void Uniform2d( int location, Double x, Double y );
     void Uniform3d( int location, Double x, Double y, Double z );
@@ -151,15 +143,15 @@ public partial interface IGLBindings
     unsafe void GetQueryIndexediv( int target, uint index, int pname, int* parameters );
     void GetQueryIndexediv( int target, uint index, int pname, ref int[] parameters );
     void ReleaseShaderCompiler();
-    unsafe void ShaderBinary( int count, uint* shaders, int binaryformat, void* binary, int length );
+    unsafe void ShaderBinary( int count, uint* shaders, int binaryformat, IntPtr binary, int length );
     void ShaderBinary( uint[] shaders, int binaryformat, byte[] binary );
     unsafe void GetShaderPrecisionFormat( int shaderType, int precisionType, int* range, int* precision );
     void GetShaderPrecisionFormat( int shaderType, int precisionType, ref int[] range, ref int precision );
     void DepthRangef( float n, float f );
     void ClearDepthf( float d );
-    unsafe void GetProgramBinary( uint program, int bufSize, int* length, int* binaryFormat, void* binary );
+    unsafe void GetProgramBinary( uint program, int bufSize, int* length, int* binaryFormat, IntPtr binary );
     byte[] GetProgramBinary( uint program, int bufSize, out int binaryFormat );
-    unsafe void ProgramBinary( uint program, int binaryFormat, void* binary, int length );
+    unsafe void ProgramBinary( uint program, int binaryFormat, IntPtr binary, int length );
     void ProgramBinary( uint program, int binaryFormat, byte[] binary );
     void ProgramParameteri( uint program, int pname, int value );
     void UseProgramStages( uint pipeline, uint stages, uint program );
@@ -274,7 +266,7 @@ public partial interface IGLBindings
     void VertexAttribL3dv( uint index, Double[] v );
     unsafe void VertexAttribL4dv( uint index, Double* v );
     void VertexAttribL4dv( uint index, Double[] v );
-    unsafe void VertexAttribLPointer( uint index, int size, int type, int stride, void* pointer );
+    unsafe void VertexAttribLPointer( uint index, int size, int type, int stride, IntPtr pointer );
     void VertexAttribLPointer( uint index, int size, int type, int stride, int pointer );
     unsafe void GetVertexAttribLdv( uint index, int pname, Double* parameters );
     void GetVertexAttribLdv( uint index, int pname, ref Double[] parameters );
@@ -296,10 +288,10 @@ public partial interface IGLBindings
     unsafe void GetDoublei_v( int target, uint index, Double* data );
     void GetDoublei_v( int target, uint index, ref Double[] data );
     void DrawArraysInstancedBaseInstance( int mode, int first, int count, int instancecount, uint baseinstance );
-    unsafe void DrawElementsInstancedBaseInstance( int mode, int count, int type, void* indices, int instancecount, uint baseinstance );
+    unsafe void DrawElementsInstancedBaseInstance( int mode, int count, int type, IntPtr indices, int instancecount, uint baseinstance );
     void DrawElementsInstancedBaseInstance< T >( int mode, int count, int type, T[] indices, int instancecount, uint baseinstance ) where T : unmanaged, IUnsignedNumber< T >;
 
-    unsafe void DrawElementsInstancedBaseVertexBaseInstance( int mode, int count, int type, void* indices,
+    unsafe void DrawElementsInstancedBaseVertexBaseInstance( int mode, int count, int type, IntPtr indices,
                                                              int instancecount, int basevertex, uint baseinstance );
 
     void DrawElementsInstancedBaseVertexBaseInstance< T >( int mode, int count, int type, T[] indices,
@@ -317,15 +309,15 @@ public partial interface IGLBindings
     void TexStorage3D( int target, int levels, int internalFormat, int width, int height, int depth );
     void DrawTransformFeedbackInstanced( int mode, uint id, int instancecount );
     void DrawTransformFeedbackStreamInstanced( int mode, uint id, uint stream, int instancecount );
-    unsafe void GetPointerv( int pname, void** parameters );
+    unsafe void GetPointerv( int pname, IntPtr* parameters );
     void GetPointerv( int pname, ref IntPtr[] parameters );
-    unsafe void ClearBufferData( int target, int internalFormat, int format, int type, void* data );
+    unsafe void ClearBufferData( int target, int internalFormat, int format, int type, IntPtr data );
     void ClearBufferData< T >( int target, int internalFormat, int format, int type, T[] data ) where T : unmanaged;
-    unsafe void ClearBufferSubData( int target, int internalFormat, int offset, int size, int format, int type, void* data );
+    unsafe void ClearBufferSubData( int target, int internalFormat, int offset, int size, int format, int type, IntPtr data );
     void ClearBufferSubData< T >( int target, int internalFormat, int offset, int size, int format, int type, T[] data ) where T : unmanaged;
     void DispatchCompute( uint num_groups_x, uint num_groups_y, uint num_groups_z );
-    unsafe void DispatchComputeIndirect( void* indirect );
-    void DispatchComputeIndirect( GLBindings.DispatchIndirectCommand indirect );
+    unsafe void DispatchComputeIndirect( IntPtr indirect );
+//    void DispatchComputeIndirect( GLBindings.DispatchIndirectCommand indirect );
 
     void CopyImageSubData( uint srcName, int srcTarget, int srcLevel, int srcX, int srcY, int srcZ,
                            uint dstName, int dstTarget, int dstLevel, int dstX, int dstY,
@@ -344,10 +336,8 @@ public partial interface IGLBindings
     void InvalidateFramebuffer( int target, int numAttachments, int[] attachments );
     unsafe void InvalidateSubFramebuffer( int target, int numAttachments, int* attachments, int x, int y, int width, int height );
     void InvalidateSubFramebuffer( int target, int numAttachments, int[] attachments, int x, int y, int width, int height );
-    unsafe void MultiDrawArraysIndirect( int mode, void* indirect, int drawcount, int stride );
-    void MultiDrawArraysIndirect( int mode, GLBindings.DrawArraysIndirectCommand indirect, int drawcount, int stride );
-    unsafe void MultiDrawElementsIndirect( int mode, int type, void* indirect, int drawcount, int stride );
-    void MultiDrawElementsIndirect( int mode, int type, GLBindings.DrawElementsIndirectCommand indirect, int drawcount, int stride );
+    unsafe void MultiDrawArraysIndirect( int mode, IntPtr indirect, int drawcount, int stride );
+    unsafe void MultiDrawElementsIndirect( int mode, int type, IntPtr indirect, int drawcount, int stride );
     unsafe void GetProgramInterfaceiv( int program, int programInterface, int pname, int* parameters );
     void GetProgramInterfaceiv( int program, int programInterface, int pname, ref int[] parameters );
     unsafe uint GetProgramResourceIndex( int program, int programInterface, Byte* name );
@@ -385,8 +375,8 @@ public partial interface IGLBindings
     void DebugMessageControl( int source, int type, int severity, uint[] ids, bool enabled );
     unsafe void DebugMessageInsert( int source, int type, uint id, int severity, int length, Byte* buf );
     void DebugMessageInsert( int source, int type, uint id, int severity, string buf );
-    unsafe void DebugMessageCallback( GLBindings.GLDEBUGPROC callback, void* userParam );
-    unsafe void DebugMessageCallback( GLBindings.GLDEBUGPROCSAFE callback, void* userParam );
+    unsafe void DebugMessageCallback( GLBindings.GLDEBUGPROC callback, IntPtr userParam );
+    unsafe void DebugMessageCallback( GLBindings.GLDEBUGPROCSAFE callback, IntPtr userParam );
 
     unsafe uint GetDebugMessageLog( uint count,
                                     int bufsize,
@@ -412,15 +402,15 @@ public partial interface IGLBindings
     void ObjectLabel( int identifier, uint name, string label );
     unsafe void GetObjectLabel( int identifier, uint name, int bufSize, int* length, Byte* label );
     string GetObjectLabel( int identifier, uint name, int bufSize );
-    unsafe void ObjectPtrLabel( void* ptr, int length, Byte* label );
+    unsafe void ObjectPtrLabel( IntPtr ptr, int length, Byte* label );
     void ObjectPtrLabel( IntPtr ptr, string label );
-    unsafe void GetObjectPtrLabel( void* ptr, int bufSize, int* length, Byte* label );
+    unsafe void GetObjectPtrLabel( IntPtr ptr, int bufSize, int* length, Byte* label );
     string GetObjectPtrLabel( IntPtr ptr, int bufSize );
-    unsafe void BufferStorage( int target, int size, void* data, uint flags );
+    unsafe void BufferStorage( int target, int size, IntPtr data, uint flags );
     void BufferStorage< T >( int target, T[] data, uint flags ) where T : unmanaged;
-    unsafe void ClearTexImage( uint texture, int level, int format, int type, void* data );
+    unsafe void ClearTexImage( uint texture, int level, int format, int type, IntPtr data );
     void ClearTexImage< T >( uint texture, int level, int format, int type, T[] data ) where T : unmanaged;
-    unsafe void ClearTexSubImage( uint texture, int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, int format, int type, void* data );
+    unsafe void ClearTexSubImage( uint texture, int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, int format, int type, IntPtr data );
 
     void ClearTexSubImage< T >( uint texture, int level, int xOffset, int yOffset, int zOffset, int width, int height, int depth, int format, int type, T[] data )
         where T : unmanaged;
@@ -452,20 +442,20 @@ public partial interface IGLBindings
     unsafe void CreateBuffers( int n, uint* buffers );
     uint[] CreateBuffers( int n );
     uint CreateBuffer();
-    unsafe void NamedBufferStorage( uint buffer, int size, void* data, uint flags );
+    unsafe void NamedBufferStorage( uint buffer, int size, IntPtr data, uint flags );
     void NamedBufferStorage< T >( uint buffer, int size, T[] data, uint flags ) where T : unmanaged;
-    unsafe void NamedBufferData( uint buffer, int size, void* data, int usage );
+    unsafe void NamedBufferData( uint buffer, int size, IntPtr data, int usage );
     void NamedBufferData< T >( uint buffer, int size, T[] data, int usage ) where T : unmanaged;
-    unsafe void NamedBufferSubData( uint buffer, int offset, int size, void* data );
+    unsafe void NamedBufferSubData( uint buffer, int offset, int size, IntPtr data );
     void NamedBufferSubData< T >( uint buffer, int offset, int size, T[] data ) where T : unmanaged;
     void CopyNamedBufferSubData( uint readBuffer, uint writeBuffer, int readOffset, int writeOffset, int size );
-    unsafe void ClearNamedBufferData( uint buffer, int internalFormat, int format, int type, void* data );
+    unsafe void ClearNamedBufferData( uint buffer, int internalFormat, int format, int type, IntPtr data );
     void ClearNamedBufferData< T >( uint buffer, int internalFormat, int format, int type, T[] data ) where T : unmanaged;
-    unsafe void ClearNamedBufferSubData( uint buffer, int internalFormat, int offset, int size, int format, int type, void* data );
+    unsafe void ClearNamedBufferSubData( uint buffer, int internalFormat, int offset, int size, int format, int type, IntPtr data );
     void ClearNamedBufferSubData< T >( uint buffer, int internalFormat, int offset, int size, int format, int type, T[] data ) where T : unmanaged;
-    unsafe void* MapNamedBuffer( uint buffer, int access );
+    unsafe IntPtr MapNamedBuffer( uint buffer, int access );
     System.Span< T > MapNamedBuffer< T >( uint buffer, int access ) where T : unmanaged;
-    unsafe void* MapNamedBufferRange( uint buffer, int offset, int length, uint access );
+    unsafe IntPtr MapNamedBufferRange( uint buffer, int offset, int length, uint access );
     System.Span< T > MapNamedBufferRange< T >( uint buffer, int offset, int length, uint access ) where T : unmanaged;
     bool UnmapNamedBuffer( uint buffer );
     void FlushMappedNamedBufferRange( uint buffer, int offset, int length );
@@ -473,9 +463,9 @@ public partial interface IGLBindings
     void GetNamedBufferParameteriv( uint buffer, int pname, ref int[] parameters );
     unsafe void GetNamedBufferParameteri64v( uint buffer, int pname, Int64* parameters );
     void GetNamedBufferParameteri64v( uint buffer, int pname, ref Int64[] parameters );
-    unsafe void GetNamedBufferPointerv( uint buffer, int pname, void** parameters );
+    unsafe void GetNamedBufferPointerv( uint buffer, int pname, IntPtr* parameters );
     void GetNamedBufferPointerv( uint buffer, int pname, ref IntPtr[] parameters );
-    unsafe void GetNamedBufferSubData( uint buffer, int offset, int size, void* data );
+    unsafe void GetNamedBufferSubData( uint buffer, int offset, int size, IntPtr data );
     T[] GetNamedBufferSubData< T >( uint buffer, int offset, int size ) where T : unmanaged;
     unsafe void CreateFramebuffers( int n, uint* framebuffers );
     uint[] CreateFramebuffers( int n );
@@ -525,26 +515,26 @@ public partial interface IGLBindings
     void TextureStorage3D( uint texture, int levels, int internalFormat, int width, int height, int depth );
     void TextureStorage2DMultisample( uint texture, int samples, int internalFormat, int width, int height, bool fixedsamplelocations );
     void TextureStorage3DMultisample( uint texture, int samples, int internalFormat, int width, int height, int depth, bool fixedsamplelocations );
-    unsafe void TextureSubImage1D( uint texture, int level, int xoffset, int width, int format, int type, void* pixels );
+    unsafe void TextureSubImage1D( uint texture, int level, int xoffset, int width, int format, int type, IntPtr pixels );
     void TextureSubImage1D< T >( uint texture, int level, int xoffset, int width, int format, int type, T[] pixels ) where T : unmanaged;
-    unsafe void TextureSubImage2D( uint texture, int level, int xoffset, int yoffset, int width, int height, int format, int type, void* pixels );
+    unsafe void TextureSubImage2D( uint texture, int level, int xoffset, int yoffset, int width, int height, int format, int type, IntPtr pixels );
     void TextureSubImage2D< T >( uint texture, int level, int xoffset, int yoffset, int width, int height, int format, int type, T[] pixels ) where T : unmanaged;
-    unsafe void TextureSubImage3D( uint texture, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int type, void* pixels );
+    unsafe void TextureSubImage3D( uint texture, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int type, IntPtr pixels );
 
     void TextureSubImage3D< T >( uint texture, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int type,
                                  T[] pixels ) where T : unmanaged;
 
     unsafe void CompressedTextureSubImage1D( uint texture, int level, int xoffset, int width,
-                                             int format, int imageSize, void* data );
+                                             int format, int imageSize, IntPtr data );
 
     void CompressedTextureSubImage1D( uint texture, int level, int xoffset, int width,
                                       int format, int imageSize, byte[] data );
 
-    unsafe void CompressedTextureSubImage2D( uint texture, int level, int xoffset, int yoffset, int width, int height, int format, int imageSize, void* data );
+    unsafe void CompressedTextureSubImage2D( uint texture, int level, int xoffset, int yoffset, int width, int height, int format, int imageSize, IntPtr data );
     void CompressedTextureSubImage2D( uint texture, int level, int xoffset, int yoffset, int width, int height, int format, int imageSize, byte[] data );
 
     unsafe void CompressedTextureSubImage3D( uint texture, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int imageSize,
-                                             void* data );
+                                             IntPtr data );
 
     void CompressedTextureSubImage3D( uint texture, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int imageSize,
                                       byte[] data );
@@ -567,9 +557,9 @@ public partial interface IGLBindings
     void TextureParameteriv( uint texture, int pname, int[] param );
     void GenerateTextureMipmap( uint texture );
     void BindTextureUnit( uint unit, uint texture );
-    unsafe void GetTextureImage( uint texture, int level, int format, int type, int bufSize, void* pixels );
+    unsafe void GetTextureImage( uint texture, int level, int format, int type, int bufSize, IntPtr pixels );
     T[] GetTextureImage< T >( uint texture, int level, int format, int type, int bufSize ) where T : unmanaged;
-    unsafe void GetCompressedTextureImage( uint texture, int level, int bufSize, void* pixels );
+    unsafe void GetCompressedTextureImage( uint texture, int level, int bufSize, IntPtr pixels );
     byte[] GetCompressedTextureImage( uint texture, int level, int bufSize );
     unsafe void GetTextureLevelParameterfv( uint texture, int level, int pname, float* param );
     void GetTextureLevelParameterfv( uint texture, int level, int pname, ref float[] param );
@@ -620,18 +610,18 @@ public partial interface IGLBindings
 
     unsafe void GetTextureSubImage( uint texture, int level, int xoffset, int yoffset,
                                     int zoffset, int width, int height, int depth,
-                                    int format, int type, int bufSize, void* pixels );
+                                    int format, int type, int bufSize, IntPtr pixels );
 
     byte[] GetTextureSubImage( uint texture, int level, int xoffset, int yoffset, int zoffset,
                                int width, int height, int depth, int format, int type,
                                int bufSize );
 
-    unsafe void GetCompressedTextureSubImage( uint texture, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int bufSize, void* pixels );
+    unsafe void GetCompressedTextureSubImage( uint texture, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int bufSize, IntPtr pixels );
     byte[] GetCompressedTextureSubImage( uint texture, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int bufSize );
     int GetGraphicsResetStatus();
-    unsafe void GetnCompressedTexImage( int target, int lod, int bufSize, void* pixels );
+    unsafe void GetnCompressedTexImage( int target, int lod, int bufSize, IntPtr pixels );
     byte[] GetnCompressedTexImage( int target, int lod, int bufSize );
-    unsafe void GetnTexImage( int target, int level, int format, int type, int bufSize, void* pixels );
+    unsafe void GetnTexImage( int target, int level, int format, int type, int bufSize, IntPtr pixels );
     byte[] GetnTexImage( int target, int level, int format, int type, int bufSize );
     unsafe void GetnUniformdv( uint program, int location, int bufSize, Double* parameters );
     void GetnUniformdv( uint program, int location, int bufSize, ref Double[] parameters );
@@ -641,15 +631,23 @@ public partial interface IGLBindings
     void GetnUniformiv( uint program, int location, int bufSize, ref int[] parameters );
     unsafe void GetnUniformuiv( uint program, int location, int bufSize, uint* parameters );
     void GetnUniformuiv( uint program, int location, int bufSize, ref uint[] parameters );
-    unsafe void ReadnPixels( int x, int y, int width, int height, int format, int type, int bufSize, void* data );
+    unsafe void ReadnPixels( int x, int y, int width, int height, int format, int type, int bufSize, IntPtr data );
     byte[] ReadnPixels( int x, int y, int width, int height, int format, int type, int bufSize );
     void TextureBarrier();
     unsafe void SpecializeShader( uint shader, Byte* pEntryPoint, uint numSpecializationConstants, uint* pConstantIndex, uint* pConstantValue );
     void SpecializeShader( uint shader, string pEntryPoint, uint numSpecializationConstants, uint[] pConstantIndex, uint[] pConstantValue );
-    unsafe void MultiDrawArraysIndirectCount( int mode, void* indirect, int drawcount, int maxdrawcount, int stride );
-    void MultiDrawArraysIndirectCount( int mode, GLBindings.DrawArraysIndirectCommand indirect, int drawcount, int maxdrawcount, int stride );
-    unsafe void MultiDrawElementsIndirectCount( int mode, int type, void* indirect, int drawcount, int maxdrawcount, int stride );
-    void MultiDrawElementsIndirectCount( int mode, int type, GLBindings.DrawElementsIndirectCommand indirect, int drawcount, int maxdrawcount, int stride );
+    unsafe void MultiDrawArraysIndirectCount( int mode, IntPtr indirect, int drawcount, int maxdrawcount, int stride );
+    unsafe void MultiDrawElementsIndirectCount( int mode, int type, IntPtr indirect, int drawcount, int maxdrawcount, int stride );
+
+    // ------------------------------------------------------------------------
+    
+//    void DrawArraysIndirect( int mode, GLBindings.DrawArraysIndirectCommand indirect );
+//    void MultiDrawArraysIndirect( int mode, GLBindings.DrawArraysIndirectCommand indirect, int drawcount, int stride );
+//    void MultiDrawArraysIndirectCount( int mode, GLBindings.DrawArraysIndirectCommand indirect, int drawcount, int maxdrawcount, int stride );
+
+//    void DrawElementsIndirect( int mode, int type, GLBindings.DrawElementsIndirectCommand indirect );
+//    void MultiDrawElementsIndirect( int mode, int type, GLBindings.DrawElementsIndirectCommand indirect, int drawcount, int stride );
+//    void MultiDrawElementsIndirectCount( int mode, int type, GLBindings.DrawElementsIndirectCommand indirect, int drawcount, int maxdrawcount, int stride );
 
     /// <summary>
     /// Controls the parameters of polygon offset.

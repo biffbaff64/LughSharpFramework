@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 
 namespace DesktopGLBackend.Window;
 
-public unsafe partial class DesktopGLWindow
+public partial class DesktopGLWindow
 {
     public void GdxFocusCallback( GLFW.Window windowHandle, bool focused )
     {

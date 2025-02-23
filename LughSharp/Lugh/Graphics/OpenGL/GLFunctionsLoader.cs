@@ -22,16 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-//#pragma warning disable IDE0079 // Remove unnecessary suppression
-//#pragma warning disable CS8618  // Non-nullable field is uninitialized. Consider declaring as nullable.
-//#pragma warning disable CS8603  // Possible null reference return.
-//#pragma warning disable IDE0060 // Remove unused parameter.
-//#pragma warning disable IDE1006 // Naming Styles.
-//#pragma warning disable IDE0090 // Use 'new(...)'.
-//#pragma warning disable CS8500  // This takes the address of, gets the size of, or declares a pointer to a managed type
-
-// ============================================================================
-
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -128,10 +118,3 @@ public partial class GLBindings
     // ========================================================================
 }
 
-//#pragma warning restore IDE0079 // Remove unnecessary suppression
-//#pragma warning restore CS8618  // Non-nullable field is uninitialized. Consider declaring as nullable.
-//#pragma warning restore CS8603  // Possible null reference return.
-//#pragma warning restore IDE0060 // Remove unused parameter.
-//#pragma warning restore IDE1006 // Naming Styles.
-//#pragma warning restore IDE0090 // Use 'new(...)'.
-//#pragma warning restore CS8500  // This takes the address of, gets the size of, or declares a pointer to a managed type

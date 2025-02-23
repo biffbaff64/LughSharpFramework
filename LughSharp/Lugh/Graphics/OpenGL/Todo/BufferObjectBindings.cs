@@ -22,45 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using GLuint = uint;
-
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
-public partial class GLBindings
+public class BufferObjectBindings
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI]
-    [StructLayout( LayoutKind.Sequential )]
-    public struct DrawElementsIndirectCommand
-    {
-        public GLuint Count;
-        public GLuint PrimCount;
-        public GLuint FirstIndex;
-        public GLuint BaseVertex;
-        public GLuint BaseInstance;
-    }
-
-    [PublicAPI]
-    [StructLayout( LayoutKind.Sequential )]
-    public struct DispatchIndirectCommand
-    {
-        public uint NumGroupsX;
-        public uint NumGroupsY;
-        public uint NumGroupsZ;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    [PublicAPI]
-    [StructLayout( LayoutKind.Sequential )]
-    public struct DrawArraysIndirectCommand
-    {
-        public GLuint Count         { get; set; }
-        public GLuint InstanceCount { get; set; }
-        public GLuint First         { get; set; }
-        public GLuint BaseInstance  { get; set; }
-    }
+    
 }

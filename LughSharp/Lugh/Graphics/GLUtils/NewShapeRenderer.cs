@@ -47,10 +47,10 @@ public unsafe class NewShapeRenderer : IDisposable
 
         // 3. Setup vertex attributes
         GL.EnableVertexAttribArray( 0 ); // Position
-        GL.VertexAttribPointer( 0u, 2, IGL.GL_FLOAT, false, 4 * sizeof( float ), IntPtr.Zero );
+//        GL.VertexAttribPointer( 0u, 2, IGL.GL_FLOAT, false, 4 * sizeof( float ), IntPtr.Zero );
 
         GL.EnableVertexAttribArray( 1 ); // Color
-        GL.VertexAttribPointer( 1u, 4, IGL.GL_FLOAT, false, 4 * sizeof( float ), new IntPtr( 2 * sizeof( float ) ) );
+//        GL.VertexAttribPointer( 1u, 4, IGL.GL_FLOAT, false, 4 * sizeof( float ), new IntPtr( 2 * sizeof( float ) ) );
 
         GL.BindBuffer( IGL.GL_ARRAY_BUFFER, 0 );
         GL.BindVertexArray( 0 );
@@ -70,6 +70,7 @@ public unsafe class NewShapeRenderer : IDisposable
 
     private int CreateShapeShaderProgram()
     {
+        throw new NotImplementedException();
     }
 
     // ========================================================================
