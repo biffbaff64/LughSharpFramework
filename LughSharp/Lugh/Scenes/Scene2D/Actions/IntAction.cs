@@ -27,18 +27,14 @@ using LughSharp.Lugh.Maths;
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-/// An action that has a int, whose value is transitioned over time.
+///     An action that has a int, whose value is transitioned over time.
 /// </summary>
 public class IntAction : TemporalAction
 {
-    public int Start    { get; }
-    public int EndValue { get; }
-    public int Value    { get; set; }
-
     // ========================================================================
-    
+
     /// <summary>
-    /// Creates a IntAction that transitions from 0 to 1.
+    ///     Creates a IntAction that transitions from 0 to 1.
     /// </summary>
     public IntAction()
     {
@@ -47,7 +43,7 @@ public class IntAction : TemporalAction
     }
 
     /// <summary>
-    /// Creates a IntAction that transitions from start to end.
+    ///     Creates a IntAction that transitions from start to end.
     /// </summary>
     public IntAction( int start, int end )
     {
@@ -56,7 +52,7 @@ public class IntAction : TemporalAction
     }
 
     /// <summary>
-    /// Creates a IntAction that transitions from start to end.
+    ///     Creates a IntAction that transitions from start to end.
     /// </summary>
     public IntAction( int start, int end, float duration ) : base( duration )
     {
@@ -65,7 +61,7 @@ public class IntAction : TemporalAction
     }
 
     /// <summary>
-    /// Creates a IntAction that transitions from start to end.
+    ///     Creates a IntAction that transitions from start to end.
     /// </summary>
     public IntAction( int start, int end, float duration, IInterpolation interpolation )
         : base( duration, interpolation )
@@ -73,6 +69,10 @@ public class IntAction : TemporalAction
         Start    = start;
         EndValue = end;
     }
+
+    public int Start    { get; }
+    public int EndValue { get; }
+    public int Value    { get; set; }
 
     /// <inheritdoc />
     protected override void Begin()
@@ -93,7 +93,7 @@ public class IntAction : TemporalAction
         }
         else
         {
-            Value = ( int ) ( Start + ( ( EndValue - Start ) * percent ) );
+            Value = ( int )( Start + ( ( EndValue - Start ) * percent ) );
         }
     }
 }

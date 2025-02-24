@@ -25,39 +25,39 @@
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-/// Provides an abstraction layer for managing graphics backends, enabling support
-/// for multiple rendering technologies.
+///     Provides an abstraction layer for managing graphics backends, enabling support
+///     for multiple rendering technologies.
 /// </summary>
 [PublicAPI]
 public class GraphicsBackend
 {
     /// <summary>
-    /// The supported underlying graphics backends.
+    ///     The supported underlying graphics backends.
     /// </summary>
     [PublicAPI]
     public enum BackendType : int
     {
         /// <summary>
-        /// OpenGL graphics backend.
+        ///     OpenGL graphics backend.
         /// </summary>
         OpenGL,
         OpenGles,
         WebGL,
 
         /// <summary>
-        /// Vulkan graphics backend.
+        ///     Vulkan graphics backend.
         /// </summary>
         Vulkan,
 
         /// <summary>
-        /// Microsoft DirectX 11 graphics backend.
+        ///     Microsoft DirectX 11 graphics backend.
         /// </summary>
         DirectX,
         DirectX12,
     }
 
     /// <summary>
-    /// Sub-categories for OpenGL
+    ///     Sub-categories for OpenGL
     /// </summary>
     [PublicAPI]
     public enum OpenGLSubCategories
@@ -68,24 +68,24 @@ public class GraphicsBackend
         GL40,
     }
 
+    /// <summary>
+    ///     Gets or sets information about a graphics backend, including its type
+    ///     and any associated subcategories.
+    /// </summary>
+    public BackendInfo Data { get; set; }
+
     // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// Represents detailed information about a graphics backend, including the backend type
-    /// and any subcategories associated with it.
+    ///     Represents detailed information about a graphics backend, including the backend type
+    ///     and any subcategories associated with it.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential )]
     public struct BackendInfo
     {
         public BackendType         Type        { get; set; }
         public OpenGLSubCategories SubCategory { get; set; }
     }
-
-    /// <summary>
-    /// Gets or sets information about a graphics backend, including its type
-    /// and any associated subcategories.
-    /// </summary>
-    public BackendInfo Data { get; set; }
 }
-

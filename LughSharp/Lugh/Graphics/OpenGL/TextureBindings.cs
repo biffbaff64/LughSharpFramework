@@ -22,31 +22,16 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Numerics;
-
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
-using GLenum = System.Int32;
-using GLfloat = System.Single;
-using GLint = System.Int32;
-using GLsizei = System.Int32;
-using GLbitfield = System.UInt32;
-using GLdouble = System.Double;
-using GLuint = System.UInt32;
-using GLboolean = System.Boolean;
-using GLubyte = System.Byte;
-using GLsizeiptr = System.Int32;
-using GLintptr = System.Int32;
-using GLshort = System.Int16;
-using GLbyte = System.SByte;
-using GLushort = System.UInt16;
-using GLchar = System.Byte;
-using GLuint64 = System.UInt64;
-using GLint64 = System.Int64;
+using GLenum = int;
+using GLfloat = float;
+using GLint = int;
+using GLsizei = int;
+using GLuint = uint;
+using GLboolean = bool;
 
 // ============================================================================
 
@@ -56,19 +41,19 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 // ============================================================================
 
 /// <summary>
-/// Bindings for OpenGL, for core profile. Blazing fast, low level,
-/// direct access to the OpenGL API for all versions of OpenGL, using the unmanaged
-/// delegates feature in C# 9.0,
-/// <para>
-/// Also includes a few overloads of many functions to make them a bit more C# friendly
-/// (e.g. passing arrays of bytes or floats instead of passing pointers to fixed memory
-/// locations). Significant effort has been made to make sure that the overloads are as
-/// efficient as possible, in terms of both performance and memory usage.
-/// </para>
+///     Bindings for OpenGL, for core profile. Blazing fast, low level,
+///     direct access to the OpenGL API for all versions of OpenGL, using the unmanaged
+///     delegates feature in C# 9.0,
+///     <para>
+///         Also includes a few overloads of many functions to make them a bit more C# friendly
+///         (e.g. passing arrays of bytes or floats instead of passing pointers to fixed memory
+///         locations). Significant effort has been made to make sure that the overloads are as
+///         efficient as possible, in terms of both performance and memory usage.
+///     </para>
 /// </summary>
 public partial class GLBindings
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexImage1D( GLenum target,
                             GLint level,
                             GLenum internalFormat,
@@ -78,12 +63,12 @@ public partial class GLBindings
                             GLenum type,
                             IntPtr pixels )
     {
-        GetDelegateForFunction< PFNGLTEXIMAGE1DPROC >( "glTexImage1D", out _glTexImage1D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXIMAGE1DPROC >( "glTexImage1D", out _glTexImage1D );
 
         _glTexImage1D( target, level, internalFormat, width, border, format, type, pixels );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexImage1D< T >( GLenum target,
                                  GLint level,
                                  GLenum internalFormat,
@@ -93,7 +78,7 @@ public partial class GLBindings
                                  GLenum type,
                                  T[] pixels ) where T : unmanaged
     {
-        GetDelegateForFunction< PFNGLTEXIMAGE1DPROC >( "glTexImage1D", out _glTexImage1D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXIMAGE1DPROC >( "glTexImage1D", out _glTexImage1D );
 
         unsafe
         {
@@ -106,7 +91,7 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexImage2D( GLenum target,
                             GLint level,
                             GLenum internalFormat,
@@ -117,15 +102,15 @@ public partial class GLBindings
                             GLenum type,
                             IntPtr pixels )
     {
-        GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
         _glTexImage2D( target, level, internalFormat, width, height, border, format, type, pixels );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap )
     {
-        GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
         unsafe
         {
@@ -144,7 +129,7 @@ public partial class GLBindings
         }
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexImage2D< T >( GLenum target,
                                  GLint level,
                                  GLenum internalpixelformat,
@@ -157,7 +142,7 @@ public partial class GLBindings
     {
         if ( pixels == null ) return;
 
-        GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
         unsafe
         {
@@ -170,61 +155,61 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CopyTexImage1D( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLint border )
     {
-        GetDelegateForFunction< PFNGLCOPYTEXIMAGE1DPROC >( "glCopyTexImage1D", out _glCopyTexImage1D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOPYTEXIMAGE1DPROC >( "glCopyTexImage1D", out _glCopyTexImage1D );
 
         _glCopyTexImage1D( target, level, internalFormat, x, y, width, border );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CopyTexImage2D( GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLsizei height,
                                 GLint border )
     {
-        GetDelegateForFunction< PFNGLCOPYTEXIMAGE2DPROC >( "glCopyTexImage2D", out _glCopyTexImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOPYTEXIMAGE2DPROC >( "glCopyTexImage2D", out _glCopyTexImage2D );
 
         _glCopyTexImage2D( target, level, internalFormat, x, y, width, height, border );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CopyTexSubImage1D( GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width )
     {
-        GetDelegateForFunction< PFNGLCOPYTEXSUBIMAGE1DPROC >( "glCopyTexSubImage1D", out _glCopyTexSubImage1D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOPYTEXSUBIMAGE1DPROC >( "glCopyTexSubImage1D", out _glCopyTexSubImage1D );
 
         _glCopyTexSubImage1D( target, level, xoffset, x, y, width );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CopyTexSubImage2D( GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width,
                                    GLsizei height )
     {
-        GetDelegateForFunction< PFNGLCOPYTEXSUBIMAGE2DPROC >( "glCopyTexSubImage2D", out _glCopyTexSubImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOPYTEXSUBIMAGE2DPROC >( "glCopyTexSubImage2D", out _glCopyTexSubImage2D );
 
         _glCopyTexSubImage2D( target, level, xoffset, yoffset, x, y, width, height );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexSubImage1D( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, IntPtr pixels )
     {
-        GetDelegateForFunction< PFNGLTEXSUBIMAGE1DPROC >( "glTexSubImage1D", out _glTexSubImage1D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXSUBIMAGE1DPROC >( "glTexSubImage1D", out _glTexSubImage1D );
 
         _glTexSubImage1D( target, level, xoffset, width, format, type, pixels );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexSubImage1D< T >( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, T[] pixels )
         where T : unmanaged
     {
-        GetDelegateForFunction< PFNGLTEXSUBIMAGE1DPROC >( "glTexSubImage1D", out _glTexSubImage1D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXSUBIMAGE1DPROC >( "glTexSubImage1D", out _glTexSubImage1D );
 
         unsafe
         {
@@ -239,7 +224,7 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexSubImage2D( GLenum target,
                                GLint level,
                                GLint xoffset,
@@ -250,12 +235,12 @@ public partial class GLBindings
                                GLenum type,
                                IntPtr pixels )
     {
-        GetDelegateForFunction< PFNGLTEXSUBIMAGE2DPROC >( "glTexSubImage2D", out _glTexSubImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXSUBIMAGE2DPROC >( "glTexSubImage2D", out _glTexSubImage2D );
 
         _glTexSubImage2D( target, level, xoffset, yoffset, width, height, format, type, pixels );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexSubImage2D< T >( GLenum target,
                                     GLint level,
                                     GLint xoffset,
@@ -266,7 +251,7 @@ public partial class GLBindings
                                     GLenum type,
                                     T[] pixels ) where T : unmanaged
     {
-        GetDelegateForFunction< PFNGLTEXSUBIMAGE2DPROC >( "glTexSubImage2D", out _glTexSubImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXSUBIMAGE2DPROC >( "glTexSubImage2D", out _glTexSubImage2D );
 
         unsafe
         {
@@ -281,28 +266,28 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BindTexture( GLenum target, GLuint texture )
     {
-        GetDelegateForFunction< PFNGLBINDTEXTUREPROC >( "glBindTexture", out _glBindTexture );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLBINDTEXTUREPROC >( "glBindTexture", out _glBindTexture );
 
         _glBindTexture( target, texture );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public unsafe void DeleteTextures( GLsizei n, GLuint* textures )
     {
-        GetDelegateForFunction< PFNGLDELETETEXTURESPROC >( "glDeleteTextures", out _glDeleteTextures );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLDELETETEXTURESPROC >( "glDeleteTextures", out _glDeleteTextures );
 
         _glDeleteTextures( n, textures );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DeleteTextures( params GLuint[] textures )
     {
-        GetDelegateForFunction< PFNGLDELETETEXTURESPROC >( "glDeleteTextures", out _glDeleteTextures );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLDELETETEXTURESPROC >( "glDeleteTextures", out _glDeleteTextures );
 
         unsafe
         {
@@ -315,18 +300,18 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public unsafe void GenTextures( GLsizei n, GLuint* textures )
     {
-        GetDelegateForFunction< PFNGLGENTEXTURESPROC >( "glGenTextures", out _glGenTextures );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGENTEXTURESPROC >( "glGenTextures", out _glGenTextures );
 
         _glGenTextures( n, textures );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLuint[] GenTextures( GLsizei n )
     {
-        GetDelegateForFunction< PFNGLGENTEXTURESPROC >( "glGenTextures", out _glGenTextures );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGENTEXTURESPROC >( "glGenTextures", out _glGenTextures );
 
         var textures = new GLuint[ n ];
 
@@ -341,7 +326,7 @@ public partial class GLBindings
         return textures;
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLuint GenTexture()
     {
         return GenTextures( 1 )[ 0 ];
@@ -349,17 +334,17 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLboolean IsTexture( GLuint texture )
     {
-        GetDelegateForFunction< PFNGLISTEXTUREPROC >( "glIsTexture", out _glIsTexture );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLISTEXTUREPROC >( "glIsTexture", out _glIsTexture );
 
         return _glIsTexture( texture );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexImage3D( GLenum target,
                             GLint level,
                             GLint internalFormat,
@@ -371,12 +356,12 @@ public partial class GLBindings
                             GLenum type,
                             IntPtr pixels )
     {
-        GetDelegateForFunction< PFNGLTEXIMAGE3DPROC >( "glTexImage3D", out _glTexImage3D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXIMAGE3DPROC >( "glTexImage3D", out _glTexImage3D );
 
         _glTexImage3D( target, level, internalFormat, width, height, depth, border, format, type, pixels );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexImage3D< T >( GLenum target,
                                  GLint level,
                                  GLint internalFormat,
@@ -388,7 +373,7 @@ public partial class GLBindings
                                  GLenum type,
                                  T[] pixels ) where T : unmanaged
     {
-        GetDelegateForFunction< PFNGLTEXIMAGE3DPROC >( "glTexImage3D", out _glTexImage3D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXIMAGE3DPROC >( "glTexImage3D", out _glTexImage3D );
 
         unsafe
         {
@@ -403,7 +388,7 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexSubImage3D( GLenum target,
                                GLint level,
                                GLint xoffset,
@@ -416,12 +401,12 @@ public partial class GLBindings
                                GLenum type,
                                IntPtr pixels )
     {
-        GetDelegateForFunction< PFNGLTEXSUBIMAGE3DPROC >( "glTexSubImage3D", out _glTexSubImage3D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXSUBIMAGE3DPROC >( "glTexSubImage3D", out _glTexSubImage3D );
 
         _glTexSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexSubImage3D< T >( GLenum target,
                                     GLint level,
                                     GLint xoffset,
@@ -434,7 +419,7 @@ public partial class GLBindings
                                     GLenum type,
                                     T[] pixels ) where T : unmanaged
     {
-        GetDelegateForFunction< PFNGLTEXSUBIMAGE3DPROC >( "glTexSubImage3D", out _glTexSubImage3D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXSUBIMAGE3DPROC >( "glTexSubImage3D", out _glTexSubImage3D );
 
         unsafe
         {
@@ -449,7 +434,7 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CopyTexSubImage3D( GLenum target,
                                    GLint level,
                                    GLint xoffset,
@@ -460,27 +445,30 @@ public partial class GLBindings
                                    GLsizei width,
                                    GLsizei height )
     {
-        GetDelegateForFunction< PFNGLCOPYTEXSUBIMAGE3DPROC >( "glCopyTexSubImage3D", out _glCopyTexSubImage3D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOPYTEXSUBIMAGE3DPROC >( "glCopyTexSubImage3D", out _glCopyTexSubImage3D );
 
         _glCopyTexSubImage3D( target, level, xoffset, yoffset, zoffset, x, y, width, height );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void ActiveTexture( TextureUnit texture ) => ActiveTexture( ( int )texture );
+    /// <inheritdoc />
+    public void ActiveTexture( TextureUnit texture )
+    {
+        ActiveTexture( ( int )texture );
+    }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void ActiveTexture( GLenum texture )
     {
-        GetDelegateForFunction< PFNGLACTIVETEXTUREPROC >( "glActiveTexture", out _glActiveTexture );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLACTIVETEXTUREPROC >( "glActiveTexture", out _glActiveTexture );
 
         _glActiveTexture( texture );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexImage3D( GLenum target,
                                       GLint level,
                                       GLenum internalFormat,
@@ -491,12 +479,12 @@ public partial class GLBindings
                                       GLsizei imageSize,
                                       IntPtr data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE3DPROC >( "glCompressedTexImage3D", out _glCompressedTexImage3D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXIMAGE3DPROC >( "glCompressedTexImage3D", out _glCompressedTexImage3D );
 
         _glCompressedTexImage3D( target, level, internalFormat, width, height, depth, border, imageSize, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexImage3D( GLenum target,
                                       GLint level,
                                       GLenum internalFormat,
@@ -506,7 +494,7 @@ public partial class GLBindings
                                       GLint border,
                                       byte[] data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE3DPROC >( "glCompressedTexImage3D", out _glCompressedTexImage3D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXIMAGE3DPROC >( "glCompressedTexImage3D", out _glCompressedTexImage3D );
 
         unsafe
         {
@@ -519,7 +507,7 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexImage2D( GLenum target,
                                       GLint level,
                                       GLenum internalFormat,
@@ -529,16 +517,16 @@ public partial class GLBindings
                                       GLsizei imageSize,
                                       IntPtr data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE2DPROC >( "glCompressedTexImage2D", out _glCompressedTexImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXIMAGE2DPROC >( "glCompressedTexImage2D", out _glCompressedTexImage2D );
 
         _glCompressedTexImage2D( target, level, internalFormat, width, height, border, imageSize, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexImage2D( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLsizei height, GLint border,
                                       byte[] data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE2DPROC >( "glCompressedTexImage2D", out _glCompressedTexImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXIMAGE2DPROC >( "glCompressedTexImage2D", out _glCompressedTexImage2D );
 
         unsafe
         {
@@ -551,19 +539,19 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexImage1D( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLint border, GLsizei imageSize,
                                       IntPtr data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE1DPROC >( "glCompressedTexImage1D", out _glCompressedTexImage1D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXIMAGE1DPROC >( "glCompressedTexImage1D", out _glCompressedTexImage1D );
 
         _glCompressedTexImage1D( target, level, internalFormat, width, border, imageSize, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexImage1D( GLenum target, GLint level, GLenum internalFormat, GLsizei width, GLint border, byte[] data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXIMAGE1DPROC >( "glCompressedTexImage1D", out _glCompressedTexImage1D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXIMAGE1DPROC >( "glCompressedTexImage1D", out _glCompressedTexImage1D );
 
         unsafe
         {
@@ -576,7 +564,7 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexSubImage3D( GLenum target,
                                          GLint level,
                                          GLint xoffset,
@@ -589,12 +577,12 @@ public partial class GLBindings
                                          GLsizei imageSize,
                                          IntPtr data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC >( "glCompressedTexSubImage3D", out _glCompressedTexSubImage3D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC >( "glCompressedTexSubImage3D", out _glCompressedTexSubImage3D );
 
         _glCompressedTexSubImage3D( target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexSubImage3D( GLenum target,
                                          GLint level,
                                          GLint xoffset,
@@ -606,7 +594,7 @@ public partial class GLBindings
                                          GLenum format,
                                          byte[] data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC >( "glCompressedTexSubImage3D", out _glCompressedTexSubImage3D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXSUBIMAGE3DPROC >( "glCompressedTexSubImage3D", out _glCompressedTexSubImage3D );
 
         unsafe
         {
@@ -620,7 +608,7 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexSubImage2D( GLenum target,
                                          GLint level,
                                          GLint xoffset,
@@ -631,12 +619,12 @@ public partial class GLBindings
                                          GLsizei imageSize,
                                          IntPtr data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC >( "glCompressedTexSubImage2D", out _glCompressedTexSubImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC >( "glCompressedTexSubImage2D", out _glCompressedTexSubImage2D );
 
         _glCompressedTexSubImage2D( target, level, xoffset, yoffset, width, height, format, imageSize, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexSubImage2D( GLenum target,
                                          GLint level,
                                          GLint xoffset,
@@ -646,7 +634,7 @@ public partial class GLBindings
                                          GLenum format,
                                          byte[] data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC >( "glCompressedTexSubImage2D", out _glCompressedTexSubImage2D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXSUBIMAGE2DPROC >( "glCompressedTexSubImage2D", out _glCompressedTexSubImage2D );
 
         unsafe
         {
@@ -659,19 +647,19 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexSubImage1D( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize,
                                          IntPtr data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC >( "glCompressedTexSubImage1D", out _glCompressedTexSubImage1D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC >( "glCompressedTexSubImage1D", out _glCompressedTexSubImage1D );
 
         _glCompressedTexSubImage1D( target, level, xoffset, width, format, imageSize, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompressedTexSubImage1D( GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, byte[] data )
     {
-        GetDelegateForFunction< PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC >( "glCompressedTexSubImage1D", out _glCompressedTexSubImage1D );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLCOMPRESSEDTEXSUBIMAGE1DPROC >( "glCompressedTexSubImage1D", out _glCompressedTexSubImage1D );
 
         unsafe
         {
@@ -684,18 +672,18 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetCompressedTexImage( GLenum target, GLint level, IntPtr img )
     {
-        GetDelegateForFunction< PFNGLGETCOMPRESSEDTEXIMAGEPROC >( "glGetCompressedTexImage", out _glGetCompressedTexImage );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETCOMPRESSEDTEXIMAGEPROC >( "glGetCompressedTexImage", out _glGetCompressedTexImage );
 
         _glGetCompressedTexImage( target, level, img );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetCompressedTexImage( GLenum target, GLint level, ref byte[] img )
     {
-        GetDelegateForFunction< PFNGLGETCOMPRESSEDTEXIMAGEPROC >( "glGetCompressedTexImage", out _glGetCompressedTexImage );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETCOMPRESSEDTEXIMAGEPROC >( "glGetCompressedTexImage", out _glGetCompressedTexImage );
 
         unsafe
         {
@@ -708,28 +696,28 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexParameterf( GLenum target, GLenum pname, GLfloat param )
     {
-        GetDelegateForFunction< PFNGLTEXPARAMETERFPROC >( "glTexParameterf", out _glTexParameterf );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXPARAMETERFPROC >( "glTexParameterf", out _glTexParameterf );
 
         _glTexParameterf( target, pname, param );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public unsafe void TexParameterfv( GLenum target, GLenum pname, GLfloat* parameters )
     {
-        GetDelegateForFunction< PFNGLTEXPARAMETERFVPROC >( "glTexParameterfv", out _glTexParameterfv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXPARAMETERFVPROC >( "glTexParameterfv", out _glTexParameterfv );
 
         _glTexParameterfv( target, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexParameterfv( GLenum target, GLenum pname, GLfloat[] parameters )
     {
-        GetDelegateForFunction< PFNGLTEXPARAMETERFVPROC >( "glTexParameterfv", out _glTexParameterfv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXPARAMETERFVPROC >( "glTexParameterfv", out _glTexParameterfv );
 
         unsafe
         {
@@ -742,28 +730,28 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexParameteri( GLenum target, GLenum pname, GLint param )
     {
-        GetDelegateForFunction< PFNGLTEXPARAMETERIPROC >( "glTexParameteri", out _glTexParameteri );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXPARAMETERIPROC >( "glTexParameteri", out _glTexParameteri );
 
         _glTexParameteri( target, pname, param );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public unsafe void TexParameteriv( GLenum target, GLenum pname, GLint* parameters )
     {
-        GetDelegateForFunction< PFNGLTEXPARAMETERIVPROC >( "glTexParameteriv", out _glTexParameteriv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXPARAMETERIVPROC >( "glTexParameteriv", out _glTexParameteriv );
 
         _glTexParameteriv( target, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexParameteriv( GLenum target, GLenum pname, GLint[] parameters )
     {
-        GetDelegateForFunction< PFNGLTEXPARAMETERIVPROC >( "glTexParameteriv", out _glTexParameteriv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXPARAMETERIVPROC >( "glTexParameteriv", out _glTexParameteriv );
 
         unsafe
         {
@@ -776,18 +764,18 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetTexImage( GLenum target, GLint level, GLenum format, GLenum type, IntPtr pixels )
     {
-        GetDelegateForFunction< PFNGLGETTEXIMAGEPROC >( "glGetTexImage", out _glGetTexImage );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETTEXIMAGEPROC >( "glGetTexImage", out _glGetTexImage );
 
         _glGetTexImage( target, level, format, type, pixels );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetTexImage< T >( GLenum target, GLint level, GLenum format, GLenum type, ref T[] pixels ) where T : unmanaged
     {
-        GetDelegateForFunction< PFNGLGETTEXIMAGEPROC >( "glGetTexImage", out _glGetTexImage );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETTEXIMAGEPROC >( "glGetTexImage", out _glGetTexImage );
 
         unsafe
         {
@@ -800,18 +788,18 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public unsafe void GetTexParameterfv( GLenum target, GLenum pname, GLfloat* parameters )
     {
-        GetDelegateForFunction< PFNGLGETTEXPARAMETERFVPROC >( "glGetTexParameterfv", out _glGetTexParameterfv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETTEXPARAMETERFVPROC >( "glGetTexParameterfv", out _glGetTexParameterfv );
 
         _glGetTexParameterfv( target, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetTexParameterfv( GLenum target, GLenum pname, ref GLfloat[] parameters )
     {
-        GetDelegateForFunction< PFNGLGETTEXPARAMETERFVPROC >( "glGetTexParameterfv", out _glGetTexParameterfv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETTEXPARAMETERFVPROC >( "glGetTexParameterfv", out _glGetTexParameterfv );
 
         unsafe
         {
@@ -824,18 +812,18 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public unsafe void GetTexParameteriv( GLenum target, GLenum pname, GLint* parameters )
     {
-        GetDelegateForFunction< PFNGLGETTEXPARAMETERIVPROC >( "glGetTexParameteriv", out _glGetTexParameteriv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETTEXPARAMETERIVPROC >( "glGetTexParameteriv", out _glGetTexParameteriv );
 
         _glGetTexParameteriv( target, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetTexParameteriv( GLenum target, GLenum pname, ref GLint[] parameters )
     {
-        GetDelegateForFunction< PFNGLGETTEXPARAMETERIVPROC >( "glGetTexParameteriv", out _glGetTexParameteriv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETTEXPARAMETERIVPROC >( "glGetTexParameteriv", out _glGetTexParameteriv );
 
         unsafe
         {
@@ -848,18 +836,18 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public unsafe void GetTexLevelParameterfv( GLenum target, GLint level, GLenum pname, GLfloat* parameters )
     {
-        GetDelegateForFunction< PFNGLGETTEXLEVELPARAMETERFVPROC >( "glGetTexLevelParameterfv", out _glGetTexLevelParameterfv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETTEXLEVELPARAMETERFVPROC >( "glGetTexLevelParameterfv", out _glGetTexLevelParameterfv );
 
         _glGetTexLevelParameterfv( target, level, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetTexLevelParameterfv( GLenum target, GLint level, GLenum pname, ref GLfloat[] parameters )
     {
-        GetDelegateForFunction< PFNGLGETTEXLEVELPARAMETERFVPROC >( "glGetTexLevelParameterfv", out _glGetTexLevelParameterfv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETTEXLEVELPARAMETERFVPROC >( "glGetTexLevelParameterfv", out _glGetTexLevelParameterfv );
 
         unsafe
         {
@@ -872,18 +860,18 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public unsafe void GetTexLevelParameteriv( GLenum target, GLint level, GLenum pname, GLint* parameters )
     {
-        GetDelegateForFunction< PFNGLGETTEXLEVELPARAMETERIVPROC >( "glGetTexLevelParameteriv", out _glGetTexLevelParameteriv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETTEXLEVELPARAMETERIVPROC >( "glGetTexLevelParameteriv", out _glGetTexLevelParameteriv );
 
         _glGetTexLevelParameteriv( target, level, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetTexLevelParameteriv( GLenum target, GLint level, GLenum pname, ref GLint[] parameters )
     {
-        GetDelegateForFunction< PFNGLGETTEXLEVELPARAMETERIVPROC >( "glGetTexLevelParameteriv", out _glGetTexLevelParameteriv );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETTEXLEVELPARAMETERIVPROC >( "glGetTexLevelParameteriv", out _glGetTexLevelParameteriv );
 
         unsafe
         {
@@ -896,7 +884,7 @@ public partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexImage2DMultisample( GLenum target,
                                        GLsizei samples,
                                        GLenum internalFormat,
@@ -904,14 +892,14 @@ public partial class GLBindings
                                        GLsizei height,
                                        GLboolean fixedsamplelocations )
     {
-        GetDelegateForFunction< PFNGLTEXIMAGE2DMULTISAMPLEPROC >( "glTexImage2DMultisample", out _glTexImage2DMultisample );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXIMAGE2DMULTISAMPLEPROC >( "glTexImage2DMultisample", out _glTexImage2DMultisample );
 
         _glTexImage2DMultisample( target, samples, internalFormat, width, height, fixedsamplelocations );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TexImage3DMultisample( GLenum target,
                                        GLsizei samples,
                                        GLenum internalFormat,
@@ -920,7 +908,7 @@ public partial class GLBindings
                                        GLsizei depth,
                                        GLboolean fixedsamplelocations )
     {
-        GetDelegateForFunction< PFNGLTEXIMAGE3DMULTISAMPLEPROC >( "glTexImage3DMultisample", out _glTexImage3DMultisample );
+        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXIMAGE3DMULTISAMPLEPROC >( "glTexImage3DMultisample", out _glTexImage3DMultisample );
 
         _glTexImage3DMultisample( target, samples, internalFormat, width, height, depth, fixedsamplelocations );
     }

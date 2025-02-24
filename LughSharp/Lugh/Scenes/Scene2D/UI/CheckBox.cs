@@ -32,13 +32,10 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 [PublicAPI]
 public class CheckBox : TextButton
 {
-    public Image? Image     { get; set; }
-    public Cell?  ImageCell { get; set; }
-
     private CheckBoxStyle? _style;
 
     // ========================================================================
-    
+
     public CheckBox( string text, Skin skin )
         : this( text, skin.Get< CheckBoxStyle >() )
     {
@@ -53,6 +50,9 @@ public class CheckBox : TextButton
     {
         NonVirtualSetup( style );
     }
+
+    public Image? Image     { get; set; }
+    public Cell?  ImageCell { get; set; }
 
     public new ButtonStyle? Style
     {
@@ -70,8 +70,8 @@ public class CheckBox : TextButton
     }
 
     /// <summary>
-    /// Private setup method to allow calls to virtual methods that can't
-    /// be called from constructors.
+    ///     Private setup method to allow calls to virtual methods that can't
+    ///     be called from constructors.
     /// </summary>
     private void NonVirtualSetup( CheckBoxStyle style )
     {
@@ -113,8 +113,8 @@ public class CheckBox : TextButton
             if ( IsChecked && ( _style?.CheckboxOn != null ) )
             {
                 checkbox = over && ( _style.CheckboxOnOver != null )
-                               ? _style.CheckboxOnOver
-                               : _style.CheckboxOn;
+                    ? _style.CheckboxOnOver
+                    : _style.CheckboxOn;
             }
             else if ( over && ( _style?.CheckboxOver != null ) )
             {
@@ -135,7 +135,7 @@ public class CheckBox : TextButton
     // ========================================================================
 
     /// <summary>
-    /// The style for a select box, see <see cref="CheckBox"/>.
+    ///     The style for a select box, see <see cref="CheckBox" />.
     /// </summary>
     [PublicAPI]
     public class CheckBoxStyle : TextButtonStyle

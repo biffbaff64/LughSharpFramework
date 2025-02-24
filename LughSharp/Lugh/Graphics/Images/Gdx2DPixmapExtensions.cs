@@ -29,7 +29,7 @@ public partial class Gdx2DPixmap
     private const string DLL_PATH = "lib/net8.0/gdx2d.dll";
 
     /// <summary>
-    /// Gets the pixel at the specified X and Y coordinates.
+    ///     Gets the pixel at the specified X and Y coordinates.
     /// </summary>
     /// <param name="x"> X co-ordinate. </param>
     /// <param name="y"> Y co-ordinate. </param>
@@ -43,7 +43,7 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// Set the pixel at the given coordinates.
+    ///     Set the pixel at the given coordinates.
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -59,7 +59,6 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -77,7 +76,6 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -95,7 +93,6 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -112,7 +109,6 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -130,7 +126,6 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -147,7 +142,6 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x1"></param>
     /// <param name="y1"></param>
@@ -167,7 +161,6 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="src"></param>
     /// <param name="srcX"></param>
@@ -181,7 +174,7 @@ public partial class Gdx2DPixmap
         gdx2d_draw_pixmap( src._pixmapDataType, _pixmapDataType, srcX, srcY, width, height, dstX, dstY, width, height );
 
         return;
-        
+
         [DllImport( DLL_PATH )]
         static extern void gdx2d_draw_pixmap( PixmapDataType pd,
                                               PixmapDataType dpd,
@@ -196,7 +189,6 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="src"></param>
     /// <param name="srcX"></param>
@@ -207,12 +199,13 @@ public partial class Gdx2DPixmap
     /// <param name="dstY"></param>
     /// <param name="dstWidth"></param>
     /// <param name="dstHeight"></param>
-    public void DrawPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int srcWidth, int srcHeight, int dstY, int dstWidth, int dstHeight )
+    public void DrawPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int srcWidth, int srcHeight, int dstY, int dstWidth,
+                            int dstHeight )
     {
         gdx2d_draw_pixmap( src._pixmapDataType, _pixmapDataType, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight );
 
         return;
-        
+
         [DllImport( DLL_PATH )]
         static extern void gdx2d_draw_pixmap( PixmapDataType pd,
                                               PixmapDataType dpd,

@@ -31,13 +31,13 @@ namespace LughSharp.Lugh.Graphics.G3D;
 public class Environment : AttributesGroup
 {
     /// <summary>
-    /// Shadow map used to render shadows
+    ///     Shadow map used to render shadows
     /// </summary>
     public IShadowMap? ShadowMap { get; set; }
 
     /// <summary>
-    /// Adds one or more Lights, extended from <see cref="BaseLight"/>, to the
-    /// attributes list in <see cref="AttributesGroup"/> .
+    ///     Adds one or more Lights, extended from <see cref="BaseLight" />, to the
+    ///     attributes list in <see cref="AttributesGroup" /> .
     /// </summary>
     /// <param name="lights"></param>
     /// <returns></returns>
@@ -85,7 +85,7 @@ public class Environment : AttributesGroup
 
     public Environment Add( DirectionalLight light )
     {
-        var dirLights = ( DirectionalLightsAttribute? ) Get( DirectionalLightsAttribute.Type );
+        var dirLights = ( DirectionalLightsAttribute? )Get( DirectionalLightsAttribute.Type );
 
         if ( dirLights == null )
         {
@@ -99,7 +99,7 @@ public class Environment : AttributesGroup
 
     public Environment Add( PointLight light )
     {
-        var pointLights = ( PointLightsAttribute? ) Get( PointLightsAttribute.Type );
+        var pointLights = ( PointLightsAttribute? )Get( PointLightsAttribute.Type );
 
         if ( pointLights == null )
         {
@@ -113,7 +113,7 @@ public class Environment : AttributesGroup
 
     public Environment Add( SpotLight light )
     {
-        var spotLights = ( SpotLightsAttribute? ) Get( SpotLightsAttribute.Type );
+        var spotLights = ( SpotLightsAttribute? )Get( SpotLightsAttribute.Type );
 
         if ( spotLights == null )
         {
@@ -171,7 +171,7 @@ public class Environment : AttributesGroup
     {
         if ( Has( DirectionalLightsAttribute.Type ) )
         {
-            var dirLights = ( DirectionalLightsAttribute? ) Get( DirectionalLightsAttribute.Type );
+            var dirLights = ( DirectionalLightsAttribute? )Get( DirectionalLightsAttribute.Type );
 
             dirLights?.Lights.Remove( light );
 
@@ -188,7 +188,7 @@ public class Environment : AttributesGroup
     {
         if ( Has( PointLightsAttribute.Type ) )
         {
-            var pointLights = ( PointLightsAttribute? ) Get( PointLightsAttribute.Type );
+            var pointLights = ( PointLightsAttribute? )Get( PointLightsAttribute.Type );
 
             pointLights?.Lights.Remove( light );
 
@@ -205,7 +205,7 @@ public class Environment : AttributesGroup
     {
         if ( Has( SpotLightsAttribute.Type ) )
         {
-            var spotLights = ( SpotLightsAttribute? ) Get( SpotLightsAttribute.Type );
+            var spotLights = ( SpotLightsAttribute? )Get( SpotLightsAttribute.Type );
 
             spotLights?.Lights.Remove( light );
 

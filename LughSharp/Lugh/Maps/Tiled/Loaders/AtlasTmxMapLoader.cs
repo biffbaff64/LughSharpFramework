@@ -25,9 +25,7 @@
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -35,14 +33,14 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Maps.Tiled.Loaders;
 
 /// <summary>
-/// A TiledMap Loader which loads tiles from a TextureAtlas instead of separate images.
-/// It requires a map-level property called 'atlas' with its value being the relative
-/// path to the TextureAtlas.
-/// <para>
-/// The atlas must have in it indexed regions named after the tilesets used in the map.
-/// The indexes shall be local to the tileset (not the global id). Strip whitespace and
-/// rotation should not be used when creating the atlas.
-/// </para>
+///     A TiledMap Loader which loads tiles from a TextureAtlas instead of separate images.
+///     It requires a map-level property called 'atlas' with its value being the relative
+///     path to the TextureAtlas.
+///     <para>
+///         The atlas must have in it indexed regions named after the tilesets used in the map.
+///         The indexes shall be local to the tileset (not the global id). Strip whitespace and
+///         rotation should not be used when creating the atlas.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class AtlasTmxMapLoader( IFileHandleResolver resolver )
@@ -53,7 +51,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
     // ========================================================================
     // ========================================================================
-    
+
     public AtlasTmxMapLoader()
         : this( new InternalFileHandleResolver() )
     {
@@ -91,8 +89,8 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
     /// <inheritdoc />
     public override void LoadAsync< TP >( AssetManager? manager,
-                                                         FileInfo? tmxFile,
-                                                         TP? parameter ) where TP : class
+                                          FileInfo? tmxFile,
+                                          TP? parameter ) where TP : class
     {
         ArgumentNullException.ThrowIfNull( manager );
         ArgumentNullException.ThrowIfNull( tmxFile );
@@ -224,7 +222,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
             }
         }
     }
-    
+
     protected FileInfo GetAtlasFileHandle( FileInfo tmxFile )
     {
         var properties = XmlDocument.SelectSingleNode( "properties" );

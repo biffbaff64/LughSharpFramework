@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Maps;
 
 /// <summary>
-/// A Collection of <see cref="MapObject"/> instances.
+///     A Collection of <see cref="MapObject" /> instances.
 /// </summary>
 [PublicAPI]
 public class MapObjects : IEnumerable< MapObject >
@@ -34,7 +33,7 @@ public class MapObjects : IEnumerable< MapObject >
     private readonly List< MapObject > _objects;
 
     /// <summary>
-    /// Creates an empty set of MapObjects
+    ///     Creates an empty set of MapObjects
     /// </summary>
     public MapObjects()
     {
@@ -54,7 +53,7 @@ public class MapObjects : IEnumerable< MapObject >
     }
 
     /// <summary>
-    /// Gets the <see cref="MapObject"/> at the specified index.
+    ///     Gets the <see cref="MapObject" /> at the specified index.
     /// </summary>
     public MapObject Get( int index )
     {
@@ -62,8 +61,8 @@ public class MapObjects : IEnumerable< MapObject >
     }
 
     /// <summary>
-    /// Searches for, and returns, the <see cref="MapObject"/> which has
-    /// the same name as the one provided.
+    ///     Searches for, and returns, the <see cref="MapObject" /> which has
+    ///     the same name as the one provided.
     /// </summary>
     public MapObject Get( string name )
     {
@@ -80,45 +79,45 @@ public class MapObjects : IEnumerable< MapObject >
         return null!;
     }
 
-    /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)"/>
+    /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)" />
     public int GetIndex( string name )
     {
         return GetIndex( Get( name ) );
     }
 
-    /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)"/>
+    /// <inheritdoc cref="List{MapObject}.IndexOf(MapObject)" />
     public int GetIndex( MapObject obj )
     {
         return _objects.IndexOf( obj );
     }
 
-    /// <inheritdoc cref="List{MapObject}.Count"/>
+    /// <inheritdoc cref="List{MapObject}.Count" />
     public int GetCount()
     {
         return _objects.Count;
     }
 
-    /// <inheritdoc cref="List{MapObject}.Add"/>
+    /// <inheritdoc cref="List{MapObject}.Add" />
     public virtual void Add( MapObject obj )
     {
         _objects.Add( obj );
     }
 
-    /// <inheritdoc cref="List{MapObject}.RemoveAt"/>
+    /// <inheritdoc cref="List{MapObject}.RemoveAt" />
     public void RemoveIndex( int index )
     {
         _objects.RemoveAt( index );
     }
 
-    /// <inheritdoc cref="List{MapObject}.Remove"/>
+    /// <inheritdoc cref="List{MapObject}.Remove" />
     public void Remove( MapObject obj )
     {
         _objects.Remove( obj );
     }
 
     /// <summary>
-    /// Returns a List of all <see cref="MapObject"/>s that match the
-    /// specified type.
+    ///     Returns a List of all <see cref="MapObject" />s that match the
+    ///     specified type.
     /// </summary>
     /// <param name="type"> class of the objects we want to retrieve </param>
     /// <returns> array filled with all the objects in the collection matching type  </returns>
@@ -132,7 +131,7 @@ public class MapObjects : IEnumerable< MapObject >
 
             if ( obj.GetType() == typeof( T ) )
             {
-                fill.Add( ( T ) obj );
+                fill.Add( ( T )obj );
             }
         }
 

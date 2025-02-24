@@ -23,12 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Audio;
-using JetBrains.Annotations;
 
 namespace DesktopGLBackend.Audio.Mock;
 
 /// <summary>
-/// Audio stubs for use when Audio is disabled, or when Audio failed to initialise.
+///     Audio stubs for use when Audio is disabled, or when Audio failed to initialise.
 /// </summary>
 [PublicAPI]
 public class MockSound : ISound

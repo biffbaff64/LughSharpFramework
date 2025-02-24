@@ -6,7 +6,7 @@ LughSharp.Audio.MP3Sharp
 
 - I have made no changes to this code other than:-
 
-    - Tidying 
+    - Tidying
     - Changed the namespace to honour Maponus, the God of Music.
     - Any necessary updates for more recent versions of C#
     - Any necessary changes arising from integrating the original with LughSharp

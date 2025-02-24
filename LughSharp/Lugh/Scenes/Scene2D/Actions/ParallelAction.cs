@@ -33,7 +33,7 @@ public class ParallelAction : Action
     private          bool           _complete;
 
     // ========================================================================
-    
+
     protected ParallelAction()
     {
     }

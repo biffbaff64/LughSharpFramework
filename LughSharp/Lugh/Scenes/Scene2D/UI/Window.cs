@@ -32,14 +32,14 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A table that can be dragged and act as a modal window. The top padding is
-/// used as the window's title height.
-/// <para>
-/// The preferred size of a window is the preferred size of the title text and
-/// the children as laid out by the table. After adding children to the window,
-/// it can be convenient to call <see cref="WidgetGroup.Pack"/> to size the
-/// window to the size of the children.
-/// </para>
+///     A table that can be dragged and act as a modal window. The top padding is
+///     used as the window's title height.
+///     <para>
+///         The preferred size of a window is the preferred size of the title text and
+///         the children as laid out by the table. After adding children to the window,
+///         it can be convenient to call <see cref="WidgetGroup.Pack" /> to size the
+///         window to the size of the children.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class Window : Table
@@ -89,7 +89,7 @@ public class Window : Table
     protected int Edge { get; set; }
 
     /// <summary>
-    /// This windows <see cref="WindowStyle"/> property.
+    ///     This windows <see cref="WindowStyle" /> property.
     /// </summary>
     public WindowStyle? Style
     {
@@ -105,9 +105,9 @@ public class Window : Table
     }
 
     /// <summary>
-    /// Private Setup method, code moved from constructor to allow
-    /// calling of virtual methods as they should not be called from
-    /// constructors.
+    ///     Private Setup method, code moved from constructor to allow
+    ///     calling of virtual methods as they should not be called from
+    ///     constructors.
     /// </summary>
     /// <param name="title"> Window title. </param>
     /// <param name="style"> Window Style </param>
@@ -147,7 +147,7 @@ public class Window : Table
             var parentHeight = Stage.Height;
 
             if ( ( GetX( Alignment.RIGHT ) - Stage.Camera.Position.X )
-               > ( parentWidth / 2 / orthographicCamera.Zoom ) )
+                 > ( parentWidth / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( Stage.Camera.Position.X + ( parentWidth / 2 / orthographicCamera.Zoom ),
                              GetY( Alignment.RIGHT ),
@@ -155,7 +155,7 @@ public class Window : Table
             }
 
             if ( ( GetX( Alignment.LEFT ) - Stage.Camera.Position.X )
-               < ( -parentWidth / 2 / orthographicCamera.Zoom ) )
+                 < ( -parentWidth / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( Stage.Camera.Position.X - ( parentWidth / 2 / orthographicCamera.Zoom ),
                              GetY( Alignment.LEFT ),
@@ -170,7 +170,7 @@ public class Window : Table
             }
 
             if ( ( GetY( Alignment.BOTTOM ) - Stage.Camera.Position.Y )
-               < ( -parentHeight / 2 / orthographicCamera.Zoom ) )
+                 < ( -parentHeight / 2 / orthographicCamera.Zoom ) )
             {
                 SetPosition( GetX( Alignment.BOTTOM ),
                              Stage.Camera.Position.Y - ( parentHeight / 2 / orthographicCamera.Zoom ),
@@ -302,8 +302,8 @@ public class Window : Table
     protected override float GetPrefWidth()
     {
         return _titleTable == null
-                   ? base.GetPrefWidth()
-                   : Math.Max( base.GetPrefWidth(), _titleTable.PrefWidth + GetPadLeft() + GetPadRight() );
+            ? base.GetPrefWidth()
+            : Math.Max( base.GetPrefWidth(), _titleTable.PrefWidth + GetPadLeft() + GetPadRight() );
     }
 
     // ========================================================================
@@ -378,9 +378,9 @@ public class Window : Table
             _window.Edge = 0;
 
             if ( _window.IsResizable
-              && ( x >= ( padLeft - border ) )
-              && ( x <= ( right + border ) )
-              && ( y >= ( padBottom - border ) ) )
+                 && ( x >= ( padLeft - border ) )
+                 && ( x <= ( right + border ) )
+                 && ( y >= ( padBottom - border ) ) )
             {
                 if ( x < ( padLeft + border ) )
                 {
@@ -419,10 +419,10 @@ public class Window : Table
             }
 
             if ( _window is { IsMovable: true, Edge: 0 }
-              && ( y <= height )
-              && ( y >= ( height - padTop ) )
-              && ( x >= padLeft )
-              && ( x <= right )
+                 && ( y <= height )
+                 && ( y >= ( height - padTop ) )
+                 && ( x >= padLeft )
+                 && ( x <= right )
                )
             {
                 _window.Edge = MOVE;
@@ -471,8 +471,8 @@ public class Window : Table
             var stage = _window.Stage;
 
             var clampPosition = _window.KeepWithinStage
-                             && ( stage != null )
-                             && ( _window.Parent == stage.Root );
+                                && ( stage != null )
+                                && ( _window.Parent == stage.Root );
 
             if ( ( _window.Edge & MOVE ) != 0 )
             {
@@ -553,10 +553,10 @@ public class Window : Table
                 height += amountY;
             }
 
-            _window.SetBounds( ( float ) Math.Round( windowX ),
-                               ( float ) Math.Round( windowY ),
-                               ( float ) Math.Round( width ),
-                               ( float ) Math.Round( height ) );
+            _window.SetBounds( ( float )Math.Round( windowX ),
+                               ( float )Math.Round( windowY ),
+                               ( float )Math.Round( width ),
+                               ( float )Math.Round( height ) );
         }
 
         public override bool MouseMoved( InputEvent? ev, float x, float y )
@@ -591,7 +591,7 @@ public class Window : Table
     // ========================================================================
 
     /// <summary>
-    /// The style for a window, see <see cref="Window"/>.
+    ///     The style for a window, see <see cref="Window" />.
     /// </summary>
     [PublicAPI]
     public class WindowStyle

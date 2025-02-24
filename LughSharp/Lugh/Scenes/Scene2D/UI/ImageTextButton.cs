@@ -103,8 +103,8 @@ public class ImageTextButton : Button
     }
 
     /// <summary>
-    /// Returns the appropriate image drawable from the style based on the
-    /// current button state.
+    ///     Returns the appropriate image drawable from the style based on the
+    ///     current button state.
     /// </summary>
     public virtual IDrawable? GetImageDrawable()
     {
@@ -161,8 +161,8 @@ public class ImageTextButton : Button
     }
 
     /// <summary>
-    /// Sets the image drawable based on the current button state. The default
-    /// implementation sets the image drawable using <see cref="GetImageDrawable()"/>.
+    ///     Sets the image drawable based on the current button state. The default
+    ///     implementation sets the image drawable using <see cref="GetImageDrawable()" />.
     /// </summary>
     public virtual void UpdateImage()
     {
@@ -170,7 +170,7 @@ public class ImageTextButton : Button
     }
 
     /// <summary>
-    /// Returns the appropriate label font color from the style based on the current button state.
+    ///     Returns the appropriate label font color from the style based on the current button state.
     /// </summary>
     protected Color? GetFontColor()
     {
@@ -308,12 +308,12 @@ public class ImageTextButton : Button
         }
 
         return ( className.IndexOf( '$' ) != -1 ? "ImageTextButton " : "" )
-             + className
-             + $":  {_image?.Drawable}  {_label?.Text}";
+               + className
+               + $":  {_image?.Drawable}  {_label?.Text}";
     }
 
     /// <summary>
-    /// The style for an image text button, see <see cref="ImageTextButton"/>.
+    ///     The style for an image text button, see <see cref="ImageTextButton" />.
     /// </summary>
     [PublicAPI]
     public class ImageTextButtonStyle : TextButton.TextButtonStyle

@@ -26,6 +26,7 @@ using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
 
+using GLBindings = LughSharp.Lugh.Graphics.OpenGL.GLBindings;
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace DesktopGLBackend.Core;
@@ -44,9 +45,9 @@ public class DesktopGLApplicationTest : IApplication
         {
             Glfw.GetError( out var error );
             Logger.Debug( $"Failed to initialise Glfw: {error}" );
-            System.Environment.Exit( 1 );
+            Environment.Exit( 1 );
         }
-        
+
         return;
 
         static void ErrorCallback( ErrorCode error, string description )
@@ -54,14 +55,13 @@ public class DesktopGLApplicationTest : IApplication
             Logger.Checkpoint();
             Logger.Error( $"ErrorCode: {error}, {description}" );
         }
-        
     }
 
     /// <inheritdoc />
-    public Platform.ApplicationType AppType   { get; set; }
+    public Platform.ApplicationType AppType { get; set; }
 
     /// <inheritdoc />
-    public IClipboard?              Clipboard { get; set; }
+    public IClipboard? Clipboard { get; set; }
 
     /// <inheritdoc />
     public int GetVersion()

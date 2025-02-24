@@ -54,16 +54,16 @@ public class DialogFocusListener : FocusListener
     private void FocusChanged( FocusEvent ev )
     {
         if ( _dialog is { IsModal: true, Stage: not null }
-          && ( _dialog.Stage.Root.Children.Size > 0 )
-          && ( _dialog.Stage.Root.Children.Peek() == _dialog ) )
+             && ( _dialog.Stage.Root.Children.Size > 0 )
+             && ( _dialog.Stage.Root.Children.Peek() == _dialog ) )
         {
             // Dialog is top most actor.
             var newFocusedActor = ev.RelatedActor;
 
             if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
+                 && !newFocusedActor.IsDescendantOf( _dialog )
+                 && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
+                       || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
             {
                 ev.Cancel();
             }

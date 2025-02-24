@@ -29,9 +29,10 @@ public class BMPFormatStructs
 {
     // ========================================================================
     /// <summary>
-    /// BMP Header Structure.
+    ///     BMP Header Structure.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential )]
     public struct BMPHeader
     {
         public ushort FileType           { get; set; }
@@ -43,9 +44,10 @@ public class BMPFormatStructs
 
     // ========================================================================
     /// <summary>
-    /// BMP Info Header Structure.
+    ///     BMP Info Header Structure.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential )]
     public struct BMPInfoHeader
     {
         public uint   HeaderSize      { get; set; }
@@ -63,9 +65,10 @@ public class BMPFormatStructs
 
     // ========================================================================
     /// <summary>
-    /// BMP Color Header Structure.
+    ///     BMP Color Header Structure.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential )]
     public struct BMPColorHeader
     {
         public uint RedMask             { get; set; }
@@ -81,9 +84,10 @@ public class BMPFormatStructs
 
     // ========================================================================
     /// <summary>
-    /// BMP Pixel Array Structure.
+    ///     BMP Pixel Array Structure.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential )]
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential )]
     public struct BMPPixelArray
     {
         public byte[] PixelData { get; set; } // Array of color data for each pixel in the image.  

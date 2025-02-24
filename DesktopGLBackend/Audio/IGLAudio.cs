@@ -27,8 +27,8 @@ using LughSharp.Lugh.Audio;
 namespace DesktopGLBackend.Audio;
 
 /// <summary>
-/// Interface which extends <see cref="IAudio"/> to add an Update
-/// method for updating of the sound device.
+///     Interface which extends <see cref="IAudio" /> to add an Update
+///     method for updating of the sound device.
 /// </summary>
 [PublicAPI]
 public interface IGLAudio : IAudio, IDisposable

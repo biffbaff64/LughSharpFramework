@@ -32,8 +32,6 @@ public abstract class OpenALMusic : IMusic
 {
     public const int INVALID_SOURCE_ID = AL.INVALID_VALUE;
 
-    protected readonly FileInfo File;
-
     private static readonly int           _bufferSize     = 4096 * 10;
     private static readonly int           _bufferCount    = 3;
     private static readonly int           _bytesPerSample = 2;
@@ -43,6 +41,8 @@ public abstract class OpenALMusic : IMusic
     private readonly        float         _pan                  = 0;
     private readonly        List< float > _renderedSecondsQueue = new( _bufferCount );
     private readonly        float         _volume               = 1;
+
+    protected readonly FileInfo File;
 
     private uint[]? _buffers;
     private int     _format;
@@ -61,7 +61,7 @@ public abstract class OpenALMusic : IMusic
     protected OpenALMusic( OpenALAudio audio, FileInfo file )
     {
         _audio               = audio;
-        this.File            = file;
+        File                 = file;
         OnCompletionListener = null;
     }
 
@@ -97,12 +97,12 @@ public abstract class OpenALMusic : IMusic
                 }
             }
 
-            AL.Sourcei( ( uint ) SourceId, AL.DIRECT_CHANNELS_SOFT, AL.TRUE );
-            AL.Sourcei( ( uint ) SourceId, AL.LOOPING, AL.FALSE );
+            AL.Sourcei( ( uint )SourceId, AL.DIRECT_CHANNELS_SOFT, AL.TRUE );
+            AL.Sourcei( ( uint )SourceId, AL.LOOPING, AL.FALSE );
 
             SetPan( _pan, _volume );
 
-            AL.SourceQueueBuffers( ( uint ) SourceId, _bufferCount, _buffers );
+            AL.SourceQueueBuffers( ( uint )SourceId, _bufferCount, _buffers );
 
             //TODO: 
 //            var filled = false; // Check if there's anything to actually play.
@@ -136,7 +136,7 @@ public abstract class OpenALMusic : IMusic
 
         if ( !IsPlaying )
         {
-            AL.SourcePlay( ( uint ) SourceId );
+            AL.SourcePlay( ( uint )SourceId );
             _isPlaying = true;
         }
     }
@@ -313,7 +313,7 @@ public abstract class OpenALMusic : IMusic
             return 0;
         }
 
-        AL.GetSourcef( ( uint ) SourceId, AL.SEC_OFFSET, out var value );
+        AL.GetSourcef( ( uint )SourceId, AL.SEC_OFFSET, out var value );
 
         return _renderedSeconds + value;
     }
@@ -337,23 +337,23 @@ public abstract class OpenALMusic : IMusic
     {
         _format              = channels > 1 ? AL.FORMAT_STEREO16 : AL.FORMAT_MONO16;
         _sampleRate          = sampleRate;
-        _maxSecondsPerBuffer = ( float ) _bufferSize / ( _bytesPerSample * channels * sampleRate );
+        _maxSecondsPerBuffer = ( float )_bufferSize / ( _bytesPerSample * channels * sampleRate );
     }
 
     /// <summary>
-    /// Fills as much of the buffer as possible and returns the number of
-    /// bytes filled. Returns &lt;= 0 to indicate the end of the stream.
+    ///     Fills as much of the buffer as possible and returns the number of
+    ///     bytes filled. Returns &lt;= 0 to indicate the end of the stream.
     /// </summary>
     public abstract int Read( byte[] buffer );
 
     /// <summary>
-    /// Resets the stream to the beginning.
+    ///     Resets the stream to the beginning.
     /// </summary>
     public abstract void Reset();
 
     /// <summary>
-    /// By default, does just the same as reset().
-    /// Used to add special behaviour in Ogg.Music.
+    ///     By default, does just the same as reset().
+    ///     Used to add special behaviour in Ogg.Music.
     /// </summary>
     protected void Loop()
     {

@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 public abstract class RelativeTemporalAction : TemporalAction

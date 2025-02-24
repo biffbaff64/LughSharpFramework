@@ -26,29 +26,30 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
+
 using Timer = LughSharp.Lugh.Utils.Timer;
 using Utils_Timer = LughSharp.Lugh.Utils.Timer;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 
 /// <summary>
-/// Causes a scroll pane to scroll when a drag goes outside the bounds of the scroll pane.
-/// Attach the listener to the actor which will cause scrolling when dragged, usually the
-/// scroll pane or the scroll pane's actor.
-/// <para>
-/// If <see cref="ScrollPane.SetFlickScroll(bool)"/> is true, the scroll pane must have
-/// <see cref="ScrollPane.CancelTouchFocus"/> false. When a drag starts that should drag
-/// rather than flick scroll, cancel the scroll pane's touch focus using:-
-/// <code>
+///     Causes a scroll pane to scroll when a drag goes outside the bounds of the scroll pane.
+///     Attach the listener to the actor which will cause scrolling when dragged, usually the
+///     scroll pane or the scroll pane's actor.
+///     <para>
+///         If <see cref="ScrollPane.SetFlickScroll(bool)" /> is true, the scroll pane must have
+///         <see cref="ScrollPane.CancelTouchFocus" /> false. When a drag starts that should drag
+///         rather than flick scroll, cancel the scroll pane's touch focus using:-
+///         <code>
 ///             Stage.CancelTouchFocus(scrollPane);
 ///         </code>
-/// .
-/// In this case the drag scroll listener must not be attached to the scroll pane, else
-/// it would also lose touch focus. Instead it can be attached to the scroll pane's actor.
-/// </para>
-/// <para>
-/// If using drag and drop, <see cref="DragAndDrop.CancelTouchFocus"/> must be false.
-/// </para>
+///         .
+///         In this case the drag scroll listener must not be attached to the scroll pane, else
+///         it would also lose touch focus. Instead it can be attached to the scroll pane's actor.
+///     </para>
+///     <para>
+///         If using drag and drop, <see cref="DragAndDrop.CancelTouchFocus" /> must be false.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class DragScrollListener : DragListener
@@ -71,7 +72,7 @@ public class DragScrollListener : DragListener
     // ========================================================================
 
     /// <summary>
-    /// This class listens for drag events and handles scrolling for a ScrollPane.
+    ///     This class listens for drag events and handles scrolling for a ScrollPane.
     /// </summary>
     public DragScrollListener( ScrollPane scroll )
     {
@@ -82,7 +83,7 @@ public class DragScrollListener : DragListener
     }
 
     /// <summary>
-    /// Configures the scrolling speed and timing for the drag scroll listener.
+    ///     Configures the scrolling speed and timing for the drag scroll listener.
     /// </summary>
     /// <param name="minSpeedPixels">The minimum speed in pixels per second.</param>
     /// <param name="maxSpeedPixels">The maximum speed in pixels per second.</param>
@@ -93,7 +94,7 @@ public class DragScrollListener : DragListener
         _minSpeed = minSpeedPixels;
         _maxSpeed = maxSpeedPixels;
         _tickSecs = tickSecs;
-        _rampTime = ( long ) ( rampSecs * 1000 );
+        _rampTime = ( long )( rampSecs * 1000 );
     }
 
     /// <inheritdoc />
@@ -142,7 +143,7 @@ public class DragScrollListener : DragListener
     }
 
     /// <summary>
-    /// Sets the top and bottom padding amounts.
+    ///     Sets the top and bottom padding amounts.
     /// </summary>
     /// <param name="padtop"> The Top padding. </param>
     /// <param name="padbottom"> The Bottom padding. </param>
@@ -153,7 +154,7 @@ public class DragScrollListener : DragListener
     }
 
     /// <summary>
-    /// Returns true if the provided Y value is above the scrollpane.
+    ///     Returns true if the provided Y value is above the scrollpane.
     /// </summary>
     protected bool IsAbove( float y )
     {
@@ -161,7 +162,7 @@ public class DragScrollListener : DragListener
     }
 
     /// <summary>
-    /// Returns true if the provided Y value is below the scrollpane.
+    ///     Returns true if the provided Y value is below the scrollpane.
     /// </summary>
     protected bool IsBelow( float y )
     {
@@ -169,7 +170,7 @@ public class DragScrollListener : DragListener
     }
 
     /// <summary>
-    /// Sets the ScrollPane Y Scroll to the provided value.
+    ///     Sets the ScrollPane Y Scroll to the provided value.
     /// </summary>
     protected void SetScroll( float y )
     {
@@ -177,23 +178,23 @@ public class DragScrollListener : DragListener
     }
 
     /// <summary>
-    /// Calculates the current scroll speed in pixels.
+    ///     Calculates the current scroll speed in pixels.
     /// </summary>
     /// <returns>
-    /// The current scroll speed in pixels based on the interpolation between minimum and maximum speed.
+    ///     The current scroll speed in pixels based on the interpolation between minimum and maximum speed.
     /// </returns>
     private float GetScrollPixels()
     {
         return _interpolation.Apply( _minSpeed,
                                      _maxSpeed,
-                                     Math.Min( 1, ( TimeUtils.Millis() - _startTime ) / ( float ) _rampTime ) );
+                                     Math.Min( 1, ( TimeUtils.Millis() - _startTime ) / ( float )_rampTime ) );
     }
 
     // ========================================================================
     // ========================================================================
 
     [PublicAPI]
-    public class ScrollUp( DragScrollListener dsl, ScrollPane scroll ) : Utils_Timer.Task
+    public class ScrollUp( DragScrollListener dsl, ScrollPane scroll ) : Timer.Task
     {
         public override void Run()
         {
@@ -205,7 +206,7 @@ public class DragScrollListener : DragListener
     // ========================================================================
 
     [PublicAPI]
-    public class ScrollDown( DragScrollListener dsl, ScrollPane scroll ) : Utils_Timer.Task
+    public class ScrollDown( DragScrollListener dsl, ScrollPane scroll ) : Timer.Task
     {
         public override void Run()
         {

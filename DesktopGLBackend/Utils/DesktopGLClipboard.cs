@@ -22,30 +22,33 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Utils;
 using DesktopGLBackend.Graphics;
+
+using LughSharp.Lugh.Utils;
 
 namespace DesktopGLBackend.Utils;
 
 /// <summary>
-/// Clipboard implementation for desktop that uses the system clipboard via Glfw.
+///     Clipboard implementation for desktop that uses the system clipboard via Glfw.
 /// </summary>
 [PublicAPI]
 public class DesktopGLClipboard : IClipboard
 {
     /// <summary>
-    /// Check if the clipboard has contents.
+    ///     Check if the clipboard has contents.
     /// </summary>
     /// <returns> true, if the clipboard has contents </returns>
-    public bool HasContents() => Contents?.Length > 0;
+    public bool HasContents()
+    {
+        return Contents?.Length > 0;
+    }
 
     /// <summary>
-    /// Gets, or Sets, the current content of the clipboard.
+    ///     Gets, or Sets, the current content of the clipboard.
     /// </summary>
-    public unsafe string? Contents
+    public string? Contents
     {
-        get => Glfw.GetClipboardString( ( ( DesktopGLGraphics ) GdxApi.Graphics ).GLWindow!.GlfwWindow );
-        set => Glfw.SetClipboardString( ( ( DesktopGLGraphics ) GdxApi.Graphics ).GLWindow!.GlfwWindow, value );
+        get => Glfw.GetClipboardString( ( ( DesktopGLGraphics )GdxApi.Graphics ).GLWindow!.GlfwWindow );
+        set => Glfw.SetClipboardString( ( ( DesktopGLGraphics )GdxApi.Graphics ).GLWindow!.GlfwWindow, value );
     }
 }

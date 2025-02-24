@@ -27,14 +27,14 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-/// Returns a list of points at integer coordinates for a line on a 2D grid,
-/// using the Bresenham algorithm.
-/// <para>
-/// Instances of this class own the returned array of points and the points
-/// themselves to avoid garbage collection as much as possible. Calling any of
-/// the methods will result in the reuse of the previously returned array and
-/// vectors.
-/// </para>
+///     Returns a list of points at integer coordinates for a line on a 2D grid,
+///     using the Bresenham algorithm.
+///     <para>
+///         Instances of this class own the returned array of points and the points
+///         themselves to avoid garbage collection as much as possible. Calling any of
+///         the methods will result in the reuse of the previously returned array and
+///         vectors.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class Bresenham2
@@ -48,8 +48,8 @@ public class Bresenham2
     }
 
     /// <summary>
-    /// Returns a list of <see cref="GridPoint2"/> instances along the given line,
-    /// at integer coordinates.
+    ///     Returns a list of <see cref="GridPoint2" /> instances along the given line,
+    ///     at integer coordinates.
     /// </summary>
     /// <param name="start"> the start of the line </param>
     /// <param name="end"> the end of the line </param>
@@ -60,8 +60,8 @@ public class Bresenham2
     }
 
     /// <summary>
-    /// Returns a list of <see cref="GridPoint2"/> instances along the given line,
-    /// at integer coordinates.
+    ///     Returns a list of <see cref="GridPoint2" /> instances along the given line,
+    ///     at integer coordinates.
     /// </summary>
     /// <param name="startX"> the start x coordinate of the line </param>
     /// <param name="startY"> the start y coordinate of the line </param>
@@ -77,8 +77,8 @@ public class Bresenham2
     }
 
     /// <summary>
-    /// Returns a list of <see cref="GridPoint2"/> instances along the given line,
-    /// at integer coordinates.
+    ///     Returns a list of <see cref="GridPoint2" /> instances along the given line,
+    ///     at integer coordinates.
     /// </summary>
     /// <param name="startX"> the start x coordinate of the line </param>
     /// <param name="startY"> the start y coordinate of the line </param>

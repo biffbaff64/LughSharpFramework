@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
@@ -30,22 +29,11 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics.Cameras;
 
 /// <summary>
-/// A Camera with Orthographic Projection.
+///     A Camera with Orthographic Projection.
 /// </summary>
 [PublicAPI]
 public class OrthographicCamera : Camera
 {
-    public float Zoom
-    {
-        get
-        {
-            _zoom = Math.Max( 0.0001f, _zoom );
-
-            return _zoom;
-        }
-        set => _zoom = value;
-    }
-
     // ========================================================================
 
     private readonly Vector3 _tmp = new();
@@ -56,8 +44,8 @@ public class OrthographicCamera : Camera
     // ========================================================================
 
     /// <summary>
-    /// Constructs a default OrthographicCamera.
-    /// All properties, such as viewport size etc, will need setting up before use.
+    ///     Constructs a default OrthographicCamera.
+    ///     All properties, such as viewport size etc, will need setting up before use.
     /// </summary>
     public OrthographicCamera()
     {
@@ -67,10 +55,10 @@ public class OrthographicCamera : Camera
     }
 
     /// <summary>
-    /// Constructs a new OrthographicCamera, using the given viewport width and height.
-    /// For pixel perfect 2D rendering just supply the screen size, for other unit scales
-    /// (e.g. meters for box2d) proceed accordingly. The camera will show the region
-    /// [-viewportWidth/2, -(viewportHeight/2-1)] - [(viewportWidth/2-1), viewportHeight/2].
+    ///     Constructs a new OrthographicCamera, using the given viewport width and height.
+    ///     For pixel perfect 2D rendering just supply the screen size, for other unit scales
+    ///     (e.g. meters for box2d) proceed accordingly. The camera will show the region
+    ///     [-viewportWidth/2, -(viewportHeight/2-1)] - [(viewportWidth/2-1), viewportHeight/2].
     /// </summary>
     /// <param name="viewportWidth"> Width, in pixels, of this cameras viewport. </param>
     /// <param name="viewportHeight"> Height, in pixels, of this cameras viewport. </param>
@@ -85,9 +73,20 @@ public class OrthographicCamera : Camera
         SafeUpdate();
     }
 
+    public float Zoom
+    {
+        get
+        {
+            _zoom = Math.Max( 0.0001f, _zoom );
+
+            return _zoom;
+        }
+        set => _zoom = value;
+    }
+
     /// <summary>
-    /// This method is here because <see cref="Update"/> is a <b>virtual method</b> and
-    /// should not be called from a constructor.
+    ///     This method is here because <see cref="Update" /> is a <b>virtual method</b> and
+    ///     should not be called from a constructor.
     /// </summary>
     private void SafeUpdate()
     {
@@ -95,8 +94,8 @@ public class OrthographicCamera : Camera
     }
 
     /// <summary>
-    /// Updates the camera.
-    /// Also updates the frustrum if <paramref name="updateFrustrum"/> is true.
+    ///     Updates the camera.
+    ///     Also updates the frustrum if <paramref name="updateFrustrum" /> is true.
     /// </summary>
     /// <param name="updateFrustrum"></param>
     public override void Update( bool updateFrustrum = true )
@@ -124,10 +123,10 @@ public class OrthographicCamera : Camera
     }
 
     /// <summary>
-    /// Sets this camera to an orthographic projection using a viewport fitting
-    /// the screen resolution, centered at:-
-    /// <code>(GdxApi.graphics.getWidth()/2, GdxApi.graphics.getHeight()/2)</code>
-    /// with the y-axis pointing up or down.
+    ///     Sets this camera to an orthographic projection using a viewport fitting
+    ///     the screen resolution, centered at:-
+    ///     <code>(GdxApi.graphics.getWidth()/2, GdxApi.graphics.getHeight()/2)</code>
+    ///     with the y-axis pointing up or down.
     /// </summary>
     /// <param name="yDown">whether y should be pointing down.</param>
     public void SetToOrtho( bool yDown )
@@ -136,16 +135,16 @@ public class OrthographicCamera : Camera
     }
 
     /// <summary>
-    /// Sets this camera to an orthographic projection, centered at
-    /// (viewportWidth/2, viewportHeight/2), with the y-axis pointing up or down.
+    ///     Sets this camera to an orthographic projection, centered at
+    ///     (viewportWidth/2, viewportHeight/2), with the y-axis pointing up or down.
     /// </summary>
     /// <param name="viewportWidth"></param>
     /// <param name="viewportHeight"></param>
     /// <param name="yDown">whether y should be pointing down.</param>
     public void SetToOrtho( float viewportWidth, float viewportHeight, bool yDown )
     {
-        Up.Set( 0, ( yDown ? -1 : 1 ), 0 );
-        Direction.Set( 0, 0, ( yDown ? 1 : -1 ) );
+        Up.Set( 0, yDown ? -1 : 1, 0 );
+        Direction.Set( 0, 0, yDown ? 1 : -1 );
 
         Position.Set( ( Zoom * viewportWidth ) / 2.0f, ( Zoom * viewportHeight ) / 2.0f, 0 );
 
@@ -156,8 +155,8 @@ public class OrthographicCamera : Camera
     }
 
     /// <summary>
-    /// Rotates the camera by the given angle around the direction vector.
-    /// The direction and up vector will not be orthogonalized.
+    ///     Rotates the camera by the given angle around the direction vector.
+    ///     The direction and up vector will not be orthogonalized.
     /// </summary>
     /// <param name="angle"></param>
     public void Rotate( float angle )
@@ -166,17 +165,23 @@ public class OrthographicCamera : Camera
     }
 
     /// <summary>
-    /// Moves the camera by the given amount on each axis.
+    ///     Moves the camera by the given amount on each axis.
     /// </summary>
-    /// <param name="x"/>
+    /// <param name="x" />
     /// the displacement on the x-axis
-    /// <param name="y"/>
+    /// <param name="y" />
     /// the displacement on the y-axis
-    public void Translate( float x, float y ) => Translate( x, y, 0 );
+    public void Translate( float x, float y )
+    {
+        Translate( x, y, 0 );
+    }
 
     /// <summary>
-    /// Moves the camera by the given vector.
+    ///     Moves the camera by the given vector.
     /// </summary>
     /// <param name="vec">the displacement vector</param>
-    public void Translate( Vector2 vec ) => Translate( vec.X, vec.Y, 0 );
+    public void Translate( Vector2 vec )
+    {
+        Translate( vec.X, vec.Y, 0 );
+    }
 }

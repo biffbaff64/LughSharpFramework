@@ -28,23 +28,24 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
-using GLenum = System.Int32;
-using GLfloat = System.Single;
-using GLint = System.Int32;
-using GLsizei = System.Int32;
-using GLbitfield = System.UInt32;
-using GLdouble = System.Double;
-using GLuint = System.UInt32;
-using GLboolean = System.Boolean;
-using GLubyte = System.Byte;
-using GLsizeiptr = System.Int32;
-using GLintptr = System.Int32;
-using GLshort = System.Int16;
-using GLbyte = System.SByte;
-using GLushort = System.UInt16;
-using GLchar = System.Byte;
-using GLuint64 = System.UInt64;
-using GLint64 = System.Int64;
+
+using GLenum = int;
+using GLfloat = float;
+using GLint = int;
+using GLsizei = int;
+using GLbitfield = uint;
+using GLdouble = double;
+using GLuint = uint;
+using GLboolean = bool;
+using GLubyte = byte;
+using GLsizeiptr = int;
+using GLintptr = int;
+using GLshort = short;
+using GLbyte = sbyte;
+using GLushort = ushort;
+using GLchar = byte;
+using GLuint64 = ulong;
+using GLint64 = long;
 
 // ============================================================================
 
@@ -54,79 +55,30 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 // ============================================================================
 
 /// <summary>
-/// Bindings for OpenGL, for core profile. Blazing fast, low level,
-/// direct access to the OpenGL API for all versions of OpenGL, using the unmanaged
-/// delegates feature in C# 9.0,
-/// <para>
-/// Also includes a few overloads of many functions to make them a bit more C# friendly
-/// (e.g. passing arrays of bytes or floats instead of passing pointers to fixed memory
-/// locations). Significant effort has been made to make sure that the overloads are as
-/// efficient as possible, in terms of both performance and memory usage.
-/// </para>
+///     Bindings for OpenGL, for core profile. Blazing fast, low level,
+///     direct access to the OpenGL API for all versions of OpenGL, using the unmanaged
+///     delegates feature in C# 9.0,
+///     <para>
+///         Also includes a few overloads of many functions to make them a bit more C# friendly
+///         (e.g. passing arrays of bytes or floats instead of passing pointers to fixed memory
+///         locations). Significant effort has been made to make sure that the overloads are as
+///         efficient as possible, in terms of both performance and memory usage.
+///     </para>
 /// </summary>
 [PublicAPI]
-public partial class GLBindings : IGLBindings
+public unsafe partial class GLBindings : IGLBindings
 {
     // ========================================================================
 
     /// <summary>
-    /// The null pointer, just like in C/C++.
+    ///     The null pointer, just like in C/C++.
     /// </summary>
     public readonly IntPtr NULL = ( IntPtr )0;
 
     // ========================================================================
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe (int major, int minor) GetOpenGLVersion()
-    {
-        var version = GetString( IGL.GL_VERSION );
-
-        if ( version == null )
-        {
-            throw new GdxRuntimeException( "NULL GL Version returned!" );
-        }
-
-        return ( version[ 0 ], version[ 2 ] );
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Handles OpenGL debug messages or errors by logging a callback. This can be used to retrieve
-    /// diagnostic messages from OpenGL during runtime.
-    /// </summary>
-    /// <param name="source">
-    /// Specifies the source of the debug callback, identifying which part of the OpenGL system the
-    /// message originates from.
-    /// </param>
-    /// <param name="type">Specifies the type of debug message, such as error, performance warning, or other messages.</param>
-    /// <param name="id">Specifies the unique ID for the message to help identify specific issues.</param>
-    /// <param name="severity">Specifies the severity level of the message (e.g., notification, warning, or error).</param>
-    /// <param name="length">Specifies the length of the message string in bytes.</param>
-    /// <param name="message">A pointer to the actual message string provided by OpenGL.</param>
-    /// <param name="userParam">A pointer to optional user-defined data passed to the callback.</param>
-    public unsafe void MessageCallback( int source,
-                                 int type,
-                                 uint id,
-                                 int severity,
-                                 int length,
-                                 byte* message,
-                                 IntPtr userParam )
-    {
-        Logger.Error( $"GL CALLBACK: " +
-                      $"{( type == IGL.GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" )} " +
-                      $"source = {source:X}, " +
-                      $"type = {type:X}, " +
-                      $"severity = {severity:X}, " +
-                      $"message = {BytePointerToString.Convert( message )}\n" );
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CullFace( GLenum mode )
     {
         GetDelegateForFunction< PFNGLCULLFACEPROC >( "glCullFace", out _glCullFace );
@@ -136,7 +88,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void FrontFace( GLenum mode )
     {
         GetDelegateForFunction< PFNGLFRONTFACEPROC >( "glFrontFace", out _glFrontFace );
@@ -146,17 +98,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void Hint( GLenum target, GLenum mode )
-    {
-        GetDelegateForFunction< PFNGLHINTPROC >( "glHint", out _glHint );
-
-        _glHint( target, mode );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void LineWidth( GLfloat width )
     {
         GetDelegateForFunction< PFNGLLINEWIDTHPROC >( "glLineWidth", out _glLineWidth );
@@ -166,7 +108,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void PointSize( GLfloat size )
     {
         GetDelegateForFunction< PFNGLPOINTSIZEPROC >( "glPointSize", out _glPointSize );
@@ -176,7 +118,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void PolygonMode( GLenum face, GLenum mode )
     {
         GetDelegateForFunction< PFNGLPOLYGONMODEPROC >( "glPolygonMode", out _glPolygonMode );
@@ -186,7 +128,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Scissor( GLint x, GLint y, GLsizei width, GLsizei height )
     {
         GetDelegateForFunction< PFNGLSCISSORPROC >( "glScissor", out _glScissor );
@@ -196,7 +138,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DrawBuffer( GLenum buf )
     {
         GetDelegateForFunction< PFNGLDRAWBUFFERPROC >( "glDrawBuffer", out _glDrawBuffer );
@@ -206,27 +148,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void Clear( GLbitfield mask )
-    {
-        GetDelegateForFunction< PFNGLCLEARPROC >( "glClear", out _glClear );
-
-        _glClear( mask );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void ClearColor( GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha )
-    {
-        GetDelegateForFunction< PFNGLCLEARCOLORPROC >( "glClearColor", out _glClearColor );
-
-        _glClearColor( red, green, blue, alpha );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void ClearStencil( GLint s )
     {
         GetDelegateForFunction< PFNGLCLEARSTENCILPROC >( "glClearStencil", out _glClearStencil );
@@ -236,7 +158,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void ClearDepth( GLdouble depth )
     {
         GetDelegateForFunction< PFNGLCLEARDEPTHPROC >( "glClearDepth", out _glClearDepth );
@@ -246,7 +168,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void StencilMask( GLuint mask )
     {
         GetDelegateForFunction< PFNGLSTENCILMASKPROC >( "glStencilMask", out _glStencilMask );
@@ -256,7 +178,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void ColorMask( GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha )
     {
         GetDelegateForFunction< PFNGLCOLORMASKPROC >( "glColorMask", out _glColorMask );
@@ -266,7 +188,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DepthMask( GLboolean flag )
     {
         GetDelegateForFunction< PFNGLDEPTHMASKPROC >( "glDepthMask", out _glDepthMask );
@@ -276,27 +198,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void Disable( GLenum cap )
-    {
-        GetDelegateForFunction< PFNGLDISABLEPROC >( "glDisable", out _glDisable );
-
-        _glDisable( cap );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void Enable( GLenum cap )
-    {
-        GetDelegateForFunction< PFNGLENABLEPROC >( "glEnable", out _glEnable );
-
-        _glEnable( cap );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Finish()
     {
         GetDelegateForFunction< PFNGLFINISHPROC >( "glFinish", out _glFinish );
@@ -306,7 +208,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Flush()
     {
         GetDelegateForFunction< PFNGLFLUSHPROC >( "glFlush", out _glFlush );
@@ -316,7 +218,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BlendFunc( GLenum sfactor, GLenum dfactor )
     {
         GetDelegateForFunction< PFNGLBLENDFUNCPROC >( "glBlendFunc", out _glBlendFunc );
@@ -326,17 +228,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void LogicOp( GLenum opcode )
-    {
-        GetDelegateForFunction< PFNGLLOGICOPPROC >( "glLogicOp", out _glLogicOp );
-
-        _glLogicOp( opcode );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void StencilFunc( GLenum func, GLint @ref, GLuint mask )
     {
         GetDelegateForFunction< PFNGLSTENCILFUNCPROC >( "glStencilFunc", out _glStencilFunc );
@@ -346,7 +238,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void StencilOp( GLenum fail, GLenum zfail, GLenum zpass )
     {
         GetDelegateForFunction< PFNGLSTENCILOPPROC >( "glStencilOp", out _glStencilOp );
@@ -356,7 +248,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DepthFunc( GLenum func )
     {
         GetDelegateForFunction< PFNGLDEPTHFUNCPROC >( "glDepthFunc", out _glDepthFunc );
@@ -366,7 +258,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void PixelStoref( GLenum pname, GLfloat param )
     {
         GetDelegateForFunction< PFNGLPIXELSTOREFPROC >( "glPixelStoref", out _glPixelStoref );
@@ -376,7 +268,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void PixelStorei( GLenum pname, GLint param )
     {
         GetDelegateForFunction< PFNGLPIXELSTOREIPROC >( "glPixelStorei", out _glPixelStorei );
@@ -386,7 +278,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void ReadBuffer( GLenum src )
     {
         GetDelegateForFunction< PFNGLREADBUFFERPROC >( "glReadBuffer", out _glReadBuffer );
@@ -396,7 +288,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void ReadPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, IntPtr pixels )
     {
         GetDelegateForFunction< PFNGLREADPIXELSPROC >( "glReadPixels", out _glReadPixels );
@@ -404,37 +296,33 @@ public partial class GLBindings : IGLBindings
         _glReadPixels( x, y, width, height, format, type, pixels );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void ReadPixels< T >( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, ref T[] pixels )
         where T : unmanaged
     {
         GetDelegateForFunction< PFNGLREADPIXELSPROC >( "glReadPixels", out _glReadPixels );
 
-        unsafe
+        fixed ( void* p = &pixels[ 0 ] )
         {
-            fixed ( void* p = &pixels[ 0 ] )
-            {
-                _glReadPixels( x, y, width, height, format, type, ( IntPtr )p );
-            }
+            _glReadPixels( x, y, width, height, format, type, ( IntPtr )p );
         }
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe void GetBooleanv( GLenum pname, GLboolean* data )
+    /// <inheritdoc />
+    public void GetBooleanv( GLenum pname, GLboolean* data )
     {
         GetDelegateForFunction< PFNGLGETBOOLEANVPROC >( "glGetBooleanv", out _glGetBooleanv );
 
         _glGetBooleanv( pname, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetBooleanv( GLenum pname, ref GLboolean[] data )
     {
         GetDelegateForFunction< PFNGLGETBOOLEANVPROC >( "glGetBooleanv", out _glGetBooleanv );
 
-        unsafe
         {
             fixed ( GLboolean* p = &data[ 0 ] )
             {
@@ -445,20 +333,19 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe void GetDoublev( GLenum pname, GLdouble* data )
+    /// <inheritdoc />
+    public void GetDoublev( GLenum pname, GLdouble* data )
     {
         GetDelegateForFunction< PFNGLGETDOUBLEVPROC >( "glGetDoublev", out _glGetDoublev );
 
         _glGetDoublev( pname, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetDoublev( GLenum pname, ref GLdouble[] data )
     {
         GetDelegateForFunction< PFNGLGETDOUBLEVPROC >( "glGetDoublev", out _glGetDoublev );
 
-        unsafe
         {
             fixed ( GLdouble* p = &data[ 0 ] )
             {
@@ -469,30 +356,19 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public GLenum GetError()
-    {
-        GetDelegateForFunction< PFNGLGETERRORPROC >( "glGetError", out _glGetError );
-
-        return _glGetError();
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public unsafe void GetFloatv( GLenum pname, float* data )
+    /// <inheritdoc />
+    public void GetFloatv( GLenum pname, float* data )
     {
         GetDelegateForFunction< PFNGLGETFLOATVPROC >( "glGetFloatv", out _glGetFloatv );
 
         _glGetFloatv( pname, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetFloatv( GLenum pname, ref GLfloat[] data )
     {
         GetDelegateForFunction< PFNGLGETFLOATVPROC >( "glGetFloatv", out _glGetFloatv );
 
-        unsafe
         {
             fixed ( GLfloat* p = &data[ 0 ] )
             {
@@ -503,20 +379,19 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe void GetIntegerv( GLenum pname, GLint* data )
+    /// <inheritdoc />
+    public void GetIntegerv( GLenum pname, GLint* data )
     {
         GetDelegateForFunction< PFNGLGETINTEGERVPROC >( "glGetIntegerv", out _glGetIntegerv );
 
         _glGetIntegerv( pname, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetIntegerv( GLenum pname, ref GLint[] data )
     {
         GetDelegateForFunction< PFNGLGETINTEGERVPROC >( "glGetIntegerv", out _glGetIntegerv );
 
-        unsafe
         {
             fixed ( GLint* p = &data[ 0 ] )
             {
@@ -527,8 +402,8 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe GLubyte* GetString( GLenum name )
+    /// <inheritdoc />
+    public GLubyte* GetString( GLenum name )
     {
         GetDelegateForFunction< PFNGLGETSTRINGPROC >( "glGetString", out _glGetString );
 
@@ -537,8 +412,8 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe string GetStringSafe( GLenum name )
+    /// <inheritdoc />
+    public string GetStringSafe( GLenum name )
     {
         GetDelegateForFunction< PFNGLGETSTRINGPROC >( "glGetString", out _glGetString );
 
@@ -561,17 +436,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public GLboolean IsEnabled( GLenum cap )
-    {
-        GetDelegateForFunction< PFNGLISENABLEDPROC >( "glIsEnabled", out _glIsEnabled );
-
-        return _glIsEnabled( cap );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DepthRange( GLdouble near, GLdouble far )
     {
         GetDelegateForFunction< PFNGLDEPTHRANGEPROC >( "glDepthRange", out _glDepthRange );
@@ -581,7 +446,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Viewport( GLint x, GLint y, GLsizei width, GLsizei height )
     {
         GetDelegateForFunction< PFNGLVIEWPORTPROC >( "glViewport", out _glViewport );
@@ -591,7 +456,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DrawArrays( GLenum mode, GLint first, GLsizei count )
     {
         GetDelegateForFunction< PFNGLDRAWARRAYSPROC >( "glDrawArrays", out _glDrawArrays );
@@ -601,7 +466,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DrawElements( GLenum mode, GLsizei count, GLenum type, IntPtr indices )
     {
         GetDelegateForFunction< PFNGLDRAWELEMENTSPROC >( "glDrawElements", out _glDrawElements );
@@ -609,12 +474,11 @@ public partial class GLBindings : IGLBindings
         _glDrawElements( mode, count, type, indices );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DrawElements< T >( GLenum mode, GLsizei count, GLenum type, T[] indices ) where T : unmanaged, IUnsignedNumber< T >
     {
         GetDelegateForFunction< PFNGLDRAWELEMENTSPROC >( "glDrawElements", out _glDrawElements );
 
-        unsafe
         {
             fixed ( T* p = &indices[ 0 ] )
             {
@@ -625,7 +489,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void PolygonOffset( GLfloat factor, GLfloat units )
     {
         GetDelegateForFunction< PFNGLPOLYGONOFFSETPROC >( "glPolygonOffset", out _glPolygonOffset );
@@ -635,7 +499,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DrawRangeElements( GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, IntPtr indices )
     {
         GetDelegateForFunction< PFNGLDRAWRANGEELEMENTSPROC >( "glDrawRangeElements", out _glDrawRangeElements );
@@ -643,13 +507,12 @@ public partial class GLBindings : IGLBindings
         _glDrawRangeElements( mode, start, end, count, type, indices );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DrawRangeElements< T >( GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, T[] indices )
         where T : unmanaged, IUnsignedNumber< T >
     {
         GetDelegateForFunction< PFNGLDRAWRANGEELEMENTSPROC >( "glDrawRangeElements", out _glDrawRangeElements );
 
-        unsafe
         {
             fixed ( T* pIndices = &indices[ 0 ] )
             {
@@ -660,17 +523,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void SampleCoverage( GLfloat value, GLboolean invert )
-    {
-        GetDelegateForFunction< PFNGLSAMPLECOVERAGEPROC >( "glSampleCoverage", out _glSampleCoverage );
-
-        _glSampleCoverage( value, invert );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BlendFuncSeparate( GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha )
     {
         GetDelegateForFunction< PFNGLBLENDFUNCSEPARATEPROC >( "glBlendFuncSeparate", out _glBlendFuncSeparate );
@@ -680,15 +533,15 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe void MultiDrawArrays( GLenum mode, GLint* first, GLsizei* count, GLsizei drawcount )
+    /// <inheritdoc />
+    public void MultiDrawArrays( GLenum mode, GLint* first, GLsizei* count, GLsizei drawcount )
     {
         GetDelegateForFunction< PFNGLMULTIDRAWARRAYSPROC >( "glMultiDrawArrays", out _glMultiDrawArrays );
 
         _glMultiDrawArrays( mode, first, count, drawcount );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void MultiDrawArrays( GLenum mode, GLint[] first, GLsizei[] count )
     {
         if ( first.Length != count.Length )
@@ -698,7 +551,6 @@ public partial class GLBindings : IGLBindings
 
         GetDelegateForFunction< PFNGLMULTIDRAWARRAYSPROC >( "glMultiDrawArrays", out _glMultiDrawArrays );
 
-        unsafe
         {
             fixed ( GLint* p1 = &first[ 0 ] )
             {
@@ -712,16 +564,16 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe void MultiDrawElements( GLenum mode, GLsizei* count, GLenum type, IntPtr* indices, GLsizei drawcount )
+    /// <inheritdoc />
+    public void MultiDrawElements( GLenum mode, GLsizei* count, GLenum type, IntPtr* indices, GLsizei drawcount )
     {
         GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSPROC >( "glMultiDrawElements", out _glMultiDrawElements );
 
         _glMultiDrawElements( mode, count, type, indices, drawcount );
     }
 
-    /// <inheritdoc/>
-    public unsafe void MultiDrawElements< T >( GLenum mode, GLsizei[] count, GLenum type, T[][] indices ) where T : unmanaged, IUnsignedNumber< T >
+    /// <inheritdoc />
+    public void MultiDrawElements< T >( GLenum mode, GLsizei[] count, GLenum type, T[][] indices ) where T : unmanaged, IUnsignedNumber< T >
     {
         var indexPtrs = new void*[ indices.Length ];
 
@@ -746,7 +598,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void PointParameterf( GLenum pname, GLfloat param )
     {
         GetDelegateForFunction< PFNGLPOINTPARAMETERFPROC >( "glPointParameterf", out _glPointParameterf );
@@ -756,20 +608,19 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe void PointParameterfv( GLenum pname, GLfloat* parameters )
+    /// <inheritdoc />
+    public void PointParameterfv( GLenum pname, GLfloat* parameters )
     {
         GetDelegateForFunction< PFNGLPOINTPARAMETERFVPROC >( "glPointParameterfv", out _glPointParameterfv );
 
         _glPointParameterfv( pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void PointParameterfv( GLenum pname, GLfloat[] parameters )
     {
         GetDelegateForFunction< PFNGLPOINTPARAMETERFVPROC >( "glPointParameterfv", out _glPointParameterfv );
 
-        unsafe
         {
             fixed ( GLfloat* p = &parameters[ 0 ] )
             {
@@ -780,7 +631,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void PointParameteri( GLenum pname, GLint param )
     {
         GetDelegateForFunction< PFNGLPOINTPARAMETERIPROC >( "glPointParameteri", out _glPointParameteri );
@@ -790,20 +641,19 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe void PointParameteriv( GLenum pname, GLint* parameters )
+    /// <inheritdoc />
+    public void PointParameteriv( GLenum pname, GLint* parameters )
     {
         GetDelegateForFunction< PFNGLPOINTPARAMETERIVPROC >( "glPointParameteriv", out _glPointParameteriv );
 
         _glPointParameteriv( pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void PointParameteriv( GLenum pname, GLint[] parameters )
     {
         GetDelegateForFunction< PFNGLPOINTPARAMETERIVPROC >( "glPointParameteriv", out _glPointParameteriv );
 
-        unsafe
         {
             fixed ( GLint* p = &parameters[ 0 ] )
             {
@@ -814,7 +664,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BlendColor( GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha )
     {
         GetDelegateForFunction< PFNGLBLENDCOLORPROC >( "glBlendColor", out _glBlendColor );
@@ -824,7 +674,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BlendEquation( GLenum mode )
     {
         GetDelegateForFunction< PFNGLBLENDEQUATIONPROC >( "glBlendEquation", out _glBlendEquation );
@@ -834,370 +684,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public unsafe void GenQueries( GLsizei n, GLuint* ids )
-    {
-        GetDelegateForFunction< PFNGLGENQUERIESPROC >( "glGenQueries", out _glGenQueries );
-
-        _glGenQueries( n, ids );
-    }
-
-    /// <inheritdoc/>
-    public GLuint[] GenQueries( GLsizei n )
-    {
-        GetDelegateForFunction< PFNGLGENQUERIESPROC >( "glGenQueries", out _glGenQueries );
-
-        var ret = new GLuint[ n ];
-
-        unsafe
-        {
-            fixed ( GLuint* p = &ret[ 0 ] )
-            {
-                _glGenQueries( n, p );
-            }
-        }
-
-        return ret;
-    }
-
-    /// <inheritdoc/>
-    public GLuint GenQuery()
-    {
-        return GenQueries( 1 )[ 0 ];
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void DeleteQueries( GLsizei n, GLuint* ids )
-    {
-        GetDelegateForFunction< PFNGLDELETEQUERIESPROC >( "glDeleteQueries", out _glDeleteQueries );
-
-        _glDeleteQueries( n, ids );
-    }
-
-    /// <inheritdoc/>
-    public void DeleteQueries( params GLuint[] ids )
-    {
-        GetDelegateForFunction< PFNGLDELETEQUERIESPROC >( "glDeleteQueries", out _glDeleteQueries );
-
-        fixed ( GLuint* p = &ids[ 0 ] )
-        {
-            _glDeleteQueries( ids.Length, p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public GLboolean IsQuery( GLuint id )
-    {
-        GetDelegateForFunction< PFNGLISQUERYPROC >( "glIsQuery", out _glIsQuery );
-
-        return _glIsQuery( id );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void BeginQuery( GLenum target, GLuint id )
-    {
-        GetDelegateForFunction< PFNGLBEGINQUERYPROC >( "glBeginQuery", out _glBeginQuery );
-
-        _glBeginQuery( target, id );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void EndQuery( GLenum target )
-    {
-        GetDelegateForFunction< PFNGLENDQUERYPROC >( "glEndQuery", out _glEndQuery );
-
-        _glEndQuery( target );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetQueryiv( GLenum target, GLenum pname, GLint* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYIVPROC >( "glGetQueryiv", out _glGetQueryiv );
-
-        _glGetQueryiv( target, pname, parameters );
-    }
-
-    /// <inheritdoc/>
-    public void GetQueryiv( GLenum target, GLenum pname, ref GLint[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYIVPROC >( "glGetQueryiv", out _glGetQueryiv );
-
-        fixed ( GLint* p = &parameters[ 0 ] )
-        {
-            _glGetQueryiv( target, pname, p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetQueryObjectiv( GLuint id, GLenum pname, GLint* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYOBJECTIVPROC >( "glGetQueryObjectiv", out _glGetQueryObjectiv );
-
-        _glGetQueryObjectiv( id, pname, parameters );
-    }
-
-    /// <inheritdoc/>
-    public void GetQueryObjectiv( GLuint id, GLenum pname, ref GLint[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYOBJECTIVPROC >( "glGetQueryObjectiv", out _glGetQueryObjectiv );
-
-        fixed ( GLint* p = &parameters[ 0 ] )
-        {
-            _glGetQueryObjectiv( id, pname, p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetQueryObjectuiv( GLuint id, GLenum pname, GLuint* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYOBJECTUIVPROC >( "glGetQueryObjectuiv", out _glGetQueryObjectuiv );
-
-        _glGetQueryObjectuiv( id, pname, parameters );
-    }
-
-    /// <inheritdoc/>
-    public void GetQueryObjectuiv( GLuint id, GLenum pname, ref GLuint[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYOBJECTUIVPROC >( "glGetQueryObjectuiv", out _glGetQueryObjectuiv );
-
-        fixed ( GLuint* p = &parameters[ 0 ] )
-        {
-            _glGetQueryObjectuiv( id, pname, p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void BindBuffer( GLenum target, GLuint buffer )
-    {
-        GetDelegateForFunction< PFNGLBINDBUFFERPROC >( "glBindBuffer", out _glBindBuffer );
-
-        _glBindBuffer( target, buffer );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void DeleteBuffers( GLsizei n, GLuint* buffers )
-    {
-        GetDelegateForFunction< PFNGLDELETEBUFFERSPROC >( "glDeleteBuffers", out _glDeleteBuffers );
-
-        _glDeleteBuffers( n, buffers );
-    }
-
-    /// <inheritdoc/>
-    public void DeleteBuffers( params GLuint[] buffers )
-    {
-        GetDelegateForFunction< PFNGLDELETEBUFFERSPROC >( "glDeleteBuffers", out _glDeleteBuffers );
-
-        fixed ( GLuint* p = &buffers[ 0 ] )
-        {
-            _glDeleteBuffers( buffers.Length, p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GenBuffers( GLsizei n, GLuint* buffers )
-    {
-        GetDelegateForFunction< PFNGLGENBUFFERSPROC >( "glGenBuffers", out _glGenBuffers );
-
-        _glGenBuffers( n, buffers );
-    }
-
-    /// <inheritdoc/>
-    public GLuint[] GenBuffers( GLsizei n )
-    {
-        GetDelegateForFunction< PFNGLGENBUFFERSPROC >( "glGenBuffers", out _glGenBuffers );
-
-        var ret = new GLuint[ n ];
-
-        fixed ( GLuint* p = &ret[ 0 ] )
-        {
-            _glGenBuffers( n, p );
-        }
-
-        return ret;
-    }
-
-    /// <inheritdoc/>
-    public GLuint GenBuffer()
-    {
-        return GenBuffers( 1 )[ 0 ];
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public GLboolean IsBuffer( GLuint buffer )
-    {
-        GetDelegateForFunction< PFNGLISBUFFERPROC >( "glIsBuffer", out _glIsBuffer );
-
-        return _glIsBuffer( buffer );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void BufferData( GLenum target, GLsizeiptr size, IntPtr data, GLenum usage )
-    {
-        GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
-
-        _glBufferData( target, size, data, usage );
-
-        CheckErrors();
-    }
-
-    /// <inheritdoc/>
-    public void BufferData< T >( GLenum target, T[] data, GLenum usage ) where T : unmanaged
-    {
-        GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
-
-        fixed ( T* p = &data[ 0 ] )
-        {
-            _glBufferData( target, sizeof( T ) * data.Length, p, usage );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void BufferSubData( GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data )
-    {
-        GetDelegateForFunction< PFNGLBUFFERSUBDATAPROC >( "glBufferSubData", out _glBufferSubData );
-
-        _glBufferSubData( target, offset, size, data );
-    }
-
-    /// <inheritdoc/>
-    public void BufferSubData< T >( GLenum target, GLintptr offsetCount, T[] data ) where T : unmanaged
-    {
-        GetDelegateForFunction< PFNGLBUFFERSUBDATAPROC >( "glBufferSubData", out _glBufferSubData );
-
-        fixed ( T* p = &data[ 0 ] )
-        {
-            _glBufferSubData( target, offsetCount * sizeof( T ), sizeof( T ) * data.Length, p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetBufferSubData( GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data )
-    {
-        GetDelegateForFunction< PFNGLGETBUFFERSUBDATAPROC >( "glGetBufferSubData", out _glGetBufferSubData );
-
-        _glGetBufferSubData( target, offset, size, data );
-    }
-
-    /// <inheritdoc/>
-    public void GetBufferSubData< T >( GLenum target, GLintptr offsetCount, GLsizei count, ref T[] data ) where T : unmanaged
-    {
-        GetDelegateForFunction< PFNGLGETBUFFERSUBDATAPROC >( "glGetBufferSubData", out _glGetBufferSubData );
-
-        fixed ( T* p = &data[ 0 ] )
-        {
-            _glGetBufferSubData( target, offsetCount * sizeof( T ), sizeof( T ) * count, p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public IntPtr MapBuffer( GLenum target, GLenum access )
-    {
-        GetDelegateForFunction< PFNGLMAPBUFFERPROC >( "glMapBuffer", out _glMapBuffer );
-
-        return _glMapBuffer( target, access );
-    }
-
-    /// <inheritdoc/>
-    public Span< T > MapBuffer< T >( GLenum target, GLenum access ) where T : unmanaged
-    {
-        GLint size;
-
-        GetDelegateForFunction< PFNGLGETBUFFERPARAMETERIVPROC >( "glGetBufferParameteriv", out _glGetBufferParameteriv );
-
-        _glGetBufferParameteriv( target, IGL.GL_BUFFER_SIZE, &size );
-
-        GetDelegateForFunction< PFNGLMAPBUFFERPROC >( "glMapBuffer", out _glMapBuffer );
-
-        var ret = _glMapBuffer( target, access );
-
-        return new Span< T >( ret, size / sizeof( T ) );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public GLboolean UnmapBuffer( GLenum target )
-    {
-        GetDelegateForFunction< PFNGLUNMAPBUFFERPROC >( "glUnmapBuffer", out _glUnmapBuffer );
-
-        return _glUnmapBuffer( target );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetBufferParameteriv( GLenum target, GLenum pname, GLint* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETBUFFERPARAMETERIVPROC >( "glGetBufferParameteriv", out _glGetBufferParameteriv );
-
-        _glGetBufferParameteriv( target, pname, parameters );
-    }
-
-    /// <inheritdoc/>
-    public void GetBufferParameteriv( GLenum target, GLenum pname, ref GLint[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETBUFFERPARAMETERIVPROC >( "glGetBufferParameteriv", out _glGetBufferParameteriv );
-
-        fixed ( GLint* p = &parameters[ 0 ] )
-        {
-            _glGetBufferParameteriv( target, pname, p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetBufferPointerv( GLenum target, GLenum pname, IntPtr* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETBUFFERPOINTERVPROC >( "glGetBufferPointerv", out _glGetBufferPointerv );
-
-        _glGetBufferPointerv( target, pname, parameters );
-    }
-
-    /// <inheritdoc/>
-    public void GetBufferPointerv( GLenum target, GLenum pname, ref IntPtr[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETBUFFERPOINTERVPROC >( "glGetBufferPointerv", out _glGetBufferPointerv );
-
-        fixed ( IntPtr* p = &parameters[ 0 ] )
-        {
-            _glGetBufferPointerv( target, pname, ( IntPtr* )p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BlendEquationSeparate( GLenum modeRGB, GLenum modeAlpha )
     {
         GetDelegateForFunction< PFNGLBLENDEQUATIONSEPARATEPROC >( "glBlendEquationSeparate", out _glBlendEquationSeparate );
@@ -1207,28 +694,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void DrawBuffers( GLsizei n, GLenum* bufs )
-    {
-        GetDelegateForFunction< PFNGLDRAWBUFFERSPROC >( "glDrawBuffers", out _glDrawBuffers );
-
-        _glDrawBuffers( n, bufs );
-    }
-
-    /// <inheritdoc/>
-    public void DrawBuffers( params GLenum[] bufs )
-    {
-        GetDelegateForFunction< PFNGLDRAWBUFFERSPROC >( "glDrawBuffers", out _glDrawBuffers );
-
-        fixed ( GLenum* pbufs = &bufs[ 0 ] )
-        {
-            _glDrawBuffers( bufs.Length, pbufs );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void StencilOpSeparate( GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass )
     {
         GetDelegateForFunction< PFNGLSTENCILOPSEPARATEPROC >( "glStencilOpSeparate", out _glStencilOpSeparate );
@@ -1238,7 +704,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void StencilFuncSeparate( GLenum face, GLenum func, GLint @ref, GLuint mask )
     {
         GetDelegateForFunction< PFNGLSTENCILFUNCSEPARATEPROC >( "glStencilFuncSeparate", out _glStencilFuncSeparate );
@@ -1248,7 +714,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void StencilMaskSeparate( GLenum face, GLuint mask )
     {
         GetDelegateForFunction< PFNGLSTENCILMASKSEPARATEPROC >( "glStencilMaskSeparate", out _glStencilMaskSeparate );
@@ -1258,7 +724,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void AttachShader( GLint program, GLint shader )
     {
         GetDelegateForFunction< PFNGLATTACHSHADERPROC >( "glAttachShader", out _glAttachShader );
@@ -1268,7 +734,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BindAttribLocation( GLuint program, GLuint index, GLchar* name )
     {
         GetDelegateForFunction< PFNGLBINDATTRIBLOCATIONPROC >( "glBindAttribLocation", out _glBindAttribLocation );
@@ -1276,7 +742,7 @@ public partial class GLBindings : IGLBindings
         _glBindAttribLocation( ( uint )program, index, name );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BindAttribLocation( GLuint program, GLuint index, string name )
     {
         var utf8 = Encoding.UTF8.GetBytes( name );
@@ -1291,7 +757,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void CompileShader( GLint shader )
     {
         GetDelegateForFunction< PFNGLCOMPILESHADERPROC >( "glCompileShader", out _glCompileShader );
@@ -1301,7 +767,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLuint CreateProgram()
     {
         GetDelegateForFunction< PFNGLCREATEPROGRAMPROC >( "glCreateProgram", out _glCreateProgram );
@@ -1311,7 +777,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLuint CreateShader( GLenum type )
     {
         GetDelegateForFunction< PFNGLCREATESHADERPROC >( "glCreateShader", out _glCreateShader );
@@ -1321,7 +787,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DeleteProgram( GLint program )
     {
         GetDelegateForFunction< PFNGLDELETEPROGRAMPROC >( "glDeleteProgram", out _glDeleteProgram );
@@ -1331,7 +797,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DeleteShader( GLint shader )
     {
         GetDelegateForFunction< PFNGLDELETESHADERPROC >( "glDeleteShader", out _glDeleteShader );
@@ -1341,7 +807,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DetachShader( GLint program, GLint shader )
     {
         GetDelegateForFunction< PFNGLDETACHSHADERPROC >( "glDetachShader", out _glDetachShader );
@@ -1351,7 +817,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void DisableVertexAttribArray( GLuint index )
     {
         GetDelegateForFunction< PFNGLDISABLEVERTEXATTRIBARRAYPROC >( "glDisableVertexAttribArray", out _glDisableVertexAttribArray );
@@ -1361,7 +827,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void EnableVertexAttribArray( GLuint index )
     {
         GetDelegateForFunction< PFNGLENABLEVERTEXATTRIBARRAYPROC >( "glEnableVertexAttribArray", out _glEnableVertexAttribArray );
@@ -1371,7 +837,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetActiveAttrib( GLint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name )
     {
         GetDelegateForFunction< PFNGLGETACTIVEATTRIBPROC >( "glGetActiveAttrib", out _glGetActiveAttrib );
@@ -1379,7 +845,7 @@ public partial class GLBindings : IGLBindings
         _glGetActiveAttrib( ( uint )program, index, bufSize, length, size, type, name );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public string GetActiveAttrib( GLint program, GLuint index, GLsizei bufSize, out GLint size, out GLenum type )
     {
         var     name = stackalloc GLchar[ bufSize ];
@@ -1395,12 +861,12 @@ public partial class GLBindings : IGLBindings
             }
         }
 
-        return new string( ( sbyte* )name, 0, len, Encoding.UTF8 );
+        return new string( ( GLbyte* )name, 0, len, Encoding.UTF8 );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetActiveUniform( GLint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name )
     {
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMPROC >( "glGetActiveUniform", out _glGetActiveUniform );
@@ -1408,7 +874,7 @@ public partial class GLBindings : IGLBindings
         _glGetActiveUniform( ( uint )program, index, bufSize, length, size, type, name );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public string GetActiveUniform( GLint program, GLuint index, GLsizei bufSize, out GLint size, out GLenum type )
     {
         var     name = stackalloc GLchar[ bufSize ];
@@ -1424,12 +890,12 @@ public partial class GLBindings : IGLBindings
             }
         }
 
-        return new string( ( sbyte* )name, 0, len, Encoding.UTF8 );
+        return new string( ( GLbyte* )name, 0, len, Encoding.UTF8 );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetAttachedShaders( GLuint program, GLsizei maxCount, GLsizei* count, GLuint* shaders )
     {
         GetDelegateForFunction< PFNGLGETATTACHEDSHADERSPROC >( "glGetAttachedShaders", out _glGetAttachedShaders );
@@ -1437,7 +903,7 @@ public partial class GLBindings : IGLBindings
         _glGetAttachedShaders( ( uint )program, maxCount, count, shaders );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLuint[] GetAttachedShaders( GLuint program, GLsizei maxCount )
     {
         var     shaders = new GLuint[ maxCount ];
@@ -1457,7 +923,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLint GetAttribLocation( GLint program, GLchar* name )
     {
         GetDelegateForFunction< PFNGLGETATTRIBLOCATIONPROC >( "glGetAttribLocation", out _glGetAttribLocation );
@@ -1465,7 +931,7 @@ public partial class GLBindings : IGLBindings
         return _glGetAttribLocation( ( uint )program, name );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLint GetAttribLocation( GLint program, string name )
     {
         GetDelegateForFunction< PFNGLGETATTRIBLOCATIONPROC >( "glGetAttribLocation", out _glGetAttribLocation );
@@ -1478,7 +944,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetProgramiv( GLint program, GLenum pname, GLint* parameters )
     {
         GetDelegateForFunction< PFNGLGETPROGRAMIVPROC >( "glGetProgramiv", out _glGetProgramiv );
@@ -1486,7 +952,7 @@ public partial class GLBindings : IGLBindings
         _glGetProgramiv( ( uint )program, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetProgramiv( GLint program, GLenum pname, ref GLint[] parameters )
     {
         GetDelegateForFunction< PFNGLGETPROGRAMIVPROC >( "glGetProgramiv", out _glGetProgramiv );
@@ -1499,7 +965,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetProgramInfoLog( GLint program, GLsizei bufSize, GLsizei* length, GLchar* infoLog )
     {
         GetDelegateForFunction< PFNGLGETPROGRAMINFOLOGPROC >( "glGetProgramInfoLog", out _glGetProgramInfoLog );
@@ -1507,7 +973,7 @@ public partial class GLBindings : IGLBindings
         _glGetProgramInfoLog( ( uint )program, bufSize, length, infoLog );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public string GetProgramInfoLog( GLint program, GLsizei bufSize )
     {
         var     infoLog = stackalloc GLchar[ bufSize ];
@@ -1517,12 +983,12 @@ public partial class GLBindings : IGLBindings
 
         _glGetProgramInfoLog( ( uint )program, bufSize, &len, infoLog );
 
-        return new string( ( sbyte* )infoLog, 0, len, Encoding.UTF8 );
+        return new string( ( GLbyte* )infoLog, 0, len, Encoding.UTF8 );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetShaderiv( GLint shader, GLenum pname, GLint* parameters )
     {
         GetDelegateForFunction< PFNGLGETSHADERIVPROC >( "glGetShaderiv", out _glGetShaderiv );
@@ -1530,7 +996,7 @@ public partial class GLBindings : IGLBindings
         _glGetShaderiv( ( uint )shader, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetShaderiv( GLint shader, GLenum pname, ref GLint[] parameters )
     {
         GetDelegateForFunction< PFNGLGETSHADERIVPROC >( "glGetShaderiv", out _glGetShaderiv );
@@ -1543,7 +1009,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetShaderInfoLog( GLint shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog )
     {
         GetDelegateForFunction< PFNGLGETSHADERINFOLOGPROC >( "glGetShaderInfoLog", out _glGetShaderInfoLog );
@@ -1551,7 +1017,7 @@ public partial class GLBindings : IGLBindings
         _glGetShaderInfoLog( ( uint )shader, bufSize, length, infoLog );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public string GetShaderInfoLog( GLint shader, GLsizei bufSize )
     {
         var     infoLog = stackalloc GLchar[ bufSize ];
@@ -1561,12 +1027,12 @@ public partial class GLBindings : IGLBindings
 
         _glGetShaderInfoLog( ( uint )shader, bufSize, &len, infoLog );
 
-        return new string( ( sbyte* )infoLog, 0, len, Encoding.UTF8 );
+        return new string( ( GLbyte* )infoLog, 0, len, Encoding.UTF8 );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetShaderSource( GLint shader, GLsizei bufSize, GLsizei* length, GLchar* source )
     {
         GetDelegateForFunction< PFNGLGETSHADERSOURCEPROC >( "glGetShaderSource", out _glGetShaderSource );
@@ -1574,7 +1040,7 @@ public partial class GLBindings : IGLBindings
         _glGetShaderSource( ( uint )shader, bufSize, length, source );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public string GetShaderSource( GLint shader, GLsizei bufSize = 4096 )
     {
         var     source = stackalloc GLchar[ bufSize ];
@@ -1584,12 +1050,12 @@ public partial class GLBindings : IGLBindings
 
         _glGetShaderSource( ( uint )shader, bufSize, &len, source );
 
-        return new string( ( sbyte* )source, 0, len, Encoding.UTF8 );
+        return new string( ( GLbyte* )source, 0, len, Encoding.UTF8 );
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLint GetUniformLocation( GLint program, GLchar* name )
     {
         GetDelegateForFunction< PFNGLGETUNIFORMLOCATIONPROC >( "glGetUniformLocation", out _glGetUniformLocation );
@@ -1597,7 +1063,7 @@ public partial class GLBindings : IGLBindings
         return _glGetUniformLocation( ( uint )program, name );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLint GetUniformLocation( GLint program, string name )
     {
         GetDelegateForFunction< PFNGLGETUNIFORMLOCATIONPROC >( "glGetUniformLocation", out _glGetUniformLocation );
@@ -1610,7 +1076,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetUniformfv( GLint program, GLint location, GLfloat* parameters )
     {
         GetDelegateForFunction< PFNGLGETUNIFORMFVPROC >( "glGetUniformfv", out _glGetUniformfv );
@@ -1618,7 +1084,7 @@ public partial class GLBindings : IGLBindings
         _glGetUniformfv( ( uint )program, location, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetUniformfv( GLint program, GLint location, ref GLfloat[] parameters )
     {
         GetDelegateForFunction< PFNGLGETUNIFORMFVPROC >( "glGetUniformfv", out _glGetUniformfv );
@@ -1631,7 +1097,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetUniformiv( GLuint program, GLint location, GLint* parameters )
     {
         GetDelegateForFunction< PFNGLGETUNIFORMIVPROC >( "glGetUniformiv", out _glGetUniformiv );
@@ -1639,7 +1105,7 @@ public partial class GLBindings : IGLBindings
         _glGetUniformiv( ( uint )program, location, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetUniformiv( GLuint program, GLint location, ref GLint[] parameters )
     {
         GetDelegateForFunction< PFNGLGETUNIFORMIVPROC >( "glGetUniformiv", out _glGetUniformiv );
@@ -1652,7 +1118,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetVertexAttribdv( GLuint index, GLenum pname, GLdouble* parameters )
     {
         GetDelegateForFunction< PFNGLGETVERTEXATTRIBDVPROC >( "glGetVertexAttribdv", out _glGetVertexAttribdv );
@@ -1660,7 +1126,7 @@ public partial class GLBindings : IGLBindings
         _glGetVertexAttribdv( index, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetVertexAttribdv( GLuint index, GLenum pname, ref GLdouble[] parameters )
     {
         GetDelegateForFunction< PFNGLGETVERTEXATTRIBDVPROC >( "glGetVertexAttribdv", out _glGetVertexAttribdv );
@@ -1673,7 +1139,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetVertexAttribfv( GLuint index, GLenum pname, GLfloat* parameters )
     {
         GetDelegateForFunction< PFNGLGETVERTEXATTRIBFVPROC >( "glGetVertexAttribfv", out _glGetVertexAttribfv );
@@ -1681,7 +1147,7 @@ public partial class GLBindings : IGLBindings
         _glGetVertexAttribfv( index, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetVertexAttribfv( GLuint index, GLenum pname, ref GLfloat[] parameters )
     {
         GetDelegateForFunction< PFNGLGETVERTEXATTRIBFVPROC >( "glGetVertexAttribfv", out _glGetVertexAttribfv );
@@ -1694,7 +1160,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetVertexAttribiv( GLuint index, GLenum pname, GLint* parameters )
     {
         GetDelegateForFunction< PFNGLGETVERTEXATTRIBIVPROC >( "glGetVertexAttribiv", out _glGetVertexAttribiv );
@@ -1702,7 +1168,7 @@ public partial class GLBindings : IGLBindings
         _glGetVertexAttribiv( index, pname, parameters );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetVertexAttribiv( GLuint index, GLenum pname, ref GLint[] parameters )
     {
         GetDelegateForFunction< PFNGLGETVERTEXATTRIBIVPROC >( "glGetVertexAttribiv", out _glGetVertexAttribiv );
@@ -1715,7 +1181,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetVertexAttribPointerv( GLuint index, GLenum pname, IntPtr* pointer )
     {
         GetDelegateForFunction< PFNGLGETVERTEXATTRIBPOINTERVPROC >( "glGetVertexAttribPointerv", out _glGetVertexAttribPointerv );
@@ -1723,16 +1189,16 @@ public partial class GLBindings : IGLBindings
         _glGetVertexAttribPointerv( index, pname, pointer );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetVertexAttribPointerv( GLuint index, GLenum pname, ref uint[] pointer )
     {
         var ptr = new void*[ pointer.Length ];
 
         GetDelegateForFunction< PFNGLGETVERTEXATTRIBPOINTERVPROC >( "glGetVertexAttribPointerv", out _glGetVertexAttribPointerv );
 
-        fixed ( IntPtr* p = &ptr[ 0 ] )
+        fixed ( void** p = &ptr[ 0 ] )
         {
-            _glGetVertexAttribPointerv( index, pname, p );
+            _glGetVertexAttribPointerv( index, pname, ( IntPtr* )p );
         }
 
         for ( var i = 0; i < pointer.Length; i++ )
@@ -1743,7 +1209,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLboolean IsProgram( GLint program )
     {
         GetDelegateForFunction< PFNGLISPROGRAMPROC >( "glIsProgram", out _glIsProgram );
@@ -1753,7 +1219,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLboolean IsShader( GLint shader )
     {
         GetDelegateForFunction< PFNGLISSHADERPROC >( "glIsShader", out _glIsShader );
@@ -1763,7 +1229,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void LinkProgram( GLint program )
     {
         GetDelegateForFunction< PFNGLLINKPROGRAMPROC >( "glLinkProgram", out _glLinkProgram );
@@ -1773,7 +1239,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void ShaderSource( GLint shader, GLsizei count, GLchar** str, GLint* length )
     {
         GetDelegateForFunction< PFNGLSHADERSOURCEPROC >( "glShaderSource", out _glShaderSource );
@@ -1781,7 +1247,7 @@ public partial class GLBindings : IGLBindings
         _glShaderSource( ( uint )shader, count, str, length );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void ShaderSource( GLint shader, params string[] @string )
     {
         var count   = @string.Length;
@@ -1814,7 +1280,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UseProgram( GLint program )
     {
         GetDelegateForFunction< PFNGLUSEPROGRAMPROC >( "glUseProgram", out _glUseProgram );
@@ -1824,7 +1290,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform1f( GLint location, GLfloat v0 )
     {
         GetDelegateForFunction< PFNGLUNIFORM1FPROC >( "glUniform1f", out _glUniform1f );
@@ -1834,7 +1300,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform2f( GLint location, GLfloat v0, GLfloat v1 )
     {
         GetDelegateForFunction< PFNGLUNIFORM2FPROC >( "glUniform2f", out _glUniform2f );
@@ -1844,7 +1310,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform3f( GLint location, GLfloat v0, GLfloat v1, GLfloat v2 )
     {
         GetDelegateForFunction< PFNGLUNIFORM3FPROC >( "glUniform3f", out _glUniform3f );
@@ -1854,7 +1320,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform4f( GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3 )
     {
         GetDelegateForFunction< PFNGLUNIFORM4FPROC >( "glUniform4f", out _glUniform4f );
@@ -1864,7 +1330,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform1i( GLint location, GLint v0 )
     {
         GetDelegateForFunction< PFNGLUNIFORM1IPROC >( "glUniform1i", out _glUniform1i );
@@ -1874,7 +1340,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform2i( GLint location, GLint v0, GLint v1 )
     {
         GetDelegateForFunction< PFNGLUNIFORM2IPROC >( "glUniform2i", out _glUniform2i );
@@ -1884,7 +1350,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform3i( GLint location, GLint v0, GLint v1, GLint v2 )
     {
         GetDelegateForFunction< PFNGLUNIFORM3IPROC >( "glUniform23", out _glUniform3i );
@@ -1894,7 +1360,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform4i( GLint location, GLint v0, GLint v1, GLint v2, GLint v3 )
     {
         GetDelegateForFunction< PFNGLUNIFORM4IPROC >( "glUniform4i", out _glUniform4i );
@@ -1904,7 +1370,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform1fv( GLint location, GLsizei count, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM1FVPROC >( "glUniform1fv", out _glUniform1fv );
@@ -1912,7 +1378,7 @@ public partial class GLBindings : IGLBindings
         _glUniform1fv( location, count, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform1fv( GLint location, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM1FVPROC >( "glUniform1fv", out _glUniform1fv );
@@ -1925,7 +1391,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform2fv( GLint location, GLsizei count, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM2FVPROC >( "glUniform2fv", out _glUniform2fv );
@@ -1933,7 +1399,7 @@ public partial class GLBindings : IGLBindings
         _glUniform2fv( location, count, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform2fv( GLint location, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM2FVPROC >( "glUniform2fv", out _glUniform2fv );
@@ -1946,7 +1412,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform3fv( GLint location, GLsizei count, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM3FVPROC >( "glUniform3fv", out _glUniform3fv );
@@ -1954,7 +1420,7 @@ public partial class GLBindings : IGLBindings
         _glUniform3fv( location, count, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform3fv( GLint location, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM3FVPROC >( "glUniform3fv", out _glUniform3fv );
@@ -1967,7 +1433,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform4fv( GLint location, GLsizei count, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM4FVPROC >( "glUniform4fv", out _glUniform4fv );
@@ -1975,7 +1441,7 @@ public partial class GLBindings : IGLBindings
         _glUniform4fv( location, count, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform4fv( GLint location, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM4FVPROC >( "glUniform4fv", out _glUniform4fv );
@@ -1988,7 +1454,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform1iv( GLint location, GLsizei count, GLint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM1IVPROC >( "glUniform1iv", out _glUniform1iv );
@@ -1996,7 +1462,7 @@ public partial class GLBindings : IGLBindings
         _glUniform1iv( location, count, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform1iv( GLint location, params GLint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM1IVPROC >( "glUniform1iv", out _glUniform1iv );
@@ -2009,7 +1475,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform2iv( GLint location, GLsizei count, GLint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM2IVPROC >( "glUniform2iv", out _glUniform2iv );
@@ -2017,7 +1483,7 @@ public partial class GLBindings : IGLBindings
         _glUniform2iv( location, count, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform2iv( GLint location, params GLint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM2IVPROC >( "glUniform2iv", out _glUniform2iv );
@@ -2030,7 +1496,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform3iv( GLint location, GLsizei count, GLint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM3IVPROC >( "glUniform3iv", out _glUniform3iv );
@@ -2038,7 +1504,7 @@ public partial class GLBindings : IGLBindings
         _glUniform3iv( location, count, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform3iv( GLint location, params GLint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM3IVPROC >( "glUniform3iv", out _glUniform3iv );
@@ -2051,7 +1517,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform4iv( GLint location, GLsizei count, GLint* value )
     {
         GetDelegateForFunction< PFNGLUNIFORM4IVPROC >( "glUniform4iv", out _glUniform4iv );
@@ -2059,7 +1525,7 @@ public partial class GLBindings : IGLBindings
         _glUniform4iv( location, count, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Uniform4iv( GLint location, params GLint[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORM4IVPROC >( "glUniform4iv", out _glUniform4iv );
@@ -2072,7 +1538,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix2fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2FVPROC >( "glUniformMatrix2fv", out _glUniformMatrix2fv );
@@ -2080,7 +1546,7 @@ public partial class GLBindings : IGLBindings
         _glUniformMatrix2fv( location, count, transpose, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix2fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2FVPROC >( "glUniformMatrix2fv", out _glUniformMatrix2fv );
@@ -2093,7 +1559,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix3fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3FVPROC >( "glUniformMatrix3fv", out _glUniformMatrix3fv );
@@ -2101,7 +1567,7 @@ public partial class GLBindings : IGLBindings
         _glUniformMatrix3fv( location, count, transpose, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix3fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3FVPROC >( "glUniformMatrix3fv", out _glUniformMatrix3fv );
@@ -2114,7 +1580,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix4fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4FVPROC >( "glUniformMatrix4fv", out _glUniformMatrix4fv );
@@ -2122,13 +1588,13 @@ public partial class GLBindings : IGLBindings
         _glUniformMatrix4fv( location, count, transpose, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix4fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         ArgumentNullException.ThrowIfNull( value );
 
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4FVPROC >( "glUniformMatrix4fv", out _glUniformMatrix4fv );
-        
+
         if ( ( value.Length % 16 ) != 0 )
         {
             throw new GdxRuntimeException( $"Error: value array length ({value.Length}) is not a multiple " +
@@ -2142,7 +1608,7 @@ public partial class GLBindings : IGLBindings
             _glUniformMatrix4fv( location, matrixCount, transpose, p );
 
             var error = _glGetError();
-            
+
             if ( error != IGL.GL_NO_ERROR )
             {
                 throw new GdxRuntimeException( $"OpenGL Error: {error} after glUniformMatrix4fv. Location: {location}, " +
@@ -2153,7 +1619,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLboolean ValidateProgram( GLuint program )
     {
         GetDelegateForFunction< PFNGLVALIDATEPROGRAMPROC >( "glValidateProgram", out _glValidateProgram );
@@ -2163,7 +1629,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib1d( GLuint index, GLdouble x )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1DPROC >( "glVertexAttrib1d", out _glVertexAttrib1d );
@@ -2173,7 +1639,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib1dv( GLuint index, GLdouble* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1DVPROC >( "glVertexAttrib1dv", out _glVertexAttrib1dv );
@@ -2181,7 +1647,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib1dv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib1dv( GLuint index, params GLdouble[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1DVPROC >( "glVertexAttrib1dv", out _glVertexAttrib1dv );
@@ -2194,7 +1660,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib1f( GLuint index, GLfloat x )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1FPROC >( "glVertexAttrib1f", out _glVertexAttrib1f );
@@ -2204,7 +1670,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib1fv( GLuint index, GLfloat* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1FVPROC >( "glVertexAttrib1fv", out _glVertexAttrib1fv );
@@ -2212,7 +1678,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib1fv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib1fv( GLuint index, params GLfloat[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1FVPROC >( "glVertexAttrib1fv", out _glVertexAttrib1fv );
@@ -2225,7 +1691,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib1s( GLuint index, GLshort x )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1SPROC >( "glVertexAttrib1s", out _glVertexAttrib1s );
@@ -2235,7 +1701,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib1sv( GLuint index, GLshort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1SVPROC >( "glVertexAttrib1sv", out _glVertexAttrib1sv );
@@ -2243,7 +1709,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib1sv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib1sv( GLuint index, params GLshort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB1SVPROC >( "glVertexAttrib1sv", out _glVertexAttrib1sv );
@@ -2256,7 +1722,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib2d( GLuint index, GLdouble x, GLdouble y )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2DPROC >( "glVertexAttrib2d", out _glVertexAttrib2d );
@@ -2266,7 +1732,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib2dv( GLuint index, GLdouble* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2DVPROC >( "glVertexAttrib2dv", out _glVertexAttrib2dv );
@@ -2274,7 +1740,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib2dv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib2dv( GLuint index, params GLdouble[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2DVPROC >( "glVertexAttrib2dv", out _glVertexAttrib2dv );
@@ -2287,7 +1753,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib2f( GLuint index, GLfloat x, GLfloat y )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2FPROC >( "glVertexAttrib2f", out _glVertexAttrib2f );
@@ -2297,7 +1763,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib2fv( GLuint index, GLfloat* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2FVPROC >( "glVertexAttrib2fv", out _glVertexAttrib2fv );
@@ -2305,7 +1771,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib2fv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib2fv( GLuint index, params GLfloat[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2FVPROC >( "glVertexAttrib2fv", out _glVertexAttrib2fv );
@@ -2318,7 +1784,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib2s( GLuint index, GLshort x, GLshort y )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2SPROC >( "glVertexAttrib2s", out _glVertexAttrib2s );
@@ -2328,7 +1794,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib2sv( GLuint index, GLshort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2SVPROC >( "glVertexAttrib2sv", out _glVertexAttrib2sv );
@@ -2336,7 +1802,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib2sv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib2sv( GLuint index, params GLshort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB2SVPROC >( "glVertexAttrib2sv", out _glVertexAttrib2sv );
@@ -2349,7 +1815,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib3d( GLuint index, GLdouble x, GLdouble y, GLdouble z )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3DPROC >( "glVertexAttrib3d", out _glVertexAttrib3d );
@@ -2359,7 +1825,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib3dv( GLuint index, GLdouble* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3DVPROC >( "glVertexAttrib3dv", out _glVertexAttrib3dv );
@@ -2367,7 +1833,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib3dv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib3dv( GLuint index, params GLdouble[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3DVPROC >( "glVertexAttrib3dv", out _glVertexAttrib3dv );
@@ -2380,7 +1846,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib3f( GLuint index, GLfloat x, GLfloat y, GLfloat z )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3FPROC >( "glVertexAttrib3f", out _glVertexAttrib3f );
@@ -2390,7 +1856,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib3fv( GLuint index, GLfloat* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3FVPROC >( "glVertexAttrib3fv", out _glVertexAttrib3fv );
@@ -2398,7 +1864,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib3fv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib3fv( GLuint index, params GLfloat[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3FVPROC >( "glVertexAttrib3fv", out _glVertexAttrib3fv );
@@ -2411,7 +1877,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib3s( GLuint index, GLshort x, GLshort y, GLshort z )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3SPROC >( "glVertexAttrib3s", out _glVertexAttrib3s );
@@ -2421,7 +1887,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib3sv( GLuint index, GLshort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3SVPROC >( "glVertexAttrib3sv", out _glVertexAttrib3sv );
@@ -2429,7 +1895,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib3sv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib3sv( GLuint index, params GLshort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB3SVPROC >( "glVertexAttrib3sv", out _glVertexAttrib3sv );
@@ -2442,7 +1908,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nbv( GLuint index, GLbyte* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NBVPROC >( "glVertexAttrib4Nbv", out _glVertexAttrib4Nbv );
@@ -2450,7 +1916,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4Nbv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nbv( GLuint index, params GLbyte[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NBVPROC >( "glVertexAttrib4Nbv", out _glVertexAttrib4Nbv );
@@ -2463,7 +1929,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Niv( GLuint index, GLint* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NIVPROC >( "glVertexAttrib4Niv", out _glVertexAttrib4Niv );
@@ -2471,7 +1937,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4Niv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Niv( GLuint index, params GLint[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NIVPROC >( "glVertexAttrib4Niv", out _glVertexAttrib4Niv );
@@ -2484,7 +1950,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nsv( GLuint index, GLshort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NSVPROC >( "glVertexAttrib4Nsv", out _glVertexAttrib4Nsv );
@@ -2492,7 +1958,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4Nsv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nsv( GLuint index, params GLshort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NSVPROC >( "glVertexAttrib4Nsv", out _glVertexAttrib4Nsv );
@@ -2505,7 +1971,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nub( GLuint index, GLubyte x, GLubyte y, GLubyte z, GLubyte w )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NUBPROC >( "glVertexAttrib4Nub", out _glVertexAttrib4Nub );
@@ -2515,7 +1981,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nubv( GLuint index, GLubyte* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NUBVPROC >( "glVertexAttrib4Nubv", out _glVertexAttrib4Nubv );
@@ -2523,7 +1989,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4Nubv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nubv( GLuint index, params GLubyte[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NUBVPROC >( "glVertexAttrib4Nubv", out _glVertexAttrib4Nubv );
@@ -2536,7 +2002,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nuiv( GLuint index, GLuint* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NUIVPROC >( "glVertexAttrib4Nuiv", out _glVertexAttrib4Nuiv );
@@ -2544,7 +2010,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4Nuiv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nuiv( GLuint index, params GLuint[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NUIVPROC >( "glVertexAttrib4Nuiv", out _glVertexAttrib4Nuiv );
@@ -2557,7 +2023,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nusv( GLuint index, GLushort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NUSVPROC >( "glVertexAttrib4Nusv", out _glVertexAttrib4Nusv );
@@ -2565,7 +2031,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4Nusv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4Nusv( GLuint index, params GLushort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4NUSVPROC >( "glVertexAttrib4Nusv", out _glVertexAttrib4Nusv );
@@ -2578,7 +2044,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4bv( GLuint index, GLbyte* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4BVPROC >( "glVertexAttrib4bv", out _glVertexAttrib4bv );
@@ -2586,7 +2052,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4bv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4bv( GLuint index, params GLbyte[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4BVPROC >( "glVertexAttrib4bv", out _glVertexAttrib4bv );
@@ -2599,7 +2065,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4d( GLuint index, GLdouble x, GLdouble y, GLdouble z, GLdouble w )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4DPROC >( "glVertexAttrib4d", out _glVertexAttrib4d );
@@ -2609,7 +2075,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4dv( GLuint index, GLdouble* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4DVPROC >( "glVertexAttrib4dv", out _glVertexAttrib4dv );
@@ -2617,7 +2083,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4dv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4dv( GLuint index, params GLdouble[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4DVPROC >( "glVertexAttrib4dv", out _glVertexAttrib4dv );
@@ -2630,7 +2096,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4f( GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4FPROC >( "glVertexAttrib4f", out _glVertexAttrib4f );
@@ -2640,7 +2106,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4fv( GLuint index, GLfloat* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4FVPROC >( "glVertexAttrib4fv", out _glVertexAttrib4fv );
@@ -2648,7 +2114,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4fv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4fv( GLuint index, params GLfloat[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4FVPROC >( "glVertexAttrib4fv", out _glVertexAttrib4fv );
@@ -2661,7 +2127,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4iv( GLuint index, GLint* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4IVPROC >( "glVertexAttrib4iv", out _glVertexAttrib4iv );
@@ -2669,7 +2135,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4iv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4iv( GLuint index, params GLint[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4IVPROC >( "glVertexAttrib4iv", out _glVertexAttrib4iv );
@@ -2682,7 +2148,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4s( GLuint index, GLshort x, GLshort y, GLshort z, GLshort w )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4SPROC >( "glVertexAttrib4s", out _glVertexAttrib4s );
@@ -2692,7 +2158,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4sv( GLuint index, GLshort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4SVPROC >( "glVertexAttrib4sv", out _glVertexAttrib4sv );
@@ -2700,7 +2166,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4sv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4sv( GLuint index, params GLshort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4SVPROC >( "glVertexAttrib4sv", out _glVertexAttrib4sv );
@@ -2713,7 +2179,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4ubv( GLuint index, GLubyte* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4UBVPROC >( "glVertexAttrib4ubv", out _glVertexAttrib4ubv );
@@ -2721,7 +2187,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4ubv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4ubv( GLuint index, params GLubyte[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4UBVPROC >( "glVertexAttrib4ubv", out _glVertexAttrib4ubv );
@@ -2734,7 +2200,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4uiv( GLuint index, GLuint* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4UIVPROC >( "glVertexAttrib4uiv", out _glVertexAttrib4uiv );
@@ -2742,7 +2208,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4uiv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4uiv( GLuint index, params GLuint[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4UIVPROC >( "glVertexAttrib4uiv", out _glVertexAttrib4uiv );
@@ -2755,7 +2221,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4usv( GLuint index, GLushort* v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4USVPROC >( "glVertexAttrib4usv", out _glVertexAttrib4usv );
@@ -2763,7 +2229,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttrib4usv( index, v );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttrib4usv( GLuint index, params GLushort[] v )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIB4USVPROC >( "glVertexAttrib4usv", out _glVertexAttrib4usv );
@@ -2776,7 +2242,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, IntPtr pointer )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBPOINTERPROC >( "glVertexAttribPointer", out _glVertexAttribPointer );
@@ -2784,7 +2250,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttribPointer( index, size, type, normalized, stride, pointer );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uint pointer )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBPOINTERPROC >( "glVertexAttribPointer", out _glVertexAttribPointer );
@@ -2794,7 +2260,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix2x3fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X3FVPROC >( "glUniformMatrix2x3fv", out _glUniformMatrix2x3fv );
@@ -2802,7 +2268,7 @@ public partial class GLBindings : IGLBindings
         _glUniformMatrix2x3fv( location, count, transpose, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix2x3fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X3FVPROC >( "glUniformMatrix2x3fv", out _glUniformMatrix2x3fv );
@@ -2815,7 +2281,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix3x2fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X2FVPROC >( "glUniformMatrix3x2fv", out _glUniformMatrix3x2fv );
@@ -2823,20 +2289,22 @@ public partial class GLBindings : IGLBindings
         _glUniformMatrix3x2fv( location, count, transpose, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix3x2fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X2FVPROC >( "glUniformMatrix3x2fv", out _glUniformMatrix3x2fv );
 
-        fixed ( GLfloat* p = &value[ 0 ] )
         {
-            _glUniformMatrix3x2fv( location, value.Length / 6, transpose, p );
+            fixed ( GLfloat* p = &value[ 0 ] )
+            {
+                _glUniformMatrix3x2fv( location, value.Length / 6, transpose, p );
+            }
         }
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix2x4fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X4FVPROC >( "_glUniformMatrix2x4fv", out _glUniformMatrix2x4fv );
@@ -2844,7 +2312,7 @@ public partial class GLBindings : IGLBindings
         _glUniformMatrix2x4fv( location, count, transpose, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix2x4fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X4FVPROC >( "_glUniformMatrix2x4fv", out _glUniformMatrix2x4fv );
@@ -2857,7 +2325,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix4x2fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X2FVPROC >( "glUniformMatrix4x2fv", out _glUniformMatrix4x2fv );
@@ -2865,7 +2333,7 @@ public partial class GLBindings : IGLBindings
         _glUniformMatrix4x2fv( location, count, transpose, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix4x2fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X2FVPROC >( "glUniformMatrix4x2fv", out _glUniformMatrix4x2fv );
@@ -2878,7 +2346,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix3x4fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X4FVPROC >( "glUniformMatrix3x4fv", out _glUniformMatrix3x4fv );
@@ -2886,7 +2354,7 @@ public partial class GLBindings : IGLBindings
         _glUniformMatrix3x4fv( location, count, transpose, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix3x4fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X4FVPROC >( "glUniformMatrix3x4fv", out _glUniformMatrix3x4fv );
@@ -2899,7 +2367,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix4x3fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X3FVPROC >( "glUniformMatrix4x3fv", out _glUniformMatrix4x3fv );
@@ -2907,7 +2375,7 @@ public partial class GLBindings : IGLBindings
         _glUniformMatrix4x3fv( location, count, transpose, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void UniformMatrix4x3fv( GLint location, GLboolean transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X3FVPROC >( "glUniformMatrix4x3fv", out _glUniformMatrix4x3fv );
@@ -2920,7 +2388,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void ColorMaski( GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a )
     {
         GetDelegateForFunction< PFNGLCOLORMASKIPROC >( "glColorMaski", out _glColorMaski );
@@ -2930,7 +2398,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetBooleani_v( GLenum target, GLuint index, GLboolean* data )
     {
         GetDelegateForFunction< PFNGLGETBOOLEANI_VPROC >( "glGetBooleani_v", out _glGetBooleani_v );
@@ -2938,7 +2406,7 @@ public partial class GLBindings : IGLBindings
         _glGetBooleani_v( target, index, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetBooleani_v( GLenum target, GLuint index, ref GLboolean[] data )
     {
         GetDelegateForFunction< PFNGLGETBOOLEANI_VPROC >( "glGetBooleani_v", out _glGetBooleani_v );
@@ -2951,7 +2419,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetIntegeri_v( GLenum target, GLuint index, GLint* data )
     {
         GetDelegateForFunction< PFNGLGETINTEGERI_VPROC >( "glGetIntegeri_v", out _glGetIntegeri_v );
@@ -2959,7 +2427,7 @@ public partial class GLBindings : IGLBindings
         _glGetIntegeri_v( target, index, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetIntegeri_v( GLenum target, GLuint index, ref GLint[] data )
     {
         GetDelegateForFunction< PFNGLGETINTEGERI_VPROC >( "glGetIntegeri_v", out _glGetIntegeri_v );
@@ -2972,7 +2440,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Enablei( GLenum target, GLuint index )
     {
         GetDelegateForFunction< PFNGLENABLEIPROC >( "glEnablei", out _glEnablei );
@@ -2982,7 +2450,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Disablei( GLenum target, GLuint index )
     {
         GetDelegateForFunction< PFNGLDISABLEIPROC >( "glDisablei", out _glDisablei );
@@ -2992,7 +2460,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLboolean IsEnabledi( GLenum target, GLuint index )
     {
         GetDelegateForFunction< PFNGLISENABLEDIPROC >( "glIsEnabledi", out _glIsEnabledi );
@@ -3002,7 +2470,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BeginTransformFeedback( GLenum primitiveMode )
     {
         GetDelegateForFunction< PFNGLBEGINTRANSFORMFEEDBACKPROC >( "glBeginTransformFeedback", out _glBeginTransformFeedback );
@@ -3012,7 +2480,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void EndTransformFeedback()
     {
         GetDelegateForFunction< PFNGLENDTRANSFORMFEEDBACKPROC >( "glEndTransformFeedback", out _glEndTransformFeedback );
@@ -3022,27 +2490,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void BindBufferRange( GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size )
-    {
-        GetDelegateForFunction< PFNGLBINDBUFFERRANGEPROC >( "glBindBufferRange", out _glBindBufferRange );
-
-        _glBindBufferRange( target, index, buffer, offset, size );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void BindBufferBase( GLenum target, GLuint index, GLuint buffer )
-    {
-        GetDelegateForFunction< PFNGLBINDBUFFERBASEPROC >( "glBindBufferBase", out _glBindBufferBase );
-
-        _glBindBufferBase( target, index, buffer );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void WaitSync( IntPtr sync, GLbitfield flags, GLuint64 timeout )
     {
         GetDelegateForFunction< PFNGLWAITSYNCPROC >( "glWaitSync", out _glWaitSync );
@@ -3050,17 +2498,9 @@ public partial class GLBindings : IGLBindings
         _glWaitSync( sync, flags, timeout );
     }
 
-    /// <inheritdoc/>
-    public void WaitSyncSafe( IntPtr sync, GLbitfield flags, GLuint64 timeout )
-    {
-        GetDelegateForFunction< PFNGLWAITSYNCPROC >( "glWaitSync", out _glWaitSync );
-
-        _glWaitSync( sync.ToPointer(), flags, timeout );
-    }
-
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetInteger64v( GLenum pname, GLint64* data )
     {
         GetDelegateForFunction< PFNGLGETINTEGER64VPROC >( "glGetInteger64v", out _glGetInteger64v );
@@ -3068,20 +2508,22 @@ public partial class GLBindings : IGLBindings
         _glGetInteger64v( pname, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetInteger64v( GLenum pname, ref GLint64[] data )
     {
         GetDelegateForFunction< PFNGLGETINTEGER64VPROC >( "glGetInteger64v", out _glGetInteger64v );
 
-        fixed ( GLint64* dp = &data[ 0 ] )
         {
-            _glGetInteger64v( pname, dp );
+            fixed ( GLint64* dp = &data[ 0 ] )
+            {
+                _glGetInteger64v( pname, dp );
+            }
         }
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetSynciv( IntPtr sync, GLenum pname, GLsizei bufSize, GLsizei* length, GLint* values )
     {
         GetDelegateForFunction< PFNGLGETSYNCIVPROC >( "glGetSynciv", out _glGetSynciv );
@@ -3089,18 +2531,20 @@ public partial class GLBindings : IGLBindings
         _glGetSynciv( sync, pname, bufSize, length, values );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLint[] GetSynciv( IntPtr sync, GLenum pname, GLsizei bufSize )
     {
         var ret = new GLint[ bufSize ];
 
         GetDelegateForFunction< PFNGLGETSYNCIVPROC >( "glGetSynciv", out _glGetSynciv );
 
-        fixed ( GLint* dp = &ret[ 0 ] )
         {
-            GLsizei len;
-            _glGetSynciv( sync.ToPointer(), pname, bufSize, &len, dp );
-            Array.Resize( ref ret, len );
+            fixed ( GLint* dp = &ret[ 0 ] )
+            {
+                GLsizei len;
+                _glGetSynciv( sync, pname, bufSize, &len, dp );
+                Array.Resize( ref ret, len );
+            }
         }
 
         return ret;
@@ -3108,7 +2552,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetInteger64i_v( GLenum target, GLuint index, GLint64* data )
     {
         GetDelegateForFunction< PFNGLGETINTEGER64I_VPROC >( "glGetInteger64i_v", out _glGetInteger64i_v );
@@ -3116,7 +2560,7 @@ public partial class GLBindings : IGLBindings
         _glGetInteger64i_v( target, index, data );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void GetInteger64i_v( GLenum target, GLuint index, ref GLint64[] data )
     {
         GetDelegateForFunction< PFNGLGETINTEGER64I_VPROC >( "glGetInteger64i_v", out _glGetInteger64i_v );
@@ -3129,28 +2573,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void GetBufferParameteri64v( GLenum target, GLenum pname, GLint64* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETBUFFERPARAMETERI64VPROC >( "glGetBufferParameteri64v", out _glGetBufferParameteri64v );
-
-        _glGetBufferParameteri64v( target, pname, parameters );
-    }
-
-    /// <inheritdoc/>
-    public void GetBufferParameteri64v( GLenum target, GLenum pname, ref GLint64[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETBUFFERPARAMETERI64VPROC >( "glGetBufferParameteri64v", out _glGetBufferParameteri64v );
-
-        fixed ( GLint64* dp = &parameters[ 0 ] )
-        {
-            _glGetBufferParameteri64v( target, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void FramebufferTexture( GLenum target, GLenum attachment, GLuint texture, GLint level )
     {
         GetDelegateForFunction< PFNGLFRAMEBUFFERTEXTUREPROC >( "glFramebufferTexture", out _glFramebufferTexture );
@@ -3160,40 +2583,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void GetMultisamplefv( GLenum pname, GLuint index, GLfloat* val )
-    {
-        GetDelegateForFunction< PFNGLGETMULTISAMPLEFVPROC >( "glGetMultisamplefv", out _glGetMultisamplefv );
-
-        _glGetMultisamplefv( pname, index, val );
-    }
-
-    /// <inheritdoc/>
-    public void GetMultisamplefvSafe( GLenum pname, GLuint index, ref GLfloat[] val )
-    {
-        GetDelegateForFunction< PFNGLGETMULTISAMPLEFVPROC >( "glGetMultisamplefv", out _glGetMultisamplefv );
-
-        unsafe
-        {
-            fixed ( GLfloat* dp = &val[ 0 ] )
-            {
-                _glGetMultisamplefv( pname, index, dp );
-            }
-        }    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void SampleMaski( GLuint maskNumber, GLbitfield mask )
-    {
-        GetDelegateForFunction< PFNGLSAMPLEMASKIPROC >( "glSampleMaski", out _glSampleMaski );
-
-        _glSampleMaski( maskNumber, mask );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BindFragDataLocationIndexed( GLuint program, GLuint colorNumber, GLuint index, GLchar* name )
     {
         GetDelegateForFunction< PFNGLBINDFRAGDATALOCATIONINDEXEDPROC >( "glBindFragDataLocationIndexed",
@@ -3202,7 +2592,7 @@ public partial class GLBindings : IGLBindings
         _glBindFragDataLocationIndexed( ( uint )program, colorNumber, index, name );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void BindFragDataLocationIndexed( GLuint program, GLuint colorNumber, GLuint index, string name )
     {
         var nameBytes = Encoding.UTF8.GetBytes( name );
@@ -3210,15 +2600,17 @@ public partial class GLBindings : IGLBindings
         GetDelegateForFunction< PFNGLBINDFRAGDATALOCATIONINDEXEDPROC >( "glBindFragDataLocationIndexed",
                                                                         out _glBindFragDataLocationIndexed );
 
-        fixed ( GLchar* p = &nameBytes[ 0 ] )
         {
-            _glBindFragDataLocationIndexed( ( uint )program, colorNumber, index, p );
+            fixed ( GLchar* p = &nameBytes[ 0 ] )
+            {
+                _glBindFragDataLocationIndexed( ( uint )program, colorNumber, index, p );
+            }
         }
     }
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLint GetFragDataIndex( GLuint program, GLchar* name )
     {
         GetDelegateForFunction< PFNGLGETFRAGDATAINDEXPROC >( "glGetFragDataIndex", out _glGetFragDataIndex );
@@ -3226,7 +2618,7 @@ public partial class GLBindings : IGLBindings
         return _glGetFragDataIndex( ( uint )program, name );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public GLint GetFragDataIndex( GLuint program, string name )
     {
         var nameBytes = Encoding.UTF8.GetBytes( name );
@@ -3241,319 +2633,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
-    public void GenSamplers( GLsizei count, GLuint* samplers )
-    {
-        GetDelegateForFunction< PFNGLGENSAMPLERSPROC >( "glGenSamplers", out _glGenSamplers );
-
-        _glGenSamplers( count, samplers );
-    }
-
-    /// <inheritdoc/>
-    public GLuint[] GenSamplers( GLsizei count )
-    {
-        var result = new GLuint[ count ];
-
-        GetDelegateForFunction< PFNGLGENSAMPLERSPROC >( "glGenSamplers", out _glGenSamplers );
-
-        fixed ( GLuint* dp = &result[ 0 ] )
-        {
-            _glGenSamplers( count, dp );
-        }
-
-        return result;
-    }
-
-    /// <inheritdoc/>
-    public GLuint GenSampler()
-    {
-        return GenSamplers( 1 )[ 0 ];
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void DeleteSamplers( GLsizei count, GLuint* samplers )
-    {
-        GetDelegateForFunction< PFNGLDELETESAMPLERSPROC >( "glDeleteSamplers", out _glDeleteSamplers );
-
-        _glDeleteSamplers( count, samplers );
-    }
-
-    /// <inheritdoc/>
-    public void DeleteSamplers( params GLuint[] samplers )
-    {
-        GetDelegateForFunction< PFNGLDELETESAMPLERSPROC >( "glDeleteSamplers", out _glDeleteSamplers );
-
-        fixed ( GLuint* dp = &samplers[ 0 ] )
-        {
-            _glDeleteSamplers( samplers.Length, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public GLboolean IsSampler( GLuint sampler )
-    {
-        GetDelegateForFunction< PFNGLISSAMPLERPROC >( "glIsSampler", out _glIsSampler );
-
-        return _glIsSampler( sampler );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void BindSampler( GLuint unit, GLuint sampler )
-    {
-        GetDelegateForFunction< PFNGLBINDSAMPLERPROC >( "glBindSampler", out _glBindSampler );
-
-        _glBindSampler( unit, sampler );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void SamplerParameteri( GLuint sampler, GLenum pname, GLint param )
-    {
-        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIPROC >( "glSamplerParameteri", out _glSamplerParameteri );
-
-        _glSamplerParameteri( sampler, pname, param );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void SamplerParameteriv( GLuint sampler, GLenum pname, GLint* param )
-    {
-        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIVPROC >( "glSamplerParameteriv", out _glSamplerParameteriv );
-
-        _glSamplerParameteriv( sampler, pname, param );
-    }
-
-    /// <inheritdoc/>
-    public void SamplerParameteriv( GLuint sampler, GLenum pname, GLint[] param )
-    {
-        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIVPROC >( "glSamplerParameteriv", out _glSamplerParameteriv );
-
-        fixed ( GLint* dp = &param[ 0 ] )
-        {
-            _glSamplerParameteriv( sampler, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void SamplerParameterf( GLuint sampler, GLenum pname, GLfloat param )
-    {
-        GetDelegateForFunction< PFNGLSAMPLERPARAMETERFPROC >( "glSamplerParameterf", out _glSamplerParameterf );
-
-        _glSamplerParameterf( sampler, pname, param );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void SamplerParameterfv( GLuint sampler, GLenum pname, GLfloat* param )
-    {
-        GetDelegateForFunction< PFNGLSAMPLERPARAMETERFVPROC >( "glSamplerParameterfv", out _glSamplerParameterfv );
-
-        _glSamplerParameterfv( sampler, pname, param );
-    }
-
-    /// <inheritdoc/>
-    public void SamplerParameterfv( GLuint sampler, GLenum pname, GLfloat[] param )
-    {
-        GetDelegateForFunction< PFNGLSAMPLERPARAMETERFVPROC >( "glSamplerParameterfv", out _glSamplerParameterfv );
-
-        fixed ( GLfloat* dp = &param[ 0 ] )
-        {
-            _glSamplerParameterfv( sampler, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void SamplerParameterIiv( GLuint sampler, GLenum pname, GLint* param )
-    {
-        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIIVPROC >( "glSamplerParameterIiv", out _glSamplerParameterIiv );
-
-        _glSamplerParameterIiv( sampler, pname, param );
-    }
-
-    /// <inheritdoc/>
-    public void SamplerParameterIiv( GLuint sampler, GLenum pname, GLint[] param )
-    {
-        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIIVPROC >( "glSamplerParameterIiv", out _glSamplerParameterIiv );
-
-        fixed ( GLint* dp = &param[ 0 ] )
-        {
-            _glSamplerParameterIiv( sampler, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void SamplerParameterIuiv( GLuint sampler, GLenum pname, GLuint* param )
-    {
-        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIUIVPROC >( "glSamplerParameterIuiv", out _glSamplerParameterIuiv );
-
-        _glSamplerParameterIuiv( sampler, pname, param );
-    }
-
-    /// <inheritdoc/>
-    public void SamplerParameterIuiv( GLuint sampler, GLenum pname, GLuint[] param )
-    {
-        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIUIVPROC >( "glSamplerParameterIuiv", out _glSamplerParameterIuiv );
-
-        fixed ( GLuint* dp = &param[ 0 ] )
-        {
-            _glSamplerParameterIuiv( sampler, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetSamplerParameteriv( GLuint sampler, GLenum pname, GLint* param )
-    {
-        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIVPROC >( "glGetSamplerParameteriv", out _glGetSamplerParameteriv );
-
-        _glGetSamplerParameteriv( sampler, pname, param );
-    }
-
-    /// <inheritdoc/>
-    public void GetSamplerParameteriv( GLuint sampler, GLenum pname, ref GLint[] param )
-    {
-        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIVPROC >( "glGetSamplerParameteriv", out _glGetSamplerParameteriv );
-
-        fixed ( GLint* dp = &param[ 0 ] )
-        {
-            _glGetSamplerParameteriv( sampler, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetSamplerParameterIiv( GLuint sampler, GLenum pname, GLint* param )
-    {
-        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIIVPROC >( "glGetSamplerParameterIiv", out _glGetSamplerParameterIiv );
-
-        _glGetSamplerParameterIiv( sampler, pname, param );
-    }
-
-    /// <inheritdoc/>
-    public void GetSamplerParameterIiv( GLuint sampler, GLenum pname, ref GLint[] param )
-    {
-        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIIVPROC >( "glGetSamplerParameterIiv", out _glGetSamplerParameterIiv );
-
-        fixed ( GLint* dp = &param[ 0 ] )
-        {
-            _glGetSamplerParameterIiv( sampler, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetSamplerParameterfv( GLuint sampler, GLenum pname, GLfloat* param )
-    {
-        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERFVPROC >( "glGetSamplerParameterfv", out _glGetSamplerParameterfv );
-
-        _glGetSamplerParameterfv( sampler, pname, param );
-    }
-
-    /// <inheritdoc/>
-    public void GetSamplerParameterfv( GLuint sampler, GLenum pname, ref GLfloat[] param )
-    {
-        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERFVPROC >( "glGetSamplerParameterfv", out _glGetSamplerParameterfv );
-
-        fixed ( GLfloat* dp = &param[ 0 ] )
-        {
-            _glGetSamplerParameterfv( sampler, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetSamplerParameterIuiv( GLuint sampler, GLenum pname, GLuint* param )
-    {
-        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIUIVPROC >( "glGetSamplerParameterIuiv", out _glGetSamplerParameterIuiv );
-
-        _glGetSamplerParameterIuiv( sampler, pname, param );
-    }
-
-    /// <inheritdoc/>
-    public void GetSamplerParameterIuiv( GLuint sampler, GLenum pname, ref GLuint[] param )
-    {
-        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIUIVPROC >( "glGetSamplerParameterIuiv", out _glGetSamplerParameterIuiv );
-
-        fixed ( GLuint* dp = &param[ 0 ] )
-        {
-            _glGetSamplerParameterIuiv( sampler, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void QueryCounter( GLuint id, GLenum target )
-    {
-        GetDelegateForFunction< PFNGLQUERYCOUNTERPROC >( "glQueryCounter", out _glQueryCounter );
-
-        _glQueryCounter( id, target );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetQueryObjecti64v( GLuint id, GLenum pname, GLint64* param )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYOBJECTI64VPROC >( "glGetQueryObjecti64v", out _glGetQueryObjecti64v );
-
-        _glGetQueryObjecti64v( id, pname, param );
-    }
-
-    /// <inheritdoc/>
-    public void GetQueryObjecti64v( GLuint id, GLenum pname, ref GLint64[] param )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYOBJECTI64VPROC >( "glGetQueryObjecti64v", out _glGetQueryObjecti64v );
-
-        fixed ( GLint64* dp = &param[ 0 ] )
-        {
-            _glGetQueryObjecti64v( id, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void GetQueryObjectui64v( GLuint id, GLenum pname, GLuint64* param )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYOBJECTUI64VPROC >( "glGetQueryObjectui64v", out _glGetQueryObjectui64v );
-
-        _glGetQueryObjectui64v( id, pname, param );
-    }
-
-    /// <inheritdoc/>
-    public void GetQueryObjectui64v( GLuint id, GLenum pname, ref GLuint64[] param )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYOBJECTUI64VPROC >( "glGetQueryObjectui64v", out _glGetQueryObjectui64v );
-
-        fixed ( GLuint64* dp = &param[ 0 ] )
-        {
-            _glGetQueryObjectui64v( id, pname, dp );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribDivisor( GLuint index, GLuint divisor )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBDIVISORPROC >( "glVertexAttribDivisor", out _glVertexAttribDivisor );
@@ -3563,7 +2643,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP1ui( GLuint index, GLenum type, GLboolean normalized, GLuint value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP1UIPROC >( "glVertexAttribP1ui", out _glVertexAttribP1ui );
@@ -3573,7 +2653,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP1uiv( GLuint index, GLenum type, GLboolean normalized, GLuint* value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP1UIVPROC >( "glVertexAttribP1uiv", out _glVertexAttribP1uiv );
@@ -3581,7 +2661,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttribP1uiv( index, type, normalized, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP1uiv( GLuint index, GLenum type, GLboolean normalized, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP1UIVPROC >( "glVertexAttribP1uiv", out _glVertexAttribP1uiv );
@@ -3594,7 +2674,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP2ui( GLuint index, GLenum type, GLboolean normalized, GLuint value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP2UIPROC >( "glVertexAttribP2ui", out _glVertexAttribP2ui );
@@ -3604,7 +2684,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP2uiv( GLuint index, GLenum type, GLboolean normalized, GLuint* value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP2UIVPROC >( "glVertexAttribP2uiv", out _glVertexAttribP2uiv );
@@ -3612,7 +2692,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttribP2uiv( index, type, normalized, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP2uiv( GLuint index, GLenum type, GLboolean normalized, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP2UIVPROC >( "glVertexAttribP2uiv", out _glVertexAttribP2uiv );
@@ -3625,7 +2705,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP3ui( GLuint index, GLenum type, GLboolean normalized, GLuint value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP3UIPROC >( "glVertexAttribP3ui", out _glVertexAttribP3ui );
@@ -3635,7 +2715,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP3uiv( GLuint index, GLenum type, GLboolean normalized, GLuint* value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP3UIVPROC >( "glVertexAttribP3uiv", out _glVertexAttribP3uiv );
@@ -3643,7 +2723,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttribP3uiv( index, type, normalized, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP3uiv( GLuint index, GLenum type, GLboolean normalized, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP3UIVPROC >( "glVertexAttribP3uiv", out _glVertexAttribP3uiv );
@@ -3656,7 +2736,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP4ui( GLuint index, GLenum type, GLboolean normalized, GLuint value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP4UIPROC >( "glVertexAttribP4ui", out _glVertexAttribP4ui );
@@ -3666,7 +2746,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP4uiv( GLuint index, GLenum type, GLboolean normalized, GLuint* value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP4UIVPROC >( "glVertexAttribP4uiv", out _glVertexAttribP4uiv );
@@ -3674,7 +2754,7 @@ public partial class GLBindings : IGLBindings
         _glVertexAttribP4uiv( index, type, normalized, value );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void VertexAttribP4uiv( GLuint index, GLenum type, GLboolean normalized, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP4UIVPROC >( "glVertexAttribP4uiv", out _glVertexAttribP4uiv );
@@ -3683,16 +2763,6 @@ public partial class GLBindings : IGLBindings
         {
             _glVertexAttribP4uiv( index, type, normalized, dp );
         }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc/>
-    public void MinSampleShading( GLfloat value )
-    {
-        GetDelegateForFunction< PFNGLMINSAMPLESHADINGPROC >( "glMinSampleShading", out _glMinSampleShading );
-
-        _glMinSampleShading( value );
     }
 
     // ========================================================================
@@ -3740,13 +2810,6 @@ public partial class GLBindings : IGLBindings
         _glDrawArraysIndirect( mode, indirect );
     }
 
-//    public void DrawArraysIndirect( GLenum mode, DrawArraysIndirectCommand indirect )
-//    {
-//        GetDelegateForFunction< PFNGLDRAWARRAYSINDIRECTPROC >( "glDrawArraysIndirect", out _glDrawArraysIndirect );
-//
-//        _glDrawArraysIndirect( mode, &indirect );
-//    }
-
     // ========================================================================
 
     public void DrawElementsIndirect( GLenum mode, GLenum type, IntPtr indirect )
@@ -3755,13 +2818,6 @@ public partial class GLBindings : IGLBindings
 
         _glDrawElementsIndirect( mode, type, indirect );
     }
-
-//    public void DrawElementsIndirect( GLenum mode, GLenum type, DrawElementsIndirectCommand indirect )
-//    {
-//        GetDelegateForFunction< PFNGLDRAWELEMENTSINDIRECTPROC >( "glDrawElementsIndirect", out _glDrawElementsIndirect );
-//
-//        _glDrawElementsIndirect( mode, type, &indirect );
-//    }
 
     // ========================================================================
 
@@ -4154,7 +3210,7 @@ public partial class GLBindings : IGLBindings
 
             _glGetActiveSubroutineUniformName( ( uint )program, shadertype, index, bufsize, &length, p );
 
-            return new string( ( sbyte* )p, 0, length, Encoding.UTF8 );
+            return new string( ( GLbyte* )p, 0, length, Encoding.UTF8 );
         }
     }
 
@@ -4435,7 +3491,7 @@ public partial class GLBindings : IGLBindings
         {
             fixed ( byte* pBinary = &binary[ 0 ] )
             {
-                _glShaderBinary( count, pShaders, binaryformat, pBinary, binary.Length );
+                _glShaderBinary( count, pShaders, binaryformat, ( IntPtr )pBinary, binary.Length );
             }
         }
     }
@@ -4502,7 +3558,7 @@ public partial class GLBindings : IGLBindings
         {
             fixed ( GLenum* pBinaryFormat = &binaryFormat )
             {
-                _glGetProgramBinary( ( uint )program, bufSize, &length, pBinaryFormat, pBinary );
+                _glGetProgramBinary( ( uint )program, bufSize, &length, pBinaryFormat, ( IntPtr )pBinary );
             }
         }
 
@@ -4526,7 +3582,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( byte* pBinary = &binary[ 0 ] )
         {
-            _glProgramBinary( ( uint )program, binaryFormat, pBinary, binary.Length );
+            _glProgramBinary( ( uint )program, binaryFormat, ( IntPtr )pBinary, binary.Length );
         }
     }
 
@@ -4911,7 +3967,7 @@ public partial class GLBindings : IGLBindings
     }
 
     // ========================================================================
-    
+
     public void ProgramUniform3iv( GLuint program, GLint location, GLsizei count, GLint* value )
     {
         GetDelegateForFunction< PFNGLPROGRAMUNIFORM3IVPROC >( "glProgramUniform3iv", out _glProgramUniform3iv );
@@ -5497,7 +4553,7 @@ public partial class GLBindings : IGLBindings
 
             _glGetProgramPipelineInfoLog( pipeline, bufSize, &length, pInfoLog );
 
-            return new string( ( sbyte* )pInfoLog, 0, length, Encoding.UTF8 );
+            return new string( ( GLbyte* )pInfoLog, 0, length, Encoding.UTF8 );
         }
     }
 
@@ -5837,7 +4893,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( void* p = &indices[ 0 ] )
         {
-            _glDrawElementsInstancedBaseInstance( mode, count, type, p, instancecount, baseinstance );
+            _glDrawElementsInstancedBaseInstance( mode, count, type, ( IntPtr )p, instancecount, baseinstance );
         }
     }
 
@@ -5862,7 +4918,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( void* p = &indices[ 0 ] )
         {
-            _glDrawElementsInstancedBaseVertexBaseInstance( mode, count, type, p, instancecount, basevertex, baseinstance );
+            _glDrawElementsInstancedBaseVertexBaseInstance( mode, count, type, ( IntPtr )p, instancecount, basevertex, baseinstance );
         }
     }
 
@@ -5989,52 +5045,12 @@ public partial class GLBindings : IGLBindings
 
         GetDelegateForFunction< PFNGLGETPOINTERVPROC >( "glGetPointerv", out _glGetPointerv );
 
-        _glGetPointerv( pname, p );
+        _glGetPointerv( pname, ( IntPtr* )p );
 
         for ( var i = 0; i < length; i++ )
         {
             parameters[ i ] = new IntPtr( *p );
             p++;
-        }
-    }
-
-    // ========================================================================
-
-    public void ClearBufferData( GLenum target, GLenum internalFormat, GLenum format, GLenum type, IntPtr data )
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERDATAPROC >( "glClearBufferData", out _glClearBufferData );
-
-        _glClearBufferData( target, internalFormat, format, type, data );
-    }
-
-    public void ClearBufferData< T >( GLenum target, GLenum internalFormat, GLenum format, GLenum type, T[] data ) where T : unmanaged
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERDATAPROC >( "glClearBufferData", out _glClearBufferData );
-
-        fixed ( T* t = &data[ 0 ] )
-        {
-            _glClearBufferData( target, internalFormat, format, type, t );
-        }
-    }
-
-    // ========================================================================
-
-    public void ClearBufferSubData( GLenum target, GLenum internalFormat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type,
-                                    IntPtr data )
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERSUBDATAPROC >( "glClearBufferSubData", out _glClearBufferSubData );
-
-        _glClearBufferSubData( target, internalFormat, offset, size, format, type, data );
-    }
-
-    public void ClearBufferSubData< T >( GLenum target, GLenum internalFormat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type,
-                                         T[] data ) where T : unmanaged
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERSUBDATAPROC >( "glClearBufferSubData", out _glClearBufferSubData );
-
-        fixed ( T* t = &data[ 0 ] )
-        {
-            _glClearBufferSubData( target, internalFormat, offset, size, format, type, t );
         }
     }
 
@@ -6055,13 +5071,6 @@ public partial class GLBindings : IGLBindings
 
         _glDispatchComputeIndirect( indirect );
     }
-
-//    public void DispatchComputeIndirect( DispatchIndirectCommand indirect )
-//    {
-//        GetDelegateForFunction< PFNGLDISPATCHCOMPUTEINDIRECTPROC >( "glDispatchComputeIndirect", out _glDispatchComputeIndirect );
-// 
-//        _glDispatchComputeIndirect( &indirect );
-//    }
 
     // ========================================================================
 
@@ -6086,7 +5095,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public unsafe void GetFramebufferParameteriv( GLenum target, GLenum pname, GLint* parameters )
+    public void GetFramebufferParameteriv( GLenum target, GLenum pname, GLint* parameters )
     {
         GetDelegateForFunction< PFNGLGETFRAMEBUFFERPARAMETERIVPROC >( "glGetFramebufferParameteriv", out _glGetFramebufferParameteriv );
 
@@ -6097,14 +5106,10 @@ public partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLGETFRAMEBUFFERPARAMETERIVPROC >( "glGetFramebufferParameteriv", out _glGetFramebufferParameteriv );
 
-        unsafe
+        fixed ( GLint* pParameters = &parameters[ 0 ] )
         {
-            fixed ( GLint* pParameters = &parameters[ 0 ] )
-            {
-                _glGetFramebufferParameteriv( target, pname, pParameters );
-            }
+            _glGetFramebufferParameteriv( target, pname, pParameters );
         }
-        
     }
 
     // ========================================================================
@@ -6143,24 +5148,6 @@ public partial class GLBindings : IGLBindings
         GetDelegateForFunction< PFNGLINVALIDATETEXIMAGEPROC >( "glInvalidateTexImage", out _glInvalidateTexImage );
 
         _glInvalidateTexImage( texture, level );
-    }
-
-    // ========================================================================
-
-    public void InvalidateBufferSubData( GLuint buffer, GLintptr offset, GLsizeiptr length )
-    {
-        GetDelegateForFunction< PFNGLINVALIDATEBUFFERSUBDATAPROC >( "glInvalidateBufferSubData", out _glInvalidateBufferSubData );
-
-        _glInvalidateBufferSubData( buffer, offset, length );
-    }
-
-    // ========================================================================
-
-    public void InvalidateBufferData( GLuint buffer )
-    {
-        GetDelegateForFunction< PFNGLINVALIDATEBUFFERDATAPROC >( "glInvalidateBufferData", out _glInvalidateBufferData );
-
-        _glInvalidateBufferData( buffer );
     }
 
     // ========================================================================
@@ -6212,13 +5199,6 @@ public partial class GLBindings : IGLBindings
         _glMultiDrawArraysIndirect( mode, indirect, drawcount, stride );
     }
 
-//    public void MultiDrawArraysIndirect( GLenum mode, DrawArraysIndirectCommand indirect, GLsizei drawcount, GLsizei stride )
-//    {
-//        GetDelegateForFunction< PFNGLMULTIDRAWARRAYSINDIRECTPROC >( "glMultiDrawArraysIndirect", out _glMultiDrawArraysIndirect );
-//
-//        _glMultiDrawArraysIndirect( mode, ( IntPtr )&indirect, drawcount, stride );
-//    }
-
     // ========================================================================
 
     public void MultiDrawElementsIndirect( GLenum mode, GLenum type, IntPtr indirect, GLsizei drawcount, GLsizei stride )
@@ -6227,14 +5207,6 @@ public partial class GLBindings : IGLBindings
 
         _glMultiDrawElementsIndirect( mode, type, indirect, drawcount, stride );
     }
-
-//    public void MultiDrawElementsIndirect( GLenum mode, GLenum type, DrawElementsIndirectCommand indirect, GLsizei drawcount,
-//                                           GLsizei stride )
-//    {
-//        GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSINDIRECTPROC >( "glMultiDrawElementsIndirect", out _glMultiDrawElementsIndirect );
-//
-//        _glMultiDrawElementsIndirect( mode, type, ( IntPtr )&indirect, drawcount, stride );
-//    }
 
     // ========================================================================
 
@@ -6332,7 +5304,7 @@ public partial class GLBindings : IGLBindings
 
             _glGetProgramResourceName( ( uint )program, programInterface, index, bufSize, &length, pName );
 
-            return new string( ( sbyte* )pName, 0, length, Encoding.UTF8 );
+            return new string( ( GLbyte* )pName, 0, length, Encoding.UTF8 );
         }
     }
 
@@ -6541,163 +5513,6 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void DebugMessageControl( GLenum source, GLenum type, GLenum severity, GLsizei count, GLuint* ids, GLboolean enabled )
-    {
-        GetDelegateForFunction< PFNGLDEBUGMESSAGECONTROLPROC >( "glDebugMessageControl", out _glDebugMessageControl );
-
-        _glDebugMessageControl( source, type, severity, count, ids, enabled );
-    }
-
-    public void DebugMessageControl( GLenum source, GLenum type, GLenum severity, GLuint[] ids, GLboolean enabled )
-    {
-        GetDelegateForFunction< PFNGLDEBUGMESSAGECONTROLPROC >( "glDebugMessageControl", out _glDebugMessageControl );
-
-        fixed ( GLuint* pIds = ids )
-        {
-            _glDebugMessageControl( source, type, severity, ids.Length, pIds, enabled );
-        }
-    }
-
-    // ========================================================================
-
-    public void DebugMessageInsert( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar* buf )
-    {
-        GetDelegateForFunction< PFNGLDEBUGMESSAGEINSERTPROC >( "glDebugMessageInsert", out _glDebugMessageInsert );
-
-        _glDebugMessageInsert( source, type, id, severity, length, buf );
-    }
-
-    public void DebugMessageInsert( GLenum source, GLenum type, GLuint id, GLenum severity, string buf )
-    {
-        var bufBytes = Encoding.UTF8.GetBytes( buf );
-
-        GetDelegateForFunction< PFNGLDEBUGMESSAGEINSERTPROC >( "glDebugMessageInsert", out _glDebugMessageInsert );
-
-        fixed ( GLchar* pBufBytes = bufBytes )
-        {
-            _glDebugMessageInsert( source, type, id, severity, bufBytes.Length, pBufBytes );
-        }
-    }
-
-    // ========================================================================
-
-    public void DebugMessageCallback( GLDEBUGPROC callback, IntPtr userParam )
-    {
-        GetDelegateForFunction< PFNGLDEBUGMESSAGECALLBACKPROC >( "glDebugMessageCallback", out _glDebugMessageCallback );
-
-        _glDebugMessageCallback( callback, userParam );
-    }
-
-    public void DebugMessageCallback( GLDEBUGPROCSAFE callback, IntPtr userParam )
-    {
-        GetDelegateForFunction< PFNGLDEBUGMESSAGECALLBACKPROC >( "glDebugMessageCallback", out _glDebugMessageCallback );
-
-        _glDebugMessageCallback( CallbackUnsafe, userParam );
-
-        return;
-
-        void CallbackUnsafe( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar* message, IntPtr param )
-        {
-            var messageString = new string( ( sbyte* )message, 0, length, Encoding.UTF8 );
-
-            callback( source, type, id, severity, messageString, param );
-        }
-    }
-
-    // ========================================================================
-
-    public GLuint GetDebugMessageLog( GLuint count,
-                                      GLsizei bufsize,
-                                      GLenum* sources,
-                                      GLenum* types,
-                                      GLuint* ids,
-                                      GLenum* severities,
-                                      GLsizei* lengths,
-                                      GLchar* messageLog )
-    {
-        GetDelegateForFunction< PFNGLGETDEBUGMESSAGELOGPROC >( "glGetDebugMessageLog", out _glGetDebugMessageLog );
-
-        return _glGetDebugMessageLog( count, bufsize, sources, types, ids, severities, lengths, messageLog );
-    }
-
-    public GLuint GetDebugMessageLog( GLuint count,
-                                      GLsizei bufSize,
-                                      out GLenum[] sources,
-                                      out GLenum[] types,
-                                      out GLuint[] ids,
-                                      out GLenum[] severities,
-                                      out string[] messageLog )
-    {
-        sources    = new GLenum[ count ];
-        types      = new GLenum[ count ];
-        ids        = new GLuint[ count ];
-        severities = new GLenum[ count ];
-
-        var messageLogBytes = new GLchar[ bufSize ];
-        var lengths         = new GLsizei[ count ];
-
-        GetDelegateForFunction< PFNGLGETDEBUGMESSAGELOGPROC >( "glGetDebugMessageLog", out _glGetDebugMessageLog );
-
-        fixed ( GLenum* pSources = &sources[ 0 ] )
-        fixed ( GLenum* pTypes = &types[ 0 ] )
-        fixed ( GLuint* pIds = &ids[ 0 ] )
-        fixed ( GLenum* pSeverities = &severities[ 0 ] )
-        fixed ( GLsizei* pLengths = &lengths[ 0 ] )
-        fixed ( GLchar* pMessageLogBytes = &messageLogBytes[ 0 ] )
-        {
-            var pstart = pMessageLogBytes;
-            var ret    = _glGetDebugMessageLog( count, bufSize, pSources, pTypes, pIds, pSeverities, pLengths, pMessageLogBytes );
-
-            messageLog = new string[ count ];
-
-            for ( var i = 0; i < count; i++ )
-            {
-                messageLog[ i ] =  new string( ( sbyte* )pstart, 0, lengths[ i ], Encoding.UTF8 );
-                pstart          += lengths[ i ];
-            }
-
-            Array.Resize( ref sources, ( int )ret );
-            Array.Resize( ref types, ( int )ret );
-            Array.Resize( ref ids, ( int )ret );
-            Array.Resize( ref severities, ( int )ret );
-            Array.Resize( ref messageLog, ( int )ret );
-
-            return ret;
-        }
-    }
-
-    // ========================================================================
-
-    public void PushDebugGroup( GLenum source, GLuint id, GLsizei length, GLchar* message )
-    {
-        GetDelegateForFunction< PFNGLPUSHDEBUGGROUPPROC >( "glPushDebugGroup", out _glPushDebugGroup );
-
-        _glPushDebugGroup( source, id, length, message );
-    }
-
-    public void PushDebugGroup( GLenum source, GLuint id, string message )
-    {
-        var messageBytes = Encoding.UTF8.GetBytes( message );
-
-        GetDelegateForFunction< PFNGLPUSHDEBUGGROUPPROC >( "glPushDebugGroup", out _glPushDebugGroup );
-
-        fixed ( GLchar* pMessageBytes = messageBytes )
-        {
-            _glPushDebugGroup( source, id, messageBytes.Length, pMessageBytes );
-        }
-    }
-
-    // ========================================================================
-
-    public void PopDebugGroup()
-    {
-        GetDelegateForFunction< PFNGLPOPDEBUGGROUPPROC >( "glPopDebugGroup", out _glPopDebugGroup );
-
-        _glPopDebugGroup();
-    }
-
-    // ========================================================================
-
     public void ObjectLabel( GLenum identifier, GLuint name, GLsizei length, GLchar* label )
     {
         GetDelegateForFunction< PFNGLOBJECTLABELPROC >( "glObjectLabel", out _glObjectLabel );
@@ -6738,7 +5553,7 @@ public partial class GLBindings : IGLBindings
 
             _glGetObjectLabel( identifier, name, bufSize, &length, pLabelBytes );
 
-            return new string( ( sbyte* )pLabelBytes, 0, length, Encoding.UTF8 );
+            return new string( ( GLbyte* )pLabelBytes, 0, length, Encoding.UTF8 );
         }
     }
 
@@ -6759,7 +5574,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( GLchar* pLabelBytes = labelBytes )
         {
-            _glObjectPtrLabel( ptr.ToPointer(), labelBytes.Length, pLabelBytes );
+            _glObjectPtrLabel( ptr, labelBytes.Length, pLabelBytes );
         }
     }
 
@@ -6782,9 +5597,9 @@ public partial class GLBindings : IGLBindings
         {
             GLsizei length;
 
-            _glGetObjectPtrLabel( ptr.ToPointer(), bufSize, &length, pLabelBytes );
+            _glGetObjectPtrLabel( ptr, bufSize, &length, pLabelBytes );
 
-            return new string( ( sbyte* )pLabelBytes, 0, length, Encoding.UTF8 );
+            return new string( ( GLbyte* )pLabelBytes, 0, length, Encoding.UTF8 );
         }
     }
 
@@ -6803,7 +5618,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( void* pData = &data[ 0 ] )
         {
-            _glBufferStorage( target, data.Length * sizeof( T ), pData, flags );
+            _glBufferStorage( target, data.Length * sizeof( T ), ( IntPtr )pData, flags );
         }
     }
 
@@ -6822,7 +5637,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* t = &data[ 0 ] )
         {
-            _glClearTexImage( texture, level, format, type, t );
+            _glClearTexImage( texture, level, format, type, ( IntPtr )t );
         }
     }
 
@@ -6844,7 +5659,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* t = &data[ 0 ] )
         {
-            _glClearTexSubImage( texture, level, xOffset, yOffset, zOffset, width, height, depth, format, type, t );
+            _glClearTexSubImage( texture, level, xOffset, yOffset, zOffset, width, height, depth, format, type, ( IntPtr )t );
         }
     }
 
@@ -6908,25 +5723,6 @@ public partial class GLBindings : IGLBindings
         fixed ( GLuint* pTextures = &textures[ 0 ] )
         {
             _glBindTextures( first, textures.Length, pTextures );
-        }
-    }
-
-    // ========================================================================
-
-    public void BindSamplers( GLuint first, GLsizei count, GLuint* samplers )
-    {
-        GetDelegateForFunction< PFNGLBINDSAMPLERSPROC >( "glBindSamplers", out _glBindSamplers );
-
-        _glBindSamplers( first, count, samplers );
-    }
-
-    public void BindSamplers( GLuint first, GLuint[] samplers )
-    {
-        GetDelegateForFunction< PFNGLBINDSAMPLERSPROC >( "glBindSamplers", out _glBindSamplers );
-
-        fixed ( GLuint* pSamplers = &samplers[ 0 ] )
-        {
-            _glBindSamplers( first, samplers.Length, pSamplers );
         }
     }
 
@@ -7131,7 +5927,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* pData = &data[ 0 ] )
         {
-            _glNamedBufferStorage( buffer, size, pData, flags );
+            _glNamedBufferStorage( buffer, size, ( IntPtr )pData, flags );
         }
     }
 
@@ -7150,7 +5946,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* pData = &data[ 0 ] )
         {
-            _glNamedBufferData( buffer, size, pData, usage );
+            _glNamedBufferData( buffer, size, ( IntPtr )pData, usage );
         }
     }
 
@@ -7169,7 +5965,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* pData = &data[ 0 ] )
         {
-            _glNamedBufferSubData( buffer, offset, size, pData );
+            _glNamedBufferSubData( buffer, offset, size, ( IntPtr )pData );
         }
     }
 
@@ -7197,7 +5993,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* t = &data[ 0 ] )
         {
-            _glClearNamedBufferData( buffer, internalFormat, format, type, t );
+            _glClearNamedBufferData( buffer, internalFormat, format, type, ( IntPtr )t );
         }
     }
 
@@ -7218,7 +6014,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* t = &data[ 0 ] )
         {
-            _glClearNamedBufferSubData( buffer, internalFormat, offset, size, format, type, t );
+            _glClearNamedBufferSubData( buffer, internalFormat, offset, size, format, type, ( IntPtr )t );
         }
     }
 
@@ -7231,7 +6027,7 @@ public partial class GLBindings : IGLBindings
         return _glMapNamedBuffer( buffer, access );
     }
 
-    public System.Span< T > MapNamedBuffer< T >( GLuint buffer, GLenum access ) where T : unmanaged
+    public Span< T > MapNamedBuffer< T >( GLuint buffer, GLenum access ) where T : unmanaged
     {
         var size = stackalloc GLint[ 1 ];
 
@@ -7241,9 +6037,9 @@ public partial class GLBindings : IGLBindings
 
         GetDelegateForFunction< PFNGLMAPNAMEDBUFFERPROC >( "glMapNamedBuffer", out _glMapNamedBuffer );
 
-        IntPtr ptr = _glMapNamedBuffer( buffer, access );
+        var ptr = _glMapNamedBuffer( buffer, access );
 
-        return new System.Span< T >( ptr, *size / sizeof( T ) );
+        return new Span< T >( ( void* )ptr, *size / sizeof( T ) );
     }
 
     // ========================================================================
@@ -7255,14 +6051,14 @@ public partial class GLBindings : IGLBindings
         return _glMapNamedBufferRange( buffer, offset, length, access );
     }
 
-    public System.Span< T > MapNamedBufferRange< T >( GLuint buffer, GLintptr offset, GLsizeiptr length, GLbitfield access )
+    public Span< T > MapNamedBufferRange< T >( GLuint buffer, GLintptr offset, GLsizeiptr length, GLbitfield access )
         where T : unmanaged
     {
         GetDelegateForFunction< PFNGLMAPNAMEDBUFFERRANGEPROC >( "glMapNamedBufferRange", out _glMapNamedBufferRange );
 
         var ptr = _glMapNamedBufferRange( buffer, offset, length, access );
 
-        return new System.Span< T >( ptr, ( int )length / sizeof( T ) );
+        return new Span< T >( ( void* )ptr, ( int )length / sizeof( T ) );
     }
 
     // ========================================================================
@@ -7372,7 +6168,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* ptrData = &data[ 0 ] )
         {
-            _glGetNamedBufferSubData( buffer, offset, size, ptrData );
+            _glGetNamedBufferSubData( buffer, offset, size, ( IntPtr )ptrData );
         }
 
         return data;
@@ -7836,7 +6632,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* ptrPixels = &pixels[ 0 ] )
         {
-            _glTextureSubImage1D( texture, level, xoffset, width, format, type, ptrPixels );
+            _glTextureSubImage1D( texture, level, xoffset, width, format, type, ( IntPtr )ptrPixels );
         }
     }
 
@@ -7857,7 +6653,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* ptrPixels = &pixels[ 0 ] )
         {
-            _glTextureSubImage2D( texture, level, xoffset, yoffset, width, height, format, type, ptrPixels );
+            _glTextureSubImage2D( texture, level, xoffset, yoffset, width, height, format, type, ( IntPtr )ptrPixels );
         }
     }
 
@@ -7879,7 +6675,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* ptrPixels = &pixels[ 0 ] )
         {
-            _glTextureSubImage3D( texture, level, xoffset, yoffset, zoffset, width, height, depth, format, type, ptrPixels );
+            _glTextureSubImage3D( texture, level, xoffset, yoffset, zoffset, width, height, depth, format, type, ( IntPtr )ptrPixels );
         }
     }
 
@@ -7902,7 +6698,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( byte* ptrData = &data[ 0 ] )
         {
-            _glCompressedTextureSubImage1D( texture, level, xoffset, width, format, imageSize, ptrData );
+            _glCompressedTextureSubImage1D( texture, level, xoffset, width, format, imageSize, ( IntPtr )ptrData );
         }
     }
 
@@ -7925,7 +6721,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( byte* ptrData = &data[ 0 ] )
         {
-            _glCompressedTextureSubImage2D( texture, level, xoffset, yoffset, width, height, format, imageSize, ptrData );
+            _glCompressedTextureSubImage2D( texture, level, xoffset, yoffset, width, height, format, imageSize, ( IntPtr )ptrData );
         }
     }
 
@@ -7951,7 +6747,7 @@ public partial class GLBindings : IGLBindings
         fixed ( void* ptrData = &data[ 0 ] )
         {
             var dataptr = ( IntPtr )ptrData;
-            
+
             _glCompressedTextureSubImage3D( texture, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, dataptr );
         }
     }
@@ -8139,7 +6935,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( byte* ptrPixels = &pixels[ 0 ] )
         {
-            _glGetCompressedTextureImage( texture, level, bufSize, ptrPixels );
+            _glGetCompressedTextureImage( texture, level, bufSize, ( IntPtr )ptrPixels );
         }
 
         return pixels;
@@ -8449,34 +7245,6 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void CreateSamplers( GLsizei n, GLuint* samplers )
-    {
-        GetDelegateForFunction< PFNGLCREATESAMPLERSPROC >( "glCreateSamplers", out _glCreateSamplers );
-
-        _glCreateSamplers( n, samplers );
-    }
-
-    public GLuint[] CreateSamplers( GLsizei n )
-    {
-        var samplers = new GLuint[ n ];
-
-        GetDelegateForFunction< PFNGLCREATESAMPLERSPROC >( "glCreateSamplers", out _glCreateSamplers );
-
-        fixed ( GLuint* ptrSamplers = &samplers[ 0 ] )
-        {
-            _glCreateSamplers( n, ptrSamplers );
-        }
-
-        return samplers;
-    }
-
-    public GLuint CreateSamplers()
-    {
-        return CreateSamplers( 1 )[ 0 ];
-    }
-
-    // ========================================================================
-
     public void CreateProgramPipelines( GLsizei n, GLuint* pipelines )
     {
         GetDelegateForFunction< PFNGLCREATEPROGRAMPIPELINESPROC >( "glCreateProgramPipelines", out _glCreateProgramPipelines );
@@ -8501,72 +7269,6 @@ public partial class GLBindings : IGLBindings
     public GLuint CreateProgramPipeline()
     {
         return CreateProgramPipelines( 1 )[ 0 ];
-    }
-
-    // ========================================================================
-
-    public void CreateQueries( GLenum target, GLsizei n, GLuint* ids )
-    {
-        GetDelegateForFunction< PFNGLCREATEQUERIESPROC >( "glCreateQueries", out _glCreateQueries );
-
-        _glCreateQueries( target, n, ids );
-    }
-
-    public GLuint[] CreateQueries( GLenum target, GLsizei n )
-    {
-        var ids = new GLuint[ n ];
-
-        GetDelegateForFunction< PFNGLCREATEQUERIESPROC >( "glCreateQueries", out _glCreateQueries );
-
-        fixed ( GLuint* ptrIds = &ids[ 0 ] )
-        {
-            _glCreateQueries( target, n, ptrIds );
-        }
-
-        return ids;
-    }
-
-    // ========================================================================
-
-    public GLuint CreateQuery( GLenum target )
-    {
-        return CreateQueries( target, 1 )[ 0 ];
-    }
-
-    // ========================================================================
-
-    public void GetQueryBufferObjecti64v( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTI64VPROC >( "glGetQueryBufferObjecti64v", out _glGetQueryBufferObjecti64v );
-
-        _glGetQueryBufferObjecti64v( id, buffer, pname, offset );
-    }
-
-    // ========================================================================
-
-    public void GetQueryBufferObjectiv( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTIVPROC >( "glGetQueryBufferObjectiv", out _glGetQueryBufferObjectiv );
-
-        _glGetQueryBufferObjectiv( id, buffer, pname, offset );
-    }
-
-    // ========================================================================
-
-    public void GetQueryBufferObjectui64v( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTUI64VPROC >( "glGetQueryBufferObjectui64v", out _glGetQueryBufferObjectui64v );
-
-        _glGetQueryBufferObjectui64v( id, buffer, pname, offset );
-    }
-
-    // ========================================================================
-
-    public void GetQueryBufferObjectuiv( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
-    {
-        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTUIVPROC >( "glGetQueryBufferObjectuiv", out _glGetQueryBufferObjectuiv );
-
-        _glGetQueryBufferObjectuiv( id, buffer, pname, offset );
     }
 
     // ========================================================================
@@ -8630,7 +7332,7 @@ public partial class GLBindings : IGLBindings
         fixed ( void* ptrPixels = &pixels[ 0 ] )
         {
             var dataptr = new IntPtr( ptrPixels );
-            
+
             _glGetCompressedTextureSubImage( texture, level, xoffset, yoffset, zoffset, width, height, depth, bufSize, dataptr );
         }
 
@@ -8664,7 +7366,7 @@ public partial class GLBindings : IGLBindings
         fixed ( void* ptrPixels = &pixels[ 0 ] )
         {
             var dataptr = new IntPtr( ptrPixels );
-            
+
             _glGetnCompressedTexImage( target, lod, bufSize, dataptr );
         }
 
@@ -8689,7 +7391,7 @@ public partial class GLBindings : IGLBindings
         fixed ( void* ptrPixels = &pixels[ 0 ] )
         {
             var dataptr = new IntPtr( ptrPixels );
-            
+
             _glGetnTexImage( target, level, format, type, bufSize, dataptr );
         }
 
@@ -8786,7 +7488,7 @@ public partial class GLBindings : IGLBindings
         var data = new byte[ bufSize ];
 
         GetDelegateForFunction< PFNGLREADNPIXELSPROC >( "glReadnPixels", out _glReadnPixels );
-        
+
         fixed ( void* ptrData = &data[ 0 ] )
         {
             var dataptr = new IntPtr( ptrData );
@@ -8799,7 +7501,7 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void TextureBarrier()
     {
         GetDelegateForFunction< PFNGLTEXTUREBARRIERPROC >( "glTextureBarrier", out _glTextureBarrier );
@@ -8935,7 +7637,7 @@ public partial class GLBindings : IGLBindings
 
                     _glGetTransformFeedbackVarying( ( uint )program, index, bufSize, &length, pSize, pType, p );
 
-                    return new string( ( sbyte* )p, 0, length, Encoding.UTF8 );
+                    return new string( ( GLbyte* )p, 0, length, Encoding.UTF8 );
                 }
             }
         }
@@ -9579,72 +8281,6 @@ public partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void ClearBufferiv( GLenum buffer, GLint drawbuffer, GLint* value )
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERIVPROC >( "glClearBufferiv", out _glClearBufferiv );
-
-        _glClearBufferiv( buffer, drawbuffer, value );
-    }
-
-    public void ClearBufferiv( GLenum buffer, GLint drawbuffer, GLint[] value )
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERIVPROC >( "glClearBufferiv", out _glClearBufferiv );
-
-        fixed ( GLint* p = &value[ 0 ] )
-        {
-            _glClearBufferiv( buffer, drawbuffer, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void ClearBufferuiv( GLenum buffer, GLint drawbuffer, GLuint* value )
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERUIVPROC >( "glClearBufferuiv", out _glClearBufferuiv );
-
-        _glClearBufferuiv( buffer, drawbuffer, value );
-    }
-
-    public void ClearBufferuiv( GLenum buffer, GLint drawbuffer, GLuint[] value )
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERUIVPROC >( "glClearBufferuiv", out _glClearBufferuiv );
-
-        fixed ( GLuint* p = &value[ 0 ] )
-        {
-            _glClearBufferuiv( buffer, drawbuffer, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void ClearBufferfv( GLenum buffer, GLint drawbuffer, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERFVPROC >( "glClearBufferfv", out _glClearBufferfv );
-
-        _glClearBufferfv( buffer, drawbuffer, value );
-    }
-
-    public void ClearBufferfv( GLenum buffer, GLint drawbuffer, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERFVPROC >( "glClearBufferfv", out _glClearBufferfv );
-
-        fixed ( GLfloat* p = &value[ 0 ] )
-        {
-            _glClearBufferfv( buffer, drawbuffer, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void ClearBufferfi( GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil )
-    {
-        GetDelegateForFunction< PFNGLCLEARBUFFERFIPROC >( "glClearBufferfi", out _glClearBufferfi );
-
-        _glClearBufferfi( buffer, drawbuffer, depth, stencil );
-    }
-
-    // ========================================================================
-
     public GLubyte* GetStringi( GLenum name, GLuint index )
     {
         GetDelegateForFunction< PFNGLGETSTRINGIPROC >( "glGetStringi", out _glGetStringi );
@@ -9670,7 +8306,7 @@ public partial class GLBindings : IGLBindings
             i++;
         }
 
-        return new string( ( sbyte* )ptr, 0, i, Encoding.UTF8 );
+        return new string( ( GLbyte* )ptr, 0, i, Encoding.UTF8 );
     }
 
     // ========================================================================
@@ -9956,7 +8592,7 @@ public partial class GLBindings : IGLBindings
 
         var ret = _glMapBufferRange( target, offset, length, access );
 
-        return new Span< T >( ret, length );
+        return new Span< T >( ( void* )ret, length );
     }
 
     // ========================================================================
@@ -10071,7 +8707,7 @@ public partial class GLBindings : IGLBindings
 
         fixed ( T* p = &indices[ 0 ] )
         {
-            _glDrawElementsInstanced( mode, count, type, p, instancecount );
+            _glDrawElementsInstanced( mode, count, type, ( IntPtr )p, instancecount );
         }
     }
 
@@ -10126,26 +8762,28 @@ public partial class GLBindings : IGLBindings
             uniformNamesPtrs[ i ] = Encoding.UTF8.GetBytes( uniformNames[ i ] );
         }
 
-        var pUniformNames = stackalloc GLchar*[ uniformCount ];
-
-        for ( var i = 0; i < uniformCount; i++ )
         {
-            fixed ( GLchar* p = &uniformNamesPtrs[ i ][ 0 ] )
+            var pUniformNames = stackalloc GLchar*[ uniformCount ];
+
+            for ( var i = 0; i < uniformCount; i++ )
             {
-                pUniformNames[ i ] = p;
+                fixed ( GLchar* p = &uniformNamesPtrs[ i ][ 0 ] )
+                {
+                    pUniformNames[ i ] = p;
+                }
             }
+
+            var uniformIndices = new GLuint[ uniformCount ];
+
+            GetDelegateForFunction< PFNGLGETUNIFORMINDICESPROC >( "glGetUniformIndices", out _glGetUniformIndices );
+
+            fixed ( GLuint* p = &uniformIndices[ 0 ] )
+            {
+                _glGetUniformIndices( ( uint )program, uniformCount, pUniformNames, p );
+            }
+
+            return uniformIndices;
         }
-
-        var uniformIndices = new GLuint[ uniformCount ];
-
-        GetDelegateForFunction< PFNGLGETUNIFORMINDICESPROC >( "glGetUniformIndices", out _glGetUniformIndices );
-
-        fixed ( GLuint* p = &uniformIndices[ 0 ] )
-        {
-            _glGetUniformIndices( ( uint )program, uniformCount, pUniformNames, p );
-        }
-
-        return uniformIndices;
     }
 
     // ========================================================================
@@ -10166,11 +8804,13 @@ public partial class GLBindings : IGLBindings
 
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMSIVPROC >( "glGetActiveUniformsiv", out _glGetActiveUniformsiv );
 
-        fixed ( GLuint* p = &uniformIndices[ 0 ] )
         {
-            fixed ( GLint* pParameters = &parameters[ 0 ] )
+            fixed ( GLuint* p = &uniformIndices[ 0 ] )
             {
-                _glGetActiveUniformsiv( ( uint )program, uniformCount, p, pname, pParameters );
+                fixed ( GLint* pParameters = &parameters[ 0 ] )
+                {
+                    _glGetActiveUniformsiv( ( uint )program, uniformCount, p, pname, pParameters );
+                }
             }
         }
 
@@ -10197,7 +8837,7 @@ public partial class GLBindings : IGLBindings
 
         _glGetActiveUniformName( ( uint )program, uniformIndex, bufSize, &length, uniformName );
 
-        return new string( ( sbyte* )uniformName, 0, length, Encoding.UTF8 );
+        return new string( ( GLbyte* )uniformName, 0, length, Encoding.UTF8 );
     }
 
     // ========================================================================
@@ -10217,9 +8857,11 @@ public partial class GLBindings : IGLBindings
 
         GetDelegateForFunction< PFNGLGETUNIFORMBLOCKINDEXPROC >( "glGetUniformBlockIndex", out _glGetUniformBlockIndex );
 
-        fixed ( GLchar* p = &uniformBlockNameBytes[ 0 ] )
         {
-            return _glGetUniformBlockIndex( ( uint )program, p );
+            fixed ( GLchar* p = &uniformBlockNameBytes[ 0 ] )
+            {
+                return _glGetUniformBlockIndex( ( uint )program, p );
+            }
         }
     }
 
@@ -10238,9 +8880,11 @@ public partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKIVPROC >( "glGetActiveUniformBlockiv", out _glGetActiveUniformBlockiv );
 
-        fixed ( GLint* p = &parameters[ 0 ] )
         {
-            _glGetActiveUniformBlockiv( ( uint )program, uniformBlockIndex, pname, p );
+            fixed ( GLint* p = &parameters[ 0 ] )
+            {
+                _glGetActiveUniformBlockiv( ( uint )program, uniformBlockIndex, pname, p );
+            }
         }
     }
 
@@ -10268,7 +8912,7 @@ public partial class GLBindings : IGLBindings
 
         _glGetActiveUniformBlockName( ( uint )program, uniformBlockIndex, bufSize, &length, uniformBlockName );
 
-        return new string( ( sbyte* )uniformBlockName, 0, length, Encoding.UTF8 );
+        return new string( ( GLbyte* )uniformBlockName, 0, length, Encoding.UTF8 );
     }
 
     // ========================================================================
@@ -10297,9 +8941,11 @@ public partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLDRAWELEMENTSBASEVERTEXPROC >( "glDrawElementsBaseVertex", out _glDrawElementsBaseVertex );
 
-        fixed ( void* p = &indices[ 0 ] )
         {
-            _glDrawElementsBaseVertex( mode, count, type, p, basevertex );
+            fixed ( void* p = &indices[ 0 ] )
+            {
+                _glDrawElementsBaseVertex( mode, count, type, ( IntPtr )p, basevertex );
+            }
         }
     }
 
@@ -10323,7 +8969,7 @@ public partial class GLBindings : IGLBindings
         fixed ( void* p = &indices[ 0 ] )
         {
             var dataptr = ( IntPtr )p;
-            
+
             _glDrawRangeElementsBaseVertex( mode, start, end, count, type, dataptr, basevertex );
         }
     }
@@ -10348,11 +8994,13 @@ public partial class GLBindings : IGLBindings
         GetDelegateForFunction< PFNGLDRAWELEMENTSINSTANCEDBASEVERTEXPROC >( "glDrawElementsInstancedBaseVertex",
                                                                             out _glDrawElementsInstancedBaseVertex );
 
-        fixed ( void* p = &indices[ 0 ] )
         {
-            var dataptr = ( IntPtr )p;
-            
-            _glDrawElementsInstancedBaseVertex( mode, count, type, dataptr, instancecount, basevertex );
+            fixed ( void* p = &indices[ 0 ] )
+            {
+                var dataptr = ( IntPtr )p;
+
+                _glDrawElementsInstancedBaseVertex( mode, count, type, dataptr, instancecount, basevertex );
+            }
         }
     }
 
@@ -10421,13 +9069,6 @@ public partial class GLBindings : IGLBindings
         return _glFenceSync( condition, flags );
     }
 
-    public IntPtr FenceSyncSafe( GLenum condition, GLbitfield flags )
-    {
-        GetDelegateForFunction< PFNGLFENCESYNCPROC >( "glFenceSync", out _glFenceSync );
-
-        return new IntPtr( _glFenceSync( condition, flags ) );
-    }
-
     // ========================================================================
 
     public GLboolean IsSync( IntPtr sync )
@@ -10457,22 +9098,12 @@ public partial class GLBindings : IGLBindings
         return _glClientWaitSync( sync, flags, timeout );
     }
 
-    // ========================================================================
-
-    /// <summary>
-    /// Handles any GL Errors generated by profiling methods.
-    /// </summary>
-    public void CheckErrors()
+    public IntPtr FenceSyncSafe( GLenum condition, GLbitfield flags )
     {
-        GetDelegateForFunction< PFNGLGETERRORPROC >( "glGetError", out _glGetError );
+        GetDelegateForFunction< PFNGLFENCESYNCPROC >( "glFenceSync", out _glFenceSync );
 
-        var error = _glGetError();
-
-        while ( error != IGL.GL_NO_ERROR )
-        {
-//            ErrorListener.OnError( error );
-
-            error = _glGetError();
-        }
+        return new IntPtr( _glFenceSync( condition, flags ) );
     }
+
+    // ========================================================================
 }

@@ -114,8 +114,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    /// Create a new Particvle Emitter which is a copy of the
-    /// supplied emitter.
+    ///     Create a new Particvle Emitter which is a copy of the
+    ///     supplied emitter.
     /// </summary>
     /// <param name="emitter"></param>
     public ParticleEmitter( ParticleEmitter emitter )
@@ -160,7 +160,7 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    /// Common initialisation method for all constructors
+    ///     Common initialisation method for all constructors
     /// </summary>
     private void Initialise()
     {
@@ -248,7 +248,7 @@ public class ParticleEmitter
             return;
         }
 
-        var deltaMillis = ( int ) _accumulator;
+        var deltaMillis = ( int )_accumulator;
         _accumulator -= deltaMillis;
 
         if ( _delayTimer < _delay )
@@ -299,7 +299,7 @@ public class ParticleEmitter
                         _emissionDelta -= emitCount * emissionTime;
                         _emissionDelta %= emissionTime;
 
-                        AddParticles( ( int ) emitCount );
+                        AddParticles( ( int )emitCount );
                     }
                 }
 
@@ -353,9 +353,9 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    /// Updates and draws the particles. This is slightly more efficient
-    /// than calling {@link #update(float)} and <see cref="Draw(IBatch)"/>"
-    /// separately.
+    ///     Updates and draws the particles. This is slightly more efficient
+    ///     than calling {@link #update(float)} and <see cref="Draw(IBatch)" />"
+    ///     separately.
     /// </summary>
     public void Draw( IBatch batch, float delta )
     {
@@ -368,7 +368,7 @@ public class ParticleEmitter
             return;
         }
 
-        var deltaMillis = ( int ) _accumulator;
+        var deltaMillis = ( int )_accumulator;
         _accumulator -= deltaMillis;
 
         if ( PremultipliedAlpha )
@@ -446,11 +446,11 @@ public class ParticleEmitter
 
             if ( _emissionDelta >= emissionTime )
             {
-                var emitCount = ( int ) ( _emissionDelta / emissionTime );
+                var emitCount = ( int )( _emissionDelta / emissionTime );
                 emitCount = Math.Min( emitCount, MaxParticleCount - activeCount );
 
-                _emissionDelta -= ( int ) ( emitCount * emissionTime );
-                _emissionDelta %= ( int ) emissionTime;
+                _emissionDelta -= ( int )( emitCount * emissionTime );
+                _emissionDelta %= ( int )emissionTime;
 
                 AddParticles( emitCount );
             }
@@ -492,8 +492,8 @@ public class ParticleEmitter
         DurationTimer -= Duration;
         Duration      =  DurationValue.NewLowValue();
 
-        _emission     = ( int ) EmissionValue.NewLowValue();
-        _emissionDiff = ( int ) EmissionValue.NewHighValue();
+        _emission     = ( int )EmissionValue.NewLowValue();
+        _emissionDiff = ( int )EmissionValue.NewHighValue();
 
         if ( !EmissionValue.IsRelative )
         {
@@ -616,7 +616,7 @@ public class ParticleEmitter
             GenerateLifeOffsetValues();
         }
 
-        _particles[ index ]!.CurrentLife = _life + ( int ) ( _lifeDiff * LifeValue.GetScale( percent ) );
+        _particles[ index ]!.CurrentLife = _life + ( int )( _lifeDiff * LifeValue.GetScale( percent ) );
 
         if ( VelocityValue.Active )
         {
@@ -845,7 +845,7 @@ public class ParticleEmitter
 
         _particles[ index ]!.SetBounds( x - ( spriteWidth / 2 ), y - ( spriteHeight / 2 ), spriteWidth, spriteHeight );
 
-        var offsetTime = ( int ) ( _lifeOffset + ( _lifeOffsetDiff * LifeOffsetValue.GetScale( percent ) ) );
+        var offsetTime = ( int )( _lifeOffset + ( _lifeOffsetDiff * LifeOffsetValue.GetScale( percent ) ) );
 
         if ( offsetTime > 0 )
         {
@@ -871,7 +871,7 @@ public class ParticleEmitter
 
         particle.CurrentLife = life;
 
-        var percent     = 1 - ( particle.CurrentLife / ( float ) particle.Life );
+        var percent     = 1 - ( particle.CurrentLife / ( float )particle.Life );
         var updateFlags = _updateFlags;
 
         if ( ( updateFlags & _updateScale ) != 0 )
@@ -953,8 +953,8 @@ public class ParticleEmitter
         }
 
         var color = ( updateFlags & _updateTint ) != 0
-                        ? TintValue.GetColor( percent )
-                        : particle.Tint;
+            ? TintValue.GetColor( percent )
+            : particle.Tint;
 
         if ( PremultipliedAlpha )
         {
@@ -974,7 +974,7 @@ public class ParticleEmitter
 
         if ( ( updateFlags & _updateSprite ) != 0 )
         {
-            var frame = Math.Min( ( int ) ( percent * Sprites.Count ), Sprites.Count - 1 );
+            var frame = Math.Min( ( int )( percent * Sprites.Count ), Sprites.Count - 1 );
 
             if ( particle.Frame != frame )
             {
@@ -995,8 +995,8 @@ public class ParticleEmitter
 
     private void GenerateLifeValues()
     {
-        _life     = ( int ) LifeValue.NewLowValue();
-        _lifeDiff = ( int ) LifeValue.NewHighValue();
+        _life     = ( int )LifeValue.NewLowValue();
+        _lifeDiff = ( int )LifeValue.NewHighValue();
 
         if ( !LifeValue.IsRelative )
         {
@@ -1006,8 +1006,8 @@ public class ParticleEmitter
 
     private void GenerateLifeOffsetValues()
     {
-        _lifeOffset     = LifeOffsetValue.Active ? ( int ) LifeOffsetValue.NewLowValue() : 0;
-        _lifeOffsetDiff = ( int ) LifeOffsetValue.NewHighValue();
+        _lifeOffset     = LifeOffsetValue.Active ? ( int )LifeOffsetValue.NewLowValue() : 0;
+        _lifeOffsetDiff = ( int )LifeOffsetValue.NewHighValue();
 
         if ( !LifeOffsetValue.IsRelative )
         {
@@ -1069,8 +1069,8 @@ public class ParticleEmitter
                 case SpriteModes.Animated:
                     if ( _particles[ i ] != null )
                     {
-                        var percent = 1 - ( _particles[ i ]!.CurrentLife / ( float ) _particles[ i ]!.Life );
-                        _particles[ i ]!.Frame = Math.Min( ( int ) ( percent * sprites.Count ), sprites.Count - 1 );
+                        var percent = 1 - ( _particles[ i ]!.CurrentLife / ( float )_particles[ i ]!.Life );
+                        _particles[ i ]!.Frame = Math.Min( ( int )( percent * sprites.Count ), sprites.Count - 1 );
 
                         sprite = sprites[ _particles[ i ]!.Frame ];
                     }
@@ -1108,8 +1108,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    /// Ignores the <see cref="Continuous"/> setting until the
-    /// emitter is started again. This allows the emitter to stop smoothly.
+    ///     Ignores the <see cref="Continuous" /> setting until the
+    ///     emitter is started again. This allows the emitter to stop smoothly.
     /// </summary>
     public void AllowCompletion()
     {
@@ -1169,8 +1169,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    /// Returns the bounding box for all active particles.
-    /// Z axis will always be zero.
+    ///     Returns the bounding box for all active particles.
+    ///     Z axis will always be zero.
     /// </summary>
     public BoundingBox GetBoundingBox()
     {
@@ -1234,8 +1234,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    /// Permanently scales the size of the emitter by scaling
-    /// all of its ranged values related to size.
+    ///     Permanently scales the size of the emitter by scaling
+    ///     all of its ranged values related to size.
     /// </summary>
     public void ScaleSize( float scale )
     {
@@ -1248,8 +1248,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    /// Permanently scales the size of the emitter by scaling
-    /// all of its ranged values related to size.
+    ///     Permanently scales the size of the emitter by scaling
+    ///     all of its ranged values related to size.
     /// </summary>
     public void ScaleSize( float scaleX, float scaleY )
     {
@@ -1270,8 +1270,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    /// Permanently scales the speed of the emitter by scaling all its
-    /// ranged values related to motion.
+    ///     Permanently scales the speed of the emitter by scaling all its
+    ///     ranged values related to motion.
     /// </summary>
     public void ScaleMotion( float scale )
     {
@@ -1668,7 +1668,7 @@ public class ParticleEmitter
         }
 
         /// <summary>
-        /// permanently scales the range by a scalar.
+        ///     permanently scales the range by a scalar.
         /// </summary>
         public virtual void Scale( float scale )
         {
@@ -1819,7 +1819,8 @@ public class ParticleEmitter
             var startValue = scaling[ startIndex ];
             var startTime  = timeline[ startIndex ];
 
-            return startValue + ( ( scaling[ endIndex ] - startValue ) * ( ( percent - startTime ) / ( timeline[ endIndex ] - startTime ) ) );
+            return startValue +
+                   ( ( scaling[ endIndex ] - startValue ) * ( ( percent - startTime ) / ( timeline[ endIndex ] - startTime ) ) );
         }
 
         public override void Save( StreamWriter output )
@@ -1965,8 +1966,8 @@ public class ParticleEmitter
                 // BufferedReader.MarkSupported may return false in some platforms,
                 // in which case backwards commpatibility is not possible.
                 const string ERROR_MESSAGE = "The loaded particle effect descriptor file uses an old invalid format. "
-                                           + "Please download the latest version of the Particle Editor tool and "
-                                           + "recreate the file by loading and saving it again.";
+                                             + "Please download the latest version of the Particle Editor tool and "
+                                             + "recreate the file by loading and saving it again.";
 
                 Logger.Error( ERROR_MESSAGE );
 
@@ -2166,17 +2167,17 @@ public class ParticleEmitter
     #region properties
 
     /// <summary>
-    /// Set whether to automatically return the <see cref="IBatch"/>'s blend
-    /// function to the alpha-blending default (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-    /// when done drawing. Is true by default. If set to false, the IBatch's blend
-    /// function is left as it was for drawing this ParticleEmitter, which prevents
-    /// the IBatch from being flushed repeatedly if consecutive ParticleEmitters
-    /// with the same additive or pre-multiplied alpha state are drawn in a row.
-    /// <para>
-    /// IMPORTANT: If set to false and if the next object to use this IBatch expects
-    /// alpha blending, you are responsible for setting the IBatch's blend function
-    /// to (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) before that next object is drawn.
-    /// </para>
+    ///     Set whether to automatically return the <see cref="IBatch" />'s blend
+    ///     function to the alpha-blending default (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    ///     when done drawing. Is true by default. If set to false, the IBatch's blend
+    ///     function is left as it was for drawing this ParticleEmitter, which prevents
+    ///     the IBatch from being flushed repeatedly if consecutive ParticleEmitters
+    ///     with the same additive or pre-multiplied alpha state are drawn in a row.
+    ///     <para>
+    ///         IMPORTANT: If set to false and if the next object to use this IBatch expects
+    ///         alpha blending, you are responsible for setting the IBatch's blend function
+    ///         to (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) before that next object is drawn.
+    ///     </para>
     /// </summary>
     public bool CleansUpBlendFunction { get; set; } = true;
 

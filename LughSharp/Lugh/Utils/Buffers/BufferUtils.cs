@@ -30,11 +30,11 @@ namespace LughSharp.Lugh.Utils.Buffers;
 public class BufferUtils
 {
     /// <summary>
-    /// Copies the content of the source buffer to the destination buffer.
+    ///     Copies the content of the source buffer to the destination buffer.
     /// </summary>
     /// <param name="source">The source buffer to copy from.</param>
     /// <param name="destination">The destination buffer to copy to.</param>
-    /// <exception cref="ArgumentNullException">If <paramref name="source"/> or <paramref name="destination"/> is null.</exception>
+    /// <exception cref="ArgumentNullException">If <paramref name="source" /> or <paramref name="destination" /> is null.</exception>
     /// <exception cref="ArgumentException">If buffers are incompatible or destination is too small.</exception>
     public static void Copy( Buffer source, Buffer destination )
     {
@@ -57,7 +57,7 @@ public class BufferUtils
     }
 
     /// <summary>
-    /// Copies a range of bytes from the source buffer to the destination buffer.
+    ///     Copies a range of bytes from the source buffer to the destination buffer.
     /// </summary>
     /// <param name="source">The source buffer.</param>
     /// <param name="sourceOffset">The starting position in the source buffer to copy from.</param>
@@ -89,7 +89,7 @@ public class BufferUtils
 
         //TODO: Update to take into account the type of buffer (float, short, int, etc. )
         destination.EnsureCapacity( destinationOffset + length );
-        
+
         if ( ( sourceOffset + length ) > source.Capacity )
         {
             throw new GdxRuntimeException( "Cannot copy more than source contents." );
@@ -103,7 +103,6 @@ public class BufferUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="source"></param>
     /// <param name="sourceOffset"></param>
@@ -119,7 +118,7 @@ public class BufferUtils
         {
             throw new GdxRuntimeException( "Offset and length must be non-negative." );
         }
-        
+
         destination.EnsureCapacity( length * sizeof( byte ) );
 
         for ( var i = 0; i < length; i++ )
@@ -130,7 +129,6 @@ public class BufferUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="source"></param>
     /// <param name="sourceOffset"></param>
@@ -146,7 +144,7 @@ public class BufferUtils
         {
             throw new GdxRuntimeException( "Offset and length must be non-negative." );
         }
-        
+
         destination.EnsureCapacity( length * sizeof( short ) );
 
         for ( var i = 0; i < length; i++ )
@@ -157,7 +155,6 @@ public class BufferUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="source"></param>
     /// <param name="sourceOffset"></param>
@@ -173,7 +170,7 @@ public class BufferUtils
         {
             throw new GdxRuntimeException( "Offset and length must be non-negative." );
         }
-        
+
         destination.EnsureCapacity( length * sizeof( float ) );
 
         for ( var i = 0; i < length; i++ )

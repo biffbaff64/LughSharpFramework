@@ -27,5 +27,4 @@ namespace LughSharp.Lugh.Audio;
 [PublicAPI]
 public interface IAudioDeviceAsync
 {
-    
 }

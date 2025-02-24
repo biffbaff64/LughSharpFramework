@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-/// Multiplies the delta of an action.
+///     Multiplies the delta of an action.
 /// </summary>
 [PublicAPI]
 public class TimeScaleAction : DelegateAction

@@ -28,10 +28,10 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Graphics.Viewport;
 
 /// <summary>
-/// A viewport that keeps the world aspect ratio by extending the world in one direction.
-/// The world is first scaled to fit within the viewport, then the shorter dimension is
-/// lengthened to fill the viewport. A maximum size can be specified to limit how much the
-/// world is extended and black bars (letterboxing) are used for any remaining space.
+///     A viewport that keeps the world aspect ratio by extending the world in one direction.
+///     The world is first scaled to fit within the viewport, then the shorter dimension is
+///     lengthened to fill the viewport. A maximum size can be specified to limit how much the
+///     world is extended and black bars (letterboxing) are used for any remaining space.
 /// </summary>
 [PublicAPI]
 public class ExtendViewport : Viewport
@@ -39,8 +39,8 @@ public class ExtendViewport : Viewport
     // ========================================================================
 
     /// <summary>
-    /// Creates a new viewport using a new <see cref="OrthographicCamera"/>
-    /// with no maximum world size.
+    ///     Creates a new viewport using a new <see cref="OrthographicCamera" />
+    ///     with no maximum world size.
     /// </summary>
     /// <param name="minWorldWidth"> The minimum allowable world width. </param>
     /// <param name="minWorldHeight"> The minimum allowable wortld height. </param>
@@ -50,7 +50,7 @@ public class ExtendViewport : Viewport
     }
 
     /// <summary>
-    /// Creates a new viewport with no maximum world size.
+    ///     Creates a new viewport with no maximum world size.
     /// </summary>
     /// <param name="minWorldWidth"> The minimum allowable world width. </param>
     /// <param name="minWorldHeight"> The minimum allowable wortld height. </param>
@@ -61,8 +61,8 @@ public class ExtendViewport : Viewport
     }
 
     /// <summary>
-    /// Creates a new viewport using a new <see cref="OrthographicCamera"/>
-    /// and a maximum world size.
+    ///     Creates a new viewport using a new <see cref="OrthographicCamera" />
+    ///     and a maximum world size.
     /// </summary>
     /// <param name="minWorldWidth"> The minimum allowable world width. </param>
     /// <param name="minWorldHeight"> The minimum allowable wortld height. </param>
@@ -74,7 +74,7 @@ public class ExtendViewport : Viewport
     }
 
     /// <summary>
-    /// Creates a new viewport with a maximum world size.
+    ///     Creates a new viewport with a maximum world size.
     /// </summary>
     /// <param name="minWorldWidth"> The minimum allowable world width. </param>
     /// <param name="minWorldHeight"> The minimum allowable wortld height. </param>
@@ -91,7 +91,7 @@ public class ExtendViewport : Viewport
     }
 
     /// <summary>
-    /// Update the viewport with the supplied width and height.
+    ///     Update the viewport with the supplied width and height.
     /// </summary>
     /// <param name="screenWidth"> The Viewport width. </param>
     /// <param name="screenHeight"> The Viewport height. </param>
@@ -104,8 +104,8 @@ public class ExtendViewport : Viewport
         var scaled      = Scaling.Fit.Apply( worldWidth, worldHeight, screenWidth, screenHeight );
 
         // Extend in the short direction.
-        var viewportWidth  = ( int ) Math.Round( scaled.X, MidpointRounding.AwayFromZero );
-        var viewportHeight = ( int ) Math.Round( scaled.Y, MidpointRounding.AwayFromZero );
+        var viewportWidth  = ( int )Math.Round( scaled.X, MidpointRounding.AwayFromZero );
+        var viewportHeight = ( int )Math.Round( scaled.Y, MidpointRounding.AwayFromZero );
 
         if ( viewportWidth < screenWidth )
         {
@@ -119,7 +119,7 @@ public class ExtendViewport : Viewport
             }
 
             worldWidth    += lengthen;
-            viewportWidth += ( int ) Math.Round( lengthen * toViewportSpace, MidpointRounding.AwayFromZero );
+            viewportWidth += ( int )Math.Round( lengthen * toViewportSpace, MidpointRounding.AwayFromZero );
         }
         else if ( viewportHeight < screenHeight )
         {
@@ -133,7 +133,7 @@ public class ExtendViewport : Viewport
             }
 
             worldHeight    += lengthen;
-            viewportHeight += ( int ) Math.Round( lengthen * toViewportSpace, MidpointRounding.AwayFromZero );
+            viewportHeight += ( int )Math.Round( lengthen * toViewportSpace, MidpointRounding.AwayFromZero );
         }
 
         SetWorldSize( worldWidth, worldHeight );

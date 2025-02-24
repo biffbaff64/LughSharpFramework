@@ -304,18 +304,18 @@ public partial class TextureAtlasData
     public record Page
     {
         /// <summary>
-        /// May be null if the texture is not yet loaded.
+        ///     May be null if the texture is not yet loaded.
         /// </summary>
         public Texture? Texture { get; set; }
 
         /// <summary>
-        /// May be null if this page isn't associated with a file. In that
-        /// case, <see cref="Texture"/> must be set.
+        ///     May be null if this page isn't associated with a file. In that
+        ///     case, <see cref="Texture" /> must be set.
         /// </summary>
         public FileInfo? TextureFile { get; set; }
 
         public bool                  UseMipMaps         { get; set; }
-        public PixelType.Format    Format             { get; set; } = PixelType.Format.RGBA8888;
+        public PixelType.Format      Format             { get; set; } = PixelType.Format.RGBA8888;
         public Texture.TextureFilter MinFilter          { get; set; } = Texture.TextureFilter.Nearest;
         public Texture.TextureFilter MagFilter          { get; set; } = Texture.TextureFilter.Nearest;
         public Texture.TextureWrap   UWrap              { get; set; } = Texture.TextureWrap.ClampToEdge;

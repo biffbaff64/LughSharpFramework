@@ -23,18 +23,16 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
-/// AssetLoader to load TextureAtlas instances. Passing a <see cref="TextureAtlasParameter"/> to
-/// <see cref="AssetManager.AddToLoadQueue"/> allows to specify whether the atlas regions should
-/// be flipped on the y-axis or not.
+///     AssetLoader to load TextureAtlas instances. Passing a <see cref="TextureAtlasParameter" /> to
+///     <see cref="AssetManager.AddToLoadQueue" /> allows to specify whether the atlas regions should
+///     be flipped on the y-axis or not.
 /// </summary>
 [PublicAPI]
 public class TextureAtlasLoader
@@ -43,7 +41,7 @@ public class TextureAtlasLoader
     private TextureAtlasData? _data;
 
     /// <summary>
-    /// Creates a new TextureAtlasLoader using the supplied resolver.
+    ///     Creates a new TextureAtlasLoader using the supplied resolver.
     /// </summary>
     public TextureAtlasLoader( IFileHandleResolver resolver )
         : base( resolver )
@@ -51,7 +49,16 @@ public class TextureAtlasLoader
     }
 
     /// <summary>
-    /// Loads the texture atlas using the provided asset manager, file, and parameters.
+    ///     Performs application-defined tasks associated with freeing,
+    ///     releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+    }
+
+    /// <summary>
+    ///     Loads the texture atlas using the provided asset manager, file, and parameters.
     /// </summary>
     /// <param name="assetManager">The asset manager responsible for loading the assets.</param>
     /// <param name="file">The file information of the texture atlas.</param>
@@ -120,19 +127,10 @@ public class TextureAtlasLoader
     }
 
     /// <summary>
-    /// Performs application-defined tasks associated with freeing,
-    /// releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose( true );
-    }
-
-    /// <summary>
-    /// Releases the unmanaged resources used by the texture loader.
+    ///     Releases the unmanaged resources used by the texture loader.
     /// </summary>
     /// <param name="disposing">
-    /// True to release both managed and unmanaged resources; false to release only unmanaged resources.
+    ///     True to release both managed and unmanaged resources; false to release only unmanaged resources.
     /// </param>
     protected virtual void Dispose( bool disposing )
     {
@@ -146,7 +144,7 @@ public class TextureAtlasLoader
     // ========================================================================
 
     /// <summary>
-    /// Parameters for loading a <see cref="TextureAtlas"/>
+    ///     Parameters for loading a <see cref="TextureAtlas" />
     /// </summary>
     [PublicAPI]
     public class TextureAtlasParameter( bool flip ) : AssetLoaderParameters

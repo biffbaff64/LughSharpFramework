@@ -34,13 +34,13 @@ public partial class GLBindings
     // ========================================================================
     // ========================================================================
 
+    private static readonly Dictionary< string, Delegate > _loadedFunctions = new();
+
+    // ========================================================================
+    // ========================================================================
+
     [DllImport( "opengl32.dll", EntryPoint = "wglGetProcAddress", CallingConvention = CallingConvention.StdCall )]
     private static extern IntPtr wglGetProcAddress( string procname );
-
-    // ========================================================================
-    // ========================================================================
-
-    private static readonly Dictionary< string, Delegate > _loadedFunctions = new();
 
     public static bool GetDelegateForFunction< T >( string functionName, out T functionDelegate ) where T : Delegate
     {
@@ -65,7 +65,7 @@ public partial class GLBindings
                 functionDelegate = Marshal.GetDelegateForFunctionPointer< T >( functionPtr );
 
                 _loadedFunctions.Add( functionName, functionDelegate );
-                
+
                 return true;
             }
             catch ( Exception ex )
@@ -101,8 +101,8 @@ public partial class GLBindings
         {
             try
             {
-                T functionDelegate = Marshal.GetDelegateForFunctionPointer< T >( functionPtr );
-                
+                var functionDelegate = Marshal.GetDelegateForFunctionPointer< T >( functionPtr );
+
                 return functionDelegate;
             }
             catch ( Exception ex )
@@ -113,8 +113,7 @@ public partial class GLBindings
 
         throw new GdxRuntimeException( $"Failed to load {functionName}" );
     }
-    
+
     // ========================================================================
     // ========================================================================
 }
-

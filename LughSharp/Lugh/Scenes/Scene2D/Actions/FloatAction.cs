@@ -27,19 +27,15 @@ using LughSharp.Lugh.Maths;
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-/// An action that has a float, whose value is transitioned over time.
+///     An action that has a float, whose value is transitioned over time.
 /// </summary>
 [PublicAPI]
 public class FloatAction : TemporalAction
 {
-    public float Start    { get; }
-    public float EndValue { get; }
-    public float Value    { get; set; }
-
     // ========================================================================
-    
+
     /// <summary>
-    /// Creates a FloatAction that transitions from 0.0f to 1.0f.
+    ///     Creates a FloatAction that transitions from 0.0f to 1.0f.
     /// </summary>
     public FloatAction()
     {
@@ -48,7 +44,7 @@ public class FloatAction : TemporalAction
     }
 
     /// <summary>
-    /// Creates a FloatAction that transitions from start to end.
+    ///     Creates a FloatAction that transitions from start to end.
     /// </summary>
     public FloatAction( float start, float end )
     {
@@ -57,7 +53,7 @@ public class FloatAction : TemporalAction
     }
 
     /// <summary>
-    /// Creates a FloatAction that transitions from start to end.
+    ///     Creates a FloatAction that transitions from start to end.
     /// </summary>
     public FloatAction( float start, float end, float duration ) : base( duration )
     {
@@ -66,7 +62,7 @@ public class FloatAction : TemporalAction
     }
 
     /// <summary>
-    /// Creates a FloatAction that transitions from start to end.
+    ///     Creates a FloatAction that transitions from start to end.
     /// </summary>
     public FloatAction( float start, float end, float duration, IInterpolation interpolation )
         : base( duration, interpolation )
@@ -74,6 +70,10 @@ public class FloatAction : TemporalAction
         Start    = start;
         EndValue = end;
     }
+
+    public float Start    { get; }
+    public float EndValue { get; }
+    public float Value    { get; set; }
 
     /// <inheritdoc />
     protected override void Begin()

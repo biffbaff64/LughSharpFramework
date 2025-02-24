@@ -22,20 +22,20 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Audio.Maponus;
 
 /// <summary>
-/// MP3SharpException is the base class for all API-level exceptions
-/// thrown by MP3Sharp.
+///     MP3SharpException is the base class for all API-level exceptions
+///     thrown by MP3Sharp.
 /// </summary>
-[Serializable, PublicAPI]
+[Serializable]
+[PublicAPI]
 public class Mp3SharpException : ApplicationException
 {
     /// <summary>
-    /// Initializes a new Mp3SharpException with a specified error message.
+    ///     Initializes a new Mp3SharpException with a specified error message.
     /// </summary>
     /// <param name="message"> The message that describes the error. </param>
     public Mp3SharpException( string message ) : base( message )
@@ -43,13 +43,13 @@ public class Mp3SharpException : ApplicationException
     }
 
     /// <summary>
-    /// Initializes a new Mp3SharpException with a specified error message and a
-    /// reference to the inner exception that is the cause of this exception.
+    ///     Initializes a new Mp3SharpException with a specified error message and a
+    ///     reference to the inner exception that is the cause of this exception.
     /// </summary>
     /// <param name="message">The error message that explains the reason for the exception.</param>
     /// <param name="exception">
-    /// The exception that is the cause of the current exception, or a null
-    /// reference if no inner exception is specified.
+    ///     The exception that is the cause of the current exception, or a null
+    ///     reference if no inner exception is specified.
     /// </param>
     public Mp3SharpException( string message, Exception? exception )
         : base( message, exception )
@@ -57,17 +57,18 @@ public class Mp3SharpException : ApplicationException
     }
 
     /// <summary>
-    /// Initializes a new MP3SharpException with serialized data.
+    ///     Initializes a new MP3SharpException with serialized data.
     /// </summary>
     /// <param name="info">
-    /// The <see cref="SerializationInfo"/> that holds the serialized object data about
-    /// the exception being thrown.
+    ///     The <see cref="SerializationInfo" /> that holds the serialized object data about
+    ///     the exception being thrown.
     /// </param>
     /// <param name="context">
-    /// The <see cref="StreamingContext"/> that contains contextual information about
-    /// the source or destination.
+    ///     The <see cref="StreamingContext" /> that contains contextual information about
+    ///     the source or destination.
     /// </param>
     protected Mp3SharpException( SerializationInfo info, StreamingContext context )
+
         //: base( info, context )
     {
     }

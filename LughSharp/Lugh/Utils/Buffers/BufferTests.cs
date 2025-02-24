@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Utils.Buffers;
 
 [PublicAPI]
@@ -43,7 +42,7 @@ public class BufferTests
     private static void TestByteBuffer()
     {
         Logger.Checkpoint();
-        
+
         var byteBuffer = new ByteBuffer( 20 );
 
         Logger.Debug( "BEFORE:" );
@@ -67,10 +66,10 @@ public class BufferTests
         {
             Logger.Debug( $"{byteBuffer.GetByte( i )}, " );
         }
-        
+
         byteBuffer.Flip();
         byteBuffer.PutFloat( 32.0f );
-        
+
         Logger.Debug( "AFTER FLIP:" );
         Logger.Debug( $"Length  : {byteBuffer.Length}" );
         Logger.Debug( $"Capacity: {byteBuffer.Capacity}" );
@@ -81,7 +80,7 @@ public class BufferTests
         }
 
         byteBuffer.Resize( 20 );
-        
+
         Logger.Debug( "AFTER RESIZE:" );
         Logger.Debug( $"Length  : {byteBuffer.Length}" );
         Logger.Debug( $"Capacity: {byteBuffer.Capacity}" );
@@ -90,7 +89,7 @@ public class BufferTests
         {
             Logger.Debug( $"{byteBuffer.GetFloat( i )}, " );
         }
-        
+
         byteBuffer.Clear();
 
         Logger.Debug( "AFTER CLEAR:" );
@@ -118,7 +117,7 @@ public class BufferTests
         floatBuffer.PutFloat( 16.0f );
         floatBuffer.PutFloat( 16.0f );
         floatBuffer.PutFloat( 24.0f );
-        
+
         Logger.Debug( "AFTER:" );
         Logger.Debug( $"Length  : {floatBuffer.Length}" );
         Logger.Debug( $"Capacity: {floatBuffer.Capacity}" );
@@ -127,10 +126,10 @@ public class BufferTests
         {
             Logger.Debug( $"{floatBuffer.GetFloat( i )}, " );
         }
-        
+
         floatBuffer.Flip();
         floatBuffer.PutFloat( 32.0f );
-        
+
         Logger.Debug( "AFTER FLIP:" );
         Logger.Debug( $"Length  : {floatBuffer.Length}" );
         Logger.Debug( $"Capacity: {floatBuffer.Capacity}" );
@@ -141,7 +140,7 @@ public class BufferTests
         }
 
         floatBuffer.Resize( 20 );
-        
+
         Logger.Debug( "AFTER RESIZE:" );
         Logger.Debug( $"Length  : {floatBuffer.Length}" );
         Logger.Debug( $"Capacity: {floatBuffer.Capacity}" );
@@ -150,7 +149,7 @@ public class BufferTests
         {
             Logger.Debug( $"{floatBuffer.GetFloat( i )}, " );
         }
-        
+
         floatBuffer.Clear();
 
         Logger.Debug( "AFTER CLEAR:" );
@@ -161,7 +160,7 @@ public class BufferTests
         {
             Logger.Debug( $"{floatBuffer.GetFloat( i )}, " );
         }
-        
+
         Logger.Debug( "Done" );
     }
 

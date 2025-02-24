@@ -87,18 +87,18 @@ public class Interpolation
                 return 0;
             }
 
-            return 1 - ( float ) Math.Sqrt( -( a - 1 ) );
+            return 1 - ( float )Math.Sqrt( -( a - 1 ) );
         },
     };
 
     public static Interpolator Pow3InInverse = new()
     {
-        Interp = a => ( float ) Math.Cbrt( a ),
+        Interp = a => ( float )Math.Cbrt( a ),
     };
 
     public static Interpolator Pow3OutInverse = new()
     {
-        Interp = a => 1 - ( float ) Math.Cbrt( -( a - 1 ) ),
+        Interp = a => 1 - ( float )Math.Cbrt( -( a - 1 ) ),
     };
 
     public static Interpolator Sine = new()
@@ -124,19 +124,19 @@ public class Interpolation
             {
                 a *= 2;
 
-                return ( 1 - ( float ) Math.Sqrt( 1 - ( a * a ) ) ) / 2;
+                return ( 1 - ( float )Math.Sqrt( 1 - ( a * a ) ) ) / 2;
             }
 
             a--;
             a *= 2;
 
-            return ( ( float ) Math.Sqrt( 1 - ( a * a ) ) + 1 ) / 2;
+            return ( ( float )Math.Sqrt( 1 - ( a * a ) ) + 1 ) / 2;
         },
     };
 
     public static Interpolator CircleIn = new()
     {
-        Interp = a => 1 - ( float ) Math.Sqrt( 1 - ( a * a ) ),
+        Interp = a => 1 - ( float )Math.Sqrt( 1 - ( a * a ) ),
     };
 
     public static Interpolator CircleOut = new()
@@ -145,7 +145,7 @@ public class Interpolation
         {
             a--;
 
-            return ( float ) Math.Sqrt( 1 - ( a * a ) );
+            return ( float )Math.Sqrt( 1 - ( a * a ) );
         },
     };
 
@@ -197,10 +197,10 @@ public class Interpolation
         {
             if ( a <= 0.5f )
             {
-                return ( float ) Math.Pow( a * 2, Power ) / 2;
+                return ( float )Math.Pow( a * 2, Power ) / 2;
             }
 
-            return ( ( float ) Math.Pow( ( a - 1 ) * 2, Power ) / ( ( Power % 2 ) == 0 ? -2 : 2 ) ) + 1;
+            return ( ( float )Math.Pow( ( a - 1 ) * 2, Power ) / ( ( Power % 2 ) == 0 ? -2 : 2 ) ) + 1;
         }
     }
 
@@ -213,7 +213,7 @@ public class Interpolation
 
         public override float Apply( float a )
         {
-            return ( float ) Math.Pow( a, Power );
+            return ( float )Math.Pow( a, Power );
         }
     }
 
@@ -226,7 +226,7 @@ public class Interpolation
 
         public override float Apply( float a )
         {
-            return ( ( float ) Math.Pow( a - 1, Power ) * ( ( Power % 2 ) == 0 ? -1 : 1 ) ) + 1;
+            return ( ( float )Math.Pow( a - 1, Power ) * ( ( Power % 2 ) == 0 ? -1 : 1 ) ) + 1;
         }
     }
 
@@ -245,7 +245,7 @@ public class Interpolation
         {
             Value = value;
             Power = power;
-            Min   = ( float ) Math.Pow( value, -power );
+            Min   = ( float )Math.Pow( value, -power );
             Scale = 1 / ( 1 - Min );
         }
 
@@ -253,10 +253,10 @@ public class Interpolation
         {
             if ( a <= 0.5f )
             {
-                return ( ( ( float ) Math.Pow( Value, Power * ( ( a * 2 ) - 1 ) ) - Min ) * Scale ) / 2;
+                return ( ( ( float )Math.Pow( Value, Power * ( ( a * 2 ) - 1 ) ) - Min ) * Scale ) / 2;
             }
 
-            return ( 2 - ( ( ( float ) Math.Pow( Value, -Power * ( ( a * 2 ) - 1 ) ) - Min ) * Scale ) ) / 2;
+            return ( 2 - ( ( ( float )Math.Pow( Value, -Power * ( ( a * 2 ) - 1 ) ) - Min ) * Scale ) ) / 2;
         }
     }
 
@@ -270,7 +270,7 @@ public class Interpolation
 
         public override float Apply( float a )
         {
-            return ( ( float ) Math.Pow( Value, Power * ( a - 1 ) ) - Min ) * Scale;
+            return ( ( float )Math.Pow( Value, Power * ( a - 1 ) ) - Min ) * Scale;
         }
     }
 
@@ -284,7 +284,7 @@ public class Interpolation
 
         public override float Apply( float a )
         {
-            return 1 - ( ( ( float ) Math.Pow( Value, -Power * a ) - Min ) * Scale );
+            return 1 - ( ( ( float )Math.Pow( Value, -Power * a ) - Min ) * Scale );
         }
     }
 
@@ -310,13 +310,13 @@ public class Interpolation
             {
                 a *= 2;
 
-                return ( ( float ) Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale ) / 2;
+                return ( ( float )Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale ) / 2;
             }
 
             a =  1 - a;
             a *= 2;
 
-            return 1 - ( ( ( float ) Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale ) / 2 );
+            return 1 - ( ( ( float )Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale ) / 2 );
         }
     }
 
@@ -335,7 +335,7 @@ public class Interpolation
                 return 1;
             }
 
-            return ( float ) Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale;
+            return ( float )Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale;
         }
     }
 
@@ -356,7 +356,7 @@ public class Interpolation
 
             a = 1 - a;
 
-            return 1 - ( ( float ) Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale );
+            return 1 - ( ( float )Math.Pow( Value, Power * ( a - 1 ) ) * MathUtils.Sin( a * Bounces ) * Scale );
         }
     }
 

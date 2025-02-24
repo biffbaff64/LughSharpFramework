@@ -22,17 +22,34 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 
 namespace LughSharp.Lugh.Maps.Objects;
 
 /// <summary>
-/// Represents a map object containing a texture (region).
+///     Represents a map object containing a texture (region).
 /// </summary>
 [PublicAPI]
 public class TextureMapObject : MapObject
 {
+    // ========================================================================
+
+    /// <summary>
+    ///     Creates an empty texture map object
+    /// </summary>
+    public TextureMapObject() : this( null )
+    {
+    }
+
+    /// <summary>
+    ///     Creates a new texture map object with the given region
+    /// </summary>
+    /// <param name="textureRegion">the <see cref="TextureRegion" /> to use.</param>
+    public TextureMapObject( TextureRegion? textureRegion )
+    {
+        TextureRegion = textureRegion;
+    }
+
     public float          X             { get; set; } = 0.0f;
     public float          Y             { get; set; } = 0.0f;
     public float          OriginX       { get; set; } = 0.0f;
@@ -41,22 +58,4 @@ public class TextureMapObject : MapObject
     public float          ScaleY        { get; set; } = 1.0f;
     public float          Rotation      { get; set; } = 0.0f;
     public TextureRegion? TextureRegion { get; set; } = null;
-
-    // ========================================================================
-
-    /// <summary>
-    /// Creates an empty texture map object
-    /// </summary>
-    public TextureMapObject() : this( null )
-    {
-    }
-
-    /// <summary>
-    /// Creates a new texture map object with the given region
-    /// </summary>
-    /// <param name="textureRegion">the <see cref="TextureRegion"/> to use.</param>
-    public TextureMapObject( TextureRegion? textureRegion )
-    {
-        TextureRegion = textureRegion;
-    }
 }

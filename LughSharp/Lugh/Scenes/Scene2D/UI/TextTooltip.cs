@@ -27,7 +27,7 @@ using LughSharp.Lugh.Scenes.Scene2D.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A tooltip that shows a label.
+///     A tooltip that shows a label.
 /// </summary>
 [PublicAPI]
 public class TextTooltip : Tooltip< Label >

@@ -27,22 +27,18 @@ using LughSharp.Lugh.Graphics.G2D;
 namespace LughSharp.Lugh.Graphics.Atlases;
 
 /// <summary>
-/// A sprite that, if whitespace was stripped from the region when it was packed,
-/// is automatically positioned as if whitespace had not been stripped. */
+///     A sprite that, if whitespace was stripped from the region when it was packed,
+///     is automatically positioned as if whitespace had not been stripped. */
 /// </summary>
 [PublicAPI]
 public class AtlasSprite : Sprite
 {
-    public AtlasRegion Region          { get; set; }
-    public float       OriginalOffsetX { get; set; }
-    public float       OriginalOffsetY { get; set; }
+    // ========================================================================
+    // ========================================================================
 
-    // ========================================================================
-    // ========================================================================
-    
     /// <summary>
-    /// Creates a new AtlasSprite using the atlas region from the
-    /// supplied AtlasSprite.
+    ///     Creates a new AtlasSprite using the atlas region from the
+    ///     supplied AtlasSprite.
     /// </summary>
     public AtlasSprite( AtlasSprite sprite )
     {
@@ -54,7 +50,7 @@ public class AtlasSprite : Sprite
     }
 
     /// <summary>
-    /// Creates a new AtlasSprite using the supplied atlas region.
+    ///     Creates a new AtlasSprite using the supplied atlas region.
     /// </summary>
     public AtlasSprite( AtlasRegion region )
     {
@@ -63,9 +59,27 @@ public class AtlasSprite : Sprite
         Init( region );
     }
 
+    public AtlasRegion Region          { get; set; }
+    public float       OriginalOffsetX { get; set; }
+    public float       OriginalOffsetY { get; set; }
+
+    /// <inheritdoc />
+    public override float X
+    {
+        get => base.X - Region.OffsetX;
+        set => base.X = value + Region.OffsetX;
+    }
+
+    /// <inheritdoc />
+    public override float Y
+    {
+        get => base.Y - Region.OffsetY;
+        set => base.Y = value + Region.OffsetY;
+    }
+
     /// <summary>
-    /// Setup method designed to be called from <tt>AtlasSprite(AtlasRegion)</tt>
-    /// to get around the issue of calling virtual methods from a constructor.
+    ///     Setup method designed to be called from <tt>AtlasSprite(AtlasRegion)</tt>
+    ///     to get around the issue of calling virtual methods from a constructor.
     /// </summary>
     private void Init( AtlasRegion region )
     {
@@ -90,20 +104,6 @@ public class AtlasSprite : Sprite
         }
 
         SetColor( 1, 1, 1, 1 );
-    }
-
-    /// <inheritdoc />
-    public override float X
-    {
-        get => base.X - Region.OffsetX;
-        set => base.X = value + Region.OffsetX;
-    }
-
-    /// <inheritdoc />
-    public override float Y
-    {
-        get => base.Y - Region.OffsetY;
-        set => base.Y = value + Region.OffsetY;
     }
 
     /// <inheritdoc />
@@ -197,16 +197,16 @@ public class AtlasSprite : Sprite
             Region.OffsetX = oldOffsetY;
 
             Region.OffsetY = ( Region.OriginalHeight * heightRatio )
-                           - oldOffsetX
-                           - ( Region.PackedWidth * widthRatio );
+                             - oldOffsetX
+                             - ( Region.PackedWidth * widthRatio );
         }
         else
         {
             Region.OffsetY = oldOffsetX;
 
             Region.OffsetX = ( Region.OriginalWidth * widthRatio )
-                           - oldOffsetY
-                           - ( Region.PackedHeight * heightRatio );
+                             - oldOffsetY
+                             - ( Region.PackedHeight * heightRatio );
         }
 
         // Update position and origin with new offsets.

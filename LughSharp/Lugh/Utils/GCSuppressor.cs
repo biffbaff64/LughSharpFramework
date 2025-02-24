@@ -35,7 +35,7 @@ public static class GCSuppressor
         // that any pending garbage collections are completed before entering the
         // low-latency mode.
         GC.Collect();
-        
+
         // Sets the garbage collector to low-latency mode.1 In this mode, the garbage
         // collector minimizes pauses by performing collections less frequently and
         // more aggressively.

@@ -22,24 +22,19 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using DesktopGLBackend.Window;
+
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using DesktopGLBackend.Window;
-
 namespace DesktopGLBackend.Utils;
 
 [PublicAPI]
-public unsafe class DesktopGLCursor : ICursor, IDisposable
+public class DesktopGLCursor : ICursor, IDisposable
 {
     public static readonly List< DesktopGLCursor >                    Cursors       = new();
     public static readonly Dictionary< ICursor.SystemCursor, Cursor > SystemCursors = new();
-
-    public DesktopGLWindow Window     { get; set; }
-    public Pixmap          PixmapCopy { get; set; }
-    public Image           GlfwImage  { get; set; }
-    public GLFW.Cursor     GlfwCursor { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -93,9 +88,14 @@ public unsafe class DesktopGLCursor : ICursor, IDisposable
         Cursors.Add( this );
     }
 
+    public DesktopGLWindow Window     { get; set; }
+    public Pixmap          PixmapCopy { get; set; }
+    public Image           GlfwImage  { get; set; }
+    public Cursor          GlfwCursor { get; set; }
+
     /// <summary>
-    /// Sets the system cursor for the given <see cref="GLFW.Window"/> to the
-    /// cursor specified by the parameter <paramref name="systemCursor"/>.
+    ///     Sets the system cursor for the given <see cref="GLFW.Window" /> to the
+    ///     cursor specified by the parameter <paramref name="systemCursor" />.
     /// </summary>
     /// <param name="window"></param>
     /// <param name="systemCursor"></param>

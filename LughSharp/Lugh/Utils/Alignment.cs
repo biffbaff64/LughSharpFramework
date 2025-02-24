@@ -25,22 +25,23 @@
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-/// Provides bit flag constants for alignment.
+///     Provides bit flag constants for alignment.
 /// </summary>
-[PublicAPI, Flags]
+[PublicAPI]
+[Flags]
 public enum Align
 {
     None   = 0,
-    Center = ( 1 << 0 ),
-    Top    = ( 1 << 1 ),
-    Bottom = ( 1 << 2 ),
-    Left   = ( 1 << 3 ),
-    Right  = ( 1 << 4 ),
+    Center = 1 << 0,
+    Top    = 1 << 1,
+    Bottom = 1 << 2,
+    Left   = 1 << 3,
+    Right  = 1 << 4,
 
-    TopLeft     = ( Top | Left ),
-    TopRight    = ( Top | Right ),
-    BottomLeft  = ( Bottom | Left ),
-    BottomRight = ( Bottom | Right ),
+    TopLeft     = Top | Left,
+    TopRight    = Top | Right,
+    BottomLeft  = Bottom | Left,
+    BottomRight = Bottom | Right,
 }
 
 [PublicAPI]
@@ -63,27 +64,39 @@ public sealed class Alignment
     // ========================================================================
 
     /// <summary>
-    /// Returns TRUE if the supplied position is aligned to the LEFT.
+    ///     Returns TRUE if the supplied position is aligned to the LEFT.
     /// </summary>
-    public static bool IsLeft( int position ) => ( position & LEFT ) != 0;
+    public static bool IsLeft( int position )
+    {
+        return ( position & LEFT ) != 0;
+    }
 
     /// <summary>
-    /// Returns TRUE if the supplied position is aligned to the RIGHT.
+    ///     Returns TRUE if the supplied position is aligned to the RIGHT.
     /// </summary>
-    public static bool IsRight( int position ) => ( position & RIGHT ) != 0;
+    public static bool IsRight( int position )
+    {
+        return ( position & RIGHT ) != 0;
+    }
 
     /// <summary>
-    /// Returns TRUE if the supplied position is aligned to the TOP.
+    ///     Returns TRUE if the supplied position is aligned to the TOP.
     /// </summary>
-    public static bool IsTop( int position ) => ( position & TOP ) != 0;
+    public static bool IsTop( int position )
+    {
+        return ( position & TOP ) != 0;
+    }
 
     /// <summary>
-    /// Returns TRUE if the supplied position is aligned to the BOTTOM.
+    ///     Returns TRUE if the supplied position is aligned to the BOTTOM.
     /// </summary>
-    public static bool IsBottom( int position ) => ( position & BOTTOM ) != 0;
+    public static bool IsBottom( int position )
+    {
+        return ( position & BOTTOM ) != 0;
+    }
 
     /// <summary>
-    /// Returns TRUE if the supplied position is aligned horizontally central.
+    ///     Returns TRUE if the supplied position is aligned horizontally central.
     /// </summary>
     public static bool IsCenterHorizontal( int position )
     {
@@ -91,7 +104,7 @@ public sealed class Alignment
     }
 
     /// <summary>
-    /// Returns TRUE if the supplied position is aligned vertically central.
+    ///     Returns TRUE if the supplied position is aligned vertically central.
     /// </summary>
     public static bool IsCenterVertical( int position )
     {
@@ -100,7 +113,7 @@ public sealed class Alignment
 
     // ========================================================================
 
-    /// <inheritdoc cref="Object.ToString"/>
+    /// <inheritdoc cref="Object.ToString" />
     public static string ToString( int position )
     {
         var buffer = new StringBuilder( "[" );

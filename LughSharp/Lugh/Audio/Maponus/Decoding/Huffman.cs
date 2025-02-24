@@ -27,7 +27,7 @@ using LughSharp.Lugh.Audio.Maponus.Support;
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-/// Implements a Huffman decoder.
+///     Implements a Huffman decoder.
 /// </summary>
 [PublicAPI]
 public class Huffman
@@ -692,7 +692,7 @@ public class Huffman
     private readonly int      _ylen;       //max. y-index+
 
     /// <summary>
-    /// Computes all Huffman Tables.
+    ///     Computes all Huffman Tables.
     /// </summary>
     private Huffman( string s,
                      int xlen,
@@ -720,8 +720,8 @@ public class Huffman
     }
 
     /// <summary>
-    /// Do the huffman-decoding.
-    /// NOTE: for counta, countb -the 4 bit value is returned in y, discard x.
+    ///     Do the huffman-decoding.
+    ///     NOTE: for counta, countb -the 4 bit value is returned in y, discard x.
     /// </summary>
     public static int Decode( Huffman h, int[] x, int[] y, int[] v, int[] w, BitReserve br )
     {
@@ -799,8 +799,7 @@ public class Huffman
             level = SupportClass.URShift( level, 1 );
 
             // MDM: ht[0] is always 0;
-        }
-        while ( ( level != 0 ) || ( point < 0 ) );
+        } while ( ( level != 0 ) || ( point < 0 ) );
 
         // put back any bits not consumed
         /*

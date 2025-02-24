@@ -31,19 +31,20 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Pooling;
+
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A list box displays textual items and highlights the currently selected item.
-/// <para>
-/// <see cref="ChangeListener.ChangeEvent"/> is fired when the list selection changes.
-/// </para>
-/// <para>
-/// The preferred size of the list is determined by the text bounds of the items
-/// and the size of the <see cref="Selection{T}"/>.
-/// </para>
+///     A list box displays textual items and highlights the currently selected item.
+///     <para>
+///         <see cref="ChangeListener.ChangeEvent" /> is fired when the list selection changes.
+///     </para>
+///     <para>
+///         The preferred size of the list is determined by the text bounds of the items
+///         and the size of the <see cref="Selection{T}" />.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class ListBox< T > : Widget
@@ -58,8 +59,8 @@ public class ListBox< T > : Widget
     // ========================================================================
 
     /// <summary>
-    /// Creates a new ListBox, using the supplied <see cref="Skin"/>.
-    /// The <see cref="ListStyle"/> embedded in the Skin will be used.
+    ///     Creates a new ListBox, using the supplied <see cref="Skin" />.
+    ///     The <see cref="ListStyle" /> embedded in the Skin will be used.
     /// </summary>
     /// <param name="skin"> The Skin to use. </param>
     public ListBox( Skin skin )
@@ -68,9 +69,9 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Creates a new ListBox, using the supplied <see cref="Skin"/>. The
-    /// <see cref="ListStyle"/> to use will be extracted from the supplied
-    /// skin using the name provided.
+    ///     Creates a new ListBox, using the supplied <see cref="Skin" />. The
+    ///     <see cref="ListStyle" /> to use will be extracted from the supplied
+    ///     skin using the name provided.
     /// </summary>
     /// <param name="skin"> The Skin to use. </param>
     /// <param name="styleName"> The name of the ListStyle to extract from the Skin. </param>
@@ -80,7 +81,7 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Creates a new ListBox, using the supplied <see cref="ListStyle"/>
+    ///     Creates a new ListBox, using the supplied <see cref="ListStyle" />
     /// </summary>
     /// <param name="style"> The ListStyle to use. </param>
     public ListBox( ListStyle style )
@@ -119,8 +120,8 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Returns the list's style. Modifying the returned style may not have an
-    /// effect until <see cref="SetStyle(ListStyle)"/>" is called.
+    ///     Returns the list's style. Modifying the returned style may not have an
+    ///     effect until <see cref="SetStyle(ListStyle)" />" is called.
     /// </summary>
     public ListStyle? Style { get; set; }
 
@@ -229,7 +230,7 @@ public class ListBox< T > : Widget
         for ( var i = 0; i < Items.Count; i++ )
         {
             if ( ( CullingArea == null )
-              || ( ( ( itemY - ItemHeight ) <= ( CullingArea.Y + CullingArea.Height ) ) && ( itemY >= CullingArea.Y ) ) )
+                 || ( ( ( itemY - ItemHeight ) <= ( CullingArea.Y + CullingArea.Height ) ) && ( itemY >= CullingArea.Y ) ) )
             {
                 var        item     = Items[ i ];
                 var        selected = Selection.Contains( item );
@@ -251,7 +252,7 @@ public class ListBox< T > : Widget
 
                 drawable?.Draw( batch, x, ( y + itemY ) - ItemHeight, width, ItemHeight );
 
-                DrawItem( batch, font, i, item, ( float ) ( x + textOffsetX )!, ( y + itemY ) - textOffsetY, ( float ) textWidth! );
+                DrawItem( batch, font, i, item, ( float )( x + textOffsetX )!, ( y + itemY ) - textOffsetY, ( float )textWidth! );
 
                 if ( selected )
                 {
@@ -271,7 +272,7 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Called to draw the background. Default implementation draws the style background drawable.
+    ///     Called to draw the background. Default implementation draws the style background drawable.
     /// </summary>
     protected void DrawBackground( IBatch batch, float parentAlpha )
     {
@@ -291,7 +292,7 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Returns the first selected item, or null.
+    ///     Returns the first selected item, or null.
     /// </summary>
     public T? GetSelected()
     {
@@ -299,7 +300,7 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Sets the selection to only the passed item, if it is a possible choice.
+    ///     Sets the selection to only the passed item, if it is a possible choice.
     /// </summary>
     /// <param name="item"> May be null. </param>
     public void SetSelected( T item )
@@ -319,8 +320,8 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Returns the index of the first selected item. The top item has an index of 0.
-    /// Nothing selected has an index of -1.
+    ///     Returns the index of the first selected item. The top item has an index of 0.
+    ///     Nothing selected has an index of -1.
     /// </summary>
     public int GetSelectedIndex()
     {
@@ -330,7 +331,7 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Sets the selection to only the selected index.
+    ///     Sets the selection to only the selected index.
     /// </summary>
     /// <param name="index"> -1 to clear the selection. </param>
     public void SetSelectedIndex( int index )
@@ -381,7 +382,7 @@ public class ListBox< T > : Widget
             y      -= background.BottomHeight;
         }
 
-        var index = ( int ) ( ( height - y ) / ItemHeight );
+        var index = ( int )( ( height - y ) / ItemHeight );
 
         if ( ( index < 0 ) || ( index >= Items.Count ) )
         {
@@ -415,9 +416,9 @@ public class ListBox< T > : Widget
     }
 
     /// <summary>
-    /// Sets the items visible in the list, clearing the selection if it is no longer valid. If a
-    /// selection is <see cref="ArraySelection{T}.Required()"/>", the first item is selected. This
-    /// can safely be called with a (modified) array returned from <see cref="Items"/>"
+    ///     Sets the items visible in the list, clearing the selection if it is no longer valid. If a
+    ///     selection is <see cref="ArraySelection{T}.Required()" />", the first item is selected. This
+    ///     can safely be called with a (modified) array returned from <see cref="Items" />"
     /// </summary>
     public void SetItems( List< T > newItems )
     {
@@ -583,7 +584,6 @@ public class ListBox< T > : Widget
     // ========================================================================
     // ========================================================================
 
-
     public class ListInputListener : InputListener
     {
         private readonly ListBox< T > _parent;
@@ -668,7 +668,7 @@ public class ListBox< T > : Widget
     // ========================================================================
 
     /// <summary>
-    /// The style for a list, see <see cref="ListBox{T}"/>.
+    ///     The style for a list, see <see cref="ListBox{T}" />.
     /// </summary>
     [PublicAPI]
     public class ListStyle

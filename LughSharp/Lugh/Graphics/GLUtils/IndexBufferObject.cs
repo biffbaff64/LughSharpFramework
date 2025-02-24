@@ -29,17 +29,18 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-/// An IndexBufferObject wraps OpenGL's index buffer functionality to be used in conjunction
-/// with VBOs.
-/// <para>
-/// You can also use this to store indices for vertex arrays. Do not call <see cref="Bind()"/>
-/// or <see cref="Unbind()"/> in this case but rather use <see cref="GetBuffer(bool)"/> to use the
-/// buffer directly with glDrawElements. You must also create the IndexBufferObject with the
-/// second constructor and specify isDirect as true as glDrawElements in conjunction with vertex arrays needs direct buffers.
-/// </para>
-/// <para>
-/// VertexBufferObjects must be disposed via the {@link #dispose()} method when no longer needed
-/// </para>
+///     An IndexBufferObject wraps OpenGL's index buffer functionality to be used in conjunction
+///     with VBOs.
+///     <para>
+///         You can also use this to store indices for vertex arrays. Do not call <see cref="Bind()" />
+///         or <see cref="Unbind()" /> in this case but rather use <see cref="GetBuffer(bool)" /> to use the
+///         buffer directly with glDrawElements. You must also create the IndexBufferObject with the
+///         second constructor and specify isDirect as true as glDrawElements in conjunction with vertex arrays needs
+///         direct buffers.
+///     </para>
+///     <para>
+///         VertexBufferObjects must be disposed via the {@link #dispose()} method when no longer needed
+///     </para>
 /// </summary>
 [PublicAPI]
 public class IndexBufferObject : IIndexData
@@ -49,16 +50,15 @@ public class IndexBufferObject : IIndexData
     private readonly bool        _empty;
     private readonly bool        _ownsBuffer;
     private readonly int         _usage;
-    private          int         _bufferHandle;
     private          bool        _isBound = false;
     private          bool        _isDirty = true;
 
     // ========================================================================
 
     /// <summary>
-    /// Constructs a new IndexBufferObject, setting <see cref="_usage"/> to
-    /// <see cref="IGL.GL_STATIC_DRAW"/> and <see cref="maxIndices"/> to the
-    /// given value.
+    ///     Constructs a new IndexBufferObject, setting <see cref="_usage" /> to
+    ///     <see cref="IGL.GL_STATIC_DRAW" /> and <see cref="maxIndices" /> to the
+    ///     given value.
     /// </summary>
     public IndexBufferObject( int maxIndices )
         : this( true, maxIndices )
@@ -66,11 +66,11 @@ public class IndexBufferObject : IIndexData
     }
 
     /// <summary>
-    /// Constructs a new IndexBufferObject.
+    ///     Constructs a new IndexBufferObject.
     /// </summary>
     /// <param name="isStatic">
-    /// If true, the buffer will be created with static draw usage, otherwise
-    /// with dynamic draw usage.
+    ///     If true, the buffer will be created with static draw usage, otherwise
+    ///     with dynamic draw usage.
     /// </param>
     /// <param name="maxIndices">The maximum number of indices that this buffer can hold.</param>
     public IndexBufferObject( bool isStatic, int maxIndices )
@@ -98,14 +98,14 @@ public class IndexBufferObject : IIndexData
         _byteBuffer.Flip();
 
         // Generate a new OpenGL buffer handle.
-        _bufferHandle = ( int ) GdxApi.Bindings.GenBuffer();
+        BufferID = ( int )GdxApi.Bindings.GenBuffer();
 
         // Set the usage flag for the buffer based on whether it is static or dynamic.
         _usage = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
     }
 
-    public int BufferID => _bufferHandle;
-    
+    public int BufferID { get; private set; }
+
     /// <inheritdoc />
     public int NumIndices => _empty ? 0 : _buffer.Limit;
 
@@ -128,7 +128,7 @@ public class IndexBufferObject : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ptr, _usage );
+                GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -155,7 +155,7 @@ public class IndexBufferObject : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ptr, _usage );
+                GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -180,7 +180,7 @@ public class IndexBufferObject : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ptr, _usage );
+                GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -194,16 +194,16 @@ public class IndexBufferObject : IIndexData
 
         return _buffer;
     }
-    
+
     /// <inheritdoc />
     public void Bind()
     {
-        if ( _bufferHandle == 0 )
+        if ( BufferID == 0 )
         {
             throw new GdxRuntimeException( "No buffer allocated!" );
         }
 
-        GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, ( uint ) _bufferHandle );
+        GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, ( uint )BufferID );
 
         if ( _isDirty )
         {
@@ -213,7 +213,7 @@ public class IndexBufferObject : IIndexData
             {
                 fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
                 {
-                    GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ptr, _usage );
+                    GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
                 }
             }
 
@@ -233,23 +233,23 @@ public class IndexBufferObject : IIndexData
     /// <inheritdoc />
     public void Invalidate()
     {
-        _bufferHandle = ( int ) GdxApi.Bindings.GenBuffer();
-        _isDirty      = true;
+        BufferID = ( int )GdxApi.Bindings.GenBuffer();
+        _isDirty = true;
     }
 
     /// <inheritdoc />
     public void Dispose()
     {
         GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
-        GdxApi.Bindings.DeleteBuffers( ( uint ) _bufferHandle );
+        GdxApi.Bindings.DeleteBuffers( ( uint )BufferID );
 
-        _bufferHandle = 0;
+        BufferID = 0;
 
         if ( _ownsBuffer )
         {
             _byteBuffer.Dispose();
         }
 
-        GC.SuppressFinalize(this);
+        GC.SuppressFinalize( this );
     }
 }

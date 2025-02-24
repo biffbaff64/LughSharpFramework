@@ -25,12 +25,12 @@
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-/// Simple struct with X and Y members of a generic type, and absolutely nothing else.
-/// For use when no 'padding' is needed, such as methods or constructors.
+///     Simple struct with X and Y members of a generic type, and absolutely nothing else.
+///     For use when no 'padding' is needed, such as methods or constructors.
 /// </summary>
 /// <typeparam name="T">The type of the X and Y members.</typeparam>
 /// <example>
-/// <code>
+///     <code>
 /// public int X { get; set; }
 /// public int Y { get; set; }
 /// 
@@ -41,52 +41,55 @@ namespace LughSharp.Lugh.Maths;
 /// }
 /// </code>
 /// </example>
-[PublicAPI, StructLayout( LayoutKind.Sequential )]
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
 public struct Point2D< T >( T x, T y )
 {
     /// <summary>
-    /// The X coordinate.
+    ///     The X coordinate.
     /// </summary>
     public T X { get; set; } = x;
 
     /// <summary>
-    /// The Y coordinate.
+    ///     The Y coordinate.
     /// </summary>
     public T Y { get; set; } = y;
 }
 
 /// <summary>
-/// Simple struct with X and Y members of type int, and absolutely nothing else.
-/// For use when no 'padding' is needed, such as methods or constructors.
+///     Simple struct with X and Y members of type int, and absolutely nothing else.
+///     For use when no 'padding' is needed, such as methods or constructors.
 /// </summary>
-[PublicAPI, StructLayout( LayoutKind.Sequential )]
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
 public struct Point2D( int x, int y )
 {
     /// <summary>
-    /// The X coordinate.
+    ///     The X coordinate.
     /// </summary>
     public int X { get; set; } = x;
 
     /// <summary>
-    /// The Y coordinate.
+    ///     The Y coordinate.
     /// </summary>
     public int Y { get; set; } = y;
 }
 
 /// <summary>
-/// Simple struct with X and Y members of type float, and absolutely nothing else.
-/// For use when no 'padding' is needed, such as methods or constructors.
+///     Simple struct with X and Y members of type float, and absolutely nothing else.
+///     For use when no 'padding' is needed, such as methods or constructors.
 /// </summary>
-[PublicAPI, StructLayout( LayoutKind.Sequential )]
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
 public struct Point2Df( float x, float y )
 {
     /// <summary>
-    /// The X coordinate.
+    ///     The X coordinate.
     /// </summary>
     public float X { get; set; } = x;
 
     /// <summary>
-    /// The Y coordinate.
+    ///     The Y coordinate.
     /// </summary>
     public float Y { get; set; } = y;
 }

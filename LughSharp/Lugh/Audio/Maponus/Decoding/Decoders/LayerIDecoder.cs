@@ -27,7 +27,7 @@ using LughSharp.Lugh.Audio.Maponus.Decoding.Decoders.LayerI;
 namespace LughSharp.Lugh.Audio.Maponus.Decoding.Decoders;
 
 /// <summary>
-/// Implements decoding of MPEG Audio Layer I frames.
+///     Implements decoding of MPEG Audio Layer I frames.
 /// </summary>
 [PublicAPI]
 public class LayerIDecoder : IFrameDecoder
@@ -47,7 +47,7 @@ public class LayerIDecoder : IFrameDecoder
     // ========================================================================
 
     /// <summary>
-    /// Decodes the current audio frame.
+    ///     Decodes the current audio frame.
     /// </summary>
     public virtual void DecodeFrame()
     {
@@ -73,7 +73,7 @@ public class LayerIDecoder : IFrameDecoder
     }
 
     /// <summary>
-    /// Initializes the decoder with the required parameters.
+    ///     Initializes the decoder with the required parameters.
     /// </summary>
     /// <param name="stream0"> Bitstream to decode. </param>
     /// <param name="header0"> Header of the frame. </param>
@@ -97,7 +97,7 @@ public class LayerIDecoder : IFrameDecoder
     }
 
     /// <summary>
-    /// Creates subband instances based on the header mode.
+    ///     Creates subband instances based on the header mode.
     /// </summary>
     protected virtual void CreateSubbands()
     {
@@ -121,7 +121,7 @@ public class LayerIDecoder : IFrameDecoder
     }
 
     /// <summary>
-    /// Reads allocation information for each subband.
+    ///     Reads allocation information for each subband.
     /// </summary>
     protected virtual void ReadAllocation()
     {
@@ -132,7 +132,7 @@ public class LayerIDecoder : IFrameDecoder
     }
 
     /// <summary>
-    /// Placeholder for Layer I; scale factor selection not present.
+    ///     Placeholder for Layer I; scale factor selection not present.
     /// </summary>
     protected virtual void ReadScaleFactorSelection()
     {
@@ -140,7 +140,7 @@ public class LayerIDecoder : IFrameDecoder
     }
 
     /// <summary>
-    /// Reads scale factors for each subband.
+    ///     Reads scale factors for each subband.
     /// </summary>
     protected virtual void ReadScaleFactors()
     {
@@ -151,7 +151,7 @@ public class LayerIDecoder : IFrameDecoder
     }
 
     /// <summary>
-    /// Reads and processes sample data for each subband.
+    ///     Reads and processes sample data for each subband.
     /// </summary>
     protected virtual void ReadSampleData()
     {
@@ -173,14 +173,12 @@ public class LayerIDecoder : IFrameDecoder
                 {
                     Filter2?.CalculatePcSamples( Buffer );
                 }
-            }
-            while ( !writeReady );
-        }
-        while ( !readReady );
+            } while ( !writeReady );
+        } while ( !readReady );
     }
 
     /// <summary>
-    /// Reads sample data for each subband from the bitstream.
+    ///     Reads sample data for each subband from the bitstream.
     /// </summary>
     /// <returns>True if all subbands have read their sample data, false otherwise.</returns>
     private bool ReadSubbandSampleData()
@@ -196,7 +194,7 @@ public class LayerIDecoder : IFrameDecoder
     }
 
     /// <summary>
-    /// Writes the next sample for each subband to the synthesis filters.
+    ///     Writes the next sample for each subband to the synthesis filters.
     /// </summary>
     /// <returns>True if all subbands have written their samples, false otherwise.</returns>
     private bool WriteSubbandSamples()

@@ -24,32 +24,31 @@
 
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A group that lays out its children side by side horizontally, with optional
-/// wrapping. This can be easier than using <see cref="Table"/> when actors need
-/// to be inserted into or removed from the middle of the group.
-/// <para>
-/// <see cref="Group.Children"/> can be sorted to change the order of the actors
-/// <see cref="Actor.SetZIndex(int)"/>. <see cref="Invalidate()"/> must be called
-/// after changing the children order.
-/// </para>
-/// <para>
-/// The preferred width is the sum of the children's preferred widths plus spacing.
-/// The preferred height is the largest preferred height of any child. The preferred
-/// size is slightly different when <see cref="Wrap"/>" is enabled. The min size
-/// is the preferred size and the max size is 0.
-/// </para>
-/// <para>
-/// Widgets are sized using their <see cref="ILayout.PrefWidth"/>", so widgets
-/// which return 0 as their preferred width will be given a width of 0 (eg, a label
-/// with {@link Label#setWrap(bool) word wrap} enabled).
-/// </para>
+///     A group that lays out its children side by side horizontally, with optional
+///     wrapping. This can be easier than using <see cref="Table" /> when actors need
+///     to be inserted into or removed from the middle of the group.
+///     <para>
+///         <see cref="Group.Children" /> can be sorted to change the order of the actors
+///         <see cref="Actor.SetZIndex(int)" />. <see cref="Invalidate()" /> must be called
+///         after changing the children order.
+///     </para>
+///     <para>
+///         The preferred width is the sum of the children's preferred widths plus spacing.
+///         The preferred height is the largest preferred height of any child. The preferred
+///         size is slightly different when <see cref="Wrap" />" is enabled. The min size
+///         is the preferred size and the max size is 0.
+///     </para>
+///     <para>
+///         Widgets are sized using their <see cref="ILayout.PrefWidth" />", so widgets
+///         which return 0 as their preferred width will be given a width of 0 (eg, a label
+///         with {@link Label#setWrap(bool) word wrap} enabled).
+///     </para>
 /// </summary>
 public class HorizontalGroup : WidgetGroup
 {
@@ -76,27 +75,27 @@ public class HorizontalGroup : WidgetGroup
     public float PadRight  { get; set; }
 
     /// <summary>
-    /// If true, the children will be displayed last to first.
+    ///     If true, the children will be displayed last to first.
     /// </summary>
     public bool Reverse { get; set; }
 
     /// <summary>
-    /// If true, rows will wrap above the previous rows.
+    ///     If true, rows will wrap above the previous rows.
     /// </summary>
     public bool WrapReverse { get; set; }
 
     /// <summary>
-    /// The horizontal space between children.
+    ///     The horizontal space between children.
     /// </summary>
     public float Space { get; set; }
 
     /// <summary>
-    /// The vertical space between rows when wrap is enabled.
+    ///     The vertical space between rows when wrap is enabled.
     /// </summary>
     public float WrapSpace { get; set; }
 
     /// <summary>
-    /// If true (the default), positions and sizes are rounded to integers.
+    ///     If true (the default), positions and sizes are rounded to integers.
     /// </summary>
     public bool Round { get; set; } = true;
 
@@ -162,7 +161,7 @@ public class HorizontalGroup : WidgetGroup
                 _rowSizes.Clear();
             }
 
-            List< float > rowSizes = _rowSizes;
+            var rowSizes = _rowSizes;
 
             var space      = Space;
             var wrapSpace  = WrapSpace;
@@ -252,7 +251,7 @@ public class HorizontalGroup : WidgetGroup
                 // ReSharper disable once MergeCastWithTypeCheck
                 if ( child is ILayout )
                 {
-                    var layout = ( ILayout ) child;
+                    var layout = ( ILayout )child;
 
                     _prefWidth  += layout.PrefWidth;
                     _prefHeight =  Math.Max( _prefHeight, layout.PrefHeight );
@@ -347,7 +346,7 @@ public class HorizontalGroup : WidgetGroup
             // ReSharper disable once MergeCastWithTypeCheck
             if ( child is ILayout )
             {
-                layout = ( ILayout ) child;
+                layout = ( ILayout )child;
                 width  = layout.PrefWidth;
                 height = layout.PrefHeight;
             }
@@ -463,7 +462,7 @@ public class HorizontalGroup : WidgetGroup
         groupWidth -= PadRight;
         align      =  _rowAlign;
 
-        List< float >?         rowSizes = _rowSizes;
+        var                    rowSizes = _rowSizes;
         SnapshotArray< Actor > children = Children;
 
         var i    = 0;
@@ -488,7 +487,7 @@ public class HorizontalGroup : WidgetGroup
             // ReSharper disable once MergeCastWithTypeCheck
             if ( child is ILayout )
             {
-                layout = ( ILayout ) child;
+                layout = ( ILayout )child;
                 width  = layout.PrefWidth;
 
                 if ( width > groupWidth )
@@ -581,24 +580,24 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// If false, the widgets are arranged in a single row and the preferred
-    /// width is the widget widths plus spacing.
-    /// <para>
-    /// If true, the widgets will wrap using the width of the horizontal group.
-    /// The preferred width of the group will be 0 as it is expected that something
-    /// external will set the width of the group. Widgets are sized to their
-    /// preferred width unless it is larger than the group's width, in which case
-    /// they are sized to the group's width but not less than their minimum width.
-    /// </para>
-    /// <para>
-    /// Default is false.
-    /// </para>
-    /// <para>
-    /// When wrap is enabled, the group's preferred height depends on the width of
-    /// the group. In some cases the parent of the group will need to layout twice:
-    /// once to set the width of the group and a second time to adjust to the group's
-    /// new preferred height.
-    /// </para>
+    ///     If false, the widgets are arranged in a single row and the preferred
+    ///     width is the widget widths plus spacing.
+    ///     <para>
+    ///         If true, the widgets will wrap using the width of the horizontal group.
+    ///         The preferred width of the group will be 0 as it is expected that something
+    ///         external will set the width of the group. Widgets are sized to their
+    ///         preferred width unless it is larger than the group's width, in which case
+    ///         they are sized to the group's width but not less than their minimum width.
+    ///     </para>
+    ///     <para>
+    ///         Default is false.
+    ///     </para>
+    ///     <para>
+    ///         When wrap is enabled, the group's preferred height depends on the width of
+    ///         the group. In some cases the parent of the group will need to layout twice:
+    ///         once to set the width of the group and a second time to adjust to the group's
+    ///         new preferred height.
+    ///     </para>
     /// </summary>
     public HorizontalGroup SetWrap( bool wrap = true )
     {
@@ -621,8 +620,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// When true and wrap is false, the rows will take up the
-    /// entire horizontal group height.
+    ///     When true and wrap is false, the rows will take up the
+    ///     entire horizontal group height.
     /// </summary>
     public HorizontalGroup SetExpand( bool expand = true )
     {
@@ -671,7 +670,7 @@ public class HorizontalGroup : WidgetGroup
     #region padding
 
     /// <summary>
-    /// Sets the padTop, padLeft, padBottom, and padRight to the specified value.
+    ///     Sets the padTop, padLeft, padBottom, and padRight to the specified value.
     /// </summary>
     public HorizontalGroup SetPadding( float pad )
     {
@@ -728,12 +727,12 @@ public class HorizontalGroup : WidgetGroup
     #region alignment
 
     /// <summary>
-    /// Sets the alignment of all widgets within the horizontal group.
-    /// <para>
-    /// Set to <see cref="Lugh.Utils.Alignment.CENTER"/>, <see cref="Lugh.Utils.Alignment.LEFT"/>,
-    /// <see cref="Lugh.Utils.Alignment.RIGHT"/>, <see cref="Lugh.Utils.Alignment.TOP"/>,
-    /// <see cref="Lugh.Utils.Alignment.BOTTOM"/>, or any combination of those.
-    /// </para>
+    ///     Sets the alignment of all widgets within the horizontal group.
+    ///     <para>
+    ///         Set to <see cref="Lugh.Utils.Alignment.CENTER" />, <see cref="Lugh.Utils.Alignment.LEFT" />,
+    ///         <see cref="Lugh.Utils.Alignment.RIGHT" />, <see cref="Lugh.Utils.Alignment.TOP" />,
+    ///         <see cref="Lugh.Utils.Alignment.BOTTOM" />, or any combination of those.
+    ///     </para>
     /// </summary>
     public HorizontalGroup SetAlign( int align )
     {
@@ -743,8 +742,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the alignment of all widgets within the horizontal group to
-    /// <see cref="Lugh.Utils.Alignment.CENTER"/>. This clears any other alignment.
+    ///     Sets the alignment of all widgets within the horizontal group to
+    ///     <see cref="Lugh.Utils.Alignment.CENTER" />. This clears any other alignment.
     /// </summary>
     public HorizontalGroup AlignCenter()
     {
@@ -754,8 +753,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.TOP"/> and clears <see cref="Lugh.Utils.Alignment.BOTTOM"/> for
-    /// the alignment of all widgets within the horizontal group.
+    ///     Sets <see cref="Lugh.Utils.Alignment.TOP" /> and clears <see cref="Lugh.Utils.Alignment.BOTTOM" /> for
+    ///     the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignTop()
     {
@@ -766,8 +765,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.BOTTOM"/> and clears <see cref="Lugh.Utils.Alignment.TOP"/> for
-    /// the alignment of all widgets within the horizontal group.
+    ///     Sets <see cref="Lugh.Utils.Alignment.BOTTOM" /> and clears <see cref="Lugh.Utils.Alignment.TOP" /> for
+    ///     the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignBottom()
     {
@@ -778,8 +777,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.LEFT"/> and clears <see cref="Lugh.Utils.Alignment.RIGHT"/> for
-    /// the alignment of all widgets within the horizontal group.
+    ///     Sets <see cref="Lugh.Utils.Alignment.LEFT" /> and clears <see cref="Lugh.Utils.Alignment.RIGHT" /> for
+    ///     the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignLeft()
     {
@@ -790,8 +789,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT"/> and clears <see cref="Lugh.Utils.Alignment.LEFT"/> for
-    /// the alignment of all widgets within the horizontal group.
+    ///     Adds <see cref="Lugh.Utils.Alignment.RIGHT" /> and clears <see cref="Lugh.Utils.Alignment.LEFT" /> for
+    ///     the alignment of all widgets within the horizontal group.
     /// </summary>
     public HorizontalGroup AlignRight()
     {
@@ -802,12 +801,13 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the horizontal alignment of each row of widgets when <see cref="Wrap"/>
-    /// is enabled and sets the vertical alignment of widgets within each row.
+    ///     Sets the horizontal alignment of each row of widgets when <see cref="Wrap" />
+    ///     is enabled and sets the vertical alignment of widgets within each row.
     /// </summary>
     /// <param name="rowAlign">
-    /// Set to <see cref="Lugh.Utils.Alignment.CENTER"/>, <see cref="Lugh.Utils.Alignment.LEFT"/>, <see cref="Lugh.Utils.Alignment.RIGHT"/>,
-    /// <see cref="Lugh.Utils.Alignment.TOP"/>, <see cref="Lugh.Utils.Alignment.BOTTOM"/> or any combination of those.
+    ///     Set to <see cref="Lugh.Utils.Alignment.CENTER" />, <see cref="Lugh.Utils.Alignment.LEFT" />,
+    ///     <see cref="Lugh.Utils.Alignment.RIGHT" />,
+    ///     <see cref="Lugh.Utils.Alignment.TOP" />, <see cref="Lugh.Utils.Alignment.BOTTOM" /> or any combination of those.
     /// </param>
     /// <returns></returns>
     public HorizontalGroup RowAlign( int rowAlign )
@@ -818,8 +818,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the alignment of widgets within each row to <see cref="Lugh.Utils.Alignment.CENTER"/>.
-    /// This clears any other alignment.
+    ///     Sets the alignment of widgets within each row to <see cref="Lugh.Utils.Alignment.CENTER" />.
+    ///     This clears any other alignment.
     /// </summary>
     public HorizontalGroup RowCenter()
     {
@@ -829,8 +829,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.TOP"/> and clears <see cref="Lugh.Utils.Alignment.BOTTOM"/> for
-    /// the alignment of widgets within each row.
+    ///     Sets <see cref="Lugh.Utils.Alignment.TOP" /> and clears <see cref="Lugh.Utils.Alignment.BOTTOM" /> for
+    ///     the alignment of widgets within each row.
     /// </summary>
     public HorizontalGroup RowTop()
     {
@@ -841,8 +841,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.LEFT"/> and clears <see cref="Lugh.Utils.Alignment.RIGHT"/> for
-    /// the alignment of each row of widgets when <see cref="Wrap"/> is enabled.
+    ///     Adds <see cref="Lugh.Utils.Alignment.LEFT" /> and clears <see cref="Lugh.Utils.Alignment.RIGHT" /> for
+    ///     the alignment of each row of widgets when <see cref="Wrap" /> is enabled.
     /// </summary>
     public HorizontalGroup RowLeft()
     {
@@ -853,8 +853,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Sets <see cref="Lugh.Utils.Alignment.BOTTOM"/> and clears <see cref="Lugh.Utils.Alignment.TOP"/> for
-    /// the alignment of widgets within each row.
+    ///     Sets <see cref="Lugh.Utils.Alignment.BOTTOM" /> and clears <see cref="Lugh.Utils.Alignment.TOP" /> for
+    ///     the alignment of widgets within each row.
     /// </summary>
     public HorizontalGroup RowBottom()
     {
@@ -865,8 +865,8 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
-    /// Adds <see cref="Lugh.Utils.Alignment.RIGHT"/> and clears <see cref="Lugh.Utils.Alignment.LEFT"/> for
-    /// the alignment of each row of widgets when <see cref="Wrap"/> is enabled.
+    ///     Adds <see cref="Lugh.Utils.Alignment.RIGHT" /> and clears <see cref="Lugh.Utils.Alignment.LEFT" /> for
+    ///     the alignment of each row of widgets when <see cref="Wrap" /> is enabled.
     /// </summary>
     public HorizontalGroup RowRight()
     {

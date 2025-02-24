@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotGLFW" Version="1.2.0" />
-        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
+        <PackageReference Include="DotGLFW" Version="1.2.0"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\LughSharp\LughSharp.csproj" />
+        <ProjectReference Include="..\LughSharp\LughSharp.csproj"/>
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Release|AnyCPU'">

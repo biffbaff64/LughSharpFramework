@@ -35,7 +35,7 @@ public class DialogChangeListener : ChangeListener
         _dialog = d;
     }
 
-    /// <inheritdoc cref="ChangeListener.Changed"/>
+    /// <inheritdoc cref="ChangeListener.Changed" />
     public override void Changed( ChangeEvent ev, Actor? actor )
     {
         if ( ( _dialog.Values == null ) || ( actor == null ) )

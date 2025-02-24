@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Audio.Maponus.Decoding.Decoders.LayerII;
 
 /// <summary>
-/// public class for layer II subbands in joint stereo mode.
+///     public class for layer II subbands in joint stereo mode.
 /// </summary>
 [PublicAPI]
 public class SubbandLayer2IntensityStereo : SubbandLayer2

@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-/// Sets an <see cref="Actor"/>s visibility.
+///     Sets an <see cref="Actor" />s visibility.
 /// </summary>
 [PublicAPI]
 public class VisibleAction : Action

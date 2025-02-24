@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using Environment = System.Environment;
 
 namespace LughSharp.Lugh.Audio.OpenAL;
@@ -137,7 +136,7 @@ public class ALC
     {
         return _makeContextCurrent( context );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcMakeContextCurrent" )]
     private static extern bool _makeContextCurrent( IntPtr context );
 
@@ -157,7 +156,7 @@ public class ALC
     {
         _suspendContext( context );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcSuspendContext" )]
     private static extern void _suspendContext( IntPtr context );
 
@@ -167,7 +166,7 @@ public class ALC
     {
         _destroyContext( context );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcDestroyContext" )]
     private static extern void _destroyContext( IntPtr context );
 
@@ -177,7 +176,7 @@ public class ALC
     {
         return _getCurrentContext();
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetCurrentContext" )]
     private static extern IntPtr _getCurrentContext();
 
@@ -187,7 +186,7 @@ public class ALC
     {
         return _getContextsDevice( context );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetContextsDevice" )]
     private static extern IntPtr _getContextsDevice( IntPtr context );
 
@@ -197,7 +196,7 @@ public class ALC
     {
         return _openDevice( deviceName );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcOpenDevice" )]
     private static extern IntPtr _openDevice( string deviceName );
 
@@ -207,7 +206,7 @@ public class ALC
     {
         _closeDevice( context );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcCloseDevice" )]
     private static extern bool _closeDevice( IntPtr device );
 
@@ -217,7 +216,7 @@ public class ALC
     {
         return _getError( device );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetError" )]
     private static extern int _getError( IntPtr device );
 
@@ -227,7 +226,7 @@ public class ALC
     {
         return _isExtensionPresent( context, extension );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcIsExtensionPresent" )]
     private static extern bool _isExtensionPresent( IntPtr device, string extname );
 
@@ -237,7 +236,7 @@ public class ALC
     {
         return _getProcAddress( context, procname );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetProcAddress" )]
     private static extern IntPtr _getProcAddress( IntPtr device, string funcname );
 
@@ -247,7 +246,7 @@ public class ALC
     {
         return _getEnumValue( device, enumname );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetEnumValue" )]
     private static extern int _getEnumValue( IntPtr device, string enumname );
 
@@ -257,7 +256,6 @@ public class ALC
 
     #region Query Functions
 
-
     public static string GetString( IntPtr device, int param )
     {
         return Marshal.PtrToStringAnsi( _getString( device, param ) )!;
@@ -265,13 +263,14 @@ public class ALC
 
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetString" )]
     private static extern IntPtr _getString( IntPtr device, int param );
+
     // ========================================================================
 
     public void GetIntegerv( IntPtr device, int param, int size, IntPtr data )
     {
         _getIntegerv( device, param, size, data );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcGetIntegerv" )]
     private static extern void _getIntegerv( IntPtr device, int param, int size, IntPtr data );
 
@@ -285,7 +284,7 @@ public class ALC
     {
         return _captureOpenDevice( deviceName, frequency, format, buffersize );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcCaptureOpenDevice" )]
     private static extern IntPtr _captureOpenDevice( string devicename, uint frequency, int format, int buffersize );
 
@@ -295,7 +294,7 @@ public class ALC
     {
         return _captureCloseDevice( device );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcCaptureCloseDevice" )]
     private static extern bool _captureCloseDevice( IntPtr device );
 
@@ -315,7 +314,7 @@ public class ALC
     {
         _captureStop( device );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcCaptureStop" )]
     private static extern void _captureStop( IntPtr device );
 
@@ -325,7 +324,7 @@ public class ALC
     {
         _captureSamples( device, buffer, samples );
     }
-    
+
     [DllImport( OPEN_AL_DLL, EntryPoint = "alcCaptureSamples" )]
     private static extern unsafe void _captureSamples( IntPtr device, void* buffer, int samples );
 

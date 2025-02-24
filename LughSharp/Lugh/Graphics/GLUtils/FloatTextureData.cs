@@ -29,24 +29,17 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-/// A <see cref="ITextureData"/> implementation which should be used
-/// to create float textures.
+///     A <see cref="ITextureData" /> implementation which should be used
+///     to create float textures.
 /// </summary>
 [PublicAPI]
 public class FloatTextureData : ITextureData
 {
-    public FloatBuffer Buffer     { get; private set; } = null!;
-    public int         Width      { get; set; }         = 0;
-    public int         Height     { get; set; }         = 0;
-    public bool        IsPrepared { get; set; }         = false;
-    public bool        UseMipMaps { get; set; }
-
     private readonly int  _format;
     private readonly int  _internalFormat;
     private readonly bool _isGpuOnly;
@@ -63,6 +56,12 @@ public class FloatTextureData : ITextureData
         _type           = type;
         _isGpuOnly      = isGpuOnly;
     }
+
+    public FloatBuffer Buffer     { get; private set; } = null!;
+    public int         Width      { get; set; }         = 0;
+    public int         Height     { get; set; }         = 0;
+    public bool        IsPrepared { get; set; }         = false;
+    public bool        UseMipMaps { get; set; }
 
     public void Prepare()
     {
@@ -107,8 +106,8 @@ public class FloatTextureData : ITextureData
     public void ConsumeCustomData( int target )
     {
         if ( ( GdxApi.App.AppType == Platform.ApplicationType.Android )
-          || ( GdxApi.App.AppType == Platform.ApplicationType.IOS )
-          || ( GdxApi.App.AppType == Platform.ApplicationType.WebGL ) )
+             || ( GdxApi.App.AppType == Platform.ApplicationType.IOS )
+             || ( GdxApi.App.AppType == Platform.ApplicationType.WebGL ) )
         {
             if ( !GdxApi.Graphics.SupportsExtension( "OES_texture_float" ) )
             {
@@ -122,14 +121,14 @@ public class FloatTextureData : ITextureData
                 fixed ( void* ptr = &Buffer.ToArray()[ 0 ] )
                 {
                     GdxApi.Bindings.TexImage2D( target,
-                                         0,
-                                         IGL.GL_RGBA,
-                                         Width,
-                                         Height,
-                                         0,
-                                         IGL.GL_RGBA,
-                                         IGL.GL_FLOAT,
-                                         ptr );
+                                                0,
+                                                IGL.GL_RGBA,
+                                                Width,
+                                                Height,
+                                                0,
+                                                IGL.GL_RGBA,
+                                                IGL.GL_FLOAT,
+                                                ( IntPtr )ptr );
                 }
             }
         }
@@ -147,14 +146,14 @@ public class FloatTextureData : ITextureData
                 fixed ( void* ptr = &Buffer.ToArray()[ 0 ] )
                 {
                     GdxApi.Bindings.TexImage2D( target,
-                                         0,
-                                         _internalFormat,
-                                         Width,
-                                         Height,
-                                         0,
-                                         _format,
-                                         IGL.GL_FLOAT,
-                                         ptr );
+                                                0,
+                                                _internalFormat,
+                                                Width,
+                                                Height,
+                                                0,
+                                                _format,
+                                                IGL.GL_FLOAT,
+                                                ( IntPtr )ptr );
                 }
             }
         }
@@ -163,7 +162,7 @@ public class FloatTextureData : ITextureData
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
     /// <summary>
-    /// FloatTextureData objects are Managed.
+    ///     FloatTextureData objects are Managed.
     /// </summary>
     public bool IsManaged => true;
 

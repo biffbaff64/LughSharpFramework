@@ -53,9 +53,9 @@ public class IsometricStaggeredTiledMapRenderer : BatchTileMapRenderer
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
         var color = Color.ToFloatBitsABGR( Batch.Color.R,
-                                       Batch.Color.G,
-                                       Batch.Color.B,
-                                       Batch.Color.A * layer.Opacity );
+                                           Batch.Color.G,
+                                           Batch.Color.B,
+                                           Batch.Color.A * layer.Opacity );
 
         var layerWidth  = layer.Width;
         var layerHeight = layer.Height;
@@ -71,15 +71,16 @@ public class IsometricStaggeredTiledMapRenderer : BatchTileMapRenderer
         var layerTileWidth50  = layerTileWidth * 0.50f;
         var layerTileHeight50 = layerTileHeight * 0.50f;
 
-        var minX = Math.Max( 0, ( int ) ( ( ViewBounds.X - layerTileWidth50 - layerOffsetX ) / layerTileWidth ) );
+        var minX = Math.Max( 0, ( int )( ( ViewBounds.X - layerTileWidth50 - layerOffsetX ) / layerTileWidth ) );
 
         var maxX = Math.Min( layerWidth,
-                             ( int ) ( ( ( ViewBounds.X + ViewBounds.Width + layerTileWidth + layerTileWidth50 ) - layerOffsetX ) / layerTileWidth ) );
+                             ( int )( ( ( ViewBounds.X + ViewBounds.Width + layerTileWidth + layerTileWidth50 ) - layerOffsetX ) /
+                                      layerTileWidth ) );
 
-        var minY = Math.Max( 0, ( int ) ( ( ViewBounds.Y - layerTileHeight - layerOffsetY ) / layerTileHeight ) );
+        var minY = Math.Max( 0, ( int )( ( ViewBounds.Y - layerTileHeight - layerOffsetY ) / layerTileHeight ) );
 
         var maxY = Math.Min( layerHeight,
-                             ( int ) ( ( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight ) - layerOffsetY ) / layerTileHeight50 ) );
+                             ( int )( ( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight ) - layerOffsetY ) / layerTileHeight50 ) );
 
         for ( var y = maxY - 1; y >= minY; y-- )
         {

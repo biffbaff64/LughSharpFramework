@@ -33,18 +33,18 @@ public class PNGUtils
     public const int SIGNATURE_LENGTH       = 8;
     public const int IHDR_START             = 8;
     public const int IHDR_SIZE              = 4;
-    public const int IHDR_CHUNK_TYPE_OFFSET = ( IHDR_START + IHDR_SIZE );
+    public const int IHDR_CHUNK_TYPE_OFFSET = IHDR_START + IHDR_SIZE;
     public const int IHDR_DATA_OFFSET       = 16;
     public const int IHDR_DATA_SIZE         = 13;
-    public const int IHDR_CRC_START         = ( IHDR_DATA_OFFSET + IHDR_DATA_SIZE );
+    public const int IHDR_CRC_START         = IHDR_DATA_OFFSET + IHDR_DATA_SIZE;
     public const int IHDR_CRC_SIZE          = 4;
-    public const int IDAT_START             = ( IHDR_CRC_START + IHDR_CRC_SIZE );
+    public const int IDAT_START             = IHDR_CRC_START + IHDR_CRC_SIZE;
     public const int IDAT_SIZE              = 4;
-    public const int IDAT_CHUNK_TYPE_OFFSET = ( IDAT_START + IDAT_SIZE );
-    public const int IDAT_DATA_OFFSET       = ( IDAT_CHUNK_TYPE_OFFSET + IDAT_SIZE );
+    public const int IDAT_CHUNK_TYPE_OFFSET = IDAT_START + IDAT_SIZE;
+    public const int IDAT_DATA_OFFSET       = IDAT_CHUNK_TYPE_OFFSET + IDAT_SIZE;
 
     // ------------------------------------------------------------------------
-    
+
     public const bool SHOW_OUTPUT = true;
     public const bool NO_OUTPUT   = false;
 
@@ -52,13 +52,19 @@ public class PNGUtils
 
     private const int WIDTH_OFFSET       = IHDR_DATA_OFFSET;
     private const int WIDTH_SIZE         = sizeof( uint );
-    private const int HEIGHT_OFFSET      = ( WIDTH_OFFSET + WIDTH_SIZE );
+    private const int HEIGHT_OFFSET      = WIDTH_OFFSET + WIDTH_SIZE;
     private const int HEIGHT_SIZE        = sizeof( uint );
-    private const int BITDEPTH_OFFSET    = ( HEIGHT_OFFSET + HEIGHT_SIZE );
+    private const int BITDEPTH_OFFSET    = HEIGHT_OFFSET + HEIGHT_SIZE;
     private const int COLORTYPE_OFFSET   = BITDEPTH_OFFSET + 1;
     private const int COMPRESSION_OFFSET = COLORTYPE_OFFSET + 1;
     private const int FILTER_OFFSET      = COMPRESSION_OFFSET + 1;
     private const int INTERLACE_OFFSET   = FILTER_OFFSET + 1;
+
+    // ========================================================================
+
+    private PNGUtils()
+    {
+    }
 
     // ( Example... )
     //  0 -  7 => 89 50 4E 47 0D 0A 1A 0A                  - PNG Signature (8 bytes)
@@ -71,20 +77,13 @@ public class PNGUtils
     // ... (IDAT data follows)
 
     // ========================================================================
-    
+
     public static PNGSignature PngSignature  { get; private set; }
     public static IHDRChunk    IHDRchunk     { get; private set; }
     public static IDATChunk    IDATchunk     { get; private set; }
     public static long         TotalIDATSize { get; private set; } = 0;
 
-    // ========================================================================
-
-    private PNGUtils()
-    {
-    }
-
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="filename"></param>
     public static void AnalysePNG( string filename )
@@ -95,7 +94,6 @@ public class PNGUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="pngData"></param>
     /// <param name="showResults"></param>
@@ -185,7 +183,6 @@ public class PNGUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="pngData"></param>
     /// <returns></returns>
@@ -214,7 +211,6 @@ public class PNGUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="bytes"></param>
     /// <param name="chunkType"></param>
@@ -222,7 +218,7 @@ public class PNGUtils
     /// <returns></returns>
     public static int FindChunk( byte[] bytes, string chunkType, int startIndex = 0 )
     {
-        var chunkTypeBytes = System.Text.Encoding.ASCII.GetBytes( chunkType );
+        var chunkTypeBytes = Encoding.ASCII.GetBytes( chunkType );
 
         if ( ( startIndex < 0 ) || ( startIndex > ( bytes.Length - 8 ) ) ) // Corrected end condition
         {
@@ -244,7 +240,6 @@ public class PNGUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="bytes"></param>
     /// <param name="startIndex"></param>
@@ -318,7 +313,6 @@ public class PNGUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="colorType"></param>
     /// <param name="bitDepth"></param>
@@ -328,27 +322,26 @@ public class PNGUtils
         return colorType switch
         {
             // Grayscale
-            0 => bitDepth == 8 ? 1 : ( bitDepth == 16 ? 2 : -1 ),
+            0 => bitDepth == 8 ? 1 : bitDepth == 16 ? 2 : -1,
 
             // RGB
-            2 => bitDepth == 8 ? 3 : ( bitDepth == 16 ? 6 : -1 ),
+            2 => bitDepth == 8 ? 3 : bitDepth == 16 ? 6 : -1,
 
             // Indexed-color
             // Indexed color uses a palette
             3 => 1,
 
             // Grayscale with alpha
-            4 => bitDepth == 8 ? 2 : ( bitDepth == 16 ? 4 : -1 ),
+            4 => bitDepth == 8 ? 2 : bitDepth == 16 ? 4 : -1,
 
             // RGBA
-            6 => bitDepth == 8 ? 4 : ( bitDepth == 16 ? 8 : -1 ),
+            6 => bitDepth == 8 ? 4 : bitDepth == 16 ? 8 : -1,
 
             var _ => -1,
         };
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="colorType"></param>
     /// <param name="bitDepth"></param>
@@ -364,7 +357,7 @@ public class PNGUtils
             {
                 8     => "RGB888",
                 16    => "RGB161616",
-                var _ => $"Truecolor {bitDepth}-bit"
+                var _ => $"Truecolor {bitDepth}-bit",
             },
 
             // --------------------------------------------
@@ -375,7 +368,7 @@ public class PNGUtils
             {
                 8     => "Grayscale with Alpha 88",
                 16    => "Grayscale with Alpha 1616",
-                var _ => $"Grayscale with Alpha {bitDepth}{bitDepth}"
+                var _ => $"Grayscale with Alpha {bitDepth}{bitDepth}",
             },
 
             // --------------------------------------------
@@ -383,19 +376,19 @@ public class PNGUtils
             {
                 8     => "RGBA8888",
                 16    => "RGBA16161616",
-                var _ => $"Truecolor with Alpha {bitDepth}{bitDepth}{bitDepth}{bitDepth}"
+                var _ => $"Truecolor with Alpha {bitDepth}{bitDepth}{bitDepth}{bitDepth}",
             },
 
             // --------------------------------------------
-            var _ => "Unknown Color Format"
+            var _ => "Unknown Color Format",
         };
     }
 
     /// <summary>
-    /// Returns a string representation of the Color Type for this PNG, which is held at
-    /// offset 25 into the 41-byte Signature/IHDR/IDAT Png file header.
+    ///     Returns a string representation of the Color Type for this PNG, which is held at
+    ///     offset 25 into the 41-byte Signature/IHDR/IDAT Png file header.
     /// </summary>
-    /// <seealso cref="AnalysePNG(byte[], bool)"/>
+    /// <seealso cref="AnalysePNG(byte[], bool)" />
     public static string ColorTypeName( int colortype )
     {
         return colortype switch
@@ -411,7 +404,7 @@ public class PNGUtils
     }
 
     /// <summary>
-    /// Extracts the <c>Width</c> and <c>Height</c> from a PNG file.
+    ///     Extracts the <c>Width</c> and <c>Height</c> from a PNG file.
     /// </summary>
     public static ( int width, int height ) GetPNGDimensions( FileInfo file )
     {
@@ -442,23 +435,25 @@ public class PNGUtils
     // ========================================================================
 
     /// <summary>
-    /// The PNG signature is eight bytes in length and contains information
-    /// used to identify a file or data stream as conforming to the PNG
-    /// specification.
+    ///     The PNG signature is eight bytes in length and contains information
+    ///     used to identify a file or data stream as conforming to the PNG
+    ///     specification.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct PNGSignature
     {
         public byte[] Signature { get; set; } // Identifier (always 0x89504E470D0A1A0A)
     }
 
     /// <summary>
-    /// PNG File IHDR Structure. The header chunk contains information on the image data
-    /// stored in the PNG file. This chunk must be the first chunk in a PNG data stream
-    /// and immediately follows the PNG signature. The header chunk data area is 13 bytes
-    /// in length.
+    ///     PNG File IHDR Structure. The header chunk contains information on the image data
+    ///     stored in the PNG file. This chunk must be the first chunk in a PNG data stream
+    ///     and immediately follows the PNG signature. The header chunk data area is 13 bytes
+    ///     in length.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )]
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct IHDRChunk
     {
         public byte[] Ihdr        { get; set; } // 'I', 'H', 'D', 'R'
@@ -473,9 +468,10 @@ public class PNGUtils
     }
 
     /// <summary>
-    /// PNG File IDAT Chunk Structure.
+    ///     PNG File IDAT Chunk Structure.
     /// </summary>
-    [PublicAPI, StructLayout( LayoutKind.Sequential, Pack = 1 )] // Important for correct byte alignment
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential, Pack = 1 )] // Important for correct byte alignment
     public struct IDATChunk
     {
         public uint   ChunkSize { get; set; } // 4 bytes (unsigned int)

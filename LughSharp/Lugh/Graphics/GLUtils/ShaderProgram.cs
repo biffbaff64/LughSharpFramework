@@ -28,7 +28,6 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
@@ -42,24 +41,16 @@ public class ShaderProgram : IDisposable
 
     // ========================================================================
     /// <summary>
-    /// flag indicating whether attributes & uniforms must be present at all times.
+    ///     flag indicating whether attributes & uniforms must be present at all times.
     /// </summary>
     public static readonly bool Pedantic = true;
 
-    // ========================================================================
-
-    public bool   IsCompiled             { get; set; }
-    public string VertexShaderSource     { get; }
-    public string FragmentShaderSource   { get; }
-    public int    ShaderHandle           { get; private set; }
-    public bool   Invalidated            { get; protected set; }
-    public int    CombinedMatrixLocation { get; set; }
-
-    // ========================================================================
-
-    private int    _vertexShaderHandle;
     private int    _fragmentShaderHandle;
     private string _shaderLog = "";
+
+    // ========================================================================
+
+    private int _vertexShaderHandle;
 
     // ========================================================================
     // ========================================================================
@@ -92,8 +83,54 @@ public class ShaderProgram : IDisposable
 
     // ========================================================================
 
+    public bool   IsCompiled             { get; set; }
+    public string VertexShaderSource     { get; }
+    public string FragmentShaderSource   { get; }
+    public int    ShaderHandle           { get; private set; }
+    public bool   Invalidated            { get; protected set; }
+    public int    CombinedMatrixLocation { get; set; }
+
+    // ========================================================================
+
     /// <summary>
-    /// Loads and compiles the shaders, creates a new program and links the shaders.
+    ///     the log info for the shader compilation and program linking stage.
+    ///     The shader needs to be bound for this method to have an effect.
+    /// </summary>
+    public unsafe string ShaderLog
+    {
+        get
+        {
+            if ( IsCompiled )
+            {
+                var length = stackalloc int[ 1 ];
+
+                GdxApi.Bindings.GetProgramiv( ShaderHandle, IGL.GL_INFO_LOG_LENGTH, length );
+
+                _shaderLog = GdxApi.Bindings.GetProgramInfoLog( ShaderHandle, *length );
+            }
+
+            return _shaderLog;
+        }
+    }
+
+    /// <summary>
+    ///     Disposes all resources associated with this shader.
+    ///     Must be called when the shader is no longer used.
+    /// </summary>
+    public void Dispose()
+    {
+//        GdxApi.Bindings.UseProgram( 0 );
+//        GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
+//        GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
+//        GdxApi.Bindings.DeleteProgram( ShaderHandle );
+
+        GC.SuppressFinalize( this );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    ///     Loads and compiles the shaders, creates a new program and links the shaders.
     /// </summary>
     /// <param name="vertexShaderSource"> the vertex shader </param>
     /// <param name="fragmentShaderSource"> the fragment shader </param>
@@ -118,7 +155,7 @@ public class ShaderProgram : IDisposable
         GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
         GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
 
-        IsCompiled = ( ShaderHandle != -1 );
+        IsCompiled = ShaderHandle != -1;
     }
 
     /// <summary>
@@ -220,8 +257,8 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram"/>
-    /// must be bound for this to work.
+    ///     Sets the uniform matrix with the given name. The <see cref="ShaderProgram" />
+    ///     must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix  </param>
@@ -231,8 +268,8 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram"/>
-    /// must be bound for this to work.
+    ///     Sets the uniform matrix with the given name. The <see cref="ShaderProgram" />
+    ///     must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix </param>
@@ -302,7 +339,7 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// Bind this shader to the renderer.
+    ///     Bind this shader to the renderer.
     /// </summary>
     public virtual void Bind()
     {
@@ -313,47 +350,10 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// Unbind this shader from the renderer.
+    ///     Unbind this shader from the renderer.
     /// </summary>
     public virtual void Unbind()
     {
         GdxApi.Bindings.UseProgram( 0 );
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// the log info for the shader compilation and program linking stage.
-    /// The shader needs to be bound for this method to have an effect.
-    /// </summary>
-    public unsafe string ShaderLog
-    {
-        get
-        {
-            if ( IsCompiled )
-            {
-                var length = stackalloc int[ 1 ];
-
-                GdxApi.Bindings.GetProgramiv( ShaderHandle, IGL.GL_INFO_LOG_LENGTH, length );
-
-                _shaderLog = GdxApi.Bindings.GetProgramInfoLog( ShaderHandle, *length );
-            }
-
-            return _shaderLog;
-        }
-    }
-
-    /// <summary>
-    /// Disposes all resources associated with this shader.
-    /// Must be called when the shader is no longer used.
-    /// </summary>
-    public void Dispose()
-    {
-//        GdxApi.Bindings.UseProgram( 0 );
-//        GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
-//        GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
-//        GdxApi.Bindings.DeleteProgram( ShaderHandle );
-
-        GC.SuppressFinalize( this );
     }
 }

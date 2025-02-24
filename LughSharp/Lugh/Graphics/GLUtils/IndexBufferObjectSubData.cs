@@ -29,20 +29,20 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-/// IndexBufferObject wraps OpenGL's index buffer functionality to be
-/// used in conjunction with VBOs.
-/// <para>
-/// You can also use this to store indices for vertex arrays. Do not call
-/// <see cref="Bind()"/>" or <see cref="Unbind()"/>" in this case but rather
-/// use <see cref="GetBuffer(bool)"/>" to use the buffer directly with
-/// GLDrawElements. You must also create the IndexBufferObject with the second
-/// constructor and specify isDirect as true as glDrawElements in conjunction
-/// with vertex arrays needs direct buffers.
-/// </para>
-/// <para>
-/// VertexBufferObjects must be disposed via the <see cref="Dispose()"/>" method
-/// when no longer needed.
-/// </para>
+///     IndexBufferObject wraps OpenGL's index buffer functionality to be
+///     used in conjunction with VBOs.
+///     <para>
+///         You can also use this to store indices for vertex arrays. Do not call
+///         <see cref="Bind()" />" or <see cref="Unbind()" />" in this case but rather
+///         use <see cref="GetBuffer(bool)" />" to use the buffer directly with
+///         GLDrawElements. You must also create the IndexBufferObject with the second
+///         constructor and specify isDirect as true as glDrawElements in conjunction
+///         with vertex arrays needs direct buffers.
+///     </para>
+///     <para>
+///         VertexBufferObjects must be disposed via the <see cref="Dispose()" />" method
+///         when no longer needed.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class IndexBufferObjectSubData : IIndexData
@@ -55,9 +55,9 @@ public class IndexBufferObjectSubData : IIndexData
     private          bool        _isDirty = true;
 
     // ========================================================================
-    
+
     /// <summary>
-    /// Creates a new IndexBufferObject.
+    ///     Creates a new IndexBufferObject.
     /// </summary>
     /// <param name="isStatic"> whether the index buffer is static </param>
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
@@ -75,7 +75,7 @@ public class IndexBufferObjectSubData : IIndexData
     }
 
     /// <summary>
-    /// Creates a new IndexBufferObject to be used with vertex arrays.
+    ///     Creates a new IndexBufferObject to be used with vertex arrays.
     /// </summary>
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( int maxIndices )
@@ -92,7 +92,7 @@ public class IndexBufferObjectSubData : IIndexData
     }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     public int NumIndices => _buffer.Limit;
 
@@ -115,7 +115,7 @@ public class IndexBufferObjectSubData : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ptr );
+                GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -142,7 +142,7 @@ public class IndexBufferObjectSubData : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ptr );
+                GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -167,7 +167,7 @@ public class IndexBufferObjectSubData : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ptr );
+                GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -191,7 +191,7 @@ public class IndexBufferObjectSubData : IIndexData
                 ( "IndexBufferObject cannot be used after it has been disposed." );
         }
 
-        GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, ( uint ) _bufferHandle );
+        GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -199,7 +199,7 @@ public class IndexBufferObjectSubData : IIndexData
 
             fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ptr );
+                GdxApi.Bindings.BufferSubData( IGL.GL_ELEMENT_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;
@@ -226,19 +226,19 @@ public class IndexBufferObjectSubData : IIndexData
     public void Dispose()
     {
         GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
-        GdxApi.Bindings.DeleteBuffers( ( uint ) _bufferHandle );
+        GdxApi.Bindings.DeleteBuffers( ( uint )_bufferHandle );
 
         _bufferHandle = 0;
     }
 
-    private unsafe int CreateBufferObject()
+    private int CreateBufferObject()
     {
         var result = GdxApi.Bindings.GenBuffer();
 
         GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, result );
-        GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Capacity, null!, _usage );
+        GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Capacity, 0, _usage );
         GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
 
-        return ( int ) result;
+        return ( int )result;
     }
 }

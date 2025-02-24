@@ -22,17 +22,16 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-/// Extends <see cref="BinaryWriter"/> with additional convenience methods.
+///     Extends <see cref="BinaryWriter" /> with additional convenience methods.
 /// </summary>
 [PublicAPI]
 public class DataOutput : BinaryWriter
 {
     /// <summary>
-    /// Constructs a new DataOuput instance with the given output stream.
+    ///     Constructs a new DataOuput instance with the given output stream.
     /// </summary>
     /// <param name="output"></param>
     public DataOutput( Stream output ) : base( output )
@@ -40,12 +39,12 @@ public class DataOutput : BinaryWriter
     }
 
     /// <summary>
-    /// Writes a 1-5 byte int.
+    ///     Writes a 1-5 byte int.
     /// </summary>
     /// <param name="value"></param>
     /// <param name="optimizePositive">
-    /// If true, small positive numbers will be more efficient (1 byte) and
-    /// small negative numbers will be inefficient (5 bytes).
+    ///     If true, small positive numbers will be more efficient (1 byte) and
+    ///     small negative numbers will be inefficient (5 bytes).
     /// </param>
     public void WriteInt( int value, bool optimizePositive )
     {
@@ -56,36 +55,36 @@ public class DataOutput : BinaryWriter
 
         if ( ( value >>> 7 ) == 0 )
         {
-            Write( ( sbyte ) value );
+            Write( ( sbyte )value );
         }
 
-        Write( unchecked( ( sbyte ) ( ( value & 0x7F ) | 0x80 ) ) );
+        Write( unchecked( ( sbyte )( ( value & 0x7F ) | 0x80 ) ) );
 
         if ( ( value >>> 14 ) == 0 )
         {
-            Write( ( sbyte ) ( value >>> 7 ) );
+            Write( ( sbyte )( value >>> 7 ) );
         }
 
-        Write( unchecked( ( sbyte ) ( ( value >>> 7 ) | 0x80 ) ) );
+        Write( unchecked( ( sbyte )( ( value >>> 7 ) | 0x80 ) ) );
 
         if ( ( value >>> 21 ) == 0 )
         {
-            Write( ( sbyte ) ( value >>> 14 ) );
+            Write( ( sbyte )( value >>> 14 ) );
         }
 
-        Write( unchecked( ( sbyte ) ( ( value >>> 14 ) | 0x80 ) ) );
+        Write( unchecked( ( sbyte )( ( value >>> 14 ) | 0x80 ) ) );
 
         if ( ( value >>> 28 ) == 0 )
         {
-            Write( ( sbyte ) ( value >>> 21 ) );
+            Write( ( sbyte )( value >>> 21 ) );
         }
 
-        Write( unchecked( ( sbyte ) ( ( value >>> 21 ) | 0x80 ) ) );
-        Write( ( sbyte ) ( value >>> 28 ) );
+        Write( unchecked( ( sbyte )( ( value >>> 21 ) | 0x80 ) ) );
+        Write( ( sbyte )( value >>> 28 ) );
     }
 
     /// <summary>
-    /// Writes a length and then the string as UTF8.
+    ///     Writes a length and then the string as UTF8.
     /// </summary>
     /// <param name="value"> May be null.  </param>
     public void WriteString( string? value )
@@ -101,7 +100,7 @@ public class DataOutput : BinaryWriter
 
         if ( charCount == 0 )
         {
-            Write( ( byte ) 1 );
+            Write( ( byte )1 );
 
             return;
         }
@@ -120,7 +119,7 @@ public class DataOutput : BinaryWriter
                 break;
             }
 
-            Write( ( sbyte ) c );
+            Write( ( sbyte )c );
         }
 
         if ( charIndex < charCount )
@@ -130,7 +129,7 @@ public class DataOutput : BinaryWriter
     }
 
     /// <summary>
-    /// Writes a string as UTF8 beyond the first characters that were handled as 8-bit characters.
+    ///     Writes a string as UTF8 beyond the first characters that were handled as 8-bit characters.
     /// </summary>
     /// <param name="value">The string to write.</param>
     /// <param name="charCount">The total number of characters in the string.</param>
@@ -145,24 +144,24 @@ public class DataOutput : BinaryWriter
             {
                 case <= 0x007F:
                 {
-                    Write( ( sbyte ) c );
+                    Write( ( sbyte )c );
 
                     break;
                 }
 
                 case > 0x07FF:
                 {
-                    Write( unchecked( ( sbyte ) ( 0xE0 | ( ( c >> 12 ) & 0x0F ) ) ) );
-                    Write( unchecked( ( sbyte ) ( 0x80 | ( ( c >> 6 ) & 0x3F ) ) ) );
-                    Write( unchecked( ( sbyte ) ( 0x80 | ( c & 0x3F ) ) ) );
+                    Write( unchecked( ( sbyte )( 0xE0 | ( ( c >> 12 ) & 0x0F ) ) ) );
+                    Write( unchecked( ( sbyte )( 0x80 | ( ( c >> 6 ) & 0x3F ) ) ) );
+                    Write( unchecked( ( sbyte )( 0x80 | ( c & 0x3F ) ) ) );
 
                     break;
                 }
 
                 default:
                 {
-                    Write( unchecked( ( sbyte ) ( 0xC0 | ( ( c >> 6 ) & 0x1F ) ) ) );
-                    Write( unchecked( ( sbyte ) ( 0x80 | ( c & 0x3F ) ) ) );
+                    Write( unchecked( ( sbyte )( 0xC0 | ( ( c >> 6 ) & 0x1F ) ) ) );
+                    Write( unchecked( ( sbyte )( 0x80 | ( c & 0x3F ) ) ) );
 
                     break;
                 }

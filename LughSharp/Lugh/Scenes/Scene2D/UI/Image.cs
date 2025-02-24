@@ -32,20 +32,14 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// Displays a <see cref="IDrawable"/>, scaled various way within the widgets
-/// bounds. The preferred size is the min size of the drawable. Only when using
-/// a <see cref="TextureRegionDrawable"/> will the actor's scale, rotation, and
-/// origin be used when drawing.
+///     Displays a <see cref="IDrawable" />, scaled various way within the widgets
+///     bounds. The preferred size is the min size of the drawable. Only when using
+///     a <see cref="TextureRegionDrawable" /> will the actor's scale, rotation, and
+///     origin be used when drawing.
 /// </summary>
 [PublicAPI]
 public class Image : Widget
 {
-    public float      ImageX      { get; set; }
-    public float      ImageY      { get; set; }
-    public float      ImageWidth  { get; set; }
-    public float      ImageHeight { get; set; }
-    public IDrawable? Drawable    { get; private set; }
-
     // ========================================================================
 
     private int     _alignment; // Backing value for Alignment property
@@ -55,9 +49,9 @@ public class Image : Widget
     // ========================================================================
 
     /// <summary>
-    /// Creates a new, unitialised, Image instance.
+    ///     Creates a new, unitialised, Image instance.
     /// </summary>
-    public Image() : this( ( IDrawable ) null! )
+    public Image() : this( ( IDrawable )null! )
     {
     }
 
@@ -96,14 +90,11 @@ public class Image : Widget
         NonVirtualConstructorHelper();
     }
 
-    /// <summary>
-    /// Helper method for constructors, allowing access to virtual members which are
-    /// unsafe to be referenced from constructors.
-    /// </summary>
-    private void NonVirtualConstructorHelper()
-    {
-        SetSize( PrefWidth, PrefHeight );
-    }
+    public float      ImageX      { get; set; }
+    public float      ImageY      { get; set; }
+    public float      ImageWidth  { get; set; }
+    public float      ImageHeight { get; set; }
+    public IDrawable? Drawable    { get; private set; }
 
     public int Alignment
     {
@@ -113,147 +104,6 @@ public class Image : Widget
             _alignment = value;
             Invalidate();
         }
-    }
-
-    /// <inheritdoc />
-    public override void SetLayout()
-    {
-        if ( Drawable == null )
-        {
-            return;
-        }
-
-        var regionWidth  = Drawable.MinWidth;
-        var regionHeight = Drawable.MinHeight;
-        var width        = Width;
-        var height       = Height;
-
-        var size = _scaling.Apply( regionWidth, regionHeight, width, height );
-
-        ImageWidth  = size.X;
-        ImageHeight = size.Y;
-
-        if ( ( Alignment & Lugh.Utils.Alignment.LEFT ) != 0 )
-        {
-            ImageX = 0;
-        }
-        else if ( ( Alignment & Lugh.Utils.Alignment.RIGHT ) != 0 )
-        {
-            ImageX = ( int ) ( width - ImageWidth );
-        }
-        else
-        {
-            ImageX = ( int ) ( ( width / 2 ) - ( ImageWidth / 2 ) );
-        }
-
-        if ( ( Alignment & Lugh.Utils.Alignment.TOP ) != 0 )
-        {
-            ImageY = ( int ) ( height - ImageHeight );
-        }
-        else if ( ( Alignment & Lugh.Utils.Alignment.BOTTOM ) != 0 )
-        {
-            ImageY = 0;
-        }
-        else
-        {
-            ImageY = ( int ) ( ( height / 2 ) - ( ImageHeight / 2 ) );
-        }
-    }
-
-    /// <inheritdoc />
-    public override void Draw( IBatch batch, float parentAlpha )
-    {
-        Validate();
-
-        batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
-
-        var x      = X;
-        var y      = Y;
-        var scaleX = ScaleX;
-        var scaleY = ScaleY;
-
-        if ( Drawable is ITransformDrawable drawable )
-        {
-            var rotation = Rotation;
-
-            if ( scaleX is not 1 || scaleY is not 1 || rotation is not 0 )
-            {
-                var region = new GRect
-                {
-                    X      = ( int ) ( x + ImageX ),
-                    Y      = ( int ) ( y + ImageY ),
-                    Width  = ( int ) ImageWidth,
-                    Height = ( int ) ImageHeight,
-                };
-
-                var origin = new Point2D
-                {
-                    X = ( int ) ( OriginX - ImageX ),
-                    Y = ( int ) ( OriginY - ImageY ),
-                };
-
-                var scale = new Point2D
-                {
-                    X = ( int ) scaleX,
-                    Y = ( int ) scaleY,
-                };
-
-                drawable.Draw( batch, region, origin, scale, rotation );
-
-                return;
-            }
-        }
-
-        Drawable?.Draw( batch, x + ImageX, y + ImageY, ImageWidth * scaleX, ImageHeight * scaleY );
-    }
-
-    /// <summary>
-    /// Sets the <see cref="IDrawable"/> for this Image.
-    /// </summary>
-    /// <param name="skin"></param>
-    /// <param name="drawableName"></param>
-    public void SetDrawable( Skin skin, string drawableName )
-    {
-        SetDrawable( skin.GetDrawable( drawableName ) );
-    }
-
-    /// <summary>
-    /// Sets a new drawable for the image. The image's pref size is the drawable's min size.
-    /// If using the image actor's size rather than the pref size, <see cref="Widget.Pack"/>
-    /// can be used to size the image to its pref size.
-    /// </summary>
-    /// <param name="drawable"> May be null. </param>
-    public void SetDrawable( IDrawable? drawable )
-    {
-        if ( Drawable == drawable )
-        {
-            return;
-        }
-
-        if ( drawable != null )
-        {
-            if ( !PrefWidth.Equals( drawable.MinWidth ) || !PrefHeight.Equals( drawable.MinHeight ) )
-            {
-                InvalidateHierarchy();
-            }
-        }
-        else
-        {
-            InvalidateHierarchy();
-        }
-
-        Drawable = drawable;
-    }
-
-    /// <summary>
-    /// Sets the <see cref="Scaling"/>Mode for this Image.
-    /// </summary>
-    public void SetScaling( Scaling scale )
-    {
-        ArgumentNullException.ThrowIfNull( scale );
-
-        _scaling = scale;
-        Invalidate();
     }
 
     /// <inheritdoc />
@@ -283,6 +133,156 @@ public class Image : Widget
             return 0;
         }
         set { }
+    }
+
+    /// <summary>
+    ///     Helper method for constructors, allowing access to virtual members which are
+    ///     unsafe to be referenced from constructors.
+    /// </summary>
+    private void NonVirtualConstructorHelper()
+    {
+        SetSize( PrefWidth, PrefHeight );
+    }
+
+    /// <inheritdoc />
+    public override void SetLayout()
+    {
+        if ( Drawable == null )
+        {
+            return;
+        }
+
+        var regionWidth  = Drawable.MinWidth;
+        var regionHeight = Drawable.MinHeight;
+        var width        = Width;
+        var height       = Height;
+
+        var size = _scaling.Apply( regionWidth, regionHeight, width, height );
+
+        ImageWidth  = size.X;
+        ImageHeight = size.Y;
+
+        if ( ( Alignment & Lugh.Utils.Alignment.LEFT ) != 0 )
+        {
+            ImageX = 0;
+        }
+        else if ( ( Alignment & Lugh.Utils.Alignment.RIGHT ) != 0 )
+        {
+            ImageX = ( int )( width - ImageWidth );
+        }
+        else
+        {
+            ImageX = ( int )( ( width / 2 ) - ( ImageWidth / 2 ) );
+        }
+
+        if ( ( Alignment & Lugh.Utils.Alignment.TOP ) != 0 )
+        {
+            ImageY = ( int )( height - ImageHeight );
+        }
+        else if ( ( Alignment & Lugh.Utils.Alignment.BOTTOM ) != 0 )
+        {
+            ImageY = 0;
+        }
+        else
+        {
+            ImageY = ( int )( ( height / 2 ) - ( ImageHeight / 2 ) );
+        }
+    }
+
+    /// <inheritdoc />
+    public override void Draw( IBatch batch, float parentAlpha )
+    {
+        Validate();
+
+        batch.SetColor( Color.R, Color.G, Color.B, Color.A * parentAlpha );
+
+        var x      = X;
+        var y      = Y;
+        var scaleX = ScaleX;
+        var scaleY = ScaleY;
+
+        if ( Drawable is ITransformDrawable drawable )
+        {
+            var rotation = Rotation;
+
+            if ( scaleX is not 1 || scaleY is not 1 || rotation is not 0 )
+            {
+                var region = new GRect
+                {
+                    X      = ( int )( x + ImageX ),
+                    Y      = ( int )( y + ImageY ),
+                    Width  = ( int )ImageWidth,
+                    Height = ( int )ImageHeight,
+                };
+
+                var origin = new Point2D
+                {
+                    X = ( int )( OriginX - ImageX ),
+                    Y = ( int )( OriginY - ImageY ),
+                };
+
+                var scale = new Point2D
+                {
+                    X = ( int )scaleX,
+                    Y = ( int )scaleY,
+                };
+
+                drawable.Draw( batch, region, origin, scale, rotation );
+
+                return;
+            }
+        }
+
+        Drawable?.Draw( batch, x + ImageX, y + ImageY, ImageWidth * scaleX, ImageHeight * scaleY );
+    }
+
+    /// <summary>
+    ///     Sets the <see cref="IDrawable" /> for this Image.
+    /// </summary>
+    /// <param name="skin"></param>
+    /// <param name="drawableName"></param>
+    public void SetDrawable( Skin skin, string drawableName )
+    {
+        SetDrawable( skin.GetDrawable( drawableName ) );
+    }
+
+    /// <summary>
+    ///     Sets a new drawable for the image. The image's pref size is the drawable's min size.
+    ///     If using the image actor's size rather than the pref size, <see cref="Widget.Pack" />
+    ///     can be used to size the image to its pref size.
+    /// </summary>
+    /// <param name="drawable"> May be null. </param>
+    public void SetDrawable( IDrawable? drawable )
+    {
+        if ( Drawable == drawable )
+        {
+            return;
+        }
+
+        if ( drawable != null )
+        {
+            if ( !PrefWidth.Equals( drawable.MinWidth ) || !PrefHeight.Equals( drawable.MinHeight ) )
+            {
+                InvalidateHierarchy();
+            }
+        }
+        else
+        {
+            InvalidateHierarchy();
+        }
+
+        Drawable = drawable;
+    }
+
+    /// <summary>
+    ///     Sets the <see cref="Scaling" />Mode for this Image.
+    /// </summary>
+    public void SetScaling( Scaling scale )
+    {
+        ArgumentNullException.ThrowIfNull( scale );
+
+        _scaling = scale;
+        Invalidate();
     }
 
     /// <inheritdoc />

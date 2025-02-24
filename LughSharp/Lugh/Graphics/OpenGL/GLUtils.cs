@@ -42,14 +42,14 @@ public static class GLUtils
     // ========================================================================
 
     /// <summary>
-    /// Converts a specified OpenGL error code into a corresponding descriptive error string.
+    ///     Converts a specified OpenGL error code into a corresponding descriptive error string.
     /// </summary>
     /// <param name="errorCode">
-    /// The error code to be translated, typically returned from OpenGL functions.
+    ///     The error code to be translated, typically returned from OpenGL functions.
     /// </param>
     /// <returns>
-    /// A string that describes the given OpenGL error code. If the error code is unrecognized,
-    /// a generic message including the code is returned.
+    ///     A string that describes the given OpenGL error code. If the error code is unrecognized,
+    ///     a generic message including the code is returned.
     /// </returns>
     public static string GetErrorString( int errorCode )
     {
@@ -68,18 +68,17 @@ public static class GLUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     public static void CreateCapabilities()
     {
     }
 
     /// <summary>
-    /// Checks if there is a current OpenGL context bound to the calling thread.
-    /// Throws a <see cref="GdxRuntimeException"/> if no OpenGL context is active.
+    ///     Checks if there is a current OpenGL context bound to the calling thread.
+    ///     Throws a <see cref="GdxRuntimeException" /> if no OpenGL context is active.
     /// </summary>
     /// <exception cref="GdxRuntimeException">
-    /// Thrown when no OpenGL context is currently bound to the thread.
+    ///     Thrown when no OpenGL context is currently bound to the thread.
     /// </exception>
     public static bool CheckOpenGLContext()
     {
@@ -91,13 +90,13 @@ public static class GLUtils
         #if DEBUG
         Logger.Debug( "Context found on current thread." );
         #endif
-        
+
         return true;
     }
 
     /// <summary>
-    /// Checks for OpenGL errors after a given stage of rendering or processing.
-    /// Throws an <see cref="InvalidOperationException"/> if an OpenGL error is detected.
+    ///     Checks for OpenGL errors after a given stage of rendering or processing.
+    ///     Throws an <see cref="InvalidOperationException" /> if an OpenGL error is detected.
     /// </summary>
     /// <param name="stage">The description of the stage at which the error occurred.</param>
     /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>
@@ -112,9 +111,9 @@ public static class GLUtils
     }
 
     /// <summary>
-    /// Sets up OpenGL's debug message callback and enables debug output. This helps capture and log
-    /// OpenGL debug messages during runtime, providing details about issues such as errors, warnings,
-    /// or performance bottlenecks in OpenGL operations.
+    ///     Sets up OpenGL's debug message callback and enables debug output. This helps capture and log
+    ///     OpenGL debug messages during runtime, providing details about issues such as errors, warnings,
+    ///     or performance bottlenecks in OpenGL operations.
     /// </summary>
     public static void GLDebug()
     {
@@ -137,7 +136,7 @@ public static class GLUtils
 
                 if ( severity == DebugSeverity.DEBUG_SEVERITY_HIGH )
                 {
-                    System.Diagnostics.Debugger.Break();
+                    Debugger.Break();
                 }
             } );
 

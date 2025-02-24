@@ -26,12 +26,13 @@ using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
+
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// Drawable for a <see cref="Sprite"/>.
+///     Drawable for a <see cref="Sprite" />.
 /// </summary>
 [PublicAPI]
 public class SpriteDrawable : BaseDrawable, ITransformDrawable
@@ -39,7 +40,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
     private Sprite? _sprite;
 
     /// <summary>
-    /// Creates an uninitialized SpriteDrawable. The sprite must be set before use.
+    ///     Creates an uninitialized SpriteDrawable. The sprite must be set before use.
     /// </summary>
     public SpriteDrawable()
     {
@@ -56,7 +57,7 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// The <see cref="Sprite"/> component of this <see cref="IDrawable"/>.
+    ///     The <see cref="Sprite" /> component of this <see cref="IDrawable" />.
     /// </summary>
     public Sprite? Sprite
     {
@@ -119,8 +120,8 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Creates a new drawable that renders the same as this drawable,
-    /// tinted with the specified color.
+    ///     Creates a new drawable that renders the same as this drawable,
+    ///     tinted with the specified color.
     /// </summary>
     public SpriteDrawable Tint( Color tint )
     {

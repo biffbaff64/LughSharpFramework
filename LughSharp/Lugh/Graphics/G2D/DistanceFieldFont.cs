@@ -28,15 +28,15 @@ using LughSharp.Lugh.Graphics.Images;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-/// Renders bitmap fonts using distance field textures, see the
-/// <a href="https://github.com/libgdx/libgdx/wiki/Distance-field-fonts">
-/// Distance Field Fonts wiki article
-/// </a>
-/// for usage. Initialize
-/// the SpriteBatch with the <see cref="CreateDistanceFieldShader()"/> shader.
-/// <para>
-/// Attention: The batch is flushed before and after each string is rendered.
-/// </para>
+///     Renders bitmap fonts using distance field textures, see the
+///     <a href="https://github.com/libgdx/libgdx/wiki/Distance-field-fonts">
+///         Distance Field Fonts wiki article
+///     </a>
+///     for usage. Initialize
+///     the SpriteBatch with the <see cref="CreateDistanceFieldShader()" /> shader.
+///     <para>
+///         Attention: The batch is flushed before and after each string is rendered.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class DistanceFieldFont : BitmapFont
@@ -70,7 +70,7 @@ public class DistanceFieldFont : BitmapFont
     }
 
     /// <summary>
-    /// Returns the distance field smoothing factor for this font.
+    ///     Returns the distance field smoothing factor for this font.
     /// </summary>
     public float GetDistanceFieldSmoothing()
     {
@@ -78,8 +78,8 @@ public class DistanceFieldFont : BitmapFont
     }
 
     /// <summary>
-    /// Set the distance field smoothing factor for this font. SpriteBatch needs
-    /// to have this shader set for rendering distance field fonts.
+    ///     Set the distance field smoothing factor for this font. SpriteBatch needs
+    ///     to have this shader set for rendering distance field fonts.
     /// </summary>
     public void SetDistanceFieldSmoothing( float distanceFieldSmoothing )
     {
@@ -87,59 +87,59 @@ public class DistanceFieldFont : BitmapFont
     }
 
     /// <summary>
-    /// Returns a new instance of the distance field shader, see
-    /// https://github.com/libgdx/libgdx/wiki/Distance-field-fonts if the u_smoothing
-    /// uniform > 0.0. Otherwise the same code as the default SpriteBatch shader is used.
+    ///     Returns a new instance of the distance field shader, see
+    ///     https://github.com/libgdx/libgdx/wiki/Distance-field-fonts if the u_smoothing
+    ///     uniform > 0.0. Otherwise the same code as the default SpriteBatch shader is used.
     /// </summary>
     public ShaderProgram CreateDistanceFieldShader()
     {
         const string VERTEX_SHADER = "in vec4 "
-                                   + "a_position"
-                                   + ";\n" //
-                                   + "in vec4 "
-                                   + "a_colorPacked"
-                                   + ";\n" //
-                                   + "in vec2 "
-                                   + "u_texCoord"
-                                   + "0;\n"
-                                   + "uniform mat4 u_projTrans;\n"
-                                   + "out vec4 v_color;\n"
-                                   + "out vec2 v_texCoords;\n"
-                                   + "\n"
-                                   + "void main() {\n"
-                                   + "	v_color = "
-                                   + "a_colorPacked"
-                                   + ";\n"
-                                   + "	v_color.a = v_color.a * (255.0/254.0);\n"
-                                   + "	v_texCoords = "
-                                   + "u_texCoord"
-                                   + "0;\n" //
-                                   + "	gl_Position =  u_projTrans * "
-                                   + "a_position"
-                                   + ";\n" //
-                                   + "}\n";
-
-        const string FRAGMENT_SHADER = "#ifdef GL_ES\n"
-                                     + "#define LOWP lowp\n"
-                                     + "precision mediump float;\n"
-                                     + "#endif\n"
-                                     + "\n"
-                                     + "uniform sampler2D u_texture;\n"
-                                     + "uniform float u_smoothing;\n"
-                                     + "in vec4 v_color;\n"
-                                     + "in vec2 v_texCoords;\n"
-                                     + "out vec4 fragColor;\n"
+                                     + "a_position"
+                                     + ";\n" //
+                                     + "in vec4 "
+                                     + "a_colorPacked"
+                                     + ";\n" //
+                                     + "in vec2 "
+                                     + "u_texCoord"
+                                     + "0;\n"
+                                     + "uniform mat4 u_projTrans;\n"
+                                     + "out vec4 v_color;\n"
+                                     + "out vec2 v_texCoords;\n"
                                      + "\n"
                                      + "void main() {\n"
-                                     + "	if (u_smoothing > 0.0) {\n"
-                                     + "		float smoothing = 0.25 / u_smoothing;\n"
-                                     + "		float distance = texture(u_texture, v_texCoords).a;\n"
-                                     + "		float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, distance);\n"
-                                     + "		fragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
-                                     + "	} else {\n"
-                                     + "		fragColor = v_color * texture(u_texture, v_texCoords);\n"
-                                     + "	}\n"
+                                     + "	v_color = "
+                                     + "a_colorPacked"
+                                     + ";\n"
+                                     + "	v_color.a = v_color.a * (255.0/254.0);\n"
+                                     + "	v_texCoords = "
+                                     + "u_texCoord"
+                                     + "0;\n" //
+                                     + "	gl_Position =  u_projTrans * "
+                                     + "a_position"
+                                     + ";\n" //
                                      + "}\n";
+
+        const string FRAGMENT_SHADER = "#ifdef GL_ES\n"
+                                       + "#define LOWP lowp\n"
+                                       + "precision mediump float;\n"
+                                       + "#endif\n"
+                                       + "\n"
+                                       + "uniform sampler2D u_texture;\n"
+                                       + "uniform float u_smoothing;\n"
+                                       + "in vec4 v_color;\n"
+                                       + "in vec2 v_texCoords;\n"
+                                       + "out vec4 fragColor;\n"
+                                       + "\n"
+                                       + "void main() {\n"
+                                       + "	if (u_smoothing > 0.0) {\n"
+                                       + "		float smoothing = 0.25 / u_smoothing;\n"
+                                       + "		float distance = texture(u_texture, v_texCoords).a;\n"
+                                       + "		float alpha = smoothstep(0.5 - smoothing, 0.5 + smoothing, distance);\n"
+                                       + "		fragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
+                                       + "	} else {\n"
+                                       + "		fragColor = v_color * texture(u_texture, v_texCoords);\n"
+                                       + "	}\n"
+                                       + "}\n";
 
         var shader = new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
 
@@ -152,9 +152,9 @@ public class DistanceFieldFont : BitmapFont
     }
 
     /// <summary>
-    /// Provides a font cache that uses distance field shader for rendering fonts.
-    /// Attention: breaks batching because uniform is needed for smoothing factor,
-    /// so a flush is performed before and after every font rendering.
+    ///     Provides a font cache that uses distance field shader for rendering fonts.
+    ///     Attention: breaks batching because uniform is needed for smoothing factor,
+    ///     so a flush is performed before and after every font rendering.
     /// </summary>
     private sealed class DistanceFieldFontCache : BitmapFontCache
     {
@@ -170,7 +170,7 @@ public class DistanceFieldFont : BitmapFont
 
         private float GetSmoothingFactor()
         {
-            var font = ( DistanceFieldFont ) Font;
+            var font = ( DistanceFieldFont )Font;
 
             return font.GetDistanceFieldSmoothing() * font.GetScaleX();
         }

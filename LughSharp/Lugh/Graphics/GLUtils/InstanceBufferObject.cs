@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -33,16 +34,14 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI]
 public class InstanceBufferObject : IInstanceData
 {
-    public VertexAttributes Attributes { get; set; } = null!;
-
     // ========================================================================
 
     private FloatBuffer _buffer = null!;
+    private int         _bufferHandle;
     private ByteBuffer? _byteBuffer;
     private bool        _isBound = false;
     private bool        _isDirty = false;
     private bool        _ownsBuffer;
-    private int         _bufferHandle;
     private int         _usage;
 
     // ========================================================================
@@ -66,8 +65,8 @@ public class InstanceBufferObject : IInstanceData
     }
 
     /// <summary>
-    /// The GL enum used in the call to <see cref="GLBindings.BufferData"/>",
-    /// e.g. GL_STATIC_DRAW or GL_DYNAMIC_DRAW. It can only be called when the VBO is not bound.
+    ///     The GL enum used in the call to <see cref="OpenGL.GLBindings.BufferData" />",
+    ///     e.g. GL_STATIC_DRAW or GL_DYNAMIC_DRAW. It can only be called when the VBO is not bound.
     /// </summary>
     public int Usage
     {
@@ -82,6 +81,8 @@ public class InstanceBufferObject : IInstanceData
             _usage = value;
         }
     }
+
+    public VertexAttributes Attributes { get; set; } = null!;
 
     public int NumInstances    => ( _buffer.Limit * 4 ) / Attributes.VertexSize;
     public int NumMaxInstances => _byteBuffer!.Capacity / Attributes.VertexSize;
@@ -162,8 +163,8 @@ public class InstanceBufferObject : IInstanceData
     }
 
     /// <summary>
-    /// Binds this InstanceBufferObject for rendering via
-    /// GLDrawArraysInstanced or GLDrawElementsInstanced
+    ///     Binds this InstanceBufferObject for rendering via
+    ///     GLDrawArraysInstanced or GLDrawElementsInstanced
     /// </summary>
     public unsafe void Bind( ShaderProgram shader, int[]? locations = null )
     {
@@ -177,7 +178,7 @@ public class InstanceBufferObject : IInstanceData
 
             fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, ptr, Usage );
+                GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
             }
 
             _isDirty = false;
@@ -241,7 +242,7 @@ public class InstanceBufferObject : IInstanceData
     }
 
     /// <summary>
-    /// Unbinds this InstanceBufferObject.
+    ///     Unbinds this InstanceBufferObject.
     /// </summary>
     public void Unbind( ShaderProgram shader, int[]? locations = null )
     {
@@ -285,8 +286,8 @@ public class InstanceBufferObject : IInstanceData
     }
 
     /// <summary>
-    /// Invalidates the InstanceBufferObject so a new OpenGL _buffer handle
-    /// is created. Use this in case of a context loss.
+    ///     Invalidates the InstanceBufferObject so a new OpenGL _buffer handle
+    ///     is created. Use this in case of a context loss.
     /// </summary>
     public void Invalidate()
     {
@@ -295,7 +296,7 @@ public class InstanceBufferObject : IInstanceData
     }
 
     /// <summary>
-    /// Disposes of all resources this InstanceBufferObject uses.
+    ///     Disposes of all resources this InstanceBufferObject uses.
     /// </summary>
     public void Dispose()
     {
@@ -311,8 +312,8 @@ public class InstanceBufferObject : IInstanceData
     }
 
     /// <summary>
-    /// Low level method to reset the _buffer and _attributes to
-    /// the specified values. Use with care!
+    ///     Low level method to reset the _buffer and _attributes to
+    ///     the specified values. Use with care!
     /// </summary>
     protected void SetBuffer( Buffer data, bool ownsBuffer, VertexAttributes value )
     {
@@ -358,8 +359,8 @@ public class InstanceBufferObject : IInstanceData
         {
             fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, null!, Usage );
-                GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, ptr, Usage );
+                GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, 0, Usage );
+                GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
                 _isDirty = false;
             }
         }

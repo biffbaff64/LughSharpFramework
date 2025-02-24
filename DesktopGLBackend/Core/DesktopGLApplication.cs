@@ -24,13 +24,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Graphics.GLUtils;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
-
 using DesktopGLBackend.Audio;
 using DesktopGLBackend.Audio.Mock;
 using DesktopGLBackend.Files;
@@ -38,36 +31,25 @@ using DesktopGLBackend.Input;
 using DesktopGLBackend.Utils;
 using DesktopGLBackend.Window;
 
+using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Network;
+using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Collections;
+using LughSharp.Lugh.Utils.Exceptions;
+
+using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace DesktopGLBackend.Core;
 
 /// <summary>
-/// Creates, and manages, an application to for Windows OpenGL backends. 
+///     Creates, and manages, an application to for Windows OpenGL backends.
 /// </summary>
 [PublicAPI]
 public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 {
-    #region public properties
-
-    public DesktopGLApplicationConfiguration? Config             { get; set; }
-    public Dictionary< string, IPreferences > Preferences        { get; set; } = [ ];
-    public List< DesktopGLWindow >            Windows            { get; set; } = [ ];
-    public List< IRunnable.Runnable >         Runnables          { get; set; } = [ ];
-    public List< IRunnable.Runnable >         ExecutedRunnables  { get; set; } = [ ];
-    public List< ILifecycleListener >         LifecycleListeners { get; set; } = [ ];
-
-    public IClipboard?      Clipboard     { get; set; }
-    public IGLAudio?        Audio         { get; set; }
-    public INet             Network       { get; set; }
-    public IFiles           Files         { get; set; }
-    public GLVersion?       GLVersion     { get; set; }
-    public OpenGLProfile    OGLProfile    { get; set; }
-    public DesktopGLWindow? CurrentWindow { get; set; }
-
-    #endregion public properties
-
     // ========================================================================
 
     private const int FR_UNINITIALISED = -2;
@@ -76,18 +58,18 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
     private static   GlfwErrorCallback? _errorCallback;
     private readonly Sync?              _sync;
-    private          bool               _running         = true;
     private          bool               _glfwInitialised = false;
     private          IPreferences       _prefs;
+    private          bool               _running = true;
 
     // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// Creates a new Desktop Gl Application using the provided <see cref="DesktopGLApplicationConfiguration"/>.
+    ///     Creates a new Desktop Gl Application using the provided <see cref="DesktopGLApplicationConfiguration" />.
     /// </summary>
-    /// <param name="listener"> The <see cref="IApplicationListener"/> to use. </param>
-    /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration"/> to use.</param>
+    /// <param name="listener"> The <see cref="IApplicationListener" /> to use. </param>
+    /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration" /> to use.</param>
     public DesktopGLApplication( IApplicationListener listener,
                                  DesktopGLApplicationConfiguration config )
     {
@@ -126,13 +108,130 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     // ========================================================================
+
+    /// <inheritdoc />
+    public IGLAudio CreateAudio( DesktopGLApplicationConfiguration config )
+    {
+        IGLAudio audio;
+
+        if ( !config.DisableAudio )
+        {
+            try
+            {
+                audio = new OpenALAudio( config.AudioDeviceSimultaneousSources,
+                                         config.AudioDeviceBufferCount,
+                                         config.AudioDeviceBufferSize );
+            }
+            catch ( Exception e )
+            {
+                Logger.Debug( $"Couldn't initialize audio, disabling audio: {e}" );
+                audio = new MockAudio();
+            }
+        }
+        else
+        {
+            Logger.Debug( "Audio is disabled in Config, using MockAudio instead." );
+
+            audio = new MockAudio();
+        }
+
+        return audio;
+    }
+
+    /// <inheritdoc />
+    public IPreferences GetPreferences( string name )
+    {
+        if ( Preferences.ContainsKey( name ) )
+        {
+            return Preferences.Get( name )!;
+        }
+
+        IPreferences prefs = new DesktopGLPreferences( name );
+
+        Preferences.Put( name, prefs );
+
+        return prefs;
+    }
+
+    /// <inheritdoc />
+    public Platform.ApplicationType AppType
+    {
+        get => Platform.ApplicationType.WindowsGL;
+        set { }
+    }
+
+    /// <inheritdoc />
+    public void PostRunnable( IRunnable.Runnable runnable )
+    {
+        lock ( Runnables )
+        {
+            Runnables.Add( runnable );
+        }
+    }
+
+    /// <inheritdoc />
+    public virtual IDesktopGLInput CreateInput( DesktopGLWindow window )
+    {
+        return new DefaultDesktopGLInput( window );
+    }
+
+    /// <summary>
+    ///     Returns the Android API level on Android, the major OS version on iOS (5, 6, 7, ..),
+    ///     or 0 on the desktop.
+    /// </summary>
+    public virtual int GetVersion()
+    {
+        return 0;
+    }
+
+    /// <summary>
+    ///     Schedule an exit from the application. On android, this will cause a call to
+    ///     Pause() and Dispose() at the next opportunity. It will not immediately finish
+    ///     your application. On iOS this should be avoided in production as it breaks
+    ///     Apples guidelines
+    /// </summary>
+    public virtual void Exit()
+    {
+        _running = false;
+    }
+
+    /// <inheritdoc />
+    public void AddLifecycleListener( ILifecycleListener listener )
+    {
+        lock ( LifecycleListeners )
+        {
+            LifecycleListeners.Add( listener );
+        }
+    }
+
+    /// <inheritdoc />
+    public void RemoveLifecycleListener( ILifecycleListener listener )
+    {
+        lock ( LifecycleListeners )
+        {
+            LifecycleListeners.Remove( listener );
+        }
+    }
+
+    /// <inheritdoc />
+    /// <remarks> Calls Dispose(bool) with <b>true</b>. </remarks>
+    /// <remarks> GC.SuppressFinalize is called in Dispose(bool). </remarks>
+    [SuppressMessage( "Usage", "CA1816:Dispose methods should call SuppressFinalize" )]
+    public void Dispose()
+    {
+        Dispose( true );
+
+        GC.SuppressFinalize( this );
+    }
+
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// The entry point for running code using this framework. At this point at least one window
-    /// will have been created, Glfw will have been set up, and the framework properly initialised.
-    /// This passes control to <see cref="Loop()"/> and stays there until the app is finished. At
-    /// this point <see cref="CleanupWindows"/> is called, followed by <see cref="Cleanup"/>.
+    ///     The entry point for running code using this framework. At this point at least one window
+    ///     will have been created, Glfw will have been set up, and the framework properly initialised.
+    ///     This passes control to <see cref="Loop()" /> and stays there until the app is finished. At
+    ///     this point <see cref="CleanupWindows" /> is called, followed by <see cref="Cleanup" />.
     /// </summary>
     public void Run()
     {
@@ -141,9 +240,9 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
             Loop();
             CleanupWindows();
         }
-        catch ( System.Exception e )
+        catch ( Exception e )
         {
-            throw ( e is SystemException ) ? e : new GdxRuntimeException( e );
+            throw e is SystemException ? e : new GdxRuntimeException( e );
         }
         finally
         {
@@ -152,7 +251,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     /// <summary>
-    /// Framework Main Loop.
+    ///     Framework Main Loop.
     /// </summary>
     protected void Loop()
     {
@@ -272,7 +371,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
             }
 
             Audio?.Update();
-            
+
             // Glfw.SwapBuffers is called in window.Update().
             Glfw.PollEvents();
         }
@@ -283,17 +382,206 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// </summary>
+    /// <param name="windowHandle"></param>
+    private void InitGLVersion( GLFW.Window windowHandle )
+    {
+//        OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
+//
+//        Glfw.GetVersion( out var glMajor, out var glMinor, out var revision );
+//
+//        Logger.Debug( $"OpenGL Version: {glMajor}.{glMinor}.{revision}" );
+//        
+//        Glfw.WindowHint( WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
+//        Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
+//        Glfw.WindowHint( WindowHint.ContextVersionMajor, glMajor );
+//        Glfw.WindowHint( WindowHint.ContextVersionMinor, glMinor );
+
+//        Glfw.MakeContextCurrent( windowHandle );
+
+        GLVersion = new GLVersion( Platform.ApplicationType.WindowsGL );
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <exception cref="GdxRuntimeException"></exception>
+    public void InitialiseGlfw()
+    {
+        try
+        {
+            if ( !_glfwInitialised )
+            {
+                DesktopGLNativesLoader.Load();
+
+                ErrorCallback();
+
+                Glfw.SetErrorCallback( _errorCallback );
+                Glfw.InitHint( InitHint.JoystickHatButtons, false );
+
+                if ( !Glfw.Init() )
+                {
+                    Glfw.GetError( out var error );
+
+                    Logger.Debug( $"Failed to initialise Glfw: {error}" );
+
+                    Environment.Exit( 1 );
+                }
+
+//                Logger.Debug( $"Success: Glfw Version: {Glfw.GetVersionString()}", true );
+
+                _glfwInitialised = true;
+            }
+        }
+        catch ( Exception e )
+        {
+            throw new ApplicationException( $"Failure in InitialiseGLFW() : {e}" );
+        }
+    }
+
+    private static void ErrorCallback()
+    {
+        _errorCallback = ( error, description ) =>
+        {
+            Logger.Error( $"ErrorCode: {error}, {description}" );
+
+            if ( error == ErrorCode.InvalidEnum )
+            {
+            }
+        };
+    }
+
+    /// <summary>
+    ///     Cleans up, and disposes of, any windows that have been closed.
+    /// </summary>
+    protected void CleanupWindows()
+    {
+        lock ( LifecycleListeners )
+        {
+            foreach ( var lifecycleListener in LifecycleListeners )
+            {
+                lifecycleListener.Pause();
+                lifecycleListener.Dispose();
+            }
+        }
+
+        foreach ( var window in Windows )
+        {
+            window.Dispose();
+        }
+
+        Windows.Clear();
+    }
+
+    /// <summary>
+    ///     Cleanup everything before shutdown.
+    /// </summary>
+    protected void Cleanup()
+    {
+        DesktopGLCursor.DisposeSystemCursors();
+
+        Audio?.Dispose();
+
+        _errorCallback = null;
+
+        Glfw.Terminate();
+    }
+
+    /// <summary>
+    ///     Initialise the main Window <see cref="WindowHint" />s. Some Hints may be set
+    ///     elsewhere, but this is where most are initialised.
+    /// </summary>
+    /// <param name="config"> The current <see cref="DesktopGLApplicationConfiguration" />. </param>
+    private void SetWindowHints( DesktopGLApplicationConfiguration config )
+    {
+        ArgumentNullException.ThrowIfNull( config );
+
+        Glfw.DefaultWindowHints();
+
+        Glfw.WindowHint( WindowHint.Visible, config.InitialVisibility );
+        Glfw.WindowHint( WindowHint.Resizable, config.WindowResizable );
+        Glfw.WindowHint( WindowHint.Maximized, config.WindowMaximized );
+        Glfw.WindowHint( WindowHint.AutoIconify, config.AutoIconify );
+        Glfw.WindowHint( WindowHint.Decorated, config.WindowDecorated );
+
+        Glfw.WindowHint( WindowHint.RedBits, config.Red );
+        Glfw.WindowHint( WindowHint.GreenBits, config.Green );
+        Glfw.WindowHint( WindowHint.BlueBits, config.Blue );
+        Glfw.WindowHint( WindowHint.AlphaBits, config.Alpha );
+        Glfw.WindowHint( WindowHint.StencilBits, config.Stencil );
+        Glfw.WindowHint( WindowHint.DepthBits, config.Depth );
+        Glfw.WindowHint( WindowHint.Samples, config.Samples );
+
+        OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
+
+        Glfw.WindowHint( WindowHint.ContextVersionMajor, config.GLContextMajorVersion );
+        Glfw.WindowHint( WindowHint.ContextVersionMinor, config.GLContextMinorVersion );
+        Glfw.WindowHint( WindowHint.OpenGLForwardCompat, GLUtils.DEFAULT_OPENGL_FORWARDCOMPAT );
+        Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
+        Glfw.WindowHint( WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
+
+        Glfw.WindowHint( WindowHint.DoubleBuffer, true );
+
+        if ( config.TransparentFramebuffer )
+        {
+            Glfw.WindowHint( WindowHint.TransparentFramebuffer, true );
+        }
+
+        if ( config.Debug )
+        {
+            Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    ~DesktopGLApplication()
+    {
+        Dispose( false );
+    }
+
+    public static void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            // Release managed resources here
+        }
+    }
+
+    #region public properties
+
+    public DesktopGLApplicationConfiguration? Config             { get; set; }
+    public Dictionary< string, IPreferences > Preferences        { get; set; } = [ ];
+    public List< DesktopGLWindow >            Windows            { get; set; } = [ ];
+    public List< IRunnable.Runnable >         Runnables          { get; set; } = [ ];
+    public List< IRunnable.Runnable >         ExecutedRunnables  { get; set; } = [ ];
+    public List< ILifecycleListener >         LifecycleListeners { get; set; } = [ ];
+
+    public IClipboard?      Clipboard     { get; set; }
+    public IGLAudio?        Audio         { get; set; }
+    public INet             Network       { get; set; }
+    public IFiles           Files         { get; set; }
+    public GLVersion?       GLVersion     { get; set; }
+    public OpenGLProfile    OGLProfile    { get; set; }
+    public DesktopGLWindow? CurrentWindow { get; set; }
+
+    #endregion public properties
+
+    // ========================================================================
+    // ========================================================================
+
     #region window creation handlers
 
     /// <summary>
-    /// Creates a new <see cref="DesktopGLWindow"/> using the provided listener and
-    /// <see cref="DesktopGLWindowConfiguration"/>.
-    /// <para>
-    /// This function only instantiates a <see cref="DesktopGLWindow"/> and
-    /// returns immediately. The actual window creation is postponed with
-    /// <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)"/> until after all
-    /// existing windows are updated.
-    /// </para>
+    ///     Creates a new <see cref="DesktopGLWindow" /> using the provided listener and
+    ///     <see cref="DesktopGLWindowConfiguration" />.
+    ///     <para>
+    ///         This function only instantiates a <see cref="DesktopGLWindow" /> and
+    ///         returns immediately. The actual window creation is postponed with
+    ///         <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)" /> until after all
+    ///         existing windows are updated.
+    ///     </para>
     /// </summary>
     public DesktopGLWindow NewWindow( IApplicationListener listener, DesktopGLWindowConfiguration windowConfig )
     {
@@ -305,7 +593,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     /// <summary>
-    /// Creates a new <see cref="DesktopGLWindow"/> using the 
+    ///     Creates a new <see cref="DesktopGLWindow" /> using the
     /// </summary>
     /// <param name="config"></param>
     /// <param name="listener"></param>
@@ -477,290 +765,4 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     #endregion window creation handlers
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="windowHandle"></param>
-    private void InitGLVersion( GLFW.Window windowHandle )
-    {
-//        OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
-//
-//        Glfw.GetVersion( out var glMajor, out var glMinor, out var revision );
-//
-//        Logger.Debug( $"OpenGL Version: {glMajor}.{glMinor}.{revision}" );
-//        
-//        Glfw.WindowHint( WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
-//        Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
-//        Glfw.WindowHint( WindowHint.ContextVersionMajor, glMajor );
-//        Glfw.WindowHint( WindowHint.ContextVersionMinor, glMinor );
-        
-//        Glfw.MakeContextCurrent( windowHandle );
-
-        GLVersion = new GLVersion( LughSharp.Lugh.Core.Platform.ApplicationType.WindowsGL );
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <exception cref="GdxRuntimeException"></exception>
-    public void InitialiseGlfw()
-    {
-        try
-        {
-            if ( !_glfwInitialised )
-            {
-                DesktopGLNativesLoader.Load();
-
-                ErrorCallback();
-
-                Glfw.SetErrorCallback( _errorCallback );
-                Glfw.InitHint( InitHint.JoystickHatButtons, false );
-
-                if ( !Glfw.Init() )
-                {
-                    Glfw.GetError( out var error );
-
-                    Logger.Debug( $"Failed to initialise Glfw: {error}" );
-
-                    System.Environment.Exit( 1 );
-                }
-
-//                Logger.Debug( $"Success: Glfw Version: {Glfw.GetVersionString()}", true );
-
-                _glfwInitialised = true;
-            }
-        }
-        catch ( System.Exception e )
-        {
-            throw new ApplicationException( $"Failure in InitialiseGLFW() : {e}" );
-        }
-    }
-
-    private static void ErrorCallback()
-    {
-        _errorCallback = ( error, description ) =>
-        {
-            Logger.Error( $"ErrorCode: {error}, {description}" );
-
-            if ( error == ErrorCode.InvalidEnum )
-            {
-            }
-        };
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public IGLAudio CreateAudio( DesktopGLApplicationConfiguration config )
-    {
-        IGLAudio audio;
-
-        if ( !config.DisableAudio )
-        {
-            try
-            {
-                audio = new OpenALAudio( config.AudioDeviceSimultaneousSources,
-                                         config.AudioDeviceBufferCount,
-                                         config.AudioDeviceBufferSize );
-            }
-            catch ( System.Exception e )
-            {
-                Logger.Debug( $"Couldn't initialize audio, disabling audio: {e}" );
-                audio = new MockAudio();
-            }
-        }
-        else
-        {
-            Logger.Debug( "Audio is disabled in Config, using MockAudio instead." );
-
-            audio = new MockAudio();
-        }
-
-        return audio;
-    }
-
-    /// <summary>
-    /// Cleans up, and disposes of, any windows that have been closed.
-    /// </summary>
-    protected void CleanupWindows()
-    {
-        lock ( LifecycleListeners )
-        {
-            foreach ( var lifecycleListener in LifecycleListeners )
-            {
-                lifecycleListener.Pause();
-                lifecycleListener.Dispose();
-            }
-        }
-
-        foreach ( var window in Windows )
-        {
-            window.Dispose();
-        }
-
-        Windows.Clear();
-    }
-
-    /// <summary>
-    /// Cleanup everything before shutdown.
-    /// </summary>
-    protected void Cleanup()
-    {
-        DesktopGLCursor.DisposeSystemCursors();
-
-        Audio?.Dispose();
-
-        _errorCallback = null;
-
-        Glfw.Terminate();
-    }
-
-    /// <inheritdoc />
-    public IPreferences GetPreferences( string name )
-    {
-        if ( Preferences.ContainsKey( name ) )
-        {
-            return Preferences.Get( name )!;
-        }
-
-        IPreferences prefs = new DesktopGLPreferences( name );
-
-        Preferences.Put( name, prefs );
-
-        return prefs;
-    }
-
-    /// <inheritdoc />
-    public LughSharp.Lugh.Core.Platform.ApplicationType AppType
-    {
-        get => LughSharp.Lugh.Core.Platform.ApplicationType.WindowsGL;
-        set { }
-    }
-
-    /// <inheritdoc />
-    public void PostRunnable( IRunnable.Runnable runnable )
-    {
-        lock ( Runnables )
-        {
-            Runnables.Add( runnable );
-        }
-    }
-
-    /// <inheritdoc />
-    public virtual IDesktopGLInput CreateInput( DesktopGLWindow window )
-    {
-        return new DefaultDesktopGLInput( window );
-    }
-
-    /// <summary>
-    /// Returns the Android API level on Android, the major OS version on iOS (5, 6, 7, ..),
-    /// or 0 on the desktop.
-    /// </summary>
-    public virtual int GetVersion() => 0;
-
-    /// <summary>
-    /// Schedule an exit from the application. On android, this will cause a call to
-    /// Pause() and Dispose() at the next opportunity. It will not immediately finish
-    /// your application. On iOS this should be avoided in production as it breaks
-    /// Apples guidelines
-    /// </summary>
-    public virtual void Exit()
-    {
-        _running = false;
-    }
-
-    /// <inheritdoc />
-    public void AddLifecycleListener( ILifecycleListener listener )
-    {
-        lock ( LifecycleListeners )
-        {
-            LifecycleListeners.Add( listener );
-        }
-    }
-
-    /// <inheritdoc />
-    public void RemoveLifecycleListener( ILifecycleListener listener )
-    {
-        lock ( LifecycleListeners )
-        {
-            LifecycleListeners.Remove( listener );
-        }
-    }
-
-    /// <summary>
-    /// Initialise the main Window <see cref="WindowHint"/>s. Some Hints may be set
-    /// elsewhere, but this is where most are initialised.
-    /// </summary>
-    /// <param name="config"> The current <see cref="DesktopGLApplicationConfiguration"/>. </param>
-    private void SetWindowHints( DesktopGLApplicationConfiguration config )
-    {
-        ArgumentNullException.ThrowIfNull( config );
-
-        Glfw.DefaultWindowHints();
-
-        Glfw.WindowHint( WindowHint.Visible, config.InitialVisibility );
-        Glfw.WindowHint( WindowHint.Resizable, config.WindowResizable );
-        Glfw.WindowHint( WindowHint.Maximized, config.WindowMaximized );
-        Glfw.WindowHint( WindowHint.AutoIconify, config.AutoIconify );
-        Glfw.WindowHint( WindowHint.Decorated, config.WindowDecorated );
-
-        Glfw.WindowHint( WindowHint.RedBits, config.Red );
-        Glfw.WindowHint( WindowHint.GreenBits, config.Green );
-        Glfw.WindowHint( WindowHint.BlueBits, config.Blue );
-        Glfw.WindowHint( WindowHint.AlphaBits, config.Alpha );
-        Glfw.WindowHint( WindowHint.StencilBits, config.Stencil );
-        Glfw.WindowHint( WindowHint.DepthBits, config.Depth );
-        Glfw.WindowHint( WindowHint.Samples, config.Samples );
-
-        OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
-
-        Glfw.WindowHint( WindowHint.ContextVersionMajor, config.GLContextMajorVersion );
-        Glfw.WindowHint( WindowHint.ContextVersionMinor, config.GLContextMinorVersion );
-        Glfw.WindowHint( WindowHint.OpenGLForwardCompat, GLUtils.DEFAULT_OPENGL_FORWARDCOMPAT );
-        Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
-        Glfw.WindowHint( WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
-
-        Glfw.WindowHint( WindowHint.DoubleBuffer, true );
-
-        if ( config.TransparentFramebuffer )
-        {
-            Glfw.WindowHint( WindowHint.TransparentFramebuffer, true );
-        }
-
-        if ( config.Debug )
-        {
-            Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );
-        }
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    ~DesktopGLApplication()
-    {
-        Dispose( false );
-    }
-
-    /// <inheritdoc/>
-    /// <remarks> Calls Dispose(bool) with <b>true</b>. </remarks>
-    /// <remarks> GC.SuppressFinalize is called in Dispose(bool). </remarks>
-    [SuppressMessage( "Usage", "CA1816:Dispose methods should call SuppressFinalize" )]
-    public void Dispose()
-    {
-        Dispose( true );
-
-        GC.SuppressFinalize( this );
-    }
-
-    public static void Dispose( bool disposing )
-    {
-        if ( disposing )
-        {
-            // Release managed resources here
-        }
-    }
 }

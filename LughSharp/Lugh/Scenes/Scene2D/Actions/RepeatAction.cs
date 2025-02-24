@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 [PublicAPI]
@@ -35,7 +34,7 @@ public class RepeatAction : DelegateAction
     public bool Finished      { get; set; }
 
     // ========================================================================
-    
+
     protected override bool Delegate( float delta )
     {
         if ( ExecutedCount == RepeatCount )
@@ -72,7 +71,7 @@ public class RepeatAction : DelegateAction
     }
 
     /// <summary>
-    /// Causes the action to not repeat again.
+    ///     Causes the action to not repeat again.
     /// </summary>
     public void Finish()
     {

@@ -22,18 +22,18 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
+
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maps.Objects;
 using LughSharp.Lugh.Maps.Tiled.Objects;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
-using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
 namespace LughSharp.Lugh.Maps.Tiled.Loaders;
 
@@ -41,12 +41,6 @@ namespace LughSharp.Lugh.Maps.Tiled.Loaders;
 public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     : AsynchronousAssetLoader( resolver ) where TP : BaseTmxMapLoader< TP >.BaseTmxLoaderParameters
 {
-    public int      MapTileWidth      { get; set; }
-    public int      MapTileHeight     { get; set; }
-    public int      MapWidthInPixels  { get; set; }
-    public int      MapHeightInPixels { get; set; }
-    public TiledMap Map               { get; set; } = null!;
-
     // ========================================================================
     // ========================================================================
 
@@ -69,17 +63,22 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
     protected XmlDocument XmlDocument = new();
     protected XmlNode?    XmlRootNode;
+    public    int         MapTileWidth      { get; set; }
+    public    int         MapTileHeight     { get; set; }
+    public    int         MapWidthInPixels  { get; set; }
+    public    int         MapHeightInPixels { get; set; }
+    public    TiledMap    Map               { get; set; } = null!;
 
     // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// Loads the map data, given the XML root element.
+    ///     Loads the map data, given the XML root element.
     /// </summary>
     /// <param name="tmxFile">The Filehandle of the tmx file </param>
     /// <param name="parameter"></param>
     /// <param name="imageResolver"></param>
-    /// <returns>The <see cref="TiledMap"/>.</returns>
+    /// <returns>The <see cref="TiledMap" />.</returns>
     protected TiledMap LoadTiledMap( FileInfo tmxFile, TP? parameter, IImageResolver imageResolver )
     {
         // ====================================================================
@@ -365,7 +364,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
                     var flipVertically   = ( id & FLAG_FLIP_VERTICALLY ) != 0;
                     var flipDiagonally   = ( id & FLAG_FLIP_DIAGONALLY ) != 0;
 
-                    var tile = tilesets.GetTile( ( int ) ( id & ~MASK_CLEAR ) );
+                    var tile = tilesets.GetTile( ( int )( id & ~MASK_CLEAR ) );
 
                     if ( tile != null )
                     {
@@ -429,14 +428,14 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     }
 
     /// <summary>
-    /// From the official Tiled website:
-    /// "Image layers provide a way to quickly include a single image as foreground
-    /// or background of your map. They currently have limited functionality and you
-    /// may consider adding the image as a Tileset instead and place it as a Tile
-    /// Object. This way, you gain the ability to freely scale and rotate the image."
-    /// See https://doc.mapeditor.org/en/stable/manual/layers/
+    ///     From the official Tiled website:
+    ///     "Image layers provide a way to quickly include a single image as foreground
+    ///     or background of your map. They currently have limited functionality and you
+    ///     may consider adding the image as a Tileset instead and place it as a Tile
+    ///     Object. This way, you gain the ability to freely scale and rotate the image."
+    ///     See https://doc.mapeditor.org/en/stable/manual/layers/
     /// </summary>
-    /// <param name="map"> The parent <see cref="TiledMap"/>. </param>
+    /// <param name="map"> The parent <see cref="TiledMap" />. </param>
     /// <param name="parentLayers"> The actual layer group belonging to the map. </param>
     /// <param name="node"> The xml node being processed. </param>
     /// <param name="tmxFile"> The parent TMX map file. </param>
@@ -455,12 +454,12 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
         if ( node.Name.Equals( "imagelayer" ) )
         {
             var x = float.Parse( node.SelectSingleNode( "offsetx" )?.Value
-                              ?? node.SelectSingleNode( "x" )?.Value
-                              ?? "0" );
+                                 ?? node.SelectSingleNode( "x" )?.Value
+                                 ?? "0" );
 
             var y = float.Parse( node.SelectSingleNode( "offsety" )?.Value
-                              ?? node.SelectSingleNode( "y" )?.Value
-                              ?? "0" );
+                                 ?? node.SelectSingleNode( "y" )?.Value
+                                 ?? "0" );
 
             if ( FlipY )
             {
@@ -616,12 +615,12 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
                 if ( ( gid = node.Attributes?[ "gid" ]?.Value ) != null )
                 {
-                    id = ( int ) long.Parse( gid );
+                    id = ( int )long.Parse( gid );
 
                     var flipHorizontally = ( id & FLAG_FLIP_HORIZONTALLY ) != 0;
                     var flipVertically   = ( id & FLAG_FLIP_VERTICALLY ) != 0;
 
-                    var tile = map.Tilesets.GetTile( ( int ) ( id & ~MASK_CLEAR ) );
+                    var tile = map.Tilesets.GetTile( ( int )( id & ~MASK_CLEAR ) );
 
                     var tiledMapTileMapObject = new TiledMapTileMapObject( tile!, flipHorizontally, flipVertically );
 
@@ -762,7 +761,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
             default:
                 throw new GdxRuntimeException( $"Wrong type given for property {name}, given : {type}, "
-                                             + $"supported : string, bool, int, float, color ( or colour )" );
+                                               + $"supported : string, bool, int, float, color ( or colour )" );
         }
     }
 
@@ -850,7 +849,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
             for ( var i = 0; i < array.Length; i++ )
             {
-                ids[ i ] = ( int ) long.Parse( array[ i ].Trim() );
+                ids[ i ] = ( int )long.Parse( array[ i ].Trim() );
             }
         }
         else
@@ -916,9 +915,9 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
                                 }
 
                                 ids[ ( y * width ) + x ] = MathUtils.UnsignedByteToInt( temp[ 0 ] )
-                                                         | ( MathUtils.UnsignedByteToInt( temp[ 1 ] ) << 8 )
-                                                         | ( MathUtils.UnsignedByteToInt( temp[ 2 ] ) << 16 )
-                                                         | ( MathUtils.UnsignedByteToInt( temp[ 3 ] ) << 24 );
+                                                           | ( MathUtils.UnsignedByteToInt( temp[ 1 ] ) << 8 )
+                                                           | ( MathUtils.UnsignedByteToInt( temp[ 2 ] ) << 16 )
+                                                           | ( MathUtils.UnsignedByteToInt( temp[ 3 ] ) << 24 );
                             }
                         }
                     }
@@ -963,14 +962,14 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     }
 
     /// <summary>
-    /// Loads a Tileset as described in <paramref name="tilesetNode"/>.
-    /// The Node is laid ouit as follows:-
-    /// <code>
+    ///     Loads a Tileset as described in <paramref name="tilesetNode" />.
+    ///     The Node is laid ouit as follows:-
+    ///     <code>
     /// &lt;tileset firstgid="x" source="filename.tsx"/&gt;
     /// </code>
-    /// where 'x' is the id of the first tile in the tileset.
-    /// The width and height dimensions of the image used for the tiles are held in the TSX file, as are
-    /// the tile width/height, number of columns in the tile image, and total tile count.
+    ///     where 'x' is the id of the first tile in the tileset.
+    ///     The width and height dimensions of the image used for the tiles are held in the TSX file, as are
+    ///     the tile width/height, number of columns in the tile image, and total tile count.
     /// </summary>
     /// <param name="tilesetNode"> The node referencing the TSX tileset file. </param>
     /// <param name="tmxFile"> The current TMX file being processed. </param>
@@ -1255,8 +1254,8 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
 
         foreach ( XmlNode frameElement in frames )
         {
-            staticTiles.Add( ( StaticTiledMapTile ) tileSet
-                                .GetTile( firstgid + int.Parse( frameElement.Attributes![ "tileid" ]!.Value ) )! );
+            staticTiles.Add( ( StaticTiledMapTile )tileSet
+                                 .GetTile( firstgid + int.Parse( frameElement.Attributes![ "tileid" ]!.Value ) )! );
 
             intervals.Add( int.Parse( frameElement.Attributes[ "duration" ]!.Value ) );
         }
@@ -1270,7 +1269,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     }
 
     /// <summary>
-    /// Add a standard, non-animating, static tile to the map.
+    ///     Add a standard, non-animating, static tile to the map.
     /// </summary>
     /// <param name="tileSet"></param>
     /// <param name="textureRegion"> The tile image </param>
@@ -1311,14 +1310,14 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
         public Texture.TextureFilter TextureMagFilter { get; set; } = Texture.TextureFilter.Nearest;
 
         /// <summary>
-        /// Whether to convert the objects' pixel position and size to the equivalent in tile space.
+        ///     Whether to convert the objects' pixel position and size to the equivalent in tile space.
         /// </summary>
         public bool ConvertObjectToTileSpace { get; set; } = false;
 
         /// <summary>
-        /// Whether to flip all Y coordinates so that Y positive is up. All LibGDX renderers
-        /// require flipped Y coordinates, and thus flipY set to true. This parameter is included
-        /// for non-rendering related purposes of TMX files, or custom renderers.
+        ///     Whether to flip all Y coordinates so that Y positive is up. All LibGDX renderers
+        ///     require flipped Y coordinates, and thus flipY set to true. This parameter is included
+        ///     for non-rendering related purposes of TMX files, or custom renderers.
         /// </summary>
         public bool FlipY { get; set; } = true;
     }

@@ -27,10 +27,10 @@ using LughSharp.Lugh.Scenes.Scene2D.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// Value placeholder, allowing the value to be computed on request.
-/// Values can be provided to an actor for context to reduce the number of value
-/// instances that need to be created and reduce verbosity in code that specifies
-/// values.
+///     Value placeholder, allowing the value to be computed on request.
+///     Values can be provided to an actor for context to reduce the number of value
+///     instances that need to be created and reduce verbosity in code that specifies
+///     values.
 /// </summary>
 [PublicAPI]
 public abstract class Value
@@ -73,7 +73,7 @@ public abstract class Value
     // ========================================================================
 
     /// <summary>
-    /// A fixed value that is not computed each time it is used.
+    ///     A fixed value that is not computed each time it is used.
     /// </summary>
     [PublicAPI]
     public class Fixed : Value
@@ -104,13 +104,13 @@ public abstract class Value
                 return Zero;
             }
 
-            if ( value is >= -10 and <= 100 && value.Equals( ( int ) value ) )
+            if ( value is >= -10 and <= 100 && value.Equals( ( int )value ) )
             {
-                var f = _cache[ ( int ) value + 10 ];
+                var f = _cache[ ( int )value + 10 ];
 
                 if ( f == null )
                 {
-                    _cache[ ( int ) value + 10 ] = f = new Fixed( value );
+                    _cache[ ( int )value + 10 ] = f = new Fixed( value );
                 }
 
                 return f;
@@ -123,7 +123,7 @@ public abstract class Value
     // ========================================================================
 
     /// <summary>
-    /// Returns a value that is a percentage of the actor's width.
+    ///     Returns a value that is a percentage of the actor's width.
     /// </summary>
     private sealed class ValuePercentWidth : Value
     {
@@ -145,7 +145,7 @@ public abstract class Value
     // ========================================================================
 
     /// <summary>
-    /// Returns a value that is a percentage of the actor's height.
+    ///     Returns a value that is a percentage of the actor's height.
     /// </summary>
     private sealed class ValuePercentHeight : Value
     {
@@ -167,7 +167,7 @@ public abstract class Value
     // ========================================================================
 
     /// <summary>
-    /// Value that is the minWidth of the actor in the cell.
+    ///     Value that is the minWidth of the actor in the cell.
     /// </summary>
     private sealed class ValueMinWidthInnerClass : Value
     {
@@ -185,7 +185,7 @@ public abstract class Value
     // ========================================================================
 
     /// <summary>
-    /// Value that is the minHeight of the actor in the cell.
+    ///     Value that is the minHeight of the actor in the cell.
     /// </summary>
     private sealed class ValueMinHeightInnerClass : Value
     {
@@ -203,7 +203,7 @@ public abstract class Value
     // ========================================================================
 
     /// <summary>
-    /// Value that is the prefWidth of the actor in the cell.
+    ///     Value that is the prefWidth of the actor in the cell.
     /// </summary>
     private sealed class ValuePrefWidthInnerClass : Value
     {
@@ -221,7 +221,7 @@ public abstract class Value
     // ========================================================================
 
     /// <summary>
-    /// Value that is the prefHeight of the actor in the cell.
+    ///     Value that is the prefHeight of the actor in the cell.
     /// </summary>
     private sealed class ValuePrefHeightInnerClass : Value
     {
@@ -239,7 +239,7 @@ public abstract class Value
     // ========================================================================
 
     /// <summary>
-    /// Value that is the maxWidth of the actor in the cell.
+    ///     Value that is the maxWidth of the actor in the cell.
     /// </summary>
     private sealed class ValueMaxWidthInnerClass : Value
     {
@@ -257,7 +257,7 @@ public abstract class Value
     // ========================================================================
 
     /// <summary>
-    /// Value that is the maxWidth of the actor in the cell.
+    ///     Value that is the maxWidth of the actor in the cell.
     /// </summary>
     private sealed class ValueMaxHeightInnerClass : Value
     {

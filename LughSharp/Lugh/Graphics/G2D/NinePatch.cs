@@ -29,19 +29,19 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-/// A 3x3 grid of texture regions. Any of the regions may be omitted.
-/// Padding may be set as a hint on how to inset content on top of the ninepatch
-/// (by default the eight "edge" textures of the ninepatch define the padding).
-/// When drawn, the four corner patches will not be scaled, the interior patch will
-/// be scaled in both directions, and the middle patch for each edge will be scaled
-/// in only one direction.
-/// <para>
-/// Note this class does not accept ".9.png" textures that include the metadata
-/// border pixels describing the splits (and padding) for the ninepatch. That
-/// information is either passed to a constructor or defined implicitly by the
-/// size of the individual patch textures. TextureAtlas is one way to generate
-/// a postprocessed ninepatch texture regions from ".9.png" files.
-/// </para>
+///     A 3x3 grid of texture regions. Any of the regions may be omitted.
+///     Padding may be set as a hint on how to inset content on top of the ninepatch
+///     (by default the eight "edge" textures of the ninepatch define the padding).
+///     When drawn, the four corner patches will not be scaled, the interior patch will
+///     be scaled in both directions, and the middle patch for each edge will be scaled
+///     in only one direction.
+///     <para>
+///         Note this class does not accept ".9.png" textures that include the metadata
+///         border pixels describing the splits (and padding) for the ninepatch. That
+///         information is either passed to a constructor or defined implicitly by the
+///         size of the individual patch textures. TextureAtlas is one way to generate
+///         a postprocessed ninepatch texture regions from ".9.png" files.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class NinePatch
@@ -68,9 +68,9 @@ public class NinePatch
     // ========================================================================
 
     /// <summary>
-    /// Create a ninepatch by cutting up the given texture into nine patches.
-    /// The subsequent parameters define the 4 lines that will cut the texture
-    /// region into 9 pieces.
+    ///     Create a ninepatch by cutting up the given texture into nine patches.
+    ///     The subsequent parameters define the 4 lines that will cut the texture
+    ///     region into 9 pieces.
     /// </summary>
     /// <param name="texture"></param>
     /// <param name="left">Pixels from left edge.</param>
@@ -83,9 +83,9 @@ public class NinePatch
     }
 
     /// <summary>
-    /// Create a ninepatch by cutting up the given texture region into nine patches.
-    /// The subsequent parameters define the 4 lines that will cut the texture region
-    /// into 9 pieces.
+    ///     Create a ninepatch by cutting up the given texture region into nine patches.
+    ///     The subsequent parameters define the 4 lines that will cut the texture region
+    ///     into 9 pieces.
     /// </summary>
     /// <param name="region"></param>
     /// <param name="left"> Pixels from left edge. </param>
@@ -184,7 +184,7 @@ public class NinePatch
     }
 
     /// <summary>
-    /// Construct a degenerate "nine" patch with only a center component.
+    ///     Construct a degenerate "nine" patch with only a center component.
     /// </summary>
     public NinePatch( Texture texture, Color color )
         : this( texture )
@@ -199,7 +199,7 @@ public class NinePatch
     }
 
     /// <summary>
-    /// Construct a degenerate "nine" patch with only a center component.
+    ///     Construct a degenerate "nine" patch with only a center component.
     /// </summary>
     public NinePatch( TextureRegion region, Color color )
         : this( region )
@@ -208,7 +208,7 @@ public class NinePatch
     }
 
     /// <summary>
-    /// Construct a degenerate "nine" patch with only a center component.
+    ///     Construct a degenerate "nine" patch with only a center component.
     /// </summary>
     public NinePatch( TextureRegion region )
     {
@@ -220,11 +220,11 @@ public class NinePatch
     }
 
     /// <summary>
-    /// Construct a nine patch from the given nine texture regions. The provided
-    /// patches must be consistently sized (e.g., any left edge textures must have
-    /// the same width, etc). Patches may be <tt>null</tt>. Patch indices are
-    /// specified via the public members <see cref="TopLeft"/>, <see cref="TopCenter"/>,
-    /// etc.
+    ///     Construct a nine patch from the given nine texture regions. The provided
+    ///     patches must be consistently sized (e.g., any left edge textures must have
+    ///     the same width, etc). Patches may be <tt>null</tt>. Patch indices are
+    ///     specified via the public members <see cref="TopLeft" />, <see cref="TopCenter" />,
+    ///     etc.
     /// </summary>
     public NinePatch( params TextureRegion[] patches )
     {
@@ -236,48 +236,48 @@ public class NinePatch
         Load( patches );
 
         if ( ( ( patches[ TOP_LEFT ] != null )
-            && ( Math.Abs( patches[ TOP_LEFT ].RegionWidth - LeftWidth ) > TOLERANCE ) )
-          || ( ( patches[ MIDDLE_LEFT ] != null )
-            && ( Math.Abs( patches[ MIDDLE_LEFT ].RegionWidth - LeftWidth ) > TOLERANCE ) )
-          || ( ( patches[ BOTTOM_LEFT ] != null )
-            && ( Math.Abs( patches[ BOTTOM_LEFT ].RegionWidth - LeftWidth ) > TOLERANCE ) ) )
+               && ( Math.Abs( patches[ TOP_LEFT ].RegionWidth - LeftWidth ) > TOLERANCE ) )
+             || ( ( patches[ MIDDLE_LEFT ] != null )
+                  && ( Math.Abs( patches[ MIDDLE_LEFT ].RegionWidth - LeftWidth ) > TOLERANCE ) )
+             || ( ( patches[ BOTTOM_LEFT ] != null )
+                  && ( Math.Abs( patches[ BOTTOM_LEFT ].RegionWidth - LeftWidth ) > TOLERANCE ) ) )
         {
             throw new GdxRuntimeException( "Left side patches must have the same width" );
         }
 
         if ( ( ( patches[ TOP_RIGHT ] != null )
-            && ( Math.Abs( patches[ TOP_RIGHT ].RegionWidth - RightWidth ) > TOLERANCE ) )
-          || ( ( patches[ MIDDLE_RIGHT ] != null )
-            && ( Math.Abs( patches[ MIDDLE_RIGHT ].RegionWidth - RightWidth ) > TOLERANCE ) )
-          || ( ( patches[ BOTTOM_RIGHT ] != null )
-            && ( Math.Abs( patches[ BOTTOM_RIGHT ].RegionWidth - RightWidth ) > TOLERANCE ) ) )
+               && ( Math.Abs( patches[ TOP_RIGHT ].RegionWidth - RightWidth ) > TOLERANCE ) )
+             || ( ( patches[ MIDDLE_RIGHT ] != null )
+                  && ( Math.Abs( patches[ MIDDLE_RIGHT ].RegionWidth - RightWidth ) > TOLERANCE ) )
+             || ( ( patches[ BOTTOM_RIGHT ] != null )
+                  && ( Math.Abs( patches[ BOTTOM_RIGHT ].RegionWidth - RightWidth ) > TOLERANCE ) ) )
         {
             throw new GdxRuntimeException( "Right side patches must have the same width" );
         }
 
         if ( ( ( patches[ BOTTOM_LEFT ] != null )
-            && ( Math.Abs( patches[ BOTTOM_LEFT ].RegionHeight - BottomHeight ) > TOLERANCE ) )
-          || ( ( patches[ BOTTOM_CENTER ] != null )
-            && ( Math.Abs( patches[ BOTTOM_CENTER ].RegionHeight - BottomHeight ) > TOLERANCE ) )
-          || ( ( patches[ BOTTOM_RIGHT ] != null )
-            && ( Math.Abs( patches[ BOTTOM_RIGHT ].RegionHeight - BottomHeight ) > TOLERANCE ) ) )
+               && ( Math.Abs( patches[ BOTTOM_LEFT ].RegionHeight - BottomHeight ) > TOLERANCE ) )
+             || ( ( patches[ BOTTOM_CENTER ] != null )
+                  && ( Math.Abs( patches[ BOTTOM_CENTER ].RegionHeight - BottomHeight ) > TOLERANCE ) )
+             || ( ( patches[ BOTTOM_RIGHT ] != null )
+                  && ( Math.Abs( patches[ BOTTOM_RIGHT ].RegionHeight - BottomHeight ) > TOLERANCE ) ) )
         {
             throw new GdxRuntimeException( "Bottom side patches must have the same height" );
         }
 
         if ( ( ( patches[ TOP_LEFT ] != null )
-            && ( Math.Abs( patches[ TOP_LEFT ].RegionHeight - TopHeight ) > TOLERANCE ) )
-          || ( ( patches[ TOP_CENTER ] != null )
-            && ( Math.Abs( patches[ TOP_CENTER ].RegionHeight - TopHeight ) > TOLERANCE ) )
-          || ( ( patches[ TOP_RIGHT ] != null )
-            && ( Math.Abs( patches[ TOP_RIGHT ].RegionHeight - TopHeight ) > TOLERANCE ) ) )
+               && ( Math.Abs( patches[ TOP_LEFT ].RegionHeight - TopHeight ) > TOLERANCE ) )
+             || ( ( patches[ TOP_CENTER ] != null )
+                  && ( Math.Abs( patches[ TOP_CENTER ].RegionHeight - TopHeight ) > TOLERANCE ) )
+             || ( ( patches[ TOP_RIGHT ] != null )
+                  && ( Math.Abs( patches[ TOP_RIGHT ].RegionHeight - TopHeight ) > TOLERANCE ) ) )
         {
             throw new GdxRuntimeException( "Top side patches must have the same height" );
         }
     }
 
     /// <summary>
-    /// Creates a ninepatch from the supplied ninepatch.
+    ///     Creates a ninepatch from the supplied ninepatch.
     /// </summary>
     /// <param name="ninePatch"></param>
     public NinePatch( NinePatch ninePatch )
@@ -286,8 +286,8 @@ public class NinePatch
     }
 
     /// <summary>
-    /// Creates a ninepatch from the supplied ninepatch and sets
-    /// it to the supplied Color.
+    ///     Creates a ninepatch from the supplied ninepatch and sets
+    ///     it to the supplied Color.
     /// </summary>
     /// <param name="ninePatch"></param>
     /// <param name="color"></param>
@@ -427,7 +427,7 @@ public class NinePatch
         {
             TopCenter = Add( patches[ TOP_CENTER ],
                              ( patches[ TOP_LEFT ] != null )
-                          || ( patches[ TOP_RIGHT ] != null ),
+                             || ( patches[ TOP_RIGHT ] != null ),
                              false );
 
             MiddleWidth = Math.Max( MiddleWidth, patches[ TOP_CENTER ]!.RegionWidth );
@@ -485,7 +485,7 @@ public class NinePatch
         var v2 = region.V;
 
         if ( ( Texture?.MagFilter == Texture.TextureFilter.Linear )
-          || ( Texture?.MinFilter == Texture.TextureFilter.Linear ) )
+             || ( Texture?.MinFilter == Texture.TextureFilter.Linear ) )
         {
             if ( isStretchW )
             {
@@ -522,7 +522,7 @@ public class NinePatch
     }
 
     /// <summary>
-    /// Set the coordinates and color of a ninth of the patch.
+    ///     Set the coordinates and color of a ninth of the patch.
     /// </summary>
     private void Set( int idx, float x, float y, float width, float height, float color )
     {
@@ -658,9 +658,9 @@ public class NinePatch
     }
 
     /// <summary>
-    /// Set the padding for content inside this ninepatch. By default the padding
-    /// is set to match the exterior of the ninepatch, so the content should fit
-    /// exactly within the middle patch.
+    ///     Set the padding for content inside this ninepatch. By default the padding
+    ///     is set to match the exterior of the ninepatch, so the content should fit
+    ///     exactly within the middle patch.
     /// </summary>
     public void SetPadding( float left, float right, float top, float bottom )
     {
@@ -671,7 +671,7 @@ public class NinePatch
     }
 
     /// <summary>
-    /// Multiplies the top/left/bottom/right sizes and padding by the specified amount.
+    ///     Multiplies the top/left/bottom/right sizes and padding by the specified amount.
     /// </summary>
     public void Scale( float scaleX, float scaleY )
     {

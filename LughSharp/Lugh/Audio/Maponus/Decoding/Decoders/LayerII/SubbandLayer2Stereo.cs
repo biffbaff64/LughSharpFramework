@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Audio.Maponus.Decoding.Decoders.LayerII;
 
 /// <summary>
-/// public class for layer II subbands in stereo mode.
+///     public class for layer II subbands in stereo mode.
 /// </summary>
 [PublicAPI]
 public class SubbandLayer2Stereo : SubbandLayer2
@@ -173,13 +172,13 @@ public class SubbandLayer2Stereo : SubbandLayer2
             else
             {
                 channel2Samples[ 0 ] =
-                    ( float ) ( ( stream.GetBitsFromBuffer( channel2Codelength[ 0 ] ) * channel2Factor[ 0 ] ) - 1.0 );
+                    ( float )( ( stream.GetBitsFromBuffer( channel2Codelength[ 0 ] ) * channel2Factor[ 0 ] ) - 1.0 );
 
                 channel2Samples[ 1 ] =
-                    ( float ) ( ( stream.GetBitsFromBuffer( channel2Codelength[ 0 ] ) * channel2Factor[ 0 ] ) - 1.0 );
+                    ( float )( ( stream.GetBitsFromBuffer( channel2Codelength[ 0 ] ) * channel2Factor[ 0 ] ) - 1.0 );
 
                 channel2Samples[ 2 ] =
-                    ( float ) ( ( stream.GetBitsFromBuffer( channel2Codelength[ 0 ] ) * channel2Factor[ 0 ] ) - 1.0 );
+                    ( float )( ( stream.GetBitsFromBuffer( channel2Codelength[ 0 ] ) * channel2Factor[ 0 ] ) - 1.0 );
             }
         }
 

@@ -25,8 +25,8 @@
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-/// A bitset, without size limitation, allows comparison via
-/// bitwise operators to other bitfields.
+///     A bitset, without size limitation, allows comparison via
+///     bitwise operators to other bitfields.
 /// </summary>
 [PublicAPI]
 public class Bits
@@ -34,8 +34,8 @@ public class Bits
     private long[] _bits = [ 0 ];
 
     /// <summary>
-    /// Creates a bit set whose initial size is large enough to explicitly
-    /// represent bits with indices in the range 0 through nbits-1.
+    ///     Creates a bit set whose initial size is large enough to explicitly
+    ///     represent bits with indices in the range 0 through nbits-1.
     /// </summary>
     /// <param name="nbits">the initial size of the bit set</param>
     public Bits( int nbits )
@@ -44,12 +44,12 @@ public class Bits
     }
 
     /// <summary>
-    /// True if this bitset contains at least one bit set to true.
+    ///     True if this bitset contains at least one bit set to true.
     /// </summary>
     public bool NotEmpty => !Empty;
 
     /// <summary>
-    /// True if this bitset contains no bits that are set to true.
+    ///     True if this bitset contains no bits that are set to true.
     /// </summary>
     public bool Empty
     {
@@ -68,7 +68,7 @@ public class Bits
     }
 
     /// <summary>
-    /// Returns whether or not the bit at the specified index is set.
+    ///     Returns whether or not the bit at the specified index is set.
     /// </summary>
     /// <param name="index"> the index of the bit </param>
     /// <returns> whether the bit is set </returns>
@@ -85,7 +85,7 @@ public class Bits
     }
 
     /// <summary>
-    /// Returns the bit at the given index and clears it in one go.
+    ///     Returns the bit at the given index and clears it in one go.
     /// </summary>
     /// <param name="index"> the index of the bit </param>
     /// <returns> whether the bit was set before invocation </returns>
@@ -106,7 +106,7 @@ public class Bits
     }
 
     /// <summary>
-    /// Returns the bit at the given index and sets it in one go.
+    ///     Returns the bit at the given index and sets it in one go.
     /// </summary>
     /// <param name="index">the index of the bit</param>
     /// <returns>whether the bit was set before invocation</returns>
@@ -124,7 +124,7 @@ public class Bits
     }
 
     /// <summary>
-    /// Set the bit at the specified index.
+    ///     Set the bit at the specified index.
     /// </summary>
     /// <param name="index"> the index of the bit to set </param>
     public void Set( int index )
@@ -137,7 +137,7 @@ public class Bits
     }
 
     /// <summary>
-    /// Flip the bit value at the specified index.
+    ///     Flip the bit value at the specified index.
     /// </summary>
     /// <param name="index"> the index of the bit to flip </param>
     public void Flip( int index )
@@ -150,7 +150,7 @@ public class Bits
     }
 
     /// <summary>
-    /// Ensures that this bitset has room for the requested capacity.
+    ///     Ensures that this bitset has room for the requested capacity.
     /// </summary>
     /// <param name="len"></param>
     private void EnsureCapacity( int len )
@@ -166,7 +166,7 @@ public class Bits
     }
 
     /// <summary>
-    /// Clears the bit at the specified index.
+    ///     Clears the bit at the specified index.
     /// </summary>
     /// <param name="index"> the index of the bit to clear </param>
     public void ClearBit( int index )
@@ -182,7 +182,7 @@ public class Bits
     }
 
     /// <summary>
-    /// Clears the entire bitset
+    ///     Clears the entire bitset
     /// </summary>
     public void ClearAll()
     {
@@ -190,7 +190,7 @@ public class Bits
     }
 
     /// <summary>
-    /// Returns the number of bits currently stored, <b>not</b> the highset set bit!
+    ///     Returns the number of bits currently stored, <b>not</b> the highset set bit!
     /// </summary>
     public int NumBits()
     {
@@ -198,8 +198,8 @@ public class Bits
     }
 
     /// <summary>
-    /// Returns the "logical size" of this bitset: the index of the highest set
-    /// bit in the bitset plus one. Returns zero if the bitset contains no set bits.
+    ///     Returns the "logical size" of this bitset: the index of the highest set
+    ///     bit in the bitset plus one. Returns zero if the bitset contains no set bits.
     /// </summary>
     /// <returns> the logical size of this bitset  </returns>
     public int Length()
@@ -224,9 +224,9 @@ public class Bits
     }
 
     /// <summary>
-    /// Returns the index of the first bit that is set to true that occurs on
-    /// or after the specified starting index. If no such bit exists then -1
-    /// is returned.
+    ///     Returns the index of the first bit that is set to true that occurs on
+    ///     or after the specified starting index. If no such bit exists then -1
+    ///     is returned.
     /// </summary>
     public int NextSetBit( int fromIndex )
     {
@@ -273,8 +273,8 @@ public class Bits
     }
 
     /// <summary>
-    /// Returns the index of the first bit that is set to false that occurs on
-    /// or after the specified starting index.
+    ///     Returns the index of the first bit that is set to false that occurs on
+    ///     or after the specified starting index.
     /// </summary>
     public int NextClearBit( int fromIndex )
     {
@@ -317,10 +317,10 @@ public class Bits
     }
 
     /// <summary>
-    /// Performs a logical <b>AND</b> of this target bit set with the argument
-    /// bit set. This bit set is modified so that each bit in it has the value
-    /// true if and only if it both initially had the value true and the
-    /// corresponding bit in the bit set argument also had the value true.
+    ///     Performs a logical <b>AND</b> of this target bit set with the argument
+    ///     bit set. This bit set is modified so that each bit in it has the value
+    ///     true if and only if it both initially had the value true and the
+    ///     corresponding bit in the bit set argument also had the value true.
     /// </summary>
     /// <param name="other"> a bit set  </param>
     public void And( Bits other )
@@ -342,8 +342,8 @@ public class Bits
     }
 
     /// <summary>
-    /// Clears all of the bits in this bit set whose corresponding bit is
-    /// set in the specified bit set.
+    ///     Clears all of the bits in this bit set whose corresponding bit is
+    ///     set in the specified bit set.
     /// </summary>
     /// <param name="other"> a bit set  </param>
     public void AndNot( Bits other )
@@ -355,10 +355,10 @@ public class Bits
     }
 
     /// <summary>
-    /// Performs a logical <b>OR</b> of this bit set with the bit set argument.
-    /// This bit set is modified so that a bit in it has the value true if and
-    /// only if it either already had the value true or the corresponding bit
-    /// in the bit set argument has the value true.
+    ///     Performs a logical <b>OR</b> of this bit set with the bit set argument.
+    ///     This bit set is modified so that a bit in it has the value true if and
+    ///     only if it either already had the value true or the corresponding bit
+    ///     in the bit set argument has the value true.
     /// </summary>
     /// <param name="other"> a bit set  </param>
     public void Or( Bits other )
@@ -382,17 +382,17 @@ public class Bits
     }
 
     /// <summary>
-    /// Performs a logical <b>XOR</b> of this bit set with the bit set argument. This bit
-    /// set is modified so that a bit in it has the value true if and only if one of the
-    /// following statements holds:
-    /// <li>
-    /// The bit initially has the value true, and the corresponding bit in the argument has
-    /// the value false.
-    /// </li>
-    /// <li>
-    /// The bit initially has the value false, and the corresponding bit in the argument has
-    /// the value true.
-    /// </li>
+    ///     Performs a logical <b>XOR</b> of this bit set with the bit set argument. This bit
+    ///     set is modified so that a bit in it has the value true if and only if one of the
+    ///     following statements holds:
+    ///     <li>
+    ///         The bit initially has the value true, and the corresponding bit in the argument has
+    ///         the value false.
+    ///     </li>
+    ///     <li>
+    ///         The bit initially has the value false, and the corresponding bit in the argument has
+    ///         the value true.
+    ///     </li>
     /// </summary>
     /// <param name="other">The other bitset.</param>
     public void Xor( Bits other )
@@ -416,8 +416,8 @@ public class Bits
     }
 
     /// <summary>
-    /// Returns true if the specified BitSet has any bits set to true that are
-    /// also set to true in this BitSet.
+    ///     Returns true if the specified BitSet has any bits set to true that are
+    ///     also set to true in this BitSet.
     /// </summary>
     /// <param name="other"> a bit set </param>
     /// <returns>bool indicating whether this bit set intersects the specified bit set</returns>
@@ -438,12 +438,12 @@ public class Bits
     }
 
     /// <summary>
-    /// Returns true if this bit set is a super set of the specified set, i.e. it
-    /// has all bits set to true that are also set to true in the specified BitSet.
+    ///     Returns true if this bit set is a super set of the specified set, i.e. it
+    ///     has all bits set to true that are also set to true in the specified BitSet.
     /// </summary>
     /// <param name="other"> a bit set </param>
     /// <returns>
-    /// bool indicating whether this bit set is a super set of the specified set
+    ///     bool indicating whether this bit set is a super set of the specified set
     /// </returns>
     public bool ContainsAll( Bits other )
     {
@@ -500,7 +500,7 @@ public class Bits
             return false;
         }
 
-        var other     = ( Bits ) obj;
+        var other     = ( Bits )obj;
         var otherBits = other._bits;
 
         var commonWords = Math.Min( _bits.Length, otherBits.Length );

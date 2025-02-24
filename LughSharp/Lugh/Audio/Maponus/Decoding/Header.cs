@@ -27,27 +27,11 @@ using LughSharp.Lugh.Audio.Maponus.Support;
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-/// public class for extracting information from a frame header.
+///     public class for extracting information from a frame header.
 /// </summary>
 [PublicAPI]
 public class Header
 {
-    #region constants
-    
-    public const int MPEG2_LSF  = 0;
-    public const int MPEG25_LSF = 2;
-    public const int MPEG1      = 1;
-
-    public const int STEREO               = 0;
-    public const int JOINT_STEREO         = 1;
-    public const int DUAL_CHANNEL         = 2;
-    public const int SINGLE_CHANNEL       = 3;
-    public const int FOURTYFOUR_POINT_ONE = 0;
-    public const int FOURTYEIGHT          = 1;
-    public const int THIRTYTWO            = 2;
-
-    #endregion constants
-
     // ========================================================================
 
     public static readonly int[][] Frequencies =
@@ -163,13 +147,7 @@ public class Header
     ];
 
     // ========================================================================
-    
-    public int   Framesize { get; set; }
-    public short Checksum  { get; set; }
-    public int   NSlots    { get; set; }
 
-    // ========================================================================
-    
     private int    _bitrateIndex;
     private bool   _copyright;
     private Crc16? _crc;
@@ -187,15 +165,21 @@ public class Header
     private int    _version;
 
     // ========================================================================
+
+    public int   Framesize { get; set; }
+    public short Checksum  { get; set; }
+    public int   NSlots    { get; set; }
+
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// Returns synchronized header.
+    ///     Returns synchronized header.
     /// </summary>
     public virtual int SyncHeader => _headerstring;
 
     /// <summary>
-    /// Read a 32-bit header from the bitstream.
+    ///     Read a 32-bit header from the bitstream.
     /// </summary>
     public void ReadHeader( Bitstream stream, Crc16[]? crcp )
     {
@@ -304,7 +288,7 @@ public class Header
                 if ( _syncmode == Bitstream.INITIAL_SYNC )
                 {
                     _syncmode = Bitstream.STRICT_SYNC;
-                    stream.SetSyncWord( headerstring & unchecked( ( int ) 0xFFF80CC0 ) );
+                    stream.SetSyncWord( headerstring & unchecked( ( int )0xFFF80CC0 ) );
                 }
 
                 sync = true;
@@ -313,15 +297,14 @@ public class Header
             {
                 stream.UnreadFrame();
             }
-        }
-        while ( !sync );
+        } while ( !sync );
 
         stream.ParseFrame();
 
         if ( _protectionBit == 0 )
         {
             // frame contains a crc checksum
-            Checksum = ( short ) stream.GetBitsFromBuffer( 16 );
+            Checksum = ( short )stream.GetBitsFromBuffer( 16 );
 
             _crc ??= new Crc16();
             _crc.AddBits( headerstring, 16 );
@@ -359,7 +342,7 @@ public class Header
 
     // Functions to query header contents:
     /// <summary>
-    /// Returns version.
+    ///     Returns version.
     /// </summary>
     public int Version()
     {
@@ -367,7 +350,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Layer ID.
+    ///     Returns Layer ID.
     /// </summary>
     public int Layer()
     {
@@ -375,7 +358,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns bitrate index.
+    ///     Returns bitrate index.
     /// </summary>
     public int bitrate_index()
     {
@@ -383,7 +366,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Sample Frequency.
+    ///     Returns Sample Frequency.
     /// </summary>
     public int GetSampleFrequency()
     {
@@ -391,7 +374,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Frequency.
+    ///     Returns Frequency.
     /// </summary>
     public int Frequency()
     {
@@ -399,7 +382,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Mode.
+    ///     Returns Mode.
     /// </summary>
     public int Mode()
     {
@@ -407,7 +390,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Protection bit.
+    ///     Returns Protection bit.
     /// </summary>
     public bool IsProtection()
     {
@@ -415,7 +398,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Copyright.
+    ///     Returns Copyright.
     /// </summary>
     public bool IsCopyright()
     {
@@ -423,7 +406,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Original.
+    ///     Returns Original.
     /// </summary>
     public bool IsOriginal()
     {
@@ -431,8 +414,8 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Checksum flag.
-    /// Compares computed checksum with stream checksum.
+    ///     Returns Checksum flag.
+    ///     Compares computed checksum with stream checksum.
     /// </summary>
     public bool IsChecksumOk()
     {
@@ -440,7 +423,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Layer III Padding bit.
+    ///     Returns Layer III Padding bit.
     /// </summary>
     public bool IsPadding()
     {
@@ -448,7 +431,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Slots.
+    ///     Returns Slots.
     /// </summary>
     public int Slots()
     {
@@ -456,7 +439,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Mode Extension.
+    ///     Returns Mode Extension.
     /// </summary>
     public int ModeExtension()
     {
@@ -464,7 +447,7 @@ public class Header
     }
 
     /// <summary>
-    /// Calculate Frame size in bytes excluding header size.
+    ///     Calculate Frame size in bytes excluding header size.
     /// </summary>
     public int CalculateFrameSize()
     {
@@ -520,7 +503,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns the maximum number of frames in the stream.
+    ///     Returns the maximum number of frames in the stream.
     /// </summary>
     public int MaxNumberOfFrame( int streamsize )
     {
@@ -533,7 +516,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns the maximum number of frames in the stream.
+    ///     Returns the maximum number of frames in the stream.
     /// </summary>
     public int MinNumberOfFrames( int streamsize )
     {
@@ -546,7 +529,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns ms/frame.
+    ///     Returns ms/frame.
     /// </summary>
     public float MsPerFrame()
     {
@@ -560,7 +543,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns total ms.
+    ///     Returns total ms.
     /// </summary>
     public float TotalMS( int streamsize )
     {
@@ -569,7 +552,7 @@ public class Header
 
     // functions which return header informations as strings:
     /// <summary>
-    /// Return Layer version.
+    ///     Return Layer version.
     /// </summary>
     public string? LayerAsString()
     {
@@ -583,7 +566,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Bitrate.
+    ///     Returns Bitrate.
     /// </summary>
     public string BitrateAsString()
     {
@@ -591,7 +574,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Frequency
+    ///     Returns Frequency
     /// </summary>
     public string? SampleFrequencyAsString()
     {
@@ -626,7 +609,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Mode.
+    ///     Returns Mode.
     /// </summary>
     public string? ModeAsString()
     {
@@ -649,7 +632,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Version.
+    ///     Returns Version.
     /// </summary>
     public string? VersionAsString()
     {
@@ -669,7 +652,7 @@ public class Header
     }
 
     /// <summary>
-    /// Returns the number of subbands in the current frame.
+    ///     Returns the number of subbands in the current frame.
     /// </summary>
     public int NumberSubbands()
     {
@@ -677,10 +660,10 @@ public class Header
     }
 
     /// <summary>
-    /// Returns Intensity Stereo.
-    /// Layer II joint stereo only).
-    /// Returns the number of subbands which are in stereo mode,
-    /// subbands above that limit are in intensity stereo mode.
+    ///     Returns Intensity Stereo.
+    ///     Layer II joint stereo only).
+    ///     Returns the number of subbands which are in stereo mode,
+    ///     subbands above that limit are in intensity stereo mode.
     /// </summary>
     public int IntensityStereoBound()
     {
@@ -712,4 +695,20 @@ public class Header
 
         return buffer.ToString();
     }
+
+    #region constants
+
+    public const int MPEG2_LSF  = 0;
+    public const int MPEG25_LSF = 2;
+    public const int MPEG1      = 1;
+
+    public const int STEREO               = 0;
+    public const int JOINT_STEREO         = 1;
+    public const int DUAL_CHANNEL         = 2;
+    public const int SINGLE_CHANNEL       = 3;
+    public const int FOURTYFOUR_POINT_ONE = 0;
+    public const int FOURTYEIGHT          = 1;
+    public const int THIRTYTWO            = 2;
+
+    #endregion constants
 }

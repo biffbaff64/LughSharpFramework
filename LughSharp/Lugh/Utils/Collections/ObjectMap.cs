@@ -32,47 +32,46 @@ namespace LughSharp.Lugh.Utils.Collections;
 ///     <para>Null keys are not allowed.</para>
 ///     <para>No allocation is done except when growing the table size.</para>
 ///     <para>
-///     This class performs fast contains and remove (typically O(1), worst case O(n) but
-///     that is rare in practice). Add may be slightly slower, depending on hash collisions.
-///     Hashcodes are rehashed to reduce collisions and the need to resize. Load factors
-///     greater than 0.91 greatly increase the chances to resize to the next higher POT size.
-///     Unordered sets and maps are not designed to provide especially fast iteration.
+///         This class performs fast contains and remove (typically O(1), worst case O(n) but
+///         that is rare in practice). Add may be slightly slower, depending on hash collisions.
+///         Hashcodes are rehashed to reduce collisions and the need to resize. Load factors
+///         greater than 0.91 greatly increase the chances to resize to the next higher POT size.
+///         Unordered sets and maps are not designed to provide especially fast iteration.
 ///     </para>
 ///     <para>
-///     This implementation uses linear probing with the backward shift algorithm for removal.
-///     Hashcodes are rehashed using Fibonacci hashing, instead of the more common power-of-two
-///     mask, to better distribute poor hashCodes (see Malte Skarupke's blog post). Linear
-///     probing continues to work even when all hashCodes collide, just more slowly.
+///         This implementation uses linear probing with the backward shift algorithm for removal.
+///         Hashcodes are rehashed using Fibonacci hashing, instead of the more common power-of-two
+///         mask, to better distribute poor hashCodes (see Malte Skarupke's blog post). Linear
+///         probing continues to work even when all hashCodes collide, just more slowly.
 ///     </para>
 /// </summary>
 [PublicAPI]
 public class ObjectMap< TK, TV > //: IEnumerable< TK >
 {
-    protected          TK?[] KeyTable;
-    protected          int   Threshold;
-    protected          TV?[] ValueTable;
-    protected readonly float LoadFactor;
-
-    private readonly object   _dummy = new();
-    private          Entries? _entries1;
-    private          Entries? _entries2;
-    private          Keys?    _keys1;
-    private          Keys?    _keys2;
-    private          Values?  _values1;
-    private          Values?  _values2;
+    private readonly   object   _dummy = new();
+    protected readonly float    LoadFactor;
+    private            Entries? _entries1;
+    private            Entries? _entries2;
+    private            Keys?    _keys1;
+    private            Keys?    _keys2;
+    private            Values?  _values1;
+    private            Values?  _values2;
+    protected          TK?[]    KeyTable;
+    protected          int      Threshold;
+    protected          TV?[]    ValueTable;
 
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ObjectMap{TK, TV}"/> class
-    /// with the specified initial capacity and load factor.
+    ///     Initializes a new instance of the <see cref="ObjectMap{TK, TV}" /> class
+    ///     with the specified initial capacity and load factor.
     /// </summary>
     /// <param name="initialCapacity">The initial capacity of the map. Defaults to 51.</param>
     /// <param name="loadFactor">
-    /// The load factor of the map. Must be greater than 0 and less than 1. Defaults to 0.8.
+    ///     The load factor of the map. Must be greater than 0 and less than 1. Defaults to 0.8.
     /// </param>
     /// <exception cref="ArgumentException">
-    /// Thrown when the load factor is less than or equal to 0, or greater than or equal to 1.
+    ///     Thrown when the load factor is less than or equal to 0, or greater than or equal to 1.
     /// </exception>
     public ObjectMap( int initialCapacity = 51, float loadFactor = 0.8f )
     {
@@ -93,7 +92,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Copy Constructor
+    ///     Copy Constructor
     /// </summary>
     /// <param name="map">The ObjectMap to copy.</param>
     /// <exception cref="ArgumentException"> Thrown if map is null. </exception>
@@ -121,28 +120,28 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
 
     // ========================================================================
     /// <summary>
-    /// Returns an index between 0 and <see cref="Mask"/> for the specified <c>item</c>.
-    /// <para>
-    /// The default implementation uses Fibonacci hashing based on the <c>item.GetHashCode()</c>.
-    /// The hash code is multiplied by a constant (2 to the 64th, divided by the golden ratio),
-    /// and the uppermost bits are shifted to obtain an index within the desired range.
-    /// This method can handle even poor hash codes, preventing high collision rates.
-    /// However, it may have increased collision rates when most hash codes are multiples
-    /// of larger Fibonacci numbers.
-    /// </para>
-    /// <para>
-    /// For more details, see
-    /// <a
-    ///     href="https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/">
-    /// Malte Skarupke's blog post
-    /// </a>
-    /// </para>
-    /// <para>
-    /// You can override this method to customize hashing. This might be useful, for instance,
-    /// in cases where most hash codes are Fibonacci numbers, when keys have poor or incorrect
-    /// hash codes, or when high-quality hash codes negate the need for Fibonacci hashing.
-    /// Example: <c>return item.GetHashCode() &amp; Mask;</c>
-    /// </para>
+    ///     Returns an index between 0 and <see cref="Mask" /> for the specified <c>item</c>.
+    ///     <para>
+    ///         The default implementation uses Fibonacci hashing based on the <c>item.GetHashCode()</c>.
+    ///         The hash code is multiplied by a constant (2 to the 64th, divided by the golden ratio),
+    ///         and the uppermost bits are shifted to obtain an index within the desired range.
+    ///         This method can handle even poor hash codes, preventing high collision rates.
+    ///         However, it may have increased collision rates when most hash codes are multiples
+    ///         of larger Fibonacci numbers.
+    ///     </para>
+    ///     <para>
+    ///         For more details, see
+    ///         <a
+    ///             href="https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/">
+    ///             Malte Skarupke's blog post
+    ///         </a>
+    ///     </para>
+    ///     <para>
+    ///         You can override this method to customize hashing. This might be useful, for instance,
+    ///         in cases where most hash codes are Fibonacci numbers, when keys have poor or incorrect
+    ///         hash codes, or when high-quality hash codes negate the need for Fibonacci hashing.
+    ///         Example: <c>return item.GetHashCode() &amp; Mask;</c>
+    ///     </para>
     /// </summary>
     /// <param name="item">The item to calculate the index for.</param>
     protected virtual int Place( TK item )
@@ -153,11 +152,11 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Locates the specified key in the map.
+    ///     Locates the specified key in the map.
     /// </summary>
     /// <param name="key">The key to locate in the map.</param>
     /// <returns>
-    /// The index of the key if found; otherwise, the negative value of the available index minus one.
+    ///     The index of the key if found; otherwise, the negative value of the available index minus one.
     /// </returns>
     /// <exception cref="ArgumentNullException">Thrown when the key is null.</exception>
     /// <exception cref="NullReferenceException">Thrown when the KeyTable is null.</exception>
@@ -187,8 +186,8 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Replaces the value associated with the specified key, and returns the old value.
-    /// If the key is not found, the value is added at the end of the map and null is returned.
+    ///     Replaces the value associated with the specified key, and returns the old value.
+    ///     If the key is not found, the value is added at the end of the map and null is returned.
     /// </summary>
     /// <param name="key"></param>
     /// <param name="value"></param>
@@ -223,17 +222,17 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Copies all key-value pairs from the specified <paramref name="map"/>
-    /// into the current collection.
+    ///     Copies all key-value pairs from the specified <paramref name="map" />
+    ///     into the current collection.
     /// </summary>
     /// <param name="map">The source map containing the key-value pairs to copy.</param>
     /// <remarks>
     ///     <para>
-    ///     This method ensures that the current collection has sufficient capacity
-    ///     to accommodate the key-value pairs from the <paramref name="map"/>. Then,
-    ///     it iterates through the key table, copying each non-null key along with
-    ///     its associated value from the <paramref name="map"/> into the current
-    ///     collection using the <see cref="Put"/> method.
+    ///         This method ensures that the current collection has sufficient capacity
+    ///         to accommodate the key-value pairs from the <paramref name="map" />. Then,
+    ///         it iterates through the key table, copying each non-null key along with
+    ///         its associated value from the <paramref name="map" /> into the current
+    ///         collection using the <see cref="Put" /> method.
     ///     </para>
     /// </remarks>
     /// <typeparam name="TK">The type of the keys in the collection.</typeparam>
@@ -254,17 +253,17 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Retrieves the value associated with the specified <paramref name="key"/>
-    /// from the collection.
+    ///     Retrieves the value associated with the specified <paramref name="key" />
+    ///     from the collection.
     /// </summary>
     /// <param name="key">The key to look up.</param>
     /// <returns>
-    /// The value associated with the <paramref name="key"/> if found; otherwise null.
+    ///     The value associated with the <paramref name="key" /> if found; otherwise null.
     /// </returns>
     /// <remarks>
-    /// This method searches the collection for the given <paramref name="key"/>
-    /// using the <see cref="LocateKey"/> method. If the key is found, the associated
-    /// value is returned; otherwise, <c>null</c> is returned.
+    ///     This method searches the collection for the given <paramref name="key" />
+    ///     using the <see cref="LocateKey" /> method. If the key is found, the associated
+    ///     value is returned; otherwise, <c>null</c> is returned.
     /// </remarks>
     /// <typeparam name="TT">The type of the key to look up.</typeparam>
     /// <typeparam name="TK">The type constraint for the key type.</typeparam>
@@ -277,20 +276,20 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Retrieves the value associated with the specified <paramref name="key"/> from the collection,
-    /// or returns the provided <paramref name="defaultValue"/> if the key is not found.
+    ///     Retrieves the value associated with the specified <paramref name="key" /> from the collection,
+    ///     or returns the provided <paramref name="defaultValue" /> if the key is not found.
     /// </summary>
     /// <param name="key">The key to look up.</param>
     /// <param name="defaultValue">The value to return if the key is not found.</param>
     /// <returns>
-    /// The value associated with the <paramref name="key"/> if found; otherwise, the
-    /// <paramref name="defaultValue"/> is returned.
+    ///     The value associated with the <paramref name="key" /> if found; otherwise, the
+    ///     <paramref name="defaultValue" /> is returned.
     /// </returns>
     /// <remarks>
     ///     <para>
-    ///     This method searches the collection for the given <paramref name="key"/> using
-    ///     the <see cref="LocateKey"/> method. If the key is found, the associated value is
-    ///     returned; otherwise, the provided <paramref name="defaultValue"/> is returned.
+    ///         This method searches the collection for the given <paramref name="key" /> using
+    ///         the <see cref="LocateKey" /> method. If the key is found, the associated value is
+    ///         returned; otherwise, the provided <paramref name="defaultValue" /> is returned.
     ///     </para>
     /// </remarks>
     /// <typeparam name="TK">The type of the keys in the collection.</typeparam>
@@ -303,8 +302,8 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Helper method.
-    /// Returns TRUE if Size is greater than zero.
+    ///     Helper method.
+    ///     Returns TRUE if Size is greater than zero.
     /// </summary>
     public virtual bool NotEmpty()
     {
@@ -312,8 +311,8 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Helper method.
-    /// Returns TRUE if Size is zero.
+    ///     Helper method.
+    ///     Returns TRUE if Size is zero.
     /// </summary>
     public virtual bool IsEmpty()
     {
@@ -321,7 +320,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Shrinks the map to the specified maximum capacity.
+    ///     Shrinks the map to the specified maximum capacity.
     /// </summary>
     /// <param name="maximumCapacity"> The new maximum capacity. </param>
     public void Shrink( int maximumCapacity )
@@ -340,8 +339,8 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Clears the map and reduces the size of the backing arrays to be the
-    /// specified capacity / loadFactor, if they are larger.
+    ///     Clears the map and reduces the size of the backing arrays to be the
+    ///     specified capacity / loadFactor, if they are larger.
     /// </summary>
     /// <param name="maximumCapacity"></param>
     public void Clear( int maximumCapacity )
@@ -361,7 +360,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Clears the map.
+    ///     Clears the map.
     /// </summary>
     public void Clear()
     {
@@ -377,13 +376,13 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Returns true if the specified value is in the map. Note this traverses the
-    /// entire map and compares every value, which may be an expensive operation.
+    ///     Returns true if the specified value is in the map. Note this traverses the
+    ///     entire map and compares every value, which may be an expensive operation.
     /// </summary>
     /// <param name="value"> The value to check for. </param>
     /// <param name="identity">
-    /// If true, uses == to compare the specified value with values in the
-    /// map. If false, uses equals(Object).
+    ///     If true, uses == to compare the specified value with values in the
+    ///     map. If false, uses equals(Object).
     /// </param>
     /// <returns></returns>
     public bool ContainsValue( object? value, bool identity )
@@ -413,7 +412,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Checks to see if the map contains the given key.
+    ///     Checks to see if the map contains the given key.
     /// </summary>
     /// <returns> True if the key is found. </returns>
     public bool ContainsKey( TK key )
@@ -422,9 +421,9 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Returns the key for the specified value, or null if it is not in the map.
-    /// Note this traverses the entire map and compares every value, which may be
-    /// an expensive operation.
+    ///     Returns the key for the specified value, or null if it is not in the map.
+    ///     Note this traverses the entire map and compares every value, which may be
+    ///     an expensive operation.
     /// </summary>
     public TK? FindKey( object? value )
     {
@@ -453,9 +452,9 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Increases the size of the backing array to accommodate the specified number
-    /// of additional items / loadFactor. Useful before adding many items to avoid
-    /// multiple backing array resizes.
+    ///     Increases the size of the backing array to accommodate the specified number
+    ///     of additional items / loadFactor. Useful before adding many items to avoid
+    ///     multiple backing array resizes.
     /// </summary>
     public void EnsureCapacity( int additionalCapacity )
     {
@@ -479,16 +478,16 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Calculates the appropriate table size, which is the next power of two greater
-    /// than or equal to the specified capacity divided by the load factor.
+    ///     Calculates the appropriate table size, which is the next power of two greater
+    ///     than or equal to the specified capacity divided by the load factor.
     /// </summary>
     /// <param name="capacity">The desired capacity of the map.</param>
     /// <param name="lf">The load factor used to determine the table size.</param>
     /// <returns>
-    /// The next power of two greater than or equal to the capacity divided by the load factor.
+    ///     The next power of two greater than or equal to the capacity divided by the load factor.
     /// </returns>
     /// <exception cref="ArgumentException">
-    /// Thrown when the capacity is less than 0 or when the required capacity is too large.
+    ///     Thrown when the capacity is less than 0 or when the required capacity is too large.
     /// </exception>
     public int TableSize( int capacity, float lf )
     {
@@ -554,7 +553,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Resizes the internal storage arrays to the specified new size.
+    ///     Resizes the internal storage arrays to the specified new size.
     /// </summary>
     /// <param name="newSize">The new size for the internal storage arrays.</param>
     public void Resize( int newSize )
@@ -590,7 +589,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Places a key-value pair into the resized tables.
+    ///     Places a key-value pair into the resized tables.
     /// </summary>
     /// <param name="key">The key to be inserted.</param>
     /// <param name="value">The value to be associated with the key.</param>
@@ -609,12 +608,12 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Removes the entry for the specified key from the map, if present.
+    ///     Removes the entry for the specified key from the map, if present.
     /// </summary>
     /// <param name="key">The key whose mapping is to be removed from the map.</param>
     /// <returns>
-    /// The previous value associated with the specified key, or the default
-    /// value if the key was not found.
+    ///     The previous value associated with the specified key, or the default
+    ///     value if the key was not found.
     /// </returns>
     public TV? Remove( TK key )
     {
@@ -662,12 +661,12 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Returns an iterator for the entries in the map. Remove is supported.
-    /// <para>
-    /// If Collections.allocateIterators is false, the same iterator instance
-    /// is returned each time this method is called. Use the ObjectMap.Entries
-    /// constructor for nested or multithreaded iteration.
-    /// </para>
+    ///     Returns an iterator for the entries in the map. Remove is supported.
+    ///     <para>
+    ///         If Collections.allocateIterators is false, the same iterator instance
+    ///         is returned each time this method is called. Use the ObjectMap.Entries
+    ///         constructor for nested or multithreaded iteration.
+    ///     </para>
     /// </summary>
     /// <returns></returns>
     public Entries GetEntries()
@@ -702,12 +701,12 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Returns an iterator for the values in the map. Remove is supported.
-    /// <para>
-    /// If Collections.allocateIterators is false, the same iterator instance is
-    /// returned each time this method is called. Use the ObjectMap.Values
-    /// constructor for nested or multithreaded iteration.
-    /// </para>
+    ///     Returns an iterator for the values in the map. Remove is supported.
+    ///     <para>
+    ///         If Collections.allocateIterators is false, the same iterator instance is
+    ///         returned each time this method is called. Use the ObjectMap.Values
+    ///         constructor for nested or multithreaded iteration.
+    ///     </para>
     /// </summary>
     /// <returns></returns>
     public Values GetValues()
@@ -743,12 +742,12 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <summary>
-    /// Returns an iterator for the keys in the map. Remove is supported.
-    /// <para>
-    /// If Collections.allocateIterators is false, the same iterator instance
-    /// is returned each time this method is called. Use the ObjectMap.Keys
-    /// constructor for nested or multithreaded iteration.
-    /// </para>
+    ///     Returns an iterator for the keys in the map. Remove is supported.
+    ///     <para>
+    ///         If Collections.allocateIterators is false, the same iterator instance
+    ///         is returned each time this method is called. Use the ObjectMap.Keys
+    ///         constructor for nested or multithreaded iteration.
+    ///     </para>
     /// </summary>
     /// <returns></returns>
     public Keys GetKeys()
@@ -871,7 +870,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     // ========================================================================
 
     /// <summary>
-    /// Represents a key-value pair in the map.
+    ///     Represents a key-value pair in the map.
     /// </summary>
     [PublicAPI]
     public class Entry
@@ -884,18 +883,18 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     // ========================================================================
 
     /// <summary>
-    /// Abstract base class for iterators that iterate over an ObjectMap.
+    ///     Abstract base class for iterators that iterate over an ObjectMap.
     /// </summary>
     [PublicAPI]
     public abstract class MapIterator
     {
         /// <summary>
-        /// The map being iterated over.
+        ///     The map being iterated over.
         /// </summary>
         protected readonly ObjectMap< TK, TV > Map;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MapIterator"/> class.
+        ///     Initializes a new instance of the <see cref="MapIterator" /> class.
         /// </summary>
         /// <param name="map">The map to iterate over.</param>
         protected MapIterator( ObjectMap< TK, TV > map )
@@ -905,27 +904,27 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Indicates whether the iterator is valid.
+        ///     Indicates whether the iterator is valid.
         /// </summary>
         public bool Valid { get; set; } = true;
 
         /// <summary>
-        /// The current index in the map.
+        ///     The current index in the map.
         /// </summary>
         protected int CurrentIndex { get; set; } = -1;
 
         /// <summary>
-        /// The next index in the map.
+        ///     The next index in the map.
         /// </summary>
         protected int NextIndex { get; set; } = -1;
 
         /// <summary>
-        /// Indicates whether there are more elements to iterate over.
+        ///     Indicates whether there are more elements to iterate over.
         /// </summary>
         protected bool HasNext { get; set; }
 
         /// <summary>
-        /// Resets the iterator to the start of the map.
+        ///     Resets the iterator to the start of the map.
         /// </summary>
         public void Reset()
         {
@@ -935,7 +934,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Finds the next index in the map that contains a key.
+        ///     Finds the next index in the map that contains a key.
         /// </summary>
         protected void FindNextIndex()
         {
@@ -953,7 +952,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Removes the current key-value pair from the map.
+        ///     Removes the current key-value pair from the map.
         /// </summary>
         public void Remove()
         {
@@ -999,7 +998,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     // ========================================================================
 
     /// <summary>
-    /// An iterator for the entries in an ObjectMap.
+    ///     An iterator for the entries in an ObjectMap.
     /// </summary>
     [PublicAPI]
     public class Entries : MapIterator
@@ -1007,7 +1006,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         private readonly Entry _entry = new();
 
         /// <summary>
-        /// Initializes a new instance of the Entries class for the specified map.
+        ///     Initializes a new instance of the Entries class for the specified map.
         /// </summary>
         /// <param name="map">The ObjectMap to iterate over.</param>
         public Entries( ObjectMap< TK, TV > map ) : base( map )
@@ -1015,11 +1014,11 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Returns the next entry in the iteration.
+        ///     Returns the next entry in the iteration.
         /// </summary>
         /// <returns>The next entry in the map.</returns>
         /// <exception cref="GdxRuntimeException">
-        /// Thrown if there are no more entries to iterate over, or if the iterator is nested.
+        ///     Thrown if there are no more entries to iterate over, or if the iterator is nested.
         /// </exception>
         public Entry Next()
         {
@@ -1043,7 +1042,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Returns this instance as its iterator.
+        ///     Returns this instance as its iterator.
         /// </summary>
         public Entries Iterator()
         {
@@ -1055,13 +1054,13 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     // ========================================================================
 
     /// <summary>
-    /// Represents an iterator for the values of an ObjectMap.
+    ///     Represents an iterator for the values of an ObjectMap.
     /// </summary>
     [PublicAPI]
     public class Values : MapIterator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Values"/> class.
+        ///     Initializes a new instance of the <see cref="Values" /> class.
         /// </summary>
         /// <param name="map">The map to iterate over.</param>
         public Values( ObjectMap< TK, TV > map )
@@ -1070,11 +1069,11 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Returns the next key in the iteration.
+        ///     Returns the next key in the iteration.
         /// </summary>
         /// <returns>The next key in the map.</returns>
         /// <exception cref="GdxRuntimeException">
-        /// Thrown if there are no more values to iterate over, or if the iterator is nested.
+        ///     Thrown if there are no more values to iterate over, or if the iterator is nested.
         /// </exception>
         public TV? Next()
         {
@@ -1098,7 +1097,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Returns this instance as its iterator.
+        ///     Returns this instance as its iterator.
         /// </summary>
         public Values Iterator()
         {
@@ -1106,7 +1105,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Returns a new array containing the remaining values.
+        ///     Returns a new array containing the remaining values.
         /// </summary>
         public List< TV > ToArray()
         {
@@ -1114,7 +1113,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Adds the remaining values to the array.
+        ///     Adds the remaining values to the array.
         /// </summary>
         public List< TV > ToArray( List< TV > array )
         {
@@ -1131,13 +1130,13 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     // ========================================================================
 
     /// <summary>
-    /// Represents an iterator for the keys of an ObjectMap.
+    ///     Represents an iterator for the keys of an ObjectMap.
     /// </summary>
     [PublicAPI]
     public class Keys : MapIterator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Keys"/> class.
+        ///     Initializes a new instance of the <see cref="Keys" /> class.
         /// </summary>
         /// <param name="map">The map to iterate over.</param>
         public Keys( ObjectMap< TK, TV > map )
@@ -1146,11 +1145,11 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Returns the next key in the iteration.
+        ///     Returns the next key in the iteration.
         /// </summary>
         /// <returns>The next key in the map.</returns>
         /// <exception cref="GdxRuntimeException">
-        /// Thrown if there are no more keys to iterate over, or if the iterator is nested.
+        ///     Thrown if there are no more keys to iterate over, or if the iterator is nested.
         /// </exception>
         public TK Next()
         {
@@ -1174,7 +1173,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Returns this instance as its iterator.
+        ///     Returns this instance as its iterator.
         /// </summary>
         public Keys Iterator()
         {
@@ -1182,7 +1181,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Returns a new list containing the remaining keys.
+        ///     Returns a new list containing the remaining keys.
         /// </summary>
         public List< TK > ToArray()
         {
@@ -1190,7 +1189,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         }
 
         /// <summary>
-        /// Adds the remaining keys to the specified list.
+        ///     Adds the remaining keys to the specified list.
         /// </summary>
         /// <param name="array">The list to add the remaining keys to.</param>
         /// <returns>The list containing the remaining keys.</returns>
@@ -1210,39 +1209,39 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     #region properties
 
     /// <summary>
-    /// Used by <see cref="Place"/> to bit shift the upper bits of a <b>long</b>
-    /// into a usable range (&gt;= 0 and &lt;= <see cref="Mask"/>).
-    /// <para>
-    /// The shift can be negative, which is convenient to match the number of bits in
-    /// mask: if mask is a 7-bit number, a shift of -7 shifts the upper 7 bits into the
-    /// lowest 7 positions. This class sets the shift &gt; 32 and &lt; 64, which if used
-    /// with an int will still move the upper bits of an int to the lower bits.
-    /// </para>
-    /// <para>
-    /// <see cref="Mask"/> can also be used to mask the low bits of a number, which may
-    /// be faster for some hashcodes if <see cref="Place"/> is overridden.
-    /// </para>
+    ///     Used by <see cref="Place" /> to bit shift the upper bits of a <b>long</b>
+    ///     into a usable range (&gt;= 0 and &lt;= <see cref="Mask" />).
+    ///     <para>
+    ///         The shift can be negative, which is convenient to match the number of bits in
+    ///         mask: if mask is a 7-bit number, a shift of -7 shifts the upper 7 bits into the
+    ///         lowest 7 positions. This class sets the shift &gt; 32 and &lt; 64, which if used
+    ///         with an int will still move the upper bits of an int to the lower bits.
+    ///     </para>
+    ///     <para>
+    ///         <see cref="Mask" /> can also be used to mask the low bits of a number, which may
+    ///         be faster for some hashcodes if <see cref="Place" /> is overridden.
+    ///     </para>
     /// </summary>
     protected int Shift { get; set; }
 
     /// <summary>
-    /// A bitmask used to confine hashcodes to the size of the table. Must be all
-    /// 1 bits in its low positions, ie a power of two minus 1.
-    /// If <see cref="Place"/> is overriden, this can be used instead of <see cref="Shift"/>
-    /// to isolate usable bits of a hash.
+    ///     A bitmask used to confine hashcodes to the size of the table. Must be all
+    ///     1 bits in its low positions, ie a power of two minus 1.
+    ///     If <see cref="Place" /> is overriden, this can be used instead of <see cref="Shift" />
+    ///     to isolate usable bits of a hash.
     /// </summary>
     protected int Mask { get; set; }
 
     /// <summary>
-    /// Returns the size of this ObjectMap
+    ///     Returns the size of this ObjectMap
     /// </summary>
     public int Size { get; set; }
 
     /// <summary>
-    /// When true, <see cref="IEnumerator{T}"/> for collections will allocate a new
-    /// iterator for each invocation. When false, the iterator is reused and nested
-    /// use will throw an exception.
-    /// <para> Default is false. </para>
+    ///     When true, <see cref="IEnumerator{T}" /> for collections will allocate a new
+    ///     iterator for each invocation. When false, the iterator is reused and nested
+    ///     use will throw an exception.
+    ///     <para> Default is false. </para>
     /// </summary>
     public bool AllocateIterators { get; set; }
 

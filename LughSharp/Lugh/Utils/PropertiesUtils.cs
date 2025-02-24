@@ -25,9 +25,9 @@
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-/// A helper class that allows you to load and store key/value pairs of an
-/// <see cref="Dictionary{TK,TV}"/> with the same line-oriented syntax supported
-/// by <see cref="IPreferences"/>
+///     A helper class that allows you to load and store key/value pairs of an
+///     <see cref="Dictionary{TK,TV}" /> with the same line-oriented syntax supported
+///     by <see cref="IPreferences" />
 /// </summary>
 [PublicAPI]
 public static class PropertiesUtils
@@ -41,7 +41,7 @@ public static class PropertiesUtils
     private const string LINE_SEPARATOR = "\n";
 
     /// <summary>
-    /// Loads properties from the specified <see cref="StreamReader"/> into the provided dictionary.
+    ///     Loads properties from the specified <see cref="StreamReader" /> into the provided dictionary.
     /// </summary>
     /// <param name="properties">The dictionary to load properties into.</param>
     /// <param name="reader">The reader to read the properties from.</param>
@@ -66,7 +66,7 @@ public static class PropertiesUtils
 
             if ( intVal == -1 ) break;
 
-            var nextChar = ( char ) intVal;
+            var nextChar = ( char )intVal;
 
             if ( offset == buf.Length )
             {
@@ -79,7 +79,7 @@ public static class PropertiesUtils
             {
                 case UNICODE:
                     var num   = char.GetNumericValue( nextChar.ToString(), 16 );
-                    var digit = ( int ) num;
+                    var digit = ( int )num;
 
                     if ( digit >= 0 )
                     {
@@ -93,7 +93,7 @@ public static class PropertiesUtils
                     }
 
                     mode            = NONE;
-                    buf[ offset++ ] = ( char ) unicode;
+                    buf[ offset++ ] = ( char )unicode;
 
                     if ( nextChar != '\n' ) continue;
 
@@ -164,7 +164,7 @@ public static class PropertiesUtils
 
                                     if ( intVal == -1 ) break;
 
-                                    nextChar = ( char ) intVal;
+                                    nextChar = ( char )intVal;
 
                                     if ( nextChar is '\r' or '\n' )
                                     {
@@ -234,7 +234,7 @@ public static class PropertiesUtils
                         }
                     }
 
-                    mode = ( mode is IGNORE or CONTINUE ) ? NONE : mode;
+                    mode = mode is IGNORE or CONTINUE ? NONE : mode;
 
                     break;
             }
@@ -273,7 +273,7 @@ public static class PropertiesUtils
     }
 
     /// <summary>
-    /// Stores the properties from the dictionary to the specified <see cref="StreamWriter"/>.
+    ///     Stores the properties from the dictionary to the specified <see cref="StreamWriter" />.
     /// </summary>
     /// <param name="properties">The dictionary containing properties to store.</param>
     /// <param name="writer">The writer to write the properties to.</param>
@@ -306,7 +306,7 @@ public static class PropertiesUtils
     }
 
     /// <summary>
-    /// Converts a string to a form suitable for writing to a properties file, escaping necessary characters.
+    ///     Converts a string to a form suitable for writing to a properties file, escaping necessary characters.
     /// </summary>
     /// <param name="outBuffer">The buffer to write the escaped string to.</param>
     /// <param name="str">The string to escape.</param>
@@ -372,7 +372,7 @@ public static class PropertiesUtils
                 default:
                     if ( escapeUnicode && ( ( ch < 0x0020 ) || ( ch > 0x007e ) ) )
                     {
-                        var hex = ( ( int ) ch ).ToString( "X" );
+                        var hex = ( ( int )ch ).ToString( "X" );
                         outBuffer.Append( "\\u" );
 
                         for ( var j = 0; j < ( 4 - hex.Length ); j++ )
@@ -393,7 +393,7 @@ public static class PropertiesUtils
     }
 
     /// <summary>
-    /// Writes a comment to the specified <see cref="StreamWriter"/>.
+    ///     Writes a comment to the specified <see cref="StreamWriter" />.
     /// </summary>
     /// <param name="writer">The writer to write the comment to.</param>
     /// <param name="comment">The comment to write.</param>
@@ -418,7 +418,7 @@ public static class PropertiesUtils
 
                 if ( c > '\u00ff' )
                 {
-                    var hex = ( ( int ) c ).ToString( "X" );
+                    var hex = ( ( int )c ).ToString( "X" );
                     writer.Write( "\\u" );
 
                     for ( var j = 0; j < ( 4 - hex.Length ); j++ )

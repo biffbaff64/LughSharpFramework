@@ -34,7 +34,7 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A text input field with multiple lines.
+///     A text input field with multiple lines.
 /// </summary>
 [PublicAPI]
 public class TextArea : TextField
@@ -81,7 +81,7 @@ public class TextArea : TextField
     public List< int >? LinesBreak { get; set; }
 
     /// <summary>
-    /// Initialise this TextArea.
+    ///     Initialise this TextArea.
     /// </summary>
     public override void Initialise()
     {
@@ -138,7 +138,7 @@ public class TextArea : TextField
         Style = style;
 
         // no extra descent to fake line height
-        TextHeight = ( float ) ( style.Font?.GetCapHeight() - style.Font?.GetDescent() )!;
+        TextHeight = ( float )( style.Font?.GetCapHeight() - style.Font?.GetDescent() )!;
 
         if ( Text != null )
         {
@@ -149,8 +149,8 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    /// Sets the preferred number of rows (lines) for this text area.
-    /// Used to calculate preferred height
+    ///     Sets the preferred number of rows (lines) for this text area.
+    ///     Used to calculate preferred height
     /// </summary>
     public void SetPrefRows( float prefRows )
     {
@@ -184,7 +184,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    /// Returns total number of lines that the text occupies
+    ///     Returns total number of lines that the text occupies
     /// </summary>
     public int GetLines()
     {
@@ -192,7 +192,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    /// Returns if there's a new line at then end of the text
+    ///     Returns if there's a new line at then end of the text
     /// </summary>
     public bool NewLineAtEnd()
     {
@@ -202,11 +202,11 @@ public class TextArea : TextField
         }
 
         return ( Text.Length != 0 ) && ( ( Text[ Text.Length - 1 ] == NEWLINE )
-                                      || ( Text[ Text.Length - 1 ] == CARRIAGE_RETURN ) );
+                                         || ( Text[ Text.Length - 1 ] == CARRIAGE_RETURN ) );
     }
 
     /// <summary>
-    /// Moves the cursor to the given number line.
+    ///     Moves the cursor to the given number line.
     /// </summary>
     public void MoveCursorLine( int line )
     {
@@ -238,19 +238,19 @@ public class TextArea : TextField
             if ( _moveOffset < 0 )
             {
                 _moveOffset = LinesBreak.Count <= ( CursorLine * 2 )
-                                  ? 0
-                                  : GlyphPositions[ Cursor ] - GlyphPositions[ LinesBreak[ CursorLine * 2 ] ];
+                    ? 0
+                    : GlyphPositions[ Cursor ] - GlyphPositions[ LinesBreak[ CursorLine * 2 ] ];
             }
 
             CursorLine = line;
 
             Cursor = ( CursorLine * 2 ) >= LinesBreak.Count
-                         ? Text.Length
-                         : LinesBreak[ CursorLine * 2 ];
+                ? Text.Length
+                : LinesBreak[ CursorLine * 2 ];
 
             while ( ( Cursor < Text.Length )
-                 && ( Cursor <= ( LinesBreak[ ( CursorLine * 2 ) + 1 ] - 1 ) )
-                 && ( ( GlyphPositions[ Cursor ] - GlyphPositions[ LinesBreak[ CursorLine * 2 ] ] ) < _moveOffset ) )
+                    && ( Cursor <= ( LinesBreak[ ( CursorLine * 2 ) + 1 ] - 1 ) )
+                    && ( ( GlyphPositions[ Cursor ] - GlyphPositions[ LinesBreak[ CursorLine * 2 ] ] ) < _moveOffset ) )
             {
                 Cursor++;
             }
@@ -260,7 +260,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    /// Updates the current line, checking the cursor position in the text
+    ///     Updates the current line, checking the cursor position in the text
     /// </summary>
     private void UpdateCurrentLine()
     {
@@ -275,14 +275,14 @@ public class TextArea : TextField
         // Special case when cursor moves to the beginning of the line from
         // the end of another and a word wider than the box
         if ( ( ( index % 2 ) == 0 )
-          || ( ( index + 1 ) >= LinesBreak.Count )
-          || ( Cursor != LinesBreak[ index ] )
-          || ( LinesBreak[ index + 1 ] != LinesBreak[ index ] ) )
+             || ( ( index + 1 ) >= LinesBreak.Count )
+             || ( Cursor != LinesBreak[ index ] )
+             || ( LinesBreak[ index + 1 ] != LinesBreak[ index ] ) )
         {
             if ( ( line < ( LinesBreak.Count / 2 ) )
-              || ( Text.Length == 0 )
-              || ( Text[ Text.Length - 1 ] == NEWLINE )
-              || ( Text[ Text.Length - 1 ] == CARRIAGE_RETURN ) )
+                 || ( Text.Length == 0 )
+                 || ( Text[ Text.Length - 1 ] == NEWLINE )
+                 || ( Text[ Text.Length - 1 ] == CARRIAGE_RETURN ) )
             {
                 CursorLine = line;
             }
@@ -293,7 +293,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    /// Scroll the text area to show the line of the cursor
+    ///     Scroll the text area to show the line of the cursor
     /// </summary>
     private void ShowCursor()
     {
@@ -308,7 +308,7 @@ public class TextArea : TextField
             var step = CursorLine >= FirstLineShowing ? 1 : -1;
 
             while ( ( FirstLineShowing > CursorLine )
-                 || ( ( ( FirstLineShowing + LinesShowing ) - 1 ) < CursorLine ) )
+                    || ( ( ( FirstLineShowing + LinesShowing ) - 1 ) < CursorLine ) )
             {
                 FirstLineShowing += step;
             }
@@ -316,7 +316,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    /// Calculates the text area line for the given cursor position
+    ///     Calculates the text area line for the given cursor position
     /// </summary>
     private int CalculateCurrentLineIndex( int cursor )
     {
@@ -340,11 +340,11 @@ public class TextArea : TextField
         var background = Style?.Background;
 
         var availableHeight = Height
-                            - ( background == null
-                                    ? 0
-                                    : background.BottomHeight + background.TopHeight );
+                              - ( background == null
+                                  ? 0
+                                  : background.BottomHeight + background.TopHeight );
 
-        LinesShowing = ( int ) Math.Floor( availableHeight / font!.GetLineHeight() );
+        LinesShowing = ( int )Math.Floor( availableHeight / font!.GetLineHeight() );
     }
 
     protected override float GetTextY( BitmapFont font, IDrawable? background )
@@ -358,7 +358,7 @@ public class TextArea : TextField
 
         if ( font.UseIntegerPositions )
         {
-            textY = ( int ) textY;
+            textY = ( int )textY;
         }
 
         return textY;
@@ -380,13 +380,13 @@ public class TextArea : TextField
             var lineEnd   = LinesBreak[ i + 1 ];
 
             if ( !( ( ( minIndex < lineStart )
-                   && ( minIndex < lineEnd )
-                   && ( maxIndex < lineStart )
-                   && ( maxIndex < lineEnd ) )
-                 || ( ( minIndex > lineStart )
-                   && ( minIndex > lineEnd )
-                   && ( maxIndex > lineStart )
-                   && ( maxIndex > lineEnd ) ) ) )
+                      && ( minIndex < lineEnd )
+                      && ( maxIndex < lineStart )
+                      && ( maxIndex < lineEnd ) )
+                    || ( ( minIndex > lineStart )
+                         && ( minIndex > lineEnd )
+                         && ( maxIndex > lineStart )
+                         && ( maxIndex > lineEnd ) ) ) )
             {
                 var start = Math.Max( lineStart, minIndex );
                 var end   = Math.Min( lineEnd, maxIndex );
@@ -405,14 +405,14 @@ public class TextArea : TextField
                     if ( start == lineStart )
                     {
                         fontLineOffsetWidth = lineFirst.FixedWidth
-                                                  ? 0
-                                                  : ( -lineFirst.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
+                            ? 0
+                            : ( -lineFirst.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
                     }
                     else
                     {
                         fontLineOffsetX = lineFirst.FixedWidth
-                                              ? 0
-                                              : ( -lineFirst.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
+                            ? 0
+                            : ( -lineFirst.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
                     }
                 }
 
@@ -441,8 +441,8 @@ public class TextArea : TextField
         var offsetY = -( Style.Font?.GetLineHeight() - TextHeight ) / 2;
 
         for ( var i = FirstLineShowing * 2;
-              ( i < ( ( FirstLineShowing + LinesShowing ) * 2 ) ) && ( i < LinesBreak.Count );
-              i += 2 )
+             ( i < ( ( FirstLineShowing + LinesShowing ) * 2 ) ) && ( i < LinesBreak.Count );
+             i += 2 )
         {
             font.Draw( batch, DisplayText!, x, y + ( offsetY ?? 0 ), LinesBreak[ i ], LinesBreak[ i + 1 ], 0, Alignment.LEFT, false );
             offsetY -= font.GetLineHeight();
@@ -466,9 +466,9 @@ public class TextArea : TextField
             _lastText = Text;
 
             var maxWidthLine = Width
-                             - ( Style.Background != null
-                                     ? Style.Background.LeftWidth + Style.Background.RightWidth
-                                     : 0 );
+                               - ( Style.Background != null
+                                   ? Style.Background.LeftWidth + Style.Background.RightWidth
+                                   : 0 );
 
             LinesBreak?.Clear();
 
@@ -539,9 +539,9 @@ public class TextArea : TextField
         var index = ( CursorLine * 2 ) + count;
 
         if ( ( index >= 0 )
-          && ( ( index + 1 ) < LinesBreak?.Count )
-          && ( LinesBreak[ index ] == Cursor )
-          && ( LinesBreak[ index + 1 ] == Cursor ) )
+             && ( ( index + 1 ) < LinesBreak?.Count )
+             && ( LinesBreak[ index ] == Cursor )
+             && ( LinesBreak[ index + 1 ] == Cursor ) )
         {
             CursorLine += count;
 
@@ -570,10 +570,10 @@ public class TextArea : TextField
         var pos = CalculateCurrentLineIndex( index + offset );
 
         return base.ContinueCursor( index, offset )
-            && ( ( pos < 0 )
-              || ( pos >= ( LinesBreak.Count - 2 ) )
-              || ( LinesBreak[ pos + 1 ] != index )
-              || ( LinesBreak[ pos + 1 ] == LinesBreak[ pos + 2 ] ) );
+               && ( ( pos < 0 )
+                    || ( pos >= ( LinesBreak.Count - 2 ) )
+                    || ( LinesBreak[ pos + 1 ] != index )
+                    || ( LinesBreak[ pos + 1 ] == LinesBreak[ pos + 2 ] ) );
     }
 
     public float GetCursorX()
@@ -610,7 +610,7 @@ public class TextArea : TextField
     // ========================================================================
 
     /// <summary>
-    /// Input listener for the text area.
+    ///     Input listener for the text area.
     /// </summary>
     [PublicAPI]
     public class TextAreaListener : TextFieldClickListener
@@ -644,7 +644,7 @@ public class TextArea : TextField
                 y -= background.TopHeight;
             }
 
-            _parent.CursorLine = ( int ) Math.Floor( ( height - y ) / font!.GetLineHeight() ) + _parent.FirstLineShowing;
+            _parent.CursorLine = ( int )Math.Floor( ( height - y ) / font!.GetLineHeight() ) + _parent.FirstLineShowing;
             _parent.CursorLine = Math.Max( 0, Math.Min( _parent.CursorLine, _parent.GetLines() - 1 ) );
 
             base.SetCursorPosition( x, y );
@@ -660,7 +660,7 @@ public class TextArea : TextField
                 var repeat = false;
 
                 var shift = GdxApi.Input.IsKeyPressed( IInput.Keys.SHIFT_LEFT )
-                         || GdxApi.Input.IsKeyPressed( IInput.Keys.SHIFT_RIGHT );
+                            || GdxApi.Input.IsKeyPressed( IInput.Keys.SHIFT_RIGHT );
 
                 if ( keycode == IInput.Keys.DOWN )
                 {

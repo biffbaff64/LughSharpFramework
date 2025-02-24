@@ -35,9 +35,6 @@ namespace DesktopGLBackend.Audio;
 [PublicAPI]
 public class OpenALAudio : IGLAudio
 {
-    public bool                NoDevice { get; set; } = false;
-    public List< OpenALMusic > Music    { get; set; } = new( 1 );
-
     private readonly uint[]?                    _allSources;
     private readonly IntPtr                     _context;
     private readonly IntPtr                     _device;
@@ -118,6 +115,9 @@ public class OpenALAudio : IGLAudio
 
         _recentSounds = new OpenALSound[ simultaneousSources ];
     }
+
+    public bool                NoDevice { get; set; } = false;
+    public List< OpenALMusic > Music    { get; set; } = new( 1 );
 
     /// <summary>
     /// </summary>
@@ -297,17 +297,17 @@ public class OpenALAudio : IGLAudio
                 }
                 else
                 {
-                    var oldSoundId = _sourceToSoundId?[ ( int ) sourceId ];
+                    var oldSoundId = _sourceToSoundId?[ ( int )sourceId ];
 
                     if ( oldSoundId != null )
                     {
-                        _soundIdToSource?.Remove( ( long ) oldSoundId );
+                        _soundIdToSource?.Remove( ( long )oldSoundId );
                     }
 
                     var soundId = _nextSoundId++;
 
-                    _sourceToSoundId?.Put( ( int ) sourceId, soundId );
-                    _soundIdToSource?.Put( soundId, ( int ) sourceId );
+                    _sourceToSoundId?.Put( ( int )sourceId, soundId );
+                    _soundIdToSource?.Put( soundId, ( int )sourceId );
                 }
 
                 AL.SourceStop( sourceId );
@@ -316,7 +316,7 @@ public class OpenALAudio : IGLAudio
                 AL.Sourcef( sourceId, AL.PITCH, 1 );
                 AL.Source3F( sourceId, AL.POSITION, 0, 0, 1f );
 
-                return ( int ) sourceId;
+                return ( int )sourceId;
             }
         }
 
@@ -333,8 +333,8 @@ public class OpenALAudio : IGLAudio
             return;
         }
 
-        AL.SourceStop( ( uint ) sourceID );
-        AL.Sourcei( ( uint ) sourceID, AL.BUFFER, 0 );
+        AL.SourceStop( ( uint )sourceID );
+        AL.Sourcei( ( uint )sourceID, AL.BUFFER, 0 );
 
         var soundId = _sourceToSoundId?[ sourceID ];
 
@@ -342,10 +342,10 @@ public class OpenALAudio : IGLAudio
 
         if ( soundId != null )
         {
-            _soundIdToSource?.Remove( ( long ) soundId );
+            _soundIdToSource?.Remove( ( long )soundId );
         }
 
-        _idleSources?.Add( ( uint ) sourceID );
+        _idleSources?.Add( ( uint )sourceID );
     }
 
     /// <summary>
@@ -367,21 +367,21 @@ public class OpenALAudio : IGLAudio
                 continue;
             }
 
-            AL.GetSourcei( ( uint ) sourceID, AL.BUFFER, out var outval );
+            AL.GetSourcei( ( uint )sourceID, AL.BUFFER, out var outval );
 
             if ( outval == bufferID )
             {
-                var soundId = _sourceToSoundId?[ ( int ) sourceID ];
+                var soundId = _sourceToSoundId?[ ( int )sourceID ];
 
-                _sourceToSoundId?.Remove( ( int ) sourceID );
+                _sourceToSoundId?.Remove( ( int )sourceID );
 
                 if ( soundId != null )
                 {
-                    _soundIdToSource?.Remove( ( int ) soundId );
+                    _soundIdToSource?.Remove( ( int )soundId );
                 }
 
-                AL.SourceStop( ( uint ) sourceID );
-                AL.Sourcei( ( uint ) sourceID, AL.BUFFER, 0 );
+                AL.SourceStop( ( uint )sourceID );
+                AL.Sourcei( ( uint )sourceID, AL.BUFFER, 0 );
             }
         }
     }
@@ -404,13 +404,13 @@ public class OpenALAudio : IGLAudio
 
             if ( outval == bufferID )
             {
-                var soundId = _sourceToSoundId?[ ( int ) sourceID ];
+                var soundId = _sourceToSoundId?[ ( int )sourceID ];
 
-                _sourceToSoundId?.Remove( ( int ) sourceID );
+                _sourceToSoundId?.Remove( ( int )sourceID );
 
                 if ( soundId != null )
                 {
-                    _soundIdToSource?.Remove( ( long ) soundId );
+                    _soundIdToSource?.Remove( ( long )soundId );
                 }
 
                 AL.SourceStop( sourceID );
@@ -500,7 +500,7 @@ public class OpenALAudio : IGLAudio
 
         if ( sourceId != null )
         {
-            AL.SourceStop( ( uint ) sourceId );
+            AL.SourceStop( ( uint )sourceId );
         }
     }
 
@@ -513,7 +513,7 @@ public class OpenALAudio : IGLAudio
 
         if ( sourceId != null )
         {
-            AL.SourcePause( ( uint ) sourceId );
+            AL.SourcePause( ( uint )sourceId );
         }
     }
 
@@ -523,11 +523,11 @@ public class OpenALAudio : IGLAudio
 
         if ( ( sourceId != null ) && ( sourceId != -1 ) )
         {
-            AL.GetSourcei( ( uint ) sourceId, AL.SOURCE_STATE, out var outval );
+            AL.GetSourcei( ( uint )sourceId, AL.SOURCE_STATE, out var outval );
 
             if ( outval == AL.PAUSED )
             {
-                AL.SourcePlay( ( uint ) sourceId );
+                AL.SourcePlay( ( uint )sourceId );
             }
         }
     }
@@ -538,7 +538,7 @@ public class OpenALAudio : IGLAudio
 
         if ( sourceId != null )
         {
-            AL.Sourcef( ( uint ) sourceId, AL.GAIN, volume );
+            AL.Sourcef( ( uint )sourceId, AL.GAIN, volume );
         }
     }
 
@@ -548,7 +548,7 @@ public class OpenALAudio : IGLAudio
 
         if ( sourceId != null )
         {
-            AL.Sourcei( ( uint ) sourceId, AL.LOOPING, looping ? AL.TRUE : AL.FALSE );
+            AL.Sourcei( ( uint )sourceId, AL.LOOPING, looping ? AL.TRUE : AL.FALSE );
         }
     }
 
@@ -558,7 +558,7 @@ public class OpenALAudio : IGLAudio
 
         if ( sourceId != null )
         {
-            AL.Sourcef( ( uint ) sourceId, AL.PITCH, pitch );
+            AL.Sourcef( ( uint )sourceId, AL.PITCH, pitch );
         }
     }
 
@@ -568,19 +568,19 @@ public class OpenALAudio : IGLAudio
 
         if ( ( sourceId != null ) && ( sourceId != -1 ) )
         {
-            AL.Source3F( ( uint ) sourceId,
+            AL.Source3F( ( uint )sourceId,
                          AL.POSITION,
                          MathUtils.Cos( ( pan - 1 ) * MathUtils.HALF_PI ),
                          0,
                          MathUtils.Sin( ( pan + 1 ) * MathUtils.HALF_PI ) );
 
-            AL.Sourcef( ( uint ) sourceId, AL.GAIN, volume );
+            AL.Sourcef( ( uint )sourceId, AL.GAIN, volume );
         }
     }
 
     /// <summary>
-    /// Retains a list of the most recently played sounds and stops the sound played
-    /// least recently if necessary for a new sound to play.
+    ///     Retains a list of the most recently played sounds and stops the sound played
+    ///     least recently if necessary for a new sound to play.
     /// </summary>
     public void Retain( OpenALSound sound, bool stop )
     {
@@ -609,7 +609,7 @@ public class OpenALAudio : IGLAudio
     }
 
     /// <summary>
-    /// Removes the disposed sound from the least recently played list.
+    ///     Removes the disposed sound from the least recently played list.
     /// </summary>
     public void Forget( OpenALSound sound )
     {
@@ -648,7 +648,7 @@ public class OpenALAudio : IGLAudio
                         AL.SourceStop( sourceID );
                     }
 
-                    AL.DeleteSources( ( int ) sourceID, _allSources.ToArray() );
+                    AL.DeleteSources( ( int )sourceID, _allSources.ToArray() );
                 }
             }
 

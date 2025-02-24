@@ -30,13 +30,13 @@ using NotNull = System.Diagnostics.CodeAnalysis.NotNullAttribute;
 namespace LughSharp.Lugh.Utils.Exceptions;
 
 /// <summary>
-/// Typed runtime exception used throughout LughSharp.
+///     Typed runtime exception used throughout LughSharp.
 /// </summary>
 [PublicAPI]
 public class GdxRuntimeException : ApplicationException
 {
     /// <summary>
-    /// Initializes a new GdxRuntimeException with a specified error message.
+    ///     Initializes a new GdxRuntimeException with a specified error message.
     /// </summary>
     /// <param name="message"> The message that describes the error. </param>
     public GdxRuntimeException( string? message = "" )
@@ -45,12 +45,12 @@ public class GdxRuntimeException : ApplicationException
     }
 
     /// <summary>
-    /// Initializes a new GdxRuntimeException with a reference to the inner exception
-    /// that is the cause of this exception.
+    ///     Initializes a new GdxRuntimeException with a reference to the inner exception
+    ///     that is the cause of this exception.
     /// </summary>
     /// <param name="e">
-    /// The exception that is the cause of the current exception, or a null
-    /// reference if no inner exception is specified.
+    ///     The exception that is the cause of the current exception, or a null
+    ///     reference if no inner exception is specified.
     /// </param>
     public GdxRuntimeException( Exception? e )
         : this( "", e )
@@ -58,13 +58,13 @@ public class GdxRuntimeException : ApplicationException
     }
 
     /// <summary>
-    /// Initializes a new GdxRuntimeException with a specified error message and a
-    /// reference to the inner exception that is the cause of this exception.
+    ///     Initializes a new GdxRuntimeException with a specified error message and a
+    ///     reference to the inner exception that is the cause of this exception.
     /// </summary>
     /// <param name="message">The error message that explains the reason for the exception.</param>
     /// <param name="exception">
-    /// The exception that is the cause of the current exception, or a null
-    /// reference if no inner exception is specified.
+    ///     The exception that is the cause of the current exception, or a null
+    ///     reference if no inner exception is specified.
     /// </param>
     public GdxRuntimeException( string message, Exception? exception )
         : base( message, exception )
@@ -72,7 +72,7 @@ public class GdxRuntimeException : ApplicationException
     }
 
     /// <summary>
-    /// Throws an GdxRuntimeException if argument is null.
+    ///     Throws an GdxRuntimeException if argument is null.
     /// </summary>
     /// <param name="argument">The reference type argument to validate as non-null.</param>
     /// <param name="message"> A message to display when/if the exception is thrown </param>
@@ -87,7 +87,7 @@ public class GdxRuntimeException : ApplicationException
     }
 
     /// <summary>
-    /// Throws an GdxRuntimeException if the supplied condition is TRUE.
+    ///     Throws an GdxRuntimeException if the supplied condition is TRUE.
     /// </summary>
     /// <param name="condition">The condition to validate as true.</param>
     /// <param name="message"> A message to display when/if the exception is thrown </param>
@@ -102,7 +102,7 @@ public class GdxRuntimeException : ApplicationException
     }
 
     /// <summary>
-    /// Throws an GdxRuntimeException if the supplied reference type is ZERO.
+    ///     Throws an GdxRuntimeException if the supplied reference type is ZERO.
     /// </summary>
     /// <param name="argument">The reference type argument to validate as zero.</param>
     /// <param name="message"> A message to display when/if the exception is thrown </param>

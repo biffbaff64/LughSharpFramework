@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
 namespace DesktopGLBackend.Window;
 
 public partial class DesktopGLWindow

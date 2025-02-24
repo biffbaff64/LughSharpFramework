@@ -29,7 +29,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
-/// OpenGL wrapper for TextureArray.
+///     OpenGL wrapper for TextureArray.
 /// </summary>
 [PublicAPI]
 public class TextureArray : GLTexture, IManaged
@@ -37,6 +37,153 @@ public class TextureArray : GLTexture, IManaged
     private static readonly Dictionary< IApplication, List< TextureArray > > _managedTextureArrays = new();
 
     private ITextureArrayData _data;
+
+    // ========================================================================
+
+    /// <summary>
+    ///     Returns a string representation of the managed status of all
+    ///     textures in the managed textures array.
+    /// </summary>
+    public string ManagedStatus
+    {
+        get
+        {
+            var builder = new StringBuilder( "Managed TextureArrays/app: { " );
+
+            foreach ( var app in _managedTextureArrays.Keys )
+            {
+                builder.Append( _managedTextureArrays[ app ].Count );
+                builder.Append( ' ' );
+            }
+
+            builder.Append( '}' );
+
+            return builder.ToString();
+        }
+    }
+
+    /// <summary>
+    ///     Gets the number of managed TextureArrays currently loaded.
+    /// </summary>
+    public int NumManagedTextureArrays => _managedTextureArrays[ GdxApi.App ].Count;
+
+    // ========================================================================
+
+    public override int Width  => _data.Width;
+    public override int Height => _data.Height;
+    public override int Depth  => _data.Depth;
+
+    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
+    public bool IsManaged
+    {
+        get => _data.Managed;
+        set { }
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="internalPaths"></param>
+    /// <returns></returns>
+    private static FileInfo[] GetInternalHandles( params string[] internalPaths )
+    {
+        var handles = new FileInfo[ internalPaths.Length ];
+
+        for ( var i = 0; i < internalPaths.Length; i++ )
+        {
+            handles[ i ] = GdxApi.Files.Internal( internalPaths[ i ] ).File;
+        }
+
+        return handles;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="data"></param>
+    /// <exception cref="GdxRuntimeException"></exception>
+    private void Load( ITextureArrayData data )
+    {
+        if ( ( _data != null ) && ( data.Managed != _data.Managed ) )
+        {
+            throw new GdxRuntimeException
+                ( "New data must have the same managed status as the old data" );
+        }
+
+        _data = data;
+
+        Bind();
+
+        GdxApi.Bindings.TexImage3D( IGL.GL_TEXTURE_2D_ARRAY,
+                                    0,
+                                    data.InternalFormat,
+                                    data.Width,
+                                    data.Height,
+                                    data.Depth,
+                                    0,
+                                    data.InternalFormat,
+                                    data.GLDataType,
+                                    0 );
+
+        if ( !data.Prepared )
+        {
+            data.Prepare();
+        }
+
+        data.ConsumeTextureArrayData();
+
+        SetFilter( MinFilter, MagFilter );
+        SetWrap( UWrap, VWrap );
+
+        GdxApi.Bindings.BindTexture( GLTarget, 0 );
+    }
+
+    /// <summary>
+    ///     Attempts to reload the TextureArray.
+    /// </summary>
+    /// <exception cref="GdxRuntimeException"> If the TextureArray is unmanaged. </exception>
+    public override void Reload()
+    {
+        if ( !IsManaged )
+        {
+            throw new GdxRuntimeException( "Tried to reload an unmanaged TextureArray" );
+        }
+
+        GLTextureHandle = GdxApi.Bindings.GenTexture();
+
+        Load( _data );
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="app"></param>
+    /// <param name="texture"></param>
+    private static void AddManagedTexture( IApplication app, TextureArray texture )
+    {
+        List< TextureArray > managedTextureArray = _managedTextureArrays[ app ];
+
+        _managedTextureArrays[ app ].Add( texture );
+        _managedTextureArrays[ app ] = managedTextureArray;
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    ///     Clears all managed TextureArrays.
+    /// </summary>
+    internal static void ClearAllTextureArrays( IApplication app )
+    {
+        _managedTextureArrays.Remove( app );
+    }
+
+    /// <summary>
+    ///     Invalidate all managed TextureArrays.
+    /// </summary>
+    internal static void InvalidateAllTextureArrays( IApplication app )
+    {
+        foreach ( var textureArray in _managedTextureArrays[ app ] )
+        {
+            textureArray.Reload();
+        }
+    }
 
     // ========================================================================
 
@@ -93,151 +240,4 @@ public class TextureArray : GLTexture, IManaged
     }
 
     #endregion constructors
-
-    // ========================================================================
-
-    /// <summary>
-    /// Returns a string representation of the managed status of all
-    /// textures in the managed textures array.
-    /// </summary>
-    public string ManagedStatus
-    {
-        get
-        {
-            var builder = new StringBuilder( "Managed TextureArrays/app: { " );
-
-            foreach ( var app in _managedTextureArrays.Keys )
-            {
-                builder.Append( _managedTextureArrays[ app ].Count );
-                builder.Append( ' ' );
-            }
-
-            builder.Append( '}' );
-
-            return builder.ToString();
-        }
-    }
-
-    /// <summary>
-    /// Gets the number of managed TextureArrays currently loaded.
-    /// </summary>
-    public int NumManagedTextureArrays => _managedTextureArrays[ GdxApi.App ].Count;
-
-    /// <summary>
-    /// </summary>
-    /// <param name="internalPaths"></param>
-    /// <returns></returns>
-    private static FileInfo[] GetInternalHandles( params string[] internalPaths )
-    {
-        var handles = new FileInfo[ internalPaths.Length ];
-
-        for ( var i = 0; i < internalPaths.Length; i++ )
-        {
-            handles[ i ] = GdxApi.Files.Internal( internalPaths[ i ] ).File;
-        }
-
-        return handles;
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="data"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
-    private unsafe void Load( ITextureArrayData data )
-    {
-        if ( ( this._data != null ) && ( data.Managed != this._data.Managed ) )
-        {
-            throw new GdxRuntimeException
-                ( "New data must have the same managed status as the old data" );
-        }
-
-        this._data = data;
-
-        Bind();
-
-        GdxApi.Bindings.TexImage3D( IGL.GL_TEXTURE_2D_ARRAY,
-                                    0,
-                                    data.InternalFormat,
-                                    data.Width,
-                                    data.Height,
-                                    data.Depth,
-                                    0,
-                                    data.InternalFormat,
-                                    data.GLDataType,
-                                    null );
-
-        if ( !data.Prepared )
-        {
-            data.Prepare();
-        }
-
-        data.ConsumeTextureArrayData();
-
-        SetFilter( MinFilter, MagFilter );
-        SetWrap( UWrap, VWrap );
-
-        GdxApi.Bindings.BindTexture( GLTarget, 0 );
-    }
-
-    /// <summary>
-    /// Attempts to reload the TextureArray.
-    /// </summary>
-    /// <exception cref="GdxRuntimeException"> If the TextureArray is unmanaged. </exception>
-    public override void Reload()
-    {
-        if ( !IsManaged )
-        {
-            throw new GdxRuntimeException( "Tried to reload an unmanaged TextureArray" );
-        }
-
-        GLTextureHandle = GdxApi.Bindings.GenTexture();
-
-        Load( _data );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="app"></param>
-    /// <param name="texture"></param>
-    private static void AddManagedTexture( IApplication app, TextureArray texture )
-    {
-        List< TextureArray > managedTextureArray = _managedTextureArrays[ app ];
-
-        _managedTextureArrays[ app ].Add( texture );
-        _managedTextureArrays[ app ] = managedTextureArray;
-    }
-
-    // ========================================================================
-
-    public override int Width  => _data.Width;
-    public override int Height => _data.Height;
-    public override int Depth  => _data.Depth;
-
-    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
-    public bool IsManaged
-    {
-        get => _data.Managed;
-        set { }
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Clears all managed TextureArrays.
-    /// </summary>
-    internal static void ClearAllTextureArrays( IApplication app )
-    {
-        _managedTextureArrays.Remove( app );
-    }
-
-    /// <summary>
-    /// Invalidate all managed TextureArrays.
-    /// </summary>
-    internal static void InvalidateAllTextureArrays( IApplication app )
-    {
-        foreach ( var textureArray in _managedTextureArrays[ app ] )
-        {
-            textureArray.Reload();
-        }
-    }
 }

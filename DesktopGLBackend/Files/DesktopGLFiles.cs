@@ -22,10 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils.Exceptions;
-using JetBrains.Annotations;
+
 using Environment = System.Environment;
 
 namespace DesktopGLBackend.Files;
@@ -34,19 +33,19 @@ namespace DesktopGLBackend.Files;
 public class DesktopGLFiles : IFiles
 {
     public static readonly string ExternalPath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile );
-    public static readonly string InternalPath = System.IO.Directory.GetCurrentDirectory();
+    public static readonly string InternalPath = Directory.GetCurrentDirectory();
     public static readonly string LocalPath    = $"{Path.PathSeparator}";
 
     // ========================================================================
     // ========================================================================
-    
+
     /// <summary>
-    /// Returns a <see cref="FileHandle"/> representing a file or directory.
+    ///     Returns a <see cref="FileHandle" /> representing a file or directory.
     /// </summary>
     /// <param name="path"></param>
     /// <param name="type"> Determines how the path is resolved. </param>
     /// <exception cref="GdxRuntimeException">
-    /// if the type is classpath or internal and the file does not exist.
+    ///     if the type is classpath or internal and the file does not exist.
     /// </exception>
     public FileHandle GetFileHandle( string path, PathTypes type )
     {
@@ -54,49 +53,76 @@ public class DesktopGLFiles : IFiles
     }
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Classpath"/> file handle.
+    ///     Convenience method that returns a <see cref="PathTypes.Classpath" /> file handle.
     /// </summary>
-    public FileHandle Classpath( string path ) => GetFileHandle( path, PathTypes.Classpath );
+    public FileHandle Classpath( string path )
+    {
+        return GetFileHandle( path, PathTypes.Classpath );
+    }
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Internal"/> file handle.
+    ///     Convenience method that returns a <see cref="PathTypes.Internal" /> file handle.
     /// </summary>
-    public FileHandle Internal( string path ) => GetFileHandle( $"{InternalPath}{'/'}{path}", PathTypes.Internal );
+    public FileHandle Internal( string path )
+    {
+        return GetFileHandle( $"{InternalPath}{'/'}{path}", PathTypes.Internal );
+    }
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.External"/> file handle.
+    ///     Convenience method that returns a <see cref="PathTypes.External" /> file handle.
     /// </summary>
-    public FileHandle External( string path ) => GetFileHandle( path, PathTypes.External );
+    public FileHandle External( string path )
+    {
+        return GetFileHandle( path, PathTypes.External );
+    }
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Absolute"/> file handle.
+    ///     Convenience method that returns a <see cref="PathTypes.Absolute" /> file handle.
     /// </summary>
-    public FileHandle Absolute( string path ) => GetFileHandle( path, PathTypes.Absolute );
+    public FileHandle Absolute( string path )
+    {
+        return GetFileHandle( path, PathTypes.Absolute );
+    }
 
     /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Local"/> file handle.
+    ///     Convenience method that returns a <see cref="PathTypes.Local" /> file handle.
     /// </summary>
-    public FileHandle Local( string path ) => GetFileHandle( path, PathTypes.Local );
+    public FileHandle Local( string path )
+    {
+        return GetFileHandle( path, PathTypes.Local );
+    }
 
     /// <summary>
-    /// Returns the external storage path directory. This is the app external storage
-    /// on Android and the home directory of the current user on the desktop.
+    ///     Returns the external storage path directory. This is the app external storage
+    ///     on Android and the home directory of the current user on the desktop.
     /// </summary>
-    public string GetExternalStoragePath() => ExternalPath;
+    public string GetExternalStoragePath()
+    {
+        return ExternalPath;
+    }
 
     /// <summary>
-    /// Returns true if the external storage is ready for file IO.
+    ///     Returns true if the external storage is ready for file IO.
     /// </summary>
-    public bool IsExternalStorageAvailable() => true;
+    public bool IsExternalStorageAvailable()
+    {
+        return true;
+    }
 
     /// <summary>
-    /// Returns the local storage path directory. This is the private files directory
-    /// on Android and the directory of the jar on the desktop.
+    ///     Returns the local storage path directory. This is the private files directory
+    ///     on Android and the directory of the jar on the desktop.
     /// </summary>
-    public string GetLocalStoragePath() => LocalPath;
+    public string GetLocalStoragePath()
+    {
+        return LocalPath;
+    }
 
     /// <summary>
-    /// Returns true if the local storage is ready for file IO.
+    ///     Returns true if the local storage is ready for file IO.
     /// </summary>
-    public bool IsLocalStorageAvailable() => true;
+    public bool IsLocalStorageAvailable()
+    {
+        return true;
+    }
 }

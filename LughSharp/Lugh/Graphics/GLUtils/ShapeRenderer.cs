@@ -31,7 +31,7 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 [PublicAPI]
-[Obsolete("to be removed")]
+[Obsolete( "to be removed" )]
 public class ShapeRenderer : IDisposable
 {
     public enum ShapeTypes
@@ -40,10 +40,6 @@ public class ShapeRenderer : IDisposable
         Lines  = IGL.GL_LINES,
         Filled = IGL.GL_TRIANGLES,
     }
-
-    public IImmediateModeRenderer Renderer      { get; set; }
-    public ShapeTypes?            ShapeType     { get; set; }
-    public bool                   AutoShapeType { get; set; }
 
     private readonly Color   _color                = new( 1, 1, 1, 1 );
     private readonly Matrix4 _combinedMatrix       = new();
@@ -62,6 +58,10 @@ public class ShapeRenderer : IDisposable
         _projectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
         _matrixDirty = true;
     }
+
+    public IImmediateModeRenderer Renderer      { get; set; }
+    public ShapeTypes?            ShapeType     { get; set; }
+    public bool                   AutoShapeType { get; set; }
 
     public Color Color
     {
@@ -89,10 +89,21 @@ public class ShapeRenderer : IDisposable
         }
     }
 
+    public void Dispose()
+    {
+    }
+
     // ========================================================================
 
-    public void SetColor( float r, float g, float b, float a ) => _color.Set( r, g, b, a );
-    public void UpdateMatrices() => _matrixDirty = true;
+    public void SetColor( float r, float g, float b, float a )
+    {
+        _color.Set( r, g, b, a );
+    }
+
+    public void UpdateMatrices()
+    {
+        _matrixDirty = true;
+    }
 
     public void Identity()
     {
@@ -100,7 +111,10 @@ public class ShapeRenderer : IDisposable
         _matrixDirty = true;
     }
 
-    public bool IsDrawing() => ShapeType != null;
+    public bool IsDrawing()
+    {
+        return ShapeType != null;
+    }
 
     public void Translate( float x, float y, float z )
     {
@@ -199,11 +213,30 @@ public class ShapeRenderer : IDisposable
         Renderer.Vertex( x, y, z );
     }
 
-    public void Line( float x, float y, float z, float x2, float y2, float z2 ) => Line( x, y, z, x2, y2, z2, _color, _color );
-    public void Line( Vector3 v0, Vector3 v1 ) => Line( v0.X, v0.Y, v0.Z, v1.X, v1.Y, v1.Z, _color, _color );
-    public void Line( float x, float y, float x2, float y2 ) => Line( x, y, 0.0f, x2, y2, 0.0f, _color, _color );
-    public void Line( Vector2 v0, Vector2 v1 ) => Line( v0.X, v0.Y, 0.0f, v1.X, v1.Y, 0.0f, _color, _color );
-    public void Line( float x, float y, float x2, float y2, Color c1, Color c2 ) => Line( x, y, 0.0f, x2, y2, 0.0f, c1, c2 );
+    public void Line( float x, float y, float z, float x2, float y2, float z2 )
+    {
+        Line( x, y, z, x2, y2, z2, _color, _color );
+    }
+
+    public void Line( Vector3 v0, Vector3 v1 )
+    {
+        Line( v0.X, v0.Y, v0.Z, v1.X, v1.Y, v1.Z, _color, _color );
+    }
+
+    public void Line( float x, float y, float x2, float y2 )
+    {
+        Line( x, y, 0.0f, x2, y2, 0.0f, _color, _color );
+    }
+
+    public void Line( Vector2 v0, Vector2 v1 )
+    {
+        Line( v0.X, v0.Y, 0.0f, v1.X, v1.Y, 0.0f, _color, _color );
+    }
+
+    public void Line( float x, float y, float x2, float y2, Color c1, Color c2 )
+    {
+        Line( x, y, 0.0f, x2, y2, 0.0f, c1, c2 );
+    }
 
     public void Line( float x, float y, float z, float x2, float y2, float z2, Color c1, Color c2 )
     {
@@ -571,7 +604,10 @@ public class ShapeRenderer : IDisposable
         Renderer.Vertex( x1 - tx, y1 - ty, 0 );
     }
 
-    public void RectLine( Vector2 p1, Vector2 p2, float width ) => RectLine( p1.X, p1.Y, p2.X, p2.Y, width );
+    public void RectLine( Vector2 p1, Vector2 p2, float width )
+    {
+        RectLine( p1.X, p1.Y, p2.X, p2.Y, width );
+    }
 
     public void Box( float x, float y, float z, float width, float height, float depth )
     {
@@ -726,7 +762,10 @@ public class ShapeRenderer : IDisposable
         Line( x - size, y + size, x + size, y - size );
     }
 
-    public void XShape( Vector2 p, float size ) => XShape( p.X, p.Y, size );
+    public void XShape( Vector2 p, float size )
+    {
+        XShape( p.X, p.Y, size );
+    }
 
     public void Arc( float x, float y, float radius, float start, float degrees )
     {
@@ -1124,8 +1163,15 @@ public class ShapeRenderer : IDisposable
         }
     }
 
-    public void Polygon( float[] vertices ) => Polygon( vertices, 0, vertices.Length );
-    public void Polyline( float[] vertices ) => Polyline( vertices, 0, vertices.Length );
+    public void Polygon( float[] vertices )
+    {
+        Polygon( vertices, 0, vertices.Length );
+    }
+
+    public void Polyline( float[] vertices )
+    {
+        Polyline( vertices, 0, vertices.Length );
+    }
 
     private void Check( ShapeTypes preferred, ShapeTypes? other, int newVertices )
     {
@@ -1147,9 +1193,5 @@ public class ShapeRenderer : IDisposable
             // Either matrix has been changed or there is not enough space
             Flush( ShapeType );
         }
-    }
-
-    public void Dispose()
-    {
     }
 }

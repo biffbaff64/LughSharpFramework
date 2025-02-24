@@ -47,14 +47,19 @@ public class TexturePacker
     [PublicAPI]
     public class Alias( Rect rect ) : IComparable< Alias >
     {
-        public string Name           = rect.Name;
         public int    Index          = rect.Index;
-        public int[]  Splits         = rect.Splits;
-        public int[]  Pads           = rect.Pads;
+        public string Name           = rect.Name;
         public int    OffsetX        = rect.OffsetX;
         public int    OffsetY        = rect.OffsetY;
-        public int    OriginalWidth  = rect.OriginalWidth;
         public int    OriginalHeight = rect.OriginalHeight;
+        public int    OriginalWidth  = rect.OriginalWidth;
+        public int[]  Pads           = rect.Pads;
+        public int[]  Splits         = rect.Splits;
+
+        public int CompareTo( Alias? o )
+        {
+            return string.Compare( Name, o?.Name, StringComparison.Ordinal );
+        }
 
         public void Apply( Rect rect )
         {
@@ -67,41 +72,35 @@ public class TexturePacker
             rect.OriginalWidth  = OriginalWidth;
             rect.OriginalHeight = OriginalHeight;
         }
-
-        public int CompareTo( Alias? o )
-        {
-            return string.Compare( Name, o?.Name, StringComparison.Ordinal );
-        }
     }
 
     [PublicAPI]
     public class Rect : IComparable< Rect >
     {
-        public string Name = string.Empty;
-        public int    OffsetX;
-        public int    OffsetY;
-        public int    RegionWidth;
-        public int    RegionHeight;
-        public int    OriginalWidth;
-        public int    OriginalHeight;
-        public int    X;
-        public int    Y;
-        public int    Width;  // Portion of page taken by this region, including padding.
-        public int    Height; // Portion of page taken by this region, including padding.
-        public int    Index;
-        public bool   Rotated;
-
-//        public Set< Alias > aliases = new HashSet< Alias >();
-        public int[] Splits    = null!;
-        public int[] Pads      = null!;
-        public bool  CanRotate = true;
-
-        private bool _isPatch;
-
 //        private BufferedImage image;
         private FileInfo _file = null!;
-        private int      _score1;
-        private int      _score2;
+
+        private bool   _isPatch;
+        private int    _score1;
+        private int    _score2;
+        public  bool   CanRotate = true;
+        public  int    Height; // Portion of page taken by this region, including padding.
+        public  int    Index;
+        public  string Name = string.Empty;
+        public  int    OffsetX;
+        public  int    OffsetY;
+        public  int    OriginalHeight;
+        public  int    OriginalWidth;
+        public  int[]  Pads = null!;
+        public  int    RegionHeight;
+        public  int    RegionWidth;
+        public  bool   Rotated;
+
+//        public Set< Alias > aliases = new HashSet< Alias >();
+        public int[] Splits = null!;
+        public int   Width; // Portion of page taken by this region, including padding.
+        public int   X;
+        public int   Y;
 
         public Rect()
         {
@@ -113,6 +112,11 @@ public class TexturePacker
             Y      = rect.Y;
             Width  = rect.Width;
             Height = rect.Height;
+        }
+
+        public int CompareTo( Rect? o )
+        {
+            return string.Compare( Name, o?.Name, StringComparison.Ordinal );
         }
 
 //        public Rect( BufferedImage source, int left, int top, int newWidth, int newHeight, bool isPatch )
@@ -131,10 +135,12 @@ public class TexturePacker
 //            this.isPatch   = isPatch;
 //        }
 
-        /** Clears the image for this rect, which will be loaded from the specified file by {@link #getImage(ImageProcessor)}. */
-        public void UnloadImage( FileInfo fileInfo )
+/**
+         * Clears the image for this rect, which will be loaded from the specified file by {@link #getImage(ImageProcessor)}.
+         */
+public void UnloadImage( FileInfo fileInfo )
         {
-            this._file = fileInfo;
+            _file = fileInfo;
 
 //            image     = null;
         }
@@ -181,15 +187,10 @@ public class TexturePacker
             Splits    = rect.Splits;
             Pads      = rect.Pads;
             CanRotate = rect.CanRotate;
-            _score1    = rect._score1;
-            _score2    = rect._score2;
-            _file      = rect._file;
-            _isPatch   = rect._isPatch;
-        }
-
-        public int CompareTo( Rect? o )
-        {
-            return string.Compare( Name, o?.Name, StringComparison.Ordinal );
+            _score1   = rect._score1;
+            _score2   = rect._score2;
+            _file     = rect._file;
+            _isPatch  = rect._isPatch;
         }
 
         /// <inheritdoc />

@@ -71,12 +71,12 @@ public partial class TextureAtlasData
     {
         public void Parse( Page page, params string[] entry )
         {
-            if ( entry[ 1 ].Contains('x'))
+            if ( entry[ 1 ].Contains( 'x' ) )
             {
                 page.UWrap = Texture.TextureWrap.Repeat;
             }
 
-            if ( entry[ 1 ].Contains('y'))
+            if ( entry[ 1 ].Contains( 'y' ) )
             {
                 page.VWrap = Texture.TextureWrap.Repeat;
             }
@@ -211,8 +211,8 @@ public class ComparatorAnonymousInnerClass : IComparer< TextureAtlasData.Region 
     }
 
     /// <summary>
-    /// Compares two objects and returns a value indicating whether one is
-    /// less than, equal to, or greater than the other.
+    ///     Compares two objects and returns a value indicating whether one is
+    ///     less than, equal to, or greater than the other.
     /// </summary>
     /// <param name="region1">The first object to compare.</param>
     /// <param name="region2">The second object to compare.</param>

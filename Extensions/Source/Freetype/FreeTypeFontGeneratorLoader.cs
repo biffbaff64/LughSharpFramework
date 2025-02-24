@@ -26,5 +26,4 @@ namespace Extensions.Source.Freetype;
 
 public class FreeTypeFontGeneratorLoader
 {
-    
 }

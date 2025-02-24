@@ -26,24 +26,22 @@ using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
+
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// Draws a <see cref="TextureRegion"/> repeatedly to fill the area,
-/// instead of stretching it.
+///     Draws a <see cref="TextureRegion" /> repeatedly to fill the area,
+///     instead of stretching it.
 /// </summary>
 [PublicAPI]
 public class TiledDrawable : TextureRegionDrawable
 {
-    public Color Color { get; set; } = new( 1, 1, 1, 1 );
-    public float Scale { set; get; } = 1;
-
     // ========================================================================
 
     /// <summary>
-    /// Creates a new TiledDrawable, using the given <see cref="TextureRegion"/>
+    ///     Creates a new TiledDrawable, using the given <see cref="TextureRegion" />
     /// </summary>
     public TiledDrawable( TextureRegion region )
         : base( region )
@@ -51,12 +49,15 @@ public class TiledDrawable : TextureRegionDrawable
     }
 
     /// <summary>
-    /// Creates a new TiledDrawable, using the given <see cref="TextureRegionDrawable"/>
+    ///     Creates a new TiledDrawable, using the given <see cref="TextureRegionDrawable" />
     /// </summary>
     public TiledDrawable( TextureRegionDrawable drawable )
         : base( drawable )
     {
     }
+
+    public Color Color { get; set; } = new( 1, 1, 1, 1 );
+    public float Scale { set; get; } = 1;
 
     /// <inheritdoc />
     public override void Draw( IBatch batch, float x, float y, float width, float height )
@@ -71,8 +72,8 @@ public class TiledDrawable : TextureRegionDrawable
 
             var regionWidth  = region.RegionWidth * Scale;
             var regionHeight = region.RegionHeight * Scale;
-            var fullX        = ( int ) ( width / regionWidth );
-            var fullY        = ( int ) ( height / regionHeight );
+            var fullX        = ( int )( width / regionWidth );
+            var fullY        = ( int )( height / regionHeight );
             var remainingX   = width - ( regionWidth * fullX );
             var remainingY   = height - ( regionHeight * fullY );
             var startX       = x;
@@ -106,10 +107,10 @@ public class TiledDrawable : TextureRegionDrawable
 
                 var rect = new GRect
                 {
-                    X      = ( int ) x,
-                    Y      = ( int ) y,
-                    Width  = ( int ) remainingX,
-                    Height = ( int ) regionHeight,
+                    X      = ( int )x,
+                    Y      = ( int )y,
+                    Width  = ( int )remainingX,
+                    Height = ( int )regionHeight,
                 };
 
                 for ( var ii = 0; ii < fullY; ii++ )
@@ -126,10 +127,10 @@ public class TiledDrawable : TextureRegionDrawable
 
                     rect = new GRect
                     {
-                        X      = ( int ) x,
-                        Y      = ( int ) y,
-                        Width  = ( int ) remainingX,
-                        Height = ( int ) remainingY,
+                        X      = ( int )x,
+                        Y      = ( int )y,
+                        Width  = ( int )remainingX,
+                        Height = ( int )remainingY,
                     };
 
                     batch.Draw( texture, rect, u, v2, u2, v );
@@ -146,10 +147,10 @@ public class TiledDrawable : TextureRegionDrawable
 
                 var rect = new GRect
                 {
-                    X      = ( int ) x,
-                    Y      = ( int ) y,
-                    Width  = ( int ) regionWidth,
-                    Height = ( int ) remainingY,
+                    X      = ( int )x,
+                    Y      = ( int )y,
+                    Width  = ( int )regionWidth,
+                    Height = ( int )remainingY,
                 };
 
                 for ( var i = 0; i < fullX; i++ )

@@ -22,19 +22,19 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Maths;
 
-[PublicAPI, StructLayout(LayoutKind.Sequential)]
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
 public struct Matrix2f( float m11, float m12, float m21, float m22 )
 {
     public float M11 = m11, M12 = m12;
     public float M21 = m21, M22 = m22;
 }
 
-[PublicAPI, StructLayout(LayoutKind.Sequential)]
-public struct Matrix3f
-(
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
+public struct Matrix3f(
     float m11,
     float m12,
     float m13,
@@ -50,9 +50,9 @@ public struct Matrix3f
     public float M31 = m31, M32 = m32, M33 = m33;
 }
 
-[PublicAPI, StructLayout(LayoutKind.Sequential)]
-public struct Matrix4f
-(
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
+public struct Matrix4f(
     float m11,
     float m12,
     float m13,
@@ -75,4 +75,3 @@ public struct Matrix4f
     public float M31 = m31, M32 = m32, M33 = m33, M34 = m34;
     public float M41 = m41, M42 = m42, M43 = m43, M44 = m44;
 }
-

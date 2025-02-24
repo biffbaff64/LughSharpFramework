@@ -42,12 +42,12 @@ public static class BytePointerToString
         Marshal.Copy( ( IntPtr )bytePointer, byteArray, 0, length );
 
         // Convert byte array to string
-        return System.Text.Encoding.UTF8.GetString( byteArray );
+        return Encoding.UTF8.GetString( byteArray );
     }
 
     /// <summary>
-    /// Converts a GLchar* (pointer to a null-terminated or length-specified C-style string)
-    /// to a C# string.
+    ///     Converts a GLchar* (pointer to a null-terminated or length-specified C-style string)
+    ///     to a C# string.
     /// </summary>
     /// <param name="glCharPtr">The pointer to the GLchar array.</param>
     /// <param name="length">The length of the string, or -1 if null-terminated.</param>

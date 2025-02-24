@@ -29,16 +29,13 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-/// Immediate mode rendering class for GLES 2.0. The renderer will allow you to
-/// specify vertices on the fly and provides a default shader for (unlit) rendering.
+///     Immediate mode rendering class for GLES 2.0. The renderer will allow you to
+///     specify vertices on the fly and provides a default shader for (unlit) rendering.
 /// </summary>
 [PublicAPI]
-[Obsolete("To be removed")]
+[Obsolete( "To be removed" )]
 public class ImmediateModeRenderer20 : IImmediateModeRenderer
 {
-    public int MaxVertices { get; set; }
-    public int NumVertices { get; set; }
-
     // ========================================================================
     // ========================================================================
 
@@ -62,7 +59,6 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     // ========================================================================
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="hasNormals"></param>
     /// <param name="hasColors"></param>
@@ -74,7 +70,6 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="maxVertices"></param>
     /// <param name="hasNormals"></param>
@@ -91,7 +86,6 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="maxVertices"></param>
     /// <param name="hasNormals"></param>
@@ -140,8 +134,10 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         }
     }
 
+    public int MaxVertices { get; set; }
+    public int NumVertices { get; set; }
+
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="projModelView"></param>
     /// <param name="primitiveType"></param>
@@ -152,7 +148,6 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     }
 
     /// <summary>
-    /// 
     /// </summary>
     public void End()
     {
@@ -160,7 +155,6 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="color"></param>
     public void SetColor( Color color )
@@ -169,7 +163,6 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="r"></param>
     /// <param name="g"></param>
@@ -181,7 +174,6 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="colorBits"></param>
     public void SetColor( float colorBits )
@@ -190,7 +182,6 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="u"></param>
     /// <param name="v"></param>
@@ -204,7 +195,6 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -259,8 +249,20 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         NumVertices      = 0;
     }
 
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        if ( _ownsShader && ( _shader != null ) )
+        {
+            _shader.Dispose();
+        }
+
+        _mesh.Dispose();
+
+        GC.SuppressFinalize( this );
+    }
+
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="hasNormals"></param>
     /// <param name="hasColor"></param>
@@ -402,8 +404,8 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     }
 
     /// <summary>
-    /// Returns a new instance of the default shader used by SpriteBatch
-    /// when no shader is specified.
+    ///     Returns a new instance of the default shader used by SpriteBatch
+    ///     when no shader is specified.
     /// </summary>
     public static ShaderProgram CreateDefaultShader( bool hasNormals, bool hasColors, int numTexCoords )
     {
@@ -417,18 +419,5 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         }
 
         return program;
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        if ( _ownsShader && ( _shader != null ) )
-        {
-            _shader.Dispose();
-        }
-
-        _mesh.Dispose();
-
-        GC.SuppressFinalize( this );
     }
 }

@@ -23,30 +23,28 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets;
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Maps;
 
 /// <summary>
-/// Resolves an image by a string, wrapper around a Map or AssetManager to load
-/// maps either directly or via AssetManager.
+///     Resolves an image by a string, wrapper around a Map or AssetManager to load
+///     maps either directly or via AssetManager.
 /// </summary>
 [PublicAPI]
 public interface IImageResolver
 {
     /// <summary>
-    /// Returns the <see cref="TextureRegion"/> for the given name,
-    /// or null if texture doesn't exist.
+    ///     Returns the <see cref="TextureRegion" /> for the given name,
+    ///     or null if texture doesn't exist.
     /// </summary>
     public TextureRegion? GetImage( string name );
 
     /// <summary>
-    /// A class that resolves images directly from a dictionary of textures.
-    /// Implements the IImageResolver interface.
+    ///     A class that resolves images directly from a dictionary of textures.
+    ///     Implements the IImageResolver interface.
     /// </summary>
     [PublicAPI]
     public class DirectImageResolver : IImageResolver
@@ -55,8 +53,8 @@ public interface IImageResolver
         private readonly Dictionary< string, Texture > _images;
 
         /// <summary>
-        /// Initializes a new instance of the DirectImageResolver class with the
-        /// specified dictionary of images.
+        ///     Initializes a new instance of the DirectImageResolver class with the
+        ///     specified dictionary of images.
         /// </summary>
         /// <param name="images">A dictionary mapping image names to Texture objects.</param>
         public DirectImageResolver( Dictionary< string, Texture > images )
@@ -65,14 +63,14 @@ public interface IImageResolver
         }
 
         /// <summary>
-        /// Retrieves the texture region for the specified image name.
+        ///     Retrieves the texture region for the specified image name.
         /// </summary>
         /// <param name="name">The name of the image to retrieve.</param>
         /// <returns>
-        /// A <see cref="TextureRegion"/> object representing the texture region of the specified image.
+        ///     A <see cref="TextureRegion" /> object representing the texture region of the specified image.
         /// </returns>
         /// <exception cref="KeyNotFoundException">
-        /// Thrown if the specified image name is not found in the dictionary.
+        ///     Thrown if the specified image name is not found in the dictionary.
         /// </exception>
         public TextureRegion GetImage( string name )
         {
@@ -91,7 +89,7 @@ public interface IImageResolver
     }
 
     /// <summary>
-    /// Image Resolver for TextureRegions fetched via an <see cref="AssetManager"/>
+    ///     Image Resolver for TextureRegions fetched via an <see cref="AssetManager" />
     /// </summary>
     [PublicAPI]
     public class AssetManagerImageResolver : IImageResolver
@@ -99,27 +97,27 @@ public interface IImageResolver
         private readonly AssetManager _assetManager;
 
         /// <summary>
-        /// Initializes a new instance of the AssetManagerImageResolver class with the specified AssetManager.
+        ///     Initializes a new instance of the AssetManagerImageResolver class with the specified AssetManager.
         /// </summary>
         /// <param name="assetManager">The AssetManager used to manage and retrieve assets.</param>
         public AssetManagerImageResolver( AssetManager assetManager )
         {
-            _assetManager = assetManager 
-                         ?? throw new ArgumentNullException( nameof( assetManager ), "AssetManager cannot be null" );
+            _assetManager = assetManager
+                            ?? throw new ArgumentNullException( nameof( assetManager ), "AssetManager cannot be null" );
         }
 
         /// <summary>
-        /// Retrieves the texture region for the specified image name.
+        ///     Retrieves the texture region for the specified image name.
         /// </summary>
         /// <param name="name">The name of the image to retrieve.</param>
         /// <returns>
-        /// A <see cref="TextureRegion"/> object representing the texture region of the specified image.
+        ///     A <see cref="TextureRegion" /> object representing the texture region of the specified image.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// Thrown if the specified image name is null or empty.
+        ///     Thrown if the specified image name is null or empty.
         /// </exception>
         /// <exception cref="AssetNotLoadedException">
-        /// Thrown if the specified image is not loaded by the AssetManager.
+        ///     Thrown if the specified image is not loaded by the AssetManager.
         /// </exception>
         public TextureRegion GetImage( string name )
         {
@@ -140,8 +138,8 @@ public interface IImageResolver
     }
 
     /// <summary>
-    /// Resolver for TextureAtlas regions.
-    /// Provides a means of accessing TextureRegions in the atlas.
+    ///     Resolver for TextureAtlas regions.
+    ///     Provides a means of accessing TextureRegions in the atlas.
     /// </summary>
     [PublicAPI]
     public class TextureAtlasImageResolver : IImageResolver
@@ -149,8 +147,8 @@ public interface IImageResolver
         private readonly TextureAtlas _atlas;
 
         /// <summary>
-        /// Constructor.
-        /// Creates an Image Resolver for the supplied TextureAtlas.
+        ///     Constructor.
+        ///     Creates an Image Resolver for the supplied TextureAtlas.
         /// </summary>
         /// <param name="atlas"></param>
         public TextureAtlasImageResolver( TextureAtlas atlas )
@@ -159,7 +157,7 @@ public interface IImageResolver
         }
 
         /// <summary>
-        /// Gets the TextureRegion that matches the supplied name.
+        ///     Gets the TextureRegion that matches the supplied name.
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>

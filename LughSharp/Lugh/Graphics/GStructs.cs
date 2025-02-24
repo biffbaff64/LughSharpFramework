@@ -25,18 +25,19 @@
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-/// A simple Rectangle shape struct, which contains only X, Y, Width, and Height
-/// members. For use when no 'padding' is needed, as in method parameters, for instance.
-/// <example>
-/// <code>
+///     A simple Rectangle shape struct, which contains only X, Y, Width, and Height
+///     members. For use when no 'padding' is needed, as in method parameters, for instance.
+///     <example>
+///         <code>
 /// public void SetRegion( Texture texture, GRect region )
 /// {
 ///     . . .
 /// }
 /// </code>
-/// </example>
+///     </example>
 /// </summary>
-[PublicAPI, StructLayout( LayoutKind.Sequential )]
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
 public struct GRect
 {
     public int X;
@@ -46,19 +47,20 @@ public struct GRect
 }
 
 /// <summary>
-/// A Simple 2D Point struct with only X and Y members.
-/// For use when no 'padding' is needed, as in method parameters, for instance.
-/// <example>
-/// <code>
+///     A Simple 2D Point struct with only X and Y members.
+///     For use when no 'padding' is needed, as in method parameters, for instance.
+///     <example>
+///         <code>
 /// public void SetPosition( GPoint pos )
 /// {
 ///     Position.X = pos.X;
 ///     Position.Y = pos.Y;
 /// }
 /// </code>
-/// </example>
+///     </example>
 /// </summary>
-[PublicAPI, StructLayout( LayoutKind.Sequential )]
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
 public struct GPoint
 {
     public int X;
@@ -66,19 +68,20 @@ public struct GPoint
 }
 
 /// <summary>
-/// A Simple 2D Size struct with only Width and Height members.
-/// For use when no 'padding' is needed, as in method parameters, for instance.
-/// <example>
-/// <code>
+///     A Simple 2D Size struct with only Width and Height members.
+///     For use when no 'padding' is needed, as in method parameters, for instance.
+///     <example>
+///         <code>
 /// public void SetSize( GSize newSize )
 /// {
 ///     Width = newSize.Width;
 ///     Height = newSize.Height;
 /// }
 /// </code>
-/// </example>
+///     </example>
 /// </summary>
-[PublicAPI, StructLayout( LayoutKind.Sequential )]
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
 public struct GSize
 {
     public int Width;

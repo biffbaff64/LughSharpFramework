@@ -417,7 +417,13 @@ GRAPHICS/OPENGL
 
     CODE   DOCUMENT
     ----   --------
+    - IP   -      - BufferObjectBindings
+    -      -      - ContextBindings
+    - IP   -      - DebugBindings
     - DONE - DONE - DebugSeverity
+    -      -      - DrawBindings
+    - IP   -      - ErrorBindings
+    -      -      - FrameBufferBindings
     - DONE - DONE - GLBindings
     - DONE - DONE - GLBindingsStructs
     - DONE - DONE - GLFunctionDelegates
@@ -426,6 +432,17 @@ GRAPHICS/OPENGL
     - DONE - DONE - IGL
     - DONE - DONE - IGLBindings
     - DONE - DONE - IGLBindingsExtra
+    -      -      - ProgramBindings
+    - IP   -      - QueryBindings
+    -      -      - RenderBufferBindings
+    -      -      - ShaderBindings
+    -      -      - StateBindings
+    - IP   -      - TextureBindings
+    - IP   -      - TextureSamplerBindings
+    -      -      - TransformFeedbackBindings
+    -      -      - UniformBindings
+    - IP   -      - UtilBindings
+    -      -      - VertexArrayBindings
 
 GRAPHICS/OPENGL/ENUMS
 ---------------------

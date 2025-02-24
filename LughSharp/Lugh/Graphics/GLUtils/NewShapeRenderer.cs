@@ -27,7 +27,7 @@ using LughSharp.Lugh.Graphics.OpenGL;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 [PublicAPI]
-public unsafe class NewShapeRenderer : IDisposable
+public class NewShapeRenderer : IDisposable
 {
     private int _programId;
     private int _vaoId;
@@ -47,13 +47,22 @@ public unsafe class NewShapeRenderer : IDisposable
 
         // 3. Setup vertex attributes
         GL.EnableVertexAttribArray( 0 ); // Position
+
 //        GL.VertexAttribPointer( 0u, 2, IGL.GL_FLOAT, false, 4 * sizeof( float ), IntPtr.Zero );
 
         GL.EnableVertexAttribArray( 1 ); // Color
+
 //        GL.VertexAttribPointer( 1u, 4, IGL.GL_FLOAT, false, 4 * sizeof( float ), new IntPtr( 2 * sizeof( float ) ) );
 
         GL.BindBuffer( IGL.GL_ARRAY_BUFFER, 0 );
         GL.BindVertexArray( 0 );
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
     }
 
     public void Begin()
@@ -88,13 +97,6 @@ public unsafe class NewShapeRenderer : IDisposable
         {
             // TODO release managed resources here
         }
-    }
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        Dispose( true );
-        GC.SuppressFinalize( this );
     }
 
     /// <inheritdoc />

@@ -22,67 +22,43 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils;
-
 using DesktopGLBackend.Core;
 using DesktopGLBackend.Graphics;
 using DesktopGLBackend.Input;
 using DesktopGLBackend.Utils;
 
+using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Maths;
+using LughSharp.Lugh.Utils;
 
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace DesktopGLBackend.Window;
 
 /// <summary>
-/// Wrapper/Manager class for a <see cref="GLFW.Window"/>.
+///     Wrapper/Manager class for a <see cref="GLFW.Window" />.
 /// </summary>
 [PublicAPI]
 public partial class DesktopGLWindow : IDisposable
 {
-    public GLFW.Window?                      GlfwWindow          { get; set; }
-    public IDesktopGLWindowListener?         WindowListener      { get; set; }
-    public IApplicationListener              ApplicationListener { get; set; }
-    public IDesktopGLInput                   Input               { get; set; } = null!;
-    public DesktopGLApplicationConfiguration AppConfig           { get; set; }
-    public DesktopGLGraphics                 Graphics            { get; set; } = null!;
-    public IDesktopGLApplicationBase         Application         { get; set; }
-    public bool                              ListenerInitialised { get; set; } = false;
-
-    /// <summary>
-    /// Return the window X position in logical coordinates. All monitors span a virtual
-    /// surface together. The coordinates are relative to the first monitor in the
-    /// virtual surface.
-    /// </summary>
-    public int PositionX => ( int )GetPosition().X;
-
-    /// <summary>
-    /// Return the window Y position in logical coordinates. All monitors span a virtual
-    /// surface together. The coordinates are relative to the first monitor in the
-    /// virtual surface.
-    /// </summary>
-    public int PositionY => ( int )GetPosition().Y;
-
     // ========================================================================
 
     private List< IRunnable.Runnable > _executedRunnables = [ ];
-    private List< IRunnable.Runnable > _runnables         = [ ];
-    private bool                       _iconified         = false;
     private bool                       _focused           = false;
-    private Vector2                    _tmpV2             = new();
+    private bool                       _iconified         = false;
     private bool                       _requestRendering  = false;
+    private List< IRunnable.Runnable > _runnables         = [ ];
+    private Vector2                    _tmpV2             = new();
 
     // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// Creates a new DesktopGLWindow instance, using the given <see cref="IApplicationListener"/>,
-    /// <see cref="DesktopGLApplicationConfiguration"/>, and attaching it to the given
-    /// <see cref="IDesktopGLApplicationBase"/>.
+    ///     Creates a new DesktopGLWindow instance, using the given <see cref="IApplicationListener" />,
+    ///     <see cref="DesktopGLApplicationConfiguration" />, and attaching it to the given
+    ///     <see cref="IDesktopGLApplicationBase" />.
     /// </summary>
     public DesktopGLWindow( IApplicationListener listener,
                             DesktopGLApplicationConfiguration config,
@@ -94,15 +70,37 @@ public partial class DesktopGLWindow : IDisposable
         Application         = application;
     }
 
+    public GLFW.Window?                      GlfwWindow          { get; set; }
+    public IDesktopGLWindowListener?         WindowListener      { get; set; }
+    public IApplicationListener              ApplicationListener { get; set; }
+    public IDesktopGLInput                   Input               { get; set; } = null!;
+    public DesktopGLApplicationConfiguration AppConfig           { get; set; }
+    public DesktopGLGraphics                 Graphics            { get; set; } = null!;
+    public IDesktopGLApplicationBase         Application         { get; set; }
+    public bool                              ListenerInitialised { get; set; } = false;
+
     /// <summary>
-    /// 
+    ///     Return the window X position in logical coordinates. All monitors span a virtual
+    ///     surface together. The coordinates are relative to the first monitor in the
+    ///     virtual surface.
+    /// </summary>
+    public int PositionX => ( int )GetPosition().X;
+
+    /// <summary>
+    ///     Return the window Y position in logical coordinates. All monitors span a virtual
+    ///     surface together. The coordinates are relative to the first monitor in the
+    ///     virtual surface.
+    /// </summary>
+    public int PositionY => ( int )GetPosition().Y;
+
+    /// <summary>
     /// </summary>
     public void Create( GLFW.Window window )
     {
-        this.GlfwWindow         = window;
-        this.Input              = Application.CreateInput( this );
-        this.Graphics           = new DesktopGLGraphics( this );
-        this.Graphics.GLVersion = Application.GLVersion;
+        GlfwWindow         = window;
+        Input              = Application.CreateInput( this );
+        Graphics           = new DesktopGLGraphics( this );
+        Graphics.GLVersion = Application.GLVersion;
 
         GdxApi.Input    = Input;
         GdxApi.Graphics = Graphics;
@@ -120,7 +118,7 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Update this window.
+    ///     Update this window.
     /// </summary>
     /// <returns> True if the window should render itself. </returns>
     public bool Update()
@@ -178,9 +176,9 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Post a <see cref="IRunnable.Runnable"/> to this window's event queue. Use this if
-    /// you access statics like <see cref="Gdx.Graphics"/> in your runnable instead
-    /// of <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)"/>".
+    ///     Post a <see cref="IRunnable.Runnable" /> to this window's event queue. Use this if
+    ///     you access statics like <see cref="Gdx.Graphics" /> in your runnable instead
+    ///     of <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)" />".
     /// </summary>
     public void PostRunnable( IRunnable.Runnable runnable )
     {
@@ -191,7 +189,7 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Makes this the currently active window.
+    ///     Makes this the currently active window.
     /// </summary>
     public void MakeCurrent()
     {
@@ -204,7 +202,7 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Reguest the window to be drawn.
+    ///     Reguest the window to be drawn.
     /// </summary>
     public void RequestRendering()
     {
@@ -215,8 +213,8 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Returns <b>true</b> if this window should close. It establishes this
-    /// via <see cref="Glfw.WindowShouldClose(GLFW.Window)"/>
+    ///     Returns <b>true</b> if this window should close. It establishes this
+    ///     via <see cref="Glfw.WindowShouldClose(GLFW.Window)" />
     /// </summary>
     /// <returns></returns>
     public bool ShouldClose()
@@ -224,16 +222,16 @@ public partial class DesktopGLWindow : IDisposable
         return Glfw.WindowShouldClose( GlfwWindow );
     }
 
-    /// <inheritdoc cref="Glfw.SetWindowPos(GLFW.Window,int,int)"/>
+    /// <inheritdoc cref="Glfw.SetWindowPos(GLFW.Window,int,int)" />
     public void SetPosition( int x, int y )
     {
         Glfw.SetWindowPos( GlfwWindow, x, y );
     }
 
     /// <summary>
-    /// Gets the current window position in logical coordinates. All monitors span a
-    /// virtual surface together. The coordinates are relative to the first monitor
-    /// in the virtual surface.
+    ///     Gets the current window position in logical coordinates. All monitors span a
+    ///     virtual surface together. The coordinates are relative to the first monitor
+    ///     in the virtual surface.
     /// </summary>
     /// <returns>A Vector2 holding the window X and Y.</returns>
     public Vector2 GetPosition()
@@ -244,8 +242,8 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Sets the visibility of the window.
-    /// Invisible windows will still call their <see cref="IApplicationListener"/>
+    ///     Sets the visibility of the window.
+    ///     Invisible windows will still call their <see cref="IApplicationListener" />
     /// </summary>
     public void SetVisible( bool visible )
     {
@@ -262,43 +260,58 @@ public partial class DesktopGLWindow : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Closes this window and pauses and disposes the associated <see cref="IApplicationListener"/>.
-    /// This function sets the value of the close flag of the specified window. This can be used to
-    /// override the user's attempt to close the window, or to signal that it should be closed.
+    ///     Closes this window and pauses and disposes the associated <see cref="IApplicationListener" />.
+    ///     This function sets the value of the close flag of the specified window. This can be used to
+    ///     override the user's attempt to close the window, or to signal that it should be closed.
     /// </summary>
-    public void CloseWindow() => Glfw.SetWindowShouldClose( GlfwWindow, true );
+    public void CloseWindow()
+    {
+        Glfw.SetWindowShouldClose( GlfwWindow, true );
+    }
 
     /// <summary>
-    /// Minimizes (iconifies) the window. Iconified windows do not call their
-    /// <see cref="IApplicationListener"/> until the window is restored.
+    ///     Minimizes (iconifies) the window. Iconified windows do not call their
+    ///     <see cref="IApplicationListener" /> until the window is restored.
     /// </summary>
-    public void IconifyWindow() => Glfw.IconifyWindow( GlfwWindow );
+    public void IconifyWindow()
+    {
+        Glfw.IconifyWindow( GlfwWindow );
+    }
 
     /// <summary>
-    /// This function restores the specified window if it was previously iconified
-    /// (minimized) or maximized. If the window is already restored, this function
-    /// does nothing. If the specified window is a full screen window, the resolution
-    /// chosen for the window is restored on the selected monitor.
+    ///     This function restores the specified window if it was previously iconified
+    ///     (minimized) or maximized. If the window is already restored, this function
+    ///     does nothing. If the specified window is a full screen window, the resolution
+    ///     chosen for the window is restored on the selected monitor.
     /// </summary>
-    public void RestoreWindow() => Glfw.RestoreWindow( GlfwWindow );
+    public void RestoreWindow()
+    {
+        Glfw.RestoreWindow( GlfwWindow );
+    }
 
     /// <summary>
-    /// This function maximizes the specified window if it was previously not maximized.
-    /// If the window is already maximized, this function does nothing. If the specified
-    /// window is a full screen window, this function does nothing.
+    ///     This function maximizes the specified window if it was previously not maximized.
+    ///     If the window is already maximized, this function does nothing. If the specified
+    ///     window is a full screen window, this function does nothing.
     /// </summary>
-    public void MaximizeWindow() => Glfw.MaximizeWindow( GlfwWindow );
+    public void MaximizeWindow()
+    {
+        Glfw.MaximizeWindow( GlfwWindow );
+    }
 
     /// <summary>
-    /// Brings the window to front and sets input focus. The window should
-    /// already be visible and not iconified.
+    ///     Brings the window to front and sets input focus. The window should
+    ///     already be visible and not iconified.
     /// </summary>
-    public void FocusWindow() => Glfw.FocusWindow( GlfwWindow );
+    public void FocusWindow()
+    {
+        Glfw.FocusWindow( GlfwWindow );
+    }
 
     // ========================================================================
 
     /// <summary>
-    /// Sets the windows title.
+    ///     Sets the windows title.
     /// </summary>
     /// <param name="title"> String holding the Title text. </param>
     public void SetTitle( string title )
@@ -307,9 +320,9 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Sets minimum and maximum size limits for the window. If the window
-    /// is full screen or not resizable, these limits are ignored. Use -1
-    /// to indicate an unrestricted dimension.
+    ///     Sets minimum and maximum size limits for the window. If the window
+    ///     is full screen or not resizable, these limits are ignored. Use -1
+    ///     to indicate an unrestricted dimension.
     /// </summary>
     public void SetSizeLimits( int minWidth, int minHeight, int maxWidth, int maxHeight )
     {
@@ -317,9 +330,9 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Sets minimum and maximum size limits for the given window. If the window
-    /// is full screen or not resizable, these limits are ignored.
-    /// Use -1 to indicate an unrestricted dimension.
+    ///     Sets minimum and maximum size limits for the given window. If the window
+    ///     is full screen or not resizable, these limits are ignored.
+    ///     Use -1 to indicate an unrestricted dimension.
     /// </summary>
     /// <param name="handle"> The window. </param>
     /// <param name="minWidth"> The minimum window width. </param>
@@ -336,14 +349,17 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Sets the icon that will be used in the window's title bar. Has no effect in macOS,
-    /// which doesn't use window icons.
+    ///     Sets the icon that will be used in the window's title bar. Has no effect in macOS,
+    ///     which doesn't use window icons.
     /// </summary>
     /// <param name="images">
-    /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="PixelType.Format.RGBA8888"/>
-    /// is preferred so the images will not have to be copied and converted. <b>The chosen image
-    /// is copied, and the provided Pixmaps are not disposed.</b>
+    ///     One or more images. The one closest to the system's desired size will be scaled.
+    ///     Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="PixelType.Format.RGBA8888" />
+    ///     is preferred so the images will not have to be copied and converted.
+    ///     <b>
+    ///         The chosen image
+    ///         is copied, and the provided Pixmaps are not disposed.
+    ///     </b>
     /// </param>
     public void SetIcon( params Pixmap[] images )
     {
@@ -354,8 +370,8 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Sets the icon that will be used in the window's title bar. Has no effect in macOS,
-    /// which doesn't use window icons.
+    ///     Sets the icon that will be used in the window's title bar. Has no effect in macOS,
+    ///     which doesn't use window icons.
     /// </summary>
     public static void SetIcon( GLFW.Window window, string[] imagePaths, PathTypes imageFileType )
     {
@@ -380,15 +396,18 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Sets the icon that will be used in the window's title bar. Has no effect in macOS,
-    /// which doesn't use window icons.
+    ///     Sets the icon that will be used in the window's title bar. Has no effect in macOS,
+    ///     which doesn't use window icons.
     /// </summary>
     /// <param name="window"> The applicable window. </param>
     /// <param name="images">
-    /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="PixelType.Format.RGBA8888"/>
-    /// is preferred so the images will not have to be copied and converted. <b>The chosen image
-    /// is copied, and the provided Pixmaps are not disposed.</b>
+    ///     One or more images. The one closest to the system's desired size will be scaled.
+    ///     Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="PixelType.Format.RGBA8888" />
+    ///     is preferred so the images will not have to be copied and converted.
+    ///     <b>
+    ///         The chosen image
+    ///         is copied, and the provided Pixmaps are not disposed.
+    ///     </b>
     /// </param>
     public static void SetIcon( GLFW.Window window, Pixmap[] images )
     {
@@ -432,7 +451,7 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
-    /// Initialises the <see cref="IApplicationListener"/>.
+    ///     Initialises the <see cref="IApplicationListener" />.
     /// </summary>
     private void InitialiseListener()
     {

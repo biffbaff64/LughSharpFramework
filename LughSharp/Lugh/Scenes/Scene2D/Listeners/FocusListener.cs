@@ -22,21 +22,20 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 
 /// <summary>
-/// Fired when an actor gains or loses keyboard or scroll focus. Can be
-/// cancelled to prevent losing or gaining focus.
+///     Fired when an actor gains or loses keyboard or scroll focus. Can be
+///     cancelled to prevent losing or gaining focus.
 /// </summary>
 [PublicAPI]
 public class FocusListener : IEventListener
 {
     /// <summary>
-    /// Try to handle the given event, if it is applicable.
+    ///     Try to handle the given event, if it is applicable.
     /// </summary>
     /// <returns>
-    /// True if the event should be considered as handled by scene2d.
+    ///     True if the event should be considered as handled by scene2d.
     /// </returns>
     public virtual bool Handle( Event e )
     {
@@ -59,7 +58,7 @@ public class FocusListener : IEventListener
 
     /// <param name="ev"></param>
     /// <param name="actor">
-    /// The event target, which is the actor that emitted the focus event.
+    ///     The event target, which is the actor that emitted the focus event.
     /// </param>
     /// <param name="focused"></param>
     public virtual void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
@@ -68,7 +67,7 @@ public class FocusListener : IEventListener
 
     /// <param name="ev"></param>
     /// <param name="actor">
-    /// The event target, which is the actor that emitted the focus event.
+    ///     The event target, which is the actor that emitted the focus event.
     /// </param>
     /// <param name="focused"></param>
     public virtual void ScrollFocusChanged( FocusEvent ev, Actor? actor, bool focused )
@@ -95,9 +94,9 @@ public class FocusListener : IEventListener
         // ====================================================================
 
         /// <summary>
-        /// The actor related to the event. When focus is lost, this is the new
-        /// actor being focused, or null. When focus is gained, this is the
-        /// previous actor that was focused, or null.
+        ///     The actor related to the event. When focus is lost, this is the new
+        ///     actor being focused, or null. When focus is gained, this is the
+        ///     previous actor that was focused, or null.
         /// </summary>
         public Actor? RelatedActor { get; set; }
 

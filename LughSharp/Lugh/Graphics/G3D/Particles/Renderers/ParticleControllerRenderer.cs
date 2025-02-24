@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Graphics.G3D.Particles.Renderers;
 
 public class ParticleControllerRenderer

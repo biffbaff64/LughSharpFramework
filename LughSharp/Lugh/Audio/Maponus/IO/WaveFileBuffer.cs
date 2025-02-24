@@ -27,7 +27,7 @@ using LughSharp.Lugh.Audio.Maponus.Decoding;
 namespace LughSharp.Lugh.Audio.Maponus.IO;
 
 /// <summary>
-/// Implements an Obuffer by writing the data to a file in RIFF WAVE format.
+///     Implements an Obuffer by writing the data to a file in RIFF WAVE format.
 /// </summary>
 [PublicAPI]
 public class WaveFileBuffer : AudioBase
@@ -47,11 +47,11 @@ public class WaveFileBuffer : AudioBase
 
         for ( var i = 0; i < numberOfChannels; ++i )
         {
-            _bufferp[ i ] = ( short ) i;
+            _bufferp[ i ] = ( short )i;
         }
 
         _outWave = new WaveFile();
-        _outWave.OpenForWrite( fileName, null, freq, 16, ( short ) _channels );
+        _outWave.OpenForWrite( fileName, null, freq, 16, ( short )_channels );
     }
 
     public WaveFileBuffer( int numberOfChannels, int freq, Stream stream )
@@ -62,20 +62,20 @@ public class WaveFileBuffer : AudioBase
 
         for ( var i = 0; i < numberOfChannels; ++i )
         {
-            _bufferp[ i ] = ( short ) i;
+            _bufferp[ i ] = ( short )i;
         }
 
         _outWave = new WaveFile();
-        _outWave.OpenForWrite( null!, stream, freq, 16, ( short ) _channels );
+        _outWave.OpenForWrite( null!, stream, freq, 16, ( short )_channels );
     }
 
     /// <summary>
-    /// Takes a 16 Bit PCM sample.
+    ///     Takes a 16 Bit PCM sample.
     /// </summary>
     protected override void Append( int channel, short valueRenamed )
     {
         _buffer[ _bufferp[ channel ] ] = valueRenamed;
-        _bufferp[ channel ]            = ( short ) ( _bufferp[ channel ] + _channels );
+        _bufferp[ channel ]            = ( short )( _bufferp[ channel ] + _channels );
     }
 
     public override void WriteBuffer( int val )
@@ -84,7 +84,7 @@ public class WaveFileBuffer : AudioBase
 
         for ( var i = 0; i < _channels; ++i )
         {
-            _bufferp[ i ] = ( short ) i;
+            _bufferp[ i ] = ( short )i;
         }
     }
 

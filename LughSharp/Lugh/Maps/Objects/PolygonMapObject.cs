@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Maps.Objects;
 public class PolygonMapObject : MapObject
 {
     /// <summary>
-    /// Creates empty polygon map object
+    ///     Creates empty polygon map object
     /// </summary>
     public PolygonMapObject()
         : this( [ ] )
@@ -38,7 +38,7 @@ public class PolygonMapObject : MapObject
     }
 
     /// <summary>
-    /// Creates a new polygon map object using the supplied vertices.
+    ///     Creates a new polygon map object using the supplied vertices.
     /// </summary>
     /// <param name="vertices"> polygon defining vertices (at least 3) </param>
     public PolygonMapObject( float[]? vertices )
@@ -47,7 +47,7 @@ public class PolygonMapObject : MapObject
     }
 
     /// <summary>
-    /// Creates a new polygon map object from the supplied polygon.
+    ///     Creates a new polygon map object from the supplied polygon.
     /// </summary>
     /// <param name="polygon">the polygon</param>
     public PolygonMapObject( Polygon polygon )

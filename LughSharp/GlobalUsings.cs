@@ -58,6 +58,7 @@ global using JetBrains.Annotations;
 // ============================================================================
 // OpenGL support
 global using DotGLFW;
+
 global using GLFW = DotGLFW;
 
 // ============================================================================

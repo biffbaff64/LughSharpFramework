@@ -27,11 +27,11 @@ using LughSharp.Lugh.Audio.Maponus.Support;
 namespace LughSharp.Lugh.Audio.Maponus.IO;
 
 /// <summary>
-/// public class allowing WaveFormat Access
+///     public class allowing WaveFormat Access
 /// </summary>
 /// <remarks>
-/// This class is marked as  to indicate to ReSharper that
-/// methods and members etc may be called externally.
+///     This class is marked as  to indicate to ReSharper that
+///     methods and members etc may be called externally.
 /// </remarks>
 [PublicAPI]
 public class WaveFile : RiffFile
@@ -46,7 +46,7 @@ public class WaveFile : RiffFile
     private long _pcmDataOffset; // offset of 'pc_data' in output file
 
     /// <summary>
-    /// Creates a new WaveFile instance.
+    ///     Creates a new WaveFile instance.
     /// </summary>
     public WaveFile()
     {
@@ -58,7 +58,7 @@ public class WaveFile : RiffFile
     }
 
     /// <summary>
-    /// Pass in either a FileName or a Stream.
+    ///     Pass in either a FileName or a Stream.
     /// </summary>
     public virtual int OpenForWrite( string filename,
                                      Stream? stream,
@@ -85,10 +85,10 @@ public class WaveFile : RiffFile
 
         sbyte[] theWave =
         [
-            ( sbyte ) SupportClass.Identity( 'W' ),
-            ( sbyte ) SupportClass.Identity( 'A' ),
-            ( sbyte ) SupportClass.Identity( 'V' ),
-            ( sbyte ) SupportClass.Identity( 'E' ),
+            ( sbyte )SupportClass.Identity( 'W' ),
+            ( sbyte )SupportClass.Identity( 'A' ),
+            ( sbyte )SupportClass.Identity( 'V' ),
+            ( sbyte )SupportClass.Identity( 'E' ),
         ];
 
         var retcode = Write( theWave, 4 );
@@ -115,7 +115,7 @@ public class WaveFile : RiffFile
     }
 
     /// <summary>
-    /// Write 16-bit audio
+    ///     Write 16-bit audio
     /// </summary>
     public virtual int WriteData( short[] data, int numData )
     {
@@ -178,7 +178,7 @@ public class WaveFile : RiffFile
     }
 
     /// <summary>
-    /// Open for write using another wave file's parameters...
+    ///     Open for write using another wave file's parameters...
     /// </summary>
     public virtual int OpenForWrite( string filename, WaveFile otherWave )
     {
@@ -216,7 +216,7 @@ public class WaveFormatChunkData
         NumChannels       = newNumChannels;
         NumBitsPerSample  = newBitsPerSample;
         NumAvgBytesPerSec = ( NumChannels * NumSamplesPerSec * NumBitsPerSample ) / 8;
-        NumBlockAlign     = ( short ) ( ( NumChannels * NumBitsPerSample ) / 8 );
+        NumBlockAlign     = ( short )( ( NumChannels * NumBitsPerSample ) / 8 );
     }
 }
 
@@ -239,9 +239,9 @@ public class WaveFormatChunk
     public virtual int VerifyValidity()
     {
         var ret = ( Header.CkId == RiffFile.FourCC( "fmt " ) )
-               && Data.NumChannels is 1 or 2
-               && ( Data.NumAvgBytesPerSec == ( ( Data.NumChannels * Data.NumSamplesPerSec * Data.NumBitsPerSample ) / 8 ) )
-               && ( Data.NumBlockAlign == ( ( Data.NumChannels * Data.NumBitsPerSample ) / 8 ) );
+                  && Data.NumChannels is 1 or 2
+                  && ( Data.NumAvgBytesPerSec == ( ( Data.NumChannels * Data.NumSamplesPerSec * Data.NumBitsPerSample ) / 8 ) )
+                  && ( Data.NumBlockAlign == ( ( Data.NumChannels * Data.NumBitsPerSample ) / 8 ) );
 
         return ret ? 1 : 0;
     }

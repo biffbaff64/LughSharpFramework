@@ -22,42 +22,21 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Assets;
 
 [PublicAPI]
 public class AssetDescriptor
 {
-    /// <summary>
-    /// The Type of asset ( Texture, Pixmap, Audio, Atlas etc ).
-    /// </summary>
-    public Type AssetType { get; set; }
-
-    /// <summary>
-    /// The asset name.
-    /// </summary>
-    public string AssetName { get; set; }
-
-    /// <summary>
-    /// Optional parameters for the asset loader.
-    /// </summary>
-    public AssetLoaderParameters? Parameters { get; set; }
-
-    /// <summary>
-    /// The file information for the asset.
-    /// </summary>
-    public FileInfo File { get; set; }
-
     // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// Creates an empty AssetDescriptor object.
-    /// Information will need providing before this object can be used.
-    /// <li> AssetType - The Type of asset ( Texture, TextureAtlas, Sound, Pixmap etc. ) </li>
-    /// <li> Filepath - The full path, including filename, of the asset. </li>
-    /// <li> Parameters - The <see cref="AssetLoaderParameters"/> to use. </li>
-    /// <li> File - A <see cref="FileInfo"/> object holding file/path information </li>
+    ///     Creates an empty AssetDescriptor object.
+    ///     Information will need providing before this object can be used.
+    ///     <li> AssetType - The Type of asset ( Texture, TextureAtlas, Sound, Pixmap etc. ) </li>
+    ///     <li> Filepath - The full path, including filename, of the asset. </li>
+    ///     <li> Parameters - The <see cref="AssetLoaderParameters" /> to use. </li>
+    ///     <li> File - A <see cref="FileInfo" /> object holding file/path information </li>
     /// </summary>
     public AssetDescriptor()
     {
@@ -68,7 +47,7 @@ public class AssetDescriptor
     }
 
     /// <summary>
-    /// Creates a new AssetDescriptor object.
+    ///     Creates a new AssetDescriptor object.
     /// </summary>
     /// <param name="filepath"> The full path, including filename, of the asset. </param>
     /// <param name="assetType"> The Type of asset ( Texture, Pixmap, Audio, Atlas etc ). </param>
@@ -84,7 +63,7 @@ public class AssetDescriptor
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AssetDescriptor"/> class.
+    ///     Initializes a new instance of the <see cref="AssetDescriptor" /> class.
     /// </summary>
     /// <param name="file"> The file information for the asset. </param>
     /// <param name="assetType"> The Type of asset ( Texture, Pixmap, Audio, Atlas etc ). </param>
@@ -96,6 +75,26 @@ public class AssetDescriptor
         AssetName  = file.FullName.Replace( '\\', '/' );
         Parameters = parameters;
     }
+
+    /// <summary>
+    ///     The Type of asset ( Texture, Pixmap, Audio, Atlas etc ).
+    /// </summary>
+    public Type AssetType { get; set; }
+
+    /// <summary>
+    ///     The asset name.
+    /// </summary>
+    public string AssetName { get; set; }
+
+    /// <summary>
+    ///     Optional parameters for the asset loader.
+    /// </summary>
+    public AssetLoaderParameters? Parameters { get; set; }
+
+    /// <summary>
+    ///     The file information for the asset.
+    /// </summary>
+    public FileInfo File { get; set; }
 
     /// <inheritdoc />
     public override string ToString()

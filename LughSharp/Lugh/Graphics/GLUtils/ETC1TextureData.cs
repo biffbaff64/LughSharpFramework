@@ -32,18 +32,6 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI]
 public class ETC1TextureData : ITextureData
 {
-    /// <inheritdoc />
-    public int Width { get; set; }
-
-    /// <inheritdoc />
-    public int Height { get; set; }
-
-    /// <inheritdoc />
-    public bool UseMipMaps { get; set; } = false;
-
-    /// <inheritdoc />
-    public bool IsPrepared { get; set; }
-
     // ========================================================================
 
     private readonly FileInfo?      _file;
@@ -65,6 +53,18 @@ public class ETC1TextureData : ITextureData
         _etc1      = new ETC1();
         UseMipMaps = useMipMaps;
     }
+
+    /// <inheritdoc />
+    public int Width { get; set; }
+
+    /// <inheritdoc />
+    public int Height { get; set; }
+
+    /// <inheritdoc />
+    public bool UseMipMaps { get; set; } = false;
+
+    /// <inheritdoc />
+    public bool IsPrepared { get; set; }
 
     /// <inheritdoc />
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
@@ -129,14 +129,14 @@ public class ETC1TextureData : ITextureData
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
                 GdxApi.Bindings.TexImage2D( target,
-                                     0,
-                                     pixmap.GLInternalPixelFormat,
-                                     pixmap.Width,
-                                     pixmap.Height,
-                                     0,
-                                     pixmap.GLPixelFormat,
-                                     pixmap.GLDataType,
-                                     ptr );
+                                            0,
+                                            pixmap.GLInternalPixelFormat,
+                                            pixmap.Width,
+                                            pixmap.Height,
+                                            0,
+                                            pixmap.GLPixelFormat,
+                                            pixmap.GLDataType,
+                                            ( IntPtr )ptr );
             }
 
             if ( UseMipMaps )
@@ -152,13 +152,13 @@ public class ETC1TextureData : ITextureData
             fixed ( void* ptr = &_data.CompressedData.ToArray()[ 0 ] )
             {
                 GdxApi.Bindings.CompressedTexImage2D( target,
-                                               0,
-                                               ETC1.ETC1_RGB8_OES,
-                                               Width,
-                                               Height,
-                                               0,
-                                               _data.CompressedData.Capacity - _data.DataOffset,
-                                               ptr );
+                                                      0,
+                                                      ETC1.ETC1_RGB8_OES,
+                                                      Width,
+                                                      Height,
+                                                      0,
+                                                      _data.CompressedData.Capacity - _data.DataOffset,
+                                                      ( IntPtr )ptr );
             }
 
             if ( UseMipMaps )

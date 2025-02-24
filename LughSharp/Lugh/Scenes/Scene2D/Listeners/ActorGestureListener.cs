@@ -27,8 +27,8 @@ using LughSharp.Lugh.Input;
 namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 
 /// <summary>
-/// Detects tap, long press, fling, pan, zoom, and pinch gestures on an actor.
-/// If there is only a need to detect tap, use <see cref="ClickListener"/>.
+///     Detects tap, long press, fling, pan, zoom, and pinch gestures on an actor.
+///     If there is only a need to detect tap, use <see cref="ClickListener" />.
 /// </summary>
 [PublicAPI]
 public class ActorGestureListener : IEventListener
@@ -41,33 +41,30 @@ public class ActorGestureListener : IEventListener
     private static readonly Vector2 _tmpCoords  = new();
     private static readonly Vector2 _tmpCoords2 = new();
 
-    public ActorGestureDetector Detector        { get; set; }
-    public Actor?               TouchDownTarget { get; set; }
-
     private Actor?      _actor;
     private InputEvent? _inputEvent;
 
     // ========================================================================
 
     /// <summary>
-    /// Constructs a new GestureListener for Actors.
+    ///     Constructs a new GestureListener for Actors.
     /// </summary>
     /// <param name="halfTapSquareSize">
-    /// Half width in pixels of the square around an initial touch event, see
-    /// <see cref="ActorGestureDetector.Tap(float, float, int, int)"/>.
+    ///     Half width in pixels of the square around an initial touch event, see
+    ///     <see cref="ActorGestureDetector.Tap(float, float, int, int)" />.
     /// </param>
     /// <param name="tapCountInterval">
-    /// Time in seconds that must pass for two touch down/up sequences to be detected
-    /// as consecutive taps.
+    ///     Time in seconds that must pass for two touch down/up sequences to be detected
+    ///     as consecutive taps.
     /// </param>
     /// <param name="longPressDuration">
-    /// Time in seconds that must pass for the detector to fire a
-    /// <see cref="ActorGestureDetector.LongPress(float, float)"/> event.
+    ///     Time in seconds that must pass for the detector to fire a
+    ///     <see cref="ActorGestureDetector.LongPress(float, float)" /> event.
     /// </param>
     /// <param name="maxFlingDelay">
-    /// No fling event is fired when the time in seconds the finger was dragged is larger
-    /// than this, see <see cref="ActorGestureDetector.Fling(float, float, int)"/>.
-    ///</param>
+    ///     No fling event is fired when the time in seconds the finger was dragged is larger
+    ///     than this, see <see cref="ActorGestureDetector.Fling(float, float, int)" />.
+    /// </param>
     public ActorGestureListener( float halfTapSquareSize = DEFAULT_HALF_TAP_SQUARE_SIZE,
                                  float tapCountInterval = DEFAULT_TAP_COUNT_INTERVAL,
                                  float longPressDuration = DEFAULT_LONG_PRESS_DURATION,
@@ -79,6 +76,9 @@ public class ActorGestureListener : IEventListener
                                              maxFlingDelay,
                                              this );
     }
+
+    public ActorGestureDetector Detector        { get; set; }
+    public Actor?               TouchDownTarget { get; set; }
 
     /// <summary>
     /// </summary>
@@ -163,8 +163,8 @@ public class ActorGestureListener : IEventListener
     }
 
     /// <summary>
-    /// If true is returned, additional gestures will not be triggered. No ev is
-    /// provided because this ev is triggered by time passing, not by an InputEvent.
+    ///     If true is returned, additional gestures will not be triggered. No ev is
+    ///     provided because this ev is triggered by time passing, not by an InputEvent.
     /// </summary>
     public virtual bool LongPress( Actor actor, float x, float y )
     {
@@ -182,7 +182,7 @@ public class ActorGestureListener : IEventListener
     }
 
     /// <summary>
-    /// The delta is the difference in stage coordinates since the last pan.
+    ///     The delta is the difference in stage coordinates since the last pan.
     /// </summary>
     public virtual void Pan( InputEvent ev, float x, float y, float deltaX, float deltaY )
     {

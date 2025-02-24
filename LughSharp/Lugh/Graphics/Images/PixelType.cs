@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Images;
@@ -50,7 +49,6 @@ public class PixelType
     // ========================================================================
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
@@ -67,12 +65,11 @@ public class PixelType
             Format.RGB888         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
             Format.RGBA8888       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
 
-            var _ => throw new GdxRuntimeException( "Unknown Format: " + format )
+            var _ => throw new GdxRuntimeException( "Unknown Format: " + format ),
         };
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
@@ -88,17 +85,17 @@ public class PixelType
             Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => Format.RGB888,
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => Format.RGBA8888,
 
-            var _ => throw new GdxRuntimeException( "Unknown Gdx2DPixmap Format: " + format )
+            var _ => throw new GdxRuntimeException( "Unknown Gdx2DPixmap Format: " + format ),
         };
     }
 
-    /// <inheritdoc cref="PixmapFormat.ToGLPixelFormat(LughSharp.Lugh.Graphics.Images.PixelType.Format)"/>
+    /// <inheritdoc cref="PixmapFormat.ToGLPixelFormat(LughSharp.Lugh.Graphics.Images.PixelType.Format)" />
     public static int ToGLPixelFormat( Format format )
     {
         return PixmapFormat.ToGLPixelFormat( ToGdx2DPixmapPixelFormat( format ) );
     }
 
-    /// <inheritdoc cref="PixmapFormat.ToGLDataType(Format)"/>
+    /// <inheritdoc cref="PixmapFormat.ToGLDataType(Format)" />
     public static int ToGLDataType( Format format )
     {
         return PixmapFormat.ToGLDataType( ToGdx2DPixmapPixelFormat( format ) );

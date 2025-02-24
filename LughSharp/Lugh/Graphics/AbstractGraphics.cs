@@ -30,14 +30,14 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public abstract class AbstractGraphics : IGraphics
 {
-    public IGraphics.BufferFormatDescriptor BufferFormat { get; set; } = null!;
+    public int                              LogicalWidth          { get; set; } = 0;
+    public int                              LogicalHeight         { get; set; } = 0;
+    public Color                            WindowBackgroundColor { get; set; } = Color.Blue;
+    public IGraphics.BufferFormatDescriptor BufferFormat          { get; set; } = null!;
 
-    public int    BackBufferWidth       { get; set; } = 0;
-    public int    BackBufferHeight      { get; set; } = 0;
-    public int    LogicalWidth          { get; set; } = 0;
-    public int    LogicalHeight         { get; set; } = 0;
-    public Window CurrentContext        { get; set; } = null!;
-    public Color  WindowBackgroundColor { get; set; } = Color.Blue;
+    public int    BackBufferWidth  { get; set; } = 0;
+    public int    BackBufferHeight { get; set; } = 0;
+    public Window CurrentContext   { get; set; } = null!;
 
     // ========================================================================
 
@@ -52,105 +52,114 @@ public abstract class AbstractGraphics : IGraphics
     // ========================================================================
 
     /// <summary>
-    /// Returns the time span between the current frame and the last frame
-    /// in seconds, without smoothing.
+    ///     Returns the time span between the current frame and the last frame
+    ///     in seconds, without smoothing.
     /// </summary>
-    public virtual float GetRawDeltaTime() => DeltaTime;
+    public virtual float GetRawDeltaTime()
+    {
+        return DeltaTime;
+    }
 
     /// <summary>
-    /// This is a scaling factor for the Density Independent Pixel unit, following the convention
-    /// where one DIP is one pixel on an approximately 160 dpi screen. Thus on a 160dpi screen this
-    /// density value will be 1; on a 120 dpi screen it would be .75; etc.
+    ///     This is a scaling factor for the Density Independent Pixel unit, following the convention
+    ///     where one DIP is one pixel on an approximately 160 dpi screen. Thus on a 160dpi screen this
+    ///     density value will be 1; on a 120 dpi screen it would be .75; etc.
     /// </summary>
     /// <returns>the Density Independent Pixel factor of the display.</returns>
-    public virtual float GetDensity() => GetPpiXY().X / 160f;
+    public virtual float GetDensity()
+    {
+        return GetPpiXY().X / 160f;
+    }
 
     /// <summary>
-    /// Returns the amount of pixels per logical pixel (point).
+    ///     Returns the amount of pixels per logical pixel (point).
     /// </summary>
-    float IGraphics.GetBackBufferScale() => BackBufferWidth / ( float )Width;
+    float IGraphics.GetBackBufferScale()
+    {
+        return BackBufferWidth / ( float )Width;
+    }
 
     // ========================================================================
     // 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract IGraphics.DisplayMode GetDisplayMode();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract IGraphics.DisplayMode GetDisplayMode( GLFW.Monitor monitor );
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract IGraphics.DisplayMode[] GetDisplayModes();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract IGraphics.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
 
     // ========================================================================
     // Window properties
-    
-    /// <inheritdoc/>
+
+    /// <inheritdoc />
     public abstract bool SetWindowedMode( int width, int height );
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract void SetUndecorated( bool undecorated );
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract void SetResizable( bool resizable );
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract void SetVSync( bool vsync );
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract void SetForegroundFps( int fps );
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract bool SetFullscreenMode( IGraphics.DisplayMode displayMode );
 
     // ========================================================================
     // 
-    
-    /// <inheritdoc/>
+
+    /// <inheritdoc />
     public abstract bool SupportsExtension( string extension );
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract bool SupportsDisplayModeChange();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract void RequestRendering();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract int GetSafeInsetLeft();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract int GetSafeInsetTop();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract int GetSafeInsetBottom();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract int GetSafeInsetRight();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract long GetFrameID();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract int GetFramesPerSecond();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract (float X, float Y) GetPpcXY();
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract (float X, float Y) GetPpiXY();
 
     // ========================================================================
     // Cursor / SystemCursor
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract ICursor NewCursor( Pixmap pixmap, int xHotspot, int yHotspot );
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract void SetCursor( ICursor cursor );
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public abstract void SetSystemCursor( ICursor.SystemCursor systemCursor );
 }

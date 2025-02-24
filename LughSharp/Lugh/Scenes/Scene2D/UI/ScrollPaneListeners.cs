@@ -105,8 +105,8 @@ public partial class ScrollPane
             }
 
             if ( _parent!.ScrollBarTouch
-              && _parent!.ScrollX
-              && _parent!._hScrollBounds.Contains( x, y ) )
+                 && _parent!.ScrollX
+                 && _parent!._hScrollBounds.Contains( x, y ) )
             {
                 inputEvent?.Stop();
                 _parent!.SetScrollbarsVisible( true );
@@ -127,8 +127,8 @@ public partial class ScrollPane
             }
 
             if ( _parent!.ScrollBarTouch
-              && _parent!.ScrollY
-              && _parent!._vScrollBounds.Contains( x, y ) )
+                 && _parent!.ScrollY
+                 && _parent!._vScrollBounds.Contains( x, y ) )
             {
                 inputEvent?.Stop();
                 _parent!.SetScrollbarsVisible( true );
@@ -183,7 +183,7 @@ public partial class ScrollPane
                 scrollH         = Math.Max( _parent!._hScrollBounds.X, scrollH );
 
                 scrollH = Math.Min( ( _parent!._hScrollBounds.X + _parent!._hScrollBounds.Width )
-                                  - _parent!._hKnobBounds.Width,
+                                    - _parent!._hKnobBounds.Width,
                                     scrollH );
 
                 var total = _parent!._hScrollBounds.Width - _parent!._hKnobBounds.Width;
@@ -204,7 +204,7 @@ public partial class ScrollPane
                 scrollV         = Math.Max( _parent!._vScrollBounds.Y, scrollV );
 
                 scrollV = Math.Min( ( _parent!._vScrollBounds.Y + _parent!._vScrollBounds.Height )
-                                  - _parent!._vKnobBounds.Height,
+                                    - _parent!._vKnobBounds.Height,
                                     scrollV );
 
                 var total = _parent!._vScrollBounds.Height - _parent!._vKnobBounds.Height;
@@ -294,7 +294,7 @@ public partial class ScrollPane
 
             if ( base.Handle( inputEvent ) )
             {
-                if ( ( ( InputEvent ) inputEvent ).Type == InputEvent.EventType.TouchDown )
+                if ( ( ( InputEvent )inputEvent ).Type == InputEvent.EventType.TouchDown )
                 {
                     _parent!._flingTimer = 0;
                 }

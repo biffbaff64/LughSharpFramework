@@ -28,12 +28,57 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-/// A color class, holding the r, g, b and alpha component as floats in the range [0,1].
-/// All methods perform clamping on the internal values after execution.
+///     A color class, holding the r, g, b and alpha component as floats in the range [0,1].
+///     All methods perform clamping on the internal values after execution.
 /// </summary>
-[PublicAPI, DebuggerDisplay( "RGBADebugString" )]
+[PublicAPI]
+[DebuggerDisplay( "RGBADebugString" )]
 public sealed class Color : ICloneable, IEquatable< Color >
 {
+    // ========================================================================
+    // ========================================================================
+
+    private static Color _color = new();
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    ///     Debug string for DebuggerDisplay attribute.
+    /// </summary>
+    internal string RGBADebugString => $"R: {R}. G: {G}. B: {B}. A: {A}";
+
+    // ========================================================================
+    // ========================================================================
+
+    #region From ICloneable Interface
+
+    /// <inheritdoc />
+    public object Clone()
+    {
+        return new Color( this );
+    }
+
+    #endregion From ICloneable Interface
+
+    /// <summary>
+    ///     Debugs the various methods and properties for this class.
+    /// </summary>
+    public void Debug()
+    {
+        Logger.Debug( RGBADebugString );
+        Logger.Debug( $"PackedColorABGR: {ABGRPackedColor} :: {ABGRPackedColor:X}" );
+        Logger.Debug( $"PackedColorRGBA: {RGBAPackedColor} :: {RGBAPackedColor:X}" );
+        Logger.Debug( $"ABGRFloatPack: {ABGRFloatPack}" );
+        Logger.Debug( $"RGBAFloatPack: {RGBAFloatPack}" );
+        Logger.Debug( $"RGBA8888ToInt(R, G, B, A): {RGBA8888ToInt( R, G, B, A ):X}" );
+        Logger.Debug( $"ToFloatBitsABGR(): {ToFloatBitsABGR()}" );
+        Logger.Debug( $"ToFloatBitsRGBA(): {ToFloatBitsRGBA()}" );
+        Logger.Debug( $"ToFloatBitsABGR(F,F,F,F): {ToFloatBitsABGR( A, B, G, R )}" );
+        Logger.Debug( $"ToFloatBitsRGBA(F,F,F,F): {ToFloatBitsRGBA( R, G, B, A )}" );
+        Logger.Divider();
+    }
+
     #region colour values
 
     public static readonly Color Red        = new( 0xff0000ff );
@@ -72,7 +117,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     public static readonly Color Maroon     = new( 0xb03060ff );
 
     /// <summary>
-    /// Convenience for frequently used <tt>White.ToFloatBits()</tt>
+    ///     Convenience for frequently used <tt>White.ToFloatBits()</tt>
     /// </summary>
     public static float WhiteFloatBits => White.ToFloatBitsABGR();
 
@@ -84,42 +129,42 @@ public sealed class Color : ICloneable, IEquatable< Color >
     #region Colour Components
 
     /// <summary>
-    /// Red Color Component
+    ///     Red Color Component
     /// </summary>
     public float R { get; set; }
 
     /// <summary>
-    /// Green Color Component
+    ///     Green Color Component
     /// </summary>
     public float G { get; set; }
 
     /// <summary>
-    /// Blue Color Component
+    ///     Blue Color Component
     /// </summary>
     public float B { get; set; }
 
     /// <summary>
-    /// Alpha Color Component
+    ///     Alpha Color Component
     /// </summary>
     public float A { get; set; }
 
     /// <summary>
-    /// Color Components packed into a <b>uint</b>, stored in RGBA format.
+    ///     Color Components packed into a <b>uint</b>, stored in RGBA format.
     /// </summary>
     public uint RGBAPackedColor { get; private set; }
 
     /// <summary>
-    /// Color Components packed into a <b>uint</b>, stored in ABGR format.
+    ///     Color Components packed into a <b>uint</b>, stored in ABGR format.
     /// </summary>
     public uint ABGRPackedColor { get; private set; }
 
     /// <summary>
-    /// Color Components packed into a <b>float</b>, stored in RGBA format.
+    ///     Color Components packed into a <b>float</b>, stored in RGBA format.
     /// </summary>
     public double RGBAFloatPack { get; private set; }
 
     /// <summary>
-    /// Color Components packed into a <b>float</b>, stored in ABGR format.
+    ///     Color Components packed into a <b>float</b>, stored in ABGR format.
     /// </summary>
     public double ABGRFloatPack { get; private set; }
 
@@ -128,37 +173,32 @@ public sealed class Color : ICloneable, IEquatable< Color >
     // ========================================================================
     // ========================================================================
 
-    private static Color _color = new();
-
-    // ========================================================================
-    // ========================================================================
-
     #region constructors
 
     /// <summary>
-    /// Constructor, sets all the components to 0.
+    ///     Constructor, sets all the components to 0.
     /// </summary>
     public Color() : this( 0, 0, 0, 0 )
     {
     }
 
     /// <summary>
-    /// Constructor, sets the Color components using the specified integer value in
-    /// the format RGBA8888. This is inverse to the rgba8888(r, g, b, a) method.
+    ///     Constructor, sets the Color components using the specified integer value in
+    ///     the format RGBA8888. This is inverse to the rgba8888(r, g, b, a) method.
     /// </summary>
     /// <param name="rgba8888"> An uint color value in RGBA8888 format. </param>
     public Color( uint rgba8888 )
     {
-        this.R = ( float )( ( rgba8888 & 0xff000000 ) >> 24 ) / 255.0f;
-        this.G = ( float )( ( rgba8888 & 0x00ff0000 ) >> 16 ) / 255.0f;
-        this.B = ( float )( ( rgba8888 & 0x0000ff00 ) >> 8 ) / 255.0f;
-        this.A = ( float )( rgba8888 & 0x000000ff ) / 255.0f;
+        R = ( float )( ( rgba8888 & 0xff000000 ) >> 24 ) / 255.0f;
+        G = ( float )( ( rgba8888 & 0x00ff0000 ) >> 16 ) / 255.0f;
+        B = ( float )( ( rgba8888 & 0x0000ff00 ) >> 8 ) / 255.0f;
+        A = ( float )( rgba8888 & 0x000000ff ) / 255.0f;
 
         Clamp();
     }
 
     /// <summary>
-    /// Constructor, sets the components of the color.
+    ///     Constructor, sets the components of the color.
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -166,16 +206,16 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="a"> Alpha component </param>
     public Color( float r, float g, float b, float a )
     {
-        this.R = r;
-        this.G = g;
-        this.B = b;
-        this.A = a;
+        R = r;
+        G = g;
+        B = b;
+        A = a;
 
         Clamp();
     }
 
     /// <summary>
-    /// Constructs a new color using the components from the supplied color.
+    ///     Constructs a new color using the components from the supplied color.
     /// </summary>
     public Color( Color color )
         : this( color.R, color.G, color.B, color.A )
@@ -190,21 +230,21 @@ public sealed class Color : ICloneable, IEquatable< Color >
     #region general methods
 
     /// <summary>
-    /// Sets this colors components using the components from the supplied color.
+    ///     Sets this colors components using the components from the supplied color.
     /// </summary>
     /// <returns> This Color for chaining. </returns>
     public Color Set( Color color )
     {
-        this.R = color.R;
-        this.G = color.G;
-        this.B = color.B;
-        this.A = color.A;
+        R = color.R;
+        G = color.G;
+        B = color.B;
+        A = color.A;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Sets this color's component values through an integer representation.
+    ///     Sets this color's component values through an integer representation.
     /// </summary>
     /// <param name="rgba"> The integer representation. </param>
     /// <returns> This color for chaining. </returns>
@@ -214,16 +254,16 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
         RGBA8888ToColor( ref color, rgba );
 
-        this.R = color.R;
-        this.G = color.G;
-        this.B = color.B;
-        this.A = color.A;
+        R = color.R;
+        G = color.G;
+        B = color.B;
+        A = color.A;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Sets this colors components using the supplied r,g,b,a components.
+    ///     Sets this colors components using the supplied r,g,b,a components.
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -232,46 +272,46 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns> This Color for chaining. </returns>
     public Color Set( float r, float g, float b, float a )
     {
-        this.R = r;
-        this.G = g;
-        this.B = b;
-        this.A = a;
+        R = r;
+        G = g;
+        B = b;
+        A = a;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Multiplies each of this color objects components by the corresponding components
-    /// in the supplied Color.
+    ///     Multiplies each of this color objects components by the corresponding components
+    ///     in the supplied Color.
     /// </summary>
     /// <param name="color"> The supplied color. </param>
     /// <returns> This Color for chaining. </returns>
     public Color Mul( Color color )
     {
-        this.R *= color.R;
-        this.G *= color.G;
-        this.B *= color.B;
-        this.A *= color.A;
+        R *= color.R;
+        G *= color.G;
+        B *= color.B;
+        A *= color.A;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Multiplies the colour components by the supplied value.
+    ///     Multiplies the colour components by the supplied value.
     /// </summary>
     /// <returns> This Color for chaining. </returns>
     public Color Mul( float value )
     {
-        this.R *= value;
-        this.G *= value;
-        this.B *= value;
-        this.A *= value;
+        R *= value;
+        G *= value;
+        B *= value;
+        A *= value;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Multiplies each of this color objects components by the corresponding supplied components.
+    ///     Multiplies each of this color objects components by the corresponding supplied components.
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -280,32 +320,32 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns>This Color for chaining.</returns>
     public Color Mul( float r, float g, float b, float a )
     {
-        this.R *= r;
-        this.G *= g;
-        this.B *= b;
-        this.A *= a;
+        R *= r;
+        G *= g;
+        B *= b;
+        A *= a;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Adds the components from the supplied Color to the corresponding
-    /// components of this color.
+    ///     Adds the components from the supplied Color to the corresponding
+    ///     components of this color.
     /// </summary>
     /// <param name="color"> The Color to add. </param>
     /// <returns> This Color for chaining. </returns>
     public Color Add( Color color )
     {
-        this.R += color.R;
-        this.G += color.G;
-        this.B += color.B;
-        this.A += color.A;
+        R += color.R;
+        G += color.G;
+        B += color.B;
+        A += color.A;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Adds the supplied Color components to the corresponding components of this Color.
+    ///     Adds the supplied Color components to the corresponding components of this Color.
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -314,32 +354,32 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns> This Color for chaining. </returns>
     public Color Add( float r, float g, float b, float a )
     {
-        this.R += r;
-        this.G += g;
-        this.B += b;
-        this.A += a;
+        R += r;
+        G += g;
+        B += b;
+        A += a;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Subtracts the elements in the supplied Color from the equivalent
-    /// elements in this Color.
+    ///     Subtracts the elements in the supplied Color from the equivalent
+    ///     elements in this Color.
     /// </summary>
     /// <param name="color"> The color to subtract. </param>
     /// <returns> This Color for chaining. </returns>
     public Color Sub( Color color )
     {
-        this.R -= color.R;
-        this.G -= color.G;
-        this.B -= color.B;
-        this.A -= color.A;
+        R -= color.R;
+        G -= color.G;
+        B -= color.B;
+        A -= color.A;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Subtracts the supplied elements from the equivalent elements in this Color.
+    ///     Subtracts the supplied elements from the equivalent elements in this Color.
     /// </summary>
     /// <param name="r"> Red component. </param>
     /// <param name="g"> Green component. </param>
@@ -348,75 +388,75 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns> This Color for chaining. </returns>
     public Color Sub( float r, float g, float b, float a )
     {
-        this.R -= r;
-        this.G -= g;
-        this.B -= b;
-        this.A -= a;
+        R -= r;
+        G -= g;
+        B -= b;
+        A -= a;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Multiplies the RGB values by the alpha.
+    ///     Multiplies the RGB values by the alpha.
     /// </summary>
     /// <returns>This color for chaining.</returns>
     public Color PremultiplyAlpha()
     {
-        this.R *= A;
-        this.G *= A;
-        this.B *= A;
+        R *= A;
+        G *= A;
+        B *= A;
 
         return Clamp();
     }
 
     /// <summary>
-    /// Adds the components of the supplied Color object to the components
-    /// of this Color object and returns the result as a new Color object.
+    ///     Adds the components of the supplied Color object to the components
+    ///     of this Color object and returns the result as a new Color object.
     /// </summary>
     public Color AddNew( Color color )
     {
-        return new Color( this.R + color.R,
-                          this.G + color.G,
-                          this.B + color.B,
-                          this.A + color.A ).Clamp();
+        return new Color( R + color.R,
+                          G + color.G,
+                          B + color.B,
+                          A + color.A ).Clamp();
     }
 
     /// <summary>
-    /// Subtracts the components of the supplied Color object from the
-    /// components of this Color object and returns the result as a new
-    /// Color object.
+    ///     Subtracts the components of the supplied Color object from the
+    ///     components of this Color object and returns the result as a new
+    ///     Color object.
     /// </summary>
     public Color SubNew( Color color )
     {
-        return new Color( this.R - color.R,
-                          this.G - color.G,
-                          this.B - color.B,
-                          this.A - color.A ).Clamp();
+        return new Color( R - color.R,
+                          G - color.G,
+                          B - color.B,
+                          A - color.A ).Clamp();
     }
 
     /// <summary>
-    /// Multiplies the components of this Color object by the components
-    /// of the supplied Color object and returns the result as a new Color
-    /// object.
+    ///     Multiplies the components of this Color object by the components
+    ///     of the supplied Color object and returns the result as a new Color
+    ///     object.
     /// </summary>
     public Color MulNew( Color color )
     {
-        return new Color( this.R * color.R,
-                          this.G * color.G,
-                          this.B * color.B,
-                          this.A * color.A ).Clamp();
+        return new Color( R * color.R,
+                          G * color.G,
+                          B * color.B,
+                          A * color.A ).Clamp();
     }
 
     /// <summary>
-    /// Clamps this Colors RGBA components to a valid range [0 - 1]
+    ///     Clamps this Colors RGBA components to a valid range [0 - 1]
     /// </summary>
     /// <returns> This Color for chaining. </returns>
     private Color Clamp()
     {
-        R = R < 0f ? 0f : ( R > 1f ? 1f : R );
-        G = G < 0f ? 0f : ( G > 1f ? 1f : G );
-        B = B < 0f ? 0f : ( B > 1f ? 1f : B );
-        A = A < 0f ? 0f : ( A > 1f ? 1f : A );
+        R = R < 0f ? 0f : R > 1f ? 1f : R;
+        G = G < 0f ? 0f : G > 1f ? 1f : G;
+        B = B < 0f ? 0f : B > 1f ? 1f : B;
+        A = A < 0f ? 0f : A > 1f ? 1f : A;
 
         RGBAPackedColor = RGBA8888( R, G, B, A );
         ABGRPackedColor = ABGR8888( A, B, G, R );
@@ -437,9 +477,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Linearly interpolates between this color and the target color by
-    /// 'interpolationCoefficient' which is in the range [0,1].
-    /// The result is stored in this color.
+    ///     Linearly interpolates between this color and the target color by
+    ///     'interpolationCoefficient' which is in the range [0,1].
+    ///     The result is stored in this color.
     /// </summary>
     /// <param name="target"> The target color. </param>
     /// <param name="interpolationCoefficient"> This value must be in the range [0, 1] </param>
@@ -454,18 +494,18 @@ public sealed class Color : ICloneable, IEquatable< Color >
                 ( nameof( interpolationCoefficient ), "Interpolation coefficient must be between 0f and 1f." );
         }
 
-        this.R += interpolationCoefficient * ( target.R - this.R );
-        this.G += interpolationCoefficient * ( target.G - this.G );
-        this.B += interpolationCoefficient * ( target.B - this.B );
-        this.A += interpolationCoefficient * ( target.A - this.A );
+        R += interpolationCoefficient * ( target.R - R );
+        G += interpolationCoefficient * ( target.G - G );
+        B += interpolationCoefficient * ( target.B - B );
+        A += interpolationCoefficient * ( target.A - A );
 
         return Clamp();
     }
 
     /// <summary>
-    /// Linearly interpolates between this color and the target color by
-    /// 'interpolationCoefficient' which is in the range [0,1].
-    /// The result is stored in this color.
+    ///     Linearly interpolates between this color and the target color by
+    ///     'interpolationCoefficient' which is in the range [0,1].
+    ///     The result is stored in this color.
     /// </summary>
     /// <param name="r"> Red component. </param>
     /// <param name="g"> Green component. </param>
@@ -481,10 +521,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
                                                    "Interpolation coefficient must be between 0f and 1f." );
         }
 
-        this.R += interpolationCoefficient * ( r - this.R );
-        this.G += interpolationCoefficient * ( g - this.G );
-        this.B += interpolationCoefficient * ( b - this.B );
-        this.A += interpolationCoefficient * ( a - this.A );
+        R += interpolationCoefficient * ( r - R );
+        G += interpolationCoefficient * ( g - G );
+        B += interpolationCoefficient * ( b - B );
+        A += interpolationCoefficient * ( a - A );
 
         return Clamp();
     }
@@ -495,7 +535,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     // ========================================================================
 
     /// <summary>
-    /// Parses a hex color string and assigns the color values to the provided Color object.
+    ///     Parses a hex color string and assigns the color values to the provided Color object.
     /// </summary>
     /// <param name="hex">The hex color string, which can optionally start with '#'.</param>
     /// <param name="color">The Color object to assign the parsed values to.</param>
@@ -535,7 +575,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns a new color from a hex string with the format <b>RRGGBBAA</b>.
+    ///     Returns a new color from a hex string with the format <b>RRGGBBAA</b>.
     /// </summary>
     /// <param name="hex"></param>
     /// <returns></returns>
@@ -547,7 +587,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Parses a hex component (2 characters) to a float value between 0 and 1.
+    ///     Parses a hex component (2 characters) to a float value between 0 and 1.
     /// </summary>
     /// <param name="hexComponent">The hex component to parse.</param>
     /// <returns>The parsed float value.</returns>
@@ -559,7 +599,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given Alpha value as a 32-bit uint.
+    ///     Returns the given Alpha value as a 32-bit uint.
     /// </summary>
     /// <param name="alpha"> The Alpha value. </param>
     /// <returns> The uint result. </returns>
@@ -569,7 +609,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="luminance"></param>
     /// <param name="alpha"></param>
@@ -593,20 +632,20 @@ public sealed class Color : ICloneable, IEquatable< Color >
     #region RGBA Methods
 
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR and then
-    /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
-    /// between 0-254 to avoid using float bits in the NaN range.
-    /// <para>
-    /// Note: Converting a color to a float and back can be lossy for alpha.
-    /// </para>
+    ///     Packs the color components into a 32-bit integer with the format ABGR and then
+    ///     converts it to a float. Alpha is compressed from 0-255 to use only even numbers
+    ///     between 0-254 to avoid using float bits in the NaN range.
+    ///     <para>
+    ///         Note: Converting a color to a float and back can be lossy for alpha.
+    ///     </para>
     /// </summary>
     /// <returns> The resulting float. </returns>
-    /// <seealso cref="NumberUtils.UIntToFloatColor"/>
+    /// <seealso cref="NumberUtils.UIntToFloatColor" />
     public float ToFloatBitsRGBA()
     {
-        var r = ( ( uint )( 255f * R ) << 24 );
-        var g = ( ( uint )( 255f * G ) << 16 );
-        var b = ( ( uint )( 255f * B ) << 8 );
+        var r = ( uint )( 255f * R ) << 24;
+        var g = ( uint )( 255f * G ) << 16;
+        var b = ( uint )( 255f * B ) << 8;
         var a = ( uint )( 255f * A );
 
         var intBits = ( uint )( r | g | b | a );
@@ -615,12 +654,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR and then
-    /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
-    /// between 0-254 to avoid using float bits in the NaN range.
-    /// <para>
-    /// Note: Converting a color to a float and back can be lossy for alpha.
-    /// </para>
+    ///     Packs the color components into a 32-bit integer with the format ABGR and then
+    ///     converts it to a float. Alpha is compressed from 0-255 to use only even numbers
+    ///     between 0-254 to avoid using float bits in the NaN range.
+    ///     <para>
+    ///         Note: Converting a color to a float and back can be lossy for alpha.
+    ///     </para>
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -629,9 +668,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns></returns>
     public static float ToFloatBitsRGBA( float r, float g, float b, float a )
     {
-        var rf = ( ( uint )( 255f * r ) << 24 );
-        var gf = ( ( uint )( 255f * g ) << 16 );
-        var bf = ( ( uint )( 255f * b ) << 8 );
+        var rf = ( uint )( 255f * r ) << 24;
+        var gf = ( uint )( 255f * g ) << 16;
+        var bf = ( uint )( 255f * b ) << 8;
         var af = ( uint )( 255f * a );
 
         var intBits = ( uint )( rf | gf | bf | af );
@@ -640,19 +679,19 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format RGBA.
+    ///     Packs the color components into a 32-bit integer with the format RGBA.
     /// </summary>
     /// <returns> the packed color as a 32-bit int. </returns>
     public uint PackedColorRGBA()
     {
-        return ( ( ( uint )( 255f * R ) ) << 24 )
-               | ( ( ( uint )( 255f * G ) ) << 16 )
-               | ( ( ( uint )( 255f * B ) ) << 8 )
-               | ( ( uint )( 255f * A ) );
+        return ( ( uint )( 255f * R ) << 24 )
+               | ( ( uint )( 255f * G ) << 16 )
+               | ( ( uint )( 255f * B ) << 8 )
+               | ( uint )( 255f * A );
     }
 
     /// <summary>
-    /// Converts the supplied color components to an <b>uint</b>.
+    ///     Converts the supplied color components to an <b>uint</b>.
     /// </summary>
     /// <param name="r"> Red component. </param>
     /// <param name="g"> Green component. </param>
@@ -661,19 +700,19 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns></returns>
     public uint RGBA8888ToInt( float r, float g, float b, float a )
     {
-        return ( ( ( uint )( 255f * r ) ) << 24 )
-               | ( ( ( uint )( 255f * g ) ) << 16 )
-               | ( ( ( uint )( 255f * b ) ) << 8 )
-               | ( ( uint )( 255f * a ) );
+        return ( ( uint )( 255f * r ) << 24 )
+               | ( ( uint )( 255f * g ) << 16 )
+               | ( ( uint )( 255f * b ) << 8 )
+               | ( uint )( 255f * a );
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 4  : Blue component</li>
-    /// <li>Bits  5 - 10 : Green component</li>
-    /// <li>Bits 11 - 15 : Red component</li>
-    /// <li>Bits 16 - 31 : Undefined</li>
+    ///     Returns the given <see cref="Color" /> as a 32-bit uint in the
+    ///     following format:-
+    ///     <li>Bits  0 - 4  : Blue component</li>
+    ///     <li>Bits  5 - 10 : Green component</li>
+    ///     <li>Bits 11 - 15 : Red component</li>
+    ///     <li>Bits 16 - 31 : Undefined</li>
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -684,13 +723,13 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given R.G.B colour components as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 3  : Alpha component</li>
-    /// <li>Bits  4 - 7  : Blue component</li>
-    /// <li>Bits  8 - 11 : Green component</li>
-    /// <li>Bits 12 - 15 : Red component</li>
-    /// <li>Bits 16 - 31 : Undefined</li>
+    ///     Returns the given R.G.B colour components as a 32-bit uint in the
+    ///     following format:-
+    ///     <li>Bits  0 - 3  : Alpha component</li>
+    ///     <li>Bits  4 - 7  : Blue component</li>
+    ///     <li>Bits  8 - 11 : Green component</li>
+    ///     <li>Bits 12 - 15 : Red component</li>
+    ///     <li>Bits 16 - 31 : Undefined</li>
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -705,12 +744,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given R.G.B colour components as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Blue component</li>
-    /// <li>Bits  8 - 15 : Green component</li>
-    /// <li>Bits 16 - 23 : Red component</li>
-    /// <li>Bits 24 - 31 : Undefined</li>
+    ///     Returns the given R.G.B colour components as a 32-bit uint in the
+    ///     following format:-
+    ///     <li>Bits  0 - 7  : Blue component</li>
+    ///     <li>Bits  8 - 15 : Green component</li>
+    ///     <li>Bits 16 - 23 : Red component</li>
+    ///     <li>Bits 24 - 31 : Undefined</li>
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -721,12 +760,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given seperate colour components as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Alpha component</li>
-    /// <li>Bits  8 - 15 : Blue component</li>
-    /// <li>Bits 16 - 23 : Green component</li>
-    /// <li>Bits 24 - 31 : Red component</li>
+    ///     Returns the given seperate colour components as a 32-bit uint in the
+    ///     following format:-
+    ///     <li>Bits  0 - 7  : Alpha component</li>
+    ///     <li>Bits  8 - 15 : Blue component</li>
+    ///     <li>Bits 16 - 23 : Green component</li>
+    ///     <li>Bits 24 - 31 : Red component</li>
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -741,12 +780,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 4  : Blue component</li>
-    /// <li>Bits  5 - 10 : Green component</li>
-    /// <li>Bits 11 - 15 : Red component</li>
-    /// <li>Bits 16 - 31 : Undefined</li>
+    ///     Returns the given <see cref="Color" /> as a 32-bit uint in the
+    ///     following format:-
+    ///     <li>Bits  0 - 4  : Blue component</li>
+    ///     <li>Bits  5 - 10 : Green component</li>
+    ///     <li>Bits 11 - 15 : Red component</li>
+    ///     <li>Bits 16 - 31 : Undefined</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
     public static uint RGB565( Color color )
@@ -757,13 +796,13 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 16-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 3  : Alpha component</li>
-    /// <li>Bits  4 - 7  : Blue component</li>
-    /// <li>Bits  8 - 11 : Green component</li>
-    /// <li>Bits 12 - 15 : Red component</li>
-    /// <li>Bits 16 - 31 : Undefined</li>
+    ///     Returns the given <see cref="Color" /> as a 16-bit uint in the
+    ///     following format:-
+    ///     <li>Bits  0 - 3  : Alpha component</li>
+    ///     <li>Bits  4 - 7  : Blue component</li>
+    ///     <li>Bits  8 - 11 : Green component</li>
+    ///     <li>Bits 12 - 15 : Red component</li>
+    ///     <li>Bits 16 - 31 : Undefined</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
     public static uint RGBA4444( Color color )
@@ -775,12 +814,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Blue component</li>
-    /// <li>Bits  8 - 15 : Green component</li>
-    /// <li>Bits 16 - 23 : Red component</li>
-    /// <li>Bits 24 - 31 : Undefined</li>
+    ///     Returns the given <see cref="Color" /> as a 32-bit uint in the
+    ///     following format:-
+    ///     <li>Bits  0 - 7  : Blue component</li>
+    ///     <li>Bits  8 - 15 : Green component</li>
+    ///     <li>Bits 16 - 23 : Red component</li>
+    ///     <li>Bits 24 - 31 : Undefined</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
     public static uint RGB888( Color color )
@@ -791,12 +830,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Alpha component</li>
-    /// <li>Bits  8 - 15 : Blue component</li>
-    /// <li>Bits 16 - 23 : Green component</li>
-    /// <li>Bits 24 - 31 : Red component</li>
+    ///     Returns the given <see cref="Color" /> as a 32-bit uint in the
+    ///     following format:-
+    ///     <li>Bits  0 - 7  : Alpha component</li>
+    ///     <li>Bits  8 - 15 : Blue component</li>
+    ///     <li>Bits 16 - 23 : Green component</li>
+    ///     <li>Bits 24 - 31 : Red component</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
     public static uint RGBA8888( Color color )
@@ -808,7 +847,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Converts a 32-bit RGBA8888 integer value to a Color object.
+    ///     Converts a 32-bit RGBA8888 integer value to a Color object.
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 32-bit RGBA8888 integer value. </param>
@@ -821,7 +860,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Converts a 16-bit RGB565 integer value to a Color object.
+    ///     Converts a 16-bit RGB565 integer value to a Color object.
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 16-bit RGB565 integer value. </param>
@@ -840,7 +879,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Converts a 16-bit RGBA4444 integer value to a Color object.
+    ///     Converts a 16-bit RGBA4444 integer value to a Color object.
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 16-bit RGBA4444 integer value. </param>
@@ -853,7 +892,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns a string representation of the Color components RGBA.
+    ///     Returns a string representation of the Color components RGBA.
     /// </summary>
     public string RGBAToString()
     {
@@ -871,20 +910,20 @@ public sealed class Color : ICloneable, IEquatable< Color >
     #region ABGR Methods
 
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR and then
-    /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
-    /// between 0-254 to avoid using float bits in the NaN range.
-    /// <para>
-    /// Note: Converting a color to a float and back can be lossy for alpha.
-    /// </para>
+    ///     Packs the color components into a 32-bit integer with the format ABGR and then
+    ///     converts it to a float. Alpha is compressed from 0-255 to use only even numbers
+    ///     between 0-254 to avoid using float bits in the NaN range.
+    ///     <para>
+    ///         Note: Converting a color to a float and back can be lossy for alpha.
+    ///     </para>
     /// </summary>
     /// <returns> The resulting float. </returns>
-    /// <seealso cref="NumberUtils.UIntToFloatColor(uint)"/>
+    /// <seealso cref="NumberUtils.UIntToFloatColor(uint)" />
     public float ToFloatBitsABGR()
     {
-        var a = ( ( uint )( 255f * A ) << 24 );
-        var b = ( ( uint )( 255f * B ) << 16 );
-        var g = ( ( uint )( 255f * G ) << 8 );
+        var a = ( uint )( 255f * A ) << 24;
+        var b = ( uint )( 255f * B ) << 16;
+        var g = ( uint )( 255f * G ) << 8;
         var r = ( uint )( 255f * R );
 
         var intBits = ( uint )( a | b | g | r );
@@ -893,12 +932,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR and then
-    /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
-    /// between 0-254 to avoid using float bits in the NaN range.
-    /// <para>
-    /// Note: Converting a color to a float and back can be lossy for alpha.
-    /// </para>
+    ///     Packs the color components into a 32-bit integer with the format ABGR and then
+    ///     converts it to a float. Alpha is compressed from 0-255 to use only even numbers
+    ///     between 0-254 to avoid using float bits in the NaN range.
+    ///     <para>
+    ///         Note: Converting a color to a float and back can be lossy for alpha.
+    ///     </para>
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -907,9 +946,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <returns></returns>
     public static float ToFloatBitsABGR( float a, float b, float g, float r )
     {
-        var af = ( ( uint )( a * 255f ) ) << 24;
-        var bf = ( ( uint )( b * 255f ) ) << 16;
-        var gf = ( ( uint )( g * 255f ) ) << 8;
+        var af = ( uint )( a * 255f ) << 24;
+        var bf = ( uint )( b * 255f ) << 16;
+        var gf = ( uint )( g * 255f ) << 8;
         var rf = ( uint )( r * 255f );
 
         var intBits = ( uint )( af | bf | gf | rf );
@@ -917,13 +956,13 @@ public sealed class Color : ICloneable, IEquatable< Color >
         return ( float )intBits;
     }
 
-    public static float ToFloatBitsABGR(byte a, byte b, byte g, byte r)
+    public static float ToFloatBitsABGR( byte a, byte b, byte g, byte r )
     {
-        return BitConverter.Int32BitsToSingle((a << 24) | (b << 16) | (g << 8) | r);
+        return BitConverter.Int32BitsToSingle( ( a << 24 ) | ( b << 16 ) | ( g << 8 ) | r );
     }
-    
+
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR.
+    ///     Packs the color components into a 32-bit integer with the format ABGR.
     /// </summary>
     /// <returns> the packed color as a 32-bit int. </returns>
     public uint PackedColorABGR()
@@ -935,12 +974,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given seperate colour components as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Alpha component</li>
-    /// <li>Bits  8 - 15 : Blue component</li>
-    /// <li>Bits 16 - 23 : Green component</li>
-    /// <li>Bits 24 - 31 : Red component</li>
+    ///     Returns the given seperate colour components as a 32-bit uint in the
+    ///     following format:-
+    ///     <li>Bits  0 - 7  : Alpha component</li>
+    ///     <li>Bits  8 - 15 : Blue component</li>
+    ///     <li>Bits 16 - 23 : Green component</li>
+    ///     <li>Bits 24 - 31 : Red component</li>
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -955,7 +994,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Sets the Color components using the specified float value in the format ABGR8888.
+    ///     Sets the Color components using the specified float value in the format ABGR8888.
     /// </summary>
     /// <param name="color">The Color object to assign the converted values to.</param>
     /// <param name="value">The float value representing the color in ABGR8888 format.</param>
@@ -972,8 +1011,8 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR.
-    /// Note that no range checking is performed for higher performance.
+    ///     Packs the color components into a 32-bit integer with the format ABGR.
+    ///     Note that no range checking is performed for higher performance.
     /// </summary>
     /// <param name="r"> Red component </param>
     /// <param name="g"> Green component </param>
@@ -986,7 +1025,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns a string representation of the Color components ABGR.
+    ///     Returns a string representation of the Color components ABGR.
     /// </summary>
     public string ABGRToString()
     {
@@ -1004,7 +1043,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     #region ARGB Methods
 
     /// <summary>
-    /// Converts a 32-bit ARGB8888 integer value to a Color object.
+    ///     Converts a 32-bit ARGB8888 integer value to a Color object.
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 32-bit ARGB8888 integer value. </param>
@@ -1017,12 +1056,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given seperate colour components as a 32-bit uint in the
-    /// following format:-
-    /// <li> Bits  0 - 7  : Blue component </li>
-    /// <li> Bits  8 - 15 : Green component </li>
-    /// <li> Bits 16 - 23 : Red component </li>
-    /// <li> Bits 24 - 31 : Alpha component </li>
+    ///     Returns the given seperate colour components as a 32-bit uint in the
+    ///     following format:-
+    ///     <li> Bits  0 - 7  : Blue component </li>
+    ///     <li> Bits  8 - 15 : Green component </li>
+    ///     <li> Bits 16 - 23 : Red component </li>
+    ///     <li> Bits 24 - 31 : Alpha component </li>
     /// </summary>
     /// <param name="a"> Alpha component </param>
     /// <param name="b"> Blue component </param>
@@ -1037,12 +1076,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color"/> as a 32-bit uint in the
-    /// following format:-
-    /// <li>Bits  0 - 7  : Blue component</li>
-    /// <li>Bits  8 - 15 : Green component</li>
-    /// <li>Bits 16 - 23 : Red component</li>
-    /// <li>Bits 24 - 31 : Alpha component</li>
+    ///     Returns the given <see cref="Color" /> as a 32-bit uint in the
+    ///     following format:-
+    ///     <li>Bits  0 - 7  : Blue component</li>
+    ///     <li>Bits  8 - 15 : Green component</li>
+    ///     <li>Bits 16 - 23 : Red component</li>
+    ///     <li>Bits 24 - 31 : Alpha component</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
     public static uint ARGB8888( Color color )
@@ -1064,9 +1103,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     #region HSV Methods
 
     /// <summary>
-    /// Sets the RGB Color components using the specified Hue-Saturation-Value.
-    /// Note that HSV components are voluntary not clamped to preserve high range
-    /// color and can range beyond typical values.
+    ///     Sets the RGB Color components using the specified Hue-Saturation-Value.
+    ///     Note that HSV components are voluntary not clamped to preserve high range
+    ///     color and can range beyond typical values.
     /// </summary>
     /// <param name="h">The Hue in degree from 0 to 360</param>
     /// <param name="s">The Saturation from 0 to 1</param>
@@ -1087,7 +1126,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
         var q = v * ( 1 - ( s * f ) );
         var t = v * ( 1 - ( s * ( 1 - f ) ) );
 
-        ( this.R, this.G, this.B ) = i switch
+        ( R, G, B ) = i switch
         {
             0     => ( v, t, p ),
             1     => ( q, v, p ),
@@ -1101,9 +1140,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Sets RGB components using the specified Hue-Saturation-Value. This is a
-    /// convenient method for fromHsv(float, float, float). This is the inverse
-    /// of toHsv(float[]).
+    ///     Sets RGB components using the specified Hue-Saturation-Value. This is a
+    ///     convenient method for fromHsv(float, float, float). This is the inverse
+    ///     of toHsv(float[]).
     /// </summary>
     /// <param name="hsv"> The Hue-Saturation-Value. </param>
     /// <returns> The modified color for chaining. </returns>
@@ -1113,12 +1152,12 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Converts the RGB color values to HSV and stores the result in the provided array.
+    ///     Converts the RGB color values to HSV and stores the result in the provided array.
     /// </summary>
     /// <param name="hsv">An array of at least 3 elements where the HSV values will be stored.</param>
     /// <returns>The array with HSV values.</returns>
     /// <exception cref="ArgumentException">
-    /// Thrown if the provided array does not have at least 3 elements.
+    ///     Thrown if the provided array does not have at least 3 elements.
     /// </exception>
     public float[] ToHsv( float[] hsv )
     {
@@ -1165,7 +1204,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
     #region From IEquatable Interface
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public bool Equals( Color? other )
     {
         if ( other is null )
@@ -1191,7 +1230,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
         var color = ( Color )obj;
 
-        return this.PackedColorABGR() == color.PackedColorABGR();
+        return PackedColorABGR() == color.PackedColorABGR();
     }
 
     /// Not from IEquatable, but connected to it because of Equals()
@@ -1209,9 +1248,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     #region operators
 
     /// <summary>
-    /// Determines whether two <see cref="Color"/> objects are equal.
+    ///     Determines whether two <see cref="Color" /> objects are equal.
     /// </summary>
-    /// <param name="c1"> The first <see cref="Color"/> object to compare, or <b>null</b>. </param>
+    /// <param name="c1"> The first <see cref="Color" /> object to compare, or <b>null</b>. </param>
     /// <param name="c2"> The second object to compare, or <b>null</b>. </param>
     /// <returns> <b>true</b> if the two objects are equal; otherwise, <b>false</b>. </returns>
     public static bool operator ==( Color? c1, object? c2 )
@@ -1225,9 +1264,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Determines whether two <see cref="Color"/> objects are not equal.
+    ///     Determines whether two <see cref="Color" /> objects are not equal.
     /// </summary>
-    /// <param name="c1"> The first <see cref="Color"/> object to compare, or null. </param>
+    /// <param name="c1"> The first <see cref="Color" /> object to compare, or null. </param>
     /// <param name="c2"> The second object to compare, or null. </param>
     /// <returns><b>true</b> if the two objects are not equal; otherwise, <b>false</b>.</returns>
     public static bool operator !=( Color? c1, object? c2 )
@@ -1236,8 +1275,8 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Multiplies the Color Components of Color 1 by the Color Components of
-    /// Color 2, ending with returning Color 1.
+    ///     Multiplies the Color Components of Color 1 by the Color Components of
+    ///     Color 2, ending with returning Color 1.
     /// </summary>
     /// <param name="c1"> Color 1, which will be returned. </param>
     /// <param name="c2"> Color 2. </param>
@@ -1255,45 +1294,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     #endregion operators
-
-    // ========================================================================
-    // ========================================================================
-
-    #region From ICloneable Interface
-
-    /// <inheritdoc/>
-    public object Clone()
-    {
-        return new Color( this );
-    }
-
-    #endregion From ICloneable Interface
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Debug string for DebuggerDisplay attribute.
-    /// </summary>
-    internal string RGBADebugString => $"R: {R}. G: {G}. B: {B}. A: {A}";
-
-    /// <summary>
-    /// Debugs the various methods and properties for this class.
-    /// </summary>
-    public void Debug()
-    {
-        Logger.Debug( RGBADebugString );
-        Logger.Debug( $"PackedColorABGR: {ABGRPackedColor} :: {ABGRPackedColor:X}" );
-        Logger.Debug( $"PackedColorRGBA: {RGBAPackedColor} :: {RGBAPackedColor:X}" );
-        Logger.Debug( $"ABGRFloatPack: {ABGRFloatPack}" );
-        Logger.Debug( $"RGBAFloatPack: {RGBAFloatPack}" );
-        Logger.Debug( $"RGBA8888ToInt(R, G, B, A): {RGBA8888ToInt( R, G, B, A ):X}" );
-        Logger.Debug( $"ToFloatBitsABGR(): {ToFloatBitsABGR()}" );
-        Logger.Debug( $"ToFloatBitsRGBA(): {ToFloatBitsRGBA()}" );
-        Logger.Debug( $"ToFloatBitsABGR(F,F,F,F): {ToFloatBitsABGR( A, B, G, R )}" );
-        Logger.Debug( $"ToFloatBitsRGBA(F,F,F,F): {ToFloatBitsRGBA( R, G, B, A )}" );
-        Logger.Divider();
-    }
 
     // ========================================================================
     // ========================================================================

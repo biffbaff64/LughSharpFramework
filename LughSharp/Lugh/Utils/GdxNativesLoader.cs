@@ -27,15 +27,14 @@ namespace LughSharp.Lugh.Utils;
 [PublicAPI]
 public class GdxNativesLoader
 {
-    public static bool DisableNativesLoading { get; set; } = false;
-
     private static readonly object _lock = new();
     private static          bool   _nativesLoaded;
+    public static           bool   DisableNativesLoading { get; set; } = false;
 
     // ========================================================================
 
     /// <summary>
-    /// Loads the native libraries if they have not already been loaded.
+    ///     Loads the native libraries if they have not already been loaded.
     /// </summary>
     public static void Load()
     {

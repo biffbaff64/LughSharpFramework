@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-/// A convenient 2D ellipse class, based on the circle class
+///     A convenient 2D ellipse class, based on the circle class
 /// </summary>
 [PublicAPI]
 public class Ellipse : IShape2D
@@ -34,7 +33,7 @@ public class Ellipse : IShape2D
     // ========================================================================
 
     /// <summary>
-    /// Construct a new ellipse with all values set to zero
+    ///     Construct a new ellipse with all values set to zero
     /// </summary>
     public Ellipse()
     {
@@ -45,7 +44,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Copy constructor
+    ///     Copy constructor
     /// </summary>
     public Ellipse( Ellipse ellipse )
     {
@@ -56,7 +55,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Constructs a new ellipse
+    ///     Constructs a new ellipse
     /// </summary>
     /// <param name="x"> X coordinate </param>
     /// <param name="y"> Y coordinate </param>
@@ -71,7 +70,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Constructs a new ellipse
+    ///     Constructs a new ellipse
     /// </summary>
     /// <param name="position"> Position vector </param>
     /// <param name="width"> the width of the ellipse </param>
@@ -85,7 +84,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Creates a new Ellipse using the supplied position and size vectors.
+    ///     Creates a new Ellipse using the supplied position and size vectors.
     /// </summary>
     /// <param name="position"> Position Vector. </param>
     /// <param name="size"> Size Vector. </param>
@@ -98,8 +97,8 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Constructs a new <see cref="Ellipse"/> from the position and radius of
-    /// a <see cref="Circle"/> (since circles are special cases of ellipses).
+    ///     Constructs a new <see cref="Ellipse" /> from the position and radius of
+    ///     a <see cref="Circle" /> (since circles are special cases of ellipses).
     /// </summary>
     /// <param name="circle"> The circle to take the values of  </param>
     public Ellipse( Circle circle )
@@ -116,7 +115,7 @@ public class Ellipse : IShape2D
     public float Height { get; set; }
 
     /// <summary>
-    /// Checks whether or not this ellipse contains the given point.
+    ///     Checks whether or not this ellipse contains the given point.
     /// </summary>
     /// <param name="x"> X coordinate </param>
     /// <param name="y"> Y coordinate </param>
@@ -127,12 +126,12 @@ public class Ellipse : IShape2D
         y -= Y;
 
         return ( ( ( x * x ) / ( Width * 0.5f * Width * 0.5f ) )
-               + ( ( y * y ) / ( Height * 0.5f * Height * 0.5f ) ) )
-            <= 1.0f;
+                 + ( ( y * y ) / ( Height * 0.5f * Height * 0.5f ) ) )
+               <= 1.0f;
     }
 
     /// <summary>
-    /// Checks whether or not this ellipse contains the given point.
+    ///     Checks whether or not this ellipse contains the given point.
     /// </summary>
     /// <param name="point"> Position vector </param>
     /// <returns> true if this ellipse contains the given point; false otherwise. </returns>
@@ -142,7 +141,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Sets a new position and size for this ellipse.
+    ///     Sets a new position and size for this ellipse.
     /// </summary>
     /// <param name="x"> X coordinate </param>
     /// <param name="y"> Y coordinate </param>
@@ -157,7 +156,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Sets a new position and size for this ellipse based upon another ellipse.
+    ///     Sets a new position and size for this ellipse based upon another ellipse.
     /// </summary>
     /// <param name="ellipse"> The ellipse to copy the position and size of. </param>
     public void Set( Ellipse ellipse )
@@ -169,8 +168,8 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Sets the position and size of this ellipse, based on the supplied
-    /// <see cref="Circle"/>.
+    ///     Sets the position and size of this ellipse, based on the supplied
+    ///     <see cref="Circle" />.
     /// </summary>
     /// <param name="circle"> The Circle to copy position and size from. </param>
     public void Set( Circle circle )
@@ -182,7 +181,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Sets the position and size of this ellipse.
+    ///     Sets the position and size of this ellipse.
     /// </summary>
     /// <param name="position"> A Vector2 holding the new position. </param>
     /// <param name="size"> A Vector2 holding the new width and height. </param>
@@ -195,7 +194,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Sets the x and y-coordinates of ellipse center from a <see cref="Vector2"/>.
+    ///     Sets the x and y-coordinates of ellipse center from a <see cref="Vector2" />.
     /// </summary>
     /// <param name="position"> The position vector </param>
     /// <returns> this ellipse for chaining  </returns>
@@ -208,7 +207,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Sets the x and y-coordinates of ellipse center
+    ///     Sets the x and y-coordinates of ellipse center
     /// </summary>
     /// <param name="x"> The x-coordinate </param>
     /// <param name="y"> The y-coordinate </param>
@@ -222,7 +221,7 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Sets the width and height of this ellipse
+    ///     Sets the width and height of this ellipse
     /// </summary>
     /// <param name="width"> The width </param>
     /// <param name="height"> The height </param>
@@ -236,8 +235,8 @@ public class Ellipse : IShape2D
     }
 
     /// <returns>
-    /// The area of this <see cref="Ellipse"/> as <see cref="MathUtils.PI"/>
-    /// <see cref="Ellipse.Width"/> * <see cref="Ellipse.Height"/>
+    ///     The area of this <see cref="Ellipse" /> as <see cref="MathUtils.PI" />
+    ///     <see cref="Ellipse.Width" /> * <see cref="Ellipse.Height" />
     /// </returns>
     public float Area()
     {
@@ -245,13 +244,13 @@ public class Ellipse : IShape2D
     }
 
     /// <summary>
-    /// Approximates the circumference of this <see cref="Ellipse"/>. Oddly enough,
-    /// the circumference of an ellipse is actually difficult to compute exactly.
+    ///     Approximates the circumference of this <see cref="Ellipse" />. Oddly enough,
+    ///     the circumference of an ellipse is actually difficult to compute exactly.
     /// </summary>
     /// <returns>
-    /// The <a href="https://www.johndcook.com/blog/2013/05/05/ramanujan-circumference-ellipse/">Ramanujan</a>
-    /// approximation to the circumference of an ellipse if one dimension is at least three times
-    /// longer than the other, else the simpler approximation
+    ///     The <a href="https://www.johndcook.com/blog/2013/05/05/ramanujan-circumference-ellipse/">Ramanujan</a>
+    ///     approximation to the circumference of an ellipse if one dimension is at least three times
+    ///     longer than the other, else the simpler approximation
     /// </returns>
     public float Circumference()
     {
@@ -261,13 +260,13 @@ public class Ellipse : IShape2D
         if ( ( ( a * 3 ) > b ) || ( ( b * 3 ) > a ) )
         {
             // If one dimension is three times as long as the other...
-            return ( float ) ( MathUtils.PI
-                             * ( ( 3 * ( a + b ) )
-                               - Math.Sqrt( ( ( 3 * a ) + b ) * ( a + ( 3 * b ) ) ) ) );
+            return ( float )( MathUtils.PI
+                              * ( ( 3 * ( a + b ) )
+                                  - Math.Sqrt( ( ( 3 * a ) + b ) * ( a + ( 3 * b ) ) ) ) );
         }
 
         // We can use the simpler approximation, then
-        return ( float ) ( MathUtils.PI2 * Math.Sqrt( ( ( a * a ) + ( b * b ) ) / 2 ) );
+        return ( float )( MathUtils.PI2 * Math.Sqrt( ( ( a * a ) + ( b * b ) ) / 2 ) );
     }
 
     /// <inheritdoc />
@@ -283,12 +282,12 @@ public class Ellipse : IShape2D
             return false;
         }
 
-        var e = ( Ellipse ) o;
+        var e = ( Ellipse )o;
 
         return X.Equals( e.X )
-            && Y.Equals( e.Y )
-            && Width.Equals( e.Width )
-            && Height.Equals( e.Height );
+               && Y.Equals( e.Y )
+               && Width.Equals( e.Width )
+               && Height.Equals( e.Height );
     }
 
     /// <inheritdoc />

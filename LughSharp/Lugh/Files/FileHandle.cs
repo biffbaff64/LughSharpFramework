@@ -25,109 +25,118 @@
 namespace LughSharp.Lugh.Files;
 
 /// <summary>
-/// A FileInfo container which contains a <see cref="FileInfo"/> instance
-/// and a <see cref="PathTypes"/> instance. The <c>PathTypes</c> instance
-/// defaults to <see cref="PathTypes.Internal"/>.
+///     A FileInfo container which contains a <see cref="FileInfo" /> instance
+///     and a <see cref="PathTypes" /> instance. The <c>PathTypes</c> instance
+///     defaults to <see cref="PathTypes.Internal" />.
 /// </summary>
 [PublicAPI]
 public class FileHandle
 {
-    public PathTypes PathType { get; set; }
-    public FileInfo  File     { get; set; }
-
     // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// Create a new FileHandle with a default <see cref="FileInfo"/> and PathType set
-    /// to <see cref="PathTypes.Internal"/>
+    ///     Create a new FileHandle with a default <see cref="FileInfo" /> and PathType set
+    ///     to <see cref="PathTypes.Internal" />
     /// </summary>
     protected FileHandle()
     {
-        this.File     = new FileInfo( "" );
-        this.PathType = PathTypes.Internal;
+        File     = new FileInfo( "" );
+        PathType = PathTypes.Internal;
     }
 
     /// <summary>
-    /// Create a new FileHandle with a <see cref="FileInfo"/> using the supplied filename,
-    /// and PathType set to <see cref="PathTypes.Internal"/>
+    ///     Create a new FileHandle with a <see cref="FileInfo" /> using the supplied filename,
+    ///     and PathType set to <see cref="PathTypes.Internal" />
     /// </summary>
     /// <param name="fileName"></param>
     public FileHandle( string fileName )
     {
-        this.File     = new FileInfo( fileName );
-        this.PathType = PathTypes.Internal;
+        File     = new FileInfo( fileName );
+        PathType = PathTypes.Internal;
     }
 
     /// <summary>
-    /// Creates a new FileHandle using the supplied <see cref="FileInfo"/>
+    ///     Creates a new FileHandle using the supplied <see cref="FileInfo" />
     /// </summary>
     /// <param name="file"> The FileInfo instance. </param>
     public FileHandle( FileInfo file )
     {
-        this.File     = file;
-        this.PathType = PathTypes.Internal;
+        File     = file;
+        PathType = PathTypes.Internal;
     }
 
     /// <summary>
-    /// Creates a new FileHandle using the supplied fileName string, and <see cref="PathTypes"/> value.
+    ///     Creates a new FileHandle using the supplied fileName string, and <see cref="PathTypes" /> value.
     /// </summary>
     /// <param name="fileName"></param>
     /// <param name="type"></param>
     public FileHandle( string fileName, PathTypes type )
     {
-        this.File     = new FileInfo( fileName );
-        this.PathType = type;
+        File     = new FileInfo( fileName );
+        PathType = type;
     }
 
     /// <summary>
-    /// Creates a new FileHandle using the supplied FileInfo instance, and <see cref="PathTypes"/> value.
+    ///     Creates a new FileHandle using the supplied FileInfo instance, and <see cref="PathTypes" /> value.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="type"></param>
     public FileHandle( FileInfo file, PathTypes type )
     {
-        this.File     = file;
-        this.PathType = type;
+        File     = file;
+        PathType = type;
     }
+
+    public PathTypes PathType { get; set; }
+    public FileInfo  File     { get; set; }
 
     // ========================================================================
 
     #region helpers
 
     /// <summary>
-    /// The name of the file, without any parent paths.
+    ///     The name of the file, without any parent paths.
     /// </summary>
     public string FileName => File.Name;
 
     /// <summary>
-    /// The path of the file as specified on construction, e.g.
-    /// <code>
+    ///     The path of the file as specified on construction, e.g.
+    ///     <code>
     /// GdxApi.Files.Internal("dir/file.png") -> dir/file.png.
     /// </code>
-    /// <para>
-    /// Backward slashes will be replaced by forward slashes.
-    /// </para>
+    ///     <para>
+    ///         Backward slashes will be replaced by forward slashes.
+    ///     </para>
     /// </summary>
     public string FilePath => File.FullName.Replace( "\\", "/" );
 
     /// <summary>
-    /// Returns the file extension (without the dot) or an empty string if the
-    /// file name doesn't contain a dot.
+    ///     Returns the file extension (without the dot) or an empty string if the
+    ///     file name doesn't contain a dot.
     /// </summary>
-    public string Extension() => Path.GetExtension( File.Name ).TrimStart( '.' );
+    public string Extension()
+    {
+        return Path.GetExtension( File.Name ).TrimStart( '.' );
+    }
 
     /// <summary>
-    /// Return the name of the file, without parent paths or the extension.
+    ///     Return the name of the file, without parent paths or the extension.
     /// </summary>
-    public string NameWithoutExtension() => Path.GetFileNameWithoutExtension( File.Name );
+    public string NameWithoutExtension()
+    {
+        return Path.GetFileNameWithoutExtension( File.Name );
+    }
 
     /// <summary>
-    /// Returns the path and filename without the extension, eg.
-    /// <code>dir/dir2/file.png -> dir/dir2/file.</code>
-    /// Backward slashes will be returned as forward slashes.
+    ///     Returns the path and filename without the extension, eg.
+    ///     <code>dir/dir2/file.png -> dir/dir2/file.</code>
+    ///     Backward slashes will be returned as forward slashes.
     /// </summary>
-    public string PathWithoutExtension() => Path.GetFileNameWithoutExtension( File.FullName );
+    public string PathWithoutExtension()
+    {
+        return Path.GetFileNameWithoutExtension( File.FullName );
+    }
 
     #endregion helpers
 

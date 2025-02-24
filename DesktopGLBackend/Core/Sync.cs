@@ -22,18 +22,18 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+
 namespace DesktopGLBackend.Core;
 
-using System;
-using System.Diagnostics; // Use Stopwatch for high-resolution timing
-using System.Threading;
+// Use Stopwatch for high-resolution timing
 
 public class Sync
 {
     private const    long      NANOS_IN_SECOND = 1000L * 1000L * 1000L;
-    private readonly Stopwatch _stopwatch      = new Stopwatch();
-    private          long      _nextFrame      = 0;
+    private readonly Stopwatch _stopwatch      = new();
     private          bool      _initialised    = false;
+    private          long      _nextFrame      = 0;
 
     public void SyncFrameRate( int fps )
     {
@@ -74,8 +74,8 @@ public class Sync
 // ============================================================================
 
 /// <summary>
-/// A highly accurate sync method that continually adapts to the system
-/// it runs on to provide reliable results.
+///     A highly accurate sync method that continually adapts to the system
+///     it runs on to provide reliable results.
 /// </summary>
 [PublicAPI]
 public class OldSync
@@ -96,8 +96,8 @@ public class OldSync
     // ========================================================================
 
     /// <summary>
-    /// An accurate sync method that will attempt to run at a constant frame rate.
-    /// It should be called once every frame.
+    ///     An accurate sync method that will attempt to run at a constant frame rate.
+    ///     It should be called once every frame.
     /// </summary>
     /// <param name="fps"> the desired frame rate, in frames per second. </param>
     public void SyncFrameRate( int fps )
@@ -144,9 +144,9 @@ public class OldSync
     }
 
     /// <summary>
-    /// This method will initialise the sync method by setting initial values for
-    /// sleepDurations/ yieldDurations and nextFrame. If running on windows it will
-    /// start the sleep timer fix.
+    ///     This method will initialise the sync method by setting initial values for
+    ///     sleepDurations/ yieldDurations and nextFrame. If running on windows it will
+    ///     start the sleep timer fix.
     /// </summary>
     private void Initialise()
     {
@@ -157,7 +157,7 @@ public class OldSync
 
         _nextFrame = GetTime();
 
-        var osName = System.Environment.OSVersion.Platform.ToString();
+        var osName = Environment.OSVersion.Platform.ToString();
 
         if ( osName.StartsWith( "Win" ) )
         {
@@ -181,7 +181,7 @@ public class OldSync
     }
 
     /// <summary>
-    /// Get the system time in nano seconds.
+    ///     Get the system time in nano seconds.
     /// </summary>
     private static long GetTime()
     {

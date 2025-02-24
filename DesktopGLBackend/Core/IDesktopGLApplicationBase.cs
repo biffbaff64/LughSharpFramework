@@ -22,12 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Graphics.GLUtils;
-
 using DesktopGLBackend.Audio;
 using DesktopGLBackend.Input;
 using DesktopGLBackend.Window;
+
+using LughSharp.Lugh.Core;
+using LughSharp.Lugh.Graphics.GLUtils;
 
 namespace DesktopGLBackend.Core;
 
@@ -37,12 +37,12 @@ public interface IDesktopGLApplicationBase : IApplication
     GLVersion? GLVersion { get; set; }
 
     /// <summary>
-    /// Creates the Audio device.
+    ///     Creates the Audio device.
     /// </summary>
     IGLAudio CreateAudio( DesktopGLApplicationConfiguration config );
 
     /// <summary>
-    /// Creates an Input device.
+    ///     Creates an Input device.
     /// </summary>
     IDesktopGLInput CreateInput( DesktopGLWindow window );
 }

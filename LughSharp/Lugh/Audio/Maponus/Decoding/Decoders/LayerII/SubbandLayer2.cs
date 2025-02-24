@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Audio.Maponus.Decoding.Decoders.LayerII;
 
 /// <summary>
-/// public class for layer II subbands in single channel mode.
+///     public class for layer II subbands in single channel mode.
 /// </summary>
 [PublicAPI]
 public class SubbandLayer2 : ASubband
@@ -128,7 +127,8 @@ public class SubbandLayer2 : ASubband
         -6.0f / 9.0f, -6.0f / 9.0f, 4.0f / 9.0f, -6.0f / 9.0f, -4.0f / 9.0f, 4.0f / 9.0f, -6.0f / 9.0f, -2.0f / 9.0f, 4.0f / 9.0f,
         -6.0f / 9.0f, 0.0f, 4.0f / 9.0f, -6.0f / 9.0f, 2.0f / 9.0f, 4.0f / 9.0f, -6.0f / 9.0f, 4.0f / 9.0f, 4.0f / 9.0f,
         -6.0f / 9.0f, 6.0f / 9.0f, 4.0f / 9.0f, -6.0f / 9.0f, 8.0f / 9.0f, 4.0f / 9.0f, -6.0f / 9.0f, -8.0f / 9.0f,
-        6.0f / 9.0f, -6.0f / 9.0f, -6.0f / 9.0f, 6.0f / 9.0f, -6.0f / 9.0f, -4.0f / 9.0f, 6.0f / 9.0f, -6.0f / 9.0f, -2.0f / 9.0f, 6.0f / 9.0f, -6.0f / 9.0f,
+        6.0f / 9.0f, -6.0f / 9.0f, -6.0f / 9.0f, 6.0f / 9.0f, -6.0f / 9.0f, -4.0f / 9.0f, 6.0f / 9.0f, -6.0f / 9.0f, -2.0f / 9.0f,
+        6.0f / 9.0f, -6.0f / 9.0f,
         0.0f, 6.0f / 9.0f, -6.0f / 9.0f,
         2.0f / 9.0f, 6.0f / 9.0f, -6.0f / 9.0f, 4.0f / 9.0f, 6.0f / 9.0f, -6.0f / 9.0f, 6.0f / 9.0f, 6.0f / 9.0f, -6.0f / 9.0f,
         8.0f / 9.0f, 6.0f / 9.0f, -6.0f / 9.0f, -8.0f / 9.0f, 8.0f / 9.0f, -6.0f / 9.0f, -6.0f / 9.0f, 8.0f / 9.0f, -6.0f / 9.0f,
@@ -705,9 +705,9 @@ public class SubbandLayer2 : ASubband
             }
             else
             {
-                samples[ 0 ] = ( float ) ( ( stream.GetBitsFromBuffer( codelength[ 0 ] ) * factor[ 0 ] ) - 1.0 );
-                samples[ 1 ] = ( float ) ( ( stream.GetBitsFromBuffer( codelength[ 0 ] ) * factor[ 0 ] ) - 1.0 );
-                samples[ 2 ] = ( float ) ( ( stream.GetBitsFromBuffer( codelength[ 0 ] ) * factor[ 0 ] ) - 1.0 );
+                samples[ 0 ] = ( float )( ( stream.GetBitsFromBuffer( codelength[ 0 ] ) * factor[ 0 ] ) - 1.0 );
+                samples[ 1 ] = ( float )( ( stream.GetBitsFromBuffer( codelength[ 0 ] ) * factor[ 0 ] ) - 1.0 );
+                samples[ 2 ] = ( float )( ( stream.GetBitsFromBuffer( codelength[ 0 ] ) * factor[ 0 ] ) - 1.0 );
             }
         }
 

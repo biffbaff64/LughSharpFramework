@@ -39,7 +39,7 @@ public abstract class Action : IAction, IResetable
     public virtual Actor? Target { get; set; }
 
     /// <summary>
-    /// The actor this action is attached to, or null if it is not attached.
+    ///     The actor this action is attached to, or null if it is not attached.
     /// </summary>
     public virtual Actor? Actor
     {
@@ -75,7 +75,7 @@ public abstract class Action : IAction, IResetable
     // ========================================================================
     // ========================================================================
 
-    /// <inheritdoc cref="IAction.Reset()"/>
+    /// <inheritdoc cref="IAction.Reset()" />
     public virtual void Reset()
     {
         Actor  = null;

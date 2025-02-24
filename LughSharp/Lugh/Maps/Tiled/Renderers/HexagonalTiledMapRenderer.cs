@@ -32,22 +32,22 @@ namespace LughSharp.Lugh.Maps.Tiled.Renderers;
 public class HexagonalTiledMapRenderer : BatchTileMapRenderer
 {
     /// <summary>
-    /// the parameter defining the shape of the hexagon from tiled. more
-    /// specifically it represents the length of the sides that are parallel
-    /// to the stagger axis. e.g. with respect to the stagger axis a value
-    /// of 0 results in a rhombus shape, while a value equal to the tile
-    /// length/height represents a square shape and a value of 0.5 represents
-    /// a regular hexagon if tile length equals tile height
+    ///     the parameter defining the shape of the hexagon from tiled. more
+    ///     specifically it represents the length of the sides that are parallel
+    ///     to the stagger axis. e.g. with respect to the stagger axis a value
+    ///     of 0 results in a rhombus shape, while a value equal to the tile
+    ///     length/height represents a square shape and a value of 0.5 represents
+    ///     a regular hexagon if tile length equals tile height
     /// </summary>
     private float _hexSideLength = 0f;
 
     /// <summary>
-    /// true for X-Axis, false for Y-Axis
+    ///     true for X-Axis, false for Y-Axis
     /// </summary>
     private bool _staggerAxisX = true;
 
     /// <summary>
-    /// true for even StaggerIndex, false for odd
+    ///     true for even StaggerIndex, false for odd
     /// </summary>
     private bool _staggerIndexEven = false;
 
@@ -112,7 +112,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
                 }
                 else
                 {
-                    var tmtl = ( TiledMapTileLayer ) map.Layers.Get( 0 );
+                    var tmtl = ( TiledMapTileLayer )map.Layers.Get( 0 );
                     _hexSideLength = 0.5f * tmtl.TileWidth;
                 }
             }
@@ -126,7 +126,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
                 }
                 else
                 {
-                    var tmtl = ( TiledMapTileLayer ) map.Layers.Get( 0 );
+                    var tmtl = ( TiledMapTileLayer )map.Layers.Get( 0 );
                     _hexSideLength = 0.5f * tmtl.TileHeight;
                 }
             }
@@ -152,16 +152,16 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
             var tileWidthUpperCorner = ( layerTileWidth + layerHexLength ) / 2;
             var layerTileHeight50    = layerTileHeight * 0.50f;
 
-            var row1 = Math.Max( 0, ( int ) ( ( ViewBounds.Y - layerTileHeight50 - layerOffsetX ) / layerTileHeight ) );
+            var row1 = Math.Max( 0, ( int )( ( ViewBounds.Y - layerTileHeight50 - layerOffsetX ) / layerTileHeight ) );
 
             var row2 = Math.Min( layerHeight,
-                                 ( int ) ( ( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight ) - layerOffsetX ) / layerTileHeight ) );
+                                 ( int )( ( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight ) - layerOffsetX ) / layerTileHeight ) );
 
-            var col1 = Math.Max( 0, ( int ) ( ( ViewBounds.X - tileWidthLowerCorner - layerOffsetY ) / tileWidthUpperCorner ) );
+            var col1 = Math.Max( 0, ( int )( ( ViewBounds.X - tileWidthLowerCorner - layerOffsetY ) / tileWidthUpperCorner ) );
 
             var col2 = Math.Min( layerWidth,
-                                 ( int ) ( ( ( ViewBounds.X + ViewBounds.Width + tileWidthUpperCorner ) - layerOffsetY )
-                                         / tileWidthUpperCorner ) );
+                                 ( int )( ( ( ViewBounds.X + ViewBounds.Width + tileWidthUpperCorner ) - layerOffsetY )
+                                          / tileWidthUpperCorner ) );
 
             // depending on the stagger index either draw all even before the odd or vice versa
             var colA = _staggerIndexEven == ( ( col1 % 2 ) == 0 ) ? col1 + 1 : col1;
@@ -192,17 +192,17 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
             var tileHeightUpperCorner = ( layerTileHeight + layerHexLength ) / 2;
             var layerTileWidth50      = layerTileWidth * 0.50f;
 
-            var row1 = Math.Max( 0, ( int ) ( ( ViewBounds.Y - tileHeightLowerCorner - layerOffsetX ) / tileHeightUpperCorner ) );
+            var row1 = Math.Max( 0, ( int )( ( ViewBounds.Y - tileHeightLowerCorner - layerOffsetX ) / tileHeightUpperCorner ) );
 
             var row2 = Math.Min( layerHeight,
-                                 ( int ) ( ( ( ViewBounds.Y + ViewBounds.Height + tileHeightUpperCorner ) - layerOffsetX )
-                                         / tileHeightUpperCorner ) );
+                                 ( int )( ( ( ViewBounds.Y + ViewBounds.Height + tileHeightUpperCorner ) - layerOffsetX )
+                                          / tileHeightUpperCorner ) );
 
-            var col1 = Math.Max( 0, ( int ) ( ( ViewBounds.X - layerTileWidth50 - layerOffsetY ) / layerTileWidth ) );
+            var col1 = Math.Max( 0, ( int )( ( ViewBounds.X - layerTileWidth50 - layerOffsetY ) / layerTileWidth ) );
 
             var col2 = Math.Min( layerWidth,
-                                 ( int ) ( ( ( ViewBounds.X + ViewBounds.Width + layerTileWidth ) - layerOffsetY )
-                                         / layerTileWidth ) );
+                                 ( int )( ( ( ViewBounds.X + ViewBounds.Width + layerTileWidth ) - layerOffsetY )
+                                          / layerTileWidth ) );
 
             for ( var row = row2 - 1; row >= row1; row-- )
             {

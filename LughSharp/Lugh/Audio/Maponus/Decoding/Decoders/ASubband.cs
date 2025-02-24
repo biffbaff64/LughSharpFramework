@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Audio.Maponus.Decoding.Decoders;
 
 /// <summary>
-/// Abstract base class for subband classes of layer I and II
+///     Abstract base class for subband classes of layer I and II
 /// </summary>
 [PublicAPI]
 public abstract class ASubband

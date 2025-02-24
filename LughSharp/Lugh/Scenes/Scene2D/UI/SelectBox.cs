@@ -36,26 +36,22 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A select box (aka a drop-down list) allows a user to choose one of a number of values
-/// from a list. When inactive, the selected value is displayed. When activated, it shows
-/// the list of values that may be selected.
-/// <para>
-/// <see cref="ChangeListener.ChangeEvent"/> is fired when the selectbox selection changes.
-/// </para>
-/// <para>
-/// The preferred size of the select box is determined by the maximum text bounds of the items and the size of the
-/// {@link SelectBoxStyle#background}.
-/// </para>
+///     A select box (aka a drop-down list) allows a user to choose one of a number of values
+///     from a list. When inactive, the selected value is displayed. When activated, it shows
+///     the list of values that may be selected.
+///     <para>
+///         <see cref="ChangeListener.ChangeEvent" /> is fired when the selectbox selection changes.
+///     </para>
+///     <para>
+///         The preferred size of the select box is determined by the maximum text bounds of the items and the size of the
+///         {@link SelectBoxStyle#background}.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class SelectBox< T > : Widget, IDisableable
 {
-    public ClickListener  ClickListener { get; set; }
-    public SelectBoxStyle BoxStyle      { get; set; }
-    public bool           IsDisabled    { get; set; }
-
     // ========================================================================
-    
+
     private readonly List< T >           _items;
     private readonly SelectBoxList?      _selectBoxList;
     private readonly ArraySelection< T > _selection;
@@ -95,9 +91,12 @@ public class SelectBox< T > : Widget, IDisableable
         Setup( style );
     }
 
+    public ClickListener  ClickListener { get; set; }
+    public SelectBoxStyle BoxStyle      { get; set; }
+
     /// <summary>
-    /// Set the max number of items to display when the select box is opened. Set to
-    /// 0 (the default) to display as many as fit in the stage height.
+    ///     Set the max number of items to display when the select box is opened. Set to
+    ///     0 (the default) to display as many as fit in the stage height.
     /// </summary>
     public int MaxListCount
     {
@@ -124,6 +123,8 @@ public class SelectBox< T > : Widget, IDisableable
             return _prefHeight;
         }
     }
+
+    public bool IsDisabled { get; set; }
 
     private void Setup( SelectBoxStyle style )
     {
@@ -157,7 +158,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Set the backing List that makes up the choices available in the SelectBox
+    ///     Set the backing List that makes up the choices available in the SelectBox
     /// </summary>
     public void SetItems( params T[] newItems )
     {
@@ -179,7 +180,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Sets the items visible in the select box.
+    ///     Sets the items visible in the select box.
     /// </summary>
     public void SetItems( List< T > newItems )
     {
@@ -217,7 +218,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Returns the internal items array.
+    ///     Returns the internal items array.
     /// </summary>
     public List< T > GetItems()
     {
@@ -232,7 +233,7 @@ public class SelectBox< T > : Widget, IDisableable
         if ( bg != null )
         {
             _prefHeight = Math.Max( ( bg.TopHeight + bg.BottomHeight + font.GetCapHeight() )
-                                  - ( font.GetDescent() * 2 ),
+                                    - ( font.GetDescent() * 2 ),
                                     bg.MinHeight );
         }
         else
@@ -286,7 +287,7 @@ public class SelectBox< T > : Widget, IDisableable
 
             if ( bg != null )
             {
-                listWidth = Math.Max( ( float ) ( listWidth + bg.LeftWidth + bg.RightWidth )!, bg.MinWidth );
+                listWidth = Math.Max( ( float )( listWidth + bg.LeftWidth + bg.RightWidth )!, bg.MinWidth );
             }
 
             if ( _selectBoxList is not { DisableYScroll: true } )
@@ -295,15 +296,15 @@ public class SelectBox< T > : Widget, IDisableable
                                        BoxStyle.ScrollStyle.VScrollKnob?.MinWidth ?? 0 );
             }
 
-            _prefWidth = Math.Max( _prefWidth, ( float ) listWidth! );
+            _prefWidth = Math.Max( _prefWidth, ( float )listWidth! );
         }
 
         layoutPool.Free( layout! );
     }
 
     /// <summary>
-    /// Returns appropriate background Drawable from the style
-    /// based on the current select box state.
+    ///     Returns appropriate background Drawable from the style
+    ///     based on the current select box state.
     /// </summary>
     protected IDrawable? GetBackgroundIDrawable()
     {
@@ -326,7 +327,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Returns the appropriate label font color from the style based on the current button state.
+    ///     Returns the appropriate label font color from the style based on the current button state.
     /// </summary>
     protected Color GetFontColor()
     {
@@ -371,11 +372,11 @@ public class SelectBox< T > : Widget, IDisableable
                 width  -= background.LeftWidth + background.RightWidth;
                 height -= background.BottomHeight + background.TopHeight;
                 x      += background.LeftWidth;
-                y      += ( int ) ( ( height / 2 ) + background.BottomHeight + ( font.Data.CapHeight / 2 ) );
+                y      += ( int )( ( height / 2 ) + background.BottomHeight + ( font.Data.CapHeight / 2 ) );
             }
             else
             {
-                y += ( int ) ( ( height / 2 ) + ( font.Data.CapHeight / 2 ) );
+                y += ( int )( ( height / 2 ) + ( font.Data.CapHeight / 2 ) );
             }
 
             font.SetColor( fontColor.R, fontColor.G, fontColor.B, fontColor.A * parentAlpha );
@@ -392,18 +393,18 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Sets the alignment of the selected item in the select box. See <see cref="GetList()"/>
-    /// and <see cref="SetAlignment(int)"/> to set the alignment in the list shown when the
-    /// select box is open.
+    ///     Sets the alignment of the selected item in the select box. See <see cref="GetList()" />
+    ///     and <see cref="SetAlignment(int)" /> to set the alignment in the list shown when the
+    ///     select box is open.
     /// </summary>
-    /// <param name="alignment"> See <see cref="Alignment"/>. </param>
+    /// <param name="alignment"> See <see cref="Alignment" />. </param>
     public void SetAlignment( int alignment )
     {
         _alignment = alignment;
     }
 
     /// <summary>
-    /// Get the set of selected items, useful when multiple items are selected
+    ///     Get the set of selected items, useful when multiple items are selected
     /// </summary>
     /// <returns> a Selection object containing the selected elements </returns>
     public ArraySelection< T > GetSelection()
@@ -412,8 +413,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Returns the first selected item, or null. For multiple selections
-    /// use <see cref="GetSelection()"/>.
+    ///     Returns the first selected item, or null. For multiple selections
+    ///     use <see cref="GetSelection()" />.
     /// </summary>
     public T? GetSelected()
     {
@@ -421,8 +422,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Sets the selection to only the passed item, if it is a possible
-    /// choice, else selects the first item.
+    ///     Sets the selection to only the passed item, if it is a possible
+    ///     choice, else selects the first item.
     /// </summary>
     public void SetSelected( T item )
     {
@@ -441,8 +442,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <returns>
-    /// The index of the first selected item. The top item has an index of 0.
-    /// Nothing selected has an index of -1.
+    ///     The index of the first selected item. The top item has an index of 0.
+    ///     Nothing selected has an index of -1.
     /// </returns>
     public int GetSelectedIndex()
     {
@@ -452,7 +453,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Sets the selection to only the selected index.
+    ///     Sets the selection to only the selected index.
     /// </summary>
     public void SetSelectedIndex( int index )
     {
@@ -460,7 +461,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// When true the pref width is based on the selected item.
+    ///     When true the pref width is based on the selected item.
     /// </summary>
     public void SetSelectedPrefWidth( bool selectedPrefWidth )
     {
@@ -468,8 +469,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Returns the pref width of the select box if the widest item was selected,
-    /// for use when <see cref="SetSelectedPrefWidth(bool)"/> is true.
+    ///     Returns the pref width of the select box if the widest item was selected,
+    ///     for use when <see cref="SetSelectedPrefWidth(bool)" /> is true.
     /// </summary>
     public float GetMaxSelectedPrefWidth()
     {
@@ -522,7 +523,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Returns the list shown when the select box is open.
+    ///     Returns the list shown when the select box is open.
     /// </summary>
     public ListBox< T >? GetList()
     {
@@ -530,7 +531,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Disables scrolling of the list shown when the select box is open.
+    ///     Disables scrolling of the list shown when the select box is open.
     /// </summary>
     public void SetScrollingDisabled( bool y )
     {
@@ -539,8 +540,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Returns the scroll pane containing the list that is shown
-    /// when the select box is open.
+    ///     Returns the scroll pane containing the list that is shown
+    ///     when the select box is open.
     /// </summary>
     public ScrollPane? GetScrollPane()
     {
@@ -577,10 +578,6 @@ public class SelectBox< T > : Widget, IDisableable
     [PublicAPI]
     public class SelectBoxList : ScrollPane
     {
-        public int            MaxListCount { get; set; }
-        public ListBox< T >   ListBox      { get; set; }
-        public SelectBox< T > SelectBox    { get; set; }
-
         // ====================================================================
 
         private readonly InputListener _hideListener;
@@ -588,7 +585,7 @@ public class SelectBox< T > : Widget, IDisableable
         private          Actor?        _previousScrollFocus;
 
         // ====================================================================
-        
+
         public SelectBoxList( SelectBox< T > selectBox )
             : base( null, selectBox.BoxStyle.ScrollStyle )
         {
@@ -612,6 +609,10 @@ public class SelectBox< T > : Widget, IDisableable
             AddListener( new SelectBoxListInputListener( this ) );
         }
 
+        public int            MaxListCount { get; set; }
+        public ListBox< T >   ListBox      { get; set; }
+        public SelectBox< T > SelectBox    { get; set; }
+
         public void Show( Stage stage )
         {
             if ( ListBox.IsTouchable() )
@@ -623,7 +624,7 @@ public class SelectBox< T > : Widget, IDisableable
             stage.AddCaptureListener( _hideListener );
 
             stage.AddListener( ListBox.KeyListener
-                            ?? throw new GdxRuntimeException( "No ListBox KeyListener available!" ) );
+                               ?? throw new GdxRuntimeException( "No ListBox KeyListener available!" ) );
 
             SelectBox.LocalToStageCoordinates( _stagePosition.Set( 0, 0 ) );
 
@@ -632,9 +633,9 @@ public class SelectBox< T > : Widget, IDisableable
             var itemHeight = ListBox.ItemHeight;
 
             var height = itemHeight
-                       * ( MaxListCount <= 0
-                               ? SelectBox._items.Count
-                               : Math.Min( MaxListCount, SelectBox._items.Count ) );
+                         * ( MaxListCount <= 0
+                             ? SelectBox._items.Count
+                             : Math.Min( MaxListCount, SelectBox._items.Count ) );
 
             var scrollPaneBackground = GetStyle().Background;
 
@@ -956,7 +957,7 @@ public class SelectBox< T > : Widget, IDisableable
     // ========================================================================
 
     /// <summary>
-    /// The Style for a <see cref="SelectBox{T}"/>.
+    ///     The Style for a <see cref="SelectBox{T}" />.
     /// </summary>
     [PublicAPI]
     public class SelectBoxStyle

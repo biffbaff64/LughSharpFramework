@@ -30,4 +30,3 @@ public class Area2D : Vector2
     public float Width  { get; private set; }
     public float Height { get; private set; }
 }
-

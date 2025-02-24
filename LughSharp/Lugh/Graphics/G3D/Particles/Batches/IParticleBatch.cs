@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Graphics.G3D.Particles.Batches;
 
 public interface IParticleBatch

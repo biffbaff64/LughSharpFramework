@@ -27,70 +27,59 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-/// A class for the synthesis filter bank. This class does a fast downsampling from 32,
-/// 44.1 or 48 kHz to 8 kHz, if ULAW is defined. Frequencies above 4 kHz are removed by
-/// ignoring higher subbands.
+///     A class for the synthesis filter bank. This class does a fast downsampling from 32,
+///     44.1 or 48 kHz to 8 kHz, if ULAW is defined. Frequencies above 4 kHz are removed by
+///     ignoring higher subbands.
 /// </summary>
 [PublicAPI]
 public class SynthesisFilter
 {
     private const double MY_PI = 3.14159265358979323846;
 
-    private readonly int     _channel;
-    private readonly float[] _samples; // 32 new subband samples
-    private readonly float   _scalefactor;
-    private readonly float[] _v1;
-    private readonly float[] _v2;
-
-    private float[]  _actualV = null!; // v1 or v2
-    private int      _actualWritePos;  // 0-15
-    private float[]? _eq;
-    private float[]  _tmpOut = null!;
-
     // Note: These values are not in the same order as in Annex 3-B.3 of the ISO/IEC DIS 11172-3 
-    private static readonly float _cos164  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( MY_PI / 64.0 ) ) );
-    private static readonly float _cos364  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 64.0 ) ) );
-    private static readonly float _cos564  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 5.0 ) / 64.0 ) ) );
-    private static readonly float _cos764  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 7.0 ) / 64.0 ) ) );
-    private static readonly float _cos964  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 9.0 ) / 64.0 ) ) );
-    private static readonly float _cos1164 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 11.0 ) / 64.0 ) ) );
-    private static readonly float _cos1364 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 13.0 ) / 64.0 ) ) );
-    private static readonly float _cos1564 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 15.0 ) / 64.0 ) ) );
-    private static readonly float _cos1764 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 17.0 ) / 64.0 ) ) );
-    private static readonly float _cos1964 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 19.0 ) / 64.0 ) ) );
-    private static readonly float _cos2164 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 21.0 ) / 64.0 ) ) );
-    private static readonly float _cos2364 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 23.0 ) / 64.0 ) ) );
-    private static readonly float _cos2564 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 25.0 ) / 64.0 ) ) );
-    private static readonly float _cos2764 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 27.0 ) / 64.0 ) ) );
-    private static readonly float _cos2964 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 29.0 ) / 64.0 ) ) );
-    private static readonly float _cos3164 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 31.0 ) / 64.0 ) ) );
-    private static readonly float _cos132  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( MY_PI / 32.0 ) ) );
-    private static readonly float _cos332  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 32.0 ) ) );
-    private static readonly float _cos532  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 5.0 ) / 32.0 ) ) );
-    private static readonly float _cos732  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 7.0 ) / 32.0 ) ) );
-    private static readonly float _cos932  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 9.0 ) / 32.0 ) ) );
-    private static readonly float _cos1132 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 11.0 ) / 32.0 ) ) );
-    private static readonly float _cos1332 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 13.0 ) / 32.0 ) ) );
-    private static readonly float _cos1532 = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 15.0 ) / 32.0 ) ) );
-    private static readonly float _cos116  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( MY_PI / 16.0 ) ) );
-    private static readonly float _cos316  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 16.0 ) ) );
-    private static readonly float _cos516  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 5.0 ) / 16.0 ) ) );
-    private static readonly float _cos716  = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 7.0 ) / 16.0 ) ) );
-    private static readonly float _cos18   = ( float ) ( 1.0 / ( 2.0 * Math.Cos( MY_PI / 8.0 ) ) );
-    private static readonly float _cos38   = ( float ) ( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 8.0 ) ) );
-    private static readonly float _cos14   = ( float ) ( 1.0 / ( 2.0 * Math.Cos( MY_PI / 4.0 ) ) );
+    private static readonly float _cos164  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 64.0 ) ) );
+    private static readonly float _cos364  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 64.0 ) ) );
+    private static readonly float _cos564  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 5.0 ) / 64.0 ) ) );
+    private static readonly float _cos764  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 7.0 ) / 64.0 ) ) );
+    private static readonly float _cos964  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 9.0 ) / 64.0 ) ) );
+    private static readonly float _cos1164 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 11.0 ) / 64.0 ) ) );
+    private static readonly float _cos1364 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 13.0 ) / 64.0 ) ) );
+    private static readonly float _cos1564 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 15.0 ) / 64.0 ) ) );
+    private static readonly float _cos1764 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 17.0 ) / 64.0 ) ) );
+    private static readonly float _cos1964 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 19.0 ) / 64.0 ) ) );
+    private static readonly float _cos2164 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 21.0 ) / 64.0 ) ) );
+    private static readonly float _cos2364 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 23.0 ) / 64.0 ) ) );
+    private static readonly float _cos2564 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 25.0 ) / 64.0 ) ) );
+    private static readonly float _cos2764 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 27.0 ) / 64.0 ) ) );
+    private static readonly float _cos2964 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 29.0 ) / 64.0 ) ) );
+    private static readonly float _cos3164 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 31.0 ) / 64.0 ) ) );
+    private static readonly float _cos132  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 32.0 ) ) );
+    private static readonly float _cos332  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 32.0 ) ) );
+    private static readonly float _cos532  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 5.0 ) / 32.0 ) ) );
+    private static readonly float _cos732  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 7.0 ) / 32.0 ) ) );
+    private static readonly float _cos932  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 9.0 ) / 32.0 ) ) );
+    private static readonly float _cos1132 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 11.0 ) / 32.0 ) ) );
+    private static readonly float _cos1332 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 13.0 ) / 32.0 ) ) );
+    private static readonly float _cos1532 = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 15.0 ) / 32.0 ) ) );
+    private static readonly float _cos116  = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 16.0 ) ) );
+    private static readonly float _cos316  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 16.0 ) ) );
+    private static readonly float _cos516  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 5.0 ) / 16.0 ) ) );
+    private static readonly float _cos716  = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 7.0 ) / 16.0 ) ) );
+    private static readonly float _cos18   = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 8.0 ) ) );
+    private static readonly float _cos38   = ( float )( 1.0 / ( 2.0 * Math.Cos( ( MY_PI * 3.0 ) / 8.0 ) ) );
+    private static readonly float _cos14   = ( float )( 1.0 / ( 2.0 * Math.Cos( MY_PI / 4.0 ) ) );
 
     private static float[]? _d;
 
     /// <summary>
-    /// d[] split into subarrays of length 16. This provides for more faster
-    /// access by allowing a block of 16 to be addressed with constant offset.
+    ///     d[] split into subarrays of length 16. This provides for more faster
+    ///     access by allowing a block of 16 to be addressed with constant offset.
     /// </summary>
     private static float[][]? _d16;
 
     /// <summary>
-    /// The original data for d[]. This data (was) loaded from a file
-    /// to reduce the overall package size and to improve performance. 
+    ///     The original data for d[]. This data (was) loaded from a file
+    ///     to reduce the overall package size and to improve performance.
     /// </summary>
     private static readonly float[] _dData =
     [
@@ -182,10 +171,21 @@ public class SynthesisFilter
         0.000473022f, 0.000015259f,
     ];
 
+    private readonly int     _channel;
+    private readonly float[] _samples; // 32 new subband samples
+    private readonly float   _scalefactor;
+    private readonly float[] _v1;
+    private readonly float[] _v2;
+
+    private float[]  _actualV = null!; // v1 or v2
+    private int      _actualWritePos;  // 0-15
+    private float[]? _eq;
+    private float[]  _tmpOut = null!;
+
     /// <summary>
-    /// Contructor.
-    /// The scalefactor scales the calculated float pcm samples to short values
-    /// (raw pcm samples are in [-1.0, 1.0], if no violations occur).
+    ///     Contructor.
+    ///     The scalefactor scales the calculated float pcm samples to short values
+    ///     (raw pcm samples are in [-1.0, 1.0], if no violations occur).
     /// </summary>
     public SynthesisFilter( int channelnumber, float factor, float[]? eq0 )
     {
@@ -241,7 +241,7 @@ public class SynthesisFilter
     }
 
     /// <summary>
-    /// Reset the synthesis filter.
+    ///     Reset the synthesis filter.
     /// </summary>
     public void Reset()
     {
@@ -288,7 +288,7 @@ public class SynthesisFilter
     }
 
     /// <summary>
-    /// Compute new values via a fast cosine transform.
+    ///     Compute new values via a fast cosine transform.
     /// </summary>
     private void ComputeNewValues()
     {
@@ -625,22 +625,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 0 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -657,22 +657,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 1 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -689,22 +689,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 2 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -721,22 +721,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 3 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -753,22 +753,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 4 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -785,22 +785,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 5 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -818,22 +818,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 6 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -850,22 +850,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 7 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -882,22 +882,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 8 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -914,22 +914,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 9 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -946,22 +946,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 10 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -978,22 +978,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 11 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -1010,22 +1010,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 12 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -1042,22 +1042,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 13 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -1074,22 +1074,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 14 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 15 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 15 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -1106,22 +1106,22 @@ public class SynthesisFilter
         for ( var i = 0; i < 32; i++ )
         {
             var pcSample = ( ( _actualV[ 15 + dvp ] * _d16![ i ][ 0 ] )
-                           + ( _actualV[ 14 + dvp ] * _d16[ i ][ 1 ] )
-                           + ( _actualV[ 13 + dvp ] * _d16[ i ][ 2 ] )
-                           + ( _actualV[ 12 + dvp ] * _d16[ i ][ 3 ] )
-                           + ( _actualV[ 11 + dvp ] * _d16[ i ][ 4 ] )
-                           + ( _actualV[ 10 + dvp ] * _d16[ i ][ 5 ] )
-                           + ( _actualV[ 9 + dvp ] * _d16[ i ][ 6 ] )
-                           + ( _actualV[ 8 + dvp ] * _d16[ i ][ 7 ] )
-                           + ( _actualV[ 7 + dvp ] * _d16[ i ][ 8 ] )
-                           + ( _actualV[ 6 + dvp ] * _d16[ i ][ 9 ] )
-                           + ( _actualV[ 5 + dvp ] * _d16[ i ][ 10 ] )
-                           + ( _actualV[ 4 + dvp ] * _d16[ i ][ 11 ] )
-                           + ( _actualV[ 3 + dvp ] * _d16[ i ][ 12 ] )
-                           + ( _actualV[ 2 + dvp ] * _d16[ i ][ 13 ] )
-                           + ( _actualV[ 1 + dvp ] * _d16[ i ][ 14 ] )
-                           + ( _actualV[ 0 + dvp ] * _d16[ i ][ 15 ] ) )
-                         * _scalefactor;
+                             + ( _actualV[ 14 + dvp ] * _d16[ i ][ 1 ] )
+                             + ( _actualV[ 13 + dvp ] * _d16[ i ][ 2 ] )
+                             + ( _actualV[ 12 + dvp ] * _d16[ i ][ 3 ] )
+                             + ( _actualV[ 11 + dvp ] * _d16[ i ][ 4 ] )
+                             + ( _actualV[ 10 + dvp ] * _d16[ i ][ 5 ] )
+                             + ( _actualV[ 9 + dvp ] * _d16[ i ][ 6 ] )
+                             + ( _actualV[ 8 + dvp ] * _d16[ i ][ 7 ] )
+                             + ( _actualV[ 7 + dvp ] * _d16[ i ][ 8 ] )
+                             + ( _actualV[ 6 + dvp ] * _d16[ i ][ 9 ] )
+                             + ( _actualV[ 5 + dvp ] * _d16[ i ][ 10 ] )
+                             + ( _actualV[ 4 + dvp ] * _d16[ i ][ 11 ] )
+                             + ( _actualV[ 3 + dvp ] * _d16[ i ][ 12 ] )
+                             + ( _actualV[ 2 + dvp ] * _d16[ i ][ 13 ] )
+                             + ( _actualV[ 1 + dvp ] * _d16[ i ][ 14 ] )
+                             + ( _actualV[ 0 + dvp ] * _d16[ i ][ 15 ] ) )
+                           * _scalefactor;
 
             _tmpOut[ i ] =  pcSample;
             dvp          += 16;
@@ -1220,7 +1220,7 @@ public class SynthesisFilter
     }
 
     /// <summary>
-    /// Calculate 32 PCM samples and put the into the Obuffer-object.
+    ///     Calculate 32 PCM samples and put the into the Obuffer-object.
     /// </summary>
     public void CalculatePcSamples( AudioBase? buffer )
     {
@@ -1245,17 +1245,17 @@ public class SynthesisFilter
     }
 
     /// <summary>
-    /// Converts a 1D array into a number of smaller arrays. This is used achieve offset
-    /// + constant indexing into an array. Each sub-array represents a block of values of
-    /// the original array.
+    ///     Converts a 1D array into a number of smaller arrays. This is used achieve offset
+    ///     + constant indexing into an array. Each sub-array represents a block of values of
+    ///     the original array.
     /// </summary>
     /// <param name="array"> The array to split up into blocks. </param>
     /// <param name="blockSize">
-    /// The size of the blocks to split the array into. This must be an exact divisor of
-    /// the length of the array, or some data will be lost from the main array.
+    ///     The size of the blocks to split the array into. This must be an exact divisor of
+    ///     the length of the array, or some data will be lost from the main array.
     /// </param>
     /// <returns>
-    /// An array of arrays in which each element in the returned array will be of length blockSize.
+    ///     An array of arrays in which each element in the returned array will be of length blockSize.
     /// </returns>
     private static float[][] SplitArray( float[] array, int blockSize )
     {

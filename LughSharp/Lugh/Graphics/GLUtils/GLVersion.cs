@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -32,24 +31,23 @@ using Platform = LughSharp.Lugh.Core.Platform;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-/// Wrapper for the current OpenGL Version used by this library.
+///     Wrapper for the current OpenGL Version used by this library.
 /// </summary>
 /// <remarks>
-/// It is HIGHLY likely that this class can be removed, with some minor work elsewhere.
+///     It is HIGHLY likely that this class can be removed, with some minor work elsewhere.
 /// </remarks>
-[PublicAPI, DebuggerDisplay( "DebugVersionString" )]
+[PublicAPI]
+[DebuggerDisplay( "DebugVersionString" )]
 public class GLVersion
 {
-    public GraphicsBackend.BackendType BackendType { get; set; }
-
     // ========================================================================
 
-    private int _majorVersion    = 0;
-    private int _minorVersion    = 0;
-    private int _revisionVersion = 0;
+    private int    _majorVersion    = 0;
+    private int    _minorVersion    = 0;
+    private string _renderer        = "";
+    private int    _revisionVersion = 0;
 
-    private string _vendor   = "";
-    private string _renderer = "";
+    private string _vendor = "";
 
     // ========================================================================
     // ========================================================================
@@ -78,11 +76,14 @@ public class GLVersion
         Logger.Debug( DebugVersionString() );
     }
 
+    public GraphicsBackend.BackendType BackendType { get; set; }
+
     public unsafe string VendorString
     {
         get
         {
             _vendor = BytePointerToString.Convert( GdxApi.Bindings.GetString( ( int )StringName.Vendor ) );
+
             return _vendor;
         }
     }
@@ -92,12 +93,12 @@ public class GLVersion
         get
         {
             _renderer = BytePointerToString.Convert( GdxApi.Bindings.GetString( ( int )StringName.Renderer ) );
+
             return _renderer;
         }
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <returns></returns>
     public (int major, int minor, int revision) Get()
@@ -106,8 +107,8 @@ public class GLVersion
     }
 
     /// <summary>
-    /// Checks to see if the current GL connection version is higher, or
-    /// equal to the provided test versions.
+    ///     Checks to see if the current GL connection version is higher, or
+    ///     equal to the provided test versions.
     /// </summary>
     /// <param name="testMajorVersion"> the major version to test against </param>
     /// <param name="testMinorVersion"> the minor version to test against </param>
@@ -119,7 +120,7 @@ public class GLVersion
     }
 
     /// <summary>
-    /// Returns a string with the current GL connection data.
+    ///     Returns a string with the current GL connection data.
     /// </summary>
     public string DebugVersionString()
     {

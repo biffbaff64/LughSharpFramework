@@ -27,9 +27,9 @@ using LughSharp.Lugh.Graphics.G2D;
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-/// A general purpose class containing named colors that can be changed at will.
-/// For example, the markup language defined by the <see cref="BitmapFontCache"/> class
-/// uses this class to retrieve colors and the user can define his own colors.
+///     A general purpose class containing named colors that can be changed at will.
+///     For example, the markup language defined by the <see cref="BitmapFontCache" /> class
+///     uses this class to retrieve colors and the user can define his own colors.
 /// </summary>
 [PublicAPI]
 public static class Colors
@@ -37,14 +37,14 @@ public static class Colors
     public static Dictionary< string, Color > Map { get; set; } = new();
 
     // ========================================================================
-    
+
     /// <summary>
-    /// Looks up a color by its name.
+    ///     Looks up a color by its name.
     /// </summary>
     /// <param name="name">The name of the color.</param>
     /// <returns>
-    /// The <see cref="Color"/> associated with the specified <paramref name="name"/>,
-    /// or <c>null</c> if no mapping was found.
+    ///     The <see cref="Color" /> associated with the specified <paramref name="name" />,
+    ///     or <c>null</c> if no mapping was found.
     /// </returns>
     public static Color? Get( string name )
     {
@@ -52,7 +52,7 @@ public static class Colors
     }
 
     /// <summary>
-    /// Adds or replaces a color with the specified name.
+    ///     Adds or replaces a color with the specified name.
     /// </summary>
     /// <param name="name">The name of the color.</param>
     /// <param name="color">The color to add or replace.</param>
@@ -62,7 +62,7 @@ public static class Colors
     }
 
     /// <summary>
-    /// Resets the color map to the predefined colors.
+    ///     Resets the color map to the predefined colors.
     /// </summary>
     public static void Reset()
     {
@@ -71,7 +71,7 @@ public static class Colors
     }
 
     /// <summary>
-    /// Adds the predefined colors to the color map.
+    ///     Adds the predefined colors to the color map.
     /// </summary>
     private static void AddPredefinedColors()
     {

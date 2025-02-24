@@ -23,16 +23,17 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-/// To deal with HDPI monitors properly, use the glViewport and glScissor functions
-/// of this class instead of directly calling OpenGL yourself. The logical coordinate
-/// system provided by the operating system may not have the same resolution as the
-/// actual drawing surface to which OpenGL draws, also known as the backbuffer. This
-/// class will ensure, that you pass the correct values to OpenGL for any function
-/// that expects backbuffer coordinates instead of logical coordinates.
+///     To deal with HDPI monitors properly, use the glViewport and glScissor functions
+///     of this class instead of directly calling OpenGL yourself. The logical coordinate
+///     system provided by the operating system may not have the same resolution as the
+///     actual drawing surface to which OpenGL draws, also known as the backbuffer. This
+///     class will ensure, that you pass the correct values to OpenGL for any function
+///     that expects backbuffer coordinates instead of logical coordinates.
 /// </summary>
 [PublicAPI]
 public class HdpiUtils
@@ -40,10 +41,10 @@ public class HdpiUtils
     private static HdpiMode _mode = HdpiMode.Logical;
 
     /// <summary>
-    /// Allows applications to override HDPI coordinate conversion for glViewport and
-    /// glScissor calls. This function can be used to ignore the default behavior, for
-    /// example when rendering a UI stage to an off-screen framebuffer:
-    /// <code>
+    ///     Allows applications to override HDPI coordinate conversion for glViewport and
+    ///     glScissor calls. This function can be used to ignore the default behavior, for
+    ///     example when rendering a UI stage to an off-screen framebuffer:
+    ///     <code>
     ///     HdpiUtils.setMode(HdpiMode.Pixels);
     ///     fb.begin();
     ///     stage.draw();
@@ -52,7 +53,7 @@ public class HdpiUtils
     /// </code>
     /// </summary>
     /// <param name="mode">
-    /// set to HdpiMode.Pixels to ignore HDPI conversion for glViewport and glScissor functions
+    ///     set to HdpiMode.Pixels to ignore HDPI conversion for glViewport and glScissor functions
     /// </param>
     public static void SetMode( HdpiMode mode )
     {
@@ -60,20 +61,20 @@ public class HdpiUtils
     }
 
     /// <summary>
-    /// Calls <see cref="GLBindings.glScissor(int, int, int, int)"/>, expecting the
-    /// coordinates and sizes given in logical coordinates and automatically
-    /// converts them to backbuffer coordinates, which may be bigger on HDPI screens.
+    ///     Calls <see cref="OpenGL.GLBindings.glScissor(int, int, int, int)" />, expecting the
+    ///     coordinates and sizes given in logical coordinates and automatically
+    ///     converts them to backbuffer coordinates, which may be bigger on HDPI screens.
     /// </summary>
     public static void GLScissor( int x, int y, int width, int height )
     {
         if ( ( _mode == HdpiMode.Logical )
-          && ( ( GdxApi.Graphics.Width != GdxApi.Graphics.BackBufferWidth )
-            || ( GdxApi.Graphics.Height != GdxApi.Graphics.BackBufferHeight ) ) )
+             && ( ( GdxApi.Graphics.Width != GdxApi.Graphics.BackBufferWidth )
+                  || ( GdxApi.Graphics.Height != GdxApi.Graphics.BackBufferHeight ) ) )
         {
             GdxApi.Bindings.Scissor( ToBackBufferX( x ),
-                              ToBackBufferY( y ),
-                              ToBackBufferX( width ),
-                              ToBackBufferY( height ) );
+                                     ToBackBufferY( y ),
+                                     ToBackBufferX( width ),
+                                     ToBackBufferY( height ) );
         }
         else
         {
@@ -82,20 +83,20 @@ public class HdpiUtils
     }
 
     /// <summary>
-    /// Calls <see cref="GLBindings.glViewport(int, int, int, int)"/>, expecting
-    /// the coordinates and sizes given in logical coordinates and automatically
-    /// converts them to backbuffer coordinates, which may be bigger on HDPI screens.
+    ///     Calls <see cref="OpenGL.GLBindings.glViewport(int, int, int, int)" />, expecting
+    ///     the coordinates and sizes given in logical coordinates and automatically
+    ///     converts them to backbuffer coordinates, which may be bigger on HDPI screens.
     /// </summary>
     public static void GLViewport( int x, int y, int width, int height )
     {
         if ( ( _mode == HdpiMode.Logical )
-          && ( ( GdxApi.Graphics.Width != GdxApi.Graphics.BackBufferWidth )
-            || ( GdxApi.Graphics.Height != GdxApi.Graphics.BackBufferHeight ) ) )
+             && ( ( GdxApi.Graphics.Width != GdxApi.Graphics.BackBufferWidth )
+                  || ( GdxApi.Graphics.Height != GdxApi.Graphics.BackBufferHeight ) ) )
         {
             GdxApi.Bindings.Viewport( ToBackBufferX( x ),
-                               ToBackBufferY( y ),
-                               ToBackBufferX( width ),
-                               ToBackBufferY( height ) );
+                                      ToBackBufferY( y ),
+                                      ToBackBufferX( width ),
+                                      ToBackBufferY( height ) );
         }
         else
         {
@@ -104,38 +105,38 @@ public class HdpiUtils
     }
 
     /// <summary>
-    /// Converts an x-coordinate given in backbuffer coordinates to
-    /// logical screen coordinates.
+    ///     Converts an x-coordinate given in backbuffer coordinates to
+    ///     logical screen coordinates.
     /// </summary>
     public static int ToLogicalX( int backBufferX )
     {
-        return ( int ) ( ( backBufferX * GdxApi.Graphics.Width ) / ( float ) GdxApi.Graphics.BackBufferWidth );
+        return ( int )( ( backBufferX * GdxApi.Graphics.Width ) / ( float )GdxApi.Graphics.BackBufferWidth );
     }
 
     /// <summary>
-    /// Convers an y-coordinate given in backbuffer coordinates to
-    /// logical screen coordinates
+    ///     Convers an y-coordinate given in backbuffer coordinates to
+    ///     logical screen coordinates
     /// </summary>
     public static int ToLogicalY( int backBufferY )
     {
-        return ( int ) ( ( backBufferY * GdxApi.Graphics.Height ) / ( float ) GdxApi.Graphics.BackBufferHeight );
+        return ( int )( ( backBufferY * GdxApi.Graphics.Height ) / ( float )GdxApi.Graphics.BackBufferHeight );
     }
 
     /// <summary>
-    /// Converts an x-coordinate given in logical screen coordinates to
-    /// backbuffer coordinates.
+    ///     Converts an x-coordinate given in logical screen coordinates to
+    ///     backbuffer coordinates.
     /// </summary>
     public static int ToBackBufferX( int logicalX )
     {
-        return ( int ) ( ( logicalX * GdxApi.Graphics.BackBufferWidth ) / ( float ) GdxApi.Graphics.Width );
+        return ( int )( ( logicalX * GdxApi.Graphics.BackBufferWidth ) / ( float )GdxApi.Graphics.Width );
     }
 
     /// <summary>
-    /// Convers an y-coordinate given in backbuffer coordinates to
-    /// logical screen coordinates
+    ///     Convers an y-coordinate given in backbuffer coordinates to
+    ///     logical screen coordinates
     /// </summary>
     public static int ToBackBufferY( int logicalY )
     {
-        return ( int ) ( ( logicalY * GdxApi.Graphics.BackBufferHeight ) / ( float ) GdxApi.Graphics.Height );
+        return ( int )( ( logicalY * GdxApi.Graphics.BackBufferHeight ) / ( float )GdxApi.Graphics.Height );
     }
 }

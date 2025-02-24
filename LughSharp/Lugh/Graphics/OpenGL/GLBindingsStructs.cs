@@ -29,7 +29,6 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 public partial class GLBindings
 {
     /// <summary>
-    /// 
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]
@@ -52,7 +51,6 @@ public partial class GLBindings
     }
 
     /// <summary>
-    /// 
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]

@@ -24,7 +24,6 @@
 
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
-public class DrawBindings
+public class RenderBufferBindings
 {
-    
 }

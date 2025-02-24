@@ -22,27 +22,26 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-/// This class represents a cumulative distribution.
-/// <para>
-/// It can be used in scenarios where there are values with different probabilities
-/// and it's required to pick one of those respecting the probability.
-/// </para>
-/// <para>
-/// For example one could represent the frequency of the alphabet letters using a
-/// cumulative distribution and use it to randomly pick a letter respecting their
-/// probabilities (useful when generating random words).
-/// </para>
-/// <para>
-/// Another example could be point generation on a mesh surface: one could generate a
-/// cumulative distribution using triangles areas as interval size, in this way triangles
-/// with a large area will be picked more often than triangles with a smaller one.
-/// See <a href="http://en.wikipedia.org/wiki/Cumulative_distribution_function">Wikipedia</a>
-/// for a detailed explanation.
-/// </para>
+///     This class represents a cumulative distribution.
+///     <para>
+///         It can be used in scenarios where there are values with different probabilities
+///         and it's required to pick one of those respecting the probability.
+///     </para>
+///     <para>
+///         For example one could represent the frequency of the alphabet letters using a
+///         cumulative distribution and use it to randomly pick a letter respecting their
+///         probabilities (useful when generating random words).
+///     </para>
+///     <para>
+///         Another example could be point generation on a mesh surface: one could generate a
+///         cumulative distribution using triangles areas as interval size, in this way triangles
+///         with a large area will be picked more often than triangles with a smaller one.
+///         See <a href="http://en.wikipedia.org/wiki/Cumulative_distribution_function">Wikipedia</a>
+///         for a detailed explanation.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class CumulativeDistribution< T >
@@ -50,7 +49,7 @@ public class CumulativeDistribution< T >
     private readonly List< CumulativeValue > _values = new( 10 );
 
     /// <summary>
-    /// Adds a value with a given interval size to the distribution
+    ///     Adds a value with a given interval size to the distribution
     /// </summary>
     public virtual void Add( T value, float intervalSize )
     {
@@ -58,7 +57,7 @@ public class CumulativeDistribution< T >
     }
 
     /// <summary>
-    /// Adds a value with interval size equal to zero to the distribution
+    ///     Adds a value with interval size equal to zero to the distribution
     /// </summary>
     public virtual void Add( T value )
     {
@@ -66,7 +65,7 @@ public class CumulativeDistribution< T >
     }
 
     /// <summary>
-    /// Generate the cumulative distribution
+    ///     Generate the cumulative distribution
     /// </summary>
     public virtual void Generate()
     {
@@ -80,8 +79,8 @@ public class CumulativeDistribution< T >
     }
 
     /// <summary>
-    /// Generate the cumulative distribution in [0,1] where each interval
-    /// will get a frequency between [0,1]
+    ///     Generate the cumulative distribution in [0,1] where each interval
+    ///     will get a frequency between [0,1]
     /// </summary>
     public virtual void GenerateNormalized()
     {
@@ -102,8 +101,8 @@ public class CumulativeDistribution< T >
     }
 
     /// <summary>
-    /// Generate the cumulative distribution in [0,1] where each value will have
-    /// the same frequency and interval size
+    ///     Generate the cumulative distribution in [0,1] where each value will have
+    ///     the same frequency and interval size
     /// </summary>
     public virtual void GenerateUniform()
     {
@@ -117,10 +116,9 @@ public class CumulativeDistribution< T >
         }
     }
 
-
     /// <summary>
-    /// Finds the value whose interval contains the given probability
-    /// Binary search algorithm is used to find the value.
+    ///     Finds the value whose interval contains the given probability
+    ///     Binary search algorithm is used to find the value.
     /// </summary>
     /// <param name="probability"> </param>
     /// <returns> the value whose interval contains the probability  </returns>
@@ -180,8 +178,8 @@ public class CumulativeDistribution< T >
     // ========================================================================
 
     /// <summary>
-    /// Set the interval size on the passed in object.
-    /// The object must be present in the distribution.
+    ///     Set the interval size on the passed in object.
+    ///     The object must be present in the distribution.
     /// </summary>
     public virtual void SetInterval( T obj, float intervalSize )
     {
@@ -197,7 +195,7 @@ public class CumulativeDistribution< T >
     }
 
     /// <summary>
-    /// Sets the interval size for the value at the given index
+    ///     Sets the interval size for the value at the given index
     /// </summary>
     public virtual void SetInterval( int index, float intervalSize )
     {
@@ -205,7 +203,7 @@ public class CumulativeDistribution< T >
     }
 
     /// <summary>
-    /// Removes all the values from the distribution
+    ///     Removes all the values from the distribution
     /// </summary>
     public virtual void Clear()
     {

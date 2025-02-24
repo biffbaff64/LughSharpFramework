@@ -27,8 +27,8 @@ namespace LughSharp.Lugh.Graphics.Images;
 public partial class Gdx2DPixmap
 {
     /// <summary>
-    /// Clear the pd defined in the supplied <see cref="PixmapDataType"/>,
-    /// setting it to the supplied Color.
+    ///     Clear the pd defined in the supplied <see cref="PixmapDataType" />,
+    ///     setting it to the supplied Color.
     /// </summary>
     /// <param name="color"> The Color. </param>
     public void Clear( Color color )
@@ -120,7 +120,7 @@ public partial class Gdx2DPixmap
     internal static void clear_RGBA8888( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGBA8888( color );
-        var a   = ( byte )( ( col & 0x000000ff ) );
+        var a   = ( byte )( col & 0x000000ff );
         var b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
         var g   = ( byte )( ( col & 0x00ff0000 ) >> 16 );
         var r   = ( byte )( ( col & 0xff000000 ) >> 24 );
@@ -193,7 +193,7 @@ public partial class Gdx2DPixmap
                 r = ( color & 0xff000000 ) >> 24;
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
-                a = ( color & 0xff );
+                a = color & 0xff;
                 var l = ( ( uint )( ( 0.2126f * r ) + ( 0.7152 * g ) + ( 0.0722 * b ) ) & 0xff ) << 8;
 
                 return ( l & 0xffffff00 ) | a;

@@ -46,8 +46,8 @@ public class ParticleEffectPool( ParticleEffect effect, int initialCapacity, int
         effect1.Reset( false ); // copy parameters exactly to avoid introducing error
 
         if ( !effect1.XSizeScale.Equals( effect.XSizeScale )
-          || !effect1.YSizeScale.Equals( effect.YSizeScale )
-          || !effect1.MotionScale.Equals( effect.MotionScale ) )
+             || !effect1.YSizeScale.Equals( effect.YSizeScale )
+             || !effect1.MotionScale.Equals( effect.MotionScale ) )
         {
             List< ParticleEmitter > emitters         = effect1.GetEmitters();
             List< ParticleEmitter > templateEmitters = effect.GetEmitters();
@@ -66,7 +66,6 @@ public class ParticleEffectPool( ParticleEffect effect, int initialCapacity, int
             effect1.MotionScale = effect.MotionScale;
         }
     }
-
 
     public class PooledEffect : ParticleEffect
     {

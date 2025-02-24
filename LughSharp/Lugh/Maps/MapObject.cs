@@ -27,7 +27,7 @@ using LughSharp.Lugh.Graphics;
 namespace LughSharp.Lugh.Maps;
 
 /// <summary>
-/// Generic Map entity with basic attributes like name, opacity, color
+///     Generic Map entity with basic attributes like name, opacity, color
 /// </summary>
 [PublicAPI]
 public class MapObject

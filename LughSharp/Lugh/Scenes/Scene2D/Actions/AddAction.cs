@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-/// Adds an action to an actor.
+///     Adds an action to an actor.
 /// </summary>
 [PublicAPI]
 public class AddAction : Action

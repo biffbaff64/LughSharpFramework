@@ -22,23 +22,20 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.CompilerServices;
-
 using LughSharp.Lugh.Graphics.G2D;
 
 using Exception = System.Exception;
-using NotNull = System.Diagnostics.CodeAnalysis.NotNullAttribute;
 
 namespace LughSharp.Lugh.Utils.Exceptions;
 
 /// <summary>
-/// Typed runtime exception used in SpriteBatch.
+///     Typed runtime exception used in SpriteBatch.
 /// </summary>
 [PublicAPI]
 public class SpriteBatchException : ApplicationException
 {
     /// <summary>
-    /// Initializes a new SpriteBatchException with a specified error message.
+    ///     Initializes a new SpriteBatchException with a specified error message.
     /// </summary>
     /// <param name="message"> The message that describes the error. </param>
     public SpriteBatchException( string? message = "" )
@@ -47,12 +44,12 @@ public class SpriteBatchException : ApplicationException
     }
 
     /// <summary>
-    /// Initializes a new SpriteBatchException with a reference to the inner exception
-    /// that is the cause of this exception.
+    ///     Initializes a new SpriteBatchException with a reference to the inner exception
+    ///     that is the cause of this exception.
     /// </summary>
     /// <param name="e">
-    /// The exception that is the cause of the current exception, or a null
-    /// reference if no inner exception is specified.
+    ///     The exception that is the cause of the current exception, or a null
+    ///     reference if no inner exception is specified.
     /// </param>
     public SpriteBatchException( Exception? e )
         : this( "", e )
@@ -60,13 +57,13 @@ public class SpriteBatchException : ApplicationException
     }
 
     /// <summary>
-    /// Initializes a new SpriteBatchException with a specified error message and a
-    /// reference to the inner exception that is the cause of this exception.
+    ///     Initializes a new SpriteBatchException with a specified error message and a
+    ///     reference to the inner exception that is the cause of this exception.
     /// </summary>
     /// <param name="message">The error message that explains the reason for the exception.</param>
     /// <param name="exception">
-    /// The exception that is the cause of the current exception, or a null
-    /// reference if no inner exception is specified.
+    ///     The exception that is the cause of the current exception, or a null
+    ///     reference if no inner exception is specified.
     /// </param>
     public SpriteBatchException( string message, Exception? exception )
         : base( message, exception )
@@ -74,7 +71,7 @@ public class SpriteBatchException : ApplicationException
     }
 
     /// <summary>
-    /// Throws an SpriteBatchException if End, or Draw, is called before Begin.
+    ///     Throws an SpriteBatchException if End, or Draw, is called before Begin.
     /// </summary>
     /// <param name="batch"> </param>
     [InTesting]
@@ -87,7 +84,7 @@ public class SpriteBatchException : ApplicationException
     }
 
     /// <summary>
-    /// Throws an SpriteBatchException if Begin is called before End and the batch is currently drawing.
+    ///     Throws an SpriteBatchException if Begin is called before End and the batch is currently drawing.
     /// </summary>
     /// <param name="batch"> </param>
     [InTesting]
@@ -100,7 +97,7 @@ public class SpriteBatchException : ApplicationException
     }
 
     // ========================================================================
-    
+
     [DoesNotReturn]
     internal static void Throw( string? message )
     {

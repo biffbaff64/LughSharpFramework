@@ -39,7 +39,6 @@ public class ColorBleedEffect
     // ========================================================================
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="image"></param>
     /// <param name="maxIterations"></param>
@@ -80,7 +79,6 @@ public class ColorBleedEffect
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="pixels"></param>
     /// <param name="mask"></param>
@@ -138,7 +136,6 @@ public class ColorBleedEffect
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="width"></param>
     /// <param name="x"></param>
@@ -153,16 +150,13 @@ public class ColorBleedEffect
     // ========================================================================
 
     /// <summary>
-    /// 
     /// </summary>
     [PublicAPI]
     private class Mask
     {
-        public int PendingSize { get; private set; }
-
         private readonly bool[] _blank;
-        private readonly int[]  _pending;
         private readonly int[]  _changing;
+        private readonly int[]  _pending;
         private          int    _changingSize;
 
         public Mask( Rgba32[] pixels )
@@ -184,8 +178,9 @@ public class ColorBleedEffect
             }
         }
 
+        public int PendingSize { get; private set; }
+
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -195,7 +190,6 @@ public class ColorBleedEffect
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
@@ -216,7 +210,6 @@ public class ColorBleedEffect
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="mask"></param>
         [PublicAPI]
@@ -225,7 +218,6 @@ public class ColorBleedEffect
             private int _index;
 
             /// <summary>
-            /// 
             /// </summary>
             /// <returns></returns>
             public bool HasNext()
@@ -234,7 +226,6 @@ public class ColorBleedEffect
             }
 
             /// <summary>
-            /// 
             /// </summary>
             /// <returns></returns>
             /// <exception cref="InvalidOperationException"></exception>
@@ -249,7 +240,6 @@ public class ColorBleedEffect
             }
 
             /// <summary>
-            /// 
             /// </summary>
             public void MarkAsInProgress()
             {
@@ -259,7 +249,6 @@ public class ColorBleedEffect
             }
 
             /// <summary>
-            /// 
             /// </summary>
             public void Reset()
             {

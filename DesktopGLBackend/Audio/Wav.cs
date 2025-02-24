@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Utils.Exceptions;
-using JetBrains.Annotations;
 
 namespace DesktopGLBackend.Audio;
 

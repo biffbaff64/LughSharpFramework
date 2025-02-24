@@ -22,13 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Utils.Pooling;
 
 /// <summary>
-/// A <see cref="Pool{T}"/> which keeps track of the items obtained by calling
-/// (see <see cref="Obtain()"/>), which can be freed all at once using the
-/// <see cref="Flush()"/> method.
+///     A <see cref="Pool{T}" /> which keeps track of the items obtained by calling
+///     (see <see cref="Obtain()" />), which can be freed all at once using the
+///     <see cref="Flush()" /> method.
 /// </summary>
 [PublicAPI]
 public abstract class FlushablePool< T > : Pool< T >
@@ -36,7 +35,7 @@ public abstract class FlushablePool< T > : Pool< T >
     private readonly List< T > _obtained = [ ];
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     protected FlushablePool()
     {
@@ -65,12 +64,12 @@ public abstract class FlushablePool< T > : Pool< T >
     }
 
     /// <summary>
-    /// Frees all obtained instances.
+    ///     Frees all obtained instances.
     /// </summary>
     public virtual void Flush()
     {
         FreeAll( _obtained );
-        
+
         _obtained.Clear();
     }
 

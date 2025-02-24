@@ -32,10 +32,10 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
 
 /// <summary>
-/// Renders ortho tiles by caching geometry on the GPU. How much is cached is controlled
-/// by SetOverCache(float). When the view reaches the edge of the cached tiles, the cache
-/// is rebuilt at the new view position. This class may have poor performance when tiles
-/// are often changed dynamically, since the cache must be rebuilt after each change.
+///     Renders ortho tiles by caching geometry on the GPU. How much is cached is controlled
+///     by SetOverCache(float). When the view reaches the edge of the cached tiles, the cache
+///     is rebuilt at the new view position. This class may have poor performance when tiles
+///     are often changed dynamically, since the cache must be rebuilt after each change.
 /// </summary>
 [PublicAPI]
 public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
@@ -67,7 +67,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     /// <param name="map"></param>
     /// <param name="unitScale"></param>
     /// <param name="cacheSize">
-    /// The maximum number of tiles that can be cached. The default size is 2000.
+    ///     The maximum number of tiles that can be cached. The default size is 2000.
     /// </param>
     public OrthoCachedTiledMapRenderer( TiledMap map, float unitScale, int cacheSize = DEFAULT_CACHE_SIZE )
     {
@@ -77,11 +77,11 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     }
 
     /// <summary>
-    /// Sets the percentage of the view that is cached in each direction. Default is 0.5.
-    /// <para>
-    /// Eg, 0.75 will cache 75% of the width of the view to the left and right of the view,
-    /// and 75% of the height of the view above and below the view.
-    /// </para>
+    ///     Sets the percentage of the view that is cached in each direction. Default is 0.5.
+    ///     <para>
+    ///         Eg, 0.75 will cache 75% of the width of the view to the left and right of the view,
+    ///         and 75% of the height of the view above and below the view.
+    ///     </para>
     /// </summary>
     public float OverCache { get; set; } = 0.50f;
 
@@ -103,9 +103,9 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
         ViewBounds.Set( camera.Position.X - ( width / 2 ), camera.Position.Y - ( height / 2 ), width, height );
 
         if ( ( CanCacheMoreW && ( ViewBounds.X < ( CacheBounds.X - _tolerance ) ) )
-          || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - _tolerance ) ) )
-          || ( CanCacheMoreE && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + _tolerance ) ) )
-          || ( CanCacheMoreN && ( ( ViewBounds.Y + ViewBounds.Height ) > ( CacheBounds.Y + CacheBounds.Height + _tolerance ) ) ) )
+             || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - _tolerance ) ) )
+             || ( CanCacheMoreE && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + _tolerance ) ) )
+             || ( CanCacheMoreN && ( ( ViewBounds.Y + ViewBounds.Height ) > ( CacheBounds.Y + CacheBounds.Height + _tolerance ) ) ) )
         {
             Cached = false;
         }
@@ -125,9 +125,9 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
         ViewBounds.Set( x, y, width, height );
 
         if ( ( CanCacheMoreW && ( ViewBounds.X < ( CacheBounds.X - _tolerance ) ) )
-          || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - _tolerance ) ) )
-          || ( CanCacheMoreE && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + _tolerance ) ) )
-          || ( CanCacheMoreN && ( ( ViewBounds.Y + ViewBounds.Height ) > ( CacheBounds.Y + CacheBounds.Height + _tolerance ) ) ) )
+             || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - _tolerance ) ) )
+             || ( CanCacheMoreE && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + _tolerance ) ) )
+             || ( CanCacheMoreN && ( ( ViewBounds.Y + ViewBounds.Height ) > ( CacheBounds.Y + CacheBounds.Height + _tolerance ) ) ) )
         {
             Cached = false;
         }
@@ -283,13 +283,13 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
         // offset in tiled is y down, so we flip it
         var layerOffsetY = -layer.RenderOffsetY * UnitScale;
 
-        var col1 = Math.Max( 0, ( int ) ( ( CacheBounds.X - layerOffsetX ) / layerTileWidth ) );
+        var col1 = Math.Max( 0, ( int )( ( CacheBounds.X - layerOffsetX ) / layerTileWidth ) );
         var col2 = Math.Min( layerWidth,
-                             ( int ) ( ( ( CacheBounds.X + CacheBounds.Width + layerTileWidth ) - layerOffsetX ) / layerTileWidth ) );
+                             ( int )( ( ( CacheBounds.X + CacheBounds.Width + layerTileWidth ) - layerOffsetX ) / layerTileWidth ) );
 
-        var row1 = Math.Max( 0, ( int ) ( ( CacheBounds.Y - layerOffsetY ) / layerTileHeight ) );
+        var row1 = Math.Max( 0, ( int )( ( CacheBounds.Y - layerOffsetY ) / layerTileHeight ) );
         var row2 = Math.Min( layerHeight,
-                             ( int ) ( ( ( CacheBounds.Y + CacheBounds.Height + layerTileHeight ) - layerOffsetY ) / layerTileHeight ) );
+                             ( int )( ( ( CacheBounds.Y + CacheBounds.Height + layerTileHeight ) - layerOffsetY ) / layerTileHeight ) );
 
         CanCacheMoreN = row2 < layerHeight;
         CanCacheMoreE = col2 < layerWidth;
@@ -488,7 +488,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     }
 
     /// <summary>
-    /// Causes the cache to be rebuilt the next time it is rendered.
+    ///     Causes the cache to be rebuilt the next time it is rendered.
     /// </summary>
     public void InvalidateCache()
     {
@@ -496,7 +496,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     }
 
     /// <summary>
-    /// Returns true if tiles are currently cached.
+    ///     Returns true if tiles are currently cached.
     /// </summary>
     public bool IsCached()
     {
@@ -504,17 +504,17 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     }
 
     /// <summary>
-    /// Expands the view size in each direction, ensuring that tiles of this size or
-    /// smaller are never culled from the visible portion of the view. Default is 0,0.
-    /// <para>
-    /// The amount of tiles cached is computed using <tt>(view size + max tile size) * overCache</tt>,
-    /// meaning the max tile size increases the amount cached and possibly
-    /// <see cref="OverCache"/> can be reduced.
-    /// </para>
-    /// <para>
-    /// If the view size and <see cref="OverCache"/> are configured so the size of the
-    /// cached tiles is always larger than the largest tile size, this setting is not needed.
-    /// </para>
+    ///     Expands the view size in each direction, ensuring that tiles of this size or
+    ///     smaller are never culled from the visible portion of the view. Default is 0,0.
+    ///     <para>
+    ///         The amount of tiles cached is computed using <tt>(view size + max tile size) * overCache</tt>,
+    ///         meaning the max tile size increases the amount cached and possibly
+    ///         <see cref="OverCache" /> can be reduced.
+    ///     </para>
+    ///     <para>
+    ///         If the view size and <see cref="OverCache" /> are configured so the size of the
+    ///         cached tiles is always larger than the largest tile size, this setting is not needed.
+    ///     </para>
     /// </summary>
     public void SetMaxTileSize( float maxPixelWidth, float maxPixelHeight )
     {

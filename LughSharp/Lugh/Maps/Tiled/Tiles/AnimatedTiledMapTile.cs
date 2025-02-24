@@ -22,22 +22,19 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils.Exceptions;
+
 using Blendmode = LughSharp.Lugh.Maps.Tiled.ITiledMapTile.Blendmode;
 
 namespace LughSharp.Lugh.Maps.Tiled.Tiles;
 
 /// <summary>
-/// Represents an animating <see cref="ITiledMapTile"/>.
+///     Represents an animating <see cref="ITiledMapTile" />.
 /// </summary>
 [PublicAPI]
 public class AnimatedTiledMapTile : ITiledMapTile
 {
-    public int       ID        { get; set; }
-    public Blendmode BlendMode { get; set; } = Blendmode.Alpha;
-
     private static readonly long _initialTimeOffset = DateTime.Now.Millisecond;
 
     private static   long                 _lastTiledMapRenderTime = 0;
@@ -52,34 +49,34 @@ public class AnimatedTiledMapTile : ITiledMapTile
     // ========================================================================
 
     /// <summary>
-    /// Creates an animated tile with the given animation interval and frame tiles.
+    ///     Creates an animated tile with the given animation interval and frame tiles.
     /// </summary>
     /// <param name="interval">The interval between each individual frame tile.</param>
     /// <param name="frameTiles">
-    /// An array of <see cref="StaticTiledMapTile"/>s that make up the animation.
+    ///     An array of <see cref="StaticTiledMapTile" />s that make up the animation.
     /// </param>
     public AnimatedTiledMapTile( float interval, List< StaticTiledMapTile > frameTiles )
     {
         _frameTiles = new StaticTiledMapTile[ frameTiles.Count ];
 
-        _loopDuration       = frameTiles.Count * ( int ) ( interval * 1000f );
+        _loopDuration       = frameTiles.Count * ( int )( interval * 1000f );
         _animationIntervals = new int[ frameTiles.Count ];
 
         for ( var i = 0; i < frameTiles.Count; ++i )
         {
             _frameTiles[ i ]         = frameTiles[ i ];
-            _animationIntervals[ i ] = ( int ) ( interval * 1000f );
+            _animationIntervals[ i ] = ( int )( interval * 1000f );
         }
     }
 
     /// <summary>
-    /// Creates an animated tile with the given animation intervals and frame tiles.
+    ///     Creates an animated tile with the given animation intervals and frame tiles.
     /// </summary>
     /// <param name="intervals">
-    /// The intervals between each individual frame tile in milliseconds.
+    ///     The intervals between each individual frame tile in milliseconds.
     /// </param>
     /// <param name="frameTiles">
-    /// An array of <see cref="StaticTiledMapTile"/> that make up the animation.
+    ///     An array of <see cref="StaticTiledMapTile" /> that make up the animation.
     /// </param>
     public AnimatedTiledMapTile( List< int > intervals, List< StaticTiledMapTile > frameTiles )
     {
@@ -95,8 +92,11 @@ public class AnimatedTiledMapTile : ITiledMapTile
         }
     }
 
+    public int       ID        { get; set; }
+    public Blendmode BlendMode { get; set; } = Blendmode.Alpha;
+
     /// <summary>
-    /// The currently displayed animation frame.
+    ///     The currently displayed animation frame.
     /// </summary>
     public TextureRegion TextureRegion
     {
@@ -105,7 +105,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     }
 
     /// <summary>
-    /// X-coordinate of the currently displayed animation frame in the tilemap.
+    ///     X-coordinate of the currently displayed animation frame in the tilemap.
     /// </summary>
     public float OffsetX
     {
@@ -114,7 +114,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     }
 
     /// <summary>
-    /// Y-coordinate of the currently displayed animation frame in the tilemap.
+    ///     Y-coordinate of the currently displayed animation frame in the tilemap.
     /// </summary>
     public float OffsetY
     {
@@ -122,12 +122,16 @@ public class AnimatedTiledMapTile : ITiledMapTile
         set { }
     }
 
+    public MapProperties Properties => _properties ??= new MapProperties();
+
+    public MapObjects MapObjects => _mapObjects ??= new MapObjects();
+
     /// <summary>
-    /// Gets the index into the animation images array
+    ///     Gets the index into the animation images array
     /// </summary>
     public int GetCurrentFrameIndex()
     {
-        var currentTime = ( int ) ( _lastTiledMapRenderTime % _loopDuration );
+        var currentTime = ( int )( _lastTiledMapRenderTime % _loopDuration );
 
         for ( var i = 0; i < _animationIntervals.Length; ++i )
         {
@@ -146,18 +150,20 @@ public class AnimatedTiledMapTile : ITiledMapTile
     }
 
     /// <summary>
-    /// Update the animation time
+    ///     Update the animation time
     /// </summary>
     public static void UpdateAnimationBaseTime()
     {
-        _lastTiledMapRenderTime = ( DateTime.Now.Millisecond - _initialTimeOffset );
+        _lastTiledMapRenderTime = DateTime.Now.Millisecond - _initialTimeOffset;
     }
 
-    public MapProperties Properties => _properties ??= new MapProperties();
+    public StaticTiledMapTile[] GetFrameTiles()
+    {
+        return _frameTiles;
+    }
 
-    public MapObjects MapObjects => _mapObjects ??= new MapObjects();
-
-    public StaticTiledMapTile[] GetFrameTiles() => _frameTiles;
-
-    public ITiledMapTile GetCurrentFrame() => _frameTiles[ GetCurrentFrameIndex() ];
+    public ITiledMapTile GetCurrentFrame()
+    {
+        return _frameTiles[ GetCurrentFrameIndex() ];
+    }
 }

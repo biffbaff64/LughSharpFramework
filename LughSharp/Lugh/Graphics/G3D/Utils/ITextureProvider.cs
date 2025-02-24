@@ -29,7 +29,7 @@ using LughSharp.Lugh.Graphics.Images;
 namespace LughSharp.Lugh.Graphics.G3D.Utils;
 
 /// <summary>
-/// Used by <see cref="Model"/> to load textures from <see cref="ModelData"/>.
+///     Used by <see cref="Model" /> to load textures from <see cref="ModelData" />.
 /// </summary>
 [PublicAPI]
 public interface ITextureProvider

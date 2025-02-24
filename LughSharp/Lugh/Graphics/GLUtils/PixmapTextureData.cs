@@ -32,8 +32,8 @@ public class PixmapTextureData( Pixmap pixmap, PixelType.Format? format, bool us
     : ITextureData
 {
     public Pixmap            Pixmap        { get; set; } = pixmap;
-    public PixelType.Format? PixelFormat        { get; set; } = format;
     public bool              DisposePixmap { get; set; } = disposePixmap;
+    public PixelType.Format? PixelFormat   { get; set; } = format;
     public bool              IsManaged     { get; set; } = managed;
     public bool              UseMipMaps    { get; set; } = useMipMaps;
     public bool              IsPrepared    { get; set; } = true;
@@ -43,12 +43,18 @@ public class PixmapTextureData( Pixmap pixmap, PixelType.Format? format, bool us
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
 
     /// <returns>
-    /// whether the caller of <see cref="ITextureData.ConsumePixmap"/> should dispose the
-    /// Pixmap returned by <see cref="ITextureData.ConsumePixmap"/>
+    ///     whether the caller of <see cref="ITextureData.ConsumePixmap" /> should dispose the
+    ///     Pixmap returned by <see cref="ITextureData.ConsumePixmap" />
     /// </returns>
-    bool ITextureData.ShouldDisposePixmap() => DisposePixmap;
+    bool ITextureData.ShouldDisposePixmap()
+    {
+        return DisposePixmap;
+    }
 
-    Pixmap ITextureData.ConsumePixmap() => Pixmap;
+    Pixmap ITextureData.ConsumePixmap()
+    {
+        return Pixmap;
+    }
 
     public int Width
     {

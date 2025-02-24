@@ -22,22 +22,21 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-/// Provides methods to sort arrays of objects.
-/// <para>
-/// Sorting requires working memory and this class allows that memory to be reused
-/// to avoid allocation. The sorting is otherwise identical to the Arrays.sort
-/// methods (uses timsort).
-/// </para>
+///     Provides methods to sort arrays of objects.
+///     <para>
+///         Sorting requires working memory and this class allows that memory to be reused
+///         to avoid allocation. The sorting is otherwise identical to the Arrays.sort
+///         methods (uses timsort).
+///     </para>
 /// </summary>
 [PublicAPI]
 public class SortUtils
 {
     /// <summary>
-    /// Sorts the elements of the specified list using the default comparer.
+    ///     Sorts the elements of the specified list using the default comparer.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the list.</typeparam>
     /// <param name="a">The list to sort.</param>
@@ -48,7 +47,7 @@ public class SortUtils
     }
 
     /// <summary>
-    /// Sorts the elements of the specified array using the default comparer.
+    ///     Sorts the elements of the specified array using the default comparer.
     /// </summary>
     /// <param name="a">The array to sort.</param>
     public static void Sort( object[] a )
@@ -58,7 +57,7 @@ public class SortUtils
     }
 
     /// <summary>
-    /// Sorts the elements of the specified range in the array using the default comparer.
+    ///     Sorts the elements of the specified range in the array using the default comparer.
     /// </summary>
     /// <param name="a">The array to sort.</param>
     /// <param name="fromIndex">The index of the first element (inclusive) to be sorted.</param>
@@ -70,7 +69,7 @@ public class SortUtils
     }
 
     /// <summary>
-    /// Sorts the elements of the specified list using the specified comparer.
+    ///     Sorts the elements of the specified list using the specified comparer.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the list.</typeparam>
     /// <param name="a">The list to sort.</param>
@@ -82,7 +81,7 @@ public class SortUtils
     }
 
     /// <summary>
-    /// Sorts the elements of the specified array using the specified comparer.
+    ///     Sorts the elements of the specified array using the specified comparer.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the array.</typeparam>
     /// <param name="a">The array to sort.</param>
@@ -94,7 +93,7 @@ public class SortUtils
     }
 
     /// <summary>
-    /// Sorts the elements of the specified range in the array using the specified comparer.
+    ///     Sorts the elements of the specified range in the array using the specified comparer.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the array.</typeparam>
     /// <param name="a">The array to sort.</param>
@@ -108,7 +107,7 @@ public class SortUtils
     }
 
     /// <summary>
-    /// Sorts the elements of the specified range in the array using the default comparer.
+    ///     Sorts the elements of the specified range in the array using the default comparer.
     /// </summary>
     /// <typeparam name="T">The type of the elements in the array.</typeparam>
     /// <param name="a">The array to sort.</param>

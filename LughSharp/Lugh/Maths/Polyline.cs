@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Maths;
 
 [PublicAPI]
@@ -55,8 +54,8 @@ public class Polyline : IShape2D
     }
 
     /// <summary>
-    /// Returns vertices without scaling or rotation and without
-    /// being offset by the polyline position.
+    ///     Returns vertices without scaling or rotation and without
+    ///     being offset by the polyline position.
     /// </summary>
     public float[] LocalVertices { get; private set; }
 
@@ -79,7 +78,7 @@ public class Polyline : IShape2D
     }
 
     /// <summary>
-    /// Returns vertices scaled, rotated, and offset by the polygon position.
+    ///     Returns vertices scaled, rotated, and offset by the polygon position.
     /// </summary>
     public float[]? GetTransformedVertices()
     {
@@ -137,7 +136,7 @@ public class Polyline : IShape2D
     }
 
     /// <summary>
-    /// Returns the euclidean length of the polyline without scaling
+    ///     Returns the euclidean length of the polyline without scaling
     /// </summary>
     public float GetLength()
     {
@@ -154,14 +153,14 @@ public class Polyline : IShape2D
         {
             var x = LocalVertices[ i + 2 ] - LocalVertices[ i ];
             var y = LocalVertices[ i + 1 ] - LocalVertices[ i + 3 ];
-            _length += ( float ) Math.Sqrt( ( x * x ) + ( y * y ) );
+            _length += ( float )Math.Sqrt( ( x * x ) + ( y * y ) );
         }
 
         return _length;
     }
 
     /// <summary>
-    /// Returns the euclidean length of the polyline
+    ///     Returns the euclidean length of the polyline
     /// </summary>
     public float GetScaledLength()
     {
@@ -178,7 +177,7 @@ public class Polyline : IShape2D
         {
             var x = ( LocalVertices[ i + 2 ] * ScaleX ) - ( LocalVertices[ i ] * ScaleX );
             var y = ( LocalVertices[ i + 1 ] * ScaleY ) - ( LocalVertices[ i + 3 ] * ScaleY );
-            _scaledLength += ( float ) Math.Sqrt( ( x * x ) + ( y * y ) );
+            _scaledLength += ( float )Math.Sqrt( ( x * x ) + ( y * y ) );
         }
 
         return _scaledLength;

@@ -22,15 +22,16 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Utils;
 
-[PublicAPI,
- AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct, Inherited = false),
- Conditional("DEBUG")]
+[PublicAPI]
+[AttributeUsage( AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct, Inherited = false )]
+[Conditional( "DEBUG" )]
 public sealed class InTestingAttribute( string message ) : Attribute
 {
-    public string Message { get; } = message;
+    public InTestingAttribute() : this( "This member is currently in testing and may change or be removed." )
+    {
+    }
 
-    public InTestingAttribute() : this("This member is currently in testing and may change or be removed.") { }
+    public string Message { get; } = message;
 }

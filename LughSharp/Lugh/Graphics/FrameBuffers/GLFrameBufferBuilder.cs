@@ -46,9 +46,8 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     public bool HasPackedStencilDepthRenderBuffer { get; set; }
 
     // ========================================================================
-    
+
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="internalFormat"></param>
     /// <param name="format"></param>
@@ -62,7 +61,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
@@ -75,7 +73,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="internalFormat"></param>
     /// <param name="format"></param>
@@ -99,7 +96,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="internalFormat"></param>
     /// <param name="type"></param>
@@ -117,7 +113,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="internalFormat"></param>
     /// <param name="type"></param>
@@ -135,7 +130,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="internalFormat"></param>
     /// <returns></returns>
@@ -148,7 +142,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="internalFormat"></param>
     /// <returns></returns>
@@ -161,7 +154,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="internalFormat"></param>
     /// <returns></returns>
@@ -174,7 +166,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicDepthRenderBuffer()
@@ -183,7 +174,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicStencilRenderBuffer()
@@ -192,7 +182,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicStencilDepthPackedRenderBuffer()
@@ -201,7 +190,6 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>

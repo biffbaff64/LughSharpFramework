@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Utils.Exceptions;
 public class BufferOverflowException : ApplicationException
 {
     /// <summary>
-    /// Initializes a new GdxRuntimeException with a specified error message.
+    ///     Initializes a new GdxRuntimeException with a specified error message.
     /// </summary>
     /// <param name="message"> The message that describes the error. </param>
     public BufferOverflowException( string? message = "" )

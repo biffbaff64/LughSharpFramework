@@ -31,15 +31,15 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// An on-screen joystick. The movement area of the joystick is circular, centered on the
-/// touchpad, and its size determined by the smaller touchpad dimension.
-/// <para>
-/// The preferred size of the touchpad is determined by the background.
-/// </para>
-/// <para>
-/// A <see cref="ChangeListener.ChangeEvent"/> is fired when the touchpad knob is moved.
-/// Cancelling the event will move the knob to where it was previously.
-/// </para>
+///     An on-screen joystick. The movement area of the joystick is circular, centered on the
+///     touchpad, and its size determined by the smaller touchpad dimension.
+///     <para>
+///         The preferred size of the touchpad is determined by the background.
+///     </para>
+///     <para>
+///         A <see cref="ChangeListener.ChangeEvent" /> is fired when the touchpad knob is moved.
+///         Cancelling the event will move the knob to where it was previously.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class Touchpad : Widget
@@ -56,10 +56,10 @@ public class Touchpad : Widget
     // ========================================================================
 
     /// <summary>
-    /// Constructor
+    ///     Constructor
     /// </summary>
     /// <param name="deadzoneRadius">
-    /// The distance in pixels from the center of the touchpad required for the knob to be moved.
+    ///     The distance in pixels from the center of the touchpad required for the knob to be moved.
     /// </param>
     /// <param name="skin"></param>
     public Touchpad( float deadzoneRadius, Skin skin )
@@ -68,10 +68,10 @@ public class Touchpad : Widget
     }
 
     /// <summary>
-    /// Constructor
+    ///     Constructor
     /// </summary>
     /// <param name="deadzoneRadius">
-    /// The distance in pixels from the center of the touchpad required for the knob to be moved.
+    ///     The distance in pixels from the center of the touchpad required for the knob to be moved.
     /// </param>
     /// <param name="skin"></param>
     /// <param name="styleName"></param>
@@ -81,17 +81,43 @@ public class Touchpad : Widget
     }
 
     /// <summary>
-    /// Constructs a new Touchpad using the supplied <see cref="TouchpadStyle"/>
-    /// and deadzone radius.
+    ///     Constructs a new Touchpad using the supplied <see cref="TouchpadStyle" />
+    ///     and deadzone radius.
     /// </summary>
     /// <param name="deadzoneRadius">
-    /// The distance in pixels from the center of the touchpad required for the knob to be moved.
+    ///     The distance in pixels from the center of the touchpad required for the knob to be moved.
     /// </param>
     /// <param name="style"></param>
     public Touchpad( float deadzoneRadius, TouchpadStyle style )
     {
         ConstructorHelper( deadzoneRadius, style );
     }
+
+    // ========================================================================
+
+    /// <summary>
+    ///     Returns the x-position of the knob relative to the center of the widget.
+    ///     The positive direction is right.
+    /// </summary>
+    public float KnobX => _knobPosition.X;
+
+    /// <summary>
+    ///     Returns the y-position of the knob relative to the center of the widget.
+    ///     The positive direction is up.
+    /// </summary>
+    public float KnobY => _knobPosition.Y;
+
+    /// <summary>
+    ///     Returns the x-position of the knob as a percentage from the center of the touchpad
+    ///     to the edge of the circular movement area. The positive direction is right.
+    /// </summary>
+    public float KnobPercentX => _knobPercent.X;
+
+    /// <summary>
+    ///     Returns the y-position of the knob as a percentage from the center of the touchpad
+    ///     to the edge of the circular movement area. The positive direction is up.
+    /// </summary>
+    public float KnobPercentY => _knobPercent.Y;
 
     // ========================================================================
 
@@ -112,32 +138,6 @@ public class Touchpad : Widget
 
         AddListener( new TouchpadInputListener( this ) );
     }
-    
-    // ========================================================================
-
-    /// <summary>
-    /// Returns the x-position of the knob relative to the center of the widget.
-    /// The positive direction is right.
-    /// </summary>
-    public float KnobX => _knobPosition.X;
-
-    /// <summary>
-    /// Returns the y-position of the knob relative to the center of the widget.
-    /// The positive direction is up.
-    /// </summary>
-    public float KnobY => _knobPosition.Y;
-
-    /// <summary>
-    /// Returns the x-position of the knob as a percentage from the center of the touchpad
-    /// to the edge of the circular movement area. The positive direction is right.
-    /// </summary>
-    public float KnobPercentX => _knobPercent.X;
-
-    /// <summary>
-    /// Returns the y-position of the knob as a percentage from the center of the touchpad
-    /// to the edge of the circular movement area. The positive direction is up.
-    /// </summary>
-    public float KnobPercentY => _knobPercent.Y;
 
     // ========================================================================
 
@@ -254,7 +254,7 @@ public class Touchpad : Widget
     }
 
     /// <summary>
-    /// The distance in pixels from the center of the touchpad required for the knob to be moved.
+    ///     The distance in pixels from the center of the touchpad required for the knob to be moved.
     /// </summary>
     public void SetDeadzone( float deadzoneRadius )
     {
@@ -357,7 +357,7 @@ public class Touchpad : Widget
     public override float PrefHeight => _style.Background?.MinHeight ?? 0;
 
     /// <summary>
-    /// Whether to reset the knob to the center on touch up.
+    ///     Whether to reset the knob to the center on touch up.
     /// </summary>
     public bool ResetOnTouchUp { get; set; } = true;
 

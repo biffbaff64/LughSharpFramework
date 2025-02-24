@@ -25,38 +25,37 @@
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
+
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// Drawable for a <see cref="NinePatch"/>.
-/// <para>
-/// The drawable sizes are set when the ninepatch is set, but they are separate
-/// values. Eg, <see cref="IDrawable.LeftWidth"/> could be set to more than
-/// <see cref="NinePatch.LeftWidth"/> in order to provide more space on the left
-/// than actually exists in the ninepatch.
-/// </para>
-/// The min size is set to the ninepatch total size by default. It could be set
-/// to the left+right and top+bottom, excluding the middle size, to allow the
-/// drawable to be sized down as small as possible.
+///     Drawable for a <see cref="NinePatch" />.
+///     <para>
+///         The drawable sizes are set when the ninepatch is set, but they are separate
+///         values. Eg, <see cref="IDrawable.LeftWidth" /> could be set to more than
+///         <see cref="NinePatch.LeftWidth" /> in order to provide more space on the left
+///         than actually exists in the ninepatch.
+///     </para>
+///     The min size is set to the ninepatch total size by default. It could be set
+///     to the left+right and top+bottom, excluding the middle size, to allow the
+///     drawable to be sized down as small as possible.
 /// </summary>
 [PublicAPI]
 public class NinePatchDrawable : BaseDrawable, ITransformDrawable
 {
-    public NinePatch? Patch { get; set; }
-
     // ========================================================================
 
     /// <summary>
-    /// Creates an uninitialized NinePatchDrawable. The ninepatch must be set before use.
+    ///     Creates an uninitialized NinePatchDrawable. The ninepatch must be set before use.
     /// </summary>
     public NinePatchDrawable()
     {
     }
 
     /// <summary>
-    /// Creates a new NinePatchDrawable, initialised with the supplied <see cref="NinePatch"/>.
+    ///     Creates a new NinePatchDrawable, initialised with the supplied <see cref="NinePatch" />.
     /// </summary>
     /// <param name="patch"></param>
     public NinePatchDrawable( NinePatch patch )
@@ -65,8 +64,8 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Creates a new NinePatchDrawable, initialised with the <see cref="NinePatch"/>
-    /// from another NinePatchDrawable.
+    ///     Creates a new NinePatchDrawable, initialised with the <see cref="NinePatch" />
+    ///     from another NinePatchDrawable.
     /// </summary>
     /// <param name="drawable"></param>
     public NinePatchDrawable( NinePatchDrawable drawable )
@@ -75,6 +74,8 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
         Patch = drawable.Patch;
     }
 
+    public NinePatch? Patch { get; set; }
+
     /// <inheritdoc />
     public override void Draw( IBatch batch, float x, float y, float width, float height )
     {
@@ -82,9 +83,9 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Draw the <see cref="NinePatch"/>
+    ///     Draw the <see cref="NinePatch" />
     /// </summary>
-    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
+    /// <param name="batch"> The <see cref="IBatch" /> to use. </param>
     /// <param name="region"></param>
     /// <param name="origin"></param>
     /// <param name="scale"></param>
@@ -104,8 +105,8 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Sets this drawable's ninepatch and set the min width, min height, top height,
-    /// right width, bottom height, and left width to the patch's padding.
+    ///     Sets this drawable's ninepatch and set the min width, min height, top height,
+    ///     right width, bottom height, and left width to the patch's padding.
     /// </summary>
     public void SetPatch( NinePatch patch )
     {
@@ -123,8 +124,8 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Creates a new drawable that renders the same as this drawable tinted
-    /// the specified color.
+    ///     Creates a new drawable that renders the same as this drawable tinted
+    ///     the specified color.
     /// </summary>
     public NinePatchDrawable Tint( Color tint )
     {

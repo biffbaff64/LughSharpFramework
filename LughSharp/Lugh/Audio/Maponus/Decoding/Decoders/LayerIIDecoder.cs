@@ -27,18 +27,18 @@ using LughSharp.Lugh.Audio.Maponus.Decoding.Decoders.LayerII;
 namespace LughSharp.Lugh.Audio.Maponus.Decoding.Decoders;
 
 /// <summary>
-/// Implements decoding of MPEG Audio Layer II frames.
+///     Implements decoding of MPEG Audio Layer II frames.
 /// </summary>
 [PublicAPI]
 public class LayerIIDecoder : LayerIDecoder
 {
     /// <summary>
-    /// Creates subband instances based on the header mode for Layer II.
+    ///     Creates subband instances based on the header mode for Layer II.
     /// </summary>
     protected override void CreateSubbands()
     {
         int i;
-        
+
         switch ( Mode )
         {
             case Header.SINGLE_CHANNEL:
@@ -73,13 +73,13 @@ public class LayerIIDecoder : LayerIDecoder
     }
 
     /// <summary>
-    /// Reads the scale factor selection for each subband.
+    ///     Reads the scale factor selection for each subband.
     /// </summary>
     protected override void ReadScaleFactorSelection()
     {
         for ( var i = 0; i < NuSubbands; ++i )
         {
-            ( ( SubbandLayer2 ) Subbands[ i ] ).ReadScaleFactorSelection( Stream, CRC );
+            ( ( SubbandLayer2 )Subbands[ i ] ).ReadScaleFactorSelection( Stream, CRC );
         }
     }
 }

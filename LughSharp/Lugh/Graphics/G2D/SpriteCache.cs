@@ -34,62 +34,55 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-/// Draws 2D images, optimized for geometry that does not change. Sprites and/or
-/// textures are cached and given an ID, which can later be used for _drawing.
-/// The size, color, and texture region for each cached image cannot be modified.
-/// This information is stored in video memory and does not have to be sent to the
-/// GPU each time it is drawn.
-/// <para>
-/// To cache Sprites or Textures, first call <see cref="BeginCache()"/>, then call
-/// the appropriate add method to define the images. To complete the cache,
-/// call <see cref="EndCache"/> and store the returned cache ID.
-/// </para>
-/// <para>
-/// To draw with SpriteCache, first call <see cref="Begin()"/>, then call
-/// <see cref="Draw(int)"/> with a cache ID. When SpriteCache _drawing is complete,
-/// call <see cref="End()"/>.
-/// </para>
-/// <para>
-/// By default, SpriteCache draws using screen coordinates and uses an x-axis
-/// pointing to the right, an y-axis pointing upwards and the origin is the bottom
-/// left corner of the screen. The default transformation and projection matrices
-/// can be changed. If the screen is <see cref="IApplicationListener.Resize"/>,
-/// the SpriteCache's matrices must be updated. For example:
-/// </para>
-/// <code>
+///     Draws 2D images, optimized for geometry that does not change. Sprites and/or
+///     textures are cached and given an ID, which can later be used for _drawing.
+///     The size, color, and texture region for each cached image cannot be modified.
+///     This information is stored in video memory and does not have to be sent to the
+///     GPU each time it is drawn.
+///     <para>
+///         To cache Sprites or Textures, first call <see cref="BeginCache()" />, then call
+///         the appropriate add method to define the images. To complete the cache,
+///         call <see cref="EndCache" /> and store the returned cache ID.
+///     </para>
+///     <para>
+///         To draw with SpriteCache, first call <see cref="Begin()" />, then call
+///         <see cref="Draw(int)" /> with a cache ID. When SpriteCache _drawing is complete,
+///         call <see cref="End()" />.
+///     </para>
+///     <para>
+///         By default, SpriteCache draws using screen coordinates and uses an x-axis
+///         pointing to the right, an y-axis pointing upwards and the origin is the bottom
+///         left corner of the screen. The default transformation and projection matrices
+///         can be changed. If the screen is <see cref="IApplicationListener.Resize" />,
+///         the SpriteCache's matrices must be updated. For example:
+///     </para>
+///     <code>
 /// cache.GetProjectionMatrix().SetToOrtho2D(0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height);
 /// </code>
-/// <para>
-/// Note that SpriteCache does not manage blending. You will need to enable blending
-/// (<tt>GdxApi.GL.GLEnable(IGL.GL_Blend);</tt>) and set the blend func as needed before
-/// or between calls to <see cref="Draw(int)"/>.
-/// </para>
-/// <para>
-/// SpriteCache is managed. If the OpenGL context is lost and the restored, all OpenGL
-/// resources a SpriteCache uses internally are restored.
-/// </para>
-/// <para>
-/// SpriteCache is a reasonably heavyweight object. Typically only one instance should
-/// be used for an entire application.
-/// </para>
-/// <para>
-/// SpriteCache works with OpenGL ES 1.x and 2.0. For 2.0, it uses its own custom shader
-/// to draw.
-/// </para>
-/// <para>
-/// SpriteCache must be disposed once it is no longer needed.
-/// </para>
+///     <para>
+///         Note that SpriteCache does not manage blending. You will need to enable blending
+///         (<tt>GdxApi.GL.GLEnable(IGL.GL_Blend);</tt>) and set the blend func as needed before
+///         or between calls to <see cref="Draw(int)" />.
+///     </para>
+///     <para>
+///         SpriteCache is managed. If the OpenGL context is lost and the restored, all OpenGL
+///         resources a SpriteCache uses internally are restored.
+///     </para>
+///     <para>
+///         SpriteCache is a reasonably heavyweight object. Typically only one instance should
+///         be used for an entire application.
+///     </para>
+///     <para>
+///         SpriteCache works with OpenGL ES 1.x and 2.0. For 2.0, it uses its own custom shader
+///         to draw.
+///     </para>
+///     <para>
+///         SpriteCache must be disposed once it is no longer needed.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class SpriteCache
 {
-    public int     RenderCallsSinceBegin { get; set; } = 0;
-    public int     TotalRenderCalls      { get; set; } = 0;
-    public Color   Color                 { get; set; } = new( 1, 1, 1, 1 );
-    public Matrix4 ProjectionMatrix      { get; set; } = new();
-    public Matrix4 TransformMatrix       { get; set; } = new();
-    public bool    IsDrawing             { get; private set; }
-
     // ========================================================================
     // ========================================================================
 
@@ -98,9 +91,9 @@ public class SpriteCache
     private readonly List< Cache >   _caches         = new();
     private readonly Matrix4         _combinedMatrix = new();
     private readonly List< int >     _counts         = new( 8 );
-    private readonly List< Texture > _textures       = new( 8 );
     private readonly Mesh            _mesh;
     private readonly ShaderProgram?  _shader;
+    private readonly List< Texture > _textures = new( 8 );
 
     private float  _colorPacked = Color.WhiteFloatBits;
     private Cache? _currentCache;
@@ -109,18 +102,18 @@ public class SpriteCache
     // ========================================================================
 
     /// <summary>
-    /// Creates a cache that uses indexed geometry and can contain up to 1000 images.
+    ///     Creates a cache that uses indexed geometry and can contain up to 1000 images.
     /// </summary>
     public SpriteCache() : this( 1000, false )
     {
     }
 
     /// <summary>
-    /// Creates a cache with the specified size, using a default shader.
+    ///     Creates a cache with the specified size, using a default shader.
     /// </summary>
     /// <param name="size">
-    /// The maximum number of images this cache can hold. The memory required
-    /// to hold the images is allocated up front. Max of 8191 if indices.
+    ///     The maximum number of images this cache can hold. The memory required
+    ///     to hold the images is allocated up front. Max of 8191 if indices.
     /// </param>
     /// <param name="useIndices">If true, indexed geometry will be used.</param>
     public SpriteCache( int size, bool useIndices )
@@ -129,11 +122,11 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Creates a cache with the specified size and OpenGL ES 2.0 shader.
+    ///     Creates a cache with the specified size and OpenGL ES 2.0 shader.
     /// </summary>
     /// <param name="size">
-    /// The maximum number of images this cache can hold. The memory required
-    /// to hold the images is allocated up front. Max of 8191 if indices are used.
+    ///     The maximum number of images this cache can hold. The memory required
+    ///     to hold the images is allocated up front. Max of 8191 if indices are used.
     /// </param>
     /// <param name="shader"></param>
     /// <param name="useIndices">If true, indexed geometry will be used.</param>
@@ -184,11 +177,18 @@ public class SpriteCache
         ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
     }
 
+    public int     RenderCallsSinceBegin { get; set; } = 0;
+    public int     TotalRenderCalls      { get; set; } = 0;
+    public Color   Color                 { get; set; } = new( 1, 1, 1, 1 );
+    public Matrix4 ProjectionMatrix      { get; set; } = new();
+    public Matrix4 TransformMatrix       { get; set; } = new();
+    public bool    IsDrawing             { get; private set; }
+
     // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// The color of this sprite cache, expanding the alpha from 0-254 to 0-255.
+    ///     The color of this sprite cache, expanding the alpha from 0-254 to 0-255.
     /// </summary>
     public float PackedColor
     {
@@ -206,7 +206,7 @@ public class SpriteCache
 
     /// Sets the color used to tint images when they are added to the
     /// SpriteCache. Default is
-    /// <see cref="Graphics.Color.White"/>
+    /// <see cref="Graphics.Color.White" />
     /// .
     public void SetColor( Color tint )
     {
@@ -216,7 +216,7 @@ public class SpriteCache
 
     /// <summary>
     /// </summary>
-    /// <see cref="SetColor(LughSharp.Lugh.Graphics.Color)"/>
+    /// <see cref="SetColor(LughSharp.Lugh.Graphics.Color)" />
     public void SetColor( float r, float g, float b, float a )
     {
         Color.Set( r, g, b, a );
@@ -224,8 +224,8 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Starts the definition of a new cache, allowing the add and
-    /// <see cref="EndCache()"/> methods to be called.
+    ///     Starts the definition of a new cache, allowing the add and
+    ///     <see cref="EndCache()" /> methods to be called.
     /// </summary>
     public void BeginCache()
     {
@@ -245,11 +245,11 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Starts the redefinition of an existing cache, allowing the add and
-    /// <see cref="EndCache()"/> methods to be called. If this is not the
-    /// last cache created, it cannot have more entries added to it than when
-    /// it was first created. To do that, use <see cref="Clear()"/> and then
-    /// <see cref="Begin()"/>.
+    ///     Starts the redefinition of an existing cache, allowing the add and
+    ///     <see cref="EndCache()" /> methods to be called. If this is not the
+    ///     last cache created, it cannot have more entries added to it than when
+    ///     it was first created. To do that, use <see cref="Clear()" /> and then
+    ///     <see cref="Begin()" />.
     /// </summary>
     public void BeginCache( int cacheID )
     {
@@ -277,8 +277,8 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Ends the definition of a cache, returning the cache ID to be
-    /// used with <see cref="Draw(int)"/>.
+    ///     Ends the definition of a cache, returning the cache ID to be
+    ///     used with <see cref="Draw(int)" />.
     /// </summary>
     public int EndCache()
     {
@@ -354,7 +354,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Invalidates all cache IDs and resets the SpriteCache so new caches can be added.
+    ///     Invalidates all cache IDs and resets the SpriteCache so new caches can be added.
     /// </summary>
     public void Clear()
     {
@@ -364,10 +364,10 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Adds the specified vertices to the cache. Each vertex should have 5
-    /// elements, one for each of the attributes: x, y, color, u, and v. If
-    /// indexed geometry is used, each image should be specified as 4 vertices,
-    /// otherwise each image should be specified as 6 vertices.
+    ///     Adds the specified vertices to the cache. Each vertex should have 5
+    ///     elements, one for each of the attributes: x, y, color, u, and v. If
+    ///     indexed geometry is used, each image should be specified as 4 vertices,
+    ///     otherwise each image should be specified as 6 vertices.
     /// </summary>
     public void Add( Texture texture, float[] vertices, int offset, int length )
     {
@@ -394,7 +394,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Adds the specified texture to the cache.
+    ///     Adds the specified texture to the cache.
     /// </summary>
     public void Add( Texture texture, float x, float y )
     {
@@ -454,7 +454,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Adds the specified texture to the cache.
+    ///     Adds the specified texture to the cache.
     /// </summary>
     public void Add( Texture texture,
                      float x,
@@ -523,7 +523,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Adds the specified texture to the cache.
+    ///     Adds the specified texture to the cache.
     /// </summary>
     public void Add( Texture texture, float x, float y, int srcX, int srcY, int srcWidth, int srcHeight )
     {
@@ -590,7 +590,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Adds the specified texture to the cache.
+    ///     Adds the specified texture to the cache.
     /// </summary>
     public void Add( Texture texture,
                      float x,
@@ -677,7 +677,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Adds the specified texture to the cache.
+    ///     Adds the specified texture to the cache.
     /// </summary>
     public void Add( Texture texture,
                      float x,
@@ -846,7 +846,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Adds the specified region to the cache.
+    ///     Adds the specified region to the cache.
     /// </summary>
     public void Add( TextureRegion region, float x, float y )
     {
@@ -854,7 +854,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Adds the specified region to the cache.
+    ///     Adds the specified region to the cache.
     /// </summary>
     public void Add( TextureRegion region, float x, float y, float width, float height )
     {
@@ -918,7 +918,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Adds the specified region to the cache.
+    ///     Adds the specified region to the cache.
     /// </summary>
     public void Add( TextureRegion region,
                      float x,
@@ -1067,7 +1067,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Adds the specified region to the cache.
+    ///     Adds the specified region to the cache.
     /// </summary>
     public void Add( Sprite sprite )
     {
@@ -1098,7 +1098,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Prepares the OpenGL state for SpriteCache rendering.
+    ///     Prepares the OpenGL state for SpriteCache rendering.
     /// </summary>
     public void Begin()
     {
@@ -1142,7 +1142,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Completes rendering for this SpriteCache.
+    ///     Completes rendering for this SpriteCache.
     /// </summary>
     public void End()
     {
@@ -1159,7 +1159,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Draws all the images defined for the specified cache ID.
+    ///     Draws all the images defined for the specified cache ID.
     /// </summary>
     public void Draw( int cacheID )
     {
@@ -1191,7 +1191,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Draws a subset of images defined for the specified cache ID.
+    ///     Draws a subset of images defined for the specified cache ID.
     /// </summary>
     /// <param name="cacheID"></param>
     /// <param name="offset"> The first image to render. </param>
@@ -1240,7 +1240,7 @@ public class SpriteCache
     }
 
     /// <summary>
-    /// Releases all resources held by this SpriteCache.
+    ///     Releases all resources held by this SpriteCache.
     /// </summary>
     public void Dispose()
     {
@@ -1252,22 +1252,22 @@ public class SpriteCache
     // ========================================================================
 
     /// <summary>
-    /// Represents a low-level cached asset for efficient reuse in rendering
-    /// operations. The Cache class is designed to store information related
-    /// to textures and their associated drawing metadata. It is used internally
-    /// by higher-level rendering systems to optimize rendering by avoiding
-    /// redundant computations or data transfers.
-    /// <para>
-    /// A Cache object holds texture references, their counts, and offsets to
-    /// manage batches of drawable content. It allows for batch rendering by
-    /// associating multiple textures and their respective geometries, reducing
-    /// overhead during rendering processes.
-    /// </para>
-    /// <para>
-    /// Note that Cache instances are created and managed internally, and they
-    /// serve as fundamental units for grouping rendering data. They are not
-    /// intended to be accessed or modified directly by consumers.
-    /// </para>
+    ///     Represents a low-level cached asset for efficient reuse in rendering
+    ///     operations. The Cache class is designed to store information related
+    ///     to textures and their associated drawing metadata. It is used internally
+    ///     by higher-level rendering systems to optimize rendering by avoiding
+    ///     redundant computations or data transfers.
+    ///     <para>
+    ///         A Cache object holds texture references, their counts, and offsets to
+    ///         manage batches of drawable content. It allows for batch rendering by
+    ///         associating multiple textures and their respective geometries, reducing
+    ///         overhead during rendering processes.
+    ///     </para>
+    ///     <para>
+    ///         Note that Cache instances are created and managed internally, and they
+    ///         serve as fundamental units for grouping rendering data. They are not
+    ///         intended to be accessed or modified directly by consumers.
+    ///     </para>
     /// </summary>
     private sealed class Cache
     {
@@ -1345,14 +1345,14 @@ public class SpriteCache
     //TODO: Update this documentation, this is GL not GLES
     //
     /// <summary>
-    /// Sets the shader to be used in a GLES 2.0 environment. Vertex position
-    /// attribute is called "a_position", the texture coordinates attribute is
-    /// called called "a_texCoords", the color attribute is called "a_color".
-    /// The projection matrix is uploaded via a mat4 uniform called "u_proj",
-    /// the transform matrix is uploaded via a uniform called "u_trans", the combined
-    /// transform and projection matrx is is uploaded via a mat4 uniform called
-    /// "u_projTrans". The texture sampler is passed via a uniform called "u_texture".
-    /// Call this method with a null argument to use the default shader.
+    ///     Sets the shader to be used in a GLES 2.0 environment. Vertex position
+    ///     attribute is called "a_position", the texture coordinates attribute is
+    ///     called called "a_texCoords", the color attribute is called "a_color".
+    ///     The projection matrix is uploaded via a mat4 uniform called "u_proj",
+    ///     the transform matrix is uploaded via a uniform called "u_trans", the combined
+    ///     transform and projection matrx is is uploaded via a mat4 uniform called
+    ///     "u_projTrans". The texture sampler is passed via a uniform called "u_texture".
+    ///     Call this method with a null argument to use the default shader.
     /// </summary>
     public ShaderProgram? CustomShader { get; set; }
 

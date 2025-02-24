@@ -38,9 +38,9 @@ public class TextButton : Button
     // ========================================================================
 
     /// <summary>
-    /// Creates a new TextButton using the supplied <see cref="Skin"/>, and
-    /// setting its text property to the supplied text.
-    /// The default <see cref="TextButtonStyle"/> will be used.
+    ///     Creates a new TextButton using the supplied <see cref="Skin" />, and
+    ///     setting its text property to the supplied text.
+    ///     The default <see cref="TextButtonStyle" /> will be used.
     /// </summary>
     public TextButton( string? text, Skin skin )
         : this( text, skin.Get< TextButtonStyle >() )
@@ -49,9 +49,9 @@ public class TextButton : Button
     }
 
     /// <summary>
-    /// Creates a new TextButton using the supplied <see cref="Skin"/>, and
-    /// setting its text property to the supplied text.
-    /// A <see cref="TextButtonStyle"/> identified by <tt>styleName</tt> will be used.
+    ///     Creates a new TextButton using the supplied <see cref="Skin" />, and
+    ///     setting its text property to the supplied text.
+    ///     A <see cref="TextButtonStyle" /> identified by <tt>styleName</tt> will be used.
     /// </summary>
     public TextButton( string? text, Skin skin, string styleName )
         : this( text, skin.Get< TextButtonStyle >( styleName ) )
@@ -60,8 +60,8 @@ public class TextButton : Button
     }
 
     /// <summary>
-    /// Creates a new TextButton, setting its text property to the supplied text.
-    /// The supplied <see cref="TextButtonStyle"/> will be used.
+    ///     Creates a new TextButton, setting its text property to the supplied text.
+    ///     The supplied <see cref="TextButtonStyle" /> will be used.
     /// </summary>
     public TextButton( string? text, TextButtonStyle style )
     {
@@ -76,10 +76,10 @@ public class TextButton : Button
     }
 
     /// <summary>
-    /// Property: The <see cref="TextButtonStyle"/> for this TextButton.
+    ///     Property: The <see cref="TextButtonStyle" /> for this TextButton.
     /// </summary>
     /// <exception cref="ArgumentException">
-    /// Thrown if an attempt to set Style to null is made.
+    ///     Thrown if an attempt to set Style to null is made.
     /// </exception>
     public new TextButtonStyle? Style
     {
@@ -108,7 +108,7 @@ public class TextButton : Button
     }
 
     /// <summary>
-    /// A Text<see cref="Label"/> which is used to store the text for this button.
+    ///     A Text<see cref="Label" /> which is used to store the text for this button.
     /// </summary>
     public Label? Label
     {
@@ -123,8 +123,8 @@ public class TextButton : Button
     }
 
     /// <summary>
-    /// Returns the appropriate label font color from the style based on
-    /// the current button state.
+    ///     Returns the appropriate label font color from the style based on
+    ///     the current button state.
     /// </summary>
     public Color? GetFontColor()
     {
@@ -204,13 +204,24 @@ public class TextButton : Button
         }
     }
 
-    public Cell?   GetLabelCell()          => GetCell( _label! );
-    public void    SetText( string? text ) => _label?.SetText( text );
-    public string? GetText()               => _label?.Text.ToString();
+    public Cell? GetLabelCell()
+    {
+        return GetCell( _label! );
+    }
+
+    public void SetText( string? text )
+    {
+        _label?.SetText( text );
+    }
+
+    public string? GetText()
+    {
+        return _label?.Text.ToString();
+    }
 
     /// <summary>
-    /// Private setup method to allow calls to virtual methods that can't
-    /// be called from constructors.
+    ///     Private setup method to allow calls to virtual methods that can't
+    ///     be called from constructors.
     /// </summary>
     private void NonVirtualSetup()
     {
@@ -242,7 +253,7 @@ public class TextButton : Button
     // ========================================================================
 
     /// <summary>
-    /// The style for a text button, see <see cref="TextButton"/>.
+    ///     The style for a text button, see <see cref="TextButton" />.
     /// </summary>
     [PublicAPI]
     public class TextButtonStyle : ButtonStyle

@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Utils;
 
 [PublicAPI]
@@ -31,7 +30,7 @@ public class DataInput( Stream input ) : BinaryReader( input )
     private char[] _chars = new char[ 32 ];
 
     /// <summary>
-    /// Reads a 1-5 byte int.
+    ///     Reads a 1-5 byte int.
     /// </summary>
     public int ReadInt( bool optimizePositive )
     {
@@ -66,7 +65,7 @@ public class DataInput( Stream input ) : BinaryReader( input )
     }
 
     /// <summary>
-    /// Reads the length and string of UTF8 characters, or null.
+    ///     Reads the length and string of UTF8 characters, or null.
     /// </summary>
     public string? ReadStringUTF8()
     {
@@ -102,7 +101,7 @@ public class DataInput( Stream input ) : BinaryReader( input )
                 break;
             }
 
-            _chars[ charIndex++ ] = ( char ) b;
+            _chars[ charIndex++ ] = ( char )b;
         }
 
         // If a char was not ASCII, finish with slow path.
@@ -127,23 +126,23 @@ public class DataInput( Stream input ) : BinaryReader( input )
             {
                 case >= 0 and <= 7:
                 {
-                    _chars[ charIndex ] = ( char ) b;
+                    _chars[ charIndex ] = ( char )b;
 
                     break;
                 }
 
                 case 12 or 13:
                 {
-                    _chars[ charIndex ] = ( char ) ( ( ( b & 0x1F ) << 6 ) | ( Read() & 0x3F ) );
+                    _chars[ charIndex ] = ( char )( ( ( b & 0x1F ) << 6 ) | ( Read() & 0x3F ) );
 
                     break;
                 }
 
                 case 14:
                 {
-                    _chars[ charIndex ] = ( char ) ( ( ( b & 0x0F ) << 12 )
-                                                   | ( ( Read() & 0x3F ) << 6 )
-                                                   | ( Read() & 0x3F ) );
+                    _chars[ charIndex ] = ( char )( ( ( b & 0x0F ) << 12 )
+                                                    | ( ( Read() & 0x3F ) << 6 )
+                                                    | ( Read() & 0x3F ) );
 
                     break;
                 }

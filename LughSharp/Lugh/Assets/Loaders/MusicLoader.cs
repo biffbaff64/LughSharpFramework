@@ -28,18 +28,16 @@ using LughSharp.Lugh.Audio;
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
-/// <see cref="AssetLoader"/> for <see cref="IMusic"/> instances.
-/// The Music instance is loaded synchronously.
+///     <see cref="AssetLoader" /> for <see cref="IMusic" /> instances.
+///     The Music instance is loaded synchronously.
 /// </summary>
 [PublicAPI]
 public class MusicLoader : AsynchronousAssetLoader, IDisposable
 {
-    public IMusic LoadedMusic { get; set; }
-
     // ========================================================================
 
     /// <summary>
-    /// Creates a new Music loader using the provided <see cref="IFileHandleResolver"/>
+    ///     Creates a new Music loader using the provided <see cref="IFileHandleResolver" />
     /// </summary>
     public MusicLoader( IFileHandleResolver resolver )
         : base( resolver )
@@ -47,10 +45,21 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
         LoadedMusic = null!;
     }
 
+    public IMusic LoadedMusic { get; set; }
+
+    /// <summary>
+    ///     Performs application-defined tasks associated with freeing,
+    ///     releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+    }
+
     /// <inheritdoc />
     public override List< AssetDescriptor > GetDependencies< TP >( string fileName,
-                                                             FileInfo file,
-                                                             TP? parameter ) where TP : class
+                                                                   FileInfo file,
+                                                                   TP? parameter ) where TP : class
     {
         return default( List< AssetDescriptor > )!;
     }
@@ -60,7 +69,7 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     {
     }
 
-    /// <inheritdeoc/>
+    /// <inheritdeoc />
     public override object LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
         LoadedMusic = GdxApi.Audio.NewMusic( file );
@@ -69,19 +78,10 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     }
 
     /// <summary>
-    /// Performs application-defined tasks associated with freeing,
-    /// releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose( true );
-    }
-
-    /// <summary>
-    /// Releases the unmanaged resources used by the texture loader.
+    ///     Releases the unmanaged resources used by the texture loader.
     /// </summary>
     /// <param name="disposing">
-    /// True to release both managed and unmanaged resources; false to release only unmanaged resources.
+    ///     True to release both managed and unmanaged resources; false to release only unmanaged resources.
     /// </param>
     protected void Dispose( bool disposing )
     {

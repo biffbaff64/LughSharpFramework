@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.GLUtils;
@@ -31,6 +30,24 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 [PublicAPI]
 public class FileTextureData : ITextureData
 {
+    // ========================================================================
+
+    private Pixmap? _pixmap;
+
+    // ========================================================================
+    // ========================================================================
+
+    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, PixelType.Format format, bool useMipMaps )
+    {
+        File        = file;
+        _pixmap     = preloadedPixmap;
+        PixelFormat = format;
+        UseMipMaps  = useMipMaps;
+        Width       = _pixmap.Width;
+        Height      = _pixmap.Height;
+        PixelFormat = _pixmap.GetColorFormat();
+    }
+
     public FileInfo File { get; set; }
 
     /// <returns> the width of the pixel data </returns>
@@ -45,28 +62,10 @@ public class FileTextureData : ITextureData
     /// <returns> whether to generate mipmaps or not. </returns>
     public bool UseMipMaps { get; set; }
 
-    // ========================================================================
-
-    private Pixmap? _pixmap;
-
-    // ========================================================================
-    // ========================================================================
-
-    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, PixelType.Format format, bool useMipMaps )
-    {
-        this.File       = file;
-        this._pixmap    = preloadedPixmap;
-        this.PixelFormat     = format;
-        this.UseMipMaps = useMipMaps;
-        this.Width      = _pixmap.Width;
-        this.Height     = _pixmap.Height;
-        this.PixelFormat     = _pixmap.GetColorFormat();
-    }
-
     /// <summary>
-    /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap"/> or
-    /// <see cref="ITextureData.ConsumeCustomData"/>. This method can be called from a non
-    /// OpenGL thread and should thus not interact with OpenGL.
+    ///     Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap" /> or
+    ///     <see cref="ITextureData.ConsumeCustomData" />. This method can be called from a non
+    ///     OpenGL thread and should thus not interact with OpenGL.
     /// </summary>
     public void Prepare()
     {
@@ -79,21 +78,21 @@ public class FileTextureData : ITextureData
         {
             _pixmap = File.Extension.Equals( "cim" ) ? PixmapIO.ReadCIM( File ) : new Pixmap( File );
 
-            this.Width  = _pixmap.Width;
-            this.Height = _pixmap.Height;
-            this.PixelFormat = _pixmap.GetColorFormat();
+            Width       = _pixmap.Width;
+            Height      = _pixmap.Height;
+            PixelFormat = _pixmap.GetColorFormat();
         }
 
         IsPrepared = true;
     }
 
     /// <summary>
-    /// Returns the <see cref="Pixmap"/> for upload by Texture.
-    /// <para>
-    /// A call to <see cref="ITextureData.Prepare"/> must precede a call to this method.
-    /// Any internal data structures created in <see cref="ITextureData.Prepare"/>
-    /// should be disposed of here.
-    /// </para>
+    ///     Returns the <see cref="Pixmap" /> for upload by Texture.
+    ///     <para>
+    ///         A call to <see cref="ITextureData.Prepare" /> must precede a call to this method.
+    ///         Any internal data structures created in <see cref="ITextureData.Prepare" />
+    ///         should be disposed of here.
+    ///     </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
     public virtual Pixmap? ConsumePixmap()
@@ -117,8 +116,8 @@ public class FileTextureData : ITextureData
     }
 
     /// <returns>
-    /// whether the caller of <see cref="ITextureData.ConsumePixmap"/> should dispose the
-    /// Pixmap returned by <see cref="ITextureData.ConsumePixmap"/>
+    ///     whether the caller of <see cref="ITextureData.ConsumePixmap" /> should dispose the
+    ///     Pixmap returned by <see cref="ITextureData.ConsumePixmap" />
     /// </returns>
     public virtual bool ShouldDisposePixmap()
     {
@@ -126,13 +125,13 @@ public class FileTextureData : ITextureData
     }
 
     /// <summary>
-    /// Uploads the pixel data to the OpenGL ES texture. The caller must bind an
-    /// OpenGL ES texture. A call to <see cref="ITextureData.Prepare"/> must preceed a call
-    /// to this method.
-    /// <para>
-    /// Any internal data structures created in <see cref="ITextureData.Prepare"/> should be
-    /// disposed of here.
-    /// </para>
+    ///     Uploads the pixel data to the OpenGL ES texture. The caller must bind an
+    ///     OpenGL ES texture. A call to <see cref="ITextureData.Prepare" /> must preceed a call
+    ///     to this method.
+    ///     <para>
+    ///         Any internal data structures created in <see cref="ITextureData.Prepare" /> should be
+    ///         disposed of here.
+    ///     </para>
     /// </summary>
     public virtual void ConsumeCustomData( int target )
     {
@@ -140,7 +139,7 @@ public class FileTextureData : ITextureData
     }
 
     /// <summary>
-    /// Returns the <see cref="PixelType.Format"/> of the pixel data.
+    ///     Returns the <see cref="PixelType.Format" /> of the pixel data.
     /// </summary>
     public PixelType.Format? PixelFormat { get; set; }
 
@@ -150,6 +149,6 @@ public class FileTextureData : ITextureData
         set { }
     }
 
-    /// <returns> the <see cref="ITextureData.TextureDataType"/></returns>
+    /// <returns> the <see cref="ITextureData.TextureDataType" /></returns>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
 }

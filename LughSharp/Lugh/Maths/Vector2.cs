@@ -24,12 +24,13 @@
 
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-/// Encapsulates a 2D vector. Allows chaining methods by returning a reference to itself
+///     Encapsulates a 2D vector. Allows chaining methods by returning a reference to itself
 /// </summary>
 [PublicAPI]
 public class Vector2 : IVector< Vector2 >
@@ -42,14 +43,14 @@ public class Vector2 : IVector< Vector2 >
     // ========================================================================
 
     /// <summary>
-    /// Constructs a new vector at (0,0)
+    ///     Constructs a new vector at (0,0)
     /// </summary>
     public Vector2() : this( 0, 0 )
     {
     }
 
     /// <summary>
-    /// Constructs a vector with the given components
+    ///     Constructs a vector with the given components
     /// </summary>
     /// <param name="x">The x-component.</param>
     /// <param name="y">The x-component.</param>
@@ -60,7 +61,7 @@ public class Vector2 : IVector< Vector2 >
     }
 
     /// <summary>
-    /// Constructs a vector from the given vector
+    ///     Constructs a vector from the given vector
     /// </summary>
     /// <param name="v">The Vector</param>
     public Vector2( Vector2 v )
@@ -69,17 +70,17 @@ public class Vector2 : IVector< Vector2 >
     }
 
     /// <summary>
-    /// The X-Component of this vector.
+    ///     The X-Component of this vector.
     /// </summary>
     public float X { get; set; }
 
     /// <summary>
-    /// The Y-Component of this vector.
+    ///     The Y-Component of this vector.
     /// </summary>
     public float Y { get; set; }
 
     /// <summary>
-    /// Returns a copy of this vector.
+    ///     Returns a copy of this vector.
     /// </summary>
     public Vector2 Cpy()
     {
@@ -88,7 +89,7 @@ public class Vector2 : IVector< Vector2 >
 
     public float Len()
     {
-        return ( float ) Math.Sqrt( ( X * X ) + ( Y * Y ) );
+        return ( float )Math.Sqrt( ( X * X ) + ( Y * Y ) );
     }
 
     public float Len2()
@@ -178,7 +179,7 @@ public class Vector2 : IVector< Vector2 >
         var xD = v.X - X;
         var yD = v.Y - Y;
 
-        return ( float ) Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
+        return ( float )Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
     }
 
     public float Distance2( Vector2 v )
@@ -198,7 +199,7 @@ public class Vector2 : IVector< Vector2 >
     {
         var len2 = Len2();
 
-        return len2 > limit2 ? Scale( ( float ) Math.Sqrt( limit2 / len2 ) ) : this;
+        return len2 > limit2 ? Scale( ( float )Math.Sqrt( limit2 / len2 ) ) : this;
     }
 
     public Vector2 Clamp( float min, float max )
@@ -214,12 +215,12 @@ public class Vector2 : IVector< Vector2 >
 
         if ( len2 > max2 )
         {
-            return Scale( ( float ) Math.Sqrt( max2 / len2 ) );
+            return Scale( ( float )Math.Sqrt( max2 / len2 ) );
         }
 
         var min2 = min * min;
 
-        return len2 < min2 ? Scale( ( float ) Math.Sqrt( min2 / len2 ) ) : this;
+        return len2 < min2 ? Scale( ( float )Math.Sqrt( min2 / len2 ) ) : this;
     }
 
     public Vector2 SetLength( float len )
@@ -231,7 +232,7 @@ public class Vector2 : IVector< Vector2 >
     {
         var oldLen2 = Len2();
 
-        return ( oldLen2 == 0 ) || MathUtils.IsEqual( oldLen2, len2 ) ? this : Scale( ( float ) Math.Sqrt( len2 / oldLen2 ) );
+        return ( oldLen2 == 0 ) || MathUtils.IsEqual( oldLen2, len2 ) ? this : Scale( ( float )Math.Sqrt( len2 / oldLen2 ) );
     }
 
     public Vector2 Lerp( Vector2 target, float alpha )
@@ -345,7 +346,7 @@ public class Vector2 : IVector< Vector2 >
 
     public static float Len( float x, float y )
     {
-        return ( float ) Math.Sqrt( ( x * x ) + ( y * y ) );
+        return ( float )Math.Sqrt( ( x * x ) + ( y * y ) );
     }
 
     public static float Len2( float x, float y )
@@ -354,7 +355,7 @@ public class Vector2 : IVector< Vector2 >
     }
 
     /// <summary>
-    /// Sets the components of this vector
+    ///     Sets the components of this vector
     /// </summary>
     /// <param name="x">The x-component</param>
     /// <param name="y">The y-component</param>
@@ -368,7 +369,7 @@ public class Vector2 : IVector< Vector2 >
     }
 
     /// <summary>
-    /// Substracts the other vector from this vector.
+    ///     Substracts the other vector from this vector.
     /// </summary>
     /// <param name="x">The x-component of the other vector</param>
     /// <param name="y">The y-component of the other vector</param>
@@ -382,7 +383,7 @@ public class Vector2 : IVector< Vector2 >
     }
 
     /// <summary>
-    /// Adds the given components to this vector
+    ///     Adds the given components to this vector
     /// </summary>
     /// <param name="x">The X component.</param>
     /// <param name="y">The Y component.</param>
@@ -418,7 +419,7 @@ public class Vector2 : IVector< Vector2 >
         var xD = x2 - x1;
         var yD = y2 - y1;
 
-        return ( float ) Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
+        return ( float )Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
     }
 
     public float Dst( float x, float y )
@@ -426,7 +427,7 @@ public class Vector2 : IVector< Vector2 >
         var xD = x - X;
         var yD = y - Y;
 
-        return ( float ) Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
+        return ( float )Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
     }
 
     public static float Dst2( float x1, float y1, float x2, float y2 )
@@ -496,7 +497,7 @@ public class Vector2 : IVector< Vector2 >
 
     public float Angle()
     {
-        var angle = ( float ) Math.Atan2( Y, X ) * MathUtils.RADIANS_TO_DEGREES;
+        var angle = ( float )Math.Atan2( Y, X ) * MathUtils.RADIANS_TO_DEGREES;
 
         if ( angle < 0 )
         {
@@ -508,12 +509,12 @@ public class Vector2 : IVector< Vector2 >
 
     public float Angle( Vector2 reference )
     {
-        return ( float ) Math.Atan2( Crs( reference ), Dot( reference ) ) * MathUtils.RADIANS_TO_DEGREES;
+        return ( float )Math.Atan2( Crs( reference ), Dot( reference ) ) * MathUtils.RADIANS_TO_DEGREES;
     }
 
     public float AngleDeg()
     {
-        var angle = ( float ) Math.Atan2( Y, X ) * MathUtils.RADIANS_TO_DEGREES;
+        var angle = ( float )Math.Atan2( Y, X ) * MathUtils.RADIANS_TO_DEGREES;
 
         if ( angle < 0 )
         {
@@ -525,7 +526,7 @@ public class Vector2 : IVector< Vector2 >
 
     public float AngleDeg( Vector2 reference )
     {
-        var angle = ( float ) Math.Atan2( reference.Crs( this ), reference.Dot( this ) ) * MathUtils.RADIANS_TO_DEGREES;
+        var angle = ( float )Math.Atan2( reference.Crs( this ), reference.Dot( this ) ) * MathUtils.RADIANS_TO_DEGREES;
 
         if ( angle < 0 )
         {
@@ -537,12 +538,12 @@ public class Vector2 : IVector< Vector2 >
 
     public float AngleRad()
     {
-        return ( float ) Math.Atan2( Y, X );
+        return ( float )Math.Atan2( Y, X );
     }
 
     public float AngleRad( Vector2 reference )
     {
-        return ( float ) Math.Atan2( reference.Crs( this ), reference.Dot( this ) );
+        return ( float )Math.Atan2( reference.Crs( this ), reference.Dot( this ) );
     }
 
     public Vector2 SetAngle( float degrees )
@@ -580,8 +581,8 @@ public class Vector2 : IVector< Vector2 >
 
     public Vector2 RotateRad( float radians )
     {
-        var cos = ( float ) Math.Cos( radians );
-        var sin = ( float ) Math.Sin( radians );
+        var cos = ( float )Math.Cos( radians );
+        var sin = ( float )Math.Sin( radians );
 
         var newX = ( X * cos ) - ( Y * sin );
         var newY = ( X * sin ) + ( Y * cos );
@@ -647,7 +648,7 @@ public class Vector2 : IVector< Vector2 >
             return false;
         }
 
-        var other = ( Vector2 ) obj;
+        var other = ( Vector2 )obj;
 
         if ( NumberUtils.FloatToIntBits( X ) != NumberUtils.FloatToIntBits( other.X ) )
         {

@@ -27,8 +27,8 @@ using LughSharp.Lugh.Utils.Collections;
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-/// Delaunay triangulation. Adapted from Paul Bourke's triangulate:
-/// http://paulbourke.net/papers/triangulate/
+///     Delaunay triangulation. Adapted from Paul Bourke's triangulate:
+///     http://paulbourke.net/papers/triangulate/
 /// </summary>
 [PublicAPI]
 public class DelaunayTriangulator
@@ -65,23 +65,23 @@ public class DelaunayTriangulator
     // ========================================================================
 
     /// <summary>
-    /// Triangulates the given point cloud to a list of triangle indices that
-    /// make up the Delaunay triangulation.
+    ///     Triangulates the given point cloud to a list of triangle indices that
+    ///     make up the Delaunay triangulation.
     /// </summary>
     /// <param name="points">
-    /// x,y pairs describing points. Duplicate points will result in undefined behavior.
+    ///     x,y pairs describing points. Duplicate points will result in undefined behavior.
     /// </param>
     /// <param name="offset"></param>
     /// <param name="count"></param>
     /// <param name="sorted">
-    /// If false, the points will be sorted by the x coordinate, which is required
-    /// by the triangulation algorithm. If sorting is done the input array is not
-    /// modified, the returned indices are for the input array, and count*2
-    /// additional working memory is needed.
+    ///     If false, the points will be sorted by the x coordinate, which is required
+    ///     by the triangulation algorithm. If sorting is done the input array is not
+    ///     modified, the returned indices are for the input array, and count*2
+    ///     additional working memory is needed.
     /// </param>
     /// <returns>
-    /// triples of indices into the points that describe the triangles in clockwise
-    /// order. Note the returned array is reused for later calls to the same method.
+    ///     triples of indices into the points that describe the triangles in clockwise
+    ///     order. Note the returned array is reused for later calls to the same method.
     /// </returns>
     public List< int > ComputeTriangles( float[] points, int offset, int count, bool sorted )
     {
@@ -90,7 +90,7 @@ public class DelaunayTriangulator
             throw new ArgumentException( "count must be <= " + 32767 );
         }
 
-        List< int > triangles = _triangles;
+        var triangles = _triangles;
         triangles.Clear();
 
         if ( count < 6 )
@@ -307,8 +307,8 @@ public class DelaunayTriangulator
         for ( var i = triangles.Count - 1; i >= 0; i -= 3 )
         {
             if ( ( trianglesArray[ i ] >= end )
-              || ( trianglesArray[ i - 1 ] >= end )
-              || ( trianglesArray[ i - 2 ] >= end ) )
+                 || ( trianglesArray[ i - 1 ] >= end )
+                 || ( trianglesArray[ i - 2 ] >= end ) )
             {
                 triangles.RemoveAt( i );
                 triangles.RemoveAt( i - 1 );
@@ -323,7 +323,7 @@ public class DelaunayTriangulator
 
             for ( int i = 0, n = triangles.Count; i < n; i++ )
             {
-                trianglesArray[ i ] = ( short ) ( originalIndicesArray[ trianglesArray[ i ] / 2 ] * 2 );
+                trianglesArray[ i ] = ( short )( originalIndicesArray[ trianglesArray[ i ] / 2 ] * 2 );
             }
         }
 
@@ -333,14 +333,14 @@ public class DelaunayTriangulator
         {
             for ( int i = 0, n = triangles.Count; i < n; i++ )
             {
-                trianglesArray[ i ] = ( short ) ( trianglesArray[ i ] / 2 );
+                trianglesArray[ i ] = ( short )( trianglesArray[ i ] / 2 );
             }
         }
         else
         {
             for ( int i = 0, n = triangles.Count; i < n; i++ )
             {
-                trianglesArray[ i ] = ( short ) ( ( trianglesArray[ i ] - offset ) / 2 );
+                trianglesArray[ i ] = ( short )( ( trianglesArray[ i ] - offset ) / 2 );
             }
         }
 
@@ -348,12 +348,12 @@ public class DelaunayTriangulator
     }
 
     /// <summary>
-    /// Returns INSIDE if point xp,yp is inside the circumcircle made up of
-    /// the points x1,y1, x2,y2, x3,y3. Returns COMPLETE if xp is to the right
-    /// of the entire circumcircle. Otherwise returns INCOMPLETE.
-    /// <para>
-    /// Note: a point on the circumcircle edge is considered inside.
-    /// </para>
+    ///     Returns INSIDE if point xp,yp is inside the circumcircle made up of
+    ///     the points x1,y1, x2,y2, x3,y3. Returns COMPLETE if xp is to the right
+    ///     of the entire circumcircle. Otherwise returns INCOMPLETE.
+    ///     <para>
+    ///         Note: a point on the circumcircle edge is considered inside.
+    ///     </para>
     /// </summary>
     private int CircumCircle( float xp,
                               float yp,
@@ -402,7 +402,7 @@ public class DelaunayTriangulator
 
                 xc = ( ( ( ( m1 * mx1 ) - ( m2 * mx2 ) ) + my2 ) - my1 ) / ( m1 - m2 );
             }
-            
+
             yc = ( m1 * ( xc - mx1 ) ) + my1;
         }
 
@@ -423,7 +423,7 @@ public class DelaunayTriangulator
     }
 
     /// <summary>
-    /// Sorts x,y pairs of values by the x value.
+    ///     Sorts x,y pairs of values by the x value.
     /// </summary>
     /// <param name="values"></param>
     /// <param name="count"> Number of indices, must be even. </param>
@@ -519,9 +519,9 @@ public class DelaunayTriangulator
     }
 
     /// <summary>
-    /// Removes all triangles with a centroid outside the specified hull, which
-    /// may be concave. Note some triangulations may have triangles whose centroid
-    /// is inside the hull but a portion is outside.
+    ///     Removes all triangles with a centroid outside the specified hull, which
+    ///     may be concave. Note some triangulations may have triangles whose centroid
+    ///     is inside the hull but a portion is outside.
     /// </summary>
     public void Trim( List< short > triangles, float[] points, float[] hull, int offset, int count )
     {

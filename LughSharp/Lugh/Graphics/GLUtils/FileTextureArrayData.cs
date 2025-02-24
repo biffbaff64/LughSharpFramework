@@ -38,7 +38,6 @@ public class FileTextureArrayData : ITextureArrayData
     // ========================================================================
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="pixelFormat"></param>
     /// <param name="useMipMaps"></param>
@@ -56,51 +55,69 @@ public class FileTextureArrayData : ITextureArrayData
         }
     }
 
+    public PixelType.Format PixelFormat { get; set; }
+
+    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
+    public bool IsManaged
+    {
+        get
+        {
+            foreach ( var data in _textureData )
+            {
+                if ( data is { IsManaged: false } )
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        set { }
+    }
+
     // ========================================================================
 
     /// <summary>
-    /// whether the TextureArrayData is prepared or not.
+    ///     whether the TextureArrayData is prepared or not.
     /// </summary>
     public bool Prepared { get; set; }
 
     /// <summary>
-    /// the width of this TextureArray
+    ///     the width of this TextureArray
     /// </summary>
     public int Width => _textureData[ 0 ]!.Width;
 
     /// <summary>
-    /// the height of this TextureArray
+    ///     the height of this TextureArray
     /// </summary>
     public int Height => _textureData[ 0 ]!.Height;
 
     /// <summary>
-    /// the layer count of this TextureArray
+    ///     the layer count of this TextureArray
     /// </summary>
     public int Depth { get; set; }
 
     /// <summary>
-    /// whether this implementation can cope with a EGL context loss.
+    ///     whether this implementation can cope with a EGL context loss.
     /// </summary>
     public bool Managed { get; set; }
 
-    public PixelType.Format PixelFormat { get; set; }
-
     /// <summary>
-    /// the internal format of this TextureArray
+    ///     the internal format of this TextureArray
     /// </summary>
     public int InternalFormat => PixmapFormat.ToGLPixelFormat( PixelFormat );
 
     /// <summary>
-    /// the GL Data type of this TextureArray
+    ///     the GL Data type of this TextureArray
     /// </summary>
     public int GLDataType => PixmapFormat.ToGLDataType( PixelFormat );
 
     // ========================================================================
 
     /// <summary>
-    /// Prepares the TextureArrayData for a call to <see cref="ITextureArrayData.ConsumeTextureArrayData"/>.
-    /// This method can be called from a non OpenGL thread and should thus not interact
-    /// with OpenGL.
+    ///     Prepares the TextureArrayData for a call to <see cref="ITextureArrayData.ConsumeTextureArrayData" />.
+    ///     This method can be called from a non OpenGL thread and should thus not interact
+    ///     with OpenGL.
     /// </summary>
     public void Prepare()
     {
@@ -132,16 +149,16 @@ public class FileTextureArrayData : ITextureArrayData
     }
 
     /// <summary>
-    /// Uploads the pixel data of the TextureArray layers of the TextureArray to the OpenGL
-    /// ES texture. The caller must bind an OpenGL ES texture.
-    /// <para></para>
-    /// <para>
-    /// A call to <see cref="ITextureArrayData.Prepare"/> must preceed a call to this method.
-    /// </para>
-    /// <para>
-    /// Any internal data structures created in <see cref="ITextureArrayData.Prepare"/>
-    /// should be disposed of here.
-    /// </para>
+    ///     Uploads the pixel data of the TextureArray layers of the TextureArray to the OpenGL
+    ///     ES texture. The caller must bind an OpenGL ES texture.
+    ///     <para></para>
+    ///     <para>
+    ///         A call to <see cref="ITextureArrayData.Prepare" /> must preceed a call to this method.
+    ///     </para>
+    ///     <para>
+    ///         Any internal data structures created in <see cref="ITextureArrayData.Prepare" />
+    ///         should be disposed of here.
+    ///     </para>
     /// </summary>
     public void ConsumeTextureArrayData()
     {
@@ -190,7 +207,7 @@ public class FileTextureArrayData : ITextureArrayData
                                                        1,
                                                        pixmap.GLInternalPixelFormat,
                                                        pixmap.GLDataType,
-                                                       ptr );
+                                                       ( IntPtr )ptr );
                     }
                 }
 
@@ -205,23 +222,5 @@ public class FileTextureArrayData : ITextureArrayData
                 }
             }
         }
-    }
-
-    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
-    public bool IsManaged
-    {
-        get
-        {
-            foreach ( var data in _textureData )
-            {
-                if ( data is { IsManaged: false } )
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        set { }
     }
 }

@@ -27,8 +27,8 @@ using LughSharp.Lugh.Input;
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// A selection that supports range selection by knowing about the
-/// array of items being selected.
+///     A selection that supports range selection by knowing about the
+///     array of items being selected.
 /// </summary>
 [PublicAPI]
 public class ArraySelection< T > : Selection< T >
@@ -118,7 +118,7 @@ public class ArraySelection< T > : Selection< T >
     }
 
     /// <summary>
-    /// Called after the selection changes, clears the range start item.
+    ///     Called after the selection changes, clears the range start item.
     /// </summary>
     protected override void Changed()
     {
@@ -126,9 +126,9 @@ public class ArraySelection< T > : Selection< T >
     }
 
     /// <summary>
-    /// Removes objects from the selection that are no longer in the items
-    /// array. If <see cref="Selection{T}.Required"/> is true and there is
-    /// no selected item, the first item is selected.
+    ///     Removes objects from the selection that are no longer in the items
+    ///     array. If <see cref="Selection{T}.Required" /> is true and there is
+    ///     no selected item, the first item is selected.
     /// </summary>
     public virtual void Validate()
     {

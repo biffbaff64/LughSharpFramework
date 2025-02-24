@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Maths;
 
 [PublicAPI]
@@ -57,7 +56,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     {
         var n = SpanCount;
         var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int ) u;
+        var i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -68,7 +67,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     {
         var n = SpanCount;
         var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int ) u;
+        var i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -96,7 +95,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
             {
                 _tmp2?.Set( _tmp3 );
 
-                ValueAt( _tmp3, i / ( ( float ) samples - 1 ) );
+                ValueAt( _tmp3, i / ( ( float )samples - 1 ) );
 
                 if ( ( _tmp2 != null ) && ( i > 0 ) )
                 {
@@ -109,7 +108,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    /// Calculates the cubic b-spline value for the given position (t).
+    ///     Calculates the cubic b-spline value for the given position (t).
     /// </summary>
     /// <param name="output"> The Vector to set to the result. </param>
     /// <param name="t"> The position (0&lt;=t&lt;=1) on the spline </param>
@@ -121,7 +120,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     {
         var n = continuous ? points.Length : points.Length - 3;
         var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int ) u;
+        var i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -129,7 +128,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    /// Calculates the cubic b-spline derivative for the given position (t).
+    ///     Calculates the cubic b-spline derivative for the given position (t).
     /// </summary>
     /// <param name="output"> The Vector to set to the result. </param>
     /// <param name="t"> The position (0&lt;=t&lt;=1) on the spline </param>
@@ -141,7 +140,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     {
         var n = continuous ? points.Length : points.Length - 3;
         var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int ) u;
+        var i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -149,11 +148,11 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    /// Calculates the cubic b-spline value for the given span (i) at the given position (u).
+    ///     Calculates the cubic b-spline value for the given span (i) at the given position (u).
     /// </summary>
     /// <param name="output"> The Vector to set to the result. </param>
     /// <param name="i">
-    /// The span (0&lt;=i&lt;spanCount) spanCount = continuous ? points.length : points.length - 3 (cubic degree)
+    ///     The span (0&lt;=i&lt;spanCount) spanCount = continuous ? points.length : points.length - 3 (cubic degree)
     /// </param>
     /// <param name="u"> The position (0&lt;=u&lt;=1) on the span </param>
     /// <param name="points"> The control points </param>
@@ -190,11 +189,11 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    /// Calculates the cubic b-spline derivative for the given span (i) at the given position (u).
+    ///     Calculates the cubic b-spline derivative for the given span (i) at the given position (u).
     /// </summary>
     /// <param name="output"> The Vector to set to the result. </param>
     /// <param name="i">
-    /// The span (0&lt;=i&lt;spanCount) spanCount = continuous ? points.length : points.length - 3 (cubic degree)
+    ///     The span (0&lt;=i&lt;spanCount) spanCount = continuous ? points.length : points.length - 3 (cubic degree)
     /// </param>
     /// <param name="u"> The position (0&lt;=u&lt;=1) on the span </param>
     /// <param name="points"> The control points </param>
@@ -230,7 +229,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    /// Calculates the n-degree b-spline value for the given position (t).
+    ///     Calculates the n-degree b-spline value for the given position (t).
     /// </summary>
     /// <param name="output"> The Vector to set to the result. </param>
     /// <param name="t"> The position (0&lt;=t&lt;=1) on the spline </param>
@@ -243,7 +242,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     {
         var n = continuous ? points.Length : points.Length - degree;
         var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int ) u;
+        var i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -251,7 +250,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    /// Calculates the n-degree b-spline derivative for the given position (t).
+    ///     Calculates the n-degree b-spline derivative for the given position (t).
     /// </summary>
     /// <param name="output"> The Vector to set to the result. </param>
     /// <param name="t"> The position (0&lt;=t&lt;=1) on the spline </param>
@@ -264,7 +263,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     {
         var n = continuous ? points.Length : points.Length - degree;
         var u = t * n;
-        var i = t >= 1f ? n - 1 : ( int ) u;
+        var i = t >= 1f ? n - 1 : ( int )u;
 
         u -= i;
 
@@ -272,11 +271,11 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    /// Calculates the n-degree b-spline value for the given span (i) at the given position (u).
+    ///     Calculates the n-degree b-spline value for the given span (i) at the given position (u).
     /// </summary>
     /// <param name="output"> The Vector to set to the result. </param>
     /// <param name="i">
-    /// The span (0&lt;=i&lt;spanCount) spanCount = continuous ? points.length : points.length - degree
+    ///     The span (0&lt;=i&lt;spanCount) spanCount = continuous ? points.length : points.length - degree
     /// </param>
     /// <param name="u"> The position (0&lt;=u&lt;=1) on the span </param>
     /// <param name="points"> The control points </param>
@@ -295,11 +294,11 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    /// Calculates the n-degree b-spline derivative for the given span (i) at the given position (u).
+    ///     Calculates the n-degree b-spline derivative for the given span (i) at the given position (u).
     /// </summary>
     /// <param name="output"> The Vector to set to the result. </param>
     /// <param name="i">
-    /// The span (0&lt;=i&lt;spanCount) spanCount = continuous ? points.length : points.length - degree
+    ///     The span (0&lt;=i&lt;spanCount) spanCount = continuous ? points.length : points.length - degree
     /// </param>
     /// <param name="u"> The position (0&lt;=u&lt;=1) on the span </param>
     /// <param name="points"> The control points </param>
@@ -341,7 +340,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
         for ( var i = 0; i < SpanCount; i++ )
         {
             Knots.Add( Calculate( controlPoints[ 0 ].Cpy(),
-                                  continuous ? i : ( int ) ( i + ( 0.5f * degree ) ),
+                                  continuous ? i : ( int )( i + ( 0.5f * degree ) ),
                                   0f,
                                   controlPoints,
                                   degree,
@@ -356,7 +355,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     protected virtual T ValueAt( T output, int span, float u )
     {
         return Calculate( output,
-                          Continuous ? span : span + ( int ) ( Degree * 0.5f ),
+                          Continuous ? span : span + ( int )( Degree * 0.5f ),
                           u,
                           ControlPoints!,
                           Degree,
@@ -368,7 +367,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     protected virtual T DerivativeAt( T output, int span, float u )
     {
         return Derivative( output,
-                           Continuous ? span : span + ( int ) ( Degree * 0.5f ),
+                           Continuous ? span : span + ( int )( Degree * 0.5f ),
                            u,
                            ControlPoints!,
                            Degree,
@@ -444,7 +443,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
         var l1Sqr = p1.Distance2( p2 );
         var l2Sqr = p3.Distance2( p2 );
         var l3Sqr = p3.Distance2( p1 );
-        var l1    = ( float ) Math.Sqrt( l1Sqr );
+        var l1    = ( float )Math.Sqrt( l1Sqr );
         var s     = ( ( l2Sqr + l1Sqr ) - l3Sqr ) / ( 2 * l1 );
         var u     = MathUtils.Clamp( ( l1 - s ) / l1, 0f, 1f );
 

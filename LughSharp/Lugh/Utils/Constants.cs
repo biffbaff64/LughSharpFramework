@@ -22,23 +22,22 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-/// Various constants applicable to floats.
+///     Various constants applicable to floats.
 /// </summary>
 [PublicAPI]
 public static class Constants
 {
     public const int NOT_SET = -1;
-    
+
     // ========================================================================
 
     public const float PI = 3.14159265358979323846f;
-    
+
     // ========================================================================
-    
+
     public const float POSITIVE_INFINITY = float.PositiveInfinity;
     public const float NEGATIVE_INFINITY = float.NegativeInfinity;
     public const float NA_N              = float.NaN;

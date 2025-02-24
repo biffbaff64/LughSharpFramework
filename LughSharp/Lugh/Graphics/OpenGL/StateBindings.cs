@@ -24,7 +24,6 @@
 
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
-public class FrameBufferBindings
+public class StateBindings
 {
-    
 }

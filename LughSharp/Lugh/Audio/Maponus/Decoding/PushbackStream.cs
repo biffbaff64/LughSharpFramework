@@ -22,17 +22,16 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-/// A PushbackStream is a stream that can "push back" or "unread" data. This is useful in
-/// situations where it is convenient for a fragment of code to read an indefinite number
-/// of data bytes that are delimited by a particular byte value; after reading the terminating
-/// byte, the code fragment can "unread" it, so that the next read operation on the input stream
-/// will reread the byte that was pushed back.
+///     A PushbackStream is a stream that can "push back" or "unread" data. This is useful in
+///     situations where it is convenient for a fragment of code to read an indefinite number
+///     of data bytes that are delimited by a particular byte value; after reading the terminating
+///     byte, the code fragment can "unread" it, so that the next read operation on the input stream
+///     will reread the byte that was pushed back.
 /// </summary>
 [PublicAPI]
 public class PushbackStream
@@ -46,12 +45,12 @@ public class PushbackStream
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PushbackStream"/> class with a specified
-    /// stream and a back buffer size.
+    ///     Initializes a new instance of the <see cref="PushbackStream" /> class with a specified
+    ///     stream and a back buffer size.
     /// </summary>
     /// <param name="s">The stream to be wrapped.</param>
     /// <param name="backBufferSize">
-    /// The size of the back buffer, which determines how many bytes can be unread.
+    ///     The size of the back buffer, which determines how many bytes can be unread.
     /// </param>
     public PushbackStream( Stream s, int backBufferSize )
     {
@@ -62,18 +61,18 @@ public class PushbackStream
     }
 
     /// <summary>
-    /// Reads bytes from the stream into the specified buffer.
+    ///     Reads bytes from the stream into the specified buffer.
     /// </summary>
     /// <param name="readBuffer">The buffer to store the read bytes.</param>
     /// <param name="offset">
-    /// The zero-based byte offset in the buffer at which to begin storing the data read
-    /// from the stream.
+    ///     The zero-based byte offset in the buffer at which to begin storing the data read
+    ///     from the stream.
     /// </param>
     /// <param name="length">The maximum number of bytes to read.</param>
     /// <returns>
-    /// The total number of bytes read into the buffer. This can be less than the number of
-    /// bytes requested if that many bytes are not currently available, or zero if the end
-    /// of the stream is reached.
+    ///     The total number of bytes read into the buffer. This can be less than the number of
+    ///     bytes requested if that many bytes are not currently available, or zero if the end
+    ///     of the stream is reached.
     /// </returns>
     public virtual int Read( sbyte[] readBuffer, int offset, int length )
     {
@@ -86,7 +85,7 @@ public class PushbackStream
             {
                 // Read from the circular buffer
                 _numForwardBytesInBuffer--;
-                readBuffer[ offset + index ] = ( sbyte ) _circularByteBuffer[ _numForwardBytesInBuffer ];
+                readBuffer[ offset + index ] = ( sbyte )_circularByteBuffer[ _numForwardBytesInBuffer ];
                 index++;
             }
             else
@@ -100,7 +99,7 @@ public class PushbackStream
                 for ( var i = 0; i < countBytesRead; i++ )
                 {
                     _circularByteBuffer.Push( _temporaryBuffer[ i ] );
-                    readBuffer[ offset + index + i ] = ( sbyte ) _temporaryBuffer[ i ];
+                    readBuffer[ offset + index + i ] = ( sbyte )_temporaryBuffer[ i ];
                 }
 
                 index += countBytesRead;
@@ -111,11 +110,11 @@ public class PushbackStream
     }
 
     /// <summary>
-    /// Unreads a specified number of bytes, making them available to be read again.
+    ///     Unreads a specified number of bytes, making them available to be read again.
     /// </summary>
     /// <param name="length">The number of bytes to unread.</param>
     /// <exception cref="Exception">
-    /// Thrown when the number of bytes to unread exceeds the back buffer size.
+    ///     Thrown when the number of bytes to unread exceeds the back buffer size.
     /// </exception>
     public virtual void UnRead( int length )
     {
@@ -128,7 +127,7 @@ public class PushbackStream
     }
 
     /// <summary>
-    /// Closes the underlying stream.
+    ///     Closes the underlying stream.
     /// </summary>
     public virtual void Close()
     {

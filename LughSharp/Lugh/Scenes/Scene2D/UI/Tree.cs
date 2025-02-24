@@ -27,28 +27,21 @@ using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
+
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// A tree widget where each node has an icon, actor, and child nodes.
-/// The preferred size of the tree is determined by the preferred size
-/// of the actors for the expanded nodes.
+///     A tree widget where each node has an icon, actor, and child nodes.
+///     The preferred size of the tree is determined by the preferred size
+///     of the actors for the expanded nodes.
 /// </summary>
 /// <typeparam name="TNode"> The type of nodes in the tree. </typeparam>
 /// <typeparam name="TValue"> The type of values for each node. </typeparam>
 [PublicAPI]
 public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TValue >.Node
 {
-    public TNode?         RangeStart    { get; set; }
-    public ClickListener? ClickListener { get; set; }
-    public TreeStyle?     Style         { get; set; }
-    public List< TNode >  RootNodes     { get; set; } = [ ];
-    public float          YSpacing      { get; set; } = 4;
-    public float          IndentSpacing { get; set; }
-    public TNode?         OverNode      { get; set; }
-
     // ========================================================================
 
     private readonly TreeSelection _selection;
@@ -65,8 +58,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     // ========================================================================
 
     /// <summary>
-    /// Construct a new Tree using the supplied <see cref="Skin"/>
-    /// and a default <see cref="TreeStyle"/> from that skin.
+    ///     Construct a new Tree using the supplied <see cref="Skin" />
+    ///     and a default <see cref="TreeStyle" /> from that skin.
     /// </summary>
     public Tree( Skin skin ) : this( skin.Get< TreeStyle >() )
     {
@@ -90,6 +83,14 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         SetStyle( style );
         Initialise();
     }
+
+    public TNode?         RangeStart    { get; set; }
+    public ClickListener? ClickListener { get; set; }
+    public TreeStyle?     Style         { get; set; }
+    public List< TNode >  RootNodes     { get; set; } = [ ];
+    public float          YSpacing      { get; set; } = 4;
+    public float          IndentSpacing { get; set; }
+    public TNode?         OverNode      { get; set; }
 
     private void Initialise()
     {
@@ -347,8 +348,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     }
 
     /// <summary>
-    /// Called to draw the background.
-    /// Default implementation draws the style background drawable.
+    ///     Called to draw the background.
+    ///     Default implementation draws the style background drawable.
     /// </summary>
     protected void DrawBackground( IBatch batch, float parentAlpha )
     {
@@ -408,7 +409,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                     var iconY = y + actorY + Math.Round( ( height - node.Icon.MinHeight ) / 2 );
 
                     batch.Color = actor.Color;
-                    DrawIcon( node, node.Icon, batch, iconX, ( float ) iconY );
+                    DrawIcon( node, node.Icon, batch, iconX, ( float )iconY );
                     batch.SetColor( 1, 1, 1, 1 );
                 }
 
@@ -417,7 +418,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                     var expandIcon = GetExpandIcon( node, iconX );
                     var iconY      = y + actorY + Math.Round( ( height - expandIcon.MinHeight ) / 2 );
 
-                    DrawExpandIcon( node, expandIcon, batch, expandX, ( float ) iconY );
+                    DrawExpandIcon( node, expandIcon, batch, expandX, ( float )iconY );
                 }
             }
             else if ( actorY < cullBottom )
@@ -454,18 +455,18 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     }
 
     /// <summary>
-    /// Returns the drawable for the expand icon. The default implementation returns
-    /// <see cref="Tree{T,V}.TreeStyle.PlusOver"/> or <see cref="Tree{T,V}.TreeStyle.MinusOver"/>
-    /// on the desktop if the node is the over node, the mouse is left of iconX, and
-    /// clicking would expand the node.
+    ///     Returns the drawable for the expand icon. The default implementation returns
+    ///     <see cref="Tree{T,V}.TreeStyle.PlusOver" /> or <see cref="Tree{T,V}.TreeStyle.MinusOver" />
+    ///     on the desktop if the node is the over node, the mouse is left of iconX, and
+    ///     clicking would expand the node.
     /// </summary>
     protected IDrawable GetExpandIcon( TNode node, float iconX )
     {
         var over = false;
 
         if ( ( node == OverNode )
-          && ( GdxApi.App.AppType == Platform.ApplicationType.WindowsGL )
-          && ( !_selection.Multiple || ( !InputUtils.CtrlKey() && !InputUtils.ShiftKey() ) ) )
+             && ( GdxApi.App.AppType == Platform.ApplicationType.WindowsGL )
+             && ( !_selection.Multiple || ( !InputUtils.CtrlKey() && !InputUtils.ShiftKey() ) ) )
         {
             var mouseX = ScreenToLocalCoordinates( _tmp.Set( GdxApi.Input.GetX(), 0 ) ).X;
 
@@ -569,7 +570,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     }
 
     /// <summary>
-    /// Returns the first selected node, or null.
+    ///     Returns the first selected node, or null.
     /// </summary>
     public TNode? GetSelectedNode()
     {
@@ -577,7 +578,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     }
 
     /// <summary>
-    /// Returns the first selected value, or null.
+    ///     Returns the first selected value, or null.
     /// </summary>
     public TValue? GetSelectedValue()
     {
@@ -585,9 +586,9 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     }
 
     /// <summary>
-    /// Updates the order of the actors in the tree for all root nodes and all
-    /// child nodes.
-    /// This is useful after changing the order of <see cref="RootNodes"/>.
+    ///     Updates the order of the actors in the tree for all root nodes and all
+    ///     child nodes.
+    ///     This is useful after changing the order of <see cref="RootNodes" />.
     /// </summary>
     public void UpdateRootNodes()
     {
@@ -651,13 +652,13 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     }
 
     /// <summary>
-    /// Returns the node with the specified value, or null.
+    ///     Returns the node with the specified value, or null.
     /// </summary>
     public TNode? FindNode( TValue value )
     {
         ArgumentNullException.ThrowIfNull( value );
 
-        return ( TNode? ) FindNode( RootNodes, value );
+        return ( TNode? )FindNode( RootNodes, value );
     }
 
     private static Node? FindNode< T >( List< T > nodes, object value ) where T : Node
@@ -739,7 +740,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     }
 
     /// <summary>
-    /// Gets the preferred width of this tree.
+    ///     Gets the preferred width of this tree.
     /// </summary>
     public float GetPrefWidth()
     {
@@ -752,7 +753,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     }
 
     /// <summary>
-    /// Gets the preferred height of this tree.
+    ///     Gets the preferred height of this tree.
     /// </summary>
     public float GetPrefHeight()
     {
@@ -793,10 +794,10 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 // ========================================================================
 // ========================================================================
 
-    /// <summary>
-    /// The style for a <see cref="Tree{TN,TV}"/>.
-    /// </summary>
-    [PublicAPI]
+/// <summary>
+///     The style for a <see cref="Tree{TN,TV}" />.
+/// </summary>
+[PublicAPI]
     public class TreeStyle
     {
         public TreeStyle( IDrawable plus, IDrawable minus, IDrawable? selection )
@@ -832,11 +833,11 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     // ========================================================================
 
     /// <summary>
-    /// A <see cref="Tree{TNode,TValue}"/> node which has an actor and value.
-    /// <para>
-    /// A subclass can be used so the generic type parameters don't need
-    /// to be specified repeatedly.
-    /// </para>
+    ///     A <see cref="Tree{TNode,TValue}" /> node which has an actor and value.
+    ///     <para>
+    ///         A subclass can be used so the generic type parameters don't need
+    ///         to be specified repeatedly.
+    ///     </para>
     /// </summary>
     [PublicAPI]
     public class Node
@@ -844,8 +845,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         private Actor? _actor;
 
         /// <summary>
-        /// Creates a node without an actor. An actor must be
-        /// set before this node can be used.
+        ///     Creates a node without an actor. An actor must be
+        ///     set before this node can be used.
         /// </summary>
         public Node()
         {
@@ -866,10 +867,10 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         public bool       IsExpanded { get; private set; }
 
         /// <summary>
-        /// If the children order is changed, <see cref="UpdateChildren()"/> must
-        /// be called to ensure the node's actors are in the correct order. That
-        /// is not necessary if this node is not in the tree or is not expanded,
-        /// because then the child node's actors are not in the tree.
+        ///     If the children order is changed, <see cref="UpdateChildren()" /> must
+        ///     be called to ensure the node's actors are in the correct order. That
+        ///     is not necessary if this node is not in the tree or is not expanded,
+        ///     because then the child node's actors are not in the tree.
         /// </summary>
         public List< TNode >? NodeChildren { get; set; } = [ ];
 
@@ -936,7 +937,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Called to add the actor to the tree when the node's parent is expanded.
+        ///     Called to add the actor to the tree when the node's parent is expanded.
         /// </summary>
         /// <returns> The number of node actors added to the tree. </returns>
         public int AddToTree( Tree< TNode, TValue > tree, int actorIndex )
@@ -960,8 +961,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Called to remove the actor from the tree, eg when the node is
-        /// removed or the node's parent is collapsed.
+        ///     Called to remove the actor from the tree, eg when the node is
+        ///     removed or the node's parent is collapsed.
         /// </summary>
         public void RemoveFromTree( Tree< TNode, TValue > tree, int actorIndex )
         {
@@ -1001,7 +1002,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Inserts the supplied node into the <see cref="NodeChildren"/> list.
+        ///     Inserts the supplied node into the <see cref="NodeChildren" /> list.
         /// </summary>
         /// <param name="childIndex"></param>
         /// <param name="node"></param>
@@ -1046,8 +1047,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Return the current count of actors held in <see cref="NodeChildren"/>.
-        /// If this node is not expanded, a count of 1 is returned by default.
+        ///     Return the current count of actors held in <see cref="NodeChildren" />.
+        ///     If this node is not expanded, a count of 1 is returned by default.
         /// </summary>
         public int CountActors()
         {
@@ -1069,7 +1070,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Remove this node from its parent.
+        ///     Remove this node from its parent.
         /// </summary>
         public void Remove()
         {
@@ -1086,15 +1087,15 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Remove the specified child node from this node.
-        /// Does nothing if the node is not a child of this node.
+        ///     Remove the specified child node from this node.
+        ///     Does nothing if the node is not a child of this node.
         /// </summary>
         public void Remove( TNode? node )
         {
             if ( ( node == null )
-              || ( NodeChildren == null )
-              || !NodeChildren.Remove( node )
-              || !IsExpanded )
+                 || ( NodeChildren == null )
+                 || !NodeChildren.Remove( node )
+                 || !IsExpanded )
             {
                 return;
             }
@@ -1110,7 +1111,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Removes all children from this node.
+        ///     Removes all children from this node.
         /// </summary>
         public void ClearChildren()
         {
@@ -1133,9 +1134,9 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Returns the tree this node's actor is currently in, or null.
-        /// The actor is only in the tree when all of its parent nodes
-        /// are expanded.
+        ///     Returns the tree this node's actor is currently in, or null.
+        ///     The actor is only in the tree when all of its parent nodes
+        ///     are expanded.
         /// </summary>
         public Tree< TNode, TValue >? GetTree()
         {
@@ -1155,8 +1156,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Updates the order of the actors in the tree for this node and all child nodes.
-        /// This is useful after changing the order. of <see cref="NodeChildren"/>.
+        ///     Updates the order of the actors in the tree for this node and all child nodes.
+        ///     This is useful after changing the order. of <see cref="NodeChildren" />.
         /// </summary>
         public void UpdateChildren()
         {
@@ -1202,7 +1203,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Returns this node or the child node with the specified value, or null.
+        ///     Returns this node or the child node with the specified value, or null.
         /// </summary>
         public TNode? FindNode( TValue? value )
         {
@@ -1210,14 +1211,14 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
             if ( value.Equals( Value ) )
             {
-                return ( TNode ) this;
+                return ( TNode )this;
             }
 
-            return ( TNode? ) Tree< TNode, TValue >.FindNode( NodeChildren!, value );
+            return ( TNode? )Tree< TNode, TValue >.FindNode( NodeChildren!, value );
         }
 
         /// <summary>
-        /// Collapses all nodes under and including this node.
+        ///     Collapses all nodes under and including this node.
         /// </summary>
         public void CollapseAll()
         {
@@ -1226,7 +1227,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Expands all nodes under and including this node.
+        ///     Expands all nodes under and including this node.
         /// </summary>
         public void ExpandAll()
         {
@@ -1239,7 +1240,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Expands all parent nodes of this node.
+        ///     Expands all parent nodes of this node.
         /// </summary>
         public void ExpandTo()
         {
@@ -1255,7 +1256,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         public void FindExpandedValues( List< TValue > values )
         {
             if ( IsExpanded
-              && !Tree< TNode, TValue >.FindExpandedValues( NodeChildren!, values ) )
+                 && !Tree< TNode, TValue >.FindExpandedValues( NodeChildren!, values ) )
             {
                 values.Add( Value! );
             }
@@ -1276,9 +1277,9 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Returns the height of the node as calculated for layout. A subclass
-        /// may override and increase the returned height to create a blank space
-        /// in the tree above the node, eg for a separator.
+        ///     Returns the height of the node as calculated for layout. A subclass
+        ///     may override and increase the returned height to create a blank space
+        ///     in the tree above the node, eg for a separator.
         /// </summary>
         public virtual float GetHeight()
         {
@@ -1286,7 +1287,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Returns true if the specified node is this node or an ascendant of this node.
+        ///     Returns true if the specified node is this node or an ascendant of this node.
         /// </summary>
         public bool IsAscendantOf( TNode node )
         {
@@ -1308,7 +1309,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
 
         /// <summary>
-        /// Returns true if the specified node is this node or an descendant of this node.
+        ///     Returns true if the specified node is this node or an descendant of this node.
         /// </summary>
         public bool IsDescendantOf( TNode? node )
         {

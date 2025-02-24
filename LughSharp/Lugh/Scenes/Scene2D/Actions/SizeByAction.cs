@@ -22,12 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-/// Scales an actor by the the values in <see cref="AmountWidth"/>
-/// and <see cref="AmountHeight"/>.
+///     Scales an actor by the the values in <see cref="AmountWidth" />
+///     and <see cref="AmountHeight" />.
 /// </summary>
 [PublicAPI]
 public class SizeByAction : RelativeTemporalAction
@@ -36,7 +35,7 @@ public class SizeByAction : RelativeTemporalAction
     public float AmountHeight { get; set; }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     protected override void UpdateRelative( float percentDelta )
     {
@@ -44,7 +43,7 @@ public class SizeByAction : RelativeTemporalAction
     }
 
     /// <summary>
-    /// Sets the amounts by which to scale the width and height.
+    ///     Sets the amounts by which to scale the width and height.
     /// </summary>
     /// <param name="width"></param>
     /// <param name="height"></param>

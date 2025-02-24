@@ -33,60 +33,43 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-/// A PolygonSpriteBatch is used to Draw 2D polygons that reference a
-/// texture (region). The class will batch the drawing commands and
-/// optimize them for processing by the GPU.
-/// <para>
-/// To Draw something with a PolygonSpriteBatch one has to first call the
-/// <see cref="PolygonSpriteBatch.Begin()"/> method which will setup appropriate
-/// render states. When you are done with drawing you have to call
-/// <see cref="PolygonSpriteBatch.End()"/> which will actually Draw the things
-/// you specified.
-/// </para>
-/// <para>
-/// All drawing commands of the PolygonSpriteBatch operate in screen coordinates.
-/// The screen coordinate system has an x-axis pointing to the right, an y-axis
-/// pointing upwards and the origin is in the lower left corner of the screen. You
-/// can also provide your own transformation and projection matrices if you so wish.
-/// A PolygonSpriteBatch is managed. In case the OpenGL context is lost all OpenGL
-/// resources a PolygonSpriteBatch uses internally get invalidated. A context is lost
-/// when a user switches to another application or receives an incoming call on Android.
-/// A SpritPolygonSpriteBatcheBatch will be automatically reloaded after the OpenGL
-/// context is restored.
-/// </para>
-/// <para>
-/// A PolygonSpriteBatch is a pretty heavy object so you should only ever have one
-/// in your program.
-/// </para>
-/// <para>
-/// A PolygonSpriteBatch works with OpenGL ES 1.x and 2.0. In the case of a 2.0 context
-/// it will use its own custom shader to Draw all provided sprites. You can set your own
-/// custom shader via <see cref="Shader"/>.
-/// </para>
-/// <para>
-/// A PolygonSpriteBatch has to be disposed if it is no longer used.
-/// </para>
+///     A PolygonSpriteBatch is used to Draw 2D polygons that reference a
+///     texture (region). The class will batch the drawing commands and
+///     optimize them for processing by the GPU.
+///     <para>
+///         To Draw something with a PolygonSpriteBatch one has to first call the
+///         <see cref="PolygonSpriteBatch.Begin()" /> method which will setup appropriate
+///         render states. When you are done with drawing you have to call
+///         <see cref="PolygonSpriteBatch.End()" /> which will actually Draw the things
+///         you specified.
+///     </para>
+///     <para>
+///         All drawing commands of the PolygonSpriteBatch operate in screen coordinates.
+///         The screen coordinate system has an x-axis pointing to the right, an y-axis
+///         pointing upwards and the origin is in the lower left corner of the screen. You
+///         can also provide your own transformation and projection matrices if you so wish.
+///         A PolygonSpriteBatch is managed. In case the OpenGL context is lost all OpenGL
+///         resources a PolygonSpriteBatch uses internally get invalidated. A context is lost
+///         when a user switches to another application or receives an incoming call on Android.
+///         A SpritPolygonSpriteBatcheBatch will be automatically reloaded after the OpenGL
+///         context is restored.
+///     </para>
+///     <para>
+///         A PolygonSpriteBatch is a pretty heavy object so you should only ever have one
+///         in your program.
+///     </para>
+///     <para>
+///         A PolygonSpriteBatch works with OpenGL ES 1.x and 2.0. In the case of a 2.0 context
+///         it will use its own custom shader to Draw all provided sprites. You can set your own
+///         custom shader via <see cref="Shader" />.
+///     </para>
+///     <para>
+///         A PolygonSpriteBatch has to be disposed if it is no longer used.
+///     </para>
 /// </summary>
 [PublicAPI]
 public class PolygonSpriteBatch : IPolygonBatch
 {
-    public int     BlendSrcFunc      { get; private set; } = IGL.GL_SRC_ALPHA;
-    public int     BlendDstFunc      { get; private set; } = IGL.GL_ONE_MINUS_SRC_ALPHA;
-    public int     BlendSrcFuncAlpha { get; private set; } = IGL.GL_SRC_ALPHA;
-    public int     BlendDstFuncAlpha { get; private set; } = IGL.GL_ONE_MINUS_SRC_ALPHA;
-    public Matrix4 ProjectionMatrix  { get; set; }         = new();
-    public Matrix4 TransformMatrix   { get; set; }         = new();
-    public bool    IsDrawing         { get; set; }
-
-    // The maximum number of triangles rendered in one batch so far.
-    public int MaxTrianglesInBatch { get; set; } = 0;
-
-    // Number of render calls since the last call to Begin()
-    public int RenderCalls { get; set; } = 0;
-
-    // Number of rendering calls, ever. Will not be reset unless set manually.
-    public int TotalRenderCalls { get; set; } = 0;
-
     // ========================================================================
     // ========================================================================
 
@@ -111,11 +94,11 @@ public class PolygonSpriteBatch : IPolygonBatch
     // ========================================================================
 
     /// <summary>
-    /// Constructs a PolygonSpriteBatch with the default shader, size vertices,
-    /// and size * 2 triangles.
+    ///     Constructs a PolygonSpriteBatch with the default shader, size vertices,
+    ///     and size * 2 triangles.
     /// </summary>
     /// <param name="size">
-    /// The max number of vertices and number of triangles in a single batch. Max of 32767.
+    ///     The max number of vertices and number of triangles in a single batch. Max of 32767.
     /// </param>
     public PolygonSpriteBatch( int size )
         : this( size, size * 2, null )
@@ -123,11 +106,11 @@ public class PolygonSpriteBatch : IPolygonBatch
     }
 
     /// <summary>
-    /// Constructs a PolygonSpriteBatch with the specified shader, size vertices
-    /// and size * 2 triangles.
+    ///     Constructs a PolygonSpriteBatch with the specified shader, size vertices
+    ///     and size * 2 triangles.
     /// </summary>
     /// <param name="size">
-    /// The max number of vertices and number of triangles in a single batch. Max of 32767.
+    ///     The max number of vertices and number of triangles in a single batch. Max of 32767.
     /// </param>
     /// <param name="defaultShader"></param>
     public PolygonSpriteBatch( int size, ShaderProgram? defaultShader = null )
@@ -136,21 +119,21 @@ public class PolygonSpriteBatch : IPolygonBatch
     }
 
     /// <summary>
-    /// Constructs a new PolygonSpriteBatch. Sets the projection matrix to an orthographic
-    /// projection with y-axis point upwards, x-axis point to the right and the origin
-    /// being in the bottom left corner of the screen. The projection will be pixel perfect
-    /// with respect to the current screen resolution.
-    /// <para>
-    /// The defaultShader specifies the shader to use. Note that the names for uniforms for
-    /// this default shader are different than the ones expect for shaders set with
-    /// <see cref="Shader"/>.
-    /// </para>
+    ///     Constructs a new PolygonSpriteBatch. Sets the projection matrix to an orthographic
+    ///     projection with y-axis point upwards, x-axis point to the right and the origin
+    ///     being in the bottom left corner of the screen. The projection will be pixel perfect
+    ///     with respect to the current screen resolution.
+    ///     <para>
+    ///         The defaultShader specifies the shader to use. Note that the names for uniforms for
+    ///         this default shader are different than the ones expect for shaders set with
+    ///         <see cref="Shader" />.
+    ///     </para>
     /// </summary>
     /// <param name="maxVertices"> The max number of vertices in a single batch. Max of 32767.</param>
     /// <param name="maxTriangles"> The max number of triangles in a single batch. </param>
     /// <param name="defaultShader">
-    /// The default shader to use. This is not owned by the PolygonSpriteBatch and must
-    /// be disposed separately. May be null to use the default shader.
+    ///     The default shader to use. This is not owned by the PolygonSpriteBatch and must
+    ///     be disposed separately. May be null to use the default shader.
     /// </param>
     public PolygonSpriteBatch( int maxVertices, int maxTriangles, ShaderProgram? defaultShader )
     {
@@ -183,6 +166,22 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
     }
+
+    // The maximum number of triangles rendered in one batch so far.
+    public int MaxTrianglesInBatch { get; set; } = 0;
+
+    // Number of render calls since the last call to Begin()
+    public int RenderCalls { get; set; } = 0;
+
+    // Number of rendering calls, ever. Will not be reset unless set manually.
+    public int     TotalRenderCalls  { get; set; }         = 0;
+    public int     BlendSrcFunc      { get; private set; } = IGL.GL_SRC_ALPHA;
+    public int     BlendDstFunc      { get; private set; } = IGL.GL_ONE_MINUS_SRC_ALPHA;
+    public int     BlendSrcFuncAlpha { get; private set; } = IGL.GL_SRC_ALPHA;
+    public int     BlendDstFuncAlpha { get; private set; } = IGL.GL_ONE_MINUS_SRC_ALPHA;
+    public Matrix4 ProjectionMatrix  { get; set; }         = new();
+    public Matrix4 TransformMatrix   { get; set; }         = new();
+    public bool    IsDrawing         { get; set; }
 
     public void Begin()
     {
@@ -261,7 +260,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     }
 
     /// <summary>
-    /// Draws the supplied <see cref="PolygonRegion"/> at the given corrdinates.
+    ///     Draws the supplied <see cref="PolygonRegion" /> at the given corrdinates.
     /// </summary>
     /// <param name="region"> The Polygon Region to draw </param>
     /// <param name="x"> X coordinate </param>
@@ -279,14 +278,14 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Region.Texture );
         }
         else if ( ( ( _triangleIndex + region.Triangles.Length ) > _triangles.Length )
-               || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
         {
             Flush();
         }
 
         foreach ( var t in region.Triangles )
         {
-            _triangles[ _triangleIndex++ ] = ( short ) ( t + ( _vertexIndex / Sprite.VERTEX_SIZE ) );
+            _triangles[ _triangleIndex++ ] = ( short )( t + ( _vertexIndex / Sprite.VERTEX_SIZE ) );
         }
 
         for ( var i = 0; i < region.Vertices?.Length; i += 2 )
@@ -311,7 +310,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Region.Texture );
         }
         else if ( ( ( _triangleIndex + region.Triangles.Length ) > _triangles.Length )
-               || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -320,7 +319,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         for ( int i = 0, n = region.Triangles.Length; i < n; i++ )
         {
-            _triangles[ _triangleIndex++ ] = ( short ) ( region.Triangles[ i ] + startVertex );
+            _triangles[ _triangleIndex++ ] = ( short )( region.Triangles[ i ] + startVertex );
         }
 
         var sX = width / region.Region.RegionWidth;
@@ -357,7 +356,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Region.Texture );
         }
         else if ( ( ( _triangleIndex + region.Triangles.Length ) > _triangles.Length )
-               || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + ( ( region.Vertices?.Length * Sprite.VERTEX_SIZE ) / 2 ) ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -366,7 +365,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         foreach ( var triangle in region.Triangles )
         {
-            _triangles[ _triangleIndex++ ] = ( short ) ( triangle + startVertex );
+            _triangles[ _triangleIndex++ ] = ( short )( triangle + startVertex );
         }
 
         var worldOriginX = x + originX;
@@ -407,7 +406,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + trianglesCount ) > _triangles.Length )
-               || ( ( _vertexIndex + verticesCount ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + verticesCount ) > _vertices.Length ) )
         {
             Flush();
         }
@@ -416,7 +415,7 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         for ( int i = trianglesOffset, n = i + trianglesCount; i < n; i++ )
         {
-            _triangles[ _triangleIndex++ ] = ( short ) ( polygonTriangles[ i ] + startVertex );
+            _triangles[ _triangleIndex++ ] = ( short )( polygonTriangles[ i ] + startVertex );
         }
 
         Array.Copy( polygonVertices, verticesOffset, _vertices, _vertexIndex, verticesCount );
@@ -442,19 +441,19 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
 
         var startVertex = _vertexIndex / Sprite.VERTEX_SIZE;
 
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 1 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 3 );
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         // bottom left and top right corner points relative to origin
         var worldOriginX = region.X + origin.X;
@@ -590,19 +589,19 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
 
         var startVertex = _vertexIndex / Sprite.VERTEX_SIZE;
 
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 1 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 3 );
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         var u   = src.X * _invTexWidth;
         var v   = ( src.Y + src.Height ) * _invTexHeight;
@@ -658,19 +657,19 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
 
         var startVertex = _vertexIndex / Sprite.VERTEX_SIZE;
 
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 1 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 3 );
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         var u   = src.X * _invTexWidth;
         var v   = ( src.Y + src.Height ) * _invTexHeight;
@@ -716,19 +715,19 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
 
         var startVertex = _vertexIndex / Sprite.VERTEX_SIZE;
 
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 1 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 3 );
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         var fx2 = region.X + region.Width;
         var fy2 = region.Y + region.Height;
@@ -763,7 +762,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         Draw( texture, x, y, texture.Width, texture.Height );
     }
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public void Draw( Texture texture, float posX, float posY, float width, float height )
     {
         if ( !IsDrawing )
@@ -776,19 +775,19 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
 
         var startVertex = _vertexIndex / Sprite.VERTEX_SIZE;
 
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 1 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 3 );
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         var   fx2 = posX + width;
         var   fy2 = posY + height;
@@ -835,14 +834,16 @@ public class PolygonSpriteBatch : IPolygonBatch
         if ( texture != _lastTexture )
         {
             SwitchTexture( texture );
-            batch = Math.Min( Math.Min( count, _vertices.Length - ( _vertices.Length % Sprite.SPRITE_SIZE ) ), ( _triangles.Length / 6 ) * Sprite.SPRITE_SIZE );
+            batch = Math.Min( Math.Min( count, _vertices.Length - ( _vertices.Length % Sprite.SPRITE_SIZE ) ),
+                              ( _triangles.Length / 6 ) * Sprite.SPRITE_SIZE );
             triangleCount = ( batch / Sprite.SPRITE_SIZE ) * 6;
         }
         else if ( ( ( _triangleIndex + triangleCount ) > _triangles.Length )
-               || ( ( _vertexIndex + count ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + count ) > _vertices.Length ) )
         {
             Flush();
-            batch = Math.Min( Math.Min( count, _vertices.Length - ( _vertices.Length % Sprite.SPRITE_SIZE ) ), ( _triangles.Length / 6 ) * Sprite.SPRITE_SIZE );
+            batch = Math.Min( Math.Min( count, _vertices.Length - ( _vertices.Length % Sprite.SPRITE_SIZE ) ),
+                              ( _triangles.Length / 6 ) * Sprite.SPRITE_SIZE );
             triangleCount = ( batch / Sprite.SPRITE_SIZE ) * 6;
         }
         else
@@ -850,15 +851,15 @@ public class PolygonSpriteBatch : IPolygonBatch
             batch = count;
         }
 
-        var vertex = ( short ) ( _vertexIndex / Sprite.VERTEX_SIZE );
+        var vertex = ( short )( _vertexIndex / Sprite.VERTEX_SIZE );
 
         for ( var n = _triangleIndex + triangleCount; _triangleIndex < n; _triangleIndex += 6, vertex += 4 )
         {
             _triangles[ _triangleIndex ]     = vertex;
-            _triangles[ _triangleIndex + 1 ] = ( short ) ( vertex + 1 );
-            _triangles[ _triangleIndex + 2 ] = ( short ) ( vertex + 2 );
-            _triangles[ _triangleIndex + 3 ] = ( short ) ( vertex + 2 );
-            _triangles[ _triangleIndex + 4 ] = ( short ) ( vertex + 3 );
+            _triangles[ _triangleIndex + 1 ] = ( short )( vertex + 1 );
+            _triangles[ _triangleIndex + 2 ] = ( short )( vertex + 2 );
+            _triangles[ _triangleIndex + 3 ] = ( short )( vertex + 2 );
+            _triangles[ _triangleIndex + 4 ] = ( short )( vertex + 3 );
             _triangles[ _triangleIndex + 5 ] = vertex;
         }
 
@@ -906,19 +907,19 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) ) //
+                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) ) //
         {
             Flush();
         }
 
         var startVertex = _vertexIndex / Sprite.VERTEX_SIZE;
 
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 1 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 3 );
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         var fx2 = x + width;
         var fy2 = y + height;
@@ -968,19 +969,19 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( textureRegion.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) ) //
+                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) ) //
         {
             Flush();
         }
 
         var startVertex = _vertexIndex / Sprite.VERTEX_SIZE;
 
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 1 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 3 );
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         // bottom left and top right corner points relative to origin
         var worldOriginX = region.X + origin.X;
@@ -1107,19 +1108,19 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( textureRegion.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
 
         var startVertex = _vertexIndex / Sprite.VERTEX_SIZE;
 
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 1 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 3 );
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         // bottom left and top right corner points relative to origin
         var worldOriginX = region.X + origin.X;
@@ -1261,19 +1262,19 @@ public class PolygonSpriteBatch : IPolygonBatch
             SwitchTexture( region.Texture );
         }
         else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
+                  || ( ( _vertexIndex + Sprite.SPRITE_SIZE ) > _vertices.Length ) )
         {
             Flush();
         }
 
         var startVertex = _vertexIndex / Sprite.VERTEX_SIZE;
 
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 1 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short ) ( startVertex + 3 );
-        _triangles[ _triangleIndex++ ] = ( short ) startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         // construct corner points
         var x1 = transform.M02;
@@ -1379,9 +1380,9 @@ public class PolygonSpriteBatch : IPolygonBatch
     public void SetBlendFunctionSeparate( int srcFuncColor, int dstFuncColor, int srcFuncAlpha, int dstFuncAlpha )
     {
         if ( ( BlendSrcFunc == srcFuncColor )
-          && ( BlendDstFunc == dstFuncColor )
-          && ( BlendSrcFuncAlpha == srcFuncAlpha )
-          && ( BlendDstFuncAlpha == dstFuncAlpha ) )
+             && ( BlendDstFunc == dstFuncColor )
+             && ( BlendSrcFuncAlpha == srcFuncAlpha )
+             && ( BlendDstFuncAlpha == dstFuncAlpha ) )
         {
             return;
         }

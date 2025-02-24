@@ -27,24 +27,24 @@ using LughSharp.Lugh.Audio.Maponus.Support;
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-/// 16-Bit CRC checksum
+///     16-Bit CRC checksum
 /// </summary>
 [PublicAPI]
 public class Crc16
 {
     private static readonly short _polynomial;
 
-    private short _crc = ( short ) SupportClass.Identity( 0xFFFF );
+    private short _crc = ( short )SupportClass.Identity( 0xFFFF );
 
     // ========================================================================
 
     static Crc16()
     {
-        _polynomial = ( short ) SupportClass.Identity( 0x8005 );
+        _polynomial = ( short )SupportClass.Identity( 0x8005 );
     }
 
     /// <summary>
-    /// Feed a bitstring to the crc calculation (length between 0 and 32, not inclusive).
+    ///     Feed a bitstring to the crc calculation (length between 0 and 32, not inclusive).
     /// </summary>
     public void AddBits( int bitstring, int length )
     {
@@ -61,18 +61,17 @@ public class Crc16
             {
                 _crc <<= 1;
             }
-        }
-        while ( ( bitmask = SupportClass.URShift( bitmask, 1 ) ) != 0 );
+        } while ( ( bitmask = SupportClass.URShift( bitmask, 1 ) ) != 0 );
     }
 
     /// <summary>
-    /// Return the calculated checksum. Erase it for next calls to add_bits().
+    ///     Return the calculated checksum. Erase it for next calls to add_bits().
     /// </summary>
     public short Checksum()
     {
         var sum = _crc;
 
-        _crc = ( short ) SupportClass.Identity( 0xFFFF );
+        _crc = ( short )SupportClass.Identity( 0xFFFF );
 
         return sum;
     }

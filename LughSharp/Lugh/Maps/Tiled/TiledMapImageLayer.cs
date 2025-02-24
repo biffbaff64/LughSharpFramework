@@ -22,28 +22,23 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 
 namespace LughSharp.Lugh.Maps.Tiled;
 
 /// <summary>
-/// Represents a TiledMap layer which is a TextureRegion.
+///     Represents a TiledMap layer which is a TextureRegion.
 /// </summary>
 [PublicAPI]
 public class TiledMapImageLayer : MapLayer
 {
-    public TextureRegion? Region { get; set; }
-    public float          X      { get; set; }
-    public float          Y      { get; set; }
-
     // ========================================================================
-    
+
     /// <summary>
-    /// Creates a new TiledMapImageLayer, using the supplied TextureRegion as its
-    /// background, and the given X and Y as the coordinates of the image in the map,
+    ///     Creates a new TiledMapImageLayer, using the supplied TextureRegion as its
+    ///     background, and the given X and Y as the coordinates of the image in the map,
     /// </summary>
-    /// <param name="region"> The <see cref="TextureRegion"/>. </param>
+    /// <param name="region"> The <see cref="TextureRegion" />. </param>
     /// <param name="x"> Textureregion Layer X coordinate. </param>
     /// <param name="y"> Textureregion Layer X coordinate. </param>
     public TiledMapImageLayer( TextureRegion? region, float x, float y )
@@ -52,4 +47,8 @@ public class TiledMapImageLayer : MapLayer
         X      = x;
         Y      = y;
     }
+
+    public TextureRegion? Region { get; set; }
+    public float          X      { get; set; }
+    public float          Y      { get; set; }
 }

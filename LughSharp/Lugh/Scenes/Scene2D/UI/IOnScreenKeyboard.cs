@@ -22,12 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// An interface for onscreen keyboards.
-/// Can invoke the default keyboard or render your own keyboard
+///     An interface for onscreen keyboards.
+///     Can invoke the default keyboard or render your own keyboard
 /// </summary>
 [PublicAPI]
 public interface IOnScreenKeyboard

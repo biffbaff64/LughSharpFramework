@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -32,7 +31,6 @@ namespace LughSharp.Lugh.Graphics.Images;
 public class PixmapFormat
 {
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
@@ -49,12 +47,11 @@ public class PixmapFormat
             PixelType.Format.RGBA4444       => IGL.GL_RGBA4,
             PixelType.Format.Intensity      => IGL.GL_LUMINANCE,
 
-            var _ => throw new GdxRuntimeException( $"Illegal PixelFormat specified: {format}" )
+            var _ => throw new GdxRuntimeException( $"Illegal PixelFormat specified: {format}" ),
         };
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
@@ -71,12 +68,11 @@ public class PixmapFormat
             IGL.GL_RGBA4           => PixelType.Format.RGBA4444,
             IGL.GL_LUMINANCE       => PixelType.Format.Intensity,
 
-            var _ => throw new GdxRuntimeException( $"Illegal PixelFormat specified: {format}" )
+            var _ => throw new GdxRuntimeException( $"Illegal PixelFormat specified: {format}" ),
         };
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
@@ -98,7 +94,7 @@ public class PixmapFormat
     }
 
     /// <summary>
-    /// Gets the number of bytes required for 1 pixel of the specified format.
+    ///     Gets the number of bytes required for 1 pixel of the specified format.
     /// </summary>
     public static int Gdx2dBytesPerPixel( PixelType.Format format )
     {
@@ -119,7 +115,7 @@ public class PixmapFormat
     }
 
     /// <summary>
-    /// Gets the number of bytes required for 1 pixel of the specified format.
+    ///     Gets the number of bytes required for 1 pixel of the specified format.
     /// </summary>
     public static int Gdx2dBytesPerPixel( int format )
     {
@@ -140,7 +136,6 @@ public class PixmapFormat
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
@@ -158,7 +153,6 @@ public class PixmapFormat
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>

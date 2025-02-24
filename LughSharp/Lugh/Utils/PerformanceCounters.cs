@@ -22,29 +22,28 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-/// Class to keep track of a group of <see cref="PerformanceCounter"/> instances.
+///     Class to keep track of a group of <see cref="PerformanceCounter" /> instances.
 /// </summary>
 [PublicAPI]
 public class PerformanceCounters
 {
-    /// <summary>
-    /// The list of <see cref="PerformanceCounter"/>s to track.
-    /// </summary>
-    public List< PerformanceCounter > Counters { get; set; } = [ ];
-
     private const float NANO2_SECONDS = 1f / 1000000000.0f;
 
     private long _lastTick = 0L;
 
+    /// <summary>
+    ///     The list of <see cref="PerformanceCounter" />s to track.
+    /// </summary>
+    public List< PerformanceCounter > Counters { get; set; } = [ ];
+
     // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// Adds a new <see cref="PerformanceCounter"/> to the <see cref="Counters"/> list.
+    ///     Adds a new <see cref="PerformanceCounter" /> to the <see cref="Counters" /> list.
     /// </summary>
     /// <param name="name"> The identifying name. </param>
     /// <param name="windowSize"></param>
@@ -59,7 +58,7 @@ public class PerformanceCounters
     }
 
     /// <summary>
-    /// Adds a new <see cref="PerformanceCounter"/> to the <see cref="Counters"/> list.
+    ///     Adds a new <see cref="PerformanceCounter" /> to the <see cref="Counters" /> list.
     /// </summary>
     /// <param name="name"> The identifying name. </param>
     /// <returns> The newly created PerformanceCounter. </returns>

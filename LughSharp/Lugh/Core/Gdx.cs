@@ -30,11 +30,13 @@ using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Network;
 using LughSharp.Lugh.Utils;
 
+using GLBindings = LughSharp.Lugh.Graphics.OpenGL.GLBindings;
+
 namespace LughSharp.Lugh.Core;
 
 /// <summary>
-/// Environment class holding references to the Application,
-/// Graphics, Audio, Files and Input instances.
+///     Environment class holding references to the Application,
+///     Graphics, Audio, Files and Input instances.
 /// </summary>
 [PublicAPI]
 public class Gdx
@@ -42,14 +44,35 @@ public class Gdx
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    ///     This is here, in line with my faith.
+    /// </summary>
+    private const string A_PRAYER_TO_THE_GODDESS =
+        "Mother Earth, enlighten what's dark in me. "
+        + "Strengthen what's weak in me. "
+        + "Mend what's broken in me. "
+        + "Bind what's bruised in me. "
+        + "Heal what's sick in me. "
+        + "Revive whatever peace & love has died in me.";
+
+    // ========================================================================
+    // ========================================================================
+
     private IGLBindings? _glBindings;
 
+    // ========================================================================
+    // ========================================================================
+
+    private Gdx()
+    {
+    }
+
     /// <summary>
-    /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings"/> interface.
-    /// Initially initialised as an instance of <see cref="GLBindings"/>, it can be modified to
-    /// reference any class inheriting from IGLBindings.
-    /// The property will check internally for null, and initialise itself to reference GLBindings
-    /// by default if that is the case.
+    ///     Globally accessible instance of classes inheriting from the <see cref="IGLBindings" /> interface.
+    ///     Initially initialised as an instance of <see cref="GLBindings" />, it can be modified to
+    ///     reference any class inheriting from IGLBindings.
+    ///     The property will check internally for null, and initialise itself to reference GLBindings
+    ///     by default if that is the case.
     /// </summary>
     public IGLBindings Bindings
     {
@@ -82,26 +105,26 @@ public class Gdx
     // ========================================================================
 
     /// <summary>
-    /// From Wiktionary...
-    /// <para>
-    /// "1. (video games) A game mode where the player character is invulnerable to
-    /// damage, typically activated by entering a cheat code."
-    /// </para>
-    /// <para>
-    /// "2. (video games) A mode of play in (mostly) roguelike games, allowing the
-    /// player to create objects on demand, to be resurrected in the case of death,
-    /// etc."
-    /// </para>
-    /// <para>
-    /// Note: Only the flag is provided by this library. It is intended for use in
-    /// your local game code.
-    /// </para>
+    ///     From Wiktionary...
+    ///     <para>
+    ///         "1. (video games) A game mode where the player character is invulnerable to
+    ///         damage, typically activated by entering a cheat code."
+    ///     </para>
+    ///     <para>
+    ///         "2. (video games) A mode of play in (mostly) roguelike games, allowing the
+    ///         player to create objects on demand, to be resurrected in the case of death,
+    ///         etc."
+    ///     </para>
+    ///     <para>
+    ///         Note: Only the flag is provided by this library. It is intended for use in
+    ///         your local game code.
+    ///     </para>
     /// </summary>
     public bool GodMode { get; set; } = false;
 
     /// <summary>
-    /// Test mode flag which, when TRUE, means that all developer options are enabled.
-    /// This must, however, mean that software with this enabled cannot be published.
+    ///     Test mode flag which, when TRUE, means that all developer options are enabled.
+    ///     This must, however, mean that software with this enabled cannot be published.
     /// </summary>
     public bool DevMode { get; set; } = false;
 
@@ -114,28 +137,9 @@ public class Gdx
     // ========================================================================
     // ========================================================================
 
-    private Gdx()
-    {
-    }
-
-    // Fully Lazy instantiation.
-    private class Nested
-    {
-        // Explicit static constructor to tell C# compiler
-        // not to mark type as beforefieldinit
-        static Nested()
-        {
-        }
-
-        internal static readonly Gdx Instance = new();
-    }
-
-    // ========================================================================
-    // ========================================================================
-
     /// <summary>
-    /// Performs essential tasks, which MUST be performed to allow the
-    /// framework to work correctly.
+    ///     Performs essential tasks, which MUST be performed to allow the
+    ///     framework to work correctly.
     /// </summary>
     /// <param name="app"></param>
     public void Initialise( IApplication app )
@@ -152,8 +156,8 @@ public class Gdx
     }
 
     /// <summary>
-    /// Enables <see cref="DevMode"/> if the environment variable "DEV_MODE" is
-    /// available and is set to "TRUE" or "true".
+    ///     Enables <see cref="DevMode" /> if the environment variable "DEV_MODE" is
+    ///     available and is set to "TRUE" or "true".
     /// </summary>
     /// <returns> This class for chaining. </returns>
     public Gdx CheckEnableDevMode()
@@ -171,8 +175,8 @@ public class Gdx
     }
 
     /// <summary>
-    /// Enables <see cref="GodMode"/> if the environment variable "GOD_MODE" is
-    /// available and is set to "TRUE" or "true".
+    ///     Enables <see cref="GodMode" /> if the environment variable "GOD_MODE" is
+    ///     available and is set to "TRUE" or "true".
     /// </summary>
     /// <returns> This class for chaining. </returns>
     public Gdx CheckEnableGodMode()
@@ -206,7 +210,6 @@ public class Gdx
     // ========================================================================
 
     /// <summary>
-    /// 
     /// </summary>
     public void GLErrorCheck()
     {
@@ -218,19 +221,17 @@ public class Gdx
         }
     }
 
-    // ========================================================================
-    // ========================================================================
+    // Fully Lazy instantiation.
+    private class Nested
+    {
+        internal static readonly Gdx Instance = new();
 
-    /// <summary>
-    /// This is here, in line with my faith.
-    /// </summary>
-    private const string A_PRAYER_TO_THE_GODDESS =
-        "Mother Earth, enlighten what's dark in me. "
-        + "Strengthen what's weak in me. "
-        + "Mend what's broken in me. "
-        + "Bind what's bruised in me. "
-        + "Heal what's sick in me. "
-        + "Revive whatever peace & love has died in me.";
+        // Explicit static constructor to tell C# compiler
+        // not to mark type as beforefieldinit
+        static Nested()
+        {
+        }
+    }
 
     // ========================================================================
     // ========================================================================

@@ -32,21 +32,21 @@ using Platform = LughSharp.Lugh.Core.Platform;
 namespace LughSharp.Lugh.Graphics.FrameBuffers;
 
 /// <summary>
-/// This is a <see cref="FrameBuffer"/> variant backed by a float texture.
+///     This is a <see cref="FrameBuffer" /> variant backed by a float texture.
 /// </summary>
 [PublicAPI]
 public class FloatFrameBuffer : FrameBuffer
 {
     /// <summary>
-    /// Default constructor which creates an empty FloatFrameBuffer.
+    ///     Default constructor which creates an empty FloatFrameBuffer.
     /// </summary>
     public FloatFrameBuffer()
     {
     }
 
     /// <summary>
-    /// Creates a GLFrameBuffer from the specifications provided by the
-    /// given <see cref="GLFrameBufferBuilder{TU}"/>.
+    ///     Creates a GLFrameBuffer from the specifications provided by the
+    ///     given <see cref="GLFrameBufferBuilder{TU}" />.
     /// </summary>
     /// <param name="bufferBuilder"></param>
     public FloatFrameBuffer( GLFrameBufferBuilder< GLFrameBuffer< GLTexture > > bufferBuilder )
@@ -55,8 +55,8 @@ public class FloatFrameBuffer : FrameBuffer
     }
 
     /// <summary>
-    /// Creates a new FrameBuffer with a float backing texture, having the given dimensions
-    /// and potentially a depth buffer attached.
+    ///     Creates a new FrameBuffer with a float backing texture, having the given dimensions
+    ///     and potentially a depth buffer attached.
     /// </summary>
     /// <param name="width"> the width of the framebuffer in pixels </param>
     /// <param name="height"> the height of the framebuffer in pixels </param>
@@ -79,9 +79,9 @@ public class FloatFrameBuffer : FrameBuffer
     }
 
     /// <summary>
-    /// Creates the backing <see cref="Texture"/> for this buffer, using the provided
-    /// <see cref="FrameBufferTextureAttachmentSpec"/> which contains config
-    /// data for said texture.
+    ///     Creates the backing <see cref="Texture" /> for this buffer, using the provided
+    ///     <see cref="FrameBufferTextureAttachmentSpec" /> which contains config
+    ///     data for said texture.
     /// </summary>
     /// <returns> The texture</returns>
     protected override Texture CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )

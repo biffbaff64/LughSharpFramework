@@ -65,15 +65,15 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
         // offset in tiled is y down, so we flip it
         var layerOffsetY = -layer.RenderOffsetY * UnitScale;
 
-        var col1 = Math.Max( 0, ( int ) ( ( ViewBounds.X - layerOffsetX ) / layerTileWidth ) );
+        var col1 = Math.Max( 0, ( int )( ( ViewBounds.X - layerOffsetX ) / layerTileWidth ) );
 
         var col2 = Math.Min( layerWidth,
-                             ( int ) ( ( ( ViewBounds.X + ViewBounds.Width + layerTileWidth ) - layerOffsetX ) / layerTileWidth ) );
+                             ( int )( ( ( ViewBounds.X + ViewBounds.Width + layerTileWidth ) - layerOffsetX ) / layerTileWidth ) );
 
-        var row1 = Math.Max( 0, ( int ) ( ( ViewBounds.Y - layerOffsetY ) / layerTileHeight ) );
+        var row1 = Math.Max( 0, ( int )( ( ViewBounds.Y - layerOffsetY ) / layerTileHeight ) );
 
         var row2 = Math.Min( layerHeight,
-                             ( int ) ( ( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight ) - layerOffsetY ) / layerTileHeight ) );
+                             ( int )( ( ( ViewBounds.Y + ViewBounds.Height + layerTileHeight ) - layerOffsetY ) / layerTileHeight ) );
 
         var y      = ( row2 * layerTileHeight ) + layerOffsetY;
         var xStart = ( col1 * layerTileWidth ) + layerOffsetX;

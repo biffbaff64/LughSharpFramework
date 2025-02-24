@@ -29,23 +29,21 @@ namespace LughSharp.Lugh.Input;
 [PublicAPI]
 public class InputMultiplexer : IInputProcessor
 {
-    public SnapshotArray< IInputProcessor > Processors { get; set; } = new( 4 );
-
     // ========================================================================
-    
+
     /// <summary>
-    /// Constructor.
-    /// Creates a new InputMultiplexer. It will not contain any Input Processors,
-    /// these will need adding seperately.
+    ///     Constructor.
+    ///     Creates a new InputMultiplexer. It will not contain any Input Processors,
+    ///     these will need adding seperately.
     /// </summary>
     public InputMultiplexer()
     {
     }
 
     /// <summary>
-    /// Constructor.
-    /// Creats a new InputMultiplexer. The supplied <see cref="IInputProcessor"/>(s)
-    /// will be added to the multiplexer.
+    ///     Constructor.
+    ///     Creats a new InputMultiplexer. The supplied <see cref="IInputProcessor" />(s)
+    ///     will be added to the multiplexer.
     /// </summary>
     public InputMultiplexer( params IInputProcessor[] processors )
     {
@@ -54,6 +52,8 @@ public class InputMultiplexer : IInputProcessor
             Processors.Add( inputProcessor );
         }
     }
+
+    public SnapshotArray< IInputProcessor > Processors { get; set; } = new( 4 );
 
     /// <inheritdoc />
     public bool KeyDown( int keycode )
@@ -240,9 +240,9 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <summary>
-    /// Inserts an <see cref="IInputProcessor"/> into the list of processors.
-    /// This processor will be inserted at the position specified by
-    /// <paramref name="index"/>
+    ///     Inserts an <see cref="IInputProcessor" /> into the list of processors.
+    ///     This processor will be inserted at the position specified by
+    ///     <paramref name="index" />
     /// </summary>
     public void AddProcessor( int index, IInputProcessor processor )
     {
@@ -255,7 +255,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <summary>
-    /// Adds the specified <see cref="IInputProcessor"/> to the list of processors.
+    ///     Adds the specified <see cref="IInputProcessor" /> to the list of processors.
     /// </summary>
     public void AddProcessor( IInputProcessor processor )
     {
@@ -268,8 +268,8 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <summary>
-    /// Remove the <see cref="IInputProcessor"/> at the given index from
-    /// the multiplexer.
+    ///     Remove the <see cref="IInputProcessor" /> at the given index from
+    ///     the multiplexer.
     /// </summary>
     public void RemoveProcessor( int index )
     {
@@ -277,8 +277,8 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <summary>
-    /// Remove the first occurance of the specified <see cref="IInputProcessor"/>
-    /// from the InputMultiplexer.
+    ///     Remove the first occurance of the specified <see cref="IInputProcessor" />
+    ///     from the InputMultiplexer.
     /// </summary>
     public void RemoveProcessor( IInputProcessor processor )
     {
@@ -286,7 +286,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <summary>
-    /// Returns the number of <see cref="IInputProcessor"/>s in the list.
+    ///     Returns the number of <see cref="IInputProcessor" />s in the list.
     /// </summary>
     /// <returns></returns>
     public int Size()
@@ -295,7 +295,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <summary>
-    /// Clears the list of Input Processors.
+    ///     Clears the list of Input Processors.
     /// </summary>
     public void Clear()
     {
@@ -303,8 +303,8 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <summary>
-    /// Adds the given list of <see cref="IInputProcessor"/>s, which can be a
-    /// single processor or multiple processors, to the multiplexer.
+    ///     Adds the given list of <see cref="IInputProcessor" />s, which can be a
+    ///     single processor or multiple processors, to the multiplexer.
     /// </summary>
     public void AddProcessors( params IInputProcessor[] processorList )
     {
@@ -313,8 +313,8 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <summary>
-    /// Adds the given list of <see cref="IInputProcessor"/>s, which can be a
-    /// single processor or multiple processors, to the multiplexer.
+    ///     Adds the given list of <see cref="IInputProcessor" />s, which can be a
+    ///     single processor or multiple processors, to the multiplexer.
     /// </summary>
     public void AddProcessors( List< IInputProcessor > processorList )
     {

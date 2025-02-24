@@ -22,13 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 
 namespace LughSharp.Lugh.Maps.Tiled;
 
 /// <summary>
-/// Generalises the concept of tile in a TiledMap
+///     Generalises the concept of tile in a TiledMap
 /// </summary>
 [PublicAPI]
 public interface ITiledMapTile
@@ -41,37 +40,37 @@ public interface ITiledMapTile
     }
 
     /// <summary>
-    /// The tile ID
+    ///     The tile ID
     /// </summary>
     int ID { get; set; }
 
     /// <summary>
-    /// The <see cref="Blendmode"/> to use when rendering a tile.
+    ///     The <see cref="Blendmode" /> to use when rendering a tile.
     /// </summary>
     Blendmode BlendMode { get; set; }
 
     /// <summary>
-    /// The <see cref="TextureRegion"/> to display.
+    ///     The <see cref="TextureRegion" /> to display.
     /// </summary>
     TextureRegion TextureRegion { get; set; }
 
     /// <summary>
-    /// X co-ordinate of a tile image in a tileset.
+    ///     X co-ordinate of a tile image in a tileset.
     /// </summary>
     float OffsetX { get; set; }
 
     /// <summary>
-    /// Y co-ordinate of a tile image in a tileset.
+    ///     Y co-ordinate of a tile image in a tileset.
     /// </summary>
     float OffsetY { get; set; }
 
     /// <summary>
-    /// Returns this tiles properties set.
+    ///     Returns this tiles properties set.
     /// </summary>
     MapProperties Properties { get; }
 
     /// <summary>
-    /// Returns the collection of objects contained within a tile.
+    ///     Returns the collection of objects contained within a tile.
     /// </summary>
     MapObjects MapObjects { get; }
 }

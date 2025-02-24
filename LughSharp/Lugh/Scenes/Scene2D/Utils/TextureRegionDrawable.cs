@@ -27,12 +27,13 @@ using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
+
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-/// Drawable for a <see cref="TextureRegion"/>.
+///     Drawable for a <see cref="TextureRegion" />.
 /// </summary>
 [PublicAPI]
 public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
@@ -42,16 +43,16 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     // ========================================================================
 
     /// <summary>
-    /// Creates an uninitialized TextureRegionDrawable.
-    /// The texture region must be set before use.
+    ///     Creates an uninitialized TextureRegionDrawable.
+    ///     The texture region must be set before use.
     /// </summary>
     public TextureRegionDrawable()
     {
     }
 
     /// <summary>
-    /// Creates a new TextureRegionDrawable, initialised with a new <see cref="TextureRegion"/>
-    /// from the supplied <see cref="Texture"/>
+    ///     Creates a new TextureRegionDrawable, initialised with a new <see cref="TextureRegion" />
+    ///     from the supplied <see cref="Texture" />
     /// </summary>
     public TextureRegionDrawable( Texture texture )
         : this( new TextureRegion( texture ) )
@@ -59,7 +60,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Creates a new TextureRegionDrawable, initialised with the supplied <see cref="TextureRegion"/>
+    ///     Creates a new TextureRegionDrawable, initialised with the supplied <see cref="TextureRegion" />
     /// </summary>
     public TextureRegionDrawable( TextureRegion region )
     {
@@ -67,8 +68,8 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Creates a new TextureRegionDrawable using the <see cref="TextureRegion"/> from
-    /// the given TextureRegionDrawable.
+    ///     Creates a new TextureRegionDrawable using the <see cref="TextureRegion" /> from
+    ///     the given TextureRegionDrawable.
     /// </summary>
     /// <param name="drawable"></param>
     public TextureRegionDrawable( TextureRegionDrawable drawable ) : base( drawable )
@@ -77,7 +78,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// The <see cref="TextureRegion"/> component of this <see cref="IDrawable"/>
+    ///     The <see cref="TextureRegion" /> component of this <see cref="IDrawable" />
     /// </summary>
     protected TextureRegion? Region
     {
@@ -104,7 +105,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Draws this drawable at the specified bounds.
+    ///     Draws this drawable at the specified bounds.
     /// </summary>
     public virtual void Draw( IBatch batch,
                               GRect region,
@@ -119,8 +120,8 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Creates a new drawable that renders the same as this drawable
-    /// tinted the specified color.
+    ///     Creates a new drawable that renders the same as this drawable
+    ///     tinted the specified color.
     /// </summary>
     public virtual IDrawable Tint( Color tint )
     {
@@ -130,8 +131,8 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
         }
 
         var sprite = Region is AtlasRegion region
-                         ? new AtlasSprite( region )
-                         : new Sprite( Region! );
+            ? new AtlasSprite( region )
+            : new Sprite( Region! );
 
         sprite.SetColor( tint );
         sprite.SetSize( MinWidth, MinHeight );

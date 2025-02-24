@@ -27,7 +27,7 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-/// Executes a number of actions one at a time.
+///     Executes a number of actions one at a time.
 /// </summary>
 [PublicAPI]
 public class SequenceAction : ParallelAction

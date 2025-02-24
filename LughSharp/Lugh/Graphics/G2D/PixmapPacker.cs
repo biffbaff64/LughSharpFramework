@@ -33,20 +33,20 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-/// Packs <see cref="Pixmap"/>s into one or more <see cref="Page"/> to generate
-/// an atlas of pixmap instances. Provides means to directly convert the pixmap
-/// atlas to a <see cref="TextureAtlas"/>. The packer supports padding and border
-/// pixel duplication, specified during construction. The packer supports incremental
-/// inserts and updates of TextureAtlases generated with this class.
-/// <para>
-/// How bin packing is performed can be customized via <see cref="IPackStrategy"/>.
-/// </para>
-/// <para>
-/// All methods can be called from any thread unless otherwise noted.
-/// </para>
-/// <para>
-/// One-off usage:
-/// <code>
+///     Packs <see cref="Pixmap" />s into one or more <see cref="Page" /> to generate
+///     an atlas of pixmap instances. Provides means to directly convert the pixmap
+///     atlas to a <see cref="TextureAtlas" />. The packer supports padding and border
+///     pixel duplication, specified during construction. The packer supports incremental
+///     inserts and updates of TextureAtlases generated with this class.
+///     <para>
+///         How bin packing is performed can be customized via <see cref="IPackStrategy" />.
+///     </para>
+///     <para>
+///         All methods can be called from any thread unless otherwise noted.
+///     </para>
+///     <para>
+///         One-off usage:
+///         <code>
 ///         // 512x512 pixel pages, RGB565 format, 2 pixels of padding, border duplication
 ///         PixmapPacker packer = new PixmapPacker(512, 512, Format.RGB565, 2, true);
 ///         packer.Pack(&quot;First Pixmap&quot;, pixmap1);
@@ -56,11 +56,11 @@ namespace LughSharp.Lugh.Graphics.G2D;
 ///         // ...
 ///         atlas.Dispose();
 ///         </code>
-/// With this usage pattern, disposing the packer will not dispose any pixmaps
-/// used by the texture atlas. The texture atlas must also be disposed when no
-/// longer needed.
-/// Incremental texture atlas usage:
-/// <code>
+///         With this usage pattern, disposing the packer will not dispose any pixmaps
+///         used by the texture atlas. The texture atlas must also be disposed when no
+///         longer needed.
+///         Incremental texture atlas usage:
+///         <code>
 ///         // 512x512 pixel pages, RGB565 format, 2 pixels of padding, no border duplication
 ///         PixmapPacker packer = new PixmapPacker(512, 512, Format.RGB565, 2, false);
 ///         TextureAtlas atlas = new TextureAtlas();
@@ -77,8 +77,8 @@ namespace LughSharp.Lugh.Graphics.G2D;
 ///         // ...
 ///         atlas.Dispose();
 ///         </code>
-/// Pixmap-only usage:
-/// <code>
+///         Pixmap-only usage:
+///         <code>
 ///         PixmapPacker packer = new PixmapPacker(512, 512, Format.RGB565, 2, true);
 ///         packer.Pack(&quot;First Pixmap&quot;, pixmap1);
 ///         packer.Pack(&quot;Second Pixmap&quot;, pixmap2);
@@ -91,21 +91,11 @@ namespace LughSharp.Lugh.Graphics.G2D;
 ///         
 ///         packer.Dispose();
 ///         </code>
-/// </para>
+///     </para>
 /// </summary>
 [PublicAPI]
 public class PixmapPacker : IDisposable
 {
-    public int              PageWidth        { get; set; }
-    public int              PageHeight       { get; set; }
-    public PixelType.Format PageFormat       { get; set; }
-    public Color            TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
-    public bool             PackToTexture    { get; set; }
-    public bool             DuplicateBorder  { get; set; }
-    public int              Padding          { get; set; }
-    public List< Page >     Pages            { get; set; } = [ ];
-    public int              AlphaThreshold   { get; set; }
-
     // ========================================================================
 
     private readonly IPackStrategy _packStrategy;
@@ -118,19 +108,19 @@ public class PixmapPacker : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Creates a new ImagePacker which will insert all supplied pixmaps into
-    /// one or more <tt>pageWidth</tt> by <tt>pageHeight</tt> pixmaps using the
-    /// <see cref="GuillotineStrategy"/> strategy.
+    ///     Creates a new ImagePacker which will insert all supplied pixmaps into
+    ///     one or more <tt>pageWidth</tt> by <tt>pageHeight</tt> pixmaps using the
+    ///     <see cref="GuillotineStrategy" /> strategy.
     /// </summary>
     /// <param name="pageWidth"> Page Width in pixels. </param>
     /// <param name="pageHeight"> Page Height in pixels. </param>
     /// <param name="pageFormat">
-    /// The graphics format of pages. See <see cref="PixelType.Format"/>
+    ///     The graphics format of pages. See <see cref="PixelType.Format" />
     /// </param>
     /// <param name="padding"> the number of blank pixels to insert between pixmaps. </param>
     /// <param name="duplicateBorder">
-    /// If TRUE, duplicate the border pixels of the inserted images to avoid
-    /// seams when rendering with bi-linear filtering on.
+    ///     If TRUE, duplicate the border pixels of the inserted images to avoid
+    ///     seams when rendering with bi-linear filtering on.
     /// </param>
     public PixmapPacker( int pageWidth, int pageHeight, PixelType.Format pageFormat, int padding, bool duplicateBorder )
         : this( pageWidth, pageHeight, pageFormat, padding, duplicateBorder, false, false, new GuillotineStrategy() )
@@ -138,21 +128,21 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Creates a new ImagePacker which will insert all supplied pixmaps into
-    /// one or more <tt>pageWidth</tt> by <tt>pageHeight</tt> pixmaps using the
-    /// specified strategy.
+    ///     Creates a new ImagePacker which will insert all supplied pixmaps into
+    ///     one or more <tt>pageWidth</tt> by <tt>pageHeight</tt> pixmaps using the
+    ///     specified strategy.
     /// </summary>
     /// <param name="pageWidth"> Page Width in pixels. </param>
     /// <param name="pageHeight"> Page Height in pixels. </param>
     /// <param name="pageFormat">
-    /// The graphics format of pages. See <see cref="PixelType.Format"/>
+    ///     The graphics format of pages. See <see cref="PixelType.Format" />
     /// </param>
     /// <param name="padding"> the number of blank pixels to insert between pixmaps. </param>
     /// <param name="duplicateBorder">
-    /// If TRUE, duplicate the border pixels of the inserted images to avoid
-    /// seams when rendering with bi-linear filtering on.
+    ///     If TRUE, duplicate the border pixels of the inserted images to avoid
+    ///     seams when rendering with bi-linear filtering on.
     /// </param>
-    /// <param name="packStrategy"> The <see cref="IPackStrategy"/> to use. </param>
+    /// <param name="packStrategy"> The <see cref="IPackStrategy" /> to use. </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
                          PixelType.Format pageFormat,
@@ -164,23 +154,23 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Creates a new ImagePacker which will insert all supplied pixmaps into
-    /// one or more <tt>pageWidth</tt> by <tt>pageHeight</tt> pixmaps using the
-    /// specified strategy.
+    ///     Creates a new ImagePacker which will insert all supplied pixmaps into
+    ///     one or more <tt>pageWidth</tt> by <tt>pageHeight</tt> pixmaps using the
+    ///     specified strategy.
     /// </summary>
     /// <param name="pageWidth"> Page Width in pixels. </param>
     /// <param name="pageHeight"> Page Height in pixels. </param>
     /// <param name="pageFormat">
-    /// The graphics format of pages. See <see cref="PixelType.Format"/>
+    ///     The graphics format of pages. See <see cref="PixelType.Format" />
     /// </param>
     /// <param name="padding"> the number of blank pixels to insert between pixmaps. </param>
     /// <param name="duplicateBorder">
-    /// duplicate the border pixels of the inserted images to avoid seams when
-    /// rendering with bi-linear filtering on.
+    ///     duplicate the border pixels of the inserted images to avoid seams when
+    ///     rendering with bi-linear filtering on.
     /// </param>
     /// <param name="stripWhitespaceX"> strip whitespace in x axis </param>
     /// <param name="stripWhitespaceY"> strip whitespace in y axis </param>
-    /// <param name="packStrategy"> The <see cref="IPackStrategy"/> to use. </param>
+    /// <param name="packStrategy"> The <see cref="IPackStrategy" /> to use. </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
                          PixelType.Format pageFormat,
@@ -200,9 +190,19 @@ public class PixmapPacker : IDisposable
         _packStrategy     = packStrategy;
     }
 
+    public int              PageWidth        { get; set; }
+    public int              PageHeight       { get; set; }
+    public PixelType.Format PageFormat       { get; set; }
+    public Color            TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
+    public bool             PackToTexture    { get; set; }
+    public bool             DuplicateBorder  { get; set; }
+    public int              Padding          { get; set; }
+    public List< Page >     Pages            { get; set; } = [ ];
+    public int              AlphaThreshold   { get; set; }
+
     /// <summary>
-    /// Performs application-defined tasks associated with freeing,
-    /// releasing, or resetting unmanaged resources.
+    ///     Performs application-defined tasks associated with freeing,
+    ///     releasing, or resetting unmanaged resources.
     /// </summary>
     public void Dispose()
     {
@@ -218,8 +218,8 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Sorts the images to the optimal order they should be packed.
-    /// Some packing strategies rely heavily on the images being sorted.
+    ///     Sorts the images to the optimal order they should be packed.
+    ///     Some packing strategies rely heavily on the images being sorted.
     /// </summary>
     public void Sort( List< Pixmap > images )
     {
@@ -227,7 +227,7 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Inserts the pixmap without a name. It cannot be looked up by name.
+    ///     Inserts the pixmap without a name. It cannot be looked up by name.
     /// </summary>
     public RectangleShape? Pack( Pixmap image )
     {
@@ -235,15 +235,15 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Inserts the pixmap. If name was not null, you can later retrieve
-    /// the image's position in the output image via <see cref="GetRect(string)"/>".
+    ///     Inserts the pixmap. If name was not null, you can later retrieve
+    ///     the image's position in the output image via <see cref="GetRect(string)" />".
     /// </summary>
     /// <param name="name"> If null, the image cannot be looked up by name. </param>
     /// <param name="image"></param>
     /// <returns> RectangleShape describing the area the pixmap was rendered to. </returns>
     /// <exception cref="GdxRuntimeException">
-    /// in case the image did not fit due to the page size being too small
-    /// or providing a duplicate name.
+    ///     in case the image did not fit due to the page size being too small
+    ///     or providing a duplicate name.
     /// </exception>
     public RectangleShape? Pack( string? name, Pixmap image )
     {
@@ -402,10 +402,10 @@ public class PixmapPacker : IDisposable
             page.AddedRects.Add( name );
         }
 
-        var rectX      = ( int ) rect.X;
-        var rectY      = ( int ) rect.Y;
-        var rectWidth  = ( int ) rect.Width;
-        var rectHeight = ( int ) rect.Height;
+        var rectX      = ( int )rect.X;
+        var rectY      = ( int )rect.Y;
+        var rectWidth  = ( int )rect.Width;
+        var rectHeight = ( int )rect.Height;
 
         if ( PackToTexture && !DuplicateBorder && page is { Texture: not null, Dirty: false } )
         {
@@ -414,14 +414,14 @@ public class PixmapPacker : IDisposable
 //            var pixels = image.ByteBuffer;
 
             GdxApi.Bindings.TexSubImage2D( page.Texture!.GLTarget,
-                                    0,
-                                    rectX,
-                                    rectY,
-                                    rectWidth,
-                                    rectHeight,
-                                    image.GLPixelFormat,
-                                    image.GLDataType,
-                                    image.PixelData );
+                                           0,
+                                           rectX,
+                                           rectY,
+                                           rectWidth,
+                                           rectHeight,
+                                           image.GLPixelFormat,
+                                           image.GLDataType,
+                                           image.PixelData );
 
 //            image.ByteBuffer = pixels;
         }
@@ -488,7 +488,7 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Returns the index of the page containing the given packed rectangle.
+    ///     Returns the index of the page containing the given packed rectangle.
     /// </summary>
     /// <param name="name"> the name of the image </param>
     /// <returns> the index of the page the image is stored in or -1 </returns>
@@ -506,9 +506,9 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Generates a new <see cref="TextureAtlas"/> from the pixmaps inserted
-    /// so far. After calling this method, disposing the packer will no longer
-    /// dispose the page pixmaps.
+    ///     Generates a new <see cref="TextureAtlas" /> from the pixmaps inserted
+    ///     so far. After calling this method, disposing the packer will no longer
+    ///     dispose the page pixmaps.
     /// </summary>
     public TextureAtlas GenerateTextureAtlas( Texture.TextureFilter minFilter, Texture.TextureFilter magFilter, bool useMipMaps )
     {
@@ -520,31 +520,31 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Updates the <see cref="TextureAtlas"/>, adding any new <see cref="Pixmap"/> instances
-    /// packed since the last call to this method. This can be used to insert Pixmap instances
-    /// on a separate thread via <see cref="Pack(String, Pixmap)"/> and update the TextureAtlas
-    /// on the rendering thread.
-    /// <para>
-    /// This method must be called on the rendering thread.
-    /// </para>
-    /// After calling this method, disposing the packer will no longer dispose the page pixmaps.
-    /// Has useIndexes on by default so as to keep backwards compatibility
+    ///     Updates the <see cref="TextureAtlas" />, adding any new <see cref="Pixmap" /> instances
+    ///     packed since the last call to this method. This can be used to insert Pixmap instances
+    ///     on a separate thread via <see cref="Pack(String, Pixmap)" /> and update the TextureAtlas
+    ///     on the rendering thread.
+    ///     <para>
+    ///         This method must be called on the rendering thread.
+    ///     </para>
+    ///     After calling this method, disposing the packer will no longer dispose the page pixmaps.
+    ///     Has useIndexes on by default so as to keep backwards compatibility
     /// </summary>
     public void UpdateTextureAtlas( TextureAtlas atlas,
                                     Texture.TextureFilter minFilter,
                                     Texture.TextureFilter magFilter,
                                     bool useMipMaps )
     {
-        UpdateTextureAtlas( atlas, minFilter, magFilter, useMipMaps, useIndexes: true );
+        UpdateTextureAtlas( atlas, minFilter, magFilter, useMipMaps, true );
     }
 
     /// <summary>
-    /// Updates the <see cref="TextureAtlas"/>, adding any new <see cref="Pixmap"/>
-    /// instances packed since the last call to this method. This can be used to
-    /// insert Pixmap instances on a separate thread via <see cref="Pack(String, Pixmap)"/>
-    /// and update the TextureAtlas on the rendering thread. This method must be
-    /// called on the rendering thread. After calling this method, disposing the
-    /// packer will no longer dispose the page pixmaps.
+    ///     Updates the <see cref="TextureAtlas" />, adding any new <see cref="Pixmap" />
+    ///     instances packed since the last call to this method. This can be used to
+    ///     insert Pixmap instances on a separate thread via <see cref="Pack(String, Pixmap)" />
+    ///     and update the TextureAtlas on the rendering thread. This method must be
+    ///     called on the rendering thread. After calling this method, disposing the
+    ///     packer will no longer dispose the page pixmaps.
     /// </summary>
     public void UpdateTextureAtlas( TextureAtlas atlas,
                                     Texture.TextureFilter minFilter,
@@ -567,7 +567,7 @@ public class PixmapPacker : IDisposable
                         continue;
                     }
 
-                    var region = new AtlasRegion( page.Texture, ( int ) rect.X, ( int ) rect.Y, ( int ) rect.Width, ( int ) rect.Height );
+                    var region = new AtlasRegion( page.Texture, ( int )rect.X, ( int )rect.Y, ( int )rect.Width, ( int )rect.Height );
 
                     if ( rect.Splits != null )
                     {
@@ -597,7 +597,7 @@ public class PixmapPacker : IDisposable
                     region.Name           = imageName;
                     region.Index          = imageIndex;
                     region.OffsetX        = rect.OffsetX;
-                    region.OffsetY        = ( int ) ( rect.OriginalHeight - rect.Height - rect.OffsetY );
+                    region.OffsetY        = ( int )( rect.OriginalHeight - rect.Height - rect.OffsetY );
                     region.OriginalWidth  = rect.OriginalWidth;
                     region.OriginalHeight = rect.OriginalHeight;
 
@@ -611,8 +611,8 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Calls <see cref="UpdatePageTextures(Texture.TextureFilter, Texture.TextureFilter, bool)"/>
-    /// for each page and adds a region to the specified array for each page texture.
+    ///     Calls <see cref="UpdatePageTextures(Texture.TextureFilter, Texture.TextureFilter, bool)" />
+    ///     for each page and adds a region to the specified array for each page texture.
     /// </summary>
     public void UpdateTextureRegions( List< TextureRegion > regions,
                                       Texture.TextureFilter minFilter,
@@ -633,8 +633,8 @@ public class PixmapPacker : IDisposable
     }
 
     /// <summary>
-    /// Calls <see cref="Page.UpdateTexture(Texture.TextureFilter, Texture.TextureFilter, bool)"/>"
-    /// for each page.
+    ///     Calls <see cref="Page.UpdateTexture(Texture.TextureFilter, Texture.TextureFilter, bool)" />"
+    ///     for each page.
     /// </summary>
     public void UpdatePageTextures( Texture.TextureFilter minFilter, Texture.TextureFilter magFilter, bool useMipMaps )
     {
@@ -797,12 +797,12 @@ public class PixmapPacker : IDisposable
 
             Color c = new();
 
-            c.Set( ( uint ) raster.GetPixel( x, y ) );
+            c.Set( ( uint )raster.GetPixel( x, y ) );
 
-            rgba[ 0 ] = ( int ) ( c.R * 255 );
-            rgba[ 1 ] = ( int ) ( c.G * 255 );
-            rgba[ 2 ] = ( int ) ( c.B * 255 );
-            rgba[ 3 ] = ( int ) ( c.A * 255 );
+            rgba[ 0 ] = ( int )( c.R * 255 );
+            rgba[ 1 ] = ( int )( c.G * 255 );
+            rgba[ 2 ] = ( int )( c.B * 255 );
+            rgba[ 3 ] = ( int )( c.A * 255 );
 
             if ( rgba[ 3 ] == breakA )
             {
@@ -810,10 +810,10 @@ public class PixmapPacker : IDisposable
             }
 
             if ( !startPoint
-              && ( ( rgba[ 0 ] != 0 )
-                || ( rgba[ 1 ] != 0 )
-                || ( rgba[ 2 ] != 0 )
-                || ( rgba[ 3 ] != 255 ) ) )
+                 && ( ( rgba[ 0 ] != 0 )
+                      || ( rgba[ 1 ] != 0 )
+                      || ( rgba[ 2 ] != 0 )
+                      || ( rgba[ 3 ] != 255 ) ) )
             {
                 Console.WriteLine( $"{x}  {y} {rgba}" );
             }
@@ -830,16 +830,9 @@ public class PixmapPacker : IDisposable
     [PublicAPI]
     public class Page
     {
-        public Pixmap         Image      { get; set; }
-        public Texture?       Texture    { get; set; }
-        public List< string > AddedRects { get; set; } = [ ];
-        public bool           Dirty      { get; set; }
-
-        public Dictionary< string, PixmapPackerRectangle? > Rects { get; set; } = new();
-
         /// <summary>
-        /// Creates a new page filled with the color provided by the
-        /// <see cref="PixmapPacker.TransparentColor"/>"
+        ///     Creates a new page filled with the color provided by the
+        ///     <see cref="PixmapPacker.TransparentColor" />"
         /// </summary>
         public Page( PixmapPacker packer )
         {
@@ -850,10 +843,17 @@ public class PixmapPacker : IDisposable
             Image.FillWithCurrentColor();
         }
 
+        public Pixmap         Image      { get; set; }
+        public Texture?       Texture    { get; set; }
+        public List< string > AddedRects { get; set; } = [ ];
+        public bool           Dirty      { get; set; }
+
+        public Dictionary< string, PixmapPackerRectangle? > Rects { get; set; } = new();
+
         /// <summary>
-        /// Creates the texture if it has not been created, else reuploads the
-        /// entire page pixmap to the texture if the pixmap has changed since
-        /// this method was last called.
+        ///     Creates the texture if it has not been created, else reuploads the
+        ///     entire page pixmap to the texture if the pixmap has changed since
+        ///     this method was last called.
         /// </summary>
         /// <returns> true if the texture was created or reuploaded. </returns>
         public bool UpdateTexture( Texture.TextureFilter minFilter, Texture.TextureFilter magFilter, bool useMipMaps )
@@ -884,8 +884,8 @@ public class PixmapPacker : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Does bin packing by inserting to the right or below previously packed
-    /// rectangles. This is good at packing arbitrarily sized images.
+    ///     Does bin packing by inserting to the right or below previously packed
+    ///     rectangles. This is good at packing arbitrarily sized images.
     /// </summary>
     [PublicAPI]
     public class GuillotineStrategy : IPackStrategy
@@ -912,7 +912,7 @@ public class PixmapPacker : IDisposable
             else
             {
                 // Always try to pack into the last page.
-                page = ( GuillotinePage ) packer.Pages.Peek();
+                page = ( GuillotinePage )packer.Pages.Peek();
             }
 
             var padding = packer.Padding;
@@ -952,7 +952,7 @@ public class PixmapPacker : IDisposable
             if ( node.Full ) return null;
 
             if ( ( Math.Abs( node.Rect.Width - rect.Width ) < Constants.FLOAT_TOLERANCE )
-              && ( Math.Abs( node.Rect.Height - rect.Height ) < Constants.FLOAT_TOLERANCE ) )
+                 && ( Math.Abs( node.Rect.Height - rect.Height ) < Constants.FLOAT_TOLERANCE ) )
             {
                 return node;
             }
@@ -962,8 +962,8 @@ public class PixmapPacker : IDisposable
             node.LeftChild  = new Node();
             node.RightChild = new Node();
 
-            var deltaWidth  = ( int ) node.Rect.Width - ( int ) rect.Width;
-            var deltaHeight = ( int ) node.Rect.Height - ( int ) rect.Height;
+            var deltaWidth  = ( int )node.Rect.Width - ( int )rect.Width;
+            var deltaHeight = ( int )node.Rect.Height - ( int )rect.Height;
 
             if ( deltaWidth > deltaHeight )
             {
@@ -1031,8 +1031,8 @@ public class PixmapPacker : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Does bin packing by inserting in rows. This is good at
-    /// packing images that have similar heights.
+    ///     Does bin packing by inserting in rows. This is good at
+    ///     packing images that have similar heights.
     /// </summary>
     [PublicAPI]
     public class SkylineStrategy : IPackStrategy
@@ -1051,12 +1051,12 @@ public class PixmapPacker : IDisposable
             var padding    = packer.Padding;
             var pageWidth  = packer.PageWidth - ( padding * 2 );
             var pageHeight = packer.PageHeight - ( padding * 2 );
-            var rectWidth  = ( int ) rect.Width + padding;
-            var rectHeight = ( int ) rect.Height + padding;
+            var rectWidth  = ( int )rect.Width + padding;
+            var rectHeight = ( int )rect.Height + padding;
 
             for ( int i = 0, n = packer.Pages.Count; i < n; i++ )
             {
-                var                  page    = ( SkylinePage ) packer.Pages[ i ];
+                var                  page    = ( SkylinePage )packer.Pages[ i ];
                 SkylinePage.RowSpec? bestRow = null;
 
                 // Fit in any row before the last.
@@ -1155,9 +1155,9 @@ public class PixmapPacker : IDisposable
 
             internal record RowSpec
             {
+                internal int Height = 0;
                 internal int X      = 0;
                 internal int Y      = 0;
-                internal int Height = 0;
             }
         }
     }
@@ -1168,13 +1168,6 @@ public class PixmapPacker : IDisposable
     [PublicAPI]
     public class PixmapPackerRectangle : RectangleShape
     {
-        public int[]? Splits         { get; set; }
-        public int[]? Pads           { get; set; }
-        public int    OffsetX        { get; set; }
-        public int    OffsetY        { get; set; }
-        public int    OriginalWidth  { get; set; }
-        public int    OriginalHeight { get; set; }
-
         public PixmapPackerRectangle( int x, int y, int width, int height )
             : base( x, y, width, height )
         {
@@ -1199,13 +1192,20 @@ public class PixmapPacker : IDisposable
             OriginalWidth  = originalWidth;
             OriginalHeight = originalHeight;
         }
+
+        public int[]? Splits         { get; set; }
+        public int[]? Pads           { get; set; }
+        public int    OffsetX        { get; set; }
+        public int    OffsetY        { get; set; }
+        public int    OriginalWidth  { get; set; }
+        public int    OriginalHeight { get; set; }
     }
 
     // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// Choose the page and location for each rectangle.
+    ///     Choose the page and location for each rectangle.
     /// </summary>
     [PublicAPI]
     public interface IPackStrategy
@@ -1213,8 +1213,8 @@ public class PixmapPacker : IDisposable
         void Sort( List< Pixmap > images );
 
         /// <summary>
-        /// Returns the page the rectangle should be placed in and
-        /// modifies the specified rectangle position.
+        ///     Returns the page the rectangle should be placed in and
+        ///     modifies the specified rectangle position.
         /// </summary>
         Page Pack( PixmapPacker packer, string? name, RectangleShape rect );
     }

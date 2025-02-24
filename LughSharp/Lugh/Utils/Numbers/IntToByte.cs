@@ -35,23 +35,19 @@ public interface IIntToByte
     byte B3 { get; }
 }
 
-[PublicAPI, StructLayout( LayoutKind.Explicit )]
+[PublicAPI]
+[StructLayout( LayoutKind.Explicit )]
 public struct IntToByteLE : IIntToByte
 {
-    [FieldOffset( 0 )]
-    public int IntVal;
+    [FieldOffset( 0 )] public int IntVal;
 
-    [FieldOffset( 0 )]
-    public byte b0;
+    [FieldOffset( 0 )] public byte b0;
 
-    [FieldOffset( 1 )]
-    public byte b1;
+    [FieldOffset( 1 )] public byte b1;
 
-    [FieldOffset( 2 )]
-    public byte b2;
+    [FieldOffset( 2 )] public byte b2;
 
-    [FieldOffset( 3 )]
-    public byte b3;
+    [FieldOffset( 3 )] public byte b3;
 
     public int Int
     {
@@ -65,23 +61,19 @@ public struct IntToByteLE : IIntToByte
     public byte B3 => b3;
 }
 
-[PublicAPI, StructLayout( LayoutKind.Explicit )]
-public struct IntToByteBE : IIntToByte  //TODO:
+[PublicAPI]
+[StructLayout( LayoutKind.Explicit )]
+public struct IntToByteBE : IIntToByte //TODO:
 {
-    [FieldOffset( 0 )]
-    public int IntVal;
+    [FieldOffset( 0 )] public int IntVal;
 
-    [FieldOffset( 0 )]
-    public byte b0;
+    [FieldOffset( 0 )] public byte b0;
 
-    [FieldOffset( 1 )]
-    public byte b1;
+    [FieldOffset( 1 )] public byte b1;
 
-    [FieldOffset( 2 )]
-    public byte b2;
+    [FieldOffset( 2 )] public byte b2;
 
-    [FieldOffset( 3 )]
-    public byte b3;
+    [FieldOffset( 3 )] public byte b3;
 
     public int Int
     {

@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Globalization;
-using System.Xml;
 using System.Xml.Linq;
 
 using LughSharp.Lugh.Core;
@@ -35,8 +34,8 @@ using Environment = System.Environment;
 namespace DesktopGLBackend.Utils;
 
 /// <summary>
-/// Represents a class to manage desktop GL preferences with methods to
-/// store and retrieve various types of data.
+///     Represents a class to manage desktop GL preferences with methods to
+///     store and retrieve various types of data.
 /// </summary>
 [PublicAPI]
 public class DesktopGLPreferences : IPreferences
@@ -50,7 +49,7 @@ public class DesktopGLPreferences : IPreferences
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DesktopGLPreferences"/> class.
+    ///     Initializes a new instance of the <see cref="DesktopGLPreferences" /> class.
     /// </summary>
     /// <param name="filename"> The name of the preferences file. </param>
     public DesktopGLPreferences( string filename )
@@ -93,25 +92,40 @@ public class DesktopGLPreferences : IPreferences
     // ------------------------------------------------------------------------
 
     /// <inheritdoc />
-    public IPreferences PutBool( string key, bool val ) => _put( key, val.ToString() );
+    public IPreferences PutBool( string key, bool val )
+    {
+        return _put( key, val.ToString() );
+    }
 
     /// <inheritdoc />
-    public IPreferences PutInteger( string key, int val ) => _put( key, val.ToString() );
+    public IPreferences PutInteger( string key, int val )
+    {
+        return _put( key, val.ToString() );
+    }
 
     /// <inheritdoc />
-    public IPreferences PutLong( string key, long val ) => _put( key, val.ToString() );
+    public IPreferences PutLong( string key, long val )
+    {
+        return _put( key, val.ToString() );
+    }
 
     /// <inheritdoc />
-    public IPreferences PutFloat( string key, float val ) => _put( key, val.ToString( CultureInfo.InvariantCulture ) );
+    public IPreferences PutFloat( string key, float val )
+    {
+        return _put( key, val.ToString( CultureInfo.InvariantCulture ) );
+    }
 
     /// <inheritdoc />
-    public IPreferences PutString( string key, string val ) => _put( key, val );
+    public IPreferences PutString( string key, string val )
+    {
+        return _put( key, val );
+    }
 
     /// <summary>
-    /// Adds or updates multiple entries in the preferences.
+    ///     Adds or updates multiple entries in the preferences.
     /// </summary>
     /// <param name="vals"> The dictionary of key-value pairs to add or update. </param>
-    /// <returns> The current <see cref="IPreferences"/> instance. </returns>
+    /// <returns> The current <see cref="IPreferences" /> instance. </returns>
     public IPreferences PutAll( Dictionary< string, object > vals )
     {
         foreach ( var entry in vals )
@@ -148,43 +162,48 @@ public class DesktopGLPreferences : IPreferences
         return this;
     }
 
-    private IPreferences _put( string key, string value )
-    {
-        _properties[ key ] = value.ToLower();
-
-        return this;
-    }
-
     /// <summary>
-    /// Gets a boolean value from the preferences.
+    ///     Gets a boolean value from the preferences.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <returns> The boolean value. </returns>
-    public bool GetBool( string key ) => GetBool( key, false );
+    public bool GetBool( string key )
+    {
+        return GetBool( key, false );
+    }
 
     /// <summary>
-    /// Gets an integer value from the preferences.
+    ///     Gets an integer value from the preferences.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <returns> The integer value. </returns>
-    public int GetInteger( string key ) => GetInteger( key, 0 );
+    public int GetInteger( string key )
+    {
+        return GetInteger( key, 0 );
+    }
 
     /// <summary>
-    /// Gets a long value from the preferences.
+    ///     Gets a long value from the preferences.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <returns> The long value. </returns>
-    public long GetLong( string key ) => GetLong( key, 0 );
+    public long GetLong( string key )
+    {
+        return GetLong( key, 0 );
+    }
 
     /// <summary>
-    /// Gets a float value from the preferences.
+    ///     Gets a float value from the preferences.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <returns> The float value. </returns>
-    public float GetFloat( string key ) => GetFloat( key, 0 );
+    public float GetFloat( string key )
+    {
+        return GetFloat( key, 0 );
+    }
 
     /// <summary>
-    /// Gets a boolean value from the preferences with a default value.
+    ///     Gets a boolean value from the preferences with a default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
@@ -192,7 +211,7 @@ public class DesktopGLPreferences : IPreferences
     public bool GetBool( string key, bool defValue )
     {
         if ( !_properties.TryGetValue( key, out var value )
-            || ( ( value.ToString() != "true" ) && ( value.ToString() != "false" ) ) )
+             || ( ( value.ToString() != "true" ) && ( value.ToString() != "false" ) ) )
         {
             return defValue;
         }
@@ -201,7 +220,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    /// Gets an integer value from the preferences with a default value.
+    ///     Gets an integer value from the preferences with a default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
@@ -217,7 +236,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    /// Gets a long value from the preferences with a default value.
+    ///     Gets a long value from the preferences with a default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
@@ -233,7 +252,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    /// Gets a float value from the preferences with a default value.
+    ///     Gets a float value from the preferences with a default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
@@ -249,11 +268,11 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    /// Gets a string value from the preferences with an optional default value.
+    ///     Gets a string value from the preferences with an optional default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue">
-    /// The default value if the key does not exist. Default is an empty string.
+    ///     The default value if the key does not exist. Default is an empty string.
     /// </param>
     /// <returns> The string value. </returns>
     public string GetString( string key, string defValue = "" )
@@ -267,34 +286,46 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    /// Gets all properties in the preferences.
+    ///     Gets all properties in the preferences.
     /// </summary>
     /// <returns> A dictionary of all properties. </returns>
-    public Dictionary< string, object > Get() => _properties;
+    public Dictionary< string, object > Get()
+    {
+        return _properties;
+    }
 
     /// <summary>
-    /// Checks if a key exists in the preferences.
+    ///     Checks if a key exists in the preferences.
     /// </summary>
     /// <param name="key">The key to check.</param>
     /// <returns> True if the key exists; otherwise, false. </returns>
-    public bool Contains( string key ) => _properties.ContainsKey( key );
+    public bool Contains( string key )
+    {
+        return _properties.ContainsKey( key );
+    }
 
     /// <summary>
-    /// Clears all entries in the preferences.
+    ///     Clears all entries in the preferences.
     /// </summary>
-    public void Clear() => _properties.Clear();
+    public void Clear()
+    {
+        _properties.Clear();
+    }
 
     /// <summary>
-    /// Removes a specific entry from the preferences.
+    ///     Removes a specific entry from the preferences.
     /// </summary>
     /// <param name="key"> The key of the entry to remove. </param>
-    public void Remove( string key ) => _properties.Remove( key );
+    public void Remove( string key )
+    {
+        _properties.Remove( key );
+    }
 
     /// <summary>
-    /// Saves the preferences to the file.
+    ///     Saves the preferences to the file.
     /// </summary>
     /// <exception cref="GdxRuntimeException">
-    /// Thrown when there is an error writing preferences.
+    ///     Thrown when there is an error writing preferences.
     /// </exception>
     public void Flush()
     {
@@ -320,5 +351,12 @@ public class DesktopGLPreferences : IPreferences
         {
             throw new GdxRuntimeException( "Error writing preferences!" );
         }
+    }
+
+    private IPreferences _put( string key, string value )
+    {
+        _properties[ key ] = value.ToLower();
+
+        return this;
     }
 }

@@ -24,7 +24,6 @@
 
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
-public class TextureSamplerBindings
+public class TransformFeedbackBindings
 {
-    
 }

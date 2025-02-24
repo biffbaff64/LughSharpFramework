@@ -22,14 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-
 namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 
 /// <summary>
-/// A <see cref="IFileHandleResolver"/> that adds a prefix to the filename before
-/// passing it to the base resolver. Can be used e.g. to use a given subfolder from
-/// the base resolver. The prefix is added as is, you have to include any trailing
-/// '/' character if needed.
+///     A <see cref="IFileHandleResolver" /> that adds a prefix to the filename before
+///     passing it to the base resolver. Can be used e.g. to use a given subfolder from
+///     the base resolver. The prefix is added as is, you have to include any trailing
+///     '/' character if needed.
 /// </summary>
 [PublicAPI]
 public class PrefixFileHandleResolver : IFileHandleResolver

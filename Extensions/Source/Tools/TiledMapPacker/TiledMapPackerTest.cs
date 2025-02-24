@@ -26,5 +26,4 @@ namespace Extensions.Source.Tools.TiledMapPacker;
 
 public class TiledMapPackerTest
 {
-    
 }

@@ -29,5 +29,4 @@ namespace Extensions.Source.Tools.TexturePacker;
 [PublicAPI]
 public class ImageProcessor
 {
-    
 }

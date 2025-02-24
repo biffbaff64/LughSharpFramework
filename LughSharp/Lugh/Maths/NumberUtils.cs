@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Maths;
 public class NumberUtils
 {
     /// <summary>
-    /// Converts the given floating-point value to its integer bit representation.
+    ///     Converts the given floating-point value to its integer bit representation.
     /// </summary>
     /// <param name="value"> The floating-point value to convert. </param>
     /// <returns> The integer bit representation of the floating-point value. </returns>
@@ -41,7 +41,7 @@ public class NumberUtils
         // Check for NaN based on values of bit fields, maximum
         // exponent and nonzero significand.
         if ( ( ( result & Constants.EXP_BIT_MASK ) == Constants.EXP_BIT_MASK )
-          && ( ( result & Constants.SIGNIF_BIT_MASK ) != 0 ) )
+             && ( ( result & Constants.SIGNIF_BIT_MASK ) != 0 ) )
         {
             result = 0x7fc00000;
         }
@@ -50,11 +50,11 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// Converts the given floating-point value to its raw integer bit representation.
+    ///     Converts the given floating-point value to its raw integer bit representation.
     /// </summary>
     /// <param name="value"> The floating-point value to convert. </param>
     /// <returns>
-    /// The raw integer bit representation of the floating-point value.
+    ///     The raw integer bit representation of the floating-point value.
     /// </returns>
     public static int FloatToRawIntBits( float value )
     {
@@ -62,11 +62,11 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// Converts a float value to its hexadecimal representation.
-    /// <example>
-    /// string hexValue = FloatToHex(-1.7014117E+38f);
-    /// Console.WriteLine(hexValue); // Outputs: FF7FFFFF
-    /// </example>
+    ///     Converts a float value to its hexadecimal representation.
+    ///     <example>
+    ///         string hexValue = FloatToHex(-1.7014117E+38f);
+    ///         Console.WriteLine(hexValue); // Outputs: FF7FFFFF
+    ///     </example>
     /// </summary>
     /// <param name="value">The float value to convert.</param>
     /// <returns>A string representing the hexadecimal value.</returns>
@@ -74,7 +74,7 @@ public class NumberUtils
     {
         unsafe
         {
-            var intBits = *( ( int* ) &value );
+            var intBits = *( int* )&value;
             var result  = intBits.ToString( "X8" );
 
             return result;
@@ -82,7 +82,7 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// Converts the given integer bit representation to its floating-point value.
+    ///     Converts the given integer bit representation to its floating-point value.
     /// </summary>
     /// <param name="value"> The integer bit representation to convert. </param>
     /// <returns> The floating-point value represented by the integer bits. </returns>
@@ -92,23 +92,23 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// Converts the given floating-point color value to its integer bit representation.
+    ///     Converts the given floating-point color value to its integer bit representation.
     /// </summary>
     /// <param name="value"> The floating-point color value to convert. </param>
     /// <returns>
-    /// The integer bit representation of the floating-point color value.
+    ///     The integer bit representation of the floating-point color value.
     /// </returns>
     public static int FloatToIntColor( float value )
     {
         var intBits = FloatToRawIntBits( value );
 
-        intBits |= ( int ) ( ( intBits >>> 24 ) * ( 255f / 254f ) ) << 24;
+        intBits |= ( int )( ( intBits >>> 24 ) * ( 255f / 254f ) ) << 24;
 
         return intBits;
     }
 
     /// <summary>
-    /// Converts the given integer bit representation to its floating-point color value.
+    ///     Converts the given integer bit representation to its floating-point color value.
     /// </summary>
     /// <param name="value"> The integer bit representation to convert. </param>
     /// <returns> The floating-point color value represented by the integer bits. </returns>
@@ -118,7 +118,7 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// Converts the given unsigned integer bit representation to its floating-point color value.
+    ///     Converts the given unsigned integer bit representation to its floating-point color value.
     /// </summary>
     /// <param name="value"> The integer bit representation to convert. </param>
     /// <returns> The floating-point color value represented by the integer bits. </returns>
@@ -128,7 +128,7 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// Converts the given double-precision floating-point value to its long bit representation.
+    ///     Converts the given double-precision floating-point value to its long bit representation.
     /// </summary>
     /// <param name="value"> The double-precision floating-point value to convert. </param>
     /// <returns> The long bit representation of the double-precision floating-point value. </returns>
@@ -138,7 +138,7 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// Converts the given long bit representation to its double-precision floating-point value.
+    ///     Converts the given long bit representation to its double-precision floating-point value.
     /// </summary>
     /// <param name="value"> The long bit representation to convert. </param>
     /// <returns> The double-precision floating-point value represented by the long bits. </returns>
@@ -148,11 +148,11 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// Parses the given string as an integer.
+    ///     Parses the given string as an integer.
     /// </summary>
     /// <param name="str"> The string to parse. </param>
     /// <returns>
-    /// The parsed integer value, or null if the string could not be parsed as an integer.
+    ///     The parsed integer value, or null if the string could not be parsed as an integer.
     /// </returns>
     public static int? ParseInt( string? str )
     {
@@ -165,12 +165,12 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// Parses the given string as a floating-point number.
+    ///     Parses the given string as a floating-point number.
     /// </summary>
     /// <param name="str"> The string to parse. </param>
     /// <returns>
-    /// The parsed floating-point value, or null if the string could not be parsed
-    /// as a floating-point number.
+    ///     The parsed floating-point value, or null if the string could not be parsed
+    ///     as a floating-point number.
     /// </returns>
     public static float? ParseFloat( string? str )
     {
@@ -183,17 +183,17 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// Determines if a character is a valid hexadecimal digit.
+    ///     Determines if a character is a valid hexadecimal digit.
     /// </summary>
     /// <param name="ch"> The character to check. </param>
     /// <returns> True if the character is a hexadecimal digit; otherwise, false. </returns>
     public static bool IsHexDigit( char ch )
     {
-        return ( ch is >= '0' and <= '9' or >= 'a' and <= 'f' or >= 'A' and <= 'F' );
+        return ch is >= '0' and <= '9' or >= 'a' and <= 'f' or >= 'A' and <= 'F';
     }
 
     /// <summary>
-    /// Converts a hexadecimal digit character to its integer value.
+    ///     Converts a hexadecimal digit character to its integer value.
     /// </summary>
     /// <param name="ch"> The hexadecimal digit character. </param>
     /// <returns> The integer value of the hexadecimal digit. </returns>
@@ -223,29 +223,26 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <returns></returns>
     public static byte Compare( byte x, byte y )
     {
-        return ( byte ) ( x - y );
+        return ( byte )( x - y );
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <returns></returns>
     public static char Compare( char x, char y )
     {
-        return ( char ) ( x - y );
+        return ( char )( x - y );
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>
@@ -256,7 +253,6 @@ public class NumberUtils
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>

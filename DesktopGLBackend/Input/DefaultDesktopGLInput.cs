@@ -22,14 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Graphics.GLUtils;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-
 using DesktopGLBackend.Window;
 
+using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Input;
+using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Exceptions;
 
 namespace DesktopGLBackend.Input;
 
@@ -41,12 +39,12 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     private readonly InputEventQueue _eventQueue         = new();
     private readonly bool[]          _justPressedButtons = new bool[ 5 ];
     private readonly DesktopGLWindow _window;
+    private          int             _deltaX;
+    private          int             _deltaY;
 
     private bool _justTouched;
     private char _lastCharacter;
     private int  _logicalMouseX;
-    private int  _deltaX;
-    private int  _deltaY;
     private int  _logicalMouseY;
     private int  _mousePressed;
     private int  _mouseX;
@@ -126,19 +124,34 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     #region From Abstract Input
 
     /// <inheritdoc />
-    public override int GetMaxPointers() => DEFAULT_MAX_POINTERS;
+    public override int GetMaxPointers()
+    {
+        return DEFAULT_MAX_POINTERS;
+    }
 
     /// <inheritdoc />
-    public override int GetX( int pointer = 0 ) => pointer == 0 ? _mouseX : 0;
+    public override int GetX( int pointer = 0 )
+    {
+        return pointer == 0 ? _mouseX : 0;
+    }
 
     /// <inheritdoc />
-    public override int GetDeltaX( int pointer = 0 ) => pointer == 0 ? _deltaX : 0;
+    public override int GetDeltaX( int pointer = 0 )
+    {
+        return pointer == 0 ? _deltaX : 0;
+    }
 
     /// <inheritdoc />
-    public override int GetY( int pointer = 0 ) => pointer == 0 ? _mouseY : 0;
+    public override int GetY( int pointer = 0 )
+    {
+        return pointer == 0 ? _mouseY : 0;
+    }
 
     /// <inheritdoc />
-    public override int GetDeltaY( int pointer = 0 ) => pointer == 0 ? _deltaY : 0;
+    public override int GetDeltaY( int pointer = 0 )
+    {
+        return pointer == 0 ? _deltaY : 0;
+    }
 
     /// <inheritdoc />
     public override bool IsTouched( int pointer = 0 )
@@ -158,10 +171,16 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     }
 
     /// <inheritdoc />
-    public override bool JustTouched() => _justTouched;
+    public override bool JustTouched()
+    {
+        return _justTouched;
+    }
 
     /// <inheritdoc />
-    public override float GetPressure( int pointer = 0 ) => IsTouched( pointer ) ? 1 : 0;
+    public override float GetPressure( int pointer = 0 )
+    {
+        return IsTouched( pointer ) ? 1 : 0;
+    }
 
     /// <inheritdoc />
     public override bool IsButtonPressed( int button )
@@ -204,7 +223,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     {
         Glfw.SetInputMode( _window.GlfwWindow,
                            InputMode.Cursor,
-                           ( caught ? CursorMode.Disabled : CursorMode.Normal ) );
+                           caught ? CursorMode.Disabled : CursorMode.Normal );
     }
 
     /// <inheritdoc />
@@ -567,25 +586,55 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     // Stubs
     // ========================================================================
 
-    public override float GetAccelerometerX() => 0;
+    public override float GetAccelerometerX()
+    {
+        return 0;
+    }
 
-    public override float GetAccelerometerY() => 0;
+    public override float GetAccelerometerY()
+    {
+        return 0;
+    }
 
-    public override float GetAccelerometerZ() => 0;
+    public override float GetAccelerometerZ()
+    {
+        return 0;
+    }
 
-    public override int GetRotation() => 0;
+    public override int GetRotation()
+    {
+        return 0;
+    }
 
-    public override float GetAzimuth() => 0;
+    public override float GetAzimuth()
+    {
+        return 0;
+    }
 
-    public override float GetPitch() => 0;
+    public override float GetPitch()
+    {
+        return 0;
+    }
 
-    public override float GetRoll() => 0;
+    public override float GetRoll()
+    {
+        return 0;
+    }
 
-    public override float GetGyroscopeX() => 0;
+    public override float GetGyroscopeX()
+    {
+        return 0;
+    }
 
-    public override float GetGyroscopeY() => 0;
+    public override float GetGyroscopeY()
+    {
+        return 0;
+    }
 
-    public override float GetGyroscopeZ() => 0;
+    public override float GetGyroscopeZ()
+    {
+        return 0;
+    }
 
     public override void SetOnscreenKeyboardVisible( bool visible )
     {
