@@ -83,9 +83,9 @@ public static class Logger
     /// <param name="logLevel"> The initially enabled log level(s). </param>
     /// <param name="enableWriteToFile"> TRUE to enable outputting messages to a file. </param>
     /// <param name="filename"> The name of the file to write to. Default is trace.txt. </param>
-    public static void Initialise( int logLevel = LOG_DEBUG | LOG_ERROR,
-                                   bool enableWriteToFile = true,
-                                   string filename = DEFAULT_TRACE_FILENAME )
+    public static void Initialise( int    logLevel          = LOG_DEBUG | LOG_ERROR,
+                                   bool   enableWriteToFile = true,
+                                   string filename          = DEFAULT_TRACE_FILENAME )
     {
         TraceLevel        = logLevel;
         EnableWriteToFile = enableWriteToFile;
@@ -106,11 +106,11 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    public static void Debug( string message,
-                              bool boxedDebug = false,
-                              [CallerFilePath] string callerFilePath = "",
-                              [CallerMemberName] string callerMethod = "",
-                              [CallerLineNumber] int callerLine = 0 )
+    public static void Debug( string                    message,
+                              bool                      boxedDebug     = false,
+                              [CallerFilePath]   string callerFilePath = "",
+                              [CallerMemberName] string callerMethod   = "",
+                              [CallerLineNumber] int    callerLine     = 0 )
     {
         if ( !IsEnabled( LOG_DEBUG ) )
         {
@@ -137,10 +137,10 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    public static void Error( string message,
-                              [CallerFilePath] string callerFilePath = "",
-                              [CallerMemberName] string callerMethod = "",
-                              [CallerLineNumber] int callerLine = 0 )
+    public static void Error( string                    message,
+                              [CallerFilePath]   string callerFilePath = "",
+                              [CallerMemberName] string callerMethod   = "",
+                              [CallerLineNumber] int    callerLine     = 0 )
     {
         if ( !IsEnabled( LOG_ERROR ) )
         {
@@ -164,11 +164,11 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    public static void DebugCondition( string message,
-                                       bool condition = false,
-                                       [CallerFilePath] string callerFilePath = "",
-                                       [CallerMemberName] string callerMethod = "",
-                                       [CallerLineNumber] int callerLine = 0 )
+    public static void DebugCondition( string                    message,
+                                       bool                      condition      = false,
+                                       [CallerFilePath]   string callerFilePath = "",
+                                       [CallerMemberName] string callerMethod   = "",
+                                       [CallerLineNumber] int    callerLine     = 0 )
     {
         if ( !IsEnabled( LOG_DEBUG ) || !condition )
         {
@@ -194,11 +194,11 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    public static void Checkpoint( bool lineBefore = false,
-                                   bool lineAfter = false,
-                                   [CallerFilePath] string callerFilePath = "",
-                                   [CallerMemberName] string callerMethod = "",
-                                   [CallerLineNumber] int callerLine = 0 )
+    public static void Checkpoint( bool                      lineBefore     = false,
+                                   bool                      lineAfter      = false,
+                                   [CallerFilePath]   string callerFilePath = "",
+                                   [CallerMemberName] string callerMethod   = "",
+                                   [CallerLineNumber] int    callerLine     = 0 )
     {
         if ( !IsEnabled( LOG_DEBUG ) )
         {
@@ -249,30 +249,47 @@ public static class Logger
     /// </param>
     public static void OpenDebugFile( string fileName, bool deleteExisting )
     {
-        if ( fileName.Equals( string.Empty ) )
+        try
         {
-            fileName = DEFAULT_TRACE_FILENAME;
-        }
+            if ( fileName.Equals( string.Empty ) )
+            {
+                fileName = DEFAULT_TRACE_FILENAME;
+            }
 
-        if ( File.Exists( fileName ) && deleteExisting )
+            if ( File.Exists( fileName ) && deleteExisting )
+            {
+                File.Delete( fileName );
+            }
+
+            // Get the base directory
+            string baseDirectory = AppContext.BaseDirectory;
+
+            // Construct the log directory path
+            _debugFilePath = Path.Combine( baseDirectory, "logs/" );
+            _debugFileName = fileName;
+
+            using var fs = File.Create( _debugFilePath + _debugFileName );
+
+            Console.WriteLine( fs.Name );
+
+            var dateTime = DateTime.Now;
+            var divider  = new UTF8Encoding( true ).GetBytes( "-----------------------------------------------------" );
+            var time     = new UTF8Encoding( true ).GetBytes( dateTime.ToShortTimeString() );
+
+            fs.Write( divider, 0, divider.Length );
+            fs.Write( time, 0, time.Length );
+            fs.Write( divider, 0, divider.Length );
+
+            fs.Close();
+        }
+        catch ( Exception )
         {
-            File.Delete( fileName );
+            Console.WriteLine( $"Unable to open loge file: {_debugFilePath + _debugFileName}" );
+
+            _debugFilePath    = null!;
+            _debugFileName    = null!;
+            EnableWriteToFile = false;
         }
-
-        _debugFilePath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile ) + PREFS_FOLDER;
-        _debugFileName = fileName;
-
-        using var fs = File.Create( _debugFilePath + _debugFileName );
-
-        var dateTime = DateTime.Now;
-        var divider  = new UTF8Encoding( true ).GetBytes( "-----------------------------------------------------" );
-        var time     = new UTF8Encoding( true ).GetBytes( dateTime.ToShortTimeString() );
-
-        fs.Write( divider, 0, divider.Length );
-        fs.Write( time, 0, time.Length );
-        fs.Write( divider, 0, divider.Length );
-
-        fs.Close();
     }
 
     /// <summary>
@@ -363,9 +380,9 @@ public static class Logger
         var c = new GregorianCalendar();
 
         return $"{c.GetHour( DateTime.Now )}"
-               + $":{c.GetMinute( DateTime.Now )}"
-               + $":{c.GetSecond( DateTime.Now )}"
-               + $":{c.GetMilliseconds( DateTime.Now )}";
+             + $":{c.GetMinute( DateTime.Now )}"
+             + $":{c.GetSecond( DateTime.Now )}"
+             + $":{c.GetMilliseconds( DateTime.Now )}";
     }
 
     /// <summary>
@@ -407,7 +424,7 @@ public static class Logger
         return traceLevel switch
         {
             LOG_DEBUG
-                or LOG_ERROR => ( TraceLevel & traceLevel ) != 0,
+             or LOG_ERROR => ( TraceLevel & traceLevel ) != 0,
             var _ => false,
         };
     }

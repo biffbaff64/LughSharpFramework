@@ -54,11 +54,19 @@ public class DesktopGLPreferences : IPreferences
     /// <param name="filename"> The name of the preferences file. </param>
     public DesktopGLPreferences( string filename )
     {
-        _filePath       = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile ) + @"\.prefs\";
+        _filePath       = AppContext.BaseDirectory + "logs" + Path.DirectorySeparatorChar;
         _propertiesFile = filename;
+        
+        if ( !Directory.Exists( _filePath ) )
+        {
+            Directory.CreateDirectory( _filePath );
+        }
 
-        if ( !File.Exists( _filePath + _propertiesFile ) ) return;
-
+        if ( !File.Exists( _filePath + _propertiesFile ) )
+        {
+            File.Create( _filePath + _propertiesFile ).Dispose();
+        }
+        
         try
         {
             _xDocument = XDocument.Load( _filePath + _propertiesFile );
