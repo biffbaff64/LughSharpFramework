@@ -41,9 +41,9 @@ public abstract class Scaling
     // ============================================================================
 
     /// <summary>
-    ///     Returns the size of the source scaled to the target.
-    ///     Note the same Vector2 instance is always returned and should
-    ///     never be cached.
+    /// Returns the size of the source scaled to the target.
+    /// Note the same Vector2 instance is always returned and should
+    /// never be cached.
     /// </summary>
     public abstract Vector2 Apply( float sourceWidth, float sourceHeight, float targetWidth, float targetHeight );
 }
@@ -51,8 +51,8 @@ public abstract class Scaling
 // ============================================================================
 
 /// <summary>
-///     Scales the source to fit the target while keeping the same aspect ratio.
-///     This may cause the source to be smaller than the target in one direction.
+/// Scales the source to fit the target while keeping the same aspect ratio.
+/// This may cause the source to be smaller than the target in one direction.
 /// </summary>
 [PublicAPI]
 internal class FitScaling : Scaling
@@ -73,8 +73,8 @@ internal class FitScaling : Scaling
 // ============================================================================
 
 /// <summary>
-///     Scales the source to fill the target while keeping the same aspect ratio.
-///     This may cause the source to be larger than the target in one direction.
+/// Scales the source to fill the target while keeping the same aspect ratio.
+/// This may cause the source to be larger than the target in one direction.
 /// </summary>
 [PublicAPI]
 internal class FillScaling : Scaling
@@ -95,8 +95,8 @@ internal class FillScaling : Scaling
 // ============================================================================
 
 /// <summary>
-///     Scales the source to fill the target in the x direction while keeping the same aspect
-///     ratio. This may cause the source to be smaller or larger than the target in the y direction.
+/// Scales the source to fill the target in the x direction while keeping the same aspect
+/// ratio. This may cause the source to be smaller or larger than the target in the y direction.
 /// </summary>
 [PublicAPI]
 internal class FillXScaling : Scaling
@@ -115,9 +115,9 @@ internal class FillXScaling : Scaling
 // ============================================================================
 
 /// <summary>
-///     Scales the source to fill the target in the y direction while keeping the
-///     same aspect ratio. This may cause the source to be smaller or larger than
-///     the target in the x direction.
+/// Scales the source to fill the target in the y direction while keeping the
+/// same aspect ratio. This may cause the source to be smaller or larger than
+/// the target in the x direction.
 /// </summary>
 [PublicAPI]
 internal class FillYScaling : Scaling
@@ -136,8 +136,8 @@ internal class FillYScaling : Scaling
 // ============================================================================
 
 /// <summary>
-///     Scales the source to fill the target.
-///     This may cause the source to not keep the same aspect ratio.
+/// Scales the source to fill the target.
+/// This may cause the source to not keep the same aspect ratio.
 /// </summary>
 [PublicAPI]
 internal class StretchScaling : Scaling
@@ -154,8 +154,8 @@ internal class StretchScaling : Scaling
 // ============================================================================
 
 /// <summary>
-///     Scales the source to fill the target in the x direction, without changing the
-///     y direction. This may cause the source to not keep the same aspect ratio.
+/// Scales the source to fill the target in the x direction, without changing the
+/// y direction. This may cause the source to not keep the same aspect ratio.
 /// </summary>
 [PublicAPI]
 internal class StretchXScaling : Scaling
@@ -172,8 +172,8 @@ internal class StretchXScaling : Scaling
 // ============================================================================
 
 /// <summary>
-///     Scales the source to fill the target in the y direction, without changing the
-///     x direction. This may cause the source to not keep the same aspect ratio.
+/// Scales the source to fill the target in the y direction, without changing the
+/// x direction. This may cause the source to not keep the same aspect ratio.
 /// </summary>
 [PublicAPI]
 internal class StretchYScaling : Scaling
@@ -190,7 +190,7 @@ internal class StretchYScaling : Scaling
 // ============================================================================
 
 /// <summary>
-///     The source is not scaled.
+/// The source is not scaled.
 /// </summary>
 [PublicAPI]
 internal class NoScaling : Scaling

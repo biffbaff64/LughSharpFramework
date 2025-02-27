@@ -33,29 +33,29 @@ using SixLabors.ImageSharp.Processing;
 namespace Extensions.Source.Tools.ImagePacker;
 
 /// <summary>
-///     A simple image packer class based on the nice algorithm by blackpawn.
-///     See <see href="http://www.blackpawn.com/texts/lightmaps/default.html">here</see>
-///     for details.
-///     <para>
-///         <b>Usage:</b> instanciate an ImagePacker instance, load and optionally sort the
-///         images you want to add by size (e. g. area) then insert each image via a call to
-///         <see cref="InsertImage(String, Image{Rgba32})" />. When you are done with inserting
-///         images you can reference the property <see cref="Image" /> for the actual Image that
-///         holds the packed images. Additionally you can get a Dictionary where a) the keys are
-///         the names you specified when inserting and b) the values are the rectangles within
-///         the packed image where that specific image is located. All things are given in pixels.
-///     </para>
-///     <para>
-///         See the <see cref="main(string[])" /> method for an example that will generate 100
-///         random images, pack them and then output the packed image as a png along with a json
-///         file holding the image descriptors.
-///     </para>
-///     <para>
-///         In some cases it is beneficial to add padding and to duplicate the border pixels of
-///         an inserted image so that there is no bleeding of neighbouring pixels when using the
-///         packed image as a texture. You can specify the padding as well as whether to duplicate
-///         the border pixels in the constructor.
-///     </para>
+/// A simple image packer class based on the nice algorithm by blackpawn.
+/// See <see href="http://www.blackpawn.com/texts/lightmaps/default.html">here</see>
+/// for details.
+/// <para>
+///     <b>Usage:</b> instanciate an ImagePacker instance, load and optionally sort the
+///     images you want to add by size (e. g. area) then insert each image via a call to
+///     <see cref="InsertImage(String, Image{Rgba32})" />. When you are done with inserting
+///     images you can reference the property <see cref="Image" /> for the actual Image that
+///     holds the packed images. Additionally you can get a Dictionary where a) the keys are
+///     the names you specified when inserting and b) the values are the rectangles within
+///     the packed image where that specific image is located. All things are given in pixels.
+/// </para>
+/// <para>
+///     See the <see cref="main(string[])" /> method for an example that will generate 100
+///     random images, pack them and then output the packed image as a png along with a json
+///     file holding the image descriptors.
+/// </para>
+/// <para>
+///     In some cases it is beneficial to add padding and to duplicate the border pixels of
+///     an inserted image so that there is no bleeding of neighbouring pixels when using the
+///     packed image as a texture. You can specify the padding as well as whether to duplicate
+///     the border pixels in the constructor.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class ImagePacker
@@ -69,10 +69,10 @@ public class ImagePacker
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new ImagePacker which will insert all supplied images into a <tt>width</tt>
-    ///     by <tt>height</tt> image. <tt>padding</tt> specifies the minimum number of pixels to
-    ///     insert between images. <tt>border</tt> will duplicate the border pixels of the inserted
-    ///     images to avoid seams when rendering with bi-linear filtering on.
+    /// Creates a new ImagePacker which will insert all supplied images into a <tt>width</tt>
+    /// by <tt>height</tt> image. <tt>padding</tt> specifies the minimum number of pixels to
+    /// insert between images. <tt>border</tt> will duplicate the border pixels of the inserted
+    /// images to avoid seams when rendering with bi-linear filtering on.
     /// </summary>
     /// <param name="width"> the width of the output image </param>
     /// <param name="height"> the height of the output image </param>
@@ -90,12 +90,12 @@ public class ImagePacker
     public Dictionary< string, Rectangle > Rects { get; } = new();
 
     /// <summary>
-    ///     Inserts an image into the current image packer with the specified name.
+    /// Inserts an image into the current image packer with the specified name.
     /// </summary>
     /// <param name="name">The name to associate with the inserted image.</param>
     /// <param name="image">The image to be inserted.</param>
     /// <exception cref="GdxRuntimeException">
-    ///     Thrown when the image does not fit or when an image with the same name already exists.
+    /// Thrown when the image does not fit or when an image with the same name already exists.
     /// </exception>
     public void InsertImage( string name, Image< Rgba32 > image )
     {
@@ -134,13 +134,13 @@ public class ImagePacker
     }
 
     /// <summary>
-    ///     Attempts to insert a rectangle into the image packer and returns the node
-    ///     where the rectangle was inserted.
+    /// Attempts to insert a rectangle into the image packer and returns the node
+    /// where the rectangle was inserted.
     /// </summary>
     /// <param name="rect">The rectangle to insert.</param>
     /// <returns>
-    ///     A node representing the position where the rectangle was inserted, or null
-    ///     if the rectangle did not fit.
+    /// A node representing the position where the rectangle was inserted, or null
+    /// if the rectangle did not fit.
     /// </returns>
     private Node? Insert( Rectangle rect )
     {
@@ -179,12 +179,12 @@ public class ImagePacker
     }
 
     /// <summary>
-    ///     Duplicates the border of the given image around the specified rectangle to handle padding.
+    /// Duplicates the border of the given image around the specified rectangle to handle padding.
     /// </summary>
     /// <param name="ctx">The image processing context.</param>
     /// <param name="image">The image whose border is to be duplicated.</param>
     /// <param name="rect">
-    ///     The rectangle that outlines where the image should be drawn and the border duplicated.
+    /// The rectangle that outlines where the image should be drawn and the border duplicated.
     /// </param>
     private static void DuplicateBorder( IImageProcessingContext ctx, Image< Rgba32 > image, Rectangle rect )
     {
@@ -214,7 +214,7 @@ public class ImagePacker
     }
 
     /// <summary>
-    ///     Creates a new image with the specified width, height, and background color.
+    /// Creates a new image with the specified width, height, and background color.
     /// </summary>
     /// <param name="width">The width of the image to create.</param>
     /// <param name="height">The height of the image to create.</param>
@@ -229,7 +229,7 @@ public class ImagePacker
     // ========================================================================
 
     /// <summary>
-    ///     Entry point for the application.
+    /// Entry point for the application.
     /// </summary>
     /// <param name="args">Command-line arguments.</param>
     public static void main( string[] args )
@@ -258,8 +258,8 @@ public class ImagePacker
     // ========================================================================
 
     /// <summary>
-    ///     Represents a node used in the image packing process.
-    ///     Each node can either be a leaf node containing a rectangle region or an internal node with children.
+    /// Represents a node used in the image packing process.
+    /// Each node can either be a leaf node containing a rectangle region or an internal node with children.
     /// </summary>
     /// <param name="x">The x-coordinate of the node's region.</param>
     /// <param name="y">The y-coordinate of the node's region.</param>
@@ -275,7 +275,7 @@ public class ImagePacker
         // ====================================================================
 
         /// <summary>
-        ///     Splits the current node into two children based on the specified rectangle dimensions.
+        /// Splits the current node into two children based on the specified rectangle dimensions.
         /// </summary>
         /// <param name="rect">The rectangle that defines the dimensions for splitting the node.</param>
         public void Split( Rectangle rect )

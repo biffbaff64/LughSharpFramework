@@ -71,7 +71,7 @@ public class RepeatAction : DelegateAction
     }
 
     /// <summary>
-    ///     Causes the action to not repeat again.
+    /// Causes the action to not repeat again.
     /// </summary>
     public void Finish()
     {

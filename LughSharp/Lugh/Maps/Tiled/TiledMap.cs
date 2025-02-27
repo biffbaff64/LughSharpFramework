@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Maps.Tiled;
 
 /// <summary>
-///     Represents a tiled map, adds the concept of tiles and tilesets.
+/// Represents a tiled map, adds the concept of tiles and tilesets.
 /// </summary>
 [PublicAPI]
 public class TiledMap : Map, IDisposable
@@ -34,8 +34,8 @@ public class TiledMap : Map, IDisposable
     public List< object >?  OwnedResources { get; set; }
 
     /// <summary>
-    ///     Performs application-defined tasks associated with freeing,
-    ///     releasing, or resetting unmanaged resources.
+    /// Performs application-defined tasks associated with freeing,
+    /// releasing, or resetting unmanaged resources.
     /// </summary>
     public void Dispose()
     {
@@ -62,8 +62,8 @@ public class TiledMap : Map, IDisposable
     }
 
     /// <summary>
-    ///     Allows an object to try to free resources and perform other cleanup
-    ///     operations before it is reclaimed by garbage collection.
+    /// Allows an object to try to free resources and perform other cleanup
+    /// operations before it is reclaimed by garbage collection.
     /// </summary>
     ~TiledMap()
     {

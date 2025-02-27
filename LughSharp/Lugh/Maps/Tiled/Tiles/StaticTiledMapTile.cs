@@ -27,7 +27,7 @@ using LughSharp.Lugh.Graphics.Images;
 namespace LughSharp.Lugh.Maps.Tiled.Tiles;
 
 /// <summary>
-///     Represents a non changing <see cref="ITiledMapTile" /> (can be cached)
+/// Represents a non changing <see cref="ITiledMapTile" /> (can be cached)
 /// </summary>
 [PublicAPI]
 public class StaticTiledMapTile : ITiledMapTile
@@ -41,7 +41,7 @@ public class StaticTiledMapTile : ITiledMapTile
     // ========================================================================
 
     /// <summary>
-    ///     Creates a static tile with the given region
+    /// Creates a static tile with the given region
     /// </summary>
     /// <param name="texture"> The <see cref="TextureRegion" /> to use. </param>
     public StaticTiledMapTile( TextureRegion texture )
@@ -50,7 +50,7 @@ public class StaticTiledMapTile : ITiledMapTile
     }
 
     /// <summary>
-    ///     Copy Constructor
+    /// Copy Constructor
     /// </summary>
     /// <param name="copy"> The StaticTiledMapTile to copy. </param>
     public StaticTiledMapTile( StaticTiledMapTile copy )
@@ -72,14 +72,14 @@ public class StaticTiledMapTile : ITiledMapTile
     public ITiledMapTile.Blendmode BlendMode     { get; set; } = ITiledMapTile.Blendmode.Alpha;
 
     /// <summary>
-    ///     Returns the <see cref="MapProperties" /> instance for this tile. If the
-    ///     current properties instance is null, a new instance will be created first.
+    /// Returns the <see cref="MapProperties" /> instance for this tile. If the
+    /// current properties instance is null, a new instance will be created first.
     /// </summary>
     public MapProperties Properties => _properties ??= new MapProperties();
 
     /// <summary>
-    ///     Returns the <see cref="MapObjects" /> instance for this tile. If the
-    ///     current mapobjects instance is null, a new instance will be created first.
+    /// Returns the <see cref="MapObjects" /> instance for this tile. If the
+    /// current mapobjects instance is null, a new instance will be created first.
     /// </summary>
     public MapObjects MapObjects => _mapObjects ??= new MapObjects();
 }

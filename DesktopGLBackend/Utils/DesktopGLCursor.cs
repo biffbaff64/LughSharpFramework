@@ -94,8 +94,8 @@ public class DesktopGLCursor : ICursor, IDisposable
     public Cursor          GlfwCursor { get; set; }
 
     /// <summary>
-    ///     Sets the system cursor for the given <see cref="GLFW.Window" /> to the
-    ///     cursor specified by the parameter <paramref name="systemCursor" />.
+    /// Sets the system cursor for the given <see cref="GLFW.Window" /> to the
+    /// cursor specified by the parameter <paramref name="systemCursor" />.
     /// </summary>
     /// <param name="window"></param>
     /// <param name="systemCursor"></param>

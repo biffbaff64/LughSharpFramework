@@ -27,9 +27,9 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Utils.Buffers;
 
 /// <summary>
-///     Provides a type-safe view of an underlying ByteBuffer, specialized float values.
-///     This buffer holds a reference to a ByteBuffer instance (_byteBuffer), and does
-///     not have its own backing arrays.
+/// Provides a type-safe view of an underlying ByteBuffer, specialized float values.
+/// This buffer holds a reference to a ByteBuffer instance (_byteBuffer), and does
+/// not have its own backing arrays.
 /// </summary>
 [PublicAPI]
 public class FloatBuffer : Buffer, IDisposable
@@ -39,11 +39,11 @@ public class FloatBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new FloatBuffer with the specified capacity.
+    /// Creates a new FloatBuffer with the specified capacity.
     /// </summary>
     /// <param name="capacityInFloats">
-    ///     The number of floats to be made available in the buffer. As the backing buffer is a
-    ///     ByteBuffer, this capacity will need to be translated into bytes from floats.
+    /// The number of floats to be made available in the buffer. As the backing buffer is a
+    /// ByteBuffer, this capacity will need to be translated into bytes from floats.
     /// </param>
     public FloatBuffer( int capacityInFloats ) : base( capacityInFloats )
     {
@@ -54,9 +54,9 @@ public class FloatBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Creates a new IntBuffer that is a view of the given byte array.
-    ///     This constructor is intended for creating buffer views (e.g., using ByteBuffer.AsIntBuffer()).
-    ///     It shares the provided byte array; data is NOT copied.
+    /// Creates a new IntBuffer that is a view of the given byte array.
+    /// This constructor is intended for creating buffer views (e.g., using ByteBuffer.AsIntBuffer()).
+    /// It shares the provided byte array; data is NOT copied.
     /// </summary>
     /// <param name="backingArray">The byte array to use as the backing store.</param>
     /// <param name="offset">The starting offset within the byte array (in bytes).</param>
@@ -180,8 +180,8 @@ public class FloatBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Adds the contents of the provided float array to this buffer, staring at
-    ///     index <see cref="Buffer.Position" />
+    /// Adds the contents of the provided float array to this buffer, staring at
+    /// index <see cref="Buffer.Position" />
     /// </summary>
     public void PutFloats( float[] floatArray )
     {
@@ -201,7 +201,7 @@ public class FloatBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Returns the backing array as a byte[].
+    /// Returns the backing array as a byte[].
     /// </summary>
     /// <returns></returns>
     public new float[] ToArray()
@@ -301,8 +301,8 @@ public class FloatBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Performs application-defined tasks associated with freeing, releasing, or
-    ///     resetting unmanaged resources.
+    /// Performs application-defined tasks associated with freeing, releasing, or
+    /// resetting unmanaged resources.
     /// </summary>
     protected override void Dispose( bool disposing )
     {

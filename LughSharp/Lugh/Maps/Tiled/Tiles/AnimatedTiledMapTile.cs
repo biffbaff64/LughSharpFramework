@@ -30,7 +30,7 @@ using Blendmode = LughSharp.Lugh.Maps.Tiled.ITiledMapTile.Blendmode;
 namespace LughSharp.Lugh.Maps.Tiled.Tiles;
 
 /// <summary>
-///     Represents an animating <see cref="ITiledMapTile" />.
+/// Represents an animating <see cref="ITiledMapTile" />.
 /// </summary>
 [PublicAPI]
 public class AnimatedTiledMapTile : ITiledMapTile
@@ -49,11 +49,11 @@ public class AnimatedTiledMapTile : ITiledMapTile
     // ========================================================================
 
     /// <summary>
-    ///     Creates an animated tile with the given animation interval and frame tiles.
+    /// Creates an animated tile with the given animation interval and frame tiles.
     /// </summary>
     /// <param name="interval">The interval between each individual frame tile.</param>
     /// <param name="frameTiles">
-    ///     An array of <see cref="StaticTiledMapTile" />s that make up the animation.
+    /// An array of <see cref="StaticTiledMapTile" />s that make up the animation.
     /// </param>
     public AnimatedTiledMapTile( float interval, List< StaticTiledMapTile > frameTiles )
     {
@@ -70,13 +70,13 @@ public class AnimatedTiledMapTile : ITiledMapTile
     }
 
     /// <summary>
-    ///     Creates an animated tile with the given animation intervals and frame tiles.
+    /// Creates an animated tile with the given animation intervals and frame tiles.
     /// </summary>
     /// <param name="intervals">
-    ///     The intervals between each individual frame tile in milliseconds.
+    /// The intervals between each individual frame tile in milliseconds.
     /// </param>
     /// <param name="frameTiles">
-    ///     An array of <see cref="StaticTiledMapTile" /> that make up the animation.
+    /// An array of <see cref="StaticTiledMapTile" /> that make up the animation.
     /// </param>
     public AnimatedTiledMapTile( List< int > intervals, List< StaticTiledMapTile > frameTiles )
     {
@@ -96,7 +96,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     public Blendmode BlendMode { get; set; } = Blendmode.Alpha;
 
     /// <summary>
-    ///     The currently displayed animation frame.
+    /// The currently displayed animation frame.
     /// </summary>
     public TextureRegion TextureRegion
     {
@@ -105,7 +105,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     }
 
     /// <summary>
-    ///     X-coordinate of the currently displayed animation frame in the tilemap.
+    /// X-coordinate of the currently displayed animation frame in the tilemap.
     /// </summary>
     public float OffsetX
     {
@@ -114,7 +114,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     }
 
     /// <summary>
-    ///     Y-coordinate of the currently displayed animation frame in the tilemap.
+    /// Y-coordinate of the currently displayed animation frame in the tilemap.
     /// </summary>
     public float OffsetY
     {
@@ -127,7 +127,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     public MapObjects MapObjects => _mapObjects ??= new MapObjects();
 
     /// <summary>
-    ///     Gets the index into the animation images array
+    /// Gets the index into the animation images array
     /// </summary>
     public int GetCurrentFrameIndex()
     {
@@ -150,7 +150,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
     }
 
     /// <summary>
-    ///     Update the animation time
+    /// Update the animation time
     /// </summary>
     public static void UpdateAnimationBaseTime()
     {

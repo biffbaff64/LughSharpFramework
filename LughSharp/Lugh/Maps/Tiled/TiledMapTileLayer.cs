@@ -30,7 +30,7 @@ public class TiledMapTileLayer : MapLayer
     // ========================================================================
 
     /// <summary>
-    ///     Creates TiledMap layer
+    /// Creates TiledMap layer
     /// </summary>
     /// <param name="width"> layer width in tiles </param>
     /// <param name="height"> layer height in tiles </param>
@@ -52,7 +52,7 @@ public class TiledMapTileLayer : MapLayer
     public Cell[ , ] Cells      { get; }
 
     /// <summary>
-    ///     Gets the <see cref="Cell" /> at the given X, Y coordinates.
+    /// Gets the <see cref="Cell" /> at the given X, Y coordinates.
     /// </summary>
     /// <param name="x"> X coordinate </param>
     /// <param name="y"> Y coordinate </param>
@@ -73,7 +73,7 @@ public class TiledMapTileLayer : MapLayer
     }
 
     /// <summary>
-    ///     Sets the <see cref="Cell" /> at the given coordinates.
+    /// Sets the <see cref="Cell" /> at the given coordinates.
     /// </summary>
     /// <param name="x"> X coordinate </param>
     /// <param name="y"> Y coordinate </param>
@@ -94,7 +94,7 @@ public class TiledMapTileLayer : MapLayer
     }
 
     /// <summary>
-    ///     represents a cell in a TiledLayer: ITiledMapTile, flip and rotation properties.
+    /// represents a cell in a TiledLayer: ITiledMapTile, flip and rotation properties.
     /// </summary>
     [PublicAPI]
     public class Cell
@@ -110,7 +110,7 @@ public class TiledMapTileLayer : MapLayer
         private ITiledMapTile? _tile;
 
         /// <summary>
-        ///     return The tile currently assigned to this cell.
+        /// return The tile currently assigned to this cell.
         /// </summary>
         public ITiledMapTile? GetTile()
         {
@@ -118,7 +118,7 @@ public class TiledMapTileLayer : MapLayer
         }
 
         /// <summary>
-        ///     Sets the tile to be used for this cell.
+        /// Sets the tile to be used for this cell.
         /// </summary>
         /// <param name="tile"> the <see cref="ITiledMapTile" /> to use for this cell. </param>
         /// <returns> this, for method chaining </returns>
@@ -130,7 +130,7 @@ public class TiledMapTileLayer : MapLayer
         }
 
         /// <summary>
-        ///     Returns whether the tile should be flipped horizontally.
+        /// Returns whether the tile should be flipped horizontally.
         /// </summary>
         public bool GetFlipHorizontally()
         {
@@ -138,7 +138,7 @@ public class TiledMapTileLayer : MapLayer
         }
 
         /// <summary>
-        ///     Sets whether to flip the tile horizontally.
+        /// Sets whether to flip the tile horizontally.
         /// </summary>
         /// <param name="flipHorizontally"> whether or not to flip the tile horizontally. </param>
         /// <returns> this, for method chaining </returns>
@@ -150,7 +150,7 @@ public class TiledMapTileLayer : MapLayer
         }
 
         /// <summary>
-        ///     Returns whether the tile should be flipped vertically.
+        /// Returns whether the tile should be flipped vertically.
         /// </summary>
         public bool GetFlipVertically()
         {
@@ -158,7 +158,7 @@ public class TiledMapTileLayer : MapLayer
         }
 
         /// <summary>
-        ///     Sets whether to flip the tile vertically.
+        /// Sets whether to flip the tile vertically.
         /// </summary>
         /// <param name="flipVertically"> whether or not this tile should be flipped vertically. </param>
         /// <returns> this, for method chaining </returns>
@@ -170,7 +170,7 @@ public class TiledMapTileLayer : MapLayer
         }
 
         /// <summary>
-        ///     Returns the rotation of this cell, in 90 degree increments.
+        /// Returns the rotation of this cell, in 90 degree increments.
         /// </summary>
         public int GetRotation()
         {
@@ -178,7 +178,7 @@ public class TiledMapTileLayer : MapLayer
         }
 
         /// <summary>
-        ///     Sets the rotation of this cell, in 90 degree increments.
+        /// Sets the rotation of this cell, in 90 degree increments.
         /// </summary>
         /// <param name="rotation"> the rotation in 90 degree increments (see ints below). </param>
         /// <returns> this, for method chaining </returns>

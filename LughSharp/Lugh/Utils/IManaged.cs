@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-///     Interface for objects that are manageable, such as textures.
+/// Interface for objects that are manageable, such as textures.
 /// </summary>
 [PublicAPI]
 public interface IManaged

@@ -149,7 +149,7 @@ public class Wav
 //            }
 //            catch ( Exception ex )
 //            {
-////                StreamUtils.closeQuietly( this );
+////            StreamUtils.closeQuietly( this );
 //
 //                throw new GdxRuntimeException( "Error reading WAV file: " + file, ex );
 //            }

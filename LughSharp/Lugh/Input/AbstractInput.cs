@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Input;
 
 /// <summary>
-///     Base class for Input classes.
+/// Base class for Input classes.
 /// </summary>
 [PublicAPI]
 public abstract class AbstractInput : IInput
@@ -35,22 +35,22 @@ public abstract class AbstractInput : IInput
     private readonly List< int > _keysToOverride = [ ];
 
     /// <summary>
-    ///     A List of keys that are currently pressed.
+    /// A List of keys that are currently pressed.
     /// </summary>
     protected bool[] PressedKeys { get; set; } = new bool[ IInput.Keys.MAX_KEYCODE + 1 ];
 
     /// <summary>
-    ///     A list of keys that have JUST been pressed.
+    /// A list of keys that have JUST been pressed.
     /// </summary>
     protected bool[] JustPressedKeys { get; set; } = new bool[ IInput.Keys.MAX_KEYCODE + 1 ];
 
     /// <summary>
-    ///     True if any key has just been pressed.
+    /// True if any key has just been pressed.
     /// </summary>
     protected bool KeyJustPressed { get; set; } = false;
 
     /// <summary>
-    ///     The number of currently pressed keys.
+    /// The number of currently pressed keys.
     /// </summary>
     protected int PressedKeyCount { get; set; } = 0;
 
@@ -60,7 +60,7 @@ public abstract class AbstractInput : IInput
     // ========================================================================
 
     /// <summary>
-    ///     Returns TRUE if the key identified by the supplied <see cref="IInput.Keys" /> key code is pressed.
+    /// Returns TRUE if the key identified by the supplied <see cref="IInput.Keys" /> key code is pressed.
     /// </summary>
     public virtual bool IsKeyPressed( int key )
     {
@@ -73,8 +73,8 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    ///     Returns TRUE if the key identified by the supplied <see cref="IInput.Keys" />
-    ///     key code has <b>just</b> been pressed.
+    /// Returns TRUE if the key identified by the supplied <see cref="IInput.Keys" />
+    /// key code has <b>just</b> been pressed.
     /// </summary>
     public virtual bool IsKeyJustPressed( int key )
     {
@@ -108,7 +108,7 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    ///     Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.BACK" />
+    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.BACK" />
     /// </summary>
     public virtual bool IsOverrideBackKey()
     {
@@ -116,7 +116,7 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    ///     Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.BACK" /> key.
+    /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.BACK" /> key.
     /// </summary>
     /// <param name="addKey"> True to add, false to remove. </param>
     public virtual void SetOverrideBackKey( bool addKey )
@@ -125,7 +125,7 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    ///     Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.MENU" />
+    /// Returns <b>true</b> if the list of Override Keys contains <see cref="IInput.Keys.MENU" />
     /// </summary>
     public virtual bool IsOverrideMenuKey()
     {
@@ -133,7 +133,7 @@ public abstract class AbstractInput : IInput
     }
 
     /// <summary>
-    ///     Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.MENU" /> key.
+    /// Either <b>adds</b> or <b>removes</b> the <see cref="IInput.Keys.MENU" /> key.
     /// </summary>
     /// <param name="addKey"> True to add, false to remove. </param>
     public virtual void SetOverrideMenuKey( bool addKey )

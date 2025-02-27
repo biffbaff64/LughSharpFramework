@@ -34,7 +34,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-///     Wraps a standard OpenGL ES Cubemap. Must be disposed when it is no longer used.
+/// Wraps a standard OpenGL ES Cubemap. Must be disposed when it is no longer used.
 /// </summary>
 [PublicAPI]
 public class Cubemap : GLTexture, IManaged
@@ -46,7 +46,7 @@ public class Cubemap : GLTexture, IManaged
     // ========================================================================
 
     /// <summary>
-    ///     Construct a Cubemap based on the given CubemapData.
+    /// Construct a Cubemap based on the given CubemapData.
     /// </summary>
     public Cubemap( ICubemapData? data ) : base( IGL.GL_TEXTURE_CUBE_MAP )
     {
@@ -63,8 +63,8 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Construct a Cubemap with the specified texture files for the sides,
-    ///     optionally generating mipmaps (Default is do not generate mipmaps).
+    /// Construct a Cubemap with the specified texture files for the sides,
+    /// optionally generating mipmaps (Default is do not generate mipmaps).
     /// </summary>
     public Cubemap( FileInfo positiveX,
                     FileInfo negativeX,
@@ -83,8 +83,8 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Construct a Cubemap with the specified <see cref="Pixmap" />s for the sides,
-    ///     optionally generating mipmaps.
+    /// Construct a Cubemap with the specified <see cref="Pixmap" />s for the sides,
+    /// optionally generating mipmaps.
     /// </summary>
     public Cubemap( Pixmap? positiveX,
                     Pixmap? negativeX,
@@ -103,7 +103,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Construct a Cubemap with <see cref="Pixmap" />s for each side of the specified size.
+    /// Construct a Cubemap with <see cref="Pixmap" />s for each side of the specified size.
     /// </summary>
     public Cubemap( int width, int height, int depth, PixelType.Format format )
         : this( new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
@@ -116,7 +116,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Construct a Cubemap with the specified <see cref="ITextureData" />'s for the sides
+    /// Construct a Cubemap with the specified <see cref="ITextureData" />'s for the sides
     /// </summary>
     public Cubemap( ITextureData? positiveX,
                     ITextureData? negativeX,
@@ -138,14 +138,14 @@ public class Cubemap : GLTexture, IManaged
     public override int Depth  => 0;
 
     /// <summary>
-    ///     return the number of managed cubemaps currently loaded
+    /// return the number of managed cubemaps currently loaded
     /// </summary>
     public static int NumManagedCubemaps => _managedCubemaps[ GdxApi.App ]?.Count ?? 0;
 
     public bool IsManaged => Data.IsManaged;
 
     /// <summary>
-    ///     Sets the sides of this cubemap to the specified <see cref="ICubemapData" />.
+    /// Sets the sides of this cubemap to the specified <see cref="ICubemapData" />.
     /// </summary>
     public void Load( ICubemapData data )
     {
@@ -166,8 +166,8 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Used internally to reload after context loss. Creates a new GL handle then
-    ///     calls <see cref="Load(ICubemapData?)" />.
+    /// Used internally to reload after context loss. Creates a new GL handle then
+    /// calls <see cref="Load(ICubemapData?)" />.
     /// </summary>
     public override void Reload()
     {
@@ -182,7 +182,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Adds a new entry to the list of managed cubemnaps.
+    /// Adds a new entry to the list of managed cubemnaps.
     /// </summary>
     /// <param name="app"></param>
     /// <param name="cubemap"></param>
@@ -195,7 +195,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Clears all managed cubemaps.
+    /// Clears all managed cubemaps.
     /// </summary>
     public static void ClearAllCubemaps( IApplication app )
     {
@@ -203,7 +203,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Invalidate all managed cubemaps. This is an internal method. Do not use it!
+    /// Invalidate all managed cubemaps. This is an internal method. Do not use it!
     /// </summary>
     public static void InvalidateAllCubemaps( IApplication app )
     {
@@ -281,7 +281,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Retuens a string describing the managed status of this Cubemap.
+    /// Retuens a string describing the managed status of this Cubemap.
     /// </summary>
     public static string GetManagedStatus()
     {
@@ -299,7 +299,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Disposes all resources associated with the cubemap.
+    /// Disposes all resources associated with the cubemap.
     /// </summary>
     public override void Dispose()
     {
@@ -337,7 +337,7 @@ public class Cubemap : GLTexture, IManaged
     #region cubemapside
 
     /// <summary>
-    ///     Enum to identify each side of a Cubemap
+    /// Enum to identify each side of a Cubemap
     /// </summary>
     [PublicAPI]
     public class CubemapSide
@@ -355,37 +355,37 @@ public class Cubemap : GLTexture, IManaged
         // ====================================================================
 
         /// <summary>
-        ///     The positive X and first side of the cubemap
+        /// The positive X and first side of the cubemap
         /// </summary>
         public static readonly CubemapSide PositiveX =
             new( "PositiveX", InnerEnum.PositiveX, 0, IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, -1, 0, 1, 0, 0 );
 
         /// <summary>
-        ///     The negative X and second side of the cubemap
+        /// The negative X and second side of the cubemap
         /// </summary>
         public static readonly CubemapSide NegativeX =
             new( "NegativeX", InnerEnum.NegativeX, 1, IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, -1, 0, -1, 0, 0 );
 
         /// <summary>
-        ///     The positive Y and third side of the cubemap
+        /// The positive Y and third side of the cubemap
         /// </summary>
         public static readonly CubemapSide PositiveY =
             new( "PositiveY", InnerEnum.PositiveY, 2, IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, 0, 1, 0, 1, 0 );
 
         /// <summary>
-        ///     The negative Y and fourth side of the cubemap
+        /// The negative Y and fourth side of the cubemap
         /// </summary>
         public static readonly CubemapSide NegativeY =
             new( "NegativeY", InnerEnum.NegativeY, 3, IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, 0, -1, 0, -1, 0 );
 
         /// <summary>
-        ///     The positive Z and fifth side of the cubemap
+        /// The positive Z and fifth side of the cubemap
         /// </summary>
         public static readonly CubemapSide PositiveZ =
             new( "PositiveZ", InnerEnum.PositiveZ, 4, IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, -1, 0, 0, 0, 1 );
 
         /// <summary>
-        ///     The negative Z and sixth side of the cubemap
+        /// The negative Z and sixth side of the cubemap
         /// </summary>
         public static readonly CubemapSide NegativeZ =
             new( "NegativeZ", InnerEnum.NegativeZ, 5, IGL.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, -1, 0, 0, 0, -1 );
@@ -434,28 +434,28 @@ public class Cubemap : GLTexture, IManaged
         public int       OrdinalValue   { get; private set; }
 
         /// <summary>
-        ///     The zero based index of the side in the cubemap
+        /// The zero based index of the side in the cubemap
         /// </summary>
         public int Index { get; set; }
 
         /// <summary>
-        ///     The OpenGL target (used for glTexImage2D) of the side.
+        /// The OpenGL target (used for glTexImage2D) of the side.
         /// </summary>
         public int GLTarget { get; set; }
 
         /// <summary>
-        ///     The up vector to target the side.
+        /// The up vector to target the side.
         /// </summary>
         public Vector3 Up { get; set; }
 
         /// <summary>
-        ///     The direction vector to target the side.
+        /// The direction vector to target the side.
         /// </summary>
         public Vector3 Direction { get; set; }
 
         /// <summary>
-        ///     Sets the supplied <see cref="Vector3" /> to the contents of
-        ///     <see cref="Up" /> and returns it to the caller.
+        /// Sets the supplied <see cref="Vector3" /> to the contents of
+        /// <see cref="Up" /> and returns it to the caller.
         /// </summary>
         public Vector3 GetUp( Vector3 vec3 )
         {
@@ -463,8 +463,8 @@ public class Cubemap : GLTexture, IManaged
         }
 
         /// <summary>
-        ///     Sets the supplied <see cref="Vector3" /> to the contents of
-        ///     <see cref="Direction" /> and returns it to the caller.
+        /// Sets the supplied <see cref="Vector3" /> to the contents of
+        /// <see cref="Direction" /> and returns it to the caller.
         /// </summary>
         public Vector3 GetDirection( Vector3 vec3 )
         {
@@ -472,7 +472,7 @@ public class Cubemap : GLTexture, IManaged
         }
 
         /// <summary>
-        ///     Returns an array of all <see cref="CubemapSide" /> values.
+        /// Returns an array of all <see cref="CubemapSide" /> values.
         /// </summary>
         public static CubemapSide[] Values()
         {
@@ -480,7 +480,7 @@ public class Cubemap : GLTexture, IManaged
         }
 
         /// <summary>
-        ///     Returns the <see cref="CubemapSide" /> with the specified name.
+        /// Returns the <see cref="CubemapSide" /> with the specified name.
         /// </summary>
         /// <param name="name">The name of the cubemap side.</param>
         /// <returns>The <see cref="CubemapSide" /> with the specified name.</returns>

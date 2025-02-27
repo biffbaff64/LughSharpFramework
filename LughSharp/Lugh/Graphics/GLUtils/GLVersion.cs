@@ -31,10 +31,10 @@ using Platform = LughSharp.Lugh.Core.Platform;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-///     Wrapper for the current OpenGL Version used by this library.
+/// Wrapper for the current OpenGL Version used by this library.
 /// </summary>
 /// <remarks>
-///     It is HIGHLY likely that this class can be removed, with some minor work elsewhere.
+/// It is HIGHLY likely that this class can be removed, with some minor work elsewhere.
 /// </remarks>
 [PublicAPI]
 [DebuggerDisplay( "DebugVersionString" )]
@@ -107,8 +107,8 @@ public class GLVersion
     }
 
     /// <summary>
-    ///     Checks to see if the current GL connection version is higher, or
-    ///     equal to the provided test versions.
+    /// Checks to see if the current GL connection version is higher, or
+    /// equal to the provided test versions.
     /// </summary>
     /// <param name="testMajorVersion"> the major version to test against </param>
     /// <param name="testMinorVersion"> the minor version to test against </param>
@@ -120,7 +120,7 @@ public class GLVersion
     }
 
     /// <summary>
-    ///     Returns a string with the current GL connection data.
+    /// Returns a string with the current GL connection data.
     /// </summary>
     public string DebugVersionString()
     {

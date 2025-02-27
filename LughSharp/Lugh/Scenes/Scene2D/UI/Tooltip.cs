@@ -27,7 +27,7 @@ using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     A listener that shows a tooltip actor when the mouse is over another actor.
+/// A listener that shows a tooltip actor when the mouse is over another actor.
 /// </summary>
 [PublicAPI]
 public class Tooltip< T > : InputListener where T : Actor

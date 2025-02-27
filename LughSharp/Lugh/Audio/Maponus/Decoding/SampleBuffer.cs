@@ -25,8 +25,8 @@
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-///     The SampleBuffer class implements an output buffer that provides storage for a
-///     fixed size block of samples.
+/// The SampleBuffer class implements an output buffer that provides storage for a
+/// fixed size block of samples.
 /// </summary>
 [PublicAPI]
 public class SampleBuffer : AudioBase
@@ -38,8 +38,8 @@ public class SampleBuffer : AudioBase
     // ========================================================================
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="SampleBuffer" /> class with the
-    ///     specified sample frequency and number of channels.
+    /// Initializes a new instance of the <see cref="SampleBuffer" /> class with the
+    /// specified sample frequency and number of channels.
     /// </summary>
     /// <param name="sampleFrequency">The sample frequency of the audio samples.</param>
     /// <param name="numberOfChannels">The number of channels in the audio samples.</param>
@@ -58,22 +58,22 @@ public class SampleBuffer : AudioBase
     }
 
     /// <summary>
-    ///     Gets or sets the sample frequency of the audio samples.
+    /// Gets or sets the sample frequency of the audio samples.
     /// </summary>
     public virtual int SampleFrequency { get; set; }
 
     /// <summary>
-    ///     Gets the number of channels in the audio samples.
+    /// Gets the number of channels in the audio samples.
     /// </summary>
     public virtual int ChannelCount => _channels;
 
     /// <summary>
-    ///     Gets the buffer containing the audio samples.
+    /// Gets the buffer containing the audio samples.
     /// </summary>
     public virtual short[] Buffer => _buffer;
 
     /// <summary>
-    ///     Gets the length of the buffer.
+    /// Gets the length of the buffer.
     /// </summary>
     public virtual int BufferLength => _bufferp[ 0 ];
 
@@ -83,7 +83,7 @@ public class SampleBuffer : AudioBase
     }
 
     /// <summary>
-    ///     Appends a 16-bit PCM sample to the buffer.
+    /// Appends a 16-bit PCM sample to the buffer.
     /// </summary>
     /// <param name="channel">The channel index.</param>
     /// <param name="valueRenamed">The 16-bit PCM sample value.</param>
@@ -94,7 +94,7 @@ public class SampleBuffer : AudioBase
     }
 
     /// <summary>
-    ///     Appends an array of floating-point samples to the buffer.
+    /// Appends an array of floating-point samples to the buffer.
     /// </summary>
     /// <param name="channel">The channel index.</param>
     /// <param name="samples">The array of floating-point samples.</param>
@@ -119,7 +119,7 @@ public class SampleBuffer : AudioBase
     }
 
     /// <summary>
-    ///     Writes the buffer to the file (Random Access).
+    /// Writes the buffer to the file (Random Access).
     /// </summary>
     public override void WriteBuffer( int val )
     {
@@ -127,7 +127,7 @@ public class SampleBuffer : AudioBase
     }
 
     /// <summary>
-    ///     Closes the buffer.
+    /// Closes the buffer.
     /// </summary>
     public override void Close()
     {
@@ -135,7 +135,7 @@ public class SampleBuffer : AudioBase
     }
 
     /// <summary>
-    ///     Clears the buffer.
+    /// Clears the buffer.
     /// </summary>
     public override void ClearBuffer()
     {
@@ -146,7 +146,7 @@ public class SampleBuffer : AudioBase
     }
 
     /// <summary>
-    ///     Sets the stop flag.
+    /// Sets the stop flag.
     /// </summary>
     public override void SetStopFlag()
     {

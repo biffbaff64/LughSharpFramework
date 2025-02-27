@@ -579,8 +579,8 @@ public class OpenALAudio : IGLAudio
     }
 
     /// <summary>
-    ///     Retains a list of the most recently played sounds and stops the sound played
-    ///     least recently if necessary for a new sound to play.
+    /// Retains a list of the most recently played sounds and stops the sound played
+    /// least recently if necessary for a new sound to play.
     /// </summary>
     public void Retain( OpenALSound sound, bool stop )
     {
@@ -609,7 +609,7 @@ public class OpenALAudio : IGLAudio
     }
 
     /// <summary>
-    ///     Removes the disposed sound from the least recently played list.
+    /// Removes the disposed sound from the least recently played list.
     /// </summary>
     public void Forget( OpenALSound sound )
     {

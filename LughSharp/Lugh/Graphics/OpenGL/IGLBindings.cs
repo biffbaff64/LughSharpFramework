@@ -3155,8 +3155,8 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object in which the association is to be made.</param>
     /// <param name="index">Specifies the index of the generic vertex attribute to be bound.</param>
     /// <param name="name">
-    ///     Specifies a null terminated string containing the name of the vertex shader attribute variable to
-    ///     which index is to be bound.
+    /// Specifies a null terminated string containing the name of the vertex shader attribute variable to
+    /// which index is to be bound.
     /// </param>
     unsafe void BindAttribLocation( int program, uint index, byte* name );
 
@@ -3167,8 +3167,8 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object in which the association is to be made.</param>
     /// <param name="index">Specifies the index of the generic vertex attribute to be bound.</param>
     /// <param name="name">
-    ///     Specifies a string containing the name of the vertex shader attribute variable to which index is to
-    ///     be bound.
+    /// Specifies a string containing the name of the vertex shader attribute variable to which index is to
+    /// be bound.
     /// </param>
     void BindAttribLocation( int program, uint index, string name );
 
@@ -3309,7 +3309,7 @@ public partial interface IGLBindings
     /// <param name="maxCount">Specifies the size of the array for storing object names.</param>
     /// <param name="count">Returns the number of names actually returned in shaders.</param>
     /// <param name="shaders">Returns the names of the shader objects attached to program.</param>
-    unsafe void GetAttachedShaders( uint program, int maxCount, int* count, uint* shaders );
+    unsafe void GetAttachedShaders( int program, int maxCount, int* count, uint* shaders );
 
     /// <summary>
     /// Returns the shader objects attached to program
@@ -3317,7 +3317,7 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="maxCount">Specifies a maximum amount of shaders to return.</param>
     /// <returns>Returns an array of shader objects attached to program resized to the amount of shaders actually attached.</returns>
-    uint[] GetAttachedShaders( uint program, int maxCount );
+    uint[] GetAttachedShaders( int program, int maxCount );
 
     /// <summary>
     /// Returns the location of an attribute variable
@@ -3480,8 +3480,8 @@ public partial interface IGLBindings
     /// <param name="program">Specifies the program object to be queried.</param>
     /// <param name="location">Specifies the location of the uniform variable to be queried.</param>
     /// <param name="parameters">
-    ///     A <see langword="ref" /> to an array to receive the value of the uniform variable at the location
-    ///     specified by location.
+    /// A <see langword="ref" /> to an array to receive the value of the uniform variable at the location
+    /// specified by location.
     /// </param>
     void GetUniformiv( int program, int location, ref int[] parameters );
 
@@ -3660,8 +3660,8 @@ public partial interface IGLBindings
     /// Replaces the source code in a shader object
     /// </summary>
     /// <param name="shader">Specifies the handle of the shader object whose source code is to be replaced.</param>
-    /// <param name="string">Specifies an array of strings containing the source code to be loaded into the shader.</param>
-    void ShaderSource( int shader, params string[] @string );
+    /// <param name="stringParam">Specifies an array of strings containing the source code to be loaded into the shader.</param>
+    void ShaderSource( int shader, params string[] stringParam );
 
     /// <summary>
     /// Installs a program object as part of current rendering state
@@ -4011,12 +4011,12 @@ public partial interface IGLBindings
 //
 //    unsafe void UniformMatrix4fv( int location, int count, bool transpose, Buffer buffer );
 
-    /// <summary>
-    /// Validates a program object
-    /// </summary>
-    /// <param name="program">Specifies the handle of the program object to be validated</param>
-    /// <returns><c>true</c> if validation is successful, <c>false</c> otherwise</returns>
-    bool ValidateProgram( uint program );
+/// <summary>
+/// Validates a program object
+/// </summary>
+/// <param name="program">Specifies the handle of the program object to be validated</param>
+/// <returns><c>true</c> if validation is successful, <c>false</c> otherwise</returns>
+bool ValidateProgram( int program );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute

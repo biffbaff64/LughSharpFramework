@@ -32,23 +32,23 @@ using Exception = System.Exception;
 namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
-///     A Pixmap represents an image in memory. It has a width and height expressed
-///     in pixels as well as a <see cref="PixelType.Format" /> specifying the number and order
-///     of color components per pixel.
-///     <para>
-///         Coordinates of pixels are specified with respect to the top left corner of
-///         the image, with the x-axis pointing to the right and the y-axis pointing
-///         downwards.
-///     </para>
-///     <para>
-///         By default all methods use blending. You can disable blending by setting it
-///         to <see cref="BlendTypes.None" />, which may reduce blitting time by ~30%.
-///     </para>
-///     <para>
-///         The <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" /> method
-///         will scale and stretch the source image to a target image. In this case either nearest
-///         neighbour or bilinear filtering can be used.
-///     </para>
+/// A Pixmap represents an image in memory. It has a width and height expressed
+/// in pixels as well as a <see cref="PixelType.Format" /> specifying the number and order
+/// of color components per pixel.
+/// <para>
+///     Coordinates of pixels are specified with respect to the top left corner of
+///     the image, with the x-axis pointing to the right and the y-axis pointing
+///     downwards.
+/// </para>
+/// <para>
+///     By default all methods use blending. You can disable blending by setting it
+///     to <see cref="BlendTypes.None" />, which may reduce blitting time by ~30%.
+/// </para>
+/// <para>
+///     The <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" /> method
+///     will scale and stretch the source image to a target image. In this case either nearest
+///     neighbour or bilinear filtering can be used.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class Pixmap : IDisposable
@@ -61,7 +61,7 @@ public class Pixmap : IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new Pixmap instance with the given width, height and format.
+    /// Creates a new Pixmap instance with the given width, height and format.
     /// </summary>
     /// <param name="width">The width in pixels.</param>
     /// <param name="height">The height in pixels.</param>
@@ -84,8 +84,8 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Creates a new Pixmap instance from the given encoded image data. The image can be encoded
-    ///     as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
+    /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded
+    /// as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
     /// </summary>
     public Pixmap( byte[] encodedData, int offset, int len )
     {
@@ -102,8 +102,8 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Creates a new Pixmap instance from the given encoded image data. The image can be encoded
-    ///     as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
+    /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded
+    /// as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
     /// </summary>
     /// <param name="buffer"> A ByteBuffer holding the encoded data. </param>
     /// <param name="offset"> The position in the data to start copying from. </param>
@@ -129,7 +129,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Creates a new Pixmap from the supplied encoded data.
+    /// Creates a new Pixmap from the supplied encoded data.
     /// </summary>
     /// <param name="buffer"> A ByteBuffer holding the encoded data. </param>
     public Pixmap( ByteBuffer buffer )
@@ -138,12 +138,12 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Creates a new Pixmap instance from the given file. The file must be a Png,
-    ///     Jpeg or Bitmap. Paletted formats are not supported.
+    /// Creates a new Pixmap instance from the given file. The file must be a Png,
+    /// Jpeg or Bitmap. Paletted formats are not supported.
     /// </summary>
     /// <param name="file"> The file. </param>
     /// <exception cref="GdxRuntimeException">
-    ///     Thrown if there were errors loading or reading the file.
+    /// Thrown if there were errors loading or reading the file.
     /// </exception>
     public Pixmap( FileInfo file )
     {
@@ -161,7 +161,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Creates a new Pixmap object from the supplied <see cref="Gdx2DPixmap" />.
+    /// Creates a new Pixmap object from the supplied <see cref="Gdx2DPixmap" />.
     /// </summary>
     public Pixmap( Gdx2DPixmap gdx2DPixmap )
     {
@@ -173,13 +173,13 @@ public class Pixmap : IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Returns the OpenGL pixel format of this Pixmap.
+    /// Returns the OpenGL pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, or GL_LUMINANCE_ALPHA.</returns>
     public int GLPixelFormat => PixmapFormat.ToGLPixelFormat( ( int )Gdx2DPixmap.ColorType );
 
     /// <summary>
-    ///     Returns the OpenGL ES internal pixel format of this Pixmap.
+    /// Returns the OpenGL ES internal pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_RG, GL_RGB, GL_RGBA, GL_RED, GL_DEPTH_COMPONENT, or GL_DEPTH_STENCIL.</returns>
     public int GLInternalPixelFormat
@@ -202,7 +202,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Returns the OpenGL Data Type of this Pixmap.
+    /// Returns the OpenGL Data Type of this Pixmap.
     /// </summary>
     /// <returns> one of GL_UNSIGNED_BYTE, GL_UNSIGNED_SHORT </returns>
     public int GLDataType
@@ -241,20 +241,20 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Returns the byte[] array holding the pixel data. For the format Alpha each
-    ///     value is encoded as a byte.
-    ///     <para>
-    ///         For the format LuminanceAlpha the luminance is the first byte and the alpha is
-    ///         the second byte of the pixel.
-    ///     </para>
-    ///     <para>
-    ///         For the formats RGB888 and RGBA8888 the color components are stored in a single
-    ///         byte each in the order red, green, blue (alpha).
-    ///     </para>
-    ///     <para>
-    ///         For the formats RGB565 and RGBA4444 the pixel colors are stored in shorts in
-    ///         machine dependent order.
-    ///     </para>
+    /// Returns the byte[] array holding the pixel data. For the format Alpha each
+    /// value is encoded as a byte.
+    /// <para>
+    ///     For the format LuminanceAlpha the luminance is the first byte and the alpha is
+    ///     the second byte of the pixel.
+    /// </para>
+    /// <para>
+    ///     For the formats RGB888 and RGBA8888 the color components are stored in a single
+    ///     byte each in the order red, green, blue (alpha).
+    /// </para>
+    /// <para>
+    ///     For the formats RGB565 and RGBA4444 the pixel colors are stored in shorts in
+    ///     machine dependent order.
+    /// </para>
     /// </summary>
     public ByteBuffer ByteBuffer
     {
@@ -276,8 +276,8 @@ public class Pixmap : IDisposable
     public byte[] PixelData => Gdx2DPixmap.PixmapBuffer.BackingArray();
 
     /// <summary>
-    ///     Sets the type of interpolation <see cref="BlendTypes" /> to be used in
-    ///     conjunction with <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" />.
+    /// Sets the type of interpolation <see cref="BlendTypes" /> to be used in
+    /// conjunction with <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" />.
     /// </summary>
     public Filter FilterValue
     {
@@ -293,8 +293,8 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Downloads an image from http(s) url and passes it as a Pixmap to the
-    ///     specified <see cref="IDownloadPixmapResponseListener" />.
+    /// Downloads an image from http(s) url and passes it as a Pixmap to the
+    /// specified <see cref="IDownloadPixmapResponseListener" />.
     /// </summary>
     /// <param name="url">http url to download the image from.</param>
     /// <param name="responseListener"> The listener to call once the image is available as a Pixmap</param>
@@ -306,7 +306,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Sets the color for drawing operations.
+    /// Sets the color for drawing operations.
     /// </summary>
     /// <param name="color"> The color, encoded as RGBA8888. </param>
     public void SetColor( Color color )
@@ -315,7 +315,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Sets the color for drawing operations.
+    /// Sets the color for drawing operations.
     /// </summary>
     /// <param name="r"> The red component. </param>
     /// <param name="g"> The green component. </param>
@@ -327,7 +327,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Fills the complete bitmap with the currently set color.
+    /// Fills the complete bitmap with the currently set color.
     /// </summary>
     public void FillWithCurrentColor()
     {
@@ -335,7 +335,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Returns the <see cref="PixelType.Format" /> of this Pixmap.
+    /// Returns the <see cref="PixelType.Format" /> of this Pixmap.
     /// </summary>
     public PixelType.Format GetColorFormat()
     {
@@ -343,7 +343,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Gets the number of bits per pixel.
+    /// Gets the number of bits per pixel.
     /// </summary>
     public int GetBitDepth()
     {
@@ -351,7 +351,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Draws a line between the given coordinates using the currently set color.
+    /// Draws a line between the given coordinates using the currently set color.
     /// </summary>
     /// <param name="x"> The x-coodinate of the first point </param>
     /// <param name="y"> The y-coordinate of the first point </param>
@@ -363,8 +363,8 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Draws a rectangle outline starting at x, y extending by width to the right
-    ///     and by height downwards (y-axis points downwards) using the current color.
+    /// Draws a rectangle outline starting at x, y extending by width to the right
+    /// and by height downwards (y-axis points downwards) using the current color.
     /// </summary>
     /// <param name="x"> The x coordinate </param>
     /// <param name="y"> The y coordinate </param>
@@ -376,7 +376,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Draws an area from another Pixmap to this Pixmap.
+    /// Draws an area from another Pixmap to this Pixmap.
     /// </summary>
     /// <param name="pixmap"> The other Pixmap </param>
     /// <param name="x"> The target x-coordinate (top left corner) </param>
@@ -387,7 +387,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Draws an area from another Pixmap to this Pixmap.
+    /// Draws an area from another Pixmap to this Pixmap.
     /// </summary>
     /// <param name="pixmap"> The other Pixmap </param>
     /// <param name="x"> The target x-coordinate (top left corner) </param>
@@ -411,12 +411,12 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Draws an area from another Pixmap to this Pixmap. This will automatically
-    ///     scale and stretch the source image to the specified target rectangle.
-    ///     <para>
-    ///         Use <see cref="Pixmap.Filter" /> property to specify the type of filtering to
-    ///         be used (NearestNeighbour or Bilinear).
-    ///     </para>
+    /// Draws an area from another Pixmap to this Pixmap. This will automatically
+    /// scale and stretch the source image to the specified target rectangle.
+    /// <para>
+    ///     Use <see cref="Pixmap.Filter" /> property to specify the type of filtering to
+    ///     be used (NearestNeighbour or Bilinear).
+    /// </para>
     /// </summary>
     /// <param name="pixmap"> The other Pixmap </param>
     /// <param name="srcx"> The source x-coordinate (top left corner) </param>
@@ -443,8 +443,8 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Fills a rectangle starting at x, y extending by width to the right and by
-    ///     height downwards (y-axis points downwards) using the current color.
+    /// Fills a rectangle starting at x, y extending by width to the right and by
+    /// height downwards (y-axis points downwards) using the current color.
     /// </summary>
     /// <param name="x"> The x coordinate </param>
     /// <param name="y"> The y coordinate </param>
@@ -456,8 +456,8 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Draws a circle outline with the center at x,y and a radius using the
-    ///     current color and stroke width.
+    /// Draws a circle outline with the center at x,y and a radius using the
+    /// current color and stroke width.
     /// </summary>
     /// <param name="x"> The x-coordinate of the center </param>
     /// <param name="y"> The y-coordinate of the center </param>
@@ -468,7 +468,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Fills a circle with the center at x,y and a radius using the current color.
+    /// Fills a circle with the center at x,y and a radius using the current color.
     /// </summary>
     /// <param name="x"> The x-coordinate of the center </param>
     /// <param name="y"> The y-coordinate of the center </param>
@@ -479,7 +479,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Fills a triangle with vertices at x1,y1 and x2,y2 and x3,y3 using the current color.
+    /// Fills a triangle with vertices at x1,y1 and x2,y2 and x3,y3 using the current color.
     /// </summary>
     /// <param name="x1"> The x-coordinate of vertex 1 </param>
     /// <param name="y1"> The y-coordinate of vertex 1 </param>
@@ -493,8 +493,8 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Returns the 32-bit RGBA8888 value of the pixel at x, y.
-    ///     For Alpha formats the RGB components will be one.
+    /// Returns the 32-bit RGBA8888 value of the pixel at x, y.
+    /// For Alpha formats the RGB components will be one.
     /// </summary>
     /// <param name="x"> The x-coordinate </param>
     /// <param name="y"> The y-coordinate </param>
@@ -505,7 +505,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Draws a pixel at the given location with the current color.
+    /// Draws a pixel at the given location with the current color.
     /// </summary>
     /// <param name="x"> the x-coordinate </param>
     /// <param name="y"> the y-coordinate </param>
@@ -515,7 +515,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Draws a pixel at the given location with the given color.
+    /// Draws a pixel at the given location with the given color.
     /// </summary>
     /// <param name="x"> The x-coordinate </param>
     /// <param name="y"> The y-coordinate </param>
@@ -526,7 +526,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Creates a Pixmap from a part of the current framebuffer.
+    /// Creates a Pixmap from a part of the current framebuffer.
     /// </summary>
     /// <param name="x"> Framebuffer region x </param>
     /// <param name="y"> Framebuffer region y </param>
@@ -577,7 +577,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Returns the pixel format from a valid named string.
+    /// Returns the pixel format from a valid named string.
     /// </summary>
     public static PixelType.Format FormatFromString( string str )
     {
@@ -625,18 +625,18 @@ public class Pixmap : IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Response listener for <see cref="Pixmap.DownloadFromUrl(String, IDownloadPixmapResponseListener)" />
+    /// Response listener for <see cref="Pixmap.DownloadFromUrl(String, IDownloadPixmapResponseListener)" />
     /// </summary>
     [PublicAPI]
     public interface IDownloadPixmapResponseListener
     {
         /// <summary>
-        ///     Called on the render thread when image was downloaded successfully.
+        /// Called on the render thread when image was downloaded successfully.
         /// </summary>
         void DownloadComplete( Pixmap pixmap );
 
         /// <summary>
-        ///     Called when image download failed. This might get called on a background thread.
+        /// Called when image download failed. This might get called on a background thread.
         /// </summary>
         void DownloadFailed( Exception e );
     }
@@ -649,18 +649,18 @@ public class Pixmap : IDisposable
     public Gdx2DPixmap Gdx2DPixmap { get; set; }                // 
 
     /// <summary>
-    ///     Returns the width of the Pixmap in pixels.
+    /// Returns the width of the Pixmap in pixels.
     /// </summary>
     public int Width => ( int )Gdx2DPixmap.Width;
 
     /// <summary>
-    ///     Returns the height of the Pixmap in pixels.
+    /// Returns the height of the Pixmap in pixels.
     /// </summary>
     public int Height => ( int )Gdx2DPixmap.Height;
 
     /// <summary>
-    ///     Sets the type of <see cref="BlendTypes" /> to be used for all operations.
-    ///     Default is <see cref="BlendTypes.SourceOver" />.
+    /// Sets the type of <see cref="BlendTypes" /> to be used for all operations.
+    /// Default is <see cref="BlendTypes.SourceOver" />.
     /// </summary>
     public BlendTypes Blending { get; set; } = BlendTypes.SourceOver;
 
@@ -672,8 +672,8 @@ public class Pixmap : IDisposable
     #region dispose pattern
 
     /// <summary>
-    ///     Performs application-defined tasks associated with freeing, releasing,
-    ///     or resetting unmanaged resources.
+    /// Performs application-defined tasks associated with freeing, releasing,
+    /// or resetting unmanaged resources.
     /// </summary>
     public void Dispose()
     {
@@ -707,7 +707,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Blending functions to be set with <see cref="Pixmap.Blending" />.
+    /// Blending functions to be set with <see cref="Pixmap.Blending" />.
     /// </summary>
     [PublicAPI]
     public enum BlendTypes : int
@@ -719,7 +719,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    ///     Filters to be used with <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" />.
+    /// Filters to be used with <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" />.
     /// </summary>
     [PublicAPI]
     public enum Filter : int

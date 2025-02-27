@@ -30,10 +30,10 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-///     A <see cref="ITextureData" /> implementation which should be used to create
-///     GL only textures.
-///     This TextureData fits perfectly for <see cref="FrameBuffer" />s.
-///     The data is not managed.
+/// A <see cref="ITextureData" /> implementation which should be used to create
+/// GL only textures.
+/// This TextureData fits perfectly for <see cref="FrameBuffer" />s.
+/// The data is not managed.
 /// </summary>
 [PublicAPI]
 public class GLOnlyTextureData : ITextureData
@@ -41,26 +41,26 @@ public class GLOnlyTextureData : ITextureData
     // ========================================================================
 
     /// <summary>
-    ///     See <a href="https://www.khronos.org/opengles/sdk/docs/man/xhtml/glTexImage2D.xml">glTexImage2D</a>
+    /// See <a href="https://www.khronos.org/opengles/sdk/docs/man/xhtml/glTexImage2D.xml">glTexImage2D</a>
     /// </summary>
     /// <param name="width"></param>
     /// <param name="height"></param>
     /// <param name="mipMapLevel"></param>
     /// <param name="internalFormat">
-    ///     Specifies the internal format of the texture. Must be one of the following symbolic constants:
-    ///     <see cref="IGL.GL_ALPHA" />, <see cref="IGL.GL_LUMINANCE" />, <see cref="IGL.GL_LUMINANCE_ALPHA" />,
-    ///     <see cref="IGL.GL_RGB" />, <see cref="IGL.GL_RGBA" />.
+    /// Specifies the internal format of the texture. Must be one of the following symbolic constants:
+    /// <see cref="IGL.GL_ALPHA" />, <see cref="IGL.GL_LUMINANCE" />, <see cref="IGL.GL_LUMINANCE_ALPHA" />,
+    /// <see cref="IGL.GL_RGB" />, <see cref="IGL.GL_RGBA" />.
     /// </param>
     /// <param name="format">
-    ///     Specifies the format of the texel data. Must match internalFormat.
-    ///     The following symbolic values are accepted:
-    ///     <see cref="IGL.GL_ALPHA" />, <see cref="IGL.GL_RGB" />, <see cref="IGL.GL_RGBA" />,
-    ///     <see cref="IGL.GL_LUMINANCE" />, and <see cref="IGL.GL_LUMINANCE_ALPHA" />.
+    /// Specifies the format of the texel data. Must match internalFormat.
+    /// The following symbolic values are accepted:
+    /// <see cref="IGL.GL_ALPHA" />, <see cref="IGL.GL_RGB" />, <see cref="IGL.GL_RGBA" />,
+    /// <see cref="IGL.GL_LUMINANCE" />, and <see cref="IGL.GL_LUMINANCE_ALPHA" />.
     /// </param>
     /// <param name="type">
-    ///     Specifies the data type of the texel data. The following symbolic values are accepted:
-    ///     <see cref="IGL.GL_UNSIGNED_BYTE" />, <see cref="IGL.GL_UNSIGNED_SHORT_5_6_5" />,
-    ///     <see cref="IGL.GL_UNSIGNED_SHORT_4_4_4_4" />, and <see cref="IGL.GL_UNSIGNED_SHORT_5_5_5_1" />.
+    /// Specifies the data type of the texel data. The following symbolic values are accepted:
+    /// <see cref="IGL.GL_UNSIGNED_BYTE" />, <see cref="IGL.GL_UNSIGNED_SHORT_5_6_5" />,
+    /// <see cref="IGL.GL_UNSIGNED_SHORT_4_4_4_4" />, and <see cref="IGL.GL_UNSIGNED_SHORT_5_5_5_1" />.
     /// </param>
     public GLOnlyTextureData( int width,
                               int height,
@@ -110,7 +110,7 @@ public class GLOnlyTextureData : ITextureData
     }
 
     /// <summary>
-    ///     GLOnlyTextureData objects are not Managed.
+    /// GLOnlyTextureData objects are not Managed.
     /// </summary>
     public bool IsManaged
     {
@@ -119,7 +119,7 @@ public class GLOnlyTextureData : ITextureData
     }
 
     /// <summary>
-    ///     Returns the <see cref="ITextureData.TextureType" /> for this Texture Data.
+    /// Returns the <see cref="ITextureData.TextureType" /> for this Texture Data.
     /// </summary>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
@@ -137,7 +137,7 @@ public class GLOnlyTextureData : ITextureData
     }
 
     /// <summary>
-    ///     Returns the <see cref="PixelType.Format" /> for this GLOnlyTextureData object.
+    /// Returns the <see cref="PixelType.Format" /> for this GLOnlyTextureData object.
     /// </summary>
     public PixelType.Format GetFormat()
     {

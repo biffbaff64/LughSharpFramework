@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Maps;
 
 /// <summary>
-///     Container holding a set of MapLayers, objects and properties.
+/// Container holding a set of MapLayers, objects and properties.
 /// </summary>
 [PublicAPI]
 public class MapGroupLayer : MapLayer
@@ -33,8 +33,8 @@ public class MapGroupLayer : MapLayer
     public MapLayers Layers { get; set; } = new();
 
     /// <summary>
-    ///     For each layer in this group, flag that its Render Offets need
-    ///     to be recalculated.
+    /// For each layer in this group, flag that its Render Offets need
+    /// to be recalculated.
     /// </summary>
     public override void InvalidateRenderOffset()
     {

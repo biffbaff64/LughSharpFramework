@@ -32,17 +32,17 @@ using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-///     A <see cref="IVertexData" /> implementation based on OpenGL vertex buffer objects.
-///     If the OpenGL context was lost you can call <see cref="Invalidate()" /> to recreate
-///     a new OpenGL vertex buffer object.
-///     <para>
-///         The data is bound via <tt>GLBindings.glVertexAttribPointer</tt> according to the
-///         attribute aliases specified via <see cref="VertexAttributes" /> in the constructor.
-///     </para>
-///     <para>
-///         VertexBufferObjects must be disposed via the <see cref="Dispose()" /> method when
-///         no longer needed
-///     </para>
+/// A <see cref="IVertexData" /> implementation based on OpenGL vertex buffer objects.
+/// If the OpenGL context was lost you can call <see cref="Invalidate()" /> to recreate
+/// a new OpenGL vertex buffer object.
+/// <para>
+///     The data is bound via <tt>GLBindings.glVertexAttribPointer</tt> according to the
+///     attribute aliases specified via <see cref="VertexAttributes" /> in the constructor.
+/// </para>
+/// <para>
+///     VertexBufferObjects must be disposed via the <see cref="Dispose()" /> method when
+///     no longer needed
+/// </para>
 /// </summary>
 [PublicAPI]
 public class VertexBufferObject : IVertexData
@@ -59,7 +59,7 @@ public class VertexBufferObject : IVertexData
     // ========================================================================
 
     /// <summary>
-    ///     Constructs a new interleaved VertexBufferObject.
+    /// Constructs a new interleaved VertexBufferObject.
     /// </summary>
     /// <param name="isStatic"> whether the vertex data is static. </param>
     /// <param name="numVertices"> the maximum number of vertices </param>
@@ -70,7 +70,7 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Constructs a new interleaved VertexBufferObject.
+    /// Constructs a new interleaved VertexBufferObject.
     /// </summary>
     /// <param name="isStatic"> whether the vertex data is static. </param>
     /// <param name="numVertices"> the maximum number of vertices </param>
@@ -87,12 +87,12 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Constructs a new interleaved VertexBufferObject with the specified usage, data,
-    ///     ownership flag, and vertex attributes. It generates a buffer handle using OpenGL,
-    ///     sets the buffer data and attributes, and assigns the usage parameter.
+    /// Constructs a new interleaved VertexBufferObject with the specified usage, data,
+    /// ownership flag, and vertex attributes. It generates a buffer handle using OpenGL,
+    /// sets the buffer data and attributes, and assigns the usage parameter.
     /// </summary>
     /// <param name="usage">
-    ///     Specifies the expected usage pattern of the data store (e.g., GL_STATIC_DRAW, GL_DYNAMIC_DRAW).
+    /// Specifies the expected usage pattern of the data store (e.g., GL_STATIC_DRAW, GL_DYNAMIC_DRAW).
     /// </param>
     /// <param name="data">The byte buffer containing the vertex data.</param>
     /// <param name="ownsBuffer">Indicates whether this object should take ownership of the buffer.</param>
@@ -111,8 +111,8 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     The usage pattern for the vertex buffer object, which hints to the GPU how the
-    ///     data will be used (e.g., GL_STATIC_DRAW for data that doesn't change often).
+    /// The usage pattern for the vertex buffer object, which hints to the GPU how the
+    /// data will be used (e.g., GL_STATIC_DRAW for data that doesn't change often).
     /// </summary>
     public int Usage
     {
@@ -129,25 +129,25 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Returns the number of vertices this VertexData stores.
+    /// Returns the number of vertices this VertexData stores.
     /// </summary>
     public int NumVertices { get; set; }
 
     /// <summary>
-    ///     Returns the number of vertices this VertedData can store.
+    /// Returns the number of vertices this VertedData can store.
     /// </summary>
     public int NumMaxVertices { get; set; }
 
     /// <summary>
-    ///     Returns the <see cref="VertexAttributes" /> as specified during construction.
+    /// Returns the <see cref="VertexAttributes" /> as specified during construction.
     /// </summary>
     public VertexAttributes Attributes { get; set; }
 
     /// <summary>
-    ///     Returns the underlying FloatBuffer and marks it as dirty, causing the buffer
-    ///     contents to be uploaded on the next call to bind. If you need immediate
-    ///     uploading use <see cref="SetVertices" />; Any modifications made to the Buffer
-    ///     after* the call to bind will not automatically be uploaded.
+    /// Returns the underlying FloatBuffer and marks it as dirty, causing the buffer
+    /// contents to be uploaded on the next call to bind. If you need immediate
+    /// uploading use <see cref="SetVertices" />; Any modifications made to the Buffer
+    /// after* the call to bind will not automatically be uploaded.
     /// </summary>
     /// <returns> the underlying FloatBuffer holding the vertex data.  </returns>
     public FloatBuffer GetBuffer( bool forWriting )
@@ -158,14 +158,14 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Sets the vertices of this VertexData, discarding the old vertex data. The
-    ///     count must equal the number of floats per vertex times the number of vertices
-    ///     to be copied to this VertexData. The order of the vertex attributes must be
-    ///     the same as specified at construction time via <see cref="VertexAttributes" />.
-    ///     <para>
-    ///         This can be called in between calls to bind and unbind. The vertex data will
-    ///         be updated instantly.
-    ///     </para>
+    /// Sets the vertices of this VertexData, discarding the old vertex data. The
+    /// count must equal the number of floats per vertex times the number of vertices
+    /// to be copied to this VertexData. The order of the vertex attributes must be
+    /// the same as specified at construction time via <see cref="VertexAttributes" />.
+    /// <para>
+    ///     This can be called in between calls to bind and unbind. The vertex data will
+    ///     be updated instantly.
+    /// </para>
     /// </summary>
     /// <param name="vertices"> the vertex data </param>
     /// <param name="offset"> the offset to start copying the data from </param>
@@ -186,7 +186,7 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Update (a portion of) the vertices. Does not resize the backing buffer.
+    /// Update (a portion of) the vertices. Does not resize the backing buffer.
     /// </summary>
     /// <param name="targetOffset">The offset in the target buffer where the update begins.</param>
     /// <param name="vertices">The vertex data to be copied.</param>
@@ -225,7 +225,7 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Binds this VertexData for rendering via glDrawArrays or glDrawElements.
+    /// Binds this VertexData for rendering via glDrawArrays or glDrawElements.
     /// </summary>
     /// <param name="shader"> The <see cref="ShaderProgram" /> to use. </param>
     /// <param name="locations"> array containing the attribute locations.  </param>
@@ -282,12 +282,12 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Unbinds the vertex buffer object from the shader, disabling the vertex attributes.
+    /// Unbinds the vertex buffer object from the shader, disabling the vertex attributes.
     /// </summary>
     /// <param name="shader">The shader program currently in use.</param>
     /// <param name="locations">
-    ///     An optional array of attribute locations to be disabled. If null, attribute
-    ///     aliases from the vertex attributes are used.
+    /// An optional array of attribute locations to be disabled. If null, attribute
+    /// aliases from the vertex attributes are used.
     /// </param>
     public void Unbind( ShaderProgram shader, int[]? locations = null )
     {
@@ -326,7 +326,7 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Invalidates the VertexData if applicable. Use this in case of a context loss.
+    /// Invalidates the VertexData if applicable. Use this in case of a context loss.
     /// </summary>
     public void Invalidate()
     {
@@ -335,8 +335,8 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Performs application-defined tasks associated with freeing, releasing,
-    ///     or resetting unmanaged resources.
+    /// Performs application-defined tasks associated with freeing, releasing,
+    /// or resetting unmanaged resources.
     /// </summary>
     public void Dispose()
     {
@@ -352,8 +352,8 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Low level method to reset the buffer and attributes to the specified values.
-    ///     Use with care!
+    /// Low level method to reset the buffer and attributes to the specified values.
+    /// Use with care!
     /// </summary>
     public void SetBuffer( Buffer data, bool ownsBuffer, VertexAttributes value )
     {
@@ -388,7 +388,7 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    ///     Handles any additional logic required when the buffer is updated.
+    /// Handles any additional logic required when the buffer is updated.
     /// </summary>
     private unsafe void BufferChanged()
     {

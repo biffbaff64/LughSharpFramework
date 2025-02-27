@@ -34,8 +34,8 @@ using Environment = System.Environment;
 namespace DesktopGLBackend.Utils;
 
 /// <summary>
-///     Represents a class to manage desktop GL preferences with methods to
-///     store and retrieve various types of data.
+/// Represents a class to manage desktop GL preferences with methods to
+/// store and retrieve various types of data.
 /// </summary>
 [PublicAPI]
 public class DesktopGLPreferences : IPreferences
@@ -49,7 +49,7 @@ public class DesktopGLPreferences : IPreferences
     // ========================================================================
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="DesktopGLPreferences" /> class.
+    /// Initializes a new instance of the <see cref="DesktopGLPreferences" /> class.
     /// </summary>
     /// <param name="filename"> The name of the preferences file. </param>
     public DesktopGLPreferences( string filename )
@@ -130,7 +130,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Adds or updates multiple entries in the preferences.
+    /// Adds or updates multiple entries in the preferences.
     /// </summary>
     /// <param name="vals"> The dictionary of key-value pairs to add or update. </param>
     /// <returns> The current <see cref="IPreferences" /> instance. </returns>
@@ -171,7 +171,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Gets a boolean value from the preferences.
+    /// Gets a boolean value from the preferences.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <returns> The boolean value. </returns>
@@ -181,7 +181,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Gets an integer value from the preferences.
+    /// Gets an integer value from the preferences.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <returns> The integer value. </returns>
@@ -191,7 +191,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Gets a long value from the preferences.
+    /// Gets a long value from the preferences.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <returns> The long value. </returns>
@@ -201,7 +201,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Gets a float value from the preferences.
+    /// Gets a float value from the preferences.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <returns> The float value. </returns>
@@ -211,7 +211,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Gets a boolean value from the preferences with a default value.
+    /// Gets a boolean value from the preferences with a default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
@@ -228,7 +228,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Gets an integer value from the preferences with a default value.
+    /// Gets an integer value from the preferences with a default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
@@ -244,7 +244,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Gets a long value from the preferences with a default value.
+    /// Gets a long value from the preferences with a default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
@@ -260,7 +260,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Gets a float value from the preferences with a default value.
+    /// Gets a float value from the preferences with a default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
@@ -276,11 +276,11 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Gets a string value from the preferences with an optional default value.
+    /// Gets a string value from the preferences with an optional default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue">
-    ///     The default value if the key does not exist. Default is an empty string.
+    /// The default value if the key does not exist. Default is an empty string.
     /// </param>
     /// <returns> The string value. </returns>
     public string GetString( string key, string defValue = "" )
@@ -294,7 +294,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Gets all properties in the preferences.
+    /// Gets all properties in the preferences.
     /// </summary>
     /// <returns> A dictionary of all properties. </returns>
     public Dictionary< string, object > Get()
@@ -303,7 +303,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Checks if a key exists in the preferences.
+    /// Checks if a key exists in the preferences.
     /// </summary>
     /// <param name="key">The key to check.</param>
     /// <returns> True if the key exists; otherwise, false. </returns>
@@ -313,7 +313,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Clears all entries in the preferences.
+    /// Clears all entries in the preferences.
     /// </summary>
     public void Clear()
     {
@@ -321,7 +321,7 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Removes a specific entry from the preferences.
+    /// Removes a specific entry from the preferences.
     /// </summary>
     /// <param name="key"> The key of the entry to remove. </param>
     public void Remove( string key )
@@ -330,10 +330,10 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    ///     Saves the preferences to the file.
+    /// Saves the preferences to the file.
     /// </summary>
     /// <exception cref="GdxRuntimeException">
-    ///     Thrown when there is an error writing preferences.
+    /// Thrown when there is an error writing preferences.
     /// </exception>
     public void Flush()
     {

@@ -34,7 +34,7 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     A text input field with multiple lines.
+/// A text input field with multiple lines.
 /// </summary>
 [PublicAPI]
 public class TextArea : TextField
@@ -81,7 +81,7 @@ public class TextArea : TextField
     public List< int >? LinesBreak { get; set; }
 
     /// <summary>
-    ///     Initialise this TextArea.
+    /// Initialise this TextArea.
     /// </summary>
     public override void Initialise()
     {
@@ -149,8 +149,8 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    ///     Sets the preferred number of rows (lines) for this text area.
-    ///     Used to calculate preferred height
+    /// Sets the preferred number of rows (lines) for this text area.
+    /// Used to calculate preferred height
     /// </summary>
     public void SetPrefRows( float prefRows )
     {
@@ -184,7 +184,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    ///     Returns total number of lines that the text occupies
+    /// Returns total number of lines that the text occupies
     /// </summary>
     public int GetLines()
     {
@@ -192,7 +192,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    ///     Returns if there's a new line at then end of the text
+    /// Returns if there's a new line at then end of the text
     /// </summary>
     public bool NewLineAtEnd()
     {
@@ -206,7 +206,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    ///     Moves the cursor to the given number line.
+    /// Moves the cursor to the given number line.
     /// </summary>
     public void MoveCursorLine( int line )
     {
@@ -260,7 +260,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    ///     Updates the current line, checking the cursor position in the text
+    /// Updates the current line, checking the cursor position in the text
     /// </summary>
     private void UpdateCurrentLine()
     {
@@ -293,7 +293,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    ///     Scroll the text area to show the line of the cursor
+    /// Scroll the text area to show the line of the cursor
     /// </summary>
     private void ShowCursor()
     {
@@ -316,7 +316,7 @@ public class TextArea : TextField
     }
 
     /// <summary>
-    ///     Calculates the text area line for the given cursor position
+    /// Calculates the text area line for the given cursor position
     /// </summary>
     private int CalculateCurrentLineIndex( int cursor )
     {
@@ -610,7 +610,7 @@ public class TextArea : TextField
     // ========================================================================
 
     /// <summary>
-    ///     Input listener for the text area.
+    /// Input listener for the text area.
     /// </summary>
     [PublicAPI]
     public class TextAreaListener : TextFieldClickListener

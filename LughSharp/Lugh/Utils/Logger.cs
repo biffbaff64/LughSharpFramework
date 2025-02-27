@@ -31,14 +31,14 @@ using Environment = System.Environment;
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-///     A class to write debug messages to console and a text file. Primarily intended for flow
-///     tracing, messages will display calling file/class/methods and any provided debug message.
-///     <li>Debug messages will not work if (TraceLevel &amp; LOG_DEBUG) is false.</li>
-///     <li>Error Debug messages will not work if (TraceLevel &amp; LOG_ERROR) is false.</li>
-///     <para>
-///         To enable writing to file, <see cref="EnableWriteToFile" /> must be TRUE
-///         and <see cref="OpenDebugFile" /> must be called.
-///     </para>
+/// A class to write debug messages to console and a text file. Primarily intended for flow
+/// tracing, messages will display calling file/class/methods and any provided debug message.
+/// <li>Debug messages will not work if (TraceLevel &amp; LOG_DEBUG) is false.</li>
+/// <li>Error Debug messages will not work if (TraceLevel &amp; LOG_ERROR) is false.</li>
+/// <para>
+///     To enable writing to file, <see cref="EnableWriteToFile" /> must be TRUE
+///     and <see cref="OpenDebugFile" /> must be called.
+/// </para>
 /// </summary>
 [PublicAPI]
 public static class Logger
@@ -80,7 +80,7 @@ public static class Logger
     #region public methods
 
     /// <summary>
-    ///     Initialises the Logger.
+    /// Initialises the Logger.
     /// </summary>
     /// <param name="logLevel"> The initially enabled log level(s). </param>
     /// <param name="enableWriteToFile"> TRUE to enable outputting messages to a file. </param>
@@ -99,11 +99,11 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Send a DEBUG message to output window/console/File.
+    /// Send a DEBUG message to output window/console/File.
     /// </summary>
     /// <param name="message"> The message to send. </param>
     /// <param name="boxedDebug">
-    ///     If TRUE, a dividing line will be written before and after this debug message.
+    /// If TRUE, a dividing line will be written before and after this debug message.
     /// </param>
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
@@ -133,7 +133,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Send a DEBUG message to output window/console/File.
+    /// Send a DEBUG message to output window/console/File.
     /// </summary>
     /// <param name="message"> The message to send. </param>
     /// <param name="callerFilePath"> The File this message was sent from. </param>
@@ -159,7 +159,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Write a message to console if the supplied condition is TRUE.
+    /// Write a message to console if the supplied condition is TRUE.
     /// </summary>
     /// <param name="message"> The message to send. </param>
     /// <param name="condition"> The condition to evaluate. </param>
@@ -187,9 +187,9 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Writes a debug message consisting solely of the following:-
-    ///     <li> Current time and date. </li>
-    ///     <li> Calling Class/method/line number information. </li>
+    /// Writes a debug message consisting solely of the following:-
+    /// <li> Current time and date. </li>
+    /// <li> Calling Class/method/line number information. </li>
     /// </summary>
     /// <param name="lineBefore"> Draws a divider line first, if set to true. </param>
     /// <param name="lineAfter"> Draws a divider line after checkpoint is logged, if set to true. </param>
@@ -221,7 +221,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Adds a dividing line to text output.
+    /// Adds a dividing line to text output.
     /// </summary>
     /// <param name="ch"> The character to use, default is '-' </param>
     /// <param name="length"> The line length, default is 80. </param>
@@ -240,14 +240,14 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Opens a physical file for writing copies of debug messages to.
+    /// Opens a physical file for writing copies of debug messages to.
     /// </summary>
     /// <param name="fileName">
-    ///     The filename. This should be filename only,
-    ///     and the file will be created in the working directory.
+    /// The filename. This should be filename only,
+    /// and the file will be created in the working directory.
     /// </param>
     /// <param name="deleteExisting">
-    ///     True to delete existing copies of the file, False to append to existing file.
+    /// True to delete existing copies of the file, False to append to existing file.
     /// </param>
     public static void OpenDebugFile( string fileName, bool deleteExisting )
     {
@@ -293,7 +293,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Disables DEBUG Log messages without affecting other types.
+    /// Disables DEBUG Log messages without affecting other types.
     /// </summary>
     public static void DisableDebugLogging()
     {
@@ -301,7 +301,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Disables Error Log messages without affecting other types.
+    /// Disables Error Log messages without affecting other types.
     /// </summary>
     public static void DisableErrorLogging()
     {
@@ -309,7 +309,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Enables DEBUG Log messages without affecting other types.
+    /// Enables DEBUG Log messages without affecting other types.
     /// </summary>
     public static void EnableDebugLogging()
     {
@@ -317,7 +317,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Enables ERROR Log messages without affecting other types.
+    /// Enables ERROR Log messages without affecting other types.
     /// </summary>
     public static void EnableErrorLogging()
     {
@@ -331,7 +331,7 @@ public static class Logger
     #region private methods
 
     /// <summary>
-    ///     Creates a debug/error/info message ready for dumping.
+    /// Creates a debug/error/info message ready for dumping.
     /// </summary>
     /// <param name="tag"></param>
     /// <param name="formatString">The base message</param>
@@ -356,7 +356,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Creates a <see cref="CallerID" /> object from the supplied file path, method and line number.
+    /// Creates a <see cref="CallerID" /> object from the supplied file path, method and line number.
     /// </summary>
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
@@ -373,7 +373,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Returns a string holding the current time.
+    /// Returns a string holding the current time.
     /// </summary>
     private static string GetTimeStampInfo()
     {
@@ -386,7 +386,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Returns a string holding the calling filename, method and line number.
+    /// Returns a string holding the calling filename, method and line number.
     /// </summary>
     private static string GetCallerInfo( CallerID cid )
     {
@@ -394,7 +394,7 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Writes text to the logFile, if it exists.
+    /// Writes text to the logFile, if it exists.
     /// </summary>
     /// <param name="text">String holding the text to write.</param>
     private static void WriteToFile( string text )
@@ -413,10 +413,10 @@ public static class Logger
     }
 
     /// <summary>
-    ///     Returns whether the requested trace level is enabled or not.
+    /// Returns whether the requested trace level is enabled or not.
     /// </summary>
     /// <param name="traceLevel">
-    ///     The trace level to check, either LOG_DEBUG, LOG_INFO, LOG_ERROR or LOG_ASSERT
+    /// The trace level to check, either LOG_DEBUG, LOG_INFO, LOG_ERROR or LOG_ASSERT
     /// </param>
     /// <returns> True if the level is enabled. </returns>
     private static bool IsEnabled( int traceLevel )
@@ -436,8 +436,8 @@ public static class Logger
 // ====================================================================--------
 
 /// <summary>
-///     Object used for creating debug messages which include
-///     the calling file and method.
+/// Object used for creating debug messages which include
+/// the calling file and method.
 /// </summary>
 [StructLayout( LayoutKind.Sequential )]
 internal struct CallerID

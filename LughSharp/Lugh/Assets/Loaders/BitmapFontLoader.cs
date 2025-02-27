@@ -35,10 +35,10 @@ namespace LughSharp.Lugh.Assets.Loaders;
 // ========================================================================
 
 /// <summary>
-///     <see cref="AssetLoader" /> for <see cref="BitmapFont" /> instances. Loads the font
-///     description file (.fnt) asynchronously, loads the <see cref="Texture" /> containing
-///     the glyphs as a dependency. The <see cref="BitmapFontParameter" /> allows you to
-///     set things like texture filters or whether to flip the glyphs vertically.
+/// <see cref="AssetLoader" /> for <see cref="BitmapFont" /> instances. Loads the font
+/// description file (.fnt) asynchronously, loads the <see cref="Texture" /> containing
+/// the glyphs as a dependency. The <see cref="BitmapFontParameter" /> allows you to
+/// set things like texture filters or whether to flip the glyphs vertically.
 /// </summary>
 [PublicAPI]
 public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
@@ -49,7 +49,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new BitmapFontLoader using the specified <see cref="IFileHandleResolver" />
+    /// Creates a new BitmapFontLoader using the specified <see cref="IFileHandleResolver" />
     /// </summary>
     public BitmapFontLoader( IFileHandleResolver resolver )
         : base( resolver )
@@ -57,8 +57,8 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
     }
 
     /// <summary>
-    ///     Returns the assets this asset requires to be loaded first.
-    ///     This method may be called on a thread other than the GL thread.
+    /// Returns the assets this asset requires to be loaded first.
+    /// This method may be called on a thread other than the GL thread.
     /// </summary>
     /// <param name="fileName">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>
@@ -170,37 +170,37 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 public class BitmapFontParameter : AssetLoaderParameters
 {
     /// <summary>
-    ///     Flips the font vertically if <tt>true</tt>. Defaults to <tt>false</tt>.
+    /// Flips the font vertically if <tt>true</tt>. Defaults to <tt>false</tt>.
     /// </summary>
     public bool Flip { get; set; } = false;
 
     /// <summary>
-    ///     Generates mipmaps for the font if <tt>true</tt>. Defaults to <tt>false</tt>.
+    /// Generates mipmaps for the font if <tt>true</tt>. Defaults to <tt>false</tt>.
     /// </summary>
     public bool GenMipMaps { get; set; } = false;
 
     /// <summary>
-    ///     The <see cref="Texture.TextureFilter" /> to use when scaling down the <see cref="BitmapFont" />.
-    ///     Defaults to <see cref="Texture.TextureFilter.Nearest" />.
+    /// The <see cref="Texture.TextureFilter" /> to use when scaling down the <see cref="BitmapFont" />.
+    /// Defaults to <see cref="Texture.TextureFilter.Nearest" />.
     /// </summary>
     public Texture.TextureFilter MinFilter { get; set; } = Texture.TextureFilter.Nearest;
 
     /// <summary>
-    ///     The <see cref="Texture.TextureFilter" /> to use when scaling up the <see cref="BitmapFont" />.
-    ///     Defaults to <see cref="Texture.TextureFilter.Nearest" />.
+    /// The <see cref="Texture.TextureFilter" /> to use when scaling up the <see cref="BitmapFont" />.
+    /// Defaults to <see cref="Texture.TextureFilter.Nearest" />.
     /// </summary>
     public Texture.TextureFilter MagFilter { get; set; } = Texture.TextureFilter.Nearest;
 
     /// <summary>
-    ///     optional <see cref="BitmapFont.BitmapFontData" /> to be used instead of
-    ///     loading the <see cref="Texture" /> directly. Use this if your font is
-    ///     embedded in a <see cref="Skin" />.
+    /// optional <see cref="BitmapFont.BitmapFontData" /> to be used instead of
+    /// loading the <see cref="Texture" /> directly. Use this if your font is
+    /// embedded in a <see cref="Skin" />.
     /// </summary>
     public BitmapFont.BitmapFontData? BitmapFontData { get; set; } = null;
 
     /// <summary>
-    ///     The name of the <see cref="TextureAtlas" /> to load the <see cref="BitmapFont" />.
-    ///     if null, will look for a separate image.
+    /// The name of the <see cref="TextureAtlas" /> to load the <see cref="BitmapFont" />.
+    /// if null, will look for a separate image.
     /// </summary>
     public string? AtlasName { get; set; }
 }

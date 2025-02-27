@@ -28,9 +28,9 @@ using LughSharp.Lugh.Graphics.G2D;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     ParticleEffectActor holds an ParticleEffect to use in Scene2d applications.
-///     The particle effect is positioned at 0, 0 in the ParticleEffectActor. Its
-///     bounding box is not limited to the size of this actor.
+/// ParticleEffectActor holds an ParticleEffect to use in Scene2d applications.
+/// The particle effect is positioned at 0, 0 in the ParticleEffectActor. Its
+/// bounding box is not limited to the size of this actor.
 /// </summary>
 public class ParticleEffectActor : Actor, IDisposable
 {

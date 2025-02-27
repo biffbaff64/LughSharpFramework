@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 public class Animation< T >
 {
     /// <summary>
-    ///     Defines possible playback modes for an <see cref="Animation{T}" />.
+    /// Defines possible playback modes for an <see cref="Animation{T}" />.
     /// </summary>
     public enum AnimMode
     {
@@ -56,13 +56,13 @@ public class Animation< T >
     // ========================================================================
 
     /// <summary>
-    ///     Constructor, storing the frame duration and key frames.
+    /// Constructor, storing the frame duration and key frames.
     /// </summary>
     /// <param name="frameDuration">the time between frames in seconds.</param>
     /// <param name="keyFrames">
-    ///     The objects representing the frames.
-    ///     If this Array is type-aware, <see cref="KeyFrames" /> can return the
-    ///     correct type of array. Otherwise, it returns an object[].
+    /// The objects representing the frames.
+    /// If this Array is type-aware, <see cref="KeyFrames" /> can return the
+    /// correct type of array. Otherwise, it returns an object[].
     /// </param>
     public Animation( float frameDuration, List< T > keyFrames )
     {
@@ -72,13 +72,13 @@ public class Animation< T >
     }
 
     /// <summary>
-    ///     Constructor, storing the frame duration and key frames.
+    /// Constructor, storing the frame duration and key frames.
     /// </summary>
     /// <param name="frameDuration"> the time between frames in seconds.</param>
     /// <param name="keyFrames">
-    ///     The objects representing the frames. If this Array is type-aware,
-    ///     <see cref="KeyFrames" /> can return the correct type of array.
-    ///     Otherwise, it returns an object[].
+    /// The objects representing the frames. If this Array is type-aware,
+    /// <see cref="KeyFrames" /> can return the correct type of array.
+    /// Otherwise, it returns an object[].
     /// </param>
     /// <param name="playMode"> The required animation playback mode. </param>
     public Animation( float frameDuration, List< T > keyFrames, AnimMode playMode )
@@ -88,7 +88,7 @@ public class Animation< T >
     }
 
     /// <summary>
-    ///     Constructor, storing the frame duration and key frames.
+    /// Constructor, storing the frame duration and key frames.
     /// </summary>
     /// <param name="frameDuration"> the time between frames in seconds.</param>
     /// <param name="keyFrames"> the objects representing the frames.</param>
@@ -99,13 +99,13 @@ public class Animation< T >
     }
 
     /// <summary>
-    ///     The animation play mode.
+    /// The animation play mode.
     /// </summary>
     public AnimMode PlayMode { get; set; } = AnimMode.Normal;
 
     /// <summary>
-    ///     The keyframes[] array where all the frames of the
-    ///     animation are stored.
+    /// The keyframes[] array where all the frames of the
+    /// animation are stored.
     /// </summary>
     public T[] KeyFrames
     {
@@ -118,10 +118,10 @@ public class Animation< T >
     }
 
     /// <summary>
-    ///     Returns a frame based on the so called state time. This is the amount of
-    ///     seconds an object has spent in the state this Animation instance represents,
-    ///     e.g. running, jumping and so on. The mode specifies whether the animation is
-    ///     looping or not.
+    /// Returns a frame based on the so called state time. This is the amount of
+    /// seconds an object has spent in the state this Animation instance represents,
+    /// e.g. running, jumping and so on. The mode specifies whether the animation is
+    /// looping or not.
     /// </summary>
     /// <param name="stateTime">the time spent in the state represented by this animation.</param>
     /// <param name="looping"> whether the animation is looping or not.</param>
@@ -154,10 +154,10 @@ public class Animation< T >
     }
 
     /// <summary>
-    ///     Returns a frame based on the so called state time. This is the amount
-    ///     of seconds an object has spent in the state this Animation instance
-    ///     represents, e.g. running, jumping and so on using the mode specified by
-    ///     <see cref="PlayMode" /> property.
+    /// Returns a frame based on the so called state time. This is the amount
+    /// of seconds an object has spent in the state this Animation instance
+    /// represents, e.g. running, jumping and so on using the mode specified by
+    /// <see cref="PlayMode" /> property.
     /// </summary>
     /// <param name="stateTime"> </param>
     /// <returns> the frame of animation for the given state time.</returns>
@@ -169,7 +169,7 @@ public class Animation< T >
     }
 
     /// <summary>
-    ///     Returns the current frame number.
+    /// Returns the current frame number.
     /// </summary>
     public int GetKeyFrameIndex( float stateTime )
     {
@@ -242,8 +242,8 @@ public class Animation< T >
     }
 
     /// <summary>
-    ///     Whether the animation would be finished if played without looping
-    ///     (PlayMode#NORMAL), given the state time.
+    /// Whether the animation would be finished if played without looping
+    /// (PlayMode#NORMAL), given the state time.
     /// </summary>
     /// <param name="stateTime"> </param>
     /// <returns> whether the animation is finished.</returns>
@@ -255,7 +255,7 @@ public class Animation< T >
     }
 
     /// <summary>
-    ///     Sets duration a frame will be displayed.
+    /// Sets duration a frame will be displayed.
     /// </summary>
     /// <param name="frameDuration">The animation frame duration in seconds</param>
     public void SetFrameDuration( float frameDuration )
@@ -265,7 +265,7 @@ public class Animation< T >
     }
 
     /// <summary>
-    ///     the duration of a frame in seconds.
+    /// the duration of a frame in seconds.
     /// </summary>
     public float FrameDuration()
     {
@@ -273,8 +273,8 @@ public class Animation< T >
     }
 
     /// <summary>
-    ///     the duration of the entire animation, (number of frames x frame duration),
-    ///     in seconds.
+    /// the duration of the entire animation, (number of frames x frame duration),
+    /// in seconds.
     /// </summary>
     public float GetAnimationDuration()
     {

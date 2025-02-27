@@ -385,8 +385,8 @@ public class PNGUtils
     }
 
     /// <summary>
-    ///     Returns a string representation of the Color Type for this PNG, which is held at
-    ///     offset 25 into the 41-byte Signature/IHDR/IDAT Png file header.
+    /// Returns a string representation of the Color Type for this PNG, which is held at
+    /// offset 25 into the 41-byte Signature/IHDR/IDAT Png file header.
     /// </summary>
     /// <seealso cref="AnalysePNG(byte[], bool)" />
     public static string ColorTypeName( int colortype )
@@ -404,7 +404,7 @@ public class PNGUtils
     }
 
     /// <summary>
-    ///     Extracts the <c>Width</c> and <c>Height</c> from a PNG file.
+    /// Extracts the <c>Width</c> and <c>Height</c> from a PNG file.
     /// </summary>
     public static ( int width, int height ) GetPNGDimensions( FileInfo file )
     {
@@ -435,9 +435,9 @@ public class PNGUtils
     // ========================================================================
 
     /// <summary>
-    ///     The PNG signature is eight bytes in length and contains information
-    ///     used to identify a file or data stream as conforming to the PNG
-    ///     specification.
+    /// The PNG signature is eight bytes in length and contains information
+    /// used to identify a file or data stream as conforming to the PNG
+    /// specification.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential, Pack = 1 )]
@@ -447,10 +447,10 @@ public class PNGUtils
     }
 
     /// <summary>
-    ///     PNG File IHDR Structure. The header chunk contains information on the image data
-    ///     stored in the PNG file. This chunk must be the first chunk in a PNG data stream
-    ///     and immediately follows the PNG signature. The header chunk data area is 13 bytes
-    ///     in length.
+    /// PNG File IHDR Structure. The header chunk contains information on the image data
+    /// stored in the PNG file. This chunk must be the first chunk in a PNG data stream
+    /// and immediately follows the PNG signature. The header chunk data area is 13 bytes
+    /// in length.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential, Pack = 1 )]
@@ -468,7 +468,7 @@ public class PNGUtils
     }
 
     /// <summary>
-    ///     PNG File IDAT Chunk Structure.
+    /// PNG File IDAT Chunk Structure.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential, Pack = 1 )] // Important for correct byte alignment

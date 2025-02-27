@@ -30,7 +30,7 @@ public class DataInput( Stream input ) : BinaryReader( input )
     private char[] _chars = new char[ 32 ];
 
     /// <summary>
-    ///     Reads a 1-5 byte int.
+    /// Reads a 1-5 byte int.
     /// </summary>
     public int ReadInt( bool optimizePositive )
     {
@@ -65,7 +65,7 @@ public class DataInput( Stream input ) : BinaryReader( input )
     }
 
     /// <summary>
-    ///     Reads the length and string of UTF8 characters, or null.
+    /// Reads the length and string of UTF8 characters, or null.
     /// </summary>
     public string? ReadStringUTF8()
     {

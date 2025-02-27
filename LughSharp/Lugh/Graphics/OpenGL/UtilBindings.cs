@@ -69,12 +69,12 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <summary>
-    ///     Handles OpenGL debug messages or errors by logging a callback. This can be used to retrieve
-    ///     diagnostic messages from OpenGL during runtime.
+    /// Handles OpenGL debug messages or errors by logging a callback. This can be used to retrieve
+    /// diagnostic messages from OpenGL during runtime.
     /// </summary>
     /// <param name="source">
-    ///     Specifies the source of the debug callback, identifying which part of the OpenGL system the
-    ///     message originates from.
+    /// Specifies the source of the debug callback, identifying which part of the OpenGL system the
+    /// message originates from.
     /// </param>
     /// <param name="type">Specifies the type of debug message, such as error, performance warning, or other messages.</param>
     /// <param name="id">Specifies the unique ID for the message to help identify specific issues.</param>

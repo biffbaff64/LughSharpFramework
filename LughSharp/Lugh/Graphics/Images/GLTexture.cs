@@ -32,9 +32,9 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
-///     Class representing an OpenGL texture by its target and handle. Keeps track of
-///     its state like the TextureFilter and TextureWrap. Also provides some methods to
-///     create TextureData and upload image data.
+/// Class representing an OpenGL texture by its target and handle. Keeps track of
+/// its state like the TextureFilter and TextureWrap. Also provides some methods to
+/// create TextureData and upload image data.
 /// </summary>
 [PublicAPI]
 public abstract class GLTexture : IDisposable
@@ -48,7 +48,7 @@ public abstract class GLTexture : IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new GLTexture object using the supplied OpenGL target.
+    /// Creates a new GLTexture object using the supplied OpenGL target.
     /// </summary>
     /// <param name="glTarget"></param>
     protected GLTexture( int glTarget ) : this( glTarget, GdxApi.Bindings.GenTexture() )
@@ -66,114 +66,114 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     The OpenGL target for the texture. A GL target, in the context of OpenGL (and
-    ///     by extension, OpenGL ES), refers to the type of texture object being manipulated
-    ///     or bound. It specifies which texture unit or binding point the subsequent texture
-    ///     operations will affect.
-    ///     <para>
-    ///         Common GL targets include:
-    ///         <li>GL_TEXTURE_2D:       For standard 2D textures</li>
-    ///         <li>GL_TEXTURE_3D:       For 3D textures</li>
-    ///         <li>GL_TEXTURE_CUBE_MAP: For cube map textures</li>
-    ///         <li>GL_TEXTURE_2D_ARRAY: For 2D texture arrays</li>
-    ///     </para>
+    /// The OpenGL target for the texture. A GL target, in the context of OpenGL (and
+    /// by extension, OpenGL ES), refers to the type of texture object being manipulated
+    /// or bound. It specifies which texture unit or binding point the subsequent texture
+    /// operations will affect.
+    /// <para>
+    ///     Common GL targets include:
+    ///     <li>GL_TEXTURE_2D:       For standard 2D textures</li>
+    ///     <li>GL_TEXTURE_3D:       For 3D textures</li>
+    ///     <li>GL_TEXTURE_CUBE_MAP: For cube map textures</li>
+    ///     <li>GL_TEXTURE_2D_ARRAY: For 2D texture arrays</li>
+    /// </para>
     /// </summary>
     public int GLTarget { get; private set; }
 
     /// <summary>
-    ///     A GL texture handle, or OpenGL texture handle, is a unique identifier assigned
-    ///     by OpenGL to represent a texture object in memory. It is used to reference and
-    ///     manipulate a specific texture in OpenGL operations.
-    ///     <para>
-    ///         The handle is typically created using a function like <see cref="IGLBindings.GenTextures(int)" />.
-    ///         Once created, this handle is used in various OpenGL functions to bind, modify,
-    ///         or delete the texture. The handle remains valid until explicitly deleted using
-    ///         a function like <see cref="IGLBindings.DeleteTextures(uint[])" />
-    ///     </para>
+    /// A GL texture handle, or OpenGL texture handle, is a unique identifier assigned
+    /// by OpenGL to represent a texture object in memory. It is used to reference and
+    /// manipulate a specific texture in OpenGL operations.
+    /// <para>
+    ///     The handle is typically created using a function like <see cref="IGLBindings.GenTextures(int)" />.
+    ///     Once created, this handle is used in various OpenGL functions to bind, modify,
+    ///     or delete the texture. The handle remains valid until explicitly deleted using
+    ///     a function like <see cref="IGLBindings.DeleteTextures(uint[])" />
+    /// </para>
     /// </summary>
     public uint GLTextureHandle { get; set; }
 
     /// <summary>
-    ///     An anisotropic filter level is a technique used in computer graphics to improve
-    ///     the quality of textures when they are viewed at oblique angles or from a distance.
-    ///     <para>
-    ///         Here's a brief explanation:
-    ///         <li>
-    ///             Purpose: It enhances texture detail and sharpness, especially for surfaces that
-    ///             are at an angle to the viewer, reducing blurring and aliasing artifacts.
-    ///         </li>
-    ///         <li>
-    ///             How it works: Anisotropic filtering samples the texture more times along the axis
-    ///             of highest compression (the direction where the texture is most skewed), providing
-    ///             better quality than standard mipmapping.
-    ///         </li>
-    ///         <li>
-    ///             Levels: The "level" refers to the maximum number of samples taken for each texel.
-    ///             Higher levels provide better quality but are more computationally expensive.
-    ///         </li>
-    ///         <li>
-    ///             Range: Typically, anisotropic filter levels range from 1 (no anisotropic filtering)
-    ///             to 16 (maximum quality), though some hardware may support higher levels.
-    ///         </li>
-    ///         <li>
-    ///             Performance impact: Higher levels of anisotropic filtering can impact performance,
-    ///             so games and applications often allow users to adjust this setting.
-    ///         </li>
-    ///     </para>
+    /// An anisotropic filter level is a technique used in computer graphics to improve
+    /// the quality of textures when they are viewed at oblique angles or from a distance.
+    /// <para>
+    ///     Here's a brief explanation:
+    ///     <li>
+    ///         Purpose: It enhances texture detail and sharpness, especially for surfaces that
+    ///         are at an angle to the viewer, reducing blurring and aliasing artifacts.
+    ///     </li>
+    ///     <li>
+    ///         How it works: Anisotropic filtering samples the texture more times along the axis
+    ///         of highest compression (the direction where the texture is most skewed), providing
+    ///         better quality than standard mipmapping.
+    ///     </li>
+    ///     <li>
+    ///         Levels: The "level" refers to the maximum number of samples taken for each texel.
+    ///         Higher levels provide better quality but are more computationally expensive.
+    ///     </li>
+    ///     <li>
+    ///         Range: Typically, anisotropic filter levels range from 1 (no anisotropic filtering)
+    ///         to 16 (maximum quality), though some hardware may support higher levels.
+    ///     </li>
+    ///     <li>
+    ///         Performance impact: Higher levels of anisotropic filtering can impact performance,
+    ///         so games and applications often allow users to adjust this setting.
+    ///     </li>
+    /// </para>
     /// </summary>
     public float AnisotropicFilterLevel { get; private set; } = 1.0f;
 
     /// <summary>
-    ///     Texture depth in computer graphics typically refers to one of two concepts:
-    ///     <para>
-    ///         <li>
-    ///             For 3D textures: The depth represents the third dimension of the texture. In this
-    ///             context, a texture is a three-dimensional array of texels (texture elements),
-    ///             where depth is the size of the texture in the z-axis.
-    ///         </li>
-    ///         <li>
-    ///             For color depth: It refers to the number of bits used to represent the color of
-    ///             each texel. Higher color depth allows for more colors and smoother gradients.
-    ///         </li>
-    ///         3D textures are used in various graphics applications, such as:
-    ///         <li>Volumetric rendering (e.g., for medical imaging or scientific visualization)</li>
-    ///         <li>Storing precomputed lighting information</li>
-    ///         <li>Creating complex material effects</li>
-    ///         The Depth property would indicate how many "slices" or layers the 3D texture contains
-    ///         along its z-axis. For standard 2D textures, this value would typically be 1 or not used at all.
-    ///     </para>
+    /// Texture depth in computer graphics typically refers to one of two concepts:
+    /// <para>
+    ///     <li>
+    ///         For 3D textures: The depth represents the third dimension of the texture. In this
+    ///         context, a texture is a three-dimensional array of texels (texture elements),
+    ///         where depth is the size of the texture in the z-axis.
+    ///     </li>
+    ///     <li>
+    ///         For color depth: It refers to the number of bits used to represent the color of
+    ///         each texel. Higher color depth allows for more colors and smoother gradients.
+    ///     </li>
+    ///     3D textures are used in various graphics applications, such as:
+    ///     <li>Volumetric rendering (e.g., for medical imaging or scientific visualization)</li>
+    ///     <li>Storing precomputed lighting information</li>
+    ///     <li>Creating complex material effects</li>
+    ///     The Depth property would indicate how many "slices" or layers the 3D texture contains
+    ///     along its z-axis. For standard 2D textures, this value would typically be 1 or not used at all.
+    /// </para>
     /// </summary>
     public virtual int Depth { get; }
 
     /// <summary>
-    ///     The width, in pixels, of this texture.
+    /// The width, in pixels, of this texture.
     /// </summary>
     public virtual int Width { get; }
 
     /// <summary>
-    ///     The height, in pixels, of this texture.
+    /// The height, in pixels, of this texture.
     /// </summary>
     public virtual int Height { get; }
 
     // ========================================================================
 
     /// <summary>
-    ///     Returns the <see cref="Texture.TextureFilter" /> used for minification.
+    /// Returns the <see cref="Texture.TextureFilter" /> used for minification.
     /// </summary>
     public Texture.TextureFilter MinFilter { get; private set; } = Texture.TextureFilter.Nearest;
 
     /// <summary>
-    ///     Returns the <see cref="Texture.TextureFilter" /> used for magnification.
+    /// Returns the <see cref="Texture.TextureFilter" /> used for magnification.
     /// </summary>
     public Texture.TextureFilter MagFilter { get; private set; } = Texture.TextureFilter.Nearest;
 
     /// <summary>
-    ///     Returns the <see cref="Texture.TextureWrap" /> used for horizontal (U) texture coordinates.
+    /// Returns the <see cref="Texture.TextureWrap" /> used for horizontal (U) texture coordinates.
     /// </summary>
     public Texture.TextureWrap UWrap { get; set; } = Texture.TextureWrap.ClampToEdge;
 
     /// <summary>
-    ///     Returns the <see cref="Texture.TextureWrap" /> used for vertical (V) texture coordinates.
+    /// Returns the <see cref="Texture.TextureWrap" /> used for vertical (V) texture coordinates.
     /// </summary>
     public Texture.TextureWrap VWrap { get; set; } = Texture.TextureWrap.ClampToEdge;
 
@@ -188,8 +188,8 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     Used internally to reload after context loss. Creates a new GL handle then
-    ///     calls <see cref="Texture.Load" />.
+    /// Used internally to reload after context loss. Creates a new GL handle then
+    /// calls <see cref="Texture.Load" />.
     /// </summary>
     public abstract void Reload();
 
@@ -206,8 +206,8 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     Binds this texture. The texture will be bound to the currently active
-    ///     texture unit.
+    /// Binds this texture. The texture will be bound to the currently active
+    /// texture unit.
     /// </summary>
     public void Bind()
     {
@@ -216,7 +216,7 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     Binds the texture to the given texture unit. Sets the currently active texture unit.
+    /// Binds the texture to the given texture unit. Sets the currently active texture unit.
     /// </summary>
     /// <param name="unit"> the unit (0 to MAX_TEXTURE_UNITS).  </param>
     public void Bind( int unit )
@@ -226,13 +226,13 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     Sets the <see cref="Texture.TextureWrap" /> for this texture on the u and v axis.
-    ///     Assumes the texture is bound and active!
+    /// Sets the <see cref="Texture.TextureWrap" /> for this texture on the u and v axis.
+    /// Assumes the texture is bound and active!
     /// </summary>
     /// <param name="u"> the u wrap </param>
     /// <param name="v"> the v wrap </param>
     /// <param name="force">
-    ///     True to always set the values, even if they are the same as the current values.
+    /// True to always set the values, even if they are the same as the current values.
     /// </param>
     public void UnsafeSetWrap( Texture.TextureWrap u, Texture.TextureWrap v, bool force = false )
     {
@@ -250,8 +250,8 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     Sets the <see cref="Texture.TextureWrap" /> for this texture on the u and v axis.
-    ///     This will bind this texture!
+    /// Sets the <see cref="Texture.TextureWrap" /> for this texture on the u and v axis.
+    /// This will bind this texture!
     /// </summary>
     /// <param name="u">the u wrap</param>
     /// <param name="v">the v wrap</param>
@@ -267,14 +267,14 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     Sets the <see cref="Texture.TextureFilter" /> for this texture for minification and
-    ///     magnification. Assumes the texture is bound and active!
+    /// Sets the <see cref="Texture.TextureFilter" /> for this texture for minification and
+    /// magnification. Assumes the texture is bound and active!
     /// </summary>
     /// <param name="minFilter"> the minification filter </param>
     /// <param name="magFilter"> the magnification filter  </param>
     /// <param name="force">
-    ///     True to always set the values, even if they are the same as the current values.
-    ///     Default is false.
+    /// True to always set the values, even if they are the same as the current values.
+    /// Default is false.
     /// </param>
     public void UnsafeSetFilter( Texture.TextureFilter minFilter, Texture.TextureFilter magFilter, bool force = false )
     {
@@ -292,8 +292,8 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     Sets the <see cref="Texture.TextureFilter" /> for this texture for minification and
-    ///     magnification. This will bind this texture!
+    /// Sets the <see cref="Texture.TextureFilter" /> for this texture for minification and
+    /// magnification. This will bind this texture!
     /// </summary>
     /// <param name="minFilter"> the minification filter </param>
     /// <param name="magFilter"> the magnification filter  </param>
@@ -309,17 +309,17 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     Sets the anisotropic filter level for the texture.
-    ///     Assumes the texture is bound and active!
+    /// Sets the anisotropic filter level for the texture.
+    /// Assumes the texture is bound and active!
     /// </summary>
     /// <param name="level">
-    ///     The desired level of filtering. The maximum level supported by
-    ///     the device up to this value will be used.
+    /// The desired level of filtering. The maximum level supported by
+    /// the device up to this value will be used.
     /// </param>
     /// <param name="force"> True to force setting of the level. </param>
     /// <returns>
-    ///     The actual level set, which may be lower than the provided value
-    ///     due to device limitations.
+    /// The actual level set, which may be lower than the provided value
+    /// due to device limitations.
     /// </returns>
     public float UnsafeSetAnisotropicFilter( float level, bool force = false )
     {
@@ -343,7 +343,7 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     Sets, and returns, the Anisotropic Filter Level.
+    /// Sets, and returns, the Anisotropic Filter Level.
     /// </summary>
     /// <param name="level"> The level. </param>
     /// <returns> A float holding the new level. </returns>
@@ -371,10 +371,10 @@ public abstract class GLTexture : IDisposable
     }
 
     /// <summary>
-    ///     Gets the maximum Anisotropic Filter Level, if it is currently &gt; 0.
-    ///     If it is not, then the level is obtained from OpenGL if the extension
-    ///     <b> GL_EXT_texture_filter_anisotropic </b> is supported, or 1.0f
-    ///     is the extension is not supported.
+    /// Gets the maximum Anisotropic Filter Level, if it is currently &gt; 0.
+    /// If it is not, then the level is obtained from OpenGL if the extension
+    /// <b> GL_EXT_texture_filter_anisotropic </b> is supported, or 1.0f
+    /// is the extension is not supported.
     /// </summary>
     /// <returns></returns>
     public static float GetMaxAnisotropicFilterLevel()
@@ -522,7 +522,7 @@ public abstract class GLTexture : IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Delete this GLTexture.
+    /// Delete this GLTexture.
     /// </summary>
     public void Delete()
     {

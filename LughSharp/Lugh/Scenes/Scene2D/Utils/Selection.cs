@@ -30,11 +30,11 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-///     Manages selected objects. Optionally fires a <see cref="ChangeListener.ChangeEvent" />
-///     on an actor.
-///     <para>
-///         Selection changes can be vetoed via <see cref="ChangeListener.ChangeEvent.Cancel()" />.
-///     </para>
+/// Manages selected objects. Optionally fires a <see cref="ChangeListener.ChangeEvent" />
+/// on an actor.
+/// <para>
+///     Selection changes can be vetoed via <see cref="ChangeListener.ChangeEvent.Cancel()" />.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class Selection< T > : IDisableable, IDisposable
@@ -49,10 +49,10 @@ public class Selection< T > : IDisableable, IDisposable
     public bool           ProgrammaticChangeEvents { get; set; } = true;
 
     /// <summary>
-    ///     <param name="value">
-    ///         An actor to fire a <see cref="ChangeListener.ChangeEvent" /> on when the
-    ///         selection changes, or null.
-    ///     </param>
+    /// <param name="value">
+    ///     An actor to fire a <see cref="ChangeListener.ChangeEvent" /> on when the
+    ///     selection changes, or null.
+    /// </param>
     /// </summary>
     public Actor? Actor { get; set; }
 
@@ -63,11 +63,11 @@ public class Selection< T > : IDisableable, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Selects or deselects the specified item based on how the selection is
-    ///     configured, whether ctrl is currently pressed, etc.
-    ///     <para>
-    ///         This is typically invoked by user interaction.
-    ///     </para>
+    /// Selects or deselects the specified item based on how the selection is
+    /// configured, whether ctrl is currently pressed, etc.
+    /// <para>
+    ///     This is typically invoked by user interaction.
+    /// </para>
     /// </summary>
     public virtual void Choose( T item )
     {
@@ -131,7 +131,7 @@ public class Selection< T > : IDisableable, IDisposable
     }
 
     /// <summary>
-    ///     Returns TRUE if this set has items in it.
+    /// Returns TRUE if this set has items in it.
     /// </summary>
     public bool NotEmpty()
     {
@@ -154,7 +154,7 @@ public class Selection< T > : IDisableable, IDisposable
     }
 
     /// <summary>
-    ///     Returns the first selected item, or null.
+    /// Returns the first selected item, or null.
     /// </summary>
     public T? First()
     {
@@ -187,7 +187,7 @@ public class Selection< T > : IDisableable, IDisposable
     }
 
     /// <summary>
-    ///     Sets the selection to only the specified item.
+    /// Sets the selection to only the specified item.
     /// </summary>
     public void Set( T? item )
     {
@@ -257,7 +257,7 @@ public class Selection< T > : IDisableable, IDisposable
     }
 
     /// <summary>
-    ///     Adds the item to the selection.
+    /// Adds the item to the selection.
     /// </summary>
     public void Add( T item )
     {
@@ -280,7 +280,7 @@ public class Selection< T > : IDisableable, IDisposable
     }
 
     /// <summary>
-    ///     Adds all items from the supplied list to the selection.
+    /// Adds all items from the supplied list to the selection.
     /// </summary>
     public void AddAll( List< T > items )
     {
@@ -401,15 +401,15 @@ public class Selection< T > : IDisableable, IDisposable
     }
 
     /// <summary>
-    ///     Called after the selection changes. The default implementation does nothing.
+    /// Called after the selection changes. The default implementation does nothing.
     /// </summary>
     protected virtual void Changed()
     {
     }
 
     /// <summary>
-    ///     Fires a change event on the selection's actor, if any. Called internally when
-    ///     the selection changes, depending on <see cref="ProgrammaticChangeEvents" />.
+    /// Fires a change event on the selection's actor, if any. Called internally when
+    /// the selection changes, depending on <see cref="ProgrammaticChangeEvents" />.
     /// </summary>
     /// <returns> true if the change should be undone. </returns>
     public virtual bool FireChangeEvent()
@@ -442,8 +442,8 @@ public class Selection< T > : IDisableable, IDisposable
     }
 
     /// <summary>
-    ///     Makes a best effort to return the last item selected, else returns an
-    ///     arbitrary item or null if the selection is empty.
+    /// Makes a best effort to return the last item selected, else returns an
+    /// arbitrary item or null if the selection is empty.
     /// </summary>
     public T? GetLastSelected()
     {

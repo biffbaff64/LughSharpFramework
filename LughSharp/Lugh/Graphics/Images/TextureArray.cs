@@ -29,7 +29,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
-///     OpenGL wrapper for TextureArray.
+/// OpenGL wrapper for TextureArray.
 /// </summary>
 [PublicAPI]
 public class TextureArray : GLTexture, IManaged
@@ -41,8 +41,8 @@ public class TextureArray : GLTexture, IManaged
     // ========================================================================
 
     /// <summary>
-    ///     Returns a string representation of the managed status of all
-    ///     textures in the managed textures array.
+    /// Returns a string representation of the managed status of all
+    /// textures in the managed textures array.
     /// </summary>
     public string ManagedStatus
     {
@@ -63,7 +63,7 @@ public class TextureArray : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Gets the number of managed TextureArrays currently loaded.
+    /// Gets the number of managed TextureArrays currently loaded.
     /// </summary>
     public int NumManagedTextureArrays => _managedTextureArrays[ GdxApi.App ].Count;
 
@@ -137,7 +137,7 @@ public class TextureArray : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Attempts to reload the TextureArray.
+    /// Attempts to reload the TextureArray.
     /// </summary>
     /// <exception cref="GdxRuntimeException"> If the TextureArray is unmanaged. </exception>
     public override void Reload()
@@ -167,7 +167,7 @@ public class TextureArray : GLTexture, IManaged
     // ========================================================================
 
     /// <summary>
-    ///     Clears all managed TextureArrays.
+    /// Clears all managed TextureArrays.
     /// </summary>
     internal static void ClearAllTextureArrays( IApplication app )
     {
@@ -175,7 +175,7 @@ public class TextureArray : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Invalidate all managed TextureArrays.
+    /// Invalidate all managed TextureArrays.
     /// </summary>
     internal static void InvalidateAllTextureArrays( IApplication app )
     {

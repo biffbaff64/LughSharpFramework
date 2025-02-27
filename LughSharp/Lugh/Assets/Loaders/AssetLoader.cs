@@ -36,7 +36,7 @@ public enum AssetLoaderType : int
 }
 
 /// <summary>
-///     Abstract base class for asset loaders.
+/// Abstract base class for asset loaders.
 /// </summary>
 [PublicAPI]
 public abstract class AssetLoader
@@ -45,8 +45,8 @@ public abstract class AssetLoader
     // ========================================================================
 
     /// <summary>
-    ///     Constructor, sets the FileHandleResolver to use to resolve the file
-    ///     associated with the asset name.
+    /// Constructor, sets the FileHandleResolver to use to resolve the file
+    /// associated with the asset name.
     /// </summary>
     protected AssetLoader( IFileHandleResolver resolver )
     {
@@ -54,23 +54,23 @@ public abstract class AssetLoader
     }
 
     /// <summary>
-    ///     <see cref="IFileHandleResolver" /> used to map from plain
-    ///     asset names to File Handle instances
+    /// <see cref="IFileHandleResolver" /> used to map from plain
+    /// asset names to File Handle instances
     /// </summary>
     public IFileHandleResolver Resolver { get; }
 
     /// <summary>
-    ///     Indicates whether the child loader class is Async or Sync.
+    /// Indicates whether the child loader class is Async or Sync.
     /// </summary>
     public AssetLoaderType LoaderType { get; set; }
 
     /// <summary>
-    ///     Resolves the specified filename.
+    /// Resolves the specified filename.
     /// </summary>
     /// <param name="fileName"> The filename to resolve. </param>
     /// <returns>
-    ///     A handle to the file, as resolved by the <see cref="IFileHandleResolver" />
-    ///     set on the loader.
+    /// A handle to the file, as resolved by the <see cref="IFileHandleResolver" />
+    /// set on the loader.
     /// </returns>
     public FileInfo Resolve( string fileName )
     {
@@ -78,8 +78,8 @@ public abstract class AssetLoader
     }
 
     /// <summary>
-    ///     Returns the assets this asset requires to be loaded first. This method may be
-    ///     called on a thread other than the GL thread.
+    /// Returns the assets this asset requires to be loaded first. This method may be
+    /// called on a thread other than the GL thread.
     /// </summary>
     /// <param name="filename">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>

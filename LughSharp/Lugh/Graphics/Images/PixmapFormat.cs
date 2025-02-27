@@ -94,7 +94,7 @@ public class PixmapFormat
     }
 
     /// <summary>
-    ///     Gets the number of bytes required for 1 pixel of the specified format.
+    /// Gets the number of bytes required for 1 pixel of the specified format.
     /// </summary>
     public static int Gdx2dBytesPerPixel( PixelType.Format format )
     {
@@ -115,7 +115,7 @@ public class PixmapFormat
     }
 
     /// <summary>
-    ///     Gets the number of bytes required for 1 pixel of the specified format.
+    /// Gets the number of bytes required for 1 pixel of the specified format.
     /// </summary>
     public static int Gdx2dBytesPerPixel( int format )
     {

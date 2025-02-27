@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 public class Actions
 {
     /// <summary>
-    ///     Returns a new or pooled action of the specified type.
+    /// Returns a new or pooled action of the specified type.
     /// </summary>
     public static Action Action( Type a )
     {
@@ -81,7 +81,7 @@ public class Actions
     }
 
     /// <summary>
-    ///     Moves the actor instantly.
+    /// Moves the actor instantly.
     /// </summary>
     public static MoveToAction MoveTo( float x,
                                        float y,
@@ -200,7 +200,7 @@ public class Actions
     }
 
     /// <summary>
-    ///     Transitions from the color at the time this action starts to the specified color.
+    /// Transitions from the color at the time this action starts to the specified color.
     /// </summary>
     public static ColorAction Color( Color color, float duration = 0, IInterpolation? interpolation = null )
     {
@@ -213,7 +213,7 @@ public class Actions
     }
 
     /// <summary>
-    ///     Transitions from the alpha at the time this action starts to the specified alpha.
+    /// Transitions from the alpha at the time this action starts to the specified alpha.
     /// </summary>
     public static AlphaAction Alpha( float a,
                                      float duration = 0,
@@ -228,7 +228,7 @@ public class Actions
     }
 
     /// <summary>
-    ///     Transitions from the alpha at the time this action starts to an alpha of 0.
+    /// Transitions from the alpha at the time this action starts to an alpha of 0.
     /// </summary>
     public static AlphaAction FadeOut( float duration )
     {
@@ -236,7 +236,7 @@ public class Actions
     }
 
     /// <summary>
-    ///     Transitions from the alpha at the time this action starts to an alpha of 0.
+    /// Transitions from the alpha at the time this action starts to an alpha of 0.
     /// </summary>
     public static AlphaAction FadeOut( float duration, IInterpolation interpolation )
     {
@@ -249,7 +249,7 @@ public class Actions
     }
 
     /// <summary>
-    ///     Transitions from the alpha at the time this action starts to an alpha of 1.
+    /// Transitions from the alpha at the time this action starts to an alpha of 1.
     /// </summary>
     public static AlphaAction FadeIn( float duration )
     {
@@ -257,7 +257,7 @@ public class Actions
     }
 
     /// <summary>
-    ///     Transitions from the alpha at the time this action starts to an alpha of 1.
+    /// Transitions from the alpha at the time this action starts to an alpha of 1.
     /// </summary>
     public static AlphaAction FadeIn( float duration, IInterpolation interpolation )
     {
@@ -549,7 +549,7 @@ public class Actions
     }
 
     /// <summary>
-    ///     Sets the target of an action and returns the action
+    /// Sets the target of an action and returns the action
     /// </summary>
     /// <param name="target"> the desired target of the action </param>
     /// <param name="action"> the action on which to set the target </param>

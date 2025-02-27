@@ -33,8 +33,8 @@ namespace DesktopGLBackend.Files;
 public class DesktopGLFileHandle : FileHandle
 {
     /// <summary>
-    ///     Creates a new DesktopGLFileHandle instance, using the supplied filename
-    ///     and <see cref="PathTypes" />.
+    /// Creates a new DesktopGLFileHandle instance, using the supplied filename
+    /// and <see cref="PathTypes" />.
     /// </summary>
     public DesktopGLFileHandle( string fileName, PathTypes type )
         : base( fileName, type )
@@ -42,8 +42,8 @@ public class DesktopGLFileHandle : FileHandle
     }
 
     /// <summary>
-    ///     Creates a new DesktopGLFileHandle instance, using the file name obtained
-    ///     from the supplied <see cref="FileInfo" /> and <see cref="PathTypes" />.
+    /// Creates a new DesktopGLFileHandle instance, using the file name obtained
+    /// from the supplied <see cref="FileInfo" /> and <see cref="PathTypes" />.
     /// </summary>
     public DesktopGLFileHandle( FileInfo file, PathTypes type )
         : base( file.Name, type )
@@ -54,13 +54,13 @@ public class DesktopGLFileHandle : FileHandle
     // ========================================================================
 
     /// <summary>
-    ///     Returns the abstract pathname of this abstract pathname's parent, or null if this pathname
-    ///     does not name a parent directory.
-    ///     <para>
-    ///         The parent of an abstract pathname consists of the pathname's prefix, if any, and each name
-    ///         in the pathname's name sequence except for the last. If the name sequence is empty then the
-    ///         pathname does not name a parent directory.
-    ///     </para>
+    /// Returns the abstract pathname of this abstract pathname's parent, or null if this pathname
+    /// does not name a parent directory.
+    /// <para>
+    ///     The parent of an abstract pathname consists of the pathname's prefix, if any, and each name
+    ///     in the pathname's name sequence except for the last. If the name sequence is empty then the
+    ///     pathname does not name a parent directory.
+    /// </para>
     /// </summary>
     public DirectoryInfo ParentFolder()
     {
@@ -72,7 +72,7 @@ public class DesktopGLFileHandle : FileHandle
     }
 
     /// <summary>
-    ///     Returns a handle to the child with the specified name.
+    /// Returns a handle to the child with the specified name.
     /// </summary>
     public FileHandle Child( string name )
     {
@@ -82,7 +82,7 @@ public class DesktopGLFileHandle : FileHandle
     }
 
     /// <summary>
-    ///     Returns a handle to the sibling with the specified name.
+    /// Returns a handle to the sibling with the specified name.
     /// </summary>
     public FileHandle Sibling( string name )
     {
@@ -92,9 +92,9 @@ public class DesktopGLFileHandle : FileHandle
     }
 
     /// <summary>
-    ///     Returns a File that represents this file handle. Note the returned file will only
-    ///     be usable for <see cref="PathTypes.Absolute" />, <see cref="PathTypes.Internal" />
-    ///     and <see cref="PathTypes.External" /> file handles.
+    /// Returns a File that represents this file handle. Note the returned file will only
+    /// be usable for <see cref="PathTypes.Absolute" />, <see cref="PathTypes.Internal" />
+    /// and <see cref="PathTypes.External" /> file handles.
     /// </summary>
     public FileInfo GetFile()
     {

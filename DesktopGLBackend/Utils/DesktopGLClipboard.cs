@@ -29,13 +29,13 @@ using LughSharp.Lugh.Utils;
 namespace DesktopGLBackend.Utils;
 
 /// <summary>
-///     Clipboard implementation for desktop that uses the system clipboard via Glfw.
+/// Clipboard implementation for desktop that uses the system clipboard via Glfw.
 /// </summary>
 [PublicAPI]
 public class DesktopGLClipboard : IClipboard
 {
     /// <summary>
-    ///     Check if the clipboard has contents.
+    /// Check if the clipboard has contents.
     /// </summary>
     /// <returns> true, if the clipboard has contents </returns>
     public bool HasContents()
@@ -44,7 +44,7 @@ public class DesktopGLClipboard : IClipboard
     }
 
     /// <summary>
-    ///     Gets, or Sets, the current content of the clipboard.
+    /// Gets, or Sets, the current content of the clipboard.
     /// </summary>
     public string? Contents
     {

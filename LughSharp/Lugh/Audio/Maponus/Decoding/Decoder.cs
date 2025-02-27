@@ -30,7 +30,7 @@ using OutputChannelsEnum = LughSharp.Lugh.Audio.Maponus.Decoding.OutputChannels.
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-///     Encapsulates the details of decoding an MPEG audio frame.
+/// Encapsulates the details of decoding an MPEG audio frame.
 /// </summary>
 [PublicAPI]
 public partial class Decoder
@@ -61,7 +61,7 @@ public partial class Decoder
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new Decoder instance with custom parameters.
+    /// Creates a new Decoder instance with custom parameters.
     /// </summary>
     public Decoder( Parameters? parameters = null )
     {
@@ -78,9 +78,9 @@ public partial class Decoder
     }
 
     /// <summary>
-    ///     Gets or sets the Equalizer.
-    ///     If set to null, it defaults to <see cref="Equalizer.PassThruEq" />. When set, it
-    ///     updates the associated filters with the new equalizer's band factors.
+    /// Gets or sets the Equalizer.
+    /// If set to null, it defaults to <see cref="Equalizer.PassThruEq" />. When set, it
+    /// updates the associated filters with the new equalizer's band factors.
     /// </summary>
     public virtual Equalizer? Equalizer
     {
@@ -114,8 +114,8 @@ public partial class Decoder
     }
 
     /// <summary>
-    ///     Changes the output buffer. This will take effect the next time
-    ///     decodeFrame() is called.
+    /// Changes the output buffer. This will take effect the next time
+    /// decodeFrame() is called.
     /// </summary>
     public virtual AudioBase? OutputBuffer
     {
@@ -124,63 +124,63 @@ public partial class Decoder
     }
 
     /// <summary>
-    ///     Gets or sets the scale factor. This property determines the scaling applied
-    ///     to a particular element or calculation.
-    ///     By default, it is set to <see cref="DEFAULT_SCALE_FACTOR" />.
+    /// Gets or sets the scale factor. This property determines the scaling applied
+    /// to a particular element or calculation.
+    /// By default, it is set to <see cref="DEFAULT_SCALE_FACTOR" />.
     /// </summary>
     public float ScaleFactor { get; set; } = DEFAULT_SCALE_FACTOR;
 
     /// <summary>
-    ///     Retrieves the sample frequency of the PCM samples output
-    ///     by this decoder. This typically corresponds to the sample
-    ///     rate encoded in the MPEG audio stream.
+    /// Retrieves the sample frequency of the PCM samples output
+    /// by this decoder. This typically corresponds to the sample
+    /// rate encoded in the MPEG audio stream.
     /// </summary>
     public virtual int OutputFrequency => _outputFrequency;
 
     /// <summary>
-    ///     Retrieves the number of channels of PCM samples output by this decoder.
-    ///     This usually corresponds to the number of channels in the MPEG audio stream.
+    /// Retrieves the number of channels of PCM samples output by this decoder.
+    /// This usually corresponds to the number of channels in the MPEG audio stream.
     /// </summary>
     public virtual int OutputChannels => _outputChannels;
 
     /// <summary>
-    ///     Retrieves the maximum number of samples that will be written to
-    ///     the output buffer when one frame is decoded. This can be used to
-    ///     help calculate the size of other buffers whose size is based upon
-    ///     the number of samples written to the output buffer. NB: this is
-    ///     an upper bound and fewer samples may actually be written, depending
-    ///     upon the sample rate and number of channels.
+    /// Retrieves the maximum number of samples that will be written to
+    /// the output buffer when one frame is decoded. This can be used to
+    /// help calculate the size of other buffers whose size is based upon
+    /// the number of samples written to the output buffer. NB: this is
+    /// an upper bound and fewer samples may actually be written, depending
+    /// upon the sample rate and number of channels.
     /// </summary>
     public virtual int OutputBlockSize => AudioBase.OBUFFERSIZE;
 
     /// <summary>
-    ///     Gets the default parameters for the decoder. This property returns a clone
-    ///     of the static default parameters, ensuring that changes to the returned
-    ///     object do not affect the original default parameters.
+    /// Gets the default parameters for the decoder. This property returns a clone
+    /// of the static default parameters, ensuring that changes to the returned
+    /// object do not affect the original default parameters.
     /// </summary>
     /// <remarks>
-    ///     This property ensures that each call returns a new instance, preventing
-    ///     modifications to the default parameters from unintended side effects.
+    /// This property ensures that each call returns a new instance, preventing
+    /// modifications to the default parameters from unintended side effects.
     /// </remarks>
     /// <value>
-    ///     A clone of the default <see cref="Parameters" /> object for the decoder.
+    /// A clone of the default <see cref="Parameters" /> object for the decoder.
     /// </value>
     /// <exception cref="InvalidCastException">
-    ///     Thrown if the cloning process does not return an object of type <see cref="Parameters" />.
+    /// Thrown if the cloning process does not return an object of type <see cref="Parameters" />.
     /// </exception>
     public static Parameters DefaultParams => ( Parameters )_decoderDefaultParams.Clone();
 
     /// <summary>
-    ///     Decodes one frame from an MPEG audio bitstream.
+    /// Decodes one frame from an MPEG audio bitstream.
     /// </summary>
     /// <param name="header">
-    ///     Header describing the frame to decode.
+    /// Header describing the frame to decode.
     /// </param>
     /// <param name="stream">
-    ///     Bistream that provides the bits for the body of the frame.
+    /// Bistream that provides the bits for the body of the frame.
     /// </param>
     /// <returns>
-    ///     A SampleBuffer containing the decoded samples.
+    /// A SampleBuffer containing the decoded samples.
     /// </returns>
     public virtual AudioBase? DecodeFrame( Header header, Bitstream stream )
     {
@@ -202,15 +202,15 @@ public partial class Decoder
     }
 
     /// <summary>
-    ///     Creates a new <see cref="DecoderException" /> with the specified error code.
+    /// Creates a new <see cref="DecoderException" /> with the specified error code.
     /// </summary>
     /// <param name="errorcode">The error code representing the specific decoder error.</param>
     /// <returns>
-    ///     A new instance of <see cref="DecoderException" /> initialized with the specified error code.
+    /// A new instance of <see cref="DecoderException" /> initialized with the specified error code.
     /// </returns>
     /// <remarks>
-    ///     This method can be overridden in derived classes to provide custom exception handling
-    ///     based on the error code.
+    /// This method can be overridden in derived classes to provide custom exception handling
+    /// based on the error code.
     /// </remarks>
     protected virtual DecoderException NewDecoderException( int errorcode )
     {
@@ -218,20 +218,20 @@ public partial class Decoder
     }
 
     /// <summary>
-    ///     Creates a new <see cref="DecoderException" /> with the specified error code
-    ///     and a nested exception.
+    /// Creates a new <see cref="DecoderException" /> with the specified error code
+    /// and a nested exception.
     /// </summary>
     /// <param name="errorcode">The error code representing the specific decoder error.</param>
     /// <param name="throwable">
-    ///     The exception that caused the decoder error, if any. This parameter can be null.
+    /// The exception that caused the decoder error, if any. This parameter can be null.
     /// </param>
     /// <returns>
-    ///     A new instance of <see cref="DecoderException" /> initialized with the specified error
-    ///     code and nested exception.
+    /// A new instance of <see cref="DecoderException" /> initialized with the specified error
+    /// code and nested exception.
     /// </returns>
     /// <remarks>
-    ///     This method can be overridden in derived classes to provide custom exception handling
-    ///     that includes the original cause of the error.
+    /// This method can be overridden in derived classes to provide custom exception handling
+    /// that includes the original cause of the error.
     /// </remarks>
     protected virtual DecoderException NewDecoderException( int errorcode, Exception? throwable )
     {
@@ -239,19 +239,19 @@ public partial class Decoder
     }
 
     /// <summary>
-    ///     Retrieves the appropriate frame decoder based on the specified MPEG layer.
+    /// Retrieves the appropriate frame decoder based on the specified MPEG layer.
     /// </summary>
     /// <param name="header">The header information of the audio frame.</param>
     /// <param name="stream">The bitstream containing the audio data.</param>
     /// <param name="layer">The MPEG layer of the audio frame (1, 2, or 3).</param>
     /// <returns>An <see cref="IFrameDecoder" /> instance corresponding to the specified MPEG layer.</returns>
     /// <exception cref="DecoderException">
-    ///     Thrown when the specified layer is not supported or if the decoder cannot be retrieved.
+    /// Thrown when the specified layer is not supported or if the decoder cannot be retrieved.
     /// </exception>
     /// <remarks>
-    ///     This method initializes and returns a frame decoder based on the MPEG layer.
-    ///     If the decoder for the specified layer is already initialized, it will return the existing instance.
-    ///     Otherwise, it will create a new instance of the appropriate decoder.
+    /// This method initializes and returns a frame decoder based on the MPEG layer.
+    /// If the decoder for the specified layer is already initialized, it will return the existing instance.
+    /// Otherwise, it will create a new instance of the appropriate decoder.
     /// </remarks>
     protected virtual IFrameDecoder RetrieveDecoder( Header header, Bitstream stream, int layer )
     {
@@ -322,12 +322,12 @@ public partial class Decoder
     }
 
     /// <summary>
-    ///     Initializes the decoder with the specified header information.
+    /// Initializes the decoder with the specified header information.
     /// </summary>
     /// <param name="header">The header information of the audio frame.</param>
     /// <remarks>
-    ///     This method sets up the necessary components for decoding the audio frame based on the header information.
-    ///     It initializes the output buffer, left and right channel filters, and sets the output channels and frequency.
+    /// This method sets up the necessary components for decoding the audio frame based on the header information.
+    /// It initializes the output buffer, left and right channel filters, and sets the output channels and frequency.
     /// </remarks>
     private void Initialise( Header header )
     {

@@ -25,13 +25,13 @@
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-///     Extends <see cref="BinaryWriter" /> with additional convenience methods.
+/// Extends <see cref="BinaryWriter" /> with additional convenience methods.
 /// </summary>
 [PublicAPI]
 public class DataOutput : BinaryWriter
 {
     /// <summary>
-    ///     Constructs a new DataOuput instance with the given output stream.
+    /// Constructs a new DataOuput instance with the given output stream.
     /// </summary>
     /// <param name="output"></param>
     public DataOutput( Stream output ) : base( output )
@@ -39,12 +39,12 @@ public class DataOutput : BinaryWriter
     }
 
     /// <summary>
-    ///     Writes a 1-5 byte int.
+    /// Writes a 1-5 byte int.
     /// </summary>
     /// <param name="value"></param>
     /// <param name="optimizePositive">
-    ///     If true, small positive numbers will be more efficient (1 byte) and
-    ///     small negative numbers will be inefficient (5 bytes).
+    /// If true, small positive numbers will be more efficient (1 byte) and
+    /// small negative numbers will be inefficient (5 bytes).
     /// </param>
     public void WriteInt( int value, bool optimizePositive )
     {
@@ -84,7 +84,7 @@ public class DataOutput : BinaryWriter
     }
 
     /// <summary>
-    ///     Writes a length and then the string as UTF8.
+    /// Writes a length and then the string as UTF8.
     /// </summary>
     /// <param name="value"> May be null.  </param>
     public void WriteString( string? value )
@@ -129,7 +129,7 @@ public class DataOutput : BinaryWriter
     }
 
     /// <summary>
-    ///     Writes a string as UTF8 beyond the first characters that were handled as 8-bit characters.
+    /// Writes a string as UTF8 beyond the first characters that were handled as 8-bit characters.
     /// </summary>
     /// <param name="value">The string to write.</param>
     /// <param name="charCount">The total number of characters in the string.</param>

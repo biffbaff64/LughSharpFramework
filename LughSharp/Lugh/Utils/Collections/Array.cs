@@ -29,9 +29,9 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Utils.Collections;
 
 /// <summary>
-///     A resizable, ordered or unordered array of objects. If unordered, this class
-///     avoids a memory copy when removing elements (the last element is moved to the
-///     removed element's position).
+/// A resizable, ordered or unordered array of objects. If unordered, this class
+/// avoids a memory copy when removing elements (the last element is moved to the
+/// removed element's position).
 /// </summary>
 /// <typeparam name="T"> The type of elements returned by the iterator. </typeparam>
 [PublicAPI]
@@ -43,15 +43,15 @@ public class Array< T >
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new Array with the specified initial capacity. Default is 16.
+    /// Creates a new Array with the specified initial capacity. Default is 16.
     /// </summary>
     /// <param name="ordered">
-    ///     If false, methods that remove elements may change the order of other elements
-    ///     in the array, which avoids a memory copy.
+    /// If false, methods that remove elements may change the order of other elements
+    /// in the array, which avoids a memory copy.
     /// </param>
     /// <param name="capacity">
-    ///     The initial capacity.  Any elements added beyond this will cause the backing
-    ///     array to be grown.
+    /// The initial capacity.  Any elements added beyond this will cause the backing
+    /// array to be grown.
     /// </param>
     public Array( bool ordered = true, int capacity = 16 )
     {
@@ -60,7 +60,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Creates a new Array object from the supplied Array{T} object.
+    /// Creates a new Array object from the supplied Array{T} object.
     /// </summary>
     public Array( Array< T > array )
         : this( array.Ordered, array.Items, 0, array.Size )
@@ -68,7 +68,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Creates a new Array object from the supplied array[].
+    /// Creates a new Array object from the supplied array[].
     /// </summary>
     public Array( T[] array )
         : this( true, array, 0, array.Length )
@@ -76,11 +76,11 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Creates a new Array object from the supplied array[].
+    /// Creates a new Array object from the supplied array[].
     /// </summary>
     /// <param name="ordered">
-    ///     If false, methods that remove elements may change the order of other
-    ///     elements in the array, which avoids a memory copy.
+    /// If false, methods that remove elements may change the order of other
+    /// elements in the array, which avoids a memory copy.
     /// </param>
     /// <param name="array"> The array[]  to use. </param>
     /// <param name="start"> The start index to start copyiong from. </param>
@@ -101,7 +101,7 @@ public class Array< T >
     public bool Ordered { get; set; }
 
     /// <summary>
-    ///     Adds the specified value to this array.
+    /// Adds the specified value to this array.
     /// </summary>
     public virtual void Add( T value )
     {
@@ -114,7 +114,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Adds all items in the supplied array to this array.
+    /// Adds all items in the supplied array to this array.
     /// </summary>
     public virtual void AddAll( List< T > array )
     {
@@ -122,8 +122,8 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Copy items from the supplied array to this array,
-    ///     starting from position 0.
+    /// Copy items from the supplied array to this array,
+    /// starting from position 0.
     /// </summary>
     /// <param name="array">The array of items to add.</param>
     public virtual void AddAll( params T[] array )
@@ -132,8 +132,8 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Copy 'count' items from the supplied array to this array,
-    ///     starting from position 'start'.
+    /// Copy 'count' items from the supplied array to this array,
+    /// starting from position 'start'.
     /// </summary>
     /// <param name="array">The array of items to add.</param>
     /// <param name="start">The start index.</param>
@@ -152,8 +152,8 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Copy 'count' items from the supplied array to this array,
-    ///     starting from position 'start'.
+    /// Copy 'count' items from the supplied array to this array,
+    /// starting from position 'start'.
     /// </summary>
     /// <param name="array">The array of items to add.</param>
     /// <param name="start">The start index.</param>
@@ -173,7 +173,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Gets the array item at the specified index.
+    /// Gets the array item at the specified index.
     /// </summary>
     /// <param name="index"> The index into the array. Must be in the range 0 - Size-1. </param>
     /// <returns></returns>
@@ -193,7 +193,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Sets the elementn at the specified index to the supplied value.
+    /// Sets the elementn at the specified index to the supplied value.
     /// </summary>
     /// <param name="index"> The index into the Array. </param>
     /// <param name="value"> The new value. </param>
@@ -208,7 +208,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Inserts the supplied value into the array at the specified index.
+    /// Inserts the supplied value into the array at the specified index.
     /// </summary>
     /// <param name="index"> The index to insert the value. </param>
     /// <param name="value"> The value top insert. </param>
@@ -243,8 +243,8 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Inserts room for <paramref name="count" /> elements into the array
-    ///     starting at position <paramref name="index" />.
+    /// Inserts room for <paramref name="count" /> elements into the array
+    /// starting at position <paramref name="index" />.
     /// </summary>
     public virtual void InsertRange( int index, int count )
     {
@@ -271,8 +271,8 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Swaps the elements at positions <paramref name="first" /> and
-    ///     <paramref name="second" />
+    /// Swaps the elements at positions <paramref name="first" /> and
+    /// <paramref name="second" />
     /// </summary>
     /// <param name="first"> Array index of the first element. </param>
     /// <param name="second"> Array index of the second element. </param>
@@ -297,7 +297,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Returns TRUE if this array contains the requested value.
+    /// Returns TRUE if this array contains the requested value.
     /// </summary>
     public virtual bool Contains( T? value )
     {
@@ -305,7 +305,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Returns the index of the first occurance of the requested value in this array.
+    /// Returns the index of the first occurance of the requested value in this array.
     /// </summary>
     public virtual int IndexOf( T? value )
     {
@@ -318,7 +318,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Returns the index of the last occurance of the requested value in this array.
+    /// Returns the index of the last occurance of the requested value in this array.
     /// </summary>
     /// <param name="value"> The value to find. </param>
     /// <returns> The above mentione3d index. </returns>
@@ -328,7 +328,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Removes the first occurance of the requested value from this array.
+    /// Removes the first occurance of the requested value from this array.
     /// </summary>
     /// <param name="value"> The value to remove. </param>
     /// <returns> True if successful. </returns>
@@ -348,7 +348,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Removes, and returns, the item found at the specified index from this array.
+    /// Removes, and returns, the item found at the specified index from this array.
     /// </summary>
     /// <param name="index"> The array index. </param>
     /// <returns> The item being removed. </returns>
@@ -379,7 +379,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Remove all items from this array between, and including, the specified start and end points.
+    /// Remove all items from this array between, and including, the specified start and end points.
     /// </summary>
     /// <param name="start"> The start index. </param>
     /// <param name="end"> The end index. </param>
@@ -416,8 +416,8 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Removes all items from this array that match items in the supplied
-    ///     array at the same index.
+    /// Removes all items from this array that match items in the supplied
+    /// array at the same index.
     /// </summary>
     /// <returns> <b>True</b> if successful. </returns>
     public virtual bool RemoveAll( Array< T > array )
@@ -445,7 +445,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Removes and returns the last item.
+    /// Removes and returns the last item.
     /// </summary>
     /// <exception cref="NullReferenceException"> If the array size is zero. </exception>
     public virtual T Pop()
@@ -465,7 +465,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Returns the last item in the array.
+    /// Returns the last item in the array.
     /// </summary>
     /// <exception cref="NullReferenceException">Thrown if the array size is zero.</exception>
     public virtual T Peek()
@@ -479,7 +479,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Returns the first item in the array.
+    /// Returns the first item in the array.
     /// </summary>
     /// <exception cref="NullReferenceException">Thrown if the array size is zero.</exception>
     public T First()
@@ -493,7 +493,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Clears this array.
+    /// Clears this array.
     /// </summary>
     public virtual void Clear()
     {
@@ -503,8 +503,8 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Shrinks the backing array for this Array to the specified size.
-    ///     All items beyond the new size are lost.
+    /// Shrinks the backing array for this Array to the specified size.
+    /// All items beyond the new size are lost.
     /// </summary>
     /// <returns> The resized backing array. </returns>
     public virtual T?[] Shrink()
@@ -518,7 +518,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Sets the size of this array to the new specified value.
+    /// Sets the size of this array to the new specified value.
     /// </summary>
     /// <returns> The resized backing array. </returns>
     public virtual T?[] SetSize( int newSize )
@@ -536,7 +536,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Ensures the backing array has enough room for the requested additional capacity.
+    /// Ensures the backing array has enough room for the requested additional capacity.
     /// </summary>
     /// <returns> The resized backing array. </returns>
     public virtual T?[] EnsureCapacity( int additionalCapacity )
@@ -552,7 +552,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Resize the backing array to the given new size.
+    /// Resize the backing array to the given new size.
     /// </summary>
     /// <param name="newSize"> The new backing array size. </param>
     /// <returns> The resized backing array. </returns>
@@ -568,7 +568,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Sort the backing array, using the default comparer.
+    /// Sort the backing array, using the default comparer.
     /// </summary>
     public virtual void Sort()
     {
@@ -576,7 +576,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Sort the backing array, using the specified comparer.
+    /// Sort the backing array, using the specified comparer.
     /// </summary>
     /// <param name="comparator"> The comparer to use. </param>
     public virtual void Sort( IComparer< T > comparator )
@@ -585,8 +585,8 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Selects the kth ranked item from the backing array, using the specified
-    ///     comparer.
+    /// Selects the kth ranked item from the backing array, using the specified
+    /// comparer.
     /// </summary>
     /// <param name="comparator"> The comparer to use. </param>
     /// <param name="kthLowest"> The rank. </param>
@@ -603,13 +603,13 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Selects the Kth lowest ranked object using the specified comparator.
+    /// Selects the Kth lowest ranked object using the specified comparator.
     /// </summary>
     /// <param name="comparator"> Used for comparison. </param>
     /// <param name="kthLowest">
-    ///     Rank of desired object according to comparison, n is based on ordinal numbers, not
-    ///     array indices. for min value use 1, for max value use size of array, using 0 results
-    ///     in runtime exception.
+    /// Rank of desired object according to comparison, n is based on ordinal numbers, not
+    /// array indices. for min value use 1, for max value use size of array, using 0 results
+    /// in runtime exception.
     /// </param>
     /// <returns> The index of the Nth lowest ranked object. </returns>
     /// <exception cref="GdxRuntimeException"></exception>
@@ -624,7 +624,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Rearrange this array in reverse order.
+    /// Rearrange this array in reverse order.
     /// </summary>
     public virtual void Reverse()
     {
@@ -637,7 +637,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Shuffle this array.
+    /// Shuffle this array.
     /// </summary>
     public virtual void Shuffle()
     {
@@ -650,13 +650,13 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Returns an iterable for the selected items in the array. Remove is
-    ///     supported, but not between hasNext() and next().
-    ///     <para>
-    ///         If Collections.allocateIterators is false, the same iterable instance
-    ///         is returned each time this method is called. Use the Predicate.
-    ///         PredicateIterable constructor for nested or multithreaded iteration.
-    ///     </para>
+    /// Returns an iterable for the selected items in the array. Remove is
+    /// supported, but not between hasNext() and next().
+    /// <para>
+    ///     If Collections.allocateIterators is false, the same iterable instance
+    ///     is returned each time this method is called. Use the Predicate.
+    ///     PredicateIterable constructor for nested or multithreaded iteration.
+    /// </para>
     /// </summary>
     /// <param name="predicate"></param>
     /// <returns></returns>
@@ -681,8 +681,8 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Truncates this array to the specified new size, if the new size
-    ///     is smaller than the current size.
+    /// Truncates this array to the specified new size, if the new size
+    /// is smaller than the current size.
     /// </summary>
     public virtual void Truncate( int newSize )
     {
@@ -700,7 +700,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Returns a random element from the array.
+    /// Returns a random element from the array.
     /// </summary>
     [MustUseReturnValue]
     public virtual T? Random()
@@ -709,7 +709,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Returns the <see cref="Items" /> backing array as a one-dimensional array
+    /// Returns the <see cref="Items" /> backing array as a one-dimensional array
     /// </summary>
     /// <returns> The new array. </returns>
     [MustUseReturnValue]
@@ -721,8 +721,8 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Returns the <see cref="Items" /> backing array as a one-dimensional array
-    ///     of the specified Type.
+    /// Returns the <see cref="Items" /> backing array as a one-dimensional array
+    /// of the specified Type.
     /// </summary>
     /// <param name="type"> The <see cref="Type" /> of the array to create. </param>
     /// <returns> The new array. </returns>
@@ -808,7 +808,7 @@ public class Array< T >
     }
 
     /// <summary>
-    ///     Returns a string that represents the current object.
+    /// Returns a string that represents the current object.
     /// </summary>
     /// <param name="separator"> Character(s) to use as seperators between items. </param>
     /// <returns> A string that represents the current object. </returns>

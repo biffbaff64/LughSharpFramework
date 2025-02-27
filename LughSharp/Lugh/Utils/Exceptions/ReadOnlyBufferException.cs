@@ -25,14 +25,14 @@
 namespace LughSharp.Lugh.Utils.Exceptions;
 
 /// <summary>
-///     Unchecked exception thrown when a content-mutation method such as
-///     put or compact is invoked upon a read-only buffer.
+/// Unchecked exception thrown when a content-mutation method such as
+/// put or compact is invoked upon a read-only buffer.
 /// </summary>
 [PublicAPI]
 public class ReadOnlyBufferException : ApplicationException
 {
     /// <summary>
-    ///     Initializes a new ReadOnlyBufferException with a specified error message.
+    /// Initializes a new ReadOnlyBufferException with a specified error message.
     /// </summary>
     /// <param name="message"> The message that describes the error. </param>
     public ReadOnlyBufferException( string? message = "" )

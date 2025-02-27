@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Maps;
 
 /// <summary>
-///     A Collection of <see cref="MapObject" /> instances.
+/// A Collection of <see cref="MapObject" /> instances.
 /// </summary>
 [PublicAPI]
 public class MapObjects : IEnumerable< MapObject >
@@ -33,7 +33,7 @@ public class MapObjects : IEnumerable< MapObject >
     private readonly List< MapObject > _objects;
 
     /// <summary>
-    ///     Creates an empty set of MapObjects
+    /// Creates an empty set of MapObjects
     /// </summary>
     public MapObjects()
     {
@@ -53,7 +53,7 @@ public class MapObjects : IEnumerable< MapObject >
     }
 
     /// <summary>
-    ///     Gets the <see cref="MapObject" /> at the specified index.
+    /// Gets the <see cref="MapObject" /> at the specified index.
     /// </summary>
     public MapObject Get( int index )
     {
@@ -61,8 +61,8 @@ public class MapObjects : IEnumerable< MapObject >
     }
 
     /// <summary>
-    ///     Searches for, and returns, the <see cref="MapObject" /> which has
-    ///     the same name as the one provided.
+    /// Searches for, and returns, the <see cref="MapObject" /> which has
+    /// the same name as the one provided.
     /// </summary>
     public MapObject Get( string name )
     {
@@ -116,8 +116,8 @@ public class MapObjects : IEnumerable< MapObject >
     }
 
     /// <summary>
-    ///     Returns a List of all <see cref="MapObject" />s that match the
-    ///     specified type.
+    /// Returns a List of all <see cref="MapObject" />s that match the
+    /// specified type.
     /// </summary>
     /// <param name="type"> class of the objects we want to retrieve </param>
     /// <returns> array filled with all the objects in the collection matching type  </returns>

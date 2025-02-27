@@ -30,8 +30,8 @@ namespace LughSharp.Lugh.Maps.Objects;
 public class RectangleMapObject : MapObject
 {
     /// <summary>
-    ///     Creates a rectangle object whose lower left corner is at (0, 0)
-    ///     with width=1 and height=1
+    /// Creates a rectangle object whose lower left corner is at (0, 0)
+    /// with width=1 and height=1
     /// </summary>
     public RectangleMapObject()
         : this( 0.0f, 0.0f, 1.0f, 1.0f )
@@ -39,8 +39,8 @@ public class RectangleMapObject : MapObject
     }
 
     /// <summary>
-    ///     Creates a <see cref="RectangleShape" /> object with the given X and Y
-    ///     coordinates along with a given width and height.
+    /// Creates a <see cref="RectangleShape" /> object with the given X and Y
+    /// coordinates along with a given width and height.
     /// </summary>
     /// <param name="x"> X coordinate</param>
     /// <param name="y"> Y coordinate</param>

@@ -52,8 +52,8 @@ public abstract class AbstractGraphics : IGraphics
     // ========================================================================
 
     /// <summary>
-    ///     Returns the time span between the current frame and the last frame
-    ///     in seconds, without smoothing.
+    /// Returns the time span between the current frame and the last frame
+    /// in seconds, without smoothing.
     /// </summary>
     public virtual float GetRawDeltaTime()
     {
@@ -61,9 +61,9 @@ public abstract class AbstractGraphics : IGraphics
     }
 
     /// <summary>
-    ///     This is a scaling factor for the Density Independent Pixel unit, following the convention
-    ///     where one DIP is one pixel on an approximately 160 dpi screen. Thus on a 160dpi screen this
-    ///     density value will be 1; on a 120 dpi screen it would be .75; etc.
+    /// This is a scaling factor for the Density Independent Pixel unit, following the convention
+    /// where one DIP is one pixel on an approximately 160 dpi screen. Thus on a 160dpi screen this
+    /// density value will be 1; on a 120 dpi screen it would be .75; etc.
     /// </summary>
     /// <returns>the Density Independent Pixel factor of the display.</returns>
     public virtual float GetDensity()
@@ -72,7 +72,7 @@ public abstract class AbstractGraphics : IGraphics
     }
 
     /// <summary>
-    ///     Returns the amount of pixels per logical pixel (point).
+    /// Returns the amount of pixels per logical pixel (point).
     /// </summary>
     float IGraphics.GetBackBufferScale()
     {

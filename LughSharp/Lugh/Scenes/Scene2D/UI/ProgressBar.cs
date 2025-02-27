@@ -32,20 +32,20 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     A progress bar is a widget that visually displays the progress of some activity
-///     or a value within given range. The progress bar has a range (min, max) and a
-///     stepping between each value it represents. The percentage of completeness typically
-///     starts out as an empty progress bar and gradually becomes filled in as the task
-///     or variable value progresses.
-///     <para>
-///         A <see cref="ChangeListener.ChangeEvent" /> is fired when the progress bar knob is moved. Cancelling
-///         the event will move the knob to where it was previously.
-///     </para>
-///     <para>
-///         For a horizontal progress bar, its preferred height is determined by the larger of
-///         the knob and background, and the preferred width is 140, a relatively arbitrary size.
-///         These parameters are reversed for a vertical progress bar.
-///     </para>
+/// A progress bar is a widget that visually displays the progress of some activity
+/// or a value within given range. The progress bar has a range (min, max) and a
+/// stepping between each value it represents. The percentage of completeness typically
+/// starts out as an empty progress bar and gradually becomes filled in as the task
+/// or variable value progresses.
+/// <para>
+///     A <see cref="ChangeListener.ChangeEvent" /> is fired when the progress bar knob is moved. Cancelling
+///     the event will move the knob to where it was previously.
+/// </para>
+/// <para>
+///     For a horizontal progress bar, its preferred height is determined by the larger of
+///     the knob and background, and the preferred width is 140, a relatively arbitrary size.
+///     These parameters are reversed for a vertical progress bar.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class ProgressBar : Widget, IDisableable
@@ -81,16 +81,16 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Creates a new progress bar. If horizontal, its width is determined by the
-    ///     prefWidth parameter, and its height is determined by the maximum of the height
-    ///     of either the progress bar <see cref="NinePatch" /> or progress bar handle
-    ///     <see cref="TextureRegion" />. The min and max values determine the range the
-    ///     values of this progress bar can take on, the stepSize parameter specifies the
-    ///     distance between individual values.
-    ///     <para>
-    ///         E.g. min could be 4, max could be 10 and stepSize could be 0.2, giving you a
-    ///         total of 30 values, 4.0 4.2, 4.4 and so on.
-    ///     </para>
+    /// Creates a new progress bar. If horizontal, its width is determined by the
+    /// prefWidth parameter, and its height is determined by the maximum of the height
+    /// of either the progress bar <see cref="NinePatch" /> or progress bar handle
+    /// <see cref="TextureRegion" />. The min and max values determine the range the
+    /// values of this progress bar can take on, the stepSize parameter specifies the
+    /// distance between individual values.
+    /// <para>
+    ///     E.g. min could be 4, max could be 10 and stepSize could be 0.2, giving you a
+    ///     total of 30 values, 4.0 4.2, 4.4 and so on.
+    /// </para>
     /// </summary>
     /// <param name="min"> the minimum value </param>
     /// <param name="max"> the maximum value </param>
@@ -400,14 +400,14 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Sets the progress bar position, rounded to the nearest step size and
-    ///     clamped to the minimum and maximum values. <see cref="Clamp(float)" />
-    ///     can be overridden to allow values outside of the progress bar's min/max
-    ///     range.
+    /// Sets the progress bar position, rounded to the nearest step size and
+    /// clamped to the minimum and maximum values. <see cref="Clamp(float)" />
+    /// can be overridden to allow values outside of the progress bar's min/max
+    /// range.
     /// </summary>
     /// <returns>
-    ///     <tt>false</tt> if the value was not changed because the progress bar
-    ///     already had the value or it was canceled by a listener.
+    /// <tt>false</tt> if the value was not changed because the progress bar
+    /// already had the value or it was canceled by a listener.
     /// </returns>
     public bool SetBarPosition( float value )
     {
@@ -450,8 +450,8 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Rounds the value using the progress bar's step size.
-    ///     This can be overridden to customize or disable rounding.
+    /// Rounds the value using the progress bar's step size.
+    /// This can be overridden to customize or disable rounding.
     /// </summary>
     private float Round( float value )
     {
@@ -459,8 +459,8 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Clamps the value to the progress bar's min/max range. This can be overridden
-    ///     to allow a range different from the progress bar knob's range.
+    /// Clamps the value to the progress bar's min/max range. This can be overridden
+    /// to allow a range different from the progress bar knob's range.
     /// </summary>
     private float Clamp( float value )
     {
@@ -468,7 +468,7 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Sets the range of this progress bar. The progress bar's current value is clamped to the range.
+    /// Sets the range of this progress bar. The progress bar's current value is clamped to the range.
     /// </summary>
     public void SetRange( float min, float max )
     {
@@ -517,8 +517,8 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    ///     If > 0, changes to the progress bar value via <see cref="Value" />
-    ///     will happen over this duration in seconds.
+    /// If > 0, changes to the progress bar value via <see cref="Value" />
+    /// will happen over this duration in seconds.
     /// </summary>
     /// <param name="duration"></param>
     public void SetAnimateDuration( float duration )
@@ -527,8 +527,8 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    ///     If <see cref="SetAnimateDuration(float)" /> animating the progress bar value,
-    ///     this returns the value current displayed.
+    /// If <see cref="SetAnimateDuration(float)" /> animating the progress bar value,
+    /// this returns the value current displayed.
     /// </summary>
     public float GetVisualValue()
     {
@@ -541,8 +541,8 @@ public class ProgressBar : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Sets the visual value equal to the actual value. This can be used
-    ///     to set the value without animating.
+    /// Sets the visual value equal to the actual value. This can be used
+    /// to set the value without animating.
     /// </summary>
     public void UpdateVisualValue()
     {
@@ -613,7 +613,7 @@ public class ProgressBar : Widget, IDisableable
     // ========================================================================
 
     /// <summary>
-    ///     The style for a progress bar, see <see cref="ProgressBar" />.
+    /// The style for a progress bar, see <see cref="ProgressBar" />.
     /// </summary>
     [PublicAPI]
     public class ProgressBarStyle

@@ -27,15 +27,15 @@ using JetBrains.Annotations;
 namespace Extensions.Source.Tools;
 
 /// <summary>
-///     Instances of classes that implement this interface are used to filter filenames. These
-///     instances are used to filter directory listings in the list method of class File, and
-///     by the Abstract Window Toolkit's file dialog component.
+/// Instances of classes that implement this interface are used to filter filenames. These
+/// instances are used to filter directory listings in the list method of class File, and
+/// by the Abstract Window Toolkit's file dialog component.
 /// </summary>
 [PublicAPI]
 public interface IFilenameFilter
 {
     /// <summary>
-    ///     Tests if a specified file should be included in a file list.
+    /// Tests if a specified file should be included in a file list.
     /// </summary>
     /// <param name="dir"> The directory in which the file was found. </param>
     /// <param name="filename"> The name of the file. </param>

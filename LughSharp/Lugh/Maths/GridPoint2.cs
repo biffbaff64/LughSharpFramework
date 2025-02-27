@@ -28,14 +28,14 @@ namespace LughSharp.Lugh.Maths;
 public class GridPoint2
 {
     /// <summary>
-    ///     Constructs a new 2D grid point, with x and y set to 0.
+    /// Constructs a new 2D grid point, with x and y set to 0.
     /// </summary>
     public GridPoint2() : this( 0, 0 )
     {
     }
 
     /// <summary>
-    ///     Constructs a new 2D grid point.
+    /// Constructs a new 2D grid point.
     /// </summary>
     /// <param name="x">X coordinate</param>
     /// <param name="y">Y coordinate</param>
@@ -46,7 +46,7 @@ public class GridPoint2
     }
 
     /// <summary>
-    ///     Copy constructor
+    /// Copy constructor
     /// </summary>
     /// <param name="point">The 2D grid point to make a copy of.</param>
     public GridPoint2( GridPoint2 point )
@@ -59,7 +59,7 @@ public class GridPoint2
     public int Y { get; set; }
 
     /// <summary>
-    ///     Sets the coordinates of this 2D grid point to that of another.
+    /// Sets the coordinates of this 2D grid point to that of another.
     /// </summary>
     /// <param name="point"> The 2D grid point to copy the coordinates of.</param>
     /// <returns> this 2D grid point for chaining.</returns>
@@ -72,7 +72,7 @@ public class GridPoint2
     }
 
     /// <summary>
-    ///     Sets the coordinates of this 2D grid point.
+    /// Sets the coordinates of this 2D grid point.
     /// </summary>
     /// <param name="x"> X coordinate</param>
     /// <param name="y"> Y coordinate</param>
@@ -136,7 +136,7 @@ public class GridPoint2
     }
 
     /// <summary>
-    ///     Adds another 2D grid point to this point.
+    /// Adds another 2D grid point to this point.
     /// </summary>
     /// <param name="other"> The other point </param>
     /// <returns> this 2d grid point for chaining. </returns>
@@ -149,7 +149,7 @@ public class GridPoint2
     }
 
     /// <summary>
-    ///     Adds another 2D grid point to this point.
+    /// Adds another 2D grid point to this point.
     /// </summary>
     /// <param name="x"> The x-coordinate of the other point </param>
     /// <param name="y"> The y-coordinate of the other point </param>
@@ -163,7 +163,7 @@ public class GridPoint2
     }
 
     /// <summary>
-    ///     Subtracts another 2D grid point from this point.
+    /// Subtracts another 2D grid point from this point.
     /// </summary>
     /// <param name="other"> The other point </param>
     /// <returns> this 2d grid point for chaining. </returns>
@@ -176,7 +176,7 @@ public class GridPoint2
     }
 
     /// <summary>
-    ///     Subtracts another 2D grid point from this point.
+    /// Subtracts another 2D grid point from this point.
     /// </summary>
     /// <param name="x"> The x-coordinate of the other point </param>
     /// <param name="y"> The y-coordinate of the other point </param>

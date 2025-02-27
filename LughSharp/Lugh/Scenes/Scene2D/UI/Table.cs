@@ -95,7 +95,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Creates a table with a skin, which is required to use <see cref="AssetDescriptor" />
+    /// Creates a table with a skin, which is required to use <see cref="AssetDescriptor" />
     /// </summary>
     public Table( Skin? skin )
     {
@@ -169,8 +169,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Called to draw the background, before clipping is applied (if enabled).
-    ///     Default implementation draws the background drawable.
+    /// Called to draw the background, before clipping is applied (if enabled).
+    /// Default implementation draws the background drawable.
     /// </summary>
     protected virtual void DrawBackground( IBatch batch, float parentAlpha, float x, float y )
     {
@@ -185,9 +185,9 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Sets the background drawable from the skin and adjusts the table's padding
-    ///     to match the background. This may only be called if a skin has been set
-    ///     with <see cref="Table" /> or <see cref="Skin" />.
+    /// Sets the background drawable from the skin and adjusts the table's padding
+    /// to match the background. This may only be called if a skin has been set
+    /// with <see cref="Table" /> or <see cref="Skin" />.
     /// </summary>
     protected void SetBackground( string drawableName )
     {
@@ -200,7 +200,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     <param name="background"> May be null to clear the background. </param>
+    /// <param name="background"> May be null to clear the background. </param>
     /// </summary>
     protected void SetBackground( IDrawable? background )
     {
@@ -236,7 +236,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Sets the table background to the supplied IDrawable.
+    /// Sets the table background to the supplied IDrawable.
     /// </summary>
     /// <param name="background"></param>
     /// <returns></returns>
@@ -291,7 +291,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds a cell without an actor.
+    /// Adds a cell without an actor.
     /// </summary>
     public Cell AddWithoutActor()
     {
@@ -299,7 +299,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds a new cell to the table with the specified actor.
+    /// Adds a new cell to the table with the specified actor.
     /// </summary>
     public Cell Add< T >( T? actor ) where T : Actor
     {
@@ -392,8 +392,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds a new cell with a label. This may only be called if a skin
-    ///     has been set with <see cref="Table" /> or <see cref="Skin" />
+    /// Adds a new cell with a label. This may only be called if a skin
+    /// has been set with <see cref="Table" /> or <see cref="Skin" />
     /// </summary>
     public Cell Add( string? text )
     {
@@ -408,8 +408,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds a new cell with a label. This may only be called if a skin
-    ///     has been set with <see cref="Table" /> or <see cref="Skin" />
+    /// Adds a new cell with a label. This may only be called if a skin
+    /// has been set with <see cref="Table" /> or <see cref="Skin" />
     /// </summary>
     public Cell Add( string text, string labelStyleName )
     {
@@ -422,8 +422,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds a new cell with a label. This may only be called if a skin
-    ///     has been set with <see cref="Table" /> or <see cref="Skin" />.
+    /// Adds a new cell with a label. This may only be called if a skin
+    /// has been set with <see cref="Table" /> or <see cref="Skin" />.
     /// </summary>
     public Cell Add( string? text, string fontName, Color color )
     {
@@ -436,8 +436,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds a new cell with a label. This may only be called if a skin
-    ///     has been set with <see cref="Table" /> or <see cref="Skin" />.
+    /// Adds a new cell with a label. This may only be called if a skin
+    /// has been set with <see cref="Table" /> or <see cref="Skin" />.
     /// </summary>
     public Cell Add( string? text, string fontName, string colorName )
     {
@@ -450,7 +450,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds a new cell to the table with the specified actors in a <see cref="Stack" />.
+    /// Adds a new cell to the table with the specified actors in a <see cref="Stack" />.
     /// </summary>
     /// <param name="actors"> May be null or empty to add a stack without any actors. </param>
     public Cell Stack( params Actor[]? actors )
@@ -493,7 +493,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Removes all actors and cells from the table.
+    /// Removes all actors and cells from the table.
     /// </summary>
     public override void ClearChildren()
     {
@@ -523,8 +523,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Removes all actors and cells from the table (same as <see cref="ClearChildren" />)
-    ///     and additionally resets all table properties and cell, column, and row defaults.
+    /// Removes all actors and cells from the table (same as <see cref="ClearChildren" />)
+    /// and additionally resets all table properties and cell, column, and row defaults.
     /// </summary>
     public void Reset()
     {
@@ -553,8 +553,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Indicates that subsequent cells should be added to a new row and returns the
-    ///     cell values that will be used as the defaults for all cells in the new row.
+    /// Indicates that subsequent cells should be added to a new row and returns the
+    /// cell values that will be used as the defaults for all cells in the new row.
     /// </summary>
     public Cell? AddRow()
     {
@@ -612,8 +612,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Gets the cell values that will be used as the defaults for all cells in the
-    ///     specified column. Columns are indexed starting at 0.
+    /// Gets the cell values that will be used as the defaults for all cells in the
+    /// specified column. Columns are indexed starting at 0.
     /// </summary>
     /// <param name="column"></param>
     public Cell ColumnDefaults( int column )
@@ -644,7 +644,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns the cell for the specified actor in this table, or null.
+    /// Returns the cell for the specified actor in this table, or null.
     /// </summary>
     public Cell? GetCell< T >( T actor ) where T : Actor
     {
@@ -669,7 +669,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns the cells for this table.
+    /// Returns the cells for this table.
     /// </summary>
     public List< Cell > GetCells()
     {
@@ -721,8 +721,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Sets the padTop, padLeft, padBottom, and padRight around the
-    ///     table to the specified value.
+    /// Sets the padTop, padLeft, padBottom, and padRight around the
+    /// table to the specified value.
     /// </summary>
     /// <param name="pad"></param>
     /// <returns></returns>
@@ -751,7 +751,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Padding at the top edge of the table. */
+    /// Padding at the top edge of the table. */
     /// </summary>
     /// <param name="padTop"></param>
     /// <returns></returns>
@@ -766,7 +766,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Padding at the left edge of the table. */
+    /// Padding at the left edge of the table. */
     /// </summary>
     /// <param name="padLeft"></param>
     /// <returns></returns>
@@ -781,7 +781,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Padding at the bottom edge of the table. */
+    /// Padding at the bottom edge of the table. */
     /// </summary>
     /// <param name="padBottom"></param>
     /// <returns></returns>
@@ -796,7 +796,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Padding at the right edge of the table. */
+    /// Padding at the right edge of the table. */
     /// </summary>
     /// <param name="padRight"></param>
     /// <returns></returns>
@@ -811,7 +811,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Sets the padTop, padLeft, padBottom, and padRight around the table to the specified value.
+    /// Sets the padTop, padLeft, padBottom, and padRight around the table to the specified value.
     /// </summary>
     /// <param name="pad"></param>
     /// <returns></returns>
@@ -834,7 +834,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Padding at the top edge of the table. */
+    /// Padding at the top edge of the table. */
     /// </summary>
     /// <param name="padTop"></param>
     /// <returns></returns>
@@ -848,7 +848,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Padding at the left edge of the table. */
+    /// Padding at the left edge of the table. */
     /// </summary>
     /// <param name="padLeft"></param>
     /// <returns></returns>
@@ -862,7 +862,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Padding at the bottom edge of the table. */
+    /// Padding at the bottom edge of the table. */
     /// </summary>
     /// <param name="padBottom"></param>
     /// <returns></returns>
@@ -876,7 +876,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Padding at the right edge of the table. */
+    /// Padding at the right edge of the table. */
     /// </summary>
     /// <param name="padRight"></param>
     /// <returns></returns>
@@ -890,9 +890,9 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Alignment of the logical table within the table actor.
-    ///     Set to <see cref="Alignment.CENTER" />, <see cref="Alignment.TOP" />, <see cref="Alignment.BOTTOM" />,
-    ///     <see cref="Alignment.LEFT" />, <see cref="Alignment.RIGHT" />, or any combination of those.
+    /// Alignment of the logical table within the table actor.
+    /// Set to <see cref="Alignment.CENTER" />, <see cref="Alignment.TOP" />, <see cref="Alignment.BOTTOM" />,
+    /// <see cref="Alignment.LEFT" />, <see cref="Alignment.RIGHT" />, or any combination of those.
     /// </summary>
     /// <param name="align"></param>
     /// <returns></returns>
@@ -904,8 +904,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Sets the alignment of the logical table within the table actor to
-    ///     <see cref="Alignment.CENTER" />. This clears any other alignment.
+    /// Sets the alignment of the logical table within the table actor to
+    /// <see cref="Alignment.CENTER" />. This clears any other alignment.
     /// </summary>
     /// <returns></returns>
     public Table Center()
@@ -916,8 +916,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds <see cref="Alignment.TOP" /> and clears <see cref="Alignment.BOTTOM" /> for
-    ///     the alignment of the logical table within the table actor.
+    /// Adds <see cref="Alignment.TOP" /> and clears <see cref="Alignment.BOTTOM" /> for
+    /// the alignment of the logical table within the table actor.
     /// </summary>
     /// <returns></returns>
     public Table AddTopAlignment()
@@ -929,8 +929,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds <see cref="Alignment.LEFT" /> and clears <see cref="Alignment.RIGHT" /> for
-    ///     the alignment of the logical table within the table actor.
+    /// Adds <see cref="Alignment.LEFT" /> and clears <see cref="Alignment.RIGHT" /> for
+    /// the alignment of the logical table within the table actor.
     /// </summary>
     /// <returns></returns>
     public Table AddLeftAlignment()
@@ -942,8 +942,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds <see cref="Alignment.BOTTOM" /> and clears <see cref="Alignment.TOP" /> for the
-    ///     alignment of the logical table within the table actor.
+    /// Adds <see cref="Alignment.BOTTOM" /> and clears <see cref="Alignment.TOP" /> for the
+    /// alignment of the logical table within the table actor.
     /// </summary>
     public Table AddBottomAlignment()
     {
@@ -954,8 +954,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Adds <see cref="Alignment.RIGHT" /> and clears <see cref="Alignment.LEFT" /> for
-    ///     the alignment of the logical table within the table actor.
+    /// Adds <see cref="Alignment.RIGHT" /> and clears <see cref="Alignment.LEFT" /> for
+    /// the alignment of the logical table within the table actor.
     /// </summary>
     public Table AddRightAlignment()
     {
@@ -1006,7 +1006,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns <see cref="_padLeft" /> plus <see cref="_padRight" />.
+    /// Returns <see cref="_padLeft" /> plus <see cref="_padRight" />.
     /// </summary>
     /// <returns></returns>
     public float GetPadX()
@@ -1015,7 +1015,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns <see cref="_padTop" /> plus <see cref="_padBottom" />.
+    /// Returns <see cref="_padTop" /> plus <see cref="_padBottom" />.
     /// </summary>
     /// <returns></returns>
     public float GetPadY()
@@ -1029,7 +1029,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns the row index for the y coordinate, or -1 if not over a row.
+    /// Returns the row index for the y coordinate, or -1 if not over a row.
     /// </summary>
     /// <param name="y"> The y coordinate, where 0 is the top of the table. </param>
     public int GetRow( float y )
@@ -1064,7 +1064,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns the height of the specified row, or 0 if the table layout has not been validated.
+    /// Returns the height of the specified row, or 0 if the table layout has not been validated.
     /// </summary>
     public float GetRowHeight( int rowIndex )
     {
@@ -1072,7 +1072,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns the min height of the specified row.
+    /// Returns the min height of the specified row.
     /// </summary>
     /// <param name="rowIndex">The row number</param>
     public float GetRowMinHeight( int rowIndex )
@@ -1086,7 +1086,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns the pref height of the specified row.
+    /// Returns the pref height of the specified row.
     /// </summary>
     /// <param name="rowIndex">The row number</param>
     public float GetRowPrefHeight( int rowIndex )
@@ -1100,8 +1100,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns the width of the specified column, or 0 if the
-    ///     table layout has not been validated.
+    /// Returns the width of the specified column, or 0 if the
+    /// table layout has not been validated.
     /// </summary>
     /// <param name="columnIndex">The column number</param>
     public float GetColumnWidth( int columnIndex )
@@ -1110,7 +1110,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns the min height of the specified column.
+    /// Returns the min height of the specified column.
     /// </summary>
     /// <param name="columnIndex">The column number</param>
     public float GetColumnMinWidth( int columnIndex )
@@ -1124,7 +1124,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Returns the pref height of the specified column.
+    /// Returns the pref height of the specified column.
     /// </summary>
     /// <param name="columnIndex">The column number</param>
     public float GetColumnPrefWidth( int columnIndex )
@@ -1430,9 +1430,9 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Positions and sizes children of the table using the cell associated
-    ///     with each child. The values given are the position within the parent
-    ///     and size of the table.
+    /// Positions and sizes children of the table using the cell associated
+    /// with each child. The values given are the position within the parent
+    /// and size of the table.
     /// </summary>
     public void Layout()
     {
@@ -1864,7 +1864,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Turns on table debug lines.
+    /// Turns on table debug lines.
     /// </summary>
     public Table DebugTable()
     {
@@ -1880,7 +1880,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Turns on cell debug lines.
+    /// Turns on cell debug lines.
     /// </summary>
     public Table DebugCell()
     {
@@ -1896,7 +1896,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Turns on actor debug lines.
+    /// Turns on actor debug lines.
     /// </summary>
     public Table DebugActor()
     {
@@ -1912,7 +1912,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    ///     Turns debug lines on or off.
+    /// Turns debug lines on or off.
     /// </summary>
     public Table DebugLines( DebugType debug )
     {
@@ -2093,13 +2093,13 @@ public class Table : WidgetGroup
     #region Properties
 
     /// <value>
-    ///     The skin that was passed to this table in its constructor, or null if none was given.
+    /// The skin that was passed to this table in its constructor, or null if none was given.
     /// </value>
     public Skin? Skin { get; set; }
 
     /// <summary>
-    ///     Causes the contents to be clipped if they exceed the table's bounds.
-    ///     Enabling clipping sets <see cref="Group.Transform" /> to true.
+    /// Causes the contents to be clipped if they exceed the table's bounds.
+    /// Enabling clipping sets <see cref="Group.Transform" /> to true.
     /// </summary>
     public bool Clip
     {
@@ -2115,8 +2115,8 @@ public class Table : WidgetGroup
     public DebugType TableDebug { get; set; } = DebugType.None;
 
     /// <summary>
-    ///     If true (the default), positions and sizes of child actors are
-    ///     rounded and ceiled to the nearest integer value.
+    /// If true (the default), positions and sizes of child actors are
+    /// rounded and ceiled to the nearest integer value.
     /// </summary>
     public bool Round { get; set; } = true;
 
@@ -2129,22 +2129,22 @@ public class Table : WidgetGroup
     #region backgrounds
 
     /// <summary>
-    ///     Value that is the top padding of the table's background.
+    /// Value that is the top padding of the table's background.
     /// </summary>
     public static readonly Value BackgroundTop = new BackgroundTopDelegate();
 
     /// <summary>
-    ///     Value that is the bottom padding of the table's background.
+    /// Value that is the bottom padding of the table's background.
     /// </summary>
     public static readonly Value BackgroundBottom = new BackgroundBottomDelegate();
 
     /// <summary>
-    ///     Value that is the left padding of the table's background.
+    /// Value that is the left padding of the table's background.
     /// </summary>
     public static readonly Value BackgroundLeft = new BackgroundLeftDelegate();
 
     /// <summary>
-    ///     Value that is the right padding of the table's background.
+    /// Value that is the right padding of the table's background.
     /// </summary>
     public static readonly Value BackgroundRight = new BackgroundRightDelegate();
 

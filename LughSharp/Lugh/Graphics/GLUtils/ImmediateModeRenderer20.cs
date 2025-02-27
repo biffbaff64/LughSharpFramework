@@ -29,8 +29,8 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-///     Immediate mode rendering class for GLES 2.0. The renderer will allow you to
-///     specify vertices on the fly and provides a default shader for (unlit) rendering.
+/// Immediate mode rendering class for GLES 2.0. The renderer will allow you to
+/// specify vertices on the fly and provides a default shader for (unlit) rendering.
 /// </summary>
 [PublicAPI]
 [Obsolete( "To be removed" )]
@@ -404,8 +404,8 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     }
 
     /// <summary>
-    ///     Returns a new instance of the default shader used by SpriteBatch
-    ///     when no shader is specified.
+    /// Returns a new instance of the default shader used by SpriteBatch
+    /// when no shader is specified.
     /// </summary>
     public static ShaderProgram CreateDefaultShader( bool hasNormals, bool hasColors, int numTexCoords )
     {

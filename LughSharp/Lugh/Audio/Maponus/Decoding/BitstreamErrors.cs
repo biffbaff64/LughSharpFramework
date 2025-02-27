@@ -25,8 +25,8 @@
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-///     This struct describes all error codes that can be thrown
-///     in BistreamExceptions.
+/// This struct describes all error codes that can be thrown
+/// in BistreamExceptions.
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]

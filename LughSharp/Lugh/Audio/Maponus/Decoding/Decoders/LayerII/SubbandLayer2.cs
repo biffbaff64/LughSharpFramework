@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Audio.Maponus.Decoding.Decoders.LayerII;
 
 /// <summary>
-///     public class for layer II subbands in single channel mode.
+/// public class for layer II subbands in single channel mode.
 /// </summary>
 [PublicAPI]
 public class SubbandLayer2 : ASubband

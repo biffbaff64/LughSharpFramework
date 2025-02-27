@@ -28,7 +28,7 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Assets;
 
 /// <summary>
-///     Represents a task for loading an asset, including managing dependencies and handling cancellation.
+/// Represents a task for loading an asset, including managing dependencies and handling cancellation.
 /// </summary>
 [PublicAPI]
 public class AssetLoadingTask
@@ -44,7 +44,7 @@ public class AssetLoadingTask
     // ========================================================================
 
     /// <summary>
-    ///     Represents a task for loading an asset, including managing dependencies and handling cancellation.
+    /// Represents a task for loading an asset, including managing dependencies and handling cancellation.
     /// </summary>
     public AssetLoadingTask( AssetManager manager, AssetDescriptor assetDesc, AssetLoader loader )
     {
@@ -64,13 +64,13 @@ public class AssetLoadingTask
     public bool                     IsAsyncLoader      { get; private set; }
 
     /// <summary>
-    ///     Asynchronously loads an asset along with its dependencies based on the type of asset loader
-    ///     provided. Can handle both asynchronous and synchronous asset loaders, ensuring dependencies
-    ///     are resolved and the asset is either loaded asynchronously or synchronously as required.
+    /// Asynchronously loads an asset along with its dependencies based on the type of asset loader
+    /// provided. Can handle both asynchronous and synchronous asset loaders, ensuring dependencies
+    /// are resolved and the asset is either loaded asynchronously or synchronously as required.
     /// </summary>
     /// <returns>
-    ///     A task representing the asynchronous operation. The task contains the loaded asset object or
-    ///     null if the loading task was cancelled or the loader was not recognized.
+    /// A task representing the asynchronous operation. The task contains the loaded asset object or
+    /// null if the loading task was cancelled or the loader was not recognized.
     /// </returns>
     public object? LoadAsync()
     {
@@ -103,17 +103,17 @@ public class AssetLoadingTask
     }
 
     /// <summary>
-    ///     Asynchronously loads the dependencies required for an asset using the
-    ///     provided asynchronous asset loader. Ensures all dependencies are resolved
-    ///     and loaded before continuing to load the actual asset.
+    /// Asynchronously loads the dependencies required for an asset using the
+    /// provided asynchronous asset loader. Ensures all dependencies are resolved
+    /// and loaded before continuing to load the actual asset.
     /// </summary>
     /// <param name="loader">
-    ///     The asynchronous asset loader responsible for fetching the dependencies
-    ///     required by the asset.
+    /// The asynchronous asset loader responsible for fetching the dependencies
+    /// required by the asset.
     /// </param>
     /// <returns>
-    ///     A task representing the asynchronous operation. The task contains the resolved
-    ///     dependencies or completes when dependencies are loaded.
+    /// A task representing the asynchronous operation. The task contains the resolved
+    /// dependencies or completes when dependencies are loaded.
     /// </returns>
     private void LoadDependenciesAsync( AsynchronousAssetLoader loader )
     {
@@ -140,13 +140,13 @@ public class AssetLoadingTask
     }
 
     /// <summary>
-    ///     Asynchronously loads an asset using the provided asynchronous asset loader.
-    ///     Ensures that dependencies are loaded prior to loading the asset itself.
+    /// Asynchronously loads an asset using the provided asynchronous asset loader.
+    /// Ensures that dependencies are loaded prior to loading the asset itself.
     /// </summary>
     /// <param name="loader">The asynchronous asset loader to be used for loading the asset.</param>
     /// <returns>
-    ///     A task representing the asynchronous operation, containing the loaded
-    ///     asset object or null if loading fails.
+    /// A task representing the asynchronous operation, containing the loaded
+    /// asset object or null if loading fails.
     /// </returns>
     private object? LoadAssetAsync( AsynchronousAssetLoader loader )
     {
@@ -159,8 +159,8 @@ public class AssetLoadingTask
     }
 
     /// <summary>
-    ///     Loads an asset synchronously using the provided loader.
-    ///     This method handles dependency resolution before loading the asset itself.
+    /// Loads an asset synchronously using the provided loader.
+    /// This method handles dependency resolution before loading the asset itself.
     /// </summary>
     /// <param name="loader">The synchronous asset loader to be used for loading the asset.</param>
     /// <returns>The loaded asset object or null if loading fails.</returns>
@@ -183,8 +183,8 @@ public class AssetLoadingTask
     }
 
     /// <summary>
-    ///     Unloads the current asset using the associated asynchronous asset loader,
-    ///     if applicable.
+    /// Unloads the current asset using the associated asynchronous asset loader,
+    /// if applicable.
     /// </summary>
     public void Unload()
     {
@@ -195,8 +195,8 @@ public class AssetLoadingTask
     }
 
     /// <summary>
-    ///     Resolves the file information for the given asset descriptor using the
-    ///     provided asset loader, if needed.
+    /// Resolves the file information for the given asset descriptor using the
+    /// provided asset loader, if needed.
     /// </summary>
     /// <param name="loader">The asset loader to use for resolving the file information.</param>
     /// <param name="assetDesc">The asset descriptor containing the asset details to resolve.</param>
@@ -212,8 +212,8 @@ public class AssetLoadingTask
     }
 
     /// <summary>
-    ///     Removes duplicate asset descriptors from the given list. Duplicates are identified
-    ///     based on the asset name and asset type.
+    /// Removes duplicate asset descriptors from the given list. Duplicates are identified
+    /// based on the asset name and asset type.
     /// </summary>
     /// <param name="array">The list of asset descriptors to process for duplicates.</param>
     private static void RemoveDuplicates( List< AssetDescriptor > array )

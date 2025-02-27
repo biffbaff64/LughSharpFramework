@@ -29,8 +29,8 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-///     An action that runs a <see cref="IRunnable.Runnable" />. Alternatively, the <see cref="Run()" />
-///     method can be overridden instead of setting a runnable.
+/// An action that runs a <see cref="IRunnable.Runnable" />. Alternatively, the <see cref="Run()" />
+/// method can be overridden instead of setting a runnable.
 /// </summary>
 [PublicAPI]
 public class RunnableAction : Action
@@ -51,7 +51,7 @@ public class RunnableAction : Action
     }
 
     /// <summary>
-    ///     Called to run the runnable.
+    /// Called to run the runnable.
     /// </summary>
     public virtual void Run()
     {

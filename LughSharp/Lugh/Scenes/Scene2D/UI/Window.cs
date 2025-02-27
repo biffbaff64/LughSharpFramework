@@ -32,14 +32,14 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     A table that can be dragged and act as a modal window. The top padding is
-///     used as the window's title height.
-///     <para>
-///         The preferred size of a window is the preferred size of the title text and
-///         the children as laid out by the table. After adding children to the window,
-///         it can be convenient to call <see cref="WidgetGroup.Pack" /> to size the
-///         window to the size of the children.
-///     </para>
+/// A table that can be dragged and act as a modal window. The top padding is
+/// used as the window's title height.
+/// <para>
+///     The preferred size of a window is the preferred size of the title text and
+///     the children as laid out by the table. After adding children to the window,
+///     it can be convenient to call <see cref="WidgetGroup.Pack" /> to size the
+///     window to the size of the children.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class Window : Table
@@ -89,7 +89,7 @@ public class Window : Table
     protected int Edge { get; set; }
 
     /// <summary>
-    ///     This windows <see cref="WindowStyle" /> property.
+    /// This windows <see cref="WindowStyle" /> property.
     /// </summary>
     public WindowStyle? Style
     {
@@ -105,9 +105,9 @@ public class Window : Table
     }
 
     /// <summary>
-    ///     Private Setup method, code moved from constructor to allow
-    ///     calling of virtual methods as they should not be called from
-    ///     constructors.
+    /// Private Setup method, code moved from constructor to allow
+    /// calling of virtual methods as they should not be called from
+    /// constructors.
     /// </summary>
     /// <param name="title"> Window title. </param>
     /// <param name="style"> Window Style </param>
@@ -591,7 +591,7 @@ public class Window : Table
     // ========================================================================
 
     /// <summary>
-    ///     The style for a window, see <see cref="Window" />.
+    /// The style for a window, see <see cref="Window" />.
     /// </summary>
     [PublicAPI]
     public class WindowStyle

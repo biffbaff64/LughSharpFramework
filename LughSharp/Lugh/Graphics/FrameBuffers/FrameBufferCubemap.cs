@@ -33,12 +33,12 @@ namespace LughSharp.Lugh.Graphics.FrameBuffers;
 public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
 {
     /// <summary>
-    ///     cubemap sides cache
+    /// cubemap sides cache
     /// </summary>
     private static readonly Cubemap.CubemapSide[] _cubemapSides = Cubemap.CubemapSide.Values();
 
     /// <summary>
-    ///     the zero-based index of the active side
+    /// the zero-based index of the active side
     /// </summary>
     private int _currentSide;
 
@@ -47,7 +47,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     }
 
     /// <summary>
-    ///     Creates a GLFrameBuffer from the specifications provided by bufferBuilder
+    /// Creates a GLFrameBuffer from the specifications provided by bufferBuilder
     /// </summary>
     /// <param name="bufferBuilder"></param>
     public FrameBufferCubemap( FrameBufferCubemapBuilder bufferBuilder )
@@ -56,19 +56,19 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     }
 
     /// <summary>
-    ///     Creates a new FrameBuffer having the given dimensions and potentially
-    ///     a depth and a stencil buffer attached.
+    /// Creates a new FrameBuffer having the given dimensions and potentially
+    /// a depth and a stencil buffer attached.
     /// </summary>
     /// <param name="format">
-    ///     the format of the color buffer; according to the OpenGL ES 2.0 spec,
-    ///     only RGB565, RGBA4444 and RGB5_A1 are color-renderable
+    /// the format of the color buffer; according to the OpenGL ES 2.0 spec,
+    /// only RGB565, RGBA4444 and RGB5_A1 are color-renderable
     /// </param>
     /// <param name="width"> the width of the cubemap in pixels </param>
     /// <param name="height"> the height of the cubemap in pixels </param>
     /// <param name="hasDepth"> whether to attach a depth buffer </param>
     /// <param name="hasStencil"> whether to attach a stencil buffer </param>
     /// <exception cref="GdxRuntimeException">
-    ///     Thrown if the FrameBuffer could not be created
+    /// Thrown if the FrameBuffer could not be created
     /// </exception>
     public FrameBufferCubemap( PixelType.Format format,
                                int width,
@@ -136,10 +136,10 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     }
 
     /// <summary>
-    ///     Makes the frame buffer current so everything gets drawn to it,
-    ///     must be followed by call to either <see cref="NextSide()" /> or
-    ///     <see cref="BindSide(Cubemap.CubemapSide)" /> to activate the side
-    ///     to render onto.
+    /// Makes the frame buffer current so everything gets drawn to it,
+    /// must be followed by call to either <see cref="NextSide()" /> or
+    /// <see cref="BindSide(Cubemap.CubemapSide)" /> to activate the side
+    /// to render onto.
     /// </summary>
     protected override void Bind()
     {
@@ -175,9 +175,9 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     }
 
     /// <summary>
-    ///     Bind the side, making it active to render on. Should be called
-    ///     in between a call to <see cref="GLFrameBuffer{T}.Begin()" /> and
-    ///     <see cref="GLFrameBuffer{T}.End()" />.
+    /// Bind the side, making it active to render on. Should be called
+    /// in between a call to <see cref="GLFrameBuffer{T}.Begin()" /> and
+    /// <see cref="GLFrameBuffer{T}.End()" />.
     /// </summary>
     /// <param name="side"> The side to bind </param>
     protected void BindSide( Cubemap.CubemapSide? side )
@@ -192,7 +192,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     }
 
     /// <summary>
-    ///     Get the currently bound side.
+    /// Get the currently bound side.
     /// </summary>
     public Cubemap.CubemapSide? GetSide()
     {

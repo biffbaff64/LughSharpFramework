@@ -27,9 +27,9 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Utils.Buffers;
 
 /// <summary>
-///     Provides a type-safe view of an underlying ByteBuffer, specialized for Int32 values.
-///     This buffer holds a reference to a ByteBuffer instance (_byteBuffer), and does
-///     not have its own backing arrays.
+/// Provides a type-safe view of an underlying ByteBuffer, specialized for Int32 values.
+/// This buffer holds a reference to a ByteBuffer instance (_byteBuffer), and does
+/// not have its own backing arrays.
 /// </summary>
 [PublicAPI]
 public class IntBuffer : Buffer, IDisposable
@@ -39,11 +39,11 @@ public class IntBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new IntBuffer with the specified capacity.
+    /// Creates a new IntBuffer with the specified capacity.
     /// </summary>
     /// <param name="capacityInInts">
-    ///     The number of ints to be made available in the buffer. As the backing buffer is a
-    ///     ByteBuffer, this capacity will need to be translated into bytes from ints.
+    /// The number of ints to be made available in the buffer. As the backing buffer is a
+    /// ByteBuffer, this capacity will need to be translated into bytes from ints.
     /// </param>
     public IntBuffer( int capacityInInts ) : base( capacityInInts )
     {
@@ -54,9 +54,9 @@ public class IntBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Creates a new IntBuffer that is a view of the given byte array.
-    ///     This constructor is intended for creating buffer views (e.g., using ByteBuffer.AsIntBuffer()).
-    ///     It shares the provided byte array; data is NOT copied.
+    /// Creates a new IntBuffer that is a view of the given byte array.
+    /// This constructor is intended for creating buffer views (e.g., using ByteBuffer.AsIntBuffer()).
+    /// It shares the provided byte array; data is NOT copied.
     /// </summary>
     /// <param name="backingArray">The byte array to use as the backing store.</param>
     /// <param name="offset">The starting offset within the byte array (in bytes).</param>
@@ -177,8 +177,8 @@ public class IntBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Adds the contents of the provided int array to this buffer, staring at
-    ///     index <see cref="Buffer.Position" />
+    /// Adds the contents of the provided int array to this buffer, staring at
+    /// index <see cref="Buffer.Position" />
     /// </summary>
     /// <param name="intArray"></param>
     public void PutInts( int[] intArray )
@@ -199,7 +199,7 @@ public class IntBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Returns the backing array as a int[].
+    /// Returns the backing array as a int[].
     /// </summary>
     /// <returns></returns>
     public new int[] ToArray()
@@ -309,8 +309,8 @@ public class IntBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Performs application-defined tasks associated with freeing, releasing, or
-    ///     resetting unmanaged resources.
+    /// Performs application-defined tasks associated with freeing, releasing, or
+    /// resetting unmanaged resources.
     /// </summary>
     protected override void Dispose( bool disposing )
     {

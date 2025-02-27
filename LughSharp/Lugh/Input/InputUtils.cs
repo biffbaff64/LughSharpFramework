@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Input;
 public static class InputUtils
 {
     /// <summary>
-    ///     Returns true if the left mouse button is pressed.
+    /// Returns true if the left mouse button is pressed.
     /// </summary>
     public static bool MouseLeft()
     {
@@ -38,7 +38,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if the given keycode is the left mouse button.
+    /// Returns true if the given keycode is the left mouse button.
     /// </summary>
     public static bool MouseLeft( int button )
     {
@@ -46,7 +46,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if the right mouse button is pressed.
+    /// Returns true if the right mouse button is pressed.
     /// </summary>
     public static bool MouseRight()
     {
@@ -54,7 +54,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if the given keycode is the left mouse button.
+    /// Returns true if the given keycode is the left mouse button.
     /// </summary>
     public static bool MouseRight( int button )
     {
@@ -62,7 +62,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if the middle mouse button is pressed.
+    /// Returns true if the middle mouse button is pressed.
     /// </summary>
     public static bool MouseMiddle()
     {
@@ -70,7 +70,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if the given keycode is the middle mouse button.
+    /// Returns true if the given keycode is the middle mouse button.
     /// </summary>
     public static bool MouseMiddle( int button )
     {
@@ -78,7 +78,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if either of the SHIFT keys are pressed.
+    /// Returns true if either of the SHIFT keys are pressed.
     /// </summary>
     public static bool ShiftKey()
     {
@@ -86,7 +86,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if the given keycode is a SHIFT key.
+    /// Returns true if the given keycode is a SHIFT key.
     /// </summary>
     public static bool ShiftKey( int keycode )
     {
@@ -94,7 +94,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if either of the CTRL keys are pressed, or SYM key on MacOS.
+    /// Returns true if either of the CTRL keys are pressed, or SYM key on MacOS.
     /// </summary>
     public static bool CtrlKey()
     {
@@ -106,7 +106,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if the given keycode is a CTRL key, or SYM key on MacOS.
+    /// Returns true if the given keycode is a CTRL key, or SYM key on MacOS.
     /// </summary>
     public static bool CtrlKey( int keycode )
     {
@@ -118,7 +118,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if either of the ALT keys are pressed.
+    /// Returns true if either of the ALT keys are pressed.
     /// </summary>
     public static bool AltKey()
     {
@@ -126,7 +126,7 @@ public static class InputUtils
     }
 
     /// <summary>
-    ///     Returns true if the given keycode is an ALT key.
+    /// Returns true if the given keycode is an ALT key.
     /// </summary>
     public static bool AltKey( int keycode )
     {

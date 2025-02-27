@@ -28,14 +28,14 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Graphics.Viewport;
 
 /// <summary>
-///     A ScalingViewport that uses <see cref="Scaling.Stretch" /> so it does not
-///     keep the aspect ratio, the world is scaled to take the whole screen.
+/// A ScalingViewport that uses <see cref="Scaling.Stretch" /> so it does not
+/// keep the aspect ratio, the world is scaled to take the whole screen.
 /// </summary>
 [PublicAPI]
 public class StretchViewport : ScalingViewport
 {
     /// <summary>
-    ///     Creates a new viewport using a new <see cref="OrthographicCamera" />.
+    /// Creates a new viewport using a new <see cref="OrthographicCamera" />.
     /// </summary>
     /// <param name="worldWidth"> The world width in pixels. </param>
     /// <param name="worldHeight"> The world height in pixels. </param>
@@ -45,7 +45,7 @@ public class StretchViewport : ScalingViewport
     }
 
     /// <summary>
-    ///     Creates a new viewport using the supplied <see cref="OrthographicCamera" />.
+    /// Creates a new viewport using the supplied <see cref="OrthographicCamera" />.
     /// </summary>
     /// <param name="worldWidth"> The world width in pixels. </param>
     /// <param name="worldHeight"> The world height in pixels. </param>

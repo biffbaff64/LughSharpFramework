@@ -25,9 +25,9 @@
 namespace LughSharp.Lugh.Files;
 
 /// <summary>
-///     A FileInfo container which contains a <see cref="FileInfo" /> instance
-///     and a <see cref="PathTypes" /> instance. The <c>PathTypes</c> instance
-///     defaults to <see cref="PathTypes.Internal" />.
+/// A FileInfo container which contains a <see cref="FileInfo" /> instance
+/// and a <see cref="PathTypes" /> instance. The <c>PathTypes</c> instance
+/// defaults to <see cref="PathTypes.Internal" />.
 /// </summary>
 [PublicAPI]
 public class FileHandle
@@ -36,8 +36,8 @@ public class FileHandle
     // ========================================================================
 
     /// <summary>
-    ///     Create a new FileHandle with a default <see cref="FileInfo" /> and PathType set
-    ///     to <see cref="PathTypes.Internal" />
+    /// Create a new FileHandle with a default <see cref="FileInfo" /> and PathType set
+    /// to <see cref="PathTypes.Internal" />
     /// </summary>
     protected FileHandle()
     {
@@ -46,8 +46,8 @@ public class FileHandle
     }
 
     /// <summary>
-    ///     Create a new FileHandle with a <see cref="FileInfo" /> using the supplied filename,
-    ///     and PathType set to <see cref="PathTypes.Internal" />
+    /// Create a new FileHandle with a <see cref="FileInfo" /> using the supplied filename,
+    /// and PathType set to <see cref="PathTypes.Internal" />
     /// </summary>
     /// <param name="fileName"></param>
     public FileHandle( string fileName )
@@ -57,7 +57,7 @@ public class FileHandle
     }
 
     /// <summary>
-    ///     Creates a new FileHandle using the supplied <see cref="FileInfo" />
+    /// Creates a new FileHandle using the supplied <see cref="FileInfo" />
     /// </summary>
     /// <param name="file"> The FileInfo instance. </param>
     public FileHandle( FileInfo file )
@@ -67,7 +67,7 @@ public class FileHandle
     }
 
     /// <summary>
-    ///     Creates a new FileHandle using the supplied fileName string, and <see cref="PathTypes" /> value.
+    /// Creates a new FileHandle using the supplied fileName string, and <see cref="PathTypes" /> value.
     /// </summary>
     /// <param name="fileName"></param>
     /// <param name="type"></param>
@@ -78,7 +78,7 @@ public class FileHandle
     }
 
     /// <summary>
-    ///     Creates a new FileHandle using the supplied FileInfo instance, and <see cref="PathTypes" /> value.
+    /// Creates a new FileHandle using the supplied FileInfo instance, and <see cref="PathTypes" /> value.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="type"></param>
@@ -96,24 +96,24 @@ public class FileHandle
     #region helpers
 
     /// <summary>
-    ///     The name of the file, without any parent paths.
+    /// The name of the file, without any parent paths.
     /// </summary>
     public string FileName => File.Name;
 
     /// <summary>
-    ///     The path of the file as specified on construction, e.g.
-    ///     <code>
+    /// The path of the file as specified on construction, e.g.
+    /// <code>
     /// GdxApi.Files.Internal("dir/file.png") -> dir/file.png.
     /// </code>
-    ///     <para>
-    ///         Backward slashes will be replaced by forward slashes.
-    ///     </para>
+    /// <para>
+    ///     Backward slashes will be replaced by forward slashes.
+    /// </para>
     /// </summary>
     public string FilePath => File.FullName.Replace( "\\", "/" );
 
     /// <summary>
-    ///     Returns the file extension (without the dot) or an empty string if the
-    ///     file name doesn't contain a dot.
+    /// Returns the file extension (without the dot) or an empty string if the
+    /// file name doesn't contain a dot.
     /// </summary>
     public string Extension()
     {
@@ -121,7 +121,7 @@ public class FileHandle
     }
 
     /// <summary>
-    ///     Return the name of the file, without parent paths or the extension.
+    /// Return the name of the file, without parent paths or the extension.
     /// </summary>
     public string NameWithoutExtension()
     {
@@ -129,9 +129,9 @@ public class FileHandle
     }
 
     /// <summary>
-    ///     Returns the path and filename without the extension, eg.
-    ///     <code>dir/dir2/file.png -> dir/dir2/file.</code>
-    ///     Backward slashes will be returned as forward slashes.
+    /// Returns the path and filename without the extension, eg.
+    /// <code>dir/dir2/file.png -> dir/dir2/file.</code>
+    /// Backward slashes will be returned as forward slashes.
     /// </summary>
     public string PathWithoutExtension()
     {

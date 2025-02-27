@@ -27,7 +27,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-///     Implementation of the Bezier curve.
+/// Implementation of the Bezier curve.
 /// </summary>
 /// <typeparam name="T">The type of the points on the Bezier curve, which must implement IVector&lt;T&gt;.</typeparam>
 [PublicAPI]
@@ -40,14 +40,14 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     // ========================================================================
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Bezier{T}" /> class.
+    /// Initializes a new instance of the <see cref="Bezier{T}" /> class.
     /// </summary>
     public Bezier()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Bezier{T}" /> class with the specified points.
+    /// Initializes a new instance of the <see cref="Bezier{T}" /> class with the specified points.
     /// </summary>
     /// <param name="points">The control points of the Bezier curve.</param>
     public Bezier( params T[] points )
@@ -56,7 +56,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Bezier{T}" /> class with the specified points.
+    /// Initializes a new instance of the <see cref="Bezier{T}" /> class with the specified points.
     /// </summary>
     /// <param name="points">The control points of the Bezier curve.</param>
     /// <param name="offset">The offset in the array of points at which to start.</param>
@@ -67,7 +67,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Bezier{T}" /> class with the specified points.
+    /// Initializes a new instance of the <see cref="Bezier{T}" /> class with the specified points.
     /// </summary>
     /// <param name="points">The control points of the Bezier curve.</param>
     /// <param name="offset">The offset in the list of points at which to start.</param>
@@ -78,12 +78,12 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Gets or sets the control points of the Bezier curve.
+    /// Gets or sets the control points of the Bezier curve.
     /// </summary>
     public List< T > Points { get; set; } = [ ];
 
     /// <summary>
-    ///     Calculates the value of the Bezier curve at the specified parameter t.
+    /// Calculates the value of the Bezier curve at the specified parameter t.
     /// </summary>
     /// <param name="o">The vector to store the result.</param>
     /// <param name="t">The parameter along the curve, ranging from 0 to 1.</param>
@@ -109,7 +109,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Calculates the derivative of the Bezier curve at the specified parameter t.
+    /// Calculates the derivative of the Bezier curve at the specified parameter t.
     /// </summary>
     /// <param name="o">The vector to store the result.</param>
     /// <param name="t">The parameter along the curve, ranging from 0 to 1.</param>
@@ -135,7 +135,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Approximates the position on the curve closest to the specified vector.
+    /// Approximates the position on the curve closest to the specified vector.
     /// </summary>
     /// <param name="v">The vector to approximate.</param>
     /// <returns>The parameter t along the curve closest to the vector.</returns>
@@ -157,7 +157,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Locates the position on the curve closest to the specified vector.
+    /// Locates the position on the curve closest to the specified vector.
     /// </summary>
     /// <param name="v">The vector to locate.</param>
     /// <returns>The parameter t along the curve closest to the vector.</returns>
@@ -168,7 +168,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Approximates the length of the Bezier curve using a specified number of samples.
+    /// Approximates the length of the Bezier curve using a specified number of samples.
     /// </summary>
     /// <param name="samples">The number of samples to use.</param>
     /// <returns>The approximate length of the curve.</returns>
@@ -202,7 +202,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Sets the control points of the Bezier curve.
+    /// Sets the control points of the Bezier curve.
     /// </summary>
     /// <param name="points">The control points of the Bezier curve.</param>
     /// <returns>The current instance for chaining.</returns>
@@ -212,7 +212,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Sets the control points of the Bezier curve with the specified offset and length.
+    /// Sets the control points of the Bezier curve with the specified offset and length.
     /// </summary>
     /// <param name="points">The control points of the Bezier curve.</param>
     /// <param name="offset">The offset in the array of points at which to start.</param>
@@ -238,7 +238,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Sets the control points of the Bezier curve with the specified offset and length.
+    /// Sets the control points of the Bezier curve with the specified offset and length.
     /// </summary>
     /// <param name="points">The control points of the Bezier curve.</param>
     /// <param name="offset">The offset in the list of points at which to start.</param>
@@ -263,7 +263,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Simple linear interpolation.
+    /// Simple linear interpolation.
     /// </summary>
     /// <param name="alist">The vector to store the result.</param>
     /// <param name="t">The parameter along the line, ranging from 0 to 1.</param>
@@ -278,7 +278,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Simple linear interpolation derivative.
+    /// Simple linear interpolation derivative.
     /// </summary>
     /// <param name="vec">The vector to store the result.</param>
     /// <param name="t">The parameter along the line, ranging from 0 to 1.</param>
@@ -293,7 +293,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Quadratic Bezier curve interpolation.
+    /// Quadratic Bezier curve interpolation.
     /// </summary>
     /// <param name="list">The vector to store the result.</param>
     /// <param name="t">The parameter along the curve, ranging from 0 to 1.</param>
@@ -313,7 +313,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Quadratic Bezier curve derivative.
+    /// Quadratic Bezier curve derivative.
     /// </summary>
     /// <param name="alist">The vector to store the result.</param>
     /// <param name="t">The parameter along the curve, ranging from 0 to 1.</param>
@@ -330,7 +330,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Cubic Bezier curve interpolation.
+    /// Cubic Bezier curve interpolation.
     /// </summary>
     /// <param name="alist">The vector to store the result.</param>
     /// <param name="t">The parameter along the curve, ranging from 0 to 1.</param>
@@ -354,7 +354,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     }
 
     /// <summary>
-    ///     Cubic Bezier curve derivative.
+    /// Cubic Bezier curve derivative.
     /// </summary>
     /// <param name="alist">The vector to store the result.</param>
     /// <param name="t">The parameter along the curve, ranging from 0 to 1.</param>

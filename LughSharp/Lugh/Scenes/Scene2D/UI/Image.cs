@@ -32,10 +32,10 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     Displays a <see cref="IDrawable" />, scaled various way within the widgets
-///     bounds. The preferred size is the min size of the drawable. Only when using
-///     a <see cref="TextureRegionDrawable" /> will the actor's scale, rotation, and
-///     origin be used when drawing.
+/// Displays a <see cref="IDrawable" />, scaled various way within the widgets
+/// bounds. The preferred size is the min size of the drawable. Only when using
+/// a <see cref="TextureRegionDrawable" /> will the actor's scale, rotation, and
+/// origin be used when drawing.
 /// </summary>
 [PublicAPI]
 public class Image : Widget
@@ -49,7 +49,7 @@ public class Image : Widget
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new, unitialised, Image instance.
+    /// Creates a new, unitialised, Image instance.
     /// </summary>
     public Image() : this( ( IDrawable )null! )
     {
@@ -136,8 +136,8 @@ public class Image : Widget
     }
 
     /// <summary>
-    ///     Helper method for constructors, allowing access to virtual members which are
-    ///     unsafe to be referenced from constructors.
+    /// Helper method for constructors, allowing access to virtual members which are
+    /// unsafe to be referenced from constructors.
     /// </summary>
     private void NonVirtualConstructorHelper()
     {
@@ -237,7 +237,7 @@ public class Image : Widget
     }
 
     /// <summary>
-    ///     Sets the <see cref="IDrawable" /> for this Image.
+    /// Sets the <see cref="IDrawable" /> for this Image.
     /// </summary>
     /// <param name="skin"></param>
     /// <param name="drawableName"></param>
@@ -247,9 +247,9 @@ public class Image : Widget
     }
 
     /// <summary>
-    ///     Sets a new drawable for the image. The image's pref size is the drawable's min size.
-    ///     If using the image actor's size rather than the pref size, <see cref="Widget.Pack" />
-    ///     can be used to size the image to its pref size.
+    /// Sets a new drawable for the image. The image's pref size is the drawable's min size.
+    /// If using the image actor's size rather than the pref size, <see cref="Widget.Pack" />
+    /// can be used to size the image to its pref size.
     /// </summary>
     /// <param name="drawable"> May be null. </param>
     public void SetDrawable( IDrawable? drawable )
@@ -275,7 +275,7 @@ public class Image : Widget
     }
 
     /// <summary>
-    ///     Sets the <see cref="Scaling" />Mode for this Image.
+    /// Sets the <see cref="Scaling" />Mode for this Image.
     /// </summary>
     public void SetScaling( Scaling scale )
     {

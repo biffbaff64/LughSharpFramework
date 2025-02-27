@@ -157,8 +157,8 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// to be copied to this VertexData. The order of the vertex attributes must be
     /// the same as specified at construction time via <see cref="VertexAttributes" />.
     /// <para>
-    ///     This can be called in between calls to bind and unbind. The vertex data will
-    ///     be updated instantly.
+    /// This can be called in between calls to bind and unbind. The vertex data will
+    /// be updated instantly.
     /// </para>
     /// </summary>
     /// <param name="vertices"> the vertex data </param>

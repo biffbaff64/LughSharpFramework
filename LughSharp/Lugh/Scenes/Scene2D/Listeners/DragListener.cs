@@ -27,10 +27,10 @@ using LughSharp.Lugh.Input;
 namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 
 /// <summary>
-///     Detects mouse or finger touch drags on an actor. A touch must go down over the actor
-///     and a drag won't start until it is moved outside the <see cref="TapSquareSize" /> tap
-///     square. Any touch (not just the first) will trigger this listener. While pressed, other
-///     touch downs are ignored.
+/// Detects mouse or finger touch drags on an actor. A touch must go down over the actor
+/// and a drag won't start until it is moved outside the <see cref="TapSquareSize" /> tap
+/// square. Any touch (not just the first) will trigger this listener. While pressed, other
+/// touch downs are ignored.
 /// </summary>
 [PublicAPI]
 public class DragListener : InputListener
@@ -40,12 +40,12 @@ public class DragListener : InputListener
     private int   _pressedPointer = -1;
 
     /// <summary>
-    ///     Sets the button to listen for, all other buttons are ignored.
+    /// Sets the button to listen for, all other buttons are ignored.
     /// </summary>
     public int Button { get; set; } = IInput.Buttons.LEFT;
 
     /// <summary>
-    ///     Returns true if a touch has been dragged outside the tap square.
+    /// Returns true if a touch has been dragged outside the tap square.
     /// </summary>
     public bool IsDragging { get; private set; }
 
@@ -177,8 +177,8 @@ public class DragListener : InputListener
     }
 
     /// <summary>
-    ///     If a drag is in progress, no further drag methods will be
-    ///     called until a new drag is started.
+    /// If a drag is in progress, no further drag methods will be
+    /// called until a new drag is started.
     /// </summary>
     public virtual void Cancel()
     {
@@ -187,7 +187,7 @@ public class DragListener : InputListener
     }
 
     /// <summary>
-    ///     The distance from drag start to the current drag position.
+    /// The distance from drag start to the current drag position.
     /// </summary>
     public float GetDragDistance()
     {
@@ -195,8 +195,8 @@ public class DragListener : InputListener
     }
 
     /// <summary>
-    ///     Returns the amount on the x axis that the touch has been
-    ///     dragged since the last drag event.
+    /// Returns the amount on the x axis that the touch has been
+    /// dragged since the last drag event.
     /// </summary>
     public float GetDeltaX()
     {
@@ -204,8 +204,8 @@ public class DragListener : InputListener
     }
 
     /// <summary>
-    ///     Returns the amount on the y axis that the touch has been
-    ///     dragged since the last drag event.
+    /// Returns the amount on the y axis that the touch has been
+    /// dragged since the last drag event.
     /// </summary>
     public float GetDeltaY()
     {

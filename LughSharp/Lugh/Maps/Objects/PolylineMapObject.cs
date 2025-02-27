@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Maps.Objects;
 public class PolylineMapObject : MapObject
 {
     /// <summary>
-    ///     Creates a new, empty, PolylineMapObject.
+    /// Creates a new, empty, PolylineMapObject.
     /// </summary>
     public PolylineMapObject()
         : this( [ ] )
@@ -38,7 +38,7 @@ public class PolylineMapObject : MapObject
     }
 
     /// <summary>
-    ///     Creates a new PolylineMapObject using the supplied vertices.
+    /// Creates a new PolylineMapObject using the supplied vertices.
     /// </summary>
     /// <param name="vertices"> polyline defining vertices </param>
     public PolylineMapObject( float[] vertices )
@@ -47,7 +47,7 @@ public class PolylineMapObject : MapObject
     }
 
     /// <summary>
-    ///     Creates a new PolylineMapObject using the supplied <see cref="Polyline" />
+    /// Creates a new PolylineMapObject using the supplied <see cref="Polyline" />
     /// </summary>
     /// <param name="polyline"> the polyline </param>
     public PolylineMapObject( Polyline polyline )

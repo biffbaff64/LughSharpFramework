@@ -30,8 +30,8 @@ namespace DesktopGLBackend.Input;
 public interface IDesktopGLInput : IInput, IDisposable
 {
     /// <summary>
-    ///     Resets polling states and updates callbacks if the window
-    ///     handle has changed.
+    /// Resets polling states and updates callbacks if the window
+    /// handle has changed.
     /// </summary>
     /// <param name="windowHandle"> The new handle. </param>
     void WindowHandleChanged( GLFW.Window windowHandle );
@@ -42,8 +42,8 @@ public interface IDesktopGLInput : IInput, IDisposable
     void PrepareNext();
 
     /// <summary>
-    ///     Resets all polling states, clears touched and pressed flags,
-    ///     and clears the event queue.
+    /// Resets all polling states, clears touched and pressed flags,
+    /// and clears the event queue.
     /// </summary>
     void ResetPollingStates();
 }

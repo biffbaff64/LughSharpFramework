@@ -40,12 +40,12 @@ public class DesktopGLFiles : IFiles
     // ========================================================================
 
     /// <summary>
-    ///     Returns a <see cref="FileHandle" /> representing a file or directory.
+    /// Returns a <see cref="FileHandle" /> representing a file or directory.
     /// </summary>
     /// <param name="path"></param>
     /// <param name="type"> Determines how the path is resolved. </param>
     /// <exception cref="GdxRuntimeException">
-    ///     if the type is classpath or internal and the file does not exist.
+    /// if the type is classpath or internal and the file does not exist.
     /// </exception>
     public FileHandle GetFileHandle( string path, PathTypes type )
     {
@@ -53,7 +53,7 @@ public class DesktopGLFiles : IFiles
     }
 
     /// <summary>
-    ///     Convenience method that returns a <see cref="PathTypes.Classpath" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.Classpath" /> file handle.
     /// </summary>
     public FileHandle Classpath( string path )
     {
@@ -61,7 +61,7 @@ public class DesktopGLFiles : IFiles
     }
 
     /// <summary>
-    ///     Convenience method that returns a <see cref="PathTypes.Internal" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.Internal" /> file handle.
     /// </summary>
     public FileHandle Internal( string path )
     {
@@ -69,7 +69,7 @@ public class DesktopGLFiles : IFiles
     }
 
     /// <summary>
-    ///     Convenience method that returns a <see cref="PathTypes.External" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.External" /> file handle.
     /// </summary>
     public FileHandle External( string path )
     {
@@ -77,7 +77,7 @@ public class DesktopGLFiles : IFiles
     }
 
     /// <summary>
-    ///     Convenience method that returns a <see cref="PathTypes.Absolute" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.Absolute" /> file handle.
     /// </summary>
     public FileHandle Absolute( string path )
     {
@@ -85,7 +85,7 @@ public class DesktopGLFiles : IFiles
     }
 
     /// <summary>
-    ///     Convenience method that returns a <see cref="PathTypes.Local" /> file handle.
+    /// Convenience method that returns a <see cref="PathTypes.Local" /> file handle.
     /// </summary>
     public FileHandle Local( string path )
     {
@@ -93,8 +93,8 @@ public class DesktopGLFiles : IFiles
     }
 
     /// <summary>
-    ///     Returns the external storage path directory. This is the app external storage
-    ///     on Android and the home directory of the current user on the desktop.
+    /// Returns the external storage path directory. This is the app external storage
+    /// on Android and the home directory of the current user on the desktop.
     /// </summary>
     public string GetExternalStoragePath()
     {
@@ -102,7 +102,7 @@ public class DesktopGLFiles : IFiles
     }
 
     /// <summary>
-    ///     Returns true if the external storage is ready for file IO.
+    /// Returns true if the external storage is ready for file IO.
     /// </summary>
     public bool IsExternalStorageAvailable()
     {
@@ -110,8 +110,8 @@ public class DesktopGLFiles : IFiles
     }
 
     /// <summary>
-    ///     Returns the local storage path directory. This is the private files directory
-    ///     on Android and the directory of the jar on the desktop.
+    /// Returns the local storage path directory. This is the private files directory
+    /// on Android and the directory of the jar on the desktop.
     /// </summary>
     public string GetLocalStoragePath()
     {
@@ -119,7 +119,7 @@ public class DesktopGLFiles : IFiles
     }
 
     /// <summary>
-    ///     Returns true if the local storage is ready for file IO.
+    /// Returns true if the local storage is ready for file IO.
     /// </summary>
     public bool IsLocalStorageAvailable()
     {

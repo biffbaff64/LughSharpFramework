@@ -30,8 +30,8 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-///     Caches glyph geometry for a BitmapFont, providing a fast way to render
-///     static text. This saves needing to compute the glyph geometry each frame.
+/// Caches glyph geometry for a BitmapFont, providing a fast way to render
+/// static text. This saves needing to compute the glyph geometry each frame.
 /// </summary>
 [PublicAPI]
 public class BitmapFontCache
@@ -43,23 +43,23 @@ public class BitmapFontCache
     private          int                  _glyphCount;
 
     /// <summary>
-    ///     Number of vertex data entries per page.
+    /// Number of vertex data entries per page.
     /// </summary>
     private int[] _idx;
 
     /// <summary>
-    ///     For each page, an array with a value for each glyph from that page, where
-    ///     the value is the index of the character in the full text being cached.
+    /// For each page, an array with a value for each glyph from that page, where
+    /// the value is the index of the character in the full text being cached.
     /// </summary>
     private List< int >[]? _pageGlyphIndices;
 
     /// <summary>
-    ///     Vertex data per page.
+    /// Vertex data per page.
     /// </summary>
     private float[]?[] _pageVertices;
 
     /// <summary>
-    ///     Used internally to ensure a correct capacity for multi-page font vertex data.
+    /// Used internally to ensure a correct capacity for multi-page font vertex data.
     /// </summary>
     private int[] _tempGlyphCount;
 
@@ -74,7 +74,7 @@ public class BitmapFontCache
     /// </summary>
     /// <param name="font"></param>
     /// <param name="integer">
-    ///     If true, rendering positions will be at integer values to avoid filtering artifacts.
+    /// If true, rendering positions will be at integer values to avoid filtering artifacts.
     /// </param>
     /// <exception cref="ArgumentException"></exception>
     public BitmapFontCache( BitmapFont font, bool integer )
@@ -107,22 +107,22 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Returns the x position of the cached string, relative to the
-    ///     position when the string was cached.
+    /// Returns the x position of the cached string, relative to the
+    /// position when the string was cached.
     /// </summary>
     public float X { get; private set; }
 
     /// <summary>
-    ///     Returns the y position of the cached string, relative to the
-    ///     position when the string was cached.
+    /// Returns the y position of the cached string, relative to the
+    /// position when the string was cached.
     /// </summary>
     public float Y { get; private set; }
 
     public BitmapFont Font { get; }
 
     /// <summary>
-    ///     Specifies whether to use integer positions or not.
-    ///     Default is to use them so filtering doesn't kick in as badly.
+    /// Specifies whether to use integer positions or not.
+    /// Default is to use them so filtering doesn't kick in as badly.
     /// </summary>
     public bool UseIntegerPositions { get; set; }
 
@@ -132,8 +132,8 @@ public class BitmapFontCache
     public List< GlyphLayout > Layouts { get; set; } = [ ];
 
     /// <summary>
-    ///     Sets the position of the text, relative to the position when
-    ///     the cached text was created.
+    /// Sets the position of the text, relative to the position when
+    /// the cached text was created.
     /// </summary>
     /// <param name="x"> The x coordinate </param>
     /// <param name="y"> The y coordinate </param>
@@ -143,7 +143,7 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Sets the position of the text, relative to its current position.
+    /// Sets the position of the text, relative to its current position.
     /// </summary>
     /// <param name="xAmount"> The amount in x to move the text </param>
     /// <param name="yAmount"> The amount in y to move the text </param>
@@ -176,7 +176,7 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Tints all text currently in the cache.Does not affect subsequently added text.
+    /// Tints all text currently in the cache.Does not affect subsequently added text.
     /// </summary>
     public void Tint( Color tint )
     {
@@ -226,8 +226,8 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Sets the alpha component of all text currently in the cache.
-    ///     Does not affect subsequently added text.
+    /// Sets the alpha component of all text currently in the cache.
+    /// Does not affect subsequently added text.
     /// </summary>
     public void SetAlphas( float alpha )
     {
@@ -261,8 +261,8 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Sets the color of all text currently in the cache.
-    ///     Does not affect subsequently added text.
+    /// Sets the color of all text currently in the cache.
+    /// Does not affect subsequently added text.
     /// </summary>
     public void SetColors( float color )
     {
@@ -278,8 +278,8 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Sets the color of all text currently in the cache.
-    ///     Does not affect subsequently added text.
+    /// Sets the color of all text currently in the cache.
+    /// Does not affect subsequently added text.
     /// </summary>
     public void SetColors( Color tint )
     {
@@ -287,7 +287,7 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Sets the color of all text currently in the cache. Does not affect subsequently added text.
+    /// Sets the color of all text currently in the cache. Does not affect subsequently added text.
     /// </summary>
     /// <param name="r"></param>
     /// <param name="g"></param>
@@ -304,9 +304,9 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Sets the color of the specified characters. This may only be called
-    ///     after <see cref="SetText(string, float, float)" /> and is reset every
-    ///     time setText is called.
+    /// Sets the color of the specified characters. This may only be called
+    /// after <see cref="SetText(string, float, float)" /> and is reset every
+    /// time setText is called.
     /// </summary>
     public void SetColors( Color tint, int start, int end )
     {
@@ -314,9 +314,9 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Sets the color of the specified characters. This may only be called
-    ///     after <see cref="SetText(string, float, float)" /> and is reset every
-    ///     time setText is called.
+    /// Sets the color of the specified characters. This may only be called
+    /// after <see cref="SetText(string, float, float)" /> and is reset every
+    /// time setText is called.
     /// </summary>
     public void SetColors( float color, int start, int end )
     {
@@ -365,9 +365,9 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Returns the color used for subsequently added text. Modifying the color
-    ///     affects text subsequently added to the cache, but does not affect existing
-    ///     text currently in the cache.
+    /// Returns the color used for subsequently added text. Modifying the color
+    /// affects text subsequently added to the cache, but does not affect existing
+    /// text currently in the cache.
     /// </summary>
     public Color GetColor()
     {
@@ -375,8 +375,8 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     A convenience method for setting the cache color. The color can also
-    ///     be set by modifying <see cref="GetColor()" />.
+    /// A convenience method for setting the cache color. The color can also
+    /// be set by modifying <see cref="GetColor()" />.
     /// </summary>
     public void SetColor( Color col )
     {
@@ -384,8 +384,8 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     A convenience method for setting the cache color. The color can
-    ///     also be set by modifying {@link #getColor()}.
+    /// A convenience method for setting the cache color. The color can
+    /// also be set by modifying {@link #getColor()}.
     /// </summary>
     public void SetColor( float r, float g, float b, float a )
     {
@@ -494,7 +494,7 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Removes all glyphs in the cache.
+    /// Removes all glyphs in the cache.
     /// </summary>
     public void Clear()
     {
@@ -725,8 +725,8 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Clears any cached glyphs and adds glyphs for the specified text.
-    ///     <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
+    /// Clears any cached glyphs and adds glyphs for the specified text.
+    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
     /// </summary>
     public GlyphLayout SetText( string str, float x, float y )
     {
@@ -736,8 +736,8 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Clears any cached glyphs and adds glyphs for the specified text.
-    ///     <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
+    /// Clears any cached glyphs and adds glyphs for the specified text.
+    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
     /// </summary>
     public GlyphLayout SetText( string str, float x, float y, float targetWidth, int halign, bool wrap )
     {
@@ -747,8 +747,8 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Clears any cached glyphs and adds glyphs for the specified text.
-    ///     <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
+    /// Clears any cached glyphs and adds glyphs for the specified text.
+    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
     /// </summary>
     public GlyphLayout SetText( string str,
                                 float x,
@@ -766,8 +766,8 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Clears any cached glyphs and adds glyphs for the specified text.
-    ///     <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
+    /// Clears any cached glyphs and adds glyphs for the specified text.
+    /// <see cref="AddText(string, float, float, int, int, float, int, bool, string)" />
     /// </summary>
     public void SetText( GlyphLayout layout, float x, float y )
     {
@@ -776,7 +776,7 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Adds glyphs for the specified text.
+    /// Adds glyphs for the specified text.
     /// </summary>
     public GlyphLayout AddText( string str, float x, float y, float targetWidth, int halign, bool wrap )
     {
@@ -784,13 +784,13 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Adds glyphs for the the specified text.
+    /// Adds glyphs for the the specified text.
     /// </summary>
     /// <param name="str"></param>
     /// <param name="x"> The x position for the left most character. </param>
     /// <param name="y">
-    ///     The y position for the top of most capital letters in the font
-    ///     (the <see cref="BitmapFont.BitmapFontData.CapHeight" />).
+    /// The y position for the top of most capital letters in the font
+    /// (the <see cref="BitmapFont.BitmapFontData.CapHeight" />).
     /// </param>
     /// <param name="start"> The first character of the string to draw. </param>
     /// <param name="end"> The last character of the string to draw (exclusive). </param>
@@ -798,11 +798,11 @@ public class BitmapFontCache
     /// <param name="halign"> Horizontal alignment of the text, see <see cref="Alignment" />. </param>
     /// <param name="wrap"> If true, the text will be wrapped within targetWidth. </param>
     /// <param name="truncate">
-    ///     If not null, the text will be truncated within targetWidth with this string appended.
-    ///     May be an empty string.
+    /// If not null, the text will be truncated within targetWidth with this string appended.
+    /// May be an empty string.
     /// </param>
     /// <returns>
-    ///     The glyph layout for the cached string (the layout's height is the distance from y to the baseline).
+    /// The glyph layout for the cached string (the layout's height is the distance from y to the baseline).
     /// </returns>
     public GlyphLayout AddText( string str,
                                 float x,
@@ -825,7 +825,7 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Adds glyphs for the specified text.
+    /// Adds glyphs for the specified text.
     /// </summary>
     public GlyphLayout AddText( string str, float x, float y )
     {
@@ -833,7 +833,7 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    ///     Adds the specified glyphs.
+    /// Adds the specified glyphs.
     /// </summary>
     public void AddText( GlyphLayout? layout, float x, float y )
     {

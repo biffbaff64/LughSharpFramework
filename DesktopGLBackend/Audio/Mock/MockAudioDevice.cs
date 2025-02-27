@@ -27,7 +27,7 @@ using LughSharp.Lugh.Audio;
 namespace DesktopGLBackend.Audio.Mock;
 
 /// <summary>
-///     Audio stubs for use when Audio is disabled, or when Audio failed to initialise.
+/// Audio stubs for use when Audio is disabled, or when Audio failed to initialise.
 /// </summary>
 [PublicAPI]
 public class MockAudioDevice : IAudioDevice

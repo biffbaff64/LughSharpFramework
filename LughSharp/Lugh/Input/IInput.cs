@@ -25,23 +25,23 @@
 namespace LughSharp.Lugh.Input;
 
 /// <summary>
-///     Interface to the input facilities. This allows polling the state of the keyboard, the
-///     touch screen and the accelerometer. On some backends (desktop, gwt, etc) the touch
-///     screen is replaced by mouse input. The accelerometer is of course not available on all
-///     backends. Instead of polling for events, one can process all input events with an
-///     InputProcessor. You can set the InputProcessor via the SetInputProcessor(InputProcessor)
-///     method. It will be called before the ApplicationListener.render() method in each frame.
-///     Keyboard keys are translated to the constants in Input.Keys transparently on all systems.
-///     <para>
-///         Do not use system specific key constants.
-///     </para>
-///     <para>
-///         The class also offers methods to use (and test for the presence of) other input systems
-///         like vibration, compass, on-screen keyboards, and cursor capture.
-///     </para>
-///     <para>
-///         Support for simple input dialogs is also provided.
-///     </para>
+/// Interface to the input facilities. This allows polling the state of the keyboard, the
+/// touch screen and the accelerometer. On some backends (desktop, gwt, etc) the touch
+/// screen is replaced by mouse input. The accelerometer is of course not available on all
+/// backends. Instead of polling for events, one can process all input events with an
+/// InputProcessor. You can set the InputProcessor via the SetInputProcessor(InputProcessor)
+/// method. It will be called before the ApplicationListener.render() method in each frame.
+/// Keyboard keys are translated to the constants in Input.Keys transparently on all systems.
+/// <para>
+///     Do not use system specific key constants.
+/// </para>
+/// <para>
+///     The class also offers methods to use (and test for the presence of) other input systems
+///     like vibration, compass, on-screen keyboards, and cursor capture.
+/// </para>
+/// <para>
+///     Support for simple input dialogs is also provided.
+/// </para>
 /// </summary>
 [PublicAPI]
 public interface IInput
@@ -50,7 +50,7 @@ public interface IInput
     // ====================================================================
 
     /// <summary>
-    ///     Keyboard Types
+    /// Keyboard Types
     /// </summary>
     [PublicAPI]
     public enum OnscreenKeyboardType
@@ -67,7 +67,7 @@ public interface IInput
     // ====================================================================
 
     /// <summary>
-    ///     Screen orientation types.
+    /// Screen orientation types.
     /// </summary>
     [PublicAPI]
     public enum Orientation
@@ -80,7 +80,7 @@ public interface IInput
     // ====================================================================
 
     /// <summary>
-    ///     Supported peripherals.
+    /// Supported peripherals.
     /// </summary>
     [PublicAPI]
     public enum Peripheral
@@ -97,7 +97,7 @@ public interface IInput
     }
 
     /// <summary>
-    ///     The currently set <see cref="IInputProcessor" />.
+    /// The currently set <see cref="IInputProcessor" />.
     /// </summary>
     IInputProcessor? InputProcessor { get; set; }
 
@@ -130,7 +130,7 @@ public interface IInput
     // ====================================================================
 
     /// <summary>
-    ///     Mouse Buttons
+    /// Mouse Buttons
     /// </summary>
     [PublicAPI]
     public static class Buttons
@@ -146,7 +146,7 @@ public interface IInput
     // ====================================================================
 
     /// <summary>
-    ///     Available Keys
+    /// Available Keys
     /// </summary>
     [PublicAPI]
     public static class Keys
@@ -553,7 +553,7 @@ public interface IInput
     // ====================================================================
 
     /// <summary>
-    ///     Interface describing a listener for text input.
+    /// Interface describing a listener for text input.
     /// </summary>
     [PublicAPI]
     public interface ITextInputListener
@@ -593,16 +593,16 @@ public interface IInput
     #region override keys
 
     /// <summary>
-    ///     "Override key" refers to a mechanism for overriding the default system actions of specific
-    ///     keys (like BACK and MENU), allowing the application to handle them instead. It's used to
-    ///     prevent unwanted system behaviors and provide custom input handling for these special keys
-    ///     within games and applications.
+    /// "Override key" refers to a mechanism for overriding the default system actions of specific
+    /// keys (like BACK and MENU), allowing the application to handle them instead. It's used to
+    /// prevent unwanted system behaviors and provide custom input handling for these special keys
+    /// within games and applications.
     /// </summary>
     void SetOverrideKey( int keycode, bool addKey );
 
     /// <summary>
-    ///     Checks to see if the provided keycode applies to a key that is a member of the
-    ///     'Override Key' group of keys.
+    /// Checks to see if the provided keycode applies to a key that is a member of the
+    /// 'Override Key' group of keys.
     /// </summary>
     /// <param name="keycode"> The <see cref="Keys" /> code. </param>
     /// <returns> True if the key is an Override Key, otherwise false. </returns>

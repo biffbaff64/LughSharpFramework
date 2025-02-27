@@ -29,8 +29,8 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
-///     Manages drag and drop operations through registered
-///     drag sources and drop targets.
+/// Manages drag and drop operations through registered
+/// drag sources and drop targets.
 /// </summary>
 [PublicAPI]
 public class DragAndDrop
@@ -50,9 +50,9 @@ public class DragAndDrop
     private float         _touchOffsetY;
 
     /// <summary>
-    ///     Time in milliseconds that a drag must take before a drop will be
-    ///     considered valid. This ignores an accidental drag and drop that
-    ///     was meant to be a click. Default is 250ms.
+    /// Time in milliseconds that a drag must take before a drop will be
+    /// considered valid. This ignores an accidental drag and drop that
+    /// was meant to be a click. Default is 250ms.
     /// </summary>
     public int DragTime { get; set; } = 250;
 
@@ -64,10 +64,10 @@ public class DragAndDrop
     public int         Button          { get; set; }
 
     /// <summary>
-    ///     When true (default), the touch focus (<see cref="Stage.CancelTouchFocus()" />) is
-    ///     cancelled if <see cref="DragAndDrop.DragSource.DragStart(InputEvent, float, float, int)" />"
-    ///     returns non-null. This ensures the DragAndDrop is the only touch focus listener, eg when
-    ///     the source is inside a <see cref="ScrollPane" /> with flick scroll enabled.
+    /// When true (default), the touch focus (<see cref="Stage.CancelTouchFocus()" />) is
+    /// cancelled if <see cref="DragAndDrop.DragSource.DragStart(InputEvent, float, float, int)" />"
+    /// returns non-null. This ensures the DragAndDrop is the only touch focus listener, eg when
+    /// the source is inside a <see cref="ScrollPane" /> with flick scroll enabled.
     /// </summary>
     public bool CancelTouchFocus { get; set; } = true;
 
@@ -106,7 +106,7 @@ public class DragAndDrop
     }
 
     /// <summary>
-    ///     Removes all targets and sources.
+    /// Removes all targets and sources.
     /// </summary>
     public void Clear()
     {
@@ -121,7 +121,7 @@ public class DragAndDrop
     }
 
     /// <summary>
-    ///     Cancels the touch focus for everything except the specified source.
+    /// Cancels the touch focus for everything except the specified source.
     /// </summary>
     public void CancelTouchFocusExcept( DragSource except )
     {
@@ -138,7 +138,7 @@ public class DragAndDrop
     }
 
     /// <summary>
-    ///     Sets the distance a touch must travel before being considered a drag.
+    /// Sets the distance a touch must travel before being considered a drag.
     /// </summary>
     public void SetTapSquareSize( float halfTapSquareSize )
     {
@@ -152,8 +152,8 @@ public class DragAndDrop
     }
 
     /// <summary>
-    ///     Sets an offset in stage coordinates from the touch position which
-    ///     is used to determine the drop location. Default is 0,0.
+    /// Sets an offset in stage coordinates from the touch position which
+    /// is used to determine the drop location. Default is 0,0.
     /// </summary>
     /// <param name="touchOffsetX"></param>
     /// <param name="touchOffsetY"></param>
@@ -169,8 +169,8 @@ public class DragAndDrop
     }
 
     /// <summary>
-    ///     Returns true if a drag is in progress and the <see cref="DragTime" />"
-    ///     has elapsed since the drag started.
+    /// Returns true if a drag is in progress and the <see cref="DragTime" />"
+    /// has elapsed since the drag started.
     /// </summary>
     public bool IsDragValid()
     {
@@ -181,7 +181,7 @@ public class DragAndDrop
     // ========================================================================
 
     /// <summary>
-    ///     Class which extends the <see cref="DragListener" /> for drag &amp; drop operations.
+    /// Class which extends the <see cref="DragListener" /> for drag &amp; drop operations.
     /// </summary>
     public class DragListenerImpl : DragListener
     {
@@ -396,7 +396,7 @@ public class DragAndDrop
     // ========================================================================
 
     /// <summary>
-    ///     A source where a payload can be dragged from.
+    /// A source where a payload can be dragged from.
     /// </summary>
     [PublicAPI]
     public class DragSource
@@ -411,8 +411,8 @@ public class DragAndDrop
         public Actor Actor { get; set; }
 
         /// <summary>
-        ///     Called when a drag is started on the source. The coordinates
-        ///     are in the source's local coordinate system.
+        /// Called when a drag is started on the source. The coordinates
+        /// are in the source's local coordinate system.
         /// </summary>
         /// <returns> If null the drag will not affect any targets. </returns>
         public virtual Payload? DragStart( InputEvent ev, float x, float y, int pointer )
@@ -421,15 +421,15 @@ public class DragAndDrop
         }
 
         /// <summary>
-        ///     Called repeatedly during a drag which started on this source.
+        /// Called repeatedly during a drag which started on this source.
         /// </summary>
         public virtual void Drag( InputEvent ev, float x, float y, int pointer )
         {
         }
 
         /// <summary>
-        ///     Called when a drag for the source is stopped. The coordinates are
-        ///     in the source's local coordinate system.
+        /// Called when a drag for the source is stopped. The coordinates are
+        /// in the source's local coordinate system.
         /// </summary>
         /// <param name="ev"></param>
         /// <param name="x"></param>
@@ -451,13 +451,13 @@ public class DragAndDrop
     // ========================================================================
 
     /// <summary>
-    ///     A target where a payload can be dropped to.
+    /// A target where a payload can be dropped to.
     /// </summary>
     [PublicAPI]
     public abstract class DragTarget
     {
         /// <summary>
-        ///     Constructor, creates a new Drag Target.
+        /// Constructor, creates a new Drag Target.
         /// </summary>
         /// <param name="actor"></param>
         /// <exception cref="ArgumentException"></exception>
@@ -477,31 +477,31 @@ public class DragAndDrop
         public Actor Actor { get; set; }
 
         /// <summary>
-        ///     Called when the payload is dragged over the target. The coordinates
-        ///     are in the target's local coordinate system.
+        /// Called when the payload is dragged over the target. The coordinates
+        /// are in the target's local coordinate system.
         /// </summary>
         /// <returns> true if this is a valid target for the payload. </returns>
         public abstract bool Drag( DragSource source, Payload payload, float x, float y, int pointer );
 
         /// <summary>
-        ///     Called when the payload is no longer over the target, whether because the touch
-        ///     was moved or a drop occurred.
-        ///     <para>
-        ///         This is called even if <see cref="Drag(DragSource, Payload, float, float, int)" />
-        ///         returned false.
-        ///     </para>
+        /// Called when the payload is no longer over the target, whether because the touch
+        /// was moved or a drop occurred.
+        /// <para>
+        ///     This is called even if <see cref="Drag(DragSource, Payload, float, float, int)" />
+        ///     returned false.
+        /// </para>
         /// </summary>
         public virtual void Reset( DragSource source, Payload payload )
         {
         }
 
         /// <summary>
-        ///     Called when the payload is dropped on the target. The coordinates are in the
-        ///     target's local coordinate system.
-        ///     <para>
-        ///         This is not called if <see cref="Drag(DragSource, Payload, float, float, int)" />
-        ///         returned false.
-        ///     </para>
+        /// Called when the payload is dropped on the target. The coordinates are in the
+        /// target's local coordinate system.
+        /// <para>
+        ///     This is not called if <see cref="Drag(DragSource, Payload, float, float, int)" />
+        ///     returned false.
+        /// </para>
         /// </summary>
         public abstract void Drop( DragSource source, Payload payload, float x, float y, int pointer );
     }
@@ -510,13 +510,13 @@ public class DragAndDrop
     // ========================================================================
 
     /// <summary>
-    ///     The payload of a drag and drop operation. Actors can be optionally provided to
-    ///     follow the cursor and change when over a target. Such actors will be added the
-    ///     stage automatically during the drag operation as necessary and they will only be
-    ///     removed from the stage if they were added automatically.
-    ///     <para>
-    ///         A source actor can be used a payload drag actor.
-    ///     </para>
+    /// The payload of a drag and drop operation. Actors can be optionally provided to
+    /// follow the cursor and change when over a target. Such actors will be added the
+    /// stage automatically during the drag operation as necessary and they will only be
+    /// removed from the stage if they were added automatically.
+    /// <para>
+    ///     A source actor can be used a payload drag actor.
+    /// </para>
     /// </summary>
     [PublicAPI]
     public class Payload

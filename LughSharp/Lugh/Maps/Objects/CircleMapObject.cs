@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Maps.Objects;
 public class CircleMapObject : MapObject
 {
     /// <summary>
-    ///     Creates a circle map object at (0,0) with radius of 1.0f
+    /// Creates a circle map object at (0,0) with radius of 1.0f
     /// </summary>
     public CircleMapObject()
         : this( 0.0f, 0.0f, 1.0f )
@@ -38,7 +38,7 @@ public class CircleMapObject : MapObject
     }
 
     /// <summary>
-    ///     Creates a circle map object
+    /// Creates a circle map object
     /// </summary>
     /// <param name="x">X coordinate</param>
     /// <param name="y">Y coordinate</param>

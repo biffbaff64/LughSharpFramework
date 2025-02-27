@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-///     Moves an actor from its current position to a specific position.
+/// Moves an actor from its current position to a specific position.
 /// </summary>
 public class MoveToAction : TemporalAction
 {

@@ -25,7 +25,7 @@
 namespace Extensions.Source.Box2D;
 
 /// <summary>
-///     A rigid body. These are created via World.CreateBody.
+/// A rigid body. These are created via World.CreateBody.
 /// </summary>
 public class Body
 {

@@ -28,8 +28,8 @@ using LughSharp.Lugh.Audio;
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
-///     <see cref="AssetLoader" /> for <see cref="IMusic" /> instances.
-///     The Music instance is loaded synchronously.
+/// <see cref="AssetLoader" /> for <see cref="IMusic" /> instances.
+/// The Music instance is loaded synchronously.
 /// </summary>
 [PublicAPI]
 public class MusicLoader : AsynchronousAssetLoader, IDisposable
@@ -37,7 +37,7 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new Music loader using the provided <see cref="IFileHandleResolver" />
+    /// Creates a new Music loader using the provided <see cref="IFileHandleResolver" />
     /// </summary>
     public MusicLoader( IFileHandleResolver resolver )
         : base( resolver )
@@ -48,8 +48,8 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     public IMusic LoadedMusic { get; set; }
 
     /// <summary>
-    ///     Performs application-defined tasks associated with freeing,
-    ///     releasing, or resetting unmanaged resources.
+    /// Performs application-defined tasks associated with freeing,
+    /// releasing, or resetting unmanaged resources.
     /// </summary>
     public void Dispose()
     {
@@ -78,10 +78,10 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     }
 
     /// <summary>
-    ///     Releases the unmanaged resources used by the texture loader.
+    /// Releases the unmanaged resources used by the texture loader.
     /// </summary>
     /// <param name="disposing">
-    ///     True to release both managed and unmanaged resources; false to release only unmanaged resources.
+    /// True to release both managed and unmanaged resources; false to release only unmanaged resources.
     /// </param>
     protected void Dispose( bool disposing )
     {

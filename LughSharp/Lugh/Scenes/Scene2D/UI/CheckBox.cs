@@ -70,8 +70,8 @@ public class CheckBox : TextButton
     }
 
     /// <summary>
-    ///     Private setup method to allow calls to virtual methods that can't
-    ///     be called from constructors.
+    /// Private setup method to allow calls to virtual methods that can't
+    /// be called from constructors.
     /// </summary>
     private void NonVirtualSetup( CheckBoxStyle style )
     {
@@ -135,7 +135,7 @@ public class CheckBox : TextButton
     // ========================================================================
 
     /// <summary>
-    ///     The style for a select box, see <see cref="CheckBox" />.
+    /// The style for a select box, see <see cref="CheckBox" />.
     /// </summary>
     [PublicAPI]
     public class CheckBoxStyle : TextButtonStyle

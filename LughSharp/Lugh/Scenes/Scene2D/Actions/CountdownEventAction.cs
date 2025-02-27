@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 /// <summary>
-///     An EventAction that is complete once it receives X number of events.
+/// An EventAction that is complete once it receives X number of events.
 /// </summary>
 [PublicAPI]
 public class CountdownEventAction< T > : EventAction< T > where T : Event

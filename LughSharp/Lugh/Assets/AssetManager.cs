@@ -38,9 +38,9 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Assets;
 
 /// <summary>
-///     Loads and stores assets like textures, bitmapfonts, tile maps, sounds, music and so
-///     on. Assets are reference counted. If two assets A and B both depend on another asset C,
-///     C won’t be disposed until A and B have been disposed.
+/// Loads and stores assets like textures, bitmapfonts, tile maps, sounds, music and so
+/// on. Assets are reference counted. If two assets A and B both depend on another asset C,
+/// C won’t be disposed until A and B have been disposed.
 /// </summary>
 [PublicAPI]
 public partial class AssetManager
@@ -69,16 +69,16 @@ public partial class AssetManager
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new AssetManager with all default loaders.
+    /// Creates a new AssetManager with all default loaders.
     /// </summary>
     public AssetManager() : this( new InternalFileHandleResolver() )
     {
     }
 
     /// <summary>
-    ///     Creates a new AssetManager with optionally all default loaders. If you don't add the
-    ///     default loaders then you have to manually add the loaders you need, including any
-    ///     loaders they might depend on.
+    /// Creates a new AssetManager with optionally all default loaders. If you don't add the
+    /// default loaders then you have to manually add the loaders you need, including any
+    /// loaders they might depend on.
     /// </summary>
     /// <param name="resolver">The dedicated resolver to use.</param>
     /// <param name="defaultLoaders">Whether to add the default loaders (default is true).</param>
@@ -110,8 +110,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns the <see cref="IFileHandleResolver" /> which this
-    ///     AssetManager was loaded with.
+    /// Returns the <see cref="IFileHandleResolver" /> which this
+    /// AssetManager was loaded with.
     /// </summary>
     /// <returns>the file handle resolver which this AssetManager uses.</returns>
     public IFileHandleResolver FileHandleResolver { get; set; }
@@ -120,11 +120,11 @@ public partial class AssetManager
     // ========================================================================
 
     /// <summary>
-    ///     Updates the asset manager, loading new assets and processing asset loading tasks.
-    ///     Returns true if all assets are loaded, otherwise false.
+    /// Updates the asset manager, loading new assets and processing asset loading tasks.
+    /// Returns true if all assets are loaded, otherwise false.
     /// </summary>
     /// <returns>
-    ///     A boolean value indicating whether all assets are loaded.
+    /// A boolean value indicating whether all assets are loaded.
     /// </returns>
     public bool Update()
     {
@@ -177,8 +177,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Asynchronously updates the AssetManager by processing queued asset loading
-    ///     tasks for a specified amount of time.
+    /// Asynchronously updates the AssetManager by processing queued asset loading
+    /// tasks for a specified amount of time.
     /// </summary>
     /// <param name="millis">The number of milliseconds to perform updates.</param>
     /// <returns>A task that represents whether the asset manager finished processing all tasks.</returns>
@@ -252,8 +252,8 @@ public partial class AssetManager
     // ========================================================================
 
     /// <summary>
-    ///     Returns true if an asset with the specified name is loading,
-    ///     queued to be loaded, or has been loaded.
+    /// Returns true if an asset with the specified name is loading,
+    /// queued to be loaded, or has been loaded.
     /// </summary>
     public bool Contains( string? fileName )
     {
@@ -281,8 +281,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns true if an asset with the specified name and type is loading,
-    ///     queued to be loaded, or has been loaded.
+    /// Returns true if an asset with the specified name and type is loading,
+    /// queued to be loaded, or has been loaded.
     /// </summary>
     public bool Contains( string? fileName, Type? type )
     {
@@ -314,7 +314,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns whether the specified asset is contained in this manager.
+    /// Returns whether the specified asset is contained in this manager.
     /// </summary>
     public bool ContainsAsset< T >( T asset )
     {
@@ -342,7 +342,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Sets an <see cref="IAssetErrorListener" /> to be invoked in case loading an asset failed.
+    /// Sets an <see cref="IAssetErrorListener" /> to be invoked in case loading an asset failed.
     /// </summary>
     public void SetErrorListener( IAssetErrorListener listener )
     {
@@ -353,7 +353,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns the number of currently queued assets.
+    /// Returns the number of currently queued assets.
     /// </summary>
     public int GetQueuedAssets()
     {
@@ -364,7 +364,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns the progress in percent of completion.
+    /// Returns the progress in percent of completion.
     /// </summary>
     public float GetProgress()
     {
@@ -387,7 +387,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns a list of all asset names.
+    /// Returns a list of all asset names.
     /// </summary>
     public List< string > GetAssetNames()
     {
@@ -398,7 +398,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns a list of dependencies for the named asset.
+    /// Returns a list of dependencies for the named asset.
     /// </summary>
     /// <param name="name"> Asset name. </param>
     /// <returns> Dependencies list. </returns>
@@ -411,7 +411,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns the asset type for the given asset name.
+    /// Returns the asset type for the given asset name.
     /// </summary>
     /// <param name="name"> String holding the asset name. </param>
     /// <returns> The asset type. </returns>
@@ -429,7 +429,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Retrieves an asset of the specified type by its name.
+    /// Retrieves an asset of the specified type by its name.
     /// </summary>
     /// <param name="name">The name of the asset to retrieve.</param>
     /// <returns>The asset of the specified type.</returns>
@@ -443,7 +443,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Retrieves an asset by name, throwing an exception if the asset is not found and required.
+    /// Retrieves an asset by name, throwing an exception if the asset is not found and required.
     /// </summary>
     /// <param name="name">The name of the asset to retrieve.</param>
     /// <param name="required">Determines if an exception should be thrown if the asset is not found.</param>
@@ -471,12 +471,12 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Retrieves an asset of the specified type using the given asset descriptor.
+    /// Retrieves an asset of the specified type using the given asset descriptor.
     /// </summary>
     /// <param name="assetDescriptor">The descriptor containing the filepath and type of the asset.</param>
     /// <returns>The asset of the specified type.</returns>
     /// <exception cref="GdxRuntimeException">
-    ///     Thrown if the asset descriptor is null or if the filepath is null.
+    /// Thrown if the asset descriptor is null or if the filepath is null.
     /// </exception>
     public object? Get( AssetDescriptor assetDescriptor )
     {
@@ -489,7 +489,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Retrieves an asset from the manager.
+    /// Retrieves an asset from the manager.
     /// </summary>
     /// <param name="name">The name of the asset to retrieve.</param>
     /// <param name="type">The type of the asset to retrieve.</param>
@@ -516,14 +516,14 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Retrieves all assets of the specified type and adds them to the provided list.
+    /// Retrieves all assets of the specified type and adds them to the provided list.
     /// </summary>
     /// <typeparam name="T">The type of assets to retrieve.</typeparam>
     /// <param name="type">The type of the assets to retrieve.</param>
     /// <param name="outArray">The list to which the retrieved assets will be added.</param>
     /// <returns>The list containing all assets of the specified type.</returns>
     /// <exception cref="ArgumentNullException">
-    ///     Thrown if the <paramref name="type" /> or <paramref name="outArray" /> is null.
+    /// Thrown if the <paramref name="type" /> or <paramref name="outArray" /> is null.
     /// </exception>
     /// <exception cref="GdxRuntimeException">Thrown if no assets of the specified type are found.</exception>
     public List< T > GetAll< T >( Type type, List< T > outArray )
@@ -554,8 +554,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Gets the filename for the specified asset type.
-    ///     Will return Null if the asset is not contained in this manager.
+    /// Gets the filename for the specified asset type.
+    /// Will return Null if the asset is not contained in this manager.
     /// </summary>
     public string? GetAssetFileName< T >( T asset )
     {
@@ -591,10 +591,10 @@ public partial class AssetManager
     // ========================================================================
 
     /// <summary>
-    ///     Called when a task throws an exception during loading. The default implementation
-    ///     rethrows the exception and does not use the <tt>assetDesc</tt> parameter.
-    ///     A subclass may supress the default implementation when loading assets where loading
-    ///     failure is recoverable.
+    /// Called when a task throws an exception during loading. The default implementation
+    /// rethrows the exception and does not use the <tt>assetDesc</tt> parameter.
+    /// A subclass may supress the default implementation when loading assets where loading
+    /// failure is recoverable.
     /// </summary>
     public virtual void TaskFailed( AssetDescriptor assetDesc, Exception ex )
     {
@@ -602,8 +602,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Handles a runtime/loading error in <see cref="Update()" /> by optionally
-    ///     invoking the <see cref="IAssetErrorListener" />.
+    /// Handles a runtime/loading error in <see cref="Update()" /> by optionally
+    /// invoking the <see cref="IAssetErrorListener" />.
     /// </summary>
     /// <param name="t"></param>
     public void HandleTaskError( Exception t )
@@ -647,7 +647,7 @@ public partial class AssetManager
     // ========================================================================
 
     /// <summary>
-    ///     Clears and disposes all assets and the preloading queue.
+    /// Clears and disposes all assets and the preloading queue.
     /// </summary>
     public void ClearAsync()
     {
@@ -712,7 +712,7 @@ public partial class AssetManager
     // ========================================================================
 
     /// <summary>
-    ///     Disposes all assets in the manager and stops all asynchronous loading.
+    /// Disposes all assets in the manager and stops all asynchronous loading.
     /// </summary>
     public void Dispose()
     {
@@ -720,11 +720,11 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Releases all resources used by the AssetManager.
+    /// Releases all resources used by the AssetManager.
     /// </summary>
     /// <param name="disposing">
-    ///     Indicates whether the method call comes from a Dispose
-    ///     method (true) or from a finalizer (false).
+    /// Indicates whether the method call comes from a Dispose
+    /// method (true) or from a finalizer (false).
     /// </param>
     protected void Dispose( bool disposing )
     {
@@ -740,8 +740,8 @@ public partial class AssetManager
     #region dependency injection and ref counting
 
     /// <summary>
-    ///     Injects dependencies for a given parent asset by adding the specified
-    ///     dependent asset descriptors.
+    /// Injects dependencies for a given parent asset by adding the specified
+    /// dependent asset descriptors.
     /// </summary>
     /// <param name="parentAssetFilename">The file name of the parent asset.</param>
     /// <param name="dependendAssetDescs">The list of dependent asset descriptors to inject.</param>
@@ -773,7 +773,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Injects a single dependency for a given parent asset.
+    /// Injects a single dependency for a given parent asset.
     /// </summary>
     /// <param name="parentAssetFilename">The file name of the parent asset.</param>
     /// <param name="dependendAssetDesc">The descriptor of the dependent asset to inject.</param>
@@ -808,7 +808,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Sets the reference count of an asset.
+    /// Sets the reference count of an asset.
     /// </summary>
     /// <param name="fileName"> The asset name. </param>
     /// <param name="refCount"> The new reference count. </param>
@@ -828,7 +828,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns the reference count of an asset.
+    /// Returns the reference count of an asset.
     /// </summary>
     /// <param name="fileName"> The asset name. </param>
     public int GetReferenceCount( string fileName )
@@ -852,11 +852,11 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Increments the reference count of the dependencies for a given parent asset.
-    ///     If the parent asset has dependencies, their reference counts will be incremented recursively.
+    /// Increments the reference count of the dependencies for a given parent asset.
+    /// If the parent asset has dependencies, their reference counts will be incremented recursively.
     /// </summary>
     /// <param name="parent">
-    ///     The file name of the parent asset whose dependencies' reference counts are to be incremented.
+    /// The file name of the parent asset whose dependencies' reference counts are to be incremented.
     /// </param>
     /// <exception cref="GdxRuntimeException">Thrown if the type of a dependency is null.</exception>
     public void IncrementRefCountedDependencies( string parent )
@@ -895,14 +895,14 @@ public partial class AssetManager
     #region loading methods
 
     /// <summary>
-    ///     Returns the loader for the given type and the specified filename.
+    /// Returns the loader for the given type and the specified filename.
     /// </summary>
     /// <param name="type">The type of the loader to get</param>
     /// <param name="fileName">
-    ///     The filename of the asset to get a loader for, or null to get the default loader.
+    /// The filename of the asset to get a loader for, or null to get the default loader.
     /// </param>
     /// <returns>
-    ///     The loader capable of loading the type and filename, or null if none exists.
+    /// The loader capable of loading the type and filename, or null if none exists.
     /// </returns>
     /// <exception cref="GdxRuntimeException"> If no loader was found. </exception>
     public AssetLoader? GetLoader( Type? type, string? fileName = null )
@@ -942,7 +942,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Adds the given asset to the loading queue of the AssetManager.
+    /// Adds the given asset to the loading queue of the AssetManager.
     /// </summary>
     /// <param name="desc">the <see cref="AssetDescriptor" /></param>
     public void Load( AssetDescriptor desc )
@@ -956,10 +956,10 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Adds the given asset to the loading queue of the AssetManager.
+    /// Adds the given asset to the loading queue of the AssetManager.
     /// </summary>
     /// <param name="fileName">
-    ///     The file name (interpretation depends on <see cref="AssetLoader" />)
+    /// The file name (interpretation depends on <see cref="AssetLoader" />)
     /// </param>
     /// <param name="type"> the type of the asset. </param>
     public void Load( string fileName, Type type )
@@ -971,10 +971,10 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Adds the given asset to the loading queue of the AssetManager.
+    /// Adds the given asset to the loading queue of the AssetManager.
     /// </summary>
     /// <param name="fileName">
-    ///     the file name (interpretation depends on <see cref="AssetLoader" />)
+    /// the file name (interpretation depends on <see cref="AssetLoader" />)
     /// </param>
     /// <param name="type">the type of the asset.</param>
     /// <param name="parameters"></param>
@@ -1019,8 +1019,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Adds an asset to the asset manager with the specified file name and type.
-    ///     The asset will be contained within a new RefCountedContainer instance.
+    /// Adds an asset to the asset manager with the specified file name and type.
+    /// The asset will be contained within a new RefCountedContainer instance.
     /// </summary>
     /// <param name="fileName">The file name associated with the asset.</param>
     /// <param name="type">The type of the asset.</param>
@@ -1050,8 +1050,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns true when all assets are loaded. Can be called from any thread but
-    ///     note <see cref="Update()" /> or related methods must be called to process tasks.
+    /// Returns true when all assets are loaded. Can be called from any thread but
+    /// note <see cref="Update()" /> or related methods must be called to process tasks.
     /// </summary>
     public bool IsFinished()
     {
@@ -1062,7 +1062,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Asynchronously waits for all loading tasks in the AssetManager to complete.
+    /// Asynchronously waits for all loading tasks in the AssetManager to complete.
     /// </summary>
     /// <returns></returns>
     public void FinishLoading()
@@ -1074,7 +1074,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Blocks until the specified asset is loaded.
+    /// Blocks until the specified asset is loaded.
     /// </summary>
     /// <param name="assetDesc">the AssetDescriptor of the asset</param>
     public object FinishLoadingAsset( AssetDescriptor assetDesc )
@@ -1083,7 +1083,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Asynchronously waits for the specified asset to be loaded and returns it upon completion.
+    /// Asynchronously waits for the specified asset to be loaded and returns it upon completion.
     /// </summary>
     /// <param name="fileName">The name of the file of the asset to finish loading.</param>
     /// <returns>A task representing the asynchronous operation. The task result contains the loaded asset.</returns>
@@ -1112,13 +1112,13 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Sets a new <see cref="AssetLoader" /> for the given type.
+    /// Sets a new <see cref="AssetLoader" /> for the given type.
     /// </summary>
     /// <param name="type"> the type of the asset </param>
     /// <param name="loader"> the loader </param>
     /// <param name="suffix">
-    ///     the suffix the filename must have for this loader to be used or null
-    ///     to specify the default loader.
+    /// the suffix the filename must have for this loader to be used or null
+    /// to specify the default loader.
     /// </param>
     public void SetLoader( Type type, AssetLoader loader, string? suffix = "" )
     {
@@ -1147,7 +1147,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Asynchronously unloads an asset from the AssetManager.
+    /// Asynchronously unloads an asset from the AssetManager.
     /// </summary>
     /// <param name="fileName">The name of the asset to be unloaded.</param>
     /// <returns>A task representing the asynchronous unload operation.</returns>
@@ -1181,7 +1181,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns TRUE if the asset identified by fileName is loaded.
+    /// Returns TRUE if the asset identified by fileName is loaded.
     /// </summary>
     public bool IsLoaded( string? fileName )
     {
@@ -1192,7 +1192,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns TRUE if the asset identified by fileName and Type is loaded.
+    /// Returns TRUE if the asset identified by fileName and Type is loaded.
     /// </summary>
     public bool IsLoaded( string fileName, Type type )
     {
@@ -1218,12 +1218,12 @@ public partial class AssetManager
     #region private methods
 
     /// <summary>
-    ///     Adds a new asset loading task to the queue using the given asset descriptor.
+    /// Adds a new asset loading task to the queue using the given asset descriptor.
     /// </summary>
     /// <param name="assetDesc">Descriptor containing information about the asset to be loaded.</param>
     /// <exception cref="GdxRuntimeException">
-    ///     Thrown if no loader is available for the asset type specified in the asset
-    ///     descriptor.
+    /// Thrown if no loader is available for the asset type specified in the asset
+    /// descriptor.
     /// </exception>
     private void AddTask( AssetDescriptor assetDesc )
     {
@@ -1242,10 +1242,10 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Processes the next asset loading task in the queue asynchronously.
+    /// Processes the next asset loading task in the queue asynchronously.
     /// </summary>
     /// <returns>
-    ///     A task that represents the asynchronous operation of processing the next asset loading task.
+    /// A task that represents the asynchronous operation of processing the next asset loading task.
     /// </returns>
     private void UpdateTask()
     {
@@ -1283,8 +1283,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Loads the next asset task from the load queue. If the asset is already loaded,
-    ///     increment the loaded count for use in <see cref="GetProgress" />.
+    /// Loads the next asset task from the load queue. If the asset is already loaded,
+    /// increment the loaded count for use in <see cref="GetProgress" />.
     /// </summary>
     private bool LoadNextTask()
     {
@@ -1311,7 +1311,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Check if an asset with the same name but different type has already been added.
+    /// Check if an asset with the same name but different type has already been added.
     /// </summary>
     /// <param name="fileName"></param>
     /// <param name="type"></param>
@@ -1365,7 +1365,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Attempts to cancel the currently processing task if it matches the given file name.
+    /// Attempts to cancel the currently processing task if it matches the given file name.
     /// </summary>
     /// <param name="fileName">The name of the file to check for cancellation.</param>
     /// <returns>True if the current task was successfully canceled; otherwise, false.</returns>
@@ -1384,12 +1384,12 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Attempts to remove an asset from the load queue based on its file name and type.
+    /// Attempts to remove an asset from the load queue based on its file name and type.
     /// </summary>
     /// <param name="fileName">The name of the file corresponding to the asset to be removed.</param>
     /// <param name="type">The type of the asset to be removed.</param>
     /// <returns>
-    ///     true if the asset was successfully found and removed from the load queue; otherwise, false.
+    /// true if the asset was successfully found and removed from the load queue; otherwise, false.
     /// </returns>
     private bool TryRemoveFromQueue( string fileName, Type type )
     {
@@ -1413,7 +1413,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Asynchronously unloads the specified asset to free up resources.
+    /// Asynchronously unloads the specified asset to free up resources.
     /// </summary>
     /// <param name="fileName">The name of the asset to unload.</param>
     /// <param name="type">The type of the asset to unload.</param>
@@ -1452,7 +1452,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Disposes of the assets contained within the provided IRefCountedContainer.
+    /// Disposes of the assets contained within the provided IRefCountedContainer.
     /// </summary>
     /// <param name="container">The container that holds the asset to be disposed.</param>
     private static void DisposeAsset( IRefCountedContainer container )
@@ -1464,7 +1464,7 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Removes all dependencies related to the specified file asynchronously.
+    /// Removes all dependencies related to the specified file asynchronously.
     /// </summary>
     /// <param name="fileName">The name of the asset file whose dependencies are to be removed.</param>
     /// <returns>A task representing the asynchronous removal of dependencies.</returns>

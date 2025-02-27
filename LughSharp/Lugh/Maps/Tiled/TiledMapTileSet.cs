@@ -25,13 +25,13 @@
 namespace LughSharp.Lugh.Maps.Tiled;
 
 /// <summary>
-///     A set of <see cref="ITiledMapTile" /> instances used to compose a TiledMapLayer
+/// A set of <see cref="ITiledMapTile" /> instances used to compose a TiledMapLayer
 /// </summary>
 [PublicAPI]
 public class TiledMapTileSet : IEnumerable< ITiledMapTile >
 {
     /// <summary>
-    ///     A Collection holding the individual tiles for this tileset.
+    /// A Collection holding the individual tiles for this tileset.
     /// </summary>
     private readonly Dictionary< int, ITiledMapTile > _tiles;
 
@@ -39,7 +39,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     // ========================================================================
 
     /// <summary>
-    ///     Creates empty tileset
+    /// Creates empty tileset
     /// </summary>
     public TiledMapTileSet()
     {
@@ -49,12 +49,12 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     }
 
     /// <summary>
-    ///     The Tileset name.
+    /// The Tileset name.
     /// </summary>
     public string? Name { get; set; }
 
     /// <summary>
-    ///     A Property Set for this tileset.
+    /// A Property Set for this tileset.
     /// </summary>
     /// <inheritdoc cref="MapProperties" />
     public MapProperties Properties { get; private set; }
@@ -72,7 +72,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     }
 
     /// <summary>
-    ///     Gets the <see cref="ITiledMapTile" /> that has the given id.
+    /// Gets the <see cref="ITiledMapTile" /> that has the given id.
     /// </summary>
     /// <param name="id"> the id of the <see cref="ITiledMapTile" /> to retrieve. </param>
     /// <returns> tile matching ID, null if it doesn't exist  </returns>
@@ -82,7 +82,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     }
 
     /// <summary>
-    ///     Adds or replaces tile with the given ID.
+    /// Adds or replaces tile with the given ID.
     /// </summary>
     /// <param name="id"> the id of the <see cref="ITiledMapTile" /> to add or replace. </param>
     /// <param name="tile"> the <see cref="ITiledMapTile" /> to add or replace. </param>
@@ -92,7 +92,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     }
 
     /// <summary>
-    ///     Removes a tile from this tileset.
+    /// Removes a tile from this tileset.
     /// </summary>
     /// <param name="id"> The ID of the tile to be removed </param>
     public void RemoveTile( int id )
@@ -101,7 +101,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     }
 
     /// <summary>
-    ///     Returns the size of this TiledMapTileSet, as in the number of tiles.
+    /// Returns the size of this TiledMapTileSet, as in the number of tiles.
     /// </summary>
     public int Size()
     {

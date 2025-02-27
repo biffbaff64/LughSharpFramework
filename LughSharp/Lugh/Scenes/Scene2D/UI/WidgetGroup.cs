@@ -29,19 +29,19 @@ using LughSharp.Lugh.Utils.Collections;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     A <see cref="Group" /> that participates in layout and provides a minimum,
-///     preferred, and maximum size.
-///     <para>
-///         The default preferred size of a widget group is 0 and this is almost always
-///         overridden by a subclass. The default minimum size returns the preferred size,
-///         so a subclass may choose to return 0 for minimum size if it wants to allow
-///         itself to be sized smaller than the preferred size. The default maximum size
-///         is 0, which means no maximum size.
-///     </para>
-///     See <see cref="ILayout" /> for details on how a widget group should participate
-///     in layout. A widget group's mutator methods should call <see cref="Invalidate()" />
-///     or <see cref="InvalidateHierarchy()" /> as needed. By default, InvalidateHierarchy
-///     is called when child widgets are added and removed.
+/// A <see cref="Group" /> that participates in layout and provides a minimum,
+/// preferred, and maximum size.
+/// <para>
+///     The default preferred size of a widget group is 0 and this is almost always
+///     overridden by a subclass. The default minimum size returns the preferred size,
+///     so a subclass may choose to return 0 for minimum size if it wants to allow
+///     itself to be sized smaller than the preferred size. The default maximum size
+///     is 0, which means no maximum size.
+/// </para>
+/// See <see cref="ILayout" /> for details on how a widget group should participate
+/// in layout. A widget group's mutator methods should call <see cref="Invalidate()" />
+/// or <see cref="InvalidateHierarchy()" /> as needed. By default, InvalidateHierarchy
+/// is called when child widgets are added and removed.
 /// </summary>
 [PublicAPI]
 public class WidgetGroup : Group, ILayout
@@ -53,7 +53,7 @@ public class WidgetGroup : Group, ILayout
     }
 
     /// <summary>
-    ///     Creates a new widget group containing the specified actors.
+    /// Creates a new widget group containing the specified actors.
     /// </summary>
     public WidgetGroup( params Actor[] actors )
     {

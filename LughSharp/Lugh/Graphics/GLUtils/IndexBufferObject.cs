@@ -29,18 +29,18 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-///     An IndexBufferObject wraps OpenGL's index buffer functionality to be used in conjunction
-///     with VBOs.
-///     <para>
-///         You can also use this to store indices for vertex arrays. Do not call <see cref="Bind()" />
-///         or <see cref="Unbind()" /> in this case but rather use <see cref="GetBuffer(bool)" /> to use the
-///         buffer directly with glDrawElements. You must also create the IndexBufferObject with the
-///         second constructor and specify isDirect as true as glDrawElements in conjunction with vertex arrays needs
-///         direct buffers.
-///     </para>
-///     <para>
-///         VertexBufferObjects must be disposed via the {@link #dispose()} method when no longer needed
-///     </para>
+/// An IndexBufferObject wraps OpenGL's index buffer functionality to be used in conjunction
+/// with VBOs.
+/// <para>
+///     You can also use this to store indices for vertex arrays. Do not call <see cref="Bind()" />
+///     or <see cref="Unbind()" /> in this case but rather use <see cref="GetBuffer(bool)" /> to use the
+///     buffer directly with glDrawElements. You must also create the IndexBufferObject with the
+///     second constructor and specify isDirect as true as glDrawElements in conjunction with vertex arrays needs
+///     direct buffers.
+/// </para>
+/// <para>
+///     VertexBufferObjects must be disposed via the {@link #dispose()} method when no longer needed
+/// </para>
 /// </summary>
 [PublicAPI]
 public class IndexBufferObject : IIndexData
@@ -56,9 +56,9 @@ public class IndexBufferObject : IIndexData
     // ========================================================================
 
     /// <summary>
-    ///     Constructs a new IndexBufferObject, setting <see cref="_usage" /> to
-    ///     <see cref="IGL.GL_STATIC_DRAW" /> and <see cref="maxIndices" /> to the
-    ///     given value.
+    /// Constructs a new IndexBufferObject, setting <see cref="_usage" /> to
+    /// <see cref="IGL.GL_STATIC_DRAW" /> and <see cref="maxIndices" /> to the
+    /// given value.
     /// </summary>
     public IndexBufferObject( int maxIndices )
         : this( true, maxIndices )
@@ -66,11 +66,11 @@ public class IndexBufferObject : IIndexData
     }
 
     /// <summary>
-    ///     Constructs a new IndexBufferObject.
+    /// Constructs a new IndexBufferObject.
     /// </summary>
     /// <param name="isStatic">
-    ///     If true, the buffer will be created with static draw usage, otherwise
-    ///     with dynamic draw usage.
+    /// If true, the buffer will be created with static draw usage, otherwise
+    /// with dynamic draw usage.
     /// </param>
     /// <param name="maxIndices">The maximum number of indices that this buffer can hold.</param>
     public IndexBufferObject( bool isStatic, int maxIndices )

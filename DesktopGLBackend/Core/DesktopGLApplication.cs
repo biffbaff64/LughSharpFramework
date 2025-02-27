@@ -45,7 +45,7 @@ using Platform = LughSharp.Lugh.Core.Platform;
 namespace DesktopGLBackend.Core;
 
 /// <summary>
-///     Creates, and manages, an application to for Windows OpenGL backends.
+/// Creates, and manages, an application to for Windows OpenGL backends.
 /// </summary>
 [PublicAPI]
 public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
@@ -66,7 +66,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new Desktop Gl Application using the provided <see cref="DesktopGLApplicationConfiguration" />.
+    /// Creates a new Desktop Gl Application using the provided <see cref="DesktopGLApplicationConfiguration" />.
     /// </summary>
     /// <param name="listener"> The <see cref="IApplicationListener" /> to use. </param>
     /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration" /> to use.</param>
@@ -176,8 +176,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     /// <summary>
-    ///     Returns the Android API level on Android, the major OS version on iOS (5, 6, 7, ..),
-    ///     or 0 on the desktop.
+    /// Returns the Android API level on Android, the major OS version on iOS (5, 6, 7, ..),
+    /// or 0 on the desktop.
     /// </summary>
     public virtual int GetVersion()
     {
@@ -185,10 +185,10 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     /// <summary>
-    ///     Schedule an exit from the application. On android, this will cause a call to
-    ///     Pause() and Dispose() at the next opportunity. It will not immediately finish
-    ///     your application. On iOS this should be avoided in production as it breaks
-    ///     Apples guidelines
+    /// Schedule an exit from the application. On android, this will cause a call to
+    /// Pause() and Dispose() at the next opportunity. It will not immediately finish
+    /// your application. On iOS this should be avoided in production as it breaks
+    /// Apples guidelines
     /// </summary>
     public virtual void Exit()
     {
@@ -228,10 +228,10 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     The entry point for running code using this framework. At this point at least one window
-    ///     will have been created, Glfw will have been set up, and the framework properly initialised.
-    ///     This passes control to <see cref="Loop()" /> and stays there until the app is finished. At
-    ///     this point <see cref="CleanupWindows" /> is called, followed by <see cref="Cleanup" />.
+    /// The entry point for running code using this framework. At this point at least one window
+    /// will have been created, Glfw will have been set up, and the framework properly initialised.
+    /// This passes control to <see cref="Loop()" /> and stays there until the app is finished. At
+    /// this point <see cref="CleanupWindows" /> is called, followed by <see cref="Cleanup" />.
     /// </summary>
     public void Run()
     {
@@ -251,7 +251,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     /// <summary>
-    ///     Framework Main Loop.
+    /// Framework Main Loop.
     /// </summary>
     protected void Loop()
     {
@@ -452,7 +452,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     /// <summary>
-    ///     Cleans up, and disposes of, any windows that have been closed.
+    /// Cleans up, and disposes of, any windows that have been closed.
     /// </summary>
     protected void CleanupWindows()
     {
@@ -474,7 +474,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     /// <summary>
-    ///     Cleanup everything before shutdown.
+    /// Cleanup everything before shutdown.
     /// </summary>
     protected void Cleanup()
     {
@@ -488,8 +488,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     /// <summary>
-    ///     Initialise the main Window <see cref="WindowHint" />s. Some Hints may be set
-    ///     elsewhere, but this is where most are initialised.
+    /// Initialise the main Window <see cref="WindowHint" />s. Some Hints may be set
+    /// elsewhere, but this is where most are initialised.
     /// </summary>
     /// <param name="config"> The current <see cref="DesktopGLApplicationConfiguration" />. </param>
     private void SetWindowHints( DesktopGLApplicationConfiguration config )
@@ -574,14 +574,14 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     #region window creation handlers
 
     /// <summary>
-    ///     Creates a new <see cref="DesktopGLWindow" /> using the provided listener and
-    ///     <see cref="DesktopGLWindowConfiguration" />.
-    ///     <para>
-    ///         This function only instantiates a <see cref="DesktopGLWindow" /> and
-    ///         returns immediately. The actual window creation is postponed with
-    ///         <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)" /> until after all
-    ///         existing windows are updated.
-    ///     </para>
+    /// Creates a new <see cref="DesktopGLWindow" /> using the provided listener and
+    /// <see cref="DesktopGLWindowConfiguration" />.
+    /// <para>
+    ///     This function only instantiates a <see cref="DesktopGLWindow" /> and
+    ///     returns immediately. The actual window creation is postponed with
+    ///     <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)" /> until after all
+    ///     existing windows are updated.
+    /// </para>
     /// </summary>
     public DesktopGLWindow NewWindow( IApplicationListener listener, DesktopGLWindowConfiguration windowConfig )
     {
@@ -593,7 +593,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     /// <summary>
-    ///     Creates a new <see cref="DesktopGLWindow" /> using the
+    /// Creates a new <see cref="DesktopGLWindow" /> using the
     /// </summary>
     /// <param name="config"></param>
     /// <param name="listener"></param>

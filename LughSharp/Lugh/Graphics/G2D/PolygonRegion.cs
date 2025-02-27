@@ -33,12 +33,12 @@ public class PolygonRegion
     // ========================================================================
 
     /// <summary>
-    ///     Creates a PolygonRegion by triangulating the polygon coordinates in vertices
-    ///     and calculates uvs based on that. TextureRegion can come from an atlas.
+    /// Creates a PolygonRegion by triangulating the polygon coordinates in vertices
+    /// and calculates uvs based on that. TextureRegion can come from an atlas.
     /// </summary>
     /// <param name="region"> the region used for drawing </param>
     /// <param name="vertices">
-    ///     contains 2D polygon coordinates in pixels relative to source region.
+    /// contains 2D polygon coordinates in pixels relative to source region.
     /// </param>
     /// <param name="triangles"></param>
     public PolygonRegion( TextureRegion region, float[]? vertices, short[] triangles )

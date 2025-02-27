@@ -64,7 +64,7 @@ public class ShaderProgram : IDisposable
     /// Flag indicating whether attributes & uniforms must be present at all times.
     /// </summary>
     public static readonly bool Pedantic = true;
-    
+
     private int    _fragmentShaderHandle;
     private string _shaderLog = "";
     private int    _vertexShaderHandle;
@@ -78,6 +78,8 @@ public class ShaderProgram : IDisposable
     /// <param name="fragmentShader"></param>
     public ShaderProgram( string vertexShader, string fragmentShader )
     {
+        Logger.Checkpoint();
+
         VertexShaderSource   = vertexShader;
         FragmentShaderSource = fragmentShader;
 
@@ -129,11 +131,13 @@ public class ShaderProgram : IDisposable
     /// <param name="fragmentShaderSource"> the fragment shader </param>
     public void CompileShaders( string vertexShaderSource, string fragmentShaderSource )
     {
+        // Vertex Shader
         _vertexShaderHandle = ( int )GdxApi.Bindings.CreateShader( ( int )ShaderType.VertexShader );
         GdxApi.Bindings.ShaderSource( _vertexShaderHandle, vertexShaderSource );
         GdxApi.Bindings.CompileShader( _vertexShaderHandle );
         CheckShaderLoadError( _vertexShaderHandle, ( int )ShaderType.VertexShader );
 
+        // Fragment Shader
         _fragmentShaderHandle = ( int )GdxApi.Bindings.CreateShader( ( int )ShaderType.FragmentShader );
         GdxApi.Bindings.ShaderSource( _fragmentShaderHandle, fragmentShaderSource );
         GdxApi.Bindings.CompileShader( _fragmentShaderHandle );
@@ -152,7 +156,7 @@ public class ShaderProgram : IDisposable
             VertexShader   = _vertexShaderHandle,
             FragmentShader = _fragmentShaderHandle,
         };
-        
+
         GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
         GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
 
@@ -170,7 +174,7 @@ public class ShaderProgram : IDisposable
         Logger.Debug( $"fragment shader: {GL.GetShaderSource( ShaderData.FragmentShader )}" );
         #endif
     }
-    
+
     /// <summary>
     /// </summary>
     /// <param name="shader"></param>
@@ -278,7 +282,7 @@ public class ShaderProgram : IDisposable
     public virtual int GetAttributeLocation( string name )
     {
         var location = GdxApi.Bindings.GetAttribLocation( ShaderProgramHandle, name );
-        
+
         if ( location == -1 )
         {
             Logger.Debug( $"***** WARNING, Location is -1 for {name} *****" );
@@ -295,7 +299,7 @@ public class ShaderProgram : IDisposable
     public virtual void SetUniformi( string name, int value )
     {
         var location = FetchUniformLocation( name );
-        
+
         if ( location == -1 )
         {
             Logger.Debug( $"***** Action cannot be performed, Location is -1 for {name} *****" );
@@ -314,7 +318,7 @@ public class ShaderProgram : IDisposable
     public virtual void SetUniformf( string name, float value )
     {
         var location = FetchUniformLocation( name );
-        
+
         if ( location == -1 )
         {
             Logger.Debug( $"***** Action cannot be performed, Location is -1 for {name} *****" );
@@ -353,7 +357,7 @@ public class ShaderProgram : IDisposable
 
             return;
         }
-        
+
         SetUniformMatrix( location, matrix, transpose );
     }
 
@@ -392,6 +396,66 @@ public class ShaderProgram : IDisposable
         GdxApi.Bindings.UniformMatrix4fv( location, transpose, matrix.Val );
     }
 
+    public static void LogInvalidMatrix( float[]? matrix )
+    {
+        Logger.Checkpoint();
+
+        var isValid = IsMatrixValid( matrix );
+
+        if ( !isValid )
+        {
+            Logger.Debug( "Invalid Matrix Detected:" );
+
+            if ( matrix == null )
+            {
+                Logger.Debug( "Matrix is null." );
+
+                return;
+            }
+
+            if ( matrix.Length != 16 )
+            {
+                Logger.Debug( $"Matrix length is {matrix.Length}, expected 16." );
+
+                return;
+            }
+        }
+
+        for ( var i = 0; i < matrix?.Length; i++ )
+        {
+            Logger.Debug( $"{i}: [{matrix[i]}]" );
+
+            if ( float.IsNaN( matrix[ i ] ) )
+            {
+                Logger.Debug( $"Element [{i}] is NaN." );
+            }
+            else if ( float.IsInfinity( matrix[ i ] ) )
+            {
+                Logger.Debug( $"Element [{i}] is Infinity." );
+            }
+        }
+    }
+
+    private static bool IsMatrixValid( float[]? matrix )
+    {
+        if ( matrix is not { Length: 16 } )
+        {
+            return false; // Invalid matrix
+        }
+
+        foreach ( var t in matrix )
+        {
+            if ( float.IsNaN( t ) || float.IsInfinity( t ) )
+            {
+                return false; // Found NaN or Infinity
+            }
+        }
+
+        Logger.Debug( "Matrix is valid." );
+
+        return true; // Matrix is valid
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -405,7 +469,7 @@ public class ShaderProgram : IDisposable
         {
             Logger.Debug( $"***** Location is -1 for {name} *****" );
         }
-         
+
         return location;
     }
 
@@ -422,7 +486,7 @@ public class ShaderProgram : IDisposable
         {
             Logger.Debug( $"***** Location is -1 for {name} *****" );
         }
-        
+
         return location;
     }
 
@@ -471,7 +535,7 @@ public class ShaderProgram : IDisposable
     public virtual void SetUniformMatrix4Fv( string name, params float[] values )
     {
         var location = FetchUniformLocation( name );
-        
+
         if ( location == -1 )
         {
             Logger.Debug( $"***** Action cannot be performed, Location is -1 for {name} *****" );

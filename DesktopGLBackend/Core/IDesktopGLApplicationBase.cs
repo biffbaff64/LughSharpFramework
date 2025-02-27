@@ -37,12 +37,12 @@ public interface IDesktopGLApplicationBase : IApplication
     GLVersion? GLVersion { get; set; }
 
     /// <summary>
-    ///     Creates the Audio device.
+    /// Creates the Audio device.
     /// </summary>
     IGLAudio CreateAudio( DesktopGLApplicationConfiguration config );
 
     /// <summary>
-    ///     Creates an Input device.
+    /// Creates an Input device.
     /// </summary>
     IDesktopGLInput CreateInput( DesktopGLWindow window );
 }

@@ -114,8 +114,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    ///     Create a new Particvle Emitter which is a copy of the
-    ///     supplied emitter.
+    /// Create a new Particvle Emitter which is a copy of the
+    /// supplied emitter.
     /// </summary>
     /// <param name="emitter"></param>
     public ParticleEmitter( ParticleEmitter emitter )
@@ -160,7 +160,7 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    ///     Common initialisation method for all constructors
+    /// Common initialisation method for all constructors
     /// </summary>
     private void Initialise()
     {
@@ -353,9 +353,9 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    ///     Updates and draws the particles. This is slightly more efficient
-    ///     than calling {@link #update(float)} and <see cref="Draw(IBatch)" />"
-    ///     separately.
+    /// Updates and draws the particles. This is slightly more efficient
+    /// than calling {@link #update(float)} and <see cref="Draw(IBatch)" />"
+    /// separately.
     /// </summary>
     public void Draw( IBatch batch, float delta )
     {
@@ -1108,8 +1108,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    ///     Ignores the <see cref="Continuous" /> setting until the
-    ///     emitter is started again. This allows the emitter to stop smoothly.
+    /// Ignores the <see cref="Continuous" /> setting until the
+    /// emitter is started again. This allows the emitter to stop smoothly.
     /// </summary>
     public void AllowCompletion()
     {
@@ -1169,8 +1169,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    ///     Returns the bounding box for all active particles.
-    ///     Z axis will always be zero.
+    /// Returns the bounding box for all active particles.
+    /// Z axis will always be zero.
     /// </summary>
     public BoundingBox GetBoundingBox()
     {
@@ -1234,8 +1234,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    ///     Permanently scales the size of the emitter by scaling
-    ///     all of its ranged values related to size.
+    /// Permanently scales the size of the emitter by scaling
+    /// all of its ranged values related to size.
     /// </summary>
     public void ScaleSize( float scale )
     {
@@ -1248,8 +1248,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    ///     Permanently scales the size of the emitter by scaling
-    ///     all of its ranged values related to size.
+    /// Permanently scales the size of the emitter by scaling
+    /// all of its ranged values related to size.
     /// </summary>
     public void ScaleSize( float scaleX, float scaleY )
     {
@@ -1270,8 +1270,8 @@ public class ParticleEmitter
     }
 
     /// <summary>
-    ///     Permanently scales the speed of the emitter by scaling all its
-    ///     ranged values related to motion.
+    /// Permanently scales the speed of the emitter by scaling all its
+    /// ranged values related to motion.
     /// </summary>
     public void ScaleMotion( float scale )
     {
@@ -1668,7 +1668,7 @@ public class ParticleEmitter
         }
 
         /// <summary>
-        ///     permanently scales the range by a scalar.
+        /// permanently scales the range by a scalar.
         /// </summary>
         public virtual void Scale( float scale )
         {
@@ -2167,17 +2167,17 @@ public class ParticleEmitter
     #region properties
 
     /// <summary>
-    ///     Set whether to automatically return the <see cref="IBatch" />'s blend
-    ///     function to the alpha-blending default (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-    ///     when done drawing. Is true by default. If set to false, the IBatch's blend
-    ///     function is left as it was for drawing this ParticleEmitter, which prevents
-    ///     the IBatch from being flushed repeatedly if consecutive ParticleEmitters
-    ///     with the same additive or pre-multiplied alpha state are drawn in a row.
-    ///     <para>
-    ///         IMPORTANT: If set to false and if the next object to use this IBatch expects
-    ///         alpha blending, you are responsible for setting the IBatch's blend function
-    ///         to (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) before that next object is drawn.
-    ///     </para>
+    /// Set whether to automatically return the <see cref="IBatch" />'s blend
+    /// function to the alpha-blending default (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    /// when done drawing. Is true by default. If set to false, the IBatch's blend
+    /// function is left as it was for drawing this ParticleEmitter, which prevents
+    /// the IBatch from being flushed repeatedly if consecutive ParticleEmitters
+    /// with the same additive or pre-multiplied alpha state are drawn in a row.
+    /// <para>
+    ///     IMPORTANT: If set to false and if the next object to use this IBatch expects
+    ///     alpha blending, you are responsible for setting the IBatch's blend function
+    ///     to (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) before that next object is drawn.
+    /// </para>
     /// </summary>
     public bool CleansUpBlendFunction { get; set; } = true;
 

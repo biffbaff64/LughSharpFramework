@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Assets;
 // ====================================================================--------
 
 /// <summary>
-///     Interface representing the parameters required for loading assets.
+/// Interface representing the parameters required for loading assets.
 /// </summary>
 [PublicAPI]
 public interface ILoaderParameters
@@ -40,8 +40,8 @@ public interface ILoaderParameters
 // ====================================================================--------
 
 /// <summary>
-///     Callback interface that will be invoked when the
-///     <see cref="AssetManager" /> loaded an asset.
+/// Callback interface that will be invoked when the
+/// <see cref="AssetManager" /> loaded an asset.
 /// </summary>
 [PublicAPI]
 public interface ILoadedCallback
@@ -53,8 +53,8 @@ public interface ILoadedCallback
 // ====================================================================--------
 
 /// <summary>
-///     Base class for parameters used by asset loaders to define specific
-///     settings or configurations needed for loading an asset.
+/// Base class for parameters used by asset loaders to define specific
+/// settings or configurations needed for loading an asset.
 /// </summary>
 [PublicAPI]
 public class AssetLoaderParameters : ILoaderParameters
@@ -66,7 +66,7 @@ public class AssetLoaderParameters : ILoaderParameters
 // ====================================================================--------
 
 /// <summary>
-///     Default Loaded callback for when there is no other available.
+/// Default Loaded callback for when there is no other available.
 /// </summary>
 [PublicAPI]
 public class DefaultLoadedCallback( int refCount ) : ILoadedCallback

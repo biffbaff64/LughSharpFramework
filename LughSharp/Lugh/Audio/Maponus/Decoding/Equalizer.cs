@@ -25,18 +25,18 @@
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-///     The Equalizer class can be used to specify equalization settings for the
-///     MPEG audio decoder. The equalizer consists of 32 band-pass filters. Each
-///     band of the equalizer can take on a fractional value between -1.0 and +1.0.
-///     At -1.0, the input signal is attenuated by 6dB, at +1.0 the signal is
-///     amplified by 6dB.
+/// The Equalizer class can be used to specify equalization settings for the
+/// MPEG audio decoder. The equalizer consists of 32 band-pass filters. Each
+/// band of the equalizer can take on a fractional value between -1.0 and +1.0.
+/// At -1.0, the input signal is attenuated by 6dB, at +1.0 the signal is
+/// amplified by 6dB.
 /// </summary>
 [PublicAPI]
 public class Equalizer
 {
     /// <summary>
-    ///     Equalizer setting to denote that a given band will not be
-    ///     present in the output signal.
+    /// Equalizer setting to denote that a given band will not be
+    /// present in the output signal.
     /// </summary>
     public const float BAND_NOT_PRESENT = float.NegativeInfinity;
 
@@ -49,15 +49,15 @@ public class Equalizer
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new Equalizer instance.
+    /// Creates a new Equalizer instance.
     /// </summary>
     public Equalizer()
     {
     }
 
     /// <summary>
-    ///     Creates a new Equalizer instance, using the supplied float[] array
-    ///     to initialise this instances equalizer bands.
+    /// Creates a new Equalizer instance, using the supplied float[] array
+    /// to initialise this instances equalizer bands.
     /// </summary>
     public Equalizer( float[] settings )
     {
@@ -65,7 +65,7 @@ public class Equalizer
     }
 
     /// <summary>
-    ///     Creates a new Equalizer instance, using the supplied <see cref="EQFunction" /> function.
+    /// Creates a new Equalizer instance, using the supplied <see cref="EQFunction" /> function.
     /// </summary>
     public Equalizer( EQFunction eq )
     {
@@ -73,7 +73,7 @@ public class Equalizer
     }
 
     /// <summary>
-    ///     Modifies this Equalizer's equalizer bands using the supplied float array.
+    /// Modifies this Equalizer's equalizer bands using the supplied float array.
     /// </summary>
     public float[] SetFromFloatArray
     {
@@ -91,8 +91,8 @@ public class Equalizer
     }
 
     /// <summary>
-    ///     Sets the bands of this equalizer to the value the bands of another
-    ///     equalizer. Bands that are not present in both equalizers are ignored.
+    /// Sets the bands of this equalizer to the value the bands of another
+    /// equalizer. Bands that are not present in both equalizers are ignored.
     /// </summary>
     public virtual Equalizer SetFromEqualizer
     {
@@ -121,14 +121,14 @@ public class Equalizer
     }
 
     /// <summary>
-    ///     Retrieves the number of bands present in this equalizer.
+    /// Retrieves the number of bands present in this equalizer.
     /// </summary>
     public virtual int CurrentBandCount => _settings.Length;
 
     /// <summary>
-    ///     Retrieves an array of floats whose values represent a scaling factor that can be
-    ///     applied to linear samples in each band to provide the equalization represented by
-    ///     this instance.
+    /// Retrieves an array of floats whose values represent a scaling factor that can be
+    /// applied to linear samples in each band to provide the equalization represented by
+    /// this instance.
     /// </summary>
     /// <returns> an array of factors that can be applied to the subbands. </returns>
     public virtual float[] BandFactors
@@ -147,7 +147,7 @@ public class Equalizer
     }
 
     /// <summary>
-    ///     Sets all bands to 0.0f
+    /// Sets all bands to 0.0f
     /// </summary>
     public void Reset()
     {
@@ -158,7 +158,7 @@ public class Equalizer
     }
 
     /// <summary>
-    ///     Sets the given band to the provided value.
+    /// Sets the given band to the provided value.
     /// </summary>
     /// <param name="band"> The band. </param>
     /// <param name="neweq"> The new value. </param>
@@ -177,7 +177,7 @@ public class Equalizer
     }
 
     /// <summary>
-    ///     Retrieves the eq setting for a given band.
+    /// Retrieves the eq setting for a given band.
     /// </summary>
     public float GetBand( int band )
     {
@@ -192,7 +192,7 @@ public class Equalizer
     }
 
     /// <summary>
-    ///     Returns the Equalizer band limit for the specified band.
+    /// Returns the Equalizer band limit for the specified band.
     /// </summary>
     private static float Limit( float eq )
     {
@@ -206,9 +206,9 @@ public class Equalizer
     }
 
     /// <summary>
-    ///     Converts an equalizer band setting to a sample factor. The factor is
-    ///     determined by the function f = 2^n where n is the equalizer band setting
-    ///     in the range [-1.0,1.0].
+    /// Converts an equalizer band setting to a sample factor. The factor is
+    /// determined by the function f = 2^n where n is the equalizer band setting
+    /// in the range [-1.0,1.0].
     /// </summary>
     public static float GetBandFactor( float eq )
     {
@@ -228,7 +228,7 @@ public class Equalizer
     public abstract class EQFunction
     {
         /// <summary>
-        ///     Returns the setting of a band in the equalizer.
+        /// Returns the setting of a band in the equalizer.
         /// </summary>
         /// <param name="band"> The index of the band to retrieve the setting for. </param>
         /// <returns> the setting of the specified band. This is a value between -1 and +1. </returns>

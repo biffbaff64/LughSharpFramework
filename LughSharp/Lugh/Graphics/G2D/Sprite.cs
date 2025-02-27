@@ -37,8 +37,8 @@ public class Sprite : TextureRegion
     // ========================================================================
 
     /// <summary>
-    ///     Helper method for constructors which allows calls to virtual
-    ///     methods which cannot be called from constructors.
+    /// Helper method for constructors which allows calls to virtual
+    /// methods which cannot be called from constructors.
     /// </summary>
     /// <param name="srcWidth"></param>
     /// <param name="srcHeight"></param>
@@ -49,10 +49,10 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Make this sprite a copy in every way of the specified sprite
+    /// Make this sprite a copy in every way of the specified sprite
     /// </summary>
     /// <summary>
-    ///     Sets the properties of this Sprite to match those of the provided Sprite.
+    /// Sets the properties of this Sprite to match those of the provided Sprite.
     /// </summary>
     /// <param name="sprite">The Sprite whose properties will be copied.</param>
     /// <exception cref="ArgumentNullException">Thrown if the provided sprite is null.</exception>
@@ -94,9 +94,9 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the position and size of the sprite when drawn, before scaling
-    ///     and rotation are applied. If origin, rotation, or scale are changed,
-    ///     it is slightly more efficient to set the bounds after those operations.
+    /// Sets the position and size of the sprite when drawn, before scaling
+    /// and rotation are applied. If origin, rotation, or scale are changed,
+    /// it is slightly more efficient to set the bounds after those operations.
     /// </summary>
     public virtual void SetBounds( float x, float y, float width, float height )
     {
@@ -134,13 +134,13 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the size of the sprite when drawn, before scaling and rotation are
-    ///     applied. If origin, rotation, or scale are changed, it is slightly more
-    ///     efficient to set the size after those operations.
-    ///     <para>
-    ///         If both position and size are to be changed, it is better to use
-    ///         <see cref="SetBounds(float, float, float, float)" />.
-    ///     </para>
+    /// Sets the size of the sprite when drawn, before scaling and rotation are
+    /// applied. If origin, rotation, or scale are changed, it is slightly more
+    /// efficient to set the size after those operations.
+    /// <para>
+    ///     If both position and size are to be changed, it is better to use
+    ///     <see cref="SetBounds(float, float, float, float)" />.
+    /// </para>
     /// </summary>
     public virtual void SetSize( float width, float height )
     {
@@ -176,10 +176,10 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the position where the sprite will be drawn. If origin, rotation, or scale are changed, it is slightly more
-    ///     efficient
-    ///     to set the position after those operations. If both position and size are to be changed, it is better to use
-    ///     <see cref="SetBounds(float, float, float, float)" />.
+    /// Sets the position where the sprite will be drawn. If origin, rotation, or scale are changed, it is slightly more
+    /// efficient
+    /// to set the position after those operations. If both position and size are to be changed, it is better to use
+    /// <see cref="SetBounds(float, float, float, float)" />.
     /// </summary>
     public void SetPosition( float x, float y )
     {
@@ -215,7 +215,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the position where the sprite will be drawn, relative to its current origin.
+    /// Sets the position where the sprite will be drawn, relative to its current origin.
     /// </summary>
     public void SetOriginBasedPosition( float x, float y )
     {
@@ -223,7 +223,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the position so that the sprite is centered on (x, y)
+    /// Sets the position so that the sprite is centered on (x, y)
     /// </summary>
     public void SetCenter( float x, float y )
     {
@@ -231,7 +231,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the x position so that it is centered on the given x parameter
+    /// Sets the x position so that it is centered on the given x parameter
     /// </summary>
     public void SetCenterX( float value )
     {
@@ -239,7 +239,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the y position so that it is centered on the given y parameter
+    /// Sets the y position so that it is centered on the given y parameter
     /// </summary>
     public void SetCenterY( float value )
     {
@@ -247,9 +247,9 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the x position relative to the current position where the sprite will
-    ///     be drawn. If origin, rotation, or scale are
-    ///     changed, it is slightly more efficient to translate after those operations.
+    /// Sets the x position relative to the current position where the sprite will
+    /// be drawn. If origin, rotation, or scale are
+    /// changed, it is slightly more efficient to translate after those operations.
     /// </summary>
     public void TranslateX( float xAmount )
     {
@@ -274,9 +274,9 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the y position relative to the current position where the sprite will
-    ///     be drawn. If origin, rotation, or scale are changed, it is slightly more
-    ///     efficient to translate after those operations.
+    /// Sets the y position relative to the current position where the sprite will
+    /// be drawn. If origin, rotation, or scale are changed, it is slightly more
+    /// efficient to translate after those operations.
     /// </summary>
     public void TranslateY( float yAmount )
     {
@@ -301,9 +301,9 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the position relative to the current position where the sprite will
-    ///     be drawn. If origin, rotation, or scale are changed, it is slightly more
-    ///     efficient to translate after those operations.
+    /// Sets the position relative to the current position where the sprite will
+    /// be drawn. If origin, rotation, or scale are changed, it is slightly more
+    /// efficient to translate after those operations.
     /// </summary>
     public void Translate( float xAmount, float yAmount )
     {
@@ -336,8 +336,8 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the color used to tint this sprite.
-    ///     Default is <see cref="Graphics.Color.White" />.
+    /// Sets the color used to tint this sprite.
+    /// Default is <see cref="Graphics.Color.White" />.
     /// </summary>
     public void SetColor( Color tint )
     {
@@ -352,7 +352,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the color used to tint this sprite.
+    /// Sets the color used to tint this sprite.
     /// </summary>
     public void SetColor( float r, float g, float b, float a )
     {
@@ -367,7 +367,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the origin in relation to the sprite's position for scaling and rotation.
+    /// Sets the origin in relation to the sprite's position for scaling and rotation.
     /// </summary>
     public virtual void SetOrigin( float originX, float originY )
     {
@@ -377,7 +377,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Place origin in the center of the sprite
+    /// Place origin in the center of the sprite
     /// </summary>
     public virtual void SetOriginCenter()
     {
@@ -387,8 +387,8 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the sprite's rotation in degrees relative to the current rotation.
-    ///     Rotation is centered on the origin set in <see cref="SetOrigin(float, float)" />
+    /// Sets the sprite's rotation in degrees relative to the current rotation.
+    /// Rotation is centered on the origin set in <see cref="SetOrigin(float, float)" />
     /// </summary>
     public void Rotate( float degrees )
     {
@@ -402,9 +402,9 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Rotates this sprite 90 degrees in-place by rotating the texture coordinates.
-    ///     This rotation is unaffected by <see cref="Rotation" /> and
-    ///     <see cref="Rotate(float)" />.
+    /// Rotates this sprite 90 degrees in-place by rotating the texture coordinates.
+    /// This rotation is unaffected by <see cref="Rotation" /> and
+    /// <see cref="Rotate(float)" />.
     /// </summary>
     public virtual void Rotate90( bool clockwise )
     {
@@ -443,9 +443,9 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the sprite's scale for both X and Y uniformly. The sprite
-    ///     scales out from the origin. This will not affect the values
-    ///     returned by <see cref="Width" /> and <see cref="Height" />
+    /// Sets the sprite's scale for both X and Y uniformly. The sprite
+    /// scales out from the origin. This will not affect the values
+    /// returned by <see cref="Width" /> and <see cref="Height" />
     /// </summary>
     public void SetScale( float scaleXY )
     {
@@ -455,9 +455,9 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the sprite's scale for both X and Y. The sprite scales out from
-    ///     the origin. This will not affect the values returned by
-    ///     <see cref="Width" /> and <see cref="Height" />
+    /// Sets the sprite's scale for both X and Y. The sprite scales out from
+    /// the origin. This will not affect the values returned by
+    /// <see cref="Width" /> and <see cref="Height" />
     /// </summary>
     public void SetScale( float scaleX, float scaleY )
     {
@@ -467,12 +467,12 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the sprite's scale relative to the current scale. for example:
-    ///     original scale 2 -> sprite.scale(4) -> final scale 6.
-    ///     <para>
-    ///         The sprite scales out from the origin. This will not affect the values
-    ///         returned by <see cref="Width" /> and <see cref="Height" />
-    ///     </para>
+    /// Sets the sprite's scale relative to the current scale. for example:
+    /// original scale 2 -> sprite.scale(4) -> final scale 6.
+    /// <para>
+    ///     The sprite scales out from the origin. This will not affect the values
+    ///     returned by <see cref="Width" /> and <see cref="Height" />
+    /// </para>
     /// </summary>
     public void AddScale( float amount )
     {
@@ -482,8 +482,8 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Returns the packed vertices, colors, and texture coordinates
-    ///     for this sprite.
+    /// Returns the packed vertices, colors, and texture coordinates
+    /// for this sprite.
     /// </summary>
     public float[] GetVertices()
     {
@@ -606,7 +606,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Set the sprite's flip state regardless of current condition.
+    /// Set the sprite's flip state regardless of current condition.
     /// </summary>
     /// <param name="flipx"> the desired horizontal flip state </param>
     /// <param name="flipy"> the desired vertical flip state  </param>
@@ -719,10 +719,10 @@ public class Sprite : TextureRegion
     #region Constructors
 
     /// <summary>
-    ///     Creates an uninitialized sprite.
-    ///     <para>
-    ///         The sprite will need a texture region and bounds set before it can be drawn.
-    ///     </para>
+    /// Creates an uninitialized sprite.
+    /// <para>
+    ///     The sprite will need a texture region and bounds set before it can be drawn.
+    /// </para>
     /// </summary>
     public Sprite()
     {
@@ -730,8 +730,8 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Creates a sprite with width, height, and texture region
-    ///     equal to the size of the texture.
+    /// Creates a sprite with width, height, and texture region
+    /// equal to the size of the texture.
     /// </summary>
     public Sprite( Texture texture )
         : this( texture, 0, 0, texture.Width, texture.Height )
@@ -739,17 +739,17 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Creates a sprite with width, height, and texture region equal to the
-    ///     specified size. The texture region's upper left corner will be 0,0.
+    /// Creates a sprite with width, height, and texture region equal to the
+    /// specified size. The texture region's upper left corner will be 0,0.
     /// </summary>
     /// <param name="texture"></param>
     /// <param name="srcWidth">
-    ///     The width of the texture region.
-    ///     May be negative to flip the sprite when drawn.
+    /// The width of the texture region.
+    /// May be negative to flip the sprite when drawn.
     /// </param>
     /// <param name="srcHeight">
-    ///     The height of the texture region.
-    ///     May be negative to flip the sprite when drawn.
+    /// The height of the texture region.
+    /// May be negative to flip the sprite when drawn.
     /// </param>
     public Sprite( Texture texture, int srcWidth, int srcHeight )
         : this( texture, 0, 0, srcWidth, srcHeight )
@@ -757,19 +757,19 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Creates a sprite with width, height, and texture region equal
-    ///     to the specified size.
+    /// Creates a sprite with width, height, and texture region equal
+    /// to the specified size.
     /// </summary>
     /// <param name="texture"></param>
     /// <param name="srcX"></param>
     /// <param name="srcY"></param>
     /// <param name="srcWidth">
-    ///     The width of the texture region.
-    ///     May be negative to flip the sprite when drawn.
+    /// The width of the texture region.
+    /// May be negative to flip the sprite when drawn.
     /// </param>
     /// <param name="srcHeight">
-    ///     The height of the texture region.
-    ///     May be negative to flip the sprite when drawn.
+    /// The height of the texture region.
+    /// May be negative to flip the sprite when drawn.
     /// </param>
     public Sprite( Texture? texture, int srcX, int srcY, int srcWidth, int srcHeight )
     {
@@ -782,9 +782,9 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Creates a sprite based on a specific TextureRegion.
-    ///     The new sprite's region is a copy of the parameter region - altering one
-    ///     does not affect the other.
+    /// Creates a sprite based on a specific TextureRegion.
+    /// The new sprite's region is a copy of the parameter region - altering one
+    /// does not affect the other.
     /// </summary>
     public Sprite( TextureRegion region )
     {
@@ -795,19 +795,19 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Creates a sprite with width, height, and texture region equal to the
-    ///     specified size, relative to specified sprite's texture region.
+    /// Creates a sprite with width, height, and texture region equal to the
+    /// specified size, relative to specified sprite's texture region.
     /// </summary>
     /// <param name="region"></param>
     /// <param name="srcX"></param>
     /// <param name="srcY"></param>
     /// <param name="srcWidth">
-    ///     The width of the texture region.
-    ///     May be negative to flip the sprite when drawn.
+    /// The width of the texture region.
+    /// May be negative to flip the sprite when drawn.
     /// </param>
     /// <param name="srcHeight">
-    ///     The height of the texture region.
-    ///     May be negative to flip the sprite when drawn.
+    /// The height of the texture region.
+    /// May be negative to flip the sprite when drawn.
     /// </param>
     public Sprite( TextureRegion region, int srcX, int srcY, int srcWidth, int srcHeight )
     {
@@ -818,7 +818,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Creates a sprite that is a copy in every way of the specified sprite.
+    /// Creates a sprite that is a copy in every way of the specified sprite.
     /// </summary>
     public Sprite( Sprite sprite )
     {
@@ -881,7 +881,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the color of this sprite, expanding the alpha from 0-254 to 0-255.
+    /// Sets the color of this sprite, expanding the alpha from 0-254 to 0-255.
     /// </summary>
     /// <see cref="Graphics.Color.ToFloatBitsABGR()" />
     public float PackedColor
@@ -900,10 +900,10 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Returns the bounding axis aligned <see cref="RectangleShape" /> that
-    ///     bounds this sprite. The rectangles x and y coordinates describe its
-    ///     bottom left corner. If you change the position or size of the sprite,
-    ///     you must fetch the triangle again for it to be recomputed.
+    /// Returns the bounding axis aligned <see cref="RectangleShape" /> that
+    /// bounds this sprite. The rectangles x and y coordinates describe its
+    /// bottom left corner. If you change the position or size of the sprite,
+    /// you must fetch the triangle again for it to be recomputed.
     /// </summary>
     public RectangleShape BoundingRectangle
     {
@@ -942,7 +942,7 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the alpha portion of the color used to tint this sprite.
+    /// Sets the alpha portion of the color used to tint this sprite.
     /// </summary>
     public float Alpha
     {
@@ -961,8 +961,8 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the rotation of the sprite in degrees. Rotation is centered on the
-    ///     origin set in <see cref="SetOrigin(float, float)" />
+    /// Sets the rotation of the sprite in degrees. Rotation is centered on the
+    /// origin set in <see cref="SetOrigin(float, float)" />
     /// </summary>
     public float Rotation
     {
@@ -975,9 +975,9 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Returns the color of this sprite. If the returned instance is
-    ///     manipulated, <see cref="SetColor(float,float,float,float)" /> must be
-    ///     called afterward.
+    /// Returns the color of this sprite. If the returned instance is
+    /// manipulated, <see cref="SetColor(float,float,float,float)" /> must be
+    /// called afterward.
     /// </summary>
     public Color Color
     {
@@ -1005,36 +1005,36 @@ public class Sprite : TextureRegion
     public float Height { get; set; }
 
     /// <summary>
-    ///     The origin influences <see cref="SetPosition(float, float)" />,
-    ///     <see cref="Rotation" /> and the expansion direction of scaling
-    ///     <see cref="SetScale(float, float)" />
+    /// The origin influences <see cref="SetPosition(float, float)" />,
+    /// <see cref="Rotation" /> and the expansion direction of scaling
+    /// <see cref="SetScale(float, float)" />
     /// </summary>
     public float OriginX { get; set; }
 
     /// <summary>
-    ///     The origin influences <see cref="SetPosition(float, float)" />,
-    ///     <see cref="Rotation" /> and the expansion direction of scaling
-    ///     <see cref="SetScale(float, float)" />
+    /// The origin influences <see cref="SetPosition(float, float)" />,
+    /// <see cref="Rotation" /> and the expansion direction of scaling
+    /// <see cref="SetScale(float, float)" />
     /// </summary>
     public float OriginY { get; private set; }
 
     /// <summary>
-    ///     X scale of the sprite, independent of size set
-    ///     by <see cref="SetSize(float, float)" />
+    /// X scale of the sprite, independent of size set
+    /// by <see cref="SetSize(float, float)" />
     /// </summary>
     public float ScaleX { get; private set; } = 1;
 
     /// <summary>
-    ///     Y scale of the sprite, independent of size set
-    ///     by <see cref="SetSize(float, float)" />
+    /// Y scale of the sprite, independent of size set
+    /// by <see cref="SetSize(float, float)" />
     /// </summary>
     public float ScaleY { get; private set; } = 1;
 
     /// <summary>
-    ///     Sets the x position where the sprite will be drawn. If origin, rotation,
-    ///     or scale are changed, it is slightly more efficient to set the position
-    ///     after those operations. If both position and size are to be changed, it
-    ///     is better to use <see cref="SetBounds(float, float, float, float)" />.
+    /// Sets the x position where the sprite will be drawn. If origin, rotation,
+    /// or scale are changed, it is slightly more efficient to set the position
+    /// after those operations. If both position and size are to be changed, it
+    /// is better to use <see cref="SetBounds(float, float, float, float)" />.
     /// </summary>
     public virtual float X
     {
@@ -1065,10 +1065,10 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    ///     Sets the y position where the sprite will be drawn. If origin, rotation,
-    ///     or scale are changed, it is slightly more efficient to set the position
-    ///     after those operations. If both position and size are to be changed, it
-    ///     is better to use <see cref="SetBounds(float, float, float, float)" />.
+    /// Sets the y position where the sprite will be drawn. If origin, rotation,
+    /// or scale are changed, it is slightly more efficient to set the position
+    /// after those operations. If both position and size are to be changed, it
+    /// is better to use <see cref="SetBounds(float, float, float, float)" />.
     /// </summary>
     public virtual float Y
     {

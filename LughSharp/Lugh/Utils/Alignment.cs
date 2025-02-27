@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-///     Provides bit flag constants for alignment.
+/// Provides bit flag constants for alignment.
 /// </summary>
 [PublicAPI]
 [Flags]
@@ -64,7 +64,7 @@ public sealed class Alignment
     // ========================================================================
 
     /// <summary>
-    ///     Returns TRUE if the supplied position is aligned to the LEFT.
+    /// Returns TRUE if the supplied position is aligned to the LEFT.
     /// </summary>
     public static bool IsLeft( int position )
     {
@@ -72,7 +72,7 @@ public sealed class Alignment
     }
 
     /// <summary>
-    ///     Returns TRUE if the supplied position is aligned to the RIGHT.
+    /// Returns TRUE if the supplied position is aligned to the RIGHT.
     /// </summary>
     public static bool IsRight( int position )
     {
@@ -80,7 +80,7 @@ public sealed class Alignment
     }
 
     /// <summary>
-    ///     Returns TRUE if the supplied position is aligned to the TOP.
+    /// Returns TRUE if the supplied position is aligned to the TOP.
     /// </summary>
     public static bool IsTop( int position )
     {
@@ -88,7 +88,7 @@ public sealed class Alignment
     }
 
     /// <summary>
-    ///     Returns TRUE if the supplied position is aligned to the BOTTOM.
+    /// Returns TRUE if the supplied position is aligned to the BOTTOM.
     /// </summary>
     public static bool IsBottom( int position )
     {
@@ -96,7 +96,7 @@ public sealed class Alignment
     }
 
     /// <summary>
-    ///     Returns TRUE if the supplied position is aligned horizontally central.
+    /// Returns TRUE if the supplied position is aligned horizontally central.
     /// </summary>
     public static bool IsCenterHorizontal( int position )
     {
@@ -104,7 +104,7 @@ public sealed class Alignment
     }
 
     /// <summary>
-    ///     Returns TRUE if the supplied position is aligned vertically central.
+    /// Returns TRUE if the supplied position is aligned vertically central.
     /// </summary>
     public static bool IsCenterVertical( int position )
     {

@@ -35,19 +35,19 @@ using Exception = System.Exception;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     A skin stores resources for UI widgets to use (texture regions, ninepatches,
-///     fonts, colors, etc). Resources are named and can be looked up by name and type.
-///     <para>
-///         Resources can be described in JSON.
-///     </para>
-///     <para>
-///         Skin provides useful conversions, such as allowing access to regions in the
-///         atlas as ninepatches, sprites, drawables, etc. The get* methods return an
-///         instance of the object in the skin.
-///     </para>
-///     <para>
-///         The new* methods return a copy of an instance in the skin.
-///     </para>
+/// A skin stores resources for UI widgets to use (texture regions, ninepatches,
+/// fonts, colors, etc). Resources are named and can be looked up by name and type.
+/// <para>
+///     Resources can be described in JSON.
+/// </para>
+/// <para>
+///     Skin provides useful conversions, such as allowing access to regions in the
+///     atlas as ninepatches, sprites, drawables, etc. The get* methods return an
+///     instance of the object in the skin.
+/// </para>
+/// <para>
+///     The new* methods return a copy of an instance in the skin.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class Skin : IDisposable
@@ -98,18 +98,18 @@ public class Skin : IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Creates an empty Skin.
+    /// Creates an empty Skin.
     /// </summary>
     public Skin()
     {
     }
 
     /// <summary>
-    ///     Creates a skin containing the resources in the specified skin JSON
-    ///     file. If a file in the same directory with a ".atlas" extension exists,
-    ///     it is loaded as a <see cref="TextureAtlas" /> and the texture regions
-    ///     added to the skin. The atlas is automatically disposed when the skin is
-    ///     disposed.
+    /// Creates a skin containing the resources in the specified skin JSON
+    /// file. If a file in the same directory with a ".atlas" extension exists,
+    /// it is loaded as a <see cref="TextureAtlas" /> and the texture regions
+    /// added to the skin. The atlas is automatically disposed when the skin is
+    /// disposed.
     /// </summary>
     public Skin( FileInfo skinFile )
     {
@@ -126,11 +126,11 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    ///     Creates a skin containing the resources in the specified skin JSON
-    ///     file and the texture regions from the specified atlas.
-    ///     <para>
-    ///         The atlas is automatically disposed when the skin is disposed.
-    ///     </para>
+    /// Creates a skin containing the resources in the specified skin JSON
+    /// file and the texture regions from the specified atlas.
+    /// <para>
+    ///     The atlas is automatically disposed when the skin is disposed.
+    /// </para>
     /// </summary>
     public Skin( FileInfo skinFile, TextureAtlas atlas )
     {
@@ -141,8 +141,8 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    ///     Creates a skin containing the texture regions from the specified
-    ///     atlas. The atlas is automatically disposed when the skin is disposed.
+    /// Creates a skin containing the texture regions from the specified
+    /// atlas. The atlas is automatically disposed when the skin is disposed.
     /// </summary>
     public Skin( TextureAtlas atlas )
     {
@@ -154,20 +154,20 @@ public class Skin : IDisposable
     public static Dictionary< string, Type >                        JsonClassTags { get; set; }
 
     /// <summary>
-    ///     Returns the <see cref="TextureAtlas" /> passed to this skin constructor, or null.
+    /// Returns the <see cref="TextureAtlas" /> passed to this skin constructor, or null.
     /// </summary>
     public TextureAtlas? Atlas { get; set; }
 
     /// <summary>
-    ///     The scale used to size drawables created by this skin.
-    ///     <para>
-    ///         This can be useful when scaling an entire UI (eg with a stage's viewport)
-    ///         then using an atlas with images whose resolution matches the UI scale.
-    ///         The skin can then be scaled the opposite amount so that the larger or smaller
-    ///         images are drawn at the original size. For example, if the UI is scaled 2x,
-    ///         the atlas would have images that are twice the size, then the skin's scale
-    ///         would be set to 0.5.
-    ///     </para>
+    /// The scale used to size drawables created by this skin.
+    /// <para>
+    ///     This can be useful when scaling an entire UI (eg with a stage's viewport)
+    ///     then using an atlas with images whose resolution matches the UI scale.
+    ///     The skin can then be scaled the opposite amount so that the larger or smaller
+    ///     images are drawn at the original size. For example, if the UI is scaled 2x,
+    ///     the atlas would have images that are twice the size, then the skin's scale
+    ///     would be set to 0.5.
+    /// </para>
     /// </summary>
     public float Scale { get; set; }
 
@@ -178,8 +178,8 @@ public class Skin : IDisposable
 //    }
 
 /// <summary>
-///     Disposes the <see cref="TextureAtlas" /> and all <see cref="IDisposable" />
-///     resources in the skin.
+/// Disposes the <see cref="TextureAtlas" /> and all <see cref="IDisposable" />
+/// resources in the skin.
 /// </summary>
 public void Dispose()
     {
@@ -198,7 +198,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Adds all resources in the specified skin JSON file.
+    /// Adds all resources in the specified skin JSON file.
     /// </summary>
     public void Load( FileInfo skinFile )
     {
@@ -217,8 +217,8 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Adds all named texture regions from the atlas. The atlas will not be
-    ///     automatically disposed when the skin is disposed.
+    /// Adds all named texture regions from the atlas. The atlas will not be
+    /// automatically disposed when the skin is disposed.
     /// </summary>
     public void AddRegions( TextureAtlas atlas )
     {
@@ -272,7 +272,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a resource named "default" for the specified type.
+    /// Returns a resource named "default" for the specified type.
     /// </summary>
     /// <exception cref="GdxRuntimeException">if the resource was not found.</exception>
     public T Get< T >()
@@ -281,7 +281,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a named resource of the specified type.
+    /// Returns a named resource of the specified type.
     /// </summary>
     /// <exception cref="GdxRuntimeException">if the resource was not found.</exception>
     public T Get< T >( string name )
@@ -290,7 +290,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a named resource of the specified type.
+    /// Returns a named resource of the specified type.
     /// </summary>
     /// <exception cref="GdxRuntimeException">if the resource was not found.</exception>
     public object Get( string name, Type type )
@@ -335,7 +335,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a named resource of the specified type.
+    /// Returns a named resource of the specified type.
     /// </summary>
     /// <returns> null if not found. </returns>
     public T? Optional< T >( string name )
@@ -356,8 +356,8 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns the name to resource mapping for the specified type, or
-    ///     null if no resources of that type exist.
+    /// Returns the name to resource mapping for the specified type, or
+    /// null if no resources of that type exist.
     /// </summary>
     public Dictionary< string, object >? GetAll( Type type )
     {
@@ -375,9 +375,9 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a registered texture region. If no region is found but a
-    ///     texture exists with the name, a region is created from the texture
-    ///     and stored in the skin.
+    /// Returns a registered texture region. If no region is found but a
+    /// texture exists with the name, a region is created from the texture
+    /// and stored in the skin.
     /// </summary>
     public TextureRegion GetRegion( string name )
     {
@@ -425,9 +425,9 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a registered tiled drawable. If no tiled drawable is found but a
-    ///     region exists with the name, a tiled drawable is created from the region
-    ///     and stored in the skin.
+    /// Returns a registered tiled drawable. If no tiled drawable is found but a
+    /// region exists with the name, a tiled drawable is created from the region
+    /// and stored in the skin.
     /// </summary>
     public TiledDrawable GetTiledDrawable( string name )
     {
@@ -456,10 +456,10 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a registered ninepatch. If no ninepatch is found but a region exists with
-    ///     the name, a ninepatch is created from the region and stored in the skin. If the
-    ///     region is an <see cref="AtlasRegion" /> then its split <see cref="AtlasRegion.Values" />
-    ///     are used, otherwise the ninepatch will have the region as the center patch.
+    /// Returns a registered ninepatch. If no ninepatch is found but a region exists with
+    /// the name, a ninepatch is created from the region and stored in the skin. If the
+    /// region is an <see cref="AtlasRegion" /> then its split <see cref="AtlasRegion.Values" />
+    /// are used, otherwise the ninepatch will have the region as the center patch.
     /// </summary>
     public NinePatch GetPatch( string name )
     {
@@ -509,10 +509,10 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a registered sprite. If no sprite is found but a region exists
-    ///     with the name, a sprite is created from the region and stored in the skin.
-    ///     If the region is an <see cref="AtlasRegion" /> then an <see cref="AtlasSprite" />
-    ///     is used if the region has been whitespace stripped or packed rotated 90 degrees.
+    /// Returns a registered sprite. If no sprite is found but a region exists
+    /// with the name, a sprite is created from the region and stored in the skin.
+    /// If the region is an <see cref="AtlasRegion" /> then an <see cref="AtlasSprite" />
+    /// is used if the region has been whitespace stripped or packed rotated 90 degrees.
     /// </summary>
     public Sprite GetSprite( string name )
     {
@@ -555,9 +555,9 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a registered drawable. If no drawable is found but a region, ninepatch,
-    ///     or sprite exists with the name, then the appropriate drawable is created and
-    ///     stored in the skin.
+    /// Returns a registered drawable. If no drawable is found but a region, ninepatch,
+    /// or sprite exists with the name, then the appropriate drawable is created and
+    /// stored in the skin.
     /// </summary>
     public IDrawable GetDrawable( string name )
     {
@@ -639,9 +639,9 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns the name of the specified style object, or null if it is not in the skin.
-    ///     This compares potentially every style object in the skin of the same type as the
-    ///     specified style, which may be a somewhat expensive operation.
+    /// Returns the name of the specified style object, or null if it is not in the skin.
+    /// This compares potentially every style object in the skin of the same type as the
+    /// specified style, which may be a somewhat expensive operation.
     /// </summary>
     public string? Find( object resource )
     {
@@ -656,7 +656,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
+    /// Returns a copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
     /// </summary>
     public IDrawable NewDrawable( string name )
     {
@@ -664,7 +664,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
+    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
     /// </summary>
     public IDrawable NewDrawable( string name, float r, float g, float b, float a )
     {
@@ -672,7 +672,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
+    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
     /// </summary>
     public IDrawable NewDrawable( string name, Color tint )
     {
@@ -680,7 +680,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a copy of the specified drawable.
+    /// Returns a copy of the specified drawable.
     /// </summary>
     public IDrawable NewDrawable( IDrawable drawable )
     {
@@ -708,7 +708,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
+    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
     /// </summary>
     public IDrawable NewDrawable( IDrawable drawable, float r, float g, float b, float a )
     {
@@ -716,7 +716,7 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
+    /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
     /// </summary>
     public IDrawable NewDrawable( IDrawable drawable, Color tint )
     {
@@ -755,13 +755,13 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Scales the drawable's :-
-    ///     <see cref="IDrawable.LeftWidth" />,
-    ///     <see cref="IDrawable.RightWidth" />,
-    ///     <see cref="IDrawable.BottomHeight" />,
-    ///     <see cref="IDrawable.TopHeight" />,
-    ///     <see cref="IDrawable.MinWidth" />,
-    ///     <see cref="IDrawable.MinHeight" />.
+    /// Scales the drawable's :-
+    /// <see cref="IDrawable.LeftWidth" />,
+    /// <see cref="IDrawable.RightWidth" />,
+    /// <see cref="IDrawable.BottomHeight" />,
+    /// <see cref="IDrawable.TopHeight" />,
+    /// <see cref="IDrawable.MinWidth" />,
+    /// <see cref="IDrawable.MinHeight" />.
     /// </summary>
     public IDrawable ScaleDrawable( IDrawable drawable )
     {
@@ -776,12 +776,12 @@ public void Dispose()
     }
 
     /// <summary>
-    ///     Sets the style on the actor to disabled or enabled. This is done by appending
-    ///     "-disabled" to the style name when enabled is false, and removing "-disabled"
-    ///     from the style name when enabled is true. A method named "GetStyle" is called
-    ///     the actor via reflection and the name of that style is found in the skin. If
-    ///     the actor doesn't have a "GetStyle" method or the style was not found in the
-    ///     skin, no exception is thrown and the actor is left unchanged.
+    /// Sets the style on the actor to disabled or enabled. This is done by appending
+    /// "-disabled" to the style name when enabled is false, and removing "-disabled"
+    /// from the style name when enabled is true. A method named "GetStyle" is called
+    /// the actor via reflection and the name of that style is found in the skin. If
+    /// the actor doesn't have a "GetStyle" method or the style was not found in the
+    /// skin, no exception is thrown and the actor is left unchanged.
     /// </summary>
     public void SetEnabled( Actor actor, bool enabled )
     {

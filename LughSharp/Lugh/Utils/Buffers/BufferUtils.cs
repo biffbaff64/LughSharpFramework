@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Utils.Buffers;
 public class BufferUtils
 {
     /// <summary>
-    ///     Copies the content of the source buffer to the destination buffer.
+    /// Copies the content of the source buffer to the destination buffer.
     /// </summary>
     /// <param name="source">The source buffer to copy from.</param>
     /// <param name="destination">The destination buffer to copy to.</param>
@@ -57,7 +57,7 @@ public class BufferUtils
     }
 
     /// <summary>
-    ///     Copies a range of bytes from the source buffer to the destination buffer.
+    /// Copies a range of bytes from the source buffer to the destination buffer.
     /// </summary>
     /// <param name="source">The source buffer.</param>
     /// <param name="sourceOffset">The starting position in the source buffer to copy from.</param>

@@ -32,9 +32,9 @@ namespace LughSharp.Lugh.Graphics.Images;
 // ============================================================================
 
 /// <summary>
-///     Simple pixmap struct holding the pixel data, the dimensions and the
-///     format of the pixmap.
-///     The <see cref="ColorType" /> is one of the GDX_2D_FORMAT_XXX constants.
+/// Simple pixmap struct holding the pixel data, the dimensions and the
+/// format of the pixmap.
+/// The <see cref="ColorType" /> is one of the GDX_2D_FORMAT_XXX constants.
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
@@ -96,8 +96,8 @@ public partial class Gdx2DPixmap : IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Performs application-defined tasks associated with freeing,
-    ///     releasing, or resetting unmanaged resources.
+    /// Performs application-defined tasks associated with freeing,
+    /// releasing, or resetting unmanaged resources.
     /// </summary>
     public void Dispose()
     {
@@ -109,7 +109,7 @@ public partial class Gdx2DPixmap : IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Loads the data in the supplied byte array into a <see cref="PixmapDataType" />
+    /// Loads the data in the supplied byte array into a <see cref="PixmapDataType" />
     /// </summary>
     /// <param name="buffer"></param>
     /// <param name="offset"></param>
@@ -141,7 +141,7 @@ public partial class Gdx2DPixmap : IDisposable
     }
 
     /// <summary>
-    ///     Converts this Pixmaps <see cref="ColorType" /> to the requested format.
+    /// Converts this Pixmaps <see cref="ColorType" /> to the requested format.
     /// </summary>
     /// <param name="requestedFormat"> The new Format. </param>
     private void ConvertPixelFormatTo( int requestedFormat )
@@ -171,7 +171,7 @@ public partial class Gdx2DPixmap : IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Sets this pixmaps blending value.
+    /// Sets this pixmaps blending value.
     /// </summary>
     /// <param name="blend"></param>
     public void SetBlend( int blend )
@@ -180,7 +180,7 @@ public partial class Gdx2DPixmap : IDisposable
     }
 
     /// <summary>
-    ///     Sets this pixmaps scaling value.
+    /// Sets this pixmaps scaling value.
     /// </summary>
     /// <param name="scale"></param>
     public void SetScale( int scale )
@@ -189,7 +189,7 @@ public partial class Gdx2DPixmap : IDisposable
     }
 
     /// <summary>
-    ///     Centralise all logic related to releasing unmanaged resources.
+    /// Centralise all logic related to releasing unmanaged resources.
     /// </summary>
     protected virtual void Dispose( bool disposing )
     {
@@ -215,9 +215,9 @@ public partial class Gdx2DPixmap : IDisposable
     }
 
     /// <summary>
-    ///     Creates a new Gdx2DPixmap instance using data from the supplied buffer.
-    ///     <paramref name="len" /> bytes are copied from <paramref name="buffer" />, starting
-    ///     at position specified by <paramref name="offset" />.
+    /// Creates a new Gdx2DPixmap instance using data from the supplied buffer.
+    /// <paramref name="len" /> bytes are copied from <paramref name="buffer" />, starting
+    /// at position specified by <paramref name="offset" />.
     /// </summary>
     /// <param name="buffer"> The source byte buffer. </param>
     /// <param name="offset"> The position in buffer to start copying data from. </param>
@@ -288,7 +288,7 @@ public partial class Gdx2DPixmap : IDisposable
     }
 
     /// <summary>
-    ///     Creates a new Gdx2DPixmap object with the given width, height, and pixel format.
+    /// Creates a new Gdx2DPixmap object with the given width, height, and pixel format.
     /// </summary>
     /// <param name="width"> Width in pixels. </param>
     /// <param name="height"> Height in pixels. </param>

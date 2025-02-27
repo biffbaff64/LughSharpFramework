@@ -27,8 +27,8 @@ using LughSharp.Lugh.Graphics.G2D;
 namespace LughSharp.Lugh.Graphics.Atlases;
 
 /// <summary>
-///     A sprite that, if whitespace was stripped from the region when it was packed,
-///     is automatically positioned as if whitespace had not been stripped. */
+/// A sprite that, if whitespace was stripped from the region when it was packed,
+/// is automatically positioned as if whitespace had not been stripped. */
 /// </summary>
 [PublicAPI]
 public class AtlasSprite : Sprite
@@ -37,8 +37,8 @@ public class AtlasSprite : Sprite
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new AtlasSprite using the atlas region from the
-    ///     supplied AtlasSprite.
+    /// Creates a new AtlasSprite using the atlas region from the
+    /// supplied AtlasSprite.
     /// </summary>
     public AtlasSprite( AtlasSprite sprite )
     {
@@ -50,7 +50,7 @@ public class AtlasSprite : Sprite
     }
 
     /// <summary>
-    ///     Creates a new AtlasSprite using the supplied atlas region.
+    /// Creates a new AtlasSprite using the supplied atlas region.
     /// </summary>
     public AtlasSprite( AtlasRegion region )
     {
@@ -78,8 +78,8 @@ public class AtlasSprite : Sprite
     }
 
     /// <summary>
-    ///     Setup method designed to be called from <tt>AtlasSprite(AtlasRegion)</tt>
-    ///     to get around the issue of calling virtual methods from a constructor.
+    /// Setup method designed to be called from <tt>AtlasSprite(AtlasRegion)</tt>
+    /// to get around the issue of calling virtual methods from a constructor.
     /// </summary>
     private void Init( AtlasRegion region )
     {

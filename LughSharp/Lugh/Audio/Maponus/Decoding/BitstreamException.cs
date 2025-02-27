@@ -27,19 +27,19 @@ using Exception = System.Exception;
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-///     Instances of BitstreamException are thrown
-///     when operations on a Bitstream fail.
-///     <para>
-///         The exception provides details of the exception condition
-///         in two ways:
-///         <li>
-///             as an error-code describing the nature of the error
-///         </li>
-///         <li>
-///             as the Throwable instance, if any, that was thrown
-///             indicating that an exceptional condition has occurred.
-///         </li>
-///     </para>
+/// Instances of BitstreamException are thrown
+/// when operations on a Bitstream fail.
+/// <para>
+///     The exception provides details of the exception condition
+///     in two ways:
+///     <li>
+///         as an error-code describing the nature of the error
+///     </li>
+///     <li>
+///         as the Throwable instance, if any, that was thrown
+///         indicating that an exceptional condition has occurred.
+///     </li>
+/// </para>
 /// </summary>
 [Serializable]
 [PublicAPI]
@@ -48,15 +48,15 @@ public class BitstreamException : Mp3SharpException
     // ========================================================================
 
     /// <summary>
-    ///     Initializes a new Mp3SharpException with a specified error message and a
-    ///     reference to the inner exception that is the cause of this exception.
+    /// Initializes a new Mp3SharpException with a specified error message and a
+    /// reference to the inner exception that is the cause of this exception.
     /// </summary>
     /// <param name="message">
-    ///     The error message that explains the reason for the exception.
+    /// The error message that explains the reason for the exception.
     /// </param>
     /// <param name="inner">
-    ///     The exception that is the cause of the current exception, or a null reference
-    ///     if no inner exception is specified.
+    /// The exception that is the cause of the current exception, or a null reference
+    /// if no inner exception is specified.
     /// </param>
     public BitstreamException( string message, Exception? inner = null )
         : base( message, inner )
@@ -65,16 +65,16 @@ public class BitstreamException : Mp3SharpException
     }
 
     /// <summary>
-    ///     Initializes a new Mp3SharpException with a specified error message and a
-    ///     reference to the inner exception that is the cause of this exception.
+    /// Initializes a new Mp3SharpException with a specified error message and a
+    /// reference to the inner exception that is the cause of this exception.
     /// </summary>
     /// <param name="errorcode">
-    ///     The errorcode which is used to extract the message that explains the
-    ///     reason for the exception.
+    /// The errorcode which is used to extract the message that explains the
+    /// reason for the exception.
     /// </param>
     /// <param name="inner">
-    ///     The exception that is the cause of the current exception, or a null reference
-    ///     if no inner exception is specified.
+    /// The exception that is the cause of the current exception, or a null reference
+    /// if no inner exception is specified.
     /// </param>
     public BitstreamException( int errorcode, Exception? inner = null )
         : this( GetErrorString( errorcode ), inner )
@@ -83,15 +83,15 @@ public class BitstreamException : Mp3SharpException
     }
 
     /// <summary>
-    ///     Initializes a new BitstreamException with serialized data.
+    /// Initializes a new BitstreamException with serialized data.
     /// </summary>
     /// <param name="info">
-    ///     The <see cref="SerializationInfo" /> that holds the serialized object
-    ///     data about the exception being thrown.
+    /// The <see cref="SerializationInfo" /> that holds the serialized object
+    /// data about the exception being thrown.
     /// </param>
     /// <param name="context">
-    ///     The <see cref="StreamingContext" /> that contains contextual information
-    ///     about the source or destination.
+    /// The <see cref="StreamingContext" /> that contains contextual information
+    /// about the source or destination.
     /// </param>
     protected BitstreamException( SerializationInfo info, StreamingContext context )
         : base( info, context )
@@ -115,7 +115,7 @@ public class BitstreamException : Mp3SharpException
     }
 
     /// <summary>
-    ///     Returns the error code as a string.
+    /// Returns the error code as a string.
     /// </summary>
     /// <param name="errorcode"> The errorcode. </param>
     /// <returns></returns>

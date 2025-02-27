@@ -27,8 +27,8 @@ namespace LughSharp.Lugh.Graphics.Images;
 public partial class Gdx2DPixmap
 {
     /// <summary>
-    ///     Clear the pd defined in the supplied <see cref="PixmapDataType" />,
-    ///     setting it to the supplied Color.
+    /// Clear the pd defined in the supplied <see cref="PixmapDataType" />,
+    /// setting it to the supplied Color.
     /// </summary>
     /// <param name="color"> The Color. </param>
     public void Clear( Color color )

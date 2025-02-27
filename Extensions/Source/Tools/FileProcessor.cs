@@ -32,12 +32,12 @@ using LughSharp.Lugh.Utils.Collections;
 namespace Extensions.Source.Tools;
 
 /// <summary>
-///     Collects files recursively, filtering by file name. Callbacks are provided to
-///     process files and the results are collected, either <see cref="ProcessFile(Entry)" />
-///     or <see cref="ProcessDir(Entry, List{Entry})" /> can be overridden, or both. The
-///     entries provided to the callbacks have the original file, the output directory,
-///     and the output file. If <see cref="SetFlattenOutput(bool)" /> is false, the output
-///     will match the directory structure of the input.
+/// Collects files recursively, filtering by file name. Callbacks are provided to
+/// process files and the results are collected, either <see cref="ProcessFile(Entry)" />
+/// or <see cref="ProcessDir(Entry, List{Entry})" /> can be overridden, or both. The
+/// entries provided to the callbacks have the original file, the output directory,
+/// and the output file. If <see cref="SetFlattenOutput(bool)" /> is false, the output
+/// will match the directory structure of the input.
 /// </summary>
 [PublicAPI]
 public class FileProcessor
@@ -82,7 +82,7 @@ public class FileProcessor
     }
 
     /// <summary>
-    ///     Set comparator to the provided value. By default the files are sorted by alpha.
+    /// Set comparator to the provided value. By default the files are sorted by alpha.
     /// </summary>
     public FileProcessor SetComparator( Comparison< FileInfo? > comparator )
     {
@@ -92,7 +92,7 @@ public class FileProcessor
     }
 
     /// <summary>
-    ///     Adds a case insensitive suffix for matching input files.
+    /// Adds a case insensitive suffix for matching input files.
     /// </summary>
     public FileProcessor AddInputSuffix( params string[] suffixes )
     {
@@ -331,24 +331,24 @@ public class FileProcessor
 //    }
 
 /// <summary>
-///     Called with each input file.
+/// Called with each input file.
 /// </summary>
 protected void ProcessFile( Entry entry )
     {
     }
 
     /// <summary>
-    ///     Called for each input directory. The files will be <see cref="SetComparator(Comparison{)" />
-    ///     sorted. The specified files list can be modified to change which files are processed.
+    /// Called for each input directory. The files will be <see cref="SetComparator(Comparison{)" />
+    /// sorted. The specified files list can be modified to change which files are processed.
     /// </summary>
     protected void ProcessDir( Entry entryDir, List< Entry > files )
     {
     }
 
     /// <summary>
-    ///     This method should be called by <see cref="ProcessFile(Entry)" /> or <see cref="ProcessDir(Entry, List{})" />
-    ///     if the return value of <see cref="Process" /> or <see cref="Process(FileInfo[], FileInfo)" /> should return
-    ///     all the processed files.
+    /// This method should be called by <see cref="ProcessFile(Entry)" /> or <see cref="ProcessDir(Entry, List{})" />
+    /// if the return value of <see cref="Process" /> or <see cref="Process(FileInfo[], FileInfo)" /> should return
+    /// all the processed files.
     /// </summary>
     protected void AddProcessedFile( Entry entry )
     {

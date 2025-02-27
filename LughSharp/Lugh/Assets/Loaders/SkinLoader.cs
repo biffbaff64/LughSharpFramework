@@ -36,8 +36,8 @@ public class SkinLoader : AsynchronousAssetLoader
     }
 
     /// <summary>
-    ///     Returns the assets this asset requires to be loaded first.
-    ///     This method may be called on a thread other than the GL thread.
+    /// Returns the assets this asset requires to be loaded first.
+    /// This method may be called on a thread other than the GL thread.
     /// </summary>
     /// <param name="fileName">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>
@@ -113,11 +113,11 @@ public class SkinLoader : AsynchronousAssetLoader
     }
 
     /// <summary>
-    ///     Override to allow subclasses of Skin to be loaded or the skin instance to be configured.
+    /// Override to allow subclasses of Skin to be loaded or the skin instance to be configured.
     /// </summary>
     /// <param name="atlas"> The TextureAtlas that the skin will use. </param>
     /// <returns>
-    ///     A new Skin (or subclass of Skin) instance based on the provided TextureAtlas.
+    /// A new Skin (or subclass of Skin) instance based on the provided TextureAtlas.
     /// </returns>
     protected virtual Skin NewSkin( TextureAtlas? atlas )
     {
@@ -130,22 +130,22 @@ public class SkinLoader : AsynchronousAssetLoader
     // ========================================================================
 
     /// <summary>
-    ///     Parameters for loading skin assets.
+    /// Parameters for loading skin assets.
     /// </summary>
     [PublicAPI]
     public class SkinLoaderParameters : AssetLoaderParameters
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SkinLoaderParameters" />
-        ///     class with default values.
+        /// Initializes a new instance of the <see cref="SkinLoaderParameters" />
+        /// class with default values.
         /// </summary>
         public SkinLoaderParameters() : this( null, null )
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SkinLoaderParameters" />
-        ///     class with the specified resources.
+        /// Initializes a new instance of the <see cref="SkinLoaderParameters" />
+        /// class with the specified resources.
         /// </summary>
         /// <param name="resources">The resources to be used by the skin.</param>
         public SkinLoaderParameters( Dictionary< string, object > resources ) : this( null, resources )
@@ -153,8 +153,8 @@ public class SkinLoader : AsynchronousAssetLoader
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="SkinLoaderParameters" /> class
-        ///     with the specified texture atlas path and resources.
+        /// Initializes a new instance of the <see cref="SkinLoaderParameters" /> class
+        /// with the specified texture atlas path and resources.
         /// </summary>
         /// <param name="textureAtlasPath">The file path of the texture atlas to be used by the skin.</param>
         /// <param name="resources">The resources to be used by the skin.</param>
@@ -165,12 +165,12 @@ public class SkinLoader : AsynchronousAssetLoader
         }
 
         /// <summary>
-        ///     Gets or sets the resources to be used by the skin.
+        /// Gets or sets the resources to be used by the skin.
         /// </summary>
         public Dictionary< string, object >? Resources { get; set; }
 
         /// <summary>
-        ///     Gets or sets the file path of the texture atlas to be used by the skin.
+        /// Gets or sets the file path of the texture atlas to be used by the skin.
         /// </summary>
         public string? TextureAtlasPath { get; set; }
     }

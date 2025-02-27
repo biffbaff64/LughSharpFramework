@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 
 /// <summary>
-///     Base Class for audio output.
+/// Base Class for audio output.
 /// </summary>
 [PublicAPI]
 public abstract class AudioBase
@@ -34,12 +34,12 @@ public abstract class AudioBase
     public const int MAXCHANNELS = 2;        // max. number of channels
 
     /// <summary>
-    ///     Takes a 16 Bit PCM sample.
+    /// Takes a 16 Bit PCM sample.
     /// </summary>
     protected abstract void Append( int channel, short sampleValue );
 
     /// <summary>
-    ///     Accepts 32 new PCM samples.
+    /// Accepts 32 new PCM samples.
     /// </summary>
     public virtual void AppendSamples( int channel, float[] samples )
     {
@@ -50,7 +50,7 @@ public abstract class AudioBase
     }
 
     /// <summary>
-    ///     Clip Sample to 16 Bits
+    /// Clip Sample to 16 Bits
     /// </summary>
     private static short Clip( float sample )
     {
@@ -62,19 +62,19 @@ public abstract class AudioBase
     }
 
     /// <summary>
-    ///     Write the samples to the file or directly to the audio hardware.
+    /// Write the samples to the file or directly to the audio hardware.
     /// </summary>
     public abstract void WriteBuffer( int val );
 
     public abstract void Close();
 
     /// <summary>
-    ///     Clears all data in the buffer (for seeking).
+    /// Clears all data in the buffer (for seeking).
     /// </summary>
     public abstract void ClearBuffer();
 
     /// <summary>
-    ///     Notify the buffer that the user has stopped the stream.
+    /// Notify the buffer that the user has stopped the stream.
     /// </summary>
     public abstract void SetStopFlag();
 }

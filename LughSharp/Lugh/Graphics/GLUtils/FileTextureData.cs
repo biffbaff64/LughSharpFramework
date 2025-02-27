@@ -63,9 +63,9 @@ public class FileTextureData : ITextureData
     public bool UseMipMaps { get; set; }
 
     /// <summary>
-    ///     Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap" /> or
-    ///     <see cref="ITextureData.ConsumeCustomData" />. This method can be called from a non
-    ///     OpenGL thread and should thus not interact with OpenGL.
+    /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap" /> or
+    /// <see cref="ITextureData.ConsumeCustomData" />. This method can be called from a non
+    /// OpenGL thread and should thus not interact with OpenGL.
     /// </summary>
     public void Prepare()
     {
@@ -87,12 +87,12 @@ public class FileTextureData : ITextureData
     }
 
     /// <summary>
-    ///     Returns the <see cref="Pixmap" /> for upload by Texture.
-    ///     <para>
-    ///         A call to <see cref="ITextureData.Prepare" /> must precede a call to this method.
-    ///         Any internal data structures created in <see cref="ITextureData.Prepare" />
-    ///         should be disposed of here.
-    ///     </para>
+    /// Returns the <see cref="Pixmap" /> for upload by Texture.
+    /// <para>
+    ///     A call to <see cref="ITextureData.Prepare" /> must precede a call to this method.
+    ///     Any internal data structures created in <see cref="ITextureData.Prepare" />
+    ///     should be disposed of here.
+    /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
     public virtual Pixmap? ConsumePixmap()
@@ -116,8 +116,8 @@ public class FileTextureData : ITextureData
     }
 
     /// <returns>
-    ///     whether the caller of <see cref="ITextureData.ConsumePixmap" /> should dispose the
-    ///     Pixmap returned by <see cref="ITextureData.ConsumePixmap" />
+    /// whether the caller of <see cref="ITextureData.ConsumePixmap" /> should dispose the
+    /// Pixmap returned by <see cref="ITextureData.ConsumePixmap" />
     /// </returns>
     public virtual bool ShouldDisposePixmap()
     {
@@ -125,13 +125,13 @@ public class FileTextureData : ITextureData
     }
 
     /// <summary>
-    ///     Uploads the pixel data to the OpenGL ES texture. The caller must bind an
-    ///     OpenGL ES texture. A call to <see cref="ITextureData.Prepare" /> must preceed a call
-    ///     to this method.
-    ///     <para>
-    ///         Any internal data structures created in <see cref="ITextureData.Prepare" /> should be
-    ///         disposed of here.
-    ///     </para>
+    /// Uploads the pixel data to the OpenGL ES texture. The caller must bind an
+    /// OpenGL ES texture. A call to <see cref="ITextureData.Prepare" /> must preceed a call
+    /// to this method.
+    /// <para>
+    ///     Any internal data structures created in <see cref="ITextureData.Prepare" /> should be
+    ///     disposed of here.
+    /// </para>
     /// </summary>
     public virtual void ConsumeCustomData( int target )
     {
@@ -139,7 +139,7 @@ public class FileTextureData : ITextureData
     }
 
     /// <summary>
-    ///     Returns the <see cref="PixelType.Format" /> of the pixel data.
+    /// Returns the <see cref="PixelType.Format" /> of the pixel data.
     /// </summary>
     public PixelType.Format? PixelFormat { get; set; }
 

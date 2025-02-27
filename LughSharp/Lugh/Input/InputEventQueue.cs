@@ -27,7 +27,7 @@ using LughSharp.Lugh.Maths;
 namespace LughSharp.Lugh.Input;
 
 /// <summary>
-///     Queues events that are later passed to an <see cref="IInputProcessor" />.
+/// Queues events that are later passed to an <see cref="IInputProcessor" />.
 /// </summary>
 [PublicAPI]
 public class InputEventQueue
@@ -44,10 +44,10 @@ public class InputEventQueue
     // ========================================================================
 
     /// <summary>
-    ///     Processes and drains the events in the queue using the specified input processor.
+    /// Processes and drains the events in the queue using the specified input processor.
     /// </summary>
     /// <param name="processor">
-    ///     The input processor to handle the events. If null, the queue will be cleared without processing.
+    /// The input processor to handle the events. If null, the queue will be cleared without processing.
     /// </param>
     /// <exception cref="SystemException"> Thrown if an unknown event type is encountered. </exception>
     public void Drain( IInputProcessor? processor )
@@ -142,12 +142,12 @@ public class InputEventQueue
     }
 
     /// <summary>
-    ///     Finds the next index of the specified event type starting from the given index.
+    /// Finds the next index of the specified event type starting from the given index.
     /// </summary>
     /// <param name="nextType"> The event type to search for. </param>
     /// <param name="i"> The index to start searching from. </param>
     /// <returns>
-    ///     The index of the next occurrence of the specified event type, or -1 if not found.
+    /// The index of the next occurrence of the specified event type, or -1 if not found.
     /// </returns>
     /// <exception cref="SystemException"> Thrown if an unknown event type is encountered. </exception>
     private int Next( int nextType, int i )
@@ -220,7 +220,7 @@ public class InputEventQueue
     }
 
     /// <summary>
-    ///     Adds the specified time to the queue.
+    /// Adds the specified time to the queue.
     /// </summary>
     /// <param name="time">The time to add to the queue.</param>
     private void QueueTime( long time )
@@ -230,7 +230,7 @@ public class InputEventQueue
     }
 
     /// <summary>
-    ///     Queues a key down event with the specified keycode and time.
+    /// Queues a key down event with the specified keycode and time.
     /// </summary>
     /// <param name="keycode"> The keycode of the key down event. </param>
     /// <param name="time"> The time the event occurred. </param>
@@ -248,7 +248,7 @@ public class InputEventQueue
     }
 
     /// <summary>
-    ///     Queues a key up event with the specified keycode and time.
+    /// Queues a key up event with the specified keycode and time.
     /// </summary>
     /// <param name="keycode"> The keycode of the key up event. </param>
     /// <param name="time"> The time the event occurred. </param>
@@ -266,7 +266,7 @@ public class InputEventQueue
     }
 
     /// <summary>
-    ///     Queues a key typed event with the specified character and time.
+    /// Queues a key typed event with the specified character and time.
     /// </summary>
     /// <param name="character"> The character of the key typed event. </param>
     /// <param name="time"> The time the event occurred. </param>
@@ -284,7 +284,7 @@ public class InputEventQueue
     }
 
     /// <summary>
-    ///     Queues a touch down event with the specified parameters.
+    /// Queues a touch down event with the specified parameters.
     /// </summary>
     /// <param name="screenX"> The x-coordinate of the touch. </param>
     /// <param name="screenY"> The y-coordinate of the touch. </param>
@@ -308,7 +308,7 @@ public class InputEventQueue
     }
 
     /// <summary>
-    ///     Queues a touch up event with the specified parameters.
+    /// Queues a touch up event with the specified parameters.
     /// </summary>
     /// <param name="screenX"> The x-coordinate of the touch. </param>
     /// <param name="screenY"> The y-coordinate of the touch. </param>
@@ -334,8 +334,8 @@ public class InputEventQueue
     }
 
     /// <summary>
-    ///     Queues a touch dragged event with the specified parameters, skipping any previously
-    ///     queued touch dragged events for the same pointer.
+    /// Queues a touch dragged event with the specified parameters, skipping any previously
+    /// queued touch dragged events for the same pointer.
     /// </summary>
     /// <param name="screenX"> The x-coordinate of the drag. </param>
     /// <param name="screenY"> The y-coordinate of the drag. </param>
@@ -369,8 +369,8 @@ public class InputEventQueue
     }
 
     /// <summary>
-    ///     Queues a mouse moved event with the specified parameters, skipping any previously
-    ///     queued mouse moved events.
+    /// Queues a mouse moved event with the specified parameters, skipping any previously
+    /// queued mouse moved events.
     /// </summary>
     /// <param name="screenX"> The x-coordinate of the mouse. </param>
     /// <param name="screenY"> The y-coordinate of the mouse. </param>
@@ -399,7 +399,7 @@ public class InputEventQueue
     }
 
     /// <summary>
-    ///     Queues a mouse scrolled event with the specified parameters.
+    /// Queues a mouse scrolled event with the specified parameters.
     /// </summary>
     /// <param name="amountX">The horizontal scroll amount.</param>
     /// <param name="amountY">The vertical scroll amount.</param>

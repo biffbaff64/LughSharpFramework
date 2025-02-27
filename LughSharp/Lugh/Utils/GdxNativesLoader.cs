@@ -34,7 +34,7 @@ public class GdxNativesLoader
     // ========================================================================
 
     /// <summary>
-    ///     Loads the native libraries if they have not already been loaded.
+    /// Loads the native libraries if they have not already been loaded.
     /// </summary>
     public static void Load()
     {

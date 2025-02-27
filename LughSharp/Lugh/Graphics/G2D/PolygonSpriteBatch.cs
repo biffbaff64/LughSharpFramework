@@ -33,39 +33,39 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-///     A PolygonSpriteBatch is used to Draw 2D polygons that reference a
-///     texture (region). The class will batch the drawing commands and
-///     optimize them for processing by the GPU.
-///     <para>
-///         To Draw something with a PolygonSpriteBatch one has to first call the
-///         <see cref="PolygonSpriteBatch.Begin()" /> method which will setup appropriate
-///         render states. When you are done with drawing you have to call
-///         <see cref="PolygonSpriteBatch.End()" /> which will actually Draw the things
-///         you specified.
-///     </para>
-///     <para>
-///         All drawing commands of the PolygonSpriteBatch operate in screen coordinates.
-///         The screen coordinate system has an x-axis pointing to the right, an y-axis
-///         pointing upwards and the origin is in the lower left corner of the screen. You
-///         can also provide your own transformation and projection matrices if you so wish.
-///         A PolygonSpriteBatch is managed. In case the OpenGL context is lost all OpenGL
-///         resources a PolygonSpriteBatch uses internally get invalidated. A context is lost
-///         when a user switches to another application or receives an incoming call on Android.
-///         A SpritPolygonSpriteBatcheBatch will be automatically reloaded after the OpenGL
-///         context is restored.
-///     </para>
-///     <para>
-///         A PolygonSpriteBatch is a pretty heavy object so you should only ever have one
-///         in your program.
-///     </para>
-///     <para>
-///         A PolygonSpriteBatch works with OpenGL ES 1.x and 2.0. In the case of a 2.0 context
-///         it will use its own custom shader to Draw all provided sprites. You can set your own
-///         custom shader via <see cref="Shader" />.
-///     </para>
-///     <para>
-///         A PolygonSpriteBatch has to be disposed if it is no longer used.
-///     </para>
+/// A PolygonSpriteBatch is used to Draw 2D polygons that reference a
+/// texture (region). The class will batch the drawing commands and
+/// optimize them for processing by the GPU.
+/// <para>
+///     To Draw something with a PolygonSpriteBatch one has to first call the
+///     <see cref="PolygonSpriteBatch.Begin()" /> method which will setup appropriate
+///     render states. When you are done with drawing you have to call
+///     <see cref="PolygonSpriteBatch.End()" /> which will actually Draw the things
+///     you specified.
+/// </para>
+/// <para>
+///     All drawing commands of the PolygonSpriteBatch operate in screen coordinates.
+///     The screen coordinate system has an x-axis pointing to the right, an y-axis
+///     pointing upwards and the origin is in the lower left corner of the screen. You
+///     can also provide your own transformation and projection matrices if you so wish.
+///     A PolygonSpriteBatch is managed. In case the OpenGL context is lost all OpenGL
+///     resources a PolygonSpriteBatch uses internally get invalidated. A context is lost
+///     when a user switches to another application or receives an incoming call on Android.
+///     A SpritPolygonSpriteBatcheBatch will be automatically reloaded after the OpenGL
+///     context is restored.
+/// </para>
+/// <para>
+///     A PolygonSpriteBatch is a pretty heavy object so you should only ever have one
+///     in your program.
+/// </para>
+/// <para>
+///     A PolygonSpriteBatch works with OpenGL ES 1.x and 2.0. In the case of a 2.0 context
+///     it will use its own custom shader to Draw all provided sprites. You can set your own
+///     custom shader via <see cref="Shader" />.
+/// </para>
+/// <para>
+///     A PolygonSpriteBatch has to be disposed if it is no longer used.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class PolygonSpriteBatch : IPolygonBatch
@@ -94,11 +94,11 @@ public class PolygonSpriteBatch : IPolygonBatch
     // ========================================================================
 
     /// <summary>
-    ///     Constructs a PolygonSpriteBatch with the default shader, size vertices,
-    ///     and size * 2 triangles.
+    /// Constructs a PolygonSpriteBatch with the default shader, size vertices,
+    /// and size * 2 triangles.
     /// </summary>
     /// <param name="size">
-    ///     The max number of vertices and number of triangles in a single batch. Max of 32767.
+    /// The max number of vertices and number of triangles in a single batch. Max of 32767.
     /// </param>
     public PolygonSpriteBatch( int size )
         : this( size, size * 2, null )
@@ -106,11 +106,11 @@ public class PolygonSpriteBatch : IPolygonBatch
     }
 
     /// <summary>
-    ///     Constructs a PolygonSpriteBatch with the specified shader, size vertices
-    ///     and size * 2 triangles.
+    /// Constructs a PolygonSpriteBatch with the specified shader, size vertices
+    /// and size * 2 triangles.
     /// </summary>
     /// <param name="size">
-    ///     The max number of vertices and number of triangles in a single batch. Max of 32767.
+    /// The max number of vertices and number of triangles in a single batch. Max of 32767.
     /// </param>
     /// <param name="defaultShader"></param>
     public PolygonSpriteBatch( int size, ShaderProgram? defaultShader = null )
@@ -119,21 +119,21 @@ public class PolygonSpriteBatch : IPolygonBatch
     }
 
     /// <summary>
-    ///     Constructs a new PolygonSpriteBatch. Sets the projection matrix to an orthographic
-    ///     projection with y-axis point upwards, x-axis point to the right and the origin
-    ///     being in the bottom left corner of the screen. The projection will be pixel perfect
-    ///     with respect to the current screen resolution.
-    ///     <para>
-    ///         The defaultShader specifies the shader to use. Note that the names for uniforms for
-    ///         this default shader are different than the ones expect for shaders set with
-    ///         <see cref="Shader" />.
-    ///     </para>
+    /// Constructs a new PolygonSpriteBatch. Sets the projection matrix to an orthographic
+    /// projection with y-axis point upwards, x-axis point to the right and the origin
+    /// being in the bottom left corner of the screen. The projection will be pixel perfect
+    /// with respect to the current screen resolution.
+    /// <para>
+    ///     The defaultShader specifies the shader to use. Note that the names for uniforms for
+    ///     this default shader are different than the ones expect for shaders set with
+    ///     <see cref="Shader" />.
+    /// </para>
     /// </summary>
     /// <param name="maxVertices"> The max number of vertices in a single batch. Max of 32767.</param>
     /// <param name="maxTriangles"> The max number of triangles in a single batch. </param>
     /// <param name="defaultShader">
-    ///     The default shader to use. This is not owned by the PolygonSpriteBatch and must
-    ///     be disposed separately. May be null to use the default shader.
+    /// The default shader to use. This is not owned by the PolygonSpriteBatch and must
+    /// be disposed separately. May be null to use the default shader.
     /// </param>
     public PolygonSpriteBatch( int maxVertices, int maxTriangles, ShaderProgram? defaultShader )
     {
@@ -260,7 +260,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     }
 
     /// <summary>
-    ///     Draws the supplied <see cref="PolygonRegion" /> at the given corrdinates.
+    /// Draws the supplied <see cref="PolygonRegion" /> at the given corrdinates.
     /// </summary>
     /// <param name="region"> The Polygon Region to draw </param>
     /// <param name="x"> X coordinate </param>

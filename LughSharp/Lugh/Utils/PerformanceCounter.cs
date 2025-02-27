@@ -27,14 +27,14 @@ using LughSharp.Lugh.Maths;
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-///     Class to keep track of the time and load (percentage of total time) a specific task
-///     takes. Call start() just before starting the task and stop() right after. You can do
-///     this multiple times if required.
-///     <para>
-///         Every render or update call tick() to update the values. The time FloatCounter provides
-///         access to the minimum, maximum, average, total and current time (in seconds) the task
-///         takes. Likewise for the load value, which is the percentage of the total time.
-///     </para>
+/// Class to keep track of the time and load (percentage of total time) a specific task
+/// takes. Call start() just before starting the task and stop() right after. You can do
+/// this multiple times if required.
+/// <para>
+///     Every render or update call tick() to update the values. The time FloatCounter provides
+///     access to the minimum, maximum, average, total and current time (in seconds) the task
+///     takes. Likewise for the load value, which is the percentage of the total time.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class PerformanceCounter
@@ -47,14 +47,14 @@ public class PerformanceCounter
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new PerformanceCounter instance, giving it the siupplied name.
+    /// Creates a new PerformanceCounter instance, giving it the siupplied name.
     /// </summary>
     public PerformanceCounter( in string name ) : this( name, 5 )
     {
     }
 
     /// <summary>
-    ///     Creates a new PerformanceCounter instance, giving it the supplied name.
+    /// Creates a new PerformanceCounter instance, giving it the supplied name.
     /// </summary>
     public PerformanceCounter( in string name, in int windowSize )
     {
@@ -64,36 +64,36 @@ public class PerformanceCounter
     }
 
     /// <summary>
-    ///     The time value of this counter (seconds)
+    /// The time value of this counter (seconds)
     /// </summary>
     public FloatCounter Time { get; }
 
     /// <summary>
-    ///     The load value of this counter
+    /// The load value of this counter
     /// </summary>
     public FloatCounter Load { get; }
 
     /// <summary>
-    ///     The name of this counter
+    /// The name of this counter
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    ///     The current value in seconds, you can manually increase this using your own
-    ///     timing mechanism if needed, if you do so, you also need to update <see cref="Valid" />.
+    /// The current value in seconds, you can manually increase this using your own
+    /// timing mechanism if needed, if you do so, you also need to update <see cref="Valid" />.
     /// </summary>
     public float Current { get; set; } = 0f;
 
     /// <summary>
-    ///     Flag to indicate that the current value is valid, you need to set this to true
-    ///     if using your own timing mechanism
+    /// Flag to indicate that the current value is valid, you need to set this to true
+    /// if using your own timing mechanism
     /// </summary>
     public bool Valid { get; set; } = false;
 
     /// <summary>
-    ///     Updates the time and load counters and resets the time.
-    ///     Call <see cref="Start()" /> to begin a new count. The values are only
-    ///     valid after at least two calls to this method.
+    /// Updates the time and load counters and resets the time.
+    /// Call <see cref="Start()" /> to begin a new count. The values are only
+    /// valid after at least two calls to this method.
     /// </summary>
     public void Tick()
     {
@@ -108,8 +108,8 @@ public class PerformanceCounter
     }
 
     /// <summary>
-    ///     Updates the time and load counters and resets the time.
-    ///     Call <see cref="Start()" /> to begin a new count.
+    /// Updates the time and load counters and resets the time.
+    /// Call <see cref="Start()" /> to begin a new count.
     /// </summary>
     /// <param name="delta"> The time since the last call to this method</param>
     public void Tick( in float delta )
@@ -132,8 +132,8 @@ public class PerformanceCounter
     }
 
     /// <summary>
-    ///     Start counting, call this method just before performing the task you
-    ///     want to keep track of. Call <see cref="Stop()" /> when done.
+    /// Start counting, call this method just before performing the task you
+    /// want to keep track of. Call <see cref="Stop()" /> when done.
     /// </summary>
     public void Start()
     {
@@ -142,9 +142,9 @@ public class PerformanceCounter
     }
 
     /// <summary>
-    ///     Stop counting, call this method right after you performed the task you
-    ///     want to keep track of. Call <see cref="Start()" /> again when you perform
-    ///     more of that task.
+    /// Stop counting, call this method right after you performed the task you
+    /// want to keep track of. Call <see cref="Start()" /> again when you perform
+    /// more of that task.
     /// </summary>
     public void Stop()
     {
@@ -157,7 +157,7 @@ public class PerformanceCounter
     }
 
     /// <summary>
-    ///     Resets this performance counter to its defaults values.
+    /// Resets this performance counter to its defaults values.
     /// </summary>
     public void Reset()
     {

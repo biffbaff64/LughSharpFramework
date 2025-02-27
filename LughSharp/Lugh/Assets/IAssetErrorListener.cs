@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Assets;
 
 /// <summary>
-///     Error callback for asset loaders.
+/// Error callback for asset loaders.
 /// </summary>
 [PublicAPI]
 public interface IAssetErrorListener

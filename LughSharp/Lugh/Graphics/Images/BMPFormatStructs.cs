@@ -29,7 +29,7 @@ public class BMPFormatStructs
 {
     // ========================================================================
     /// <summary>
-    ///     BMP Header Structure.
+    /// BMP Header Structure.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]
@@ -44,7 +44,7 @@ public class BMPFormatStructs
 
     // ========================================================================
     /// <summary>
-    ///     BMP Info Header Structure.
+    /// BMP Info Header Structure.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]
@@ -65,7 +65,7 @@ public class BMPFormatStructs
 
     // ========================================================================
     /// <summary>
-    ///     BMP Color Header Structure.
+    /// BMP Color Header Structure.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]
@@ -84,7 +84,7 @@ public class BMPFormatStructs
 
     // ========================================================================
     /// <summary>
-    ///     BMP Pixel Array Structure.
+    /// BMP Pixel Array Structure.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]

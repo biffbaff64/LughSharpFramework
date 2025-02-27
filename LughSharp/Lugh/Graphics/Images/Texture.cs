@@ -34,27 +34,27 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
-///     A Texture wraps a standard OpenGL ES texture.
-///     <para>
-///         A Texture can be managed. If the OpenGL context is lost all managed textures
-///         get invalidated. This happens when a user switches to another application or
-///         receives an incoming call on mobile devices.
-///         Managed textures get reloaded automatically.
-///     </para>
-///     <para>
-///         A Texture has to be bound via the <see cref="Texture.Bind()" /> method in order
-///         for it to be applied to geometry. The texture will be bound to the currently
-///         active texture unit specified via <see cref="OpenGL.GLBindings.ActiveTexture(int)" />,
-///         or <see cref="OpenGL.GLBindings.ActiveTexture(TextureUnit)" />.
-///     </para>
-///     <para>
-///         You can draw <see cref="Pixmap" />s to a texture at any time. The changes will
-///         be automatically uploaded to texture memory. This is of course not extremely
-///         fast so use it with care. It also only works with unmanaged textures.
-///     </para>
-///     <para>
-///         A Texture must be disposed when it is no longer used
-///     </para>
+/// A Texture wraps a standard OpenGL ES texture.
+/// <para>
+///     A Texture can be managed. If the OpenGL context is lost all managed textures
+///     get invalidated. This happens when a user switches to another application or
+///     receives an incoming call on mobile devices.
+///     Managed textures get reloaded automatically.
+/// </para>
+/// <para>
+///     A Texture has to be bound via the <see cref="Texture.Bind()" /> method in order
+///     for it to be applied to geometry. The texture will be bound to the currently
+///     active texture unit specified via <see cref="OpenGL.GLBindings.ActiveTexture(int)" />,
+///     or <see cref="OpenGL.GLBindings.ActiveTexture(TextureUnit)" />.
+/// </para>
+/// <para>
+///     You can draw <see cref="Pixmap" />s to a texture at any time. The changes will
+///     be automatically uploaded to texture memory. This is of course not extremely
+///     fast so use it with care. It also only works with unmanaged textures.
+/// </para>
+/// <para>
+///     A Texture must be disposed when it is no longer used
+/// </para>
 /// </summary>
 [PublicAPI]
 public class Texture : GLTexture, IManaged
@@ -66,12 +66,12 @@ public class Texture : GLTexture, IManaged
     public enum TextureFilter : int
     {
         /// <summary>
-        ///     Fetch the nearest texel that best maps to the pixel on screen.
+        /// Fetch the nearest texel that best maps to the pixel on screen.
         /// </summary>
         Nearest = IGL.GL_NEAREST,
 
         /// <summary>
-        ///     Fetch four nearest texels that best map to the pixel on screen.
+        /// Fetch four nearest texels that best map to the pixel on screen.
         /// </summary>
         Linear = IGL.GL_LINEAR,
 
@@ -80,26 +80,26 @@ public class Texture : GLTexture, IManaged
         MipMap = IGL.GL_LINEAR_MIPMAP_LINEAR,
 
         /// <summary>
-        ///     Fetch the best fitting image from the mip map chain based on the pixel/texel ratio and
-        ///     then sample the texels with a nearest filter.
+        /// Fetch the best fitting image from the mip map chain based on the pixel/texel ratio and
+        /// then sample the texels with a nearest filter.
         /// </summary>
         MipMapNearestNearest = IGL.GL_NEAREST_MIPMAP_NEAREST,
 
         /// <summary>
-        ///     Fetch the best fitting image from the mip map chain based on the pixel/texel ratio and
-        ///     then sample the texels with a linear filter.
+        /// Fetch the best fitting image from the mip map chain based on the pixel/texel ratio and
+        /// then sample the texels with a linear filter.
         /// </summary>
         MipMapLinearNearest = IGL.GL_LINEAR_MIPMAP_NEAREST,
 
         /// <summary>
-        ///     Fetch the two best fitting images from the mip map chain and then sample the nearest texel
-        ///     from each of the two images, combining them to the final output pixel.
+        /// Fetch the two best fitting images from the mip map chain and then sample the nearest texel
+        /// from each of the two images, combining them to the final output pixel.
         /// </summary>
         MipMapNearestLinear = IGL.GL_NEAREST_MIPMAP_LINEAR,
 
         /// <summary>
-        ///     Fetch the two best fitting images from the mip map chain and then sample the four nearest
-        ///     texels from each of the two images, combining them to the final output pixel.
+        /// Fetch the two best fitting images from the mip map chain and then sample the four nearest
+        /// texels from each of the two images, combining them to the final output pixel.
         /// </summary>
         MipMapLinearLinear = MipMap,
     }
@@ -125,7 +125,7 @@ public class Texture : GLTexture, IManaged
     // ========================================================================
 
     /// <summary>
-    ///     Create a new Texture from the file at the given path.
+    /// Create a new Texture from the file at the given path.
     /// </summary>
     /// <param name="internalPath"></param>
     public Texture( string internalPath )
@@ -134,7 +134,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Create a new Texture from the file described by the given <see cref="FileInfo" />
+    /// Create a new Texture from the file described by the given <see cref="FileInfo" />
     /// </summary>
     /// <param name="file"></param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
@@ -144,9 +144,9 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Create a new Texture from the file specified in the given <see cref="FileInfo" />.
-    ///     The Texture pixmap format will be set to the given format, which defaults to
-    ///     <see cref="PixelType.Format.RGBA8888" />.
+    /// Create a new Texture from the file specified in the given <see cref="FileInfo" />.
+    /// The Texture pixmap format will be set to the given format, which defaults to
+    /// <see cref="PixelType.Format.RGBA8888" />.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="format"> The pixmap format to use. </param>
@@ -160,7 +160,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Creates a new Texture from the supplied <see cref="Pixmap" />.
+    /// Creates a new Texture from the supplied <see cref="Pixmap" />.
     /// </summary>
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
@@ -170,7 +170,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Creates a new Texture from the supplied <see cref="Pixmap" /> and <see cref="PixelType.Format" />
+    /// Creates a new Texture from the supplied <see cref="Pixmap" /> and <see cref="PixelType.Format" />
     /// </summary>
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="format"> The pixmap format to use. </param>
@@ -181,7 +181,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Creates a new Texture with the specified width, height, and Pixmap format.
+    /// Creates a new Texture with the specified width, height, and Pixmap format.
     /// </summary>
     /// <param name="width"> The width in pixels. </param>
     /// <param name="height"> The Height in pixels. </param>
@@ -192,7 +192,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Creates a new Texture using the supplied <see cref="ITextureData" />.
+    /// Creates a new Texture using the supplied <see cref="ITextureData" />.
     /// </summary>
     public Texture( ITextureData data )
         : this( IGL.GL_TEXTURE_2D, GdxApi.Bindings.GenTexture(), data )
@@ -200,8 +200,8 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Default constructor. Creates a new Texture from the supplied GLTarget,
-    ///     GLTextureHandle and TextureData.
+    /// Default constructor. Creates a new Texture from the supplied GLTarget,
+    /// GLTextureHandle and TextureData.
     /// </summary>
     /// <param name="glTarget"></param>
     /// <param name="glTextureHandle"></param>
@@ -234,8 +234,8 @@ public class Texture : GLTexture, IManaged
     public          int NumManagedTextures => _managedTextures[ GdxApi.App ].Count;
 
     /// <summary>
-    ///     The Texture name, usually the filename but can be something else.
-    ///     Name will be set to 'Name Not Set' if null or empty.
+    /// The Texture name, usually the filename but can be something else.
+    /// Name will be set to 'Name Not Set' if null or empty.
     /// </summary>
     public string Name
     {
@@ -254,7 +254,7 @@ public class Texture : GLTexture, IManaged
     public bool IsManaged => TextureData is { IsManaged: true };
 
     /// <summary>
-    ///     Load the given <see cref="ITextureData" /> data into this Texture.
+    /// Load the given <see cref="ITextureData" /> data into this Texture.
     /// </summary>
     /// <param name="data"></param>
     public void Load( ITextureData data )
@@ -282,8 +282,8 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Used internally to reload after context loss. Creates a new GL handle then
-    ///     calls <see cref="Load(ITextureData)" />.
+    /// Used internally to reload after context loss. Creates a new GL handle then
+    /// calls <see cref="Load(ITextureData)" />.
     /// </summary>
     public override void Reload()
     {
@@ -298,9 +298,9 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Draws the given <see cref="Pixmap" /> to the texture at position x, y. No clipping
-    ///     is performed so it is important to make sure that you drawing is only done inside
-    ///     the texture region. Note that this will only draw to mipmap level 0!
+    /// Draws the given <see cref="Pixmap" /> to the texture at position x, y. No clipping
+    /// is performed so it is important to make sure that you drawing is only done inside
+    /// the texture region. Note that this will only draw to mipmap level 0!
     /// </summary>
     /// <param name="pixmap"> The Pixmap </param>
     /// <param name="x"> The x coordinate in pixels </param>
@@ -324,7 +324,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Add the supplied MANAGED texture to the list of managed textures.
+    /// Add the supplied MANAGED texture to the list of managed textures.
     /// </summary>
     /// <param name="app"></param>
     /// <param name="texture"></param>
@@ -340,7 +340,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Invalidate all managed textures. This is an internal method. Do not use it!
+    /// Invalidate all managed textures. This is an internal method. Do not use it!
     /// </summary>
     internal void InvalidateAllTextures( IApplication app )
     {
@@ -408,8 +408,8 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Returns a string detailing the managed status of the textures
-    ///     within the managed textures list.
+    /// Returns a string detailing the managed status of the textures
+    /// within the managed textures list.
     /// </summary>
     public string GetManagedStatus()
     {
@@ -427,7 +427,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Clears all managed textures.
+    /// Clears all managed textures.
     /// </summary>
     internal void ClearAllTextures( IApplication app )
     {
@@ -455,7 +455,7 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    ///     Disposes all resources associated with the texture.
+    /// Disposes all resources associated with the texture.
     /// </summary>
     public override void Dispose()
     {

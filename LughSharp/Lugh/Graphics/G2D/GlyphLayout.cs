@@ -31,24 +31,24 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-///     Stores <see cref="GlyphRun" /> runs of glyphs for a piece of text. The text may contain
-///     newlines and color markup tags.
-///     <para>
-///         Where wrapping occurs is determined by <see cref="BitmapFont.BitmapFontData.GetWrapIndex" />.
-///         Additionally, when <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true wrapping
-///         can occur at color start or end tags.
-///     </para>
-///     <para>
-///         When wrapping occurs, whitespace is removed before and after the wrap position.
-///         Whitespace is determined by <see cref="BitmapFont.BitmapFontData.IsWhitespace(char)" />.
-///     </para>
-///     <para>
-///         Glyphs positions are determined by <see cref="BitmapFont.BitmapFontData.GetGlyphs" />.
-///     </para>
-///     <para>
-///         This class is not thread safe, even if synchronized externally, and must only
-///         be used from the game thread.
-///     </para>
+/// Stores <see cref="GlyphRun" /> runs of glyphs for a piece of text. The text may contain
+/// newlines and color markup tags.
+/// <para>
+///     Where wrapping occurs is determined by <see cref="BitmapFont.BitmapFontData.GetWrapIndex" />.
+///     Additionally, when <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true wrapping
+///     can occur at color start or end tags.
+/// </para>
+/// <para>
+///     When wrapping occurs, whitespace is removed before and after the wrap position.
+///     Whitespace is determined by <see cref="BitmapFont.BitmapFontData.IsWhitespace(char)" />.
+/// </para>
+/// <para>
+///     Glyphs positions are determined by <see cref="BitmapFont.BitmapFontData.GetGlyphs" />.
+/// </para>
+/// <para>
+///     This class is not thread safe, even if synchronized externally, and must only
+///     be used from the game thread.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class GlyphLayout : IResetable
@@ -63,14 +63,14 @@ public class GlyphLayout : IResetable
     // ========================================================================
 
     /// <summary>
-    ///     Creates an empty GlyphLayout.
+    /// Creates an empty GlyphLayout.
     /// </summary>
     public GlyphLayout()
     {
     }
 
     /// <summary>
-    ///     Creates a new GlyphLayout, using the supplied <see cref="BitmapFont" /> and text.
+    /// Creates a new GlyphLayout, using the supplied <see cref="BitmapFont" /> and text.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
@@ -80,15 +80,15 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Creates a new GlyphLayout, using the supplied <see cref="BitmapFont" />, text message,
-    ///     <see cref="Color" />, target width, horizontal alignment, and wrap.
+    /// Creates a new GlyphLayout, using the supplied <see cref="BitmapFont" />, text message,
+    /// <see cref="Color" />, target width, horizontal alignment, and wrap.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
     /// <param name="color">
-    ///     The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
-    ///     is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
-    ///     markup tags in the specified string may change the color for portions of the text.
+    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
+    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
+    /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="targetWidth"></param>
     /// <param name="halign"></param>
@@ -105,9 +105,9 @@ public class GlyphLayout : IResetable
     /// <param name="start"></param>
     /// <param name="end"></param>
     /// <param name="color">
-    ///     The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
-    ///     is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
-    ///     markup tags in the specified string may change the color for portions of the text.
+    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
+    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
+    /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="targetWidth"></param>
     /// <param name="halign"></param>
@@ -131,8 +131,8 @@ public class GlyphLayout : IResetable
     public float            Height { get; set; }
 
     /// <summary>
-    ///     Resets the object for reuse. Object references should be nulled and fields
-    ///     may be set to default values.
+    /// Resets the object for reuse. Object references should be nulled and fields
+    /// may be set to default values.
     /// </summary>
     public void Reset()
     {
@@ -144,8 +144,8 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Calls <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)" />
-    ///     with the whole string, the font's current color, and with no alignment or wrapping.
+    /// Calls <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)" />
+    /// with the whole string, the font's current color, and with no alignment or wrapping.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
@@ -155,15 +155,15 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Calls <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)" />
-    ///     with the whole string and no truncation.
+    /// Calls <see cref="SetText(BitmapFont, string, int, int, Color, float, int, bool, string)" />
+    /// with the whole string and no truncation.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
     /// <param name="color">
-    ///     The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
-    ///     is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
-    ///     markup tags in the specified string may change the color for portions of the text.
+    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
+    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
+    /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="targetWidth"></param>
     /// <param name="halign"></param>
@@ -180,24 +180,24 @@ public class GlyphLayout : IResetable
     /// <param name="start"></param>
     /// <param name="end"></param>
     /// <param name="color">
-    ///     The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
-    ///     is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
-    ///     markup tags in the specified string may change the color for portions of the text.
+    /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()" />
+    /// is not used). If <see cref="BitmapFont.BitmapFontData.MarkupEnabled" /> is true, color
+    /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="halign">
-    ///     Horizontal alignment of the text, see also <see cref="Alignment" />.
+    /// Horizontal alignment of the text, see also <see cref="Alignment" />.
     /// </param>
     /// <param name="targetWidth">
-    ///     The width used for alignment, line wrapping, and truncation. May be zero if
-    ///     those features are not used.
+    /// The width used for alignment, line wrapping, and truncation. May be zero if
+    /// those features are not used.
     /// </param>
     /// <param name="wrap"></param>
     /// <param name="truncate">
-    ///     If not null and the width of the glyphs exceed targetWidth, the glyphs are
-    ///     truncated and the glyphs for the specified truncate string are placed at the end.
-    ///     Empty string can be used to truncate without adding glyphs. Truncate should not
-    ///     be used with text that contains multiple lines. Wrap is ignored if truncate is
-    ///     not null.
+    /// If not null and the width of the glyphs exceed targetWidth, the glyphs are
+    /// truncated and the glyphs for the specified truncate string are placed at the end.
+    /// Empty string can be used to truncate without adding glyphs. Truncate should not
+    /// be used with text that contains multiple lines. Wrap is ignored if truncate is
+    /// not null.
     /// </param>
     public void SetText( BitmapFont font, string str, int start, int end, Color color, float targetWidth, int halign, bool wrap,
                          string? truncate )
@@ -248,7 +248,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Prepares for text processing by setting the appropriate wrapping and markup options.
+    /// Prepares for text processing by setting the appropriate wrapping and markup options.
     /// </summary>
     /// <param name="fontData">Font data containing font-specific information.</param>
     /// <param name="color">Initial color for the text.</param>
@@ -274,7 +274,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Clears the color stack and sets the initial color.
+    /// Clears the color stack and sets the initial color.
     /// </summary>
     /// <param name="color">Initial color to set.</param>
     private void ClearColorStack( Color color )
@@ -289,7 +289,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Finds the end of the current run, handling new lines and color markup if applicable.
+    /// Finds the end of the current run, handling new lines and color markup if applicable.
     /// </summary>
     /// <param name="str">Input string.</param>
     /// <param name="start">Start index of the current run.</param>
@@ -297,8 +297,8 @@ public class GlyphLayout : IResetable
     /// <param name="fontData">Font data containing font-specific information.</param>
     /// <param name="color">Current color of the text.</param>
     /// <returns>
-    ///     Tuple containing the run end index, a boolean indicating if a newline was encountered,
-    ///     and the next color.
+    /// Tuple containing the run end index, a boolean indicating if a newline was encountered,
+    /// and the next color.
     /// </returns>
     private (int runEnd, bool newline, Color nextColor) FindRunEnd( string str, ref int start, int end, BitmapFont.BitmapFontData fontData,
                                                                     Color color )
@@ -348,7 +348,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Processes a run of text, handling positioning, wrapping, and color changes.
+    /// Processes a run of text, handling positioning, wrapping, and color changes.
     /// </summary>
     /// <param name="font">Bitmap font used for rendering.</param>
     /// <param name="str">Input string.</param>
@@ -417,7 +417,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Adjusts the starting position of the run based on the last glyph processed.
+    /// Adjusts the starting position of the run based on the last glyph processed.
     /// </summary>
     /// <param name="run">Current glyph run.</param>
     /// <param name="fontData">Font data containing font-specific information.</param>
@@ -434,7 +434,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Advances the x position for the current run.
+    /// Advances the x position for the current run.
     /// </summary>
     /// <param name="run">Current glyph run.</param>
     /// <param name="fontData">Font data containing font-specific information.</param>
@@ -451,7 +451,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Handles text wrapping for the current run, creating new lines as necessary.
+    /// Handles text wrapping for the current run, creating new lines as necessary.
     /// </summary>
     /// <param name="fontData">Font data containing font-specific information.</param>
     /// <param name="run">Current glyph run.</param>
@@ -489,7 +489,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Wraps the current run, creating a new line and adjusting the y position.
+    /// Wraps the current run, creating a new line and adjusting the y position.
     /// </summary>
     /// <param name="fontData">Font data containing font-specific information.</param>
     /// <param name="run">Current glyph run.</param>
@@ -522,7 +522,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Ensures a minimum number of glyphs per line when wrapping text.
+    /// Ensures a minimum number of glyphs per line when wrapping text.
     /// </summary>
     /// <param name="run">Current glyph run.</param>
     /// <param name="wrapIndex">Index at which to wrap the text.</param>
@@ -538,7 +538,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Creates a wrapped run from the current run, adjusting for text wrapping.
+    /// Creates a wrapped run from the current run, adjusting for text wrapping.
     /// </summary>
     /// <param name="fontData">Font data containing font-specific information.</param>
     /// <param name="run">Current glyph run.</param>
@@ -558,7 +558,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Removes leading whitespace from the wrapped run.
+    /// Removes leading whitespace from the wrapped run.
     /// </summary>
     /// <param name="fontData">Font data containing font-specific information.</param>
     /// <param name="run">Current glyph run.</param>
@@ -581,7 +581,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Finalizes the text layout, calculating heights and aligning runs based on the alignment option.
+    /// Finalizes the text layout, calculating heights and aligning runs based on the alignment option.
     /// </summary>
     /// <param name="fontData">Font data containing font-specific information.</param>
     /// <param name="y">Current y position.</param>
@@ -600,7 +600,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Calculates the widths of all glyph runs.
+    /// Calculates the widths of all glyph runs.
     /// </summary>
     private void CalculateRunWidths( BitmapFont.BitmapFontData fontData )
     {
@@ -628,7 +628,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Aligns all glyph runs based on the target width and alignment option.
+    /// Aligns all glyph runs based on the target width and alignment option.
     /// </summary>
     /// <param name="targetWidth">Target width for text alignment.</param>
     /// <param name="halign">Horizontal alignment option.</param>
@@ -670,7 +670,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Truncates a glyph run to fit within the specified target width by appending a truncate string if necessary.
+    /// Truncates a glyph run to fit within the specified target width by appending a truncate string if necessary.
     /// </summary>
     /// <param name="fontData">The font data used to obtain glyphs and their properties.</param>
     /// <param name="run">The glyph run to be truncated.</param>
@@ -761,7 +761,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Breaks a run into two runs at the specified wrapIndex.
+    /// Breaks a run into two runs at the specified wrapIndex.
     /// </summary>
     /// <param name="fontData"></param>
     /// <param name="first"></param>
@@ -846,7 +846,7 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Adjusts the xadvance of the last glyph to use its width instead of xadvance.
+    /// Adjusts the xadvance of the last glyph to use its width instead of xadvance.
     /// </summary>
     /// <param name="fontData"></param>
     /// <param name="run"></param>
@@ -866,18 +866,18 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Parses a color markup within the specified string and range.
+    /// Parses a color markup within the specified string and range.
     /// </summary>
     /// <param name="str"> The input string containing the markup. </param>
     /// <param name="start"> The start index of the markup. </param>
     /// <param name="end"> The end index of the markup. </param>
     /// <param name="colorpool"> The pool from which to obtain color instances. </param>
     /// <returns>
-    ///     An integer indicating the number of characters processed:
-    ///     - -1 if the string ends with "["
-    ///     - -2 if the markup is "[["
-    ///     - 0 if the markup is "[]"
-    ///     - The number of characters processed for valid color markups
+    /// An integer indicating the number of characters processed:
+    /// - -1 if the string ends with "["
+    /// - -2 if the markup is "[["
+    /// - 0 if the markup is "[]"
+    /// - The number of characters processed for valid color markups
     /// </returns>
     private int ParseColorMarkup( string str, int start, int end, Pool< Color > colorpool )
     {
@@ -908,14 +908,14 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Parses a hexadecimal color markup within the specified string and range.
+    /// Parses a hexadecimal color markup within the specified string and range.
     /// </summary>
     /// <param name="str"> The input string containing the markup. </param>
     /// <param name="start"> The start index of the markup. </param>
     /// <param name="end"> The end index of the markup. </param>
     /// <param name="colorpool"> The pool from which to obtain color instances. </param>
     /// <returns>
-    ///     An integer indicating the number of characters processed, or -1 if the markup is invalid.
+    /// An integer indicating the number of characters processed, or -1 if the markup is invalid.
     /// </returns>
     private int ParseHexColor( string str, int start, int end, Pool< Color > colorpool )
     {
@@ -960,14 +960,14 @@ public class GlyphLayout : IResetable
     }
 
     /// <summary>
-    ///     Parses a named color markup within the specified string and range.
+    /// Parses a named color markup within the specified string and range.
     /// </summary>
     /// <param name="str"> The input string containing the markup. </param>
     /// <param name="start"> The start index of the markup. </param>
     /// <param name="end"> The end index of the markup. </param>
     /// <param name="colorpool"> The pool from which to obtain color instances. </param>
     /// <returns>
-    ///     An integer indicating the number of characters processed, or -1 if the markup is invalid.
+    /// An integer indicating the number of characters processed, or -1 if the markup is invalid.
     /// </returns>
     private int ParseNamedColor( string str, int start, int end, Pool< Color > colorpool )
     {
@@ -1002,8 +1002,8 @@ public class GlyphLayout : IResetable
     // ========================================================================
 
     /// <summary>
-    ///     Stores glyphs and positions for a piece of text which is a single color and
-    ///     does not span multiple lines.
+    /// Stores glyphs and positions for a piece of text which is a single color and
+    /// does not span multiple lines.
     /// </summary>
     [PublicAPI]
     public class GlyphRun : IResetable
@@ -1016,8 +1016,8 @@ public class GlyphLayout : IResetable
         public Color                    Color     { get; set; } = new();
 
         /// <summary>
-        ///     Resets the object for reuse. Object references should be nulled and fields
-        ///     may be set to default values.
+        /// Resets the object for reuse. Object references should be nulled and fields
+        /// may be set to default values.
         /// </summary>
         public void Reset()
         {

@@ -96,7 +96,7 @@ public partial class AssetManager
     // ========================================================================
 
     /// <summary>
-    ///     Output Assetmanager metrics via the <see cref="Logger" /> class.
+    /// Output Assetmanager metrics via the <see cref="Logger" /> class.
     /// </summary>
     public void DisplayMetrics()
     {
@@ -121,8 +121,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    ///     Returns a string containing ref count and dependency
-    ///     information for all assets.
+    /// Returns a string containing ref count and dependency
+    /// information for all assets.
     /// </summary>
     public string GetDiagnostics()
     {

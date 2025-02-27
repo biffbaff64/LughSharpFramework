@@ -36,16 +36,16 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     A select box (aka a drop-down list) allows a user to choose one of a number of values
-///     from a list. When inactive, the selected value is displayed. When activated, it shows
-///     the list of values that may be selected.
-///     <para>
-///         <see cref="ChangeListener.ChangeEvent" /> is fired when the selectbox selection changes.
-///     </para>
-///     <para>
-///         The preferred size of the select box is determined by the maximum text bounds of the items and the size of the
-///         {@link SelectBoxStyle#background}.
-///     </para>
+/// A select box (aka a drop-down list) allows a user to choose one of a number of values
+/// from a list. When inactive, the selected value is displayed. When activated, it shows
+/// the list of values that may be selected.
+/// <para>
+///     <see cref="ChangeListener.ChangeEvent" /> is fired when the selectbox selection changes.
+/// </para>
+/// <para>
+///     The preferred size of the select box is determined by the maximum text bounds of the items and the size of the
+///     {@link SelectBoxStyle#background}.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class SelectBox< T > : Widget, IDisableable
@@ -95,8 +95,8 @@ public class SelectBox< T > : Widget, IDisableable
     public SelectBoxStyle BoxStyle      { get; set; }
 
     /// <summary>
-    ///     Set the max number of items to display when the select box is opened. Set to
-    ///     0 (the default) to display as many as fit in the stage height.
+    /// Set the max number of items to display when the select box is opened. Set to
+    /// 0 (the default) to display as many as fit in the stage height.
     /// </summary>
     public int MaxListCount
     {
@@ -158,7 +158,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Set the backing List that makes up the choices available in the SelectBox
+    /// Set the backing List that makes up the choices available in the SelectBox
     /// </summary>
     public void SetItems( params T[] newItems )
     {
@@ -180,7 +180,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Sets the items visible in the select box.
+    /// Sets the items visible in the select box.
     /// </summary>
     public void SetItems( List< T > newItems )
     {
@@ -218,7 +218,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Returns the internal items array.
+    /// Returns the internal items array.
     /// </summary>
     public List< T > GetItems()
     {
@@ -303,8 +303,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Returns appropriate background Drawable from the style
-    ///     based on the current select box state.
+    /// Returns appropriate background Drawable from the style
+    /// based on the current select box state.
     /// </summary>
     protected IDrawable? GetBackgroundIDrawable()
     {
@@ -327,7 +327,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Returns the appropriate label font color from the style based on the current button state.
+    /// Returns the appropriate label font color from the style based on the current button state.
     /// </summary>
     protected Color GetFontColor()
     {
@@ -393,9 +393,9 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Sets the alignment of the selected item in the select box. See <see cref="GetList()" />
-    ///     and <see cref="SetAlignment(int)" /> to set the alignment in the list shown when the
-    ///     select box is open.
+    /// Sets the alignment of the selected item in the select box. See <see cref="GetList()" />
+    /// and <see cref="SetAlignment(int)" /> to set the alignment in the list shown when the
+    /// select box is open.
     /// </summary>
     /// <param name="alignment"> See <see cref="Alignment" />. </param>
     public void SetAlignment( int alignment )
@@ -404,7 +404,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Get the set of selected items, useful when multiple items are selected
+    /// Get the set of selected items, useful when multiple items are selected
     /// </summary>
     /// <returns> a Selection object containing the selected elements </returns>
     public ArraySelection< T > GetSelection()
@@ -413,8 +413,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Returns the first selected item, or null. For multiple selections
-    ///     use <see cref="GetSelection()" />.
+    /// Returns the first selected item, or null. For multiple selections
+    /// use <see cref="GetSelection()" />.
     /// </summary>
     public T? GetSelected()
     {
@@ -422,8 +422,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Sets the selection to only the passed item, if it is a possible
-    ///     choice, else selects the first item.
+    /// Sets the selection to only the passed item, if it is a possible
+    /// choice, else selects the first item.
     /// </summary>
     public void SetSelected( T item )
     {
@@ -442,8 +442,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <returns>
-    ///     The index of the first selected item. The top item has an index of 0.
-    ///     Nothing selected has an index of -1.
+    /// The index of the first selected item. The top item has an index of 0.
+    /// Nothing selected has an index of -1.
     /// </returns>
     public int GetSelectedIndex()
     {
@@ -453,7 +453,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Sets the selection to only the selected index.
+    /// Sets the selection to only the selected index.
     /// </summary>
     public void SetSelectedIndex( int index )
     {
@@ -461,7 +461,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     When true the pref width is based on the selected item.
+    /// When true the pref width is based on the selected item.
     /// </summary>
     public void SetSelectedPrefWidth( bool selectedPrefWidth )
     {
@@ -469,8 +469,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Returns the pref width of the select box if the widest item was selected,
-    ///     for use when <see cref="SetSelectedPrefWidth(bool)" /> is true.
+    /// Returns the pref width of the select box if the widest item was selected,
+    /// for use when <see cref="SetSelectedPrefWidth(bool)" /> is true.
     /// </summary>
     public float GetMaxSelectedPrefWidth()
     {
@@ -523,7 +523,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Returns the list shown when the select box is open.
+    /// Returns the list shown when the select box is open.
     /// </summary>
     public ListBox< T >? GetList()
     {
@@ -531,7 +531,7 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Disables scrolling of the list shown when the select box is open.
+    /// Disables scrolling of the list shown when the select box is open.
     /// </summary>
     public void SetScrollingDisabled( bool y )
     {
@@ -540,8 +540,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    ///     Returns the scroll pane containing the list that is shown
-    ///     when the select box is open.
+    /// Returns the scroll pane containing the list that is shown
+    /// when the select box is open.
     /// </summary>
     public ScrollPane? GetScrollPane()
     {
@@ -957,7 +957,7 @@ public class SelectBox< T > : Widget, IDisableable
     // ========================================================================
 
     /// <summary>
-    ///     The Style for a <see cref="SelectBox{T}" />.
+    /// The Style for a <see cref="SelectBox{T}" />.
     /// </summary>
     [PublicAPI]
     public class SelectBoxStyle

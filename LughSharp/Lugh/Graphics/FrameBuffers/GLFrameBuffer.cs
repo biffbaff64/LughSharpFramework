@@ -34,22 +34,22 @@ using Platform = LughSharp.Lugh.Core.Platform;
 namespace LughSharp.Lugh.Graphics.FrameBuffers;
 
 /// <summary>
-///     Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper
-///     class which should cover most FBO uses. It will automatically create a
-///     gltexture for the color attachment and a renderbuffer for the depth buffer.
-///     You can get a hold of the gltexture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture()" />.
-///     This class will only work with OpenGL ES 2.0.
-///     <para>
-///         FrameBuffers are managed. In case of an OpenGL context loss, which only
-///         happens on Android when a user switches to another application or receives
-///         an incoming call, the framebuffer will be automatically recreated.
-///     </para>
-///     <para>
-///         A FrameBuffer must be disposed if it is no longer needed
-///     </para>
+/// Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper
+/// class which should cover most FBO uses. It will automatically create a
+/// gltexture for the color attachment and a renderbuffer for the depth buffer.
+/// You can get a hold of the gltexture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture()" />.
+/// This class will only work with OpenGL ES 2.0.
+/// <para>
+///     FrameBuffers are managed. In case of an OpenGL context loss, which only
+///     happens on Android when a user switches to another application or receives
+///     an incoming call, the framebuffer will be automatically recreated.
+/// </para>
+/// <para>
+///     A FrameBuffer must be disposed if it is no longer needed
+/// </para>
 /// </summary>
 /// <typeparam name="T">
-///     Types which derive from GLTexture, such as Texture, Cubemap, TextureArray.
+/// Types which derive from GLTexture, such as Texture, Cubemap, TextureArray.
 /// </typeparam>
 [PublicAPI]
 public class GLFrameBuffer< T > : IDisposable where T : GLTexture
@@ -60,8 +60,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new GLFrameBuffer. No <see cref="GLFrameBufferBuilder{TU}" /> specifications
-    ///     are provided for construction so information will need to be provided.
+    /// Creates a new GLFrameBuffer. No <see cref="GLFrameBufferBuilder{TU}" /> specifications
+    /// are provided for construction so information will need to be provided.
     /// </summary>
     protected GLFrameBuffer()
     {
@@ -69,8 +69,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Creates a GLFrameBuffer from the specifications provided
-    ///     by bufferBuilder.
+    /// Creates a GLFrameBuffer from the specifications provided
+    /// by bufferBuilder.
     /// </summary>
     protected GLFrameBuffer( GLFrameBufferBuilder< GLFrameBuffer< GLTexture > > bufferBuilder )
     {
@@ -103,7 +103,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     // ========================================================================
 
     /// <summary>
-    ///     Releases all resources associated with the FrameBuffer.
+    /// Releases all resources associated with the FrameBuffer.
     /// </summary>
     public void Dispose()
     {
@@ -140,8 +140,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     // ========================================================================
 
     /// <summary>
-    ///     Wrapper to allow calling of virtual method <see cref="Build" />
-    ///     from constructors.
+    /// Wrapper to allow calling of virtual method <see cref="Build" />
+    /// from constructors.
     /// </summary>
     protected void BuildBuffer()
     {
@@ -149,8 +149,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Override this method in a derived class to set up the
-    ///     backing texture as you like.
+    /// Override this method in a derived class to set up the
+    /// backing texture as you like.
     /// </summary>
     protected virtual T CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )
     {
@@ -158,8 +158,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Override this method in a derived class to dispose the
-    ///     backing texture as you like.
+    /// Override this method in a derived class to dispose the
+    /// backing texture as you like.
     /// </summary>
     protected virtual void DisposeColorTexture( T colorTexture )
     {
@@ -167,8 +167,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Override this method in a derived class to attach the backing
-    ///     texture to the GL framebuffer object.
+    /// Override this method in a derived class to attach the backing
+    /// texture to the GL framebuffer object.
     /// </summary>
     protected virtual void AttachFrameBufferColorTexture( T texture )
     {
@@ -176,7 +176,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Convenience method to return the first Texture attachment present in the fbo.
+    /// Convenience method to return the first Texture attachment present in the fbo.
     /// </summary>
     public virtual T GetColorBufferTexture()
     {
@@ -241,7 +241,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Sets up depth and stencil render buffers based on the provided width and height.
+    /// Sets up depth and stencil render buffers based on the provided width and height.
     /// </summary>
     /// <param name="width">The width of the render buffers.</param>
     /// <param name="height">The height of the render buffers.</param>
@@ -292,7 +292,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Attaches the texture attachments to the framebuffer.
+    /// Attaches the texture attachments to the framebuffer.
     /// </summary>
     private unsafe void AttachTextureAttachments()
     {
@@ -376,8 +376,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Handles the case where the framebuffer is unsupported, attempting to
-    ///     resolve it by creating a packed depth-stencil buffer if supported.
+    /// Handles the case where the framebuffer is unsupported, attempting to
+    /// resolve it by creating a packed depth-stencil buffer if supported.
     /// </summary>
     /// <param name="result">The result code indicating the framebuffer status.</param>
     /// <param name="width">The width of the framebuffer.</param>
@@ -430,8 +430,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Handles the case where the framebuffer is incomplete, disposing
-    ///     resources and throwing exceptions accordingly.
+    /// Handles the case where the framebuffer is incomplete, disposing
+    /// resources and throwing exceptions accordingly.
     /// </summary>
     /// <param name="result">The result code indicating the framebuffer status.</param>
     public virtual void HandleIncompleteFrameBuffer( int result )
@@ -522,7 +522,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Makes the frame buffer current so everything gets drawn to it.
+    /// Makes the frame buffer current so everything gets drawn to it.
     /// </summary>
     protected virtual void Bind()
     {
@@ -530,8 +530,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Unbinds the framebuffer, all drawing will be performed to the
-    ///     normal framebuffer from here on.
+    /// Unbinds the framebuffer, all drawing will be performed to the
+    /// normal framebuffer from here on.
     /// </summary>
     public virtual void Unbind()
     {
@@ -539,8 +539,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Binds the frame buffer and sets the viewport accordingly,
-    ///     so everything gets drawn to it.
+    /// Binds the frame buffer and sets the viewport accordingly,
+    /// so everything gets drawn to it.
     /// </summary>
     public virtual void Begin()
     {
@@ -549,8 +549,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Sets viewport to the dimensions of framebuffer.
-    ///     Called by <see cref="Begin()" />.
+    /// Sets viewport to the dimensions of framebuffer.
+    /// Called by <see cref="Begin()" />.
     /// </summary>
     public void SetFrameBufferViewport()
     {
@@ -558,8 +558,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Unbinds the framebuffer, all drawing will be performed to the
-    ///     normal framebuffer from here on.
+    /// Unbinds the framebuffer, all drawing will be performed to the
+    /// normal framebuffer from here on.
     /// </summary>
     public virtual void End()
     {
@@ -567,8 +567,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Unbinds the framebuffer and sets viewport sizes, all drawing will be
-    ///     performed to the normal framebuffer from here on.
+    /// Unbinds the framebuffer and sets viewport sizes, all drawing will be
+    /// performed to the normal framebuffer from here on.
     /// </summary>
     /// <param name="x"> the x-axis position of the viewport in pixels </param>
     /// <param name="y"> the y-asis position of the viewport in pixels </param>
@@ -598,9 +598,9 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
-    ///     Invalidates all frame buffers. This can be used when the OpenGL context is
-    ///     lost to rebuild all managed frame buffers. This assumes that the texture
-    ///     attached to this buffer has already been rebuild! Use with care.
+    /// Invalidates all frame buffers. This can be used when the OpenGL context is
+    /// lost to rebuild all managed frame buffers. This assumes that the texture
+    /// attached to this buffer has already been rebuild! Use with care.
     /// </summary>
     public void InvalidateAllFrameBuffers( IApplication app )
     {

@@ -304,13 +304,13 @@ public partial class TextureAtlasData
     public record Page
     {
         /// <summary>
-        ///     May be null if the texture is not yet loaded.
+        /// May be null if the texture is not yet loaded.
         /// </summary>
         public Texture? Texture { get; set; }
 
         /// <summary>
-        ///     May be null if this page isn't associated with a file. In that
-        ///     case, <see cref="Texture" /> must be set.
+        /// May be null if this page isn't associated with a file. In that
+        /// case, <see cref="Texture" /> must be set.
         /// </summary>
         public FileInfo? TextureFile { get; set; }
 

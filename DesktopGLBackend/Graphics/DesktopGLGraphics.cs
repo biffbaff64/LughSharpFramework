@@ -57,8 +57,8 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new GLGraphics instance for Desktop backends, using the
-    ///     given <see cref="DesktopGLWindow" /> as the main window.
+    /// Creates a new GLGraphics instance for Desktop backends, using the
+    /// given <see cref="DesktopGLWindow" /> as the main window.
     /// </summary>
     public DesktopGLGraphics( DesktopGLWindow glWindow )
     {
@@ -83,7 +83,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         : LogicalHeight;
 
     /// <summary>
-    ///     Whether the app is full screen or not.
+    /// Whether the app is full screen or not.
     /// </summary>
     public override bool IsFullscreen
     {
@@ -105,7 +105,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <summary>
-    ///     Handles the resize event for the GLFW window.
+    /// Handles the resize event for the GLFW window.
     /// </summary>
     /// <param name="windowHandle">The handle to the GLFW window being resized.</param>
     /// <param name="width">The new width of the window after resizing.</param>
@@ -116,9 +116,9 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <summary>
-    ///     Updates the framebuffer information based on the current state of the window.
-    ///     This method queries the framebuffer size and logical window size, updating
-    ///     attributes such as backbuffer dimensions, logical dimensions, and buffer format.
+    /// Updates the framebuffer information based on the current state of the window.
+    /// This method queries the framebuffer size and logical window size, updating
+    /// attributes such as backbuffer dimensions, logical dimensions, and buffer format.
     /// </summary>
     private void UpdateFramebufferInfo()
     {
@@ -151,9 +151,9 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <summary>
-    ///     Updates the current graphics state by calculating the frame delta time,
-    ///     updating frames per second (FPS), and incrementing the frame identifier.
-    ///     This method is typically called on each render loop iteration.
+    /// Updates the current graphics state by calculating the frame delta time,
+    /// updating frames per second (FPS), and incrementing the frame identifier.
+    /// This method is typically called on each render loop iteration.
     /// </summary>
     public void Update()
     {
@@ -179,7 +179,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <summary>
-    ///     Returns whether cubemap seamless feature is supported.
+    /// Returns whether cubemap seamless feature is supported.
     /// </summary>
     public bool SupportsCubeMapSeamless()
     {
@@ -187,8 +187,8 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <summary>
-    ///     Enable or disable cubemap seamless feature. Default is true if supported.
-    ///     Should only be called if this feature is supported.
+    /// Enable or disable cubemap seamless feature. Default is true if supported.
+    /// Should only be called if this feature is supported.
     /// </summary>
     /// <param name="enable"></param>
     public void EnableCubeMapSeamless( bool enable )
@@ -319,14 +319,14 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <summary>
-    ///     Browsers that support cursor:url() and support the png format (the pixmap is
-    ///     converted to a data-url of type image/png) should also support custom cursors.
-    ///     Will set the mouse cursor image to the image represented by the Cursor. It is
-    ///     recommended to call this function in the main render thread, and maximum one
-    ///     time per frame.
+    /// Browsers that support cursor:url() and support the png format (the pixmap is
+    /// converted to a data-url of type image/png) should also support custom cursors.
+    /// Will set the mouse cursor image to the image represented by the Cursor. It is
+    /// recommended to call this function in the main render thread, and maximum one
+    /// time per frame.
     /// </summary>
     /// <param name="cursor">
-    ///     The mouse cursor as a <see cref="ICursor" />
+    /// The mouse cursor as a <see cref="ICursor" />
     /// </param>
     public override void SetCursor( ICursor cursor )
     {
@@ -336,7 +336,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <summary>
-    ///     Sets one of the predefined <see cref="ICursor.SystemCursor" />s.
+    /// Sets one of the predefined <see cref="ICursor.SystemCursor" />s.
     /// </summary>
     /// <param name="systemCursor">The system cursor to use.</param>
     public override void SetSystemCursor( ICursor.SystemCursor systemCursor )
@@ -463,7 +463,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <summary>
-    ///     Makes a backup of the current windows position and display mode.
+    /// Makes a backup of the current windows position and display mode.
     /// </summary>
     private void BackupCurrentWindow()
     {
@@ -527,13 +527,13 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Describes a Display Mode for a <see cref="GLFW.Monitor" />
+    /// Describes a Display Mode for a <see cref="GLFW.Monitor" />
     /// </summary>
     [PublicAPI]
     public class DesktopGLDisplayMode : IGraphics.DisplayMode
     {
         /// <summary>
-        ///     Creates a new Display Mode and its properties.
+        /// Creates a new Display Mode and its properties.
         /// </summary>
         /// <param name="monitor"> The target monitor. </param>
         /// <param name="width"> Monitor display width. </param>
@@ -547,7 +547,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         }
 
         /// <summary>
-        ///     The <see cref="GLFW.Monitor" /> this <see cref="IGraphics.DisplayMode" /> applies to.
+        /// The <see cref="GLFW.Monitor" /> this <see cref="IGraphics.DisplayMode" /> applies to.
         /// </summary>
         public GLFW.Monitor MonitorHandle { get; set; }
     }
@@ -556,14 +556,14 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Wrapper for a <see cref="GLFW.Monitor" /> which adds virtual X & Y, plus a name.
-    ///     Virtual positions are for multiple monitors.
+    /// Wrapper for a <see cref="GLFW.Monitor" /> which adds virtual X & Y, plus a name.
+    /// Virtual positions are for multiple monitors.
     /// </summary>
     [PublicAPI]
     public class DesktopGLMonitor( GLFW.Monitor monitor, int virtualX, int virtualY, string name )
     {
         /// <summary>
-        ///     The <see cref="GLFW.Monitor" />.
+        /// The <see cref="GLFW.Monitor" />.
         /// </summary>
         public GLFW.Monitor MonitorHandle { get; private set; } = monitor;
 

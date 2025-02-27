@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Audio.Maponus.Decoding.Decoders.LayerI;
 
 /// <summary>
-///     public class for layer I subbands in joint stereo mode.
+/// public class for layer I subbands in joint stereo mode.
 /// </summary>
 [PublicAPI]
 public class SubbandLayer1IntensityStereo : SubbandLayer1

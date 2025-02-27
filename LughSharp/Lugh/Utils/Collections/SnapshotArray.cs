@@ -27,16 +27,16 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Utils.Collections;
 
 /// <summary>
-///     An array that allows modification during iteration. Guarantees that array entries provided
-///     by begin() between indexes 0 and size at the time begin was called will not be modified
-///     until end() is called. If modification of the SnapshotArray occurs between begin/end, the
-///     backing array is copied prior to the modification, ensuring that the backing array that was
-///     returned by begin() is unaffected. To avoid allocation, an attempt is made to reuse any extra
-///     array created as a result of this copy on subsequent copies.
-///     <para>
-///         Note that SnapshotArray is not for thread safety, only for modification
-///         during iteration.
-///     </para>
+/// An array that allows modification during iteration. Guarantees that array entries provided
+/// by begin() between indexes 0 and size at the time begin was called will not be modified
+/// until end() is called. If modification of the SnapshotArray occurs between begin/end, the
+/// backing array is copied prior to the modification, ensuring that the backing array that was
+/// returned by begin() is unaffected. To avoid allocation, an attempt is made to reuse any extra
+/// array created as a result of this copy on subsequent copies.
+/// <para>
+///     Note that SnapshotArray is not for thread safety, only for modification
+///     during iteration.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class SnapshotArray< T > : Array< T >, IEnumerable< T >
@@ -48,8 +48,8 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new SnapshotArray with the specified initial capacity.
-    ///     The created array will be Ordered.
+    /// Creates a new SnapshotArray with the specified initial capacity.
+    /// The created array will be Ordered.
     /// </summary>
     /// <param name="capacity"> Initial capacity, default is 0. </param>
     public SnapshotArray( int capacity = 0 )
@@ -58,7 +58,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Creates a new SnapshotArray from the supplied <see cref="Array{T}" />
+    /// Creates a new SnapshotArray from the supplied <see cref="Array{T}" />
     /// </summary>
     public SnapshotArray( Array< T > array )
     {
@@ -73,8 +73,8 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Creates a new SnapshotArray, with <see cref="Array{T}.Ordered" /> and
-    ///     array capacity set to the supplied values.
+    /// Creates a new SnapshotArray, with <see cref="Array{T}.Ordered" /> and
+    /// array capacity set to the supplied values.
     /// </summary>
     /// <param name="ordered"> Default value is TRUE. </param>
     /// <param name="capacity"> Default value is 16. </param>
@@ -85,9 +85,9 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Creates a new SnapshotArray from the supplied <paramref name="array" />,
-    ///     copying <paramref name="count" /> elements from <paramref name="startIndex" />
-    ///     onwards. <see cref="Array{T}.Ordered" /> will be set to the supplied value.
+    /// Creates a new SnapshotArray from the supplied <paramref name="array" />,
+    /// copying <paramref name="count" /> elements from <paramref name="startIndex" />
+    /// onwards. <see cref="Array{T}.Ordered" /> will be set to the supplied value.
     /// </summary>
     /// <param name="ordered"> Whether this array is ordered or not. </param>
     /// <param name="array"> The array to copy from. </param>
@@ -103,7 +103,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Sets or Gets the element at the given index.
+    /// Sets or Gets the element at the given index.
     /// </summary>
     public T this[ int index ]
     {
@@ -124,12 +124,12 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Takes a snapshot of the current array state and then
-    ///     returns the array.
+    /// Takes a snapshot of the current array state and then
+    /// returns the array.
     /// </summary>
     /// <returns>
-    ///     Returns the backing array, which is guaranteed to not be modified
-    ///     before <see cref="End()" />
+    /// Returns the backing array, which is guaranteed to not be modified
+    /// before <see cref="End()" />
     /// </returns>
     public T[] Begin()
     {
@@ -143,8 +143,8 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Releases the guarantee that the array returned by <see cref="Begin()" />
-    ///     won't be modified.
+    /// Releases the guarantee that the array returned by <see cref="Begin()" />
+    /// won't be modified.
     /// </summary>
     public void End()
     {
@@ -196,7 +196,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Add the supplied value to the end of the array.
+    /// Add the supplied value to the end of the array.
     /// </summary>
     public override void Add( T value )
     {
@@ -211,8 +211,8 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Copy 'count' items from the supplied array to this array,
-    ///     starting from position 'start'.
+    /// Copy 'count' items from the supplied array to this array,
+    /// starting from position 'start'.
     /// </summary>
     /// <param name="array">The array of items to add.</param>
     /// <param name="start">The start index.</param>
@@ -232,8 +232,8 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Copy 'count' items from the supplied array to this array,
-    ///     starting from position 'start'.
+    /// Copy 'count' items from the supplied array to this array,
+    /// starting from position 'start'.
     /// </summary>
     /// <param name="array">The array of items to add.</param>
     /// <param name="start">The start index.</param>
@@ -255,10 +255,10 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Returns the item at the specified <paramref name="index" />.
+    /// Returns the item at the specified <paramref name="index" />.
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     Thrown if the specified index is &gt;= the array size.
+    /// Thrown if the specified index is &gt;= the array size.
     /// </exception>
     public override T GetAt( int index )
     {
@@ -271,7 +271,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Sets the array element at position index to the supplied value.
+    /// Sets the array element at position index to the supplied value.
     /// </summary>
     /// <param name="index"> The index. </param>
     /// <param name="value"> The value. </param>
@@ -288,7 +288,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Insert the supplied value into the array at position 'index'.
+    /// Insert the supplied value into the array at position 'index'.
     /// </summary>
     public override void Insert( int index, T value )
     {
@@ -323,8 +323,8 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Swap the array elements at <paramref name="firstIndex" />
-    ///     and <paramref name="secondIndex" />.
+    /// Swap the array elements at <paramref name="firstIndex" />
+    /// and <paramref name="secondIndex" />.
     /// </summary>
     /// <param name="firstIndex"> The position of element 1. </param>
     /// <param name="secondIndex"> The position of element 2. </param>
@@ -336,7 +336,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Removes the first occurance of <paramref name="value" /> from the array.
+    /// Removes the first occurance of <paramref name="value" /> from the array.
     /// </summary>
     /// <param name="value"> The value to remove. </param>
     /// <returns> TRUE if successful. </returns>
@@ -358,10 +358,10 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Removes, and returns, the element at the specified index.
-    ///     If the array is ordered, all elements above index will be moved down
-    ///     1 position. If the array is not ordered, the element at the end of
-    ///     the array will be moved into the position at index.
+    /// Removes, and returns, the element at the specified index.
+    /// If the array is ordered, all elements above index will be moved down
+    /// 1 position. If the array is not ordered, the element at the end of
+    /// the array will be moved into the position at index.
     /// </summary>
     /// <param name="index"> The index. </param>
     /// <returns> The removed element. </returns>
@@ -393,10 +393,10 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Removes a range of elements from the array.
+    /// Removes a range of elements from the array.
     /// </summary>
     /// <param name="start">
-    ///     The zero-based starting index of the range of elements to remove.
+    /// The zero-based starting index of the range of elements to remove.
     /// </param>
     /// <param name="end">The ending index of the range.</param>
     public override void RemoveRange( int start, int end )
@@ -433,7 +433,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Removes all the elements that match the items in the supplied array.
+    /// Removes all the elements that match the items in the supplied array.
     /// </summary>
     /// <param name="array"></param>
     /// <returns> TRUE if items have been removed. </returns>
@@ -464,12 +464,12 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     }
 
     /// <summary>
-    ///     Returns the index of first occurrence of value in the array,
-    ///     or -1 if no such value exists.
+    /// Returns the index of first occurrence of value in the array,
+    /// or -1 if no such value exists.
     /// </summary>
     /// <param name="value"> May be null. </param>
     /// <returns>
-    ///     An index of first occurrence of value in array or -1 if no such value exists
+    /// An index of first occurrence of value in array or -1 if no such value exists
     /// </returns>
     public override int IndexOf( T? value )
     {

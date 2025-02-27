@@ -28,9 +28,9 @@ namespace LughSharp.Lugh.Maths;
 public class Plane
 {
     /// <summary>
-    ///     Enum specifying on which side a point lies respective to the plane and
-    ///     it's normal. <see cref="PlaneSide.Front" /> is the side to which the
-    ///     normal points.
+    /// Enum specifying on which side a point lies respective to the plane and
+    /// it's normal. <see cref="PlaneSide.Front" /> is the side to which the
+    /// normal points.
     /// </summary>
     public enum PlaneSide
     {
@@ -40,14 +40,14 @@ public class Plane
     }
 
     /// <summary>
-    ///     Constructs a new plane with all values set to 0
+    /// Constructs a new plane with all values set to 0
     /// </summary>
     public Plane()
     {
     }
 
     /// <summary>
-    ///     Constructs a new plane based on the normal and distance to the origin.
+    /// Constructs a new plane based on the normal and distance to the origin.
     /// </summary>
     /// <param name="normal">The plane normal</param>
     /// <param name="dto">The distance to the origin</param>
@@ -58,7 +58,7 @@ public class Plane
     }
 
     /// <summary>
-    ///     Constructs a new plane based on the normal and a point on the plane.
+    /// Constructs a new plane based on the normal and a point on the plane.
     /// </summary>
     /// <param name="normal"> The normal </param>
     /// <param name="point"> The point on the plane  </param>
@@ -69,9 +69,9 @@ public class Plane
     }
 
     /// <summary>
-    ///     Constructs a new plane out of the three given points that are considered to
-    ///     be on the plane. The normal is calculated via a cross product between
-    ///     ( point1 - point2 ) x ( point2 - point3 )
+    /// Constructs a new plane out of the three given points that are considered to
+    /// be on the plane. The normal is calculated via a cross product between
+    /// ( point1 - point2 ) x ( point2 - point3 )
     /// </summary>
     /// <param name="point1"> The first point </param>
     /// <param name="point2"> The second point </param>
@@ -90,9 +90,9 @@ public class Plane
     public float DistanceToOrigin { get; private set; } = 0;
 
     /// <summary>
-    ///     Sets the plane normal and distance to the origin based on the three given
-    ///     points which are considered to be on the plane. The normal is calculated
-    ///     via a cross product between ( point1 - point2 ) x ( point2 - point3 )
+    /// Sets the plane normal and distance to the origin based on the three given
+    /// points which are considered to be on the plane. The normal is calculated
+    /// via a cross product between ( point1 - point2 ) x ( point2 - point3 )
     /// </summary>
     /// <param name="point1"> </param>
     /// <param name="point2"> </param>
@@ -108,7 +108,7 @@ public class Plane
     }
 
     /// <summary>
-    ///     Sets the plane normal and distance
+    /// Sets the plane normal and distance
     /// </summary>
     /// <param name="nx"> normal x-component </param>
     /// <param name="ny"> normal y-component </param>
@@ -121,7 +121,7 @@ public class Plane
     }
 
     /// <summary>
-    ///     Calculates the shortest signed distance between the plane and the given point.
+    /// Calculates the shortest signed distance between the plane and the given point.
     /// </summary>
     /// <param name="point">The point</param>
     /// <returns>the shortest signed distance between the plane and the point</returns>
@@ -131,8 +131,8 @@ public class Plane
     }
 
     /// <summary>
-    ///     Returns on which side the given point lies relative to the plane and its
-    ///     normal. PlaneSide.Front refers to the side the plane normal points to.
+    /// Returns on which side the given point lies relative to the plane and its
+    /// normal. PlaneSide.Front refers to the side the plane normal points to.
     /// </summary>
     /// <param name="point"> The point </param>
     /// <returns> The side the point lies relative to the plane  </returns>
@@ -149,8 +149,8 @@ public class Plane
     }
 
     /// <summary>
-    ///     Returns on which side the given point lies relative to the plane and its
-    ///     normal. PlaneSide.Front refers to the side the plane normal points to.
+    /// Returns on which side the given point lies relative to the plane and its
+    /// normal. PlaneSide.Front refers to the side the plane normal points to.
     /// </summary>
     /// <param name="x"> </param>
     /// <param name="y"> </param>
@@ -169,10 +169,10 @@ public class Plane
     }
 
     /// <summary>
-    ///     Returns whether the plane is facing the direction vector. Think of the
-    ///     direction vector as the direction a camera looks in. This method will
-    ///     return true if the front side of the plane determined by its normal
-    ///     faces the camera.
+    /// Returns whether the plane is facing the direction vector. Think of the
+    /// direction vector as the direction a camera looks in. This method will
+    /// return true if the front side of the plane determined by its normal
+    /// faces the camera.
     /// </summary>
     /// <param name="direction"> the direction </param>
     /// <returns> whether the plane is front facing  </returns>
@@ -182,7 +182,7 @@ public class Plane
     }
 
     /// <summary>
-    ///     Sets the plane to the given point and normal.
+    /// Sets the plane to the given point and normal.
     /// </summary>
     /// <param name="point">the point on the plane</param>
     /// <param name="norm">the normal of the plane</param>
@@ -207,7 +207,7 @@ public class Plane
     }
 
     /// <summary>
-    ///     Sets this plane from the given plane
+    /// Sets this plane from the given plane
     /// </summary>
     /// <param name="plane"> the plane  </param>
     public void Set( Plane plane )

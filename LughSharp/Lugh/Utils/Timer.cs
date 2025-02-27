@@ -31,7 +31,7 @@ using Monitor = System.Threading.Monitor;
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-///     Executes tasks in the future on the main loop thread.
+/// Executes tasks in the future on the main loop thread.
 /// </summary>
 [PublicAPI]
 public class Timer
@@ -49,8 +49,8 @@ public class Timer
     }
 
     /// <summary>
-    ///     Timer instance singleton for general application wide usage.
-    ///     Static methods on <see cref="Timer" /> make convenient use of this instance.
+    /// Timer instance singleton for general application wide usage.
+    /// Static methods on <see cref="Timer" /> make convenient use of this instance.
     /// </summary>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
@@ -84,8 +84,8 @@ public class Timer
     }
 
     /// <summary>
-    ///     Schedules a task to occur once as soon as possible, but not sooner
-    ///     than the start of the next frame.
+    /// Schedules a task to occur once as soon as possible, but not sooner
+    /// than the start of the next frame.
     /// </summary>
     public Task PostTask( Task task )
     {
@@ -93,7 +93,7 @@ public class Timer
     }
 
     /// <summary>
-    ///     Schedules a task to occur once after the specified delay.
+    /// Schedules a task to occur once after the specified delay.
     /// </summary>
     public Task ScheduleTask( Task task, float delaySeconds )
     {
@@ -101,8 +101,8 @@ public class Timer
     }
 
     /// <summary>
-    ///     Schedules a task to occur once after the specified delay and then a
-    ///     number of additional times at the specified interval.
+    /// Schedules a task to occur once after the specified delay and then a
+    /// number of additional times at the specified interval.
     /// </summary>
     /// <param name="task"></param>
     /// <param name="delaySeconds"></param>
@@ -146,7 +146,7 @@ public class Timer
     }
 
     /// <summary>
-    ///     Starts the timer if it is not currently running.
+    /// Starts the timer if it is not currently running.
     /// </summary>
     public void Start()
     {
@@ -164,8 +164,8 @@ public class Timer
     }
 
     /// <summary>
-    ///     Stops the timer, tasks will not be executed and time that passes
-    ///     will not be applied to the task delays.
+    /// Stops the timer, tasks will not be executed and time that passes
+    /// will not be applied to the task delays.
     /// </summary>
     public void Stop()
     {
@@ -176,7 +176,7 @@ public class Timer
     }
 
     /// <summary>
-    ///     Cancels all tasks.
+    /// Cancels all tasks.
     /// </summary>
     public void Clear()
     {
@@ -198,9 +198,9 @@ public class Timer
     }
 
     /// <summary>
-    ///     Returns true if the timer has no tasks in the queue. Note that this can change
-    ///     at any time. Synchronize on the timer instance to prevent tasks being added,
-    ///     removed, or updated.
+    /// Returns true if the timer has no tasks in the queue. Note that this can change
+    /// at any time. Synchronize on the timer instance to prevent tasks being added,
+    /// removed, or updated.
     /// </summary>
     /// <returns></returns>
     public bool IsEmpty()
@@ -261,7 +261,7 @@ public class Timer
     }
 
     /// <summary>
-    ///     Adds the specified delay to all tasks.
+    /// Adds the specified delay to all tasks.
     /// </summary>
     /// <param name="delayMillis"></param>
     protected virtual void Delay( long delayMillis )
@@ -281,7 +281,7 @@ public class Timer
     }
 
     /// <summary>
-    ///     Schedules a <see cref="Task" /> on <see cref="Instance" />
+    /// Schedules a <see cref="Task" /> on <see cref="Instance" />
     /// </summary>
     public static Task Post( Task task )
     {
@@ -289,7 +289,7 @@ public class Timer
     }
 
     /// <summary>
-    ///     Schedules a <see cref="Task" /> on <see cref="Instance" />
+    /// Schedules a <see cref="Task" /> on <see cref="Instance" />
     /// </summary>
     public static Task Schedule( Task task, float delaySeconds )
     {
@@ -297,7 +297,7 @@ public class Timer
     }
 
     /// <summary>
-    ///     Schedules a <see cref="Task" /> on <see cref="Instance" />
+    /// Schedules a <see cref="Task" /> on <see cref="Instance" />
     /// </summary>
     public static Task Schedule( Task task, float delaySeconds, float intervalSeconds )
     {
@@ -305,7 +305,7 @@ public class Timer
     }
 
     /// <summary>
-    ///     Schedules a <see cref="Task" /> on <see cref="Instance" />
+    /// Schedules a <see cref="Task" /> on <see cref="Instance" />
     /// </summary>
     public static Task Schedule( Task task, float delaySeconds, float intervalSeconds, int repeatCount )
     {
@@ -317,7 +317,7 @@ public class Timer
     // ========================================================================
 
     /// <summary>
-    ///     A <see cref="IRunnable" /> that can be scheduled on a <see cref="Utils.Timer" />
+    /// A <see cref="IRunnable" /> that can be scheduled on a <see cref="Utils.Timer" />
     /// </summary>
     [PublicAPI]
     public abstract class Task
@@ -339,15 +339,15 @@ public class Timer
         }
 
         /// <summary>
-        ///     If this is the last time the task will be ran or the task is first
-        ///     cancelled, it may be scheduled again in this method.
+        /// If this is the last time the task will be ran or the task is first
+        /// cancelled, it may be scheduled again in this method.
         /// </summary>
         public abstract void Run();
 
         /// <summary>
-        ///     Cancels the task.
-        ///     It will not be executed until it is scheduled again.
-        ///     This method can be called at any time.
+        /// Cancels the task.
+        /// It will not be executed until it is scheduled again.
+        /// This method can be called at any time.
         /// </summary>
         public virtual void Cancel()
         {
@@ -375,21 +375,21 @@ public class Timer
         }
 
         /// <summary>
-        ///     Returns true if this task is scheduled to be executed in the future by a timer.
-        ///     The execution time may be reached at any time after calling this method,
-        ///     which may change the scheduled state.
-        ///     <para>
-        ///         To prevent the scheduled state from changing, synchronize on this task object, eg:
-        ///         <code>
-        ///         lock( task )
+        /// Returns true if this task is scheduled to be executed in the future by a timer.
+        /// The execution time may be reached at any time after calling this method,
+        /// which may change the scheduled state.
+        /// <para>
+        ///     To prevent the scheduled state from changing, synchronize on this task object, eg:
+        ///     <code>
+        ///     lock( task )
+        ///     {
+        ///         if ( !task.IsScheduled() )
         ///         {
-        ///             if ( !task.IsScheduled() )
-        ///             {
-        ///                 . . . . 
-        ///             }
+        ///             . . . . 
         ///         }
-        ///         </code>
-        ///     </para>
+        ///     }
+        ///     </code>
+        /// </para>
         /// </summary>
         /// <returns></returns>
         public virtual bool IsScheduled()
@@ -398,7 +398,7 @@ public class Timer
         }
 
         /// <summary>
-        ///     Returns the time in milliseconds when this task will be executed next.
+        /// Returns the time in milliseconds when this task will be executed next.
         /// </summary>
         public virtual long GetExecuteTimeMillis()
         {

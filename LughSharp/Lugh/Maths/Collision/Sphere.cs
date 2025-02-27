@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Maths.Collision;
 
 /// <summary>
-///     Encapsulates a 3D sphere with a center and a radius
+/// Encapsulates a 3D sphere with a center and a radius
 /// </summary>
 [PublicAPI]
 public class Sphere
@@ -37,7 +37,7 @@ public class Sphere
     // ========================================================================
 
     /// <summary>
-    ///     Constructs a sphere with the given center and radius
+    /// Constructs a sphere with the given center and radius
     /// </summary>
     /// <param name="center"> The center </param>
     /// <param name="radius"> The radius  </param>
@@ -91,7 +91,7 @@ public class Sphere
     }
 
     /// <summary>
-    ///     Returns the volume of this sphere.
+    /// Returns the volume of this sphere.
     /// </summary>
     public virtual float Volume()
     {
@@ -99,7 +99,7 @@ public class Sphere
     }
 
     /// <summary>
-    ///     Returns the surface area of this sphere.
+    /// Returns the surface area of this sphere.
     /// </summary>
     public virtual float SurfaceArea()
     {

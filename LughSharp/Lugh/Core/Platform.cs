@@ -29,84 +29,84 @@ using Environment = System.Environment;
 namespace LughSharp.Lugh.Core;
 
 /// <summary>
-///     Platform specific flags and methods.
+/// Platform specific flags and methods.
 /// </summary>
 [PublicAPI]
 public static class Platform
 {
     /// <summary>
-    ///     Target application backends.
+    /// Target application backends.
     /// </summary>
     [PublicAPI]
     public enum ApplicationType : int
     {
         /// <summary>
-        ///     LughSharp Windows32 Platform
+        /// LughSharp Windows32 Platform
         /// </summary>
         Windows,
 
         /// <summary>
-        ///     LughSharp Windows Cross Platform Opengl Platform
+        /// LughSharp Windows Cross Platform Opengl Platform
         /// </summary>
         WindowsGL,
 
         /// <summary>
-        ///     LughSharp Windows Cross Platform Opengles Platform
+        /// LughSharp Windows Cross Platform Opengles Platform
         /// </summary>
         WindowsGles,
 
         /// <summary>
-        ///     LughSharp Windows Vulkan Platform
+        /// LughSharp Windows Vulkan Platform
         /// </summary>
         WindowsVK,
 
         /// <summary>
-        ///     LughSharp Windows Game Development Kit Platform
+        /// LughSharp Windows Game Development Kit Platform
         /// </summary>
         WindowsGdk,
 
         /// <summary>
-        ///     LughSharp Windows32 Platform
+        /// LughSharp Windows32 Platform
         /// </summary>
         WebGL,
 
         /// <summary>
-        ///     LughSharp XBox One Platform
+        /// LughSharp XBox One Platform
         /// </summary>
         XBoxOne,
 
         /// <summary>
-        ///     LughSharp XBox Series Platform
+        /// LughSharp XBox Series Platform
         /// </summary>
         XBoxSeries,
 
         /// <summary>
-        ///     LughSharp Nintendo Switch Platform
+        /// LughSharp Nintendo Switch Platform
         /// </summary>
         NintendoSwitch,
 
         /// <summary>
-        ///     LughSharp PlayStation 4 Platform
+        /// LughSharp PlayStation 4 Platform
         /// </summary>
         PlayStation4,
 
         /// <summary>
-        ///     LughSharp PlayStation 5 Platform
+        /// LughSharp PlayStation 5 Platform
         /// </summary>
         PlayStation5,
 
         /// <summary>
-        ///     LughSharp Android Platform
+        /// LughSharp Android Platform
         /// </summary>
         Android,
 
         /// <summary>
-        ///     LughSharp Apple iOS Platform
+        /// LughSharp Apple iOS Platform
         /// </summary>
         IOS,
 
         /// <summary>
-        ///     LughSharp Mac OS Platform
+        /// LughSharp Mac OS Platform
         /// </summary>
         MacOS,
 
@@ -114,7 +114,7 @@ public static class Platform
     }
 
     /// <summary>
-    ///     Application type family groups
+    /// Application type family groups
     /// </summary>
     public enum Family : int
     {
@@ -146,8 +146,8 @@ public static class Platform
     // ========================================================================
 
     /// <summary>
-    ///     The target platform for the app.
-    ///     Must be one of the enum <see cref="ApplicationType" />
+    /// The target platform for the app.
+    /// Must be one of the enum <see cref="ApplicationType" />
     /// </summary>
     /// <exception cref="GdxRuntimeException"></exception>
     public static ApplicationType TargetPlatform
@@ -178,8 +178,8 @@ public static class Platform
     }
 
     /// <summary>
-    ///     The target family group (mobile, console, desktop etc).
-    ///     Must be one of the enum <see cref="Family" />.
+    /// The target family group (mobile, console, desktop etc).
+    /// Must be one of the enum <see cref="Family" />.
     /// </summary>
     /// <exception cref="GdxRuntimeException"></exception>
     public static Family FamilyGroup
@@ -200,7 +200,7 @@ public static class Platform
     }
 
     /// <summary>
-    ///     Returns TRUE if the OS architecture is ARM based.
+    /// Returns TRUE if the OS architecture is ARM based.
     /// </summary>
     public static bool IsArmArchitecture()
     {
@@ -213,7 +213,7 @@ public static class Platform
     }
 
     /// <summary>
-    ///     Returns a string representation of a new GUID structure.
+    /// Returns a string representation of a new GUID structure.
     /// </summary>
     public static string RandomUUID()
     {

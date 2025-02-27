@@ -73,7 +73,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     // ========================================================================
 
     /// <summary>
-    ///     Loads the map data, given the XML root element.
+    /// Loads the map data, given the XML root element.
     /// </summary>
     /// <param name="tmxFile">The Filehandle of the tmx file </param>
     /// <param name="parameter"></param>
@@ -428,12 +428,12 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     }
 
     /// <summary>
-    ///     From the official Tiled website:
-    ///     "Image layers provide a way to quickly include a single image as foreground
-    ///     or background of your map. They currently have limited functionality and you
-    ///     may consider adding the image as a Tileset instead and place it as a Tile
-    ///     Object. This way, you gain the ability to freely scale and rotate the image."
-    ///     See https://doc.mapeditor.org/en/stable/manual/layers/
+    /// From the official Tiled website:
+    /// "Image layers provide a way to quickly include a single image as foreground
+    /// or background of your map. They currently have limited functionality and you
+    /// may consider adding the image as a Tileset instead and place it as a Tile
+    /// Object. This way, you gain the ability to freely scale and rotate the image."
+    /// See https://doc.mapeditor.org/en/stable/manual/layers/
     /// </summary>
     /// <param name="map"> The parent <see cref="TiledMap" />. </param>
     /// <param name="parentLayers"> The actual layer group belonging to the map. </param>
@@ -962,14 +962,14 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     }
 
     /// <summary>
-    ///     Loads a Tileset as described in <paramref name="tilesetNode" />.
-    ///     The Node is laid ouit as follows:-
-    ///     <code>
+    /// Loads a Tileset as described in <paramref name="tilesetNode" />.
+    /// The Node is laid ouit as follows:-
+    /// <code>
     /// &lt;tileset firstgid="x" source="filename.tsx"/&gt;
     /// </code>
-    ///     where 'x' is the id of the first tile in the tileset.
-    ///     The width and height dimensions of the image used for the tiles are held in the TSX file, as are
-    ///     the tile width/height, number of columns in the tile image, and total tile count.
+    /// where 'x' is the id of the first tile in the tileset.
+    /// The width and height dimensions of the image used for the tiles are held in the TSX file, as are
+    /// the tile width/height, number of columns in the tile image, and total tile count.
     /// </summary>
     /// <param name="tilesetNode"> The node referencing the TSX tileset file. </param>
     /// <param name="tmxFile"> The current TMX file being processed. </param>
@@ -1269,7 +1269,7 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
     }
 
     /// <summary>
-    ///     Add a standard, non-animating, static tile to the map.
+    /// Add a standard, non-animating, static tile to the map.
     /// </summary>
     /// <param name="tileSet"></param>
     /// <param name="textureRegion"> The tile image </param>
@@ -1310,14 +1310,14 @@ public abstract class BaseTmxMapLoader< TP >( IFileHandleResolver resolver )
         public Texture.TextureFilter TextureMagFilter { get; set; } = Texture.TextureFilter.Nearest;
 
         /// <summary>
-        ///     Whether to convert the objects' pixel position and size to the equivalent in tile space.
+        /// Whether to convert the objects' pixel position and size to the equivalent in tile space.
         /// </summary>
         public bool ConvertObjectToTileSpace { get; set; } = false;
 
         /// <summary>
-        ///     Whether to flip all Y coordinates so that Y positive is up. All LibGDX renderers
-        ///     require flipped Y coordinates, and thus flipY set to true. This parameter is included
-        ///     for non-rendering related purposes of TMX files, or custom renderers.
+        /// Whether to flip all Y coordinates so that Y positive is up. All LibGDX renderers
+        /// require flipped Y coordinates, and thus flipY set to true. This parameter is included
+        /// for non-rendering related purposes of TMX files, or custom renderers.
         /// </summary>
         public bool FlipY { get; set; } = true;
     }

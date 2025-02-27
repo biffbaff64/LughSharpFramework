@@ -27,14 +27,14 @@ using LughSharp.Lugh.Graphics.GLUtils;
 namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
-///     Factory class for creating instances of ITextureData based on file types.
-///     Provides static methods to instantiate the right implementation (Pixmap, ETC1, KTX).
+/// Factory class for creating instances of ITextureData based on file types.
+/// Provides static methods to instantiate the right implementation (Pixmap, ETC1, KTX).
 /// </summary>
 [PublicAPI]
 public static class TextureDataFactory
 {
     /// <summary>
-    ///     Loads texture data from the specified file with default format and mipmaps settings.
+    /// Loads texture data from the specified file with default format and mipmaps settings.
     /// </summary>
     /// <param name="file">The file to load texture data from.</param>
     /// <param name="useMipMaps">Specifies whether to use mipmaps.</param>
@@ -46,7 +46,7 @@ public static class TextureDataFactory
     }
 
     /// <summary>
-    ///     Loads texture data from the specified file with the given format and mipmaps settings.
+    /// Loads texture data from the specified file with the given format and mipmaps settings.
     /// </summary>
     /// <param name="file">The file to load texture data from.</param>
     /// <param name="format">The format of the texture data.</param>

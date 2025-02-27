@@ -29,20 +29,20 @@ using LughSharp.Lugh.Graphics.Images;
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
-///     <see cref="AssetLoader" /> for <see cref="Cubemap" /> instances. The pixel data
-///     is loaded asynchronously. The texture is then created on the rendering thread,
-///     synchronously.
-///     <para>
-///         Passing a <see cref="CubemapParameter" /> to <see cref="AssetManager.AddToLoadqueue" />"
-///         allows one to specify parameters as can be passed to the various Cubemap
-///         constructors, e.g. filtering and so on.
-///     </para>
+/// <see cref="AssetLoader" /> for <see cref="Cubemap" /> instances. The pixel data
+/// is loaded asynchronously. The texture is then created on the rendering thread,
+/// synchronously.
+/// <para>
+///     Passing a <see cref="CubemapParameter" /> to <see cref="AssetManager.AddToLoadqueue" />"
+///     allows one to specify parameters as can be passed to the various Cubemap
+///     constructors, e.g. filtering and so on.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class CubemapLoader : AsynchronousAssetLoader
 {
     /// <summary>
-    ///     Information about the cubemap being loaded.
+    /// Information about the cubemap being loaded.
     /// </summary>
     private CubemapLoaderInfo _loaderInfo = new()
     {
@@ -52,15 +52,15 @@ public class CubemapLoader : AsynchronousAssetLoader
     };
 
     /// <summary>
-    ///     Creates a new CubmapLoader using the supplied resolver.
+    /// Creates a new CubmapLoader using the supplied resolver.
     /// </summary>
     public CubemapLoader( IFileHandleResolver resolver ) : base( resolver )
     {
     }
 
     /// <summary>
-    ///     Returns the assets this asset requires to be loaded first.
-    ///     This method may be called on a thread other than the GL thread.
+    /// Returns the assets this asset requires to be loaded first.
+    /// This method may be called on a thread other than the GL thread.
     /// </summary>
     /// <param name="fileName">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>
@@ -80,8 +80,8 @@ public class CubemapLoader : AsynchronousAssetLoader
     }
 
     /// <summary>
-    ///     Loads the non-OpenGL part of the asset and injects any dependencies of
-    ///     the asset into the AssetManager.
+    /// Loads the non-OpenGL part of the asset and injects any dependencies of
+    /// the asset into the AssetManager.
     /// </summary>
     /// <param name="manager">The AssetManager to use.</param>
     /// <param name="file">The assets FileInfo object.</param>
@@ -112,7 +112,7 @@ public class CubemapLoader : AsynchronousAssetLoader
     // ========================================================================
 
     /// <summary>
-    ///     Contains information about the Cubemap being loaded.
+    /// Contains information about the Cubemap being loaded.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]
@@ -129,13 +129,13 @@ public class CubemapLoader : AsynchronousAssetLoader
     public class CubemapParameter : AssetLoaderParameters
     {
         /// <summary>
-        ///     CubemapData for textures created on the fly, optional.
-        ///     When set, all format and genMipMaps are ignored
+        /// CubemapData for textures created on the fly, optional.
+        /// When set, all format and genMipMaps are ignored
         /// </summary>
         public ICubemapData? CubemapData = null;
 
         /// <summary>
-        ///     the format of the final Texture. Uses the source images format if null
+        /// the format of the final Texture. Uses the source images format if null
         /// </summary>
         public PixelType.Format? Format = null;
 
@@ -145,7 +145,7 @@ public class CubemapLoader : AsynchronousAssetLoader
         public Texture.TextureWrap   WrapV     = Texture.TextureWrap.ClampToEdge;
 
         /// <summary>
-        ///     The texture to put the TextureData in, optional.
+        /// The texture to put the TextureData in, optional.
         /// </summary>
         public Cubemap? Cubemap { get; set; } = null;
     }

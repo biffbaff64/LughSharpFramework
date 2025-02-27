@@ -43,8 +43,8 @@ public class PixmapTextureData( Pixmap pixmap, PixelType.Format? format, bool us
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
 
     /// <returns>
-    ///     whether the caller of <see cref="ITextureData.ConsumePixmap" /> should dispose the
-    ///     Pixmap returned by <see cref="ITextureData.ConsumePixmap" />
+    /// whether the caller of <see cref="ITextureData.ConsumePixmap" /> should dispose the
+    /// Pixmap returned by <see cref="ITextureData.ConsumePixmap" />
     /// </returns>
     bool ITextureData.ShouldDisposePixmap()
     {

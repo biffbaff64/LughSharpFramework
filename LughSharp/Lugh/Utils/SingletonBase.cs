@@ -25,18 +25,18 @@
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-///     A Singleton pattern.
+/// A Singleton pattern.
 /// </summary>
 /// <typeparam name="T"> The Type of the implementing class. </typeparam>
 /// <example>
-///     <code>
+/// <code>
 /// public class AClass : SingletonBase&lt; AClass &gt;
 /// {
 /// }
 /// 
 /// then...
 /// 
-///     AClass.Instance.MethodCall();
+/// AClass.Instance.MethodCall();
 /// </code>
 /// </example>
 [PublicAPI]

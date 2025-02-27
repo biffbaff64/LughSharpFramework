@@ -30,18 +30,18 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.FrameBuffers;
 
 /// <summary>
-///     Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper class which should
-///     cover most FBO uses. It will automatically create a texture for the color attachment and a
-///     renderbuffer for the depth buffer.
-///     You can get a hold of the texture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture" />.
-///     <para>
-///         FrameBuffers are managed. In case of an OpenGL context loss, which only happens on Android
-///         when a user switches to another application or receives an incoming call, the framebuffer
-///         will be automatically recreated.
-///     </para>
-///     <para>
-///         A FrameBuffer must be disposed if it is no longer needed.
-///     </para>
+/// Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper class which should
+/// cover most FBO uses. It will automatically create a texture for the color attachment and a
+/// renderbuffer for the depth buffer.
+/// You can get a hold of the texture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture" />.
+/// <para>
+///     FrameBuffers are managed. In case of an OpenGL context loss, which only happens on Android
+///     when a user switches to another application or receives an incoming call, the framebuffer
+///     will be automatically recreated.
+/// </para>
+/// <para>
+///     A FrameBuffer must be disposed if it is no longer needed.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class FrameBuffer : GLFrameBuffer< Texture >
@@ -51,7 +51,7 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     }
 
     /// <summary>
-    ///     Creates a GLFrameBuffer from the specifications provided by bufferBuilder
+    /// Creates a GLFrameBuffer from the specifications provided by bufferBuilder
     /// </summary>
     /// <param name="bufferBuilder"></param>
     public FrameBuffer( GLFrameBufferBuilder< GLFrameBuffer< GLTexture > > bufferBuilder )
@@ -60,12 +60,12 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     }
 
     /// <summary>
-    ///     Creates a new FrameBuffer having the given dimensions and potentially a
-    ///     depth and a stencil buffer attached.
+    /// Creates a new FrameBuffer having the given dimensions and potentially a
+    /// depth and a stencil buffer attached.
     /// </summary>
     /// <param name="format">
-    ///     the format of the color buffer; according to the OpenGL ES 2.0 spec,
-    ///     only RGB565, RGBA4444 and RGB5_A1 are color-renderable.
+    /// the format of the color buffer; according to the OpenGL ES 2.0 spec,
+    /// only RGB565, RGBA4444 and RGB5_A1 are color-renderable.
     /// </param>
     /// <param name="width"> the width of the framebuffer in pixels </param>
     /// <param name="height"> the height of the framebuffer in pixels </param>
@@ -111,8 +111,8 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     }
 
     /// <summary>
-    ///     Override this method in a derived class to dispose the
-    ///     backing texture as you like.
+    /// Override this method in a derived class to dispose the
+    /// backing texture as you like.
     /// </summary>
     protected override void DisposeColorTexture( Texture colorTexture )
     {
@@ -120,8 +120,8 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     }
 
     /// <summary>
-    ///     Override this method in a derived class to attach the backing
-    ///     texture to the GL framebuffer object.
+    /// Override this method in a derived class to attach the backing
+    /// texture to the GL framebuffer object.
     /// </summary>
     protected override void AttachFrameBufferColorTexture( Texture texture )
     {

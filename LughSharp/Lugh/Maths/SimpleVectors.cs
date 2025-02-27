@@ -25,8 +25,8 @@
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-///     A simple vector class representing an X and Y,
-///     for use when that is all that is needed.
+/// A simple vector class representing an X and Y,
+/// for use when that is all that is needed.
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
@@ -37,8 +37,8 @@ public struct Vec2< T >
 }
 
 /// <summary>
-///     A simple vector class representing an X, Y and Z,
-///     for use when that is all that is needed.
+/// A simple vector class representing an X, Y and Z,
+/// for use when that is all that is needed.
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]

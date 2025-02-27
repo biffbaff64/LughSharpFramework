@@ -27,7 +27,7 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics.Cameras;
 
 /// <summary>
-///     A Camera with Perspective Projection.
+/// A Camera with Perspective Projection.
 /// </summary>
 [PublicAPI]
 public class PerspectiveCamera : Camera
@@ -44,12 +44,12 @@ public class PerspectiveCamera : Camera
     }
 
     /// <summary>
-    ///     Constructs a new <see cref="PerspectiveCamera" /> with the given field
-    ///     of view and viewport size. The aspect ratio is derived from the viewport size.
+    /// Constructs a new <see cref="PerspectiveCamera" /> with the given field
+    /// of view and viewport size. The aspect ratio is derived from the viewport size.
     /// </summary>
     /// <param name="fieldOfViewY">
-    ///     The field of view of the height, in degrees. The field of view for the
-    ///     width will be calculated according to the aspect ratio.
+    /// The field of view of the height, in degrees. The field of view for the
+    /// width will be calculated according to the aspect ratio.
     /// </param>
     /// <param name="viewportWidth">Viewport width in pixels.</param>
     /// <param name="viewportHeight">Viewport height in pixels.</param>
@@ -62,8 +62,8 @@ public class PerspectiveCamera : Camera
     }
 
     /// <summary>
-    ///     Updates the camera.
-    ///     Also updates the frustrum if <paramref name="updateFrustrum" /> is true.
+    /// Updates the camera.
+    /// Also updates the frustrum if <paramref name="updateFrustrum" /> is true.
     /// </summary>
     public override void Update( bool updateFrustrum = true )
     {

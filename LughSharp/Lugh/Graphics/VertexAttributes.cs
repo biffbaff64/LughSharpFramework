@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Graphics;
 public class VertexAttributes
 {
     /// <summary>
-    ///     Enumerates the various types of vertex attribute usage in a graphics application.
+    /// Enumerates the various types of vertex attribute usage in a graphics application.
     /// </summary>
     [PublicAPI]
     [Flags]
@@ -46,12 +46,12 @@ public class VertexAttributes
     }
 
     /// <summary>
-    ///     the attributes in the order they were specified
+    /// the attributes in the order they were specified
     /// </summary>
     private readonly VertexAttribute[] _attributes;
 
     /// <summary>
-    ///     cache of the value calculated by <see cref="Mask" />.
+    /// cache of the value calculated by <see cref="Mask" />.
     /// </summary>
     private long _mask = -1;
 
@@ -59,7 +59,7 @@ public class VertexAttributes
     // ========================================================================
 
     /// <summary>
-    ///     Constructor, sets the vertex attributes in a specific order.
+    /// Constructor, sets the vertex attributes in a specific order.
     /// </summary>
     public VertexAttributes( params VertexAttribute[] attributes )
     {
@@ -82,18 +82,18 @@ public class VertexAttributes
     // ========================================================================
 
     /// <summary>
-    ///     the size of a single vertex in bytes
+    /// the size of a single vertex in bytes
     /// </summary>
     public int VertexSize { get; private set; }
 
     /// <summary>
-    ///     Gets the number of attributes.
+    /// Gets the number of attributes.
     /// </summary>
     public int Size => _attributes.Length;
 
     /// <summary>
-    ///     Calculates a mask based on the contained <see cref="VertexAttribute" />
-    ///     instances. The mask is a bit-wise or of each attributes <see cref="VertexAttribute.Usage" />.
+    /// Calculates a mask based on the contained <see cref="VertexAttribute" />
+    /// instances. The mask is a bit-wise or of each attributes <see cref="VertexAttribute.Usage" />.
     /// </summary>
     /// <returns> the mask  </returns>
     protected long Mask
@@ -117,16 +117,16 @@ public class VertexAttributes
     }
 
     /// <summary>
-    ///     Calculates the mask based on <see cref="Mask" /> and packs
-    ///     the attributes count into the last 32 bits.
+    /// Calculates the mask based on <see cref="Mask" /> and packs
+    /// the attributes count into the last 32 bits.
     /// </summary>
     /// <returns>
-    ///     the mask with attributes count packed into the last 32 bits.
+    /// the mask with attributes count packed into the last 32 bits.
     /// </returns>
     public virtual long MaskWithSizePacked => Mask | ( ( long )_attributes.Length << 32 );
 
     /// <summary>
-    ///     Returns the offset for the first VertexAttribute with the specified usage.
+    /// Returns the offset for the first VertexAttribute with the specified usage.
     /// </summary>
     /// <param name="usage"> The usage of the VertexAttribute.</param>
     /// <param name="defaultIfNotFound"></param>
@@ -143,7 +143,7 @@ public class VertexAttributes
     }
 
     /// <summary>
-    ///     Returns the offset for the first VertexAttribute with the specified usage.
+    /// Returns the offset for the first VertexAttribute with the specified usage.
     /// </summary>
     /// <param name="usage"> The usage of the VertexAttribute.  </param>
     public int GetOffset( int usage )
@@ -152,7 +152,7 @@ public class VertexAttributes
     }
 
     /// <summary>
-    ///     Returns the first VertexAttribute for the given usage.
+    /// Returns the first VertexAttribute for the given usage.
     /// </summary>
     /// <param name="usage"> The usage of the VertexAttribute to find.  </param>
     public VertexAttribute? FindByUsage( int usage )
@@ -171,11 +171,11 @@ public class VertexAttributes
     }
 
     /// <summary>
-    ///     Calculates and sets the offsets for the vertex attributes and determines the
-    ///     total vertex size in bytes.
+    /// Calculates and sets the offsets for the vertex attributes and determines the
+    /// total vertex size in bytes.
     /// </summary>
     /// <returns>
-    ///     The total size of the vertex structure in bytes.
+    /// The total size of the vertex structure in bytes.
     /// </returns>
     private int CalculateOffsets()
     {
@@ -191,7 +191,7 @@ public class VertexAttributes
     }
 
     /// <summary>
-    ///     Gets the VertexAttribute at the given index.
+    /// Gets the VertexAttribute at the given index.
     /// </summary>
     /// <param name="index"> the index </param>
     public VertexAttribute Get( int index )
@@ -267,15 +267,15 @@ public class VertexAttributes
     }
 
     /// <summary>
-    ///     Compares the current <see cref="VertexAttributes" /> instance to another <see cref="VertexAttributes" />
-    ///     instance to determine their relative order based on the number of attributes, mask values, and individual
-    ///     attribute properties.
+    /// Compares the current <see cref="VertexAttributes" /> instance to another <see cref="VertexAttributes" />
+    /// instance to determine their relative order based on the number of attributes, mask values, and individual
+    /// attribute properties.
     /// </summary>
     /// <param name="o">The <see cref="VertexAttributes" /> instance to compare with the current instance.</param>
     /// <returns>
-    ///     A signed integer that indicates the relative order of the objects being compared. Returns a value less
-    ///     than zero if this instance precedes <paramref name="o" /> in the sort order, zero if they are equivalent,
-    ///     and a value greater than zero if this instance follows <paramref name="o" /> in the sort order.
+    /// A signed integer that indicates the relative order of the objects being compared. Returns a value less
+    /// than zero if this instance precedes <paramref name="o" /> in the sort order, zero if they are equivalent,
+    /// and a value greater than zero if this instance follows <paramref name="o" /> in the sort order.
     /// </returns>
     public int CompareTo( VertexAttributes o )
     {

@@ -45,8 +45,8 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     }
 
     /// <summary>
-    ///     Creates a new Renderer using the supplied <see cref="TiledMap" />
-    ///     and <see cref="IBatch" />
+    /// Creates a new Renderer using the supplied <see cref="TiledMap" />
+    /// and <see cref="IBatch" />
     /// </summary>
     protected BatchTileMapRenderer( TiledMap map, IBatch batch )
         : this( map, 1.0f, batch )
@@ -87,9 +87,9 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     protected float[]        Vertices   { get; set; } = new float[ NUM_VERTICES ];
 
     /// <summary>
-    ///     Draws all layers in the default <see cref="TiledMap" />.
-    ///     This is the map supplied on creation, or supplied by any
-    ///     extending classes.
+    /// Draws all layers in the default <see cref="TiledMap" />.
+    /// This is the map supplied on creation, or supplied by any
+    /// extending classes.
     /// </summary>
     public void Render()
     {
@@ -235,7 +235,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     }
 
     /// <summary>
-    ///     Renders the specified <see cref="MapLayer" />.
+    /// Renders the specified <see cref="MapLayer" />.
     /// </summary>
     protected void RenderMapLayer( MapLayer layer )
     {
@@ -277,7 +277,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     }
 
     /// <summary>
-    ///     Rendes the child layers of a <see cref="MapGroupLayer" />.
+    /// Rendes the child layers of a <see cref="MapGroupLayer" />.
     /// </summary>
     private void RenderGroupLayerChildren( MapGroupLayer groupLayer )
     {
@@ -297,7 +297,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     }
 
     /// <summary>
-    ///     Called before the rendering of all layers starts.
+    /// Called before the rendering of all layers starts.
     /// </summary>
     protected void BeginRender()
     {
@@ -306,7 +306,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     }
 
     /// <summary>
-    ///     Called after the rendering of all layers ended.
+    /// Called after the rendering of all layers ended.
     /// </summary>
     protected void EndRender()
     {

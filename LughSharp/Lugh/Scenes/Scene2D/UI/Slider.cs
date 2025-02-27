@@ -33,17 +33,17 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     A slider is a horizontal indicator that allows a user to set a value. The slider has
-///     a range (min, max) and a stepping between each value the slider represents.
-///     <para>
-///         <see cref="ChangeListener.ChangeEvent" /> is fired when the
-///         slider knob is moved. Canceling the event will move the knob to where it was previously.
-///     </para>
-///     <para>
-///         For a horizontal progress bar, its preferred height is determined by the larger of the
-///         knob and background, and the preferred width is 140, a relatively arbitrary size. These
-///         parameters are reversed for a vertical progress bar.
-///     </para>
+/// A slider is a horizontal indicator that allows a user to set a value. The slider has
+/// a range (min, max) and a stepping between each value the slider represents.
+/// <para>
+///     <see cref="ChangeListener.ChangeEvent" /> is fired when the
+///     slider knob is moved. Canceling the event will move the knob to where it was previously.
+/// </para>
+/// <para>
+///     For a horizontal progress bar, its preferred height is determined by the larger of the
+///     knob and background, and the preferred width is 140, a relatively arbitrary size. These
+///     parameters are reversed for a vertical progress bar.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class Slider : ProgressBar
@@ -87,14 +87,14 @@ public class Slider : ProgressBar
     public bool MouseOver { get; set; }
 
     /// <summary>
-    ///     Sets the mouse button, which can trigger a change of the slider.
-    ///     Is set to -1, so every button, by default.
+    /// Sets the mouse button, which can trigger a change of the slider.
+    /// Is set to -1, so every button, by default.
     /// </summary>
     public int MouseButton { get; set; } = -1;
 
     /// <summary>
-    ///     Sets the inverse interpolation to use for display. This should perform the
-    ///     inverse of setting <see cref="ProgressBar.VisualInterpolation" />".
+    /// Sets the inverse interpolation to use for display. This should perform the
+    /// inverse of setting <see cref="ProgressBar.VisualInterpolation" />".
     /// </summary>
     public Interpolator VisualInterpolationInverse { get; set; } = Interpolation.Linear;
 
@@ -269,8 +269,8 @@ public class Slider : ProgressBar
     }
 
     /// <summary>
-    ///     Will make this progress bar snap to the specified values, if the
-    ///     knob is within the threshold.
+    /// Will make this progress bar snap to the specified values, if the
+    /// knob is within the threshold.
     /// </summary>
     /// <param name="values"> May be null. </param>
     /// <param name="threshld"></param>
@@ -281,7 +281,7 @@ public class Slider : ProgressBar
     }
 
     /// <summary>
-    ///     Returns true if the slider is being dragged.
+    /// Returns true if the slider is being dragged.
     /// </summary>
     public bool IsDragging()
     {
@@ -289,7 +289,7 @@ public class Slider : ProgressBar
     }
 
     /// <summary>
-    ///     Sets the value using the specified visual percent.
+    /// Sets the value using the specified visual percent.
     /// </summary>
     public void SetVisualPercent( float percent )
     {

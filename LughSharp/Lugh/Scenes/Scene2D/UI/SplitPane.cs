@@ -337,7 +337,7 @@ public class SplitPane : WidgetGroup
     /// <summary>
     /// </summary>
     /// <param name="splitAmount">
-    ///     The split amount between the min and max amount. This parameter is clamped during layout.
+    /// The split amount between the min and max amount. This parameter is clamped during layout.
     /// </param>
     public void SetSplitAmount( float splitAmount )
     {
@@ -351,11 +351,11 @@ public class SplitPane : WidgetGroup
     }
 
     /// <summary>
-    ///     Called during layout to clamp the <see cref="_splitAmount" /> within the set limits.
-    ///     By default it imposes the limits of the <see cref="GetMinSplitAmount()" />",
-    ///     <see cref="GetMaxSplitAmount()" />", and min sizes of the children.
-    ///     This method is internally called in response to layout, so it should not call
-    ///     <see cref="WidgetGroup.Invalidate()" />.
+    /// Called during layout to clamp the <see cref="_splitAmount" /> within the set limits.
+    /// By default it imposes the limits of the <see cref="GetMinSplitAmount()" />",
+    /// <see cref="GetMaxSplitAmount()" />", and min sizes of the children.
+    /// This method is internally called in response to layout, so it should not call
+    /// <see cref="WidgetGroup.Invalidate()" />.
     /// </summary>
     protected void ClampSplitAmount()
     {

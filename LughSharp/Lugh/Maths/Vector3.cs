@@ -42,15 +42,15 @@ public class Vector3 : IVector< Vector3 >
     // ========================================================================
 
     /// <summary>
-    ///     Default constructor.
-    ///     Sets X, Y, and Z to zero.
+    /// Default constructor.
+    /// Sets X, Y, and Z to zero.
     /// </summary>
     public Vector3() : this( 0, 0, 0 )
     {
     }
 
     /// <summary>
-    ///     Constructs a new Vector3, with X, Y, and Z set to supplied values.
+    /// Constructs a new Vector3, with X, Y, and Z set to supplied values.
     /// </summary>
     public Vector3( float x, float y, float z )
     {
@@ -58,7 +58,7 @@ public class Vector3 : IVector< Vector3 >
     }
 
     /// <summary>
-    ///     Creates a new Vector3, as a copy of the supplied Vec tor3.
+    /// Creates a new Vector3, as a copy of the supplied Vec tor3.
     /// </summary>
     public Vector3( Vector3 vector )
     {
@@ -66,8 +66,8 @@ public class Vector3 : IVector< Vector3 >
     }
 
     /// <summary>
-    ///     Creates a new Vector3, using the supplied array for its X,Y and Z values.
-    ///     The valuies in the array must be ordered X, Y and Z.
+    /// Creates a new Vector3, using the supplied array for its X,Y and Z values.
+    /// The valuies in the array must be ordered X, Y and Z.
     /// </summary>
     public Vector3( IReadOnlyList< float > values )
     {
@@ -75,8 +75,8 @@ public class Vector3 : IVector< Vector3 >
     }
 
     /// <summary>
-    ///     Creates a new Vector3 from the supplied Vector2, which holds values
-    ///     for X and Y, and a float holding the Z value.
+    /// Creates a new Vector3 from the supplied Vector2, which holds values
+    /// for X and Y, and a float holding the Z value.
     /// </summary>
     public Vector3( Vector2 vector, float z )
     {
@@ -88,7 +88,7 @@ public class Vector3 : IVector< Vector3 >
     public float Z { get; set; }
 
     /// <summary>
-    ///     Sets this Vector3's X, Y and Z values from the supplied Vector3.
+    /// Sets this Vector3's X, Y and Z values from the supplied Vector3.
     /// </summary>
     public Vector3 Set( Vector3 vector )
     {

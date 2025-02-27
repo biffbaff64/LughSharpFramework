@@ -28,9 +28,9 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Utils.Collections;
 
 /// <summary>
-///     A resizable, ordered or unordered byte array. If unordered, this class
-///     avoids a memory copy when removing elements (the last element is moved
-///     to the removed element's position).
+/// A resizable, ordered or unordered byte array. If unordered, this class
+/// avoids a memory copy when removing elements (the last element is moved
+/// to the removed element's position).
 /// </summary>
 [PublicAPI]
 public class ByteArray
@@ -39,7 +39,7 @@ public class ByteArray
     // ========================================================================
 
     /// <summary>
-    ///     Creates an ordered array with a capacity of 16.
+    /// Creates an ordered array with a capacity of 16.
     /// </summary>
     public ByteArray( int capacity )
         : this( true, capacity )
@@ -49,11 +49,11 @@ public class ByteArray
     /// <summary>
     /// </summary>
     /// <param name="ordered">
-    ///     If false, methods that remove elements may change the order of other
-    ///     elements in the array, which avoids a memory copy.
+    /// If false, methods that remove elements may change the order of other
+    /// elements in the array, which avoids a memory copy.
     /// </param>
     /// <param name="capacity">
-    ///     Any elements added beyond this will cause the backing array to be grown.
+    /// Any elements added beyond this will cause the backing array to be grown.
     /// </param>
     public ByteArray( bool ordered = true, int capacity = 16 )
     {
@@ -62,10 +62,10 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Creates a new array containing the elements in the specific array. The new
-    ///     array will be ordered if the specific array is ordered. The capacity is set
-    ///     to the number of elements, so any subsequent elements added will cause the
-    ///     backing array to be grown.
+    /// Creates a new array containing the elements in the specific array. The new
+    /// array will be ordered if the specific array is ordered. The capacity is set
+    /// to the number of elements, so any subsequent elements added will cause the
+    /// backing array to be grown.
     /// </summary>
     public ByteArray( ByteArray array )
     {
@@ -77,9 +77,9 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Creates a new ordered array containing the elements in the specified array.
-    ///     The capacity is set to the number of elements, so any subsequent elements
-    ///     added will cause the backing array to be grown.
+    /// Creates a new ordered array containing the elements in the specified array.
+    /// The capacity is set to the number of elements, so any subsequent elements
+    /// added will cause the backing array to be grown.
     /// </summary>
     public ByteArray( byte[] array )
         : this( true, array, 0, array.Length )
@@ -87,13 +87,13 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Creates a new array containing the elements in the specified array. The
-    ///     capacity is set to the number of elements, so any subsequent elements
-    ///     added will cause the backing array to be grown.
+    /// Creates a new array containing the elements in the specified array. The
+    /// capacity is set to the number of elements, so any subsequent elements
+    /// added will cause the backing array to be grown.
     /// </summary>
     /// <param name="ordered">
-    ///     If false, methods that remove elements may change the order of other
-    ///     elements in the array, which avoids a memory copy
+    /// If false, methods that remove elements may change the order of other
+    /// elements in the array, which avoids a memory copy
     /// </param>
     /// <param name="array"></param>
     /// <param name="startIndex"></param>
@@ -110,7 +110,7 @@ public class ByteArray
     public bool   Ordered { get; set; }
 
     /// <summary>
-    ///     Adds a value, or values, to this array.
+    /// Adds a value, or values, to this array.
     /// </summary>
     /// <param name="values"> One, or more, values to add. </param>
     public void Add( params byte[] values )
@@ -193,12 +193,12 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Multiplies the value at the specified index by the given value.
+    /// Multiplies the value at the specified index by the given value.
     /// </summary>
     /// <param name="index"> The array index. </param>
     /// <param name="value"> The multiplier. </param>
     /// <exception cref="IndexOutOfRangeException">
-    ///     Thrown if the supplied index is less than zero or greater than the array size.
+    /// Thrown if the supplied index is less than zero or greater than the array size.
     /// </exception>
     public void Mul( int index, byte value )
     {
@@ -249,8 +249,8 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Inserts the specified number of items at the specified index. The new items
-    ///     will have values equal to the values at those indices before the insertion.
+    /// Inserts the specified number of items at the specified index. The new items
+    /// will have values equal to the values at those indices before the insertion.
     /// </summary>
     public void InsertRange( int index, int count )
     {
@@ -362,7 +362,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Removes and returns the item at the specified index.
+    /// Removes and returns the item at the specified index.
     /// </summary>
     /// <param name="index"></param>
     /// <returns></returns>
@@ -389,7 +389,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Removes the items between the specified indices, inclusive.
+    /// Removes the items between the specified indices, inclusive.
     /// </summary>
     /// <param name="start"></param>
     /// <param name="end"></param>
@@ -425,7 +425,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Removes from this array all of elements contained in the specified array.
+    /// Removes from this array all of elements contained in the specified array.
     /// </summary>
     /// <param name="array"></param>
     /// <returns> true if this array was modified. </returns>
@@ -454,7 +454,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Removes and returns the last item.
+    /// Removes and returns the last item.
     /// </summary>
     public byte Pop()
     {
@@ -462,7 +462,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Returns the last item.
+    /// Returns the last item.
     /// </summary>
     public byte Peek()
     {
@@ -470,7 +470,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Returns the first item.
+    /// Returns the first item.
     /// </summary>
     public byte First()
     {
@@ -483,7 +483,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Returns true if the array has one or more items.
+    /// Returns true if the array has one or more items.
     /// </summary>
     public bool NotEmpty()
     {
@@ -491,7 +491,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Returns true if the array is empty.
+    /// Returns true if the array is empty.
     /// </summary>
     public bool IsEmpty()
     {
@@ -506,9 +506,9 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Reduces the size of the backing array to the size of the actual items.
-    ///     This is useful to release memory when many items have been removed, or
-    ///     if it is known that more items will not be added.
+    /// Reduces the size of the backing array to the size of the actual items.
+    /// This is useful to release memory when many items have been removed, or
+    /// if it is known that more items will not be added.
     /// </summary>
     public byte[] Shrink()
     {
@@ -521,9 +521,9 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Increases the size of the backing array to accommodate the specified
-    ///     number of additional items. Useful before adding many items to avoid
-    ///     multiple backing array resizes.
+    /// Increases the size of the backing array to accommodate the specified
+    /// number of additional items. Useful before adding many items to avoid
+    /// multiple backing array resizes.
     /// </summary>
     public byte[] EnsureCapacity( int additionalCapacity )
     {
@@ -543,7 +543,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Sets the array size, leaving any values beyond the current size undefined.
+    /// Sets the array size, leaving any values beyond the current size undefined.
     /// </summary>
     /// <param name="newSize"></param>
     /// <returns></returns>
@@ -610,8 +610,8 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Reduces the size of the array to the specified size. If the array is
-    ///     already smaller than the specified size, no action is taken.
+    /// Reduces the size of the array to the specified size. If the array is
+    /// already smaller than the specified size, no action is taken.
     /// </summary>
     public void Truncate( int newSize )
     {
@@ -619,7 +619,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Returns a Random item from the array, or zero if the array is empty.
+    /// Returns a Random item from the array, or zero if the array is empty.
     /// </summary>
     /// <returns></returns>
     public byte Random()
@@ -654,7 +654,7 @@ public class ByteArray
     }
 
     /// <summary>
-    ///     Returns false if either array is unordered.
+    /// Returns false if either array is unordered.
     /// </summary>
     public override bool Equals( object? obj )
     {

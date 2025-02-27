@@ -25,22 +25,22 @@
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-///     A <c>Readable</c> is a source of characters. Characters from a <c>Readable</c>
-///     are made available to callers of the read method via a char buffer.
+/// A <c>Readable</c> is a source of characters. Characters from a <c>Readable</c>
+/// are made available to callers of the read method via a char buffer.
 /// </summary>
 [PublicAPI]
 public interface IReadable
 {
     /// <summary>
-    ///     Attempts to read characters into the specified character buffer.
-    ///     The buffer is used as a repository of characters as-is: the only
-    ///     changes made are the results of a put operation. No flipping or
-    ///     rewinding of the buffer is performed.
+    /// Attempts to read characters into the specified character buffer.
+    /// The buffer is used as a repository of characters as-is: the only
+    /// changes made are the results of a put operation. No flipping or
+    /// rewinding of the buffer is performed.
     /// </summary>
     /// <param name="cb"> the buffer to read characters into </param>
     /// <returns>
-    ///     The number of <tt>char</tt> values added to the buffer,
-    ///     or -1 if this source of characters is at its end
+    /// The number of <tt>char</tt> values added to the buffer,
+    /// or -1 if this source of characters is at its end
     /// </returns>
     int Read( char[] cb );
 }

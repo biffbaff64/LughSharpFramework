@@ -29,8 +29,8 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
-///     Renders polygon filled with a repeating TextureRegion with specified
-///     density without causing an additional flush or render call
+/// Renders polygon filled with a repeating TextureRegion with specified
+/// density without causing an additional flush or render call
 /// </summary>
 [PublicAPI]
 public class RepeatablePolygonSprite
@@ -54,8 +54,8 @@ public class RepeatablePolygonSprite
     // ========================================================================
 
     /// <summary>
-    ///     Sets polygon with repeating texture region, the size of repeating
-    ///     grid is equal to region size
+    /// Sets polygon with repeating texture region, the size of repeating
+    /// grid is equal to region size
     /// </summary>
     /// <param name="region"> region to repeat </param>
     /// <param name="vertices"> cw vertices of polygon </param>
@@ -128,11 +128,11 @@ public class RepeatablePolygonSprite
     }
 
     /// <summary>
-    ///     This is garbage, due to Intersector returning values slightly
-    ///     different then the grid values Snapping exactly to grid is important,
-    ///     so that during bulidVertices method, it can be figured out if points
-    ///     is on the wall of it's own grid box or not, to set u/v properly.
-    ///     Any other implementations are welcome
+    /// This is garbage, due to Intersector returning values slightly
+    /// different then the grid values Snapping exactly to grid is important,
+    /// so that during bulidVertices method, it can be figured out if points
+    /// is on the wall of it's own grid box or not, to set u/v properly.
+    /// Any other implementations are welcome
     /// </summary>
     private float[]? SnapToGrid( float[]? vertices )
     {
@@ -156,8 +156,8 @@ public class RepeatablePolygonSprite
     }
 
     /// <summary>
-    ///     Offsets polygon to 0 coordinate for ease of calculations, later
-    ///     offset is put back on final render.
+    /// Offsets polygon to 0 coordinate for ease of calculations, later
+    /// offset is put back on final render.
     /// </summary>
     /// <param name="vertices"></param>
     /// <returns> offsetted vertices </returns>
@@ -190,8 +190,8 @@ public class RepeatablePolygonSprite
     }
 
     /// <summary>
-    ///     Builds final vertices with vertex attributes like coordinates,
-    ///     color and region u/v
+    /// Builds final vertices with vertex attributes like coordinates,
+    /// color and region u/v
     /// </summary>
     private void BuildVertices()
     {

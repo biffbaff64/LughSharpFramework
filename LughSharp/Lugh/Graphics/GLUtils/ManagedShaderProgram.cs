@@ -35,19 +35,19 @@ using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-///     A shader program encapsulates a vertex and fragment shader pairlinked to form a shader program.
-///     After construction a ShaderProgram can be used to draw <see cref="Mesh" />. To make the GPU use
-///     a specific ShaderProgram the programs <see cref="Bind()" /> method must be used which effectively
-///     binds the program. When a ShaderProgram is bound one can set uniforms, vertex attributes and
-///     attributes as needed via the respective methods.
-///     <para>
-///         A ShaderProgram must be disposed via a call to <see cref="Dispose()" /> when it is no longer needed
-///     </para>
-///     <para>
-///         ShaderPrograms are managed. In case the OpenGL context is lost all shaders get invalidated and
-///         have to be reloaded. Managed ShaderPrograms are automatically reloaded when the OpenGL context is
-///         recreated so you don't have to do this manually.
-///     </para>
+/// A shader program encapsulates a vertex and fragment shader pairlinked to form a shader program.
+/// After construction a ShaderProgram can be used to draw <see cref="Mesh" />. To make the GPU use
+/// a specific ShaderProgram the programs <see cref="Bind()" /> method must be used which effectively
+/// binds the program. When a ShaderProgram is bound one can set uniforms, vertex attributes and
+/// attributes as needed via the respective methods.
+/// <para>
+///     A ShaderProgram must be disposed via a call to <see cref="Dispose()" /> when it is no longer needed
+/// </para>
+/// <para>
+///     ShaderPrograms are managed. In case the OpenGL context is lost all shaders get invalidated and
+///     have to be reloaded. Managed ShaderPrograms are automatically reloaded when the OpenGL context is
+///     recreated so you don't have to do this manually.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class ManagedShaderProgram : ShaderProgram
@@ -68,7 +68,7 @@ public class ManagedShaderProgram : ShaderProgram
     // ========================================================================
 
     /// <summary>
-    ///     Constructs a new ShaderProgram from the supplied shaders and immediately compiles it.
+    /// Constructs a new ShaderProgram from the supplied shaders and immediately compiles it.
     /// </summary>
     /// <param name="vertexShader"> the vertex shader </param>
     /// <param name="fragmentShader"> the fragment shader </param>
@@ -116,7 +116,7 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Returns the number of Managed Shaders in the managed array.
+    /// Returns the number of Managed Shaders in the managed array.
     /// </summary>
     public static int NumManagedShaderPrograms => _availableShaders[ GdxApi.App ]!.Count;
 
@@ -135,8 +135,8 @@ public class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the attribute </param>
     /// <returns>
-    ///     the type of the attribute, one of <see cref="IGL.GL_FLOAT" />,
-    ///     <see cref="IGL.GL_FLOAT_VEC2" /> etc.
+    /// the type of the attribute, one of <see cref="IGL.GL_FLOAT" />,
+    /// <see cref="IGL.GL_FLOAT_VEC2" /> etc.
     /// </returns>
     public int GetAttributeType( string name )
     {
@@ -300,7 +300,7 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Disables the vertex attribute with the given name
+    /// Disables the vertex attribute with the given name
     /// </summary>
     /// <param name="name"> the vertex attribute name  </param>
     public override void DisableVertexAttribute( string name )
@@ -318,7 +318,7 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Enables the vertex attribute with the given name
+    /// Enables the vertex attribute with the given name
     /// </summary>
     /// <param name="name"> the vertex attribute name  </param>
     public void EnableVertexAttribute( string name )
@@ -353,7 +353,7 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Invalidates all shaders so the next time they are used new handles are generated.
+    /// Invalidates all shaders so the next time they are used new handles are generated.
     /// </summary>
     /// <param name="app">  </param>
     public static void InvalidateAllShaderPrograms( IApplication app )
@@ -403,8 +403,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform matrix with the given name. The <see cref="ShaderProgram" />
-    ///     must be bound for this to work.
+    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram" />
+    /// must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix  </param>
@@ -414,8 +414,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform matrix with the given name. The <see cref="ShaderProgram" />
-    ///     must be bound for this to work.
+    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram" />
+    /// must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix </param>
@@ -435,8 +435,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform matrix with the given name.
-    ///     The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets the uniform matrix with the given name.
+    /// The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix  </param>
@@ -446,8 +446,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform matrix with the given name.
-    ///     The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets the uniform matrix with the given name.
+    /// The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix </param>
@@ -511,14 +511,14 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the vertex attribute with the given name. The <see cref="ShaderProgram" /> must
-    ///     be bound for this to work.
+    /// Sets the vertex attribute with the given name. The <see cref="ShaderProgram" /> must
+    /// be bound for this to work.
     /// </summary>
     /// <param name="name">The attribute name.</param>
     /// <param name="size"> The number of components, must be >= 1 and &lt;= 4. </param>
     /// <param name="type">
-    ///     The type, must be one of IGL.GL_BYTE, IGL.GL_UNSIGNED_BYTE, IGL.GL_SHORT, IGL.GL_UNSIGNED_SHORT,
-    ///     IGL.GL_FIXED, or IGL.GL_FLOAT.
+    /// The type, must be one of IGL.GL_BYTE, IGL.GL_UNSIGNED_BYTE, IGL.GL_SHORT, IGL.GL_UNSIGNED_SHORT,
+    /// IGL.GL_FIXED, or IGL.GL_FLOAT.
     /// </param>
     /// <param name="normalize"> Whether fixed point data should be normalized. Will not work on the desktop. </param>
     /// <param name="stride">The stride in bytes between successive attributes.</param>
@@ -559,15 +559,15 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the vertex attribute with the given name. The <see cref="ShaderProgram" /> must
-    ///     be bound for this to work.
+    /// Sets the vertex attribute with the given name. The <see cref="ShaderProgram" /> must
+    /// be bound for this to work.
     /// </summary>
     /// <param name="name">The attribute name.</param>
     /// <param name="size">The number of components, must be >= 1 and &lt;= 4.</param>
     /// <param name="type">
-    ///     The type, must be one of IGL.GL_Byte, IGL.GL_Unsigned_Byte, IGL.GL_Short, IGL.GL_Unsigned_Short,
-    ///     IGL.GL_Fixed, or IGL.GL_Float.
-    ///     <para>GL_Fixed will not work on the desktop.</para>
+    /// The type, must be one of IGL.GL_Byte, IGL.GL_Unsigned_Byte, IGL.GL_Short, IGL.GL_Unsigned_Short,
+    /// IGL.GL_Fixed, or IGL.GL_Float.
+    /// <para>GL_Fixed will not work on the desktop.</para>
     /// </param>
     /// <param name="normalize"> Whether fixed point data should be normalized. Will not work on the desktop.</param>
     /// <param name="stride">The stride in bytes between successive attributes.</param>
@@ -613,8 +613,8 @@ public class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <returns>
-    ///     the type of the uniform, one of <see cref="IGL.GL_FLOAT" />,
-    ///     <see cref="IGL.GL_FLOAT_VEC2" /> etc.
+    /// the type of the uniform, one of <see cref="IGL.GL_FLOAT" />,
+    /// <see cref="IGL.GL_FLOAT_VEC2" /> etc.
     /// </returns>
     public int GetUniformType( string name )
     {
@@ -622,7 +622,7 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform with the given name. The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets the uniform with the given name. The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="value"> the value  </param>
@@ -644,8 +644,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform with the given name. The <see cref="ShaderProgram" />
-    ///     must be bound for this to work.
+    /// Sets the uniform with the given name. The <see cref="ShaderProgram" />
+    /// must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="count"> the first value </param>
@@ -669,8 +669,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform with the given name.
-    ///     The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets the uniform with the given name.
+    /// The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="value1"> the first value </param>
@@ -696,8 +696,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform with the given name.
-    ///     The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets the uniform with the given name.
+    /// The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="value"> the value  </param>
@@ -718,8 +718,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform with the given name.
-    ///     The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets the uniform with the given name.
+    /// The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="value1"> the first value </param>
@@ -743,8 +743,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform with the given name.
-    ///     The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets the uniform with the given name.
+    /// The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="value1"> the first value </param>
@@ -769,8 +769,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform with the given name. The <see cref="ShaderProgram" />
-    ///     must be bound for this to work.
+    /// Sets the uniform with the given name. The <see cref="ShaderProgram" />
+    /// must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="x"></param>
@@ -819,8 +819,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets an array of uniform matrices with the given name.
-    ///     The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets an array of uniform matrices with the given name.
+    /// The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name">the name of the uniform </param>
     /// <param name="buffer">buffer containing the matrix data </param>
@@ -838,8 +838,8 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets an array of uniform matrices with the given name. The <see cref="ShaderProgram" />
-    ///     must be bound for this to work.
+    /// Sets an array of uniform matrices with the given name. The <see cref="ShaderProgram" />
+    /// must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="buffer"> buffer containing the matrix data </param>
@@ -872,7 +872,7 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform with the given name. The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets the uniform with the given name. The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="values"> x and y as the first and second values respectively  </param>
@@ -893,7 +893,7 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform with the given name. The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets the uniform with the given name. The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="values"> x, y and z as the first, second and third values respectively  </param>
@@ -914,7 +914,7 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Sets the uniform with the given name. The <see cref="ShaderProgram" /> must be bound for this to work.
+    /// Sets the uniform with the given name. The <see cref="ShaderProgram" /> must be bound for this to work.
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="values"> r, g, b and a as the first through fourth values respectively  </param>
@@ -935,7 +935,7 @@ public class ManagedShaderProgram : ShaderProgram
     // ========================================================================
 
     /// <summary>
-    ///     Bind this shader to the renderer.
+    /// Bind this shader to the renderer.
     /// </summary>
     public override void Bind()
     {
@@ -944,7 +944,7 @@ public class ManagedShaderProgram : ShaderProgram
     }
 
     /// <summary>
-    ///     Unbind this shader from the renderer.
+    /// Unbind this shader from the renderer.
     /// </summary>
     public override void Unbind()
     {
@@ -964,8 +964,8 @@ public class ManagedShaderProgram : ShaderProgram
     // ========================================================================
 
     /// <summary>
-    ///     Disposes all resources associated with this shader.
-    ///     Must be called when the shader is no longer used.
+    /// Disposes all resources associated with this shader.
+    /// Must be called when the shader is no longer used.
     /// </summary>
     public new void Dispose()
     {

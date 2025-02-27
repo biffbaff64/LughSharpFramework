@@ -25,13 +25,13 @@
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-///     Manages a group of buttons to enforce a minimum and maximum number of checked
-///     buttons. This enables "radio button" functionality and more. A button may only
-///     be in one group at a time.
-///     <para>
-///         The <see cref="CanCheck(T, bool)" /> method can be overridden to control
-///         if a button check or uncheck is allowed.
-///     </para>
+/// Manages a group of buttons to enforce a minimum and maximum number of checked
+/// buttons. This enables "radio button" functionality and more. A button may only
+/// be in one group at a time.
+/// <para>
+///     The <see cref="CanCheck(T, bool)" /> method can be overridden to control
+///     if a button check or uncheck is allowed.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class ButtonGroup< T > where T : Button
@@ -122,7 +122,7 @@ public class ButtonGroup< T > where T : Button
     }
 
     /// <summary>
-    ///     Sets the first <see cref="TextButton" /> with the specified text to checked.
+    /// Sets the first <see cref="TextButton" /> with the specified text to checked.
     /// </summary>
     public void SetChecked( string text )
     {
@@ -146,8 +146,8 @@ public class ButtonGroup< T > where T : Button
     }
 
     /// <summary>
-    ///     Called when a button is checked or unchecked. If overridden, generally
-    ///     changing button checked states should not be done from within this method.
+    /// Called when a button is checked or unchecked. If overridden, generally
+    /// changing button checked states should not be done from within this method.
     /// </summary>
     /// <returns> True if the new state should be allowed. </returns>
     public bool CanCheck( T button, bool newState )
@@ -194,8 +194,8 @@ public class ButtonGroup< T > where T : Button
     }
 
     /// <summary>
-    ///     Sets all buttons' <see cref="Button.IsChecked" /> to false, regardless
-    ///     of <see cref="SetMinCheckCount(int)" />.
+    /// Sets all buttons' <see cref="Button.IsChecked" /> to false, regardless
+    /// of <see cref="SetMinCheckCount(int)" />.
     /// </summary>
     public void UncheckAll()
     {
@@ -213,7 +213,7 @@ public class ButtonGroup< T > where T : Button
     }
 
     /// <summary>
-    ///     Returns the first checked button, or null.
+    /// Returns the first checked button, or null.
     /// </summary>
     public T? GetChecked()
     {
@@ -221,7 +221,7 @@ public class ButtonGroup< T > where T : Button
     }
 
     /// <summary>
-    ///     Returns the first checked button index, or -1.
+    /// Returns the first checked button index, or -1.
     /// </summary>
     public int GetCheckedIndex()
     {
@@ -244,7 +244,7 @@ public class ButtonGroup< T > where T : Button
     }
 
     /// <summary>
-    ///     Sets the minimum number of buttons that must be checked. Default is 1.
+    /// Sets the minimum number of buttons that must be checked. Default is 1.
     /// </summary>
     public void SetMinCheckCount( int minCheckCount )
     {
@@ -252,8 +252,8 @@ public class ButtonGroup< T > where T : Button
     }
 
     /// <summary>
-    ///     Sets the maximum number of buttons that can be checked.
-    ///     Set to -1 for no maximum. Default is 1.
+    /// Sets the maximum number of buttons that can be checked.
+    /// Set to -1 for no maximum. Default is 1.
     /// </summary>
     public void SetMaxCheckCount( int maxCheckCount )
     {
@@ -266,11 +266,11 @@ public class ButtonGroup< T > where T : Button
     }
 
     /// <summary>
-    ///     If true, when the maximum number of buttons are checked and an
-    ///     additional button is checked, the last button to be checked
-    ///     is unchecked so that the maximum is not exceeded. If false,
-    ///     additional buttons beyond the maximum are not allowed to be
-    ///     checked. Default is true.
+    /// If true, when the maximum number of buttons are checked and an
+    /// additional button is checked, the last button to be checked
+    /// is unchecked so that the maximum is not exceeded. If false,
+    /// additional buttons beyond the maximum are not allowed to be
+    /// checked. Default is true.
     /// </summary>
     public void SetUncheckLast( bool uncheckLast )
     {

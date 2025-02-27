@@ -27,16 +27,16 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
-///     This class is for selecting a ranked element (kth ordered statistic) from an
-///     unordered list in faster time than sorting the whole array. Typical applications
-///     include finding the nearest enemy unit(s), and other operations which are likely
-///     to run as often as every x frames. Certain values of k will result in a partial
-///     sorting of the Array.
-///     The lowest ranking element starts at 1, not 0. 1 = first, 2 = second, 3 = third,
-///     etc. Calling with a value of zero will result in a GdxRuntimeException
-///     This class uses very minimal extra memory, as it makes no copies of the array.
-///     The underlying algorithms used are a naive single-pass for k = min and k =max, and
-///     Hoare's quickselect for values in between.
+/// This class is for selecting a ranked element (kth ordered statistic) from an
+/// unordered list in faster time than sorting the whole array. Typical applications
+/// include finding the nearest enemy unit(s), and other operations which are likely
+/// to run as often as every x frames. Certain values of k will result in a partial
+/// sorting of the Array.
+/// The lowest ranking element starts at 1, not 0. 1 = first, 2 = second, 3 = third,
+/// etc. Calling with a value of zero will result in a GdxRuntimeException
+/// This class uses very minimal extra memory, as it makes no copies of the array.
+/// The underlying algorithms used are a naive single-pass for k = min and k =max, and
+/// Hoare's quickselect for values in between.
 /// </summary>
 [PublicAPI]
 public class Selector< T >
@@ -90,7 +90,7 @@ public class Selector< T >
     }
 
     /// <summary>
-    ///     Faster than <see cref="QuickSelect{T}" /> for n = min
+    /// Faster than <see cref="QuickSelect{T}" /> for n = min
     /// </summary>
     private static int FastMin( T[] items, IComparer< T > comp, int size )
     {
@@ -110,7 +110,7 @@ public class Selector< T >
     }
 
     /// <summary>
-    ///     Faster than <see cref="QuickSelect{T}" /> for n = max
+    /// Faster than <see cref="QuickSelect{T}" /> for n = max
     /// </summary>
     private static int FastMax( T[] items, IComparer< T > comp, int size )
     {

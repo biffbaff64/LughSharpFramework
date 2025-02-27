@@ -203,7 +203,7 @@ public void UnloadImage( FileInfo fileInfo )
         {
 //            if ( this == obj ) return true;
 //            if ( obj == null ) return false;
-////            if ( getClass() != obj.getClass() ) return false;
+////        if ( getClass() != obj.getClass() ) return false;
 //
 //            var other = ( Rect )obj;
 //

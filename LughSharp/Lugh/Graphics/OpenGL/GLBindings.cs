@@ -54,15 +54,15 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 // ============================================================================
 
 /// <summary>
-///     Bindings for OpenGL, for core profile. Blazing fast, low level,
-///     direct access to the OpenGL API for all versions of OpenGL, using the unmanaged
-///     delegates feature in C# 9.0,
-///     <para>
-///         Also includes a few overloads of many functions to make them a bit more C# friendly
-///         (e.g. passing arrays of bytes or floats instead of passing pointers to fixed memory
-///         locations). Significant effort has been made to make sure that the overloads are as
-///         efficient as possible, in terms of both performance and memory usage.
-///     </para>
+/// Bindings for OpenGL, for core profile. Blazing fast, low level,
+/// direct access to the OpenGL API for all versions of OpenGL, using the unmanaged
+/// delegates feature in C# 9.0,
+/// <para>
+///     Also includes a few overloads of many functions to make them a bit more C# friendly
+///     (e.g. passing arrays of bytes or floats instead of passing pointers to fixed memory
+///     locations). Significant effort has been made to make sure that the overloads are as
+///     efficient as possible, in terms of both performance and memory usage.
+/// </para>
 /// </summary>
 [PublicAPI]
 public unsafe partial class GLBindings : IGLBindings
@@ -73,7 +73,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <summary>
-    ///     The null pointer, just like in C/C++.
+    /// The null pointer, just like in C/C++.
     /// </summary>
     public readonly IntPtr NULL = ( IntPtr )0;
 

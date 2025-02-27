@@ -34,8 +34,8 @@ using Platform = LughSharp.Lugh.Core.Platform;
 namespace LughSharp.Lugh.Graphics.GLUtils;
 
 /// <summary>
-///     A <see cref="ITextureData" /> implementation which should be used
-///     to create float textures.
+/// A <see cref="ITextureData" /> implementation which should be used
+/// to create float textures.
 /// </summary>
 [PublicAPI]
 public class FloatTextureData : ITextureData
@@ -162,7 +162,7 @@ public class FloatTextureData : ITextureData
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
     /// <summary>
-    ///     FloatTextureData objects are Managed.
+    /// FloatTextureData objects are Managed.
     /// </summary>
     public bool IsManaged => true;
 

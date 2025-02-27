@@ -25,16 +25,16 @@
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-///     Represents a mouse cursor.
-///     Create a cursor via <see cref="IGraphics.NewCursor" />.
-///     To set the cursor use <see cref="IGraphics.SetCursor(ICursor)" />.
-///     To use one of the system cursors, call <see cref="IGraphics.SetSystemCursor" />.
+/// Represents a mouse cursor.
+/// Create a cursor via <see cref="IGraphics.NewCursor" />.
+/// To set the cursor use <see cref="IGraphics.SetCursor(ICursor)" />.
+/// To use one of the system cursors, call <see cref="IGraphics.SetSystemCursor" />.
 /// </summary>
 [PublicAPI]
 public interface ICursor
 {
     /// <summary>
-    ///     Available system mouse cursor types.
+    /// Available system mouse cursor types.
     /// </summary>
     [PublicAPI]
     public enum SystemCursor : int

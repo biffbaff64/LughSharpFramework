@@ -29,7 +29,7 @@ public partial class Gdx2DPixmap
     private const string DLL_PATH = "lib/net8.0/gdx2d.dll";
 
     /// <summary>
-    ///     Gets the pixel at the specified X and Y coordinates.
+    /// Gets the pixel at the specified X and Y coordinates.
     /// </summary>
     /// <param name="x"> X co-ordinate. </param>
     /// <param name="y"> Y co-ordinate. </param>
@@ -43,7 +43,7 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    ///     Set the pixel at the given coordinates.
+    /// Set the pixel at the given coordinates.
     /// </summary>
     /// <param name="x"></param>
     /// <param name="y"></param>

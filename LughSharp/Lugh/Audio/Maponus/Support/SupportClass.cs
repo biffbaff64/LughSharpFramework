@@ -66,7 +66,7 @@ public class SupportClass
     }
 
     /// <summary>
-    ///     This method is used as a dummy method to simulate VJ++ behavior
+    /// This method is used as a dummy method to simulate VJ++ behavior
     /// </summary>
     /// <param name="literal">The literal to return</param>
     /// <returns>The received value</returns>
@@ -76,7 +76,7 @@ public class SupportClass
     }
 
     /// <summary>
-    ///     This method is used as a dummy method to simulate VJ++ behavior
+    /// This method is used as a dummy method to simulate VJ++ behavior
     /// </summary>
     /// <param name="literal">The literal to return</param>
     /// <returns>The received value</returns>
@@ -86,7 +86,7 @@ public class SupportClass
     }
 
     /// <summary>
-    ///     This method is used as a dummy method to simulate VJ++ behavior
+    /// This method is used as a dummy method to simulate VJ++ behavior
     /// </summary>
     /// <param name="literal">The literal to return</param>
     /// <returns>The received value</returns>
@@ -96,7 +96,7 @@ public class SupportClass
     }
 
     /// <summary>
-    ///     This method is used as a dummy method to simulate VJ++ behavior
+    /// This method is used as a dummy method to simulate VJ++ behavior
     /// </summary>
     /// <param name="literal">The literal to return</param>
     /// <returns>The received value</returns>
@@ -106,17 +106,17 @@ public class SupportClass
     }
 
     /// <summary>
-    ///     Reads a number of characters from the current source Stream and writes the
-    ///     data to the target array at the
-    ///     specified index.
+    /// Reads a number of characters from the current source Stream and writes the
+    /// data to the target array at the
+    /// specified index.
     /// </summary>
     /// <param name="sourceStream">The source Stream to read from</param>
     /// <param name="target">Contains the array of characteres read from the source Stream.</param>
     /// <param name="start">The starting index of the target array.</param>
     /// <param name="count">The maximum number of characters to read from the source Stream.</param>
     /// <returns>
-    ///     The number of characters read. The number will be less than or equal to count
-    ///     depending on the data available in the source Stream.
+    /// The number of characters read. The number will be less than or equal to count
+    /// depending on the data available in the source Stream.
     /// </returns>
     public static int ReadInput( Stream sourceStream, ref sbyte[] target, int start, int count )
     {
@@ -132,7 +132,7 @@ public class SupportClass
     }
 
     /// <summary>
-    ///     Converts an array of sbytes to an array of bytes
+    /// Converts an array of sbytes to an array of bytes
     /// </summary>
     /// <param name="sbyteArray">The array of sbytes to be converted</param>
     /// <returns>The new array of bytes</returns>
@@ -149,7 +149,7 @@ public class SupportClass
     }
 
     /// <summary>
-    ///     Converts a string to an array of bytes
+    /// Converts a string to an array of bytes
     /// </summary>
     /// <param name="sourceString">The string to be converted</param>
     /// <returns>The new array of bytes</returns>
@@ -166,7 +166,7 @@ public class SupportClass
     }
 
     /// <summary>
-    ///     Method that copies an array of sbytes from a String to a received array.
+    /// Method that copies an array of sbytes from a String to a received array.
     /// </summary>
     /// <param name="sourceString">The String to get the sbytes.</param>
     /// <param name="sourceStart">Position in the String to start getting sbytes.</param>

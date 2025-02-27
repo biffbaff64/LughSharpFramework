@@ -25,8 +25,8 @@
 namespace LughSharp.Lugh.Input;
 
 /// <summary>
-///     An adapter class for <see cref="IInputProcessor" />.
-///     You can derive from this and only override what you are interested in.
+/// An adapter class for <see cref="IInputProcessor" />.
+/// You can derive from this and only override what you are interested in.
 /// </summary>
 [PublicAPI]
 public class InputAdapter : IInputProcessor

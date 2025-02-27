@@ -30,7 +30,7 @@ using Exception = System.Exception;
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-///     Encapsulates a 2D vector. Allows chaining methods by returning a reference to itself
+/// Encapsulates a 2D vector. Allows chaining methods by returning a reference to itself
 /// </summary>
 [PublicAPI]
 public class Vector2 : IVector< Vector2 >
@@ -43,14 +43,14 @@ public class Vector2 : IVector< Vector2 >
     // ========================================================================
 
     /// <summary>
-    ///     Constructs a new vector at (0,0)
+    /// Constructs a new vector at (0,0)
     /// </summary>
     public Vector2() : this( 0, 0 )
     {
     }
 
     /// <summary>
-    ///     Constructs a vector with the given components
+    /// Constructs a vector with the given components
     /// </summary>
     /// <param name="x">The x-component.</param>
     /// <param name="y">The x-component.</param>
@@ -61,7 +61,7 @@ public class Vector2 : IVector< Vector2 >
     }
 
     /// <summary>
-    ///     Constructs a vector from the given vector
+    /// Constructs a vector from the given vector
     /// </summary>
     /// <param name="v">The Vector</param>
     public Vector2( Vector2 v )
@@ -70,17 +70,17 @@ public class Vector2 : IVector< Vector2 >
     }
 
     /// <summary>
-    ///     The X-Component of this vector.
+    /// The X-Component of this vector.
     /// </summary>
     public float X { get; set; }
 
     /// <summary>
-    ///     The Y-Component of this vector.
+    /// The Y-Component of this vector.
     /// </summary>
     public float Y { get; set; }
 
     /// <summary>
-    ///     Returns a copy of this vector.
+    /// Returns a copy of this vector.
     /// </summary>
     public Vector2 Cpy()
     {
@@ -355,7 +355,7 @@ public class Vector2 : IVector< Vector2 >
     }
 
     /// <summary>
-    ///     Sets the components of this vector
+    /// Sets the components of this vector
     /// </summary>
     /// <param name="x">The x-component</param>
     /// <param name="y">The y-component</param>
@@ -369,7 +369,7 @@ public class Vector2 : IVector< Vector2 >
     }
 
     /// <summary>
-    ///     Substracts the other vector from this vector.
+    /// Substracts the other vector from this vector.
     /// </summary>
     /// <param name="x">The x-component of the other vector</param>
     /// <param name="y">The y-component of the other vector</param>
@@ -383,7 +383,7 @@ public class Vector2 : IVector< Vector2 >
     }
 
     /// <summary>
-    ///     Adds the given components to this vector
+    /// Adds the given components to this vector
     /// </summary>
     /// <param name="x">The X component.</param>
     /// <param name="y">The Y component.</param>

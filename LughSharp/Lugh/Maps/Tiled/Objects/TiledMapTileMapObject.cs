@@ -29,16 +29,16 @@ using LughSharp.Lugh.Maps.Tiled.Tiles;
 namespace LughSharp.Lugh.Maps.Tiled.Objects;
 
 /// <summary>
-///     A <see cref="MapObject" /> with a <see cref="ITiledMapTile" />.
-///     Can be both <see cref="StaticTiledMapTile" /> or <see cref="AnimatedTiledMapTile" />.
-///     For compatibility reasons, this extends <see cref="TextureMapObject" />.
-///     Use <see cref="ITiledMapTile.TextureRegion" /> instead of <see cref="TextureRegion" />.
+/// A <see cref="MapObject" /> with a <see cref="ITiledMapTile" />.
+/// Can be both <see cref="StaticTiledMapTile" /> or <see cref="AnimatedTiledMapTile" />.
+/// For compatibility reasons, this extends <see cref="TextureMapObject" />.
+/// Use <see cref="ITiledMapTile.TextureRegion" /> instead of <see cref="TextureRegion" />.
 /// </summary>
 [PublicAPI]
 public class TiledMapTileMapObject : TextureMapObject
 {
     /// <summary>
-    ///     Creates a new <see cref="MapObject" /> with an attached <see cref="ITiledMapTile" />.
+    /// Creates a new <see cref="MapObject" /> with an attached <see cref="ITiledMapTile" />.
     /// </summary>
     /// <param name="tile"> The Tile to attach. </param>
     /// <param name="flipHorizontally"> True to flip this mapobject horizontally. </param>

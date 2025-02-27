@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
 /// <summary>
-///     OpenGL functions.
+/// OpenGL functions.
 /// </summary>
 [PublicAPI]
 public interface IGL

@@ -28,13 +28,13 @@ namespace LughSharp.Lugh.Utils;
 public abstract class DataUtils
 {
     /// <summary>
-    ///     Returns the value obtained by reversing the order of the bytes in the
-    ///     two's complement representation of the specified <b>short</b> value.
+    /// Returns the value obtained by reversing the order of the bytes in the
+    /// two's complement representation of the specified <b>short</b> value.
     /// </summary>
     /// <param name="input">the value whose bytes are to be reversed</param>
     /// <returns>
-    ///     the value obtained by reversing (or, equivalently, swapping) the bytes
-    ///     in the specified <b>short</b> value.
+    /// the value obtained by reversing (or, equivalently, swapping) the bytes
+    /// in the specified <b>short</b> value.
     /// </returns>
     public static short ReverseBytes( short input )
     {
@@ -42,13 +42,13 @@ public abstract class DataUtils
     }
 
     /// <summary>
-    ///     Returns the value obtained by reversing the order of the bytes in the
-    ///     two's complement representation of the specified <b>char</b> value.
+    /// Returns the value obtained by reversing the order of the bytes in the
+    /// two's complement representation of the specified <b>char</b> value.
     /// </summary>
     /// <param name="input">the value whose bytes are to be reversed</param>
     /// <returns>
-    ///     the value obtained by reversing (or, equivalently, swapping) the bytes
-    ///     in the specified <b>char</b> value.
+    /// the value obtained by reversing (or, equivalently, swapping) the bytes
+    /// in the specified <b>char</b> value.
     /// </returns>
     public static char ReverseBytes( char input )
     {
@@ -56,13 +56,13 @@ public abstract class DataUtils
     }
 
     /// <summary>
-    ///     Returns the value obtained by reversing the order of the bytes in the
-    ///     two's complement representation of the specified <b>int</b> value.
+    /// Returns the value obtained by reversing the order of the bytes in the
+    /// two's complement representation of the specified <b>int</b> value.
     /// </summary>
     /// <param name="input">the value whose bytes are to be reversed</param>
     /// <returns>
-    ///     the value obtained by reversing (or, equivalently, swapping) the bytes
-    ///     in the specified <b>int</b> value.
+    /// the value obtained by reversing (or, equivalently, swapping) the bytes
+    /// in the specified <b>int</b> value.
     /// </returns>
     public static int ReverseBytes( int input )
     {
@@ -70,13 +70,13 @@ public abstract class DataUtils
     }
 
     /// <summary>
-    ///     Returns the value obtained by reversing the order of the bytes in the
-    ///     two's complement representation of the specified <b>long</b> value.
+    /// Returns the value obtained by reversing the order of the bytes in the
+    /// two's complement representation of the specified <b>long</b> value.
     /// </summary>
     /// <param name="input">the value whose bytes are to be reversed</param>
     /// <returns>
-    ///     the value obtained by reversing (or, equivalently, swapping) the bytes
-    ///     in the specified <b>long</b> value.
+    /// the value obtained by reversing (or, equivalently, swapping) the bytes
+    /// in the specified <b>long</b> value.
     /// </returns>
     public static long ReverseBytes( long input )
     {
@@ -86,12 +86,12 @@ public abstract class DataUtils
     }
 
     /// <summary>
-    ///     Converts the argument to an <tt>int</tt> by an unsigned conversion. In an unsigned
-    ///     conversion to an <tt>int</tt>, the high-order 16 bits of the <tt>int</tt> are zero
-    ///     and the low-order 16 bits are equal to the bits of the <tt>short</tt> argument.
-    ///     Consequently, zero and positive <tt>short</tt> values are mapped to a numerically
-    ///     equal <tt>int</tt> value and negative <tt>short</tt> values are mapped to an <tt>int</tt>
-    ///     value equal to the input plus 2<sup>16</sup>.
+    /// Converts the argument to an <tt>int</tt> by an unsigned conversion. In an unsigned
+    /// conversion to an <tt>int</tt>, the high-order 16 bits of the <tt>int</tt> are zero
+    /// and the low-order 16 bits are equal to the bits of the <tt>short</tt> argument.
+    /// Consequently, zero and positive <tt>short</tt> values are mapped to a numerically
+    /// equal <tt>int</tt> value and negative <tt>short</tt> values are mapped to an <tt>int</tt>
+    /// value equal to the input plus 2<sup>16</sup>.
     /// </summary>
     /// <param name="x"> the value to convert to an unsigned <tt>int</tt> </param>
     /// <returns> the argument converted to <tt>int</tt> by an unsigned conversion </returns>
@@ -101,12 +101,12 @@ public abstract class DataUtils
     }
 
     /// <summary>
-    ///     Converts the argument to a <tt>long</tt> by an unsigned conversion. In an
-    ///     unsigned conversion to a <tt>long</tt>, the high-order 48 bits of the
-    ///     <tt>long</tt> are zero and the low-order 16 bits are equal to the bits of the
-    ///     <tt>short</tt> argument. Consequently, zero and positive <tt>short</tt> values
-    ///     are mapped to a numerically equal <tt>long</tt> value and negative <tt>short</tt>
-    ///     values are mapped to a <tt>long</tt> value equal to the input plus 2<sup>16</sup>.
+    /// Converts the argument to a <tt>long</tt> by an unsigned conversion. In an
+    /// unsigned conversion to a <tt>long</tt>, the high-order 48 bits of the
+    /// <tt>long</tt> are zero and the low-order 16 bits are equal to the bits of the
+    /// <tt>short</tt> argument. Consequently, zero and positive <tt>short</tt> values
+    /// are mapped to a numerically equal <tt>long</tt> value and negative <tt>short</tt>
+    /// values are mapped to a <tt>long</tt> value equal to the input plus 2<sup>16</sup>.
     /// </summary>
     /// <param name="x"> the value to convert to an unsigned <tt>long</tt> </param>
     /// <returns> the argument converted to <tt>long</tt> by an unsigned conversion </returns>
