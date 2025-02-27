@@ -24,6 +24,8 @@
 
 using System.Runtime.CompilerServices;
 
+using LughSharp.Lugh.Files;
+
 using Environment = System.Environment;
 
 namespace LughSharp.Lugh.Utils;
@@ -59,7 +61,7 @@ public static class Logger
     private const string DEBUG_TAG              = "[DEBUG.....]";
     private const string ERROR_TAG              = "[ERROR.....]";
     private const string CHECKPOINT_TAG         = "[CHECKPOINT]";
-    private const string PREFS_FOLDER           = @"\.prefs\";
+    private const string PREFS_FOLDER           = "logs";
     private const string DEFAULT_TRACE_FILENAME = "trace.txt";
 
     #endregion constants
@@ -265,12 +267,10 @@ public static class Logger
             string baseDirectory = AppContext.BaseDirectory;
 
             // Construct the log directory path
-            _debugFilePath = Path.Combine( baseDirectory, "logs/" );
+            _debugFilePath = $"{baseDirectory}logs{Path.DirectorySeparatorChar}";
             _debugFileName = fileName;
 
             using var fs = File.Create( _debugFilePath + _debugFileName );
-
-            Console.WriteLine( fs.Name );
 
             var dateTime = DateTime.Now;
             var divider  = new UTF8Encoding( true ).GetBytes( "-----------------------------------------------------" );

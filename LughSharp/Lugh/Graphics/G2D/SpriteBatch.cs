@@ -621,7 +621,7 @@ public class SpriteBatch : IBatch
         }
 
         // Texture Coordinates Attribute
-        var texCoordLocation = program.GetAttributeLocation( "a_texCoords" );
+        var texCoordLocation = program.GetAttributeLocation( "a_texCoord" );
 
         if ( texCoordLocation >= 0 )
         {
@@ -723,7 +723,7 @@ public class SpriteBatch : IBatch
     {
         GdxRuntimeException.ThrowIfNull( _shader );
 
-        _combinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( _shader.ShaderHandle,
+        _combinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( _shader.ShaderProgramHandle,
                                                                       "u_combinedMatrix" );
     }
 

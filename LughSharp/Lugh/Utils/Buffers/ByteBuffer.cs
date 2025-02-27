@@ -39,17 +39,17 @@ public class ByteBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Creates a new ByteBuffer with the specified capacity.
+    /// Creates a new ByteBuffer with the specified capacity.
     /// </summary>
     /// <param name="capacityInBytes"> The number of bytes to be made available in the buffer. </param>
     /// <param name="allowAutoResize">
-    ///     If true, the buffer will automatically resize if a buffer overflow is possible. This
-    ///     can be disabled, either in the constructor parameter or by setting <see cref="Buffer.AutoResizeEnabled" />
-    ///     to false.
+    /// If true, the buffer will automatically resize if a buffer overflow is possible. This
+    /// can be disabled, either in the constructor parameter or by setting <see cref="Buffer.AutoResizeEnabled" />
+    /// to false.
     /// </param>
     /// <param name="maxCapacity">
-    ///     The value at which to set the maximum allowed buffer capacity. The default for this is 1GB, and
-    ///     can be changed to whatever the user requires.
+    /// The value at which to set the maximum allowed buffer capacity. The default for this is 1GB, and
+    /// can be changed to whatever the user requires.
     /// </param>
     public ByteBuffer( int capacityInBytes, bool allowAutoResize = true, int maxCapacity = DEFAULT_MAC_1GB )
         : base( capacityInBytes )
@@ -59,8 +59,8 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Creates a new ByteBuffer that is backed by the provided Memory&lt;byte&gt;.
-    ///     This constructor is intended for creating buffer views and should not allocate new memory.
+    /// Creates a new ByteBuffer that is backed by the provided Memory&lt;byte&gt;.
+    /// This constructor is intended for creating buffer views and should not allocate new memory.
     /// </summary>
     /// <param name="memory">The Memory&lt;byte&gt; to use as the backing store.</param>
     /// <param name="isBigEndian">Indicates whether the buffer should use big-endian byte order.</param>
@@ -85,7 +85,7 @@ public class ByteBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Gets the Byte from the backing array at the current <see cref="Buffer.Position" />.
+    /// Gets the Byte from the backing array at the current <see cref="Buffer.Position" />.
     /// </summary>
     public override byte GetByte()
     {
@@ -102,7 +102,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Gets the Byte from the backing array at the specified index.
+    /// Gets the Byte from the backing array at the specified index.
     /// </summary>
     /// <param name="index"> The buffer position from which to return the byte value. </param>
     public override byte GetByte( int index )
@@ -116,8 +116,8 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Puts the provided Byte into the backing array at the current <see cref="Buffer.Position" />.
-    ///     Position is then updated.
+    /// Puts the provided Byte into the backing array at the current <see cref="Buffer.Position" />.
+    /// Position is then updated.
     /// </summary>
     /// <param name="value"> The value to put. </param>
     public override void PutByte( byte value )
@@ -132,7 +132,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Puts the provided Byte into the backing array at the specified index.
+    /// Puts the provided Byte into the backing array at the specified index.
     /// </summary>
     /// <param name="index"> The position in the buffer at which to put the byte value. </param>
     /// <param name="value"> The value to put. </param>
@@ -158,10 +158,10 @@ public class ByteBuffer : Buffer, IDisposable
     // ----- Bulk Get/Put operations -----
 
     /// <summary>
-    ///     Transfers the entire contents of this buffer into the provided destination
-    ///     array. An invocation of this method with the destination byte array
-    ///     <paramref name="dst" /> behaves in exactly the same way as invoking
-    ///     <c>dst.GetBytes(src, 0, src.Length)</c>.
+    /// Transfers the entire contents of this buffer into the provided destination
+    /// array. An invocation of this method with the destination byte array
+    /// <paramref name="dst" /> behaves in exactly the same way as invoking
+    /// <c>dst.GetBytes(src, 0, src.Length)</c>.
     /// </summary>
     /// <param name="dst"> The destination byte array. </param>
     /// <exception cref="ArgumentNullException"> If <paramref name="dst" /> is null.</exception>
@@ -171,21 +171,21 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Gets bytes from this buffer, starting at the current <see cref="Buffer.Position" />,
-    ///     and puts them into the provided destination byte array 'dst'.
-    ///     Updates the <see cref="Buffer.Position" /> by the number of bytes read.
+    /// Gets bytes from this buffer, starting at the current <see cref="Buffer.Position" />,
+    /// and puts them into the provided destination byte array 'dst'.
+    /// Updates the <see cref="Buffer.Position" /> by the number of bytes read.
     /// </summary>
     /// <param name="dst">
-    ///     The destination array to receive the bytes. Must be large enough to hold 'dstOffset + length' bytes.
+    /// The destination array to receive the bytes. Must be large enough to hold 'dstOffset + length' bytes.
     /// </param>
     /// <param name="dstOffset"> The starting offset within the destination array to write to. </param>
     /// <param name="length"> The number of bytes to get. </param>
     /// <exception cref="IndexOutOfRangeException">
-    ///     If there are not enough remaining bytes in the buffer or if dstOffset and length cause overflow in dst.
+    /// If there are not enough remaining bytes in the buffer or if dstOffset and length cause overflow in dst.
     /// </exception>
     /// <exception cref="ArgumentNullException"> If <paramref name="dst" /> is null.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     If <paramref name="dstOffset" /> or <paramref name="length" /> is negative.
+    /// If <paramref name="dstOffset" /> or <paramref name="length" /> is negative.
     /// </exception>
     public override void GetBytes( byte[] dst, int dstOffset, int length )
     {
@@ -221,9 +221,9 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Transfers the entire content of the given source byte array into this buffer.
-    ///     An invocation of this method with the source byte array <paramref name="src" />
-    ///     behaves in exactly the same way as invoking <c>dst.PutBytes(src, 0, src.Length)</c>.
+    /// Transfers the entire content of the given source byte array into this buffer.
+    /// An invocation of this method with the source byte array <paramref name="src" />
+    /// behaves in exactly the same way as invoking <c>dst.PutBytes(src, 0, src.Length)</c>.
     /// </summary>
     /// <param name="src">The source byte array.</param>
     /// <exception cref="ArgumentNullException"> If <paramref name="src" /> is null.</exception>
@@ -235,21 +235,21 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Puts bytes from the source byte array 'src' into this buffer, starting at the current
-    ///     <see cref="Buffer.Position" /> and writing 'length' bytes. The writing starts at a
-    ///     destination offset within the buffer, specified by 'offset'. Also updates the
-    ///     <see cref="Buffer.Position" /> by the number of bytes written.
+    /// Puts bytes from the source byte array 'src' into this buffer, starting at the current
+    /// <see cref="Buffer.Position" /> and writing 'length' bytes. The writing starts at a
+    /// destination offset within the buffer, specified by 'offset'. Also updates the
+    /// <see cref="Buffer.Position" /> by the number of bytes written.
     /// </summary>
     /// <param name="src"> The source byte array to get bytes from. </param>
     /// <param name="srcOffset"> The starting offset within the source array to read from. </param>
     /// <param name="dstOffset"> The starting offset within *this buffer* (the destination) to write to. </param>
     /// <param name="length"> The number of bytes to put. </param>
     /// <exception cref="IndexOutOfRangeException">
-    ///     If there is not enough space remaining in the buffer or if srcOffset and length cause overflow in src.
+    /// If there is not enough space remaining in the buffer or if srcOffset and length cause overflow in src.
     /// </exception>
     /// <exception cref="ArgumentNullException"> If <paramref name="src" /> is null.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     If <paramref name="srcOffset" />, <paramref name="dstOffset" /> or <paramref name="length" /> is negative.
+    /// If <paramref name="srcOffset" />, <paramref name="dstOffset" /> or <paramref name="length" /> is negative.
     /// </exception>
     public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int length )
     {
@@ -297,7 +297,7 @@ public class ByteBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Gets a Short value from the backing array at the current <see cref="Buffer.Position" />.
+    /// Gets a Short value from the backing array at the current <see cref="Buffer.Position" />.
     /// </summary>
     public short GetShort()
     {
@@ -307,7 +307,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Gets a Short value from the backing array at the specified index.
+    /// Gets a Short value from the backing array at the specified index.
     /// </summary>
     public short GetShort( int index )
     {
@@ -317,7 +317,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Puts the provided Short value into the backing array at the current <see cref="Buffer.Position" />.
+    /// Puts the provided Short value into the backing array at the current <see cref="Buffer.Position" />.
     /// </summary>
     /// <param name="value"> The value to put. </param>
     public void PutShort( short value )
@@ -340,7 +340,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Puts the provided Short value into the backing array at the specified index.
+    /// Puts the provided Short value into the backing array at the specified index.
     /// </summary>
     /// <param name="index"> The index. </param>
     /// <param name="value"> The value to put. </param>
@@ -481,7 +481,7 @@ public class ByteBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Gets an Int32 value from the backing array at the current <see cref="Buffer.Position" />.
+    /// Gets an Int32 value from the backing array at the current <see cref="Buffer.Position" />.
     /// </summary>
     public int GetInt()
     {
@@ -491,7 +491,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Gets an Int32 value from the backing array at the specified index.
+    /// Gets an Int32 value from the backing array at the specified index.
     /// </summary>
     public int GetInt( int index )
     {
@@ -501,7 +501,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Puts the provided Int32 value into the backing array at the current <see cref="Buffer.Position" />.
+    /// Puts the provided Int32 value into the backing array at the current <see cref="Buffer.Position" />.
     /// </summary>
     /// <param name="value"> The value to put. </param>
     public void PutInt( int value )
@@ -524,7 +524,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Puts the provided Int32 into the backing array at the specified index.
+    /// Puts the provided Int32 into the backing array at the specified index.
     /// </summary>
     /// <param name="index"> The index. </param>
     /// <param name="value"> The value to put. </param>
@@ -664,7 +664,7 @@ public class ByteBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Gets a Float value from the backing array at the current <see cref="Buffer.Position" />.
+    /// Gets a Float value from the backing array at the current <see cref="Buffer.Position" />.
     /// </summary>
     public float GetFloat()
     {
@@ -674,7 +674,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Gets a Float value from the backing array at the specified index.
+    /// Gets a Float value from the backing array at the specified index.
     /// </summary>
     public float GetFloat( int index )
     {
@@ -684,7 +684,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Puts the provided Float into the backing array at the current <see cref="Buffer.Position" />.
+    /// Puts the provided Float into the backing array at the current <see cref="Buffer.Position" />.
     /// </summary>
     /// <param name="value"> The value to put. </param>
     public void PutFloat( float value )
@@ -707,7 +707,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Puts the provided Float into the backing array at the specified index.
+    /// Puts the provided Float into the backing array at the specified index.
     /// </summary>
     /// <param name="index"> The index. </param>
     /// <param name="value"> The value to put. </param>
@@ -857,16 +857,47 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Returns the backing array as a byte[].
+    /// Returns the backing array as a byte[].
     /// </summary>
     /// <returns></returns>
-    public new byte[] ToArray()
+    public byte[] BackingArray()
     {
         return _backingArray;
     }
 
     /// <summary>
-    ///     Allocates a new ByteBuffer with the specified capacity (in bytes).
+    /// Indexer. Gets or sets the byte at the specified index in the ByteBuffer.
+    /// </summary>
+    /// <param name="index">The zero-based index of the byte to get or set.</param>
+    /// <returns>The byte at the specified index.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when the index is less than zero or greater than or equal to the <see cref="Buffer.Capacity"/>.
+    /// </exception>
+    public byte this[ int index ]
+    {
+        get
+        {
+            if ( ( index < 0 ) || ( index >= Capacity ) )
+            {
+                throw new IndexOutOfRangeException( $"Index '{index}' is out of range. Valid range is 0 to {Capacity - 1}." );
+            }
+
+            return _backingArray[ index ];
+        }
+        set
+        {
+            if ( ( index < 0 ) || ( index >= Capacity ) )
+            {
+                throw new IndexOutOfRangeException( $"Index '{index}' is out of range. Valid range is 0 to {Capacity - 1}." );
+            }
+
+            _backingArray[ index ] = value;
+            _backingArray[ index ] = value;
+        }
+    }
+
+    /// <summary>
+    /// Allocates a new ByteBuffer with the specified capacity (in bytes).
     /// </summary>
     /// <param name="capacityInBytes">The desired capacity of the ByteBuffer in bytes.</param>
     /// <returns>A new ByteBuffer instance.</returns>
@@ -882,9 +913,9 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Creates a new IntBuffer whose content is a shared subsequence of this ByteBuffer's content.
-    ///     Changes to this ByteBuffer's content will be visible in the returned IntBuffer, and vice-versa.
-    ///     The position, limit, and mark of the new buffer will be independent of this buffer.
+    /// Creates a new IntBuffer whose content is a shared subsequence of this ByteBuffer's content.
+    /// Changes to this ByteBuffer's content will be visible in the returned IntBuffer, and vice-versa.
+    /// The position, limit, and mark of the new buffer will be independent of this buffer.
     /// </summary>
     /// <returns>A new IntBuffer instance.</returns>
     public IntBuffer AsIntBuffer()
@@ -898,9 +929,9 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Creates a new ShortBuffer whose content is a shared subsequence of this ByteBuffer's content.
-    ///     Changes to this ByteBuffer's content will be visible in the returned ShortBuffer, and vice-versa.
-    ///     The position, limit, and mark of the new buffer will be independent of this buffer.
+    /// Creates a new ShortBuffer whose content is a shared subsequence of this ByteBuffer's content.
+    /// Changes to this ByteBuffer's content will be visible in the returned ShortBuffer, and vice-versa.
+    /// The position, limit, and mark of the new buffer will be independent of this buffer.
     /// </summary>
     /// <returns>A new ShortBuffer instance.</returns>
     public ShortBuffer AsShortBuffer()
@@ -914,9 +945,9 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Creates a new FloatBuffer whose content is a shared subsequence of this ByteBuffer's content.
-    ///     Changes to this ByteBuffer's content will be visible in the returned FloatBuffer, and vice-versa.
-    ///     The position, limit, and mark of the new buffer will be independent of this buffer.
+    /// Creates a new FloatBuffer whose content is a shared subsequence of this ByteBuffer's content.
+    /// Changes to this ByteBuffer's content will be visible in the returned FloatBuffer, and vice-versa.
+    /// The position, limit, and mark of the new buffer will be independent of this buffer.
     /// </summary>
     /// <returns>A new FloatBuffer instance.</returns>
     public FloatBuffer AsFloatBuffer()
@@ -1009,28 +1040,28 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Wraps a byte array into a buffer.
-    ///     <para>
-    ///         The new buffer will be backed by the given byte array; that is, modifications
-    ///         to the buffer will cause the array to be modified and vice versa. The new buffer's
-    ///         capacity will be <c>array.length</c>, its position will be <c>offset</c>, its
-    ///         limit will be <c>offset + length</c>, and its mark will be undefined. Its
-    ///         backing array will be the given array.
-    ///     </para>
+    /// Wraps a byte array into a buffer.
+    /// <para>
+    /// The new buffer will be backed by the given byte array; that is, modifications
+    /// to the buffer will cause the array to be modified and vice versa. The new buffer's
+    /// capacity will be <c>array.length</c>, its position will be <c>offset</c>, its
+    /// limit will be <c>offset + length</c>, and its mark will be undefined. Its
+    /// backing array will be the given array.
+    /// </para>
     /// </summary>
     /// <param name="array"> The array that will back the new buffer </param>
     /// <param name="offset">
-    ///     The offset of the subarray to be used; must be non-negative and no larger
-    ///     than <c>array.length</c>. The new buffer's position will be set to this value.
+    /// The offset of the subarray to be used; must be non-negative and no larger
+    /// than <c>array.length</c>. The new buffer's position will be set to this value.
     /// </param>
     /// <param name="length">
-    ///     The length of the subarray to be used; must be non-negative and no larger
-    ///     than <c>array.length - offset</c>. The new buffer's limit will be set to
-    ///     <c>offset + length</c>.
+    /// The length of the subarray to be used; must be non-negative and no larger
+    /// than <c>array.length - offset</c>. The new buffer's limit will be set to
+    /// <c>offset + length</c>.
     /// </param>
     /// <returns> The new byte buffer </returns>
     /// <exception cref="IndexOutOfRangeException">
-    ///     If the preconditions on the <c>offset</c> and <c>length</c> parameters do not hold
+    /// If the preconditions on the <c>offset</c> and <c>length</c> parameters do not hold
     /// </exception>
     public static ByteBuffer Wrap( byte[] array, int offset, int length )
     {
@@ -1050,14 +1081,14 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    ///     Wraps a byte array into a buffer.
-    ///     <para>
-    ///         The new buffer will be backed by the given byte array; that is, modifications
-    ///         to the buffer will cause the array to be modified and vice versa. The new buffer's
-    ///         capacity will be <c>array.length</c>, its position will be <c>offset</c>, its
-    ///         limit will be <c>offset + length</c>, and its mark will be undefined. Its
-    ///         backing array will be the given array.
-    ///     </para>
+    /// Wraps a byte array into a buffer.
+    /// <para>
+    /// The new buffer will be backed by the given byte array; that is, modifications
+    /// to the buffer will cause the array to be modified and vice versa. The new buffer's
+    /// capacity will be <c>array.length</c>, its position will be <c>offset</c>, its
+    /// limit will be <c>offset + length</c>, and its mark will be undefined. Its
+    /// backing array will be the given array.
+    /// </para>
     /// </summary>
     /// <param name="array"> The array that will back the new buffer </param>
     /// <returns> The new byte buffer </returns>
@@ -1071,8 +1102,8 @@ public class ByteBuffer : Buffer, IDisposable
     // ========================================================================
 
     /// <summary>
-    ///     Performs application-defined tasks associated with freeing, releasing, or
-    ///     resetting unmanaged resources.
+    /// Performs application-defined tasks associated with freeing, releasing, or
+    /// resetting unmanaged resources.
     /// </summary>
     protected override void Dispose( bool disposing )
     {

@@ -191,7 +191,7 @@ public class VertexBufferObjectSubData : IVertexData
         {
             ByteBuffer.Limit = _buffer.Limit * 4;
 
-            fixed ( void* ptr = &ByteBuffer.ToArray()[ 0 ] )
+            fixed ( void* ptr = &ByteBuffer.BackingArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, ByteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
@@ -322,7 +322,7 @@ public class VertexBufferObjectSubData : IVertexData
     {
         if ( _isBound )
         {
-            fixed ( void* ptr = &ByteBuffer.ToArray()[ 0 ] )
+            fixed ( void* ptr = &ByteBuffer.BackingArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferSubData( IGL.GL_ARRAY_BUFFER, 0, ByteBuffer.Limit, ( IntPtr )ptr );
             }

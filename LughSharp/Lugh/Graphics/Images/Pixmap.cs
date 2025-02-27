@@ -273,7 +273,7 @@ public class Pixmap : IDisposable
 
     /// <summary>
     /// </summary>
-    public byte[] PixelData => Gdx2DPixmap.PixmapBuffer.ToArray();
+    public byte[] PixelData => Gdx2DPixmap.PixmapBuffer.BackingArray();
 
     /// <summary>
     ///     Sets the type of interpolation <see cref="BlendTypes" /> to be used in
@@ -609,7 +609,7 @@ public class Pixmap : IDisposable
                           $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DPixelFormat( GetColorFormat() ) )}" );
             Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
-            var a = Gdx2DPixmap.PixmapBuffer.ToArray();
+            var a = Gdx2DPixmap.PixmapBuffer.BackingArray();
 
             for ( var i = 0; i < 100; i += 10 )
             {

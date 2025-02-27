@@ -107,7 +107,7 @@ public class VertexArray : IVertexData
         }
 
         fixed ( float* sourcePtr = &vertices[ offset ] )
-        fixed ( byte* destPtr = _byteBuffer.ToArray() )
+        fixed ( byte* destPtr = _byteBuffer.BackingArray() )
         {
             Unsafe.CopyBlock( destPtr + _byteBuffer.Position, sourcePtr, ( uint )( count * sizeof( float ) ) );
             _byteBuffer.Position += count * 4;
@@ -131,7 +131,7 @@ public class VertexArray : IVertexData
         }
 
         fixed ( float* sourcePtr = &vertices[ sourceOffset ] )
-        fixed ( byte* destPtr = _byteBuffer.ToArray() )
+        fixed ( byte* destPtr = _byteBuffer.BackingArray() )
         {
             Unsafe.CopyBlock( destPtr + ( targetOffset * sizeof( float ) ), sourcePtr, ( uint )( count * sizeof( float ) ) );
         }

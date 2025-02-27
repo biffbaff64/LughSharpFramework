@@ -191,7 +191,7 @@ public class ScreenUtils
 
         var pixels = new ByteBuffer( numBytes );
 
-        fixed ( void* ptr = &pixels.ToArray()[ 0 ] )
+        fixed ( void* ptr = &pixels.BackingArray()[ 0 ] )
         {
             GdxApi.Bindings.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
         }

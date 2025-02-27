@@ -210,7 +210,7 @@ public class InstanceBufferObjectSubData : IInstanceData
         {
             unsafe
             {
-                fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
+                fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
                 {
                     _byteBuffer.Limit = _buffer.Limit * 4;
                     GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
@@ -356,7 +356,7 @@ public class InstanceBufferObjectSubData : IInstanceData
     {
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, 0, _usage );
                 GdxApi.Bindings.BufferSubData( IGL.GL_ARRAY_BUFFER, 0, _byteBuffer.Limit, ( IntPtr )ptr );

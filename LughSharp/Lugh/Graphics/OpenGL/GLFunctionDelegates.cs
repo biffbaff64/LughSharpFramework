@@ -49,13 +49,6 @@ using GLint64 = long;
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial class GLBindings
 {
-    [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    public unsafe delegate void GLDEBUGPROC( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar* message,
-                                             IntPtr userParam );
-
-    [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    public delegate void GLDEBUGPROCSAFE( GLenum source, GLenum type, GLuint id, GLenum severity, string message, IntPtr userParam );
-
     private PFNGLACTIVESHADERPROGRAMPROC                         _glActiveShaderProgram;
     private PFNGLACTIVETEXTUREPROC                               _glActiveTexture;
     private PFNGLATTACHSHADERPROC                                _glAttachShader;
@@ -713,6 +706,23 @@ public partial class GLBindings
     private PFNGLVIEWPORTINDEXEDFPROC                            _glViewportIndexedf;
     private PFNGLVIEWPORTINDEXEDFVPROC                           _glViewportIndexedfv;
     private PFNGLWAITSYNCPROC                                    _glWaitSync;
+
+    [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
+    public unsafe delegate void GLDEBUGPROC( GLenum source,
+                                             GLenum type,
+                                             GLuint id,
+                                             GLenum severity,
+                                             GLsizei length,
+                                             GLchar* message,
+                                             IntPtr userParam );
+
+    [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
+    public delegate void GLDEBUGPROCSAFE( GLenum source,
+                                          GLenum type,
+                                          GLuint id,
+                                          GLenum severity,
+                                          string message,
+                                          IntPtr userParam );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLCULLFACEPROC( GLenum mode );
@@ -2956,4 +2966,4 @@ public partial class GLBindings
     // ========================================================================
 }
 
-#pragma warning enable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.

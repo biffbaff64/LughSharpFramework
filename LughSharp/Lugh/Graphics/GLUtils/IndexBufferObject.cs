@@ -126,7 +126,7 @@ public class IndexBufferObject : IIndexData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
@@ -153,7 +153,7 @@ public class IndexBufferObject : IIndexData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
@@ -178,7 +178,7 @@ public class IndexBufferObject : IIndexData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
@@ -211,7 +211,7 @@ public class IndexBufferObject : IIndexData
 
             unsafe
             {
-                fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
+                fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
                 {
                     GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
                 }

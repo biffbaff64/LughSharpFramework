@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -176,7 +175,7 @@ public class InstanceBufferObject : IInstanceData
         {
             _byteBuffer.Limit = _buffer.Limit * 4;
 
-            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
             }
@@ -357,7 +356,7 @@ public class InstanceBufferObject : IInstanceData
 
         if ( _isBound )
         {
-            fixed ( void* ptr = &_byteBuffer.ToArray()[ 0 ] )
+            fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
                 GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, 0, Usage );
                 GdxApi.Bindings.BufferData( IGL.GL_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, Usage );

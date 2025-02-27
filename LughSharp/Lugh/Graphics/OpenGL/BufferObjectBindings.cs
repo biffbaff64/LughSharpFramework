@@ -72,11 +72,9 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLDELETEBUFFERSPROC >( "glDeleteBuffers", out _glDeleteBuffers );
 
+        fixed ( GLuint* p = &buffers[ 0 ] )
         {
-            fixed ( GLuint* p = &buffers[ 0 ] )
-            {
-                _glDeleteBuffers( buffers.Length, p );
-            }
+            _glDeleteBuffers( buffers.Length, p );
         }
     }
 
@@ -95,16 +93,14 @@ public unsafe partial class GLBindings
     {
         GetDelegateForFunction< PFNGLGENBUFFERSPROC >( "glGenBuffers", out _glGenBuffers );
 
+        var ret = new GLuint[ n ];
+
+        fixed ( GLuint* p = &ret[ 0 ] )
         {
-            var ret = new GLuint[ n ];
-
-            fixed ( GLuint* p = &ret[ 0 ] )
-            {
-                _glGenBuffers( n, p );
-            }
-
-            return ret;
+            _glGenBuffers( n, p );
         }
+
+        return ret;
     }
 
     /// <inheritdoc />

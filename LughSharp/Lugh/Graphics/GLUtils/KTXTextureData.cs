@@ -270,7 +270,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
             var directBuffer = new ByteBuffer( pos );
             directBuffer.Order( _compressedData.Order() );
-            directBuffer.PutBytes( _compressedData.ToArray() );
+            directBuffer.PutBytes( _compressedData.BackingArray() );
 
             _compressedData = directBuffer;
         }
@@ -489,7 +489,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
                                 unsafe
                                 {
-                                    fixed ( void* ptr = &pixmap.ByteBuffer.ToArray()[ 0 ] )
+                                    fixed ( void* ptr = &pixmap.ByteBuffer.BackingArray()[ 0 ] )
                                     {
                                         GdxApi.Bindings.TexImage2D( target + face,
                                                                     level,
@@ -509,7 +509,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                             {
                                 unsafe
                                 {
-                                    fixed ( void* dataptr = &data.ToArray()[ 0 ] )
+                                    fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                                     {
                                         GdxApi.Bindings.CompressedTexImage2D( target + face,
                                                                               level,
@@ -528,7 +528,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                             // Try to load (no software unpacking fallback)
                             unsafe
                             {
-                                fixed ( void* dataptr = &data.ToArray()[ 0 ] )
+                                fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                                 {
                                     GdxApi.Bindings.CompressedTexImage2D( target + face,
                                                                           level,
@@ -546,7 +546,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                     {
                         unsafe
                         {
-                            fixed ( void* dataptr = &data.ToArray()[ 0 ] )
+                            fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                             {
                                 GdxApi.Bindings.TexImage2D( target + face,
                                                             level,

@@ -39,9 +39,17 @@ public partial class GLBindings
     // ========================================================================
     // ========================================================================
 
-    [DllImport( "opengl32.dll", EntryPoint = "wglGetProcAddress", CallingConvention = CallingConvention.StdCall )]
-    private static extern IntPtr wglGetProcAddress( string procname );
+    [LibraryImport( "opengl32.dll", EntryPoint = "wglGetProcAddress", StringMarshalling = StringMarshalling.Utf16)]
+    [UnmanagedCallConv(CallConvs = [ typeof(System.Runtime.CompilerServices.CallConvStdcall) ] )]
+    private static partial IntPtr wglGetProcAddress( string procname );
 
+    /// <summary>
+    /// Gets the delegate for the specified OpenGL function.
+    /// </summary>
+    /// <param name="functionName"> The name of the required function. </param>
+    /// <param name="functionDelegate"> The delegate storage. </param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static bool GetDelegateForFunction< T >( string functionName, out T functionDelegate ) where T : Delegate
     {
         if ( _loadedFunctions.TryGetValue( functionName, out var existingDelegate ) )

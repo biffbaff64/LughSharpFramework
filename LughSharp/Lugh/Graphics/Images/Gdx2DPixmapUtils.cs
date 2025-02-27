@@ -73,7 +73,7 @@ public partial class Gdx2DPixmap
                 break;
         }
 
-        Array.Copy( _pixmapDataType.Pixels, PixmapBuffer.ToArray(), _pixmapDataType.Pixels.Length );
+        Array.Copy( _pixmapDataType.Pixels, PixmapBuffer.BackingArray(), _pixmapDataType.Pixels.Length );
     }
 
     // ========================================================================

@@ -210,7 +210,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <param name="len"></param>
     /// <param name="requestedFormat"></param>
     public Gdx2DPixmap( ByteBuffer buffer, int offset, int len, int requestedFormat )
-        : this( buffer.ToArray(), offset, len, requestedFormat )
+        : this( buffer.BackingArray(), offset, len, requestedFormat )
     {
     }
 

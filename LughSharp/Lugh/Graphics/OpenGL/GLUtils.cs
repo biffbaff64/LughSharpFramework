@@ -145,4 +145,28 @@ public static class GLUtils
             GdxApi.Bindings.Enable( IGL.GL_DEBUG_OUTPUT_SYNCHRONOUS );
         }
     }
+
+//    public static int Validate( int data,
+//                                 string dataName,
+//                                 string forName = "",
+//                                 [CallerMemberName] string callerMethod   = "" )
+//    {
+//        if ( data == -1 )
+//        {
+//            var sb = new StringBuilder();
+//
+//            sb.Append( $"***** Action cannot be performed, {dataName} ID is -1 " );
+//
+//            if ( forName != "" )
+//            {
+//                sb.Append( $"for {forName} " );
+//            }
+//            
+//            sb.Append( $"in method {callerMethod} *****" );
+//            
+//            Logger.Debug( sb.ToString() );
+//        }
+//        
+//        return data;
+//    }
 }
