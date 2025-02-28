@@ -136,6 +136,24 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
+    public void UseProgram( GLint program )
+    {
+        if ( program == INVALID_SHADER_PROGRAM )
+        {
+            Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
+        }
+        
+        // Error checking is done internal to GetDelegateForFunction.
+        GetDelegateForFunction< PFNGLUSEPROGRAMPROC >( "glUseProgram", out _glUseProgram );
+
+        Logger.Debug( $"Using program: {program}" );
+        
+        _glUseProgram( ( uint )program );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
     public GLuint CreateShader( GLenum type )
     {
         GetDelegateForFunction< PFNGLCREATESHADERPROC >( "glCreateShader", out _glCreateShader );
@@ -727,24 +745,6 @@ public unsafe partial class GLBindings
         GetDelegateForFunction< PFNGLSHADERSOURCEPROC >( "glShaderSource", out _glShaderSource );
 
         _glShaderSource( ( uint )shader, count, pstring, length );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void UseProgram( GLint program )
-    {
-        if ( program == INVALID_SHADER_PROGRAM )
-        {
-            Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
-        }
-        
-        // Error checking is done internal to GetDelegateForFunction.
-        GetDelegateForFunction< PFNGLUSEPROGRAMPROC >( "glUseProgram", out _glUseProgram );
-
-        Logger.Debug( $"Using program: {program}" );
-        
-        _glUseProgram( ( uint )program );
     }
 
     // ========================================================================

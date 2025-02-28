@@ -624,10 +624,10 @@ public class ShaderProgram : IDisposable
     /// </summary>
     public void Dispose()
     {
-//        Unbind();
-//        GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
-//        GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
-//        GdxApi.Bindings.DeleteProgram( ShaderHandle );
+        Unbind();
+        GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
+        GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
+        GdxApi.Bindings.DeleteProgram( ShaderProgramHandle );
 
         GC.SuppressFinalize( this );
     }

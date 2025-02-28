@@ -121,7 +121,7 @@ public class SpriteBatch : IBatch
         // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
         if ( size > MAX_SPRITES )
         {
-            throw new ArgumentException( $"Can't have more than 8191 sprites per batch: {size}" );
+            throw new ArgumentException( $"Can't have more than {MAX_SPRITES} sprites per batch: {size}" );
         }
 
         IsDrawing = false;
@@ -589,8 +589,6 @@ public class SpriteBatch : IBatch
             throw new NullReferenceException( "program and _mesh cannot be null!" );
         }
 
-        program.Bind();
-
         GdxApi.Bindings.BindVertexArray( _vao );
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
 
@@ -630,7 +628,6 @@ public class SpriteBatch : IBatch
 
         GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
         GdxApi.Bindings.BindVertexArray( 0 );
-        program.Unbind();
     }
 
     // ========================================================================
