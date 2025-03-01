@@ -124,36 +124,6 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public GLuint CreateProgram()
-    {
-        GetDelegateForFunction< PFNGLCREATEPROGRAMPROC >( "glCreateProgram", out _glCreateProgram );
-
-        //TODO: Error checking here
-        
-        return _glCreateProgram();
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void UseProgram( GLint program )
-    {
-        if ( program == INVALID_SHADER_PROGRAM )
-        {
-            Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
-        }
-        
-        // Error checking is done internal to GetDelegateForFunction.
-        GetDelegateForFunction< PFNGLUSEPROGRAMPROC >( "glUseProgram", out _glUseProgram );
-
-        Logger.Debug( $"Using program: {program}" );
-        
-        _glUseProgram( ( uint )program );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
     public GLuint CreateShader( GLenum type )
     {
         GetDelegateForFunction< PFNGLCREATESHADERPROC >( "glCreateShader", out _glCreateShader );
@@ -397,74 +367,6 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetProgramiv( GLint program, GLenum pname, GLint* parameters )
-    {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
-        {
-            Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
-        }
-        
-        // Error checking is done internal to GetDelegateForFunction.
-        GetDelegateForFunction< PFNGLGETPROGRAMIVPROC >( "glGetProgramiv", out _glGetProgramiv );
-
-        _glGetProgramiv( ( uint )program, pname, parameters );
-    }
-
-    /// <inheritdoc />
-    public void GetProgramiv( GLint program, GLenum pname, ref GLint[] parameters )
-    {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
-        {
-            Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
-        }
-        
-        // Error checking is done internal to GetDelegateForFunction.
-        GetDelegateForFunction< PFNGLGETPROGRAMIVPROC >( "glGetProgramiv", out _glGetProgramiv );
-
-        fixed ( GLint* pparams = &parameters[ 0 ] )
-        {
-            _glGetProgramiv( ( uint )program, pname, pparams );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void GetProgramInfoLog( GLint program, GLsizei bufSize, GLsizei* length, GLchar* infoLog )
-    {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
-        {
-            Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
-        }
-        
-        // Error checking is done internal to GetDelegateForFunction.
-        GetDelegateForFunction< PFNGLGETPROGRAMINFOLOGPROC >( "glGetProgramInfoLog", out _glGetProgramInfoLog );
-
-        _glGetProgramInfoLog( ( uint )program, bufSize, length, infoLog );
-    }
-
-    /// <inheritdoc />
-    public string GetProgramInfoLog( GLint program, GLsizei bufSize )
-    {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
-        {
-            Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
-        }
-        
-        // Error checking is done internal to GetDelegateForFunction.
-        var     infoLog = stackalloc GLchar[ bufSize ];
-        GLsizei len;
-
-        GetDelegateForFunction< PFNGLGETPROGRAMINFOLOGPROC >( "glGetProgramInfoLog", out _glGetProgramInfoLog );
-
-        _glGetProgramInfoLog( ( uint )program, bufSize, &len, infoLog );
-
-        return new string( ( GLbyte* )infoLog, 0, len, Encoding.UTF8 );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
     public void GetShaderiv( GLint shader, GLenum pname, GLint* parameters )
     {
         if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
@@ -659,39 +561,12 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public GLboolean IsProgram( GLint program )
-    {
-        // Error checking is done internal to GetDelegateForFunction.
-        GetDelegateForFunction< PFNGLISPROGRAMPROC >( "glIsProgram", out _glIsProgram );
-
-        return _glIsProgram( ( uint )program );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
     public GLboolean IsShader( GLint shader )
     {
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLISSHADERPROC >( "glIsShader", out _glIsShader );
 
         return _glIsShader( ( uint )shader );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void LinkProgram( GLint program )
-    {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
-        {
-            Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
-        }
-        
-        // Error checking is done internal to GetDelegateForFunction.
-        GetDelegateForFunction< PFNGLLINKPROGRAMPROC >( "glLinkProgram", out _glLinkProgram );
-
-        _glLinkProgram( ( uint )program );
     }
 
     // ========================================================================
@@ -745,22 +620,6 @@ public unsafe partial class GLBindings
         GetDelegateForFunction< PFNGLSHADERSOURCEPROC >( "glShaderSource", out _glShaderSource );
 
         _glShaderSource( ( uint )shader, count, pstring, length );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public bool ValidateProgram( int program )
-    {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
-        {
-            Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
-        }
-        
-        // Error checking is done internal to GetDelegateForFunction.
-        GetDelegateForFunction< PFNGLVALIDATEPROGRAMPROC >( "glValidateProgram", out _glValidateProgram );
-
-        return _glValidateProgram( ( uint )program );
     }
 
     // ========================================================================
@@ -1522,85 +1381,4 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc />
-    public void ColorMaski( GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a )
-    {
-        GetDelegateForFunction< PFNGLCOLORMASKIPROC >( "glColorMaski", out _glColorMaski );
-
-        _glColorMaski( index, r, g, b, a );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void GetBooleani_v( GLenum target, GLuint index, GLboolean* data )
-    {
-        GetDelegateForFunction< PFNGLGETBOOLEANI_VPROC >( "glGetBooleani_v", out _glGetBooleani_v );
-
-        _glGetBooleani_v( target, index, data );
-    }
-
-    /// <inheritdoc />
-    public void GetBooleani_v( GLenum target, GLuint index, ref GLboolean[] data )
-    {
-        GetDelegateForFunction< PFNGLGETBOOLEANI_VPROC >( "glGetBooleani_v", out _glGetBooleani_v );
-
-        fixed ( GLboolean* p = &data[ 0 ] )
-        {
-            _glGetBooleani_v( target, index, p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void GetIntegeri_v( GLenum target, GLuint index, GLint* data )
-    {
-        GetDelegateForFunction< PFNGLGETINTEGERI_VPROC >( "glGetIntegeri_v", out _glGetIntegeri_v );
-
-        _glGetIntegeri_v( target, index, data );
-    }
-
-    /// <inheritdoc />
-    public void GetIntegeri_v( GLenum target, GLuint index, ref GLint[] data )
-    {
-        GetDelegateForFunction< PFNGLGETINTEGERI_VPROC >( "glGetIntegeri_v", out _glGetIntegeri_v );
-
-        fixed ( GLint* p = &data[ 0 ] )
-        {
-            _glGetIntegeri_v( target, index, p );
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void Enablei( GLenum target, GLuint index )
-    {
-        GetDelegateForFunction< PFNGLENABLEIPROC >( "glEnablei", out _glEnablei );
-
-        _glEnablei( target, index );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void Disablei( GLenum target, GLuint index )
-    {
-        GetDelegateForFunction< PFNGLDISABLEIPROC >( "glDisablei", out _glDisablei );
-
-        _glDisablei( target, index );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public GLboolean IsEnabledi( GLenum target, GLuint index )
-    {
-        GetDelegateForFunction< PFNGLISENABLEDIPROC >( "glIsEnabledi", out _glIsEnabledi );
-
-        return _glIsEnabledi( target, index );
-    }
-
-    // ========================================================================
 }

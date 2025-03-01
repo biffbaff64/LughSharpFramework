@@ -27,20 +27,37 @@ namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum BufferTarget : int
 {
-    ArrayBuffer        = IGL.GL_ARRAY_BUFFER,
-    ElementArrayBuffer = IGL.GL_ELEMENT_ARRAY_BUFFER,
+    ArrayBuffer             = IGL.GL_ARRAY_BUFFER,
+    ElementArrayBuffer      = IGL.GL_ELEMENT_ARRAY_BUFFER,
+    PixelPackBuffer         = IGL.GL_PIXEL_PACK_BUFFER,
+    PixelUnpackBuffer       = IGL.GL_PIXEL_UNPACK_BUFFER,
+    TransformFeedbackBuffer = IGL.GL_TRANSFORM_FEEDBACK_BUFFER,
+    CopyReadBuffer          = IGL.GL_COPY_READ_BUFFER,
+    CopyWriteBuffer         = IGL.GL_COPY_WRITE_BUFFER,
+    TextureBuffer           = IGL.GL_TEXTURE_BUFFER,
+    UniformBuffer           = IGL.GL_UNIFORM_BUFFER,
+}
 
-    // ... other buffer targets
+[PublicAPI]
+public enum BufferAccess : int
+{
+    ReadOnly  = IGL.GL_READ_ONLY,
+    ReadWrite = IGL.GL_READ_WRITE,
+    WriteOnly = IGL.GL_WRITE_ONLY,
 }
 
 [PublicAPI]
 public enum BufferUsageHint : int
 {
     StaticDraw  = IGL.GL_STATIC_DRAW,
+    StaticCopy  = IGL.GL_STATIC_COPY,
+    StaticRead  = IGL.GL_STATIC_READ,
     DynamicDraw = IGL.GL_DYNAMIC_DRAW,
+    DynamicCopy = IGL.GL_DYNAMIC_COPY,
+    DynamicRead = IGL.GL_DYNAMIC_READ,
     StreamDraw  = IGL.GL_STREAM_DRAW,
-
-    // ... other usage hints
+    StreamCopy  = IGL.GL_STREAM_COPY,
+    StreamRead  = IGL.GL_STREAM_READ,
 }
 
 [PublicAPI]

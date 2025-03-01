@@ -146,18 +146,18 @@ public interface IBatch : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Sets up the Batch for drawing. This will disable depth buffer writing. It enables
-    /// blending and texturing. If you have more texture units enabled than the first one
-    /// you have to disable them before calling this. Uses a screen coordinate system by
-    /// default where everything is given in pixels. You can specify your own projection
-    /// and modelview matrices via <see cref="SetProjectionMatrix(Matrix4)" /> and
-    /// <see cref="SetTransformMatrix(Matrix4)" />.
+    /// Sets up the Batch for drawing. This will disable depth buffer writing. It enables blending
+    /// and texturing. If you have more texture units enabled than the first one you have to disable
+    /// them before calling this. Uses a screen coordinate system by default where everything is
+    /// given in pixels. You can specify your own projection and modelview matrices via
+    /// <see cref="SetProjectionMatrix(Matrix4)" /> and <see cref="SetTransformMatrix(Matrix4)" />.
     /// </summary>
-    void Begin();
-
+    /// <param name="depthMaskEnabled"> Enable or Disable DepthMask. Defaults to false. </param>
+    void Begin( bool depthMaskEnabled = false );
+    
     /// <summary>
     /// Finishes off rendering. Enables depth writes, disables blending and texturing.
-    /// Must always be called after a call to <see cref="Begin" />
+    /// Must always be called after a call to <see cref="Begin()" />
     /// </summary>
     void End();
 

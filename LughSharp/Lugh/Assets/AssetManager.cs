@@ -62,8 +62,7 @@ public partial class AssetManager
     private IAssetErrorListener? _listener;
     private int                  _loaded;
     private int                  _peakTasks;
-
-    private int _toLoad;
+    private int                  _toLoad;
 
     // ========================================================================
     // ========================================================================
@@ -135,10 +134,7 @@ public partial class AssetManager
                 // Load next task if there are no active tasks running.
                 while ( ( _loadQueue.Count != 0 ) && ( _tasks.Count == 0 ) )
                 {
-                    if ( LoadNextTask() )
-                    {
-                        Logger.Debug( $"Next task is loaded: {_tasks.Peek()}" );
-                    }
+                    LoadNextTask();
                 }
 
                 // If we still have no tasks, we're done
@@ -914,8 +910,6 @@ public partial class AssetManager
 
         AssetLoader? result = null;
 
-        Logger.Debug( $"fileName: {fileName}" );
-
         if ( fileName == null )
         {
             Logger.Debug( $"Fetching default loader for {type} : {fileName}" );
@@ -932,8 +926,6 @@ public partial class AssetManager
                 {
                     result = entry.Value;
                     len    = entry.Key.Length;
-
-                    Logger.Debug( $"Fetching loader for {type} : {result.GetType().Name}" );
                 }
             }
         }
@@ -986,8 +978,6 @@ public partial class AssetManager
 
         lock ( this )
         {
-            Logger.Debug( $"filename: {fileName}" );
-
             // The result of GetLoader is discarded here, but the call is made as the method
             // throws an exception if there is no available loader for the supplied asset.
             _ = GetLoader( type, fileName );
@@ -1031,8 +1021,6 @@ public partial class AssetManager
         ArgumentNullException.ThrowIfNull( fileName );
         ArgumentNullException.ThrowIfNull( type );
         ArgumentNullException.ThrowIfNull( asset );
-
-        Logger.Debug( $"fileName: {fileName}, type: {type}, asset: {asset}" );
 
         // Add the asset to the filename lookup
         _assetTypes[ fileName ] = type;

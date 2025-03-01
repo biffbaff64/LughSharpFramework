@@ -432,15 +432,15 @@ GRAPHICS/OPENGL
     - DONE - DONE - IGL
     - DONE - DONE - IGLBindings
     - DONE - DONE - IGLBindingsExtra
-    -      -      - ProgramBindings
+    - IP   -      - ProgramBindings
     - IP   -      - QueryBindings
     -      -      - RenderBufferBindings
-    -      -      - ShaderBindings
+    - IP   -      - ShaderBindings
     -      -      - StateBindings
     - IP   -      - TextureBindings
     - IP   -      - TextureSamplerBindings
     -      -      - TransformFeedbackBindings
-    -      -      - UniformBindings
+    - IP   -      - UniformBindings
     - IP   -      - UtilBindings
     -      -      - VertexArrayBindings
 

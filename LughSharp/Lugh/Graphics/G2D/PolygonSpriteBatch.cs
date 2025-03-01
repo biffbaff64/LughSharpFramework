@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -89,6 +90,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     private Texture?       _lastTexture;
     private int            _triangleIndex;
     private int            _vertexIndex;
+    private bool           _originalDepthMask;
 
     // ========================================================================
     // ========================================================================
@@ -183,7 +185,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     public Matrix4 TransformMatrix   { get; set; }         = new();
     public bool    IsDrawing         { get; set; }
 
-    public void Begin()
+    public void Begin( bool depthMaskEnabled = false )
     {
         if ( IsDrawing )
         {
@@ -192,7 +194,8 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         RenderCalls = 0;
 
-        GdxApi.Bindings.DepthMask( false );
+        _originalDepthMask = GdxApi.Bindings.IsEnabled( ( int )EnableCap.DepthTest );
+        GdxApi.Bindings.DepthMask( depthMaskEnabled );
 
         if ( _customShader != null )
         {

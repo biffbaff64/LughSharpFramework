@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -87,10 +88,6 @@ public static class GLUtils
             throw new GdxRuntimeException( "No OpenGL context is current on this thread!" );
         }
 
-        #if DEBUG
-        Logger.Debug( "Context found on current thread." );
-        #endif
-
         return true;
     }
 
@@ -146,27 +143,60 @@ public static class GLUtils
         }
     }
 
-//    public static int Validate( int data,
-//                                 string dataName,
-//                                 string forName = "",
-//                                 [CallerMemberName] string callerMethod   = "" )
-//    {
-//        if ( data == -1 )
-//        {
-//            var sb = new StringBuilder();
-//
-//            sb.Append( $"***** Action cannot be performed, {dataName} ID is -1 " );
-//
-//            if ( forName != "" )
-//            {
-//                sb.Append( $"for {forName} " );
-//            }
-//            
-//            sb.Append( $"in method {callerMethod} *****" );
-//            
-//            Logger.Debug( sb.ToString() );
-//        }
-//        
-//        return data;
-//    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="vbo"></param>
+    /// <param name="sizeInBytes"></param>
+    /// <param name="vertexSizeInFloats"></param>
+    /// <returns></returns>
+    public static float[]? GetVboData( uint vbo, int sizeInBytes, int vertexSizeInFloats )
+    {
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, vbo );
+
+        var dataPtr = GdxApi.Bindings.MapBuffer( ( int )BufferTarget.ArrayBuffer, ( int )BufferAccess.ReadOnly );
+
+        if ( dataPtr == IntPtr.Zero )
+        {
+            Logger.Debug( "Error: Failed to map VBO." );
+
+            return null;
+        }
+
+        var data = new float[ sizeInBytes / sizeof( float ) ];
+        Marshal.Copy( dataPtr, data, 0, data.Length );
+
+        GdxApi.Bindings.UnmapBuffer( ( int )BufferTarget.ArrayBuffer );
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+
+        return data;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="vbo"></param>
+    /// <param name="sizeInBytes"></param>
+    /// <param name="vertexSizeInFloats"></param>
+    public static void PrintVboData( uint vbo, int sizeInBytes, int vertexSizeInFloats )
+    {
+        var data = GetVboData( vbo, sizeInBytes, vertexSizeInFloats );
+
+        if ( data == null )
+        {
+            return;
+        }
+
+        for ( var i = 0; i < data.Length; i += vertexSizeInFloats )
+        {
+            Logger.Debug( $"Vertex {i / vertexSizeInFloats}: " );
+
+            for ( var j = 0; j < vertexSizeInFloats; j++ )
+            {
+                Logger.Debug( $"{data[ i + j ]} " );
+            }
+
+            Console.WriteLine();
+        }
+    }
 }

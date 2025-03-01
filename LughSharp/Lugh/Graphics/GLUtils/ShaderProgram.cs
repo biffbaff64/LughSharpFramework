@@ -524,6 +524,8 @@ public class ShaderProgram : IDisposable
             return;
         }
 
+        if ( size == 0 ) throw new GdxRuntimeException( "Size cannot be 0." );  
+        
         GdxApi.Bindings.VertexAttribPointer( ( GLuint )location, size, type, normalize, stride, offset );
     }
 

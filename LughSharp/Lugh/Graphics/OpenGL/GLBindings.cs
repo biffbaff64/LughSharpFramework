@@ -28,6 +28,7 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
+
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -78,6 +79,207 @@ public unsafe partial class GLBindings : IGLBindings
     public readonly IntPtr NULL = ( IntPtr )0;
 
     // ========================================================================
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void ColorMaski( GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a )
+    {
+        GetDelegateForFunction< PFNGLCOLORMASKIPROC >( "glColorMaski", out _glColorMaski );
+
+        _glColorMaski( index, r, g, b, a );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void GetBooleani_v( GLenum target, GLuint index, GLboolean* data )
+    {
+        GetDelegateForFunction< PFNGLGETBOOLEANI_VPROC >( "glGetBooleani_v", out _glGetBooleani_v );
+
+        _glGetBooleani_v( target, index, data );
+    }
+
+    /// <inheritdoc />
+    public void GetBooleani_v( GLenum target, GLuint index, ref GLboolean[] data )
+    {
+        GetDelegateForFunction< PFNGLGETBOOLEANI_VPROC >( "glGetBooleani_v", out _glGetBooleani_v );
+
+        fixed ( GLboolean* p = &data[ 0 ] )
+        {
+            _glGetBooleani_v( target, index, p );
+        }
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void GetIntegeri_v( GLenum target, GLuint index, GLint* data )
+    {
+        GetDelegateForFunction< PFNGLGETINTEGERI_VPROC >( "glGetIntegeri_v", out _glGetIntegeri_v );
+
+        _glGetIntegeri_v( target, index, data );
+    }
+
+    /// <inheritdoc />
+    public void GetIntegeri_v( GLenum target, GLuint index, ref GLint[] data )
+    {
+        GetDelegateForFunction< PFNGLGETINTEGERI_VPROC >( "glGetIntegeri_v", out _glGetIntegeri_v );
+
+        fixed ( GLint* p = &data[ 0 ] )
+        {
+            _glGetIntegeri_v( target, index, p );
+        }
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public (int major, int minor) GetOpenGLVersion()
+    {
+        var version = GetString( IGL.GL_VERSION );
+
+        if ( version == null )
+        {
+            throw new GdxRuntimeException( "NULL GL Version returned!" );
+        }
+
+        return ( version[ 0 ], version[ 2 ] );
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// Handles OpenGL debug messages or errors by logging a callback. This can be used to retrieve
+    /// diagnostic messages from OpenGL during runtime.
+    /// </summary>
+    /// <param name="source">
+    /// Specifies the source of the debug callback, identifying which part of the OpenGL system the
+    /// message originates from.
+    /// </param>
+    /// <param name="type">Specifies the type of debug message, such as error, performance warning, or other messages.</param>
+    /// <param name="id">Specifies the unique ID for the message to help identify specific issues.</param>
+    /// <param name="severity">Specifies the severity level of the message (e.g., notification, warning, or error).</param>
+    /// <param name="length">Specifies the length of the message string in bytes.</param>
+    /// <param name="message">A pointer to the actual message string provided by OpenGL.</param>
+    /// <param name="userParam">A pointer to optional user-defined data passed to the callback.</param>
+    public void MessageCallback( int source,
+                                 int type,
+                                 uint id,
+                                 int severity,
+                                 int length,
+                                 byte* message,
+                                 IntPtr userParam )
+    {
+        Logger.Error( $"GL CALLBACK: " +
+                      $"{( type == IGL.GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" )} " +
+                      $"source = {source:X}, " +
+                      $"type = {type:X}, " +
+                      $"severity = {severity:X}, " +
+                      $"message = {BytePointerToString.Convert( message )}\n" );
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void Hint( GLenum target, GLenum mode )
+    {
+        GetDelegateForFunction< PFNGLHINTPROC >( "glHint", out _glHint );
+
+        _glHint( target, mode );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void Clear( GLbitfield mask )
+    {
+        GetDelegateForFunction< PFNGLCLEARPROC >( "glClear", out _glClear );
+
+        _glClear( mask );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void ClearColor( GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha )
+    {
+        GetDelegateForFunction< PFNGLCLEARCOLORPROC >( "glClearColor", out _glClearColor );
+
+        _glClearColor( red, green, blue, alpha );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void Disable( GLenum cap )
+    {
+        GetDelegateForFunction< PFNGLDISABLEPROC >( "glDisable", out _glDisable );
+
+        _glDisable( cap );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void Enable( GLenum cap )
+    {
+        GetDelegateForFunction< PFNGLENABLEPROC >( "glEnable", out _glEnable );
+
+        _glEnable( cap );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void LogicOp( GLenum opcode )
+    {
+        GetDelegateForFunction< PFNGLLOGICOPPROC >( "glLogicOp", out _glLogicOp );
+
+        _glLogicOp( opcode );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public GLboolean IsEnabled( GLenum cap )
+    {
+        GetDelegateForFunction< PFNGLISENABLEDPROC >( "glIsEnabled", out _glIsEnabled );
+
+        return _glIsEnabled( cap );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void Enablei( GLenum target, GLuint index )
+    {
+        GetDelegateForFunction< PFNGLENABLEIPROC >( "glEnablei", out _glEnablei );
+
+        _glEnablei( target, index );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void Disablei( GLenum target, GLuint index )
+    {
+        GetDelegateForFunction< PFNGLDISABLEIPROC >( "glDisablei", out _glDisablei );
+
+        _glDisablei( target, index );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public GLboolean IsEnabledi( GLenum target, GLuint index )
+    {
+        GetDelegateForFunction< PFNGLISENABLEDIPROC >( "glIsEnabledi", out _glIsEnabledi );
+
+        return _glIsEnabledi( target, index );
+    }
+
     // ========================================================================
 
     /// <inheritdoc />
@@ -1077,308 +1279,6 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void Uniform1d( GLint location, GLdouble x )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM1DPROC >( "glUniform1d", out _glUniform1d );
-
-        _glUniform1d( location, x );
-    }
-
-    // ========================================================================
-
-    public void Uniform2d( GLint location, GLdouble x, GLdouble y )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM2DPROC >( "glUniform2d", out _glUniform2d );
-
-        _glUniform2d( location, x, y );
-    }
-
-    // ========================================================================
-
-    public void Uniform3d( GLint location, GLdouble x, GLdouble y, GLdouble z )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM3DPROC >( "glUniform3d", out _glUniform3d );
-
-        _glUniform3d( location, x, y, z );
-    }
-
-    // ========================================================================
-
-    public void Uniform4d( GLint location, GLdouble x, GLdouble y, GLdouble z, GLdouble w )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM4DPROC >( "glUniform4d", out _glUniform4d );
-
-        _glUniform4d( location, x, y, z, w );
-    }
-
-    // ========================================================================
-
-    public void Uniform1dv( GLint location, GLsizei count, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM1DVPROC >( "glUniform1dv", out _glUniform1dv );
-
-        _glUniform1dv( location, count, value );
-    }
-
-    public void Uniform1dv( GLint location, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM1DVPROC >( "glUniform1dv", out _glUniform1dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniform1dv( location, value.Length, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void Uniform2dv( GLint location, GLsizei count, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM2DVPROC >( "glUniform2dv", out _glUniform2dv );
-
-        _glUniform2dv( location, count, value );
-    }
-
-    public void Uniform2dv( GLint location, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM2DVPROC >( "glUniform2dv", out _glUniform2dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniform2dv( location, value.Length / 2, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void Uniform3dv( GLint location, GLsizei count, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM3DVPROC >( "glUniform3dv", out _glUniform3dv );
-
-        _glUniform3dv( location, count, value );
-    }
-
-    public void Uniform3dv( GLint location, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM3DVPROC >( "glUniform3dv", out _glUniform3dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniform3dv( location, value.Length / 3, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void Uniform4dv( GLint location, GLsizei count, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM4DVPROC >( "glUniform4dv", out _glUniform4dv );
-
-        _glUniform4dv( location, count, value );
-    }
-
-    public void Uniform4dv( GLint location, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORM4DVPROC >( "glUniform4dv", out _glUniform4dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniform4dv( location, value.Length / 4, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void UniformMatrix2dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX2DVPROC >( "glUniformMatrix2dv", out _glUniformMatrix2dv );
-
-        _glUniformMatrix2dv( location, count, transpose, value );
-    }
-
-    public void UniformMatrix2dv( GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX2DVPROC >( "glUniformMatrix2dv", out _glUniformMatrix2dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniformMatrix2dv( location, value.Length / 4, transpose, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void UniformMatrix3dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX3DVPROC >( "glUniformMatrix3dv", out _glUniformMatrix3dv );
-
-        _glUniformMatrix3dv( location, count, transpose, value );
-    }
-
-    public void UniformMatrix3dv( GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX3DVPROC >( "glUniformMatrix3dv", out _glUniformMatrix3dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniformMatrix3dv( location, value.Length / 9, transpose, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void UniformMatrix4dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX4DVPROC >( "glUniformMatrix4dv", out _glUniformMatrix4dv );
-
-        _glUniformMatrix4dv( location, count, transpose, value );
-    }
-
-    public void UniformMatrix4dv( GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX4DVPROC >( "glUniformMatrix4dv", out _glUniformMatrix4dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniformMatrix4dv( location, value.Length / 16, transpose, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void UniformMatrix2x3dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX2X3DVPROC >( "glUniformMatrix2x3dv", out _glUniformMatrix2x3dv );
-
-        _glUniformMatrix2x3dv( location, count, transpose, value );
-    }
-
-    public void UniformMatrix2x3dv( GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX2X3DVPROC >( "glUniformMatrix2x3dv", out _glUniformMatrix2x3dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniformMatrix2x3dv( location, value.Length / 6, transpose, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void UniformMatrix2x4dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX2X4DVPROC >( "glUniformMatrix2x4dv", out _glUniformMatrix2x4dv );
-
-        _glUniformMatrix2x4dv( location, count, transpose, value );
-    }
-
-    public void UniformMatrix2x4dv( GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX2X4DVPROC >( "glUniformMatrix2x4dv", out _glUniformMatrix2x4dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniformMatrix2x4dv( location, value.Length / 8, transpose, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void UniformMatrix3x2dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX3X2DVPROC >( "glUniformMatrix3x2dv", out _glUniformMatrix3x2dv );
-
-        _glUniformMatrix3x2dv( location, count, transpose, value );
-    }
-
-    public void UniformMatrix3x2dv( GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX3X2DVPROC >( "glUniformMatrix3x2dv", out _glUniformMatrix3x2dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniformMatrix3x2dv( location, value.Length / 6, transpose, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void UniformMatrix3x4dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX3X4DVPROC >( "glUniformMatrix3x4dv", out _glUniformMatrix3x4dv );
-
-        _glUniformMatrix3x4dv( location, count, transpose, value );
-    }
-
-    public void UniformMatrix3x4dv( GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX3X4DVPROC >( "glUniformMatrix3x4dv", out _glUniformMatrix3x4dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniformMatrix3x4dv( location, value.Length / 12, transpose, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void UniformMatrix4x2dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX4X2DVPROC >( "glUniformMatrix4x2dv", out _glUniformMatrix4x2dv );
-
-        _glUniformMatrix4x2dv( location, count, transpose, value );
-    }
-
-    public void UniformMatrix4x2dv( GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX4X2DVPROC >( "glUniformMatrix4x2dv", out _glUniformMatrix4x2dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniformMatrix4x2dv( location, value.Length / 8, transpose, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void UniformMatrix4x3dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX4X3DVPROC >( "glUniformMatrix4x3dv", out _glUniformMatrix4x3dv );
-
-        _glUniformMatrix4x3dv( location, count, transpose, value );
-    }
-
-    public void UniformMatrix4x3dv( GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMMATRIX4X3DVPROC >( "glUniformMatrix4x3dv", out _glUniformMatrix4x3dv );
-
-        fixed ( GLdouble* p = &value[ 0 ] )
-        {
-            _glUniformMatrix4x3dv( location, value.Length / 12, transpose, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void GetUniformdv( GLuint program, GLint location, GLdouble* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETUNIFORMDVPROC >( "glGetUniformdv", out _glGetUniformdv );
-
-        _glGetUniformdv( ( uint )program, location, parameters );
-    }
-
-    public void GetUniformdv( GLuint program, GLint location, ref GLdouble[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETUNIFORMDVPROC >( "glGetUniformdv", out _glGetUniformdv );
-
-        fixed ( GLdouble* p = &parameters[ 0 ] )
-        {
-            _glGetUniformdv( ( uint )program, location, p );
-        }
-    }
-
-    // ========================================================================
-
     public GLint GetSubroutineUniformLocation( GLuint program, GLenum shadertype, GLchar* name )
     {
         GetDelegateForFunction< PFNGLGETSUBROUTINEUNIFORMLOCATIONPROC >( "glGetSubroutineUniformLocation",
@@ -1493,72 +1393,6 @@ public unsafe partial class GLBindings : IGLBindings
 
             return new string( ( GLbyte* )p, 0, length, Encoding.UTF8 );
         }
-    }
-
-    // ========================================================================
-
-    public void UniformSubroutinesuiv( GLenum shadertype, GLsizei count, GLuint* indices )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMSUBROUTINESUIVPROC >( "glUniformSubroutinesuiv", out _glUniformSubroutinesuiv );
-
-        _glUniformSubroutinesuiv( shadertype, count, indices );
-    }
-
-    public void UniformSubroutinesuiv( GLenum shadertype, GLuint[] indices )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMSUBROUTINESUIVPROC >( "glUniformSubroutinesuiv", out _glUniformSubroutinesuiv );
-
-        fixed ( GLuint* p = &indices[ 0 ] )
-        {
-            _glUniformSubroutinesuiv( shadertype, indices.Length, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void GetUniformSubroutineuiv( GLenum shadertype, GLint location, GLuint* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETUNIFORMSUBROUTINEUIVPROC >( "glGetUniformSubroutineuiv", out _glGetUniformSubroutineuiv );
-
-        _glGetUniformSubroutineuiv( shadertype, location, parameters );
-    }
-
-    public void GetUniformSubroutineuiv( GLenum shadertype, GLint location, ref GLuint[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETUNIFORMSUBROUTINEUIVPROC >( "glGetUniformSubroutineuiv", out _glGetUniformSubroutineuiv );
-
-        fixed ( GLuint* p = &parameters[ 0 ] )
-        {
-            _glGetUniformSubroutineuiv( shadertype, location, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void GetProgramStageiv( GLuint program, GLenum shadertype, GLenum pname, GLint* values )
-    {
-        GetDelegateForFunction< PFNGLGETPROGRAMSTAGEIVPROC >( "glGetProgramStageiv", out _glGetProgramStageiv );
-
-        _glGetProgramStageiv( ( uint )program, shadertype, pname, values );
-    }
-
-    public void GetProgramStageiv( GLuint program, GLenum shadertype, GLenum pname, ref GLint[] values )
-    {
-        GetDelegateForFunction< PFNGLGETPROGRAMSTAGEIVPROC >( "glGetProgramStageiv", out _glGetProgramStageiv );
-
-        fixed ( GLint* p = &values[ 0 ] )
-        {
-            _glGetProgramStageiv( ( uint )program, shadertype, pname, p );
-        }
-    }
-
-    // ========================================================================
-
-    public void PatchParameteri( GLenum pname, GLint value )
-    {
-        GetDelegateForFunction< PFNGLPATCHPARAMETERIPROC >( "glPatchParameteri", out _glPatchParameteri );
-
-        _glPatchParameteri( pname, value );
     }
 
     // ========================================================================
@@ -1792,1025 +1626,6 @@ public unsafe partial class GLBindings : IGLBindings
         GetDelegateForFunction< PFNGLCLEARDEPTHFPROC >( "glClearDepthf", out _glClearDepthf );
 
         _glClearDepthf( d );
-    }
-
-    // ========================================================================
-
-    public void GetProgramBinary( GLuint program, GLsizei bufSize, GLsizei* length, GLenum* binaryFormat, IntPtr binary )
-    {
-        GetDelegateForFunction< PFNGLGETPROGRAMBINARYPROC >( "glGetProgramBinary", out _glGetProgramBinary );
-
-        _glGetProgramBinary( ( uint )program, bufSize, length, binaryFormat, binary );
-    }
-
-    public byte[] GetProgramBinary( GLuint program, GLsizei bufSize, out GLenum binaryFormat )
-    {
-        var     binary = new byte[ bufSize ];
-        GLsizei length;
-
-        GetDelegateForFunction< PFNGLGETPROGRAMBINARYPROC >( "glGetProgramBinary", out _glGetProgramBinary );
-
-        fixed ( byte* pBinary = &binary[ 0 ] )
-        {
-            fixed ( GLenum* pBinaryFormat = &binaryFormat )
-            {
-                _glGetProgramBinary( ( uint )program, bufSize, &length, pBinaryFormat, ( IntPtr )pBinary );
-            }
-        }
-
-        Array.Resize( ref binary, length );
-
-        return binary;
-    }
-
-    // ========================================================================
-
-    public void ProgramBinary( GLuint program, GLenum binaryFormat, IntPtr binary, GLsizei length )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMBINARYPROC >( "glProgramBinary", out _glProgramBinary );
-
-        _glProgramBinary( ( uint )program, binaryFormat, binary, length );
-    }
-
-    public void ProgramBinary( GLuint program, GLenum binaryFormat, byte[] binary )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMBINARYPROC >( "glProgramBinary", out _glProgramBinary );
-
-        fixed ( byte* pBinary = &binary[ 0 ] )
-        {
-            _glProgramBinary( ( uint )program, binaryFormat, ( IntPtr )pBinary, binary.Length );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramParameteri( GLuint program, GLenum pname, GLint value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMPARAMETERIPROC >( "glProgramParameteri", out _glProgramParameteri );
-
-        _glProgramParameteri( ( uint )program, pname, value );
-    }
-
-    // ========================================================================
-
-    public void UseProgramStages( GLuint pipeline, GLbitfield stages, GLuint program )
-    {
-        GetDelegateForFunction< PFNGLUSEPROGRAMSTAGESPROC >( "glUseProgramStages", out _glUseProgramStages );
-
-        _glUseProgramStages( pipeline, stages, ( uint )program );
-    }
-
-    // ========================================================================
-
-    public void ActiveShaderProgram( GLuint pipeline, GLuint program )
-    {
-        GetDelegateForFunction< PFNGLACTIVESHADERPROGRAMPROC >( "glActiveShaderProgram", out _glActiveShaderProgram );
-
-        _glActiveShaderProgram( pipeline, ( uint )program );
-    }
-
-    // ========================================================================
-
-    public GLuint CreateShaderProgramv( GLenum type, GLsizei count, GLchar** strings )
-    {
-        GetDelegateForFunction< PFNGLCREATESHADERPROGRAMVPROC >( "glCreateShaderProgramv", out _glCreateShaderProgramv );
-
-        return _glCreateShaderProgramv( type, count, strings );
-    }
-
-    public GLuint CreateShaderProgramv( GLenum type, string[] strings )
-    {
-        var stringsBytes = new GLchar[ strings.Length ][];
-
-        for ( var i = 0; i < strings.Length; i++ )
-        {
-            stringsBytes[ i ] = Encoding.UTF8.GetBytes( strings[ i ] );
-        }
-
-        var stringsPtrs = new GLchar*[ strings.Length ];
-
-        for ( var i = 0; i < strings.Length; i++ )
-        {
-            fixed ( GLchar* pString = &stringsBytes[ i ][ 0 ] )
-            {
-                stringsPtrs[ i ] = pString;
-            }
-        }
-
-        GetDelegateForFunction< PFNGLCREATESHADERPROGRAMVPROC >( "glCreateShaderProgramv", out _glCreateShaderProgramv );
-
-        fixed ( GLchar** pStrings = &stringsPtrs[ 0 ] )
-        {
-            return _glCreateShaderProgramv( type, strings.Length, pStrings );
-        }
-    }
-
-    // ========================================================================
-
-    public void BindProgramPipeline( GLuint pipeline )
-    {
-        GetDelegateForFunction< PFNGLBINDPROGRAMPIPELINEPROC >( "glBindProgramPipeline", out _glBindProgramPipeline );
-
-        _glBindProgramPipeline( pipeline );
-    }
-
-    // ========================================================================
-
-    public void DeleteProgramPipelines( GLsizei n, GLuint* pipelines )
-    {
-        GetDelegateForFunction< PFNGLDELETEPROGRAMPIPELINESPROC >( "glDeleteProgramPipelines", out _glDeleteProgramPipelines );
-
-        _glDeleteProgramPipelines( n, pipelines );
-    }
-
-    public void DeleteProgramPipelines( params GLuint[] pipelines )
-    {
-        GetDelegateForFunction< PFNGLDELETEPROGRAMPIPELINESPROC >( "glDeleteProgramPipelines", out _glDeleteProgramPipelines );
-
-        fixed ( GLuint* pPipelines = &pipelines[ 0 ] )
-        {
-            _glDeleteProgramPipelines( pipelines.Length, pPipelines );
-        }
-    }
-
-    // ========================================================================
-
-    public void GenProgramPipelines( GLsizei n, GLuint* pipelines )
-    {
-        GetDelegateForFunction< PFNGLGENPROGRAMPIPELINESPROC >( "glGenProgramPipelines", out _glGenProgramPipelines );
-
-        _glGenProgramPipelines( n, pipelines );
-    }
-
-    public GLuint[] GenProgramPipelines( GLsizei n )
-    {
-        var pipelines = new GLuint[ n ];
-
-        GetDelegateForFunction< PFNGLGENPROGRAMPIPELINESPROC >( "glGenProgramPipelines", out _glGenProgramPipelines );
-
-        fixed ( GLuint* pPipelines = &pipelines[ 0 ] )
-        {
-            _glGenProgramPipelines( n, pPipelines );
-        }
-
-        return pipelines;
-    }
-
-    public GLuint GenProgramPipeline()
-    {
-        return GenProgramPipelines( 1 )[ 0 ];
-    }
-
-    // ========================================================================
-
-    public GLboolean IsProgramPipeline( GLuint pipeline )
-    {
-        GetDelegateForFunction< PFNGLISPROGRAMPIPELINEPROC >( "glIsProgramPipeline", out _glIsProgramPipeline );
-
-        return _glIsProgramPipeline( pipeline );
-    }
-
-    // ========================================================================
-
-    public void GetProgramPipelineiv( GLuint pipeline, GLenum pname, GLint* param )
-    {
-        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEIVPROC >( "glGetProgramPipelineiv", out _glGetProgramPipelineiv );
-
-        _glGetProgramPipelineiv( pipeline, pname, param );
-    }
-
-    public void GetProgramPipelineiv( GLuint pipeline, GLenum pname, ref GLint[] param )
-    {
-        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEIVPROC >( "glGetProgramPipelineiv", out _glGetProgramPipelineiv );
-
-        fixed ( GLint* pParam = &param[ 0 ] )
-        {
-            _glGetProgramPipelineiv( pipeline, pname, pParam );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform1i( GLuint program, GLint location, GLint v0 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1IPROC >( "glProgramUniform1i", out _glProgramUniform1i );
-
-        _glProgramUniform1i( ( uint )program, location, v0 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform1iv( GLuint program, GLint location, GLsizei count, GLint* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1IVPROC >( "glProgramUniform1iv", out _glProgramUniform1iv );
-
-        _glProgramUniform1iv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform1iv( GLuint program, GLint location, GLint[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1IVPROC >( "glProgramUniform1iv", out _glProgramUniform1iv );
-
-        fixed ( GLint* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform1iv( ( uint )program, location, value.Length, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform1f( GLuint program, GLint location, GLfloat v0 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1FPROC >( "glProgramUniform1f", out _glProgramUniform1f );
-
-        _glProgramUniform1f( ( uint )program, location, v0 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform1fv( GLuint program, GLint location, GLsizei count, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1FVPROC >( "glProgramUniform1fv", out _glProgramUniform1fv );
-
-        _glProgramUniform1fv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform1fv( GLuint program, GLint location, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1FVPROC >( "glProgramUniform1fv", out _glProgramUniform1fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform1fv( ( uint )program, location, value.Length, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform1d( GLuint program, GLint location, GLdouble v0 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1DPROC >( "glProgramUniform1d", out _glProgramUniform1d );
-
-        _glProgramUniform1d( ( uint )program, location, v0 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform1dv( GLuint program, GLint location, GLsizei count, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1DVPROC >( "glProgramUniform1dv", out _glProgramUniform1dv );
-
-        _glProgramUniform1dv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform1dv( GLuint program, GLint location, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1DVPROC >( "glProgramUniform1dv", out _glProgramUniform1dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform1dv( ( uint )program, location, value.Length, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform1ui( GLuint program, GLint location, GLuint v0 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1UIPROC >( "glProgramUniform1ui", out _glProgramUniform1ui );
-
-        _glProgramUniform1ui( ( uint )program, location, v0 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform1uiv( GLuint program, GLint location, GLsizei count, GLuint* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1UIVPROC >( "glProgramUniform1uiv", out _glProgramUniform1uiv );
-
-        _glProgramUniform1uiv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform1uiv( GLuint program, GLint location, GLuint[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM1UIVPROC >( "glProgramUniform1uiv", out _glProgramUniform1uiv );
-
-        fixed ( GLuint* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform1uiv( ( uint )program, location, value.Length, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform2i( GLuint program, GLint location, GLint v0, GLint v1 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2IPROC >( "glProgramUniform2i", out _glProgramUniform2i );
-
-        _glProgramUniform2i( ( uint )program, location, v0, v1 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform2iv( GLuint program, GLint location, GLsizei count, GLint* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2IVPROC >( "glProgramUniform2iv", out _glProgramUniform2iv );
-
-        _glProgramUniform2iv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform2iv( GLuint program, GLint location, GLint[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2IVPROC >( "glProgramUniform2iv", out _glProgramUniform2iv );
-
-        fixed ( GLint* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform2iv( ( uint )program, location, value.Length / 2, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform2f( GLuint program, GLint location, GLfloat v0, GLfloat v1 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2FPROC >( "glProgramUniform2f", out _glProgramUniform2f );
-
-        _glProgramUniform2f( ( uint )program, location, v0, v1 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform2fv( GLuint program, GLint location, GLsizei count, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2FVPROC >( "glProgramUniform2fv", out _glProgramUniform2fv );
-
-        _glProgramUniform2fv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform2fv( GLuint program, GLint location, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2FVPROC >( "glProgramUniform2fv", out _glProgramUniform2fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform2fv( ( uint )program, location, value.Length / 2, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform2d( GLuint program, GLint location, GLdouble v0, GLdouble v1 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2DPROC >( "glProgramUniform2d", out _glProgramUniform2d );
-
-        _glProgramUniform2d( ( uint )program, location, v0, v1 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform2dv( GLuint program, GLint location, GLsizei count, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2DVPROC >( "glProgramUniform2dv", out _glProgramUniform2dv );
-
-        _glProgramUniform2dv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform2dv( GLuint program, GLint location, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2DVPROC >( "glProgramUniform2dv", out _glProgramUniform2dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform2dv( ( uint )program, location, value.Length / 2, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform2ui( GLuint program, GLint location, GLuint v0, GLuint v1 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2UIPROC >( "glProgramUniform2ui", out _glProgramUniform2ui );
-
-        _glProgramUniform2ui( ( uint )program, location, v0, v1 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform2uiv( GLuint program, GLint location, GLsizei count, GLuint* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2UIVPROC >( "glProgramUniform2uiv", out _glProgramUniform2uiv );
-
-        _glProgramUniform2uiv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform2uiv( GLuint program, GLint location, GLuint[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM2UIVPROC >( "glProgramUniform2uiv", out _glProgramUniform2uiv );
-
-        fixed ( GLuint* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform2uiv( ( uint )program, location, value.Length / 2, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform3i( GLuint program, GLint location, GLint v0, GLint v1, GLint v2 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3IPROC >( "glProgramUniform3i", out _glProgramUniform3i );
-
-        _glProgramUniform3i( ( uint )program, location, v0, v1, v2 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform3iv( GLuint program, GLint location, GLsizei count, GLint* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3IVPROC >( "glProgramUniform3iv", out _glProgramUniform3iv );
-
-        _glProgramUniform3iv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform3iv( GLuint program, GLint location, GLint[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3IVPROC >( "glProgramUniform3iv", out _glProgramUniform3iv );
-
-        fixed ( GLint* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform3iv( ( uint )program, location, value.Length / 3, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform3f( GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3FPROC >( "glProgramUniform3f", out _glProgramUniform3f );
-
-        _glProgramUniform3f( ( uint )program, location, v0, v1, v2 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform3fv( GLuint program, GLint location, GLsizei count, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3FVPROC >( "glProgramUniform3fv", out _glProgramUniform3fv );
-
-        _glProgramUniform3fv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform3fv( GLuint program, GLint location, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3FVPROC >( "glProgramUniform3fv", out _glProgramUniform3fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform3fv( ( uint )program, location, value.Length / 3, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform3d( GLuint program, GLint location, GLdouble v0, GLdouble v1, GLdouble v2 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3DPROC >( "glProgramUniform3d", out _glProgramUniform3d );
-
-        _glProgramUniform3d( ( uint )program, location, v0, v1, v2 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform3dv( GLuint program, GLint location, GLsizei count, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3DVPROC >( "glProgramUniform3dv", out _glProgramUniform3dv );
-
-        _glProgramUniform3dv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform3dv( GLuint program, GLint location, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3DVPROC >( "glProgramUniform3dv", out _glProgramUniform3dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform3dv( ( uint )program, location, value.Length / 3, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform3ui( GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3UIPROC >( "glProgramUniform3ui", out _glProgramUniform3ui );
-
-        _glProgramUniform3ui( ( uint )program, location, v0, v1, v2 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform3uiv( GLuint program, GLint location, GLsizei count, GLuint* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3UIVPROC >( "glProgramUniform3uiv", out _glProgramUniform3uiv );
-
-        _glProgramUniform3uiv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform3uiv( GLuint program, GLint location, GLuint[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM3UIVPROC >( "glProgramUniform3uiv", out _glProgramUniform3uiv );
-
-        fixed ( GLuint* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform3uiv( ( uint )program, location, value.Length / 3, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform4i( GLuint program, GLint location, GLint v0, GLint v1, GLint v2, GLint v3 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4IPROC >( "glProgramUniform4i", out _glProgramUniform4i );
-
-        _glProgramUniform4i( ( uint )program, location, v0, v1, v2, v3 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform4iv( GLuint program, GLint location, GLsizei count, GLint* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4IVPROC >( "glProgramUniform4iv", out _glProgramUniform4iv );
-
-        _glProgramUniform4iv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform4iv( GLuint program, GLint location, GLint[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4IVPROC >( "glProgramUniform4iv", out _glProgramUniform4iv );
-
-        fixed ( GLint* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform4iv( ( uint )program, location, value.Length / 4, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform4f( GLuint program, GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4FPROC >( "glProgramUniform4f", out _glProgramUniform4f );
-
-        _glProgramUniform4f( ( uint )program, location, v0, v1, v2, v3 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform4fv( GLuint program, GLint location, GLsizei count, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4FVPROC >( "glProgramUniform4fv", out _glProgramUniform4fv );
-
-        _glProgramUniform4fv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform4fv( GLuint program, GLint location, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4FVPROC >( "glProgramUniform4fv", out _glProgramUniform4fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform4fv( ( uint )program, location, value.Length / 4, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform4d( GLuint program, GLint location, GLdouble v0, GLdouble v1, GLdouble v2, GLdouble v3 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4DPROC >( "glProgramUniform4d", out _glProgramUniform4d );
-
-        _glProgramUniform4d( ( uint )program, location, v0, v1, v2, v3 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform4dv( GLuint program, GLint location, GLsizei count, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4DVPROC >( "glProgramUniform4dv", out _glProgramUniform4dv );
-
-        _glProgramUniform4dv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform4dv( GLuint program, GLint location, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4DVPROC >( "glProgramUniform4dv", out _glProgramUniform4dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform4dv( ( uint )program, location, value.Length / 4, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform4ui( GLuint program, GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3 )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4UIPROC >( "glProgramUniform4ui", out _glProgramUniform4ui );
-
-        _glProgramUniform4ui( ( uint )program, location, v0, v1, v2, v3 );
-    }
-
-    // ========================================================================
-
-    public void ProgramUniform4uiv( GLuint program, GLint location, GLsizei count, GLuint* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4UIVPROC >( "glProgramUniform4uiv", out _glProgramUniform4uiv );
-
-        _glProgramUniform4uiv( ( uint )program, location, count, value );
-    }
-
-    public void ProgramUniform4uiv( GLuint program, GLint location, GLuint[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORM4UIVPROC >( "glProgramUniform4uiv", out _glProgramUniform4uiv );
-
-        fixed ( GLuint* pValue = &value[ 0 ] )
-        {
-            _glProgramUniform4uiv( ( uint )program, location, value.Length / 4, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix2fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2FVPROC >( "glProgramUniformMatrix2fv", out _glProgramUniformMatrix2fv );
-
-        _glProgramUniformMatrix2fv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix2fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2FVPROC >( "glProgramUniformMatrix2fv", out _glProgramUniformMatrix2fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix2fv( ( uint )program, location, value.Length / 4, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix3fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3FVPROC >( "glProgramUniformMatrix3fv", out _glProgramUniformMatrix3fv );
-
-        _glProgramUniformMatrix3fv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix3fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3FVPROC >( "glProgramUniformMatrix3fv", out _glProgramUniformMatrix3fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix3fv( ( uint )program, location, value.Length / 9, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix4fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4FVPROC >( "glProgramUniformMatrix4fv", out _glProgramUniformMatrix4fv );
-
-        _glProgramUniformMatrix4fv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix4fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4FVPROC >( "glProgramUniformMatrix4fv", out _glProgramUniformMatrix4fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix4fv( ( uint )program, location, value.Length / 16, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix2dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2DVPROC >( "glProgramUniformMatrix2dv", out _glProgramUniformMatrix2dv );
-
-        _glProgramUniformMatrix2dv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix2dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2DVPROC >( "glProgramUniformMatrix2dv", out _glProgramUniformMatrix2dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix2dv( ( uint )program, location, value.Length / 4, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix3dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3DVPROC >( "glProgramUniformMatrix3dv", out _glProgramUniformMatrix3dv );
-
-        _glProgramUniformMatrix3dv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix3dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3DVPROC >( "glProgramUniformMatrix3dv", out _glProgramUniformMatrix3dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix3dv( ( uint )program, location, value.Length / 9, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix4dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4DVPROC >( "glProgramUniformMatrix4dv", out _glProgramUniformMatrix4dv );
-
-        _glProgramUniformMatrix4dv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix4dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4DVPROC >( "glProgramUniformMatrix4dv", out _glProgramUniformMatrix4dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix4dv( ( uint )program, location, value.Length / 16, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix2x3fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC >( "glProgramUniformMatrix2x3fv", out _glProgramUniformMatrix2x3fv );
-
-        _glProgramUniformMatrix2x3fv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix2x3fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC >( "glProgramUniformMatrix2x3fv", out _glProgramUniformMatrix2x3fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix2x3fv( ( uint )program, location, value.Length / 6, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix3x2fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC >( "glProgramUniformMatrix3x2fv", out _glProgramUniformMatrix3x2fv );
-
-        _glProgramUniformMatrix3x2fv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix3x2fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC >( "glProgramUniformMatrix3x2fv", out _glProgramUniformMatrix3x2fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix3x2fv( ( uint )program, location, value.Length / 6, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix2x4fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC >( "glProgramUniformMatrix2x4fv", out _glProgramUniformMatrix2x4fv );
-
-        _glProgramUniformMatrix2x4fv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix2x4fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC >( "glProgramUniformMatrix2x4fv", out _glProgramUniformMatrix2x4fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix2x4fv( ( uint )program, location, value.Length / 8, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix4x2fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC >( "glProgramUniformMatrix4x2fv", out _glProgramUniformMatrix4x2fv );
-
-        _glProgramUniformMatrix4x2fv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix4x2fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC >( "glProgramUniformMatrix4x2fv", out _glProgramUniformMatrix4x2fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix4x2fv( ( uint )program, location, value.Length / 8, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix3x4fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC >( "glProgramUniformMatrix3x4fv", out _glProgramUniformMatrix3x4fv );
-
-        _glProgramUniformMatrix3x4fv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix3x4fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC >( "glProgramUniformMatrix3x4fv", out _glProgramUniformMatrix3x4fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix3x4fv( ( uint )program, location, value.Length / 12, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix4x3fv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC >( "glProgramUniformMatrix4x3fv", out _glProgramUniformMatrix4x3fv );
-
-        _glProgramUniformMatrix4x3fv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix4x3fv( GLuint program, GLint location, GLboolean transpose, GLfloat[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC >( "glProgramUniformMatrix4x3fv", out _glProgramUniformMatrix4x3fv );
-
-        fixed ( GLfloat* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix4x3fv( ( uint )program, location, value.Length / 12, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix2x3dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC >( "glProgramUniformMatrix2x3dv", out _glProgramUniformMatrix2x3dv );
-
-        _glProgramUniformMatrix2x3dv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix2x3dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC >( "glProgramUniformMatrix2x3dv", out _glProgramUniformMatrix2x3dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix2x3dv( ( uint )program, location, value.Length / 6, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix3x2dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC >( "glProgramUniformMatrix3x2dv", out _glProgramUniformMatrix3x2dv );
-
-        _glProgramUniformMatrix3x2dv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix3x2dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC >( "glProgramUniformMatrix3x2dv", out _glProgramUniformMatrix3x2dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix3x2dv( ( uint )program, location, value.Length / 6, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix2x4dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC >( "glProgramUniformMatrix2x4dv", out _glProgramUniformMatrix2x4dv );
-
-        _glProgramUniformMatrix2x4dv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix2x4dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC >( "glProgramUniformMatrix2x4dv", out _glProgramUniformMatrix2x4dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix2x4dv( ( uint )program, location, value.Length / 8, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix4x2dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC >( "glProgramUniformMatrix4x2dv", out _glProgramUniformMatrix4x2dv );
-
-        _glProgramUniformMatrix4x2dv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix4x2dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC >( "glProgramUniformMatrix4x2dv", out _glProgramUniformMatrix4x2dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix4x2dv( ( uint )program, location, value.Length / 8, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix3x4dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC >( "glProgramUniformMatrix3x4dv", out _glProgramUniformMatrix3x4dv );
-
-        _glProgramUniformMatrix3x4dv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix3x4dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC >( "glProgramUniformMatrix3x4dv", out _glProgramUniformMatrix3x4dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix3x4dv( ( uint )program, location, value.Length / 12, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ProgramUniformMatrix4x3dv( GLuint program, GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC >( "glProgramUniformMatrix4x3dv", out _glProgramUniformMatrix4x3dv );
-
-        _glProgramUniformMatrix4x3dv( ( uint )program, location, count, transpose, value );
-    }
-
-    public void ProgramUniformMatrix4x3dv( GLuint program, GLint location, GLboolean transpose, GLdouble[] value )
-    {
-        GetDelegateForFunction< PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC >( "glProgramUniformMatrix4x3dv", out _glProgramUniformMatrix4x3dv );
-
-        fixed ( GLdouble* pValue = &value[ 0 ] )
-        {
-            _glProgramUniformMatrix4x3dv( ( uint )program, location, value.Length / 12, transpose, pValue );
-        }
-    }
-
-    // ========================================================================
-
-    public void ValidateProgramPipeline( GLuint pipeline )
-    {
-        GetDelegateForFunction< PFNGLVALIDATEPROGRAMPIPELINEPROC >( "glValidateProgramPipeline", out _glValidateProgramPipeline );
-
-        _glValidateProgramPipeline( pipeline );
-    }
-
-    // ========================================================================
-
-    public void GetProgramPipelineInfoLog( GLuint pipeline, GLsizei bufSize, GLsizei* length, GLchar* infoLog )
-    {
-        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEINFOLOGPROC >( "glGetProgramPipelineInfoLog", out _glGetProgramPipelineInfoLog );
-
-        _glGetProgramPipelineInfoLog( pipeline, bufSize, length, infoLog );
-    }
-
-    public string GetProgramPipelineInfoLog( GLuint pipeline, GLsizei bufSize )
-    {
-        var infoLog = new GLchar[ bufSize ];
-
-        GetDelegateForFunction< PFNGLGETPROGRAMPIPELINEINFOLOGPROC >( "glGetProgramPipelineInfoLog", out _glGetProgramPipelineInfoLog );
-
-        fixed ( GLchar* pInfoLog = &infoLog[ 0 ] )
-        {
-            GLsizei length;
-
-            _glGetProgramPipelineInfoLog( pipeline, bufSize, &length, pInfoLog );
-
-            return new string( ( GLbyte* )pInfoLog, 0, length, Encoding.UTF8 );
-        }
     }
 
     // ========================================================================
@@ -3462,200 +2277,6 @@ public unsafe partial class GLBindings : IGLBindings
         GetDelegateForFunction< PFNGLMULTIDRAWELEMENTSINDIRECTPROC >( "glMultiDrawElementsIndirect", out _glMultiDrawElementsIndirect );
 
         _glMultiDrawElementsIndirect( mode, type, indirect, drawcount, stride );
-    }
-
-    // ========================================================================
-
-    public void GetProgramInterfaceiv( GLint program, GLenum programInterface, GLenum pname, GLint* parameters )
-    {
-        Logger.Checkpoint();
-
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv", out _glGetProgramInterfaceiv );
-
-        _glGetProgramInterfaceiv( ( uint )program, programInterface, pname, parameters );
-    }
-
-    public void GetProgramInterfaceiv( GLint program, GLenum programInterface, GLenum pname, ref GLint[] parameters )
-    {
-        Logger.Checkpoint();
-
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        GetDelegateForFunction< PFNGLGETPROGRAMINTERFACEIVPROC >( "glGetProgramInterfaceiv", out _glGetProgramInterfaceiv );
-
-        fixed ( GLint* pParameters = &parameters[ 0 ] )
-        {
-            _glGetProgramInterfaceiv( ( uint )program, programInterface, pname, pParameters );
-        }
-    }
-
-    // ========================================================================
-
-    public GLuint GetProgramResourceIndex( GLint program, GLenum programInterface, GLchar* name )
-    {
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex", out _glGetProgramResourceIndex );
-
-        return _glGetProgramResourceIndex( ( uint )program, programInterface, name );
-    }
-
-    public GLuint GetProgramResourceIndex( GLint program, GLenum programInterface, string name )
-    {
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        var nameBytes = Encoding.UTF8.GetBytes( name );
-
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEINDEXPROC >( "glGetProgramResourceIndex", out _glGetProgramResourceIndex );
-
-        fixed ( GLchar* pName = &nameBytes[ 0 ] )
-        {
-            return _glGetProgramResourceIndex( ( uint )program, programInterface, pName );
-        }
-    }
-
-    // ========================================================================
-
-    public void GetProgramResourceName( GLint program, GLenum programInterface, GLuint index, GLsizei bufSize, GLsizei* length,
-                                        GLchar* name )
-    {
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName", out _glGetProgramResourceName );
-
-        _glGetProgramResourceName( ( uint )program, programInterface, index, bufSize, length, name );
-    }
-
-    public string GetProgramResourceName( GLint program, GLenum programInterface, GLuint index, GLsizei bufSize )
-    {
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        var name = new GLchar[ bufSize ];
-
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCENAMEPROC >( "glGetProgramResourceName", out _glGetProgramResourceName );
-
-        fixed ( GLchar* pName = &name[ 0 ] )
-        {
-            GLsizei length;
-
-            _glGetProgramResourceName( ( uint )program, programInterface, index, bufSize, &length, pName );
-
-            return new string( ( GLbyte* )pName, 0, length, Encoding.UTF8 );
-        }
-    }
-
-    // ========================================================================
-
-    public void GetProgramResourceiv( GLint program, GLenum programInterface, GLuint index, GLsizei propCount,
-                                      GLenum* props, GLsizei bufSize, GLsizei* length, GLint* parameters )
-    {
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
-
-        _glGetProgramResourceiv( ( uint )program, programInterface, index, propCount, props, bufSize, length, parameters );
-    }
-
-    public void GetProgramResourceiv( GLint program, GLenum programInterface, GLuint index, GLenum[] props, GLsizei bufSize,
-                                      ref GLint[] parameters )
-    {
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCEIVPROC >( "glGetProgramResourceiv", out _glGetProgramResourceiv );
-
-        fixed ( GLenum* pProps = &props[ 0 ] )
-        {
-            fixed ( GLint* pParams = &parameters[ 0 ] )
-            {
-                GLsizei length;
-                _glGetProgramResourceiv( ( uint )program, programInterface, index, props.Length, pProps, bufSize, &length, pParams );
-            }
-        }
-    }
-
-    // ========================================================================
-
-    public GLint GetProgramResourceLocation( GLint program, GLenum programInterface, GLchar* name )
-    {
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONPROC >( "glGetProgramResourceLocation", out _glGetProgramResourceLocation );
-
-        return _glGetProgramResourceLocation( ( uint )program, programInterface, name );
-    }
-
-    public GLint GetProgramResourceLocation( GLint program, GLenum programInterface, string name )
-    {
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        var nameBytes = Encoding.UTF8.GetBytes( name );
-
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONPROC >( "glGetProgramResourceLocation", out _glGetProgramResourceLocation );
-
-        fixed ( GLchar* pName = &nameBytes[ 0 ] )
-        {
-            return _glGetProgramResourceLocation( ( uint )program, programInterface, pName );
-        }
-    }
-
-    // ========================================================================
-
-    public GLint GetProgramResourceLocationIndex( GLint program, GLenum programInterface, GLchar* name )
-    {
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
-                                                                            out _glGetProgramResourceLocationIndex );
-
-        return _glGetProgramResourceLocationIndex( ( uint )program, programInterface, name );
-    }
-
-    public GLint GetProgramResourceLocationIndex( GLint program, GLenum programInterface, string name )
-    {
-        if ( !IsProgram( program ) )
-        {
-            throw new GdxRuntimeException( $"Invalid program ID: {program}" );
-        }
-
-        var nameBytes = Encoding.UTF8.GetBytes( name );
-
-        GetDelegateForFunction< PFNGLGETPROGRAMRESOURCELOCATIONINDEXPROC >( "glGetProgramResourceLocationIndex",
-                                                                            out _glGetProgramResourceLocationIndex );
-
-        fixed ( GLchar* pName = &nameBytes[ 0 ] )
-        {
-            return _glGetProgramResourceLocationIndex( ( uint )program, programInterface, pName );
-        }
     }
 
     // ========================================================================
@@ -5501,34 +4122,6 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void CreateProgramPipelines( GLsizei n, GLuint* pipelines )
-    {
-        GetDelegateForFunction< PFNGLCREATEPROGRAMPIPELINESPROC >( "glCreateProgramPipelines", out _glCreateProgramPipelines );
-
-        _glCreateProgramPipelines( n, pipelines );
-    }
-
-    public GLuint[] CreateProgramPipelines( GLsizei n )
-    {
-        var pipelines = new GLuint[ n ];
-
-        GetDelegateForFunction< PFNGLCREATEPROGRAMPIPELINESPROC >( "glCreateProgramPipelines", out _glCreateProgramPipelines );
-
-        fixed ( GLuint* ptrPipelines = &pipelines[ 0 ] )
-        {
-            _glCreateProgramPipelines( n, ptrPipelines );
-        }
-
-        return pipelines;
-    }
-
-    public GLuint CreateProgramPipeline()
-    {
-        return CreateProgramPipelines( 1 )[ 0 ];
-    }
-
-    // ========================================================================
-
     public void MemoryBarrierByRegion( GLbitfield barriers )
     {
         GetDelegateForFunction< PFNGLMEMORYBARRIERBYREGIONPROC >( "glMemoryBarrierByRegion", out _glMemoryBarrierByRegion );
@@ -5652,82 +4245,6 @@ public unsafe partial class GLBindings : IGLBindings
         }
 
         return pixels;
-    }
-
-    // ========================================================================
-
-    public void GetnUniformdv( GLuint program, GLint location, GLsizei bufSize, GLdouble* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETNUNIFORMDVPROC >( "glGetnUniformdv", out _glGetnUniformdv );
-
-        _glGetnUniformdv( ( uint )program, location, bufSize, parameters );
-    }
-
-    public void GetnUniformdv( GLuint program, GLint location, GLsizei bufSize, ref GLdouble[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETNUNIFORMDVPROC >( "glGetnUniformdv", out _glGetnUniformdv );
-
-        fixed ( void* ptrParameters = &parameters[ 0 ] )
-        {
-            _glGetnUniformdv( ( uint )program, location, bufSize, ( GLdouble* )ptrParameters );
-        }
-    }
-
-    // ========================================================================
-
-    public void GetnUniformfv( GLuint program, GLint location, GLsizei bufSize, GLfloat* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETNUNIFORMFVPROC >( "glGetnUniformfv", out _glGetnUniformfv );
-
-        _glGetnUniformfv( ( uint )program, location, bufSize, parameters );
-    }
-
-    public void GetnUniformfv( GLuint program, GLint location, GLsizei bufSize, ref GLfloat[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETNUNIFORMFVPROC >( "glGetnUniformfv", out _glGetnUniformfv );
-
-        fixed ( void* ptrParameters = &parameters[ 0 ] )
-        {
-            _glGetnUniformfv( ( uint )program, location, bufSize, ( GLfloat* )ptrParameters );
-        }
-    }
-
-    // ========================================================================
-
-    public void GetnUniformiv( GLuint program, GLint location, GLsizei bufSize, GLint* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETNUNIFORMIVPROC >( "glGetnUniformiv", out _glGetnUniformiv );
-
-        _glGetnUniformiv( ( uint )program, location, bufSize, parameters );
-    }
-
-    public void GetnUniformiv( GLuint program, GLint location, GLsizei bufSize, ref GLint[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETNUNIFORMIVPROC >( "glGetnUniformiv", out _glGetnUniformiv );
-
-        fixed ( void* ptrParameters = &parameters[ 0 ] )
-        {
-            _glGetnUniformiv( ( uint )program, location, bufSize, ( GLint* )ptrParameters );
-        }
-    }
-
-    // ========================================================================
-
-    public void GetnUniformuiv( GLuint program, GLint location, GLsizei bufSize, GLuint* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETNUNIFORMUIVPROC >( "glGetnUniformuiv", out _glGetnUniformuiv );
-
-        _glGetnUniformuiv( ( uint )program, location, bufSize, parameters );
-    }
-
-    public void GetnUniformuiv( GLuint program, GLint location, GLsizei bufSize, ref GLuint[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETNUNIFORMUIVPROC >( "glGetnUniformuiv", out _glGetnUniformuiv );
-
-        fixed ( void* ptrParameters = &parameters[ 0 ] )
-        {
-            _glGetnUniformuiv( ( uint )program, location, bufSize, ( GLuint* )ptrParameters );
-        }
     }
 
     // ========================================================================
@@ -6995,190 +5512,6 @@ public unsafe partial class GLBindings : IGLBindings
         GetDelegateForFunction< PFNGLCOPYBUFFERSUBDATAPROC >( "glCopyBufferSubData", out _glCopyBufferSubData );
 
         _glCopyBufferSubData( readTarget, writeTarget, readOffset, writeOffset, size );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void GetUniformIndices( GLuint program, GLsizei uniformCount, GLchar** uniformNames, GLuint* uniformIndices )
-    {
-        GetDelegateForFunction< PFNGLGETUNIFORMINDICESPROC >( "glGetUniformIndices", out _glGetUniformIndices );
-
-        _glGetUniformIndices( ( uint )program, uniformCount, uniformNames, uniformIndices );
-    }
-
-    /// <inheritdoc />
-    public GLuint[] GetUniformIndices( GLuint program, params string[] uniformNames )
-    {
-        var uniformCount     = uniformNames.Length;
-        var uniformNamesPtrs = new GLchar[ uniformCount ][];
-
-        for ( var i = 0; i < uniformCount; i++ )
-        {
-            uniformNamesPtrs[ i ] = Encoding.UTF8.GetBytes( uniformNames[ i ] );
-        }
-
-        {
-            var pUniformNames = stackalloc GLchar*[ uniformCount ];
-
-            for ( var i = 0; i < uniformCount; i++ )
-            {
-                fixed ( GLchar* p = &uniformNamesPtrs[ i ][ 0 ] )
-                {
-                    pUniformNames[ i ] = p;
-                }
-            }
-
-            var uniformIndices = new GLuint[ uniformCount ];
-
-            GetDelegateForFunction< PFNGLGETUNIFORMINDICESPROC >( "glGetUniformIndices", out _glGetUniformIndices );
-
-            fixed ( GLuint* p = &uniformIndices[ 0 ] )
-            {
-                _glGetUniformIndices( ( uint )program, uniformCount, pUniformNames, p );
-            }
-
-            return uniformIndices;
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void GetActiveUniformsiv( GLuint program, GLsizei uniformCount, GLuint* uniformIndices, GLenum pname, GLint* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMSIVPROC >( "glGetActiveUniformsiv", out _glGetActiveUniformsiv );
-
-        _glGetActiveUniformsiv( ( uint )program, uniformCount, uniformIndices, pname, parameters );
-    }
-
-    /// <inheritdoc />
-    public GLint[] GetActiveUniformsiv( GLuint program, GLenum pname, params GLuint[] uniformIndices )
-    {
-        var uniformCount = uniformIndices.Length;
-        var parameters   = new GLint[ uniformCount ];
-
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMSIVPROC >( "glGetActiveUniformsiv", out _glGetActiveUniformsiv );
-
-        {
-            fixed ( GLuint* p = &uniformIndices[ 0 ] )
-            {
-                fixed ( GLint* pParameters = &parameters[ 0 ] )
-                {
-                    _glGetActiveUniformsiv( ( uint )program, uniformCount, p, pname, pParameters );
-                }
-            }
-        }
-
-        return parameters;
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void GetActiveUniformName( GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformName )
-    {
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMNAMEPROC >( "glGetActiveUniformName", out _glGetActiveUniformName );
-
-        _glGetActiveUniformName( ( uint )program, uniformIndex, bufSize, length, uniformName );
-    }
-
-    /// <inheritdoc />
-    public string GetActiveUniformName( GLuint program, GLuint uniformIndex, GLsizei bufSize )
-    {
-        var     uniformName = stackalloc GLchar[ bufSize ];
-        GLsizei length;
-
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMNAMEPROC >( "glGetActiveUniformName", out _glGetActiveUniformName );
-
-        _glGetActiveUniformName( ( uint )program, uniformIndex, bufSize, &length, uniformName );
-
-        return new string( ( GLbyte* )uniformName, 0, length, Encoding.UTF8 );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public GLuint GetUniformBlockIndex( GLuint program, GLchar* uniformBlockName )
-    {
-        GetDelegateForFunction< PFNGLGETUNIFORMBLOCKINDEXPROC >( "glGetUniformBlockIndex", out _glGetUniformBlockIndex );
-
-        return _glGetUniformBlockIndex( ( uint )program, uniformBlockName );
-    }
-
-    /// <inheritdoc />
-    public GLuint GetUniformBlockIndex( GLuint program, string uniformBlockName )
-    {
-        var uniformBlockNameBytes = Encoding.UTF8.GetBytes( uniformBlockName );
-
-        GetDelegateForFunction< PFNGLGETUNIFORMBLOCKINDEXPROC >( "glGetUniformBlockIndex", out _glGetUniformBlockIndex );
-
-        {
-            fixed ( GLchar* p = &uniformBlockNameBytes[ 0 ] )
-            {
-                return _glGetUniformBlockIndex( ( uint )program, p );
-            }
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void GetActiveUniformBlockiv( GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint* parameters )
-    {
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKIVPROC >( "glGetActiveUniformBlockiv", out _glGetActiveUniformBlockiv );
-
-        _glGetActiveUniformBlockiv( ( uint )program, uniformBlockIndex, pname, parameters );
-    }
-
-    /// <inheritdoc />
-    public void GetActiveUniformBlockiv( GLuint program, GLuint uniformBlockIndex, GLenum pname, ref GLint[] parameters )
-    {
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKIVPROC >( "glGetActiveUniformBlockiv", out _glGetActiveUniformBlockiv );
-
-        {
-            fixed ( GLint* p = &parameters[ 0 ] )
-            {
-                _glGetActiveUniformBlockiv( ( uint )program, uniformBlockIndex, pname, p );
-            }
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void GetActiveUniformBlockName( GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei* length,
-                                           GLchar* uniformBlockName )
-    {
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName", out _glGetActiveUniformBlockName );
-
-        _glGetActiveUniformBlockName( ( uint )program, uniformBlockIndex, bufSize, length, uniformBlockName );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public string GetActiveUniformBlockName( GLuint program, GLuint uniformBlockIndex, GLsizei bufSize )
-    {
-        var uniformBlockName = stackalloc GLchar[ bufSize ];
-
-        GLsizei length;
-
-        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName", out _glGetActiveUniformBlockName );
-
-        _glGetActiveUniformBlockName( ( uint )program, uniformBlockIndex, bufSize, &length, uniformBlockName );
-
-        return new string( ( GLbyte* )uniformBlockName, 0, length, Encoding.UTF8 );
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void UniformBlockBinding( GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding )
-    {
-        GetDelegateForFunction< PFNGLUNIFORMBLOCKBINDINGPROC >( "glUniformBlockBinding", out _glUniformBlockBinding );
-
-        _glUniformBlockBinding( ( uint )program, uniformBlockIndex, uniformBlockBinding );
     }
 
     // ========================================================================

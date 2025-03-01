@@ -166,8 +166,6 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// <param name="count"> the number of floats to copy  </param>
     public void SetVertices( float[] vertices, int offset, int count )
     {
-        Logger.Debug( $"vertices length: {vertices.Length} ({vertices.Length << 2}), offset: {offset}, count: {count}" );
-
         _isDirty = true;
 
         _byteBuffer.Limit = Math.Min( _byteBuffer.Capacity, count << 2 );

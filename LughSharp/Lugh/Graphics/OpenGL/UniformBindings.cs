@@ -24,16 +24,28 @@
 
 // ============================================================================
 
-using LughSharp.Lugh.Graphics.GLUtils;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
+// ============================================================================
+
+using GLenum = int;
 using GLfloat = float;
 using GLint = int;
 using GLsizei = int;
+using GLbitfield = uint;
+using GLdouble = double;
 using GLuint = uint;
 using GLboolean = bool;
+using GLubyte = byte;
+using GLsizeiptr = int;
+using GLintptr = int;
+using GLshort = short;
+using GLbyte = sbyte;
+using GLushort = ushort;
 using GLchar = byte;
+using GLuint64 = ulong;
+using GLint64 = long;
 
 // ============================================================================
 
@@ -492,5 +504,606 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
+    
+    public void GetnUniformdv( GLuint program, GLint location, GLsizei bufSize, GLdouble* parameters )
+    {
+        GetDelegateForFunction< PFNGLGETNUNIFORMDVPROC >( "glGetnUniformdv", out _glGetnUniformdv );
+
+        _glGetnUniformdv( ( uint )program, location, bufSize, parameters );
+    }
+
+    public void GetnUniformdv( GLuint program, GLint location, GLsizei bufSize, ref GLdouble[] parameters )
+    {
+        GetDelegateForFunction< PFNGLGETNUNIFORMDVPROC >( "glGetnUniformdv", out _glGetnUniformdv );
+
+        fixed ( void* ptrParameters = &parameters[ 0 ] )
+        {
+            _glGetnUniformdv( ( uint )program, location, bufSize, ( GLdouble* )ptrParameters );
+        }
+    }
+
+    // ========================================================================
+
+    public void GetnUniformfv( GLuint program, GLint location, GLsizei bufSize, GLfloat* parameters )
+    {
+        GetDelegateForFunction< PFNGLGETNUNIFORMFVPROC >( "glGetnUniformfv", out _glGetnUniformfv );
+
+        _glGetnUniformfv( ( uint )program, location, bufSize, parameters );
+    }
+
+    public void GetnUniformfv( GLuint program, GLint location, GLsizei bufSize, ref GLfloat[] parameters )
+    {
+        GetDelegateForFunction< PFNGLGETNUNIFORMFVPROC >( "glGetnUniformfv", out _glGetnUniformfv );
+
+        fixed ( void* ptrParameters = &parameters[ 0 ] )
+        {
+            _glGetnUniformfv( ( uint )program, location, bufSize, ( GLfloat* )ptrParameters );
+        }
+    }
+
+    // ========================================================================
+
+    public void GetnUniformiv( GLuint program, GLint location, GLsizei bufSize, GLint* parameters )
+    {
+        GetDelegateForFunction< PFNGLGETNUNIFORMIVPROC >( "glGetnUniformiv", out _glGetnUniformiv );
+
+        _glGetnUniformiv( ( uint )program, location, bufSize, parameters );
+    }
+
+    public void GetnUniformiv( GLuint program, GLint location, GLsizei bufSize, ref GLint[] parameters )
+    {
+        GetDelegateForFunction< PFNGLGETNUNIFORMIVPROC >( "glGetnUniformiv", out _glGetnUniformiv );
+
+        fixed ( void* ptrParameters = &parameters[ 0 ] )
+        {
+            _glGetnUniformiv( ( uint )program, location, bufSize, ( GLint* )ptrParameters );
+        }
+    }
+
+    // ========================================================================
+
+    public void GetnUniformuiv( GLuint program, GLint location, GLsizei bufSize, GLuint* parameters )
+    {
+        GetDelegateForFunction< PFNGLGETNUNIFORMUIVPROC >( "glGetnUniformuiv", out _glGetnUniformuiv );
+
+        _glGetnUniformuiv( ( uint )program, location, bufSize, parameters );
+    }
+
+    public void GetnUniformuiv( GLuint program, GLint location, GLsizei bufSize, ref GLuint[] parameters )
+    {
+        GetDelegateForFunction< PFNGLGETNUNIFORMUIVPROC >( "glGetnUniformuiv", out _glGetnUniformuiv );
+
+        fixed ( void* ptrParameters = &parameters[ 0 ] )
+        {
+            _glGetnUniformuiv( ( uint )program, location, bufSize, ( GLuint* )ptrParameters );
+        }
+    }
+
+    // ========================================================================
+
+    public void Uniform1d( GLint location, GLdouble x )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM1DPROC >( "glUniform1d", out _glUniform1d );
+
+        _glUniform1d( location, x );
+    }
+
+    // ========================================================================
+
+    public void Uniform2d( GLint location, GLdouble x, GLdouble y )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM2DPROC >( "glUniform2d", out _glUniform2d );
+
+        _glUniform2d( location, x, y );
+    }
+
+    // ========================================================================
+
+    public void Uniform3d( GLint location, GLdouble x, GLdouble y, GLdouble z )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM3DPROC >( "glUniform3d", out _glUniform3d );
+
+        _glUniform3d( location, x, y, z );
+    }
+
+    // ========================================================================
+
+    public void Uniform4d( GLint location, GLdouble x, GLdouble y, GLdouble z, GLdouble w )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM4DPROC >( "glUniform4d", out _glUniform4d );
+
+        _glUniform4d( location, x, y, z, w );
+    }
+
+    // ========================================================================
+
+    public void Uniform1dv( GLint location, GLsizei count, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM1DVPROC >( "glUniform1dv", out _glUniform1dv );
+
+        _glUniform1dv( location, count, value );
+    }
+
+    public void Uniform1dv( GLint location, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM1DVPROC >( "glUniform1dv", out _glUniform1dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniform1dv( location, value.Length, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void Uniform2dv( GLint location, GLsizei count, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM2DVPROC >( "glUniform2dv", out _glUniform2dv );
+
+        _glUniform2dv( location, count, value );
+    }
+
+    public void Uniform2dv( GLint location, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM2DVPROC >( "glUniform2dv", out _glUniform2dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniform2dv( location, value.Length / 2, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void Uniform3dv( GLint location, GLsizei count, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM3DVPROC >( "glUniform3dv", out _glUniform3dv );
+
+        _glUniform3dv( location, count, value );
+    }
+
+    public void Uniform3dv( GLint location, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM3DVPROC >( "glUniform3dv", out _glUniform3dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniform3dv( location, value.Length / 3, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void Uniform4dv( GLint location, GLsizei count, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM4DVPROC >( "glUniform4dv", out _glUniform4dv );
+
+        _glUniform4dv( location, count, value );
+    }
+
+    public void Uniform4dv( GLint location, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORM4DVPROC >( "glUniform4dv", out _glUniform4dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniform4dv( location, value.Length / 4, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void UniformMatrix2dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX2DVPROC >( "glUniformMatrix2dv", out _glUniformMatrix2dv );
+
+        _glUniformMatrix2dv( location, count, transpose, value );
+    }
+
+    public void UniformMatrix2dv( GLint location, GLboolean transpose, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX2DVPROC >( "glUniformMatrix2dv", out _glUniformMatrix2dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniformMatrix2dv( location, value.Length / 4, transpose, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void UniformMatrix3dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX3DVPROC >( "glUniformMatrix3dv", out _glUniformMatrix3dv );
+
+        _glUniformMatrix3dv( location, count, transpose, value );
+    }
+
+    public void UniformMatrix3dv( GLint location, GLboolean transpose, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX3DVPROC >( "glUniformMatrix3dv", out _glUniformMatrix3dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniformMatrix3dv( location, value.Length / 9, transpose, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void UniformMatrix4dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX4DVPROC >( "glUniformMatrix4dv", out _glUniformMatrix4dv );
+
+        _glUniformMatrix4dv( location, count, transpose, value );
+    }
+
+    public void UniformMatrix4dv( GLint location, GLboolean transpose, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX4DVPROC >( "glUniformMatrix4dv", out _glUniformMatrix4dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniformMatrix4dv( location, value.Length / 16, transpose, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void UniformMatrix2x3dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX2X3DVPROC >( "glUniformMatrix2x3dv", out _glUniformMatrix2x3dv );
+
+        _glUniformMatrix2x3dv( location, count, transpose, value );
+    }
+
+    public void UniformMatrix2x3dv( GLint location, GLboolean transpose, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX2X3DVPROC >( "glUniformMatrix2x3dv", out _glUniformMatrix2x3dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniformMatrix2x3dv( location, value.Length / 6, transpose, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void UniformMatrix2x4dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX2X4DVPROC >( "glUniformMatrix2x4dv", out _glUniformMatrix2x4dv );
+
+        _glUniformMatrix2x4dv( location, count, transpose, value );
+    }
+
+    public void UniformMatrix2x4dv( GLint location, GLboolean transpose, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX2X4DVPROC >( "glUniformMatrix2x4dv", out _glUniformMatrix2x4dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniformMatrix2x4dv( location, value.Length / 8, transpose, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void UniformMatrix3x2dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX3X2DVPROC >( "glUniformMatrix3x2dv", out _glUniformMatrix3x2dv );
+
+        _glUniformMatrix3x2dv( location, count, transpose, value );
+    }
+
+    public void UniformMatrix3x2dv( GLint location, GLboolean transpose, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX3X2DVPROC >( "glUniformMatrix3x2dv", out _glUniformMatrix3x2dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniformMatrix3x2dv( location, value.Length / 6, transpose, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void UniformMatrix3x4dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX3X4DVPROC >( "glUniformMatrix3x4dv", out _glUniformMatrix3x4dv );
+
+        _glUniformMatrix3x4dv( location, count, transpose, value );
+    }
+
+    public void UniformMatrix3x4dv( GLint location, GLboolean transpose, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX3X4DVPROC >( "glUniformMatrix3x4dv", out _glUniformMatrix3x4dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniformMatrix3x4dv( location, value.Length / 12, transpose, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void UniformMatrix4x2dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX4X2DVPROC >( "glUniformMatrix4x2dv", out _glUniformMatrix4x2dv );
+
+        _glUniformMatrix4x2dv( location, count, transpose, value );
+    }
+
+    public void UniformMatrix4x2dv( GLint location, GLboolean transpose, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX4X2DVPROC >( "glUniformMatrix4x2dv", out _glUniformMatrix4x2dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniformMatrix4x2dv( location, value.Length / 8, transpose, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void UniformMatrix4x3dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX4X3DVPROC >( "glUniformMatrix4x3dv", out _glUniformMatrix4x3dv );
+
+        _glUniformMatrix4x3dv( location, count, transpose, value );
+    }
+
+    public void UniformMatrix4x3dv( GLint location, GLboolean transpose, GLdouble[] value )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMMATRIX4X3DVPROC >( "glUniformMatrix4x3dv", out _glUniformMatrix4x3dv );
+
+        fixed ( GLdouble* p = &value[ 0 ] )
+        {
+            _glUniformMatrix4x3dv( location, value.Length / 12, transpose, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void GetUniformdv( GLuint program, GLint location, GLdouble* parameters )
+    {
+        GetDelegateForFunction< PFNGLGETUNIFORMDVPROC >( "glGetUniformdv", out _glGetUniformdv );
+
+        _glGetUniformdv( ( uint )program, location, parameters );
+    }
+
+    public void GetUniformdv( GLuint program, GLint location, ref GLdouble[] parameters )
+    {
+        GetDelegateForFunction< PFNGLGETUNIFORMDVPROC >( "glGetUniformdv", out _glGetUniformdv );
+
+        fixed ( GLdouble* p = &parameters[ 0 ] )
+        {
+            _glGetUniformdv( ( uint )program, location, p );
+        }
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void GetUniformIndices( GLuint program, GLsizei uniformCount, GLchar** uniformNames, GLuint* uniformIndices )
+    {
+        GetDelegateForFunction< PFNGLGETUNIFORMINDICESPROC >( "glGetUniformIndices", out _glGetUniformIndices );
+
+        _glGetUniformIndices( ( uint )program, uniformCount, uniformNames, uniformIndices );
+    }
+
+    /// <inheritdoc />
+    public GLuint[] GetUniformIndices( GLuint program, params string[] uniformNames )
+    {
+        var uniformCount     = uniformNames.Length;
+        var uniformNamesPtrs = new GLchar[ uniformCount ][];
+
+        for ( var i = 0; i < uniformCount; i++ )
+        {
+            uniformNamesPtrs[ i ] = Encoding.UTF8.GetBytes( uniformNames[ i ] );
+        }
+
+        {
+            var pUniformNames = stackalloc GLchar*[ uniformCount ];
+
+            for ( var i = 0; i < uniformCount; i++ )
+            {
+                fixed ( GLchar* p = &uniformNamesPtrs[ i ][ 0 ] )
+                {
+                    pUniformNames[ i ] = p;
+                }
+            }
+
+            var uniformIndices = new GLuint[ uniformCount ];
+
+            GetDelegateForFunction< PFNGLGETUNIFORMINDICESPROC >( "glGetUniformIndices", out _glGetUniformIndices );
+
+            fixed ( GLuint* p = &uniformIndices[ 0 ] )
+            {
+                _glGetUniformIndices( ( uint )program, uniformCount, pUniformNames, p );
+            }
+
+            return uniformIndices;
+        }
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void GetActiveUniformsiv( GLuint program, GLsizei uniformCount, GLuint* uniformIndices, GLenum pname, GLint* parameters )
+    {
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMSIVPROC >( "glGetActiveUniformsiv", out _glGetActiveUniformsiv );
+
+        _glGetActiveUniformsiv( ( uint )program, uniformCount, uniformIndices, pname, parameters );
+    }
+
+    /// <inheritdoc />
+    public GLint[] GetActiveUniformsiv( GLuint program, GLenum pname, params GLuint[] uniformIndices )
+    {
+        var uniformCount = uniformIndices.Length;
+        var parameters   = new GLint[ uniformCount ];
+
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMSIVPROC >( "glGetActiveUniformsiv", out _glGetActiveUniformsiv );
+
+        {
+            fixed ( GLuint* p = &uniformIndices[ 0 ] )
+            {
+                fixed ( GLint* pParameters = &parameters[ 0 ] )
+                {
+                    _glGetActiveUniformsiv( ( uint )program, uniformCount, p, pname, pParameters );
+                }
+            }
+        }
+
+        return parameters;
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void GetActiveUniformName( GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei* length, GLchar* uniformName )
+    {
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMNAMEPROC >( "glGetActiveUniformName", out _glGetActiveUniformName );
+
+        _glGetActiveUniformName( ( uint )program, uniformIndex, bufSize, length, uniformName );
+    }
+
+    /// <inheritdoc />
+    public string GetActiveUniformName( GLuint program, GLuint uniformIndex, GLsizei bufSize )
+    {
+        var     uniformName = stackalloc GLchar[ bufSize ];
+        GLsizei length;
+
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMNAMEPROC >( "glGetActiveUniformName", out _glGetActiveUniformName );
+
+        _glGetActiveUniformName( ( uint )program, uniformIndex, bufSize, &length, uniformName );
+
+        return new string( ( GLbyte* )uniformName, 0, length, Encoding.UTF8 );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public GLuint GetUniformBlockIndex( GLuint program, GLchar* uniformBlockName )
+    {
+        GetDelegateForFunction< PFNGLGETUNIFORMBLOCKINDEXPROC >( "glGetUniformBlockIndex", out _glGetUniformBlockIndex );
+
+        return _glGetUniformBlockIndex( ( uint )program, uniformBlockName );
+    }
+
+    /// <inheritdoc />
+    public GLuint GetUniformBlockIndex( GLuint program, string uniformBlockName )
+    {
+        var uniformBlockNameBytes = Encoding.UTF8.GetBytes( uniformBlockName );
+
+        GetDelegateForFunction< PFNGLGETUNIFORMBLOCKINDEXPROC >( "glGetUniformBlockIndex", out _glGetUniformBlockIndex );
+
+        {
+            fixed ( GLchar* p = &uniformBlockNameBytes[ 0 ] )
+            {
+                return _glGetUniformBlockIndex( ( uint )program, p );
+            }
+        }
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void GetActiveUniformBlockiv( GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint* parameters )
+    {
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKIVPROC >( "glGetActiveUniformBlockiv", out _glGetActiveUniformBlockiv );
+
+        _glGetActiveUniformBlockiv( ( uint )program, uniformBlockIndex, pname, parameters );
+    }
+
+    /// <inheritdoc />
+    public void GetActiveUniformBlockiv( GLuint program, GLuint uniformBlockIndex, GLenum pname, ref GLint[] parameters )
+    {
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKIVPROC >( "glGetActiveUniformBlockiv", out _glGetActiveUniformBlockiv );
+
+        {
+            fixed ( GLint* p = &parameters[ 0 ] )
+            {
+                _glGetActiveUniformBlockiv( ( uint )program, uniformBlockIndex, pname, p );
+            }
+        }
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void GetActiveUniformBlockName( GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei* length,
+                                           GLchar* uniformBlockName )
+    {
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName", out _glGetActiveUniformBlockName );
+
+        _glGetActiveUniformBlockName( ( uint )program, uniformBlockIndex, bufSize, length, uniformBlockName );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public string GetActiveUniformBlockName( GLuint program, GLuint uniformBlockIndex, GLsizei bufSize )
+    {
+        var uniformBlockName = stackalloc GLchar[ bufSize ];
+
+        GLsizei length;
+
+        GetDelegateForFunction< PFNGLGETACTIVEUNIFORMBLOCKNAMEPROC >( "glGetActiveUniformBlockName", out _glGetActiveUniformBlockName );
+
+        _glGetActiveUniformBlockName( ( uint )program, uniformBlockIndex, bufSize, &length, uniformBlockName );
+
+        return new string( ( GLbyte* )uniformBlockName, 0, length, Encoding.UTF8 );
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void UniformBlockBinding( GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMBLOCKBINDINGPROC >( "glUniformBlockBinding", out _glUniformBlockBinding );
+
+        _glUniformBlockBinding( ( uint )program, uniformBlockIndex, uniformBlockBinding );
+    }
+
+    // ========================================================================
+
+    public void UniformSubroutinesuiv( GLenum shadertype, GLsizei count, GLuint* indices )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMSUBROUTINESUIVPROC >( "glUniformSubroutinesuiv", out _glUniformSubroutinesuiv );
+
+        _glUniformSubroutinesuiv( shadertype, count, indices );
+    }
+
+    public void UniformSubroutinesuiv( GLenum shadertype, GLuint[] indices )
+    {
+        GetDelegateForFunction< PFNGLUNIFORMSUBROUTINESUIVPROC >( "glUniformSubroutinesuiv", out _glUniformSubroutinesuiv );
+
+        fixed ( GLuint* p = &indices[ 0 ] )
+        {
+            _glUniformSubroutinesuiv( shadertype, indices.Length, p );
+        }
+    }
+
+    // ========================================================================
+
+    public void GetUniformSubroutineuiv( GLenum shadertype, GLint location, GLuint* parameters )
+    {
+        GetDelegateForFunction< PFNGLGETUNIFORMSUBROUTINEUIVPROC >( "glGetUniformSubroutineuiv", out _glGetUniformSubroutineuiv );
+
+        _glGetUniformSubroutineuiv( shadertype, location, parameters );
+    }
+
+    public void GetUniformSubroutineuiv( GLenum shadertype, GLint location, ref GLuint[] parameters )
+    {
+        GetDelegateForFunction< PFNGLGETUNIFORMSUBROUTINEUIVPROC >( "glGetUniformSubroutineuiv", out _glGetUniformSubroutineuiv );
+
+        fixed ( GLuint* p = &parameters[ 0 ] )
+        {
+            _glGetUniformSubroutineuiv( shadertype, location, p );
+        }
+    }
+
+    // ========================================================================
+
 }
 
