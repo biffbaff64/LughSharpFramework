@@ -39,7 +39,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// optimize them for processing by the GPU.
 /// <para>
 ///     To Draw something with a PolygonSpriteBatch one has to first call the
-///     <see cref="PolygonSpriteBatch.Begin()" /> method which will setup appropriate
+///     <see cref="PolygonSpriteBatch.Begin(bool)" /> method which will setup appropriate
 ///     render states. When you are done with drawing you have to call
 ///     <see cref="PolygonSpriteBatch.End()" /> which will actually Draw the things
 ///     you specified.
@@ -145,13 +145,13 @@ public class PolygonSpriteBatch : IPolygonBatch
             throw new ArgumentException( "Can't have more than 32767 vertices per batch: " + maxVertices );
         }
 
-        _mesh = new Mesh( Mesh.VertexDataType.VertexBufferObjectWithVAO,
+        _mesh = new Mesh( VertexDataType.VertexBufferObjectWithVAO,
                           false,
                           maxVertices,
                           maxTriangles * 3,
-                          new VertexAttribute( ( int )VertexAttributes.Usage.POSITION, 2, "a_position" ),
-                          new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED, 4, "a_colorPacked" ),
-                          new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES, 2, "u_texCoord" + "0" ) );
+                          new VertexAttribute( ( int )VertexConstants.Usage.POSITION, 2, "a_position" ),
+                          new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED, 4, "a_colorPacked" ),
+                          new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, 2, "u_texCoord" + "0" ) );
 
         _vertices  = new float[ maxVertices * Sprite.VERTEX_SIZE ];
         _triangles = new short[ maxTriangles * 3 ];

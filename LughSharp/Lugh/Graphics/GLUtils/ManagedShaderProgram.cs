@@ -41,12 +41,12 @@ namespace LughSharp.Lugh.Graphics.GLUtils;
 /// binds the program. When a ShaderProgram is bound one can set uniforms, vertex attributes and
 /// attributes as needed via the respective methods.
 /// <para>
-///     A ShaderProgram must be disposed via a call to <see cref="Dispose()" /> when it is no longer needed
+/// A ShaderProgram must be disposed via a call to <see cref="Dispose()" /> when it is no longer needed
 /// </para>
 /// <para>
-///     ShaderPrograms are managed. In case the OpenGL context is lost all shaders get invalidated and
-///     have to be reloaded. Managed ShaderPrograms are automatically reloaded when the OpenGL context is
-///     recreated so you don't have to do this manually.
+/// ShaderPrograms are managed. In case the OpenGL context is lost all shaders get invalidated and
+/// have to be reloaded. Managed ShaderPrograms are automatically reloaded when the OpenGL context is
+/// recreated so you don't have to do this manually.
 /// </para>
 /// </summary>
 [PublicAPI]

@@ -39,16 +39,6 @@ public class Mesh : IDisposable
 {
     // ========================================================================
 
-    public enum VertexDataType
-    {
-        VertexArray,
-        VertexBufferObject,
-        VertexBufferObjectSubData,
-        VertexBufferObjectWithVAO,
-    }
-
-    // ========================================================================
-
     private static readonly Dictionary< IApplication, List< Mesh >? > _meshes = new();
     private readonly        IIndexData                                _indices;
     private readonly        bool                                      _isVertexArray;
@@ -824,6 +814,11 @@ public class Mesh : IDisposable
             Bind( shader );
         }
 
+        Logger.Debug( $"primitiveType: {primitiveType}, offset: {offset}, count: {count}" );
+        Logger.Debug( $"_isVertexArray: {_isVertexArray}" );
+        Logger.Debug( $"_indices.NumIndices > 0: {_indices.NumIndices > 0}" );
+        Logger.Debug( $"IsInstanced: {IsInstanced}" );
+        
         if ( _isVertexArray )
         {
             if ( _indices.NumIndices > 0 )
@@ -837,6 +832,8 @@ public class Mesh : IDisposable
 
                 var buffer = _indices.GetBuffer( false );
 
+                Logger.Checkpoint();
+                
                 fixed ( short* ptr = &buffer.ToArray()[ 0 ] ) // Simplified fixed statement
                 {
                     GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, new IntPtr( ptr + offset ) );
@@ -844,6 +841,8 @@ public class Mesh : IDisposable
             }
             else
             {
+                Logger.Checkpoint();
+
                 GdxApi.Bindings.DrawArrays( primitiveType, offset, count );
             }
         }
@@ -862,6 +861,8 @@ public class Mesh : IDisposable
 
                 var offsetInBytes = offset * sizeof( short ); // Calculate byte offset
 
+                Logger.Checkpoint();
+
                 GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offsetInBytes );
 
                 _indices.Unbind();
@@ -870,10 +871,12 @@ public class Mesh : IDisposable
             {
                 if ( IsInstanced )
                 {
+                    Logger.Checkpoint();
                     GdxApi.Bindings.DrawArraysInstanced( primitiveType, offset, count, _instances!.NumInstances );
                 }
                 else
                 {
+                    Logger.Debug( "Calling: GdxApi.Bindings.DrawArrays( primitiveType, offset, count )" );
                     GdxApi.Bindings.DrawArrays( primitiveType, offset, count );
                 }
             }
@@ -883,7 +886,7 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Returns the first <see cref="VertexAttribute" /> having the given <see cref="VertexAttributes.Usage" />.
+    /// Returns the first <see cref="VertexAttribute" /> having the given <see cref="VertexConstants.Usage" />.
     /// </summary>
     /// <param name="usage"> the Usage. </param>
     /// <returns> the VertexAttribute or null if no attribute with that usage was found.  </returns>
@@ -945,7 +948,7 @@ public class Mesh : IDisposable
 
         bbox.ToInfinity();
 
-        var posAttrib = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
+        var posAttrib = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
 
         var offset     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
@@ -1046,7 +1049,7 @@ public class Mesh : IDisposable
 
         var verts      = _vertices.GetBuffer( false );
         var index      = _indices.GetBuffer( false );
-        var posAttrib  = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
+        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
         var posoff     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
         var end        = offset + count;
@@ -1192,7 +1195,7 @@ public class Mesh : IDisposable
 
         var verts      = _vertices.GetBuffer( false );
         var index      = _indices.GetBuffer( false );
-        var posAttrib  = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
+        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
         var posoff     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
         var end        = offset + count;
@@ -1407,7 +1410,7 @@ public class Mesh : IDisposable
     /// <param name="scaleZ"> scale on z  </param>
     public void Scale( float scaleX, float scaleY, float scaleZ )
     {
-        var posAttr       = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
+        var posAttr       = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
         var offset        = posAttr!.Offset / 4;
         var numComponents = posAttr.NumComponents;
         var numVertices   = NumVertices;
@@ -1473,7 +1476,7 @@ public class Mesh : IDisposable
     /// <param name="count">The number of vertices to be transformed.</param>
     protected void Transform( in Matrix4 matrix, in int start, in int count )
     {
-        var posAttr = GetVertexAttribute( ( int )VertexAttributes.Usage.POSITION );
+        var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
 
         var posOffset     = posAttr!.Offset / 4;
         var stride        = VertexSize / 4;
@@ -1590,7 +1593,7 @@ public class Mesh : IDisposable
     /// <param name="count">The number of vertices to transform.</param>
     protected void TransformUV( in Matrix3 matrix, int start, int count )
     {
-        var posAttr = GetVertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES );
+        var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES );
 
         if ( posAttr == null ) return;
 

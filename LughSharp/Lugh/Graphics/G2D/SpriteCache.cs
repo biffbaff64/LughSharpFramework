@@ -142,14 +142,14 @@ public class SpriteCache
         _mesh = new Mesh( true,
                           size * ( useIndices ? 4 : 6 ),
                           useIndices ? size * 6 : 0,
-                          new VertexAttribute( ( int )VertexAttributes.Usage.POSITION,
-                                               2,
+                          new VertexAttribute( ( int )VertexConstants.Usage.POSITION,
+                                               VertexConstants.POSITION_COMPONENTS,
                                                "a_position" ),
-                          new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED,
-                                               4,
+                          new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED,
+                                               VertexConstants.COLOR_COMPONENTS,
                                                "a_colorPacked" ),
-                          new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES,
-                                               2,
+                          new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES,
+                                               VertexConstants.TEXCOORD_COMPONENTS,
                                                "u_texCoord" + "0" ) )
         {
             AutoBind = false,
@@ -1300,8 +1300,7 @@ public class SpriteCache
                                      + "a_colorPacked"
                                      + ";\n" //
                                      + "in vec2 "
-                                     + "u_texCoord"
-                                     + "0;\n"                                   //
+                                     + "u_texCoord" + "0;\n"                                   //
                                      + "uniform mat4 u_projectionViewMatrix;\n" //
                                      + "out vec4 v_color;\n"                    //
                                      + "out vec2 v_texCoords;\n"                //
@@ -1313,8 +1312,7 @@ public class SpriteCache
                                      + ";\n"                                         //
                                      + "   v_color.a = v_color.a * (255.0/254.0);\n" //
                                      + "   v_texCoords = "
-                                     + "u_texCoord"
-                                     + "0;\n" //
+                                     + "u_texCoord" + "0;\n" //
                                      + "   gl_Position =  u_projectionViewMatrix * "
                                      + "a_position"
                                      + ";\n" //

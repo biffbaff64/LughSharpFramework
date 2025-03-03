@@ -186,6 +186,10 @@ public static class GLUtils
         {
             return;
         }
+        
+        Logger.Debug( $"sizeInBytes: {sizeInBytes}" );
+        Logger.Debug( $"vertexSizeInFloats: {vertexSizeInFloats}" );
+        Logger.Debug( $"data.Length: {data.Length}" );
 
         for ( var i = 0; i < data.Length; i += vertexSizeInFloats )
         {
@@ -195,8 +199,6 @@ public static class GLUtils
             {
                 Logger.Debug( $"{data[ i + j ]} " );
             }
-
-            Console.WriteLine();
         }
     }
 }

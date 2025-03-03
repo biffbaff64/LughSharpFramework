@@ -85,9 +85,9 @@ public static class Logger
     /// <param name="logLevel"> The initially enabled log level(s). </param>
     /// <param name="enableWriteToFile"> TRUE to enable outputting messages to a file. </param>
     /// <param name="filename"> The name of the file to write to. Default is trace.txt. </param>
-    public static void Initialise( int    logLevel          = LOG_DEBUG | LOG_ERROR,
-                                   bool   enableWriteToFile = true,
-                                   string filename          = DEFAULT_TRACE_FILENAME )
+    public static void Initialise( int logLevel = LOG_DEBUG | LOG_ERROR,
+                                   bool enableWriteToFile = true,
+                                   string filename = DEFAULT_TRACE_FILENAME )
     {
         TraceLevel        = logLevel;
         EnableWriteToFile = enableWriteToFile;
@@ -105,14 +105,16 @@ public static class Logger
     /// <param name="boxedDebug">
     /// If TRUE, a dividing line will be written before and after this debug message.
     /// </param>
+    /// <param name="addNewLine"> Adds a NewLine to the message string if TRUE (default). </param>
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    public static void Debug( string                    message,
-                              bool                      boxedDebug     = false,
-                              [CallerFilePath]   string callerFilePath = "",
-                              [CallerMemberName] string callerMethod   = "",
-                              [CallerLineNumber] int    callerLine     = 0 )
+    public static void Debug( string message,
+                              bool boxedDebug = false,
+                              bool addNewLine = true,
+                              [CallerFilePath] string callerFilePath = "",
+                              [CallerMemberName] string callerMethod = "",
+                              [CallerLineNumber] int callerLine = 0 )
     {
         if ( !IsEnabled( LOG_DEBUG ) )
         {
@@ -122,11 +124,14 @@ public static class Logger
         if ( boxedDebug ) Divider();
 
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
+        var str      = CreateMessage( DEBUG_TAG, message, callerID );
 
-        var str = CreateMessage( DEBUG_TAG, message, callerID );
-
-        Console.WriteLine( str );
-
+        if ( addNewLine )
+        {
+            str += Environment.NewLine;
+        }
+        
+        Console.Write( str );
         WriteToFile( str );
 
         if ( boxedDebug ) Divider();
@@ -136,13 +141,15 @@ public static class Logger
     /// Send a DEBUG message to output window/console/File.
     /// </summary>
     /// <param name="message"> The message to send. </param>
+    /// <param name="addNewLine"> Adds a NewLine to the message string if TRUE (default). </param>
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    public static void Error( string                    message,
-                              [CallerFilePath]   string callerFilePath = "",
-                              [CallerMemberName] string callerMethod   = "",
-                              [CallerLineNumber] int    callerLine     = 0 )
+    public static void Error( string message,
+                              bool addNewLine = true,
+                              [CallerFilePath] string callerFilePath = "",
+                              [CallerMemberName] string callerMethod = "",
+                              [CallerLineNumber] int callerLine = 0 )
     {
         if ( !IsEnabled( LOG_ERROR ) )
         {
@@ -153,7 +160,12 @@ public static class Logger
 
         var str = CreateMessage( ERROR_TAG, message, callerID );
 
-        Console.WriteLine( str );
+        if ( addNewLine )
+        {
+            str += Environment.NewLine;
+        }
+        
+        Console.Write( str );
 
         WriteToFile( str );
     }
@@ -166,11 +178,11 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    public static void DebugCondition( string                    message,
-                                       bool                      condition      = false,
-                                       [CallerFilePath]   string callerFilePath = "",
-                                       [CallerMemberName] string callerMethod   = "",
-                                       [CallerLineNumber] int    callerLine     = 0 )
+    public static void DebugCondition( string message,
+                                       bool condition = false,
+                                       [CallerFilePath] string callerFilePath = "",
+                                       [CallerMemberName] string callerMethod = "",
+                                       [CallerLineNumber] int callerLine = 0 )
     {
         if ( !IsEnabled( LOG_DEBUG ) || !condition )
         {
@@ -196,11 +208,11 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    public static void Checkpoint( bool                      lineBefore     = false,
-                                   bool                      lineAfter      = false,
-                                   [CallerFilePath]   string callerFilePath = "",
-                                   [CallerMemberName] string callerMethod   = "",
-                                   [CallerLineNumber] int    callerLine     = 0 )
+    public static void Checkpoint( bool lineBefore = false,
+                                   bool lineAfter = false,
+                                   [CallerFilePath] string callerFilePath = "",
+                                   [CallerMemberName] string callerMethod = "",
+                                   [CallerLineNumber] int callerLine = 0 )
     {
         if ( !IsEnabled( LOG_DEBUG ) )
         {
@@ -239,6 +251,17 @@ public static class Logger
         Console.WriteLine( sb.ToString() );
     }
 
+    /// <summary>
+    /// Writes an <see cref="Environment.NewLine"/> to console.
+    /// Does NOT create a string holding caller data or timestamp. This is purely for use
+    /// when calling <see cref="Debug"/> or <see cref="Error"/> with the 'addNewLine'
+    /// flag disabled.
+    /// </summary>
+    public static void NewLine()
+    {
+        Console.WriteLine( Environment.NewLine );
+    }
+    
     /// <summary>
     /// Opens a physical file for writing copies of debug messages to.
     /// </summary>
@@ -380,9 +403,9 @@ public static class Logger
         var c = new GregorianCalendar();
 
         return $"{c.GetHour( DateTime.Now )}"
-             + $":{c.GetMinute( DateTime.Now )}"
-             + $":{c.GetSecond( DateTime.Now )}"
-             + $":{c.GetMilliseconds( DateTime.Now )}";
+               + $":{c.GetMinute( DateTime.Now )}"
+               + $":{c.GetSecond( DateTime.Now )}"
+               + $":{c.GetMilliseconds( DateTime.Now )}";
     }
 
     /// <summary>
@@ -406,7 +429,7 @@ public static class Logger
 
         using var fs = File.Open( _debugFilePath + _debugFileName, FileMode.Append );
 
-        var debugLine = new UTF8Encoding( true ).GetBytes( text + "\n" );
+        var debugLine = new UTF8Encoding( true ).GetBytes( text );
 
         fs.Write( debugLine, 0, debugLine.Length );
         fs.Close();
@@ -424,7 +447,7 @@ public static class Logger
         return traceLevel switch
         {
             LOG_DEBUG
-             or LOG_ERROR => ( TraceLevel & traceLevel ) != 0,
+                or LOG_ERROR => ( TraceLevel & traceLevel ) != 0,
             var _ => false,
         };
     }

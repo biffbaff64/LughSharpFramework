@@ -100,8 +100,7 @@ public class DistanceFieldFont : BitmapFont
                                      + "a_colorPacked"
                                      + ";\n" //
                                      + "in vec2 "
-                                     + "u_texCoord"
-                                     + "0;\n"
+                                     + "u_texCoord" + "0;\n"
                                      + "uniform mat4 u_projTrans;\n"
                                      + "out vec4 v_color;\n"
                                      + "out vec2 v_texCoords;\n"

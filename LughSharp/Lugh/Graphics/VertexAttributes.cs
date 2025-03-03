@@ -28,24 +28,6 @@ namespace LughSharp.Lugh.Graphics;
 public class VertexAttributes
 {
     /// <summary>
-    /// Enumerates the various types of vertex attribute usage in a graphics application.
-    /// </summary>
-    [PublicAPI]
-    [Flags]
-    public enum Usage
-    {
-        POSITION            = 1,
-        COLOR_UNPACKED      = 2,
-        COLOR_PACKED        = 4,
-        NORMAL              = 8,
-        TEXTURE_COORDINATES = 16,
-        GENERIC             = 32,
-        BONE_WEIGHT         = 64,
-        TANGENT             = 128,
-        BI_NORMAL           = 256,
-    }
-
-    /// <summary>
     /// the attributes in the order they were specified
     /// </summary>
     private readonly VertexAttribute[] _attributes;

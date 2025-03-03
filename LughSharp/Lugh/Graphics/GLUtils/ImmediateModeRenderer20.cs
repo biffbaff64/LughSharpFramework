@@ -104,12 +104,12 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         _vertices   = new float[ maxVertices * ( _mesh.VertexAttributes!.VertexSize / 4 ) ];
         _vertexSize = _mesh.VertexAttributes.VertexSize / 4;
 
-        var attribute = _mesh.GetVertexAttribute( ( int )VertexAttributes.Usage.NORMAL );
+        var attribute = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.NORMAL );
 
         _normalOffset       = attribute != null ? attribute.Offset / 4 : 0;
-        attribute           = _mesh.GetVertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED );
+        attribute           = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED );
         _colorOffset        = attribute != null ? attribute.Offset / 4 : 0;
-        attribute           = _mesh.GetVertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES );
+        attribute           = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES );
         _texCoordOffset     = attribute != null ? attribute.Offset / 4 : 0;
         _shaderUniformNames = new string[ numTexCoords ];
 
@@ -272,28 +272,28 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     {
         var attribs = new List< VertexAttribute >
         {
-            new( ( int )VertexAttributes.Usage.POSITION, 3, "a_position" ),
+            new( ( int )VertexConstants.Usage.POSITION, VertexConstants.POSITION_COMPONENTS, "a_position" ),
         };
-
-        if ( hasNormals )
-        {
-            attribs.Add( new VertexAttribute( ( int )VertexAttributes.Usage.NORMAL,
-                                              3,
-                                              "a_normal" ) );
-        }
 
         if ( hasColor )
         {
-            attribs.Add( new VertexAttribute( ( int )VertexAttributes.Usage.COLOR_PACKED,
-                                              4,
+            attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED,
+                                              VertexConstants.COLOR_COMPONENTS,
                                               "a_colorPacked" ) );
         }
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
-            attribs.Add( new VertexAttribute( ( int )VertexAttributes.Usage.TEXTURE_COORDINATES,
-                                              2,
+            attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES,
+                                              VertexConstants.TEXCOORD_COMPONENTS,
                                               $"a_texCoord{i}" ) );
+        }
+
+        if ( hasNormals )
+        {
+            attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.NORMAL,
+                                              VertexConstants.NORMAL_COMPONENTS,
+                                              "a_normal" ) );
         }
 
         var array = new VertexAttribute[ attribs.Count ];
@@ -317,8 +317,8 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         var shader = "in vec4 "
                      + "a_position"
                      + ";\n"
-                     + ( hasNormals ? "in vec3 " + "a_normal" + ";\n" : "" )
-                     + ( hasColors ? "in vec4 " + "a_colorPacked" + ";\n" : "" );
+                     + ( hasColors ? "in vec4 " + "a_colorPacked" + ";\n" : "" )
+                     + ( hasNormals ? "in vec3 " + "a_normal" + ";\n" : "" );
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
@@ -334,16 +334,12 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         }
 
         shader += "void main() {\n"
-                  + "   gl_Position = u_projModelView * "
-                  + "a_position"
-                  + ";\n";
+                  + "   gl_Position = u_projModelView * " + "a_position" + ";\n";
 
         if ( hasColors )
         {
-            shader += "   v_col = "
-                      + "a_colorPacked"
-                      + ";\n"
-                      + "   v_col.a *= 255.0 / 254.0;\n";
+            shader += "   v_col = " + "a_colorPacked" + ";\n"
+                    + "   v_col.a *= 255.0 / 254.0;\n";
         }
 
         for ( var i = 0; i < numTexCoords; i++ )

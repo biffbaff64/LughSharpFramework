@@ -25,6 +25,8 @@
 
 // ============================================================================
 
+using LughSharp.Lugh.Utils;
+
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;

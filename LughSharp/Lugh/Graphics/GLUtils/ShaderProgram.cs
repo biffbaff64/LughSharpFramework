@@ -517,6 +517,8 @@ public class ShaderProgram : IDisposable
     /// <param name="offset"></param>
     public virtual void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, int offset )
     {
+        Logger.Debug( $"location: {location}, size: {size}, type: {type}, normalize: {normalize}, stride: {stride}, offset: {offset}" );
+        
         if ( location == -1 )
         {
             Logger.Debug( $"***** Action cannot be performed, Location is -1 *****" );

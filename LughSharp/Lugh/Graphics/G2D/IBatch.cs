@@ -117,7 +117,7 @@ public interface IBatch : IDisposable
 
     /// <summary>
     /// Sets the shader to be used in a GL environment. Vertex position attribute is
-    /// called "a_position", the texture coordinates attribute is called "a_texCoord0", the
+    /// called "a_position", the texture coordinates attribute is called "a_texCoord", the
     /// color attribute is called "a_color".
     /// <para>
     ///     See <see cref="" a_position"" />, <see cref="" a_colorPacked"" />
