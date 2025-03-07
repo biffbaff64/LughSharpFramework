@@ -258,9 +258,9 @@ public abstract class Camera
     /// right) as reported by the touch methods in <see cref="Input" />. A z-coordinate of 0 will return
     /// a point on the near plane, a z-coordinate of 1 will return a point on the far plane.
     /// <para>
-    ///     This method allows you to specify the viewport position and dimensions in the coordinate system
-    ///     expected by <see cref="OpenGL.GLBindings.Viewport(int, int, int, int)" />, with the origin in the bottom
-    ///     left corner of the screen.
+    /// This method allows you to specify the viewport position and dimensions in the coordinate system
+    /// expected by <see cref="OpenGL.GLBindings.Viewport(int, int, int, int)" />, with the origin in the bottom
+    /// left corner of the screen.
     /// </para>
     /// </summary>
     /// <param name="screenCoords">The point in screen coordinates (origin top left)</param>

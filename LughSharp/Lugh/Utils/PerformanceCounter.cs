@@ -31,9 +31,9 @@ namespace LughSharp.Lugh.Utils;
 /// takes. Call start() just before starting the task and stop() right after. You can do
 /// this multiple times if required.
 /// <para>
-///     Every render or update call tick() to update the values. The time FloatCounter provides
-///     access to the minimum, maximum, average, total and current time (in seconds) the task
-///     takes. Likewise for the load value, which is the percentage of the total time.
+/// Every render or update call tick() to update the values. The time FloatCounter provides
+/// access to the minimum, maximum, average, total and current time (in seconds) the task
+/// takes. Likewise for the load value, which is the percentage of the total time.
 /// </para>
 /// </summary>
 [PublicAPI]

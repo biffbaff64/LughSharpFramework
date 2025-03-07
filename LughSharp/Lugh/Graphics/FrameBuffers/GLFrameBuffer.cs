@@ -40,12 +40,12 @@ namespace LughSharp.Lugh.Graphics.FrameBuffers;
 /// You can get a hold of the gltexture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture()" />.
 /// This class will only work with OpenGL ES 2.0.
 /// <para>
-///     FrameBuffers are managed. In case of an OpenGL context loss, which only
-///     happens on Android when a user switches to another application or receives
-///     an incoming call, the framebuffer will be automatically recreated.
+/// FrameBuffers are managed. In case of an OpenGL context loss, which only
+/// happens on Android when a user switches to another application or receives
+/// an incoming call, the framebuffer will be automatically recreated.
 /// </para>
 /// <para>
-///     A FrameBuffer must be disposed if it is no longer needed
+/// A FrameBuffer must be disposed if it is no longer needed
 /// </para>
 /// </summary>
 /// <typeparam name="T">

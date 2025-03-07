@@ -87,8 +87,8 @@ public abstract class Number
     /// Returns the value of the specified number as a <tt>byte</tt>
     /// which may involve rounding or truncation.
     /// <para>
-    ///     This implementation returns the result of <see cref="IntValue" /> cast
-    ///     to a <tt>byte</tt>.
+    /// This implementation returns the result of <see cref="IntValue" /> cast
+    /// to a <tt>byte</tt>.
     /// </para>
     /// </summary>
     /// <returns>
@@ -104,8 +104,8 @@ public abstract class Number
     /// Returns the value of the specified number as a <tt>short</tt>
     /// which may involve rounding or truncation.
     /// <para>
-    ///     This implementation returns the result of <see cref="IntValue" />
-    ///     cast to a <tt>short</tt>.
+    /// This implementation returns the result of <see cref="IntValue" />
+    /// cast to a <tt>short</tt>.
     /// </para>
     /// </summary>
     /// <returns>

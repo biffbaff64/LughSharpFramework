@@ -36,13 +36,13 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// A slider is a horizontal indicator that allows a user to set a value. The slider has
 /// a range (min, max) and a stepping between each value the slider represents.
 /// <para>
-///     <see cref="ChangeListener.ChangeEvent" /> is fired when the
-///     slider knob is moved. Canceling the event will move the knob to where it was previously.
+/// <see cref="ChangeListener.ChangeEvent" /> is fired when the
+/// slider knob is moved. Canceling the event will move the knob to where it was previously.
 /// </para>
 /// <para>
-///     For a horizontal progress bar, its preferred height is determined by the larger of the
-///     knob and background, and the preferred width is 140, a relatively arbitrary size. These
-///     parameters are reversed for a vertical progress bar.
+/// For a horizontal progress bar, its preferred height is determined by the larger of the
+/// knob and background, and the preferred width is 140, a relatively arbitrary size. These
+/// parameters are reversed for a vertical progress bar.
 /// </para>
 /// </summary>
 [PublicAPI]

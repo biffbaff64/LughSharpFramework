@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
@@ -39,58 +39,58 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// pixel duplication, specified during construction. The packer supports incremental
 /// inserts and updates of TextureAtlases generated with this class.
 /// <para>
-///     How bin packing is performed can be customized via <see cref="IPackStrategy" />.
+/// How bin packing is performed can be customized via <see cref="IPackStrategy" />.
 /// </para>
 /// <para>
-///     All methods can be called from any thread unless otherwise noted.
+/// All methods can be called from any thread unless otherwise noted.
 /// </para>
 /// <para>
-///     One-off usage:
-///     <code>
-///     // 512x512 pixel pages, RGB565 format, 2 pixels of padding, border duplication
-///     PixmapPacker packer = new PixmapPacker(512, 512, Format.RGB565, 2, true);
-///     packer.Pack(&quot;First Pixmap&quot;, pixmap1);
-///     packer.Pack(&quot;Second Pixmap&quot;, pixmap2);
-///     TextureAtlas atlas = packer.GenerateTextureAtlas(TextureFilter.Nearest, TextureFilter.Nearest, false);
-///     packer.Dispose();
-///     // ...
-///     atlas.Dispose();
-///     </code>
-///     With this usage pattern, disposing the packer will not dispose any pixmaps
-///     used by the texture atlas. The texture atlas must also be disposed when no
-///     longer needed.
-///     Incremental texture atlas usage:
-///     <code>
-///     // 512x512 pixel pages, RGB565 format, 2 pixels of padding, no border duplication
-///     PixmapPacker packer = new PixmapPacker(512, 512, Format.RGB565, 2, false);
-///     TextureAtlas atlas = new TextureAtlas();
-///     
-///     // potentially on a separate thread, e.g. downloading thumbnails
-///     packer.Pack(&quot;thumbnail&quot;, thumbnail);
-///     
-///     // on the rendering thread, every frame
-///     packer.UpdateTextureAtlas(atlas, TextureFilter.Linear, TextureFilter.Linear, false);
-///     
-///     // once the atlas is no longer needed, make sure you get the final additions. This might
-///     // be more elaborate depending on your threading model.
-///     packer.UpdateTextureAtlas(atlas, TextureFilter.Linear, TextureFilter.Linear, false);
-///     // ...
-///     atlas.Dispose();
-///     </code>
-///     Pixmap-only usage:
-///     <code>
-///     PixmapPacker packer = new PixmapPacker(512, 512, Format.RGB565, 2, true);
-///     packer.Pack(&quot;First Pixmap&quot;, pixmap1);
-///     packer.Pack(&quot;Second Pixmap&quot;, pixmap2);
-///     
-///     // do something interesting with the resulting pages
-///     foreach (Page page in packer.GetPages())
-///     {
-///         // ...
-///     }
-///     
-///     packer.Dispose();
-///     </code>
+/// One-off usage:
+/// <code>
+/// // 512x512 pixel pages, RGB565 format, 2 pixels of padding, border duplication
+/// PixmapPacker packer = new PixmapPacker(512, 512, Format.RGB565, 2, true);
+/// packer.Pack(&quot;First Pixmap&quot;, pixmap1);
+/// packer.Pack(&quot;Second Pixmap&quot;, pixmap2);
+/// TextureAtlas atlas = packer.GenerateTextureAtlas(TextureFilter.Nearest, TextureFilter.Nearest, false);
+/// packer.Dispose();
+/// // ...
+/// atlas.Dispose();
+/// </code>
+/// With this usage pattern, disposing the packer will not dispose any pixmaps
+/// used by the texture atlas. The texture atlas must also be disposed when no
+/// longer needed.
+/// Incremental texture atlas usage:
+/// <code>
+/// // 512x512 pixel pages, RGB565 format, 2 pixels of padding, no border duplication
+/// PixmapPacker packer = new PixmapPacker(512, 512, Format.RGB565, 2, false);
+/// TextureAtlas atlas = new TextureAtlas();
+/// 
+/// // potentially on a separate thread, e.g. downloading thumbnails
+/// packer.Pack(&quot;thumbnail&quot;, thumbnail);
+/// 
+/// // on the rendering thread, every frame
+/// packer.UpdateTextureAtlas(atlas, TextureFilter.Linear, TextureFilter.Linear, false);
+/// 
+/// // once the atlas is no longer needed, make sure you get the final additions. This might
+/// // be more elaborate depending on your threading model.
+/// packer.UpdateTextureAtlas(atlas, TextureFilter.Linear, TextureFilter.Linear, false);
+/// // ...
+/// atlas.Dispose();
+/// </code>
+/// Pixmap-only usage:
+/// <code>
+/// PixmapPacker packer = new PixmapPacker(512, 512, Format.RGB565, 2, true);
+/// packer.Pack(&quot;First Pixmap&quot;, pixmap1);
+/// packer.Pack(&quot;Second Pixmap&quot;, pixmap2);
+/// 
+/// // do something interesting with the resulting pages
+/// foreach (Page page in packer.GetPages())
+/// {
+/// // ...
+/// }
+/// 
+/// packer.Dispose();
+/// </code>
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -525,7 +525,7 @@ public class PixmapPacker : IDisposable
     /// on a separate thread via <see cref="Pack(String, Pixmap)" /> and update the TextureAtlas
     /// on the rendering thread.
     /// <para>
-    ///     This method must be called on the rendering thread.
+    /// This method must be called on the rendering thread.
     /// </para>
     /// After calling this method, disposing the packer will no longer dispose the page pixmaps.
     /// Has useIndexes on by default so as to keep backwards compatibility

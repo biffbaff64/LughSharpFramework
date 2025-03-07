@@ -64,8 +64,8 @@ public class DesktopGLWindowConfiguration
     /// <summary>
     /// Sets the app to use fullscreen mode.
     /// <para>
-    ///     Use the static methods like <see cref="DesktopGLApplicationConfiguration.GetDisplayMode()" />
-    ///     on this class to enumerate connected monitors and their fullscreen display modes.
+    /// Use the static methods like <see cref="DesktopGLApplicationConfiguration.GetDisplayMode()" />
+    /// on this class to enumerate connected monitors and their fullscreen display modes.
     /// </para>
     /// </summary>
     public DesktopGLGraphics.DesktopGLDisplayMode? FullscreenMode { get; set; }
@@ -75,12 +75,12 @@ public class DesktopGLWindowConfiguration
     /// <summary>
     /// Sets whether to use vsync.
     /// <para>
-    ///     This setting can be changed anytime at runtime via <see cref="IGraphics.SetVSync(bool)" />.
+    /// This setting can be changed anytime at runtime via <see cref="IGraphics.SetVSync(bool)" />.
     /// </para>
     /// <para>
-    ///     For multi-window applications, only one (the main) window should enable vsync. Otherwise,
-    ///     every window will wait for the vertical blank on swap individually, effectively cutting
-    ///     the frame rate to (refreshRate / numberOfWindows).
+    /// For multi-window applications, only one (the main) window should enable vsync. Otherwise,
+    /// every window will wait for the vertical blank on swap individually, effectively cutting
+    /// the frame rate to (refreshRate / numberOfWindows).
     /// </para>
     /// </summary>
     public bool VSyncEnabled { get; set; } = true;

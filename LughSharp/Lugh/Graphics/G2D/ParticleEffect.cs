@@ -244,14 +244,14 @@ public class ParticleEffect : IDisposable
     /// <param name="effectFile">The file containing the particle effect configuration.</param>
     /// <remarks>
     /// <para>
-    ///     This method reads the configuration from the <paramref name="effectFile" /> and
-    ///     creates particle emitters based on the provided information. Each emitter is
-    ///     constructed using the <see cref="NewEmitter(StreamReader)" /> method, and it is
-    ///     added to the collection of emitters.
+    /// This method reads the configuration from the <paramref name="effectFile" /> and
+    /// creates particle emitters based on the provided information. Each emitter is
+    /// constructed using the <see cref="NewEmitter(StreamReader)" /> method, and it is
+    /// added to the collection of emitters.
     /// </para>
     /// <para>
-    ///     After loading all emitters, the existing emitters in the collection are cleared
-    ///     before adding the newly loaded ones.
+    /// After loading all emitters, the existing emitters in the collection are cleared
+    /// before adding the newly loaded ones.
     /// </para>
     /// </remarks>
     /// <exception cref="GdxRuntimeException">
@@ -292,16 +292,16 @@ public class ParticleEffect : IDisposable
     /// <param name="atlasPrefix">An optional prefix to apply to image names in the atlas.</param>
     /// <remarks>
     /// <para>
-    ///     This method loads images from the provided <paramref name="atlas" /> and associates
-    ///     them with the corresponding emitters in the collection. Each emitter's image paths
-    ///     are retrieved using the <see cref="ParticleEmitter.ImagePaths" /> method.
-    ///     If an emitter has no image paths, it is skipped.
+    /// This method loads images from the provided <paramref name="atlas" /> and associates
+    /// them with the corresponding emitters in the collection. Each emitter's image paths
+    /// are retrieved using the <see cref="ParticleEmitter.ImagePaths" /> method.
+    /// If an emitter has no image paths, it is skipped.
     /// </para>
     /// <para>
-    ///     The method attempts to create sprites from the atlas using the specified
-    ///     <paramref name="atlasPrefix" /> for image names.
-    ///     If a sprite cannot be created, an <see cref="ArgumentException" /> is thrown,
-    ///     indicating the missing image.
+    /// The method attempts to create sprites from the atlas using the specified
+    /// <paramref name="atlasPrefix" /> for image names.
+    /// If a sprite cannot be created, an <see cref="ArgumentException" /> is thrown,
+    /// indicating the missing image.
     /// </para>
     /// </remarks>
     public void LoadEmitterImages( TextureAtlas atlas, string? atlasPrefix = null )
@@ -353,15 +353,15 @@ public class ParticleEffect : IDisposable
     /// <param name="imagesDir">The directory containing the emitter images.</param>
     /// <remarks>
     /// <para>
-    ///     This method loads images from the <paramref name="imagesDir" /> directory and
-    ///     associates them with the corresponding emitters in the collection. Each emitter's
-    ///     image paths are retrieved using the <see cref="ParticleEmitter.ImagePaths" />
-    ///     method. If an emitter has no image paths, it is skipped.
+    /// This method loads images from the <paramref name="imagesDir" /> directory and
+    /// associates them with the corresponding emitters in the collection. Each emitter's
+    /// image paths are retrieved using the <see cref="ParticleEmitter.ImagePaths" />
+    /// method. If an emitter has no image paths, it is skipped.
     /// </para>
     /// <para>
-    ///     The loaded sprites are stored in a dictionary to avoid reloading the same sprite
-    ///     if it has already been loaded. This improves performance by reusing already loaded
-    ///     textures.
+    /// The loaded sprites are stored in a dictionary to avoid reloading the same sprite
+    /// if it has already been loaded. This improves performance by reusing already loaded
+    /// textures.
     /// </para>
     /// </remarks>
     public void LoadEmitterImages( DirectoryInfo imagesDir )
@@ -510,9 +510,9 @@ public class ParticleEffect : IDisposable
     /// Sets the 'CleansUpBlendFunction' <see cref="ParticleEmitter" /> currently
     /// in this ParticleEffect.
     /// <para>
-    ///     IMPORTANT: If set to false and if the next object to use this Batch expects
-    ///     alpha blending, you are responsible for setting the Batch's blend function
-    ///     to (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) before that next object is drawn.
+    /// IMPORTANT: If set to false and if the next object to use this Batch expects
+    /// alpha blending, you are responsible for setting the Batch's blend function
+    /// to (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) before that next object is drawn.
     /// </para>
     /// </summary>
     /// <param name="cleanUpBlendFunction"></param>

@@ -78,19 +78,11 @@ public partial class GLBindings
             }
             catch ( Exception ex )
             {
-                Logger.Debug( $"Error creating delegate for {functionName}: {ex.Message}" );
-
-                functionDelegate = null!;
-
-                return false;
+                throw new GdxRuntimeException( $"Error creating delegate for {functionName}: {ex.Message}" );
             }
         }
 
-        Logger.Debug( $"Failed to load {functionName}" );
-
-        functionDelegate = null!;
-
-        return false;
+        throw new GdxRuntimeException( $"Failed to load {functionName}" );
     }
 
     // ========================================================================
@@ -111,6 +103,8 @@ public partial class GLBindings
             {
                 var functionDelegate = Marshal.GetDelegateForFunctionPointer< T >( functionPtr );
 
+                _loadedFunctions.Add( functionName, functionDelegate );
+                
                 return functionDelegate;
             }
             catch ( Exception ex )

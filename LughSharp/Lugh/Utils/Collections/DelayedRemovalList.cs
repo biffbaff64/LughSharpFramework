@@ -34,11 +34,11 @@ namespace LughSharp.Lugh.Utils.Collections;
 /// IllegalStateException. Only <see cref="RemoveIndex(int)" />, <see cref="RemoveValue" />,
 /// <see cref="RemoveRange(int, int)" />, <see cref="Clear()" />, and add methods are allowed.
 /// <para>
-///     Note that DelayedRemovalList is not for thread safety, only for removal during iteration.
+/// Note that DelayedRemovalList is not for thread safety, only for removal during iteration.
 /// </para>
 /// <para>
-///     Code using this class must not rely on items being removed immediately. Consider using
-///     <see cref="SnapshotArray{T}" /> if this is a problem.
+/// Code using this class must not rely on items being removed immediately. Consider using
+/// <see cref="SnapshotArray{T}" /> if this is a problem.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -102,8 +102,8 @@ public class DelayedRemovalList< T > : List< T >
     /// Begins the iteration process which delays removal until iteration
     /// has finished.
     /// <para>
-    ///     See the <see cref="DelayedRemovalList{T}" /> class description for
-    ///     a fuller description.
+    /// See the <see cref="DelayedRemovalList{T}" /> class description for
+    /// a fuller description.
     /// </para>
     /// </summary>
     public void Begin()
@@ -114,8 +114,8 @@ public class DelayedRemovalList< T > : List< T >
     /// <summary>
     /// Ends the iteration process to allow element removal.
     /// <para>
-    ///     See the <see cref="DelayedRemovalList{T}" /> class description for
-    ///     a fuller description.
+    /// See the <see cref="DelayedRemovalList{T}" /> class description for
+    /// a fuller description.
     /// </para>
     /// </summary>
     /// <exception cref="GdxRuntimeException">

@@ -29,6 +29,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public class PixelType
 {
+    [PublicAPI]
     public enum Format : int
     {
         Dummy = 0,
@@ -69,6 +70,8 @@ public class PixelType
         };
     }
 
+    // ========================================================================
+
     /// <summary>
     /// </summary>
     /// <param name="format"></param>
@@ -89,11 +92,15 @@ public class PixelType
         };
     }
 
+    // ========================================================================
+
     /// <inheritdoc cref="PixmapFormat.ToGLPixelFormat(LughSharp.Lugh.Graphics.Images.PixelType.Format)" />
     public static int ToGLPixelFormat( Format format )
     {
         return PixmapFormat.ToGLPixelFormat( ToGdx2DPixmapPixelFormat( format ) );
     }
+
+    // ========================================================================
 
     /// <inheritdoc cref="PixmapFormat.ToGLDataType(Format)" />
     public static int ToGLDataType( Format format )
@@ -101,3 +108,4 @@ public class PixelType
         return PixmapFormat.ToGLDataType( ToGdx2DPixmapPixelFormat( format ) );
     }
 }
+

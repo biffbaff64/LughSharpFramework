@@ -42,13 +42,13 @@ public class ScreenUtils
     /// Returns the current framebuffer contents as a <see cref="TextureRegion" /> with
     /// a width and height equal to the current screen size.
     /// <para>
-    ///     The base <see cref="Texture" /> always has <see cref="MathUtils.NextPowerOfTwo" />
-    ///     dimensions and RGBA8888 <see cref="PixelType.Format" />. It can be accessed via
-    ///     <see cref="TextureRegion.Texture" />. The texture is not managed and has to be
-    ///     reloaded manually on a context loss.
+    /// The base <see cref="Texture" /> always has <see cref="MathUtils.NextPowerOfTwo" />
+    /// dimensions and RGBA8888 <see cref="PixelType.Format" />. It can be accessed via
+    /// <see cref="TextureRegion.Texture" />. The texture is not managed and has to be
+    /// reloaded manually on a context loss.
     /// </para>
     /// <para>
-    ///     The returned TextureRegion is flipped along the Y axis by default.
+    /// The returned TextureRegion is flipped along the Y axis by default.
     /// </para>
     /// </summary>
     public static TextureRegion FrameBufferTexture
@@ -103,17 +103,17 @@ public class ScreenUtils
     /// Returns a portion of the current framebuffer contents specified by x, y,
     /// width and height as a <see cref="TextureRegion" /> with the same dimensions.
     /// <para>
-    ///     The base <see cref="Texture" /> always has <see cref="MathUtils.NextPowerOfTwo" />
-    ///     dimensions and RGBA8888 <see cref="PixelType.Format" />. It can be accessed via
-    ///     <see cref="TextureRegion.Texture" />.
+    /// The base <see cref="Texture" /> always has <see cref="MathUtils.NextPowerOfTwo" />
+    /// dimensions and RGBA8888 <see cref="PixelType.Format" />. It can be accessed via
+    /// <see cref="TextureRegion.Texture" />.
     /// </para>
     /// <para>
-    ///     This texture is not managed and has to be reloaded manually on a context loss.
-    ///     If the width and height specified are larger than the framebuffer dimensions,
-    ///     the Texture will be padded accordingly.
+    /// This texture is not managed and has to be reloaded manually on a context loss.
+    /// If the width and height specified are larger than the framebuffer dimensions,
+    /// the Texture will be padded accordingly.
     /// </para>
     /// <para>
-    ///     Pixels that fall outside of the current screen will have RGBA values of 0.
+    /// Pixels that fall outside of the current screen will have RGBA values of 0.
     /// </para>
     /// </summary>
     /// <param name="x"> the x position of the framebuffer contents to capture </param>
@@ -175,7 +175,7 @@ public class ScreenUtils
     /// framebuffer contents should be flipped along the Y axis if you intend save them to disk as
     /// a bitmap.
     /// <para>
-    ///     Flipping is not a cheap operation, so use this functionality wisely.
+    /// Flipping is not a cheap operation, so use this functionality wisely.
     /// </para>
     /// </summary>
     /// <param name="x"> Portion X position. </param>

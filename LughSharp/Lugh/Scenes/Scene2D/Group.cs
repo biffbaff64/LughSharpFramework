@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils.Collections;
@@ -35,9 +35,9 @@ namespace LughSharp.Lugh.Scenes.Scene2D;
 /// <summary>
 /// 2D scene graph node that may contain other actors.
 /// <para>
-///     Actors have a z-order equal to the order they were inserted into the group.
-///     Actors inserted later will be drawn on top of actors added earlier. Touch
-///     events that hit more than one actor are distributed to topmost actors first.
+/// Actors have a z-order equal to the order they were inserted into the group.
+/// Actors inserted later will be drawn on top of actors added earlier. Touch
+/// events that hit more than one actor are distributed to topmost actors first.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -84,9 +84,9 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Draws the group and its children.
     /// <para>
-    ///     The default implementation calls <see cref="ApplyTransform(IBatch, Matrix4)" /> if needed,
-    ///     then <see cref="DrawChildren(IBatch, float)" />, then <see cref="ResetTransform(IBatch)" />
-    ///     if needed.
+    /// The default implementation calls <see cref="ApplyTransform(IBatch, Matrix4)" /> if needed,
+    /// then <see cref="DrawChildren(IBatch, float)" />, then <see cref="ResetTransform(IBatch)" />
+    /// if needed.
     /// </para>
     /// </summary>
     /// <param name="batch"></param>
@@ -109,15 +109,15 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Draws all children.
     /// <para>
-    ///     <see cref="ApplyTransform(IBatch, Matrix4)" /> should be called before and
-    ///     <see cref="ResetTransform(IBatch)" /> after this method if <see cref="Transform" />
-    ///     is true.
+    /// <see cref="ApplyTransform(IBatch, Matrix4)" /> should be called before and
+    /// <see cref="ResetTransform(IBatch)" /> after this method if <see cref="Transform" />
+    /// is true.
     /// </para>
     /// <para>
-    ///     If <see cref="Transform" /> is false these methods don't need to be called,
-    ///     children positions are temporarily offset by the group position when drawn.
-    ///     This method avoids drawing children completely outside the
-    ///     <see cref="CullingArea" /> culling area, if set.
+    /// If <see cref="Transform" /> is false these methods don't need to be called,
+    /// children positions are temporarily offset by the group position when drawn.
+    /// This method avoids drawing children completely outside the
+    /// <see cref="CullingArea" /> culling area, if set.
     /// </para>
     /// </summary>
     protected void DrawChildren( IBatch batch, float parentAlpha )
@@ -275,10 +275,10 @@ public class Group : Actor, ICullable
     /// called before and <see cref="ResetTransform(IBatch)" /> after this method if
     /// <see cref="Transform" /> is true.
     /// <para>
-    ///     If <see cref="Transform" /> is false these methods don't need to be called,
-    ///     children positions are temporarily offset by the group position when drawn.
-    ///     This method avoids drawing children completely outside the
-    ///     <see cref="CullingArea" /> culling area, if set.
+    /// If <see cref="Transform" /> is false these methods don't need to be called,
+    /// children positions are temporarily offset by the group position when drawn.
+    /// This method avoids drawing children completely outside the
+    /// <see cref="CullingArea" /> culling area, if set.
     /// </para>
     /// </summary>
     protected void DrawDebugChildren( ShapeRenderer shapes )
@@ -420,9 +420,9 @@ public class Group : Actor, ICullable
     /// Set the shape renderer transformation matrix, often with the result of
     /// <see cref="ComputeTransform()" />.
     /// <para>
-    ///     Note this causes the shape renderer to be flushed.
-    ///     <see cref="ResetTransform(ShapeRenderer)" /> will restore the transform
-    ///     to what it was before this call.
+    /// Note this causes the shape renderer to be flushed.
+    /// <see cref="ResetTransform(ShapeRenderer)" /> will restore the transform
+    /// to what it was before this call.
     /// </para>
     /// </summary>
     protected void ApplyTransform( ShapeRenderer shapes, Matrix4 transform )

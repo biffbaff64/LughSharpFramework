@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -35,12 +35,12 @@ namespace LughSharp.Lugh.Graphics.FrameBuffers;
 /// renderbuffer for the depth buffer.
 /// You can get a hold of the texture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture" />.
 /// <para>
-///     FrameBuffers are managed. In case of an OpenGL context loss, which only happens on Android
-///     when a user switches to another application or receives an incoming call, the framebuffer
-///     will be automatically recreated.
+/// FrameBuffers are managed. In case of an OpenGL context loss, which only happens on Android
+/// when a user switches to another application or receives an incoming call, the framebuffer
+/// will be automatically recreated.
 /// </para>
 /// <para>
-///     A FrameBuffer must be disposed if it is no longer needed.
+/// A FrameBuffer must be disposed if it is no longer needed.
 /// </para>
 /// </summary>
 [PublicAPI]

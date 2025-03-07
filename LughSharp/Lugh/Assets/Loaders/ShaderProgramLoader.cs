@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Utils;
 
 using File = System.IO.File;
@@ -37,14 +37,14 @@ namespace LughSharp.Lugh.Assets.Loaders;
 /// And vice versa if the file suffix is ".frag". These default suffixes can be changed
 /// in the ShaderProgramLoader constructor.
 /// <para>
-///     For all other file suffixes, the same file is used for both (and therefore should
-///     internally distinguish between the programs using preprocessor directives. and
-///     <see cref="ShaderProgram.PrependVertexCode" /> and <see cref="ShaderProgram.PrependFragmentCode" />).
+/// For all other file suffixes, the same file is used for both (and therefore should
+/// internally distinguish between the programs using preprocessor directives. and
+/// <see cref="ShaderProgram.PrependVertexCode" /> and <see cref="ShaderProgram.PrependFragmentCode" />).
 /// </para>
 /// <para>
-///     The above default behavior for finding the files can be overridden by explicitly
-///     setting the file names in a <see cref="ShaderProgramParameter" />. The parameter
-///     can also be used to prepend code to the programs.
+/// The above default behavior for finding the files can be overridden by explicitly
+/// setting the file names in a <see cref="ShaderProgramParameter" />. The parameter
+/// can also be used to prepend code to the programs.
 /// </para>
 /// </summary>
 [PublicAPI]

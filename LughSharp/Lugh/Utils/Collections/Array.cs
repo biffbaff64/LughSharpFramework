@@ -653,9 +653,9 @@ public class Array< T >
     /// Returns an iterable for the selected items in the array. Remove is
     /// supported, but not between hasNext() and next().
     /// <para>
-    ///     If Collections.allocateIterators is false, the same iterable instance
-    ///     is returned each time this method is called. Use the Predicate.
-    ///     PredicateIterable constructor for nested or multithreaded iteration.
+    /// If Collections.allocateIterators is false, the same iterable instance
+    /// is returned each time this method is called. Use the Predicate.
+    /// PredicateIterable constructor for nested or multithreaded iteration.
     /// </para>
     /// </summary>
     /// <param name="predicate"></param>

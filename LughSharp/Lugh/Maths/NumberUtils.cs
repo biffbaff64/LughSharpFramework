@@ -64,8 +64,8 @@ public class NumberUtils
     /// <summary>
     /// Converts a float value to its hexadecimal representation.
     /// <example>
-    ///     string hexValue = FloatToHex(-1.7014117E+38f);
-    ///     Console.WriteLine(hexValue); // Outputs: FF7FFFFF
+    /// string hexValue = FloatToHex(-1.7014117E+38f);
+    /// Console.WriteLine(hexValue); // Outputs: FF7FFFFF
     /// </example>
     /// </summary>
     /// <param name="value">The float value to convert.</param>

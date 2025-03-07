@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths;
@@ -40,44 +40,44 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// This information is stored in video memory and does not have to be sent to the
 /// GPU each time it is drawn.
 /// <para>
-///     To cache Sprites or Textures, first call <see cref="BeginCache()" />, then call
-///     the appropriate add method to define the images. To complete the cache,
-///     call <see cref="EndCache" /> and store the returned cache ID.
+/// To cache Sprites or Textures, first call <see cref="BeginCache()" />, then call
+/// the appropriate add method to define the images. To complete the cache,
+/// call <see cref="EndCache" /> and store the returned cache ID.
 /// </para>
 /// <para>
-///     To draw with SpriteCache, first call <see cref="Begin()" />, then call
-///     <see cref="Draw(int)" /> with a cache ID. When SpriteCache _drawing is complete,
-///     call <see cref="End()" />.
+/// To draw with SpriteCache, first call <see cref="Begin()" />, then call
+/// <see cref="Draw(int)" /> with a cache ID. When SpriteCache _drawing is complete,
+/// call <see cref="End()" />.
 /// </para>
 /// <para>
-///     By default, SpriteCache draws using screen coordinates and uses an x-axis
-///     pointing to the right, an y-axis pointing upwards and the origin is the bottom
-///     left corner of the screen. The default transformation and projection matrices
-///     can be changed. If the screen is <see cref="IApplicationListener.Resize" />,
-///     the SpriteCache's matrices must be updated. For example:
+/// By default, SpriteCache draws using screen coordinates and uses an x-axis
+/// pointing to the right, an y-axis pointing upwards and the origin is the bottom
+/// left corner of the screen. The default transformation and projection matrices
+/// can be changed. If the screen is <see cref="IApplicationListener.Resize" />,
+/// the SpriteCache's matrices must be updated. For example:
 /// </para>
 /// <code>
 /// cache.GetProjectionMatrix().SetToOrtho2D(0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height);
 /// </code>
 /// <para>
-///     Note that SpriteCache does not manage blending. You will need to enable blending
-///     (<tt>GdxApi.GL.GLEnable(IGL.GL_Blend);</tt>) and set the blend func as needed before
-///     or between calls to <see cref="Draw(int)" />.
+/// Note that SpriteCache does not manage blending. You will need to enable blending
+/// (<tt>GdxApi.GL.GLEnable(IGL.GL_Blend);</tt>) and set the blend func as needed before
+/// or between calls to <see cref="Draw(int)" />.
 /// </para>
 /// <para>
-///     SpriteCache is managed. If the OpenGL context is lost and the restored, all OpenGL
-///     resources a SpriteCache uses internally are restored.
+/// SpriteCache is managed. If the OpenGL context is lost and the restored, all OpenGL
+/// resources a SpriteCache uses internally are restored.
 /// </para>
 /// <para>
-///     SpriteCache is a reasonably heavyweight object. Typically only one instance should
-///     be used for an entire application.
+/// SpriteCache is a reasonably heavyweight object. Typically only one instance should
+/// be used for an entire application.
 /// </para>
 /// <para>
-///     SpriteCache works with OpenGL ES 1.x and 2.0. For 2.0, it uses its own custom shader
-///     to draw.
+/// SpriteCache works with OpenGL ES 1.x and 2.0. For 2.0, it uses its own custom shader
+/// to draw.
 /// </para>
 /// <para>
-///     SpriteCache must be disposed once it is no longer needed.
+/// SpriteCache must be disposed once it is no longer needed.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -142,15 +142,9 @@ public class SpriteCache
         _mesh = new Mesh( true,
                           size * ( useIndices ? 4 : 6 ),
                           useIndices ? size * 6 : 0,
-                          new VertexAttribute( ( int )VertexConstants.Usage.POSITION,
-                                               VertexConstants.POSITION_COMPONENTS,
-                                               "a_position" ),
-                          new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED,
-                                               VertexConstants.COLOR_COMPONENTS,
-                                               "a_colorPacked" ),
-                          new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES,
-                                               VertexConstants.TEXCOORD_COMPONENTS,
-                                               "u_texCoord" + "0" ) )
+                          new VertexAttribute( ( int )VertexConstants.Usage.POSITION, VertexConstants.POSITION_COMPONENTS, "a_position" ),
+                          new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED, VertexConstants.COLOR_COMPONENTS, "a_colorPacked" ),
+                          new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, VertexConstants.TEXCOORD_COMPONENTS, "u_texCoord" + "0" ) )
         {
             AutoBind = false,
         };
@@ -1258,15 +1252,15 @@ public class SpriteCache
     /// by higher-level rendering systems to optimize rendering by avoiding
     /// redundant computations or data transfers.
     /// <para>
-    ///     A Cache object holds texture references, their counts, and offsets to
-    ///     manage batches of drawable content. It allows for batch rendering by
-    ///     associating multiple textures and their respective geometries, reducing
-    ///     overhead during rendering processes.
+    /// A Cache object holds texture references, their counts, and offsets to
+    /// manage batches of drawable content. It allows for batch rendering by
+    /// associating multiple textures and their respective geometries, reducing
+    /// overhead during rendering processes.
     /// </para>
     /// <para>
-    ///     Note that Cache instances are created and managed internally, and they
-    ///     serve as fundamental units for grouping rendering data. They are not
-    ///     intended to be accessed or modified directly by consumers.
+    /// Note that Cache instances are created and managed internally, and they
+    /// serve as fundamental units for grouping rendering data. They are not
+    /// intended to be accessed or modified directly by consumers.
     /// </para>
     /// </summary>
     private sealed class Cache

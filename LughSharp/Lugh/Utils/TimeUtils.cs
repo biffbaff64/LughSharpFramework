@@ -27,8 +27,11 @@ namespace LughSharp.Lugh.Utils;
 [PublicAPI]
 public static class TimeUtils
 {
-    private const long NANOS_PER_MILLI = 1000000;
+    public const long NANOS_PER_MILLI        = 1_000_000;
+    public const long NANOSECONDS_PER_SECOND = 1_000_000_000;
 
+    // ========================================================================
+    
     /// <summary>
     /// The current value of the system timer, in nanoseconds.
     /// </summary>

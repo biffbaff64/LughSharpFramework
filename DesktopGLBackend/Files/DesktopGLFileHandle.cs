@@ -57,9 +57,9 @@ public class DesktopGLFileHandle : FileHandle
     /// Returns the abstract pathname of this abstract pathname's parent, or null if this pathname
     /// does not name a parent directory.
     /// <para>
-    ///     The parent of an abstract pathname consists of the pathname's prefix, if any, and each name
-    ///     in the pathname's name sequence except for the last. If the name sequence is empty then the
-    ///     pathname does not name a parent directory.
+    /// The parent of an abstract pathname consists of the pathname's prefix, if any, and each name
+    /// in the pathname's name sequence except for the last. If the name sequence is empty then the
+    /// pathname does not name a parent directory.
     /// </para>
     /// </summary>
     public DirectoryInfo ParentFolder()

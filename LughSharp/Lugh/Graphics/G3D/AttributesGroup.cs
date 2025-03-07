@@ -229,7 +229,7 @@ public class AttributesGroup : IComparer< Attribute >
     /// Or when multiple attribute types are specified, true if this collection has all specified
     /// attributes;
     /// <para>
-    ///     i.e. Has(ColorAttribute.Diffuse | ColorAttribute.Specular | TextureAttribute.Diffuse);
+    /// i.e. Has(ColorAttribute.Diffuse | ColorAttribute.Specular | TextureAttribute.Diffuse);
     /// </para>
     /// </summary>
     public bool Has( long type )

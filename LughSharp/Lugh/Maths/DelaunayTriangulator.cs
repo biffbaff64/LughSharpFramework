@@ -352,7 +352,7 @@ public class DelaunayTriangulator
     /// the points x1,y1, x2,y2, x3,y3. Returns COMPLETE if xp is to the right
     /// of the entire circumcircle. Otherwise returns INCOMPLETE.
     /// <para>
-    ///     Note: a point on the circumcircle edge is considered inside.
+    /// Note: a point on the circumcircle edge is considered inside.
     /// </para>
     /// </summary>
     private int CircumCircle( float xp,

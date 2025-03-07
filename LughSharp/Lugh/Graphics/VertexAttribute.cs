@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
 
 namespace LughSharp.Lugh.Graphics;
@@ -157,7 +157,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Position()
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.POSITION, 2, "a_position" );
+        return new VertexAttribute( ( int )VertexConstants.Usage.POSITION, VertexConstants.POSITION_COMPONENTS, "a_position" );
     }
 
     /// <summary>

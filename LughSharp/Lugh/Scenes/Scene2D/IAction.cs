@@ -64,11 +64,11 @@ public interface IAction
     /// action to be pooled and reused. State required to be set for every usage of this action
     /// or computed during the action does not need to be reset.
     /// <para>
-    ///     The default implementation should call <see cref="Action.Restart" />
+    /// The default implementation should call <see cref="Action.Restart" />
     /// </para>
     /// <para>
-    ///     If a subclass has optional state, it must override this method, call super, and reset
-    ///     the optional state.
+    /// If a subclass has optional state, it must override this method, call super, and reset
+    /// the optional state.
     /// </para>
     /// </summary>
     void Reset();

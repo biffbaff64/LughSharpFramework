@@ -628,10 +628,10 @@ public class Intersector
     /// Intersect two 2D rays and return the scalar parameter of the first ray at
     /// the intersection point.
     /// <para>
-    ///     You can get the intersection point by:
-    ///     <code>Vector2 point = direction1.Scl(scalar).Add(start1);</code>
-    ///     For more information, check:
-    ///     <a href="http://stackoverflow.com/a/565282/1091440">StackOverflow Post</a>.
+    /// You can get the intersection point by:
+    /// <code>Vector2 point = direction1.Scl(scalar).Add(start1);</code>
+    /// For more information, check:
+    /// <a href="http://stackoverflow.com/a/565282/1091440">StackOverflow Post</a>.
     /// </para>
     /// </summary>
     /// <param name="start1">The starting point of the first ray.</param>
@@ -880,18 +880,18 @@ public class Intersector
     /// Intersects a <see cref="Ray" /> and a <see cref="BoundingBox" />, returning
     /// the intersection point in <paramref name="intersection" />.
     /// <para>
-    ///     This intersection is defined as the point on the ray closest to the origin
-    ///     which is within the specified bounds.
+    /// This intersection is defined as the point on the ray closest to the origin
+    /// which is within the specified bounds.
     /// </para>
     /// <para>
-    ///     The returned intersection (if any) is guaranteed to be within the bounds of
-    ///     the bounding box, but it can occasionally diverge slightly from the ray due
-    ///     to small floating-point errors.
+    /// The returned intersection (if any) is guaranteed to be within the bounds of
+    /// the bounding box, but it can occasionally diverge slightly from the ray due
+    /// to small floating-point errors.
     /// </para>
     /// <para>
-    ///     If the origin of the ray is inside the box, this method returns <tt>true</tt>
-    ///     and the intersection point is set to the origin of the ray, accordingly to the
-    ///     definition above.
+    /// If the origin of the ray is inside the box, this method returns <tt>true</tt>
+    /// and the intersection point is set to the origin of the ray, accordingly to the
+    /// definition above.
     /// </para>
     /// </summary>
     /// <param name="ray"></param>
@@ -2027,28 +2027,28 @@ public class Intersector
     /// </summary>
     /// <remarks>
     /// <para>
-    ///     Depending on where the triangle is relative to the plane, the result can be:
+    /// Depending on where the triangle is relative to the plane, the result can be:
     /// </para>
     /// <para>
-    ///     i) Triangle is fully in front/behind: <see cref="SplitTriangle.Front" /> or
-    ///     <see cref="SplitTriangle.Back" /> will contain the original triangle, and
-    ///     <see cref="SplitTriangle.Total" /> will be one.
+    /// i) Triangle is fully in front/behind: <see cref="SplitTriangle.Front" /> or
+    /// <see cref="SplitTriangle.Back" /> will contain the original triangle, and
+    /// <see cref="SplitTriangle.Total" /> will be one.
     /// </para>
     /// <para>
-    ///     ii) Triangle has two vertices in front, one behind: <see cref="SplitTriangle.Front" />
-    ///     contains 2 triangles, <see cref="SplitTriangle.Back" /> contains 1 triangle, and
-    ///     <see cref="SplitTriangle.Total" /> will be 3.
+    /// ii) Triangle has two vertices in front, one behind: <see cref="SplitTriangle.Front" />
+    /// contains 2 triangles, <see cref="SplitTriangle.Back" /> contains 1 triangle, and
+    /// <see cref="SplitTriangle.Total" /> will be 3.
     /// </para>
     /// <para>
-    ///     iii) Triangle has one vertex in front, two behind: <see cref="SplitTriangle.Front" />
-    ///     contains 1 triangle, <see cref="SplitTriangle.Back" /> contains 2 triangles, and
-    ///     <see cref="SplitTriangle.Total" /> will be 3.
+    /// iii) Triangle has one vertex in front, two behind: <see cref="SplitTriangle.Front" />
+    /// contains 1 triangle, <see cref="SplitTriangle.Back" /> contains 2 triangles, and
+    /// <see cref="SplitTriangle.Total" /> will be 3.
     /// </para>
     /// <para>
-    ///     The input triangle should have the form: x, y, z, x2, y2, z2, x3, y3, z3. You can
-    ///     add additional attributes per vertex that will be interpolated if split, such as
-    ///     texture coordinates or normals. Note that these additional attributes won't be
-    ///     normalized, as might be necessary in case of normals.
+    /// The input triangle should have the form: x, y, z, x2, y2, z2, x3, y3, z3. You can
+    /// add additional attributes per vertex that will be interpolated if split, such as
+    /// texture coordinates or normals. Note that these additional attributes won't be
+    /// normalized, as might be necessary in case of normals.
     /// </para>
     /// </remarks>
     /// <param name="triangle"></param>

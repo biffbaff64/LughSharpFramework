@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
 
@@ -32,8 +33,8 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// <summary>
 /// A text label, with optional word wrapping.
 /// <para>
-///     The preferred size of the label is determined by the actual text bounds,
-///     unless <see cref="Wrap" /> is enabled.
+/// The preferred size of the label is determined by the actual text bounds,
+/// unless <see cref="Wrap" /> is enabled.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -87,18 +88,18 @@ public class Label : Widget
     /// If false, the text will only wrap where it contains newlines (\n). The preferred
     /// size of the label will be the text bounds.
     /// <para>
-    ///     If true, the text will word wrap using the width of the label. The preferred width
-    ///     of the label will be 0, it is expected that something external will set the width
-    ///     of the label. Wrapping will not occur when ellipsis is enabled.
+    /// If true, the text will word wrap using the width of the label. The preferred width
+    /// of the label will be 0, it is expected that something external will set the width
+    /// of the label. Wrapping will not occur when ellipsis is enabled.
     /// </para>
     /// <para>
-    ///     Default is false.
+    /// Default is false.
     /// </para>
     /// <para>
-    ///     When wrap is enabled, the label's preferred height depends on the width of the
-    ///     label. In some cases the parent of the label will need to layout twice: once to
-    ///     set the width of the label and a second time to adjust to the label's new preferred
-    ///     height.
+    /// When wrap is enabled, the label's preferred height depends on the width of the
+    /// label. In some cases the parent of the label will need to layout twice: once to
+    /// set the width of the label and a second time to adjust to the label's new preferred
+    /// height.
     /// </para>
     /// </summary>
     public bool Wrap

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
@@ -38,34 +38,34 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// texture (region). The class will batch the drawing commands and
 /// optimize them for processing by the GPU.
 /// <para>
-///     To Draw something with a PolygonSpriteBatch one has to first call the
-///     <see cref="PolygonSpriteBatch.Begin(bool)" /> method which will setup appropriate
-///     render states. When you are done with drawing you have to call
-///     <see cref="PolygonSpriteBatch.End()" /> which will actually Draw the things
-///     you specified.
+/// To Draw something with a PolygonSpriteBatch one has to first call the
+/// <see cref="PolygonSpriteBatch.Begin(bool)" /> method which will setup appropriate
+/// render states. When you are done with drawing you have to call
+/// <see cref="PolygonSpriteBatch.End()" /> which will actually Draw the things
+/// you specified.
 /// </para>
 /// <para>
-///     All drawing commands of the PolygonSpriteBatch operate in screen coordinates.
-///     The screen coordinate system has an x-axis pointing to the right, an y-axis
-///     pointing upwards and the origin is in the lower left corner of the screen. You
-///     can also provide your own transformation and projection matrices if you so wish.
-///     A PolygonSpriteBatch is managed. In case the OpenGL context is lost all OpenGL
-///     resources a PolygonSpriteBatch uses internally get invalidated. A context is lost
-///     when a user switches to another application or receives an incoming call on Android.
-///     A SpritPolygonSpriteBatcheBatch will be automatically reloaded after the OpenGL
-///     context is restored.
+/// All drawing commands of the PolygonSpriteBatch operate in screen coordinates.
+/// The screen coordinate system has an x-axis pointing to the right, an y-axis
+/// pointing upwards and the origin is in the lower left corner of the screen. You
+/// can also provide your own transformation and projection matrices if you so wish.
+/// A PolygonSpriteBatch is managed. In case the OpenGL context is lost all OpenGL
+/// resources a PolygonSpriteBatch uses internally get invalidated. A context is lost
+/// when a user switches to another application or receives an incoming call on Android.
+/// A SpritPolygonSpriteBatcheBatch will be automatically reloaded after the OpenGL
+/// context is restored.
 /// </para>
 /// <para>
-///     A PolygonSpriteBatch is a pretty heavy object so you should only ever have one
-///     in your program.
+/// A PolygonSpriteBatch is a pretty heavy object so you should only ever have one
+/// in your program.
 /// </para>
 /// <para>
-///     A PolygonSpriteBatch works with OpenGL ES 1.x and 2.0. In the case of a 2.0 context
-///     it will use its own custom shader to Draw all provided sprites. You can set your own
-///     custom shader via <see cref="Shader" />.
+/// A PolygonSpriteBatch works with OpenGL ES 1.x and 2.0. In the case of a 2.0 context
+/// it will use its own custom shader to Draw all provided sprites. You can set your own
+/// custom shader via <see cref="Shader" />.
 /// </para>
 /// <para>
-///     A PolygonSpriteBatch has to be disposed if it is no longer used.
+/// A PolygonSpriteBatch has to be disposed if it is no longer used.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -126,9 +126,9 @@ public class PolygonSpriteBatch : IPolygonBatch
     /// being in the bottom left corner of the screen. The projection will be pixel perfect
     /// with respect to the current screen resolution.
     /// <para>
-    ///     The defaultShader specifies the shader to use. Note that the names for uniforms for
-    ///     this default shader are different than the ones expect for shaders set with
-    ///     <see cref="Shader" />.
+    /// The defaultShader specifies the shader to use. Note that the names for uniforms for
+    /// this default shader are different than the ones expect for shaders set with
+    /// <see cref="Shader" />.
     /// </para>
     /// </summary>
     /// <param name="maxVertices"> The max number of vertices in a single batch. Max of 32767.</param>

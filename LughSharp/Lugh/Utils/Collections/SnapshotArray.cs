@@ -34,8 +34,8 @@ namespace LughSharp.Lugh.Utils.Collections;
 /// returned by begin() is unaffected. To avoid allocation, an attempt is made to reuse any extra
 /// array created as a result of this copy on subsequent copies.
 /// <para>
-///     Note that SnapshotArray is not for thread safety, only for modification
-///     during iteration.
+/// Note that SnapshotArray is not for thread safety, only for modification
+/// during iteration.
 /// </para>
 /// </summary>
 [PublicAPI]

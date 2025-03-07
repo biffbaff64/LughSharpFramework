@@ -31,10 +31,10 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// An <see cref="Actor" /> that participates in layout and provides a minimum,
 /// preferred, and maximum size.
 /// <para>
-///     The default preferred size of a widget is 0 and this is almost always overridden
-///     by a subclass. The default minimum size returns the preferred size, so a subclass
-///     may choose to return 0 if it wants to allow itself to be sized smaller. The default
-///     maximum size is 0, which means no maximum size.
+/// The default preferred size of a widget is 0 and this is almost always overridden
+/// by a subclass. The default minimum size returns the preferred size, so a subclass
+/// may choose to return 0 if it wants to allow itself to be sized smaller. The default
+/// maximum size is 0, which means no maximum size.
 /// </para>
 /// See <see cref="ILayout" /> for details on how a widget should participate in layout.
 /// A widget's mutator methods should call <see cref="Invalidate" /> or
@@ -66,11 +66,11 @@ public class Widget : Actor, ILayout
     /// <summary>
     /// Ensures the actor has been laid out.
     /// <para>
-    ///     Calls <see cref="ILayout.SetLayout" /> if <see cref="ILayout.Invalidate" /> has
-    ///     been called since the last time <see cref="ILayout.Validate" /> was called, or
-    ///     if the actor otherwise needs to be laid out. This method is usually called in
-    ///     <see cref="Actor.Draw(IBatch, float)" /> by the actor itself before drawing is
-    ///     performed.
+    /// Calls <see cref="ILayout.SetLayout" /> if <see cref="ILayout.Invalidate" /> has
+    /// been called since the last time <see cref="ILayout.Validate" /> was called, or
+    /// if the actor otherwise needs to be laid out. This method is usually called in
+    /// <see cref="Actor.Draw(IBatch, float)" /> by the actor itself before drawing is
+    /// performed.
     /// </para>
     /// </summary>
     public virtual void Validate()
@@ -146,12 +146,12 @@ public class Widget : Actor, ILayout
     /// <summary>
     /// Sizes this actor to its preferred width and height, then calls <see cref="ILayout.Validate" />.
     /// <para>
-    ///     Generally this method should not be called in an actor's constructor because it calls
-    ///     <see cref="ILayout.SetLayout" />, which means a subclass would have Layout() called before the
-    ///     subclass' constructor. Instead, in constructors simply set the actor's size
-    ///     to <see cref="ILayout.PrefWidth" /> and <see cref="ILayout.PrefHeight" />. This allows
-    ///     the actor to have a size at construction time for more convenient use with groups that do
-    ///     not layout their children.
+    /// Generally this method should not be called in an actor's constructor because it calls
+    /// <see cref="ILayout.SetLayout" />, which means a subclass would have Layout() called before the
+    /// subclass' constructor. Instead, in constructors simply set the actor's size
+    /// to <see cref="ILayout.PrefWidth" /> and <see cref="ILayout.PrefHeight" />. This allows
+    /// the actor to have a size at construction time for more convenient use with groups that do
+    /// not layout their children.
     /// </para>
     /// </summary>
     public virtual void Pack()

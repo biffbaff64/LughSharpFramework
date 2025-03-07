@@ -36,11 +36,11 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// be scaled in both directions, and the middle patch for each edge will be scaled
 /// in only one direction.
 /// <para>
-///     Note this class does not accept ".9.png" textures that include the metadata
-///     border pixels describing the splits (and padding) for the ninepatch. That
-///     information is either passed to a constructor or defined implicitly by the
-///     size of the individual patch textures. TextureAtlas is one way to generate
-///     a postprocessed ninepatch texture regions from ".9.png" files.
+/// Note this class does not accept ".9.png" textures that include the metadata
+/// border pixels describing the splits (and padding) for the ninepatch. That
+/// information is either passed to a constructor or defined implicitly by the
+/// size of the individual patch textures. TextureAtlas is one way to generate
+/// a postprocessed ninepatch texture regions from ".9.png" files.
 /// </para>
 /// </summary>
 [PublicAPI]

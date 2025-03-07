@@ -38,13 +38,13 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// starts out as an empty progress bar and gradually becomes filled in as the task
 /// or variable value progresses.
 /// <para>
-///     A <see cref="ChangeListener.ChangeEvent" /> is fired when the progress bar knob is moved. Cancelling
-///     the event will move the knob to where it was previously.
+/// A <see cref="ChangeListener.ChangeEvent" /> is fired when the progress bar knob is moved. Cancelling
+/// the event will move the knob to where it was previously.
 /// </para>
 /// <para>
-///     For a horizontal progress bar, its preferred height is determined by the larger of
-///     the knob and background, and the preferred width is 140, a relatively arbitrary size.
-///     These parameters are reversed for a vertical progress bar.
+/// For a horizontal progress bar, its preferred height is determined by the larger of
+/// the knob and background, and the preferred width is 140, a relatively arbitrary size.
+/// These parameters are reversed for a vertical progress bar.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -88,8 +88,8 @@ public class ProgressBar : Widget, IDisableable
     /// values of this progress bar can take on, the stepSize parameter specifies the
     /// distance between individual values.
     /// <para>
-    ///     E.g. min could be 4, max could be 10 and stepSize could be 0.2, giving you a
-    ///     total of 30 values, 4.0 4.2, 4.4 and so on.
+    /// E.g. min could be 4, max could be 10 and stepSize could be 0.2, giving you a
+    /// total of 30 values, 4.0 4.2, 4.4 and so on.
     /// </para>
     /// </summary>
     /// <param name="min"> the minimum value </param>

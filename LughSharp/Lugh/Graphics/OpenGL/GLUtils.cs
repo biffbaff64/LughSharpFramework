@@ -92,6 +92,27 @@ public static class GLUtils
     }
 
     /// <summary>
+    /// Verifies whether the currently bound buffer matches the expected buffer ID.
+    /// Logs an error if there is a mismatch.
+    /// </summary>
+    /// <param name="expectedBuffer">The identifier of the buffer that is expected to be currently bound.</param>
+    public static unsafe void CheckBufferBinding( uint expectedBuffer )
+    {
+        var currentBuffer = new int[ 1 ];
+
+        fixed ( int* ptr = &currentBuffer[ 0 ] )
+        {
+            // Fetch the currently bound buffer
+            GdxApi.Bindings.GetIntegerv( ( int )BufferBindings.ArrayBufferBinding, ptr );
+        }
+
+        if ( currentBuffer[ 0 ] != expectedBuffer )
+        {
+            Logger.Error( $"Buffer not bound correctly! Expected {expectedBuffer}, got {currentBuffer[ 0 ]}" );
+        }
+    }
+
+    /// <summary>
     /// Checks for OpenGL errors after a given stage of rendering or processing.
     /// Throws an <see cref="InvalidOperationException" /> if an OpenGL error is detected.
     /// </summary>

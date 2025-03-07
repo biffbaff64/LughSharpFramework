@@ -28,7 +28,6 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
-
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -59,10 +58,10 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 /// direct access to the OpenGL API for all versions of OpenGL, using the unmanaged
 /// delegates feature in C# 9.0,
 /// <para>
-///     Also includes a few overloads of many functions to make them a bit more C# friendly
-///     (e.g. passing arrays of bytes or floats instead of passing pointers to fixed memory
-///     locations). Significant effort has been made to make sure that the overloads are as
-///     efficient as possible, in terms of both performance and memory usage.
+/// Also includes a few overloads of many functions to make them a bit more C# friendly
+/// (e.g. passing arrays of bytes or floats instead of passing pointers to fixed memory
+/// locations). Significant effort has been made to make sure that the overloads are as
+/// efficient as possible, in terms of both performance and memory usage.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -2392,21 +2391,57 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void ObjectLabel( GLenum identifier, GLuint name, GLsizei length, GLchar* label )
     {
-        GetDelegateForFunction< PFNGLOBJECTLABELPROC >( "glObjectLabel", out _glObjectLabel );
+        if ( ObjectLabelAvailable() )
+        {
+            GetDelegateForFunction< PFNGLOBJECTLABELPROC >( "glObjectLabel", out _glObjectLabel );
 
-        _glObjectLabel( identifier, name, length, label );
+            _glObjectLabel( identifier, name, length, label );
+        }
     }
 
     public void ObjectLabel( GLenum identifier, GLuint name, string label )
     {
-        var labelBytes = Encoding.UTF8.GetBytes( label );
-
-        GetDelegateForFunction< PFNGLOBJECTLABELPROC >( "glObjectLabel", out _glObjectLabel );
-
-        fixed ( GLchar* pLabelBytes = labelBytes )
+        if ( ObjectLabelAvailable() )
         {
-            _glObjectLabel( identifier, name, labelBytes.Length, pLabelBytes );
+            if ( name <= 0 )
+            {
+                Logger.Error( $"Object handle {name} for {label} cannot be <= 0" );
+
+                // No need, in this case, to throw an exception. Just return without
+                // adding a debug label. 
+                return;
+            }
+
+            GetDelegateForFunction< PFNGLOBJECTLABELPROC >( "glObjectLabel", out _glObjectLabel );
+
+            var labelBytes = Encoding.ASCII.GetBytes( label );
+
+            fixed ( GLchar* pLabelBytes = &labelBytes[ 0 ] )
+            {
+                _glObjectLabel( identifier, name, labelBytes.Length, pLabelBytes );
+            }
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    private static GLboolean ObjectLabelAvailable()
+    {
+        if ( ( ( GdxApi.Bindings.GetOpenGLVersion().major >= 4 ) && ( GdxApi.Bindings.GetOpenGLVersion().minor >= 3 ) )
+             || GdxApi.Graphics.SupportsExtension( "GL_ARB_debug_output" ) )
+        {
+            // glObjectLabel is available through OpenGL or the extension
+            Logger.Debug( "glObjectLabel IS available" );
+
+            return true;
+        }
+
+        // glObjectLabel is not available
+        Logger.Debug( "glObjectLabel IS NOT available" );
+
+        return false;
     }
 
     // ========================================================================

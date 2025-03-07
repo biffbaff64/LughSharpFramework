@@ -117,9 +117,9 @@ public class Affine2
     /// Copies the 2D transformation components from the provided 4x4 matrix.
     /// The values are mapped as follows:
     /// <pre>
-    ///     [  M00  M01  M03  ]
-    ///     [  M10  M11  M13  ]
-    ///     [   0    0    1   ]
+    /// [  M00  M01  M03  ]
+    /// [  M10  M11  M13  ]
+    /// [   0    0    1   ]
     /// </pre>
     /// </summary>
     /// <param name="matrix">
@@ -499,7 +499,7 @@ public class Affine2
     /// <summary>
     /// Premultiplies this matrix with the provided matrix and stores the result in this matrix. For example:
     /// <pre>
-    ///     A.preMul(B) results in A := BA
+    /// A.preMul(B) results in A := BA
     /// </pre>
     /// </summary>
     /// <param name="other"> The other Matrix to multiply by </param>

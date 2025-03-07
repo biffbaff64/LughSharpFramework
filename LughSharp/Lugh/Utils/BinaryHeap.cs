@@ -43,7 +43,7 @@ public record BinaryHeapNode
 /// A binary heap that stores nodes which each have a float value and are sorted either
 /// lowest first or highest first.
 /// <para>
-///     The <see cref="BinaryHeapNode" /> class can be extended to store additional information.
+/// The <see cref="BinaryHeapNode" /> class can be extended to store additional information.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -218,8 +218,8 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// <summary>
     /// Reset all elements in the heap to null.
     /// <para>
-    ///     If the heap does not exist, it will be created first with
-    ///     capacity set to <see cref="DEFAULT_HEAP_CAPACITY" />
+    /// If the heap does not exist, it will be created first with
+    /// capacity set to <see cref="DEFAULT_HEAP_CAPACITY" />
     /// </para>
     /// </summary>
     public void Clear()

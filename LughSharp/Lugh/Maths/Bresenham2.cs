@@ -30,10 +30,10 @@ namespace LughSharp.Lugh.Maths;
 /// Returns a list of points at integer coordinates for a line on a 2D grid,
 /// using the Bresenham algorithm.
 /// <para>
-///     Instances of this class own the returned array of points and the points
-///     themselves to avoid garbage collection as much as possible. Calling any of
-///     the methods will result in the reuse of the previously returned array and
-///     vectors.
+/// Instances of this class own the returned array of points and the points
+/// themselves to avoid garbage collection as much as possible. Calling any of
+/// the methods will result in the reuse of the previously returned array and
+/// vectors.
 /// </para>
 /// </summary>
 [PublicAPI]

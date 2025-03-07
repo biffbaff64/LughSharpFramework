@@ -131,7 +131,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver )
     /// triangulation:
     /// <para>s 200.0, 100.0, ...</para>
     /// <para>
-    ///     Lines not prefixed with "s" are ignored. PSH files can be created with external tools, eg:
+    /// Lines not prefixed with "s" are ignored. PSH files can be created with external tools, eg:
     /// </para>
     /// <para>http://www.codeandweb.com/physicseditor/</para>
     /// </summary>

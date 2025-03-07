@@ -37,9 +37,9 @@ public interface IDesktopGLWindowListener
     /// to use any <see cref="DesktopGLWindow" /> member functions which, for their part,
     /// involve calling Glfw functions.
     /// <para>
-    ///     For the main window, this is an immediate callback from inside
-    ///     <see
-    ///         cref="DesktopGLApplication(IApplicationListener,DesktopGLApplicationConfiguration)" />
+    /// For the main window, this is an immediate callback from inside
+    /// <see
+    /// cref="DesktopGLApplication(IApplicationListener,DesktopGLApplicationConfiguration)" />
     /// </para>
     /// </summary>
     /// <param name="window">the window instance.</param>

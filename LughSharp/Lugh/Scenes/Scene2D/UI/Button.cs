@@ -36,18 +36,18 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// checked. Each time a button is clicked, the checked state is toggled.
 /// Being a table, a button can contain any other actors.
 /// <para>
-///     The button's padding is set to the background drawable's padding when
-///     the background changes, overwriting any padding set manually. Padding
-///     can still be set on the button's table cells.
+/// The button's padding is set to the background drawable's padding when
+/// the background changes, overwriting any padding set manually. Padding
+/// can still be set on the button's table cells.
 /// </para>
 /// <para>
-///     A <see cref="ChangeListener.ChangeEvent" /> is fired when the button is
-///     clicked. Cancelling the event will restore the checked button state to
-///     what it was previously.
+/// A <see cref="ChangeListener.ChangeEvent" /> is fired when the button is
+/// clicked. Cancelling the event will restore the checked button state to
+/// what it was previously.
 /// </para>
 /// <para>
-///     The preferred size of the button is determined by the background and the
-///     button contents.
+/// The preferred size of the button is determined by the background and the
+/// button contents.
 /// </para>
 /// </summary>
 [PublicAPI]

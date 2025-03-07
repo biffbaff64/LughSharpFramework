@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 
 namespace LughSharp.Lugh.Core;
@@ -34,9 +34,9 @@ namespace LughSharp.Lugh.Core;
 /// including OpenGL version information, buffer formats, window dimensions,
 /// display modes, and cursor management.
 /// <para>
-///     Implementations of this interface are responsible for managing the
-///     underlying graphics backend (e.g., OpenGL via GLFW) and providing
-///     a consistent API for graphics operations within the LughSharp framework.
+/// Implementations of this interface are responsible for managing the
+/// underlying graphics backend (e.g., OpenGL via GLFW) and providing
+/// a consistent API for graphics operations within the LughSharp framework.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -61,7 +61,7 @@ public interface IGraphics
     /// Gets or sets the time span between the current frame and the last frame in seconds,
     /// with smoothing applied for more consistent updates.
     /// <para>
-    ///     This value is typically used for frame-rate independent animation and game logic.
+    /// This value is typically used for frame-rate independent animation and game logic.
     /// </para>
     /// </summary>
     float DeltaTime { get; set; }
@@ -98,8 +98,8 @@ public interface IGraphics
     /// <summary>
     /// Gets or sets the current GLFW window context.
     /// <para>
-    ///     This property provides access to the underlying GLFW window handle,
-    ///     which might be needed for advanced GLFW operations.
+    /// This property provides access to the underlying GLFW window handle,
+    /// which might be needed for advanced GLFW operations.
     /// </para>
     /// </summary>
     Window CurrentContext { get; set; }
@@ -109,10 +109,10 @@ public interface IGraphics
     /// When enabled, the application will render frames continuously, typically
     /// driven by the system's refresh rate.
     /// <para>
-    ///     Disabling continuous rendering can be useful for saving power when
-    ///     the application doesn't need to be constantly redrawing (e.g., in
-    ///     non-interactive scenes). Rendering can then be triggered manually
-    ///     using <see cref="RequestRendering" />.
+    /// Disabling continuous rendering can be useful for saving power when
+    /// the application doesn't need to be constantly redrawing (e.g., in
+    /// non-interactive scenes). Rendering can then be triggered manually
+    /// using <see cref="RequestRendering" />.
     /// </para>
     /// </summary>
     bool ContinuousRendering { get; }
@@ -124,9 +124,9 @@ public interface IGraphics
     /// Class describing the bits per pixel, depth buffer precision,
     /// stencil precision and number of MSAA samples.
     /// <para>
-    ///     This descriptor is used to configure the framebuffer format when creating
-    ///     the graphics context. It allows you to specify the desired precision
-    ///     for color channels, depth buffer, stencil buffer, and multisample anti-aliasing.
+    /// This descriptor is used to configure the framebuffer format when creating
+    /// the graphics context. It allows you to specify the desired precision
+    /// for color channels, depth buffer, stencil buffer, and multisample anti-aliasing.
     /// </para>
     /// </summary>
     [PublicAPI]
@@ -176,8 +176,8 @@ public interface IGraphics
         /// Coverage sampling is an alternative anti-aliasing technique that can be more
         /// efficient than MSAA in some cases.
         /// <para>
-        ///     If coverage sampling is enabled, you might need to clear the coverage
-        ///     buffer as well during rendering setup.
+        /// If coverage sampling is enabled, you might need to clear the coverage
+        /// buffer as well during rendering setup.
         /// </para>
         /// </summary>
         public bool CoverageSampling { get; set; }
@@ -197,9 +197,9 @@ public interface IGraphics
     /// Describes a fullscreen display mode, having the properties <see cref="Width" />,
     /// <see cref="Height" />, <see cref="RefreshRate" />, and <see cref="BitsPerPixel" />.
     /// <para>
-    ///     Display modes represent different configurations for fullscreen rendering,
-    ///     allowing you to choose between resolutions, refresh rates, and color depths
-    ///     supported by the monitor.
+    /// Display modes represent different configurations for fullscreen rendering,
+    /// allowing you to choose between resolutions, refresh rates, and color depths
+    /// supported by the monitor.
     /// </para>
     /// </summary>
     [PublicAPI]
@@ -278,10 +278,10 @@ public interface IGraphics
     /// This is a scaling factor for the Density Independent Pixel unit, following the
     /// convention where one DIP is one pixel on an approximately 160 dpi screen.
     /// <para>
-    ///     Thus on a 160dpi screen this density value will be 1; on a 120 dpi screen it would
-    ///     be 0.75; etc. This value is useful for converting DIP units to screen pixels
-    ///     and vice versa, ensuring UI elements are displayed at similar physical sizes
-    ///     across devices with different screen densities.
+    /// Thus on a 160dpi screen this density value will be 1; on a 120 dpi screen it would
+    /// be 0.75; etc. This value is useful for converting DIP units to screen pixels
+    /// and vice versa, ensuring UI elements are displayed at similar physical sizes
+    /// across devices with different screen densities.
     /// </para>
     /// </summary>
     /// <returns>The Density Independent Pixel factor of the display.</returns>
@@ -428,9 +428,9 @@ public interface IGraphics
     /// <summary>
     /// Sets the desired foreground FPS (frames per second) when continuous rendering is enabled.
     /// <para>
-    ///     Note that the actual FPS might be lower if the system cannot achieve the desired rate.
-    ///     Setting this value to 0 or a negative value disables foreground FPS limiting,
-    ///     allowing the application to render as fast as possible (limited only by VSync if enabled).
+    /// Note that the actual FPS might be lower if the system cannot achieve the desired rate.
+    /// Setting this value to 0 or a negative value disables foreground FPS limiting,
+    /// allowing the application to render as fast as possible (limited only by VSync if enabled).
     /// </para>
     /// </summary>
     /// <param name="fps">The desired foreground FPS.</param>
@@ -439,9 +439,9 @@ public interface IGraphics
     /// <summary>
     /// Requests a rendering frame to be performed.
     /// <para>
-    ///     This method is typically used when continuous rendering is disabled
-    ///     (<see cref="ContinuousRendering" /> is <c>false</c>) to manually trigger
-    ///     rendering updates on demand (e.g., in response to user input or game events).
+    /// This method is typically used when continuous rendering is disabled
+    /// (<see cref="ContinuousRendering" /> is <c>false</c>) to manually trigger
+    /// rendering updates on demand (e.g., in response to user input or game events).
     /// </para>
     /// </summary>
     void RequestRendering();
@@ -452,8 +452,8 @@ public interface IGraphics
     /// necessarily equal) and of a certain minimum size (32x32 is a safe bet), and alpha
     /// transparency must be single-bit (i.e., 0x00 or 0xFF only).
     /// <para>
-    ///     This function returns a Cursor object that can be set as the system cursor
-    ///     by calling <see cref="SetCursor(ICursor)" />.
+    /// This function returns a Cursor object that can be set as the system cursor
+    /// by calling <see cref="SetCursor(ICursor)" />.
     /// </para>
     /// </summary>
     /// <param name="pixmap"> the mouse cursor image as a <see cref="Pixmap" />. </param>
@@ -474,8 +474,8 @@ public interface IGraphics
     /// cursor:url() and support the png format (the pixmap is converted to a data-url of
     /// type image/png) should also support custom cursors.
     /// <para>
-    ///     Will set the mouse cursor image to the image represented by the Cursor.
-    ///     It is recommended to call this function in the main render thread, and maximum one time per frame.
+    /// Will set the mouse cursor image to the image represented by the Cursor.
+    /// It is recommended to call this function in the main render thread, and maximum one time per frame.
     /// </para>
     /// </summary>
     /// <param name="cursor">The mouse cursor as a <see cref="ICursor" /></param>

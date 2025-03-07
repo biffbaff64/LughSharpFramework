@@ -38,6 +38,8 @@ public class Timer
 {
     private static readonly object _threadLock = new();
 
+    // ========================================================================
+    
     private static     TimerThread?  _thread;
     protected readonly List< Task? > Tasks = new( 8 );
 
@@ -379,16 +381,16 @@ public class Timer
         /// The execution time may be reached at any time after calling this method,
         /// which may change the scheduled state.
         /// <para>
-        ///     To prevent the scheduled state from changing, synchronize on this task object, eg:
-        ///     <code>
-        ///     lock( task )
-        ///     {
-        ///         if ( !task.IsScheduled() )
-        ///         {
-        ///             . . . . 
-        ///         }
-        ///     }
-        ///     </code>
+        /// To prevent the scheduled state from changing, synchronize on this task object, eg:
+        /// <code>
+        /// lock( task )
+        /// {
+        /// if ( !task.IsScheduled() )
+        /// {
+        /// . . . . 
+        /// }
+        /// }
+        /// </code>
         /// </para>
         /// </summary>
         /// <returns></returns>

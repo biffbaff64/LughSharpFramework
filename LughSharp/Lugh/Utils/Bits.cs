@@ -386,12 +386,12 @@ public class Bits
     /// set is modified so that a bit in it has the value true if and only if one of the
     /// following statements holds:
     /// <li>
-    ///     The bit initially has the value true, and the corresponding bit in the argument has
-    ///     the value false.
+    /// The bit initially has the value true, and the corresponding bit in the argument has
+    /// the value false.
     /// </li>
     /// <li>
-    ///     The bit initially has the value false, and the corresponding bit in the argument has
-    ///     the value true.
+    /// The bit initially has the value false, and the corresponding bit in the argument has
+    /// the value true.
     /// </li>
     /// </summary>
     /// <param name="other">The other bitset.</param>

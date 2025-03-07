@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
 
@@ -34,31 +34,31 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// A Batch is used to draw 2D rectangles that reference a texture (region). The class will
 /// batch the drawing commands and optimize them for processing by the GPU.
 /// <para>
-///     To draw something with a Batch one has to first call the <see cref="IBatch.Begin()" />
-///     method which will setup appropriate render states. When you are done with drawing you
-///     have to call <see cref="IBatch.End()" /> which will actually draw the things you specified.
+/// To draw something with a Batch one has to first call the <see cref="IBatch.Begin()" />
+/// method which will setup appropriate render states. When you are done with drawing you
+/// have to call <see cref="IBatch.End()" /> which will actually draw the things you specified.
 /// </para>
 /// <para>
-///     All drawing commands of the Batch operate in screen coordinates. The screen coordinate
-///     system has an x-axis pointing to the right, an y-axis pointing upwards and the origin
-///     is in the lower left corner of the screen. You can also provide your own transformation
-///     and projection matrices if you so wish.
+/// All drawing commands of the Batch operate in screen coordinates. The screen coordinate
+/// system has an x-axis pointing to the right, an y-axis pointing upwards and the origin
+/// is in the lower left corner of the screen. You can also provide your own transformation
+/// and projection matrices if you so wish.
 /// </para>
 /// <para>
-///     A Batch is managed. In case the OpenGL context is lost all OpenGL resources a Batch uses
-///     internally get invalidated. A context is lost when a user switches to another application
-///     or receives an incoming call on Android. A Batch will be automatically reloaded after the
-///     OpenGL context is restored.
+/// A Batch is managed. In case the OpenGL context is lost all OpenGL resources a Batch uses
+/// internally get invalidated. A context is lost when a user switches to another application
+/// or receives an incoming call on Android. A Batch will be automatically reloaded after the
+/// OpenGL context is restored.
 /// </para>
 /// <para>
-///     A Batch is a pretty heavy object so you should only ever have one in your program.
+/// A Batch is a pretty heavy object so you should only ever have one in your program.
 /// </para>
 /// <para>
-///     A Batch works with OpenGL ES 2.0. It will use its own custom shader to draw all provided
-///     sprites. You can set your own custom shader via the <see cref="Shader" /> property.
+/// A Batch works with OpenGL ES 2.0. It will use its own custom shader to draw all provided
+/// sprites. You can set your own custom shader via the <see cref="Shader" /> property.
 /// </para>
 /// <para>
-///     A Batch has to be disposed if it is no longer used.
+/// A Batch has to be disposed if it is no longer used.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -120,20 +120,20 @@ public interface IBatch : IDisposable
     /// called "a_position", the texture coordinates attribute is called "a_texCoord", the
     /// color attribute is called "a_color".
     /// <para>
-    ///     See <see cref="" a_position"" />, <see cref="" a_colorPacked"" />
-    ///     and <see cref="" u_texCoord"" /> which gets "0" appended to indicate
-    ///     the use of the first texture unit.
+    /// See <see cref="" a_position"" />, <see cref="" a_colorPacked"" />
+    /// and <see cref="" u_texCoord"" /> which gets "0" appended to indicate
+    /// the use of the first texture unit.
     /// </para>
     /// <para>
-    ///     The combined transform and projection matrx is uploaded via a mat4 uniform called "u_projTrans".
-    ///     The texture sampler is passed via a uniform called "u_texture".
+    /// The combined transform and projection matrx is uploaded via a mat4 uniform called "u_projTrans".
+    /// The texture sampler is passed via a uniform called "u_texture".
     /// </para>
     /// <para>
-    ///     Call this method with a null argument to use the default shader.
+    /// Call this method with a null argument to use the default shader.
     /// </para>
     /// <para>
-    ///     This method will flush the batch before setting the new shader.
-    ///     It can be called inbetween <see cref="Begin()" /> and <see cref="End()" />.
+    /// This method will flush the batch before setting the new shader.
+    /// It can be called inbetween <see cref="Begin()" /> and <see cref="End()" />.
     /// </para>
     /// </summary>
     ShaderProgram? Shader { get; set; }
@@ -171,8 +171,8 @@ public interface IBatch : IDisposable
     /// rotation of the rectangle around originX, originY. The portion of the <see cref="Texture" />
     /// given by srcX, srcY and srcWidth, srcHeight is used.
     /// <para>
-    ///     These coordinates and sizes are given in texels. FlipX and FlipY specify whether the texture
-    ///     portion should be flipped horizontally or vertically.
+    /// These coordinates and sizes are given in texels. FlipX and FlipY specify whether the texture
+    /// portion should be flipped horizontally or vertically.
     /// </para>
     /// </summary>
     /// <param name="texture"></param>

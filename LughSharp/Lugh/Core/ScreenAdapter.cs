@@ -28,8 +28,8 @@ namespace LughSharp.Lugh.Core;
 /// Convenience implementation of <see cref="IScreen" />. Derive from this and
 /// only override what you need.
 /// <para>
-///     Using this means that any app screens use only what they need and don't
-///     duplicate unnecessary code.
+/// Using this means that any app screens use only what they need and don't
+/// duplicate unnecessary code.
 /// </para>
 /// </summary>
 [PublicAPI]

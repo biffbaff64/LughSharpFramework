@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
@@ -40,11 +41,11 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// from a list. When inactive, the selected value is displayed. When activated, it shows
 /// the list of values that may be selected.
 /// <para>
-///     <see cref="ChangeListener.ChangeEvent" /> is fired when the selectbox selection changes.
+/// <see cref="ChangeListener.ChangeEvent" /> is fired when the selectbox selection changes.
 /// </para>
 /// <para>
-///     The preferred size of the select box is determined by the maximum text bounds of the items and the size of the
-///     {@link SelectBoxStyle#background}.
+/// The preferred size of the select box is determined by the maximum text bounds of the items and the size of the
+/// {@link SelectBoxStyle#background}.
 /// </para>
 /// </summary>
 [PublicAPI]

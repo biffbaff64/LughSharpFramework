@@ -34,11 +34,11 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// An on-screen joystick. The movement area of the joystick is circular, centered on the
 /// touchpad, and its size determined by the smaller touchpad dimension.
 /// <para>
-///     The preferred size of the touchpad is determined by the background.
+/// The preferred size of the touchpad is determined by the background.
 /// </para>
 /// <para>
-///     A <see cref="ChangeListener.ChangeEvent" /> is fired when the touchpad knob is moved.
-///     Cancelling the event will move the knob to where it was previously.
+/// A <see cref="ChangeListener.ChangeEvent" /> is fired when the touchpad knob is moved.
+/// Cancelling the event will move the knob to where it was previously.
 /// </para>
 /// </summary>
 [PublicAPI]

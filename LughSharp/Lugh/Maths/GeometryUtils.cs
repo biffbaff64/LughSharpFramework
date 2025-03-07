@@ -33,17 +33,19 @@ public class GeometryUtils
     private static readonly Vector2 _tmp2 = new();
     private static readonly Vector2 _tmp3 = new();
 
+    // ========================================================================
+    
     /// <summary>
     /// Computes the barycentric coordinates v,w for the specified point in the triangle.
     /// <example>
-    ///     The point is inside the triangle if the following is true,
-    ///     <code>
+    /// The point is inside the triangle if the following is true,
+    /// <code>
     /// barycentric.x >= 0 &amp;&amp; barycentric.y >= 0 &amp;&amp; barycentric.x + barycentric.y &lt;= 1;
     /// </code>
     /// </example>
     /// <example>
-    ///     If vertices a,b,c have values aa,bb,cc then to get an interpolated value at point p -
-    ///     <code>
+    /// If vertices a,b,c have values aa,bb,cc then to get an interpolated value at point p -
+    /// <code>
     /// GeometryUtils.barycentric(p, a, b, c, barycentric);
     /// float u = 1.f - barycentric.x - barycentric.y;
     /// float x = u * aa.x + barycentric.x * bb.x + barycentric.y * cc.x;
@@ -52,12 +54,11 @@ public class GeometryUtils
     /// </example>
     /// </summary>
     /// <returns> barycentricOut </returns>
-    public static Vector2 ToBarycoord( Vector2 p, Vector2 a, Vector2 b, Vector2 c, Vector2 barycentricOut )
+    public static Vector2 ToBarycentricCoord( Vector2 p, Vector2 a, Vector2 b, Vector2 c, Vector2 barycentricOut )
     {
-        var v0 = _tmp1.Set( b ).Sub( a );
-        var v1 = _tmp2.Set( c ).Sub( a );
-        var v2 = _tmp3.Set( p ).Sub( a );
-
+        var v0    = _tmp1.Set( b ).Sub( a );
+        var v1    = _tmp2.Set( c ).Sub( a );
+        var v2    = _tmp3.Set( p ).Sub( a );
         var d00   = v0.Dot( v0 );
         var d01   = v0.Dot( v1 );
         var d11   = v1.Dot( v1 );
@@ -74,7 +75,7 @@ public class GeometryUtils
     /// <summary>
     /// Returns true if the barycentric coordinates are inside the triangle.
     /// </summary>
-    public static bool BarycoordInsideTriangle( Vector2 barycentric )
+    public static bool BarycentricCoordInsideTriangle( Vector2 barycentric )
     {
         return barycentric is { X: >= 0, Y: >= 0 } && ( ( barycentric.X + barycentric.Y ) <= 1 );
     }
@@ -83,10 +84,11 @@ public class GeometryUtils
     /// Returns interpolated values given the barycentric coordinates of a point in
     /// a triangle and the values at each vertex.
     /// </summary>
-    /// <returns> interpolatedOut  </returns>
-    public static Vector2 FromBarycoord( Vector2 barycentric, Vector2 a, Vector2 b, Vector2 c, Vector2 interpolatedOut )
+    /// <returns> interpolatedOut </returns>
+    public static Vector2 FromBarycentricCoord( Vector2 barycentric, Vector2 a, Vector2 b, Vector2 c, Vector2 interpolatedOut )
     {
         var u = 1 - barycentric.X - barycentric.Y;
+
         interpolatedOut.X = ( u * a.X ) + ( barycentric.X * b.X ) + ( barycentric.Y * c.X );
         interpolatedOut.Y = ( u * a.Y ) + ( barycentric.X * b.Y ) + ( barycentric.Y * c.Y );
 
@@ -97,8 +99,8 @@ public class GeometryUtils
     /// Returns an interpolated value given the barycentric coordinates of a point
     /// in a triangle and the values at each vertex.
     /// </summary>
-    /// <returns> interpolatedOut  </returns>
-    public static float FromBarycoord( Vector2 barycentric, float a, float b, float c )
+    /// <returns> interpolatedOut </returns>
+    public static float FromBarycentricCoord( Vector2 barycentric, float a, float b, float c )
     {
         var u = 1 - barycentric.X - barycentric.Y;
 
@@ -140,15 +142,38 @@ public class GeometryUtils
         return r2 > 0 ? r2 : float.NaN;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x1"></param>
+    /// <param name="y1"></param>
+    /// <param name="x2"></param>
+    /// <param name="y2"></param>
+    /// <param name="x3"></param>
+    /// <param name="y3"></param>
+    /// <returns></returns>
     public static bool Colinear( float x1, float y1, float x2, float y2, float x3, float y3 )
     {
-        float dx21 = x2 - x1, dy21 = y2 - y1;
-        float dx32 = x3 - x2, dy32 = y3 - y2;
-        var   det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
+        var dx21 = x2 - x1;
+        var dy21 = y2 - y1;
+        var dx32 = x3 - x2;
+        var dy32 = y3 - y2;
+        var det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
 
         return Math.Abs( det ) < Constants.FLOAT_TOLERANCE;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x1"></param>
+    /// <param name="y1"></param>
+    /// <param name="x2"></param>
+    /// <param name="y2"></param>
+    /// <param name="x3"></param>
+    /// <param name="y3"></param>
+    /// <param name="centroid"></param>
+    /// <returns></returns>
     public static Vector2 TriangleCentroid( float x1,
                                             float y1,
                                             float x2,
@@ -174,10 +199,13 @@ public class GeometryUtils
                                                 float y3,
                                                 Vector2 circumcenter )
     {
-        float dx21 = x2 - x1, dy21 = y2 - y1;
-        float dx32 = x3 - x2, dy32 = y3 - y2;
-        float dx13 = x1 - x3, dy13 = y1 - y3;
-        var   det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
+        var dx21 = x2 - x1;
+        var dy21 = y2 - y1;
+        var dx32 = x3 - x2;
+        var dy32 = y3 - y2;
+        var dx13 = x1 - x3;
+        var dy13 = y1 - y3;
+        var det  = ( dx32 * dy21 ) - ( dx21 * dy32 );
 
         if ( Math.Abs( det ) < Constants.FLOAT_TOLERANCE )
         {
@@ -185,19 +213,37 @@ public class GeometryUtils
         }
 
         det *= 2;
-        float sqr1 = ( x1 * x1 ) + ( y1 * y1 ), sqr2 = ( x2 * x2 ) + ( y2 * y2 ), sqr3 = ( x3 * x3 ) + ( y3 * y3 );
 
-        circumcenter.Set(
-                         ( ( sqr1 * dy32 ) + ( sqr2 * dy13 ) + ( sqr3 * dy21 ) ) / det,
-                         -( ( sqr1 * dx32 ) + ( sqr2 * dx13 ) + ( sqr3 * dx21 ) ) / det
-                        );
+        var sqr1 = ( x1 * x1 ) + ( y1 * y1 );
+        var sqr2 = ( x2 * x2 ) + ( y2 * y2 );
+        var sqr3 = ( x3 * x3 ) + ( y3 * y3 );
+
+        circumcenter.Set( ( ( sqr1 * dy32 ) + ( sqr2 * dy13 ) + ( sqr3 * dy21 ) ) / det,
+                          -( ( sqr1 * dx32 ) + ( sqr2 * dx13 ) + ( sqr3 * dx21 ) ) / det );
 
         return circumcenter;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x1"></param>
+    /// <param name="y1"></param>
+    /// <param name="x2"></param>
+    /// <param name="y2"></param>
+    /// <param name="x3"></param>
+    /// <param name="y3"></param>
+    /// <returns></returns>
     public static float TriangleCircumradius( float x1, float y1, float x2, float y2, float x3, float y3 )
     {
-        float m1, m2, mx1, mx2, my1, my2, x, y;
+        float m1;
+        float m2;
+        float mx1;
+        float mx2;
+        float my1;
+        float my2;
+        float x;
+        float y;
 
         if ( Math.Abs( y2 - y1 ) < Constants.FLOAT_TOLERANCE )
         {
@@ -244,11 +290,34 @@ public class GeometryUtils
         return Math.Min( length1, Math.Min( length2, length3 ) ) / TriangleCircumradius( x1, y1, x2, y2, x3, y3 );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x1"></param>
+    /// <param name="y1"></param>
+    /// <param name="x2"></param>
+    /// <param name="y2"></param>
+    /// <param name="x3"></param>
+    /// <param name="y3"></param>
+    /// <returns></returns>
     public static float TriangleArea( float x1, float y1, float x2, float y2, float x3, float y3 )
     {
         return Math.Abs( ( ( x1 - x3 ) * ( y2 - y1 ) ) - ( ( x1 - x2 ) * ( y3 - y1 ) ) ) * 0.5f;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="x1"></param>
+    /// <param name="y1"></param>
+    /// <param name="x2"></param>
+    /// <param name="y2"></param>
+    /// <param name="x3"></param>
+    /// <param name="y3"></param>
+    /// <param name="x4"></param>
+    /// <param name="y4"></param>
+    /// <param name="centroid"></param>
+    /// <returns></returns>
     public static Vector2 QuadrilateralCentroid( float x1,
                                                  float y1,
                                                  float x2,
@@ -280,14 +349,18 @@ public class GeometryUtils
             throw new ArgumentException( "A polygon must have 3 or more coordinate pairs." );
         }
 
-        float area = 0, x = 0, y = 0;
+        float area = 0;
+        float x    = 0;
+        float y    = 0;
         var   last = ( offset + count ) - 2;
-        float x1   = polygon[ last ], y1 = polygon[ last + 1 ];
+        var   x1   = polygon[ last ];
+        var   y1   = polygon[ last + 1 ];
 
         for ( var i = offset; i <= last; i += 2 )
         {
-            float x2 = polygon[ i ], y2 = polygon[ i + 1 ];
-            var   a  = ( x1 * y2 ) - ( x2 * y1 );
+            var x2 = polygon[ i ];
+            var y2 = polygon[ i + 1 ];
+            var a  = ( x1 * y2 ) - ( x2 * y1 );
 
             area += a;
 
@@ -319,11 +392,13 @@ public class GeometryUtils
     {
         float area = 0;
         var   last = ( offset + count ) - 2;
-        float x1   = polygon[ last ], y1 = polygon[ last + 1 ];
+        var   x1   = polygon[ last ];
+        var   y1   = polygon[ last + 1 ];
 
         for ( var i = offset; i <= last; i += 2 )
         {
-            float x2 = polygon[ i ], y2 = polygon[ i + 1 ];
+            var x2 = polygon[ i ];
+            var y2 = polygon[ i + 1 ];
             area += ( x1 * y2 ) - ( x2 * y1 );
             x1   =  x2;
             y1   =  y2;
@@ -332,12 +407,22 @@ public class GeometryUtils
         return area * 0.5f;
     }
 
-    public static void EnsureCcw( float[] polygon )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="polygon"></param>
+    public static void EnsureCounterClockwise( float[] polygon )
     {
-        EnsureCcw( polygon, 0, polygon.Length );
+        EnsureCounterClockwise( polygon, 0, polygon.Length );
     }
 
-    public static void EnsureCcw( float[] polygon, int offset, int count )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="polygon"></param>
+    /// <param name="offset"></param>
+    /// <param name="count"></param>
+    public static void EnsureCounterClockwise( float[] polygon, int offset, int count )
     {
         if ( !IsClockwise( polygon, offset, count ) )
         {
@@ -359,6 +444,13 @@ public class GeometryUtils
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="polygon"></param>
+    /// <param name="offset"></param>
+    /// <param name="count"></param>
+    /// <returns></returns>
     public static bool IsClockwise( float[] polygon, int offset, int count )
     {
         if ( count <= 2 )
@@ -368,12 +460,15 @@ public class GeometryUtils
 
         float area = 0;
 
-        var   last = ( offset + count ) - 2;
-        float x1   = polygon[ last ], y1 = polygon[ last + 1 ];
+        var last = ( offset + count ) - 2;
+        var x1   = polygon[ last ];
+        var y1   = polygon[ last + 1 ];
 
         for ( var i = offset; i <= last; i += 2 )
         {
-            float x2 = polygon[ i ], y2 = polygon[ i + 1 ];
+            var x2 = polygon[ i ];
+            var y2 = polygon[ i + 1 ];
+
             area += ( x1 * y2 ) - ( x2 * y1 );
             x1   =  x2;
             y1   =  y2;

@@ -487,8 +487,8 @@ public class DragAndDrop
         /// Called when the payload is no longer over the target, whether because the touch
         /// was moved or a drop occurred.
         /// <para>
-        ///     This is called even if <see cref="Drag(DragSource, Payload, float, float, int)" />
-        ///     returned false.
+        /// This is called even if <see cref="Drag(DragSource, Payload, float, float, int)" />
+        /// returned false.
         /// </para>
         /// </summary>
         public virtual void Reset( DragSource source, Payload payload )
@@ -499,8 +499,8 @@ public class DragAndDrop
         /// Called when the payload is dropped on the target. The coordinates are in the
         /// target's local coordinate system.
         /// <para>
-        ///     This is not called if <see cref="Drag(DragSource, Payload, float, float, int)" />
-        ///     returned false.
+        /// This is not called if <see cref="Drag(DragSource, Payload, float, float, int)" />
+        /// returned false.
         /// </para>
         /// </summary>
         public abstract void Drop( DragSource source, Payload payload, float x, float y, int pointer );
@@ -515,7 +515,7 @@ public class DragAndDrop
     /// stage automatically during the drag operation as necessary and they will only be
     /// removed from the stage if they were added automatically.
     /// <para>
-    ///     A source actor can be used a payload drag actor.
+    /// A source actor can be used a payload drag actor.
     /// </para>
     /// </summary>
     [PublicAPI]

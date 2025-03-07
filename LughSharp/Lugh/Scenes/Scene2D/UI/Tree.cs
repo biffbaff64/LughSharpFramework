@@ -835,8 +835,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     /// <summary>
     /// A <see cref="Tree{TNode,TValue}" /> node which has an actor and value.
     /// <para>
-    ///     A subclass can be used so the generic type parameters don't need
-    ///     to be specified repeatedly.
+    /// A subclass can be used so the generic type parameters don't need
+    /// to be specified repeatedly.
     /// </para>
     /// </summary>
     [PublicAPI]

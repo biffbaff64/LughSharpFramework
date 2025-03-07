@@ -636,7 +636,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
     /// between 0-254 to avoid using float bits in the NaN range.
     /// <para>
-    ///     Note: Converting a color to a float and back can be lossy for alpha.
+    /// Note: Converting a color to a float and back can be lossy for alpha.
     /// </para>
     /// </summary>
     /// <returns> The resulting float. </returns>
@@ -658,7 +658,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
     /// between 0-254 to avoid using float bits in the NaN range.
     /// <para>
-    ///     Note: Converting a color to a float and back can be lossy for alpha.
+    /// Note: Converting a color to a float and back can be lossy for alpha.
     /// </para>
     /// </summary>
     /// <param name="r"> Red component </param>
@@ -914,7 +914,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
     /// between 0-254 to avoid using float bits in the NaN range.
     /// <para>
-    ///     Note: Converting a color to a float and back can be lossy for alpha.
+    /// Note: Converting a color to a float and back can be lossy for alpha.
     /// </para>
     /// </summary>
     /// <returns> The resulting float. </returns>
@@ -936,7 +936,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
     /// between 0-254 to avoid using float bits in the NaN range.
     /// <para>
-    ///     Note: Converting a color to a float and back can be lossy for alpha.
+    /// Note: Converting a color to a float and back can be lossy for alpha.
     /// </para>
     /// </summary>
     /// <param name="r"> Red component </param>

@@ -138,8 +138,8 @@ public class Sprite : TextureRegion
     /// applied. If origin, rotation, or scale are changed, it is slightly more
     /// efficient to set the size after those operations.
     /// <para>
-    ///     If both position and size are to be changed, it is better to use
-    ///     <see cref="SetBounds(float, float, float, float)" />.
+    /// If both position and size are to be changed, it is better to use
+    /// <see cref="SetBounds(float, float, float, float)" />.
     /// </para>
     /// </summary>
     public virtual void SetSize( float width, float height )
@@ -470,8 +470,8 @@ public class Sprite : TextureRegion
     /// Sets the sprite's scale relative to the current scale. for example:
     /// original scale 2 -> sprite.scale(4) -> final scale 6.
     /// <para>
-    ///     The sprite scales out from the origin. This will not affect the values
-    ///     returned by <see cref="Width" /> and <see cref="Height" />
+    /// The sprite scales out from the origin. This will not affect the values
+    /// returned by <see cref="Width" /> and <see cref="Height" />
     /// </para>
     /// </summary>
     public void AddScale( float amount )
@@ -721,7 +721,7 @@ public class Sprite : TextureRegion
     /// <summary>
     /// Creates an uninitialized sprite.
     /// <para>
-    ///     The sprite will need a texture region and bounds set before it can be drawn.
+    /// The sprite will need a texture region and bounds set before it can be drawn.
     /// </para>
     /// </summary>
     public Sprite()

@@ -32,11 +32,11 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// A <see cref="Group" /> that participates in layout and provides a minimum,
 /// preferred, and maximum size.
 /// <para>
-///     The default preferred size of a widget group is 0 and this is almost always
-///     overridden by a subclass. The default minimum size returns the preferred size,
-///     so a subclass may choose to return 0 for minimum size if it wants to allow
-///     itself to be sized smaller than the preferred size. The default maximum size
-///     is 0, which means no maximum size.
+/// The default preferred size of a widget group is 0 and this is almost always
+/// overridden by a subclass. The default minimum size returns the preferred size,
+/// so a subclass may choose to return 0 for minimum size if it wants to allow
+/// itself to be sized smaller than the preferred size. The default maximum size
+/// is 0, which means no maximum size.
 /// </para>
 /// See <see cref="ILayout" /> for details on how a widget group should participate
 /// in layout. A widget group's mutator methods should call <see cref="Invalidate()" />

@@ -106,7 +106,7 @@ public class FileHandle
     /// GdxApi.Files.Internal("dir/file.png") -> dir/file.png.
     /// </code>
     /// <para>
-    ///     Backward slashes will be replaced by forward slashes.
+    /// Backward slashes will be replaced by forward slashes.
     /// </para>
     /// </summary>
     public string FilePath => File.FullName.Replace( "\\", "/" );

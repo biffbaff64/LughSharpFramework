@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;

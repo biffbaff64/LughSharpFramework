@@ -320,9 +320,9 @@ public class TextureAtlas
     /// Returns all regions with the specified name as sprites, ordered by smallest
     /// to largest index.
     /// <para>
-    ///     This method uses string comparison to find the regions and constructs new
-    ///     sprites, so the result should be cached rather than calling this method
-    ///     multiple times.
+    /// This method uses string comparison to find the regions and constructs new
+    /// sprites, so the result should be cached rather than calling this method
+    /// multiple times.
     /// </para>
     /// </summary>
     public List< Sprite > CreateSprites( string name )

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils.Collections;
 
@@ -34,17 +34,17 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// <see cref="Actor.SetZIndex(int)" />). This can be easier than using <see cref="Table" />
 /// when actors need to be inserted into or removed from the middle of the group.
 /// <para>
-///     <see cref="Invalidate()" /> must be called after changing the children order.
+/// <see cref="Invalidate()" /> must be called after changing the children order.
 /// </para>
 /// <para>
-///     The preferred width is the largest preferred width of any child. The preferred height
-///     is the sum of the children's preferred heights plus spacing. The preferred size is
-///     slightly different when <see cref="Wrapping" /> is enabled. The min size is the
-///     preferred size and the max size is 0.
+/// The preferred width is the largest preferred width of any child. The preferred height
+/// is the sum of the children's preferred heights plus spacing. The preferred size is
+/// slightly different when <see cref="Wrapping" /> is enabled. The min size is the
+/// preferred size and the max size is 0.
 /// </para>
 /// <para>
-///     Widgets are sized using their <see cref="ILayout.PrefHeight" />, so widgets which return
-///     0 as their preferred height will be given a height of 0.
+/// Widgets are sized using their <see cref="ILayout.PrefHeight" />, so widgets which return
+/// 0 as their preferred height will be given a height of 0.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -774,19 +774,19 @@ public class VerticalGroup : WidgetGroup
     /// If false, the widgets are arranged in a single column and the preferred height
     /// is the widget heights plus spacing.
     /// <para>
-    ///     If true, the widgets will wrap using the height of the vertical group. The preferred
-    ///     height of the group will be 0 as it is expected that something external will set the
-    ///     height of the group. Widgets are sized to their preferred height unless it is larger
-    ///     than the group's height, in which case they are sized to the group's height but not
-    ///     less than their minimum height.
+    /// If true, the widgets will wrap using the height of the vertical group. The preferred
+    /// height of the group will be 0 as it is expected that something external will set the
+    /// height of the group. Widgets are sized to their preferred height unless it is larger
+    /// than the group's height, in which case they are sized to the group's height but not
+    /// less than their minimum height.
     /// </para>
     /// <para>
-    ///     Default is false.
+    /// Default is false.
     /// </para>
     /// <para>
-    ///     When wrap is enabled, the group's preferred width depends on the height of the group.
-    ///     In some cases the parent of the group will need to layout twice: once to set the
-    ///     height of the group and a second time to adjust to the group's new preferred width.
+    /// When wrap is enabled, the group's preferred width depends on the height of the group.
+    /// In some cases the parent of the group will need to layout twice: once to set the
+    /// height of the group and a second time to adjust to the group's new preferred width.
     /// </para>
     /// </summary>
     public bool Wrapping { get; set; }

@@ -57,7 +57,7 @@ public static class Character
     /// <summary>
     /// The minimum value of a
     /// <a href="http://www.unicode.org/glossary/#supplementary_code_point">
-    ///     Unicode supplementary code point
+    /// Unicode supplementary code point
     /// </a>
     /// , constant {@code U+10000}.
     /// </summary>
@@ -348,7 +348,7 @@ public static class Character
     /// <summary>
     /// The minimum value of a
     /// <a href="http://www.unicode.org/glossary/#code_point">
-    ///     Unicode code point
+    /// Unicode code point
     /// </a>
     /// , constant {@code U+0000}.
     /// </summary>
@@ -357,7 +357,7 @@ public static class Character
     /// <summary>
     /// The maximum value of a
     /// <a href="http://www.unicode.org/glossary/#code_point">
-    ///     Unicode code point
+    /// Unicode code point
     /// </a>
     /// , constant {@code U+10FFFF}.
     /// </summary>
@@ -368,8 +368,8 @@ public static class Character
     /// (Unicode code point). If the specified character is equal to or greater than 0x10000,
     /// then the method returns 2. Otherwise, the method returns 1.
     /// <para>
-    ///     This method doesn't validate the specified character to be a valid Unicode code point.
-    ///     The caller must validate the character value using IsValidCodePoint if necessary.
+    /// This method doesn't validate the specified character to be a valid Unicode code point.
+    /// The caller must validate the character value using IsValidCodePoint if necessary.
     /// </para>
     /// </summary>
     /// <param name="codePoint"></param>

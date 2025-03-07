@@ -59,8 +59,8 @@ public class ByteOrder
     /// <summary>
     /// Constructs a string describing this object.
     /// <para>
-    ///     This method returns the string <tt>"BigEndian"</tt> for <see cref="BigEndian" />
-    ///     and <tt>"LittleEndian"</tt> for <see cref="LittleEndian" />.
+    /// This method returns the string <tt>"BigEndian"</tt> for <see cref="BigEndian" />
+    /// and <tt>"LittleEndian"</tt> for <see cref="LittleEndian" />.
     /// </para>
     /// </summary>
     /// <returns>The specified string</returns>

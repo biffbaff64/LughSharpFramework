@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
@@ -39,11 +40,11 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// <summary>
 /// A list box displays textual items and highlights the currently selected item.
 /// <para>
-///     <see cref="ChangeListener.ChangeEvent" /> is fired when the list selection changes.
+/// <see cref="ChangeListener.ChangeEvent" /> is fired when the list selection changes.
 /// </para>
 /// <para>
-///     The preferred size of the list is determined by the text bounds of the items
-///     and the size of the <see cref="Selection{T}" />.
+/// The preferred size of the list is determined by the text bounds of the items
+/// and the size of the <see cref="Selection{T}" />.
 /// </para>
 /// </summary>
 [PublicAPI]

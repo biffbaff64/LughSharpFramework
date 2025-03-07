@@ -83,10 +83,10 @@ public interface ILayout
     /// <summary>
     /// Ensures the actor has been laid out.
     /// <para>
-    ///     Calls <see cref="SetLayout" /> if <see cref="Invalidate()" /> has been called since the
-    ///     last time <see cref="Validate()" /> was called, or if the actor otherwise needs to be
-    ///     laid out. This method is usually called in <see cref="Actor.Draw" /> by
-    ///     the actor itself before drawing is performed.
+    /// Calls <see cref="SetLayout" /> if <see cref="Invalidate()" /> has been called since the
+    /// last time <see cref="Validate()" /> was called, or if the actor otherwise needs to be
+    /// laid out. This method is usually called in <see cref="Actor.Draw" /> by
+    /// the actor itself before drawing is performed.
     /// </para>
     /// </summary>
     void Validate();
@@ -94,12 +94,12 @@ public interface ILayout
     /// <summary>
     /// Sizes this actor to its preferred width and height, then calls <see cref="Validate()" />.
     /// <para>
-    ///     Generally this method should not be called in an actor's constructor because it calls
-    ///     <see cref="SetLayout" />, which means a subclass would have Layout() called before the
-    ///     subclass' constructor. Instead, in constructors simply set the actor's size
-    ///     to <see cref="PrefWidth" /> and <see cref="PrefHeight" />. This allows the actor to have
-    ///     a size at construction time for more convenient use with groups that do not layout their
-    ///     children.
+    /// Generally this method should not be called in an actor's constructor because it calls
+    /// <see cref="SetLayout" />, which means a subclass would have Layout() called before the
+    /// subclass' constructor. Instead, in constructors simply set the actor's size
+    /// to <see cref="PrefWidth" /> and <see cref="PrefHeight" />. This allows the actor to have
+    /// a size at construction time for more convenient use with groups that do not layout their
+    /// children.
     /// </para>
     /// </summary>
     void Pack();

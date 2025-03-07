@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -70,13 +70,13 @@ public class CpuSpriteBatch : SpriteBatch
 
     /// <summary>
     /// <para>
-    ///     Flushes the batch and realigns the real matrix on the GPU. Subsequent
-    ///     draws won't need adjustment and will be slightly faster as long as the
-    ///     transform matrix is not changed by <see cref="SetTransformMatrix(Matrix4)" />.
+    /// Flushes the batch and realigns the real matrix on the GPU. Subsequent
+    /// draws won't need adjustment and will be slightly faster as long as the
+    /// transform matrix is not changed by <see cref="SetTransformMatrix(Matrix4)" />.
     /// </para>
     /// <para>
-    ///     Note: The real transform matrix <em>must</em> be invertible. If a singular
-    ///     matrix is detected, GdxRuntimeException will be thrown.
+    /// Note: The real transform matrix <em>must</em> be invertible. If a singular
+    /// matrix is detected, GdxRuntimeException will be thrown.
     /// </para>
     /// </summary>
     public virtual void FlushAndSyncTransformMatrix()
@@ -157,9 +157,9 @@ public class CpuSpriteBatch : SpriteBatch
     /// subsequent draw() the vertices will be transformed on the CPU to match the
     /// original batch matrix.
     /// <para>
-    ///     This adjustment must be performed until the matrices are realigned by restoring
-    ///     the original matrix, or by calling <see cref="FlushAndSyncTransformMatrix()" />
-    ///     or <see cref="SpriteBatch.End" />.
+    /// This adjustment must be performed until the matrices are realigned by restoring
+    /// the original matrix, or by calling <see cref="FlushAndSyncTransformMatrix()" />
+    /// or <see cref="SpriteBatch.End" />.
     /// </para>
     /// </summary>
     public virtual void SetTransformMatrix( Affine2 transform )

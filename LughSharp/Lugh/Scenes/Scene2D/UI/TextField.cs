@@ -25,6 +25,7 @@
 using System.Drawing;
 
 using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;

@@ -24,7 +24,7 @@
 
 using DesktopGLBackend.Window;
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;

@@ -28,7 +28,7 @@ using DesktopGLBackend.Window;
 
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
@@ -39,11 +39,13 @@ namespace DesktopGLBackend.Graphics;
 [PublicAPI]
 public class DesktopGLGraphics : AbstractGraphics, IDisposable
 {
-    private const long NANOSECONDS_PER_SECOND = 1_000_000_000;
+    public DesktopGLWindow? GLWindow { get; set; }
 
+    // ========================================================================
+    
     private IGraphics.DisplayMode? _displayModeBeforeFullscreen;
-    private int                    _fps;
 
+    private int  _fps;
     private long _frameCounterStart = 0;
     private long _frameId;
     private int  _frames;
@@ -70,7 +72,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         Glfw.SetWindowSizeCallback( GLWindow.GlfwWindow, ResizeCallback );
     }
 
-    public DesktopGLWindow? GLWindow { get; set; }
+    // ========================================================================
 
     /// <inheritdoc />
     public override int Width => GLWindow?.AppConfig.HdpiMode == HdpiMode.Pixels
@@ -164,10 +166,10 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
             _lastFrameTime = time;
         }
 
-        DeltaTime      = ( time - _lastFrameTime ) / ( float )NANOSECONDS_PER_SECOND;
+        DeltaTime      = ( time - _lastFrameTime ) / ( float )TimeUtils.NANOSECONDS_PER_SECOND;
         _lastFrameTime = time;
 
-        if ( ( time - _frameCounterStart ) >= NANOSECONDS_PER_SECOND )
+        if ( ( time - _frameCounterStart ) >= TimeUtils.NANOSECONDS_PER_SECOND )
         {
             _fps               = _frames;
             _frames            = 0;
@@ -479,7 +481,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         _displayModeBeforeFullscreen  = GetDisplayMode();
     }
 
-    private static void UpdateGLVersion()
+    private void UpdateGLVersion()
     {
 //        var vendorString   = GdxApi.GL.GetString( IGL.GL_VENDOR );
 //        var rendererString = GdxApi.GL.GetString( IGL.GL_RENDERER );
@@ -488,8 +490,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
 //                                   vendorString,
 //                                   rendererString );
 
-//TODO:
-//        EnableCubeMapSeamless( true );
+        EnableCubeMapSeamless( true );
     }
 
     // ========================================================================

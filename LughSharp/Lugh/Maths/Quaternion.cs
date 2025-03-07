@@ -660,9 +660,9 @@ public class Quaternion
     /// <summary>
     /// Sets the Quaternion from the given x-, y- and z-axis which have to be orthonormal.
     /// <para>
-    ///     Taken from Bones framework for JPCT, see http://www.aptalkarga.com/bones/ which in turn took it from Graphics
-    ///     Gem code at
-    ///     ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z.
+    /// Taken from Bones framework for JPCT, see http://www.aptalkarga.com/bones/ which in turn took it from Graphics
+    /// Gem code at
+    /// ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z.
     /// </para>
     /// </summary>
     /// <param name="xx"> x-axis x-coordinate </param>
@@ -690,9 +690,9 @@ public class Quaternion
     /// <summary>
     /// Sets the Quaternion from the given x-, y- and z-axis.
     /// <para>
-    ///     Taken from Bones framework for JPCT, see http://www.aptalkarga.com/bones/ which
-    ///     in turn took it from Graphics Gem code at
-    ///     ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z.
+    /// Taken from Bones framework for JPCT, see http://www.aptalkarga.com/bones/ which
+    /// in turn took it from Graphics Gem code at
+    /// ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z.
     /// </para>
     /// </summary>
     /// <param name="normalizeAxes">
@@ -826,7 +826,7 @@ public class Quaternion
     /// Spherical linear interpolation between this quaternion and the other quaternion,
     /// based on the alpha value in the range [0,1].
     /// <para>
-    ///     Taken from Bones framework for JPCT, see http://www.aptalkarga.com/bones/
+    /// Taken from Bones framework for JPCT, see http://www.aptalkarga.com/bones/
     /// </para>
     /// </summary>
     /// <param name="end"> the end quaternion </param>
@@ -930,7 +930,7 @@ public class Quaternion
     /// Calculates (this quaternion)^alpha where alpha is a real number and stores
     /// the result in this quaternion.
     /// <para>
-    ///     See http://en.wikipedia.org/wiki/Quaternion#Exponential.2C_logarithm.2C_and_power
+    /// See http://en.wikipedia.org/wiki/Quaternion#Exponential.2C_logarithm.2C_and_power
     /// </para>
     /// </summary>
     /// <param name="alpha"> Exponent </param>
@@ -1037,9 +1037,9 @@ public class Quaternion
     /// is the angle in degrees around that axis. Note that this method will alter the
     /// supplied vector, the existing value of the vector is ignored.
     /// <para>
-    ///     This will normalize this quaternion if needed. The received axis is a unit vector.
-    ///     However, if this is an identity quaternion (no rotation), then the length of the
-    ///     axis may be zero.
+    /// This will normalize this quaternion if needed. The received axis is a unit vector.
+    /// However, if this is an identity quaternion (no rotation), then the length of the
+    /// axis may be zero.
     /// </para>
     /// </summary>
     /// <param name="axis"> vector which will receive the axis </param>
@@ -1055,9 +1055,9 @@ public class Quaternion
     /// is the angle in radians around that axis. Note that this method will alter the
     /// supplied vector, the existing value of the vector is ignored.
     /// <para>
-    ///     This will normalize this quaternion if needed. The received axis is a unit vector.
-    ///     However, if this is an identity quaternion (no rotation), then the length of the
-    ///     axis may be zero.
+    /// This will normalize this quaternion if needed. The received axis is a unit vector.
+    /// However, if this is an identity quaternion (no rotation), then the length of the
+    /// axis may be zero.
     /// </para>
     /// </summary>
     /// <param name="axis"> vector which will receive the axis </param>
@@ -1098,12 +1098,12 @@ public class Quaternion
     /// Get the angle in radians of the rotation this quaternion represents.
     /// Does not normalize the quaternion.
     /// <para>
-    ///     Use <see cref="GetAxisAngleRad(Vector3)" /> to get both the axis and
-    ///     the angle of this rotation.
+    /// Use <see cref="GetAxisAngleRad(Vector3)" /> to get both the axis and
+    /// the angle of this rotation.
     /// </para>
     /// <para>
-    ///     Use <see cref="GetAngleAroundRad(Vector3)" /> to get the angle around
-    ///     a specific axis.
+    /// Use <see cref="GetAngleAroundRad(Vector3)" /> to get the angle around
+    /// a specific axis.
     /// </para>
     /// </summary>
     /// <returns> the angle in radians of the rotation </returns>
@@ -1117,7 +1117,7 @@ public class Quaternion
     /// Use <see cref="GetAxisAngle(Vector3)" />" to get both the axis
     /// and the angle of this rotation.
     /// <para>
-    ///     Use <see cref="GetAngleAround(Vector3)" /> to get the angle around a specific axis.
+    /// Use <see cref="GetAngleAround(Vector3)" /> to get the angle around a specific axis.
     /// </para>
     /// </summary>
     /// <returns> the angle in degrees of the rotation </returns>
@@ -1132,8 +1132,8 @@ public class Quaternion
     /// represents the rotation of the specified axis itself, which is the rotation
     /// around an axis perpendicular to the specified axis.
     /// <para>
-    ///     The swing and twist rotation can be used to reconstruct the original
-    ///     quaternion: this = swing * twist
+    /// The swing and twist rotation can be used to reconstruct the original
+    /// quaternion: this = swing * twist
     /// </para>
     /// </summary>
     /// <param name="axisX">
@@ -1172,8 +1172,8 @@ public class Quaternion
     /// represents the rotation of the specified axis itself, which is the rotation
     /// around an axis perpendicular to the specified axis.
     /// <para>
-    ///     The swing and twist rotation can be used to reconstruct the original
-    ///     quaternion: this = swing * twist
+    /// The swing and twist rotation can be used to reconstruct the original
+    /// quaternion: this = swing * twist
     /// </para>
     /// </summary>
     /// <param name="axis">

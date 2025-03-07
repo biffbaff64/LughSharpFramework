@@ -33,10 +33,10 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 /// <summary>
 /// Drawable for a <see cref="NinePatch" />.
 /// <para>
-///     The drawable sizes are set when the ninepatch is set, but they are separate
-///     values. Eg, <see cref="IDrawable.LeftWidth" /> could be set to more than
-///     <see cref="NinePatch.LeftWidth" /> in order to provide more space on the left
-///     than actually exists in the ninepatch.
+/// The drawable sizes are set when the ninepatch is set, but they are separate
+/// values. Eg, <see cref="IDrawable.LeftWidth" /> could be set to more than
+/// <see cref="NinePatch.LeftWidth" /> in order to provide more space on the left
+/// than actually exists in the ninepatch.
 /// </para>
 /// The min size is set to the ninepatch total size by default. It could be set
 /// to the left+right and top+bottom, excluding the middle size, to allow the

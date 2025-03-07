@@ -441,8 +441,7 @@ GRAPHICS/OPENGL
     - IP   -      - TextureSamplerBindings
     -      -      - TransformFeedbackBindings
     - IP   -      - UniformBindings
-    - IP   -      - UtilBindings
-    -      -      - VertexArrayBindings
+    - IP   -      - VertexArrayBindings
 
 GRAPHICS/OPENGL/ENUMS
 ---------------------
@@ -459,6 +458,36 @@ GRAPHICS/OPENGL/ENUMS
     - DONE - DONE - TextureUnit
     - DONE - DONE - TextureWrapMode
     - DONE - DONE - VertexAttribPointerType
+
+GRAPHICS/OPENGL/GLSL
+--------------------
+    CODE   DOCUMENT
+    ----   --------
+    - IP   - IP   - Default.glsl.frag
+    - IP   - IP   - Default.glsl.vert
+
+
+GRAPHICS/IMAGEPACKER
+--------------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - DONE - DONE - ImagePacker
+
+GRAPHICS/TEXTUREPACKER
+----------------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - DONE - IP   - ColorBleedEffect
+    - IP   -      - GridPacker
+    -      -      - ImageProcessor
+    -      -      - MaxRectsPacker
+    - IP   -      - TexturePacker
+    -      -      - TexturePackerFileProcessor
+    -      -      - TexturePackerTest
+    -      -      - TexturePackerUpscaleTest
+    -      -      - TextureUnpacker
 
 GRAPHICS/VIEWPORT
 -----------------
@@ -922,7 +951,7 @@ UTILS/COLLECTIONS
     - **** - CharArray                      -> Use List< char >
     - **** - CollectionsData                -> ***** Not needed *****
     - **** - FloatArray                     -> Use List< float >
-    - **** - IdentityMap<K, V>              -> ***** Not needed *****
+    - **** - IdentityMap<K, V>              -> Use Dictionary< K, V >
     - **** - IntArray                       -> Use List< int >
     - **** - IntFloatMap                    -> Use Dictionary< int, float >
     - **** - IntIntMap                      -> Use Dictionary< int, int >
@@ -973,24 +1002,4 @@ UTILS/POOLING
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-I tried changing my shaders to this:-
-
-(vertex shader):
-#version 450 core
-
-layout (location = 0) in vec3 aPosition;
-
-void main() {
-gl_Position = vec4(aPosition, 1.0);
-}
-
-(fragment shader):
-#version 450 core
-
-out vec4 FragColor;
-
-void main() {
-FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-}
 

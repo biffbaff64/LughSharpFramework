@@ -357,8 +357,8 @@ public partial class DesktopGLWindow : IDisposable
     /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="PixelType.Format.RGBA8888" />
     /// is preferred so the images will not have to be copied and converted.
     /// <b>
-    ///     The chosen image
-    ///     is copied, and the provided Pixmaps are not disposed.
+    /// The chosen image
+    /// is copied, and the provided Pixmaps are not disposed.
     /// </b>
     /// </param>
     public void SetIcon( params Pixmap[] images )
@@ -405,8 +405,8 @@ public partial class DesktopGLWindow : IDisposable
     /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="PixelType.Format.RGBA8888" />
     /// is preferred so the images will not have to be copied and converted.
     /// <b>
-    ///     The chosen image
-    ///     is copied, and the provided Pixmaps are not disposed.
+    /// The chosen image
+    /// is copied, and the provided Pixmaps are not disposed.
     /// </b>
     /// </param>
     public static void SetIcon( GLFW.Window window, Pixmap[] images )

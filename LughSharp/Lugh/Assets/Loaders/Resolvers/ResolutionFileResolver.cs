@@ -29,38 +29,38 @@ namespace LughSharp.Lugh.Assets.Loaders.Resolvers;
 /// determine the best match based on the current back buffer size. An example of how this
 /// resolver works:
 /// <para>
-///     Let's assume that we have only a single <see cref="Resolution" />; added to this
-///     resolver. This resolution has the following properties:
+/// Let's assume that we have only a single <see cref="Resolution" />; added to this
+/// resolver. This resolution has the following properties:
 /// </para>
 /// <ul>
-///     <li>
-///         <tt> portraitWidth = 1920</tt>
-///     </li>
-///     <li>
-///         <tt> portraitHeight = 1080</tt>
-///     </li>
-///     <li>
-///         <tt> folder = "1920x1080"</tt>
-///     </li>
+/// <li>
+/// <tt> portraitWidth = 1920</tt>
+/// </li>
+/// <li>
+/// <tt> portraitHeight = 1080</tt>
+/// </li>
+/// <li>
+/// <tt> folder = "1920x1080"</tt>
+/// </li>
 /// </ul>
 /// <para>
-///     One would now supply a file to be found to the resolver. For this example, we assume it is
-///     <tt>"textures/walls/brick.png"</tt>. Since there is only a single <see cref="Resolution" />,
-///     this will be the best match for any screen size. The resolver will now try to find the file
-///     in the following ways:
+/// One would now supply a file to be found to the resolver. For this example, we assume it is
+/// <tt>"textures/walls/brick.png"</tt>. Since there is only a single <see cref="Resolution" />,
+/// this will be the best match for any screen size. The resolver will now try to find the file
+/// in the following ways:
 /// </para>
 /// <ul>
-///     <li>
-///         <tt>"textures/walls/1920x1080/brick.png"</tt>
-///     </li>
-///     <li>
-///         <tt>"textures/walls/brick.png"</tt>
-///     </li>
+/// <li>
+/// <tt>"textures/walls/1920x1080/brick.png"</tt>
+/// </li>
+/// <li>
+/// <tt>"textures/walls/brick.png"</tt>
+/// </li>
 /// </ul>
 /// <para>
-///     The files are ultimately resolved via the given <see cref="BaseResolver" />. In case the
-///     first version cannot be resolved, the fallback will try to search for the file without
-///     the resolution folder.
+/// The files are ultimately resolved via the given <see cref="BaseResolver" />. In case the
+/// first version cannot be resolved, the fallback will try to search for the file without
+/// the resolution folder.
 /// </para>
 /// </summary>
 [PublicAPI]

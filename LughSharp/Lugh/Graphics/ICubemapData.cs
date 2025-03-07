@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics;
@@ -33,13 +33,13 @@ namespace LughSharp.Lugh.Graphics;
 /// and upload its data using <see cref="ConsumeCubemapData()" />. These are
 /// the first methods to be called by Cubemap.
 /// <para>
-///     After that the Cubemap will invoke the other methods to find out about the
-///     size of the image data, the format, whether the CubemapData is able to
-///     manage the pixel data if the OpenGL ES context is lost.
+/// After that the Cubemap will invoke the other methods to find out about the
+/// size of the image data, the format, whether the CubemapData is able to
+/// manage the pixel data if the OpenGL ES context is lost.
 /// </para>
 /// <para>
-///     Before a call to either <see cref="ConsumeCubemapData()" />, Cubemap will
-///     bind the OpenGL ES texture.
+/// Before a call to either <see cref="ConsumeCubemapData()" />, Cubemap will
+/// bind the OpenGL ES texture.
 /// </para>
 /// Look at <see cref="KtxTextureData" /> for example implementation of this
 /// interface.

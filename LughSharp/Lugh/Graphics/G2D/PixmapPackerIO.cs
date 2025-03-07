@@ -37,7 +37,7 @@ public partial class PixmapPackerIO
     /// file will use the standard TextureAtlas file format and can be loaded
     /// by TextureAtlas as if it had been created using TexturePacker.
     /// <para>
-    ///     Default <see cref="SaveParameters" /> will be used.
+    /// Default <see cref="SaveParameters" /> will be used.
     /// </para>
     /// </summary>
     /// <param name="file">

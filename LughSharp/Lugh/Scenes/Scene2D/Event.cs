@@ -32,15 +32,15 @@ namespace LughSharp.Lugh.Scenes.Scene2D;
 /// By default an event will "bubble" up through an actor's parent's handlers
 /// (see <see cref="Bubbles" />).
 /// <para>
-///     An actor's capture listeners can stop() an event to prevent child actors
-///     from seeing it.
+/// An actor's capture listeners can stop() an event to prevent child actors
+/// from seeing it.
 /// </para>
 /// <para>
-///     An Event may be marked as "handled" which will end its propagation outside
-///     of the Stage (see <see cref="IsHandled" />). The default Actor.fire(Event)
-///     will mark events handled if an EventListener returns true.
-///     A cancelled event will be stopped and handled. Additionally, many actors
-///     will undo the side-effects of a canceled event. (See <see cref="IsCancelled" />)
+/// An Event may be marked as "handled" which will end its propagation outside
+/// of the Stage (see <see cref="IsHandled" />). The default Actor.fire(Event)
+/// will mark events handled if an EventListener returns true.
+/// A cancelled event will be stopped and handled. Additionally, many actors
+/// will undo the side-effects of a canceled event. (See <see cref="IsCancelled" />)
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -100,8 +100,8 @@ public class Event : IResetable
     /// propagation. It also cancels any default action that would have been taken
     /// by the code that fired the event.
     /// <para>
-    ///     Eg, if the event is for a checkbox being checked, cancelling
-    ///     the event could uncheck the checkbox.
+    /// Eg, if the event is for a checkbox being checked, cancelling
+    /// the event could uncheck the checkbox.
     /// </para>
     /// </summary>
     public void Cancel()

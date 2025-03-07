@@ -27,11 +27,17 @@ namespace LughSharp.Lugh.Utils;
 [PublicAPI]
 [AttributeUsage( AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct, Inherited = false )]
 [Conditional( "DEBUG" )]
-public sealed class InTestingAttribute( string message ) : Attribute
+public sealed class InTestingAttribute : Attribute
 {
-    public InTestingAttribute() : this( "This member is currently in testing and may change or be removed." )
+    public InTestingAttribute()
     {
+        Message = "This member is currently in testing and may change or be removed.";
     }
 
-    public string Message { get; } = message;
+    public InTestingAttribute( string message )
+    {
+        Message = message;
+    }
+    
+    public string Message { get; private set; }
 }

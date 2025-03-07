@@ -134,8 +134,8 @@ public class Polygon : IShape2D
     /// 1. Returns the polygon's local vertices without scaling or rotation and
     /// without being offset by the polygon position.
     /// <para>
-    ///     2. Sets the polygon's local vertices relative to the origin point, without
-    ///     any scaling, rotating or translations being applied.
+    /// 2. Sets the polygon's local vertices relative to the origin point, without
+    /// any scaling, rotating or translations being applied.
     /// </para>
     /// </summary>
     /// <param name="value">

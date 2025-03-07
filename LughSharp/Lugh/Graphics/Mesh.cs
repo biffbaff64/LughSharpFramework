@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils;
@@ -37,12 +37,21 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public class Mesh : IDisposable
 {
+    public IIndexData IndexData   { get; set; }
+    public bool       IsInstanced { get; set; } = false;
+
+    /// <summary>
+    /// Whether to bind the underlying <see cref="VertexArray" /> or <see cref="VertexBufferObject" />
+    /// automatically on a call to one of the render methods. Default setting is <c>TRUE</c>
+    /// </summary>
+    /// <param name="value"> whether to autobind meshes.  </param>
+    public bool AutoBind { get; set; } = true;
+
     // ========================================================================
 
     private static readonly Dictionary< IApplication, List< Mesh >? > _meshes = new();
-    private readonly        IIndexData                                _indices;
-    private readonly        bool                                      _isVertexArray;
 
+    private readonly bool        _isVertexArray;
     private readonly ShortBuffer _shortBuffer = new( 100 );
     private readonly Vector3     _tmpV        = new();
     private readonly IVertexData _vertices;
@@ -61,7 +70,7 @@ public class Mesh : IDisposable
     protected Mesh( IVertexData vertices, IIndexData indices, bool isVertexArray )
     {
         _vertices      = vertices;
-        _indices       = indices;
+        IndexData      = indices;
         _isVertexArray = isVertexArray;
 
         AddManagedMesh( GdxApi.App, this );
@@ -80,7 +89,7 @@ public class Mesh : IDisposable
     public Mesh( bool isStatic, int maxVertices, int maxIndices, params VertexAttribute[] attributes )
     {
         _vertices      = MakeVertexBuffer( isStatic, maxVertices, new VertexAttributes( attributes ) );
-        _indices       = new IndexBufferObject( isStatic, maxIndices );
+        IndexData      = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
 
         AddManagedMesh( GdxApi.App, this );
@@ -99,7 +108,7 @@ public class Mesh : IDisposable
     public Mesh( bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
         _vertices      = MakeVertexBuffer( isStatic, maxVertices, attributes );
-        _indices       = new IndexBufferObject( isStatic, maxIndices );
+        IndexData      = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
 
         AddManagedMesh( GdxApi.App, this );
@@ -128,7 +137,7 @@ public class Mesh : IDisposable
                  VertexAttributes attributes )
     {
         _vertices      = MakeVertexBuffer( staticVertices, maxVertices, attributes );
-        _indices       = new IndexBufferObject( staticIndices, maxIndices );
+        IndexData      = new IndexBufferObject( staticIndices, maxIndices );
         _isVertexArray = false;
 
         AddManagedMesh( GdxApi.App, this );
@@ -170,21 +179,21 @@ public class Mesh : IDisposable
         {
             case VertexDataType.VertexBufferObject:
                 _vertices      = new VertexBufferObject( isStatic, maxVertices, attributes );
-                _indices       = new IndexBufferObject( isStatic, maxIndices );
+                IndexData      = new IndexBufferObject( isStatic, maxIndices );
                 _isVertexArray = false;
 
                 break;
 
             case VertexDataType.VertexBufferObjectSubData:
                 _vertices      = new VertexBufferObjectSubData( isStatic, maxVertices, attributes );
-                _indices       = new IndexBufferObjectSubData( isStatic, maxIndices );
+                IndexData      = new IndexBufferObjectSubData( isStatic, maxIndices );
                 _isVertexArray = false;
 
                 break;
 
             case VertexDataType.VertexBufferObjectWithVAO:
                 _vertices      = new VertexBufferObjectWithVAO( isStatic, maxVertices, attributes );
-                _indices       = new IndexBufferObjectSubData( isStatic, maxIndices );
+                IndexData      = new IndexBufferObjectSubData( isStatic, maxIndices );
                 _isVertexArray = false;
 
                 break;
@@ -192,7 +201,7 @@ public class Mesh : IDisposable
             case VertexDataType.VertexArray:
             default:
                 _vertices      = new VertexArray( maxVertices, attributes );
-                _indices       = new IndexArray( maxIndices );
+                IndexData      = new IndexArray( maxIndices );
                 _isVertexArray = true;
 
                 break;
@@ -208,22 +217,10 @@ public class Mesh : IDisposable
     /// </summary>
     public VertexAttributes VertexAttributes => _vertices.Attributes;
 
-    // ========================================================================
-    // ========================================================================
-
-    public bool IsInstanced { get; set; } = false;
-
-    /// <summary>
-    /// Whether to bind the underlying <see cref="VertexArray" /> or <see cref="VertexBufferObject" />
-    /// automatically on a call to one of the render methods. Default setting is <c>TRUE</c>
-    /// </summary>
-    /// <param name="value"> whether to autobind meshes.  </param>
-    public bool AutoBind { get; set; } = true;
-
     /// <summary>
     /// the number of defined indices.
     /// </summary>
-    public int NumIndices => _indices.NumIndices;
+    public int NumIndices => IndexData.NumIndices;
 
     /// <summary>
     /// the number of defined vertices.
@@ -238,7 +235,7 @@ public class Mesh : IDisposable
     /// <summary>
     /// the maximum number of indices this mesh can hold
     /// </summary>
-    public int MaxIndices => _indices.NumMaxIndices;
+    public int MaxIndices => IndexData.NumMaxIndices;
 
     /// <summary>
     /// the size of a single vertex in bytes
@@ -249,7 +246,7 @@ public class Mesh : IDisposable
     /// the backing shortbuffer holding the _indices.
     /// Does not have to be a direct buffer on Android!
     /// </summary>
-    public ShortBuffer IndicesBuffer => _indices.GetBuffer( false );
+    public ShortBuffer IndicesBuffer => IndexData.GetBuffer( false );
 
     // ========================================================================
 
@@ -257,7 +254,7 @@ public class Mesh : IDisposable
     /// Provides a summary of the managed status of meshes within the application.
     /// Returns a string that indicates the number of managed meshes for each application context.
     /// </summary>
-    public static string RepoprtManagedStatus
+    public static string ReportManagedStatus
     {
         get
         {
@@ -273,30 +270,6 @@ public class Mesh : IDisposable
 
             return builder.ToString();
         }
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Frees all resources associated with this Mesh
-    /// </summary>
-    public void Dispose()
-    {
-        if ( _meshes[ GdxApi.App ] != null )
-        {
-            _meshes[ GdxApi.App ]?.Remove( this );
-        }
-
-        _vertices.Dispose();
-        _instances?.Dispose();
-        _indices.Dispose();
-
-        GC.SuppressFinalize( this );
-    }
-
-    public IIndexData IndexData()
-    {
-        return _indices;
     }
 
     // ========================================================================
@@ -561,8 +534,8 @@ public class Mesh : IDisposable
 
         if ( ( vertices.Length - destOffset ) < count )
         {
-            throw new ArgumentException
-                ( $"not enough room in vertices array, has {vertices.Length} floats, needs {count}" );
+            throw new ArgumentException( $"not enough room in vertices array, " +
+                                         $"has {vertices.Length} floats, needs {count}" );
         }
 
         var verticesBuffer = GetVerticesBuffer();
@@ -582,7 +555,7 @@ public class Mesh : IDisposable
     /// <returns> the mesh for invocation chaining.  </returns>
     public Mesh SetIndices( short[] indices )
     {
-        _indices.SetIndices( indices, 0, indices.Length );
+        IndexData.SetIndices( indices, 0, indices.Length );
 
         return this;
     }
@@ -596,7 +569,7 @@ public class Mesh : IDisposable
     /// <returns> the mesh for invocation chaining.  </returns>
     public Mesh SetIndices( short[] indices, int offset, int count )
     {
-        _indices.SetIndices( indices, offset, count );
+        IndexData.SetIndices( indices, offset, count );
 
         return this;
     }
@@ -658,6 +631,10 @@ public class Mesh : IDisposable
         IndicesBuffer.Position = pos;
     }
 
+    // ========================================================================
+
+    #region bind/unbind
+
     /// <summary>
     /// Binds the underlying <see cref="VertexBufferObject" /> and
     /// <see cref="IndexBufferObject" /> if indices where given.
@@ -669,9 +646,8 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Binds the underlying <see cref="VertexBufferObject" /> and
-    /// <see cref="IndexBufferObject" /> if indices where given.
-    /// Use this with OpenGL ES 2.0 and when auto-bind is disabled.
+    /// Binds the underlying <see cref="VertexBufferObject" /> and <see cref="IndexBufferObject" />
+    /// if indices where given. Use this when auto-bind is disabled.
     /// </summary>
     /// <param name="shader"> the shader (does not bind the shader) </param>
     /// <param name="locations"> array containing the attribute locations.  </param>
@@ -684,15 +660,15 @@ public class Mesh : IDisposable
             _instances.Bind( shader, locations );
         }
 
-        if ( _indices.NumIndices > 0 )
+        if ( IndexData.NumIndices > 0 )
         {
-            _indices.Bind();
+            IndexData.Bind();
         }
     }
 
     /// <summary>
     /// Unbinds the underlying <see cref="VertexBufferObject" /> and <see cref="IndexBufferObject" />
-    /// is indices were given. Use this with OpenGL ES 1.x and when auto-bind is disabled.
+    /// is indices were given. Use this when auto-bind is disabled.
     /// </summary>
     /// <param name="shader"> the shader (does not unbind the shader)  </param>
     public void Unbind( in ShaderProgram? shader )
@@ -702,7 +678,7 @@ public class Mesh : IDisposable
 
     /// <summary>
     /// Unbinds the underlying <see cref="VertexBufferObject" /> and <see cref="IndexBufferObject" />
-    /// is indices were given. Use this with OpenGL ES 1.x and when auto-bind is disabled.
+    /// is indices were given. Use this when auto-bind is disabled.
     /// </summary>
     /// <param name="shader"> the shader (does not unbind the shader) </param>
     /// <param name="locations"> array containing the attribute locations.  </param>
@@ -720,35 +696,37 @@ public class Mesh : IDisposable
             _instances.Unbind( shader, locations );
         }
 
-        if ( _indices.NumIndices > 0 )
+        if ( IndexData.NumIndices > 0 )
         {
-            _indices.Unbind();
+            IndexData.Unbind();
         }
     }
+
+    #endregion bind/unbind
+
+    // ========================================================================
+
+    #region render methods
 
     /// <summary>
     /// Renders the mesh using the given primitive type. If indices are set for this
     /// mesh then getNumIndices() / #vertices per primitive primitives are rendered.
     /// If no indices are set then NumVertices / #vertices per primitive are rendered.
     /// <para>
-    ///     This method will automatically bind each vertex attribute as specified at
-    ///     construction time via <see cref="VertexAttributes" /> to the respective shader
-    ///     attributes. The binding is based on the alias defined for each VertexAttribute.
+    /// This method will automatically bind each vertex attribute as specified at
+    /// construction time via <see cref="VertexAttributes" /> to the respective shader
+    /// attributes. The binding is based on the alias defined for each VertexAttribute.
     /// </para>
     /// <para>
-    ///     This method must only be called after the <see cref="ShaderProgram.Bind()" />
-    ///     method has been called!
-    /// </para>
-    /// <para>
-    ///     This method is intended for use with OpenGL ES 2.0 and will throw an
-    ///     IllegalStateException when OpenGL ES 1.x is used.
+    /// This method must only be called after the <see cref="ShaderProgram.Bind()" />
+    /// method has been called!
     /// </para>
     /// </summary>
     /// <param name="shader"></param>
     /// <param name="primitiveType"> the primitive type  </param>
     public void Render( ShaderProgram shader, int primitiveType )
     {
-        Render( shader, primitiveType, 0, _indices.NumMaxIndices > 0 ? NumIndices : NumVertices, AutoBind );
+        Render( shader, primitiveType, 0, IndexData.NumMaxIndices > 0 ? NumIndices : NumVertices, AutoBind );
     }
 
     /// <summary>
@@ -757,17 +735,13 @@ public class Mesh : IDisposable
     /// defined. count specifies the number of vertices or indices to use thus count /
     /// vertices per primitive primitives are rendered.
     /// <para>
-    ///     This method will automatically bind each vertex attribute as specified at
-    ///     construction time via <see cref="VertexAttributes" /> to the respective shader
-    ///     attributes. The binding is based on the alias defined for each VertexAttribute.
+    /// This method will automatically bind each vertex attribute as specified at
+    /// construction time via <see cref="VertexAttributes" /> to the respective shader
+    /// attributes. The binding is based on the alias defined for each VertexAttribute.
     /// </para>
     /// <para>
-    ///     This method must only be called after the <see cref="ShaderProgram.Bind()" />
-    ///     method has been called!
-    /// </para>
-    /// <para>
-    ///     This method is intended for use with OpenGL ES 2.0 and will throw an
-    ///     IllegalStateException when OpenGL ES 1.x is used.
+    /// This method must only be called after the <see cref="ShaderProgram.Bind()" />
+    /// method has been called!
     /// </para>
     /// </summary>
     /// <param name="shader"> the shader to be used </param>
@@ -785,17 +759,13 @@ public class Mesh : IDisposable
     /// are defined. count specifies the number of vertices or indices to use thus count /
     /// vertices per primitive primitives are rendered.
     /// <para>
-    ///     This method will automatically bind each vertex attribute as specified at
-    ///     construction time via <see cref="VertexAttributes" /> to the respective shader
-    ///     attributes. The binding is based on the alias defined for each VertexAttribute.
+    /// This method will automatically bind each vertex attribute as specified at
+    /// construction time via <see cref="VertexAttributes" /> to the respective shader
+    /// attributes. The binding is based on the alias defined for each VertexAttribute.
     /// </para>
     /// <para>
-    ///     This method must only be called after the <see cref="ShaderProgram.Bind()" />
-    ///     method has been called!
-    /// </para>
-    /// <para>
-    ///     This method is intended for use with OpenGL ES 2.0 and will throw an
-    ///     IllegalStateException when OpenGL ES 1.x is used.
+    /// This method must only be called after the <see cref="ShaderProgram.Bind()" />
+    /// method has been called!
     /// </para>
     /// </summary>
     /// <param name="shader"> the shader to be used </param>
@@ -814,69 +784,56 @@ public class Mesh : IDisposable
             Bind( shader );
         }
 
-        Logger.Debug( $"primitiveType: {primitiveType}, offset: {offset}, count: {count}" );
-        Logger.Debug( $"_isVertexArray: {_isVertexArray}" );
-        Logger.Debug( $"_indices.NumIndices > 0: {_indices.NumIndices > 0}" );
-        Logger.Debug( $"IsInstanced: {IsInstanced}" );
-        
         if ( _isVertexArray )
         {
-            if ( _indices.NumIndices > 0 )
+            if ( IndexData.NumIndices > 0 )
             {
-                if ( ( count + offset ) > _indices.NumMaxIndices )
+                if ( ( count + offset ) > IndexData.NumMaxIndices )
                 {
                     throw new AccessViolationException( $"Mesh attempting to access memory outside of the " +
                                                         $"index buffer (count: {count}, offset: {offset}, " +
-                                                        $"max: {_indices.NumMaxIndices})" );
+                                                        $"max: {IndexData.NumMaxIndices})" );
                 }
 
-                var buffer = _indices.GetBuffer( false );
+                var buffer = IndexData.GetBuffer( false );
 
-                Logger.Checkpoint();
-                
-                fixed ( short* ptr = &buffer.ToArray()[ 0 ] ) // Simplified fixed statement
+                fixed ( short* ptr = &buffer.ToArray()[ 0 ] )
                 {
                     GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, new IntPtr( ptr + offset ) );
                 }
             }
             else
             {
-                Logger.Checkpoint();
-
                 GdxApi.Bindings.DrawArrays( primitiveType, offset, count );
             }
         }
         else
         {
-            if ( _indices.NumIndices > 0 )
+            if ( IndexData.NumIndices > 0 )
             {
-                if ( ( count + offset ) > _indices.NumMaxIndices )
+                if ( ( count + offset ) > IndexData.NumMaxIndices )
                 {
                     throw new GdxRuntimeException( $"Mesh attempting to access memory outside " +
                                                    $"of the index buffer (count: {count}, offset: " +
-                                                   $"{offset}, max: {_indices.NumMaxIndices})" );
+                                                   $"{offset}, max: {IndexData.NumMaxIndices})" );
                 }
 
-                _indices.Bind();
+                IndexData.Bind();
 
                 var offsetInBytes = offset * sizeof( short ); // Calculate byte offset
 
-                Logger.Checkpoint();
-
                 GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offsetInBytes );
 
-                _indices.Unbind();
+                IndexData.Unbind();
             }
             else
             {
                 if ( IsInstanced )
                 {
-                    Logger.Checkpoint();
                     GdxApi.Bindings.DrawArraysInstanced( primitiveType, offset, count, _instances!.NumInstances );
                 }
                 else
                 {
-                    Logger.Debug( "Calling: GdxApi.Bindings.DrawArrays( primitiveType, offset, count )" );
                     GdxApi.Bindings.DrawArrays( primitiveType, offset, count );
                 }
             }
@@ -884,6 +841,10 @@ public class Mesh : IDisposable
 
         if ( autoBind ) Unbind( shader );
     }
+
+    #endregion render methods
+
+    // ========================================================================
 
     /// <summary>
     /// Returns the first <see cref="VertexAttribute" /> having the given <see cref="VertexConstants.Usage" />.
@@ -893,8 +854,7 @@ public class Mesh : IDisposable
     public VertexAttribute? GetVertexAttribute( int usage )
     {
         var attributes = _vertices.Attributes;
-
-        var len = attributes.Size;
+        var len        = attributes.Size;
 
         for ( var i = 0; i < len; i++ )
         {
@@ -909,12 +869,13 @@ public class Mesh : IDisposable
 
     /// <returns>
     /// the backing FloatBuffer holding the vertices.
-    /// Does not have to be a direct buffer on Android!
     /// </returns>
     public FloatBuffer GetVerticesBuffer()
     {
         return _vertices.GetBuffer( false );
     }
+
+    // ========================================================================
 
     /// <summary>
     /// Calculates the <see cref="BoundingBox" /> of the vertices contained in this mesh.
@@ -925,6 +886,7 @@ public class Mesh : IDisposable
     public BoundingBox CalculateBoundingBox()
     {
         var bbox = new BoundingBox();
+
         CalculateBoundingBox( bbox );
 
         return bbox;
@@ -948,8 +910,7 @@ public class Mesh : IDisposable
 
         bbox.ToInfinity();
 
-        var posAttrib = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
-
+        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
         var offset     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
         var idx        = offset;
@@ -1048,7 +1009,7 @@ public class Mesh : IDisposable
         }
 
         var verts      = _vertices.GetBuffer( false );
-        var index      = _indices.GetBuffer( false );
+        var index      = IndexData.GetBuffer( false );
         var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
         var posoff     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
@@ -1168,6 +1129,8 @@ public class Mesh : IDisposable
         return box;
     }
 
+    // ========================================================================
+
     /// <summary>
     /// Calculates the squared radius of the bounding sphere around the
     /// specified center for the specified part.
@@ -1194,13 +1157,12 @@ public class Mesh : IDisposable
         }
 
         var verts      = _vertices.GetBuffer( false );
-        var index      = _indices.GetBuffer( false );
+        var index      = IndexData.GetBuffer( false );
         var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
         var posoff     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
         var end        = offset + count;
-
-        float result = 0;
+        var result     = 0f;
 
         switch ( posAttrib.NumComponents )
         {
@@ -1356,6 +1318,8 @@ public class Mesh : IDisposable
         return CalculateRadius( center.X, center.Y, center.Z, 0, NumIndices, null );
     }
 
+    // ========================================================================
+
     /// <summary>
     /// Adds a managed mesh associated with the specified application.
     /// </summary>
@@ -1388,7 +1352,7 @@ public class Mesh : IDisposable
         for ( var i = 0; i < _meshes.Count; i++ )
         {
             _meshes[ app ]?[ i ]._vertices.Invalidate();
-            _meshes[ app ]?[ i ]._indices.Invalidate();
+            _meshes[ app ]?[ i ].IndexData.Invalidate();
         }
     }
 
@@ -1493,8 +1457,8 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Method to transform the positions in the float array. Normals will be
-    /// kept as is. This is a potentially slow operation, use with care.
+    /// Method to transform the positions in the float array. Normals will be kept as is. This
+    /// is a potentially slow operation, use with care.
     /// </summary>
     /// <param name="matrix"> the transformation matrix </param>
     /// <param name="vertices"> the float array </param>
@@ -1574,9 +1538,8 @@ public class Mesh : IDisposable
     }
 
     /// <summary>
-    /// Method to transform the texture coordinates in the mesh. This is a potentially
-    /// slow operation, use with care. It will also create a temporary float[] which
-    /// will be garbage collected.
+    /// Method to transform the texture coordinates in the mesh. This is a potentially slow operation,
+    /// use with care. It will also create a temporary float[] which will be garbage collected.
     /// </summary>
     /// <param name="matrix"> the transformation matrix  </param>
     public void TransformUV( in Matrix3 matrix )
@@ -1823,6 +1786,8 @@ public class Mesh : IDisposable
         return result;
     }
 
+    // ========================================================================
+
     /// <summary>
     /// Creates a new vertex buffer object with the specified attributes.
     /// </summary>
@@ -1835,5 +1800,24 @@ public class Mesh : IDisposable
     private static VertexBufferObjectWithVAO MakeVertexBuffer( bool isStatic, int maxVertices, VertexAttributes vertexAttributes )
     {
         return new VertexBufferObjectWithVAO( isStatic, maxVertices, vertexAttributes );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Frees all resources associated with this Mesh
+    /// </summary>
+    public void Dispose()
+    {
+        if ( _meshes[ GdxApi.App ] != null )
+        {
+            _meshes[ GdxApi.App ]?.Remove( this );
+        }
+
+        _vertices.Dispose();
+        _instances?.Dispose();
+        IndexData.Dispose();
+
+        GC.SuppressFinalize( this );
     }
 }

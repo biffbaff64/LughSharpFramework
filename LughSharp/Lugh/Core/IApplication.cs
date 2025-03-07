@@ -117,10 +117,10 @@ public interface IApplication
     /// <see cref="IApplicationListener.Pause()" /> and <see cref="IDisposable.Dispose()" />
     /// some time in the future.
     /// <para>
-    ///     It will not immediately finish your application.
+    /// It will not immediately finish your application.
     /// </para>
     /// <para>
-    ///     On iOS this should be avoided in production as it breaks Apples guidelines
+    /// On iOS this should be avoided in production as it breaks Apples guidelines
     /// </para>
     /// </summary>
     void Exit();

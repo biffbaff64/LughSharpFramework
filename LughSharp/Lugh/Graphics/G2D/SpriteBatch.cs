@@ -24,7 +24,7 @@
 
 using System.Buffers;
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
@@ -86,16 +86,13 @@ public class SpriteBatch : IBatch
     private int            _nullTextureCount      = 0;
     private int            _currentTextureIndex   = 0;
     private Texture?       _lastSuccessfulTexture = null;
-    private int            _combinedMatrixLocation;
+    private ShaderProgram? _shader;
     private Mesh?          _mesh;
     private bool           _ownsShader;
     private float[]?       _vertices;
-    private int            _maxVertices;
-    private ShaderProgram? _shader;
-    private uint           _vao;
-    private uint           _vbo;
-    private int            _vertexSizeInFloats;
     private bool           _originalDepthMask;
+    private int            _maxVertices;
+    private int            _combinedMatrixLocation;
 
     // ========================================================================
 
@@ -126,22 +123,10 @@ public class SpriteBatch : IBatch
             throw new ArgumentException( $"Can't have more than {MAX_SPRITES} sprites per batch: {size}" );
         }
 
-        _maxVertices     = size * VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
         IsDrawing        = false;
         Vertices         = new float[ size * VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ];
+        _maxVertices     = size * VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
         _maxTextureUnits = QueryMaxSupportedTextureUnits();
-
-        // Create the VAO
-        _vao = GdxApi.Bindings.GenVertexArray();
-
-        // Allocate the VBO
-        _vbo = GdxApi.Bindings.GenBuffer();
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-        GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
-                                    _maxVertices * sizeof( float ),
-                                    IntPtr.Zero,
-                                    ( int )BufferUsageHint.StaticDraw );
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
 
         Initialise( size, defaultShader );
     }
@@ -171,7 +156,8 @@ public class SpriteBatch : IBatch
         // Usage.TEXTURE_COORDINATES: 2 floats for texture u and v coordinates.
         var va1 = new VertexAttribute( ( int )VertexConstants.Usage.POSITION, VertexConstants.POSITION_COMPONENTS, "a_position" );
         var va2 = new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED, VertexConstants.COLOR_COMPONENTS, "a_colorPacked" );
-        var va3 = new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, VertexConstants.TEXCOORD_COMPONENTS, "a_texCoord" + "0" );
+        var va3 = new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, VertexConstants.TEXCOORD_COMPONENTS,
+                                       "a_texCoord" + "0" );
 
         // Create the mesh object with the specified vertex attributes and size.
         // The mesh will hold the vertex and index data for rendering.
@@ -189,62 +175,20 @@ public class SpriteBatch : IBatch
         // Set the indices on the mesh.
         _mesh.SetIndices( indices );
 
-        // Calculate the vertex size in floats.
-        // This is used to determine the stride of vertex data in the VBO.
-        _vertexSizeInFloats = _mesh.VertexAttributes.VertexSize / sizeof( float );
-
-        // ------------------------------------------------
-        // Generate and bind the Vertex Array Object (VAO).
-        // The VAO stores the vertex attribute state, including the VBO bindings and attribute pointers.
-        _vao = GdxApi.Bindings.GenVertexArray();
-        GdxApi.Bindings.BindVertexArray( _vao );
-
-        // ------------------------------------------------
-        // Generate and bind the Vertex Buffer Object (VBO).
-        // The VBO stores the vertex data (position, color, texture coordinates).
-        _vbo = GdxApi.Bindings.GenBuffer();
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-
-        // Check if the VBO is correctly bound.
-        CheckBufferBinding( _vbo );
-
-        // ------------------------------------------------
-        // Allocate memory for the VBO.
-        // This is done once at initialization. The VBO will be updated using BufferSubData later.
-        // The StaticDraw usage hint indicates that the VBO data will be set once and used many times.
-        GdxApi.Bindings.BufferData( target: ( int )BufferTarget.ArrayBuffer,
-                                    size: Vertices.Length * sizeof( float ),
-                                    data: ( IntPtr )0,
-                                    usage: ( int )BufferUsageHint.StaticDraw );
-
-        // Unbind the VAO and VBO.
-        // This is done to avoid accidentally modifying them later.
-        GdxApi.Bindings.BindVertexArray( 0 );
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
-
         // Determine the shader program to use.
         // If a default shader is not provided, create one.
         if ( defaultShader == null )
         {
             Logger.Debug( "Creating Default Shader" );
-            
+
             _shader     = CreateDefaultShader();
             _ownsShader = true; // Indicate that this class owns the shader.
         }
         else
         {
             Logger.Debug( "Using Default Shader" );
-            
-            _shader = defaultShader;
-        }
 
-        // Pre-bind the index data to force the upload of indices data.
-        // This is only necessary for VBO-based meshes.
-        // It ensures that the index data is uploaded to the GPU before rendering.
-        if ( vertexDataType != VertexDataType.VertexArray )
-        {
-            _mesh.IndexData().Bind();
-            _mesh.IndexData().Unbind();
+            _shader = defaultShader;
         }
 
         // Get the location of the combined matrix uniform in the shader program.
@@ -301,11 +245,8 @@ public class SpriteBatch : IBatch
             GdxApi.Bindings.Disable( IGL.GL_BLEND );
         }
 
-        _shader?.Unbind();
-
         Array.Clear( Vertices, 0, Idx );
-        _currentTextureIndex = 0;
-        Idx                  = 0;
+        Idx = 0;
     }
 
     /// <summary>
@@ -317,27 +258,35 @@ public class SpriteBatch : IBatch
     /// Thrown if there is no OpenGL context available on the current thread, if
     /// the index buffer (`Idx`) is less than zero, or if certain rendering conditions are not met.
     /// </exception>
-    public unsafe void Flush()
+    public void Flush()
     {
         OpenGL.GLUtils.CheckOpenGLContext();
 
+        // Check if there is any data to flush.
         if ( Idx <= 0 )
         {
             Logger.Error( $"Flush cancelled: Idx: {Idx}" );
 
-            // Ensure that Idx is zero
+            // Ensure that Idx is reset to zero.
             Idx = 0;
 
             return;
         }
 
+        // Increment render call counters.
         RenderCalls++;
         TotalRenderCalls++;
 
+        // Calculate the number of sprites in the current batch.
+        // Idx represents the number of floats in the Vertices array.
+        // VERTICES_PER_SPRITE is the number of vertices per sprite (4).
+        // VertexConstants.VERTEX_SIZE is the number of floats per vertex.
         var spritesInBatch = ( int )( Idx / ( long )( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) );
 
+        // Update the maximum number of sprites in a batch.
         MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
 
+        // Check if the texture is null.
         if ( LastTexture == null )
         {
             Idx = 0;
@@ -350,32 +299,11 @@ public class SpriteBatch : IBatch
             return;
         }
 
+        // Bind the texture to the current texture unit.
         GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
         LastTexture.Bind();
-        SetupVertexAttributes( _shader );
 
-        var tmpInt = new int[ 1 ];
-
-        fixed ( int* ptr = &tmpInt[ 0 ] )
-        {
-            GdxApi.Bindings.GetIntegerv( ( int )BufferBindings.ArrayBufferBinding, ptr );
-
-            if ( *ptr != _vbo )
-            {
-                GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-            }
-        }
-
-        fixed ( int* ptr = tmpInt )
-        {
-            GdxApi.Bindings.GetIntegerv( ( int )BufferBindings.VertexArrayBinding, ptr );
-
-            if ( *ptr != _vao )
-            {
-                GdxApi.Bindings.BindVertexArray( _vao );
-            }
-        }
-
+        // Ensure that the _vertices array is large enough.
         if ( ( _vertices == null ) || ( _vertices.Length < _maxVertices ) )
         {
             if ( _vertices != null )
@@ -386,37 +314,16 @@ public class SpriteBatch : IBatch
             _vertices = ArrayPool< float >.Shared.Rent( _maxVertices ); // Rent a new array
         }
 
-        // --------------------------------------------------------------------
-        #if DEBUG
-        Logger.Debug( $"Vertex Array contents (first 32) (array length: {_vertices.Length})" );
-        var sb = new StringBuilder();
-
-        for ( var i = 0; i < 32; i++ )
-        {
-            sb.Append( _vertices[ i ] ).Append( ',' );
-        }
-
-        Logger.Debug( sb.ToString() );
-
-        Logger.Debug( $"Idx: {Idx}" );
-        #endif
-        // --------------------------------------------------------------------
-        
-        // Copy the data from the Vertices array to the pooled _vertices array
+        // Copy the data from the Vertices array to the pooled _vertices array.
         Array.Copy( Vertices, _vertices, Idx );
 
-        fixed ( float* ptr = &_vertices[ 0 ] )
-        {
-            GdxApi.Bindings.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Idx * sizeof( float ), ( IntPtr )ptr );
-        }
+        if ( _mesh == null ) throw new NullReferenceException( "Mesh is null" );
 
-        OpenGL.GLUtils.PrintVboData( _vbo, VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE, VertexConstants.VERTEX_SIZE );
+        _mesh.SetVertices( _vertices, 0, Idx );
+        _mesh.IndicesBuffer.Position = 0;
+        _mesh.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
 
-        if ( _combinedMatrixLocation != -1 )
-        {
-            _shader?.SetUniformMatrix4Fv( _combinedMatrixLocation, CombinedMatrix.Val );
-        }
-
+        // Set up blending.
         if ( BlendingDisabled )
         {
             GdxApi.Bindings.Disable( IGL.GL_BLEND );
@@ -425,18 +332,29 @@ public class SpriteBatch : IBatch
         {
             GdxApi.Bindings.Enable( IGL.GL_BLEND );
 
+            // Set the blend function if specified.
             if ( BlendSrcFunc != -1 )
             {
                 GdxApi.Bindings.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
             }
         }
 
+        // Render the sprites.
         _mesh?.Render( _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * VERTICES_PER_SPRITE );
 
-        GdxApi.Bindings.BindVertexArray( 0 );                             // Unbind VAO
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 ); // Unbind VBO
-
+        // Update the current texture index.
         _currentTextureIndex = ( _currentTextureIndex + 1 ) % _maxTextureUnits;
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Unbind VAO and VBO
+    /// </summary>
+    private static void UnbindBuffers()
+    {
+        GdxApi.Bindings.BindVertexArray( 0 );
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
     }
 
     // ========================================================================
@@ -559,7 +477,10 @@ public class SpriteBatch : IBatch
         get => _shader;
         set
         {
-            if ( IsDrawing && ( Idx > 0 ) ) Flush();
+            if ( IsDrawing && ( Idx > 0 ) )
+            {
+                Flush();
+            }
 
             _shader = value;
 
@@ -592,16 +513,6 @@ public class SpriteBatch : IBatch
             _vertices = null;
         }
 
-        unsafe
-        {
-            fixed ( uint* ptr = &_vbo )
-            {
-                GdxApi.Bindings.DeleteBuffers( 1, ptr ); // Correct way to delete a single buffer
-            }
-        }
-
-        GdxApi.Bindings.DeleteVertexArrays( _vao );
-
         GC.SuppressFinalize( this );
     }
 
@@ -631,80 +542,77 @@ public class SpriteBatch : IBatch
     /// </summary>
     private void SetupVertexAttributes( ShaderProgram? program )
     {
-        OpenGL.GLUtils.CheckOpenGLContext();
-
-        // --------------------------------------------------------------------
-
-        if ( ( program == null ) || ( _mesh == null ) )
-        {
-            throw new NullReferenceException( "program and _mesh cannot be null!" );
-        }
-
-        // --------------------------------------------------------------------
-
-        var currentProgram = new int[ 1 ];
-
-        GdxApi.Bindings.GetIntegerv( IGL.GL_CURRENT_PROGRAM, ref currentProgram );
-
-        if ( currentProgram[ 0 ] != _shader?.ShaderProgramHandle )
-        {
-            throw new GdxRuntimeException( "***** Shader program is unbound *****" );
-        }
-
-        // --------------------------------------------------------------------
-
-        GdxApi.Bindings.BindVertexArray( _vao );
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-
-        const int stride         = VertexConstants.VERTEX_SIZE_BYTES;
-        const int positionOffset = VertexConstants.POSITION_OFFSET;
-        const int colorOffset    = VertexConstants.COLOR_OFFSET * sizeof( float );
-        const int texCoordOffset = VertexConstants.TEXCOORD_OFFSET * sizeof( float );
-
-        // Position Attribute
-        var positionLocation = program.GetAttributeLocation( "a_position" );
-
-        if ( positionLocation >= 0 )
-        {
-            program.EnableVertexAttribute( positionLocation );
-            program.SetVertexAttribute( positionLocation,
-                                        VertexConstants.POSITION_COMPONENTS,
-                                        IGL.GL_FLOAT,
-                                        false,
-                                        stride,
-                                        positionOffset );
-        }
-
-        // Color Attribute
-        var colorLocation = program.GetAttributeLocation( "a_colorPacked" );
-
-        if ( colorLocation >= 0 )
-        {
-            program.EnableVertexAttribute( colorLocation );
-            program.SetVertexAttribute( colorLocation,
-                                        VertexConstants.COLOR_COMPONENTS,
-                                        IGL.GL_FLOAT,
-                                        false,
-                                        stride,
-                                        colorOffset );
-        }
-
-        // Texture Coordinates Attribute
-        var texCoordLocation = program.GetAttributeLocation( "a_texCoord" + "0" );
-
-        if ( texCoordLocation >= 0 )
-        {
-            program.EnableVertexAttribute( texCoordLocation );
-            program.SetVertexAttribute( texCoordLocation,
-                                        VertexConstants.TEXCOORD_COMPONENTS,
-                                        IGL.GL_FLOAT,
-                                        false,
-                                        stride,
-                                        texCoordOffset );
-        }
-
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
-        GdxApi.Bindings.BindVertexArray( 0 );
+//        OpenGL.GLUtils.CheckOpenGLContext();
+//
+//        // --------------------------------------------------------------------
+//
+//        if ( ( program == null ) || ( _mesh == null ) )
+//        {
+//            throw new NullReferenceException( "program and _mesh cannot be null!" );
+//        }
+//
+//        // --------------------------------------------------------------------
+//
+//        var currentProgram = new int[ 1 ];
+//
+//        GdxApi.Bindings.GetIntegerv( IGL.GL_CURRENT_PROGRAM, ref currentProgram );
+//
+//        if ( currentProgram[ 0 ] != _shader?.ShaderProgramHandle )
+//        {
+//            throw new GdxRuntimeException( "***** Shader program is unbound *****" );
+//        }
+//
+//        // --------------------------------------------------------------------
+//
+//        GdxApi.Bindings.BindVertexArray( _vao );
+//        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+//
+//        const int stride         = VertexConstants.VERTEX_SIZE_BYTES;
+//        const int positionOffset = VertexConstants.POSITION_OFFSET;
+//        const int colorOffset    = VertexConstants.COLOR_OFFSET * sizeof( float );
+//        const int texCoordOffset = VertexConstants.TEXCOORD_OFFSET * sizeof( float );
+//
+//        // Position Attribute
+//        var positionLocation = program.GetAttributeLocation( "a_position" );
+//
+//        if ( positionLocation >= 0 )
+//        {
+//            program.EnableVertexAttribute( positionLocation );
+//            program.SetVertexAttribute( positionLocation,
+//                                        VertexConstants.POSITION_COMPONENTS,
+//                                        IGL.GL_FLOAT,
+//                                        false,
+//                                        stride,
+//                                        positionOffset );
+//        }
+//
+//        // Color Attribute
+//        var colorLocation = program.GetAttributeLocation( "a_colorPacked" );
+//
+//        if ( colorLocation >= 0 )
+//        {
+//            program.EnableVertexAttribute( colorLocation );
+//            program.SetVertexAttribute( colorLocation,
+//                                        VertexConstants.COLOR_COMPONENTS,
+//                                        IGL.GL_FLOAT,
+//                                        false,
+//                                        stride,
+//                                        colorOffset );
+//        }
+//
+//        // Texture Coordinates Attribute
+//        var texCoordLocation = program.GetAttributeLocation( "a_texCoord" + "0" );
+//
+//        if ( texCoordLocation >= 0 )
+//        {
+//            program.EnableVertexAttribute( texCoordLocation );
+//            program.SetVertexAttribute( texCoordLocation,
+//                                        VertexConstants.TEXCOORD_COMPONENTS,
+//                                        IGL.GL_FLOAT,
+//                                        false,
+//                                        stride,
+//                                        texCoordOffset );
+//        }
     }
 
     // ========================================================================
@@ -900,26 +808,6 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// Verifies whether the currently bound buffer matches the expected buffer ID.
-    /// Logs an error if there is a mismatch.
-    /// </summary>
-    /// <param name="expectedBuffer">The identifier of the buffer that is expected to be currently bound.</param>
-    private unsafe void CheckBufferBinding( uint expectedBuffer )
-    {
-        var currentBuffer = new int[ 1 ];
-
-        fixed ( int* ptr = &currentBuffer[ 0 ] )
-        {
-            GdxApi.Bindings.GetIntegerv( ( int )BufferBindings.ArrayBufferBinding, ptr );
-        }
-
-        if ( currentBuffer[ 0 ] != expectedBuffer )
-        {
-            Logger.Error( $"Buffer not bound correctly! Expected {expectedBuffer}, got {currentBuffer[ 0 ]}" );
-        }
-    }
-
-    /// <summary>
     /// Query OpenGL for the maximum number of texture units that can be supported
     /// </summary>
     /// <returns></returns>
@@ -940,18 +828,6 @@ public class SpriteBatch : IBatch
         }
 
         return maxTextureUnits[ 0 ];
-    }
-
-    // ========================================================================
-
-    private void DebugBatch( string msg = "" )
-    {
-        Logger.Divider();
-        Logger.Debug( $"{msg}" );
-        Logger.Debug( $"\nCombined Matrix:\n {CombinedMatrix}" );
-        Logger.Debug( $"\nProjection Matrix:\n {ProjectionMatrix}" );
-        Logger.Debug( $"\nTransform Matrix:\n {TransformMatrix}" );
-        Logger.Divider();
     }
 
     // ========================================================================

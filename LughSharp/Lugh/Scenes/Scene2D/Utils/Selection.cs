@@ -33,7 +33,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 /// Manages selected objects. Optionally fires a <see cref="ChangeListener.ChangeEvent" />
 /// on an actor.
 /// <para>
-///     Selection changes can be vetoed via <see cref="ChangeListener.ChangeEvent.Cancel()" />.
+/// Selection changes can be vetoed via <see cref="ChangeListener.ChangeEvent.Cancel()" />.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -50,8 +50,8 @@ public class Selection< T > : IDisableable, IDisposable
 
     /// <summary>
     /// <param name="value">
-    ///     An actor to fire a <see cref="ChangeListener.ChangeEvent" /> on when the
-    ///     selection changes, or null.
+    /// An actor to fire a <see cref="ChangeListener.ChangeEvent" /> on when the
+    /// selection changes, or null.
     /// </param>
     /// </summary>
     public Actor? Actor { get; set; }
@@ -66,7 +66,7 @@ public class Selection< T > : IDisableable, IDisposable
     /// Selects or deselects the specified item based on how the selection is
     /// configured, whether ctrl is currently pressed, etc.
     /// <para>
-    ///     This is typically invoked by user interaction.
+    /// This is typically invoked by user interaction.
     /// </para>
     /// </summary>
     public virtual void Choose( T item )

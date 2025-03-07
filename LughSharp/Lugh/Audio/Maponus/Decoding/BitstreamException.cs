@@ -30,15 +30,15 @@ namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 /// Instances of BitstreamException are thrown
 /// when operations on a Bitstream fail.
 /// <para>
-///     The exception provides details of the exception condition
-///     in two ways:
-///     <li>
-///         as an error-code describing the nature of the error
-///     </li>
-///     <li>
-///         as the Throwable instance, if any, that was thrown
-///         indicating that an exceptional condition has occurred.
-///     </li>
+/// The exception provides details of the exception condition
+/// in two ways:
+/// <li>
+/// as an error-code describing the nature of the error
+/// </li>
+/// <li>
+/// as the Throwable instance, if any, that was thrown
+/// indicating that an exceptional condition has occurred.
+/// </li>
 /// </para>
 /// </summary>
 [Serializable]

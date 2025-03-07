@@ -50,13 +50,13 @@ public class ParticleEffectLoader
     /// <summary>
     /// Loads a particle effect asset using the provided asset manager, file information, and parameters.
     /// <para>
-    ///     This method constructs a new instance of <see cref="ParticleEffect" /> and loads its configuration
-    ///     based on the provided parameters. If the <paramref name="param" /> contains a non-null value for
-    ///     <see cref="ParticleEffectParameter.AtlasFile" />, the effect's configuration is loaded using the
-    ///     associated <see cref="TextureAtlas" /> and atlas prefix. If the <paramref name="param" /> contains a
-    ///     non-null value for <see cref="ParticleEffectParameter.ImagesDir" />, the effect's configuration is
-    ///     loaded using the specified images directory. Otherwise, the effect's configuration is loaded from
-    ///     the provided <paramref name="file" />.
+    /// This method constructs a new instance of <see cref="ParticleEffect" /> and loads its configuration
+    /// based on the provided parameters. If the <paramref name="param" /> contains a non-null value for
+    /// <see cref="ParticleEffectParameter.AtlasFile" />, the effect's configuration is loaded using the
+    /// associated <see cref="TextureAtlas" /> and atlas prefix. If the <paramref name="param" /> contains a
+    /// non-null value for <see cref="ParticleEffectParameter.ImagesDir" />, the effect's configuration is
+    /// loaded using the specified images directory. Otherwise, the effect's configuration is loaded from
+    /// the provided <paramref name="file" />.
     /// </para>
     /// </summary>
     /// <param name="am">The asset manager used for loading dependent assets.</param>
@@ -98,11 +98,11 @@ public class ParticleEffectLoader
     /// <summary>
     /// Retrieves a list of asset dependencies required for loading a particle effect.
     /// <para>
-    ///     This method checks if the provided <paramref name="parameters" /> is not null and if the associated
-    ///     <see cref="ParticleEffectParameter.AtlasFile" /> is not null. If both conditions are met, the
-    ///     method creates a list of asset descriptors containing a single <see cref="AssetDescriptor" />
-    ///     representing the dependency on a <see cref="TextureAtlas" /> loaded from the specified
-    ///     <see cref="ParticleEffectParameter.AtlasFile" />.
+    /// This method checks if the provided <paramref name="parameters" /> is not null and if the associated
+    /// <see cref="ParticleEffectParameter.AtlasFile" /> is not null. If both conditions are met, the
+    /// method creates a list of asset descriptors containing a single <see cref="AssetDescriptor" />
+    /// representing the dependency on a <see cref="TextureAtlas" /> loaded from the specified
+    /// <see cref="ParticleEffectParameter.AtlasFile" />.
     /// </para>
     /// </summary>
     /// <param name="fileName">The name of the file associated with the asset.</param>

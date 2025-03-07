@@ -92,7 +92,7 @@ public class Matrix3
     /// Postmultiplies this matrix with the provided matrix and stores the
     /// result in this matrix. For example:
     /// <para>
-    ///     <tt>A.mul(B) results in A := AB</tt>
+    /// <tt>A.mul(B) results in A := AB</tt>
     /// </para>
     /// </summary>
     /// <param name="m"> Matrix to multiply by. </param>
@@ -128,7 +128,7 @@ public class Matrix3
     /// Premultiplies this matrix with the provided matrix and stores the
     /// result in this matrix. For example:
     /// <para>
-    ///     <c>A.mulLeft(B) results in A := BA</c>
+    /// <c>A.mulLeft(B) results in A := BA</c>
     /// </para>
     /// </summary>
     /// <param name="m"> The other Matrix to multiply by </param>

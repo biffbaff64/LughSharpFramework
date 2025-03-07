@@ -33,14 +33,14 @@ namespace LughSharp.Lugh.Input;
 /// method. It will be called before the ApplicationListener.render() method in each frame.
 /// Keyboard keys are translated to the constants in Input.Keys transparently on all systems.
 /// <para>
-///     Do not use system specific key constants.
+/// Do not use system specific key constants.
 /// </para>
 /// <para>
-///     The class also offers methods to use (and test for the presence of) other input systems
-///     like vibration, compass, on-screen keyboards, and cursor capture.
+/// The class also offers methods to use (and test for the presence of) other input systems
+/// like vibration, compass, on-screen keyboards, and cursor capture.
 /// </para>
 /// <para>
-///     Support for simple input dialogs is also provided.
+/// Support for simple input dialogs is also provided.
 /// </para>
 /// </summary>
 [PublicAPI]

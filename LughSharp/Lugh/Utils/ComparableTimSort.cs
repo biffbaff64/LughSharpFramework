@@ -29,10 +29,10 @@ namespace LughSharp.Lugh.Utils;
 /// of objects that implement <see cref="IComparable" />, instead of using explicit
 /// comparators.
 /// <para>
-///     If you are using an optimizing VM, you may find that ComparableTimSort offers no
-///     performance benefit over TimSort in conjunction with a comparator that simply
-///     returns <see cref="IComparable.CompareTo" />. If this is the case, you are better
-///     off deleting ComparableTimSort to eliminate the code duplication.
+/// If you are using an optimizing VM, you may find that ComparableTimSort offers no
+/// performance benefit over TimSort in conjunction with a comparator that simply
+/// returns <see cref="IComparable.CompareTo" />. If this is the case, you are better
+/// off deleting ComparableTimSort to eliminate the code duplication.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -43,16 +43,16 @@ public class ComparableTimSort< T >
     /// be lengthened by calling binarySort. If the entire array is less than this length,
     /// no merges will be performed.
     /// <para>
-    ///     This constant should be a power of two. It was 64 in Tim Peter's C implementation,
-    ///     but 32 was empirically determined to work better in this implementation. In the
-    ///     unlikely event that you set this constant to be a number that's not a power of two,
-    ///     you'll need to change the <see cref="MinRunLength" /> computation.
+    /// This constant should be a power of two. It was 64 in Tim Peter's C implementation,
+    /// but 32 was empirically determined to work better in this implementation. In the
+    /// unlikely event that you set this constant to be a number that's not a power of two,
+    /// you'll need to change the <see cref="MinRunLength" /> computation.
     /// </para>
     /// <para>
-    ///     If you decrease this constant, you must change the stackLen computation in the
-    ///     TimSort constructor, or you risk an ArrayOutOfBounds exception. See listsort.txt
-    ///     for a discussion of the minimum stack length required as a function of the length
-    ///     of the array being sorted and the minimum merge sequence length.
+    /// If you decrease this constant, you must change the stackLen computation in the
+    /// TimSort constructor, or you risk an ArrayOutOfBounds exception. See listsort.txt
+    /// for a discussion of the minimum stack length required as a function of the length
+    /// of the array being sorted and the minimum merge sequence length.
     /// </para>
     /// </summary>
     private const int MIN_MERGE = 32;
@@ -369,20 +369,20 @@ public class ComparableTimSort< T >
     /// array and reverses the run if it is descending (ensuring that the run will always
     /// be ascending when the method returns).
     /// <para>
-    ///     A run is the longest ascending sequence with:
+    /// A run is the longest ascending sequence with:
     /// </para>
     /// <para>
-    ///     <tt>
-    ///         a[lo] &lt;= a[lo + 1] &lt;= a[lo + 2] &lt;= ...
-    ///     </tt>
+    /// <tt>
+    /// a[lo] &lt;= a[lo + 1] &lt;= a[lo + 2] &lt;= ...
+    /// </tt>
     /// </para>
     /// <para>
-    ///     or the longest descending sequence with:
+    /// or the longest descending sequence with:
     /// </para>
     /// <para>
-    ///     <tt>
-    ///         a[lo] > a[lo + 1] > a[lo + 2] > ...
-    ///     </tt>
+    /// <tt>
+    /// a[lo] > a[lo + 1] > a[lo + 2] > ...
+    /// </tt>
     /// </para>
     /// <para></para>
     /// For its intended use in a stable mergesort, the strictness of the definition of
@@ -458,13 +458,13 @@ public class ComparableTimSort< T >
     /// Returns the minimum acceptable run length for an array of the specified length.
     /// Natural runs shorter than this will be extended with <see cref="BinarySort" />.
     /// <para>
-    ///     Roughly speaking, the computation is:
+    /// Roughly speaking, the computation is:
     /// </para>
     /// <para>
-    ///     If n &lt; Min_Merge, return n (it's too small to bother with fancy stuff).
-    ///     Else if n is an exact power of 2, return Min_Merge/2. Else return an int k,
-    ///     Min_Merge/2 &lt;= k &lt;= Min_Merge, such that n/k is close to, but strictly
-    ///     less than, an exact power of 2.
+    /// If n &lt; Min_Merge, return n (it's too small to bother with fancy stuff).
+    /// Else if n is an exact power of 2, return Min_Merge/2. Else return an int k,
+    /// Min_Merge/2 &lt;= k &lt;= Min_Merge, such that n/k is close to, but strictly
+    /// less than, an exact power of 2.
     /// </para>
     /// </summary>
     /// <param name="n"> the length of the array to be sorted </param>
@@ -503,13 +503,13 @@ public class ComparableTimSort< T >
     /// Examines the stack of runs waiting to be merged and merges adjacent runs until
     /// the stack invariants are reestablished:
     /// <para>
-    ///     <tt>
-    ///         1. runLen[i - 3] > runLen[i - 2] + runLen[i - 1] 2. runLen[i - 2] > runLen[i - 1]
-    ///     </tt>
+    /// <tt>
+    /// 1. runLen[i - 3] > runLen[i - 2] + runLen[i - 1] 2. runLen[i - 2] > runLen[i - 1]
+    /// </tt>
     /// </para>
     /// <para>
-    ///     This method is called each time a new run is pushed onto the stack, so the
-    ///     invariants are guaranteed to hold for i &lt; stackSize upon entry to the method.
+    /// This method is called each time a new run is pushed onto the stack, so the
+    /// invariants are guaranteed to hold for i &lt; stackSize upon entry to the method.
     /// </para>
     /// </summary>
     private void MergeCollapse()
@@ -862,8 +862,8 @@ public class ComparableTimSort< T >
     /// the last element of the first run (a[base1 + len1-1]) must be greater than all elements
     /// of the second run.
     /// <para>
-    ///     For performance, this method should be called only when len1 &lt;= len2; its twin, mergeHi
-    ///     should be called if len1 >= len2. (Either method may be called if len1 == len2.)
+    /// For performance, this method should be called only when len1 &lt;= len2; its twin, mergeHi
+    /// should be called if len1 >= len2. (Either method may be called if len1 == len2.)
     /// </para>
     /// </summary>
     /// <param name="base1"> index of first element in first run to be merged </param>

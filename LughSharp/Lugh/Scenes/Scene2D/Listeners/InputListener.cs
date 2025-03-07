@@ -37,17 +37,17 @@ public class InputListener : IEventListener
     /// <summary>
     /// Try to handle the given event, if it is an <see cref="InputEvent" />.
     /// <para>
-    ///     If the input event is of type <see cref="InputEvent.EventType.TouchDown" />,
-    ///     <see cref="InputEvent.TouchFocus" /> is true and
-    ///     <see cref="TouchDown(InputEvent, float, float, int, int)" /> returns true
-    ///     ( indicating the event was handled ) then this listener is added to the
-    ///     stage's touch focus via:-
-    ///     <para>
-    ///         <tt>
-    ///             <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)" />
-    ///         </tt>
-    ///     </para>
-    ///     so it will receive all touch dragged events until the next touch up event.
+    /// If the input event is of type <see cref="InputEvent.EventType.TouchDown" />,
+    /// <see cref="InputEvent.TouchFocus" /> is true and
+    /// <see cref="TouchDown(InputEvent, float, float, int, int)" /> returns true
+    /// ( indicating the event was handled ) then this listener is added to the
+    /// stage's touch focus via:-
+    /// <para>
+    /// <tt>
+    /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)" />
+    /// </tt>
+    /// </para>
+    /// so it will receive all touch dragged events until the next touch up event.
     /// </para>
     /// </summary>
     public virtual bool Handle( Event e )

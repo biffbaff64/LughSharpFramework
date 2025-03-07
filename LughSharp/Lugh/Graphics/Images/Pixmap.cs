@@ -36,18 +36,18 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// in pixels as well as a <see cref="PixelType.Format" /> specifying the number and order
 /// of color components per pixel.
 /// <para>
-///     Coordinates of pixels are specified with respect to the top left corner of
-///     the image, with the x-axis pointing to the right and the y-axis pointing
-///     downwards.
+/// Coordinates of pixels are specified with respect to the top left corner of
+/// the image, with the x-axis pointing to the right and the y-axis pointing
+/// downwards.
 /// </para>
 /// <para>
-///     By default all methods use blending. You can disable blending by setting it
-///     to <see cref="BlendTypes.None" />, which may reduce blitting time by ~30%.
+/// By default all methods use blending. You can disable blending by setting it
+/// to <see cref="BlendTypes.None" />, which may reduce blitting time by ~30%.
 /// </para>
 /// <para>
-///     The <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" /> method
-///     will scale and stretch the source image to a target image. In this case either nearest
-///     neighbour or bilinear filtering can be used.
+/// The <see cref="DrawPixmap(Pixmap, int, int, int, int, int, int, int, int)" /> method
+/// will scale and stretch the source image to a target image. In this case either nearest
+/// neighbour or bilinear filtering can be used.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -244,16 +244,16 @@ public class Pixmap : IDisposable
     /// Returns the byte[] array holding the pixel data. For the format Alpha each
     /// value is encoded as a byte.
     /// <para>
-    ///     For the format LuminanceAlpha the luminance is the first byte and the alpha is
-    ///     the second byte of the pixel.
+    /// For the format LuminanceAlpha the luminance is the first byte and the alpha is
+    /// the second byte of the pixel.
     /// </para>
     /// <para>
-    ///     For the formats RGB888 and RGBA8888 the color components are stored in a single
-    ///     byte each in the order red, green, blue (alpha).
+    /// For the formats RGB888 and RGBA8888 the color components are stored in a single
+    /// byte each in the order red, green, blue (alpha).
     /// </para>
     /// <para>
-    ///     For the formats RGB565 and RGBA4444 the pixel colors are stored in shorts in
-    ///     machine dependent order.
+    /// For the formats RGB565 and RGBA4444 the pixel colors are stored in shorts in
+    /// machine dependent order.
     /// </para>
     /// </summary>
     public ByteBuffer ByteBuffer
@@ -414,8 +414,8 @@ public class Pixmap : IDisposable
     /// Draws an area from another Pixmap to this Pixmap. This will automatically
     /// scale and stretch the source image to the specified target rectangle.
     /// <para>
-    ///     Use <see cref="Pixmap.Filter" /> property to specify the type of filtering to
-    ///     be used (NearestNeighbour or Bilinear).
+    /// Use <see cref="Pixmap.Filter" /> property to specify the type of filtering to
+    /// be used (NearestNeighbour or Bilinear).
     /// </para>
     /// </summary>
     /// <param name="pixmap"> The other Pixmap </param>

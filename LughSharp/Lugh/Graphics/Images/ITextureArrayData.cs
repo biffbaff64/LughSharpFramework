@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 
 namespace LughSharp.Lugh.Graphics.Images;
 
@@ -32,13 +32,13 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// upload its data using <see cref="ConsumeTextureArrayData()" />. These are the first
 /// methods to be called by TextureArray.
 /// <para>
-///     After that the TextureArray will invoke the other methods to find out about the size
-///     of the image data, the format, whether the TextureArrayData is able to manage the
-///     pixel data if the OpenGL ES context is lost.
+/// After that the TextureArray will invoke the other methods to find out about the size
+/// of the image data, the format, whether the TextureArrayData is able to manage the
+/// pixel data if the OpenGL ES context is lost.
 /// </para>
 /// <para>
-///     Before a call to <see cref="ConsumeTextureArrayData()" />, TextureArray will
-///     bind the OpenGL ES texture.
+/// Before a call to <see cref="ConsumeTextureArrayData()" />, TextureArray will
+/// bind the OpenGL ES texture.
 /// </para>
 /// Look at <see cref="FileTextureArrayData" /> for example implementation of this interface.
 /// </summary>
@@ -92,7 +92,7 @@ public interface ITextureArrayData
     /// ES texture. The caller must bind an OpenGL ES texture. A call to <see cref="Prepare()" />
     /// must preceed a call to this method.
     /// <para>
-    ///     Any internal data structures created in <see cref="Prepare()" /> should be disposed of here.
+    /// Any internal data structures created in <see cref="Prepare()" /> should be disposed of here.
     /// </para>
     /// </summary>
     void ConsumeTextureArrayData();

@@ -45,10 +45,10 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 /// direct access to the OpenGL API for all versions of OpenGL, using the unmanaged
 /// delegates feature in C# 9.0,
 /// <para>
-///     Also includes a few overloads of many functions to make them a bit more C# friendly
-///     (e.g. passing arrays of bytes or floats instead of passing pointers to fixed memory
-///     locations). Significant effort has been made to make sure that the overloads are as
-///     efficient as possible, in terms of both performance and memory usage.
+/// Also includes a few overloads of many functions to make them a bit more C# friendly
+/// (e.g. passing arrays of bytes or floats instead of passing pointers to fixed memory
+/// locations). Significant effort has been made to make sure that the overloads are as
+/// efficient as possible, in terms of both performance and memory usage.
 /// </para>
 /// </summary>
 public partial class GLBindings

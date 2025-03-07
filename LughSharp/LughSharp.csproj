@@ -74,6 +74,62 @@
             <Pack>true</Pack>
             <PackagePath>contentFiles\any\any</PackagePath>
         </Content>
+        <None Remove="lib\net8.0\freetype.dll" />
+        <Content Include="lib\net8.0\freetype.dll">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\arial-15.fnt" />
+        <Content Include="lib\net8.0\arial-15.fnt">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\arial-15.png" />
+        <Content Include="lib\net8.0\arial-15.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\gdx2d.dll" />
+        <Content Include="lib\net8.0\gdx2d.dll">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\jb_beam_small.png" />
+        <Content Include="lib\net8.0\jb_beam_small.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\lsans-15.fnt" />
+        <Content Include="lib\net8.0\lsans-15.fnt">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\lsans-15.png" />
+        <Content Include="lib\net8.0\lsans-15.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\lughlogo.png" />
+        <Content Include="lib\net8.0\lughlogo.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\OSI_Standard_Logo_100X130.png" />
+        <Content Include="lib\net8.0\OSI_Standard_Logo_100X130.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\red7logo_small.png" />
+        <Content Include="lib\net8.0\red7logo_small.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\rover_wheel.png" />
+        <Content Include="lib\net8.0\rover_wheel.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\uiskin.atlas" />
+        <Content Include="lib\net8.0\uiskin.atlas">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\uiskin.json" />
+        <Content Include="lib\net8.0\uiskin.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="lib\net8.0\uiskin.png" />
+        <Content Include="lib\net8.0\uiskin.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>

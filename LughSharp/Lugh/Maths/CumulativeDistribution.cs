@@ -27,20 +27,20 @@ namespace LughSharp.Lugh.Maths;
 /// <summary>
 /// This class represents a cumulative distribution.
 /// <para>
-///     It can be used in scenarios where there are values with different probabilities
-///     and it's required to pick one of those respecting the probability.
+/// It can be used in scenarios where there are values with different probabilities
+/// and it's required to pick one of those respecting the probability.
 /// </para>
 /// <para>
-///     For example one could represent the frequency of the alphabet letters using a
-///     cumulative distribution and use it to randomly pick a letter respecting their
-///     probabilities (useful when generating random words).
+/// For example one could represent the frequency of the alphabet letters using a
+/// cumulative distribution and use it to randomly pick a letter respecting their
+/// probabilities (useful when generating random words).
 /// </para>
 /// <para>
-///     Another example could be point generation on a mesh surface: one could generate a
-///     cumulative distribution using triangles areas as interval size, in this way triangles
-///     with a large area will be picked more often than triangles with a smaller one.
-///     See <a href="http://en.wikipedia.org/wiki/Cumulative_distribution_function">Wikipedia</a>
-///     for a detailed explanation.
+/// Another example could be point generation on a mesh surface: one could generate a
+/// cumulative distribution using triangles areas as interval size, in this way triangles
+/// with a large area will be picked more often than triangles with a smaller one.
+/// See <a href="http://en.wikipedia.org/wiki/Cumulative_distribution_function">Wikipedia</a>
+/// for a detailed explanation.
 /// </para>
 /// </summary>
 [PublicAPI]

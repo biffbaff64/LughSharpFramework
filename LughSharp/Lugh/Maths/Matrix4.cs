@@ -188,8 +188,8 @@ public class Matrix4
     /// The float array to copy. Remember that this matrix is in column-major order.
     /// (The float array is not modified.)
     /// <para>
-    ///     See here:
-    ///     <a href="http://en.wikipedia.org/wiki/Row-major_order">wikipedia.org/wiki/Row-major_order</a>
+    /// See here:
+    /// <a href="http://en.wikipedia.org/wiki/Row-major_order">wikipedia.org/wiki/Row-major_order</a>
     /// </para>
     /// </param>
     public Matrix4( float[] values )
@@ -240,8 +240,8 @@ public class Matrix4
     /// The matrix, in float form, that is to be copied. Remember that this matrix is in
     /// Column-Major order.
     /// <para>
-    ///     See here:
-    ///     <a href="http://en.wikipedia.org/wiki/Row-major_order">wikipedia.org/wiki/Row-major_order</a>
+    /// See here:
+    /// <a href="http://en.wikipedia.org/wiki/Row-major_order">wikipedia.org/wiki/Row-major_order</a>
     /// </para>
     /// </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
@@ -496,7 +496,7 @@ public class Matrix4
     /// <summary>
     /// Premultiplies this matrix with the given matrix, storing the result in this matrix. For example:
     /// <para>
-    ///     <tt>A.mulLeft(B) results in A := BA.</tt>
+    /// <tt>A.mulLeft(B) results in A := BA.</tt>
     /// </para>
     /// </summary>
     /// <param name="matrix"> The other matrix to multiply by. </param>

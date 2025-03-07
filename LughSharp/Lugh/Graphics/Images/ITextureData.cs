@@ -38,7 +38,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// if necessary. See MipMapGenerator. Before a call to either consumePixmap() or
 /// consumeCustomData(int), Texture will bind the OpenGL ES texture.
 /// <para>
-///     Look at FileTextureData and ETC1TextureData for example implementations of this interface.
+/// Look at FileTextureData and ETC1TextureData for example implementations of this interface.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -91,9 +91,9 @@ public interface ITextureData : IManaged
     /// <summary>
     /// Returns the <see cref="Pixmap" /> for upload by Texture.
     /// <para>
-    ///     A call to <see cref="Prepare()" /> must precede a call to this method. Any
-    ///     internal data structures created in <see cref="Prepare()" /> should be
-    ///     disposed of here.
+    /// A call to <see cref="Prepare()" /> must precede a call to this method. Any
+    /// internal data structures created in <see cref="Prepare()" /> should be
+    /// disposed of here.
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
@@ -110,8 +110,8 @@ public interface ITextureData : IManaged
     /// OpenGL ES texture. A call to <see cref="Prepare()" /> must preceed a call
     /// to this method.
     /// <para>
-    ///     Any internal data structures created in <see cref="Prepare()" /> should be
-    ///     disposed of here.
+    /// Any internal data structures created in <see cref="Prepare()" /> should be
+    /// disposed of here.
     /// </para>
     /// </summary>
     public void ConsumeCustomData( int target );

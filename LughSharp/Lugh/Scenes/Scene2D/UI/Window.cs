@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Cameras;
 using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
@@ -35,10 +36,10 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// A table that can be dragged and act as a modal window. The top padding is
 /// used as the window's title height.
 /// <para>
-///     The preferred size of a window is the preferred size of the title text and
-///     the children as laid out by the table. After adding children to the window,
-///     it can be convenient to call <see cref="WidgetGroup.Pack" /> to size the
-///     window to the size of the children.
+/// The preferred size of a window is the preferred size of the title text and
+/// the children as laid out by the table. After adding children to the window,
+/// it can be convenient to call <see cref="WidgetGroup.Pack" /> to size the
+/// window to the size of the children.
 /// </para>
 /// </summary>
 [PublicAPI]

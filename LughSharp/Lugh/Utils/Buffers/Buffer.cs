@@ -98,58 +98,58 @@ public abstract class Buffer : IDisposable
     /// memory errors or performance issues.  MaxAllowedCapacity sets a reasonable limit.
     /// <br></br>
     /// <para>
-    ///     <b>Factors to Consider when Choosing a a value for MaxAllowedCapacity:</b>
+    /// <b>Factors to Consider when Choosing a a value for MaxAllowedCapacity:</b>
     /// </para>
     /// <para>
-    ///     <b>1. Typical Use Cases and Data Sizes:</b>
-    ///     <li>
-    ///         Small Buffers (Kilobytes to a few Megabytes): If your library is primarily intended
-    ///         for handling relatively small data structures, network packets, or configuration data,
-    ///         a smaller MaxAllowedCapacity might be appropriate.
-    ///     </li>
-    ///     <li>
-    ///         Medium Buffers (Megabytes to hundreds of Megabytes): For applications dealing with moderate-
-    ///         sized files, images, or intermediate data processing, a medium-sized limit might be suitable.
-    ///     </li>
-    ///     <li>
-    ///         Large Buffers (Gigabytes or more): If your project is designed for high-performance scenarios,
-    ///         large data sets, or memory-intensive operations (e.g., large file processing, in-memory databases,
-    ///         scientific computing), a larger MaxAllowedCapacity or even no default limit (relying on system
-    ///         memory limits) might be considered (with caution).
-    ///     </li>
-    ///     <br></br>
-    ///     <b>2. Memory Constraints of Target Environments:</b>
-    ///     <li>
-    ///         Resource-Constrained Environments (Mobile, Embedded, IoT): In environments with limited RAM, a
-    ///         smaller MaxAllowedCapacity is crucial to prevent out-of-memory errors and ensure efficient
-    ///         resource utilization. Defaults in the range of 100MB to 500MB or even lower might be more
-    ///         appropriate.
-    ///     </li>
-    ///     <li>
-    ///         Desktop/Server Environments: On systems with more abundant RAM, you can afford to set a higher
-    ///         value, but still want a reasonable limit to prevent runaway memory usage in case of programming
-    ///         errors or unexpected data growth. Defaults in the range of 1GB to a few GB might be more suitable.
-    ///     </li>
-    ///     <br></br>
-    ///     <b>3. Performance Implications of Resizing:</b>
-    ///     <li>
-    ///         Frequent resizing, especially of very large buffers, can have performance overhead due to memory
-    ///         allocation and data copying. A MaxAllowedCapacity helps to put a bound on how large a buffer can
-    ///         grow and potentially limits the worst-case resizing overhead.
-    ///     </li>
-    ///     <br></br>
-    ///     <b>4. Safety and Preventing Runaway Memory Usage:</b>
-    ///     <li>
-    ///         The primary purpose of MaxAllowedCapacity is to act as a safety net and prevent uncontrolled
-    ///         memory growth. A reasonable default should provide this safety without being overly restrictive
-    ///         in typical use cases.
-    ///     </li>
+    /// <b>1. Typical Use Cases and Data Sizes:</b>
+    /// <li>
+    /// Small Buffers (Kilobytes to a few Megabytes): If your library is primarily intended
+    /// for handling relatively small data structures, network packets, or configuration data,
+    /// a smaller MaxAllowedCapacity might be appropriate.
+    /// </li>
+    /// <li>
+    /// Medium Buffers (Megabytes to hundreds of Megabytes): For applications dealing with moderate-
+    /// sized files, images, or intermediate data processing, a medium-sized limit might be suitable.
+    /// </li>
+    /// <li>
+    /// Large Buffers (Gigabytes or more): If your project is designed for high-performance scenarios,
+    /// large data sets, or memory-intensive operations (e.g., large file processing, in-memory databases,
+    /// scientific computing), a larger MaxAllowedCapacity or even no default limit (relying on system
+    /// memory limits) might be considered (with caution).
+    /// </li>
+    /// <br></br>
+    /// <b>2. Memory Constraints of Target Environments:</b>
+    /// <li>
+    /// Resource-Constrained Environments (Mobile, Embedded, IoT): In environments with limited RAM, a
+    /// smaller MaxAllowedCapacity is crucial to prevent out-of-memory errors and ensure efficient
+    /// resource utilization. Defaults in the range of 100MB to 500MB or even lower might be more
+    /// appropriate.
+    /// </li>
+    /// <li>
+    /// Desktop/Server Environments: On systems with more abundant RAM, you can afford to set a higher
+    /// value, but still want a reasonable limit to prevent runaway memory usage in case of programming
+    /// errors or unexpected data growth. Defaults in the range of 1GB to a few GB might be more suitable.
+    /// </li>
+    /// <br></br>
+    /// <b>3. Performance Implications of Resizing:</b>
+    /// <li>
+    /// Frequent resizing, especially of very large buffers, can have performance overhead due to memory
+    /// allocation and data copying. A MaxAllowedCapacity helps to put a bound on how large a buffer can
+    /// grow and potentially limits the worst-case resizing overhead.
+    /// </li>
+    /// <br></br>
+    /// <b>4. Safety and Preventing Runaway Memory Usage:</b>
+    /// <li>
+    /// The primary purpose of MaxAllowedCapacity is to act as a safety net and prevent uncontrolled
+    /// memory growth. A reasonable default should provide this safety without being overly restrictive
+    /// in typical use cases.
+    /// </li>
     /// </para>
     /// <para>
-    ///     Note: When setting this value, properties <see cref="Capacity" /> and <see cref="Limit" />
-    ///     will be truncated to the new max allowed capacity if they are currently greater.
-    ///     If property <see cref="Position" /> is currently greater than the new Limit, it will be reset
-    ///     to zero.
+    /// Note: When setting this value, properties <see cref="Capacity" /> and <see cref="Limit" />
+    /// will be truncated to the new max allowed capacity if they are currently greater.
+    /// If property <see cref="Position" /> is currently greater than the new Limit, it will be reset
+    /// to zero.
     /// </para>
     /// </summary>
     public int MaxAllowedCapacity
@@ -257,16 +257,16 @@ public abstract class Buffer : IDisposable
     /// that the limit has already been set appropriately.
     /// <br />
     /// <para>
-    ///     <b>Usefulness:</b>
-    ///     <li>
-    ///         Re-reading Data: Allows you to reread the same data from the buffer multiple times without
-    ///         needing to create a new buffer or copy data. This is very efficient when you need to process
-    ///         the same data in different ways or multiple passes.
-    ///     </li>
-    ///     <li>
-    ///         Reprocessing: Useful in parsing, data analysis, or network protocols where you might need to
-    ///         re-examine the beginning of a buffer after some initial processing.
-    ///     </li>
+    /// <b>Usefulness:</b>
+    /// <li>
+    /// Re-reading Data: Allows you to reread the same data from the buffer multiple times without
+    /// needing to create a new buffer or copy data. This is very efficient when you need to process
+    /// the same data in different ways or multiple passes.
+    /// </li>
+    /// <li>
+    /// Reprocessing: Useful in parsing, data analysis, or network protocols where you might need to
+    /// re-examine the beginning of a buffer after some initial processing.
+    /// </li>
     /// </para>
     /// </summary>
     public virtual void Rewind()
@@ -280,21 +280,21 @@ public abstract class Buffer : IDisposable
     /// to be read from the current position onward.
     /// <br />
     /// <para>
-    ///     <b>Usefulness:</b>
-    ///     <li>
-    ///         Read Boundary Check: Essential for preventing IndexOutOfRangeException errors when reading
-    ///         sequentially. Before a Get...() operation, you can call Remaining() to check if there are enough
-    ///         elements/bytes left to read.
-    ///     </li>
-    ///     <li>
-    ///         Loop Control: Useful for loops that process data from the buffer sequentially. The loop can
-    ///         continue as long as Remaining() is greater than zero (or greater than the size of the element
-    ///         being read).
-    ///     </li>
-    ///     <li>
-    ///         Size Indication: Provides a dynamic indication of the amount of unread data within the buffer's
-    ///         current read window (between Position and Limit).
-    ///     </li>
+    /// <b>Usefulness:</b>
+    /// <li>
+    /// Read Boundary Check: Essential for preventing IndexOutOfRangeException errors when reading
+    /// sequentially. Before a Get...() operation, you can call Remaining() to check if there are enough
+    /// elements/bytes left to read.
+    /// </li>
+    /// <li>
+    /// Loop Control: Useful for loops that process data from the buffer sequentially. The loop can
+    /// continue as long as Remaining() is greater than zero (or greater than the size of the element
+    /// being read).
+    /// </li>
+    /// <li>
+    /// Size Indication: Provides a dynamic indication of the amount of unread data within the buffer's
+    /// current read window (between Position and Limit).
+    /// </li>
     /// </para>
     /// </summary>
     public abstract int Remaining();
@@ -342,12 +342,12 @@ public abstract class Buffer : IDisposable
     /// need to be adjusted after shrinking to remain valid within the new, smaller capacity.
     /// <br />
     /// <para>
-    ///     <b>Usefulness:</b>
-    ///     <li>
-    ///         Memory Optimization: Important in memory-constrained environments or when dealing with long-lived
-    ///         buffers that might hold varying amounts of data over time. Reduces memory footprint by releasing
-    ///         unused capacity.
-    ///     </li>
+    /// <b>Usefulness:</b>
+    /// <li>
+    /// Memory Optimization: Important in memory-constrained environments or when dealing with long-lived
+    /// buffers that might hold varying amounts of data over time. Reduces memory footprint by releasing
+    /// unused capacity.
+    /// </li>
     /// </para>
     /// </summary>
     public virtual void Shrink()
@@ -388,16 +388,16 @@ public abstract class Buffer : IDisposable
     /// Reset() is called. If Mark() has not been called, Reset() might have undefined behavior.
     /// <br />
     /// <para>
-    ///     <b>Usefulness:</b>
-    ///     <li>
-    ///         Backtracking/Navigation: Allows you to temporarily explore data in the buffer (read ahead),
-    ///         and then easily return to a previously saved position to continue processing from there.
-    ///         Useful in parsing scenarios where you might need to "peek ahead" but then backtrack if a
-    ///         certain condition is not met.
-    ///     </li>
-    ///     <li>
-    ///         State Management: Provides a way to save and restore the read/write position within the buffer.
-    ///     </li>
+    /// <b>Usefulness:</b>
+    /// <li>
+    /// Backtracking/Navigation: Allows you to temporarily explore data in the buffer (read ahead),
+    /// and then easily return to a previously saved position to continue processing from there.
+    /// Useful in parsing scenarios where you might need to "peek ahead" but then backtrack if a
+    /// certain condition is not met.
+    /// </li>
+    /// <li>
+    /// State Management: Provides a way to save and restore the read/write position within the buffer.
+    /// </li>
     /// </para>
     /// </summary>
     public virtual void Reset()

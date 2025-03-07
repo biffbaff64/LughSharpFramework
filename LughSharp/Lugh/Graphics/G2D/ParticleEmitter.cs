@@ -2174,9 +2174,9 @@ public class ParticleEmitter
     /// the IBatch from being flushed repeatedly if consecutive ParticleEmitters
     /// with the same additive or pre-multiplied alpha state are drawn in a row.
     /// <para>
-    ///     IMPORTANT: If set to false and if the next object to use this IBatch expects
-    ///     alpha blending, you are responsible for setting the IBatch's blend function
-    ///     to (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) before that next object is drawn.
+    /// IMPORTANT: If set to false and if the next object to use this IBatch expects
+    /// alpha blending, you are responsible for setting the IBatch's blend function
+    /// to (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) before that next object is drawn.
     /// </para>
     /// </summary>
     public bool CleansUpBlendFunction { get; set; } = true;

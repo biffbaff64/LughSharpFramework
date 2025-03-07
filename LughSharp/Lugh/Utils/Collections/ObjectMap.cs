@@ -32,17 +32,17 @@ namespace LughSharp.Lugh.Utils.Collections;
 /// <para>Null keys are not allowed.</para>
 /// <para>No allocation is done except when growing the table size.</para>
 /// <para>
-///     This class performs fast contains and remove (typically O(1), worst case O(n) but
-///     that is rare in practice). Add may be slightly slower, depending on hash collisions.
-///     Hashcodes are rehashed to reduce collisions and the need to resize. Load factors
-///     greater than 0.91 greatly increase the chances to resize to the next higher POT size.
-///     Unordered sets and maps are not designed to provide especially fast iteration.
+/// This class performs fast contains and remove (typically O(1), worst case O(n) but
+/// that is rare in practice). Add may be slightly slower, depending on hash collisions.
+/// Hashcodes are rehashed to reduce collisions and the need to resize. Load factors
+/// greater than 0.91 greatly increase the chances to resize to the next higher POT size.
+/// Unordered sets and maps are not designed to provide especially fast iteration.
 /// </para>
 /// <para>
-///     This implementation uses linear probing with the backward shift algorithm for removal.
-///     Hashcodes are rehashed using Fibonacci hashing, instead of the more common power-of-two
-///     mask, to better distribute poor hashCodes (see Malte Skarupke's blog post). Linear
-///     probing continues to work even when all hashCodes collide, just more slowly.
+/// This implementation uses linear probing with the backward shift algorithm for removal.
+/// Hashcodes are rehashed using Fibonacci hashing, instead of the more common power-of-two
+/// mask, to better distribute poor hashCodes (see Malte Skarupke's blog post). Linear
+/// probing continues to work even when all hashCodes collide, just more slowly.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -122,25 +122,25 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// <summary>
     /// Returns an index between 0 and <see cref="Mask" /> for the specified <c>item</c>.
     /// <para>
-    ///     The default implementation uses Fibonacci hashing based on the <c>item.GetHashCode()</c>.
-    ///     The hash code is multiplied by a constant (2 to the 64th, divided by the golden ratio),
-    ///     and the uppermost bits are shifted to obtain an index within the desired range.
-    ///     This method can handle even poor hash codes, preventing high collision rates.
-    ///     However, it may have increased collision rates when most hash codes are multiples
-    ///     of larger Fibonacci numbers.
+    /// The default implementation uses Fibonacci hashing based on the <c>item.GetHashCode()</c>.
+    /// The hash code is multiplied by a constant (2 to the 64th, divided by the golden ratio),
+    /// and the uppermost bits are shifted to obtain an index within the desired range.
+    /// This method can handle even poor hash codes, preventing high collision rates.
+    /// However, it may have increased collision rates when most hash codes are multiples
+    /// of larger Fibonacci numbers.
     /// </para>
     /// <para>
-    ///     For more details, see
-    ///     <a
-    ///         href="https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/">
-    ///         Malte Skarupke's blog post
-    ///     </a>
+    /// For more details, see
+    /// <a
+    /// href="https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/">
+    /// Malte Skarupke's blog post
+    /// </a>
     /// </para>
     /// <para>
-    ///     You can override this method to customize hashing. This might be useful, for instance,
-    ///     in cases where most hash codes are Fibonacci numbers, when keys have poor or incorrect
-    ///     hash codes, or when high-quality hash codes negate the need for Fibonacci hashing.
-    ///     Example: <c>return item.GetHashCode() &amp; Mask;</c>
+    /// You can override this method to customize hashing. This might be useful, for instance,
+    /// in cases where most hash codes are Fibonacci numbers, when keys have poor or incorrect
+    /// hash codes, or when high-quality hash codes negate the need for Fibonacci hashing.
+    /// Example: <c>return item.GetHashCode() &amp; Mask;</c>
     /// </para>
     /// </summary>
     /// <param name="item">The item to calculate the index for.</param>
@@ -228,11 +228,11 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// <param name="map">The source map containing the key-value pairs to copy.</param>
     /// <remarks>
     /// <para>
-    ///     This method ensures that the current collection has sufficient capacity
-    ///     to accommodate the key-value pairs from the <paramref name="map" />. Then,
-    ///     it iterates through the key table, copying each non-null key along with
-    ///     its associated value from the <paramref name="map" /> into the current
-    ///     collection using the <see cref="Put" /> method.
+    /// This method ensures that the current collection has sufficient capacity
+    /// to accommodate the key-value pairs from the <paramref name="map" />. Then,
+    /// it iterates through the key table, copying each non-null key along with
+    /// its associated value from the <paramref name="map" /> into the current
+    /// collection using the <see cref="Put" /> method.
     /// </para>
     /// </remarks>
     /// <typeparam name="TK">The type of the keys in the collection.</typeparam>
@@ -287,9 +287,9 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// </returns>
     /// <remarks>
     /// <para>
-    ///     This method searches the collection for the given <paramref name="key" /> using
-    ///     the <see cref="LocateKey" /> method. If the key is found, the associated value is
-    ///     returned; otherwise, the provided <paramref name="defaultValue" /> is returned.
+    /// This method searches the collection for the given <paramref name="key" /> using
+    /// the <see cref="LocateKey" /> method. If the key is found, the associated value is
+    /// returned; otherwise, the provided <paramref name="defaultValue" /> is returned.
     /// </para>
     /// </remarks>
     /// <typeparam name="TK">The type of the keys in the collection.</typeparam>
@@ -663,9 +663,9 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// <summary>
     /// Returns an iterator for the entries in the map. Remove is supported.
     /// <para>
-    ///     If Collections.allocateIterators is false, the same iterator instance
-    ///     is returned each time this method is called. Use the ObjectMap.Entries
-    ///     constructor for nested or multithreaded iteration.
+    /// If Collections.allocateIterators is false, the same iterator instance
+    /// is returned each time this method is called. Use the ObjectMap.Entries
+    /// constructor for nested or multithreaded iteration.
     /// </para>
     /// </summary>
     /// <returns></returns>
@@ -703,9 +703,9 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// <summary>
     /// Returns an iterator for the values in the map. Remove is supported.
     /// <para>
-    ///     If Collections.allocateIterators is false, the same iterator instance is
-    ///     returned each time this method is called. Use the ObjectMap.Values
-    ///     constructor for nested or multithreaded iteration.
+    /// If Collections.allocateIterators is false, the same iterator instance is
+    /// returned each time this method is called. Use the ObjectMap.Values
+    /// constructor for nested or multithreaded iteration.
     /// </para>
     /// </summary>
     /// <returns></returns>
@@ -744,9 +744,9 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// <summary>
     /// Returns an iterator for the keys in the map. Remove is supported.
     /// <para>
-    ///     If Collections.allocateIterators is false, the same iterator instance
-    ///     is returned each time this method is called. Use the ObjectMap.Keys
-    ///     constructor for nested or multithreaded iteration.
+    /// If Collections.allocateIterators is false, the same iterator instance
+    /// is returned each time this method is called. Use the ObjectMap.Keys
+    /// constructor for nested or multithreaded iteration.
     /// </para>
     /// </summary>
     /// <returns></returns>
@@ -1212,14 +1212,14 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// Used by <see cref="Place" /> to bit shift the upper bits of a <b>long</b>
     /// into a usable range (&gt;= 0 and &lt;= <see cref="Mask" />).
     /// <para>
-    ///     The shift can be negative, which is convenient to match the number of bits in
-    ///     mask: if mask is a 7-bit number, a shift of -7 shifts the upper 7 bits into the
-    ///     lowest 7 positions. This class sets the shift &gt; 32 and &lt; 64, which if used
-    ///     with an int will still move the upper bits of an int to the lower bits.
+    /// The shift can be negative, which is convenient to match the number of bits in
+    /// mask: if mask is a 7-bit number, a shift of -7 shifts the upper 7 bits into the
+    /// lowest 7 positions. This class sets the shift &gt; 32 and &lt; 64, which if used
+    /// with an int will still move the upper bits of an int to the lower bits.
     /// </para>
     /// <para>
-    ///     <see cref="Mask" /> can also be used to mask the low bits of a number, which may
-    ///     be faster for some hashcodes if <see cref="Place" /> is overridden.
+    /// <see cref="Mask" /> can also be used to mask the low bits of a number, which may
+    /// be faster for some hashcodes if <see cref="Place" /> is overridden.
     /// </para>
     /// </summary>
     protected int Shift { get; set; }

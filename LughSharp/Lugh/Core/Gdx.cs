@@ -107,17 +107,17 @@ public class Gdx
     /// <summary>
     /// From Wiktionary...
     /// <para>
-    ///     "1. (video games) A game mode where the player character is invulnerable to
-    ///     damage, typically activated by entering a cheat code."
+    /// "1. (video games) A game mode where the player character is invulnerable to
+    /// damage, typically activated by entering a cheat code."
     /// </para>
     /// <para>
-    ///     "2. (video games) A mode of play in (mostly) roguelike games, allowing the
-    ///     player to create objects on demand, to be resurrected in the case of death,
-    ///     etc."
+    /// "2. (video games) A mode of play in (mostly) roguelike games, allowing the
+    /// player to create objects on demand, to be resurrected in the case of death,
+    /// etc."
     /// </para>
     /// <para>
-    ///     Note: Only the flag is provided by this library. It is intended for use in
-    ///     your local game code.
+    /// Note: Only the flag is provided by this library. It is intended for use in
+    /// your local game code.
     /// </para>
     /// </summary>
     public bool GodMode { get; set; } = false;

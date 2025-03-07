@@ -36,8 +36,8 @@ namespace LughSharp.Lugh.Utils;
 /// <li>Debug messages will not work if (TraceLevel &amp; LOG_DEBUG) is false.</li>
 /// <li>Error Debug messages will not work if (TraceLevel &amp; LOG_ERROR) is false.</li>
 /// <para>
-///     To enable writing to file, <see cref="EnableWriteToFile" /> must be TRUE
-///     and <see cref="OpenDebugFile" /> must be called.
+/// To enable writing to file, <see cref="EnableWriteToFile" /> must be TRUE
+/// and <see cref="OpenDebugFile" /> must be called.
 /// </para>
 /// </summary>
 [PublicAPI]

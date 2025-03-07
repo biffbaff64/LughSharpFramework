@@ -25,7 +25,7 @@
 using System.Drawing;
 
 using LughSharp.Lugh.Graphics.Cameras;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Collections;
@@ -55,7 +55,7 @@ public class ScissorStack
     /// stack rectangle. In case no scissor is yet on the stack this will also enable
     /// <see cref="IGL.GL_SCISSOR_TEST" /> automatically.
     /// <para>
-    ///     Any drawing should be flushed before pushing scissors.
+    /// Any drawing should be flushed before pushing scissors.
     /// </para>
     /// </summary>
     /// <returns>
@@ -117,7 +117,7 @@ public class ScissorStack
     /// area to the new top of stack rectangle. In case no more rectangles are on
     /// the stack, <see cref="IGL.GL_SCISSOR_TEST" /> is disabled.
     /// <para>
-    ///     Any drawing should be flushed before popping scissors.
+    /// Any drawing should be flushed before popping scissors.
     /// </para>
     /// </summary>
     public static RectangleShape PopScissors()

@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
@@ -36,24 +36,24 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// <summary>
 /// A Texture wraps a standard OpenGL ES texture.
 /// <para>
-///     A Texture can be managed. If the OpenGL context is lost all managed textures
-///     get invalidated. This happens when a user switches to another application or
-///     receives an incoming call on mobile devices.
-///     Managed textures get reloaded automatically.
+/// A Texture can be managed. If the OpenGL context is lost all managed textures
+/// get invalidated. This happens when a user switches to another application or
+/// receives an incoming call on mobile devices.
+/// Managed textures get reloaded automatically.
 /// </para>
 /// <para>
-///     A Texture has to be bound via the <see cref="Texture.Bind()" /> method in order
-///     for it to be applied to geometry. The texture will be bound to the currently
-///     active texture unit specified via <see cref="OpenGL.GLBindings.ActiveTexture(int)" />,
-///     or <see cref="OpenGL.GLBindings.ActiveTexture(TextureUnit)" />.
+/// A Texture has to be bound via the <see cref="Texture.Bind()" /> method in order
+/// for it to be applied to geometry. The texture will be bound to the currently
+/// active texture unit specified via <see cref="OpenGL.GLBindings.ActiveTexture(int)" />,
+/// or <see cref="OpenGL.GLBindings.ActiveTexture(TextureUnit)" />.
 /// </para>
 /// <para>
-///     You can draw <see cref="Pixmap" />s to a texture at any time. The changes will
-///     be automatically uploaded to texture memory. This is of course not extremely
-///     fast so use it with care. It also only works with unmanaged textures.
+/// You can draw <see cref="Pixmap" />s to a texture at any time. The changes will
+/// be automatically uploaded to texture memory. This is of course not extremely
+/// fast so use it with care. It also only works with unmanaged textures.
 /// </para>
 /// <para>
-///     A Texture must be disposed when it is no longer used
+/// A Texture must be disposed when it is no longer used
 /// </para>
 /// </summary>
 [PublicAPI]

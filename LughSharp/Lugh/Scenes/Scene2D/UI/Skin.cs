@@ -26,6 +26,7 @@ using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -38,15 +39,15 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 /// A skin stores resources for UI widgets to use (texture regions, ninepatches,
 /// fonts, colors, etc). Resources are named and can be looked up by name and type.
 /// <para>
-///     Resources can be described in JSON.
+/// Resources can be described in JSON.
 /// </para>
 /// <para>
-///     Skin provides useful conversions, such as allowing access to regions in the
-///     atlas as ninepatches, sprites, drawables, etc. The get* methods return an
-///     instance of the object in the skin.
+/// Skin provides useful conversions, such as allowing access to regions in the
+/// atlas as ninepatches, sprites, drawables, etc. The get* methods return an
+/// instance of the object in the skin.
 /// </para>
 /// <para>
-///     The new* methods return a copy of an instance in the skin.
+/// The new* methods return a copy of an instance in the skin.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -129,7 +130,7 @@ public class Skin : IDisposable
     /// Creates a skin containing the resources in the specified skin JSON
     /// file and the texture regions from the specified atlas.
     /// <para>
-    ///     The atlas is automatically disposed when the skin is disposed.
+    /// The atlas is automatically disposed when the skin is disposed.
     /// </para>
     /// </summary>
     public Skin( FileInfo skinFile, TextureAtlas atlas )
@@ -161,12 +162,12 @@ public class Skin : IDisposable
     /// <summary>
     /// The scale used to size drawables created by this skin.
     /// <para>
-    ///     This can be useful when scaling an entire UI (eg with a stage's viewport)
-    ///     then using an atlas with images whose resolution matches the UI scale.
-    ///     The skin can then be scaled the opposite amount so that the larger or smaller
-    ///     images are drawn at the original size. For example, if the UI is scaled 2x,
-    ///     the atlas would have images that are twice the size, then the skin's scale
-    ///     would be set to 0.5.
+    /// This can be useful when scaling an entire UI (eg with a stage's viewport)
+    /// then using an atlas with images whose resolution matches the UI scale.
+    /// The skin can then be scaled the opposite amount so that the larger or smaller
+    /// images are drawn at the original size. For example, if the UI is scaled 2x,
+    /// the atlas would have images that are twice the size, then the skin's scale
+    /// would be set to 0.5.
     /// </para>
     /// </summary>
     public float Scale { get; set; }

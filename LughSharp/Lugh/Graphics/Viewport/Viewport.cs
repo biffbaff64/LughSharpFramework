@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Cameras;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;

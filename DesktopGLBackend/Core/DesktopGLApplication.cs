@@ -33,7 +33,7 @@ using DesktopGLBackend.Window;
 
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Network;
 using LughSharp.Lugh.Utils;
@@ -577,10 +577,10 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// Creates a new <see cref="DesktopGLWindow" /> using the provided listener and
     /// <see cref="DesktopGLWindowConfiguration" />.
     /// <para>
-    ///     This function only instantiates a <see cref="DesktopGLWindow" /> and
-    ///     returns immediately. The actual window creation is postponed with
-    ///     <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)" /> until after all
-    ///     existing windows are updated.
+    /// This function only instantiates a <see cref="DesktopGLWindow" /> and
+    /// returns immediately. The actual window creation is postponed with
+    /// <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)" /> until after all
+    /// existing windows are updated.
     /// </para>
     /// </summary>
     public DesktopGLWindow NewWindow( IApplicationListener listener, DesktopGLWindowConfiguration windowConfig )

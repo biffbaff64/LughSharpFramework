@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.GLUtils;
+using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
@@ -245,12 +245,12 @@ public class Actor : IActor, IComparable< Actor >
     /// Draws the actor. The batch is configured to draw in the parent's coordinate system. This
     /// draw method is convenient to draw a rotated and scaled TextureRegion.
     /// <para>
-    ///     <see cref="IBatch.Begin()" /> has already been called on the batch. If <see cref="IBatch.End()" />
-    ///     is called to draw without the batch then <see cref="IBatch.Begin()" /> must be called before
-    ///     the method returns.
+    /// <see cref="IBatch.Begin()" /> has already been called on the batch. If <see cref="IBatch.End()" />
+    /// is called to draw without the batch then <see cref="IBatch.Begin()" /> must be called before
+    /// the method returns.
     /// </para>
     /// <para>
-    ///     <b>The default implementation does nothing. Child classes should override and implement.</b>
+    /// <b>The default implementation does nothing. Child classes should override and implement.</b>
     /// </para>
     /// </summary>
     /// <param name="batch"> The <see cref="IBatch" /> to use. </param>
@@ -313,18 +313,18 @@ public class Actor : IActor, IComparable< Actor >
     /// ascendants as necessary. If this actor is not in the stage, the stage must be
     /// set before calling this method.
     /// <para>
-    ///     Events are fired in 2 phases:
-    ///     <li>
-    ///         The first phase (the "capture" phase) notifies listeners on each actor starting
-    ///         at the root and propagating down the hierarchy to (and including) this actor.
-    ///     </li>
-    ///     <li>
-    ///         The second phase notifies listeners on each actor starting at this actor and, if
-    ///         <see cref="Event.Bubbles()" /> is true, propagating upward to the root.
-    ///     </li>
+    /// Events are fired in 2 phases:
+    /// <li>
+    /// The first phase (the "capture" phase) notifies listeners on each actor starting
+    /// at the root and propagating down the hierarchy to (and including) this actor.
+    /// </li>
+    /// <li>
+    /// The second phase notifies listeners on each actor starting at this actor and, if
+    /// <see cref="Event.Bubbles()" /> is true, propagating upward to the root.
+    /// </li>
     /// </para>
     /// <para>
-    ///     If the event is stopped at any time, it will not propagate to the next actor.
+    /// If the event is stopped at any time, it will not propagate to the next actor.
     /// </para>
     /// </summary>
     /// <param name="ev"> The <see cref="Event" /> to fire. </param>
@@ -417,14 +417,14 @@ public class Actor : IActor, IComparable< Actor >
     /// <summary>
     /// Responsible for notifying event listeners of an event.
     /// <para>
-    ///     This method first verifies that the event has a valid target actor. Depending on
-    ///     whether the event is in the capture phase, it selects the appropriate listener list.
-    ///     It then iterates through these listeners and notifies them of the event. If any
-    ///     listener handles the event, the event is marked as handled.
+    /// This method first verifies that the event has a valid target actor. Depending on
+    /// whether the event is in the capture phase, it selects the appropriate listener list.
+    /// It then iterates through these listeners and notifies them of the event. If any
+    /// listener handles the event, the event is marked as handled.
     /// </para>
     /// <para>
-    ///     If an exception occurs during this process, a new exception is thrown with additional
-    ///     context.
+    /// If an exception occurs during this process, a new exception is thrown with additional
+    /// context.
     /// </para>
     /// </summary>
     /// <param name="ev"> The event. </param>
@@ -484,12 +484,12 @@ public class Actor : IActor, IComparable< Actor >
     /// local coordinate system (0,0 is the bottom left of the actor and width, height is
     /// the upper right).
     /// <para>
-    ///     This method is used to delegate touchDown, mouse, and enter/exit events.
+    /// This method is used to delegate touchDown, mouse, and enter/exit events.
     /// </para>
     /// <para>
-    ///     If this method returns null, those events will not occur on this Actor. The default
-    ///     implementation returns this actor if the point is within this actor's bounds and
-    ///     this actor is visible.
+    /// If this method returns null, those events will not occur on this Actor. The default
+    /// implementation returns this actor if the point is within this actor's bounds and
+    /// this actor is visible.
     /// </para>
     /// </summary>
     /// <param name="x"></param>

@@ -44,7 +44,7 @@ public class BMPFormatStructs
 
     // ========================================================================
     /// <summary>
-    /// BMP Info Header Structure.
+    /// BMP Info Header Structure. Do not change this layout order.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]
@@ -65,7 +65,7 @@ public class BMPFormatStructs
 
     // ========================================================================
     /// <summary>
-    /// BMP Color Header Structure.
+    /// BMP Color Header Structure. Do not change this layout order.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]
