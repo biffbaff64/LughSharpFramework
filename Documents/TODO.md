@@ -480,7 +480,7 @@ GRAPHICS/TEXTUREPACKER
     CODE   DOCUMENT
     ----   --------
     - DONE - IP   - ColorBleedEffect
-    - IP   -      - GridPacker
+    - DONE -      - GridPacker
     -      -      - ImageProcessor
     -      -      - MaxRectsPacker
     - IP   -      - TexturePacker

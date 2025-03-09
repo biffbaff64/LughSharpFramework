@@ -26,7 +26,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace LughSharp.Lugh.Graphics.TexturePacker;
+namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
 public class ColorBleedEffect

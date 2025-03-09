@@ -1,7 +1,7 @@
-// /////////////////////////////////////////////////////////////////////////////
+﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin
+//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,32 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.TexturePacker;
+using System.Drawing.Drawing2D;
+using System.Runtime.Versioning;
+
+namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
-public class TexturePackerTest
+public enum Resampling
 {
+    Nearest,
+    Bilinear,
+    Bicubic,
+}
+
+[PublicAPI]
+public static class ResamplingExtensions
+{
+    //TODO:
+    [SupportedOSPlatform("windows")]
+    public static InterpolationMode ToInterpolationMode( this Resampling resampling )
+    {
+        return resampling switch
+        {
+            Resampling.Nearest  => InterpolationMode.NearestNeighbor,
+            Resampling.Bilinear => InterpolationMode.Bilinear,
+            Resampling.Bicubic  => InterpolationMode.Bicubic,
+            var _               => InterpolationMode.Default
+        };
+    }
 }

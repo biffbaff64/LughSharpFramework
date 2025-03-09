@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.Packing;
+
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
@@ -117,5 +119,10 @@ public class SortUtils
     {
         var comparableTimSort = new ComparableTimSort< T >();
         comparableTimSort.DoSort( a, from, to );
+    }
+
+    public void Sort< T >( List< T >? list, Comparison< T > rectComparator )
+    {
+        throw new NotImplementedException();
     }
 }

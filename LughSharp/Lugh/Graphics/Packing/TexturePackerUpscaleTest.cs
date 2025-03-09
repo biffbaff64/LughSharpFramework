@@ -22,9 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.TexturePacker;
+namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
-public class TexturePackerFileProcessor
+public class TexturePackerUpscaleTest
 {
 }
