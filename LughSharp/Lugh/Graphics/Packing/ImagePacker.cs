@@ -28,7 +28,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace LughSharp.Lugh.Graphics.ImagePacker;
+namespace LughSharp.Lugh.Graphics.Packing;
 
 /// <summary>
 /// A simple image packer class based on the nice algorithm by blackpawn.

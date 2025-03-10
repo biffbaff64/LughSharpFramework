@@ -30,6 +30,7 @@ namespace LughSharp.Lugh.Graphics.Packing;
 [PublicAPI]
 public enum Resampling
 {
+    None,
     Nearest,
     Bilinear,
     Bicubic,
@@ -47,7 +48,7 @@ public static class ResamplingExtensions
             Resampling.Nearest  => InterpolationMode.NearestNeighbor,
             Resampling.Bilinear => InterpolationMode.Bilinear,
             Resampling.Bicubic  => InterpolationMode.Bicubic,
-            var _               => InterpolationMode.Default
+            var _               => InterpolationMode.Default,
         };
     }
 }

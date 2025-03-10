@@ -70,24 +70,18 @@ public class TexturePacker
         {
             if ( ( settings.maxWidth % 4 ) != 0 )
             {
-                throw new GdxRuntimeException( $"If mod4 is true, maxWidth must be evenly divisible by 4: {settings.maxWidth}" );
+                throw new GdxRuntimeException( $"If mod4 is true, maxWidth must be evenly " +
+                                               $"divisible by 4: {settings.maxWidth}" );
             }
 
             if ( ( settings.maxHeight % 4 ) != 0 )
             {
-                throw new GdxRuntimeException( $"If mod4 is true, maxHeight must be evenly divisible by 4: {settings.maxHeight}" );
+                throw new GdxRuntimeException( $"If mod4 is true, maxHeight must be evenly " +
+                                               $"divisible by 4: {settings.maxHeight}" );
             }
         }
 
-        if ( settings.grid )
-        {
-            _packer = new GridPacker( settings );
-        }
-        else
-        {
-            _packer = new MaxRectsPacker( settings );
-        }
-
+        _packer         = settings.grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
         _imageProcessor = NewImageProcessor( settings );
 
         SetRootDir( rootDir );
@@ -112,15 +106,7 @@ public class TexturePacker
             return;
         }
 
-        try
-        {
-            RootPath = rootDir.GetCanonicalPath();
-        }
-        catch ( IOException ex )
-        {
-            RootPath = rootDir.GetAbsolutePath();
-        }
-
+        RootPath = Path.GetFullPath( rootDir.FullName );
         RootPath = RootPath.Replace( '\\', '/' );
 
         if ( !RootPath.EndsWith( '/' ) )
@@ -163,30 +149,22 @@ public class TexturePacker
             packFileName = packFileName.Substring( 0, packFileName.Length - _settings.atlasExtension.Length );
         }
 
-        outputDir.mkdirs();
+        Directory.CreateDirectory( outputDir.FullName );
 
-//        if ( _progressListener == null )
-//        {
-//            _progressListener = new ProgressListener()
-//            {
-//                public void Progress(float progress)
-//                {
-//                }
-//            };
-//        }
-
+        _progressListener ??= new ProgressListenerImpl();
         _progressListener.Start( 1 );
+
         var n = _settings.scale.Length;
 
         for ( var i = 0; i < n; i++ )
         {
             _progressListener.Start( 1f / n );
 
-            _imageProcessor.SetScale( _settings.scale[ i ] );
+            _imageProcessor.Scale = _settings.scale[ i ];
 
             if ( ( _settings.scaleResampling != null )
                  && ( _settings.scaleResampling.Length > i )
-                 && ( _settings.scaleResampling[ i ] != null ) )
+                 && ( _settings.scaleResampling[ i ] != Resampling.None ) )
             {
                 _imageProcessor.SetResampling( _settings.scaleResampling[ i ] );
             }
@@ -218,9 +196,9 @@ public class TexturePacker
 
             _progressListener.Start( 0.35f );
             _progressListener.Count = 0;
-            _progressListener.Total = _imageProcessor.Images.size;
+            _progressListener.Total = _imageProcessor.GetImages().Count;
 
-            var pages = _packer.Pack( _progressListener, _imageProcessor.Images );
+            var pages = _packer.Pack( _progressListener, _imageProcessor.GetImages() );
 
             _progressListener.End();
 
@@ -230,10 +208,9 @@ public class TexturePacker
 
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
 
-            writeImages( outputDir, scaledPackFileName, pages );
+            WriteImages( outputDir, scaledPackFileName, pages );
 
             _progressListener.End();
-
             _progressListener.Start( 0.01f );
 
             try
@@ -257,18 +234,17 @@ public class TexturePacker
         _progressListener.End();
     }
 
-    private void writeImages( FileInfo outputDir, string scaledPackFileName, List< Page > pages )
+    private void WriteImages( FileInfo outputDir, string scaledPackFileName, List< Page > pages )
     {
-        var      packFileNoExt = new FileInfo( outputDir, scaledPackFileName );
-        FileInfo packDir       = packFileNoExt.getParentFile();
-        string   imageName     = packFileNoExt.getName();
-
-        var fileIndex = 1;
+        var fileName      = Path.Combine( outputDir.FullName, scaledPackFileName );
+        var packFileNoExt = new FileInfo( fileName );
+        var packDir       = Directory.GetParent( packFileNoExt.Name );
+        var imageName     = packFileNoExt.Name;
+        var fileIndex     = 1;
 
         for ( int p = 0, pn = pages.Count; p < pn; p++ )
         {
-            var page = pages[ p ];
-
+            var page   = pages[ p ];
             var width  = page.Width;
             var height = page.Height;
 
@@ -315,10 +291,12 @@ public class TexturePacker
                 if ( fileIndex > 1 )
                 {
                     // Last character is a digit or a digit + 'x'.
-                    char last = name.charAt( name.Length - 1 );
+                    var last = name[ name.Length - 1 ];
 
-                    if ( Character.isDigit( last )
-                         || ( ( name.Length > 3 ) && ( last == 'x' ) && Character.isDigit( name.charAt( name.Length - 2 ) ) ) )
+                    if ( char.IsDigit( last )
+                         || ( ( name.Length > 3 )
+                              && ( last == 'x' )
+                              && char.IsDigit( name[ name.Length - 2 ] ) ) )
                     {
                         name += "-";
                     }
@@ -327,26 +305,30 @@ public class TexturePacker
                 }
 
                 fileIndex++;
-                outputFile = new FileInfo( packDir, name + "." + _settings.outputFormat );
 
-                if ( !outputFile.Exists() ) break;
+                var fp = Path.Combine( packDir!.Name, $"{name}.{_settings.outputFormat}" );
+                outputFile = new FileInfo( fp );
+
+                if ( !File.Exists( outputFile.FullName ) )
+                {
+                    break;
+                }
             }
 
-            new FileHandle( outputFile ).parent().mkdirs();
-            page.imageName = outputFile.getName();
+            Directory.CreateDirectory( Path.GetDirectoryName( outputFile.FullName ) );
+            page.ImageName = Path.GetFileName( outputFile.FullName );
 
-            var        canvas = new BufferedImage( width, height, getBufferedImageType( settings.format ) );
-            Graphics2D g      = ( Graphics2D )canvas.getGraphics();
+            var canvas = new BufferedImage( width, height, GetBufferedImageType( _settings.format ) );
+            var g      = System.Drawing.Graphics.FromImage( canvas.GetImage() );
 
-            if ( !settings.silent ) System.out.
-            println( "Writing " + canvas.getWidth() + "x" + canvas.getHeight() + ": " + outputFile );
+            if ( !_settings.silent ) Console.WriteLine( $"Writing {canvas.Width}x{canvas.Height}: {outputFile}" );
 
-            _progressListener.start( 1 / ( float )pn );
+            _progressListener.Start( 1 / ( float )pn );
 
-            for ( int r = 0, rn = page.outputRects.size; r < rn; r++ )
+            for ( int r = 0, rn = page.OutputRects.Count; r < rn; r++ )
             {
                 Rect rect  = page.OutputRects[ r ];
-                var  image = rect.getImage( _imageProcessor );
+                var  image = rect.GetImage( _imageProcessor );
                 int  iw    = image.Width;
                 int  ih    = image.Height;
                 int  rectX = page.X + rect.X;
@@ -421,11 +403,11 @@ public class TexturePacker
 
                 copy( image, 0, 0, iw, ih, canvas, rectX, rectY, rect.Rotated );
 
-                if ( _settings.debug )
-                {
-                    g.setColor( Color.Magenta );
-                    g.drawRect( rectX, rectY, rect.Width - _settings.paddingX - 1, rect.Height - _settings.paddingY - 1 );
-                }
+//                if ( _settings.debug )
+//                {
+//                    g.SetColor( Color.Magenta );
+//                    g.DrawRectangle( rectX, rectY, rect.Width - _settings.paddingX - 1, rect.Height - _settings.paddingY - 1 );
+//                }
 
                 if ( _progressListener.Update( r + 1, rn ) )
                 {
@@ -435,72 +417,72 @@ public class TexturePacker
 
             _progressListener.End();
 
-            if ( _settings is { bleed: true, premultiplyAlpha: false }
-                 && !( string.Equals( _settings.outputFormat, "jpg", StringComparison.Ordinal )
-                       || string.Equals( _settings.outputFormat, "jpeg", StringComparison.Ordinal ) )
-            {
-                canvas = new ColorBleedEffect().ProcessImage( canvas, _settings.bleedIterations );
-                g      = ( Graphics2D )canvas.getGraphics();
-            }
+//            if ( _settings is { bleed: true, premultiplyAlpha: false }
+//                 && !( string.Equals( _settings.outputFormat, "jpg", StringComparison.Ordinal )
+//                       || string.Equals( _settings.outputFormat, "jpeg", StringComparison.Ordinal ) )
+//            {
+//                canvas = new ColorBleedEffect().ProcessImage( canvas, _settings.bleedIterations );
+//                g      = ( Graphics2D )canvas.getGraphics();
+//            }
 
-            if ( _settings.debug )
-            {
-                g.setColor( Color.magenta );
-                g.drawRect( 0, 0, width - 1, height - 1 );
-            }
+//            if ( _settings.debug )
+//            {
+//                g.setColor( Color.magenta );
+//                g.drawRect( 0, 0, width - 1, height - 1 );
+//            }
 
-            ImageOutputStream ios = null;
+//            ImageOutputStream ios = null;
 
-            try
-            {
-                if ( _settings.outputFormat.equalsIgnoreCase( "jpg" ) || _settings.outputFormat.equalsIgnoreCase( "jpeg" ) )
-                {
-                    var newImage = new BufferedImage( canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_3BYTE_BGR );
-                    newImage.getGraphics().drawImage( canvas, 0, 0, null );
-                    canvas = newImage;
-
-                    Iterator< ImageWriter > writers = ImageIO.getImageWritersByFormatName( "jpg" );
-                    ImageWriter             writer  = writers.next();
-                    ImageWriteParam         param   = writer.getDefaultWriteParam();
-                    param.setCompressionMode( ImageWriteParam.MODE_EXPLICIT );
-                    param.setCompressionQuality( _settings.jpegQuality );
-                    ios = ImageIO.createImageOutputStream( outputFile );
-                    writer.setOutput( ios );
-                    writer.write( null, new IIOImage( canvas, null, null ), param );
-                }
-                else
-                {
-                    if ( _settings.premultiplyAlpha ) canvas.getColorModel().coerceData( canvas.getRaster(), true );
-                    ImageIO.write( canvas, "png", outputFile );
-                }
-            }
-            catch ( IOException ex )
-            {
-                throw new GdxRuntimeException( "Error writing file: " + outputFile, ex );
-            }
-            finally
-            {
-                if ( ios != null )
-                {
-                    try
-                    {
-                        ios.close();
-                    }
-                    catch ( Exception ignored )
-                    {
-                    }
-                }
-            }
+//            try
+//            {
+//                if ( _settings.outputFormat.equalsIgnoreCase( "jpg" ) || _settings.outputFormat.equalsIgnoreCase( "jpeg" ) )
+//                {
+//                    var newImage = new BufferedImage( canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_3BYTE_BGR );
+//                    newImage.getGraphics().drawImage( canvas, 0, 0, null );
+//                    canvas = newImage;
+//
+//                    Iterator< ImageWriter > writers = ImageIO.getImageWritersByFormatName( "jpg" );
+//                    ImageWriter             writer  = writers.next();
+//                    ImageWriteParam         param   = writer.getDefaultWriteParam();
+//                    param.setCompressionMode( ImageWriteParam.MODE_EXPLICIT );
+//                    param.setCompressionQuality( _settings.jpegQuality );
+//                    ios = ImageIO.createImageOutputStream( outputFile );
+//                    writer.setOutput( ios );
+//                    writer.write( null, new IIOImage( canvas, null, null ), param );
+//                }
+//                else
+//                {
+//                    if ( _settings.premultiplyAlpha ) canvas.getColorModel().coerceData( canvas.getRaster(), true );
+//                    ImageIO.write( canvas, "png", outputFile );
+//                }
+//            }
+//            catch ( IOException ex )
+//            {
+//                throw new GdxRuntimeException( "Error writing file: " + outputFile, ex );
+//            }
+//            finally
+//            {
+//                if ( ios != null )
+//                {
+//                    try
+//                    {
+//                        ios.close();
+//                    }
+//                    catch ( Exception ignored )
+//                    {
+//                    }
+//                }
+//            }
 
             if ( _progressListener.Update( p + 1, pn ) ) return;
 
-            _progressListener.count++;
+            _progressListener.Count++;
         }
     }
 
     static private void plot( BufferedImage dst, int x, int y, int argb )
     {
-        if ( ( 0 <= x ) && ( x < dst.getWidth() ) && ( 0 <= y ) && ( y < dst.getHeight() ) ) dst.setRGB( x, y, argb );
+        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) ) dst.SetRGB( x, y, argb );
     }
 
     static private void copy( BufferedImage src, int x, int y, int w, int h, BufferedImage dst, int dx, int dy, bool Rotated )
@@ -521,190 +503,190 @@ public class TexturePacker
 
     private void writePackFile( FileInfo outputDir, string scaledPackFileName, List< Page > pages )
     {
-        var packFile = new
-            FileInfo( outputDir, scaledPackFileName + _settings.atlasExtension );
-        FileInfo packDir = packFile.getParentFile();
-        packDir.mkdirs();
-
-        if ( packFile.exists() )
-        {
-            // Make sure there aren't duplicate names.
-            var textureAtlasData = new TextureAtlasData( new FileHandle( packFile ), new FileHandle( packFile ), false );
-            for ( Page page :
-            pages) {
-                for ( Rect rect :
-                page.outputRects)
-                {
-                    string rectName = Rect.getAtlasName( rect.name, _settings.flattenPaths );
-                    for ( Region region :
-                    textureAtlasData.getRegions()) {
-                        if ( region.name.equals( rectName ) )
-                        {
-                            throw new GdxRuntimeException( "A region with the name \"" + rectName + "\" has already been packed: " +
-                                                           rect.name );
-                        }
-                    }
-                }
-            }
-        }
-
-        string tab = "", colon = ":", comma = ",";
-
-        if ( _settings.prettyPrint )
-        {
-            tab   = "\t";
-            colon = ": ";
-            comma = ", ";
-        }
-
-        bool               appending = packFile.exists();
-        OutputStreamWriter writer    = new OutputStreamWriter( new FileOutputStream( packFile, true ), "UTF-8" );
-
-        for ( int i = 0, n = pages.size; i < n; i++ )
-        {
-            Page page = pages.get( i );
-
-            if ( _settings.legacyOutput )
-                WritePageLegacy( writer, page );
-            else
-            {
-                if ( ( i != 0 ) || appending ) writer.write( "\n" );
-                writePage( writer, appending, page );
-            }
-
-            page.outputRects.sort();
-            for ( Rect rect :
-            page.outputRects) {
-                if ( _settings.legacyOutput )
-                    WriteRectLegacy( writer, page, rect, rect.name );
-                else
-                    writeRect( writer, page, rect, rect.name );
-                List< Alias > aliases = new List( rect.aliases.toList() );
-                aliases.sort();
-                for ( Alias alias :
-                aliases) {
-                    var aliasRect = new Rect();
-                    aliasRect.set( rect );
-                    alias.apply( aliasRect );
-                    if ( _settings.legacyOutput )
-                        WriteRectLegacy( writer, page, aliasRect, alias.name );
-                    else
-                        writeRect( writer, page, aliasRect, alias.name );
-                }
-            }
-        }
-
-        writer.close();
+//        var packFile = new
+//            FileInfo( outputDir, scaledPackFileName + _settings.atlasExtension );
+//        FileInfo packDir = packFile.getParentFile();
+//        packDir.mkdirs();
+//
+//        if ( packFile.exists() )
+//        {
+//            // Make sure there aren't duplicate names.
+//            var textureAtlasData = new TextureAtlasData( new FileHandle( packFile ), new FileHandle( packFile ), false );
+//            for ( Page page :
+//            pages) {
+//                for ( Rect rect :
+//                page.outputRects)
+//                {
+//                    string rectName = Rect.getAtlasName( rect.name, _settings.flattenPaths );
+//                    for ( Region region :
+//                    textureAtlasData.getRegions()) {
+//                        if ( region.name.equals( rectName ) )
+//                        {
+//                            throw new GdxRuntimeException( "A region with the name \"" + rectName + "\" has already been packed: " +
+//                                                           rect.name );
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        string tab = "", colon = ":", comma = ",";
+//
+//        if ( _settings.prettyPrint )
+//        {
+//            tab   = "\t";
+//            colon = ": ";
+//            comma = ", ";
+//        }
+//
+//        bool               appending = packFile.exists();
+//        OutputStreamWriter writer    = new OutputStreamWriter( new FileOutputStream( packFile, true ), "UTF-8" );
+//
+//        for ( int i = 0, n = pages.size; i < n; i++ )
+//        {
+//            Page page = pages.get( i );
+//
+//            if ( _settings.legacyOutput )
+//                WritePageLegacy( writer, page );
+//            else
+//            {
+//                if ( ( i != 0 ) || appending ) writer.write( "\n" );
+//                writePage( writer, appending, page );
+//            }
+//
+//            page.outputRects.sort();
+//            for ( Rect rect :
+//            page.outputRects) {
+//                if ( _settings.legacyOutput )
+//                    WriteRectLegacy( writer, page, rect, rect.name );
+//                else
+//                    writeRect( writer, page, rect, rect.name );
+//                List< Alias > aliases = new List( rect.aliases.toList() );
+//                aliases.sort();
+//                for ( Alias alias :
+//                aliases) {
+//                    var aliasRect = new Rect();
+//                    aliasRect.set( rect );
+//                    alias.apply( aliasRect );
+//                    if ( _settings.legacyOutput )
+//                        WriteRectLegacy( writer, page, aliasRect, alias.name );
+//                    else
+//                        writeRect( writer, page, aliasRect, alias.name );
+//                }
+//            }
+//        }
+//
+//        writer.close();
     }
 
-    private void writePage( OutputStreamWriter writer, bool appending, Page page )
-    {
-        string tab = "", colon = ":", comma = ",";
+//    private void writePage( OutputStreamWriter writer, bool appending, Page page )
+//    {
+//        string tab = "", colon = ":", comma = ",";
+//
+//        if ( _settings.prettyPrint )
+//        {
+//            tab   = "\t";
+//            colon = ": ";
+//            comma = ", ";
+//        }
+//
+//        writer.write( page.imageName + "\n" );
+//        writer.write( tab + "size" + colon + page.imageWidth + comma + page.imageHeight + "\n" );
+//
+//        if ( _settings.format != PixelType.Format.RGBA8888 ) writer.write( tab + "format" + colon + _settings.format + "\n" );
+//
+//        if ( ( _settings.filterMin != Texture.TextureFilter.Nearest ) || ( _settings.filterMag != Texture.TextureFilter.Nearest ) )
+//            writer.write( tab + "filter" + colon + _settings.filterMin + comma + _settings.filterMag + "\n" );
+//
+//        var repeatValue = GetRepeatValue();
+//        if ( repeatValue != null ) writer.write( tab + "repeat" + colon + repeatValue + "\n" );
+//
+//        if ( _settings.premultiplyAlpha ) writer.write( tab + "pma" + colon + "true\n" );
+//    }
 
-        if ( _settings.prettyPrint )
-        {
-            tab   = "\t";
-            colon = ": ";
-            comma = ", ";
-        }
+//    private void writeRect( Writer writer, Page page, Rect rect, string name )
+//    {
+//        string tab = "", colon = ":", comma = ",";
+//
+//        if ( _settings.prettyPrint )
+//        {
+//            tab   = "\t";
+//            colon = ": ";
+//            comma = ", ";
+//        }
+//
+//        writer.write( Rect.getAtlasName( name, _settings.flattenPaths ) + "\n" );
+//        if ( rect.index != -1 ) writer.write( tab + "index" + colon + rect.index + "\n" );
+//
+//        writer.write( tab + "bounds" + colon //
+//                      + ( page.x + rect.x ) + comma + ( ( page.y + page.height ) - rect.y - ( rect.height - _settings.paddingY ) ) +
+//                      comma //
+//                      + rect.regionWidth + comma + rect.regionHeight + "\n" );
+//
+//        int offsetY = rect.originalHeight - rect.regionHeight - rect.offsetY;
+//
+//        if ( ( rect.offsetX != 0 ) || ( offsetY != 0 ) //
+//                                   || ( rect.originalWidth != rect.regionWidth ) || ( rect.originalHeight != rect.regionHeight ) )
+//        {
+//            writer.write( tab + "offsets" + colon                  //
+//                          + rect.offsetX + comma + offsetY + comma //
+//                          + rect.originalWidth + comma + rect.originalHeight + "\n" );
+//        }
+//
+//        if ( rect.Rotated ) writer.write( tab + "rotate" + colon + rect.Rotated + "\n" );
+//
+//        if ( rect.splits != null )
+//        {
+//            writer.write( tab + "split" + colon                                 //
+//                          + rect.splits[ 0 ] + comma + rect.splits[ 1 ] + comma //
+//                          + rect.splits[ 2 ] + comma + rect.splits[ 3 ] + "\n" );
+//        }
+//
+//        if ( rect.pads != null )
+//        {
+//            if ( rect.splits == null ) writer.write( tab + "split" + colon + "0" + comma + "0" + comma + "0" + comma + "0\n" );
+//            writer.write(
+//                         tab + "pad" + colon + rect.pads[ 0 ] + comma + rect.pads[ 1 ] + comma + rect.pads[ 2 ] + comma + rect.pads[ 3 ] +
+//                         "\n" );
+//        }
+//    }
 
-        writer.write( page.imageName + "\n" );
-        writer.write( tab + "size" + colon + page.imageWidth + comma + page.imageHeight + "\n" );
+//    private void WritePageLegacy( OutputStreamWriter writer, Page page )
+//    {
+//        writer.write( "\n" + page.imageName + "\n" );
+//        writer.write( "size: " + page.imageWidth + ", " + page.imageHeight + "\n" );
+//        writer.write( "format: " + settings.format + "\n" );
+//        writer.write( "filter: " + settings.filterMin + ", " + settings.filterMag + "\n" );
+//        var repeatValue = GetRepeatValue();
+//        writer.write( "repeat: " + ( repeatValue == null ? "none" : repeatValue ) + "\n" );
+//    }
 
-        if ( _settings.format != PixelType.Format.RGBA8888 ) writer.write( tab + "format" + colon + _settings.format + "\n" );
-
-        if ( ( _settings.filterMin != Texture.TextureFilter.Nearest ) || ( _settings.filterMag != Texture.TextureFilter.Nearest ) )
-            writer.write( tab + "filter" + colon + _settings.filterMin + comma + _settings.filterMag + "\n" );
-
-        var repeatValue = GetRepeatValue();
-        if ( repeatValue != null ) writer.write( tab + "repeat" + colon + repeatValue + "\n" );
-
-        if ( _settings.premultiplyAlpha ) writer.write( tab + "pma" + colon + "true\n" );
-    }
-
-    private void writeRect( Writer writer, Page page, Rect rect, string name )
-    {
-        string tab = "", colon = ":", comma = ",";
-
-        if ( _settings.prettyPrint )
-        {
-            tab   = "\t";
-            colon = ": ";
-            comma = ", ";
-        }
-
-        writer.write( Rect.getAtlasName( name, _settings.flattenPaths ) + "\n" );
-        if ( rect.index != -1 ) writer.write( tab + "index" + colon + rect.index + "\n" );
-
-        writer.write( tab + "bounds" + colon //
-                      + ( page.x + rect.x ) + comma + ( ( page.y + page.height ) - rect.y - ( rect.height - _settings.paddingY ) ) +
-                      comma //
-                      + rect.regionWidth + comma + rect.regionHeight + "\n" );
-
-        int offsetY = rect.originalHeight - rect.regionHeight - rect.offsetY;
-
-        if ( ( rect.offsetX != 0 ) || ( offsetY != 0 ) //
-                                   || ( rect.originalWidth != rect.regionWidth ) || ( rect.originalHeight != rect.regionHeight ) )
-        {
-            writer.write( tab + "offsets" + colon                  //
-                          + rect.offsetX + comma + offsetY + comma //
-                          + rect.originalWidth + comma + rect.originalHeight + "\n" );
-        }
-
-        if ( rect.Rotated ) writer.write( tab + "rotate" + colon + rect.Rotated + "\n" );
-
-        if ( rect.splits != null )
-        {
-            writer.write( tab + "split" + colon                                 //
-                          + rect.splits[ 0 ] + comma + rect.splits[ 1 ] + comma //
-                          + rect.splits[ 2 ] + comma + rect.splits[ 3 ] + "\n" );
-        }
-
-        if ( rect.pads != null )
-        {
-            if ( rect.splits == null ) writer.write( tab + "split" + colon + "0" + comma + "0" + comma + "0" + comma + "0\n" );
-            writer.write(
-                         tab + "pad" + colon + rect.pads[ 0 ] + comma + rect.pads[ 1 ] + comma + rect.pads[ 2 ] + comma + rect.pads[ 3 ] +
-                         "\n" );
-        }
-    }
-
-    private void WritePageLegacy( OutputStreamWriter writer, Page page )
-    {
-        writer.write( "\n" + page.imageName + "\n" );
-        writer.write( "size: " + page.imageWidth + ", " + page.imageHeight + "\n" );
-        writer.write( "format: " + settings.format + "\n" );
-        writer.write( "filter: " + settings.filterMin + ", " + settings.filterMag + "\n" );
-        var repeatValue = GetRepeatValue();
-        writer.write( "repeat: " + ( repeatValue == null ? "none" : repeatValue ) + "\n" );
-    }
-
-    private void WriteRectLegacy( Writer writer, Page page, Rect rect, string name )
-    {
-        writer.write( Rect.getAtlasName( name, settings.flattenPaths ) + "\n" );
-        writer.write( "  rotate: " + rect.Rotated + "\n" );
-        writer
-            .write( "  xy: " + ( page.x + rect.x ) + ", " + ( ( page.y + page.height ) - rect.y - ( rect.height - settings.paddingY ) ) +
-                    "\n" );
-
-        writer.write( "  size: " + rect.regionWidth + ", " + rect.regionHeight + "\n" );
-
-        if ( rect.splits != null )
-        {
-            writer.write( "  split: " //
-                          + rect.splits[ 0 ] + ", " + rect.splits[ 1 ] + ", " + rect.splits[ 2 ] + ", " + rect.splits[ 3 ] + "\n" );
-        }
-
-        if ( rect.pads != null )
-        {
-            if ( rect.splits == null ) writer.write( "  split: 0, 0, 0, 0\n" );
-            writer.write( "  pad: " + rect.pads[ 0 ] + ", " + rect.pads[ 1 ] + ", " + rect.pads[ 2 ] + ", " + rect.pads[ 3 ] + "\n" );
-        }
-
-        writer.write( "  orig: " + rect.originalWidth + ", " + rect.originalHeight + "\n" );
-        writer.write( "  offset: " + rect.offsetX + ", " + ( rect.originalHeight - rect.regionHeight - rect.offsetY ) + "\n" );
-        writer.write( "  index: " + rect.index + "\n" );
-    }
+//    private void WriteRectLegacy( Writer writer, Page page, Rect rect, string name )
+//    {
+//        writer.write( Rect.getAtlasName( name, settings.flattenPaths ) + "\n" );
+//        writer.write( "  rotate: " + rect.Rotated + "\n" );
+//        writer
+//            .write( "  xy: " + ( page.x + rect.x ) + ", " + ( ( page.y + page.height ) - rect.y - ( rect.height - settings.paddingY ) ) +
+//                    "\n" );
+//
+//        writer.write( "  size: " + rect.regionWidth + ", " + rect.regionHeight + "\n" );
+//
+//        if ( rect.splits != null )
+//        {
+//            writer.write( "  split: " //
+//                          + rect.splits[ 0 ] + ", " + rect.splits[ 1 ] + ", " + rect.splits[ 2 ] + ", " + rect.splits[ 3 ] + "\n" );
+//        }
+//
+//        if ( rect.pads != null )
+//        {
+//            if ( rect.splits == null ) writer.write( "  split: 0, 0, 0, 0\n" );
+//            writer.write( "  pad: " + rect.pads[ 0 ] + ", " + rect.pads[ 1 ] + ", " + rect.pads[ 2 ] + ", " + rect.pads[ 3 ] + "\n" );
+//        }
+//
+//        writer.write( "  orig: " + rect.originalWidth + ", " + rect.originalHeight + "\n" );
+//        writer.write( "  offset: " + rect.offsetX + ", " + ( rect.originalHeight - rect.regionHeight - rect.offsetY ) + "\n" );
+//        writer.write( "  index: " + rect.index + "\n" );
+//    }
 
     private string? GetRepeatValue()
     {
@@ -730,15 +712,15 @@ public class TexturePacker
     {
         switch ( _settings.format )
         {
-            case RGBA8888:
-            case RGBA4444:
+            case PixelType.Format.RGBA8888:
+            case PixelType.Format.RGBA4444:
                 return BufferedImage.TYPE_INT_ARGB;
 
-            case RGB565:
-            case RGB888:
+            case PixelType.Format.RGB565:
+            case PixelType.Format.RGB888:
                 return BufferedImage.TYPE_INT_RGB;
 
-            case Alpha:
+            case PixelType.Format.Alpha:
                 return BufferedImage.TYPE_BYTE_GRAY;
 
             default:
@@ -769,6 +751,7 @@ public class TexturePacker
         public int           ImageHeight    { get; set; }
     }
 
+    // ========================================================================
     // ========================================================================
 
     [PublicAPI]
@@ -809,10 +792,11 @@ public class TexturePacker
 
         public int CompareTo( Alias? o )
         {
-            return string.Compare( Name, o?.Name, stringComparison.Ordinal );
+            return string.Compare( Name, o?.Name, StringComparison.Ordinal );
         }
     }
 
+    // ========================================================================
     // ========================================================================
 
     [PublicAPI]
@@ -849,10 +833,10 @@ public class TexturePacker
 
         public Rect( Rect rect )
         {
-            X      = rect.X;
-            Y      = rect.Y;
-            Width  = rect.Width;
-            Height = rect.Height;
+            this.X      = rect.X;
+            this.Y      = rect.Y;
+            this.Width  = rect.Width;
+            this.Height = rect.Height;
         }
 
         public int CompareTo( Rect? o )
@@ -862,9 +846,9 @@ public class TexturePacker
 
         public Rect( BufferedImage source, int left, int top, int newWidth, int newHeight, bool isPatch )
         {
-            _bufferedImage = new BufferedImage( source.GetColorModel(),
-                                                source.GetRaster().CreateWritableChild( left, top, newWidth, newHeight, 0, 0, null ),
-                                                source.GetColorModel().IsAlphaPremultiplied(), null );
+//            _bufferedImage = new BufferedImage( source.GetColorModel(),
+//                                                source.GetRaster().CreateWritableChild( left, top, newWidth, newHeight, 0, 0, null ),
+//                                                source.GetColorModel().IsAlphaPremultiplied(), null );
 
             OffsetX        = left;
             OffsetY        = top;
@@ -884,7 +868,7 @@ public class TexturePacker
             _bufferedImage = null;
         }
 
-        public BufferedImage getImage( ImageProcessor _imageProcessor )
+        public BufferedImage GetImage( ImageProcessor _imageProcessor )
         {
             if ( _bufferedImage != null ) return _bufferedImage;
 
@@ -892,14 +876,15 @@ public class TexturePacker
 
             try
             {
-                image = ImageIO.read( file );
+//                image = ImageIO.read( _file );
+                image = new BufferedImage( 0, 1, 2 );
             }
             catch ( IOException ex )
             {
-                throw new GdxRuntimeException( "Error reading image: " + file, ex );
+                throw new GdxRuntimeException( $"Error reading image: {_file}", ex );
             }
 
-            if ( image == null ) throw new GdxRuntimeException( "Unable to read image: " + file );
+            if ( image == null ) throw new GdxRuntimeException( $"Unable to read image: {_file}" );
 
             var name             = this.Name;
             if ( _isPatch ) name += ".9";
@@ -933,12 +918,21 @@ public class TexturePacker
             _isPatch       = rect._isPatch;
         }
 
+        public static string GetAtlasName( string? name, bool flattenPaths )
+        {
+            ArgumentNullException.ThrowIfNull( name );
+
+            return flattenPaths ? new FileInfo( name ).Name : name;
+        }
+
         /// <inheritdoc />
         public override int GetHashCode()
         {
+            //TODO:
             return base.GetHashCode();
         }
 
+        /// <inheritdoc />
         public override bool Equals( object? obj )
         {
             if ( this == obj ) return true;
@@ -960,29 +954,24 @@ public class TexturePacker
             return true;
         }
 
+        /// <inheritdoc />
         public override string ToString()
         {
             return $"{Name}{( Index != -1 ? $"_{Index}" : "" )}[{X},{Y} {Width}x{Height}]";
         }
-
-        public static string GetAtlasName( string? name, bool flattenPaths )
-        {
-            ArgumentNullException.ThrowIfNull( name );
-
-            return flattenPaths ? new FileInfo( name ).Name : name;
-        }
     }
 
+    // ========================================================================
     // ========================================================================
 
     [PublicAPI]
     public interface IPacker
     {
         public List< Page > Pack( List< Rect > inputRects );
-
         public List< Page > Pack( ProgressListener _progressListener, List< Rect > inputRects );
     }
 
+    // ========================================================================
     // ========================================================================
 
     [PublicAPI]
@@ -995,6 +984,15 @@ public class TexturePacker
     }
 
     // ========================================================================
+    // ========================================================================
+
+    public class ProgressListenerImpl : ProgressListener
+    {
+        /// <inheritdoc />
+        protected override void Progress( float progress )
+        {
+        }
+    }
 
     [PublicAPI]
     public abstract class ProgressListener
@@ -1008,19 +1006,7 @@ public class TexturePacker
         private readonly List< float > _portions = new( 8 );
         private          string        _message  = "";
 
-        public void Reset()
-        {
-            _scale  = 1;
-            Message = "";
-            Count   = 0;
-            Total   = 0;
-
-            Progress( 0 );
-        }
-
-        public static void Set( string msg )
-        {
-        }
+        // ====================================================================
 
         public void Start( float portion )
         {
@@ -1029,17 +1015,18 @@ public class TexturePacker
             _portions.Add( _lastUpdate );
             _portions.Add( _scale * portion );
             _portions.Add( _scale );
+
             _scale *= portion;
         }
 
         public bool Update( int count, int total )
         {
-            update( total == 0 ? 0 : count / ( float )total );
+            Update( total == 0 ? 0 : count / ( float )total );
 
             return Canceled;
         }
 
-        public void update( float percent )
+        public void Update( float percent )
         {
             _lastUpdate = _portions[ _portions.Count - 3 ] + ( _portions[ _portions.Count - 2 ] * percent );
 
@@ -1057,6 +1044,16 @@ public class TexturePacker
             Progress( _lastUpdate );
         }
 
+        public void Reset()
+        {
+            _scale  = 1;
+            Message = "";
+            Count   = 0;
+            Total   = 0;
+
+            Progress( 0 );
+        }
+
         public string Message
         {
             get => _message;
@@ -1072,7 +1069,9 @@ public class TexturePacker
     }
 
     // ========================================================================
+    // ========================================================================
 
+    [PublicAPI]
     public class Settings
     {
         public bool                  multipleOfFour        { get; set; }
@@ -1117,6 +1116,8 @@ public class TexturePacker
         public string                atlasExtension        { get; set; } = ".atlas";
         public bool                  prettyPrint           { get; set; } = true;
         public bool                  legacyOutput          { get; set; } = true;
+
+        // ====================================================================
 
         public Settings()
         {
