@@ -143,11 +143,7 @@ public class FileTextureData : ITextureData
     /// </summary>
     public PixelType.Format? PixelFormat { get; set; }
 
-    public virtual bool IsManaged
-    {
-        get => true;
-        set { }
-    }
+    public virtual bool IsManaged => true;
 
     /// <returns> the <see cref="ITextureData.TextureDataType" /></returns>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;

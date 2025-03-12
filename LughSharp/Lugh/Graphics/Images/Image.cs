@@ -25,55 +25,6 @@
 namespace LughSharp.Lugh.Graphics.Images;
 
 [PublicAPI]
-public class BufferedImage
+public partial class Image
 {
-    public int              Width       { get; set; }
-    public int              Height      { get; set; }
-    public PixelType.Format PixelFormat { get; set; }
-    public Image            Image       { get; private set; }
-
-    // ========================================================================
-
-    public BufferedImage()
-    {
-    }
-
-    public BufferedImage( Image.ColorModel getColorModel, object createWritableChild, object isAlphaPremultiplied, object o )
-    {
-    }
-
-    public BufferedImage( int colorModel, int writableChild, PixelType.Format format )
-    {
-    }
-
-    public Image.ColorModel GetColorModel()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Image.WritableRaster GetRaster()
-    {
-        throw new NotImplementedException();
-    }
-
-    public static BufferedImage Read( FileInfo file )
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// Gets the packed color RGBA at the provided X and Y coordinates
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public uint GetPixel( int x, int y )
-    {
-        throw new NotImplementedException();
-    }
-
-    public void SetPixel( int x, int y, uint color )
-    {
-    }
 }

@@ -226,22 +226,12 @@ CORE
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - AbstractGraphics
-    - DONE - DONE - AbstractInput
     - DONE - DONE - ApplicationAdapter
     - DONE - DONE - Game
     - DONE - DONE - Gdx
     - DONE - DONE - IApplication
     - DONE - DONE - IApplicationListener
-    - DONE - DONE - IFiles
-    - DONE - DONE - IGraphics
-    - DONE - DONE - IInput
-    - DONE - DONE - IInputProcessor
     - DONE - DONE - ILifecycleListener
-    - DONE - DONE - INet
-    - DONE - DONE - InputAdapter
-    - DONE - DONE - InputEventQueue
-    - DONE - DONE - InputMultiplexer
     - DONE - DONE - IPreferences
     - DONE - DONE - IScreen
     - DONE - DONE - LughVersion
@@ -258,6 +248,7 @@ FILES
     CODE   DOCUMENT
     ----   --------
     - IP   - IP   - FileHandle
+    - DONE - DONE - IFiles
     - IP   - IP   - InputStream
     - IP   - IP   - IOData
 
@@ -270,13 +261,16 @@ GRAPHICS
 
     CODE   DOCUMENT
     ----   --------
+    - DONE - DONE - AbstractGraphics
     - DONE - DONE - Color
     - DONE - DONE - Colors
     - DONE - DONE - Cubemap
     - DONE - DONE - GraphicsBackend
+    - DONE - DONE - GraphicsEnums
     - DONE - DONE - GStructs
     - DONE - DONE - ICubemapData
     - DONE - DONE - ICursor
+    - DONE - DONE - IGraphics
     - DONE - DONE - Mesh
     - DONE - DONE - VertexAttribute
     - DONE - DONE - VertexAttributes
@@ -509,7 +503,13 @@ GRAPHICS/VIEWPORT
 INPUT
 -----
 
+    - DONE - DONE - AbstractInput
     -      -      - GestureDetector
+    - DONE - DONE - IInput
+    - DONE - DONE - IInputProcessor
+    - DONE - DONE - InputAdapter
+    - DONE - DONE - InputEventQueue
+    - DONE - DONE - InputMultiplexer
     - DONE - DONE - InputUtils
     -      -      - RemoteInput
     -      -      - RemoteSender
@@ -654,6 +654,29 @@ MATH/COLLISION
     - DONE - DONE - Ray
     - DONE - IP   - Segment
     - DONE - IP   - Sphere
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+NETWORK
+-------
+
+    CODE   DOCUMENT
+    ----   --------
+    -      -      - HttpParameterUtils
+    -      -      - HttpRequestBuilder
+    -      -      - HttpStatus
+    -      -      - IHttpRequestHeader
+    -      -      - IHttpResponseHeader
+    - DONE - DONE - INet
+    -      -      - IServerSocket
+    -      -      - ISocket
+    -      -      - NetJavaImpl
+    -      -      - NetJavaServerSocketImpl
+    -      -      - NetJavaSocketImpl
+    -      -      - ServerSocketHints
+    -      -      - SocketHints
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

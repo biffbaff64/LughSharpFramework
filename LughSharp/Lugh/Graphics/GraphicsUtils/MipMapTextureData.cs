@@ -96,11 +96,7 @@ public class MipMapTextureData : ITextureData
 
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
-    public bool IsManaged
-    {
-        get => false;
-        set { }
-    }
+    public bool IsManaged => false;
 
     public bool ShouldDisposePixmap()
     {

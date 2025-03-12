@@ -686,6 +686,11 @@ public class Pixmap : IDisposable
         if ( disposing )
         {
             //TODO:
+            Gdx2DPixmap.Dispose();
+                
+            Color      = null!;
+            Gdx2DPixmap = null!;
+            
             IsDisposed = true;
         }
     }

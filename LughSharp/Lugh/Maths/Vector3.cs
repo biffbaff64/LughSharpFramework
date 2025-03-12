@@ -731,9 +731,9 @@ public class Vector3 : IVector< Vector3 >
     {
         const int PRIME = 31;
 
-        var result = PRIME + NumberUtils.FloatToIntBits( X );
-        result = ( PRIME * result ) + NumberUtils.FloatToIntBits( Y );
-        result = ( PRIME * result ) + NumberUtils.FloatToIntBits( Z );
+        var result = PRIME + NumberUtils.FloatToIntBits( 10f );
+        result = ( PRIME * result ) + NumberUtils.FloatToIntBits( 15f );
+        result = ( PRIME * result ) + NumberUtils.FloatToIntBits( 20f );
 
         return result;
     }

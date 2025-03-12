@@ -28,6 +28,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace DesktopGLBackend.Audio;
 
+[PublicAPI]
 public abstract class OpenALMusic : IMusic
 {
     public const int INVALID_SOURCE_ID = AL.INVALID_VALUE;

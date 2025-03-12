@@ -112,11 +112,7 @@ public class GLOnlyTextureData : ITextureData
     /// <summary>
     /// GLOnlyTextureData objects are not Managed.
     /// </summary>
-    public bool IsManaged
-    {
-        get => false;
-        set { }
-    }
+    public bool IsManaged => false;
 
     /// <summary>
     /// Returns the <see cref="ITextureData.TextureType" /> for this Texture Data.

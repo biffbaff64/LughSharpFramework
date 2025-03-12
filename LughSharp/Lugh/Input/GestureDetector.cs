@@ -306,7 +306,7 @@ public class GestureDetector : InputAdapter
         {
             _panning = true;
 
-            return _listener.Pan( x, y, _tracker.deltaX, _tracker.deltaY );
+            return _listener.Pan( x, y, _tracker.DeltaX, _tracker.DeltaY );
         }
 
         return false;
@@ -452,7 +452,7 @@ public class GestureDetector : InputAdapter
         _touchDownTime    = 0;
         _panning          = false;
         _inTapRectangle   = false;
-        _tracker.lastTime = 0;
+        _tracker.LastTime = 0;
     }
 
     private bool IsWithinTapRectangle( float x, float y, float centerX, float centerY )
@@ -496,11 +496,12 @@ public class GestureDetector : InputAdapter
     }
 
     /// <summary>
-    /// Register an instance of this class with a <see cref="GestureDetector" /> to
-    /// receive gestures such as taps, long presses, flings, panning or pinch zooming.
-    /// Each method returns a bool indicating if the event should be handed to the
-    /// next listener (false to hand it to the next listener, true otherwise).
+    /// Register an instance of this class with a <see cref="GestureDetector" /> to receive
+    /// gestures such as taps, long presses, flings, panning or pinch zooming. Each method
+    /// returns a bool indicating if the event should be handed to the next listener (false
+    /// to hand it to the next listener, true otherwise).
     /// </summary>
+    [PublicAPI]
     public interface IGestureListener
     {
         bool TouchDown( float x, float y, int pointer, int button );
@@ -569,9 +570,9 @@ public class GestureDetector : InputAdapter
     }
 
     /// <summary>
-    /// Derrive from this if you only want to implement a subset
-    /// of <see cref="IGestureListener" />.
+    /// Derrive from this if you only want to implement a subset of <see cref="IGestureListener" />.
     /// </summary>
+    [PublicAPI]
     public class GestureAdapter : IGestureListener
     {
         public bool TouchDown( float x, float y, int pointer, int button )
@@ -622,19 +623,23 @@ public class GestureDetector : InputAdapter
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    [PublicAPI]
     public class VelocityTracker
     {
+        public float DeltaX   { get; set; }
+        public float DeltaY   { get; set; }
+        public long  LastTime { get; set; }
+
         private readonly long[]  _meanTime;
         private readonly float[] _meanX;
         private readonly float[] _meanY;
-
-        private readonly int   _sampleSize;
-        private          float _lastX;
-        private          float _lastY;
-        private          int   _numSamples;
-        public           float deltaX;
-        public           float deltaY;
-        public           long  lastTime;
+        private readonly int     _sampleSize;
+        private          float   _lastX;
+        private          float   _lastY;
+        private          int     _numSamples;
 
         public VelocityTracker()
         {
@@ -649,8 +654,8 @@ public class GestureDetector : InputAdapter
         {
             _lastX      = x;
             _lastY      = y;
-            deltaX      = 0;
-            deltaY      = 0;
+            DeltaX      = 0;
+            DeltaY      = 0;
             _numSamples = 0;
 
             for ( var i = 0; i < _sampleSize; i++ )
@@ -660,24 +665,24 @@ public class GestureDetector : InputAdapter
                 _meanTime[ i ] = 0;
             }
 
-            lastTime = timeStamp;
+            LastTime = timeStamp;
         }
 
         public void Update( float x, float y, long currTime )
         {
-            deltaX = x - _lastX;
-            deltaY = y - _lastY;
+            DeltaX = x - _lastX;
+            DeltaY = y - _lastY;
             _lastX = x;
             _lastY = y;
 
-            var deltaTime = currTime - lastTime;
+            var deltaTime = currTime - LastTime;
 
-            lastTime = currTime;
+            LastTime = currTime;
 
             var index = _numSamples % _sampleSize;
 
-            _meanX[ index ]    = deltaX;
-            _meanY[ index ]    = deltaY;
+            _meanX[ index ]    = DeltaX;
+            _meanY[ index ]    = DeltaY;
             _meanTime[ index ] = deltaTime;
             _numSamples++;
         }

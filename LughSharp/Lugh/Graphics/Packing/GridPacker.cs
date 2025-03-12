@@ -45,18 +45,18 @@ public class GridPacker : TexturePacker.IPacker
     {
         ArgumentNullException.ThrowIfNull( progress );
         
-        if ( !settings.silent ) Console.WriteLine( "Packing" );
+        if ( !settings.Silent ) Console.WriteLine( "Packing" );
 
         // Rects are packed with right and top padding, so the max size is increased to match.
         // After packing the padding is subtracted from the page size.
-        var paddingX = settings.paddingX;
-        var paddingY = settings.paddingY;
+        var paddingX = settings.PaddingX;
+        var paddingY = settings.PaddingY;
         var adjustX  = paddingX;
         var adjustY  = paddingY;
 
-        if ( settings.edgePadding )
+        if ( settings.EdgePadding )
         {
-            if ( settings.duplicatePadding )
+            if ( settings.DuplicatePadding )
             {
                 adjustX -= paddingX;
                 adjustY -= paddingY;
@@ -68,8 +68,8 @@ public class GridPacker : TexturePacker.IPacker
             }
         }
 
-        var maxWidth   = settings.maxWidth + adjustX;
-        var maxHeight  = settings.maxHeight + adjustY;
+        var maxWidth   = settings.MaxWidth + adjustX;
+        var maxHeight  = settings.MaxHeight + adjustY;
         var n          = inputRects.Count;
         var cellWidth  = 0;
         var cellHeight = 0;
@@ -131,8 +131,8 @@ public class GridPacker : TexturePacker.IPacker
 
             rect.X      =  x;
             rect.Y      =  y;
-            rect.Width  += settings.paddingX;
-            rect.Height += settings.paddingY;
+            rect.Width  += settings.PaddingX;
+            rect.Height += settings.PaddingY;
             
             page.OutputRects.Add( rect );
             

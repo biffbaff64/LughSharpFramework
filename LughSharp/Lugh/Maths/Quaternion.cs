@@ -1258,10 +1258,10 @@ public class Quaternion
     {
         const int PRIME = 31;
 
-        var result = PRIME + NumberUtils.FloatToRawIntBits( W );
-        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( X );
-        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( Y );
-        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( Z );
+        var result = PRIME + NumberUtils.FloatToRawIntBits( 10f );
+        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 20f );
+        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 30f );
+        result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 40f );
 
         return result;
     }

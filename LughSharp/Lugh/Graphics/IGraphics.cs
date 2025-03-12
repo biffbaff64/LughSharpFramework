@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 
-namespace LughSharp.Lugh.Core;
+namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
 /// An interface representing the graphics context of the application.

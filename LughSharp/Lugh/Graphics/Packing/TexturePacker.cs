@@ -22,13 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Runtime.Versioning;
 
-using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -48,40 +46,41 @@ public class TexturePacker
     private ProgressListener?  _progressListener;
 
     // ========================================================================
+    // ========================================================================
 
     public TexturePacker( FileInfo? rootDir, Settings settings )
     {
         this._settings = settings;
 
-        if ( settings.pot )
+        if ( settings.PowerOfTwo )
         {
-            if ( settings.maxWidth != MathUtils.NextPowerOfTwo( settings.maxWidth ) )
+            if ( settings.MaxWidth != MathUtils.NextPowerOfTwo( settings.MaxWidth ) )
             {
-                throw new GdxRuntimeException( $"If pot is true, maxWidth must be a power of two: {settings.maxWidth}" );
+                throw new GdxRuntimeException( $"If pot is true, maxWidth must be a power of two: {settings.MaxWidth}" );
             }
 
-            if ( settings.maxHeight != MathUtils.NextPowerOfTwo( settings.maxHeight ) )
+            if ( settings.MaxHeight != MathUtils.NextPowerOfTwo( settings.MaxHeight ) )
             {
-                throw new GdxRuntimeException( $"If pot is true, maxHeight must be a power of two: {settings.maxHeight}" );
+                throw new GdxRuntimeException( $"If pot is true, maxHeight must be a power of two: {settings.MaxHeight}" );
             }
         }
 
-        if ( settings.multipleOfFour )
+        if ( settings.MultipleOfFour )
         {
-            if ( ( settings.maxWidth % 4 ) != 0 )
+            if ( ( settings.MaxWidth % 4 ) != 0 )
             {
                 throw new GdxRuntimeException( $"If mod4 is true, maxWidth must be evenly " +
-                                               $"divisible by 4: {settings.maxWidth}" );
+                                               $"divisible by 4: {settings.MaxWidth}" );
             }
 
-            if ( ( settings.maxHeight % 4 ) != 0 )
+            if ( ( settings.MaxHeight % 4 ) != 0 )
             {
                 throw new GdxRuntimeException( $"If mod4 is true, maxHeight must be evenly " +
-                                               $"divisible by 4: {settings.maxHeight}" );
+                                               $"divisible by 4: {settings.MaxHeight}" );
             }
         }
 
-        _packer         = settings.grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
+        _packer         = settings.Grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
         _imageProcessor = NewImageProcessor( settings );
 
         SetRootDir( rootDir );
@@ -142,11 +141,18 @@ public class TexturePacker
         this._packer = packer;
     }
 
+    /// <summary>
+    /// Packs processed images into the a <see cref="Graphics.Atlases.TextureAtlas"/> with the
+    /// specified filename. The atlas will be stored in the specified directory.
+    /// </summary>
+    /// <param name="outputDir"> The destination directory. </param>
+    /// <param name="packFileName"> The name for the resulting TextureAtlas. </param>
+    /// <exception cref="GdxRuntimeException"></exception>
     public void Pack( FileInfo outputDir, string packFileName )
     {
-        if ( packFileName.EndsWith( _settings.atlasExtension ) )
+        if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
-            packFileName = packFileName.Substring( 0, packFileName.Length - _settings.atlasExtension.Length );
+            packFileName = packFileName.Substring( 0, packFileName.Length - _settings.AtlasExtension.Length );
         }
 
         Directory.CreateDirectory( outputDir.FullName );
@@ -154,19 +160,19 @@ public class TexturePacker
         _progressListener ??= new ProgressListenerImpl();
         _progressListener.Start( 1 );
 
-        var n = _settings.scale.Length;
+        var n = _settings.Scale.Length;
 
         for ( var i = 0; i < n; i++ )
         {
             _progressListener.Start( 1f / n );
 
-            _imageProcessor.Scale = _settings.scale[ i ];
+            _imageProcessor.Scale = _settings.Scale[ i ];
 
-            if ( ( _settings.scaleResampling != null )
-                 && ( _settings.scaleResampling.Length > i )
-                 && ( _settings.scaleResampling[ i ] != Resampling.None ) )
+            if ( ( _settings.ScaleResampling != null )
+                 && ( _settings.ScaleResampling.Length > i )
+                 && ( _settings.ScaleResampling[ i ] != Resampling.None ) )
             {
-                _imageProcessor.SetResampling( _settings.scaleResampling[ i ] );
+                _imageProcessor.SetResampling( _settings.ScaleResampling[ i ] );
             }
 
             _progressListener.Start( 0.35f );
@@ -193,7 +199,6 @@ public class TexturePacker
             }
 
             _progressListener.End();
-
             _progressListener.Start( 0.35f );
             _progressListener.Count = 0;
             _progressListener.Total = _imageProcessor.GetImages().Count;
@@ -201,7 +206,6 @@ public class TexturePacker
             var pages = _packer.Pack( _progressListener, _imageProcessor.GetImages() );
 
             _progressListener.End();
-
             _progressListener.Start( 0.29f );
             _progressListener.Count = 0;
             _progressListener.Total = pages.Count;
@@ -215,7 +219,7 @@ public class TexturePacker
 
             try
             {
-                writePackFile( outputDir, scaledPackFileName, pages );
+                WritePackFile( outputDir, scaledPackFileName, pages );
             }
             catch ( IOException ex )
             {
@@ -248,12 +252,12 @@ public class TexturePacker
             var width  = page.Width;
             var height = page.Height;
 
-            if ( _settings.edgePadding )
+            if ( _settings.EdgePadding )
             {
-                var edgePadX = _settings.paddingX;
-                var edgePadY = _settings.paddingY;
+                var edgePadX = _settings.PaddingX;
+                var edgePadY = _settings.PaddingY;
 
-                if ( _settings.duplicatePadding )
+                if ( _settings.DuplicatePadding )
                 {
                     edgePadX /= 2;
                     edgePadY /= 2;
@@ -265,20 +269,20 @@ public class TexturePacker
                 height += edgePadY * 2;
             }
 
-            if ( _settings.pot )
+            if ( _settings.PowerOfTwo )
             {
                 width  = MathUtils.NextPowerOfTwo( width );
                 height = MathUtils.NextPowerOfTwo( height );
             }
 
-            if ( _settings.multipleOfFour )
+            if ( _settings.MultipleOfFour )
             {
                 width  = ( width % 4 ) == 0 ? width : ( width + 4 ) - ( width % 4 );
                 height = ( height % 4 ) == 0 ? height : ( height + 4 ) - ( height % 4 );
             }
 
-            width            = Math.Max( _settings.minWidth, width );
-            height           = Math.Max( _settings.minHeight, height );
+            width            = Math.Max( _settings.MinWidth, width );
+            height           = Math.Max( _settings.MinHeight, height );
             page.ImageWidth  = width;
             page.ImageHeight = height;
 
@@ -306,7 +310,7 @@ public class TexturePacker
 
                 fileIndex++;
 
-                var fp = Path.Combine( packDir!.Name, $"{name}.{_settings.outputFormat}" );
+                var fp = Path.Combine( packDir!.Name, $"{name}.{_settings.OutputFormat}" );
                 outputFile = new FileInfo( fp );
 
                 if ( !File.Exists( outputFile.FullName ) )
@@ -315,29 +319,35 @@ public class TexturePacker
                 }
             }
 
-            Directory.CreateDirectory( Path.GetDirectoryName( outputFile.FullName ) );
+            Directory.CreateDirectory( Path.GetDirectoryName( outputFile.FullName )
+                                       ?? throw new GdxRuntimeException( "Error creating directory for pack file." ) );
+
             page.ImageName = Path.GetFileName( outputFile.FullName );
 
-            var canvas = new BufferedImage( width, height, GetBufferedImageType( _settings.format ) );
-            var g      = System.Drawing.Graphics.FromImage( canvas.GetImage() );
+            var canvas = new BufferedImage( width, height, _settings.Format );
 
-            if ( !_settings.silent ) Console.WriteLine( $"Writing {canvas.Width}x{canvas.Height}: {outputFile}" );
+            if ( !_settings.Silent )
+            {
+                Console.WriteLine( $"Writing {canvas.Width}x{canvas.Height}: {outputFile}" );
+            }
 
-            _progressListener.Start( 1 / ( float )pn );
+            _progressListener?.Start( 1 / ( float )pn );
+
+            GdxRuntimeException.ThrowIfNull( page.OutputRects );
 
             for ( int r = 0, rn = page.OutputRects.Count; r < rn; r++ )
             {
-                Rect rect  = page.OutputRects[ r ];
-                var  image = rect.GetImage( _imageProcessor );
-                int  iw    = image.Width;
-                int  ih    = image.Height;
-                int  rectX = page.X + rect.X;
-                var  rectY = ( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.paddingY );
+                var rect  = page.OutputRects[ r ];
+                var image = rect.GetImage( _imageProcessor );
+                var iw    = image.Width;
+                var ih    = image.Height;
+                var rectX = page.X + rect.X;
+                var rectY = ( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY );
 
-                if ( _settings.duplicatePadding )
+                if ( _settings.DuplicatePadding )
                 {
-                    var amountX = _settings.paddingX / 2;
-                    var amountY = _settings.paddingY / 2;
+                    var amountX = _settings.PaddingX / 2;
+                    var amountY = _settings.PaddingY / 2;
 
                     if ( rect.Rotated )
                     {
@@ -346,10 +356,10 @@ public class TexturePacker
                         {
                             for ( var j = 1; j <= amountY; j++ )
                             {
-                                plot( canvas, rectX - j, ( ( rectY + iw ) - 1 ) + i, image.GetRGB( 0, 0 ) );
-                                plot( canvas, ( ( rectX + ih ) - 1 ) + j, ( ( rectY + iw ) - 1 ) + i, image.GetRGB( 0, ih - 1 ) );
-                                plot( canvas, rectX - j, rectY - i, image.GetRGB( iw - 1, 0 ) );
-                                plot( canvas, ( ( rectX + ih ) - 1 ) + j, rectY - i, image.GetRGB( iw - 1, ih - 1 ) );
+                                Plot( canvas, rectX - j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, 0 ) );
+                                Plot( canvas, ( ( rectX + ih ) - 1 ) + j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, ih - 1 ) );
+                                Plot( canvas, rectX - j, rectY - i, image.GetPixel( iw - 1, 0 ) );
+                                Plot( canvas, ( ( rectX + ih ) - 1 ) + j, rectY - i, image.GetPixel( iw - 1, ih - 1 ) );
                             }
                         }
 
@@ -358,8 +368,8 @@ public class TexturePacker
                         {
                             for ( var j = 0; j < iw; j++ )
                             {
-                                plot( canvas, rectX - i, ( rectY + iw ) - 1 - j, image.GetRGB( j, 0 ) );
-                                plot( canvas, ( ( rectX + ih ) - 1 ) + i, ( rectY + iw ) - 1 - j, image.GetRGB( j, ih - 1 ) );
+                                Plot( canvas, rectX - i, ( rectY + iw ) - 1 - j, image.GetPixel( j, 0 ) );
+                                Plot( canvas, ( ( rectX + ih ) - 1 ) + i, ( rectY + iw ) - 1 - j, image.GetPixel( j, ih - 1 ) );
                             }
                         }
 
@@ -367,8 +377,8 @@ public class TexturePacker
                         {
                             for ( var j = 0; j < ih; j++ )
                             {
-                                plot( canvas, rectX + j, rectY - i, image.GetRGB( iw - 1, j ) );
-                                plot( canvas, rectX + j, ( ( rectY + iw ) - 1 ) + i, image.GetRGB( 0, j ) );
+                                Plot( canvas, rectX + j, rectY - i, image.GetPixel( iw - 1, j ) );
+                                Plot( canvas, rectX + j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, j ) );
                             }
                         }
                     }
@@ -379,29 +389,29 @@ public class TexturePacker
                         {
                             for ( var j = 1; j <= amountY; j++ )
                             {
-                                plot( canvas, rectX - i, rectY - j, image.GetRGB( 0, 0 ) );
-                                plot( canvas, rectX - i, ( ( rectY + ih ) - 1 ) + j, image.GetRGB( 0, ih - 1 ) );
-                                plot( canvas, ( ( rectX + iw ) - 1 ) + i, rectY - j, image.GetRGB( iw - 1, 0 ) );
-                                plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j, image.GetRGB( iw - 1, ih - 1 ) );
+                                Plot( canvas, rectX - i, rectY - j, image.GetPixel( 0, 0 ) );
+                                Plot( canvas, rectX - i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( 0, ih - 1 ) );
+                                Plot( canvas, ( ( rectX + iw ) - 1 ) + i, rectY - j, image.GetPixel( iw - 1, 0 ) );
+                                Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( iw - 1, ih - 1 ) );
                             }
                         }
 
                         // Copy edge pixels into padding.
                         for ( var i = 1; i <= amountY; i++ )
                         {
-                            copy( image, 0, 0, iw, 1, canvas, rectX, rectY - i, rect.Rotated );
-                            copy( image, 0, ih - 1, iw, 1, canvas, rectX, ( ( rectY + ih ) - 1 ) + i, rect.Rotated );
+                            Copy( image, 0, 0, iw, 1, canvas, rectX, rectY - i, rect.Rotated );
+                            Copy( image, 0, ih - 1, iw, 1, canvas, rectX, ( ( rectY + ih ) - 1 ) + i, rect.Rotated );
                         }
 
                         for ( var i = 1; i <= amountX; i++ )
                         {
-                            copy( image, 0, 0, 1, ih, canvas, rectX - i, rectY, rect.Rotated );
-                            copy( image, iw - 1, 0, 1, ih, canvas, ( ( rectX + iw ) - 1 ) + i, rectY, rect.Rotated );
+                            Copy( image, 0, 0, 1, ih, canvas, rectX - i, rectY, rect.Rotated );
+                            Copy( image, iw - 1, 0, 1, ih, canvas, ( ( rectX + iw ) - 1 ) + i, rectY, rect.Rotated );
                         }
                     }
                 }
 
-                copy( image, 0, 0, iw, ih, canvas, rectX, rectY, rect.Rotated );
+                Copy( image, 0, 0, iw, ih, canvas, rectX, rectY, rect.Rotated );
 
 //                if ( _settings.debug )
 //                {
@@ -480,28 +490,30 @@ public class TexturePacker
         }
     }
 
-    static private void plot( BufferedImage dst, int x, int y, int argb )
+    private static void Plot( BufferedImage dst, int x, int y, uint argb )
     {
-        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) ) dst.SetRGB( x, y, argb );
+        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) ) dst.SetPixel( x, y, argb );
     }
 
-    static private void copy( BufferedImage src, int x, int y, int w, int h, BufferedImage dst, int dx, int dy, bool Rotated )
+    private static void Copy( BufferedImage src, int x, int y, int w, int h, BufferedImage dst, int dx, int dy, bool rotated )
     {
-        if ( Rotated )
+        for ( var i = 0; i < w; i++ )
         {
-            for ( var i = 0; i < w; i++ )
-                for ( var j = 0; j < h; j++ )
-                    plot( dst, dx + j, ( dy + w ) - i - 1, src.GetRGB( x + i, y + j ) );
-        }
-        else
-        {
-            for ( var i = 0; i < w; i++ )
-                for ( var j = 0; j < h; j++ )
-                    plot( dst, dx + i, dy + j, src.GetRGB( x + i, y + j ) );
+            for ( var j = 0; j < h; j++ )
+            {
+                if ( rotated )
+                {
+                    Plot( dst, dx + j, ( dy + w ) - i - 1, src.GetPixel( x + i, y + j ) );
+                }
+                else
+                {
+                    Plot( dst, dx + i, dy + j, src.GetPixel( x + i, y + j ) );
+                }
+            }
         }
     }
 
-    private void writePackFile( FileInfo outputDir, string scaledPackFileName, List< Page > pages )
+    private void WritePackFile( FileInfo outputDir, string scaledPackFileName, List< Page > pages )
     {
 //        var packFile = new
 //            FileInfo( outputDir, scaledPackFileName + _settings.atlasExtension );
@@ -579,7 +591,7 @@ public class TexturePacker
 //        writer.close();
     }
 
-//    private void writePage( OutputStreamWriter writer, bool appending, Page page )
+//    private void WritePage( OutputStreamWriter writer, bool appending, Page page )
 //    {
 //        string tab = "", colon = ":", comma = ",";
 //
@@ -604,7 +616,7 @@ public class TexturePacker
 //        if ( _settings.premultiplyAlpha ) writer.write( tab + "pma" + colon + "true\n" );
 //    }
 
-//    private void writeRect( Writer writer, Page page, Rect rect, string name )
+//    private void WriteRect( Writer writer, Page page, Rect rect, string name )
 //    {
 //        string tab = "", colon = ":", comma = ",";
 //
@@ -690,17 +702,17 @@ public class TexturePacker
 
     private string? GetRepeatValue()
     {
-        if ( ( _settings.wrapX == Texture.TextureWrap.Repeat ) && ( _settings.wrapY == Texture.TextureWrap.Repeat ) )
+        if ( ( _settings.WrapX == Texture.TextureWrap.Repeat ) && ( _settings.WrapY == Texture.TextureWrap.Repeat ) )
         {
             return "xy";
         }
 
-        if ( ( _settings.wrapX == Texture.TextureWrap.Repeat ) && ( _settings.wrapY == Texture.TextureWrap.ClampToEdge ) )
+        if ( ( _settings.WrapX == Texture.TextureWrap.Repeat ) && ( _settings.WrapY == Texture.TextureWrap.ClampToEdge ) )
         {
             return "x";
         }
 
-        if ( ( _settings.wrapX == Texture.TextureWrap.ClampToEdge ) && ( _settings.wrapY == Texture.TextureWrap.Repeat ) )
+        if ( ( _settings.WrapX == Texture.TextureWrap.ClampToEdge ) && ( _settings.WrapY == Texture.TextureWrap.Repeat ) )
         {
             return "y";
         }
@@ -708,29 +720,155 @@ public class TexturePacker
         return null;
     }
 
-    private int GetBufferedImageType( PixelType.Format format )
+    //TODO:
+    [SupportedOSPlatform( "windows" )]
+    private PixelFormat GetBufferedImageType( PixelType.Format format )
     {
-        switch ( _settings.format )
+        switch ( _settings.Format )
         {
             case PixelType.Format.RGBA8888:
             case PixelType.Format.RGBA4444:
-                return BufferedImage.TYPE_INT_ARGB;
+                return PixelFormat.Format32bppArgb;
 
             case PixelType.Format.RGB565:
             case PixelType.Format.RGB888:
-                return BufferedImage.TYPE_INT_RGB;
+                return PixelFormat.Format32bppRgb;
 
             case PixelType.Format.Alpha:
-                return BufferedImage.TYPE_BYTE_GRAY;
+                return PixelFormat.Alpha;
 
             default:
-                throw new GdxRuntimeException( $"Unsupported format: {_settings.format}" );
+                throw new GdxRuntimeException( $"Unsupported format: {_settings.Format}" );
         }
     }
 
-    public void setProgressListener( ProgressListener progress )
+    public void SetProgressListener( ProgressListener progress )
     {
         this._progressListener = progress;
+    }
+
+    /** Packs using defaults settings.
+     * @see TexturePacker#process(Settings, string, string, string) */
+    public static void Process( string input, string output, string packFileName )
+    {
+        Process( new Settings(), input, output, packFileName );
+    }
+
+    public static void Process( Settings settings, string input, string output, string packFileName )
+    {
+        Process( settings, input, output, packFileName, null );
+    }
+
+    /** @param input Directory containing individual images to be packed.
+     * @param output Directory where the pack file and page images will be written.
+     * @param packFileName The name of the pack file. Also used to name the page images.
+     * @param progress May be null. */
+    public static void Process( Settings settings, string input, string output, string packFileName,
+                                ProgressListener? progress )
+    {
+        try
+        {
+            var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
+            processor.Process( new FileInfo( input ), new FileInfo( output ) );
+        }
+        catch ( Exception ex )
+        {
+            throw new GdxRuntimeException( "Error packing images.", ex );
+        }
+    }
+
+    /** @return true if the output file does not yet exist or its last modification date is before the last modification date of
+     *         the input file */
+    public static bool IsModified( string input, string output, string packFileName, Settings settings )
+    {
+        var packFullFileName = output;
+
+        if ( !packFullFileName.EndsWith( '/' ) )
+        {
+            packFullFileName += "/";
+        }
+
+        packFullFileName += packFileName;
+        packFullFileName += settings.AtlasExtension;
+
+        // Check against the only file we know for sure will exist and will be changed if any asset changes: the atlas file.
+        var outputFile = new FileInfo( packFullFileName );
+
+        if ( !File.Exists( outputFile.FullName ) ) return true;
+
+        var inputFile = new FileInfo( input );
+
+        if ( !File.Exists( inputFile.FullName ) )
+        {
+            throw new ArgumentException( "Input file does not exist: " + inputFile.Name );
+        }
+
+        return IsModified( inputFile.FullName, ( outputFile.LastWriteTimeUtc.Ticks / 10000 ) );
+    }
+
+    public static bool IsModified( string filePath, long lastModified )
+    {
+        try
+        {
+            var fileInfo = new FileInfo( filePath );
+
+            if ( fileInfo.LastWriteTimeUtc.Ticks > lastModified )
+            {
+                return true;
+            }
+
+            if ( fileInfo.Attributes.HasFlag( FileAttributes.Directory ) )
+            {
+                var children = Directory.GetFiles( filePath, "*", SearchOption.AllDirectories );
+
+                if ( children is { Length: > 0 } )
+                {
+                    foreach ( var child in children )
+                    {
+                        if ( IsModified( child, lastModified ) )
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+        catch ( Exception ex )
+        {
+            // Handle exceptions (e.g., file not found, access denied)
+            Console.WriteLine( $"Error checking modification: {ex.Message}" );
+
+            return false; // Or throw an exception, depending on your error handling strategy
+        }
+    }
+
+    public static bool ProcessIfModified( string input, string output, string packFileName )
+    {
+        // Default settings (Needed to access the default atlas extension string)
+        var settings = new Settings();
+
+        if ( IsModified( input, output, packFileName, settings ) )
+        {
+            Process( settings, input, output, packFileName );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool ProcessIfModified( Settings settings, string input, string output, string packFileName )
+    {
+        if ( IsModified( input, output, packFileName, settings ) )
+        {
+            Process( settings, input, output, packFileName );
+
+            return true;
+        }
+
+        return false;
     }
 
     // ========================================================================
@@ -757,14 +895,14 @@ public class TexturePacker
     [PublicAPI]
     public class Alias : IComparable< Alias >
     {
-        public int    Index;
-        public string Name;
-        public int    OffsetX;
-        public int    OffsetY;
-        public int    OriginalHeight;
-        public int    OriginalWidth;
-        public int[]  Pads;
-        public int[]  Splits;
+        public int     Index;
+        public string? Name;
+        public int     OffsetX;
+        public int     OffsetY;
+        public int     OriginalHeight;
+        public int     OriginalWidth;
+        public int[]   Pads;
+        public int[]   Splits;
 
         public Alias( Rect rect )
         {
@@ -805,21 +943,21 @@ public class TexturePacker
         private BufferedImage? _bufferedImage;
         private FileInfo       _file = null!;
 
-        private bool    _isPatch;
-        public  int     Score1;
-        public  int     Score2;
-        public  bool    CanRotate = true;
-        public  int     Height; // Portion of page taken by this region, including padding.
-        public  int     Index;
-        public  string? Name = string.Empty;
-        public  int     OffsetX;
-        public  int     OffsetY;
-        public  int     OriginalHeight;
-        public  int     OriginalWidth;
-        public  int[]   Pads = null!;
-        public  int     RegionHeight;
-        public  int     RegionWidth;
-        public  bool    Rotated;
+        private bool   _isPatch;
+        public  int    Score1;
+        public  int    Score2;
+        public  bool   CanRotate = true;
+        public  int    Height; // Portion of page taken by this region, including padding.
+        public  int    Index;
+        public  string Name = string.Empty;
+        public  int    OffsetX;
+        public  int    OffsetY;
+        public  int    OriginalHeight;
+        public  int    OriginalWidth;
+        public  int[]  Pads = null!;
+        public  int    RegionHeight;
+        public  int    RegionWidth;
+        public  bool   Rotated;
 
         public List< Alias > Aliases = [ ];
         public int[]         Splits  = null!;
@@ -846,9 +984,9 @@ public class TexturePacker
 
         public Rect( BufferedImage source, int left, int top, int newWidth, int newHeight, bool isPatch )
         {
-//            _bufferedImage = new BufferedImage( source.GetColorModel(),
-//                                                source.GetRaster().CreateWritableChild( left, top, newWidth, newHeight, 0, 0, null ),
-//                                                source.GetColorModel().IsAlphaPremultiplied(), null );
+            _bufferedImage = new BufferedImage( source.GetColorModel(),
+                                                source.GetRaster().CreateWritableChild( left, top, newWidth, newHeight, 0, 0, null ),
+                                                source.GetColorModel().IsAlphaPremultiplied(), null );
 
             OffsetX        = left;
             OffsetY        = top;
@@ -868,16 +1006,17 @@ public class TexturePacker
             _bufferedImage = null;
         }
 
-        public BufferedImage GetImage( ImageProcessor _imageProcessor )
+        public BufferedImage GetImage( ImageProcessor imageProcessor )
         {
+            ArgumentNullException.ThrowIfNull( imageProcessor );
+
             if ( _bufferedImage != null ) return _bufferedImage;
 
             BufferedImage image;
 
             try
             {
-//                image = ImageIO.read( _file );
-                image = new BufferedImage( 0, 1, 2 );
+                image = BufferedImage.Read( _file );
             }
             catch ( IOException ex )
             {
@@ -886,10 +1025,18 @@ public class TexturePacker
 
             if ( image == null ) throw new GdxRuntimeException( $"Unable to read image: {_file}" );
 
-            var name             = this.Name;
+            var name = this.Name;
+
             if ( _isPatch ) name += ".9";
 
-            return _imageProcessor.ProcessImage( image, name ).GetImage( null );
+            var rect = imageProcessor.ProcessImage( image, name );
+
+            if ( rect == null )
+            {
+                throw new GdxRuntimeException( "ProcessImage returned null" );
+            }
+
+            return rect.GetImage( null );
         }
 
         public void Set( Rect rect )
@@ -928,8 +1075,14 @@ public class TexturePacker
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            //TODO:
-            return base.GetHashCode();
+            const int PRIME = 31;
+
+            var result = PRIME + NumberUtils.FloatToRawIntBits( 10f );
+            result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 20f );
+            result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 30f );
+            result = ( PRIME * result ) + NumberUtils.FloatToRawIntBits( 40f );
+
+            return result;
         }
 
         /// <inheritdoc />
@@ -968,7 +1121,7 @@ public class TexturePacker
     public interface IPacker
     {
         public List< Page > Pack( List< Rect > inputRects );
-        public List< Page > Pack( ProgressListener _progressListener, List< Rect > inputRects );
+        public List< Page > Pack( ProgressListener progressListener, List< Rect > inputRects );
     }
 
     // ========================================================================
@@ -1074,48 +1227,48 @@ public class TexturePacker
     [PublicAPI]
     public class Settings
     {
-        public bool                  multipleOfFour        { get; set; }
-        public bool                  rotation              { get; set; }
-        public bool                  pot                   { get; set; } = true;
-        public int                   paddingX              { get; set; } = 2;
-        public int                   paddingY              { get; set; } = 2;
-        public bool                  edgePadding           { get; set; } = true;
-        public bool                  duplicatePadding      { get; set; } = false;
-        public int                   minWidth              { get; set; } = 16;
-        public int                   minHeight             { get; set; } = 16;
-        public int                   maxWidth              { get; set; } = 1024;
-        public int                   maxHeight             { get; set; } = 1024;
-        public bool                  square                { get; set; } = false;
-        public bool                  stripWhitespaceX      { get; set; }
-        public bool                  stripWhitespaceY      { get; set; }
-        public int                   alphaThreshold        { get; set; }
-        public Texture.TextureFilter filterMin             { get; set; } = Texture.TextureFilter.Nearest;
-        public Texture.TextureFilter filterMag             { get; set; } = Texture.TextureFilter.Nearest;
-        public Texture.TextureWrap   wrapX                 { get; set; } = Texture.TextureWrap.ClampToEdge;
-        public Texture.TextureWrap   wrapY                 { get; set; } = Texture.TextureWrap.ClampToEdge;
-        public PixelType.Format      format                { get; set; } = PixelType.Format.RGBA8888;
-        public bool                  alias                 { get; set; } = true;
-        public string                outputFormat          { get; set; } = "png";
-        public float                 jpegQuality           { get; set; } = 0.9f;
-        public bool                  ignoreBlankImages     { get; set; } = true;
-        public bool                  fast                  { get; set; }
-        public bool                  debug                 { get; set; }
-        public bool                  silent                { get; set; }
-        public bool                  combineSubdirectories { get; set; }
-        public bool                  ignore                { get; set; }
-        public bool                  flattenPaths          { get; set; }
-        public bool                  premultiplyAlpha      { get; set; }
-        public bool                  useIndexes            { get; set; } = true;
-        public bool                  bleed                 { get; set; } = true;
-        public int                   bleedIterations       { get; set; } = 2;
-        public bool                  limitMemory           { get; set; } = true;
-        public bool                  grid                  { get; set; }
-        public float[]               scale                 { get; set; } = [ 1 ];
-        public string[]              scaleSuffix           { get; set; } = [ "" ];
-        public Resampling[]          scaleResampling       { get; set; } = [ Resampling.Bicubic ];
-        public string                atlasExtension        { get; set; } = ".atlas";
-        public bool                  prettyPrint           { get; set; } = true;
-        public bool                  legacyOutput          { get; set; } = true;
+        public bool                  MultipleOfFour        { get; set; }
+        public bool                  Rotation              { get; set; }
+        public bool                  PowerOfTwo            { get; set; } = true;
+        public int                   PaddingX              { get; set; } = 2;
+        public int                   PaddingY              { get; set; } = 2;
+        public bool                  EdgePadding           { get; set; } = true;
+        public bool                  DuplicatePadding      { get; set; } = false;
+        public int                   MinWidth              { get; set; } = 16;
+        public int                   MinHeight             { get; set; } = 16;
+        public int                   MaxWidth              { get; set; } = 1024;
+        public int                   MaxHeight             { get; set; } = 1024;
+        public bool                  Square                { get; set; } = false;
+        public bool                  StripWhitespaceX      { get; set; }
+        public bool                  StripWhitespaceY      { get; set; }
+        public int                   AlphaThreshold        { get; set; }
+        public Texture.TextureFilter FilterMin             { get; set; } = Texture.TextureFilter.Nearest;
+        public Texture.TextureFilter FilterMag             { get; set; } = Texture.TextureFilter.Nearest;
+        public Texture.TextureWrap   WrapX                 { get; set; } = Texture.TextureWrap.ClampToEdge;
+        public Texture.TextureWrap   WrapY                 { get; set; } = Texture.TextureWrap.ClampToEdge;
+        public PixelType.Format      Format                { get; set; } = PixelType.Format.RGBA8888;
+        public bool                  IsAlias               { get; set; } = true;
+        public string                OutputFormat          { get; set; } = "png";
+        public float                 JpegQuality           { get; set; } = 0.9f;
+        public bool                  IgnoreBlankImages     { get; set; } = true;
+        public bool                  Fast                  { get; set; }
+        public bool                  Debug                 { get; set; }
+        public bool                  Silent                { get; set; }
+        public bool                  CombineSubdirectories { get; set; }
+        public bool                  Ignore                { get; set; }
+        public bool                  FlattenPaths          { get; set; }
+        public bool                  PremultiplyAlpha      { get; set; }
+        public bool                  UseIndexes            { get; set; } = true;
+        public bool                  Bleed                 { get; set; } = true;
+        public int                   BleedIterations       { get; set; } = 2;
+        public bool                  LimitMemory           { get; set; } = true;
+        public bool                  Grid                  { get; set; }
+        public float[]               Scale                 { get; set; } = [ 1 ];
+        public string[]              ScaleSuffix           { get; set; } = [ "" ];
+        public Resampling[]          ScaleResampling       { get; set; } = [ Resampling.Bicubic ];
+        public string                AtlasExtension        { get; set; } = ".atlas";
+        public bool                  PrettyPrint           { get; set; } = true;
+        public bool                  LegacyOutput          { get; set; } = true;
 
         // ====================================================================
 
@@ -1130,64 +1283,64 @@ public class TexturePacker
 
         public void Set( Settings settings )
         {
-            fast                  = settings.fast;
-            rotation              = settings.rotation;
-            pot                   = settings.pot;
-            multipleOfFour        = settings.multipleOfFour;
-            minWidth              = settings.minWidth;
-            minHeight             = settings.minHeight;
-            maxWidth              = settings.maxWidth;
-            maxHeight             = settings.maxHeight;
-            paddingX              = settings.paddingX;
-            paddingY              = settings.paddingY;
-            edgePadding           = settings.edgePadding;
-            duplicatePadding      = settings.duplicatePadding;
-            alphaThreshold        = settings.alphaThreshold;
-            ignoreBlankImages     = settings.ignoreBlankImages;
-            stripWhitespaceX      = settings.stripWhitespaceX;
-            stripWhitespaceY      = settings.stripWhitespaceY;
-            alias                 = settings.alias;
-            format                = settings.format;
-            jpegQuality           = settings.jpegQuality;
-            outputFormat          = settings.outputFormat;
-            filterMin             = settings.filterMin;
-            filterMag             = settings.filterMag;
-            wrapX                 = settings.wrapX;
-            wrapY                 = settings.wrapY;
-            debug                 = settings.debug;
-            silent                = settings.silent;
-            combineSubdirectories = settings.combineSubdirectories;
-            ignore                = settings.ignore;
-            flattenPaths          = settings.flattenPaths;
-            premultiplyAlpha      = settings.premultiplyAlpha;
-            square                = settings.square;
-            useIndexes            = settings.useIndexes;
-            bleed                 = settings.bleed;
-            bleedIterations       = settings.bleedIterations;
-            limitMemory           = settings.limitMemory;
-            grid                  = settings.grid;
-            atlasExtension        = settings.atlasExtension;
-            prettyPrint           = settings.prettyPrint;
-            legacyOutput          = settings.legacyOutput;
+            Fast                  = settings.Fast;
+            Rotation              = settings.Rotation;
+            PowerOfTwo            = settings.PowerOfTwo;
+            MultipleOfFour        = settings.MultipleOfFour;
+            MinWidth              = settings.MinWidth;
+            MinHeight             = settings.MinHeight;
+            MaxWidth              = settings.MaxWidth;
+            MaxHeight             = settings.MaxHeight;
+            PaddingX              = settings.PaddingX;
+            PaddingY              = settings.PaddingY;
+            EdgePadding           = settings.EdgePadding;
+            DuplicatePadding      = settings.DuplicatePadding;
+            AlphaThreshold        = settings.AlphaThreshold;
+            IgnoreBlankImages     = settings.IgnoreBlankImages;
+            StripWhitespaceX      = settings.StripWhitespaceX;
+            StripWhitespaceY      = settings.StripWhitespaceY;
+            IsAlias               = settings.IsAlias;
+            Format                = settings.Format;
+            JpegQuality           = settings.JpegQuality;
+            OutputFormat          = settings.OutputFormat;
+            FilterMin             = settings.FilterMin;
+            FilterMag             = settings.FilterMag;
+            WrapX                 = settings.WrapX;
+            WrapY                 = settings.WrapY;
+            Debug                 = settings.Debug;
+            Silent                = settings.Silent;
+            CombineSubdirectories = settings.CombineSubdirectories;
+            Ignore                = settings.Ignore;
+            FlattenPaths          = settings.FlattenPaths;
+            PremultiplyAlpha      = settings.PremultiplyAlpha;
+            Square                = settings.Square;
+            UseIndexes            = settings.UseIndexes;
+            Bleed                 = settings.Bleed;
+            BleedIterations       = settings.BleedIterations;
+            LimitMemory           = settings.LimitMemory;
+            Grid                  = settings.Grid;
+            AtlasExtension        = settings.AtlasExtension;
+            PrettyPrint           = settings.PrettyPrint;
+            LegacyOutput          = settings.LegacyOutput;
 
-            settings.scale.CopyTo( scale, 0 );
-            settings.scaleSuffix.CopyTo( scaleSuffix, 0 );
-            settings.scaleResampling.CopyTo( scaleResampling, 0 );
+            settings.Scale.CopyTo( Scale, 0 );
+            settings.ScaleSuffix.CopyTo( ScaleSuffix, 0 );
+            settings.ScaleResampling.CopyTo( ScaleResampling, 0 );
         }
 
         public string GetScaledPackFileName( string packFileName, int scaleIndex )
         {
             // Use suffix if not empty string.
-            if ( scaleSuffix[ scaleIndex ].Length > 0 )
+            if ( ScaleSuffix[ scaleIndex ].Length > 0 )
             {
-                packFileName += scaleSuffix[ scaleIndex ];
+                packFileName += ScaleSuffix[ scaleIndex ];
             }
             else
             {
                 // Otherwise if scale != 1 or multiple scales, use subdirectory.
-                var scaleValue = scale[ scaleIndex ];
+                var scaleValue = Scale[ scaleIndex ];
 
-                if ( scale.Length != 1 )
+                if ( Scale.Length != 1 )
                 {
                     packFileName = ( ( scaleValue % 1 ) == 0f ? $"{( int )scaleValue}" : $"{scaleValue}" )
                                    + "/"

@@ -29,6 +29,7 @@ using DesktopGLBackend.Window;
 
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
 

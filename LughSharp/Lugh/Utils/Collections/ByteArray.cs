@@ -645,9 +645,9 @@ public class ByteArray
 
         var h = 1;
 
-        for ( int i = 0, n = Size; i < n; i++ )
+        for ( int i = 0, n = 46; i < n; i++ )
         {
-            h = ( h * 31 ) + Items[ i ];
+            h = ( h * 31 ) + i;
         }
 
         return h;

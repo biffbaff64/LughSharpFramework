@@ -22,26 +22,30 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Numerics;
-
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
+
+using BufferedImage = LughSharp.Lugh.Graphics.Images.BufferedImage;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
-public class ImageProcessor
+public partial class ImageProcessor
 {
     public float Scale { get; set; }
-    
-    private static readonly BufferedImage emptyImage   = new BufferedImage( 1, 1, BufferedImage.TYPE_4BYTE_ABGR );
-//    private static          Pattern       indexPattern = Pattern.compile( "(.+)_(\\d+)$" );
+
+    private static readonly BufferedImage _emptyImage   = new( 1, 1, PixelType.Format.RGBA8888 );
+    private static          Regex  _indexPattern = MyRegex();
 
     private readonly TexturePacker.Settings                    _settings;
     private readonly Dictionary< string, TexturePacker.Rect? > _crcs       = [ ];
     private readonly List< TexturePacker.Rect >                _rects      = [ ];
     private          float                                     _scale      = 1;
-    private          Resampling                  _resampling = Resampling.Bicubic;
+    private          Resampling                                _resampling = Resampling.Bicubic;
+
+    // ========================================================================
+    // ========================================================================
 
     public ImageProcessor( TexturePacker.Settings settings )
     {
@@ -56,8 +60,7 @@ public class ImageProcessor
 
         try
         {
-//            image = ImageIO.read( file );
-            image = new BufferedImage( 0, 1, 2 );
+            image = PixmapIO.ReadCIM( file );
         }
         catch ( IOException ex )
         {
@@ -66,8 +69,7 @@ public class ImageProcessor
 
         if ( image == null ) throw new GdxRuntimeException( "Unable to read image: " + file );
 
-        var name = Path.GetFullPath( file.FullName );
-        name = name.Replace( '\\', '/' );
+        var name = Path.GetFullPath( file.FullName ).Replace( '\\', '/' );
 
         // Strip root dir off front of image path.
         if ( rootPath != null )
@@ -87,35 +89,33 @@ public class ImageProcessor
 
         var rect = AddImage( image, name );
 
-        if ( ( rect != null ) && _settings.limitMemory ) rect.UnloadImage( file );
+        if ( ( rect != null ) && _settings.LimitMemory ) rect.UnloadImage( file );
 
         return rect;
     }
 
-    /** The image will be kept in-memory during packing.
-     * @see #addImage(File, string) */
     public TexturePacker.Rect? AddImage( BufferedImage? image, string? name )
     {
         ArgumentNullException.ThrowIfNull( image );
         ArgumentNullException.ThrowIfNull( name );
-        
+
         var rect = ProcessImage( image, name );
 
         if ( rect == null )
         {
-            if ( !_settings.silent ) Console.WriteLine( "Ignoring blank input image: " + name );
+            if ( !_settings.Silent ) Console.WriteLine( "Ignoring blank input image: " + name );
 
             return null;
         }
 
-        if ( _settings.alias )
+        if ( _settings.IsAlias )
         {
-            var crc      = hash( rect.GetImage( this ) );
+            var crc      = Hash( rect.GetImage( this ) );
             var existing = _crcs[ crc ];
 
             if ( existing != null )
             {
-                if ( !_settings.silent )
+                if ( !_settings.Silent )
                 {
                     var rectName     = rect.Name + ( rect.Index != -1 ? "_" + rect.Index : "" );
                     var existingName = existing.Name + ( existing.Index != -1 ? "_" + existing.Index : "" );
@@ -163,103 +163,123 @@ public class ImageProcessor
     /// </summary>
     public TexturePacker.Rect? ProcessImage( BufferedImage image, string name )
     {
-        throw new NotImplementedException();
+        if ( _scale <= 0 ) throw new GdxRuntimeException( $"scale cannot be <= 0: {_scale}" );
 
-//        if ( _scale <= 0 ) throw new GdxRuntimeException( $"scale cannot be <= 0: {_scale}" );
+        var width  = image.Width;
+        var height = image.Height;
+
+//TODO:
 //
-//        int width  = image.Width;
-//        int height = image.Height;
-//
-//        if ( image.ImageType() != BufferedImage.TYPE_4BYTE_ABGR )
+//        if ( image.ImageType != BufferedImage.TYPE_4BYTE_ABGR )
 //        {
-//            var newImage = new BufferedImage( width, height, BufferedImage.TYPE_4BYTE_ABGR );
-//
-//            newImage.GetGraphics().DrawImage( image, 0, 0, null );
-//            image = newImage;
+//            image = new BufferedImage( width, height, BufferedImage.TYPE_4BYTE_ABGR );
+//            image.GetGraphics().DrawImage( image, 0, 0, null );
 //        }
-//
-//        var                 isPatch = name.EndsWith( ".9" );
-//        int[]?              splits  = null;
-//        int[]?              pads    = null;
-//        TexturePacker.Rect? rect    = null;
-//
-//        if ( isPatch )
-//        {
-//            // Strip ".9" from file name, read ninepatch split pixels, and strip ninepatch split pixels.
-//            name   = name.Substring( 0, name.Length - 2 );
-//            splits = GetSplits( image, name );
-//            pads   = GetPads( image, name, splits );
-//
-//            // Strip split pixels.
-//            width  -= 2;
-//            height -= 2;
-//            
-//            var newImage = new BufferedImage( width, height, BufferedImage.TYPE_4BYTE_ABGR );
-//            
-//            newImage.GetGraphics().drawImage( image, 0, 0, width, height, 1, 1, width + 1, height + 1, null );
-//            image = newImage;
-//        }
-//
-//        // Scale image.
-//        if ( _scale != 1f )
-//        {
-//            width  = Math.Max( 1, Math.Round( width * _scale ) );
-//            height = Math.Max( 1, Math.Round( height * _scale ) );
-//            
-//            var newImage = new BufferedImage( width, height, BufferedImage.TYPE_4BYTE_ABGR );
-//
-//            if ( scale < 1 )
-//            {
+
+        var                 isPatch = name.EndsWith( ".9" );
+        int[]?              splits  = null;
+        int[]?              pads    = null;
+        TexturePacker.Rect? rect    = null;
+
+        if ( isPatch )
+        {
+            // Strip ".9" from file name, read ninepatch split pixels, and strip ninepatch split pixels.
+            name   = name.Substring( 0, name.Length - 2 );
+            splits = GetSplits( image, name );
+            pads   = GetPads( image, name, splits );
+
+            // Strip split pixels.
+            width  -= 2;
+            height -= 2;
+
+            image = new BufferedImage( width, height, PixelType.Format.RGBA8888 );
+            image.DrawPixmap( image, 0, 0, width, height, 1, 1, width + 1, height + 1 );
+        }
+
+        // Scale image.
+        if ( Math.Abs( _scale - 1f ) > Constants.FLOAT_TOLERANCE )
+        {
+            width  = ( int )Math.Max( 1, Math.Round( width * _scale ) );
+            height = ( int )Math.Max( 1, Math.Round( height * _scale ) );
+
+            var newImage = new BufferedImage( width, height, PixelType.Format.RGBA8888 );
+
+            if ( _scale < 1 )
+            {
 //                newImage.getGraphics().drawImage( image.getScaledInstance( width, height, Image.SCALE_AREA_AVERAGING ), 0, 0, null );
-//            }
-//            else
-//            {
+                newImage.DrawPixmap( image, 0, 0, image.Width, image.Height, 0, 0, width, height );
+            }
+            else
+            {
 //                Graphics2D g = ( Graphics2D )newImage.getGraphics();
 //                g.setRenderingHint( RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY );
 //                g.setRenderingHint( RenderingHints.KEY_INTERPOLATION, resampling.value );
 //                g.drawImage( image, 0, 0, width, height, null );
-//            }
-//
+
+//                System.Drawing.Graphics g = newImage.GetGraphics();
+
+//                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+//                g.InterpolationMode  = _resampling.ToInterpolationMode();
+//                g.DrawImage( image, Rectangle( 0, 0, width, height ), 0, 0, width, height, g.InterpolationMode 
+            }
+
 //            image = newImage;
-//        }
-//
-//        // Strip digits off end of name and use as index.
-//        var index = -1;
-//
-//        if ( settings.useIndexes )
-//        {
-//            Matcher matcher = indexPattern.matcher( name );
-//
-//            if ( matcher.matches() )
-//            {
-//                name  = matcher.group( 1 );
-//                index = Integer.parseInt( matcher.group( 2 ) );
-//            }
-//        }
-//
-//        if ( isPatch )
-//        {
-//            // Ninepatches aren't rotated or whitespace stripped.
-//            rect           = new TexturePacker.Rect( image, 0, 0, width, height, true );
-//            rect.splits    = splits;
-//            rect.pads      = pads;
-//            rect.canRotate = false;
-//        }
-//        else
-//        {
-//            rect = stripWhitespace( name, image );
-//
-//            if ( rect == null ) return null;
-//        }
-//
-//        rect.name  = name;
-//        rect.index = index;
-//
-//        return rect;
+        }
+
+        // Strip digits off end of name and use as index.
+        var index = -1;
+
+        if ( _settings.UseIndexes )
+        {
+            var match = _indexPattern.Match( name );
+
+            if ( match.Success )
+            {
+                name = match.Groups[ 1 ].Value;
+
+                if ( int.TryParse( match.Groups[ 2 ].Value, out index ) )
+                {
+                    // index now contains the parsed integer value.
+                    // name now contains the first group's value.
+                }
+                else
+                {
+                    // Handle the case where the second group is not a valid integer.
+                    Console.WriteLine( "Error: Index is not a valid integer." );
+                }
+            }
+            else
+            {
+                // Handle the case where the pattern does not match.
+                Console.WriteLine( "Pattern did not match." );
+            }
+        }
+
+        if ( isPatch )
+        {
+            // Ninepatches aren't rotated or whitespace stripped.
+            rect = new TexturePacker.Rect( image, 0, 0, width, height, true )
+            {
+                Splits    = splits,
+                Pads      = pads,
+                CanRotate = false,
+            };
+        }
+        else
+        {
+            rect = StripWhitespace( name, image );
+
+            if ( rect == null ) return null;
+        }
+
+        rect.Name  = name;
+        rect.Index = index;
+
+        return rect;
     }
 
     /** Strips whitespace and returns the rect, or null if the image should be ignored. */
-    protected TexturePacker.Rect stripWhitespace( string name, BufferedImage source )
+    protected TexturePacker.Rect StripWhitespace( string name, BufferedImage source )
     {
         throw new NotImplementedException();
 
@@ -382,15 +402,15 @@ public class ImageProcessor
 //        return new TexturePacker.Rect( source, left, top, newWidth, newHeight, false );
     }
 
-    private static string splitError( int x, int y, int[] rgba, string name )
+    private static string SplitError( int x, int y, int[] rgba, string name )
     {
         throw new GdxRuntimeException( "Invalid " + name + " ninepatch split pixel at " + x + ", " + y + ", rgba: " + rgba[ 0 ] + ", "
-                                    + rgba[ 1 ] + ", " + rgba[ 2 ] + ", " + rgba[ 3 ] );
+                                       + rgba[ 1 ] + ", " + rgba[ 2 ] + ", " + rgba[ 3 ] );
     }
 
     /** Returns the splits, or null if the image had no splits or the splits were only a single region. Splits are an int[4] that
      * has left, right, top, bottom. */
-    private int[] getSplits( BufferedImage image, string name )
+    private int[] GetSplits( BufferedImage image, string name )
     {
         throw new NotImplementedException();
 
@@ -444,7 +464,7 @@ public class ImageProcessor
 
     /** Returns the pads, or null if the image had no pads or the pads match the splits. Pads are an int[4] that has left, right,
      * top, bottom. */
-    private int[] getPads( BufferedImage image, string name, int[] splits )
+    private int[] GetPads( BufferedImage image, string name, int[] splits )
     {
         throw new NotImplementedException();
 
@@ -536,8 +556,8 @@ public class ImageProcessor
 
     //Temp
     private class WritableRaster;
-    
-    private static int getSplitPoint( WritableRaster raster, string name, int startX, int startY, bool startPoint,
+
+    private static int GetSplitPoint( WritableRaster raster, string name, int startX, int startY, bool startPoint,
                                       bool xAxis )
     {
         throw new NotImplementedException();
@@ -570,7 +590,7 @@ public class ImageProcessor
 //        return 0;
     }
 
-    private static string hash( BufferedImage image )
+    private static string Hash( BufferedImage image )
     {
         throw new NotImplementedException();
 
@@ -617,4 +637,7 @@ public class ImageProcessor
 //        digest.update( ( byte )( value >> 8 ) );
 //        digest.update( ( byte )value );
 //    }
+
+    [GeneratedRegex( "(.+)_(\\d+)$" )]
+    private static partial Regex MyRegex();
 }

@@ -29,6 +29,7 @@ namespace DesktopGLBackend.Audio;
 [PublicAPI]
 public class Wav
 {
+    [PublicAPI]
     public class Music : OpenALMusic
     {
         private WavInputStream? _input;
@@ -70,6 +71,7 @@ public class Wav
         }
     }
 
+    [PublicAPI]
     public class Sound : OpenALSound
     {
         public Sound( OpenALAudio audio, FileInfo file )

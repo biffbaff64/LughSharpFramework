@@ -625,8 +625,8 @@ public class Vector2 : IVector< Vector2 >
     {
         const int PRIME = 31;
 
-        var result = PRIME + NumberUtils.FloatToIntBits( X );
-        result = ( PRIME * result ) + NumberUtils.FloatToIntBits( Y );
+        var result = PRIME + NumberUtils.FloatToIntBits( 1f );
+        result = ( PRIME * result ) + NumberUtils.FloatToIntBits( 20f );
 
         return result;
     }

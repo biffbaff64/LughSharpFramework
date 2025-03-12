@@ -61,24 +61,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
     #endregion From ICloneable Interface
 
-    /// <summary>
-    /// Debugs the various methods and properties for this class.
-    /// </summary>
-    public void Debug()
-    {
-        Logger.Debug( RGBADebugString );
-        Logger.Debug( $"PackedColorABGR: {ABGRPackedColor} :: {ABGRPackedColor:X}" );
-        Logger.Debug( $"PackedColorRGBA: {RGBAPackedColor} :: {RGBAPackedColor:X}" );
-        Logger.Debug( $"ABGRFloatPack: {ABGRFloatPack}" );
-        Logger.Debug( $"RGBAFloatPack: {RGBAFloatPack}" );
-        Logger.Debug( $"RGBA8888ToInt(R, G, B, A): {RGBA8888ToInt( R, G, B, A ):X}" );
-        Logger.Debug( $"ToFloatBitsABGR(): {ToFloatBitsABGR()}" );
-        Logger.Debug( $"ToFloatBitsRGBA(): {ToFloatBitsRGBA()}" );
-        Logger.Debug( $"ToFloatBitsABGR(F,F,F,F): {ToFloatBitsABGR( A, B, G, R )}" );
-        Logger.Debug( $"ToFloatBitsRGBA(F,F,F,F): {ToFloatBitsRGBA( R, G, B, A )}" );
-        Logger.Divider();
-    }
-
     #region colour values
 
     public static readonly Color Red        = new( 0xff0000ff );
@@ -632,9 +614,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     #region RGBA Methods
 
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR and then
-    /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
-    /// between 0-254 to avoid using float bits in the NaN range.
+    /// Packs the color components into a 32-bit integer with the format ABGR and then converts it
+    /// to a float. Alpha is compressed from 0-255 to use only even numbers between 0-254 to avoid
+    /// using float bits in the NaN range.
     /// <para>
     /// Note: Converting a color to a float and back can be lossy for alpha.
     /// </para>
@@ -654,9 +636,9 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR and then
-    /// converts it to a float. Alpha is compressed from 0-255 to use only even numbers
-    /// between 0-254 to avoid using float bits in the NaN range.
+    /// Packs the color components into a 32-bit integer with the format ABGR and then converts it
+    /// to a float. Alpha is compressed from 0-255 to use only even numbers between 0-254 to avoid
+    /// using float bits in the NaN range.
     /// <para>
     /// Note: Converting a color to a float and back can be lossy for alpha.
     /// </para>
@@ -698,7 +680,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component. </param>
     /// <param name="a"> Alpha component. </param>
     /// <returns></returns>
-    public uint RGBA8888ToInt( float r, float g, float b, float a )
+    public static uint RGBA8888ToUInt( float r, float g, float b, float a )
     {
         return ( ( uint )( 255f * r ) << 24 )
                | ( ( uint )( 255f * g ) << 16 )
@@ -707,8 +689,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given <see cref="Color" /> as a 32-bit uint in the
-    /// following format:-
+    /// Returns the given <see cref="Color" /> as a 32-bit uint in the following format:-
     /// <li>Bits  0 - 4  : Blue component</li>
     /// <li>Bits  5 - 10 : Green component</li>
     /// <li>Bits 11 - 15 : Red component</li>
@@ -723,8 +704,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given R.G.B colour components as a 32-bit uint in the
-    /// following format:-
+    /// Returns the given R.G.B colour components as a 32-bit uint in the following format:-
     /// <li>Bits  0 - 3  : Alpha component</li>
     /// <li>Bits  4 - 7  : Blue component</li>
     /// <li>Bits  8 - 11 : Green component</li>
@@ -744,8 +724,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Returns the given R.G.B colour components as a 32-bit uint in the
-    /// following format:-
+    /// Returns the given R.G.B colour components as a 32-bit uint in the following format:-
     /// <li>Bits  0 - 7  : Blue component</li>
     /// <li>Bits  8 - 15 : Green component</li>
     /// <li>Bits 16 - 23 : Red component</li>
@@ -1047,7 +1026,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// </summary>
     /// <param name="color"> The Color object to assign the converted values to. </param>
     /// <param name="value"> The 32-bit ARGB8888 integer value. </param>
-    public static void ARGB8888ToColor( ref Color color, uint value )
+    public static void Argb8888ToColor( ref Color color, uint value )
     {
         color.A = ( ( value & 0xff000000 ) >>> 24 ) / 255f;
         color.R = ( ( value & 0x00ff0000 ) >>> 16 ) / 255f;
@@ -1067,7 +1046,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <param name="b"> Blue component </param>
     /// <param name="g"> Green component </param>
     /// <param name="r"> Red component </param>
-    public static uint ARGB8888( float a, float r, float g, float b )
+    public static uint Argb8888( float a, float r, float g, float b )
     {
         return ( ( uint )( a * 255 ) << 24 )
                | ( ( uint )( r * 255 ) << 16 )
@@ -1084,7 +1063,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// <li>Bits 24 - 31 : Alpha component</li>
     /// </summary>
     /// <param name="color"> The colour. </param>
-    public static uint ARGB8888( Color color )
+    public static uint Argb8888( Color color )
     {
         return ( ( uint )( color.A * 255 ) << 24 )
                | ( ( uint )( color.R * 255 ) << 16 )
@@ -1297,4 +1276,22 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
     // ========================================================================
     // ========================================================================
+
+    /// <summary>
+    /// Debugs the various methods and properties for this class.
+    /// </summary>
+    public void Debug()
+    {
+        Logger.Debug( RGBADebugString );
+        Logger.Debug( $"PackedColorABGR: {ABGRPackedColor} :: {ABGRPackedColor:X}" );
+        Logger.Debug( $"PackedColorRGBA: {RGBAPackedColor} :: {RGBAPackedColor:X}" );
+        Logger.Debug( $"ABGRFloatPack: {ABGRFloatPack}" );
+        Logger.Debug( $"RGBAFloatPack: {RGBAFloatPack}" );
+        Logger.Debug( $"RGBA8888ToUInt(R, G, B, A): {RGBA8888ToInt( R, G, B, A ):X}" );
+        Logger.Debug( $"ToFloatBitsABGR(): {ToFloatBitsABGR()}" );
+        Logger.Debug( $"ToFloatBitsRGBA(): {ToFloatBitsRGBA()}" );
+        Logger.Debug( $"ToFloatBitsABGR(F,F,F,F): {ToFloatBitsABGR( A, B, G, R )}" );
+        Logger.Debug( $"ToFloatBitsRGBA(F,F,F,F): {ToFloatBitsRGBA( R, G, B, A )}" );
+        Logger.Divider();
+    }
 }

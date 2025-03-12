@@ -27,4 +27,13 @@ namespace LughSharp.Lugh.Graphics.Packing;
 [PublicAPI]
 public class TexturePackerFileProcessor
 {
+    public TexturePackerFileProcessor( TexturePacker.Settings settings, string packFileName, TexturePacker.ProgressListener? progress )
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Process( FileInfo fileInfo, FileInfo fileInfo1 )
+    {
+        throw new NotImplementedException();
+    }
 }
