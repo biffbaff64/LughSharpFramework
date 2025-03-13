@@ -40,7 +40,7 @@ public enum Resampling
 public static class ResamplingExtensions
 {
     //TODO:
-    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform( "windows" )]
     public static InterpolationMode ToInterpolationMode( this Resampling resampling )
     {
         return resampling switch

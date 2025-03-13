@@ -22,15 +22,28 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.Images;
 
-public partial class Image
+namespace LughSharp.Lugh.Graphics.Packing;
+
+public class BufferedImage : Pixmap
 {
-    public class ColorModel
+    /// <inheritdoc />
+    public BufferedImage( int width, int height, PixelType.Format? format )
+        : base( width, height, format )
     {
-        public object IsAlphaPremultiplied()
-        {
-            throw new NotImplementedException();
-        }
+    }
+
+    /// <inheritdoc />
+    public BufferedImage( FileInfo file )
+        : base( file )
+    {
+    }
+    
+    // ========================================================================
+
+    public static BufferedImage FromFile( FileInfo file )
+    {
+        throw new NotImplementedException();
     }
 }

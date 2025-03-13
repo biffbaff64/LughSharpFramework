@@ -76,7 +76,7 @@ public class DesktopGLCursor : ICursor, IDisposable
         PixmapCopy.Blending = Pixmap.BlendTypes.None;
         PixmapCopy.DrawPixmap( pixmap, 0, 0 );
 
-        GlfwImage = new Image
+        GlfwImage = new GLFW.Image
         {
             Pixels = PixmapCopy.PixelData,
             Width  = PixmapCopy.Width,
@@ -90,7 +90,7 @@ public class DesktopGLCursor : ICursor, IDisposable
 
     public DesktopGLWindow Window     { get; set; }
     public Pixmap          PixmapCopy { get; set; }
-    public Image           GlfwImage  { get; set; }
+    public GLFW.Image      GlfwImage  { get; set; }
     public Cursor          GlfwCursor { get; set; }
 
     /// <summary>
@@ -132,8 +132,10 @@ public class DesktopGLCursor : ICursor, IDisposable
         Cursors.Remove( this );
         PixmapCopy.Dispose();
         PixmapCopy = null!;
-        GlfwImage  = default( Image )!;
+        GlfwImage  = null!;
         Glfw.DestroyCursor( GlfwCursor );
+        
+        GC.SuppressFinalize( this );
     }
 
     public static void Dispose( DesktopGLWindow glWindow )

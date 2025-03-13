@@ -29,9 +29,9 @@ public class IOData
 {
     // ========================================================================
 
-    public static string? AssemblyPath      = Assembly.GetExecutingAssembly().Location;
-    public static string? AssemblyDirectory = Path.GetDirectoryName( AssemblyPath );
-    public static string? AssetsPath        = Path.Combine( AssemblyDirectory ?? "", "Assets" );
+    public static readonly string? AssemblyPath      = Assembly.GetExecutingAssembly().Location;
+    public static readonly string? AssemblyDirectory = Path.GetDirectoryName( AssemblyPath );
+    public static readonly string? AssetsPath        = Path.Combine( AssemblyDirectory ?? "", "Assets" );
 
     // ========================================================================
 }

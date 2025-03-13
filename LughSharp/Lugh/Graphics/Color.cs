@@ -166,7 +166,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
     /// <summary>
     /// Constructor, sets the Color components using the specified integer value in
-    /// the format RGBA8888. This is inverse to the rgba8888(r, g, b, a) method.
+    /// the format RGBA8888.
     /// </summary>
     /// <param name="rgba8888"> An uint color value in RGBA8888 format. </param>
     public Color( uint rgba8888 )
@@ -1287,7 +1287,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
         Logger.Debug( $"PackedColorRGBA: {RGBAPackedColor} :: {RGBAPackedColor:X}" );
         Logger.Debug( $"ABGRFloatPack: {ABGRFloatPack}" );
         Logger.Debug( $"RGBAFloatPack: {RGBAFloatPack}" );
-        Logger.Debug( $"RGBA8888ToUInt(R, G, B, A): {RGBA8888ToInt( R, G, B, A ):X}" );
+        Logger.Debug( $"RGBA8888ToUInt(R, G, B, A): {RGBA8888ToUInt( R, G, B, A ):X}" );
         Logger.Debug( $"ToFloatBitsABGR(): {ToFloatBitsABGR()}" );
         Logger.Debug( $"ToFloatBitsRGBA(): {ToFloatBitsRGBA()}" );
         Logger.Debug( $"ToFloatBitsABGR(F,F,F,F): {ToFloatBitsABGR( A, B, G, R )}" );

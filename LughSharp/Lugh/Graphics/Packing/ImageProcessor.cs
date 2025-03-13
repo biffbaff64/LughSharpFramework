@@ -22,27 +22,33 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.Versioning;
+
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using BufferedImage = LughSharp.Lugh.Graphics.Images.BufferedImage;
+using Image = System.Drawing.Image;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public partial class ImageProcessor
 {
     public float Scale { get; set; }
 
-    private static readonly BufferedImage _emptyImage   = new( 1, 1, PixelType.Format.RGBA8888 );
+    private static readonly BufferedImage _emptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
     private static          Regex  _indexPattern = MyRegex();
 
     private readonly TexturePacker.Settings                    _settings;
-    private readonly Dictionary< string, TexturePacker.Rect? > _crcs       = [ ];
-    private readonly List< TexturePacker.Rect >                _rects      = [ ];
-    private          float                                     _scale      = 1;
-    private          Resampling                                _resampling = Resampling.Bicubic;
+    private readonly Dictionary< string, TexturePacker.Rect? > _crcs  = [ ];
+    private readonly List< TexturePacker.Rect >                _rects = [ ];
+
+    private float      _scale      = 1;
+    private Resampling _resampling = Resampling.Bicubic;
 
     // ========================================================================
     // ========================================================================
@@ -52,15 +58,13 @@ public partial class ImageProcessor
         this._settings = settings;
     }
 
-    /** The image won't be kept in-memory during packing if {@link Settings#limitMemory} is true.
-     * @param rootPath Used to strip the root directory prefix from image file names, can be null. */
     public TexturePacker.Rect? AddImage( FileInfo file, string? rootPath )
     {
         BufferedImage image;
 
         try
         {
-            image = PixmapIO.ReadCIM( file );
+            image = new BufferedImage( file.FullName );
         }
         catch ( IOException ex )
         {
@@ -161,20 +165,21 @@ public partial class ImageProcessor
     /// Returns a rect for the image describing the texture region to be packed,
     /// or null if the image should not be packed.
     /// </summary>
-    public TexturePacker.Rect? ProcessImage( BufferedImage image, string name )
+    public TexturePacker.Rect? ProcessImage( BufferedImage? image, string? name )
     {
         if ( _scale <= 0 ) throw new GdxRuntimeException( $"scale cannot be <= 0: {_scale}" );
 
         var width  = image.Width;
         var height = image.Height;
 
-//TODO:
-//
-//        if ( image.ImageType != BufferedImage.TYPE_4BYTE_ABGR )
-//        {
-//            image = new BufferedImage( width, height, BufferedImage.TYPE_4BYTE_ABGR );
-//            image.GetGraphics().DrawImage( image, 0, 0, null );
-//        }
+        if ( image.PixelFormat != PixelFormat.Format32bppArgb )
+        {
+            using ( image = new BufferedImage( width, height, PixelFormat.Format32bppArgb ) )
+            using ( var g = System.Drawing.Graphics.FromImage( image ) )
+            {
+                g.DrawImage( image, new Rectangle( 0, 0, width, height ) );
+            }
+        }
 
         var                 isPatch = name.EndsWith( ".9" );
         int[]?              splits  = null;
@@ -192,8 +197,14 @@ public partial class ImageProcessor
             width  -= 2;
             height -= 2;
 
-            image = new BufferedImage( width, height, PixelType.Format.RGBA8888 );
-            image.DrawPixmap( image, 0, 0, width, height, 1, 1, width + 1, height + 1 );
+            using ( image = new BufferedImage( width, height, PixelFormat.Format32bppArgb ) )
+            using ( var g = System.Drawing.Graphics.FromImage( image ) )
+            {
+                g.DrawImage( image,
+                             new Rectangle( 1, 1, width + 1, height + 1 ),
+                             0, 0, width, height,
+                             GraphicsUnit.Pixel );
+            }
         }
 
         // Scale image.
@@ -202,12 +213,11 @@ public partial class ImageProcessor
             width  = ( int )Math.Max( 1, Math.Round( width * _scale ) );
             height = ( int )Math.Max( 1, Math.Round( height * _scale ) );
 
-            var newImage = new BufferedImage( width, height, PixelType.Format.RGBA8888 );
+            var newImage = new BufferedImage( width, height, PixelFormat.Format32bppArgb );
 
             if ( _scale < 1 )
             {
-//                newImage.getGraphics().drawImage( image.getScaledInstance( width, height, Image.SCALE_AREA_AVERAGING ), 0, 0, null );
-                newImage.DrawPixmap( image, 0, 0, image.Width, image.Height, 0, 0, width, height );
+                newImage.GetGraphics().drawImage( image.getScaledInstance( width, height, Image.SCALE_AREA_AVERAGING ), 0, 0, null );
             }
             else
             {
@@ -223,7 +233,7 @@ public partial class ImageProcessor
 //                g.DrawImage( image, Rectangle( 0, 0, width, height ), 0, 0, width, height, g.InterpolationMode 
             }
 
-//            image = newImage;
+            image = newImage;
         }
 
         // Strip digits off end of name and use as index.
@@ -553,10 +563,6 @@ public partial class ImageProcessor
      * y axis (depending on value of xAxis) for the first non-transparent pixel if startPoint is true, or the first transparent
      * pixel if startPoint is false. Returns 0 if none found, as 0 is considered an invalid split point being in the outer border
      * which will be stripped. */
-
-    //Temp
-    private class WritableRaster;
-
     private static int GetSplitPoint( WritableRaster raster, string name, int startX, int startY, bool startPoint,
                                       bool xAxis )
     {
@@ -609,7 +615,7 @@ public partial class ImageProcessor
 //                image = newImage;
 //            }
 //
-//            WritableRaster raster = image.getRaster();
+//            Image.WritableRaster raster = image.getRaster();
 //            var            pixels = new int[ width ];
 //
 //            for ( var y = 0; y < height; y++ )
@@ -637,6 +643,8 @@ public partial class ImageProcessor
 //        digest.update( ( byte )( value >> 8 ) );
 //        digest.update( ( byte )value );
 //    }
+
+    // ========================================================================
 
     [GeneratedRegex( "(.+)_(\\d+)$" )]
     private static partial Regex MyRegex();

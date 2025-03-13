@@ -33,6 +33,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class TexturePacker
 {
     public string? RootPath { get; private set; }
@@ -91,6 +92,7 @@ public class TexturePacker
     {
     }
 
+    [SupportedOSPlatform( "windows" )]
     protected static ImageProcessor NewImageProcessor( Settings settings )
     {
         return new ImageProcessor( settings );
@@ -490,9 +492,9 @@ public class TexturePacker
         }
     }
 
-    private static void Plot( BufferedImage dst, int x, int y, uint argb )
+    private static void Plot( BufferedImage dst, int x, int y, int argb )
     {
-        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) ) dst.SetPixel( x, y, argb );
+        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) ) dst.DrawPixel( x, y, new Color( ( uint )argb ) );
     }
 
     private static void Copy( BufferedImage src, int x, int y, int w, int h, BufferedImage dst, int dx, int dy, bool rotated )
@@ -702,17 +704,17 @@ public class TexturePacker
 
     private string? GetRepeatValue()
     {
-        if ( ( _settings.WrapX == Texture.TextureWrap.Repeat ) && ( _settings.WrapY == Texture.TextureWrap.Repeat ) )
+        if ( _settings is { WrapX: Texture.TextureWrap.Repeat, WrapY: Texture.TextureWrap.Repeat } )
         {
             return "xy";
         }
 
-        if ( ( _settings.WrapX == Texture.TextureWrap.Repeat ) && ( _settings.WrapY == Texture.TextureWrap.ClampToEdge ) )
+        if ( _settings is { WrapX: Texture.TextureWrap.Repeat, WrapY: Texture.TextureWrap.ClampToEdge } )
         {
             return "x";
         }
 
-        if ( ( _settings.WrapX == Texture.TextureWrap.ClampToEdge ) && ( _settings.WrapY == Texture.TextureWrap.Repeat ) )
+        if ( _settings is { WrapX: Texture.TextureWrap.ClampToEdge, WrapY: Texture.TextureWrap.Repeat } )
         {
             return "y";
         }
@@ -943,21 +945,21 @@ public class TexturePacker
         private BufferedImage? _bufferedImage;
         private FileInfo       _file = null!;
 
-        private bool   _isPatch;
-        public  int    Score1;
-        public  int    Score2;
-        public  bool   CanRotate = true;
-        public  int    Height; // Portion of page taken by this region, including padding.
-        public  int    Index;
-        public  string Name = string.Empty;
-        public  int    OffsetX;
-        public  int    OffsetY;
-        public  int    OriginalHeight;
-        public  int    OriginalWidth;
-        public  int[]  Pads = null!;
-        public  int    RegionHeight;
-        public  int    RegionWidth;
-        public  bool   Rotated;
+        private bool    _isPatch;
+        public  int     Score1;
+        public  int     Score2;
+        public  bool    CanRotate = true;
+        public  int     Height; // Portion of page taken by this region, including padding.
+        public  int     Index;
+        public  string? Name = string.Empty;
+        public  int     OffsetX;
+        public  int     OffsetY;
+        public  int     OriginalHeight;
+        public  int     OriginalWidth;
+        public  int[]   Pads = null!;
+        public  int     RegionHeight;
+        public  int     RegionWidth;
+        public  bool    Rotated;
 
         public List< Alias > Aliases = [ ];
         public int[]         Splits  = null!;
@@ -984,10 +986,12 @@ public class TexturePacker
 
         public Rect( BufferedImage source, int left, int top, int newWidth, int newHeight, bool isPatch )
         {
-            _bufferedImage = new BufferedImage( source.GetColorModel(),
-                                                source.GetRaster().CreateWritableChild( left, top, newWidth, newHeight, 0, 0, null ),
-                                                source.GetColorModel().IsAlphaPremultiplied(), null );
+//            _bufferedImage = new BufferedImage( source.GetColorModel(),
+//                                                source.GetRaster().CreateWritableChild( left, top, newWidth, newHeight, 0, 0, null ),
+//                                                source.GetColorModel().IsAlphaPremultiplied(), null );
 
+            _bufferedImage = new BufferedImage( newWidth, newHeight, source.GetColorFormat() );
+            
             OffsetX        = left;
             OffsetY        = top;
             RegionWidth    = newWidth;
@@ -1006,7 +1010,7 @@ public class TexturePacker
             _bufferedImage = null;
         }
 
-        public BufferedImage GetImage( ImageProcessor imageProcessor )
+        public BufferedImage GetImage( ImageProcessor? imageProcessor )
         {
             ArgumentNullException.ThrowIfNull( imageProcessor );
 
@@ -1016,7 +1020,7 @@ public class TexturePacker
 
             try
             {
-                image = BufferedImage.Read( _file );
+                image = BufferedImage.FromFile( _file );
             }
             catch ( IOException ex )
             {
@@ -1283,14 +1287,15 @@ public class TexturePacker
 
         public void Set( Settings settings )
         {
+            MinWidth  = settings.MinWidth;
+            MinHeight = settings.MinHeight;
+            MaxWidth  = settings.MaxWidth;
+            MaxHeight = settings.MaxHeight;
+
             Fast                  = settings.Fast;
             Rotation              = settings.Rotation;
             PowerOfTwo            = settings.PowerOfTwo;
             MultipleOfFour        = settings.MultipleOfFour;
-            MinWidth              = settings.MinWidth;
-            MinHeight             = settings.MinHeight;
-            MaxWidth              = settings.MaxWidth;
-            MaxHeight             = settings.MaxHeight;
             PaddingX              = settings.PaddingX;
             PaddingY              = settings.PaddingY;
             EdgePadding           = settings.EdgePadding;

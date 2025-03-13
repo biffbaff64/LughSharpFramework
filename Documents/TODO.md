@@ -386,6 +386,7 @@ GRAPHICS/IMAGES
     CODE   DOCUMENT
     ----   --------
     - DONE - DONE - BMPFormatStructs
+    - IP   - IP   - BufferedImage
     - DONE - IP   - Gdx2DPixmap
     - DONE - IP   - Gdx2DPixmapExtensions
     - DONE - IP   - Gdx2DPixmapUtils
@@ -1026,3 +1027,6 @@ UTILS/POOLING
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+    CODE   DOCUMENT
+    ----   --------
+    -      -      - 
