@@ -41,8 +41,29 @@ namespace LughSharp.Lugh.Maths;
 [PublicAPI]
 public abstract class Number
 {
-    //TODO: This class can probably go
+    public const int   NOT_SET           = -1;
+    public const float PI                = 3.14159265358979323846f;
+    public const float MIN_NORMAL        = 1.17549435E-38f;
+    public const int   SIGNIFICAND_WIDTH = 24;
+    public const int   MAX_EXPONENT      = 127;
+    public const int   MIN_EXPONENT      = -126;
+    public const int   MIN_SUB_EXPONENT  = -149;
+    public const int   EXP_BIAS          = 127;
+    public const int   SIGN_BIT_MASK     = int.MinValue;
+    public const int   EXP_BIT_MASK      = 2139095040;
+    public const int   SIGNIF_BIT_MASK   = 8388607;
+    public const float FLOAT_TOLERANCE   = 0.000000000000001f; // 32 bits
 
+    // ========================================================================
+    
+//    public const float POSITIVE_INFINITY = float.PositiveInfinity;
+//    public const float NEGATIVE_INFINITY = float.NegativeInfinity;
+//    public const float NA_N              = float.NaN;
+//    public const float MAX_VALUE         = float.MaxValue;
+//    public const float MIN_VALUE         = float.MinValue;
+
+    // ========================================================================
+    
     /// <summary>
     /// Returns the value of the specified number as an <tt>int</tt>
     /// which may involve rounding or truncation.
@@ -117,3 +138,4 @@ public abstract class Number
         return ( short )IntValue();
     }
 }
+

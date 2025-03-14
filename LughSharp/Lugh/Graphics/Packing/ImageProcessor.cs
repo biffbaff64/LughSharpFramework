@@ -24,9 +24,12 @@
 
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Numerics;
 using System.Runtime.Versioning;
+using System.Security.Cryptography;
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -40,15 +43,15 @@ public partial class ImageProcessor
 {
     public float Scale { get; set; }
 
-    private static readonly BufferedImage _emptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
-    private static          Regex  _indexPattern = MyRegex();
+    // ========================================================================
 
-    private readonly TexturePacker.Settings                    _settings;
-    private readonly Dictionary< string, TexturePacker.Rect? > _crcs  = [ ];
-    private readonly List< TexturePacker.Rect >                _rects = [ ];
-
-    private float      _scale      = 1;
-    private Resampling _resampling = Resampling.Bicubic;
+    private static readonly Bitmap                                    _emptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
+    private static          Regex                                     _indexPattern = MyRegex();
+    private readonly        TexturePacker.Settings                    _settings;
+    private readonly        Dictionary< string, TexturePacker.Rect? > _crcs       = [ ];
+    private readonly        List< TexturePacker.Rect >                _rects      = [ ];
+    private                 float                                     _scale      = 1;
+    private                 Resampling                                _resampling = Resampling.Bicubic;
 
     // ========================================================================
     // ========================================================================
@@ -60,11 +63,11 @@ public partial class ImageProcessor
 
     public TexturePacker.Rect? AddImage( FileInfo file, string? rootPath )
     {
-        BufferedImage image;
+        Bitmap image;
 
         try
         {
-            image = new BufferedImage( file.FullName );
+            image = new Bitmap( file.Name );
         }
         catch ( IOException ex )
         {
@@ -80,7 +83,7 @@ public partial class ImageProcessor
         {
             if ( !name.StartsWith( rootPath ) )
             {
-                throw new GdxRuntimeException( "Path '" + name + "' does not start with root: " + rootPath );
+                throw new GdxRuntimeException( $"Path '{name}' does not start with root: {rootPath}" );
             }
 
             name = name.Substring( rootPath.Length );
@@ -98,7 +101,7 @@ public partial class ImageProcessor
         return rect;
     }
 
-    public TexturePacker.Rect? AddImage( BufferedImage? image, string? name )
+    public TexturePacker.Rect? AddImage( Bitmap? image, string? name )
     {
         ArgumentNullException.ThrowIfNull( image );
         ArgumentNullException.ThrowIfNull( name );
@@ -165,8 +168,11 @@ public partial class ImageProcessor
     /// Returns a rect for the image describing the texture region to be packed,
     /// or null if the image should not be packed.
     /// </summary>
-    public TexturePacker.Rect? ProcessImage( BufferedImage? image, string? name )
+    public TexturePacker.Rect? ProcessImage( Bitmap? image, string? name )
     {
+        ArgumentNullException.ThrowIfNull( image );
+        ArgumentNullException.ThrowIfNull( name );
+
         if ( _scale <= 0 ) throw new GdxRuntimeException( $"scale cannot be <= 0: {_scale}" );
 
         var width  = image.Width;
@@ -174,10 +180,10 @@ public partial class ImageProcessor
 
         if ( image.PixelFormat != PixelFormat.Format32bppArgb )
         {
-            using ( image = new BufferedImage( width, height, PixelFormat.Format32bppArgb ) )
+            using ( image = new Bitmap( width, height, PixelFormat.Format32bppArgb ) )
             using ( var g = System.Drawing.Graphics.FromImage( image ) )
             {
-                g.DrawImage( image, new Rectangle( 0, 0, width, height ) );
+                g.DrawImage( image, 0, 0, width, height );
             }
         }
 
@@ -197,43 +203,42 @@ public partial class ImageProcessor
             width  -= 2;
             height -= 2;
 
-            using ( image = new BufferedImage( width, height, PixelFormat.Format32bppArgb ) )
+            using ( image = new Bitmap( width, height, PixelFormat.Format32bppArgb ) )
             using ( var g = System.Drawing.Graphics.FromImage( image ) )
             {
-                g.DrawImage( image,
-                             new Rectangle( 1, 1, width + 1, height + 1 ),
-                             0, 0, width, height,
-                             GraphicsUnit.Pixel );
+                g.DrawImage( image: image,
+                             destRect: new Rectangle( 1, 1, width + 1, height + 1 ),
+                             srcX: 0,
+                             srcY: 0,
+                             srcWidth: width,
+                             srcHeight: height,
+                             srcUnit: GraphicsUnit.Pixel );
             }
         }
 
         // Scale image.
-        if ( Math.Abs( _scale - 1f ) > Constants.FLOAT_TOLERANCE )
+        if ( Math.Abs( _scale - 1f ) > Number.FLOAT_TOLERANCE )
         {
             width  = ( int )Math.Max( 1, Math.Round( width * _scale ) );
             height = ( int )Math.Max( 1, Math.Round( height * _scale ) );
 
-            var newImage = new BufferedImage( width, height, PixelFormat.Format32bppArgb );
-
-            if ( _scale < 1 )
+            using ( var newImage = new Bitmap( width, height, PixelFormat.Format32bppArgb ) )
+            using ( var g = System.Drawing.Graphics.FromImage( newImage ) )
             {
-                newImage.GetGraphics().drawImage( image.getScaledInstance( width, height, Image.SCALE_AREA_AVERAGING ), 0, 0, null );
+                if ( _scale < 1 )
+                {
+                    //TODO:
+//                    g.DrawImage( image.GetScaledInstance( width, height, Image.SCALE_AREA_AVERAGING ), 0, 0, null );
+                }
+                else
+                {
+                    g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                    g.InterpolationMode  = _resampling.ToInterpolationMode();
+                    g.DrawImage( image, new Rectangle( 0, 0, width, height ), 0, 0, width, height, GraphicsUnit.Pixel );
+                }
+
+                image = newImage;
             }
-            else
-            {
-//                Graphics2D g = ( Graphics2D )newImage.getGraphics();
-//                g.setRenderingHint( RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY );
-//                g.setRenderingHint( RenderingHints.KEY_INTERPOLATION, resampling.value );
-//                g.drawImage( image, 0, 0, width, height, null );
-
-//                System.Drawing.Graphics g = newImage.GetGraphics();
-
-//                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-//                g.InterpolationMode  = _resampling.ToInterpolationMode();
-//                g.DrawImage( image, Rectangle( 0, 0, width, height ), 0, 0, width, height, g.InterpolationMode 
-            }
-
-            image = newImage;
         }
 
         // Strip digits off end of name and use as index.
@@ -288,361 +293,441 @@ public partial class ImageProcessor
         return rect;
     }
 
-    /** Strips whitespace and returns the rect, or null if the image should be ignored. */
-    protected TexturePacker.Rect StripWhitespace( string name, BufferedImage source )
+    /// <summary>
+    /// Strips whitespace and returns the rect, or null if the image should be ignored.
+    /// </summary>
+    protected TexturePacker.Rect? StripWhitespace( string name, Bitmap source )
     {
-        throw new NotImplementedException();
+        BitmapData? alphaData = null;
 
-//        WritableRaster alphaRaster = source.getAlphaRaster();
-//
-//        if ( alphaRaster == null || ( !settings.stripWhitespaceX && !settings.stripWhitespaceY ) )
-//            return new TexturePacker.Rect( source, 0, 0, source.getWidth(), source.getHeight(), false );
-//
-//        readonly byte[] a =
-//        new byte[ 1 ];
-//        var top    = 0;
-//        int bottom = source.getHeight();
-//
-//        if ( settings.stripWhitespaceY )
-//        {
-//        outer:
-//
-//            for ( var y = 0; y < source.getHeight(); y++ )
-//            {
-//                for ( var x = 0; x < source.getWidth(); x++ )
-//                {
-//                    alphaRaster.getDataElements( x, y, a );
-//                    int alpha              = a[ 0 ];
-//                    if ( alpha < 0 ) alpha += 256;
-//
-//                    if ( alpha > settings.alphaThreshold ) break
-//
-//                    outer;
-//                }
-//
-//                top++;
-//            }
-//
-//        outer:
-//
-//            for ( int y = source.getHeight(); --y >= top; )
-//            {
-//                for ( var x = 0; x < source.getWidth(); x++ )
-//                {
-//                    alphaRaster.getDataElements( x, y, a );
-//                    int alpha              = a[ 0 ];
-//                    if ( alpha < 0 ) alpha += 256;
-//
-//                    if ( alpha > settings.alphaThreshold ) break
-//
-//                    outer;
-//                }
-//
-//                bottom--;
-//            }
-//
-//            // Leave 1px so nothing is copied into padding.
-//            if ( settings.duplicatePadding )
-//            {
-//                if ( top > 0 ) top--;
-//                if ( bottom < source.getHeight() ) bottom++;
-//            }
-//        }
-//
-//        var left  = 0;
-//        int right = source.getWidth();
-//
-//        if ( settings.stripWhitespaceX )
-//        {
-//        outer:
-//
-//            for ( var x = 0; x < source.getWidth(); x++ )
-//            {
-//                for ( var y = top; y < bottom; y++ )
-//                {
-//                    alphaRaster.getDataElements( x, y, a );
-//                    int alpha              = a[ 0 ];
-//                    if ( alpha < 0 ) alpha += 256;
-//
-//                    if ( alpha > settings.alphaThreshold ) break
-//
-//                    outer;
-//                }
-//
-//                left++;
-//            }
-//
-//        outer:
-//
-//            for ( int x = source.getWidth(); --x >= left; )
-//            {
-//                for ( var y = top; y < bottom; y++ )
-//                {
-//                    alphaRaster.getDataElements( x, y, a );
-//                    int alpha              = a[ 0 ];
-//                    if ( alpha < 0 ) alpha += 256;
-//
-//                    if ( alpha > settings.alphaThreshold ) break
-//
-//                    outer;
-//                }
-//
-//                right--;
-//            }
-//
-//            // Leave 1px so nothing is copied into padding.
-//            if ( settings.duplicatePadding )
-//            {
-//                if ( left > 0 ) left--;
-//                if ( right < source.getWidth() ) right++;
-//            }
-//        }
-//
-//        var newWidth  = right - left;
-//        var newHeight = bottom - top;
-//
-//        if ( newWidth <= 0 || newHeight <= 0 )
-//        {
-//            if ( _settings.ignoreBlankImages )
-//                return null;
-//            else
-//                return new TexturePacker.Rect( emptyImage, 0, 0, 1, 1, false );
-//        }
-//
-//        return new TexturePacker.Rect( source, left, top, newWidth, newHeight, false );
+        try
+        {
+            alphaData = source.LockBits( new Rectangle( 0, 0, source.Width, source.Height ), ImageLockMode.ReadOnly,
+                                         PixelFormat.Format32bppArgb );
+
+            if ( alphaData.Stride == ( source.Width * 4 ) )
+            {
+                if ( _settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
+                {
+                    return new TexturePacker.Rect( source, 0, 0, source.Width, source.Height, false );
+                }
+            }
+
+            int top    = 0;
+            int bottom = source.Height;
+
+            if ( _settings.StripWhitespaceY )
+            {
+            outer1:
+
+                for ( int y = 0; y < source.Height; y++ )
+                {
+                    for ( int x = 0; x < source.Width; x++ )
+                    {
+                        int alpha = GetAlpha( alphaData, x, y );
+
+                        if ( alpha > _settings.AlphaThreshold )
+                        {
+                            goto outer1;
+                        }
+                    }
+
+                    top++;
+                }
+
+            outer2:
+
+                for ( int y = source.Height - 1; y >= top; y-- )
+                {
+                    for ( int x = 0; x < source.Width; x++ )
+                    {
+                        int alpha = GetAlpha( alphaData, x, y );
+
+                        if ( alpha > _settings.AlphaThreshold )
+                        {
+                            goto outer2;
+                        }
+                    }
+
+                    bottom--;
+                }
+
+                if ( _settings.DuplicatePadding )
+                {
+                    if ( top > 0 )
+                    {
+                        top--;
+                    }
+
+                    if ( bottom < source.Height )
+                    {
+                        bottom++;
+                    }
+                }
+            }
+
+            int left  = 0;
+            int right = source.Width;
+
+            if ( _settings.StripWhitespaceX )
+            {
+            outer3:
+
+                for ( int x = 0; x < source.Width; x++ )
+                {
+                    for ( int y = top; y < bottom; y++ )
+                    {
+                        int alpha = GetAlpha( alphaData, x, y );
+
+                        if ( alpha > _settings.AlphaThreshold )
+                        {
+                            goto outer3;
+                        }
+                    }
+
+                    left++;
+                }
+
+            outer4:
+
+                for ( int x = source.Width - 1; x >= left; x-- )
+                {
+                    for ( int y = top; y < bottom; y++ )
+                    {
+                        int alpha = GetAlpha( alphaData, x, y );
+
+                        if ( alpha > _settings.AlphaThreshold )
+                        {
+                            goto outer4;
+                        }
+                    }
+
+                    right--;
+                }
+
+                if ( _settings.DuplicatePadding )
+                {
+                    if ( left > 0 )
+                    {
+                        left--;
+                    }
+
+                    if ( right < source.Width )
+                    {
+                        right++;
+                    }
+                }
+            }
+
+            int newWidth  = right - left;
+            int newHeight = bottom - top;
+
+            if ( ( newWidth <= 0 ) || ( newHeight <= 0 ) )
+            {
+                if ( _settings.IgnoreBlankImages )
+                {
+                    return null;
+                }
+                else
+                {
+                    return new TexturePacker.Rect( _emptyImage, 0, 0, 1, 1, false );
+                }
+            }
+
+            return new TexturePacker.Rect( source, left, top, newWidth, newHeight, false );
+        }
+        finally
+        {
+            if ( alphaData != null )
+            {
+                source.UnlockBits( alphaData );
+            }
+        }
     }
 
-    private static string SplitError( int x, int y, int[] rgba, string name )
+    private unsafe int GetAlpha( BitmapData data, int x, int y )
     {
-        throw new GdxRuntimeException( "Invalid " + name + " ninepatch split pixel at " + x + ", " + y + ", rgba: " + rgba[ 0 ] + ", "
-                                       + rgba[ 1 ] + ", " + rgba[ 2 ] + ", " + rgba[ 3 ] );
+        byte* ptr      = ( byte* )data.Scan0;
+        byte* pixelPtr = ptr + ( y * data.Stride ) + ( x * 4 ); // 4 bytes per pixel (ARGB)
+        int   alpha    = pixelPtr[ 3 ];
+
+        return alpha;
     }
 
-    /** Returns the splits, or null if the image had no splits or the splits were only a single region. Splits are an int[4] that
-     * has left, right, top, bottom. */
-    private int[] GetSplits( BufferedImage image, string name )
+    /// <summary>
+    /// Returns the splits, or null if the image had no splits or the splits were only a single
+    /// region. Splits are an int[4] that has left, right, top, bottom.
+    /// </summary>
+    private int[]? GetSplits( Bitmap image, string name )
     {
-        throw new NotImplementedException();
+        var startX = GetSplitPoint( image, name, 1, 0, true, true );
+        var endX   = GetSplitPoint( image, name, startX, 0, false, true );
+        var startY = GetSplitPoint( image, name, 0, 1, true, false );
+        var endY   = GetSplitPoint( image, name, 0, startY, false, false );
 
-//        WritableRaster raster = image.getRaster();
-//
-//        var startX = getSplitPoint( raster, name, 1, 0, true, true );
-//        var endX   = getSplitPoint( raster, name, startX, 0, false, true );
-//        var startY = getSplitPoint( raster, name, 0, 1, true, false );
-//        var endY   = getSplitPoint( raster, name, 0, startY, false, false );
-//
-//        // Ensure pixels after the end are not invalid.
-//        getSplitPoint( raster, name, endX + 1, 0, true, true );
-//        getSplitPoint( raster, name, 0, endY + 1, true, false );
-//
-//        // No splits, or all splits.
-//        if ( startX == 0 && endX == 0 && startY == 0 && endY == 0 ) return null;
-//
-//        // Subtraction here is because the coordinates were computed before the 1px border was stripped.
-//        if ( startX != 0 )
-//        {
-//            startX--;
-//            endX = raster.getWidth() - 2 - ( endX - 1 );
-//        }
-//        else
-//        {
-//            // If no start point was ever found, we assume full stretch.
-//            endX = raster.getWidth() - 2;
-//        }
-//
-//        if ( startY != 0 )
-//        {
-//            startY--;
-//            endY = raster.getHeight() - 2 - ( endY - 1 );
-//        }
-//        else
-//        {
-//            // If no start point was ever found, we assume full stretch.
-//            endY = raster.getHeight() - 2;
-//        }
-//
-//        if ( scale != 1 )
-//        {
-//            startX = ( int )Math.round( startX * scale );
-//            endX   = ( int )Math.round( endX * scale );
-//            startY = ( int )Math.round( startY * scale );
-//            endY   = ( int )Math.round( endY * scale );
-//        }
-//
-//        return new int[] { startX, endX, startY, endY };
+        // Ensure pixels after the end are not invalid.
+        GetSplitPoint( image, name, endX + 1, 0, true, true );
+        GetSplitPoint( image, name, 0, endY + 1, true, false );
+
+        // No splits, or all splits.
+        if ( ( startX == 0 ) && ( endX == 0 ) && ( startY == 0 ) && ( endY == 0 ) )
+        {
+            return null;
+        }
+
+        // Subtraction here is because the coordinates were computed before the 1px border was stripped.
+        if ( startX != 0 )
+        {
+            startX--;
+            endX = image.Width - 2 - ( endX - 1 );
+        }
+        else
+        {
+            // If no start point was ever found, we assume full stretch.
+            endX = image.Width - 2;
+        }
+
+        if ( startY != 0 )
+        {
+            startY--;
+            endY = image.Height - 2 - ( endY - 1 );
+        }
+        else
+        {
+            // If no start point was ever found, we assume full stretch.
+            endY = image.Height - 2;
+        }
+
+        if ( Math.Abs( _scale - 1.0f ) > Number.FLOAT_TOLERANCE )
+        {
+            startX = ( int )Math.Round( startX * _scale );
+            endX   = ( int )Math.Round( endX * _scale );
+            startY = ( int )Math.Round( startY * _scale );
+            endY   = ( int )Math.Round( endY * _scale );
+        }
+
+        return [ startX, endX, startY, endY ];
     }
 
-    /** Returns the pads, or null if the image had no pads or the pads match the splits. Pads are an int[4] that has left, right,
-     * top, bottom. */
-    private int[] GetPads( BufferedImage image, string name, int[] splits )
+    /// <summary>
+    /// Returns the pads, or null if the image had no pads or the pads match the splits. Pads are
+    /// an int[4] that has left, right, top, bottom.
+    /// </summary>
+    private int[]? GetPads( Bitmap image, string name, int[]? splits )
     {
-        throw new NotImplementedException();
+        var bottom = image.Height - 1;
+        var right  = image.Width - 1;
 
-//        WritableRaster raster = image.getRaster();
-//
-//        var bottom = raster.getHeight() - 1;
-//        var right  = raster.getWidth() - 1;
-//
-//        var startX = getSplitPoint( raster, name, 1, bottom, true, true );
-//        var startY = getSplitPoint( raster, name, right, 1, true, false );
-//
-//        // No need to hunt for the end if a start was never found.
-//        var endX                = 0;
-//        var endY                = 0;
-//        if ( startX != 0 ) endX = getSplitPoint( raster, name, startX + 1, bottom, false, true );
-//        if ( startY != 0 ) endY = getSplitPoint( raster, name, right, startY + 1, false, false );
-//
-//        // Ensure pixels after the end are not invalid.
-//        getSplitPoint( raster, name, endX + 1, bottom, true, true );
-//        getSplitPoint( raster, name, right, endY + 1, true, false );
-//
-//        // No pads.
-//        if ( startX == 0 && endX == 0 && startY == 0 && endY == 0 )
-//        {
-//            return null;
-//        }
-//
-//        // -2 here is because the coordinates were computed before the 1px border was stripped.
-//        if ( startX == 0 && endX == 0 )
-//        {
-//            startX = -1;
-//            endX   = -1;
-//        }
-//        else
-//        {
-//            if ( startX > 0 )
-//            {
-//                startX--;
-//                endX = raster.getWidth() - 2 - ( endX - 1 );
-//            }
-//            else
-//            {
-//                // If no start point was ever found, we assume full stretch.
-//                endX = raster.getWidth() - 2;
-//            }
-//        }
-//
-//        if ( startY == 0 && endY == 0 )
-//        {
-//            startY = -1;
-//            endY   = -1;
-//        }
-//        else
-//        {
-//            if ( startY > 0 )
-//            {
-//                startY--;
-//                endY = raster.getHeight() - 2 - ( endY - 1 );
-//            }
-//            else
-//            {
-//                // If no start point was ever found, we assume full stretch.
-//                endY = raster.getHeight() - 2;
-//            }
-//        }
-//
-//        if ( _scale != 1 )
-//        {
-//            startX = ( int )Math.Round( startX * _scale );
-//            endX   = ( int )Math.Round( endX * _scale );
-//            startY = ( int )Math.Round( startY * _scale );
-//            endY   = ( int )Math.Round( endY * _scale );
-//        }
-//
-//        var pads = new[] { startX, endX, startY, endY };
-//
-//        if ( splits != null && Array.Equals( pads, splits ) )
-//        {
-//            return null;
-//        }
-//
-//        return pads;
+        var startX = GetSplitPoint( image, name, 1, bottom, true, true );
+        var startY = GetSplitPoint( image, name, right, 1, true, false );
+
+        // No need to hunt for the end if a start was never found.
+        var endX = 0;
+        var endY = 0;
+
+        if ( startX != 0 ) endX = GetSplitPoint( image, name, startX + 1, bottom, false, true );
+        if ( startY != 0 ) endY = GetSplitPoint( image, name, right, startY + 1, false, false );
+
+        // Ensure pixels after the end are not invalid.
+        GetSplitPoint( image, name, endX + 1, bottom, true, true );
+        GetSplitPoint( image, name, right, endY + 1, true, false );
+
+        // No pads.
+        if ( ( startX == 0 ) && ( endX == 0 ) && ( startY == 0 ) && ( endY == 0 ) )
+        {
+            return null;
+        }
+
+        // -2 here is because the coordinates were computed before the 1px border was stripped.
+        if ( ( startX == 0 ) && ( endX == 0 ) )
+        {
+            startX = -1;
+            endX   = -1;
+        }
+        else
+        {
+            if ( startX > 0 )
+            {
+                startX--;
+                endX = image.Width - 2 - ( endX - 1 );
+            }
+            else
+            {
+                // If no start point was ever found, we assume full stretch.
+                endX = image.Width - 2;
+            }
+        }
+
+        if ( ( startY == 0 ) && ( endY == 0 ) )
+        {
+            startY = -1;
+            endY   = -1;
+        }
+        else
+        {
+            if ( startY > 0 )
+            {
+                startY--;
+                endY = image.Height - 2 - ( endY - 1 );
+            }
+            else
+            {
+                // If no start point was ever found, we assume full stretch.
+                endY = image.Height - 2;
+            }
+        }
+
+        if ( Math.Abs( _scale - 1.0f ) > Number.FLOAT_TOLERANCE )
+        {
+            startX = ( int )Math.Round( startX * _scale );
+            endX   = ( int )Math.Round( endX * _scale );
+            startY = ( int )Math.Round( startY * _scale );
+            endY   = ( int )Math.Round( endY * _scale );
+        }
+
+        var pads = new[] { startX, endX, startY, endY };
+
+        if ( ( splits != null ) && Equals( pads, splits ) )
+        {
+            return null;
+        }
+
+        return pads;
     }
 
-    /** Hunts for the start or end of a sequence of split pixels. Begins searching at (startX, startY) then follows along the x or
-     * y axis (depending on value of xAxis) for the first non-transparent pixel if startPoint is true, or the first transparent
-     * pixel if startPoint is false. Returns 0 if none found, as 0 is considered an invalid split point being in the outer border
-     * which will be stripped. */
-    private static int GetSplitPoint( WritableRaster raster, string name, int startX, int startY, bool startPoint,
-                                      bool xAxis )
+    /// <summary>
+    /// Hunts for the start or end of a sequence of split pixels. Begins searching at (startX, startY)
+    /// then follows along the x or y axis (depending on value of xAxis) for the first non-transparent
+    /// pixel if startPoint is true, or the first transparent pixel if startPoint is false. Returns 0
+    /// if none found, as 0 is considered an invalid split point being in the outer border which will
+    /// be stripped.
+    /// </summary>
+    [SupportedOSPlatform( "windows" )]
+    public static int GetSplitPoint( Bitmap bitmap, string name, int startX, int startY, bool startPoint, bool xAxis )
     {
-        throw new NotImplementedException();
+        var rgba = new int[ 4 ];
 
-//        var rgba = new int[ 4 ];
-//
-//        var next   = xAxis ? startX : startY;
-//        int end    = xAxis ? raster.getWidth() : raster.getHeight();
-//        var breakA = startPoint ? 255 : 0;
-//
-//        var x = startX;
-//        var y = startY;
-//
-//        while ( next != end )
-//        {
-//            if ( xAxis )
-//                x = next;
-//            else
-//                y = next;
-//
-//            raster.getPixel( x, y, rgba );
-//
-//            if ( rgba[ 3 ] == breakA ) return next;
-//
-//            if ( !startPoint && ( rgba[ 0 ] != 0 || rgba[ 1 ] != 0 || rgba[ 2 ] != 0 || rgba[ 3 ] != 255 ) ) splitError( x, y, rgba, name );
-//
-//            next++;
-//        }
-//
-//        return 0;
+        var next   = xAxis ? startX : startY;
+        var end    = xAxis ? bitmap.Width : bitmap.Height;
+        var breakA = startPoint ? 255 : 0;
+
+        var x = startX;
+        var y = startY;
+
+        var bitmapData = bitmap.LockBits( new Rectangle( 0, 0, bitmap.Width, bitmap.Height ),
+                                          ImageLockMode.ReadOnly,
+                                          PixelFormat.Format32bppArgb );
+
+        try
+        {
+            unsafe
+            {
+                var ptr = ( byte* )bitmapData.Scan0;
+
+                while ( next != end )
+                {
+                    if ( xAxis )
+                    {
+                        x = next;
+                    }
+                    else
+                    {
+                        y = next;
+                    }
+
+                    var pixelPtr = ptr + ( y * bitmapData.Stride ) + ( x * 4 ); // 4 bytes per pixel (ARGB)
+
+                    rgba[ 0 ] = pixelPtr[ 2 ]; // Red
+                    rgba[ 1 ] = pixelPtr[ 1 ]; // Green
+                    rgba[ 2 ] = pixelPtr[ 0 ]; // Blue
+                    rgba[ 3 ] = pixelPtr[ 3 ]; // Alpha
+
+                    if ( rgba[ 3 ] == breakA ) return next;
+
+                    if ( !startPoint && ( ( rgba[ 0 ] != 0 ) || ( rgba[ 1 ] != 0 ) || ( rgba[ 2 ] != 0 ) || ( rgba[ 3 ] != 255 ) ) )
+                    {
+                        throw new GdxRuntimeException( $"Invalid {name} ninepatch split pixel at {x}, {y}, " +
+                                                       $"rgba: {rgba[ 0 ]}, {rgba[ 1 ]}, {rgba[ 2 ]}, {rgba[ 3 ]}" );
+                    }
+
+                    next++;
+                }
+            }
+        }
+        finally
+        {
+            bitmap.UnlockBits( bitmapData );
+        }
+
+        return 0;
     }
 
-    private static string Hash( BufferedImage image )
+    [SupportedOSPlatform( "windows" )]
+    public static string Hash( Bitmap image )
     {
-        throw new NotImplementedException();
+        try
+        {
+            using var sha1 = SHA1.Create();
 
-//        try
-//        {
-//            MessageDigest digest = MessageDigest.getInstance( "SHA1" );
-//
-//            // Ensure image is the correct format.
-//            int width  = image.getWidth();
-//            int height = image.getHeight();
-//
-//            if ( image.getType() != BufferedImage.TYPE_INT_ARGB )
-//            {
-//                var newImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_ARGB );
-//                newImage.getGraphics().drawImage( image, 0, 0, null );
-//                image = newImage;
-//            }
-//
-//            Image.WritableRaster raster = image.getRaster();
-//            var            pixels = new int[ width ];
-//
-//            for ( var y = 0; y < height; y++ )
-//            {
-//                raster.getDataElements( 0, y, width, 1, pixels );
-//                for ( var x = 0; x < width; x++ )
-//                    hash( digest, pixels[ x ] );
-//            }
-//
-//            hash( digest, width );
-//            hash( digest, height );
-//
-//            return new BigInteger( 1, digest.digest() ).ToString( 16 );
-//        }
-//        catch ( Exception ex )  // Missing NoSuchAlgorithmException
-//        {
-//            throw new GdxRuntimeException( ex. );
-//        }
+            // Ensure image is the correct format.
+            var width  = image.Width;
+            var height = image.Height;
+
+            if ( image.PixelFormat != PixelFormat.Format32bppArgb )
+            {
+                var convertedImage = new Bitmap( width, height, PixelFormat.Format32bppArgb );
+
+                using ( var g = System.Drawing.Graphics.FromImage( convertedImage ) )
+                {
+                    g.DrawImage( image, 0, 0 );
+                }
+
+                image = convertedImage;
+            }
+
+            var bitmapData = image.LockBits( new Rectangle( 0, 0, width, height ),
+                                             ImageLockMode.ReadOnly,
+                                             PixelFormat.Format32bppArgb );
+
+            try
+            {
+                var bytesPerPixel = 4; // 32bppArgb = 4 bytes per pixel
+                var pixels        = new byte[ width * bytesPerPixel ];
+
+                for ( var y = 0; y < height; y++ )
+                {
+                    var row = bitmapData.Scan0 + ( y * bitmapData.Stride );
+                    System.Runtime.InteropServices.Marshal.Copy( row, pixels, 0, width * bytesPerPixel );
+
+                    for ( var x = 0; x < width; x++ )
+                    {
+                        var pixelValue = BitConverter.ToInt32( pixels, x * bytesPerPixel );
+                        Hash( sha1, pixelValue );
+                    }
+                }
+
+                Hash( sha1, width );
+                Hash( sha1, height );
+            }
+            finally
+            {
+                image.UnlockBits( bitmapData );
+            }
+
+            var hashBytes = sha1.Hash;
+
+            return new BigInteger( hashBytes! ).ToString( "x" ).ToLower(); // Use ReadOnlySpan implicitly
+        }
+        catch ( Exception ex )
+        {
+            throw new Exception( "Error hashing image.", ex );
+        }
     }
 
-//    private static void hash( MessageDigest digest, int value )
-//    {
-//        digest.update( ( byte )( value >> 24 ) );
-//        digest.update( ( byte )( value >> 16 ) );
-//        digest.update( ( byte )( value >> 8 ) );
-//        digest.update( ( byte )value );
-//    }
+    private static void Hash( SHA1 digest, int value )
+    {
+        digest.TransformBlock( BitConverter.GetBytes( value ), 0, 4, null, 0 );
+    }
 
     // ========================================================================
 

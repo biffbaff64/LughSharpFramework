@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
@@ -490,7 +491,7 @@ public class Mesh : IDisposable
     /// <param name="vertices"> the array to copy the vertices to  </param>
     public float[] GetVertices( float[] vertices )
     {
-        return GetVertices( 0, Constants.NOT_SET, vertices );
+        return GetVertices( 0, Number.NOT_SET, vertices );
     }
 
     /// <summary>
@@ -503,7 +504,7 @@ public class Mesh : IDisposable
     /// <param name="vertices"> the array to copy the vertices to  </param>
     public float[] GetVertices( int srcOffset, float[] vertices )
     {
-        return GetVertices( srcOffset, Constants.NOT_SET, vertices );
+        return GetVertices( srcOffset, Number.NOT_SET, vertices );
     }
 
     /// <summary>
@@ -518,7 +519,7 @@ public class Mesh : IDisposable
     {
         var max = NumVertices * VertexSize;
 
-        if ( count == Constants.NOT_SET )
+        if ( count == Number.NOT_SET )
         {
             count = Math.Min( max - srcOffset, vertices.Length - destOffset );
         }

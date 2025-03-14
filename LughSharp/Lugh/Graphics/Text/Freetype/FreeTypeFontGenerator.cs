@@ -428,7 +428,7 @@ public class FreeTypeFontGenerator : IDisposable
             break;
         }
 
-        if ( !_bitmapped && ( Math.Abs( data.CapHeight - 1.0f ) < Constants.FLOAT_TOLERANCE ) )
+        if ( !_bitmapped && ( Math.Abs( data.CapHeight - 1.0f ) < Number.FLOAT_TOLERANCE ) )
         {
             throw new GdxRuntimeException( "No cap character found in font" );
         }

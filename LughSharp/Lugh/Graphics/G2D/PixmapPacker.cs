@@ -951,8 +951,8 @@ public class PixmapPacker : IDisposable
 
             if ( node.Full ) return null;
 
-            if ( ( Math.Abs( node.Rect.Width - rect.Width ) < Constants.FLOAT_TOLERANCE )
-                 && ( Math.Abs( node.Rect.Height - rect.Height ) < Constants.FLOAT_TOLERANCE ) )
+            if ( ( Math.Abs( node.Rect.Width - rect.Width ) < Number.FLOAT_TOLERANCE )
+                 && ( Math.Abs( node.Rect.Height - rect.Height ) < Number.FLOAT_TOLERANCE ) )
             {
                 return node;
             }
