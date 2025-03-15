@@ -25,6 +25,8 @@
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
+using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Collections;
@@ -32,6 +34,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
+using Pen = System.Drawing.Pen;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
@@ -213,14 +216,14 @@ public class TexturePacker
 
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
 
-            WriteImages( outputDir, scaledPackFileName, pages );
+            WriteImages( outputDir.FullName, scaledPackFileName, pages );
 
             _progressListener.End();
             _progressListener.Start( 0.01f );
 
             try
             {
-                WritePackFile( outputDir, scaledPackFileName, pages );
+                WritePackFile( outputDir.Directory, scaledPackFileName, pages );
             }
             catch ( IOException ex )
             {
@@ -239,17 +242,20 @@ public class TexturePacker
         _progressListener.End();
     }
 
-    private void WriteImages( FileInfo outputDir, string scaledPackFileName, List< Page > pages )
+    private void WriteImages( string outputDir, string scaledPackFileName, List< Page > pages )
     {
-        var fileName      = Path.Combine( outputDir.FullName, scaledPackFileName );
-        var packFileNoExt = new FileInfo( fileName );
-        var packDir       = Directory.GetParent( packFileNoExt.Name );
-        var imageName     = packFileNoExt.Name;
-        var fileIndex     = 1;
+        var packFileNoExt = Path.Combine( outputDir, scaledPackFileName );
+        var packDir       = Path.GetDirectoryName( packFileNoExt );
+        var imageName     = Path.GetFileName( packFileNoExt );
 
-        for ( int p = 0, pn = pages.Count; p < pn; p++ )
+        if ( packDir == null ) throw new GdxRuntimeException( "Error creating pack directory." );
+
+        var fileIndex = 1;
+
+        for ( var p = 0; p < pages.Count; p++ )
         {
-            var page   = pages[ p ];
+            var page = pages[ p ];
+
             var width  = page.Width;
             var height = page.Height;
 
@@ -287,7 +293,7 @@ public class TexturePacker
             page.ImageWidth  = width;
             page.ImageHeight = height;
 
-            FileInfo outputFile;
+            string outputFile;
 
             while ( true )
             {
@@ -295,7 +301,6 @@ public class TexturePacker
 
                 if ( fileIndex > 1 )
                 {
-                    // Last character is a digit or a digit + 'x'.
                     var last = name[ name.Length - 1 ];
 
                     if ( char.IsDigit( last )
@@ -311,184 +316,204 @@ public class TexturePacker
 
                 fileIndex++;
 
-                var fp = Path.Combine( packDir!.Name, $"{name}.{_settings.OutputFormat}" );
-                outputFile = new FileInfo( fp );
+                outputFile = Path.Combine( packDir, name + "." + _settings.OutputFormat );
 
-                if ( !File.Exists( outputFile.FullName ) )
-                {
-                    break;
-                }
+                if ( !File.Exists( outputFile ) ) break;
             }
 
-            Directory.CreateDirectory( Path.GetDirectoryName( outputFile.FullName )
-                                       ?? throw new GdxRuntimeException( "Error creating directory for pack file." ) );
-
-            page.ImageName = Path.GetFileName( outputFile.FullName );
+            Directory.CreateDirectory( Path.GetDirectoryName( outputFile ) ); // Create parent directories
+            page.ImageName = Path.GetFileName( outputFile );
 
             var canvas = new Bitmap( width, height, _settings.Format );
+            var g      = System.Drawing.Graphics.FromImage( canvas );
 
             if ( !_settings.Silent )
             {
                 Console.WriteLine( $"Writing {canvas.Width}x{canvas.Height}: {outputFile}" );
             }
 
-            _progressListener?.Start( 1 / ( float )pn );
+            _progressListener.Start( 1f / pages.Count );
 
-            GdxRuntimeException.ThrowIfNull( page.OutputRects );
-
-            for ( int r = 0, rn = page.OutputRects.Count; r < rn; r++ )
+            for ( var r = 0; r < page.OutputRects.Count; r++ )
             {
-                var rect  = page.OutputRects[ r ];
-                var image = rect.GetImage( _imageProcessor );
-                var iw    = image.Width;
-                var ih    = image.Height;
-                var rectX = page.X + rect.X;
-                var rectY = ( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY );
+                var rect = page.OutputRects[ r ];
 
-                if ( _settings.DuplicatePadding )
+                using ( var image = rect.GetImage( _imageProcessor ) )
                 {
-                    var amountX = _settings.PaddingX / 2;
-                    var amountY = _settings.PaddingY / 2;
+                    var iw    = image.Width;
+                    var ih    = image.Height;
+                    var rectX = page.X + rect.X;
+                    var rectY = ( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY );
 
-                    if ( rect.Rotated )
+                    if ( _settings.DuplicatePadding )
                     {
-                        // Copy corner pixels to fill corners of the padding.
-                        for ( var i = 1; i <= amountX; i++ )
+                        var amountX = _settings.PaddingX / 2;
+                        var amountY = _settings.PaddingY / 2;
+
+                        if ( rect.Rotated )
                         {
-                            for ( var j = 1; j <= amountY; j++ )
+                            // Copy corner pixels to fill corners of the padding.
+                            for ( var i = 1; i <= amountX; i++ )
                             {
-                                Plot( canvas, rectX - j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, 0 ) );
-                                Plot( canvas, ( ( rectX + ih ) - 1 ) + j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, ih - 1 ) );
-                                Plot( canvas, rectX - j, rectY - i, image.GetPixel( iw - 1, 0 ) );
-                                Plot( canvas, ( ( rectX + ih ) - 1 ) + j, rectY - i, image.GetPixel( iw - 1, ih - 1 ) );
+                                for ( var j = 1; j <= amountY; j++ )
+                                {
+                                    Plot( canvas, rectX - j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, 0 ) );
+                                    Plot( canvas, ( ( rectX + ih ) - 1 ) + j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, ih - 1 ) );
+                                    Plot( canvas, rectX - j, rectY - i, image.GetPixel( iw - 1, 0 ) );
+                                    Plot( canvas, ( ( rectX + ih ) - 1 ) + j, rectY - i, image.GetPixel( iw - 1, ih - 1 ) );
+                                }
+                            }
+
+                            // Copy edge pixels into padding.
+                            for ( var i = 1; i <= amountY; i++ )
+                            {
+                                for ( var j = 0; j < iw; j++ )
+                                {
+                                    Plot( canvas, rectX - i, ( rectY + iw ) - 1 - j, image.GetPixel( j, 0 ) );
+                                    Plot( canvas, ( ( rectX + ih ) - 1 ) + i, ( rectY + iw ) - 1 - j, image.GetPixel( j, ih - 1 ) );
+                                }
+                            }
+
+                            for ( var i = 1; i <= amountX; i++ )
+                            {
+                                for ( var j = 0; j < ih; j++ )
+                                {
+                                    Plot( canvas, rectX + j, rectY - i, image.GetPixel( iw - 1, j ) );
+                                    Plot( canvas, rectX + j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, j ) );
+                                }
                             }
                         }
-
-                        // Copy edge pixels into padding.
-                        for ( var i = 1; i <= amountY; i++ )
+                        else
                         {
-                            for ( var j = 0; j < iw; j++ )
+                            // Copy corner pixels to fill corners of the padding.
+                            for ( var i = 1; i <= amountX; i++ )
                             {
-                                Plot( canvas, rectX - i, ( rectY + iw ) - 1 - j, image.GetPixel( j, 0 ) );
-                                Plot( canvas, ( ( rectX + ih ) - 1 ) + i, ( rectY + iw ) - 1 - j, image.GetPixel( j, ih - 1 ) );
+                                for ( var j = 1; j <= amountY; j++ )
+                                {
+                                    Plot( canvas, rectX - i, rectY - j, image.GetPixel( 0, 0 ) );
+                                    Plot( canvas, rectX - i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( 0, ih - 1 ) );
+                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, rectY - j, image.GetPixel( iw - 1, 0 ) );
+                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j,
+                                          image.GetPixel( iw - 1, ih - 1 ) );
+                                }
                             }
-                        }
 
-                        for ( var i = 1; i <= amountX; i++ )
-                        {
-                            for ( var j = 0; j < ih; j++ )
+                            // Copy edge pixels into padding.
+                            for ( var i = 1; i <= amountY; i++ )
                             {
-                                Plot( canvas, rectX + j, rectY - i, image.GetPixel( iw - 1, j ) );
-                                Plot( canvas, rectX + j, ( ( rectY + iw ) - 1 ) + i, image.GetPixel( 0, j ) );
+                                Copy( image, 0, 0, iw, 1, canvas, rectX, rectY - i, rect.Rotated );
+                                Copy( image, 0, ih - 1, iw, 1, canvas, rectX, ( ( rectY + ih ) - 1 ) + i, rect.Rotated );
+                            }
+
+                            for ( var i = 1; i <= amountX; i++ )
+                            {
+                                Copy( image, 0, 0, 1, ih, canvas, rectX - i, rectY, rect.Rotated );
+                                Copy( image, iw - 1, 0, 1, ih, canvas, ( ( rectX + iw ) - 1 ) + i, rectY, rect.Rotated );
                             }
                         }
                     }
-                    else
+
+                    Copy( image, 0, 0, iw, ih, canvas, rectX, rectY, rect.Rotated );
+
+                    if ( _settings.Debug )
                     {
-                        // Copy corner pixels to fill corners of the padding.
-                        for ( var i = 1; i <= amountX; i++ )
+                        using ( var pen = new Pen( System.Drawing.Color.Magenta ) )
                         {
-                            for ( var j = 1; j <= amountY; j++ )
-                            {
-                                Plot( canvas, rectX - i, rectY - j, image.GetPixel( 0, 0 ) );
-                                Plot( canvas, rectX - i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( 0, ih - 1 ) );
-                                Plot( canvas, ( ( rectX + iw ) - 1 ) + i, rectY - j, image.GetPixel( iw - 1, 0 ) );
-                                Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( iw - 1, ih - 1 ) );
-                            }
-                        }
-
-                        // Copy edge pixels into padding.
-                        for ( var i = 1; i <= amountY; i++ )
-                        {
-                            Copy( image, 0, 0, iw, 1, canvas, rectX, rectY - i, rect.Rotated );
-                            Copy( image, 0, ih - 1, iw, 1, canvas, rectX, ( ( rectY + ih ) - 1 ) + i, rect.Rotated );
-                        }
-
-                        for ( var i = 1; i <= amountX; i++ )
-                        {
-                            Copy( image, 0, 0, 1, ih, canvas, rectX - i, rectY, rect.Rotated );
-                            Copy( image, iw - 1, 0, 1, ih, canvas, ( ( rectX + iw ) - 1 ) + i, rectY, rect.Rotated );
+                            g.DrawRectangle( pen, rectX, rectY, rect.Width - _settings.PaddingX - 1,
+                                             rect.Height - _settings.PaddingY - 1 );
                         }
                     }
-                }
 
-                Copy( image, 0, 0, iw, ih, canvas, rectX, rectY, rect.Rotated );
-
-                if ( _settings.debug )
-                {
-                    g.SetColor( Color.Magenta );
-                    g.DrawRectangle( rectX, rectY, rect.Width - _settings.paddingX - 1, rect.Height - _settings.paddingY - 1 );
-                }
-
-                if ( _progressListener.Update( r + 1, rn ) )
-                {
-                    return;
+                    if ( _progressListener.Update( r + 1, page.OutputRects.Count ) ) return;
                 }
             }
 
             _progressListener.End();
 
-            if ( _settings is { bleed: true, premultiplyAlpha: false }
-                 && !( string.Equals( _settings.outputFormat, "jpg", StringComparison.Ordinal )
-                       || string.Equals( _settings.outputFormat, "jpeg", StringComparison.Ordinal ) )
+            if ( _settings is { Bleed: true, PremultiplyAlpha: false }
+                 && !( _settings.OutputFormat.Equals( "jpg", StringComparison.OrdinalIgnoreCase ) ||
+                       _settings.OutputFormat.Equals( "jpeg", StringComparison.OrdinalIgnoreCase ) ) )
             {
-                canvas = new ColorBleedEffect().ProcessImage( canvas, _settings.bleedIterations );
-                g      = ( Graphics2D )canvas.getGraphics();
+                canvas = new ColorBleedEffect().ProcessImage( canvas, _settings.BleedIterations );
+
+                g.Dispose(); // Dispose previous Graphics object
+                g = System.Drawing.Graphics.FromImage( canvas );
             }
 
-            if ( _settings.debug )
+            if ( _settings.Debug )
             {
-                g.setColor( Color.magenta );
-                g.drawRect( 0, 0, width - 1, height - 1 );
+                using ( var pen = new Pen( System.Drawing.Color.Magenta ) )
+                {
+                    g.DrawRectangle( pen, 0, 0, width - 1, height - 1 );
+                }
             }
-
-            ImageOutputStream ios = null;
 
             try
             {
-                if ( _settings.outputFormat.equalsIgnoreCase( "jpg" ) || _settings.outputFormat.equalsIgnoreCase( "jpeg" ) )
+                if ( _settings.OutputFormat.Equals( "jpg", StringComparison.OrdinalIgnoreCase ) ||
+                     _settings.OutputFormat.Equals( "jpeg", StringComparison.OrdinalIgnoreCase ) )
                 {
-                    var newImage = new Bitmap( canvas.getWidth(), canvas.getHeight(), Bitmap.TYPE_3BYTE_BGR );
-                    newImage.getGraphics().drawImage( canvas, 0, 0, null );
-                    canvas = newImage;
+                    using ( var newImage = new Bitmap( canvas.Width, canvas.Height, PixelFormat.Format24bppRgb ) )
+                    using ( var newGraphics = System.Drawing.Graphics.FromImage( newImage ) )
+                    {
+                        newGraphics.DrawImage( canvas, 0, 0 );
 
-                    Iterator< ImageWriter > writers = ImageIO.getImageWritersByFormatName( "jpg" );
-                    ImageWriter             writer  = writers.next();
-                    ImageWriteParam         param   = writer.getDefaultWriteParam();
-                    param.setCompressionMode( ImageWriteParam.MODE_EXPLICIT );
-                    param.setCompressionQuality( _settings.jpegQuality );
-                    ios = ImageIO.createImageOutputStream( outputFile );
-                    writer.setOutput( ios );
-                    writer.write( null, new IIOImage( canvas, null, null ), param );
+                        ImageCodecInfo jpgEncoder          = GetEncoder( ImageFormat.Jpeg );
+                        var            myEncoder           = System.Drawing.Imaging.Encoder.Quality;
+                        var            myEncoderParameters = new EncoderParameters( 1 );
+                        var            myEncoderParameter  = new EncoderParameter( myEncoder, ( long )( _settings.JpegQuality * 100 ) );
+
+                        myEncoderParameters.Param[ 0 ] = myEncoderParameter;
+                        newImage.Save( outputFile, jpgEncoder, myEncoderParameters );
+                    }
                 }
                 else
                 {
-                    if ( _settings.premultiplyAlpha ) canvas.getColorModel().coerceData( canvas.getRaster(), true );
-                    ImageIO.write( canvas, "png", outputFile );
+                    if ( _settings.PremultiplyAlpha )
+                    {
+                        // Premultiply alpha (if needed)
+                        for ( var y = 0; y < canvas.Height; y++ )
+                        {
+                            for ( var x = 0; x < canvas.Width; x++ )
+                            {
+                                var color = canvas.GetPixel( x, y );
+                                var alpha = color.A / 255f;
+                                var red   = ( int )( color.R * alpha );
+                                var green = ( int )( color.G * alpha );
+                                var blue  = ( int )( color.B * alpha );
+
+                                canvas.SetPixel( x, y, System.Drawing.Color.FromArgb( color.A, red, green, blue ) );
+                            }
+                        }
+                    }
+
+                    canvas.Save( outputFile, ImageFormat.Png );
                 }
             }
             catch ( IOException ex )
             {
-                throw new GdxRuntimeException( "Error writing file: " + outputFile, ex );
-            }
-            finally
-            {
-                if ( ios != null )
-                {
-                    try
-                    {
-                        ios.close();
-                    }
-                    catch ( Exception ignored )
-                    {
-                    }
-                }
+                throw new Exception( "Error writing file: " + outputFile, ex );
             }
 
-            if ( _progressListener.Update( p + 1, pn ) ) return;
+            if ( _progressListener.Update( p + 1, pages.Count ) ) return;
 
             _progressListener.Count++;
         }
+    }
+
+    private static ImageCodecInfo? GetEncoder( ImageFormat format )
+    {
+        ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+
+        foreach ( ImageCodecInfo codec in codecs )
+        {
+            if ( codec.FormatID == format.Guid )
+            {
+                return codec;
+            }
+        }
+
+        return null;
     }
 
     private static void Plot( Bitmap dst, int x, int y, System.Drawing.Color argb )
@@ -514,191 +539,232 @@ public class TexturePacker
         }
     }
 
-    private void WritePackFile( FileInfo outputDir, string scaledPackFileName, List< Page > pages )
+    private void WritePackFile( DirectoryInfo outputDir, string scaledPackFileName, List< Page > pages )
     {
-        var packFile = new
-            FileInfo( outputDir, scaledPackFileName + _settings.atlasExtension );
-        FileInfo packDir = packFile.getParentFile();
-        packDir.mkdirs();
+        var packFile = new FileInfo( Path.Combine( outputDir.FullName, scaledPackFileName + _settings.AtlasExtension ) );
+        var packDir  = packFile.Directory;
 
-        if ( packFile.exists() )
+        packDir?.Create();
+
+        if ( packFile.Exists )
         {
             // Make sure there aren't duplicate names.
-            var textureAtlasData = new TextureAtlasData( new FileHandle( packFile ), new FileHandle( packFile ), false );
-            for ( Page page :
-            pages) {
-                for ( Rect rect :
-                page.outputRects)
+            var textureAtlasData = new TextureAtlasData( packFile, flip: _settings.FlattenPaths );
+
+            foreach ( var page in pages )
+            {
+                foreach ( var rect in page.OutputRects )
                 {
-                    string rectName = Rect.getAtlasName( rect.name, _settings.flattenPaths );
-                    for ( Region region :
-                    textureAtlasData.getRegions()) {
-                        if ( region.name.equals( rectName ) )
+                    var rectName = Rect.GetAtlasName( rect.Name, _settings.FlattenPaths );
+
+                    foreach ( var region in textureAtlasData.Regions )
+                    {
+                        if ( region.Name.Equals( rectName ) )
                         {
-                            throw new GdxRuntimeException( "A region with the name \"" + rectName + "\" has already been packed: " +
-                                                           rect.name );
+                            throw new GdxRuntimeException( $"A region with the name \"{rectName}\" has already been packed: {rect.Name}" );
                         }
                     }
                 }
             }
         }
 
-        string tab = "", colon = ":", comma = ",";
+        var tab   = "";
+        var colon = ":";
+        var comma = ",";
 
-        if ( _settings.prettyPrint )
+        if ( _settings.PrettyPrint )
         {
             tab   = "\t";
             colon = ": ";
             comma = ", ";
         }
 
-        bool               appending = packFile.exists();
-        OutputStreamWriter writer    = new OutputStreamWriter( new FileOutputStream( packFile, true ), "UTF-8" );
+        var appending = packFile.Exists;
 
-        for ( int i = 0, n = pages.size; i < n; i++ )
+        using ( var writer = new StreamWriter( packFile.FullName, appending, System.Text.Encoding.UTF8 ) )
         {
-            Page page = pages.get( i );
-
-            if ( _settings.legacyOutput )
-                WritePageLegacy( writer, page );
-            else
+            for ( var i = 0; i < pages.Count; i++ )
             {
-                if ( ( i != 0 ) || appending ) writer.write( "\n" );
-                writePage( writer, appending, page );
-            }
+                var page = pages[ i ];
 
-            page.outputRects.sort();
-            for ( Rect rect :
-            page.outputRects) {
-                if ( _settings.legacyOutput )
-                    WriteRectLegacy( writer, page, rect, rect.name );
+                if ( _settings.LegacyOutput )
+                {
+                    WritePageLegacy( writer, page );
+                }
                 else
-                    writeRect( writer, page, rect, rect.name );
-                List< Alias > aliases = new List( rect.aliases.toList() );
-                aliases.sort();
-                for ( Alias alias :
-                aliases) {
-                    var aliasRect = new Rect();
-                    aliasRect.set( rect );
-                    alias.apply( aliasRect );
-                    if ( _settings.legacyOutput )
-                        WriteRectLegacy( writer, page, aliasRect, alias.name );
+                {
+                    if ( ( i != 0 ) || appending )
+                    {
+                        writer.WriteLine();
+                    }
+
+                    WritePage( writer, appending, page );
+                }
+
+                page.OutputRects.Sort();
+
+                foreach ( var rect in page.OutputRects )
+                {
+                    if ( _settings.LegacyOutput )
+                    {
+                        WriteRectLegacy( writer, page, rect, rect.Name );
+                    }
                     else
-                        writeRect( writer, page, aliasRect, alias.name );
+                    {
+                        WriteRect( writer, page, rect, rect.Name );
+                    }
+
+                    var aliases = new List< Alias >( rect.Aliases );
+
+                    aliases.Sort();
+
+                    foreach ( var alias in aliases )
+                    {
+                        var aliasRect = new Rect();
+                        aliasRect.Set( rect );
+                        alias.Apply( aliasRect );
+
+                        if ( _settings.LegacyOutput )
+                        {
+                            WriteRectLegacy( writer, page, aliasRect, alias.Name );
+                        }
+                        else
+                        {
+                            WriteRect( writer, page, aliasRect, alias.Name );
+                        }
+                    }
                 }
             }
         }
-
-        writer.close();
     }
 
-    private void WritePage( OutputStreamWriter writer, bool appending, Page page )
+    private void WritePage( TextWriter writer, bool appending, Page page )
     {
-        string tab = "", colon = ":", comma = ",";
+        var tab   = "";
+        var colon = ":";
+        var comma = ",";
 
-        if ( _settings.prettyPrint )
+        if ( _settings.PrettyPrint )
         {
             tab   = "\t";
             colon = ": ";
             comma = ", ";
         }
 
-        writer.write( page.imageName + "\n" );
-        writer.write( tab + "size" + colon + page.imageWidth + comma + page.imageHeight + "\n" );
+        writer.WriteLine( page.ImageName );
+        writer.WriteLine( $"{tab}size{colon}{page.ImageWidth}{comma}{page.ImageHeight}" );
 
-        if ( _settings.format != PixelType.Format.RGBA8888 ) writer.write( tab + "format" + colon + _settings.format + "\n" );
+        if ( _settings.Format != PixelFormat.Format32bppArgb )
+        {
+            writer.WriteLine( $"{tab}format{colon}{_settings.Format}" );
+        }
 
-        if ( ( _settings.filterMin != Texture.TextureFilter.Nearest ) || ( _settings.filterMag != Texture.TextureFilter.Nearest ) )
-            writer.write( tab + "filter" + colon + _settings.filterMin + comma + _settings.filterMag + "\n" );
+        if ( _settings.FilterMin != Texture.TextureFilter.Nearest || _settings.FilterMag != Texture.TextureFilter.Nearest )
+        {
+            writer.WriteLine( $"{tab}filter{colon}{_settings.FilterMin}{comma}{_settings.FilterMag}" );
+        }
 
-        var repeatValue = GetRepeatValue();
-        if ( repeatValue != null ) writer.write( tab + "repeat" + colon + repeatValue + "\n" );
+        var repeatValue = GetRepeatValue(); // Pass settings to GetRepeatValue
 
-        if ( _settings.premultiplyAlpha ) writer.write( tab + "pma" + colon + "true\n" );
+        if ( repeatValue != null )
+        {
+            writer.WriteLine( $"{tab}repeat{colon}{repeatValue}" );
+        }
+
+        if ( _settings.PremultiplyAlpha )
+        {
+            writer.WriteLine( $"{tab}pma{colon}true" );
+        }
     }
 
-    private void WriteRect( Writer writer, Page page, Rect rect, string name )
+    private void WriteRect( TextWriter writer, Page page, Rect rect, string name )
     {
-        string tab = "", colon = ":", comma = ",";
+        var tab   = "";
+        var colon = ":";
+        var comma = ",";
 
-        if ( _settings.prettyPrint )
+        if ( _settings.PrettyPrint )
         {
             tab   = "\t";
             colon = ": ";
             comma = ", ";
         }
 
-        writer.write( Rect.getAtlasName( name, _settings.flattenPaths ) + "\n" );
-        if ( rect.index != -1 ) writer.write( tab + "index" + colon + rect.index + "\n" );
+        writer.WriteLine( Rect.GetAtlasName( name, _settings.FlattenPaths ) );
 
-        writer.write( tab + "bounds" + colon //
-                      + ( page.x + rect.x ) + comma + ( ( page.y + page.height ) - rect.y - ( rect.height - _settings.paddingY ) ) +
-                      comma //
-                      + rect.regionWidth + comma + rect.regionHeight + "\n" );
-
-        int offsetY = rect.originalHeight - rect.regionHeight - rect.offsetY;
-
-        if ( ( rect.offsetX != 0 ) || ( offsetY != 0 ) //
-                                   || ( rect.originalWidth != rect.regionWidth ) || ( rect.originalHeight != rect.regionHeight ) )
+        if ( rect.Index != -1 )
         {
-            writer.write( tab + "offsets" + colon                  //
-                          + rect.offsetX + comma + offsetY + comma //
-                          + rect.originalWidth + comma + rect.originalHeight + "\n" );
+            writer.WriteLine( $"{tab}index{colon}{rect.Index}" );
         }
 
-        if ( rect.Rotated ) writer.write( tab + "rotate" + colon + rect.Rotated + "\n" );
+        writer.WriteLine( $"{tab}bounds{colon}{page.X + rect.X}{comma}{( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY )}{comma}{rect.RegionWidth}{comma}{rect.RegionHeight}" );
 
-        if ( rect.splits != null )
+        var offsetY = rect.OriginalHeight - rect.RegionHeight - rect.OffsetY;
+
+        if ( ( rect.OffsetX != 0 ) || ( offsetY != 0 ) || ( rect.OriginalWidth != rect.RegionWidth ) ||
+             ( rect.OriginalHeight != rect.RegionHeight ) )
         {
-            writer.write( tab + "split" + colon                                 //
-                          + rect.splits[ 0 ] + comma + rect.splits[ 1 ] + comma //
-                          + rect.splits[ 2 ] + comma + rect.splits[ 3 ] + "\n" );
+            writer.WriteLine( $"{tab}offsets{colon}{rect.OffsetX}{comma}{offsetY}{comma}{rect.OriginalWidth}{comma}{rect.OriginalHeight}" );
         }
 
-        if ( rect.pads != null )
+        if ( rect.Rotated )
         {
-            if ( rect.splits == null ) writer.write( tab + "split" + colon + "0" + comma + "0" + comma + "0" + comma + "0\n" );
-            writer.write(
-                         tab + "pad" + colon + rect.pads[ 0 ] + comma + rect.pads[ 1 ] + comma + rect.pads[ 2 ] + comma + rect.pads[ 3 ] +
-                         "\n" );
+            writer.WriteLine( $"{tab}rotate{colon}{rect.Rotated}" );
+        }
+
+        if ( rect.Splits != null )
+        {
+            writer.WriteLine( $"{tab}split{colon}{rect.Splits[ 0 ]}{comma}{rect.Splits[ 1 ]}{comma}{rect.Splits[ 2 ]}{comma}{rect.Splits[ 3 ]}" );
+        }
+
+        if ( rect.Pads != null )
+        {
+            if ( rect.Splits == null )
+            {
+                writer.WriteLine( $"{tab}split{colon}0{comma}0{comma}0{comma}0" );
+            }
+
+            writer.WriteLine( $"{tab}pad{colon}{rect.Pads[ 0 ]}{comma}{rect.Pads[ 1 ]}{comma}{rect.Pads[ 2 ]}{comma}{rect.Pads[ 3 ]}" );
         }
     }
 
-    private void WritePageLegacy( OutputStreamWriter writer, Page page )
+    private void WritePageLegacy( TextWriter writer, Page page )
     {
-        writer.write( "\n" + page.imageName + "\n" );
-        writer.write( "size: " + page.imageWidth + ", " + page.imageHeight + "\n" );
-        writer.write( "format: " + settings.format + "\n" );
-        writer.write( "filter: " + settings.filterMin + ", " + settings.filterMag + "\n" );
+        writer.WriteLine();
+        writer.WriteLine( page.ImageName );
+        writer.WriteLine( $"size: {page.ImageWidth}, {page.ImageHeight}" );
+        writer.WriteLine( $"format: {_settings.Format}" );
+        writer.WriteLine( $"filter: {_settings.FilterMin}, {_settings.FilterMag}" );
+
         var repeatValue = GetRepeatValue();
-        writer.write( "repeat: " + ( repeatValue == null ? "none" : repeatValue ) + "\n" );
+        writer.WriteLine( $"repeat: {repeatValue ?? "none"}" );
     }
 
-    private void WriteRectLegacy( Writer writer, Page page, Rect rect, string name )
+    private void WriteRectLegacy( TextWriter writer, Page page, Rect rect, string name )
     {
-        writer.write( Rect.getAtlasName( name, settings.flattenPaths ) + "\n" );
-        writer.write( "  rotate: " + rect.Rotated + "\n" );
-        writer
-            .write( "  xy: " + ( page.x + rect.x ) + ", " + ( ( page.y + page.height ) - rect.y - ( rect.height - settings.paddingY ) ) +
-                    "\n" );
+        writer.WriteLine( Rect.GetAtlasName( name, _settings.FlattenPaths ) );
+        writer.WriteLine( $"  rotate: {rect.Rotated}" );
+        writer.WriteLine( $"  xy: {page.X + rect.X}, {page.Y + page.Height - rect.Y - ( rect.Height - _settings.PaddingY )}" );
+        writer.WriteLine( $"  size: {rect.RegionWidth}, {rect.RegionHeight}" );
 
-        writer.write( "  size: " + rect.regionWidth + ", " + rect.regionHeight + "\n" );
-
-        if ( rect.splits != null )
+        if ( rect.Splits != null )
         {
-            writer.write( "  split: " //
-                          + rect.splits[ 0 ] + ", " + rect.splits[ 1 ] + ", " + rect.splits[ 2 ] + ", " + rect.splits[ 3 ] + "\n" );
+            writer.WriteLine( $"  split: {rect.Splits[ 0 ]}, {rect.Splits[ 1 ]}, {rect.Splits[ 2 ]}, {rect.Splits[ 3 ]}" );
         }
 
-        if ( rect.pads != null )
+        if ( rect.Pads != null )
         {
-            if ( rect.splits == null ) writer.write( "  split: 0, 0, 0, 0\n" );
-            writer.write( "  pad: " + rect.pads[ 0 ] + ", " + rect.pads[ 1 ] + ", " + rect.pads[ 2 ] + ", " + rect.pads[ 3 ] + "\n" );
+            if ( rect.Splits == null )
+            {
+                writer.WriteLine( "  split: 0, 0, 0, 0" );
+            }
+
+            writer.WriteLine( $"  pad: {rect.Pads[ 0 ]}, {rect.Pads[ 1 ]}, {rect.Pads[ 2 ]}, {rect.Pads[ 3 ]}" );
         }
 
-        writer.write( "  orig: " + rect.OriginalWidth + ", " + rect.OriginalHeight + "\n" );
-        writer.write( "  offset: " + rect.OffsetX + ", " + ( rect.OriginalHeight - rect.RegionHeight - rect.OffsetY ) + "\n" );
-        writer.write( "  index: " + rect.Index + "\n" );
+        writer.WriteLine( $"  orig: {rect.OriginalWidth}, {rect.OriginalHeight}" );
+        writer.WriteLine( $"  offset: {rect.OffsetX}, {rect.OriginalHeight - rect.RegionHeight - rect.OffsetY}" );
+        writer.WriteLine( $"  index: {rect.Index}" );
     }
 
     private string? GetRepeatValue()
@@ -721,9 +787,7 @@ public class TexturePacker
         return null;
     }
 
-    //TODO:
-    [SupportedOSPlatform( "windows" )]
-    private PixelFormat GetBufferedImageType( PixelType.Format format )
+    private PixelFormat GetPixelFormat( PixelType.Format format )
     {
         switch ( format )
         {
@@ -748,16 +812,16 @@ public class TexturePacker
         this._progressListener = progress;
     }
 
-    /** Packs using defaults settings.
+    /** Packs using defaults _settings.
      * @see TexturePacker#process(Settings, string, string, string) */
     public static void Process( string input, string output, string packFileName )
     {
         Process( new Settings(), input, output, packFileName );
     }
 
-    public static void Process( Settings settings, string input, string output, string packFileName )
+    public static void Process( Settings _settings, string input, string output, string packFileName )
     {
-        Process( settings, input, output, packFileName, null );
+        Process( _settings, input, output, packFileName, null );
     }
 
     /** @param input Directory containing individual images to be packed.
@@ -839,16 +903,15 @@ public class TexturePacker
         }
         catch ( Exception ex )
         {
-            // Handle exceptions (e.g., file not found, access denied)
+            //TODO: Handle exceptions (e.g., file not found, access denied)
             Console.WriteLine( $"Error checking modification: {ex.Message}" );
 
-            return false; // Or throw an exception, depending on your error handling strategy
+            return false; // Or throw an exception?
         }
     }
 
     public static bool ProcessIfModified( string input, string output, string packFileName )
     {
-        // Default settings (Needed to access the default atlas extension string)
         var settings = new Settings();
 
         if ( IsModified( input, output, packFileName, settings ) )
@@ -940,7 +1003,6 @@ public class TexturePacker
     // ========================================================================
 
     [PublicAPI]
-    [SupportedOSPlatform( "windows" )]
     public class Rect : IComparable< Rect >
     {
         public int           Score1;
@@ -986,7 +1048,6 @@ public class TexturePacker
             return string.Compare( Name, o?.Name, StringComparison.Ordinal );
         }
 
-        [SupportedOSPlatform( "windows" )]
         public Rect( Bitmap source, int left, int top, int newWidth, int newHeight, bool isPatch )
         {
             _bufferedImage = new Bitmap( newWidth, newHeight, source.PixelFormat );
@@ -1142,6 +1203,7 @@ public class TexturePacker
     // ========================================================================
     // ========================================================================
 
+    [PublicAPI]
     public class ProgressListenerImpl : ProgressListener
     {
         /// <inheritdoc />
