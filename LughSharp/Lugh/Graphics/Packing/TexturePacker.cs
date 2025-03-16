@@ -25,7 +25,6 @@
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
@@ -39,6 +38,7 @@ using Pen = System.Drawing.Pen;
 namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class TexturePacker
 {
     public string? RootPath { get; private set; }
@@ -54,7 +54,7 @@ public class TexturePacker
     // ========================================================================
     // ========================================================================
 
-    public TexturePacker( FileInfo? rootDir, Settings settings )
+    public TexturePacker( FileInfo? rootDir, TexturePacker.Settings settings )
     {
         this._settings = settings;
 
@@ -90,8 +90,7 @@ public class TexturePacker
         SetRootDir( rootDir );
     }
 
-    public TexturePacker( Settings settings )
-        : this( null, settings )
+    public TexturePacker( Settings settings ) : this( null, settings )
     {
     }
 
@@ -154,6 +153,9 @@ public class TexturePacker
     /// <exception cref="GdxRuntimeException"></exception>
     public void Pack( FileInfo outputDir, string packFileName )
     {
+        ArgumentNullException.ThrowIfNull( outputDir );
+        ArgumentNullException.ThrowIfNull( outputDir.Directory );
+        
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
             packFileName = packFileName.Substring( 0, packFileName.Length - _settings.AtlasExtension.Length );
@@ -244,6 +246,9 @@ public class TexturePacker
 
     private void WriteImages( string outputDir, string scaledPackFileName, List< Page > pages )
     {
+        ArgumentNullException.ThrowIfNull( outputDir );
+        ArgumentNullException.ThrowIfNull( _progressListener );
+        
         var packFileNoExt = Path.Combine( outputDir, scaledPackFileName );
         var packDir       = Path.GetDirectoryName( packFileNoExt );
         var imageName     = Path.GetFileName( packFileNoExt );
@@ -321,7 +326,10 @@ public class TexturePacker
                 if ( !File.Exists( outputFile ) ) break;
             }
 
-            Directory.CreateDirectory( Path.GetDirectoryName( outputFile ) ); // Create parent directories
+            // Create parent directories
+            Directory.CreateDirectory( Path.GetDirectoryName( outputFile )
+                                       ?? throw new GdxRuntimeException( "Error creating output directory" ) );
+
             page.ImageName = Path.GetFileName( outputFile );
 
             var canvas = new Bitmap( width, height, _settings.Format );
@@ -332,6 +340,11 @@ public class TexturePacker
                 Console.WriteLine( $"Writing {canvas.Width}x{canvas.Height}: {outputFile}" );
             }
 
+            if ( page.OutputRects == null )
+            {
+                throw new NullReferenceException( "OutputRects for page is null" );
+            }
+            
             _progressListener.Start( 1f / pages.Count );
 
             for ( var r = 0; r < page.OutputRects.Count; r++ )
@@ -393,8 +406,7 @@ public class TexturePacker
                                     Plot( canvas, rectX - i, rectY - j, image.GetPixel( 0, 0 ) );
                                     Plot( canvas, rectX - i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( 0, ih - 1 ) );
                                     Plot( canvas, ( ( rectX + iw ) - 1 ) + i, rectY - j, image.GetPixel( iw - 1, 0 ) );
-                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j,
-                                          image.GetPixel( iw - 1, ih - 1 ) );
+                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( iw - 1, ih - 1 ) );
                                 }
                             }
 
@@ -424,7 +436,10 @@ public class TexturePacker
                         }
                     }
 
-                    if ( _progressListener.Update( r + 1, page.OutputRects.Count ) ) return;
+                    if ( _progressListener.Update( r + 1, page.OutputRects.Count ) )
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -458,7 +473,7 @@ public class TexturePacker
                     {
                         newGraphics.DrawImage( canvas, 0, 0 );
 
-                        ImageCodecInfo jpgEncoder          = GetEncoder( ImageFormat.Jpeg );
+                        var jpgEncoder          = GetEncoder( ImageFormat.Jpeg );
                         var            myEncoder           = System.Drawing.Imaging.Encoder.Quality;
                         var            myEncoderParameters = new EncoderParameters( 1 );
                         var            myEncoderParameter  = new EncoderParameter( myEncoder, ( long )( _settings.JpegQuality * 100 ) );
@@ -501,11 +516,11 @@ public class TexturePacker
         }
     }
 
-    private static ImageCodecInfo? GetEncoder( ImageFormat format )
+    private static ImageCodecInfo GetEncoder( ImageFormat format )
     {
-        ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+        var codecs = ImageCodecInfo.GetImageEncoders();
 
-        foreach ( ImageCodecInfo codec in codecs )
+        foreach ( var codec in codecs )
         {
             if ( codec.FormatID == format.Guid )
             {
@@ -513,7 +528,7 @@ public class TexturePacker
             }
         }
 
-        return null;
+        throw new GdxRuntimeException( $"Decode for ImageFormat {format} not found" );
     }
 
     private static void Plot( Bitmap dst, int x, int y, System.Drawing.Color argb )
@@ -553,12 +568,16 @@ public class TexturePacker
 
             foreach ( var page in pages )
             {
+                ArgumentNullException.ThrowIfNull( page.OutputRects );
+                
                 foreach ( var rect in page.OutputRects )
                 {
                     var rectName = Rect.GetAtlasName( rect.Name, _settings.FlattenPaths );
 
                     foreach ( var region in textureAtlasData.Regions )
                     {
+                        ArgumentNullException.ThrowIfNull( region.Name );
+                        
                         if ( region.Name.Equals( rectName ) )
                         {
                             throw new GdxRuntimeException( $"A region with the name \"{rectName}\" has already been packed: {rect.Name}" );
@@ -568,16 +587,16 @@ public class TexturePacker
             }
         }
 
-        var tab   = "";
-        var colon = ":";
-        var comma = ",";
+//        var tab   = "";
+//        var colon = ":";
+//        var comma = ",";
 
-        if ( _settings.PrettyPrint )
-        {
-            tab   = "\t";
-            colon = ": ";
-            comma = ", ";
-        }
+//        if ( _settings.PrettyPrint )
+//        {
+//            tab   = "\t";
+//            colon = ": ";
+//            comma = ", ";
+//        }
 
         var appending = packFile.Exists;
 
@@ -587,6 +606,11 @@ public class TexturePacker
             {
                 var page = pages[ i ];
 
+                if ( page.OutputRects == null )
+                {
+                    throw new NullReferenceException();
+                }
+                
                 if ( _settings.LegacyOutput )
                 {
                     WritePageLegacy( writer, page );
@@ -605,6 +629,11 @@ public class TexturePacker
 
                 foreach ( var rect in page.OutputRects )
                 {
+                    if ( ( rect.Name == null ) || ( rect.Name.Length == 0 ) )
+                    {
+                        throw new GdxRuntimeException( "rect.Name must not be null or empty" );
+                    }
+                    
                     if ( _settings.LegacyOutput )
                     {
                         WriteRectLegacy( writer, page, rect, rect.Name );
@@ -620,6 +649,11 @@ public class TexturePacker
 
                     foreach ( var alias in aliases )
                     {
+                        if ( ( alias.Name == null ) || ( alias.Name.Length == 0 ) )
+                        {
+                            throw new GdxRuntimeException( "alias.Name must not be null or empty" );
+                        }
+
                         var aliasRect = new Rect();
                         aliasRect.Set( rect );
                         alias.Apply( aliasRect );
@@ -659,7 +693,7 @@ public class TexturePacker
             writer.WriteLine( $"{tab}format{colon}{_settings.Format}" );
         }
 
-        if ( _settings.FilterMin != Texture.TextureFilter.Nearest || _settings.FilterMag != Texture.TextureFilter.Nearest )
+        if ( ( _settings.FilterMin != Texture.TextureFilter.Nearest ) || ( _settings.FilterMag != Texture.TextureFilter.Nearest ) )
         {
             writer.WriteLine( $"{tab}filter{colon}{_settings.FilterMin}{comma}{_settings.FilterMag}" );
         }
@@ -744,7 +778,7 @@ public class TexturePacker
     {
         writer.WriteLine( Rect.GetAtlasName( name, _settings.FlattenPaths ) );
         writer.WriteLine( $"  rotate: {rect.Rotated}" );
-        writer.WriteLine( $"  xy: {page.X + rect.X}, {page.Y + page.Height - rect.Y - ( rect.Height - _settings.PaddingY )}" );
+        writer.WriteLine( $"  xy: {page.X + rect.X}, {( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY )}" );
         writer.WriteLine( $"  size: {rect.RegionWidth}, {rect.RegionHeight}" );
 
         if ( rect.Splits != null )
@@ -807,29 +841,27 @@ public class TexturePacker
         }
     }
 
-    public void SetProgressListener( ProgressListener progress )
-    {
-        this._progressListener = progress;
-    }
-
-    /** Packs using defaults _settings.
-     * @see TexturePacker#process(Settings, string, string, string) */
+    /// <summary>
+    /// Packs using defaults settings.
+    /// </summary>
     public static void Process( string input, string output, string packFileName )
     {
         Process( new Settings(), input, output, packFileName );
     }
 
-    public static void Process( Settings _settings, string input, string output, string packFileName )
+    public static void Process( Settings settings, string input, string output, string packFileName )
     {
-        Process( _settings, input, output, packFileName, null );
+        Process( settings, input, output, packFileName, null );
     }
 
-    /** @param input Directory containing individual images to be packed.
-     * @param output Directory where the pack file and page images will be written.
-     * @param packFileName The name of the pack file. Also used to name the page images.
-     * @param progress May be null. */
-    public static void Process( Settings settings, string input, string output, string packFileName,
-                                ProgressListener? progress )
+    /// <summary>
+    /// </summary>
+    /// <param name="settings"></param>
+    /// <param name="input"> Directory containing individual images to be packed. </param>
+    /// <param name="output"> Directory where the pack file and page images will be written. </param>
+    /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
+    /// <param name="progress"> May be null. </param>
+    public static void Process( Settings settings, string input, string output, string packFileName, ProgressListener? progress )
     {
         try
         {
@@ -842,8 +874,10 @@ public class TexturePacker
         }
     }
 
-    /** @return true if the output file does not yet exist or its last modification date is before the last modification date of
-     *         the input file */
+    /// <summary>
+    /// Returns true if the output file does not yet exist or its last modification date
+    /// is before the last modification date of the input file
+    /// </summary>
     public static bool IsModified( string input, string output, string packFileName, Settings settings )
     {
         var packFullFileName = output;
@@ -856,7 +890,8 @@ public class TexturePacker
         packFullFileName += packFileName;
         packFullFileName += settings.AtlasExtension;
 
-        // Check against the only file we know for sure will exist and will be changed if any asset changes: the atlas file.
+        // Check against the only file we know for sure will exist and will
+        // be changed if any asset changes the atlas file.
         var outputFile = new FileInfo( packFullFileName );
 
         if ( !File.Exists( outputFile.FullName ) ) return true;
@@ -871,6 +906,12 @@ public class TexturePacker
         return IsModified( inputFile.FullName, ( outputFile.LastWriteTimeUtc.Ticks / 10000 ) );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <param name="lastModified"></param>
+    /// <returns></returns>
     public static bool IsModified( string filePath, long lastModified )
     {
         try
@@ -903,10 +944,7 @@ public class TexturePacker
         }
         catch ( Exception ex )
         {
-            //TODO: Handle exceptions (e.g., file not found, access denied)
-            Console.WriteLine( $"Error checking modification: {ex.Message}" );
-
-            return false; // Or throw an exception?
+            throw new GdxRuntimeException( $"Error checking modification: {ex.Message}" );
         }
     }
 
@@ -958,6 +996,7 @@ public class TexturePacker
     // ========================================================================
 
     [PublicAPI]
+    [SupportedOSPlatform( "windows" )]
     public class Alias : IComparable< Alias >
     {
         public int     Index;
@@ -1003,6 +1042,7 @@ public class TexturePacker
     // ========================================================================
 
     [PublicAPI]
+    [SupportedOSPlatform( "windows" )]
     public class Rect : IComparable< Rect >
     {
         public int           Score1;
@@ -1048,6 +1088,7 @@ public class TexturePacker
             return string.Compare( Name, o?.Name, StringComparison.Ordinal );
         }
 
+        [SupportedOSPlatform( "windows" )]
         public Rect( Bitmap source, int left, int top, int newWidth, int newHeight, bool isPatch )
         {
             _bufferedImage = new Bitmap( newWidth, newHeight, source.PixelFormat );
@@ -1070,6 +1111,7 @@ public class TexturePacker
             _bufferedImage = null;
         }
 
+        [SupportedOSPlatform( "windows" )]
         public Bitmap GetImage( ImageProcessor? imageProcessor )
         {
             ArgumentNullException.ThrowIfNull( imageProcessor );
@@ -1290,6 +1332,7 @@ public class TexturePacker
     // ========================================================================
 
     [PublicAPI]
+    [SupportedOSPlatform( "windows" )]
     public class Settings
     {
         public bool                  MultipleOfFour        { get; set; }

@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Versioning;
+
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
@@ -30,6 +32,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class MaxRectsPacker : TexturePacker.IPacker
 {
     private static   TexturePacker.Settings    _settings = null!;
@@ -38,8 +41,8 @@ public class MaxRectsPacker : TexturePacker.IPacker
     private readonly SortUtils                 _sort     = new();
 
     // ========================================================================
-    
-    private readonly Comparison< TexturePacker.Rect > rectComparator = ( o1, o2 ) =>
+
+    private readonly Comparison< TexturePacker.Rect > _rectComparator = ( o1, o2 ) =>
         string.Compare( TexturePacker.Rect.GetAtlasName( o1.Name, _settings.FlattenPaths ),
                         TexturePacker.Rect.GetAtlasName( o2.Name, _settings.FlattenPaths ),
                         StringComparison.Ordinal );
@@ -71,6 +74,8 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
     public List< TexturePacker.Page > Pack( TexturePacker.ProgressListener? progress, List< TexturePacker.Rect > inputRects )
     {
+        ArgumentNullException.ThrowIfNull( progress );
+
         var n = inputRects.Count;
 
         for ( var i = 0; i < n; i++ )
@@ -113,11 +118,15 @@ public class MaxRectsPacker : TexturePacker.IPacker
         {
             progress.Count = ( n - inputRects.Count ) + 1;
 
-            if ( progress.Update( progress.Count, n ) ) break;
+            if ( progress.Update( progress.Count, n ) )
+            {
+                break;
+            }
 
             var result = PackPage( inputRects );
             pages.Add( result );
-            inputRects = result.RemainingRects;
+
+            inputRects = result.RemainingRects ?? throw new NullReferenceException();
         }
 
         return pages;
@@ -158,6 +167,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
             var rect   = inputRects[ i ];
             var width  = rect.Width - paddingX;
             var height = rect.Height - paddingY;
+
             minWidth  = Math.Min( minWidth, width );
             minHeight = Math.Min( minHeight, height );
 
@@ -165,28 +175,31 @@ public class MaxRectsPacker : TexturePacker.IPacker
             {
                 if ( ( ( width > maxWidth ) || ( height > maxHeight ) ) && ( ( width > maxHeight ) || ( height > maxWidth ) ) )
                 {
-                    var paddingMessage = ( edgePadX || edgePadY ) ? ( " and edge padding " + paddingX + "*2," + paddingY + "*2" ) : "";
+                    var paddingMessage = ( edgePadX || edgePadY )
+                        ? ( $" and edge padding {paddingX} *2, {paddingY} *2" )
+                        : "";
 
-                    throw new GdxRuntimeException( "Image does not fit within max page size " + _settings.MaxWidth + "x"
-                                                   + _settings.MaxHeight + paddingMessage + ": " + rect.Name + " " + width + "x" + height );
+                    throw new GdxRuntimeException( $"Image does not fit within max page size " +
+                                                   $"{_settings.MaxWidth}x{_settings.MaxHeight}{paddingMessage}: " +
+                                                   $"{rect.Name} {width}x{height}" );
                 }
             }
             else
             {
                 if ( width > maxWidth )
                 {
-                    var paddingMessage = edgePadX ? ( " and X edge padding " + paddingX + "*2" ) : "";
+                    var paddingMessage = edgePadX ? ( $" and X edge padding {paddingX} *2" ) : "";
 
-                    throw new GdxRuntimeException( "Image does not fit within max page width " + _settings.MaxWidth + paddingMessage + ": "
-                                                   + rect.Name + " " + width + "x" + height );
+                    throw new GdxRuntimeException( $"Image does not fit within max page width " +
+                                                   $"{_settings.MaxWidth}{paddingMessage}: {rect.Name} {width}x{height}" );
                 }
 
                 if ( ( height > maxHeight ) && ( !_settings.Rotation || ( width > maxHeight ) ) )
                 {
-                    var paddingMessage = edgePadY ? ( " and Y edge padding " + paddingY + "*2" ) : "";
+                    var paddingMessage = edgePadY ? ( $" and Y edge padding {paddingY} *2" ) : "";
 
-                    throw new GdxRuntimeException( "Image does not fit within max page height " + _settings.MaxHeight + paddingMessage
-                                                   + ": " + rect.Name + " " + width + "x" + height );
+                    throw new GdxRuntimeException( $"Image does not fit within max page height " +
+                                                   $"{_settings.MaxHeight}{paddingMessage}: {rect.Name} {width}x{height}" );
                 }
             }
         }
@@ -194,8 +207,8 @@ public class MaxRectsPacker : TexturePacker.IPacker
         minWidth  = Math.Max( minWidth, _settings.MinWidth );
         minHeight = Math.Max( minHeight, _settings.MinHeight );
 
-        // BinarySearch uses the max size. Rects are packed with right and top padding, so the max size is increased to match.
-        // After packing the padding is subtracted from the page size.
+        // BinarySearch uses the max size. Rects are packed with right and top padding, so the max
+        // size is increased to match. After packing the padding is subtracted from the page size.
         int adjustX = paddingX, adjustY = paddingY;
 
         if ( _settings.EdgePadding )
@@ -212,26 +225,37 @@ public class MaxRectsPacker : TexturePacker.IPacker
             }
         }
 
-        if ( !_settings.Silent ) Console.WriteLine( "Packing" );
+        if ( !_settings.Silent )
+        {
+            Console.WriteLine( "Packing" );
+        }
 
         // Find the minimal page size that fits all rects.
-        TexturePacker.Page bestResult = null;
+        TexturePacker.Page? bestResult = null;
 
         if ( _settings.Square )
         {
-            int minSize = Math.Max( minWidth, minHeight );
-            int maxSize = Math.Min( _settings.MaxWidth, _settings.MaxHeight );
-            var sizeSearch = new BinarySearch( minSize, maxSize, _settings.Fast ? 25 : 15, _settings.PowerOfTwo,
+            var minSize = Math.Max( minWidth, minHeight );
+            var maxSize = Math.Min( _settings.MaxWidth, _settings.MaxHeight );
+            var sizeSearch = new BinarySearch( minSize,
+                                               maxSize,
+                                               _settings.Fast ? 25 : 15,
+                                               _settings.PowerOfTwo,
                                                _settings.MultipleOfFour );
-            int size = sizeSearch.Reset(), i = 0;
+            var size = sizeSearch.Reset();
+            var i    = 0;
 
             while ( size != -1 )
             {
-                TexturePacker.Page result = PackAtSize( true, size + adjustX, size + adjustY, inputRects );
+                var result = PackAtSize( true, size + adjustX, size + adjustY, inputRects );
 
                 if ( !_settings.Silent )
                 {
-                    if ( ( ++i % 70 ) == 0 ) Console.WriteLine();
+                    if ( ( ++i % 70 ) == 0 )
+                    {
+                        Console.WriteLine();
+                    }
+                    
                     Console.WriteLine( "." );
                 }
 
@@ -247,7 +271,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
                 bestResult = PackAtSize( false, maxSize + adjustX, maxSize + adjustY, inputRects );
             }
 
-            _sort.Sort( bestResult.OutputRects, rectComparator );
+            _sort.Sort( bestResult?.OutputRects, _rectComparator );
+
+            GdxRuntimeException.ThrowIfNull( bestResult );
+            
             bestResult.Width  = Math.Max( bestResult.Width, bestResult.Height ) - paddingX;
             bestResult.Height = Math.Max( bestResult.Width, bestResult.Height ) - paddingY;
 
@@ -264,11 +291,11 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
             while ( true )
             {
-                TexturePacker.Page bestWidthResult = null;
+                TexturePacker.Page? bestWidthResult = null;
 
                 while ( width != -1 )
                 {
-                    TexturePacker.Page result = PackAtSize( true, width + adjustX, height + adjustY, inputRects );
+                    var result = PackAtSize( true, width + adjustX, height + adjustY, inputRects );
 
                     if ( !_settings.Silent )
                     {
@@ -304,7 +331,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
                 bestResult = PackAtSize( false, _settings.MaxWidth + adjustX, _settings.MaxHeight + adjustY, inputRects );
             }
 
-            _sort.Sort( bestResult.OutputRects, rectComparator );
+            _sort.Sort( bestResult.OutputRects, _rectComparator );
             bestResult.Width  -= paddingX;
             bestResult.Height -= paddingY;
 
@@ -333,7 +360,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
                 for ( int ii = 0, nn = inputRects.Count; ii < nn; ii++ )
                 {
-                    TexturePacker.Rect rect = inputRects[ ii ];
+                    var rect = inputRects[ ii ];
 
                     if ( _maxRects.Insert( rect, _methods[ i ] ) == null )
                     {
@@ -349,7 +376,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
             }
 
             if ( ( fully && ( result.RemainingRects?.Count > 0 ) )
-                || ( result.OutputRects?.Count == 0 ) )
+                 || ( result.OutputRects?.Count == 0 ) )
             {
                 continue;
             }
@@ -469,7 +496,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
             if ( newNode.Height == 0 ) return null;
 
-            int numRectanglesToProcess = _freeRectangles.Count;
+            var numRectanglesToProcess = _freeRectangles.Count;
 
             for ( var i = 0; i < numRectanglesToProcess; ++i )
             {
@@ -536,7 +563,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
                 rects.RemoveIndex( bestRectIndex );
             }
 
-            TexturePacker.Page result = GetResult();
+            var result = GetResult();
             result.RemainingRects = rects;
 
             return result;
@@ -548,12 +575,12 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
             for ( var i = 0; i < _usedRectangles.Count; i++ )
             {
-                TexturePacker.Rect rect = _usedRectangles[ i ];
+                var rect = _usedRectangles[ i ];
                 w = Math.Max( w, rect.X + rect.Width );
                 h = Math.Max( h, rect.Y + rect.Height );
             }
 
-            TexturePacker.Page result = new TexturePacker.Page();
+            var result = new TexturePacker.Page();
             result.OutputRects = [ ];
             result.Occupancy   = GetOccupancy();
             result.Width       = w;
@@ -564,7 +591,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
         private void PlaceRect( TexturePacker.Rect node )
         {
-            int numRectanglesToProcess = _freeRectangles.Count;
+            var numRectanglesToProcess = _freeRectangles.Count;
 
             for ( var i = 0; i < numRectanglesToProcess; i++ )
             {
@@ -583,8 +610,8 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
         private TexturePacker.Rect ScoreRect( TexturePacker.Rect rect, FreeRectChoiceHeuristic method )
         {
-            int width         = rect.Width;
-            int height        = rect.Height;
+            var width         = rect.Width;
+            var height        = rect.Height;
             var rotatedWidth  = ( height - _settings.PaddingY ) + _settings.PaddingX;
             var rotatedHeight = ( width - _settings.PaddingX ) + _settings.PaddingY;
             var rotate        = rect.CanRotate && _settings.Rotation;
@@ -705,10 +732,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
                 // Try to place the rectangle in upright (non-rotated) orientation.
                 if ( ( _freeRectangles[ i ].Width >= width ) && ( _freeRectangles[ i ].Height >= height ) )
                 {
-                    int leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - width );
-                    int leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - height );
-                    int shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
-                    int longSideFit   = Math.Max( leftoverHoriz, leftoverVert );
+                    var leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - width );
+                    var leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - height );
+                    var shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
+                    var longSideFit   = Math.Max( leftoverHoriz, leftoverVert );
 
                     if ( ( shortSideFit < bestNode.Score1 ) ||
                          ( ( shortSideFit == bestNode.Score1 ) && ( longSideFit < bestNode.Score2 ) ) )
@@ -725,10 +752,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
                 if ( rotate && ( _freeRectangles[ i ].Width >= rotatedWidth ) && ( _freeRectangles[ i ].Height >= rotatedHeight ) )
                 {
-                    int flippedLeftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - rotatedWidth );
-                    int flippedLeftoverVert  = Math.Abs( _freeRectangles[ i ].Height - rotatedHeight );
-                    int flippedShortSideFit  = Math.Min( flippedLeftoverHoriz, flippedLeftoverVert );
-                    int flippedLongSideFit   = Math.Max( flippedLeftoverHoriz, flippedLeftoverVert );
+                    var flippedLeftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - rotatedWidth );
+                    var flippedLeftoverVert  = Math.Abs( _freeRectangles[ i ].Height - rotatedHeight );
+                    var flippedShortSideFit  = Math.Min( flippedLeftoverHoriz, flippedLeftoverVert );
+                    var flippedLongSideFit   = Math.Max( flippedLeftoverHoriz, flippedLeftoverVert );
 
                     if ( ( flippedShortSideFit < bestNode.Score1 )
                          || ( ( flippedShortSideFit == bestNode.Score1 ) && ( flippedLongSideFit < bestNode.Score2 ) ) )
@@ -762,10 +789,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
                 // Try to place the rectangle in upright (non-rotated) orientation.
                 if ( ( _freeRectangles[ i ].Width >= width ) && ( _freeRectangles[ i ].Height >= height ) )
                 {
-                    int leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - width );
-                    int leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - height );
-                    int shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
-                    int longSideFit   = Math.Max( leftoverHoriz, leftoverVert );
+                    var leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - width );
+                    var leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - height );
+                    var shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
+                    var longSideFit   = Math.Max( leftoverHoriz, leftoverVert );
 
                     if ( ( longSideFit < bestNode.Score2 ) ||
                          ( ( longSideFit == bestNode.Score2 ) && ( shortSideFit < bestNode.Score1 ) ) )
@@ -782,10 +809,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
                 if ( rotate && ( _freeRectangles[ i ].Width >= rotatedWidth ) && ( _freeRectangles[ i ].Height >= rotatedHeight ) )
                 {
-                    int leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - rotatedWidth );
-                    int leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - rotatedHeight );
-                    int shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
-                    int longSideFit   = Math.Max( leftoverHoriz, leftoverVert );
+                    var leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - rotatedWidth );
+                    var leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - rotatedHeight );
+                    var shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
+                    var longSideFit   = Math.Max( leftoverHoriz, leftoverVert );
 
                     if ( ( longSideFit < bestNode.Score2 ) ||
                          ( ( longSideFit == bestNode.Score2 ) && ( shortSideFit < bestNode.Score1 ) ) )
@@ -821,9 +848,9 @@ public class MaxRectsPacker : TexturePacker.IPacker
                 // Try to place the rectangle in upright (non-rotated) orientation.
                 if ( ( _freeRectangles[ i ].Width >= width ) && ( _freeRectangles[ i ].Height >= height ) )
                 {
-                    int leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - width );
-                    int leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - height );
-                    int shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
+                    var leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - width );
+                    var leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - height );
+                    var shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
 
                     if ( ( areaFit < bestNode.Score1 ) || ( ( areaFit == bestNode.Score1 ) && ( shortSideFit < bestNode.Score2 ) ) )
                     {
@@ -839,9 +866,9 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
                 if ( rotate && ( _freeRectangles[ i ].Width >= rotatedWidth ) && ( _freeRectangles[ i ].Height >= rotatedHeight ) )
                 {
-                    int leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - rotatedWidth );
-                    int leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - rotatedHeight );
-                    int shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
+                    var leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - rotatedWidth );
+                    var leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - rotatedHeight );
+                    var shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
 
                     if ( ( areaFit < bestNode.Score1 ) || ( ( areaFit == bestNode.Score1 ) && ( shortSideFit < bestNode.Score2 ) ) )
                     {
@@ -876,7 +903,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
             for ( int i = 0, n = _usedRectangles.Count; i < n; i++ )
             {
-                TexturePacker.Rect rect = _usedRectangles[ i ];
+                var rect = _usedRectangles[ i ];
 
                 if ( ( rect.X == ( x + width ) ) || ( ( rect.X + rect.Width ) == x ) )
                 {
@@ -904,7 +931,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
             for ( int i = 0, n = _freeRectangles.Count; i < n; i++ )
             {
                 // Try to place the rectangle in upright (non-rotated) orientation.
-                TexturePacker.Rect free = _freeRectangles[ i ];
+                var free = _freeRectangles[ i ];
 
                 if ( ( free.Width >= width ) && ( free.Height >= height ) )
                 {
@@ -997,8 +1024,8 @@ public class MaxRectsPacker : TexturePacker.IPacker
             {
                 for ( var j = i + 1; j < n; ++j )
                 {
-                    TexturePacker.Rect rect1 = _freeRectangles[ i ];
-                    TexturePacker.Rect rect2 = _freeRectangles[ j ];
+                    var rect1 = _freeRectangles[ i ];
+                    var rect2 = _freeRectangles[ j ];
 
                     if ( IsContainedIn( rect1, rect2 ) )
                     {

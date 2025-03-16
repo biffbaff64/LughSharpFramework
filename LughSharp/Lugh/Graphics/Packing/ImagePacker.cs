@@ -24,10 +24,6 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
-
 namespace LughSharp.Lugh.Graphics.Packing;
 
 /// <summary>
@@ -82,8 +78,12 @@ namespace LughSharp.Lugh.Graphics.Packing;
 [PublicAPI]
 public class ImagePacker
 {
-    private readonly bool _duplicateBorder;
+    public Image< Rgba32 >                 Image { get; }
+    public Dictionary< string, Rectangle > Rects { get; } = new();
 
+    // ========================================================================
+
+    private readonly bool _duplicateBorder;
     private readonly int  _padding;
     private readonly Node _root;
 
@@ -107,9 +107,6 @@ public class ImagePacker
         _duplicateBorder = duplicateBorder;
         _root            = new Node( 0, 0, width, height );
     }
-
-    public Image< Rgba32 >                 Image { get; }
-    public Dictionary< string, Rectangle > Rects { get; } = new();
 
     /// <summary>
     /// Inserts an image into the current image packer with the specified name.

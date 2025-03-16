@@ -462,23 +462,18 @@ GRAPHICS/OPENGL/GLSL
     - IP   - IP   - Default.glsl.vert
 
 
-GRAPHICS/IMAGEPACKER
---------------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - DONE - ImagePacker
-
-GRAPHICS/TEXTUREPACKER
-----------------------
+GRAPHICS/PACKING
+----------------
 
     CODE   DOCUMENT
     ----   --------
     - DONE - IP   - ColorBleedEffect
     - DONE - IP   - GridPacker
-    - IP   - IP   - ImageProcessor
+    - DONE - DONE - ImagePacker
+    - DONE - IP   - ImageProcessor
     - IP   - IP   - MaxRectsPacker
-    - IP   - IP   - TexturePacker
+    - DONE - IP   - TexturePacker
+    - DONE - IP   - TexturePacker.Resampling
     -      -      - TexturePackerFileProcessor
     -      -      - TexturePackerTest
     -      -      - TexturePackerUpscaleTest
@@ -625,6 +620,7 @@ MATHS
     - DONE - IP   - GridPoint3
     - DONE - IP   - Interpolation
     - DONE - IP   - Intersector
+    - IP   - IP   - IntToByte
     - DONE - IP   - IPath
     - DONE - DONE - IShape2D
     - DONE - IP   - IVector
@@ -896,56 +892,14 @@ UTILS
 UTILS/BUFFERS
 -------------
 
-    I only really need the buffers that LibGDX uses, and I OUGHT to be finding alternatives.
-
      CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - Buffer
-    - IP   - IP   - BufferUtils
-    - DONE - DONE - ByteBuffer
-    - DONE - DONE - FloatBuffer
-    - IP   - IP   - GdxBufferUtils
-    - DONE - DONE - IntBuffer
+    - DONE - IP   - Buffer
+    - DONE - IP   - BufferTests
+    - DONE - IP   - ByteBuffer
+    - DONE - IP   - FLoatBuffer
+    - DONE - IP   - IntBuffer
     - DONE - IP   - ShortBuffer
-
-    - **** - **** - CharBuffer                  Not needed yet
-    - **** - **** - CircularByteBuffer          Not needed yet
-    - **** - **** - DoubleBuffer                Not needed yet
-    - **** - **** - LongBuffer                  Not needed yet
-    - **** - **** - MappedByteBuffer            Not needed yet
-    - **** - **** - StringCharBuffer            Not needed yet
-
-UTILS/BUFFERS/HEAPBUFFERS
--------------------------
-
-     CODE   DOCUMENT
-    ----   --------
-    - IP   - IP   - HeapByteBuffer
-    - **** - **** - HeapCharBuffer              Not needed yet
-    - **** - **** - HeapDoubleBuffer            Not needed yet
-    - IP   - IP   - HeapFloatBuffer
-    - IP   - IP   - HeapIntBuffer
-    - IP   - IP   - HeapShortBuffer
-    - IP   - IP   - HeapByteBufferR
-    - **** - **** - HeapCharBufferR             Not needed yet
-    - **** - **** - HeapDoubleBufferR           Not needed yet
-    - IP   - IP   - HeapFloatBufferR
-    - IP   - IP   - HeapIntBufferR
-    - IP   - IP   - HeapShortBufferR
-
-UTILS/BUFFERS/NEWBUFFERS
-------------------------
-
-  *** In development, new Buffer library to replace existing one. ***
-
-     CODE   DOCUMENT
-    ----   --------
-    - IP   - IP   - Buffer
-    - IP   - IP   - BufferTests
-    - IP   - IP   - ByteBuffer
-    - IP   - IP   - FLoatBuffer
-    - IP   - IP   - IntBuffer
-    - IP   - IP   - ShortBuffer
 
 UTILS/COLLECTIONS
 -----------------
@@ -1003,12 +957,12 @@ UTILS/EXCEPTIONS
     - DONE - DONE - ReadOnlyBufferException
     - DONE - DONE - SpriteBatchException
 
-UTILS/NUMBERS
--------------
+UTILS/GUARDING
+--------------
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - IntToByte
+    - IP   - IP   - Guard
 
 UTILS/POOLING
 -------------
