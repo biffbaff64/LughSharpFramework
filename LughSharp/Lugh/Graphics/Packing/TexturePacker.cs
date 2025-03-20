@@ -1394,6 +1394,12 @@ public class TexturePacker
             Set( settings );
         }
 
+        // ====================================================================
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="settings"></param>
         public void Set( Settings settings )
         {
             MinWidth  = settings.MinWidth;
@@ -1442,6 +1448,12 @@ public class TexturePacker
             settings.ScaleResampling.CopyTo( ScaleResampling, 0 );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="packFileName"></param>
+        /// <param name="scaleIndex"></param>
+        /// <returns></returns>
         public string GetScaledPackFileName( string packFileName, int scaleIndex )
         {
             // Use suffix if not empty string.
@@ -1463,6 +1475,14 @@ public class TexturePacker
             }
 
             return packFileName;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="root"></param>
+        public void ReadFromJson( JsonElement root )
+        {
         }
     }
 }

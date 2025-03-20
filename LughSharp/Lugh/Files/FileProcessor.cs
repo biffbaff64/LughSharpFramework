@@ -23,11 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Utils.Collections;
+using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Guarding;
 
 using static System.Text.RegularExpressions.Regex;
-
-using ArgumentException = System.ArgumentException;
 
 namespace LughSharp.Lugh.Files;
 
@@ -42,7 +41,7 @@ namespace LughSharp.Lugh.Files;
 [PublicAPI]
 public partial class FileProcessor
 {
-    public delegate bool FilenameFilter( FileInfo dir, string filename );
+    public delegate bool FilenameFilter( DirectoryInfo dir, string filename );
 
     // ========================================================================
 
@@ -135,6 +134,11 @@ public partial class FileProcessor
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="regexes"></param>
+    /// <returns></returns>
     public FileProcessor AddInputRegex( params string[] regexes )
     {
         foreach ( var regex in regexes )
@@ -186,11 +190,14 @@ public partial class FileProcessor
     {
         Guard.ThrowIfFileNullOrNotExist( inputFileOrDir );
         Guard.ThrowIfNotFileOrDirectory( inputFileOrDir );
-        
-        if ( inputFileOrDir is FileInfo files )
+        Guard.ThrowIfNull( outputRoot );
+
+        return inputFileOrDir switch
         {
-            Process( files, outputRoot );
-        }
+            FileInfo files            => Process( [ files ], outputRoot ),
+            DirectoryInfo directories => Process( [ directories ], outputRoot ),
+            var _                     => throw new GdxRuntimeException( "Cannot process file or directory." )
+        };
     }
 
     /// <summary>
@@ -217,15 +224,15 @@ public partial class FileProcessor
         {
             if ( Comparator != null ) dirEntries?.Sort( EntryComparator );
 
-            DirectoryInfo newOutputDir = null!;
+            FileInfo newOutputDir = null!;
 
             if ( _flattenOutput )
             {
-                newOutputDir = outputRoot.Directory!;
+                newOutputDir = outputRoot;
             }
             else if ( dirEntries?.Count > 0 )
             {
-                newOutputDir = dirEntries[ 0 ].OutputDir;
+                newOutputDir = dirEntries[ 0 ].OutputFile;
             }
 
             var outputName = inputDir.Name;
@@ -279,14 +286,14 @@ public partial class FileProcessor
     }
 
     /// <summary>
-    /// Processes the specified input files.
+    /// Processes the specified input directories.
     /// </summary>
-    /// <param name="files"></param>
+    /// <param name="directories"></param>
     /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
     /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
-    public List< Entry > Process( DirectoryInfo[] files, FileInfo outputRoot )
+    public List< Entry > Process( DirectoryInfo[] directories, FileInfo outputRoot )
     {
-        Guard.ThrowIfNull( files, nameof( files ) );
+        Guard.ThrowIfNull( directories, nameof( directories ) );
         Guard.ThrowIfNull( outputRoot );
         Guard.ThrowIfNull( outputRoot.Directory );
 
@@ -296,7 +303,7 @@ public partial class FileProcessor
 
         Guard.ThrowIfNull( dirToEntries );
 
-        ProcessDirectories( files, outputRoot.Directory!, outputRoot.Directory!, dirToEntries!, 0 );
+        ProcessDirectories( directories, outputRoot.Directory!, outputRoot.Directory!, dirToEntries!, 0 );
 
         var allEntries = new List< Entry >();
 
@@ -413,7 +420,7 @@ public partial class FileProcessor
 
                 if ( _outputSuffix != null )
                 {
-                    outputName = MyRegex1().Replace( outputName, "$1" ) + _outputSuffix;
+                    outputName = MyRegex().Replace( outputName, "$1" ) + _outputSuffix;
                 }
 
                 var entry = new Entry
@@ -429,7 +436,7 @@ public partial class FileProcessor
                 dirToEntries[ dir ].Add( entry );
             }
 
-            if ( _recursive && file is DirectoryInfo directoryInfo )
+            if ( _recursive && file is FileInfo directoryInfo )
             {
                 var subdir = outputDir.FullName.Length == 0
                     ? new FileInfo( directoryInfo.Name )
@@ -494,7 +501,7 @@ public partial class FileProcessor
 
             if ( _outputSuffix != null )
             {
-                outputName = MyRegex1().Replace( outputName, "$1" ) + _outputSuffix;
+                outputName = MyRegex().Replace( outputName, "$1" ) + _outputSuffix;
             }
 
             var entry = new Entry
@@ -512,13 +519,13 @@ public partial class FileProcessor
     }
 
     private void ProcessDirectories( DirectoryInfo[] files,
-                                     FileInfo outputRoot,
+                                     DirectoryInfo outputRoot,
                                      DirectoryInfo outputDir,
                                      Dictionary< DirectoryInfo, List< Entry > > dirToEntries,
                                      int depth )
     {
         Guard.ThrowIfNull( files );
-        
+
         // Store empty entries for every directory.
         foreach ( var file in files )
         {
@@ -538,7 +545,7 @@ public partial class FileProcessor
 
                 Process( file.GetFileSystemInfos().Where
                              ( f => ( _inputFilter == null )
-                                    || f is DirectoryInfo
+                                    || f is FileInfo
                                     || ( f is FileInfo fInfo
                                          && _inputFilter( fInfo, f.Name ) ) ).ToArray(),
                          outputRoot, subdir, dirToEntries, depth + 1 );
@@ -602,7 +609,7 @@ public partial class FileProcessor
         /// <inheritdoc />
         public override string? ToString()
         {
-            return InputFile?.ToString();
+            return InputFile.ToString();
         }
     }
 
@@ -611,7 +618,4 @@ public partial class FileProcessor
 
     [GeneratedRegex( "(.*)\\..*" )]
     private static partial Regex MyRegex();
-
-    [GeneratedRegex( "(.*)\\..*" )]
-    private static partial Regex MyRegex1();
 }

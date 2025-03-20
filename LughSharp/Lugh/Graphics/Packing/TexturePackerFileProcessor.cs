@@ -25,8 +25,6 @@
 using System.Runtime.Versioning;
 
 using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics.Packing;
-using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Guarding;
 
@@ -38,16 +36,14 @@ namespace LughSharp.Lugh.Graphics.Packing;
 [SupportedOSPlatform( "windows" )]
 public class TexturePackerFileProcessor : FileProcessor
 {
-//    private JsonObject _json = new();
-
-    private readonly TexturePacker.Settings                        _defaultSettings;
-    private readonly TexturePacker.ProgressListener?               _progress;
-    private          ObjectMap< FileInfo, TexturePacker.Settings > _dirToSettings = new();
-    private          string                                        _packFileName;
-    private          FileInfo?                                     _root;
-    private          List< FileInfo >                              _ignoreDirs = [ ];
-    private          bool                                          _countOnly;
-    private          int                                           _packCount;
+    private readonly TexturePacker.Settings                              _defaultSettings;
+    private readonly TexturePacker.ProgressListener?                     _progress;
+    private          Dictionary< DirectoryInfo, TexturePacker.Settings > _dirToSettings = [ ];
+    private          string                                              _packFileName;
+    private          FileInfo?                                           _root;
+    private          List< FileInfo >                                    _ignoreDirs = [ ];
+    private          bool                                                _countOnly;
+    private          int                                                 _packCount;
 
     // ========================================================================
     // ========================================================================
@@ -75,104 +71,106 @@ public class TexturePackerFileProcessor : FileProcessor
         AddInputSuffix( ".png", ".jpg", ".jpeg" );
 
         // Sort input files by name to avoid platform-dependent atlas output changes.
-        SetComparator( new Comparison< DirectoryInfo? >()
+        SetComparator( Compare );
+
+        return;
+
+        // --------------------------------------------------------------------
+
+        static int Compare( FileInfo? file1, FileInfo? file2 )
         {
- 
-            public int Compare(FileInfo file1, FileInfo file2)
-            {
-            return file1.getName().compareTo(file2.getName());
+            return string.Compare( file1?.Name, file2?.Name, StringComparison.Ordinal );
         }
-        });
     }
 
-    public List< ObjectMap< FileInfo, TexturePacker.Settings >.Entry > Process( FileInfo inputFile, FileInfo outputRoot )
+    // ========================================================================
+
+    public List< Entry > Process( FileInfo inputFile, FileInfo outputRoot )
     {
         _root = inputFile;
 
         // Collect pack.json setting files.
         List< FileInfo > settingsFiles = [ ];
 
-        var settingsProcessor = new FileProcessor()
-        {
- 
-
-            protected void processFile( ObjectMap<,  >.Entry inputFile ){ settingsFiles.add(inputFile.inputFile);
-        }
-        };
-
+        var settingsProcessor = new MyFileProcessor( settingsFiles );
         settingsProcessor.AddInputRegex( "pack\\.json" );
         settingsProcessor.Process( inputFile, null );
 
-        // Sort parent first.
-        settingsFiles.Sort();
+        // Sort input files by name to avoid platform-dependent atlas output changes.
+        Comparator = ( file1, file2 ) => string.Compare( file1.Name, file2.Name, StringComparison.Ordinal );
 
-        Collections.sort( settingsFiles, new Comparator< File >()
+        foreach ( var settingsFile in settingsFiles )
         {
- 
-
-            public int compare (File file1, File file2) {
-            return file1.toString().length() - file2.toString().length();
-        }
-
-        });
-        for ( File settingsFile :
-        settingsFiles) {
             // Find first parent with settings, or use defaults.
-            TexturePacker.Settings settings = null;
-            File                   parent   = settingsFile.getParentFile();
+            TexturePacker.Settings? settings = null;
+            var                     parent   = settingsFile.Directory;
 
             while ( true )
             {
-                if ( parent.equals( root ) ) break;
+                if ( parent?.FullName == _root.FullName ) break;
 
-                parent   = parent.getParentFile();
-                settings = dirToSettings.get( parent );
+                parent = parent?.Parent;
+
+                _dirToSettings.TryGetValue( parent!, out settings );
 
                 if ( settings != null )
                 {
-                    settings = newSettings( settings );
+                    settings = NewSettings( settings );
 
                     break;
                 }
             }
 
-            if ( settings == null ) settings = newSettings( defaultSettings );
+            if ( settings == null ) settings = NewSettings( _defaultSettings );
 
             // Merge settings from current directory.
-            merge( settings, settingsFile );
-            dirToSettings.put( settingsFile.getParentFile(), settings );
+            Merge( settings, settingsFile );
+
+            _dirToSettings[ settingsFile.Directory! ] = settings;
         }
 
-// Count the number of texture packer invocations.
-        countOnly = true;
-        super.process( inputFile, outputRoot );
-        countOnly = false;
+        // Count the number of texture packer invocations.
+        _countOnly = true;
+        base.Process( inputFile, outputRoot );
+        _countOnly = false;
 
-// Do actual processing.
-        if ( progress != null ) progress.start( 1 );
-        List< ObjectMap< , >.Entry > result = super.process( inputFile, outputRoot );
-        if ( progress != null ) progress.end();
+        // Do actual processing.
+        _progress?.Start( 1 );
+        var result = base.Process( inputFile, outputRoot );
+        _progress?.End();
 
         return result;
     }
 
-    void merge( TexturePacker.Settings settings, File settingsFile )
+    private void Merge( TexturePacker.Settings settings, FileInfo settingsFile )
     {
         try
         {
-            JsonValue root = new JsonReader().parse( new FileReader( settingsFile ) );
+            var jsonString = File.ReadAllText( settingsFile.FullName );
 
-            if ( root == null ) return; // Empty file.
+            if ( string.IsNullOrWhiteSpace( jsonString ) ) return; // Empty file.
 
-            json.readFields( settings, root );
+            using ( var document = JsonDocument.Parse( jsonString ) )
+            {
+                var root = document.RootElement;
+                settings.ReadFromJson( root ); // Assuming Settings class has a ReadFromJson method
+            }
+        }
+        catch ( JsonException ex )
+        {
+            throw new Exception( $"Error reading settings file: {settingsFile.FullName}, invalid JSON: {ex.Message}", ex );
+        }
+        catch ( FileNotFoundException ex )
+        {
+            throw new Exception( $"Error reading settings file: {settingsFile.FullName}, File not found: {ex.Message}", ex );
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( "Error reading settings file: " + settingsFile, ex );
+            throw new Exception( $"Error reading settings file: {settingsFile.FullName}, {ex.Message}", ex );
         }
     }
 
-    public List< ObjectMap< , >.Entry > process( File[] files, File outputRoot )
+    public List< Dictionary< , >.Entry > process( File[] files, File outputRoot )
 
     {
         // Delete pack file and images.
@@ -226,7 +224,7 @@ public class TexturePackerFileProcessor : FileProcessor
     }
 
     protected void processDir( Entry
-                                   inputDir, List< ObjectMap< , >.Entry > files )
+                                   inputDir, List< Dictionary< , >.Entry > files )
     {
         if ( ignoreDirs.contains( inputDir.inputFile ) ) return;
 
@@ -256,7 +254,7 @@ public class TexturePackerFileProcessor : FileProcessor
             {
  
 
-                protected void processDir (Entry entryDir, List < ObjectMap< , >.Entry > files) {
+                protected void processDir (Entry entryDir, List < Dictionary< , >.Entry > files) {
                 File file = entryDir.inputFile;
                 while (file != null && !file.equals(inputDir.inputFile)) {
                 if (new File(file, "pack.json").exists()) {
@@ -268,7 +266,7 @@ public class TexturePackerFileProcessor : FileProcessor
             if ( !countOnly ) ignoreDirs.add( entryDir.inputFile );
             }
 
-            protected void processFile( ObjectMap< , >.Entry entry )
+            protected void processFile( Dictionary< , >.Entry entry )
             {
                 addProcessedFile( entry );
             }
@@ -286,7 +284,7 @@ public class TexturePackerFileProcessor : FileProcessor
         }
 
         // Sort by name using numeric suffix, then alpha.
-        Collections.sort( files, new Comparator< ObjectMap< , >.Entry >()
+        Collections.sort( files, new Comparator< Dictionary< , >.Entry >()
         {
             Pattern digitSuffix = Pattern.compile("(.*?)(\\d+)$");
             public int compare (Entry entry1, Entry entry2) {
@@ -368,14 +366,14 @@ public class TexturePackerFileProcessor : FileProcessor
         }
 
         TexturePacker packer = newTexturePacker( root, settings );
-        for ( ObjectMap< , >.Entry file :
+        for ( Dictionary< , >.Entry file :
         files)
         packer.addImage( file.inputFile );
         Pack( packer, inputDir );
         if ( progress != null ) progress.end();
     }
 
-    protected void Pack( TexturePacker packer, ObjectMap< FileInfo, TexturePacker.Settings >.Entry inputDir )
+    protected void Pack( TexturePacker packer, Dictionary< FileInfo, TexturePacker.Settings >.Entry inputDir )
     {
         packer.Pack( inputDir.OutputDir, packFileName );
     }
@@ -399,5 +397,23 @@ public class TexturePackerFileProcessor : FileProcessor
     public TexturePacker.ProgressListener? GetProgressListener()
     {
         return _progress;
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    public class MyFileProcessor : FileProcessor
+    {
+        public List< FileInfo > SettingsFiles { get; private set; }
+
+        public MyFileProcessor( List< FileInfo > settingsFiles )
+        {
+            SettingsFiles = settingsFiles;
+        }
+
+        protected void ProcessInputFile( Entry inputFile )
+        {
+            SettingsFiles.Add( inputFile.InputFile );
+        }
     }
 }
