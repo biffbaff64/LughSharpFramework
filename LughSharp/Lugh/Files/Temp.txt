@@ -1,0 +1,168 @@
+﻿public class FileProcessor
+{
+    public delegate bool FilenameFilter(DirectoryInfo dir, string name);
+
+    public FilenameFilter InputFilter { get; set; }
+    public Comparison<FileInfo> Comparator { get; set; } = (o1, o2) => string.Compare(o1.Name, o2.Name, StringComparison.Ordinal);
+    public List<Regex> InputRegex { get; } = new List<Regex>();
+    public string OutputSuffix { get; set; }
+    public List<Entry> OutputFiles { get; } = new List<Entry>();
+    public bool Recursive { get; set; } = true;
+    public bool FlattenOutput { get; set; }
+
+    public Comparison<Entry> EntryComparator { get; set; }
+
+    public FileProcessor()
+    {
+        EntryComparator = (o1, o2) => Comparator(o1.InputFile, o2.InputFile);
+    }
+
+    // ... (rest of the class remains the same)
+
+    public List<Entry> Process(FileSystemInfo[] files, DirectoryInfo outputRoot)
+    {
+        if (outputRoot == null) outputRoot = new DirectoryInfo("");
+        OutputFiles.Clear();
+
+        var dirToEntries = new Dictionary<DirectoryInfo, List<Entry>>();
+        Process(files, outputRoot, outputRoot, dirToEntries, 0);
+
+        var allEntries = new List<Entry>();
+        foreach (var mapEntry in dirToEntries)
+        {
+            var dirEntries = mapEntry.Value;
+            if (Comparator != null) dirEntries.Sort(EntryComparator);
+
+            var inputDir = mapEntry.Key;
+            DirectoryInfo newOutputDir = null;
+            if (FlattenOutput)
+                newOutputDir = outputRoot;
+            else if (dirEntries.Count > 0)
+                newOutputDir = dirEntries[0].OutputDir;
+            string outputName = inputDir.Name;
+            if (OutputSuffix != null) outputName = Regex.Replace(outputName, "(.*)\\..*", "$1") + OutputSuffix;
+
+            var entry = new Entry
+            {
+                InputFile = mapEntry.Key.ToFileInfo(),
+                OutputDir = newOutputDir,
+            };
+            if (newOutputDir != null)
+                entry.OutputFile = new FileInfo(Path.Combine(newOutputDir.FullName, outputName));
+
+            try
+            {
+                ProcessDir(entry, dirEntries);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error processing directory: {entry.InputFile.FullName}", ex);
+            }
+            allEntries.AddRange(dirEntries);
+        }
+
+        if (Comparator != null) allEntries.Sort(EntryComparator);
+        foreach (var entry in allEntries)
+        {
+            try
+            {
+                ProcessFile(entry);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error processing file: {entry.InputFile.FullName}", ex);
+            }
+        }
+
+        return OutputFiles;
+    }
+
+    private void Process(FileSystemInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir, Dictionary<DirectoryInfo, List<Entry>> dirToEntries, int depth)
+    {
+        foreach (var file in files)
+        {
+            DirectoryInfo dir = file is FileInfo fileInfo ? fileInfo.Directory : ((DirectoryInfo)file).Parent;
+            if (dir != null)
+            {
+                if (!dirToEntries.ContainsKey(dir))
+                {
+                    dirToEntries[dir] = new List<Entry>();
+                }
+            }
+        }
+
+        foreach (var file in files)
+        {
+            if (file is FileInfo fileInfo)
+            {
+                if (InputRegex.Count > 0)
+                {
+                    bool found = false;
+                    foreach (var pattern in InputRegex)
+                    {
+                        if (pattern.IsMatch(fileInfo.Name))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) continue;
+                }
+
+                DirectoryInfo dir = fileInfo.Directory;
+                if (InputFilter != null && !InputFilter(dir, fileInfo.Name)) continue;
+
+                string outputName = fileInfo.Name;
+                if (OutputSuffix != null) outputName = Regex.Replace(outputName, "(.*)\\..*", "$1") + OutputSuffix;
+
+                var entry = new Entry
+                {
+                    Depth = depth,
+                    InputFile = fileInfo,
+                    OutputDir = outputDir
+                };
+
+                entry.OutputFile = FlattenOutput ? new FileInfo(Path.Combine(outputRoot.FullName, outputName)) : new FileInfo(Path.Combine(outputDir.FullName, outputName));
+
+                dirToEntries[dir].Add(entry);
+            }
+            if (Recursive && file is DirectoryInfo directoryInfo)
+            {
+                DirectoryInfo subdir = outputDir.FullName.Length == 0 ? new DirectoryInfo(directoryInfo.Name) : new DirectoryInfo(Path.Combine(outputDir.FullName, directoryInfo.Name));
+                Process(directoryInfo.GetFileSystemInfos().Where(f => InputFilter == null || f is DirectoryInfo || InputFilter((f as FileInfo).Directory, f.Name)).ToArray(), outputRoot, subdir, dirToEntries, depth + 1);
+            }
+        }
+    }
+
+    // ... (Entry class and virtual methods remain the same)
+}
+
+public static class FileSystemInfoExtensions
+{
+    public static DirectoryInfo ToDirectoryInfo(this FileSystemInfo fileSystemInfo)
+    {
+        if (fileSystemInfo is DirectoryInfo directoryInfo)
+        {
+            return directoryInfo;
+        }
+        else if (fileSystemInfo is FileInfo fileInfo)
+        {
+            return fileInfo.Directory;
+        }
+        return null;
+    }
+
+    public static FileInfo ToFileInfo(this FileSystemInfo fileSystemInfo)
+    {
+        if (fileSystemInfo is FileInfo fileInfo)
+        {
+            return fileInfo;
+        }
+        return null;
+    }
+}
+
+
+
+
+

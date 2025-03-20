@@ -24,6 +24,8 @@
 
 using System.Runtime.CompilerServices;
 
+using NotNull = System.Diagnostics.CodeAnalysis.NotNullAttribute;
+
 namespace LughSharp.Lugh.Utils.Guarding;
 
 [PublicAPI]
@@ -37,7 +39,7 @@ public class Guard
     /// Throws ArgumentNullException if argumentValue is null.
     /// Provides a clear error message with the argumentName.
     /// </summary>
-    public static void ThrowIfNull( object? obj,
+    public static void ThrowIfNull( [NotNull] object? obj,
                                     [CallerArgumentExpression( nameof( obj ) )]
                                     string argumentName = "" )
     {
@@ -49,7 +51,7 @@ public class Guard
     /// Throws ArgumentException if argumentValue is string.Empty.
     /// Provides a clear error message with the argumentName.
     /// </summary>
-    public static void ThrowIfNullOrEmpty( string? argumentValue,
+    public static void ThrowIfNullOrEmpty( [NotNull] string? argumentValue,
                                            [CallerArgumentExpression( nameof( argumentValue ) )]
                                            string argumentName = "" )
     {
@@ -66,7 +68,7 @@ public class Guard
     /// Throws ArgumentException if argumentValue is string.Empty or consists only of whitespace characters.
     /// Provides a clear error message with the argumentName.
     /// </summary>
-    public static void ThrowIfNullOrWhiteSpace( string? argumentValue,
+    public static void ThrowIfNullOrWhiteSpace( [NotNull] string? argumentValue,
                                                 [CallerArgumentExpression( nameof( argumentValue ) )]
                                                 string argumentName = "" )
     {
@@ -246,6 +248,62 @@ public class Guard
     // ========================================================================
     // Custom Validation checks
     // ========================================================================
+
+    // ========================================================================
+    // File Validation checks
+    // ========================================================================
+
+    /// <summary>
+    /// Throws an ArgumentNullException if the specified FileInfo object is null.
+    /// Throws an ArgumentException if the file specified by the provided FileInfo object
+    /// does not exist.
+    /// </summary>
+    public static void ThrowIfFileNullOrNotExist( [NotNull] FileSystemInfo? argumentValue,
+                                                  [CallerArgumentExpression( nameof( argumentValue ) )]
+                                                  string argumentName = "" )
+    {
+        switch ( argumentValue )
+        {
+            case { Exists: true }:
+                return;
+
+            case null:
+                throw new ArgumentNullException( $"The File {argumentName} cannot be null." );
+
+            default:
+                throw new ArgumentException( $"The file {argumentName} does not exist" );
+        }
+    }
+
+    /// <summary>
+    /// Throws an ArgumentException if the provided FileSystemInfo object is not
+    /// a valid file or directory.
+    /// Throws an ArgumentNullException if the specified FileSystemInfo object is null.
+    /// Throws an ArgumentException if the file specified by the provided FileSystemInfo object
+    /// does not exist.
+    /// </summary>
+    public static void ThrowIfNotFileOrDirectory( [NotNull] FileSystemInfo? argumentValue,
+                                                  [CallerArgumentExpression( nameof( argumentValue ) )]
+                                                  string argumentName = "" )
+    {
+        switch ( argumentValue )
+        {
+            case { Exists: true }:
+
+                if ( argumentValue is not DirectoryInfo or FileInfo )
+                {
+                    throw new ArgumentException( $"{argumentName} must be a valid  directory or file." );
+                }
+
+                return;
+                
+            case null:
+                throw new ArgumentNullException( $"The File {argumentName} cannot be null." );
+
+            default:
+                throw new ArgumentException( $"The file {argumentName} does not exist" );
+        }
+    }
 
     // ========================================================================
     // Number / Maths checks

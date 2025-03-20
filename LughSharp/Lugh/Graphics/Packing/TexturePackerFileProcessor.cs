@@ -24,33 +24,41 @@
 
 using System.Runtime.Versioning;
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Packing;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Guarding;
+
+using File = System.IO.File;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public class TexturePackerFileProcessor
+public class TexturePackerFileProcessor : FileProcessor
 {
-//    private          JsonObject                                    _json          = new();
+//    private JsonObject _json = new();
 
     private readonly TexturePacker.Settings                        _defaultSettings;
     private readonly TexturePacker.ProgressListener?               _progress;
     private          ObjectMap< FileInfo, TexturePacker.Settings > _dirToSettings = new();
     private          string                                        _packFileName;
-    private          FileInfo                                      _root;
+    private          FileInfo?                                     _root;
     private          List< FileInfo >                              _ignoreDirs = [ ];
     private          bool                                          _countOnly;
     private          int                                           _packCount;
+
+    // ========================================================================
+    // ========================================================================
 
     public TexturePackerFileProcessor()
         : this( new TexturePacker.Settings(), "pack.atlas", null )
     {
     }
 
-    public TexturePackerFileProcessor( TexturePacker.Settings defaultSettings, string packFileName,
+    public TexturePackerFileProcessor( TexturePacker.Settings defaultSettings,
+                                       string packFileName,
                                        TexturePacker.ProgressListener? progress )
     {
         this._defaultSettings = defaultSettings;
@@ -64,27 +72,27 @@ public class TexturePackerFileProcessor
         this._packFileName = packFileName;
 
         SetFlattenOutput( true );
-        addInputSuffix( ".png", ".jpg", ".jpeg" );
+        AddInputSuffix( ".png", ".jpg", ".jpeg" );
 
         // Sort input files by name to avoid platform-dependent atlas output changes.
-        setComparator( new Comparator< File >()
+        SetComparator( new Comparison< DirectoryInfo? >()
         {
  
-
-            public int compare (File file1, File file2)
+            public int Compare(FileInfo file1, FileInfo file2)
             {
             return file1.getName().compareTo(file2.getName());
         }
         });
     }
 
-    public List< ObjectMap< , >.Entry > process( File inputFile, File outputRoot )
+    public List< ObjectMap< FileInfo, TexturePacker.Settings >.Entry > Process( FileInfo inputFile, FileInfo outputRoot )
     {
-        root = inputFile;
+        _root = inputFile;
 
         // Collect pack.json setting files.
-        List< File > settingsFiles = new List();
-        FileProcessor settingsProcessor = new FileProcessor()
+        List< FileInfo > settingsFiles = [ ];
+
+        var settingsProcessor = new FileProcessor()
         {
  
 
@@ -92,10 +100,12 @@ public class TexturePackerFileProcessor
         }
         };
 
-        settingsProcessor.addInputRegex( "pack\\.json" );
-        settingsProcessor.process( inputFile, null );
+        settingsProcessor.AddInputRegex( "pack\\.json" );
+        settingsProcessor.Process( inputFile, null );
 
-// Sort parent first.
+        // Sort parent first.
+        settingsFiles.Sort();
+
         Collections.sort( settingsFiles, new Comparator< File >()
         {
  
@@ -146,7 +156,7 @@ public class TexturePackerFileProcessor
         return result;
     }
 
-    void merge( Settings settings, File settingsFile )
+    void merge( TexturePacker.Settings settings, File settingsFile )
     {
         try
         {
@@ -361,19 +371,22 @@ public class TexturePackerFileProcessor
         for ( ObjectMap< , >.Entry file :
         files)
         packer.addImage( file.inputFile );
-        pack( packer, inputDir );
+        Pack( packer, inputDir );
         if ( progress != null ) progress.end();
     }
 
-    protected void pack( TexturePacker packer, ObjectMap< , >.Entry inputDir )
+    protected void Pack( TexturePacker packer, ObjectMap< FileInfo, TexturePacker.Settings >.Entry inputDir )
     {
-        packer.pack( inputDir.outputDir, packFileName );
+        packer.Pack( inputDir.OutputDir, packFileName );
     }
 
     protected TexturePacker NewTexturePacker( FileInfo root, TexturePacker.Settings settings )
     {
+        Guard.ThrowIfNull( _progress );
+
         var packer = new TexturePacker( root, settings );
-        packer.SetProgressListener( _progress );
+
+        packer.SetListener( _progress );
 
         return packer;
     }

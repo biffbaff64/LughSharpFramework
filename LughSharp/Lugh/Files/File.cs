@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin
+//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,20 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
+namespace LughSharp.Lugh.Files;
 
-namespace Extensions.Source.Tools;
-
-/// <summary>
-/// Instances of classes that implement this interface are used to filter filenames. These
-/// instances are used to filter directory listings in the list method of class File, and
-/// by the Abstract Window Toolkit's file dialog component.
-/// </summary>
 [PublicAPI]
-public interface IFilenameFilter
+public class File : IComparable< File >
 {
-    /// <summary>
-    /// Tests if a specified file should be included in a file list.
-    /// </summary>
-    /// <param name="dir"> The directory in which the file was found. </param>
-    /// <param name="filename"> The name of the file. </param>
-    /// <returns></returns>
-    bool Accept( FileInfo dir, string filename );
+    
+    
+    // ========================================================================
+    // From IComparable<>
+    // ========================================================================
+    
+    /// <inheritdoc />
+    public int CompareTo( File? other )
+    {
+        throw new NotImplementedException();
+    }
 }

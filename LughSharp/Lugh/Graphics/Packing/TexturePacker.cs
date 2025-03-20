@@ -144,6 +144,11 @@ public class TexturePacker
         this._packer = packer;
     }
 
+    public void SetListener( ProgressListener listener )
+    {
+        this._progressListener = listener;
+    }
+    
     /// <summary>
     /// Packs processed images into the a <see cref="Graphics.Atlases.TextureAtlas"/> with the
     /// specified filename. The atlas will be stored in the specified directory.
