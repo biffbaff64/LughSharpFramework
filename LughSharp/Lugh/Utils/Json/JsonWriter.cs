@@ -22,10 +22,239 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Numerics;
+using System.Text;
+
 namespace LughSharp.Lugh.Utils.Json;
 
 [PublicAPI]
-public class JsonWriter
+public class JsonWriter : TextWriter
 {
-    
+    private readonly TextWriter          _writer;
+    private readonly Stack< JsonObject > _stack = new();
+    private          JsonObject?         _current;
+    private          bool                _named;
+    private          JsonOutputType      _outputType      = JsonOutputType.Json;
+    private          bool                _quoteLongValues = false;
+
+    // ========================================================================
+
+    public JsonWriter( TextWriter writer )
+    {
+        this._writer = writer;
+    }
+
+    public TextWriter GetWriter()
+    {
+        return _writer;
+    }
+
+    /** Sets the type of JSON output. Default is {@link JsonOutputType#minimal}. */
+    public void SetOutputType( JsonOutputType outputType )
+    {
+        this._outputType = outputType;
+    }
+
+    /** When true, quotes long, double, BigInteger, BigDecimal types to prevent truncation in languages like JavaScript and PHP.
+     * This is not necessary when using libgdx, which handles these types without truncation. Default is false. */
+    public void SetQuoteLongValues( bool quoteLongValues )
+    {
+        this._quoteLongValues = quoteLongValues;
+    }
+
+    public JsonWriter Name( string name )
+    {
+        if ( ( _current == null ) || _current.Array )
+        {
+            throw new InvalidOperationException( "Current item must be an object." );
+        }
+
+        if ( !_current.NeedsComma )
+        {
+            _current.NeedsComma = true;
+        }
+        else
+        {
+            _writer.Write( ',' );
+        }
+
+        _writer.Write( _outputType.QuoteName( name ) );
+        _writer.Write( ':' );
+        _named = true;
+
+        return this;
+    }
+
+    public JsonWriter Object()
+    {
+        RequireCommaOrName();
+
+        _stack.Push( _current = new JsonObject( false, _writer ) );
+
+        return this;
+    }
+
+    public JsonWriter Array()
+    {
+        RequireCommaOrName();
+        _stack.Push( _current = new JsonObject( true, _writer ) );
+
+        return this;
+    }
+
+    public JsonWriter Value( object value )
+    {
+        if ( _quoteLongValues && ( value is long or double or decimal or BigInteger ) )
+        {
+            value = value.ToString();
+        }
+        else if ( value is int || value is long || value is float || value is double || value is decimal )
+        {
+            if ( value is float floatValue && ( floatValue == ( long )floatValue ) )
+            {
+                value = ( long )floatValue;
+            }
+
+            if ( value is double doubleValue && ( doubleValue == ( long )doubleValue ) )
+            {
+                value = ( long )doubleValue;
+            }
+
+            if ( value is decimal decimalValue && ( decimalValue == ( long )decimalValue ) )
+            {
+                value = ( long )decimalValue;
+            }
+        }
+
+        RequireCommaOrName();
+
+        _writer.Write( _outputType.QuoteValue( value ) );
+
+        return this;
+    }
+
+    /** Writes the specified JSON value, without quoting or escaping. */
+    public JsonWriter Json( string json )
+    {
+        RequireCommaOrName();
+
+        _writer.Write( json );
+
+        return this;
+    }
+
+    private void RequireCommaOrName()
+    {
+        if ( _current == null )
+        {
+            return;
+        }
+
+        if ( _current.Array )
+        {
+            if ( !_current.NeedsComma )
+            {
+                _current.NeedsComma = true;
+            }
+            else
+            {
+                _writer.Write( ',' );
+            }
+        }
+        else
+        {
+            if ( !_named )
+            {
+                throw new InvalidOperationException( "Name must be set." );
+            }
+
+            _named = false;
+        }
+    }
+
+    public JsonWriter Object( string name )
+    {
+        return Name( name ).Object();
+    }
+
+    public JsonWriter Array( string name )
+    {
+        return Name( name ).Array();
+    }
+
+    public JsonWriter Set( string name, object value )
+    {
+        return Name( name ).Value( value );
+    }
+
+    /** Writes the specified JSON value, without quoting or escaping. */
+    public JsonWriter Json( string name, string json )
+    {
+        return Name( name ).Json( json );
+    }
+
+    public JsonWriter Pop()
+    {
+        if ( _named )
+        {
+            throw new InvalidOperationException( "Expected an object, array, or value since a name was set." );
+        }
+
+        _stack.Pop().Close();
+        _current = _stack.Count == 0 ? null : _stack.Peek();
+
+        return this;
+    }
+
+    public override void Write( char[] cbuf, int off, int len )
+    {
+        _writer.Write( cbuf, off, len );
+    }
+
+    public override void Flush()
+    {
+        _writer.Flush();
+    }
+
+    public override void Close()
+    {
+        while ( _stack.Count > 0 )
+        {
+            Pop();
+        }
+
+        _writer.Close();
+    }
+
+    // ========================================================================
+    // Abstract Property from TextWriter
+
+    /// <inheritdoc />
+    public override Encoding Encoding { get; }
+
+    // ========================================================================
+    // ========================================================================
+
+    private class JsonObject
+    {
+        public bool Array      { get; set; }
+        public bool NeedsComma { get; set; }
+
+        private readonly TextWriter _writer;
+
+        public JsonObject( bool array, TextWriter writer )
+        {
+            this.Array  = array;
+            this._writer = writer;
+            writer.Write( array ? '[' : '{' );
+        }
+
+        public void Close()
+        {
+            _writer.Write( Array ? ']' : '}' );
+        }
+    }
 }
