@@ -22,6 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+using System.Text;
+
 namespace LughSharp.Lugh.Utils;
 
 [PublicAPI]

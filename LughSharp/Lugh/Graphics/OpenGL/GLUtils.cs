@@ -22,6 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;

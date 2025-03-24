@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+
 using GLuint = uint;
 
 namespace LughSharp.Lugh.Graphics.OpenGL;

@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 using Exception = System.Exception;

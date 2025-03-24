@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Text.Json.Serialization;
+
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 [PublicAPI]

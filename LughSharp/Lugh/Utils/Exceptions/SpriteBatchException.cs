@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
+
 using LughSharp.Lugh.Graphics.G2D;
 
 using Exception = System.Exception;

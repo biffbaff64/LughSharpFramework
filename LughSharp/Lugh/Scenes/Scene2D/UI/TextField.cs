@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Drawing;
+using System.Text;
 
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;

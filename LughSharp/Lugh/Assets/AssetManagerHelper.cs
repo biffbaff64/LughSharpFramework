@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+
 using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
@@ -36,63 +38,27 @@ namespace LughSharp.Lugh.Assets;
 
 public partial class AssetManager
 {
-    //@formatter:off
-    public Texture?         GetTexture( string name )
-    {
-        return Get( name ) as Texture;
-    }
+    public Texture? GetTexture( string name ) => Get( name ) as Texture;
 
-    public BitmapFont?      GetBitmapFont( string name )
-    {
-        return Get( name ) as BitmapFont;
-    }
+    public BitmapFont? GetBitmapFont( string name ) => Get( name ) as BitmapFont;
 
-    public Pixmap?          GetPixmap( string name )
-    {
-        return Get( name ) as Pixmap;
-    }
+    public Pixmap? GetPixmap( string name ) => Get( name ) as Pixmap;
 
-    public TextureAtlas?    GetTextureAtlas( string name )
-    {
-        return Get( name ) as TextureAtlas;
-    }
+    public TextureAtlas? GetTextureAtlas( string name ) => Get( name ) as TextureAtlas;
 
-    public Skin?            GetSkin( string name )
-    {
-        return Get( name ) as Skin;
-    }
+    public Skin? GetSkin( string name ) => Get( name ) as Skin;
 
-    public ParticleEffect?  GetParticleEffect( string name )
-    {
-        return Get( name ) as ParticleEffect;
-    }
+    public ParticleEffect? GetParticleEffect( string name ) => Get( name ) as ParticleEffect;
 
-    public PolygonRegion?   GetPolygonRegion( string name )
-    {
-        return Get( name ) as PolygonRegion;
-    }
+    public PolygonRegion? GetPolygonRegion( string name ) => Get( name ) as PolygonRegion;
 
-    public ShaderProgram?   GetShaderProgram( string name )
-    {
-        return Get( name ) as ShaderProgram;
-    }
+    public ShaderProgram? GetShaderProgram( string name ) => Get( name ) as ShaderProgram;
 
-    public Cubemap?         GetCubemap( string name )
-    {
-        return Get( name ) as Cubemap;
-    }
+    public Cubemap? GetCubemap( string name ) => Get( name ) as Cubemap;
 
-    public ISound?          GetSound( string name )
-    {
-        return Get( name ) as ISound;
-    }
+    public ISound? GetSound( string name ) => Get( name ) as ISound;
 
-    public IMusic?          GetMusic( string name )
-    {
-        return Get( name ) as IMusic;
-    }
-
-    //@formatter:on
+    public IMusic? GetMusic( string name ) => Get( name ) as IMusic;
 
     // ========================================================================
 

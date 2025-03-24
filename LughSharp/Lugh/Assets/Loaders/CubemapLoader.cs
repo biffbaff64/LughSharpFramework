@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
@@ -33,8 +35,8 @@ namespace LughSharp.Lugh.Assets.Loaders;
 /// is loaded asynchronously. The texture is then created on the rendering thread,
 /// synchronously.
 /// <para>
-/// Passing a <see cref="CubemapParameter" /> to <see cref="AssetManager.AddToLoadqueue" />"
-/// allows one to specify parameters as can be passed to the various Cubemap
+/// Passing a <see cref="CubemapParameter" /> to one of the <see cref="AssetManager"/>"
+/// load methods allows one to specify parameters as can be passed to the various Cubemap
 /// constructors, e.g. filtering and so on.
 /// </para>
 /// </summary>
@@ -69,7 +71,7 @@ public class CubemapLoader : AsynchronousAssetLoader
                                                                    FileInfo file,
                                                                    TP? parameter ) where TP : class
     {
-        return default( List< AssetDescriptor > )!;
+        return null!;
     }
 
     /// <inheritdoc />

@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 using LughSharp.Lugh.Graphics.Images;

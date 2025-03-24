@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Xml;
+
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;

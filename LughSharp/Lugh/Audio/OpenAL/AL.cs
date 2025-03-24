@@ -22,6 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Reflection;
+using System.Runtime.InteropServices;
+
 using Environment = System.Environment;
 
 namespace LughSharp.Lugh.Audio.OpenAL;

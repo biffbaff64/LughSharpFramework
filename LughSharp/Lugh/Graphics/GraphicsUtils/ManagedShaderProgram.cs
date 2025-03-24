@@ -24,6 +24,8 @@
 
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
+using System.Text;
+
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Input;

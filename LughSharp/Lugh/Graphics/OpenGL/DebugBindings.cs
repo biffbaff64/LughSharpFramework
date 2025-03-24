@@ -25,6 +25,8 @@
 
 // ============================================================================
 
+using System.Text;
+
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;

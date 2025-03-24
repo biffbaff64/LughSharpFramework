@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Globalization;
+
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;

@@ -27,6 +27,7 @@ using System.Drawing.Imaging;
 using System.Numerics;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections;
+
 namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 
 /// <summary>

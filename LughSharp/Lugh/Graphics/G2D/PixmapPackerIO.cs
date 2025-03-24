@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+
 using LughSharp.Lugh.Graphics.Images;
 
 namespace LughSharp.Lugh.Graphics.G2D;

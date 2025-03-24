@@ -22,7 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Globalization;
+using System.Net;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
 
 using LughSharp.Lugh.Files;
 
@@ -281,9 +285,9 @@ public static class Logger
                 fileName = DEFAULT_TRACE_FILENAME;
             }
 
-            if ( File.Exists( fileName ) && deleteExisting )
+            if ( WebRequestMethods.File.Exists( fileName ) && deleteExisting )
             {
-                File.Delete( fileName );
+                WebRequestMethods.File.Delete( fileName );
             }
 
             // Get the base directory
@@ -293,7 +297,7 @@ public static class Logger
             _debugFilePath = $"{baseDirectory}logs{Path.DirectorySeparatorChar}";
             _debugFileName = fileName;
 
-            using var fs = File.Create( _debugFilePath + _debugFileName );
+            using var fs = WebRequestMethods.File.Create( _debugFilePath + _debugFileName );
 
             var dateTime = DateTime.Now;
             var divider  = new UTF8Encoding( true ).GetBytes( "-----------------------------------------------------" );
@@ -422,12 +426,12 @@ public static class Logger
     /// <param name="text">String holding the text to write.</param>
     private static void WriteToFile( string text )
     {
-        if ( !File.Exists( _debugFilePath + _debugFileName ) )
+        if ( !WebRequestMethods.File.Exists( _debugFilePath + _debugFileName ) )
         {
             return;
         }
 
-        using var fs = File.Open( _debugFilePath + _debugFileName, FileMode.Append );
+        using var fs = WebRequestMethods.File.Open( _debugFilePath + _debugFileName, FileMode.Append );
 
         var debugLine = new UTF8Encoding( true ).GetBytes( text );
 

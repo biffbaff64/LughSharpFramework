@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.Versioning;
+using System.Text.Json;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils.Exceptions;

@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Text.RegularExpressions;
+
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.G2D;

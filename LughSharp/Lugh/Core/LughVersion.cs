@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Reflection;
+using System.Text.RegularExpressions;
+
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 

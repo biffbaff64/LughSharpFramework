@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 

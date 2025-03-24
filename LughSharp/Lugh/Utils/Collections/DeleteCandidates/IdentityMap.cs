@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Serialization;
+
 namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 
 /// <summary>

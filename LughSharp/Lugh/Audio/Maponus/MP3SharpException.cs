@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Serialization;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Audio.Maponus;

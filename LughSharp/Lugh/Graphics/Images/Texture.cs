@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Graphics.GraphicsUtils;

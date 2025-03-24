@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.IO.Compression;
+using System.Runtime.Serialization;
+using System.Xml;
+
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
 using LughSharp.Lugh.Assets;

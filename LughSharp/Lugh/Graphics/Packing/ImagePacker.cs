@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing;
+
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Packing;

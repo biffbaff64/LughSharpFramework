@@ -25,6 +25,8 @@
 
 // ============================================================================
 
+using System.Text;
+
 using LughSharp.Lugh.Utils;
 
 using GLenum = int;
