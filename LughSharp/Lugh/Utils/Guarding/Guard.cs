@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 using NotNull = System.Diagnostics.CodeAnalysis.NotNullAttribute;
@@ -36,7 +38,7 @@ public class Guard
     // ========================================================================
 
     /// <summary>
-    /// Throws ArgumentNullException if argumentValue is null.
+    /// Throws ArgumentNullException if obj is null.
     /// Provides a clear error message with the argumentName.
     /// </summary>
     public static void ThrowIfNull( [NotNull] object? obj,
@@ -46,6 +48,20 @@ public class Guard
         ArgumentNullException.ThrowIfNull( obj, argumentName );
     }
 
+    /// <summary>
+    /// Throws ArgumentNullException if any of the objects in the 'objects[]' array is null.
+    /// Provides a clear error message with the argumentName.
+    /// </summary>
+    public static void ThrowIfNull( [NotNull] params object?[]? objects )
+    {
+        ArgumentNullException.ThrowIfNull( objects );
+        
+        foreach ( var obj in objects )
+        {
+            ArgumentNullException.ThrowIfNull( obj, obj?.GetType().FullName );
+        }
+    }
+    
     /// <summary>
     /// Throws ArgumentNullException if argumentValue is null.
     /// Throws ArgumentException if argumentValue is string.Empty.

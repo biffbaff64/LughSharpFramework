@@ -60,7 +60,7 @@ public partial class Json
         ToJson( obj, knownType, null, file );
     }
 
-    public void ToJson( object? obj, Type knownType, Type elementType, FileInfo file )
+    public void ToJson( object? obj, Type knownType, Type? elementType, FileInfo file )
     {
         try
         {
@@ -85,7 +85,7 @@ public partial class Json
         ToJson( obj, knownType, null, writer );
     }
 
-    public void ToJson( object? obj, Type knownType, Type elementType, TextWriter writer )
+    public void ToJson( object? obj, Type knownType, Type? elementType, TextWriter writer )
     {
         SetWriter( writer );
 

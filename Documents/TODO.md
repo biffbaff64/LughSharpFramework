@@ -870,8 +870,9 @@ UTILS
     - DONE - DONE - ScreenUtils
     - DONE - IP   - Selector
     - DONE - IP   - SingletonBase<T>
-    - DONE - DONE - SortUtils                       Do I still need this?
+    - DONE - DONE - SortUtils
     - DONE - DONE - StringTokenizer
+    - IP   - IP   - StringUtils
     - DONE - IP   - Timer
     - DONE - DONE - TimeUtils
     - DONE - IP   - TimSort

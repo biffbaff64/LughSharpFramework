@@ -25,10 +25,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 
+using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Guarding;
 using LughSharp.Lugh.Utils.Json;
 
@@ -130,12 +132,6 @@ public class JsonValue : IEnumerable< JsonValue >
         return current;
     }
 
-    /** Returns true if a child with the specified name exists. */
-    public bool ChildExists( string name )
-    {
-        return Get( name ) != null;
-    }
-
     /** Returns the child at the specified index. This requires walking the linked list to the specified entry, see
      * {@link JsonValue} for how to iterate efficiently.
      * @throws ArgumentException if the child was not found. */
@@ -149,7 +145,10 @@ public class JsonValue : IEnumerable< JsonValue >
             current = current.Next;
         }
 
-        if ( current == null ) throw new ArgumentException( $"Child not found with index: {index}" );
+        if ( current == null )
+        {
+            throw new ArgumentException( $"Child not found with index: {index}" );
+        }
 
         return current;
     }
@@ -167,7 +166,10 @@ public class JsonValue : IEnumerable< JsonValue >
             current = current.Next;
         }
 
-        if ( current == null ) throw new ArgumentException( $"Child not found with name: {name}" );
+        if ( current == null )
+        {
+            throw new ArgumentException( $"Child not found with name: {name}" );
+        }
 
         return current;
     }
@@ -179,17 +181,28 @@ public class JsonValue : IEnumerable< JsonValue >
     {
         var child = Get( index );
 
-        if ( child == null ) return null;
+        if ( child == null )
+        {
+            return null;
+        }
 
         if ( child.Prev == null )
         {
             this.Child = child.Next;
-            if ( this.Child != null ) this.Child.Prev = null;
+
+            if ( this.Child != null )
+            {
+                this.Child.Prev = null;
+            }
         }
         else
         {
             child.Prev.Next = child.Next;
-            if ( child.Next != null ) child.Next.Prev = child.Prev;
+
+            if ( child.Next != null )
+            {
+                child.Next.Prev = child.Prev;
+            }
         }
 
         Size--;
@@ -203,17 +216,28 @@ public class JsonValue : IEnumerable< JsonValue >
     {
         var child = Get( name );
 
-        if ( child == null ) return null;
+        if ( child == null )
+        {
+            return null;
+        }
 
         if ( child.Prev == null )
         {
             this.Child = child.Next;
-            if ( this.Child != null ) this.Child.Prev = null;
+
+            if ( this.Child != null )
+            {
+                this.Child.Prev = null;
+            }
         }
         else
         {
             child.Prev.Next = child.Next;
-            if ( child.Next != null ) child.Next.Prev = child.Prev;
+
+            if ( child.Next != null )
+            {
+                child.Next.Prev = child.Prev;
+            }
         }
 
         Size--;
@@ -229,24 +253,32 @@ public class JsonValue : IEnumerable< JsonValue >
         if ( Prev == null )
         {
             Parent!.Child = Next;
-            if ( Parent.Child != null ) Parent.Child.Prev = null;
+
+            if ( Parent.Child != null )
+            {
+                Parent.Child.Prev = null;
+            }
         }
         else
         {
             Prev.Next = Next;
-            if ( Next != null ) Next.Prev = Prev;
+
+            if ( Next != null )
+            {
+                Next.Prev = Prev;
+            }
         }
 
         Parent!.Size--;
     }
 
-    /** Returns true if there are one or more children in the array or object. */
+    /** Returns true if there are one or more children in the array or @object. */
     public bool NotEmpty()
     {
         return Size > 0;
     }
 
-    /** Returns true if there are not children in the array or object. */
+    /** Returns true if there are not children in the array or @object. */
     public bool IsEmpty()
     {
         return Size == 0;
@@ -254,7 +286,7 @@ public class JsonValue : IEnumerable< JsonValue >
 
     /** Returns this value as a string.
      * @return May be null if this value is null.
-     * @throws InvalidOperationException if this an array or object. */
+     * @throws InvalidOperationException if this an array or @object. */
     public string? AsString()
     {
         return _valueType switch
@@ -269,80 +301,87 @@ public class JsonValue : IEnumerable< JsonValue >
         };
     }
 
-    /** Returns this value as a float.
-     * @throws InvalidOperationException if this an array or object. */
-    public float asFloat()
+    public float AsFloat()
     {
         switch ( _valueType )
         {
             case ValueType.StringValue:
-                return Float.parseFloat( _stringValue );
+                return float.Parse( _stringValue );
 
             case ValueType.DoubleValue:
                 return ( float )_doubleValue;
 
             case ValueType.LongValue:
-                return _longValue;
+                return ( float )_longValue;
 
             case ValueType.BooleanValue:
                 return _longValue != 0 ? 1 : 0;
+            
+            default:
+                break;
         }
 
         throw new InvalidOperationException( $"Value cannot be converted to float: {_valueType}" );
     }
 
     /** Returns this value as a double.
-     * @throws InvalidOperationException if this an array or object. */
-    public double asDouble()
+     * @throws InvalidOperationException if this an array or @object. */
+    public double AsDouble()
     {
         switch ( _valueType )
         {
             case ValueType.StringValue:
-                return Double.parseDouble( _stringValue );
+                return double.Parse( _stringValue );
 
             case ValueType.DoubleValue:
-                return _doubleValue;
+                return ( double )_doubleValue!;
 
             case ValueType.LongValue:
-                return _longValue;
+                return ( double )_longValue!;
 
             case ValueType.BooleanValue:
                 return _longValue != 0 ? 1 : 0;
+            
+            default:
+                break;
         }
 
         throw new InvalidOperationException( $"Value cannot be converted to double: {_valueType}" );
     }
 
     /** Returns this value as a long.
-     * @throws InvalidOperationException if this an array or object. */
-    public long asLong()
+     * @throws InvalidOperationException if this an array or @object. */
+    public long AsLong()
     {
         switch ( _valueType )
         {
             case ValueType.StringValue:
-                return Long.parseLong( _stringValue );
+                return long.Parse( _stringValue );
 
             case ValueType.DoubleValue:
                 return ( long )_doubleValue;
 
             case ValueType.LongValue:
-                return _longValue;
+                return ( long )_longValue;
 
             case ValueType.BooleanValue:
                 return _longValue != 0 ? 1 : 0;
+            
+            default:
+                break;
         }
 
         throw new InvalidOperationException( $"Value cannot be converted to long: {_valueType}" );
     }
 
     /** Returns this value as an int.
-     * @throws InvalidOperationException if this an array or object. */
-    public int asInt()
+     * @throws InvalidOperationException if this an array or @object. */
+    public int AsInt()
     {
         switch ( _valueType )
         {
             case ValueType.StringValue:
-                return Integer.parseInt( _stringValue );
+                return int.Parse( _stringValue );
 
             case ValueType.DoubleValue:
                 return ( int )_doubleValue;
@@ -352,14 +391,17 @@ public class JsonValue : IEnumerable< JsonValue >
 
             case ValueType.BooleanValue:
                 return _longValue != 0 ? 1 : 0;
+            
+            default:
+                break;
         }
 
         throw new InvalidOperationException( $"Value cannot be converted to int: {_valueType}" );
     }
 
     /** Returns this value as a bool.
-     * @throws InvalidOperationException if this an array or object. */
-    public bool asBoolean()
+     * @throws InvalidOperationException if this an array or @object. */
+    public bool AsBoolean()
     {
         switch ( _valueType )
         {
@@ -374,13 +416,16 @@ public class JsonValue : IEnumerable< JsonValue >
 
             case ValueType.BooleanValue:
                 return _longValue != 0;
+            
+            default:
+                break;
         }
 
         throw new InvalidOperationException( $"Value cannot be converted to bool: {_valueType}" );
     }
 
     /** Returns this value as a byte.
-     * @throws InvalidOperationException if this an array or object. */
+     * @throws InvalidOperationException if this an array or @object. */
     public byte AsByte()
     {
         switch ( _valueType )
@@ -396,13 +441,14 @@ public class JsonValue : IEnumerable< JsonValue >
 
             case ValueType.BooleanValue:
                 return ( byte )( _longValue != 0 ? 1 : 0 );
+            
+            default:
+                break;
         }
 
         throw new InvalidOperationException( $"Value cannot be converted to byte: {_valueType}" );
     }
 
-    /** Returns this value as a short.
-     * @throws InvalidOperationException if this an array or object. */
     public short AsShort()
     {
         switch ( _valueType )
@@ -418,31 +464,28 @@ public class JsonValue : IEnumerable< JsonValue >
 
             case ValueType.BooleanValue:
                 return ( short )( _longValue != 0 ? 1 : 0 );
+            
+            default:
+                break;
         }
 
         throw new InvalidOperationException( $"Value cannot be converted to short: {_valueType}" );
     }
 
     /** Returns this value as a char.
-     * @throws InvalidOperationException if this an array or object. */
+     * @throws InvalidOperationException if this an array or @object. */
     public char AsChar()
     {
-        switch ( _valueType )
+        Guard.ThrowIfNull( _stringValue );
+
+        return _valueType switch
         {
-            case ValueType.StringValue:
-                return _stringValue.Length == 0 ? ( char )0 : _stringValue[ 0 ];
-
-            case ValueType.DoubleValue:
-                return ( char )_doubleValue;
-
-            case ValueType.LongValue:
-                return ( char )_longValue;
-`
-            case ValueType.BooleanValue:
-                return ( char )( _longValue != 0 ? 1 : 0 );
-        }
-
-        throw new InvalidOperationException( $"Value cannot be converted to char: {_valueType}" );
+            ValueType.StringValue  => _stringValue.Length == 0 ? ( char )0 : _stringValue[ 0 ],
+            ValueType.DoubleValue  => ( char )_doubleValue,
+            ValueType.LongValue    => ( char )_longValue,
+            ValueType.BooleanValue => ( char )( _longValue != 0 ? 1 : 0 ),
+            var _                  => throw new InvalidOperationException( $"Value cannot be converted to char: {_valueType}" )
+        };
     }
 
     /// <summary>
@@ -510,7 +553,7 @@ public class JsonValue : IEnumerable< JsonValue >
         }
 
         var array = new float[ Size ];
-        var     i     = 0;
+        var i     = 0;
 
         for ( var value = Child; value != null; value = value.Next, i++ )
         {
@@ -520,7 +563,7 @@ public class JsonValue : IEnumerable< JsonValue >
                 ValueType.DoubleValue  => ( float )value._doubleValue,
                 ValueType.LongValue    => ( float )value._longValue,
                 ValueType.BooleanValue => value._longValue != 0 ? 1 : 0,
-                
+
                 var _ => throw new InvalidOperationException( $"Value cannot be converted to float: {value._valueType}" )
             };
 
@@ -540,7 +583,7 @@ public class JsonValue : IEnumerable< JsonValue >
         }
 
         var array = new double[ Size ];
-        var      i     = 0;
+        var i     = 0;
 
         for ( var value = Child; value != null; value = value.Next, i++ )
         {
@@ -554,12 +597,12 @@ public class JsonValue : IEnumerable< JsonValue >
                     break;
 
                 case ValueType.DoubleValue:
-                    v = value._doubleValue;
+                    v = ( double )value._doubleValue;
 
                     break;
 
                 case ValueType.LongValue:
-                    v = value._longValue;
+                    v = ( double )value._longValue;
 
                     break;
 
@@ -670,7 +713,7 @@ public class JsonValue : IEnumerable< JsonValue >
         }
 
         var array = new bool[ Size ];
-        var    i     = 0;
+        var i     = 0;
 
         for ( var value = Child; value != null; value = value.Next, i++ )
         {
@@ -718,7 +761,7 @@ public class JsonValue : IEnumerable< JsonValue >
         }
 
         var array = new byte[ Size ];
-        var    i     = 0;
+        var i     = 0;
 
         for ( var value = Child; value != null; value = value.Next, i++ )
         {
@@ -766,7 +809,7 @@ public class JsonValue : IEnumerable< JsonValue >
         }
 
         var array = new short[ Size ];
-        var     i     = 0;
+        var i     = 0;
 
         for ( var value = Child; value != null; value = value.Next, i++ )
         {
@@ -790,7 +833,7 @@ public class JsonValue : IEnumerable< JsonValue >
                     break;
 
                 case ValueType.BooleanValue:
-                    v = value._longValue != 0 ? ( short )1 : 0;
+                    v = ( short )( value._longValue != 0 ? 1 : 0 );
 
                     break;
 
@@ -806,12 +849,15 @@ public class JsonValue : IEnumerable< JsonValue >
 
     /** Returns the children of this value as a newly allocated char array.
      * @throws InvalidOperationException if this is not an array. */
-    public char[] asCharArray()
+    public char[] AsCharArray()
     {
-        if ( _valueType != ValueType.ArrayValue ) throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
+        if ( _valueType != ValueType.ArrayValue )
+        {
+            throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
+        }
 
-        var array = new char[ size ];
-        var    i     = 0;
+        var array = new char[ Size ];
+        var i     = 0;
 
         for ( var value = Child; value != null; value = value.Next, i++ )
         {
@@ -820,7 +866,7 @@ public class JsonValue : IEnumerable< JsonValue >
             switch ( value._valueType )
             {
                 case ValueType.StringValue:
-                    v = value._stringValue.Length == 0 ? 0 : value._stringValue.charAt( 0 );
+                    v = ( char )( value._stringValue.Length == 0 ? 0 : value._stringValue.ToCharArray()[ 0 ] );
 
                     break;
 
@@ -835,7 +881,7 @@ public class JsonValue : IEnumerable< JsonValue >
                     break;
 
                 case ValueType.BooleanValue:
-                    v = value._longValue != 0 ? ( char )1 : 0;
+                    v = ( char )( value._longValue != 0 ? 1 : 0 );
 
                     break;
 
@@ -849,347 +895,463 @@ public class JsonValue : IEnumerable< JsonValue >
         return array;
     }
 
-    /** Returns true if a child with the specified name exists and has a child. */
-    public bool hasChild( string name )
+    /// <summary>
+    /// Returns true if a child with the specified name exists.
+    /// </summary>
+    public bool ChildExists( string name )
     {
-        return getChild( name ) != null;
+        return Get( name ) != null;
     }
 
-    /** Finds the child with the specified name and returns its first child.
-     * @return May be null. */
-    public JsonValue getChild( string name )
+    /// <summary>
+    /// Returns true if a child with the specified name exists, and has a child.
+    /// </summary>
+    public bool ChildWithChildExists( string name )
+    {
+        return GetChild( name ) != null;
+    }
+
+    /// <summary>
+    /// Finds the child with the specified name and returns its first child.
+    /// </summary>
+    public JsonValue? GetChild( string name )
     {
         var child = Get( name );
 
-        return child == null ? null : child.child;
+        return child == null ? null : child.Child;
     }
 
-    /** Finds the child with the specified name and returns it as a string. Returns defaultValue if not found.
-     * @param defaultValue May be null. */
-    public string getString( string name, string defaultValue )
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a string.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public string? GetString( string name, string defaultValue )
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.isValue() || child.isNull() ) ? defaultValue : child.asString();
+        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsString();
     }
 
-    /** Finds the child with the specified name and returns it as a float. Returns defaultValue if not found. */
-    public float getFloat( string name, float defaultValue )
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a float.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public float GetFloat( string name, float defaultValue )
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.isValue() || child.isNull() ) ? defaultValue : child.asFloat();
+        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsFloat();
     }
 
-    /** Finds the child with the specified name and returns it as a double. Returns defaultValue if not found. */
-    public double getDouble( string name, double defaultValue )
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a double.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public double GetDouble( string name, double defaultValue )
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.isValue() || child.isNull() ) ? defaultValue : child.asDouble();
+        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsDouble();
     }
 
-    /** Finds the child with the specified name and returns it as a long. Returns defaultValue if not found. */
-    public long getLong( string name, long defaultValue )
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a long.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public long GetLong( string name, long defaultValue )
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.isValue() || child.isNull() ) ? defaultValue : child.asLong();
+        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsLong();
     }
 
-    /** Finds the child with the specified name and returns it as an int. Returns defaultValue if not found. */
-    public int getInt( string name, int defaultValue )
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a int.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public int GetInt( string name, int defaultValue )
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.isValue() || child.isNull() ) ? defaultValue : child.asInt();
+        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsInt();
     }
 
-    /** Finds the child with the specified name and returns it as a bool. Returns defaultValue if not found. */
-    public bool getBoolean( string name, bool defaultValue )
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a bool.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public bool GetBoolean( string name, bool defaultValue )
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.isValue() || child.isNull() ) ? defaultValue : child.asBoolean();
+        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsBoolean();
     }
 
-    /** Finds the child with the specified name and returns it as a byte. Returns defaultValue if not found. */
-    public byte getByte( string name, byte defaultValue )
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a byte.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public byte GetByte( string name, byte defaultValue )
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.isValue() || child.isNull() ) ? defaultValue : child.AsByte();
+        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsByte();
     }
 
-    /** Finds the child with the specified name and returns it as a short. Returns defaultValue if not found. */
-    public short getShort( string name, short defaultValue )
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a short.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public short GetShort( string name, short defaultValue )
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.isValue() || child.isNull() ) ? defaultValue : child.AsShort();
+        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsShort();
     }
 
-    /** Finds the child with the specified name and returns it as a char. Returns defaultValue if not found. */
-    public char getChar( string name, char defaultValue )
+    /// <summary>
+    /// Finds the child with the specified name and returns it as a char.
+    /// Returns defaultValue if not found.
+    /// </summary>
+    public char GetChar( string name, char defaultValue )
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.isValue() || child.isNull() ) ? defaultValue : child.AsChar();
+        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsChar();
     }
 
-    /** Finds the child with the specified name and returns it as a string.
-     * @throws ArgumentException if the child was not found. */
-    public string getString( string name )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a string.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public string GetString( string name )
     {
         var child = Get( name );
 
-        if ( child == null ) throw new ArgumentException( $"Named value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Named value not found: {name}" );
+        }
 
-        return child.asString();
+        return child.AsString();
     }
 
-    /** Finds the child with the specified name and returns it as a float.
-     * @throws ArgumentException if the child was not found. */
-    public float getFloat( string name )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a float.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public float GetFloat( string name )
     {
         var child = Get( name );
 
-        if ( child == null ) throw new ArgumentException( $"Named value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Named value not found: {name}" );
+        }
 
-        return child.asFloat();
+        return child.AsFloat();
     }
 
-    /** Finds the child with the specified name and returns it as a double.
-     * @throws ArgumentException if the child was not found. */
-    public double getDouble( string name )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a double.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public double GetDouble( string name )
     {
         var child = Get( name );
 
-        if ( child == null ) throw new ArgumentException( $"Named value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Named value not found: {name}" );
+        }
 
-        return child.asDouble();
+        return child.AsDouble();
     }
 
-    /** Finds the child with the specified name and returns it as a long.
-     * @throws ArgumentException if the child was not found. */
-    public long getLong( string name )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a long.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public long GetLong( string name )
     {
         var child = Get( name );
 
-        if ( child == null ) throw new ArgumentException( $"Named value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Named value not found: {name}" );
+        }
 
-        return child.asLong();
+        return child.AsLong();
     }
 
-    /** Finds the child with the specified name and returns it as an int.
-     * @throws ArgumentException if the child was not found. */
-    public int getInt( string name )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a int.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public int GetInt( string name )
     {
         var child = Get( name );
 
-        if ( child == null ) throw new ArgumentException( $"Named value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Named value not found: {name}" );
+        }
 
-        return child.asInt();
+        return child.AsInt();
     }
 
-    /** Finds the child with the specified name and returns it as a bool.
-     * @throws ArgumentException if the child was not found. */
-    public bool getBoolean( string name )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a bool.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public bool GetBoolean( string name )
     {
         var child = Get( name );
 
-        if ( child == null ) throw new ArgumentException( $"Named value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Named value not found: {name}" );
+        }
 
-        return child.asBoolean();
+        return child.AsBoolean();
     }
 
-    /** Finds the child with the specified name and returns it as a byte.
-     * @throws ArgumentException if the child was not found. */
-    public byte getByte( string name )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a byte.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public byte GetByte( string name )
     {
         var child = Get( name );
 
-        if ( child == null ) throw new ArgumentException( $"Named value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Named value not found: {name}" );
+        }
 
         return child.AsByte();
     }
 
-    /** Finds the child with the specified name and returns it as a short.
-     * @throws ArgumentException if the child was not found. */
-    public short getShort( string name )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a short.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public short GetShort( string name )
     {
         var child = Get( name );
 
-        if ( child == null ) throw new ArgumentException( $"Named value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Named value not found: {name}" );
+        }
 
         return child.AsShort();
     }
 
-    /** Finds the child with the specified name and returns it as a char.
-     * @throws ArgumentException if the child was not found. */
-    public char getChar( string name )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a char.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public char GetChar( string name )
     {
         var child = Get( name );
 
-        if ( child == null ) throw new ArgumentException( $"Named value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Named value not found: {name}" );
+        }
 
         return child.AsChar();
     }
 
-    /** Finds the child with the specified index and returns it as a string.
-     * @throws ArgumentException if the child was not found. */
-    public string getString( int index )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a string.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public string? GetString( int index )
     {
-        var child = get( index );
+        var child = Get( index );
 
-        if ( child == null ) throw new ArgumentException( $"Indexed value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Indexed value not found: {Name}" );
+        }
 
-        return child.asString();
+        return child.AsString();
     }
 
-    /** Finds the child with the specified index and returns it as a float.
-     * @throws ArgumentException if the child was not found. */
-    public float getFloat( int index )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a float.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public float GetFloat( int index )
     {
-        var child = get( index );
+        var child = Get( index );
 
-        if ( child == null ) throw new ArgumentException( $"Indexed value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Indexed value not found: {Name}" );
+        }
 
-        return child.asFloat();
+        return child.AsFloat();
     }
 
-    /** Finds the child with the specified index and returns it as a double.
-     * @throws ArgumentException if the child was not found. */
-    public double getDouble( int index )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a double.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public double GetDouble( int index )
     {
-        var child = get( index );
+        var child = Get( index );
 
-        if ( child == null ) throw new ArgumentException( $"Indexed value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Indexed value not found: {Name}" );
+        }
 
-        return child.asDouble();
+        return child.AsDouble();
     }
 
-    /** Finds the child with the specified index and returns it as a long.
-     * @throws ArgumentException if the child was not found. */
-    public long getLong( int index )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a long.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public long GetLong( int index )
     {
-        var child = get( index );
+        var child = Get( index );
 
-        if ( child == null ) throw new ArgumentException( $"Indexed value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Indexed value not found: {Name}" );
+        }
 
-        return child.asLong();
+        return child.AsLong();
     }
 
-    /** Finds the child with the specified index and returns it as an int.
-     * @throws ArgumentException if the child was not found. */
-    public int getInt( int index )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a int.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public int GetInt( int index )
     {
-        var child = get( index );
+        var child = Get( index );
 
-        if ( child == null ) throw new ArgumentException( $"Indexed value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Indexed value not found: {Name}" );
+        }
 
-        return child.asInt();
+        return child.AsInt();
     }
 
-    /** Finds the child with the specified index and returns it as a bool.
-     * @throws ArgumentException if the child was not found. */
-    public bool getBoolean( int index )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a bool.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public bool GetBoolean( int index )
     {
-        var child = get( index );
+        var child = Get( index );
 
-        if ( child == null ) throw new ArgumentException( $"Indexed value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Indexed value not found: {Name}" );
+        }
 
-        return child.asBoolean();
+        return child.AsBoolean();
     }
 
-    /** Finds the child with the specified index and returns it as a byte.
-     * @throws ArgumentException if the child was not found. */
-    public byte getByte( int index )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a byte.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public byte GetByte( int index )
     {
-        var child = get( index );
+        var child = Get( index );
 
-        if ( child == null ) throw new ArgumentException( $"Indexed value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Indexed value not found: {Name}" );
+        }
 
-        return child.asByte();
+        return child.AsByte();
     }
 
-    /** Finds the child with the specified index and returns it as a short.
-     * @throws ArgumentException if the child was not found. */
-    public short getShort( int index )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a short.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public short GetShort( int index )
     {
-        var child = get( index );
+        var child = Get( index );
 
-        if ( child == null ) throw new ArgumentException( $"Indexed value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Indexed value not found: {Name}" );
+        }
 
-        return child.asShort();
+        return child.AsShort();
     }
 
-    /** Finds the child with the specified index and returns it as a char.
-     * @throws ArgumentException if the child was not found. */
-    public char getChar( int index )
+    /// <summary>
+    /// Finds the child with the specified index and returns it as a char.
+    /// </summary>
+    /// <exception cref="ArgumentException"> if the child was not found. </exception>
+    public char GetChar( int index )
     {
-        var child = get( index );
+        var child = Get( index );
 
-        if ( child == null ) throw new ArgumentException( $"Indexed value not found: {name}" );
+        if ( child == null )
+        {
+            throw new ArgumentException( $"Indexed value not found: {Name}" );
+        }
 
-        return child.asChar();
+        return child.AsChar();
     }
 
-    public ValueType type()
+    public bool IsArray()
     {
-        return type;
+        return _valueType == ValueType.ArrayValue;
     }
 
-    public void setType( ValueType type )
+    public bool IsObject()
     {
-        if ( type == null ) throw new ArgumentException( "type cannot be null." );
-
-        this.type = type;
+        return _valueType == ValueType.ObjectValue;
     }
 
-    public bool isArray()
+    public bool IsString()
     {
-        return type == ValueType.ArrayValue;
+        return _valueType == ValueType.StringValue;
     }
 
-    public bool isObject()
+    public bool IsNumber()
     {
-        return type == ValueType.object;
+        return _valueType is ValueType.DoubleValue or ValueType.LongValue;
     }
 
-    public bool isString()
+    public bool IsDouble()
     {
-        return type == ValueType._stringValue;
+        return _valueType == ValueType.DoubleValue;
     }
 
-    /** Returns true if this is a double or long value. */
-    public bool isNumber()
+    public bool IsLong()
     {
-        return ( type == ValueType._doubleValue ) || ( type == ValueType._longValue );
+        return _valueType == ValueType.LongValue;
     }
 
-    public bool isDouble()
+    public bool IsBoolean()
     {
-        return type == ValueType._doubleValue;
+        return _valueType == ValueType.BooleanValue;
     }
 
-    public bool isLong()
+    public bool IsNull()
     {
-        return type == ValueType._longValue;
+        return _valueType == ValueType.NullValue;
     }
 
-    public bool isBoolean()
-    {
-        return type == ValueType.booleanValue;
-    }
-
-    public bool isNull()
-    {
-        return type == ValueType.nullValue;
-    }
-
-    /** Returns true if this is not an array or object. */
-    public bool isValue()
+    /// <summary>
+    /// Returns true if this is not an array or object.
+    /// </summary>
+    public bool IsValue()
     {
         switch ( _valueType )
         {
@@ -1204,24 +1366,37 @@ public class JsonValue : IEnumerable< JsonValue >
         return false;
     }
 
-    /** Sets the name of the specified value and adds it after the last child. */
-    public void addChild( string name, JsonValue value )
-    {
-        if ( name == null ) throw new ArgumentException( "name cannot be null." );
+    // ========================================================================
 
-        value.name = name;
-        addChild( value );
+    /// <summary>
+    /// Sets the name of the specified value and adds it after the last child.
+    /// </summary>
+    public void AddChild( string name, JsonValue value )
+    {
+        if ( name == null )
+        {
+            throw new ArgumentException( "name cannot be null." );
+        }
+
+        value.Name = name;
+        
+        AddChild( value );
     }
 
-    /** Adds the specified value after the last child. */
-    public void addChild( JsonValue value )
+    /// <summary>
+    /// Adds the specified value after the last child.
+    /// </summary>
+    public void AddChild( JsonValue value )
     {
         value.Parent = this;
-        size++;
-        JsonValue current = child;
+        Size++;
+
+        var current = Child;
 
         if ( current == null )
-            child = value;
+        {
+            Child = value;
+        }
         else
         {
             while ( true )
@@ -1239,151 +1414,199 @@ public class JsonValue : IEnumerable< JsonValue >
         }
     }
 
-    /** @param value May be null. */
-    public void set( string value )
+    // ========================================================================
+
+    /// <summary>
+    /// </summary>
+    /// <param name="value"></param>
+    public void Set( string? value )
     {
         _stringValue = value;
-        type        = value == null ? ValueType.nullValue : ValueType._stringValue;
+        _valueType   = value == null ? ValueType.NullValue : ValueType.StringValue;
     }
 
-    /** @param _stringValue May be null if the string representation is the string value of the double (eg, no leading zeros). */
-    public void set( double value, string _stringValue )
+    /// <summary>
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="stringValue">
+    /// May be null if the string representation is the string value of the double (eg, no leading zeros).
+    /// </param>
+    public void Set( double value, string? stringValue )
     {
-        _doubleValue      = value;
-        _longValue        = ( long )value;
-        this._stringValue = _stringValue;
-        type             = ValueType._doubleValue;
+        _doubleValue = value;
+        _longValue   = ( long )value;
+        _stringValue = stringValue;
+        _valueType   = ValueType.DoubleValue;
     }
 
-    /** @param _stringValue May be null if the string representation is the string value of the long (eg, no leading zeros). */
-    public void set( long value, string _stringValue )
+    /// <summary>
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="stringValue">
+    /// May be null if the string representation is the string value of the long (eg, no leading zeros).
+    /// </param>
+    public void Set( long value, string stringValue )
     {
-        _longValue        = value;
-        _doubleValue      = value;
-        this._stringValue = _stringValue;
-        type             = ValueType._longValue;
+        _longValue   = value;
+        _doubleValue = value;
+        _stringValue = stringValue;
+        _valueType   = ValueType.LongValue;
     }
 
-    public void set( bool value )
+    /// <summary>
+    /// </summary>
+    /// <param name="value"></param>
+    public void Set( bool value )
     {
         _longValue = value ? 1 : 0;
-        type      = ValueType.booleanValue;
+        _valueType = ValueType.BooleanValue;
     }
 
-    public string toJson( OutputType outputType )
+    // ========================================================================
+
+    public string? ToJson( JsonOutputType outputType )
     {
-        if ( isValue() ) return asString();
+        if ( IsValue() )
+        {
+            return AsString();
+        }
 
         var buffer = new StringBuilder( 512 );
-        json( this, buffer, outputType );
 
-        return buffer.toString();
+        Json( this, buffer, outputType );
+
+        return buffer.ToString();
     }
 
-    private void json( JsonValue object, StringBuilder buffer, OutputType outputType) {
-        if ( object.isObject() )
+    private static void Json( JsonValue jsonval, StringBuilder buffer, JsonOutputType outputType )
+    {
+        if ( jsonval.IsObject() )
         {
-            if ( object.child == null )
-                buffer.append( "{}" );
+            if ( jsonval.Child == null )
+            {
+                buffer.Append( "{}" );
+            }
             else
             {
-                int start = buffer.Length;
+                var start = buffer.Length;
 
                 while ( true )
                 {
-                    buffer.append( '{' );
-                    var i = 0;
+                    buffer.Append( '{' );
 
-                    for ( JsonValue child = object.child; child != null; child = child.Next )
+                    for ( var child = jsonval.Child; child != null; child = child.Next )
                     {
-                        buffer.append( outputType.quoteName( child.name ) );
-                        buffer.append( ':' );
-                        json( child, buffer, outputType );
-                        if ( child.Next != null ) buffer.append( ',' );
+                        buffer.Append( outputType.QuoteName( child.Name ?? "" ) );
+                        buffer.Append( ':' );
+
+                        Json( child, buffer, outputType );
+
+                        if ( child.Next != null )
+                        {
+                            buffer.Append( ',' );
+                        }
                     }
 
                     break;
                 }
 
-                buffer.append( '}' );
+                buffer.Append( '}' );
             }
         }
-        else if ( object.isArray() )
+        else if ( jsonval.IsArray() )
         {
-            if ( object.child == null )
-                buffer.append( "[]" );
+            if ( jsonval.Child == null )
+            {
+                buffer.Append( "[]" );
+            }
             else
             {
-                int start = buffer.Length;
-
                 while ( true )
                 {
-                    buffer.append( '[' );
+                    buffer.Append( '[' );
 
-                    for ( JsonValue child = object.child; child != null; child = child.Next )
+                    for ( var child = jsonval.Child; child != null; child = child.Next )
                     {
-                        json( child, buffer, outputType );
-                        if ( child.Next != null ) buffer.append( ',' );
+                        Json( child, buffer, outputType );
+
+                        if ( child.Next != null )
+                        {
+                            buffer.Append( ',' );
+                        }
                     }
 
                     break;
                 }
 
-                buffer.append( ']' );
+                buffer.Append( ']' );
             }
         }
-        else if ( object.isString() )
+        else if ( jsonval.IsString() )
         {
-            buffer.append( outputType.quoteValue( object.asString() ) );
+            buffer.Append( outputType.QuoteValue( jsonval.AsString() ) );
         }
-        else if ( object.isDouble() )
+        else if ( jsonval.IsDouble() )
         {
-            double _doubleValue = object.asDouble();
-            long   _longValue   = object.asLong();
-            buffer.append( _doubleValue == _longValue ? _longValue : _doubleValue );
+            var doubleValue = jsonval.AsDouble();
+            var longValue   = jsonval.AsLong();
+
+            buffer.Append( Math.Abs( doubleValue - longValue ) < Number.FLOAT_TOLERANCE ? longValue : doubleValue );
         }
-        else if ( object.isLong() )
+        else if ( jsonval.IsLong() )
         {
-            buffer.append( object.asLong() );
+            buffer.Append( jsonval.AsLong() );
         }
-        else if ( object.isBoolean() )
+        else if ( jsonval.IsBoolean() )
         {
-            buffer.append( object.asBoolean() );
+            buffer.Append( jsonval.AsBoolean() );
         }
-        else if ( object.isNull() )
+        else if ( jsonval.IsNull() )
         {
-            buffer.append( "null" );
+            buffer.Append( "null" );
         }
         else
-            throw new SerializationException( $"Unknown object type: {object}" );
-    }
-
-    public string toString()
-    {
-        if ( isValue() ) return name == null ? asString() : $"{name}: {asString()}";
-
-        return ( name == null ? "" : $"{name}: " ) + prettyPrint( OutputType.minimal, 0 );
-    }
-
-    /** Returns a human readable string representing the path from the root of the JSON object graph to this value. */
-    public string trace()
-    {
-        if ( parent == null )
         {
-            if ( type == ValueType.ArrayValue ) return "[]";
+            throw new SerializationException( $"Unknown jsonval type: {jsonval}" );
+        }
+    }
 
-            if ( type == ValueType.object) return "{}";
-            return "";
+    // ========================================================================
+    
+    /// <inheritdoc />
+    public override string? ToString()
+    {
+        if ( IsValue() )
+        {
+            return Name == null ? AsString() : $"{Name}: {AsString()}";
+        }
+
+        return ( Name == null ? "" : $"{Name}: " ) + PrettyPrint( JsonOutputType.Minimal, 0 );
+    }
+
+    /// <summary>
+    /// Returns a human readable string representing the path from the root of the
+    /// JSON object graph to this value.
+    /// </summary>
+    public string Trace()
+    {
+        if ( Parent == null )
+        {
+            return _valueType switch
+            {
+                ValueType.ArrayValue  => "[]",
+                ValueType.ObjectValue => "{}",
+                _                     => ""
+            };
         }
 
         string trace;
 
-        if ( parent.type == ValueType.ArrayValue )
+        if ( Parent._valueType == ValueType.ArrayValue )
         {
             trace = "[]";
             var i = 0;
 
-            for ( JsonValue child = parent.child; child != null; child = child.Next, i++ )
+            for ( var child = Parent.Child; child != null; child = child.Next, i++ )
             {
                 if ( child == this )
                 {
@@ -1393,367 +1616,470 @@ public class JsonValue : IEnumerable< JsonValue >
                 }
             }
         }
-        else if ( name.indexOf( '.' ) != -1 )
-            trace = $".\"{name.replace( "\"", "\\\"" )}\"";
+        else if ( Name?.IndexOf( '.' ) != -1 )
+        {
+            trace = $".\"{Name?.Replace( "\"", "\\\"" )}\"";
+        }
         else
-            trace = '.' + name;
+        {
+            trace = '.' + Name;
+        }
 
-        return parent.trace() + trace;
+        return Parent.Trace() + trace;
     }
 
-    public string prettyPrint( OutputType outputType, int singleLineColumns )
+    public string PrettyPrint( JsonOutputType outputType, int singleLineColumns )
     {
-        var settings = new PrettyPrintSettings();
-        settings.outputType        = outputType;
-        settings.singleLineColumns = singleLineColumns;
-
-        return prettyPrint( settings );
+        var settings = new PrettyPrintSettings
+        {
+            JsonOutputType = outputType,
+            SingleLineColumns = singleLineColumns,
+        };
+        
+        return PrettyPrint( settings );
     }
 
-    public string prettyPrint( PrettyPrintSettings settings )
+    public string PrettyPrint( PrettyPrintSettings settings )
     {
         var buffer = new StringBuilder( 512 );
-        prettyPrint( this, buffer, 0, settings );
 
-        return buffer.toString();
+        PrettyPrint( this, buffer, 0, settings );
+
+        return buffer.ToString();
     }
 
-    private void prettyPrint( JsonValue object, StringBuilder buffer, int indent, PrettyPrintSettings settings) {
-        OutputType outputType = settings.outputType;
+    private void PrettyPrint( JsonValue jsonval, StringBuilder buffer, int indent, PrettyPrintSettings settings )
+    {
+        var outputType = settings.JsonOutputType;
 
-        if ( object.isObject() )
+        if ( jsonval.IsObject() )
         {
-            if ( object.child == null )
-                buffer.append( "{}" );
+            if ( jsonval.Child == null )
+            {
+                buffer.Append( "{}" );
+            }
             else
             {
-                bool newLines = !isFlat( object );
-                int  start    = buffer.Length;
+                var newLines = !IsFlat( jsonval );
+                var start    = buffer.Length;
             outer:
 
                 while ( true )
                 {
-                    buffer.append( newLines ? "{\n" : "{ " );
+                    buffer.Append( newLines ? "{\n" : "{ " );
                     var i = 0;
 
-                    for ( JsonValue child = object.child; child != null; child = child.Next )
+                    for ( var child = jsonval.Child; child != null; child = child.Next )
                     {
-                        if ( newLines ) indent( indent, buffer );
-                        buffer.append( outputType.quoteName( child.name ) );
-                        buffer.append( ": " );
-                        prettyPrint( child, buffer, indent + 1, settings );
-                        if ( ( !newLines || ( outputType != OutputType.minimal ) ) && ( child.Next != null ) ) buffer.append( ',' );
-                        buffer.append( newLines ? '\n' : ' ' );
-
-                        if ( !newLines && ( ( buffer.Length - start ) > settings.singleLineColumns ) )
+                        if ( newLines )
                         {
-                            buffer.setLength( start );
+                            Indent( indent, buffer );
+                        }
+
+                        buffer.Append( outputType.QuoteName( child.Name ) );
+                        buffer.Append( ": " );
+                        PrettyPrint( child, buffer, indent + 1, settings );
+
+                        if ( ( !newLines || ( outputType != JsonOutputType.Minimal ) ) && ( child.Next != null ) )
+                        {
+                            buffer.Append( ',' );
+                        }
+
+                        buffer.Append( newLines ? '\n' : ' ' );
+
+                        if ( !newLines && ( ( buffer.Length - start ) > settings.SingleLineColumns ) )
+                        {
+                            buffer.Length = start;
                             newLines = true;
 
-                            continue outer;
+                            goto outer;
                         }
                     }
 
                     break;
                 }
 
-                if ( newLines ) indent( indent - 1, buffer );
-                buffer.append( '}' );
+                if ( newLines )
+                {
+                    Indent( indent - 1, buffer );
+                }
+
+                buffer.Append( '}' );
             }
         }
-        else if ( object.isArray() )
+        else if ( jsonval.IsArray() )
         {
-            if ( object.child == null )
-                buffer.append( "[]" );
+            if ( jsonval.Child == null )
+            {
+                buffer.Append( "[]" );
+            }
             else
             {
-                bool newLines = !isFlat( object );
-                var wrap     = settings.wrapNumericArrays || !isNumeric( object );
-                int  start    = buffer.Length;
+                var newLines = !IsFlat( jsonval );
+                var wrap     = settings.WrapNumericArrays || !IsNumeric( jsonval );
+                var start    = buffer.Length;
             outer:
 
                 while ( true )
                 {
-                    buffer.append( newLines ? "[\n" : "[ " );
+                    buffer.Append( newLines ? "[\n" : "[ " );
 
-                    for ( JsonValue child = object.child; child != null; child = child.Next )
+                    for ( var child = jsonval.Child; child != null; child = child.Next )
                     {
-                        if ( newLines ) indent( indent, buffer );
-                        prettyPrint( child, buffer, indent + 1, settings );
-                        if ( ( !newLines || ( outputType != OutputType.minimal ) ) && ( child.Next != null ) ) buffer.append( ',' );
-                        buffer.append( newLines ? '\n' : ' ' );
-
-                        if ( wrap && !newLines && ( ( buffer.Length - start ) > settings.singleLineColumns ) )
+                        if ( newLines )
                         {
-                            buffer.setLength( start );
-                            newLines = true;
+                            Indent( indent, buffer );
+                        }
 
-                            continue outer;
+                        PrettyPrint( child, buffer, indent + 1, settings );
+
+                        if ( ( !newLines || ( outputType != JsonOutputType.Minimal ) )
+                             && ( child.Next != null ) )
+                        {
+                            buffer.Append( ',' );
+                        }
+
+                        buffer.Append( newLines ? '\n' : ' ' );
+
+                        if ( wrap && !newLines && ( ( buffer.Length - start ) > settings.SingleLineColumns ) )
+                        {
+                            buffer.Length = start;
+                            newLines      = true;
+
+                            goto outer;
                         }
                     }
 
                     break;
                 }
 
-                if ( newLines ) indent( indent - 1, buffer );
-                buffer.append( ']' );
+                if ( newLines )
+                {
+                    Indent( indent - 1, buffer );
+                }
+
+                buffer.Append( ']' );
             }
         }
-        else if ( object.isString() )
+        else if ( jsonval.IsString() )
         {
-            buffer.append( outputType.quoteValue( object.asString() ) );
+            buffer.Append( outputType.QuoteValue( jsonval.AsString() ) );
         }
-        else if ( object.isDouble() )
+        else if ( jsonval.IsDouble() )
         {
-            double _doubleValue = object.asDouble();
-            long   _longValue   = object.asLong();
-            buffer.append( _doubleValue == _longValue ? _longValue : _doubleValue );
+            var doubleValue = jsonval.AsDouble();
+            var longValue   = jsonval.AsLong();
+
+            buffer.Append( Math.Abs( doubleValue - longValue ) < Number.FLOAT_TOLERANCE
+                               ? longValue
+                               : doubleValue );
         }
-        else if ( object.isLong() )
+        else if ( jsonval.IsLong() )
         {
-            buffer.append( object.asLong() );
+            buffer.Append( jsonval.AsLong() );
         }
-        else if ( object.isBoolean() )
+        else if ( jsonval.IsBoolean() )
         {
-            buffer.append( object.asBoolean() );
+            buffer.Append( jsonval.AsBoolean() );
         }
-        else if ( object.isNull() )
+        else if ( jsonval.IsNull() )
         {
-            buffer.append( "null" );
+            buffer.Append( "null" );
         }
         else
-            throw new SerializationException( $"Unknown object type: {object}" );
+        {
+            throw new SerializationException( $"Unknown @object type: {jsonval}" );
+        }
     }
 
-    /** More efficient than {@link #prettyPrint(PrettyPrintSettings)} but {@link PrettyPrintSettings#singleLineColumns} and
-     * {@link PrettyPrintSettings#wrapNumericArrays} are not supported. */
-    public void prettyPrint( OutputType outputType, Writer writer ) throws IOException
+    public void PrettyPrint( JsonOutputType outputType, TextWriter writer )
     {
-        PrettyPrintSettings settings = new PrettyPrintSettings();
-        settings.outputType = outputType;
-        prettyPrint(this, writer, 0, settings);
+        var settings = new PrettyPrintSettings
+        {
+            JsonOutputType = outputType,
+        };
+
+        PrettyPrint( this, writer, 0, settings );
     }
 
-    private void prettyPrint( JsonValue object, Writer writer, int indent, PrettyPrintSettings settings) throws
-        IOException { OutputType outputType = settings.outputType;
-        if (object.isObject()) {
-        if ( object.child == null )
-            writer.append( "{}" );
-        else
-        {
-            var newLines = !isFlat( object ) || ( object.size > 6 );
-            writer.append( newLines ? "{\n" : "{ " );
-            var i = 0;
+    private void PrettyPrint( JsonValue jsonval, TextWriter writer, int indent, PrettyPrintSettings settings )
+    {
+        var outputType = settings.JsonOutputType;
 
-            for ( JsonValue child = object.child; child != null; child = child.Next )
+        if ( jsonval.IsObject() )
+        {
+            if ( jsonval.Child == null )
             {
-                if ( newLines ) indent( indent, writer );
-                writer.append( outputType.quoteName( child.name ) );
-                writer.append( ": " );
-                prettyPrint( child, writer, indent + 1, settings );
-                if ( ( !newLines || ( outputType != OutputType.minimal ) ) && ( child.Next != null ) ) writer.append( ',' );
-                writer.append( newLines ? '\n' : ' ' );
+                writer.Write( "{}" );
             }
+            else
+            {
+                var newLines = !IsFlat( jsonval ) || ( jsonval.Size > 6 );
 
-            if ( newLines ) indent( indent - 1, writer );
-            writer.append( '}' );
+                writer.Write( newLines ? "{\n" : "{ " );
+
+                for ( var child = jsonval.Child; child != null; child = child.Next )
+                {
+                    if ( newLines )
+                    {
+                        Indent( indent, writer );
+                    }
+
+                    writer.Write( outputType.QuoteName( child.Name ) );
+                    writer.Write( ": " );
+
+                    PrettyPrint( child, writer, indent + 1, settings );
+
+                    if ( ( !newLines || ( outputType != JsonOutputType.Minimal ) )
+                         && ( child.Next != null ) )
+                    {
+                        writer.Write( ',' );
+                    }
+
+                    writer.Write( newLines ? '\n' : ' ' );
+                }
+
+                if ( newLines )
+                {
+                    Indent( indent - 1, writer );
+                }
+
+                writer.Write( '}' );
+            }
         }
-    }
-
-else if ( object.isArray() )
-{
-    if ( object.child == null )
-        writer.append( "[]" );
-    else
-    {
-        bool newLines = !isFlat( object );
-        writer.append( newLines ? "[\n" : "[ " );
-        var i = 0;
-
-        for ( JsonValue child = object.child; child != null; child = child.Next )
+        else if ( jsonval.IsArray() )
         {
-            if ( newLines ) indent( indent, writer );
-            prettyPrint( child, writer, indent + 1, settings );
-            if ( ( !newLines || ( outputType != OutputType.minimal ) ) && ( child.Next != null ) ) writer.append( ',' );
-            writer.append( newLines ? '\n' : ' ' );
+            if ( jsonval.Child == null )
+            {
+                writer.Write( "[]" );
+            }
+            else
+            {
+                var newLines = !IsFlat( jsonval );
+
+                writer.Write( newLines ? "[\n" : "[ " );
+
+                for ( var child = jsonval.Child; child != null; child = child.Next )
+                {
+                    if ( newLines )
+                    {
+                        Indent( indent, writer );
+                    }
+
+                    PrettyPrint( child, writer, indent + 1, settings );
+
+                    if ( ( !newLines || ( outputType != JsonOutputType.Minimal ) )
+                         && ( child.Next != null ) )
+                    {
+                        writer.Write( ',' );
+                    }
+
+                    writer.Write( newLines ? '\n' : ' ' );
+                }
+
+                if ( newLines )
+                {
+                    Indent( indent - 1, writer );
+                }
+
+                writer.Write( ']' );
+            }
         }
-
-        if ( newLines ) indent( indent - 1, writer );
-        writer.append( ']' );
-    }
-}
-else if ( object.isString() )
-{
-    writer.append( outputType.quoteValue( object.asString() ) );
-}
-else if ( object.isDouble() )
-{
-    double _doubleValue = object.asDouble();
-    long   _longValue   = object.asLong();
-    writer.append( Double.toString( _doubleValue == _longValue ? _longValue : _doubleValue ) );
-}
-else if ( object.isLong() )
-{
-    writer.append( Long.toString( object.asLong() ) );
-}
-else if ( object.isBoolean() )
-{
-    writer.append( Boolean.toString( object.asBoolean() ) );
-}
-else if ( object.isNull() )
-{
-    writer.append( "null" );
-}
-else
-    throw new SerializationException( $"Unknown object type: {object}" );
-
-}
-
-static private bool isFlat( JsonValue
-object) {
-    for ( JsonValue child = object.child; child != null; child = child.Next )
-        if ( child.isObject() || child.isArray() )
-            return false;
-
-    return true;
-}
-
-static private bool isNumeric( JsonValue
-object) {
-    for ( JsonValue child = object.child; child != null; child = child.Next )
-        if ( !child.isNumber() )
-            return false;
-
-    return true;
-}
-
-static private void indent( int count, StringBuilder buffer )
-{
-    for ( var i = 0; i < count; i++ )
-        buffer.append( '\t' );
-}
-
-static private void indent( int count, Writer buffer )
-throws IOException {
-    for ( var i = 0; i < count; i++ )
-        buffer.append( '\t' );
-}
-
-// ========================================================================
-
-/// <inheritdoc />
-public IEnumerator< JsonValue > GetEnumerator()
-{
-    return new JsonIterator( this, this.Size );
-}
-
-/// <inheritdoc />
-IEnumerator IEnumerable.GetEnumerator()
-{
-    return GetEnumerator();
-}
-
-// ========================================================================
-// ========================================================================
-
-[PublicAPI]
-public class JsonIterator : IEnumerator< JsonValue >, IEnumerable< JsonValue >
-{
-    private JsonValue? _child;
-    private JsonValue? _current;
-    private int        _size;
-
-    public JsonIterator( JsonValue child, int size )
-    {
-        this._child = child;
-        this._size  = size;
-    }
-
-    public bool MoveNext()
-    {
-        if ( _child != null )
+        else if ( jsonval.IsString() )
         {
-            _current = _child;
-            _child   = _child.Next;
-
-            return true;
+            writer.Write( outputType.QuoteValue( jsonval.AsString() ) );
         }
+        else if ( jsonval.IsDouble() )
+        {
+            var doubleValue = jsonval.AsDouble();
+            var longValue   = jsonval.AsLong();
 
-        return false;
+            writer.Write( Math.Abs( doubleValue - longValue ) < Number.FLOAT_TOLERANCE
+                              ? longValue.ToString( CultureInfo.InvariantCulture )
+                              : doubleValue.ToString( CultureInfo.InvariantCulture ) );
+        }
+        else if ( jsonval.IsLong() )
+        {
+            writer.Write( jsonval.AsLong().ToString() );
+        }
+        else if ( jsonval.IsBoolean() )
+        {
+            writer.Write( jsonval.AsBoolean().ToString() );
+        }
+        else if ( jsonval.IsNull() )
+        {
+            writer.Write( "null" );
+        }
+        else
+        {
+            throw new SerializationException( $"Unknown @object type: {jsonval}" );
+        }
     }
 
-    public JsonValue Current => _current!;
-
-    object IEnumerator.Current => Current;
-
-    public void Reset()
+    private bool IsFlat( JsonValue jsonval )
     {
-        throw new NotSupportedException();
+        for ( var child = jsonval.Child; child != null; child = child.Next )
+        {
+            if ( child.IsObject() || child.IsArray() )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool IsNumeric( JsonValue jsonval )
+    {
+        for ( var child = jsonval.Child; child != null; child = child.Next )
+        {
+            if ( !child.IsNumber() )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void Indent( int count, StringBuilder buffer )
+    {
+        for ( var i = 0; i < count; i++ )
+        {
+            buffer.Append( '\t' );
+        }
+    }
+
+    private void Indent( int count, TextWriter buffer )
+    {
+        for ( var i = 0; i < count; i++ )
+        {
+            buffer.Write( '\t' );
+        }
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public IEnumerator< JsonValue > GetEnumerator()
+    {
+        return new JsonIterator( this, this.Size );
     }
 
     /// <inheritdoc />
-    public void Dispose()
+    IEnumerator IEnumerable.GetEnumerator()
     {
-    } // Nothing to dispose
-
-    public void Remove()
-    {
-        if ( _current == null )
-        {
-            throw new InvalidOperationException( "Remove can only be called after Next." );
-        }
-
-        if ( _current.Prev == null )
-        {
-            _child = _current.Next;
-            if ( _child != null ) _child.Prev = null;
-        }
-        else
-        {
-            _current.Prev.Next = _current.Next;
-            if ( _current.Next != null ) _current.Next.Prev = _current.Prev;
-        }
-
-        _size--;
+        return GetEnumerator();
     }
 
-    public IEnumerator< JsonValue > GetEnumerator() => this;
+    // ========================================================================
+    // ========================================================================
 
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-}
+    [PublicAPI]
+    public class JsonIterator : IEnumerator< JsonValue >, IEnumerable< JsonValue >
+    {
+        private JsonValue? _child;
+        private JsonValue? _current;
+        private int        _size;
 
-// ========================================================================
+        public JsonIterator( JsonValue child, int size )
+        {
+            this._child = child;
+            this._size  = size;
+        }
 
-[PublicAPI]
-public enum ValueType
-{
-    ObjectValue,
-    ArrayValue,
-    StringValue,
-    DoubleValue,
-    LongValue,
-    BooleanValue,
-    NullValue,
-}
+        public bool MoveNext()
+        {
+            if ( _child != null )
+            {
+                _current = _child;
+                _child   = _child.Next;
 
-// ========================================================================
+                return true;
+            }
 
-[PublicAPI]
-public class PrettyPrintSettings
-{
-    /// <summary>
-    /// </summary>
-    public JsonOutputType OutputType { get; set; }
+            return false;
+        }
 
-    /// <summary>
-    /// If an object on a single line fits this many columns, it won't wrap.
-    /// </summary>
-    public int SingleLineColumns { get; set; }
+        public JsonValue Current => _current!;
 
-    /// <summary>
-    /// Enables or Disables float array wrapping.
-    /// </summary>
-    public bool WrapNumericArrays { get; set; }
-}
+        object IEnumerator.Current => Current;
 
+        public void Reset()
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+        }
+
+        public void Remove()
+        {
+            if ( _current == null )
+            {
+                throw new InvalidOperationException( "Remove can only be called after Next." );
+            }
+
+            if ( _current.Prev == null )
+            {
+                _child = _current.Next;
+
+                if ( _child != null )
+                {
+                    _child.Prev = null;
+                }
+            }
+            else
+            {
+                _current.Prev.Next = _current.Next;
+
+                if ( _current.Next != null )
+                {
+                    _current.Next.Prev = _current.Prev;
+                }
+            }
+
+            _size--;
+        }
+
+        public IEnumerator< JsonValue > GetEnumerator() => this;
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    // ========================================================================
+
+    [PublicAPI]
+    public enum ValueType
+    {
+        ObjectValue,
+        ArrayValue,
+        StringValue,
+        DoubleValue,
+        LongValue,
+        BooleanValue,
+        NullValue,
+    }
+
+    // ========================================================================
+
+    [PublicAPI]
+    public class PrettyPrintSettings
+    {
+        /// <summary>
+        /// </summary>
+        public JsonOutputType JsonOutputType { get; set; }
+
+        /// <summary>
+        /// If an object on a single line fits this many columns, it won't wrap.
+        /// </summary>
+        public int SingleLineColumns { get; set; }
+
+        /// <summary>
+        /// Enables or Disables float array wrapping.
+        /// </summary>
+        public bool WrapNumericArrays { get; set; }
+    }
 }

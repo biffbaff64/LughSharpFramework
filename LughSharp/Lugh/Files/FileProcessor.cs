@@ -518,7 +518,7 @@ public partial class FileProcessor
         }
     }
 
-    private void ProcessDirectories( DirectoryInfo[] files,
+    private void ProcessDirectories( DirectoryInfo[]? files,
                                      DirectoryInfo outputRoot,
                                      DirectoryInfo outputDir,
                                      Dictionary< DirectoryInfo, List< Entry > > dirToEntries,
