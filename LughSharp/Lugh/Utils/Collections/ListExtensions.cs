@@ -170,9 +170,8 @@ public static class ListExtensions
     /// <summary>
     /// Removes and returns the item at the specified index.
     /// </summary>
-    /// <param name="list"></param>
-    /// <param name="index"></param>
-    /// <typeparam name="T"></typeparam>
+    /// <param name="list"> The List{} class to which this extension applies. </param>
+    /// <param name="index"> The index at which to get the element. </param>
     /// <returns></returns>
     public static T RemoveIndex< T >( this List< T > list, int index )
     {

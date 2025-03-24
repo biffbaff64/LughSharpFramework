@@ -22,8 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Guarding;
 
 namespace LughSharp.Lugh.Utils.Collections;
 
@@ -48,17 +51,24 @@ namespace LughSharp.Lugh.Utils.Collections;
 [PublicAPI]
 public class ObjectMap< TK, TV > //: IEnumerable< TK >
 {
-    private readonly   object   _dummy = new();
-    protected readonly float    LoadFactor;
-    private            Entries? _entries1;
-    private            Entries? _entries2;
-    private            Keys?    _keys1;
-    private            Keys?    _keys2;
-    private            Values?  _values1;
-    private            Values?  _values2;
-    protected          TK?[]    KeyTable;
-    protected          int      Threshold;
-    protected          TV?[]    ValueTable;
+    protected readonly float LoadFactor;
+    protected          TK?[] KeyTable;
+    protected          int   Threshold;
+    protected          TV?[] ValueTable;
+
+    // ========================================================================
+
+    private const int   DEFAULT_CAPACITY    = 51;
+    private const float DEFAULT_LOAD_FACTOR = 0.8f;
+
+    private readonly object _dummy = new();
+
+    private Entries? _entries1;
+    private Entries? _entries2;
+    private Keys?    _keys1;
+    private Keys?    _keys2;
+    private Values?  _values1;
+    private Values?  _values2;
 
     // ========================================================================
 
@@ -73,7 +83,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// <exception cref="ArgumentException">
     /// Thrown when the load factor is less than or equal to 0, or greater than or equal to 1.
     /// </exception>
-    public ObjectMap( int initialCapacity = 51, float loadFactor = 0.8f )
+    public ObjectMap( int initialCapacity = DEFAULT_CAPACITY, float loadFactor = DEFAULT_LOAD_FACTOR )
     {
         if ( loadFactor is <= 0f or >= 1f )
         {
@@ -119,6 +129,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     // ========================================================================
+
     /// <summary>
     /// Returns an index between 0 and <see cref="Mask" /> for the specified <c>item</c>.
     /// <para>
@@ -160,7 +171,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// </returns>
     /// <exception cref="ArgumentNullException">Thrown when the key is null.</exception>
     /// <exception cref="NullReferenceException">Thrown when the KeyTable is null.</exception>
-    private int LocateKey( TK key )
+    protected int LocateKey( TK key )
     {
         ArgumentNullException.ThrowIfNull( key );
 
@@ -192,7 +203,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// <param name="key"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public TV? Put( TK key, TV? value )
+    public virtual TV? Put( TK key, TV? value )
     {
         ArgumentNullException.ThrowIfNull( KeyTable );
         ArgumentNullException.ThrowIfNull( ValueTable );
@@ -305,19 +316,13 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// Helper method.
     /// Returns TRUE if Size is greater than zero.
     /// </summary>
-    public virtual bool NotEmpty()
-    {
-        return Size > 0;
-    }
+    public virtual bool NotEmpty() => Size > 0;
 
     /// <summary>
     /// Helper method.
     /// Returns TRUE if Size is zero.
     /// </summary>
-    public virtual bool IsEmpty()
-    {
-        return Size == 0;
-    }
+    public virtual bool IsEmpty() => Size == 0;
 
     /// <summary>
     /// Shrinks the map to the specified maximum capacity.
@@ -615,7 +620,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// The previous value associated with the specified key, or the default
     /// value if the key was not found.
     /// </returns>
-    public TV? Remove( TK key )
+    public virtual TV? Remove( TK key )
     {
         if ( KeyTable == null )
         {
@@ -682,7 +687,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
             _entries2 = new Entries( this );
         }
 
-        Debug.Assert( _entries2 != null, nameof( _entries2 ) + " != null" );
+        Guard.ThrowIfNull( _entries2 );
 
         if ( !_entries1.Valid )
         {
@@ -722,8 +727,8 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
             _values2 = new Values( this );
         }
 
-        Debug.Assert( _values1 != null, nameof( _values1 ) + " != null" );
-        Debug.Assert( _values2 != null, nameof( _values2 ) + " != null" );
+        Guard.ThrowIfNull( _values1 );
+        Guard.ThrowIfNull( _values2 );
 
         if ( !_values1.Valid )
         {
@@ -763,8 +768,8 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
             _keys2 = new Keys( this );
         }
 
-        Debug.Assert( _keys1 != null, nameof( _keys1 ) + " != null" );
-        Debug.Assert( _keys2 != null, nameof( _keys2 ) + " != null" );
+        Guard.ThrowIfNull( _keys1 );
+        Guard.ThrowIfNull( _keys2 );
 
         if ( !_keys1.Valid )
         {
@@ -894,16 +899,6 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         protected readonly ObjectMap< TK, TV > Map;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MapIterator" /> class.
-        /// </summary>
-        /// <param name="map">The map to iterate over.</param>
-        protected MapIterator( ObjectMap< TK, TV > map )
-        {
-            Map = map;
-            Reset();
-        }
-
-        /// <summary>
         /// Indicates whether the iterator is valid.
         /// </summary>
         public bool Valid { get; set; } = true;
@@ -923,10 +918,29 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// </summary>
         protected bool HasNext { get; set; }
 
+        // ====================================================================
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MapIterator" /> class.
+        /// </summary>
+        /// <param name="map">The map to iterate over.</param>
+        protected MapIterator( ObjectMap< TK, TV > map )
+        {
+            Map = map;
+            SafeReset();
+        }
+
+        // ====================================================================
+
+        private void SafeReset()
+        {
+            Reset();
+        }
+        
         /// <summary>
         /// Resets the iterator to the start of the map.
         /// </summary>
-        public void Reset()
+        public virtual void Reset()
         {
             CurrentIndex = -1;
             NextIndex    = -1;
@@ -936,7 +950,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// <summary>
         /// Finds the next index in the map that contains a key.
         /// </summary>
-        protected void FindNextIndex()
+        protected virtual void FindNextIndex()
         {
             for ( var n = Map.KeyTable.Length; ++NextIndex < n; )
             {
@@ -954,7 +968,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// <summary>
         /// Removes the current key-value pair from the map.
         /// </summary>
-        public void Remove()
+        public virtual void Remove()
         {
             var i = CurrentIndex;
 
@@ -1003,7 +1017,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     [PublicAPI]
     public class Entries : MapIterator
     {
-        private readonly Entry _entry = new();
+        protected readonly Entry Entry = new();
 
         /// <summary>
         /// Initializes a new instance of the Entries class for the specified map.
@@ -1020,7 +1034,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// <exception cref="GdxRuntimeException">
         /// Thrown if there are no more entries to iterate over, or if the iterator is nested.
         /// </exception>
-        public Entry Next()
+        public virtual Entry Next()
         {
             if ( !HasNext )
             {
@@ -1032,13 +1046,13 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
                 throw new GdxRuntimeException( "#iterator() cannot be used nested." );
             }
 
-            _entry.Key   = Map.KeyTable[ NextIndex ];
-            _entry.Value = Map.ValueTable[ NextIndex ];
+            Entry.Key   = Map.KeyTable[ NextIndex ];
+            Entry.Value = Map.ValueTable[ NextIndex ];
             CurrentIndex = NextIndex;
 
             FindNextIndex();
 
-            return _entry;
+            return Entry;
         }
 
         /// <summary>
@@ -1075,7 +1089,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// <exception cref="GdxRuntimeException">
         /// Thrown if there are no more values to iterate over, or if the iterator is nested.
         /// </exception>
-        public TV? Next()
+        public virtual TV? Next()
         {
             if ( !HasNext )
             {
@@ -1107,7 +1121,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// <summary>
         /// Returns a new array containing the remaining values.
         /// </summary>
-        public List< TV > ToArray()
+        public virtual List< TV > ToArray()
         {
             return ToArray( new List< TV >( Map.Size ) );
         }
@@ -1115,7 +1129,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// <summary>
         /// Adds the remaining values to the array.
         /// </summary>
-        public List< TV > ToArray( List< TV > array )
+        public virtual List< TV > ToArray( List< TV > array )
         {
             while ( HasNext )
             {
@@ -1151,7 +1165,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// <exception cref="GdxRuntimeException">
         /// Thrown if there are no more keys to iterate over, or if the iterator is nested.
         /// </exception>
-        public TK Next()
+        public virtual TK Next()
         {
             if ( !HasNext )
             {
@@ -1183,7 +1197,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// <summary>
         /// Returns a new list containing the remaining keys.
         /// </summary>
-        public List< TK > ToArray()
+        public virtual List< TK > ToArray()
         {
             return ToArray( new List< TK >( Map.Size ) );
         }
@@ -1193,7 +1207,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// </summary>
         /// <param name="array">The list to add the remaining keys to.</param>
         /// <returns>The list containing the remaining keys.</returns>
-        public List< TK > ToArray( List< TK > array )
+        public virtual List< TK > ToArray( List< TK > array )
         {
             while ( HasNext )
             {

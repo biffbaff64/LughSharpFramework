@@ -451,9 +451,9 @@ public partial class Json
     {
         Type type = object.GetType();
 
-        var defaultValues = getDefaultValues( type );
+        var defaultValues = GetDefaultValues( type );
 
-        OrderedMap< string, FieldMetadata > fields       = getFields( type );
+        OrderedMap< string, FieldMetadata > fields       = GetFields( type );
         var                                 defaultIndex = 0;
         Array< string >                     fieldNames   = fields.orderedKeys();
 
@@ -554,7 +554,7 @@ public partial class Json
     public void WriteField( object @object, string fieldName, string jsonName, Type elementType )
     {
         Type          type     = object.GetType();
-        FieldMetadata metadata = getFields( type ).get( fieldName );
+        FieldMetadata metadata = GetFields( type ).get( fieldName );
 
         if ( metadata == null )
         {

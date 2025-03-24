@@ -137,14 +137,16 @@ public partial class Json
         return _classToTag[ type ];
     }
 
-    /** Registers a serializer to use for the specified type instead of the default behavior of serializing all of an objects
-     * fields. */
-    public void SetSerializer< T >( Type type, ISerializer< T > serializer )
+    /// <summary>
+    /// Registers a serializer to use for the specified type instead of the default behavior
+    /// of serializing all of an objects fields.
+    /// </summary>
+    public void SetSerializer< T >( Type type, ISerializer serializer )
     {
         _classToSerializer[ type ] = serializer;
     }
 
-    public ISerializer< T > GetSerializer< T >( Type type )
+    public ISerializer GetSerializer< T >( Type type )
     {
         return _classToSerializer[ type ];
     }
@@ -156,7 +158,7 @@ public partial class Json
     /// </summary>
     public void SetElementType( Type type, string fieldName, Type elementType )
     {
-        FieldMetadata metadata = getFields( type ).get( fieldName );
+        FieldMetadata metadata = GetFields( type )[ fieldName ];
 
         if ( metadata == null )
         {
@@ -171,7 +173,7 @@ public partial class Json
      * @see #setReadDeprecated(bool) */
     public void SetDeprecated( Type type, string fieldName, bool deprecated )
     {
-        FieldMetadata metadata = getFields( type ).get( fieldName );
+        FieldMetadata metadata = GetFields( type ).get( fieldName );
 
         if ( metadata == null )
         {
@@ -181,7 +183,7 @@ public partial class Json
         metadata.Deprecated = deprecated;
     }
 
-    private OrderedMap< string, FieldMetadata > getFields( Type type )
+    private OrderedMap< string, FieldMetadata > GetFields( Type type )
     {
         OrderedMap< string, FieldMetadata > fields = typeToFields.get( type );
 
@@ -237,12 +239,12 @@ public partial class Json
         this.writer.setQuoteLongValues( quoteLongValues );
     }
 
-    public JsonWriter getWriter()
+    public JsonWriter GetWriter()
     {
         return writer;
     }
 
-    private object[] getDefaultValues( Type type )
+    private object[] GetDefaultValues( Type type )
     {
         if ( !usePrototypes ) return null;
         if ( classToDefaultValues.containsKey( type ) ) return classToDefaultValues.get( type );
@@ -260,7 +262,7 @@ public partial class Json
             return null;
         }
 
-        OrderedMap< string, FieldMetadata > fields = getFields( type );
+        OrderedMap< string, FieldMetadata > fields = GetFields( type );
         var                                 values = new object[ fields.size ];
         classToDefaultValues.put( type, values );
 
@@ -301,37 +303,37 @@ public partial class Json
         return values;
     }
 
-    public void readField( object @object, string name, JsonValue jsonData )
+    public void ReadField( object @object, string name, JsonValue jsonData )
     {
-        readField( object, name, name, null, jsonData );
+        ReadField( object, name, name, null, jsonData );
     }
 
-    public void readField( object @object, string name, Type elementType, JsonValue jsonData )
+    public void ReadField( object @object, string name, Type elementType, JsonValue jsonData )
     {
-        readField( object, name, name, elementType, jsonData );
+        ReadField( object, name, name, elementType, jsonData );
     }
 
-    public void readField( object @object, string fieldName, string jsonName, JsonValue jsonData )
+    public void ReadField( object @object, string fieldName, string jsonName, JsonValue jsonData )
     {
-        readField( object, fieldName, jsonName, null, jsonData );
+        ReadField( object, fieldName, jsonName, null, jsonData );
     }
 
     /** @param elementType May be null if the type is unknown. */
-    public void readField( object @object, string fieldName, string jsonName, Type elementType, JsonValue jsonMap )
+    public void ReadField( object @object, string fieldName, string jsonName, Type elementType, JsonValue jsonMap )
     {
         Type          type     = object.GetType();
-        FieldMetadata metadata = getFields( type ).get( fieldName );
+        FieldMetadata metadata = GetFields( type ).get( fieldName );
 
         if ( metadata == null ) throw new SerializationException( "Field not found: " + fieldName + " (" + type.getName() + ")" );
 
         Field field                            = metadata.field;
         if ( elementType == null ) elementType = metadata.elementType;
-        readField( object, field, jsonName, elementType, jsonMap );
+        ReadField( object, field, jsonName, elementType, jsonMap );
     }
 
     /** @param object May be null if the field is static.
      * @param elementType May be null if the type is unknown. */
-    public void readField( object @object, Field field, string jsonName, Type elementType, JsonValue jsonMap )
+    public void ReadField( object @object, Field field, string jsonName, Type elementType, JsonValue jsonMap )
     {
         JsonValue jsonValue = jsonMap.Get( jsonName );
 
@@ -363,10 +365,10 @@ public partial class Json
         }
     }
 
-    public void readFields( object @object, JsonValue jsonMap )
+    public void ReadFields( object @object, JsonValue jsonMap )
     {
         Type                                type   = object.GetType();
-        OrderedMap< string, FieldMetadata > fields = getFields( type );
+        OrderedMap< string, FieldMetadata > fields = GetFields( type );
 
         for ( JsonValue child = jsonMap.Child; child != null; child = child.Next )
         {
@@ -376,7 +378,7 @@ public partial class Json
             {
                 if ( child.Name.equals( typeName ) ) continue;
 
-                if ( ignoreUnknownFields || ignoreUnknownField( type, child.Name ) )
+                if ( ignoreUnknownFields || IgnoreUnknownField( type, child.Name ) )
                 {
                     if ( debug ) System.out.
                     println( "Ignoring unknown field: " + child.Name + " (" + type.getName() + ")" );
@@ -430,7 +432,7 @@ public partial class Json
      * @param fieldName A field name encountered in the JSON for which there is no matching class field.
      * @return true if the field name should be ignored and an exception won't be thrown by
      *         {@link #readFields(object, JsonValue)}. */
-    protected bool ignoreUnknownField( Type type, string fieldName )
+    protected bool IgnoreUnknownField( Type type, string fieldName )
     {
         return false;
     }
@@ -637,7 +639,7 @@ public partial class Json
                     return ( T )result;
                 }
 
-                readFields( object, jsonData );
+                ReadFields( object, jsonData );
 
                 return ( T )object;
             }
@@ -785,11 +787,11 @@ public partial class Json
     /** Each field on the <code>to</code> object is set to the value for the field with the same name on the <code>from</code>
      * object. The <code>to</code> object must have at least all the fields of the <code>from</code> object with the same name and
      * type. */
-    public void copyFields( object from, object to )
+    public void CopyFields( object from, object to )
     {
-        var toFields = getFields( to.GetType() );
+        var toFields = GetFields( to.GetType() );
 
-        foreach ( ObjectMap.Entry< string, FieldMetadata > entry in getFields( from.GetType() ))
+        foreach ( ObjectMap.Entry< string, FieldMetadata > entry in GetFields( from.GetType() ) )
         {
             FieldMetadata toField   = toFields.get( entry.key );
             Field         fromField = entry.value.field;
@@ -867,7 +869,7 @@ public partial class Json
                 {
                     throw new Exception( $"Encountered JSON object when expected array of type: {type.FullName}", ex );
                 }
-                
+
                 if ( type is { IsNested: true, IsNestedPublic: false } )
                 {
                     throw new Exception( $"Type cannot be created (non-static member class): {type.FullName}", ex );
@@ -949,7 +951,7 @@ public partial class Json
     // ========================================================================
 
     [PublicAPI]
-    public abstract class ReadOnlySerializer< T > : ISerializer< T >
+    public abstract class ReadOnlySerializer< T > : ISerializer
     {
         public virtual void Write( Json json, T obj, Type knownType )
         {
@@ -984,4 +986,3 @@ public partial class Json
     }
 }
 
-internal class OrderedMap : OrderedDictionary;

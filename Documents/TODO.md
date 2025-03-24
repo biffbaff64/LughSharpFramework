@@ -912,7 +912,8 @@ UTILS/COLLECTIONS
     - DONE - DONE - DelayedRemovalList             Convert / Extend List<>
     - DONE - DONE - DictionaryExtensions
     - DONE - DONE - ListExtensions
-    - DONE - DONE - ObjectMap                      Converted, but use Dictionary< object, object >
+    - DONE - DONE - ObjectMap< K, V >              Converted, but use Dictionary< object, object > in most cases
+    - IP   - IP   - OrderedMap<K, V>
     - DONE - DONE - SnapshotArray<T>
 
     - Work on removing these
@@ -942,7 +943,6 @@ UTILS/COLLECTIONS
     - **** - ObjectIntMap                   -> Use Dictionary< object, int >
     - **** - ObjectLongMap                  -> Use Dictionary< object, long >
     - **** - ObjectSet<T>                   -> Use List<T>
-    - **** - OrderedMap<K, V>               -> Use SortedDictionary<K, V> ?
     - **** - OrderedSet<T>                  -> Use SortedSet<T>
     - **** - ShortArray                     -> Use List< short >
 
