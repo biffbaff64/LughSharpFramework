@@ -798,12 +798,12 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         return ToString( ", ", true );
     }
 
-    public string ToString( string separator )
+    public virtual string ToString( string separator )
     {
         return ToString( separator, false );
     }
 
-    protected string ToString( string separator, bool braces )
+    protected virtual string ToString( string separator, bool braces )
     {
         if ( Size == 0 )
         {

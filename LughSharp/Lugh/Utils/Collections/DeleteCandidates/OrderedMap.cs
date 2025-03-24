@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Guarding;
 
@@ -32,7 +34,7 @@ namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 /// insertion order. Null Keys are not allowed. No allocation is done except when growing the
 /// table size.
 /// <p>
-/// Iteration over the <see cref="Entries()"/>, <see cref="Keys()"/>, and <see cref="ObjectMap{TK,TV}.Values"/> is
+/// Iteration over the <see cref="ObjectMap{TK,TV}.Entries"/>, <see cref="Keys()"/>, and <see cref="ObjectMap{TK,TV}.Values"/> is
 /// ordered and faster than an unordered map. Keys can also be accessed and the order changed using
 /// <see cref="OrderedKeys()"/>. There is some additional overhead for put and remove operations.
 /// </p>
@@ -336,41 +338,44 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         return keys2;
     }
 
-    protected String toString( String separator, bool braces )
+    // ========================================================================
+    
+    protected override string ToString( string separator, bool braces )
     {
-        if ( size == 0 )
+        if ( Size == 0 )
         {
             return braces ? "{}" : "";
         }
 
-        java.lang.StringBuilder buffer = new java.lang.StringBuilder( 32 );
+        var buffer = new StringBuilder( 32 );
+
         if ( braces )
         {
-            buffer.append( '{' );
+            buffer.Append( '{' );
         }
 
-        List< TK > keys = this.keys;
+        var keys = this.keys;
 
         for ( int i = 0, n = keys.size; i < n; i++ )
         {
             TK key = keys.get( i );
             if ( i > 0 )
             {
-                buffer.append( separator );
+                buffer.Append( separator );
             }
 
-            buffer.append( key == this ? "(this)" : key );
-            buffer.append( '=' );
+            buffer.Append( key == this ? "(this)" : key );
+            buffer.Append( '=' );
             TV value = get( key );
-            buffer.append( value == this ? "(this)" : value );
+            buffer.Append( value == this ? "(this)" : value );
         }
 
         if ( braces )
         {
-            buffer.append( '}' );
+            buffer.Append( '}' );
         }
 
-        return buffer.toString();
+        return buffer.ToString();
     }
 
     // ========================================================================
