@@ -34,6 +34,10 @@ using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Maps;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Collections.DeleteCandidates;
+using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Guarding;
+
+using SerializationException = LughSharp.Lugh.Utils.Exceptions.SerializationException;
 
 namespace LughSharp.Lugh.Utils.Json;
 
@@ -76,7 +80,7 @@ public partial class Json
     /// <summary>
     /// Sets the serializer to use when the type being deserialized is not known (null).
     /// </summary>
-    public Json.ISerializer? DefaultSerializer { get; set; }
+    public IJsonSerializer? DefaultSerializer { get; set; }
 
     /// <summary>
     /// When true, field values that are identical to a newly constructed instance are not
@@ -90,49 +94,56 @@ public partial class Json
     /// </summary>
     public bool SortFields { get; set; }
 
-    public JsonWriter?    JsonWriter      { get; set; }
-    public JsonOutputType OutputType      { get; set; }
-    public bool           QuoteLongValues { get; set; } = false;
+    public JsonWriter?     JsonWriter      { get; set; }
+    public JsonOutputType? OutputType      { get; set; }
+    public bool            QuoteLongValues { get; set; } = false;
 
     // ========================================================================
 
-    private Dictionary< Type, OrderedDictionary > _typeToFields         = [ ];
-    private Dictionary< string, Type >            _tagToClass           = [ ];
-    private Dictionary< Type, string >            _classToTag           = [ ];
-    private Dictionary< Type, ISerializer >       _classToSerializer    = [ ];
-    private Dictionary< Type, object[] >          _classToDefaultValues = [ ];
-    private object[]?                             _equals1              = [ ];
-    private object[]?                             _equals2              = [ ];
-    private TextWriter                            _textWriter;
+    private Dictionary< Type, OrderedMap< string, FieldMetadata >? > _typeToFields         = [ ];
+    private Dictionary< string, Type >                               _tagToClass           = [ ];
+    private Dictionary< Type, string >                               _classToTag           = [ ];
+    private Dictionary< Type, IJsonSerializer >                      _classToSerializer    = [ ];
+    private Dictionary< Type, object[]? >                            _classToDefaultValues = [ ];
+    private object[]?                                                _equals1              = [ ];
+    private object[]?                                                _equals2              = [ ];
+    private TextWriter?                                              _textWriter;
 
     // ========================================================================
 
     public Json()
     {
-        this.OutputType = JsonOutputType.Minimal;
+        OutputType = JsonOutputType.Minimal;
     }
 
     public Json( JsonOutputType outputType )
     {
-        this.OutputType = outputType;
+        OutputType = outputType;
     }
 
     // ========================================================================
 
-    /** Sets a tag to use instead of the fully qualifier class name. This can make the JSON easier to read. */
+    /// <summary>
+    /// Sets a tag to use instead of the fully qualifier class name. This can make
+    /// the JSON easier to read.
+    /// </summary>
     public void AddClassTag( string tag, Type type )
     {
         _tagToClass[ tag ]  = type;
         _classToTag[ type ] = tag;
     }
 
-    /** Returns the class for the specified tag, or null. */
+    /// <summary>
+    /// Returns the class for the specified tag, or null.
+    /// </summary>
     public Type GetType( string tag )
     {
         return _tagToClass[ tag ];
     }
 
-    /** Returns the tag for the specified class, or null. */
+    /// <summary>
+    /// Returns the tag for the specified class, or null.
+    /// </summary>
     public string GetTag( Type type )
     {
         return _classToTag[ type ];
@@ -142,12 +153,16 @@ public partial class Json
     /// Registers a serializer to use for the specified type instead of the default behavior
     /// of serializing all of an objects fields.
     /// </summary>
-    public void SetSerializer< T >( Type type, ISerializer serializer )
+    public void SetSerializer< T >( Type type, IJsonSerializer serializer )
     {
         _classToSerializer[ type ] = serializer;
     }
 
-    public ISerializer GetSerializer< T >( Type type )
+    /// <summary>
+    /// Gets the <see cref="IJsonSerializer"/> that has been registered for the supplied
+    /// <see cref="Type"/>.
+    /// </summary>
+    public IJsonSerializer GetSerializer< T >( Type type )
     {
         return _classToSerializer[ type ];
     }
@@ -159,7 +174,7 @@ public partial class Json
     /// </summary>
     public void SetElementType( Type type, string fieldName, Type elementType )
     {
-        FieldMetadata metadata = GetFields( type )[ fieldName ];
+        var metadata = GetFields( type ).Get( fieldName );
 
         if ( metadata == null )
         {
@@ -169,12 +184,15 @@ public partial class Json
         metadata.ElementType = elementType;
     }
 
-    /** The specified field will be treated as if it has or does not have the {@link Deprecated} annotation.
-     * @see #setIgnoreDeprecated(bool)
-     * @see #setReadDeprecated(bool) */
+    /// <summary>
+    /// The specified field will be treated as if it has or does not have the
+    /// <see cref="Deprecated"/> annotation.
+    /// </summary>
+
+    //TODO: Should this be 'Obsolete' in line with C#?
     public void SetDeprecated( Type type, string fieldName, bool deprecated )
     {
-        FieldMetadata metadata = GetFields( type ).get( fieldName );
+        var metadata = GetFields( type ).Get( fieldName );
 
         if ( metadata == null )
         {
@@ -184,118 +202,155 @@ public partial class Json
         metadata.Deprecated = deprecated;
     }
 
-    private OrderedMap< string, FieldMetadata > GetFields( Type type )
+    /// <summary>
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    private OrderedMap< string, FieldMetadata >? GetFields( Type type )
     {
-        OrderedMap< string, FieldMetadata > fields = typeToFields.get( type );
-
-        if ( fields != null ) return fields;
-
-        Array< Type > classHierarchy = new Array();
-        var           nextClass      = type;
-        while ( nextClass != object.class) {
-            classHierarchy.add( nextClass );
-            nextClass = nextClass.getSuperclass();
-        }
-        List< Field > allFields = [ ];
-        for ( var i = classHierarchy.size - 1; i >= 0; i-- )
-            Collections.addAll( allFields, ClassReflection.getDeclaredFields( classHierarchy.get( i ) ) );
-
-        OrderedMap< string, FieldMetadata > nameToField = new OrderedMap( allFields.size() );
-
-        for ( int i = 0, n = allFields.size(); i < n; i++ )
+        if ( _typeToFields.TryGetValue( type, out var fields ) )
         {
-            Field field = allFields.get( i );
+            return fields;
+        }
 
-            if ( field.isTransient() ) continue;
-            if ( field.isStatic() ) continue;
-            if ( field.isSynthetic() ) continue;
+        var classHierarchy = new List< Type >();
+        var nextClass      = type;
 
-            if ( !field.isAccessible() )
+        while ( ( nextClass != typeof( object ) ) && ( nextClass != null ) )
+        {
+            classHierarchy.Add( nextClass );
+            nextClass = nextClass.BaseType;
+        }
+
+        List< FieldInfo > allFields = [ ];
+
+        for ( var i = classHierarchy.Count - 1; i >= 0; i-- )
+        {
+            allFields.AddRange( classHierarchy[ i ].GetFields( BindingFlags.DeclaredOnly
+                                                               | BindingFlags.Instance
+                                                               | BindingFlags.Public
+                                                               | BindingFlags.NonPublic ) );
+        }
+
+        var nameToField = new OrderedMap< string, FieldMetadata >( allFields.Count );
+
+        for ( int i = 0, n = allFields.Count; i < n; i++ )
+        {
+            var field = allFields[ i ];
+
+            if ( field.GetCustomAttribute< NonSerializedAttribute >() != null ) continue;
+            if ( field.IsStatic ) continue;
+            if ( field.IsPrivate && field.Name.Contains( '<' ) ) continue;
+
+            if ( !field.IsPublic )
             {
                 try
                 {
-                    field.setAccessible( true );
+                    //TODO:
+                    // No direct equivalent to setAccessible. In C#, private fields are
+                    // accessible via reflection.
+                    // If there are specific security constraints, handle them here.
                 }
-                catch ( AccessControlException ex )
+                catch ( SecurityException )
                 {
                     continue;
                 }
             }
 
-            nameToField.put( field.getName(), new FieldMetadata( field ) );
+            nameToField.Put( field.Name, new FieldMetadata( field ) );
         }
 
-        if ( sortFields ) nameToField.keys.sort();
-        typeToFields.put( type, nameToField );
+        if ( SortFields )
+        {
+            nameToField.OrderedKeys().Sort();
+        }
+
+        _typeToFields[ type ] = nameToField;
 
         return nameToField;
     }
 
-    /** Sets the writer where JSON output will be written. This is only necessary when not using the ToJson methods. */
+    /// <summary>
+    /// Sets the writer where JSON output will be written. This is only necessary when
+    /// not using the ToJson methods.
+    /// </summary>
     public void SetWriter( TextWriter writer )
     {
-        if ( !( writer is JsonWriter ) ) writer = new JsonWriter( writer );
-        this.writer = ( JsonWriter )writer;
-        this.writer.setOutputType( outputType );
-        this.writer.setQuoteLongValues( quoteLongValues );
+        if ( writer is not Utils.Json.JsonWriter )
+        {
+            writer = new JsonWriter( writer );
+        }
+
+        this.JsonWriter = ( JsonWriter )writer;
+        this.JsonWriter.SetOutputType( OutputType );
+        this.JsonWriter.SetQuoteLongValues( QuoteLongValues );
     }
 
-    public JsonWriter GetWriter()
+    /// <summary>
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    /// <exception cref="SerializationException"></exception>
+    private object[]? GetDefaultValues( Type type )
     {
-        return writer;
-    }
+        if ( !UsePrototypes ) return null;
 
-    private object[] GetDefaultValues( Type type )
-    {
-        if ( !usePrototypes ) return null;
-        if ( classToDefaultValues.containsKey( type ) ) return classToDefaultValues.get( type );
+        if ( _classToDefaultValues.TryGetValue( type, out var value ) )
+        {
+            return value;
+        }
 
-        object @object;
+        object? instance;
 
         try
         {
-            object = newInstance( type );
+            instance = NewInstance( type );
         }
         catch ( Exception ex )
         {
-            classToDefaultValues.put( type, null );
+            _classToDefaultValues[ type ] = null;
 
             return null;
         }
 
-        OrderedMap< string, FieldMetadata > fields = GetFields( type );
-        var                                 values = new object[ fields.size ];
-        classToDefaultValues.put( type, values );
+        var fields = GetFields( type ) ?? throw new GdxRuntimeException( "GetFields returned NULL" );
+        var values = new object[ fields.Size ];
 
-        var             defaultIndex = 0;
-        Array< string > fieldNames   = fields.orderedKeys();
+        _classToDefaultValues[ type ] = values;
 
-        for ( int i = 0, n = fieldNames.size; i < n; i++ )
+        var defaultIndex = 0;
+        var fieldNames   = fields.OrderedKeys();
+
+        for ( int i = 0, n = fieldNames.Count; i < n; i++ )
         {
-            FieldMetadata metadata = fields.get( fieldNames.get( i ) );
+            var metadata = fields.Get( fieldNames[ i ] );
 
-            if ( ignoreDeprecated && metadata.deprecated ) continue;
+            if ( IgnoreDeprecated && ( bool )metadata?.Deprecated ) continue;
 
-            Field field = metadata.field;
+            var field = metadata?.Field;
 
+            Guard.ThrowIfNull( field );
+            
             try
             {
-                values[ defaultIndex++ ] = field.get( object );
+                values[ defaultIndex++ ] = field.GetValue( instance )!;
             }
-            catch ( ReflectionException ex )
+            catch ( FieldAccessException ex )
             {
-                throw new SerializationException( "Error accessing field: " + field.getName() + " (" + type.getName() + ")", ex );
+                throw new SerializationException( $"Error accessing field: {field.Name} " +
+                                                  $"({type.Name})", ex );
             }
             catch ( SerializationException ex )
             {
-                ex.addTrace( field + " (" + type.getName() + ")" );
+                var newEx = new SerializationException( ex.Message );
+                newEx.AddTrace( field + " (" + type.Name + ")" );
 
-                throw ex;
+                throw newEx;
             }
-            catch ( RuntimeException runtimeEx )
+            catch ( GdxRuntimeException runtimeEx )
             {
-                var ex = new SerializationException( runtimeEx );
-                ex.addTrace( field + " (" + type.getName() + ")" );
+                var ex = new SerializationException( runtimeEx.ToString() );
+                ex.AddTrace( field + " (" + type.Name + ")" );
 
                 throw ex;
             }
@@ -306,43 +361,43 @@ public partial class Json
 
     public void ReadField( object @object, string name, JsonValue jsonData )
     {
-        ReadField( object, name, name, null, jsonData );
+        ReadField( @object, name, name, null, jsonData );
     }
 
     public void ReadField( object @object, string name, Type elementType, JsonValue jsonData )
     {
-        ReadField( object, name, name, elementType, jsonData );
+        ReadField( @object, name, name, elementType, jsonData );
     }
 
     public void ReadField( object @object, string fieldName, string jsonName, JsonValue jsonData )
     {
-        ReadField( object, fieldName, jsonName, null, jsonData );
+        ReadField( @object, fieldName, jsonName, null, jsonData );
     }
 
     /** @param elementType May be null if the type is unknown. */
     public void ReadField( object @object, string fieldName, string jsonName, Type elementType, JsonValue jsonMap )
     {
-        Type          type     = object.GetType();
+        var           type     = @object.GetType();
         FieldMetadata metadata = GetFields( type ).get( fieldName );
 
         if ( metadata == null ) throw new SerializationException( "Field not found: " + fieldName + " (" + type.getName() + ")" );
 
         Field field                            = metadata.field;
         if ( elementType == null ) elementType = metadata.elementType;
-        ReadField( object, field, jsonName, elementType, jsonMap );
+        ReadField( @object, field, jsonName, elementType, jsonMap );
     }
 
     /** @param object May be null if the field is static.
      * @param elementType May be null if the type is unknown. */
     public void ReadField( object @object, Field field, string jsonName, Type elementType, JsonValue jsonMap )
     {
-        JsonValue jsonValue = jsonMap.Get( jsonName );
+        var jsonValue = jsonMap.Get( jsonName );
 
         if ( jsonValue == null ) return;
 
         try
         {
-            field.set( object, ReadValue( field.getType(), elementType, jsonValue ) );
+            field.set( @object, ReadValue< T >( field.getType(), elementType, jsonValue ) );
         }
         catch ( ReflectionException ex )
         {
@@ -368,10 +423,10 @@ public partial class Json
 
     public void ReadFields( object @object, JsonValue jsonMap )
     {
-        Type                                type   = object.GetType();
+        var                                 type   = @object.GetType();
         OrderedMap< string, FieldMetadata > fields = GetFields( type );
 
-        for ( JsonValue child = jsonMap.Child; child != null; child = child.Next )
+        for ( var child = jsonMap.Child; child != null; child = child.Next )
         {
             FieldMetadata metadata = fields.get( child.Name().replace( " ", "_" ) );
 
@@ -404,7 +459,7 @@ public partial class Json
 
             try
             {
-                field.set( object, ReadValue( field.getType(), metadata.elementType, child ) );
+                field.set( @object, ReadValue( field.getType(), metadata.elementType, child ) );
             }
             catch ( ReflectionException ex )
             {
@@ -440,61 +495,61 @@ public partial class Json
 
     /** @param type May be null if the type is unknown.
      * @return May be null. */
-    public T ReadValue< T >( string name, Type< T > type, JsonValue jsonMap )
+    public T ReadValue< T >( string name, Type type, JsonValue jsonMap )
     {
-        return ReadValue( type, null, jsonMap.Get( name ) );
+        return ReadValue< T >( type, null, jsonMap.Get( name ) );
     }
 
     /** @param type May be null if the type is unknown.
      * @return May be null. */
-    public T ReadValue< T >( string name, Type< T > type, T defaultValue, JsonValue jsonMap )
+    public T ReadValue< T >( string name, Type type, T defaultValue, JsonValue jsonMap )
     {
-        JsonValue jsonValue = jsonMap.Get( name );
+        var jsonValue = jsonMap.Get( name );
 
         if ( jsonValue == null ) return defaultValue;
 
-        return ReadValue( type, null, jsonValue );
+        return ReadValue< T >( type, null, jsonValue );
     }
 
     /** @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      * @return May be null. */
-    public T ReadValue< T >( string name, Type< T > type, Type elementType, JsonValue jsonMap )
+    public T ReadValue< T >( string name, Type type, Type elementType, JsonValue jsonMap )
     {
-        return ReadValue( type, elementType, jsonMap.Get( name ) );
+        return ReadValue< T >( type, elementType, jsonMap.Get( name ) );
     }
 
     /** @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      * @return May be null. */
-    public T ReadValue< T >( string name, Type< T > type, Type elementType, T defaultValue, JsonValue jsonMap )
+    public T ReadValue< T >( string name, Type type, Type elementType, T defaultValue, JsonValue jsonMap )
     {
-        JsonValue jsonValue = jsonMap.Get( name );
+        var jsonValue = jsonMap.Get( name );
 
-        return ReadValue( type, elementType, defaultValue, jsonValue );
+        return ReadValue< T >( type, elementType, defaultValue, jsonValue );
     }
 
     /** @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      * @return May be null. */
-    public T ReadValue< T >( Type< T > type, Type elementType, T defaultValue, JsonValue jsonData )
+    public T ReadValue< T >( Type type, Type elementType, T defaultValue, JsonValue jsonData )
     {
         if ( jsonData == null ) return defaultValue;
 
-        return ReadValue( type, elementType, jsonData );
+        return ReadValue< T >( type, elementType, jsonData );
     }
 
     /** @param type May be null if the type is unknown.
      * @return May be null. */
-    public T ReadValue< T >( Type< T > type, JsonValue jsonData )
+    public T ReadValue< T >( Type type, JsonValue jsonData )
     {
-        return ReadValue( type, null, jsonData );
+        return ReadValue< T >( type, null, jsonData );
     }
 
     /** @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      * @return May be null. */
-    public T ReadValue< T >( Type< T > type, Type elementType, JsonValue jsonData )
+    public T ReadValue< T >( Type type, Type? elementType, JsonValue jsonData )
     {
         if ( jsonData == null ) return null;
 
@@ -541,7 +596,7 @@ public partial class Json
                 if ( type == string.class || type == Integer.class || type == Boolean.class || type == Float.class
                 || type == Long.class || type == Double.class || type == Short.class || type == Byte.class
                 || type == Character.class || ClassReflection.isAssignableFrom( Enum.class, type)) {
-                    return ReadValue( "value", type, jsonData );
+                    return ReadValue< T >( "value", type, jsonData );
                 }
 
                 var @object = newInstance( type );
@@ -556,9 +611,9 @@ public partial class Json
                 // JSON object special cases.
                 if ( object is ObjectMap )
                 {
-                    ObjectMap result = ( ObjectMap )object;
-                    for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
-                        result.put( child.Name, ReadValue( elementType, null, child ) );
+                    var result = ( ObjectMap )object;
+                    for ( var child = jsonData.Child; child != null; child = child.Next )
+                        result.put( child.Name, ReadValue< T >( elementType, null, child ) );
 
                     return ( T )result;
                 }
@@ -566,8 +621,8 @@ public partial class Json
                 if ( object is ObjectIntMap )
                 {
                     ObjectIntMap result = ( ObjectIntMap )object;
-                    for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
-                        result.put( child.Name, ReadValue( Integer.class, null, child));
+                    for ( var child = jsonData.Child; child != null; child = child.Next )
+                        result.put( child.Name, ReadValue< T >( Integer.class, null, child));
 
                     return ( T )result;
                 }
@@ -575,8 +630,8 @@ public partial class Json
                 if ( object is ObjectFloatMap )
                 {
                     ObjectFloatMap result = ( ObjectFloatMap )object;
-                    for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
-                        result.put( child.Name, ReadValue( Float.class, null, child));
+                    for ( var child = jsonData.Child; child != null; child = child.Next )
+                        result.put( child.Name, ReadValue< T >( Float.class, null, child));
 
                     return ( T )result;
                 }
@@ -584,8 +639,8 @@ public partial class Json
                 if ( object is ObjectSet )
                 {
                     ObjectSet result = ( ObjectSet )object;
-                    for ( JsonValue child = jsonData.GetChild( "values" ); child != null; child = child.Next )
-                        result.add( ReadValue( elementType, null, child ) );
+                    for ( var child = jsonData.GetChild( "values" ); child != null; child = child.Next )
+                        result.add( ReadValue< T >( elementType, null, child ) );
 
                     return ( T )result;
                 }
@@ -593,8 +648,8 @@ public partial class Json
                 if ( object is IntMap )
                 {
                     IntMap result = ( IntMap )object;
-                    for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
-                        result.put( Integer.parseInt( child.Name ), ReadValue( elementType, null, child ) );
+                    for ( var child = jsonData.Child; child != null; child = child.Next )
+                        result.put( Integer.parseInt( child.Name ), ReadValue< T >( elementType, null, child ) );
 
                     return ( T )result;
                 }
@@ -602,8 +657,8 @@ public partial class Json
                 if ( object is LongMap )
                 {
                     LongMap result = ( LongMap )object;
-                    for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
-                        result.put( Long.parseLong( child.Name ), ReadValue( elementType, null, child ) );
+                    for ( var child = jsonData.Child; child != null; child = child.Next )
+                        result.put( Long.parseLong( child.Name ), ReadValue< T >( elementType, null, child ) );
 
                     return ( T )result;
                 }
@@ -611,7 +666,7 @@ public partial class Json
                 if ( object is IntSet )
                 {
                     IntSet result = ( IntSet )object;
-                    for ( JsonValue child = jsonData.GetChild( "values" ); child != null; child = child.Next )
+                    for ( var child = jsonData.GetChild( "values" ); child != null; child = child.Next )
                         result.add( child.asInt() );
 
                     return ( T )result;
@@ -620,8 +675,8 @@ public partial class Json
                 if ( object is ArrayMap )
                 {
                     ArrayMap result = ( ArrayMap )object;
-                    for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
-                        result.put( child.Name, ReadValue( elementType, null, child ) );
+                    for ( var child = jsonData.Child; child != null; child = child.Next )
+                        result.put( child.Name, ReadValue< T >( elementType, null, child ) );
 
                     return ( T )result;
                 }
@@ -630,11 +685,11 @@ public partial class Json
                 {
                     var result = ( Map )object;
 
-                    for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
+                    for ( var child = jsonData.Child; child != null; child = child.Next )
                     {
                         if ( child.Name.equals( typeName ) ) continue;
 
-                        result.put( child.Name, ReadValue( elementType, null, child ) );
+                        result.put( child.Name, ReadValue< T >( elementType, null, child ) );
                     }
 
                     return ( T )result;
@@ -664,37 +719,37 @@ public partial class Json
         if ( jsonData.isArray() )
         {
             // JSON array special cases.
-            if ( type == null || type == object.class) type = ( Type< T > )Array.class;
-            if ( ClassReflection.isAssignableFrom( Array.class, type)) {
-                Array result = type == Array.class ? new Array() : ( Array )newInstance( type );
-                for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
-                    result.add( ReadValue( elementType, null, child ) );
+            if ( type == null || type == object.class) type = ( Type )List.class;
+            if ( ClassReflection.isAssignableFrom( List.class, type)) {
+                List result = type == List.class ? new List() : ( List )newInstance( type );
+                for ( var child = jsonData.Child; child != null; child = child.Next )
+                    result.add( ReadValue< T >( elementType, null, child ) );
 
                 return ( T )result;
             }
             if ( ClassReflection.isAssignableFrom( Queue.class, type)) {
                 Queue result = type == Queue.class ? new Queue() : ( Queue )newInstance( type );
-                for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
-                    result.addLast( ReadValue( elementType, null, child ) );
+                for ( var child = jsonData.Child; child != null; child = child.Next )
+                    result.addLast( ReadValue< T >( elementType, null, child ) );
 
                 return ( T )result;
             }
             if ( ClassReflection.isAssignableFrom( Collection.class, type)) {
                 Collection result = type.isInterface() ? new List() : ( Collection )newInstance( type );
-                for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
-                    result.add( ReadValue( elementType, null, child ) );
+                for ( var child = jsonData.Child; child != null; child = child.Next )
+                    result.add( ReadValue< T >( elementType, null, child ) );
 
                 return ( T )result;
             }
 
             if ( type.isArray() )
             {
-                Type componentType                     = type.getComponentType();
+                Type? componentType                    = type.getComponentType();
                 if ( elementType == null ) elementType = componentType;
                 object result                          = ArrayReflection.newInstance( componentType, jsonData.Size );
                 var    i                               = 0;
-                for ( JsonValue child = jsonData.Child; child != null; child = child.Next )
-                    ArrayReflection.set( result, i++, ReadValue( elementType, null, child ) );
+                for ( var child = jsonData.Child; child != null; child = child.Next )
+                    ArrayReflection.set( result, i++, ReadValue< T >( elementType, null, child ) );
 
                 return ( T )result;
             }
@@ -785,9 +840,11 @@ public partial class Json
         return null;
     }
 
-    /** Each field on the <code>to</code> object is set to the value for the field with the same name on the <code>from</code>
-     * object. The <code>to</code> object must have at least all the fields of the <code>from</code> object with the same name and
-     * type. */
+    /// <summary>
+    /// Each field on the <c>to</c> object is set to the value for the field with the same name
+    /// on the <c>from</c> object. The <c>to</c> object must have at least all the fields of the
+    /// <c>from</c> object with the same name and type.
+    /// </summary>
     public void CopyFields( object from, object to )
     {
         var toFields = GetFields( to.GetType() );
@@ -801,9 +858,9 @@ public partial class Json
 
             try
             {
-                toField.field.set( to, fromField.get( from ) );
+                toField.Field.set( to, fromField.get( from ) );
             }
-            catch ( ReflectionException ex )
+            catch ( FieldAccessException ex )
             {
                 throw new SerializationException( "Error copying field: " + fromField.getName(), ex );
             }
@@ -948,42 +1005,4 @@ public partial class Json
             Deprecated = field.GetCustomAttribute< ObsoleteAttribute >() != null;
         }
     }
-
-    // ========================================================================
-
-    [PublicAPI]
-    public abstract class ReadOnlySerializer< T > : ISerializer
-    {
-        public virtual void Write( Json json, T obj, Type knownType )
-        {
-        }
-
-        public abstract T Read( Json json, JsonValue jsonData, Type type );
-    }
-
-    // ========================================================================
-
-    [PublicAPI]
-    public interface ISerializer
-    {
-        void Write( Json json, object obj, Type knownType );
-        object Read( Json json, JsonValue jsonData, Type type );
-    }
-
-    [PublicAPI]
-    public interface ISerializer< T >
-    {
-        void Write( Json json, T obj, Type knownType );
-        T Read( Json json, JsonValue jsonData, Type type );
-    }
-
-    // ========================================================================
-
-    [PublicAPI]
-    public interface ISerializable
-    {
-        void Write( Json json );
-        void Read( Json json, JsonValue jsonData );
-    }
 }
-

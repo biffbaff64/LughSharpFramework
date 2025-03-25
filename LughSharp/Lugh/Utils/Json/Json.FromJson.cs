@@ -34,41 +34,41 @@ public partial class Json
 {
     /** @param type May be null if the type is unknown.
      * @return May be null. */
-    public T FromJson< T >( Type type, TextReader reader )
+    public static T FromJson< T >( Type type, TextReader reader )
     {
-        return ReadValue( type, null, new JsonReader().Parse( reader ) );
+        return ReadValue< T >( type, null, new JsonReader().Parse( reader ) );
     }
 
     /** @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      * @return May be null. */
-    public T FromJson< T >( Type type, Type elementType, TextReader reader )
+    public static T FromJson< T >( Type type, Type elementType, TextReader reader )
     {
-        return ReadValue( type, elementType, new JsonReader().Parse( reader ) );
+        return ReadValue< T >( type, elementType, new JsonReader().Parse( reader ) );
     }
 
     /** @param type May be null if the type is unknown.
      * @return May be null. */
-    public T FromJson< T >( Type type, InputStream input )
+    public static T FromJson< T >( Type type, InputStream input )
     {
-        return ReadValue( type, null, new JsonReader().Parse( input ) );
+        return ReadValue< T >( type, null, new JsonReader().Parse( input ) );
     }
 
     /** @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      * @return May be null. */
-    public T FromJson< T >( Type type, Type elementType, InputStream input )
+    public static T FromJson< T >( Type type, Type elementType, InputStream input )
     {
-        return ReadValue( type, elementType, new JsonReader().Parse( input ) );
+        return ReadValue< T >( type, elementType, new JsonReader().Parse( input ) );
     }
 
     /** @param type May be null if the type is unknown.
      * @return May be null. */
-    public T FromJson< T >( Type type, FileInfo file )
+    public static T FromJson< T >( Type type, FileInfo file )
     {
         try
         {
-            return ReadValue( type, null, new JsonReader().Parse( file ) );
+            return ReadValue< T >( type, null, new JsonReader().Parse( file ) );
         }
         catch ( Exception ex )
         {
@@ -79,11 +79,11 @@ public partial class Json
     /** @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      * @return May be null. */
-    public T FromJson< T >( Type type, Type elementType, FileInfo file )
+    public static T FromJson< T >( Type type, Type elementType, FileInfo file )
     {
         try
         {
-            return ReadValue( type, elementType, new JsonReader().Parse( file ) );
+            return ReadValue< T >( type, elementType, new JsonReader().Parse( file ) );
         }
         catch ( Exception ex )
         {
@@ -93,30 +93,30 @@ public partial class Json
 
     /** @param type May be null if the type is unknown.
      * @return May be null. */
-    public T FromJson< T >( Type type, char[] data, int offset, int length )
+    public static T FromJson< T >( Type type, char[] data, int offset, int length )
     {
-        return ReadValue( type, null, new JsonReader().Parse( data, offset, length ) );
+        return ReadValue< T >( type, null, new JsonReader().Parse( data, offset, length ) );
     }
 
     /** @param type May be null if the type is unknown.
      * @param elementType May be null if the type is unknown.
      * @return May be null. */
-    public T FromJson< T >( Type type, Type elementType, char[] data, int offset, int length )
+    public static T FromJson< T >( Type type, Type elementType, char[] data, int offset, int length )
     {
-        return ReadValue( type, elementType, new JsonReader().Parse( data, offset, length ) );
+        return ReadValue< T >( type, elementType, new JsonReader().Parse( data, offset, length ) );
     }
 
     /** @param type May be null if the type is unknown.
      * @return May be null. */
-    public T FromJson< T >( Type type, string json )
+    public static T FromJson< T >( Type type, string json )
     {
-        return ReadValue( type, null, new JsonReader().Parse( json ) );
+        return ReadValue< T >( type, null, new JsonReader().Parse( json ) );
     }
 
     /** @param type May be null if the type is unknown.
      * @return May be null. */
-    public T FromJson< T >( Type type, Type elementType, string json )
+    public static T FromJson< T >( Type type, Type elementType, string json )
     {
-        return ReadValue( type, elementType, new JsonReader().Parse( json ) );
+        return ReadValue< T >( type, elementType, new JsonReader().Parse( json ) );
     }
 }

@@ -51,10 +51,56 @@ namespace LughSharp.Lugh.Utils.Collections;
 [PublicAPI]
 public class ObjectMap< TK, TV > //: IEnumerable< TK >
 {
+    /// <summary>
+    /// Used by <see cref="Place" /> to bit shift the upper bits of a <b>long</b>
+    /// into a usable range (&gt;= 0 and &lt;= <see cref="Mask" />).
+    /// <para>
+    /// The shift can be negative, which is convenient to match the number of bits in
+    /// mask: if mask is a 7-bit number, a shift of -7 shifts the upper 7 bits into the
+    /// lowest 7 positions. This class sets the shift &gt; 32 and &lt; 64, which if used
+    /// with an int will still move the upper bits of an int to the lower bits.
+    /// </para>
+    /// <para>
+    /// <see cref="Mask" /> can also be used to mask the low bits of a number, which may
+    /// be faster for some hashcodes if <see cref="Place" /> is overridden.
+    /// </para>
+    /// </summary>
+    protected int Shift { get; set; }
+
+    /// <summary>
+    /// A bitmask used to confine hashcodes to the size of the table. Must be all
+    /// 1 bits in its low positions, ie a power of two minus 1.
+    /// If <see cref="Place" /> is overriden, this can be used instead of <see cref="Shift" />
+    /// to isolate usable bits of a hash.
+    /// </summary>
+    protected int Mask { get; set; }
+
+    /// <summary>
+    /// Returns the size of this ObjectMap
+    /// </summary>
+    public int Size { get; set; }
+
+    /// <summary>
+    /// When true, <see cref="IEnumerator{T}" /> for collections will allocate a new
+    /// iterator for each invocation. When false, the iterator is reused and nested
+    /// use will throw an exception.
+    /// <para> Default is false. </para>
+    /// </summary>
+    public bool AllocateIterators { get; set; }
+
+    // ========================================================================
+
     protected readonly float LoadFactor;
     protected          TK?[] KeyTable;
     protected          int   Threshold;
     protected          TV?[] ValueTable;
+
+    protected Entries? Entries1;
+    protected Entries? Entries2;
+    protected Keys?    Keys1;
+    protected Keys?    Keys2;
+    protected Values?  Values1;
+    protected Values?  Values2;
 
     // ========================================================================
 
@@ -62,13 +108,6 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     private const float DEFAULT_LOAD_FACTOR = 0.8f;
 
     private readonly object _dummy = new();
-
-    private Entries? _entries1;
-    private Entries? _entries2;
-    private Keys?    _keys1;
-    private Keys?    _keys2;
-    private Values?  _values1;
-    private Values?  _values2;
 
     // ========================================================================
 
@@ -348,7 +387,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// specified capacity / loadFactor, if they are larger.
     /// </summary>
     /// <param name="maximumCapacity"></param>
-    public void Clear( int maximumCapacity )
+    public virtual void Clear( int maximumCapacity )
     {
         var tableSize = TableSize( maximumCapacity, LoadFactor );
 
@@ -367,7 +406,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// <summary>
     /// Clears the map.
     /// </summary>
-    public void Clear()
+    public virtual void Clear()
     {
         if ( Size == 0 )
         {
@@ -674,35 +713,35 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// </para>
     /// </summary>
     /// <returns></returns>
-    public Entries GetEntries()
+    public virtual Entries GetEntries()
     {
         if ( AllocateIterators )
         {
             return new Entries( this );
         }
 
-        if ( _entries1 == null )
+        if ( Entries1 == null )
         {
-            _entries1 = new Entries( this );
-            _entries2 = new Entries( this );
+            Entries1 = new Entries( this );
+            Entries2 = new Entries( this );
         }
 
-        Guard.ThrowIfNull( _entries2 );
+        Guard.ThrowIfNull( Entries2 );
 
-        if ( !_entries1.Valid )
+        if ( !Entries1.Valid )
         {
-            _entries1.Reset();
-            _entries1.Valid = true;
-            _entries2.Valid = false;
+            Entries1.Reset();
+            Entries1.Valid = true;
+            Entries2.Valid = false;
 
-            return _entries1;
+            return Entries1;
         }
 
-        _entries2.Reset();
-        _entries2.Valid = true;
-        _entries1.Valid = false;
+        Entries2.Reset();
+        Entries2.Valid = true;
+        Entries1.Valid = false;
 
-        return _entries2;
+        return Entries2;
     }
 
     /// <summary>
@@ -714,36 +753,36 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// </para>
     /// </summary>
     /// <returns></returns>
-    public Values GetValues()
+    public virtual Values GetValues()
     {
         if ( AllocateIterators )
         {
             return new Values( this );
         }
 
-        if ( _values1 == null )
+        if ( Values1 == null )
         {
-            _values1 = new Values( this );
-            _values2 = new Values( this );
+            Values1 = new Values( this );
+            Values2 = new Values( this );
         }
 
-        Guard.ThrowIfNull( _values1 );
-        Guard.ThrowIfNull( _values2 );
+        Guard.ThrowIfNull( Values1 );
+        Guard.ThrowIfNull( Values2 );
 
-        if ( !_values1.Valid )
+        if ( !Values1.Valid )
         {
-            _values1.Reset();
-            _values1.Valid = true;
-            _values2.Valid = false;
+            Values1.Reset();
+            Values1.Valid = true;
+            Values2.Valid = false;
 
-            return _values1;
+            return Values1;
         }
 
-        _values2.Reset();
-        _values2.Valid = true;
-        _values1.Valid = false;
+        Values2.Reset();
+        Values2.Valid = true;
+        Values1.Valid = false;
 
-        return _values2;
+        return Values2;
     }
 
     /// <summary>
@@ -755,36 +794,36 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     /// </para>
     /// </summary>
     /// <returns></returns>
-    public Keys GetKeys()
+    public virtual Keys GetKeys()
     {
         if ( AllocateIterators )
         {
             return new Keys( this );
         }
 
-        if ( _keys1 == null )
+        if ( Keys1 == null )
         {
-            _keys1 = new Keys( this );
-            _keys2 = new Keys( this );
+            Keys1 = new Keys( this );
+            Keys2 = new Keys( this );
         }
 
-        Guard.ThrowIfNull( _keys1 );
-        Guard.ThrowIfNull( _keys2 );
+        Guard.ThrowIfNull( Keys1 );
+        Guard.ThrowIfNull( Keys2 );
 
-        if ( !_keys1.Valid )
+        if ( !Keys1.Valid )
         {
-            _keys1.Reset();
-            _keys1.Valid = true;
-            _keys2.Valid = false;
+            Keys1.Reset();
+            Keys1.Valid = true;
+            Keys2.Valid = false;
 
-            return _keys1;
+            return Keys1;
         }
 
-        _keys2.Reset();
-        _keys2.Valid = true;
-        _keys1.Valid = false;
+        Keys2.Reset();
+        Keys2.Valid = true;
+        Keys1.Valid = false;
 
-        return _keys2;
+        return Keys2;
     }
 
     protected Entries GetIterator()
@@ -1189,7 +1228,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         /// <summary>
         /// Returns this instance as its iterator.
         /// </summary>
-        public Keys Iterator()
+        public virtual Keys Iterator()
         {
             return this;
         }
@@ -1217,47 +1256,4 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
             return array;
         }
     }
-
-    // ========================================================================
-
-    #region properties
-
-    /// <summary>
-    /// Used by <see cref="Place" /> to bit shift the upper bits of a <b>long</b>
-    /// into a usable range (&gt;= 0 and &lt;= <see cref="Mask" />).
-    /// <para>
-    /// The shift can be negative, which is convenient to match the number of bits in
-    /// mask: if mask is a 7-bit number, a shift of -7 shifts the upper 7 bits into the
-    /// lowest 7 positions. This class sets the shift &gt; 32 and &lt; 64, which if used
-    /// with an int will still move the upper bits of an int to the lower bits.
-    /// </para>
-    /// <para>
-    /// <see cref="Mask" /> can also be used to mask the low bits of a number, which may
-    /// be faster for some hashcodes if <see cref="Place" /> is overridden.
-    /// </para>
-    /// </summary>
-    protected int Shift { get; set; }
-
-    /// <summary>
-    /// A bitmask used to confine hashcodes to the size of the table. Must be all
-    /// 1 bits in its low positions, ie a power of two minus 1.
-    /// If <see cref="Place" /> is overriden, this can be used instead of <see cref="Shift" />
-    /// to isolate usable bits of a hash.
-    /// </summary>
-    protected int Mask { get; set; }
-
-    /// <summary>
-    /// Returns the size of this ObjectMap
-    /// </summary>
-    public int Size { get; set; }
-
-    /// <summary>
-    /// When true, <see cref="IEnumerator{T}" /> for collections will allocate a new
-    /// iterator for each invocation. When false, the iterator is reused and nested
-    /// use will throw an exception.
-    /// <para> Default is false. </para>
-    /// </summary>
-    public bool AllocateIterators { get; set; }
-
-    #endregion properties
 }

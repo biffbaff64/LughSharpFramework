@@ -27,14 +27,14 @@ using System.Text;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Guarding;
 
-namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
+namespace LughSharp.Lugh.Utils.Collections;
 
 /// <summary>
 /// An <see cref="ObjectMap{TK,TV}"/> that also stores Keys in an <see cref="List{T}"/> using the
 /// insertion order. Null Keys are not allowed. No allocation is done except when growing the
 /// table size.
 /// <p>
-/// Iteration over the <see cref="ObjectMap{TK,TV}.Entries"/>, <see cref="Keys()"/>, and <see cref="ObjectMap{TK,TV}.Values"/> is
+/// Iteration over the <see cref="ObjectMap{TK,TV}.Entries"/>, <see cref="GetKeys"/>, and <see cref="ObjectMap{TK,TV}.Values"/> is
 /// ordered and faster than an unordered map. Keys can also be accessed and the order changed using
 /// <see cref="OrderedKeys()"/>. There is some additional overhead for put and remove operations.
 /// </p>
@@ -180,162 +180,196 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
     /// <returns> true if <c>before</c> was removed and <c>after</c> was added, false otherwise. </returns>
     public bool Alter( TK before, TK after )
     {
-        if ( containsKey( after ) )
+        if ( ContainsKey( after ) )
         {
             return false;
         }
 
-        int index = keys.indexOf( before, false );
+        var index = _keys.IndexOf( before );
 
         if ( index == -1 )
         {
             return false;
         }
 
-        base.put( after, base.remove( before ) );
-        keys.set( index, after );
+        base.Put( after, base.Remove( before ) );
+
+        _keys[ index ] = after;
 
         return true;
     }
 
-    /** Changes the key at the given {@code index} in the order to {@code after}, without changing the ordering of other entries or
-     * any values. If {@code after} is already present, this returns false; it will also return false if {@code index} is invalid
-     * for the size of this map. Otherwise, it returns true. Unlike {@link #alter(Object, Object)}, this operates in constant time.
-     * @param index the index in the order of the key to change; must be non-negative and less than {@link #size}
-     * @param after the key that will replace the contents at {@code index}; this key must not be present for this to succeed
-     * @return true if {@code after} successfully replaced the key at {@code index}, false otherwise */
+    /// <summary>
+    /// Changes the key at the given {@code index} in the order to <c>after</c>, without
+    /// changing the ordering of other entries or any values. If <c>after</c> is already
+    /// present, this returns false; it will also return false if <c>index</c> is invalid
+    /// for the size of this map. Otherwise, it returns true. Unlike <see cref="Alter(TK,TK)"/>,
+    /// this operates in constant time.
+    /// </summary>
+    /// <param name="index">
+    /// the index in the order of the key to change; must be non-negative and less than
+    /// <see cref="ObjectMap{T,V}.Size"/>
+    /// </param>
+    /// <param name="after">
+    /// the key that will replace the contents at <c>index</c>; this key must not be present
+    /// for this to succeed
+    /// </param>
+    /// <returns>
+    /// true if <c>after</c> successfully replaced the key at <c>index</c>, false otherwise
+    /// </returns>
     public bool AlterIndex( int index, TK after )
     {
-        if ( index < 0 || index >= size || containsKey( after ) )
+        if ( ( index < 0 ) || ( index >= Size ) || ContainsKey( after ) )
         {
             return false;
         }
 
-        base.put( after, base.remove( keys.get( index ) ) );
-        keys.set( index, after );
+        base.Put( after, base.Remove( _keys[ index ] ) );
+
+        _keys[ index ] = after;
 
         return true;
     }
 
-    public void clear( int maximumCapacity )
+    /// <inheritdoc />
+    public override void Clear( int maximumCapacity )
     {
-        keys.clear();
-        base.clear( maximumCapacity );
+        _keys.Clear();
+        base.Clear( maximumCapacity );
     }
 
-    public void clear()
+    /// <inheritdoc />
+    public override void Clear()
     {
-        keys.clear();
-        base.clear();
+        _keys.Clear();
+        base.Clear();
     }
 
-    public List< TK > orderedKeys()
+    public List< TK > OrderedKeys()
     {
-        return keys;
+        return _keys;
     }
 
-    public Entries< TK, TV > iterator()
+    public Entries Iterator()
     {
-        return entries();
+        return GetEntries();
     }
 
-    /** Returns an iterator for the entries in the map. Remove is supported.
-     * <p>
-     * If {@link Collections#allocateIterators} is false, the same iterator instance is returned each time this method is called.
-     * Use the {@link OrderedMapEntries} constructor for nested or multithreaded iteration. */
-    public Entries< TK, TV > entries()
+    /// <summary>
+    /// Returns an iterator for the entries in the map. Remove is supported.
+    /// <para>
+    /// If <see cref="ObjectMap{T,V}.AllocateIterators"/> is false, the same iterator instance is
+    /// returned each time this method is called. Use the <see cref="OrderedMapEntries"/> constructor
+    /// for nested or multithreaded iteration.
+    /// </para>
+    /// </summary>
+    public override Entries GetEntries()
     {
-        if ( Collections.allocateIterators )
+        if ( AllocateIterators )
         {
             return new OrderedMapEntries( this );
         }
 
-        if ( entries1 == null )
+        if ( Entries1 == null )
         {
-            entries1 = new OrderedMapEntries( this );
-            entries2 = new OrderedMapEntries( this );
+            Entries1 = new OrderedMapEntries( this );
+            Entries2 = new OrderedMapEntries( this );
         }
 
-        if ( !entries1.valid )
+        Guard.ThrowIfNull( Entries2 );
+        
+        if ( !Entries1.Valid )
         {
-            entries1.reset();
-            entries1.valid = true;
-            entries2.valid = false;
+            Entries1.Reset();
+            Entries1.Valid = true;
+            Entries2.Valid = false;
 
-            return entries1;
+            return Entries1;
         }
 
-        entries2.reset();
-        entries2.valid = true;
-        entries1.valid = false;
+        Entries2.Reset();
+        Entries2.Valid = true;
+        Entries1.Valid = false;
 
-        return entries2;
+        return Entries2;
     }
 
-    /** Returns an iterator for the values in the map. Remove is supported.
-     * <p>
-     * If {@link Collections#allocateIterators} is false, the same iterator instance is returned each time this method is called.
-     * Use the {@link OrderedMapValues} constructor for nested or multithreaded iteration. */
-    public Values< TV > values()
+    /// <summary>
+    /// Returns an iterator for the values in the map. Remove is supported.
+    /// <para>
+    /// If <see cref="ObjectMap{T,V}.AllocateIterators"/> is false, the same iterator instance is
+    /// returned each time this method is called. Use the <see cref="OrderedMapValues"/> constructor
+    /// for nested or multithreaded iteration.
+    /// </para>
+    /// </summary>
+    public override Values GetValues()
     {
-        if ( Collections.allocateIterators )
+        if ( AllocateIterators )
         {
             return new OrderedMapValues( this );
         }
 
-        if ( values1 == null )
+        if ( Values1 == null )
         {
-            values1 = new OrderedMapValues( this );
-            values2 = new OrderedMapValues( this );
+            Values1 = new OrderedMapValues( this );
+            Values2 = new OrderedMapValues( this );
+        }
+        
+        Guard.ThrowIfNull( Values2 );
+
+        if ( !Values1.Valid )
+        {
+            Values1.Reset();
+            Values1.Valid = true;
+            Values2.Valid = false;
+
+            return Values1;
         }
 
-        if ( !values1.valid )
-        {
-            values1.reset();
-            values1.valid = true;
-            values2.valid = false;
+        Values2.Reset();
+        Values2.Valid = true;
+        Values1.Valid = false;
 
-            return values1;
-        }
-
-        values2.reset();
-        values2.valid = true;
-        values1.valid = false;
-
-        return values2;
+        return Values2;
     }
 
-    /** Returns an iterator for the keys in the map. Remove is supported.
-     * <p>
-     * If {@link Collections#allocateIterators} is false, the same iterator instance is returned each time this method is called.
-     * Use the {@link OrderedMapKeys} constructor for nested or multithreaded iteration. */
-    public Keys< TK > keys()
+    /// <summary>
+    /// Returns an iterator for the keys in the map. Remove is supported.
+    /// <para>
+    /// If <see cref="ObjectMap{T,V}.AllocateIterators"/> is false, the same iterator instance is
+    /// returned each time this method is called. Use the <see cref="OrderedMapValues"/> constructor
+    /// for nested or multithreaded iteration.
+    /// </para>
+    /// </summary>
+    public override Keys GetKeys()
     {
-        if ( Collections.allocateIterators )
+        if ( AllocateIterators )
         {
             return new OrderedMapKeys( this );
         }
 
-        if ( keys1 == null )
+        Guard.ThrowIfNull( Keys2 );
+        
+        if ( Keys1 == null )
         {
-            keys1 = new OrderedMapKeys( this );
-            keys2 = new OrderedMapKeys( this );
+            Keys1 = new OrderedMapKeys( this );
+            Keys2 = new OrderedMapKeys( this );
+        }
+        
+        if ( !Keys1.Valid )
+        {
+            Keys1.Reset();
+            Keys1.Valid = true;
+            Keys2.Valid = false;
+
+            return Keys1;
         }
 
-        if ( !keys1.valid )
-        {
-            keys1.reset();
-            keys1.valid = true;
-            keys2.valid = false;
+        Keys2.Reset();
+        Keys2.Valid = true;
+        Keys1.Valid = false;
 
-            return keys1;
-        }
-
-        keys2.reset();
-        keys2.valid = true;
-        keys1.valid = false;
-
-        return keys2;
+        return Keys2;
     }
 
     // ========================================================================
@@ -354,20 +388,19 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             buffer.Append( '{' );
         }
 
-        var keys = this.keys;
-
-        for ( int i = 0, n = keys.size; i < n; i++ )
+        for ( int i = 0, n = _keys.Count; i < n; i++ )
         {
-            TK key = keys.get( i );
             if ( i > 0 )
             {
                 buffer.Append( separator );
             }
 
-            buffer.Append( key == this ? "(this)" : key );
+            //TODO:
+            buffer.Append( /*_keys[ i ] == this ? "(this)" :*/ _keys[ i ] );
             buffer.Append( '=' );
-            TV value = get( key );
-            buffer.Append( value == this ? "(this)" : value );
+
+            var value = Get( _keys[ i ] );
+            buffer.Append( /*value == this ? "(this)" :*/ value );
         }
 
         if ( braces )

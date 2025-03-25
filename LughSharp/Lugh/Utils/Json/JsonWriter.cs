@@ -53,7 +53,7 @@ public class JsonWriter : TextWriter
     }
 
     /** Sets the type of JSON output. Default is {@link JsonOutputType#minimal}. */
-    public void SetOutputType( JsonOutputType outputType )
+    public void SetOutputType( JsonOutputType? outputType )
     {
         this._outputType = outputType;
     }

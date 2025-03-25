@@ -456,7 +456,7 @@ public partial class Json
 
         OrderedMap< string, FieldMetadata > fields       = GetFields( type );
         var                                 defaultIndex = 0;
-        Array< string >                     fieldNames   = fields.orderedKeys();
+        Array< string >                     fieldNames   = fields.OrderedKeys();
 
         for ( int i = 0, n = fieldNames.size; i < n; i++ )
         {
