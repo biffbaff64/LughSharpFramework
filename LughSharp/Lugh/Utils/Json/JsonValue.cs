@@ -925,7 +925,7 @@ public class JsonValue : IEnumerable< JsonValue >
     /// Finds the child with the specified name and returns it as a string.
     /// Returns defaultValue if not found.
     /// </summary>
-    public string? GetString( string name, string defaultValue )
+    public string? GetString( string name, string? defaultValue )
     {
         var child = Get( name );
 
@@ -1628,11 +1628,13 @@ public class JsonValue : IEnumerable< JsonValue >
         return Parent.Trace() + trace;
     }
 
-    public string PrettyPrint( JsonOutputType outputType, int singleLineColumns )
+    public string PrettyPrint( JsonOutputType? outputType, int singleLineColumns )
     {
+        Guard.ThrowIfNull( outputType );
+        
         var settings = new PrettyPrintSettings
         {
-            JsonOutputType = outputType,
+            JsonOutputType    = ( JsonOutputType )outputType,
             SingleLineColumns = singleLineColumns,
         };
         
@@ -1667,7 +1669,6 @@ public class JsonValue : IEnumerable< JsonValue >
                 while ( true )
                 {
                     buffer.Append( newLines ? "{\n" : "{ " );
-                    var i = 0;
 
                     for ( var child = jsonval.Child; child != null; child = child.Next )
                     {
@@ -1792,11 +1793,13 @@ public class JsonValue : IEnumerable< JsonValue >
         }
     }
 
-    public void PrettyPrint( JsonOutputType outputType, TextWriter writer )
+    public void PrettyPrint( JsonOutputType? outputType, TextWriter writer )
     {
+        Guard.ThrowIfNull( outputType );
+        
         var settings = new PrettyPrintSettings
         {
-            JsonOutputType = outputType,
+            JsonOutputType = ( JsonOutputType )outputType,
         };
 
         PrettyPrint( this, writer, 0, settings );
@@ -1916,7 +1919,7 @@ public class JsonValue : IEnumerable< JsonValue >
         }
     }
 
-    private bool IsFlat( JsonValue jsonval )
+    private static bool IsFlat( JsonValue jsonval )
     {
         for ( var child = jsonval.Child; child != null; child = child.Next )
         {
@@ -1929,7 +1932,7 @@ public class JsonValue : IEnumerable< JsonValue >
         return true;
     }
 
-    private bool IsNumeric( JsonValue jsonval )
+    private static bool IsNumeric( JsonValue jsonval )
     {
         for ( var child = jsonval.Child; child != null; child = child.Next )
         {
@@ -1942,7 +1945,7 @@ public class JsonValue : IEnumerable< JsonValue >
         return true;
     }
 
-    private void Indent( int count, StringBuilder buffer )
+    private static void Indent( int count, StringBuilder buffer )
     {
         for ( var i = 0; i < count; i++ )
         {
@@ -1950,7 +1953,7 @@ public class JsonValue : IEnumerable< JsonValue >
         }
     }
 
-    private void Indent( int count, TextWriter buffer )
+    private static void Indent( int count, TextWriter buffer )
     {
         for ( var i = 0; i < count; i++ )
         {

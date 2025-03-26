@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections;
 using System.Text;
 
 using LughSharp.Lugh.Maths;
@@ -49,7 +50,7 @@ namespace LughSharp.Lugh.Utils.Collections;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class ObjectMap< TK, TV > //: IEnumerable< TK >
+public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 {
     /// <summary>
     /// Used by <see cref="Place" /> to bit shift the upper bits of a <b>long</b>
@@ -832,6 +833,18 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     }
 
     /// <inheritdoc />
+    public IEnumerator< KeyValuePair< TK, TV > > GetEnumerator()
+    {
+        return new ObjectMapEnumerator( this );
+    }
+
+    /// <inheritdoc />
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    /// <inheritdoc />
     public override string ToString()
     {
         return ToString( ", ", true );
@@ -914,6 +927,80 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
     // ========================================================================
 
     /// <summary>
+    /// Enumerator for ObjectMap.
+    /// </summary>
+    private class ObjectMapEnumerator : IEnumerator< KeyValuePair< TK, TV > >
+    {
+        private readonly ObjectMap< TK, TV >    _map;
+        private          int                    _currentIndex = -1;
+        private          int                    _nextIndex    = -1;
+        private          bool                   _hasNext      = true;
+        private          KeyValuePair< TK, TV > _current;
+
+        public ObjectMapEnumerator( ObjectMap< TK, TV > map )
+        {
+            _map = map;
+            Reset();
+        }
+
+        public bool MoveNext()
+        {
+            if ( !_hasNext )
+            {
+                return false;
+            }
+
+            _currentIndex = _nextIndex;
+            FindNextIndex();
+
+            if ( _currentIndex >= 0 )
+            {
+                _current = new KeyValuePair< TK, TV >( _map.KeyTable[ _currentIndex ]!,
+                                                       _map.ValueTable[ _currentIndex ]! );
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public void Reset()
+        {
+            _currentIndex = -1;
+            _nextIndex    = -1;
+            
+            FindNextIndex();
+        }
+
+        private void FindNextIndex()
+        {
+            for ( var n = _map.KeyTable.Length; ++_nextIndex < n; )
+            {
+                if ( _map.KeyTable[ _nextIndex ] != null )
+                {
+                    _hasNext = true;
+
+                    return;
+                }
+            }
+
+            _hasNext = false;
+        }
+
+        public KeyValuePair< TK, TV > Current => _current;
+
+        object IEnumerator.Current => Current;
+
+        public void Dispose()
+        {
+            // Nothing to dispose.
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
     /// Represents a key-value pair in the map.
     /// </summary>
     [PublicAPI]
@@ -975,7 +1062,7 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
         {
             Reset();
         }
-        
+
         /// <summary>
         /// Resets the iterator to the start of the map.
         /// </summary>
@@ -1085,8 +1172,8 @@ public class ObjectMap< TK, TV > //: IEnumerable< TK >
                 throw new GdxRuntimeException( "#iterator() cannot be used nested." );
             }
 
-            Entry.Key   = Map.KeyTable[ NextIndex ];
-            Entry.Value = Map.ValueTable[ NextIndex ];
+            Entry.Key    = Map.KeyTable[ NextIndex ];
+            Entry.Value  = Map.ValueTable[ NextIndex ];
             CurrentIndex = NextIndex;
 
             FindNextIndex();
