@@ -285,9 +285,9 @@ public static class Logger
                 fileName = DEFAULT_TRACE_FILENAME;
             }
 
-            if ( WebRequestMethods.File.Exists( fileName ) && deleteExisting )
+            if ( System.IO.File.Exists( fileName ) && deleteExisting )
             {
-                WebRequestMethods.File.Delete( fileName );
+                System.IO.File.Delete( fileName );
             }
 
             // Get the base directory
@@ -297,7 +297,7 @@ public static class Logger
             _debugFilePath = $"{baseDirectory}logs{Path.DirectorySeparatorChar}";
             _debugFileName = fileName;
 
-            using var fs = WebRequestMethods.File.Create( _debugFilePath + _debugFileName );
+            using var fs = System.IO.File.Create( _debugFilePath + _debugFileName );
 
             var dateTime = DateTime.Now;
             var divider  = new UTF8Encoding( true ).GetBytes( "-----------------------------------------------------" );
@@ -426,12 +426,12 @@ public static class Logger
     /// <param name="text">String holding the text to write.</param>
     private static void WriteToFile( string text )
     {
-        if ( !WebRequestMethods.File.Exists( _debugFilePath + _debugFileName ) )
+        if ( !System.IO.File.Exists( _debugFilePath + _debugFileName ) )
         {
             return;
         }
 
-        using var fs = WebRequestMethods.File.Open( _debugFilePath + _debugFileName, FileMode.Append );
+        using var fs = System.IO.File.Open( _debugFilePath + _debugFileName, FileMode.Append );
 
         var debugLine = new UTF8Encoding( true ).GetBytes( text );
 

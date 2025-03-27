@@ -247,7 +247,10 @@ FILES
 
     CODE   DOCUMENT
     ----   --------
+    - IP   - IP   - File
     - IP   - IP   - FileHandle
+    - IP   - IP   - FileProcessor
+    - IP   - IP   - IFilenameFilter
     - DONE - DONE - IFiles
     - IP   - IP   - InputStream
     - IP   - IP   - IOData
@@ -971,8 +974,12 @@ UTILS/JSON
     CODE   DOCUMENT
     ----   --------
     - IP   - IP   - Json
+    - IP   - IP   - Json.FromJson
+    - IP   - IP   - Json.ToJson
+    - IP   - IP   - Json.WriteValue
     - IP   - IP   - JsonOutputType
     - IP   - IP   - JsonReader
+    - IP   - IP   - JsonSerializer
     - IP   - IP   - JsonValue
     - IP   - IP   - JsonWriter
 

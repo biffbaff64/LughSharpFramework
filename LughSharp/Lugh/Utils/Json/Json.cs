@@ -22,20 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security;
-using System.Text.Json;
 
-using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Maps;
 using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Guarding;
 
@@ -176,7 +168,7 @@ public partial class Json
     /// </summary>
     public void SetElementType( Type type, string fieldName, Type elementType )
     {
-        var metadata = GetFields( type ).Get( fieldName );
+        var metadata = GetFields( type )?.Get( fieldName );
 
         if ( metadata == null )
         {
@@ -188,13 +180,11 @@ public partial class Json
 
     /// <summary>
     /// The specified field will be treated as if it has or does not have the
-    /// <see cref="Deprecated"/> annotation.
+    /// <see cref="System.ObsoleteAttribute"/> annotation.
     /// </summary>
-
-    //TODO: Should this be 'Obsolete' in line with C#?
     public void SetDeprecated( Type type, string fieldName, bool deprecated )
     {
-        var metadata = GetFields( type ).Get( fieldName );
+        var metadata = GetFields( type )?.Get( fieldName );
 
         if ( metadata == null )
         {
@@ -310,6 +300,8 @@ public partial class Json
         }
         catch ( Exception ignored )
         {
+            Logger.Error( $"Exception (IGNORED): {ignored.Message}" );
+            
             _classToDefaultValues[ type ] = null;
 
             return null;
@@ -339,20 +331,19 @@ public partial class Json
             }
             catch ( FieldAccessException ex )
             {
-                throw new SerializationException( $"Error accessing field: {field.Name} " +
-                                                  $"({type.Name})", ex );
+                throw new SerializationException( $"Error accessing field: {field.Name} ({type.Name})", ex );
             }
             catch ( SerializationException ex )
             {
                 var newEx = new SerializationException( ex.Message );
-                newEx.AddTrace( field + " (" + type.Name + ")" );
+                newEx.AddTrace( $"{field} ({type.Name})" );
 
                 throw newEx;
             }
             catch ( GdxRuntimeException runtimeEx )
             {
                 var ex = new SerializationException( runtimeEx.ToString() );
-                ex.AddTrace( field + " (" + type.Name + ")" );
+                ex.AddTrace( $"{field} ({type.Name})" );
 
                 throw ex;
             }
@@ -361,21 +352,46 @@ public partial class Json
         return values;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="name"></param>
+    /// <param name="jsonData"></param>
     public void ReadField( object obj, string name, JsonValue jsonData )
     {
         ReadField( obj, name, name, null, jsonData );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="name"></param>
+    /// <param name="elementType"></param>
+    /// <param name="jsonData"></param>
     public void ReadField( object obj, string name, Type elementType, JsonValue jsonData )
     {
         ReadField( obj, name, name, elementType, jsonData );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="fieldName"></param>
+    /// <param name="jsonName"></param>
+    /// <param name="jsonData"></param>
     public void ReadField( object obj, string fieldName, string jsonName, JsonValue jsonData )
     {
         ReadField( obj, fieldName, jsonName, null, jsonData );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="fieldName"></param>
+    /// <param name="jsonName"></param>
+    /// <param name="elementType"></param>
+    /// <param name="jsonMap"></param>
+    /// <exception cref="SerializationException"></exception>
     public void ReadField( object obj, string fieldName, string jsonName, Type? elementType, JsonValue jsonMap )
     {
         var type     = obj.GetType();
@@ -396,6 +412,14 @@ public partial class Json
         ReadField( obj, field, jsonName, elementType, jsonMap );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="field"></param>
+    /// <param name="jsonName"></param>
+    /// <param name="elementType"></param>
+    /// <param name="jsonMap"></param>
+    /// <exception cref="SerializationException"></exception>
     public void ReadField( object obj, FieldInfo field, string jsonName, Type? elementType, JsonValue jsonMap )
     {
         var jsonValue = jsonMap.Get( jsonName );
@@ -404,151 +428,142 @@ public partial class Json
 
         try
         {
-            field.SetValue( obj, ReadValue< T >( field.GetType(), elementType, jsonValue ) );
+            field.SetValue( obj, ReadValue< object >( field.GetType(), elementType, jsonValue ) );
         }
-        catch ( ReflectionException ex )
+        catch ( FieldAccessException ex )
         {
-            throw new SerializationException(
-                                             "Error accessing field: " + field.getName() + " (" + field.getDeclaringClass().getName() + ")",
-                                             ex );
+            throw new SerializationException( $"Error accessing field: {field.Name} ({field.DeclaringType?.Name})", ex );
         }
         catch ( SerializationException ex )
         {
-            ex.addTrace( field.getName() + " (" + field.getDeclaringClass().getName() + ")" );
+            var newEx = new SerializationException( ex );
+            newEx.AddTrace( $"{field.Name} ({field.DeclaringType?.Name})" );
 
-            throw ex;
+            throw newEx;
         }
-        catch ( RuntimeException runtimeEx )
+        catch ( GdxRuntimeException runtimeEx )
         {
             var ex = new SerializationException( runtimeEx );
-            ex.addTrace( jsonValue.trace() );
-            ex.addTrace( field.getName() + " (" + field.getDeclaringClass().getName() + ")" );
+            ex.AddTrace( jsonValue.Trace() );
+            ex.AddTrace( $"{field.Name} ({field.DeclaringType?.Name})" );
 
             throw ex;
         }
     }
 
-    public void ReadFields( object @object, JsonValue jsonMap )
+    /// <summary>
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="jsonMap"></param>
+    /// <exception cref="SerializationException"></exception>
+    public void ReadFields( object obj, JsonValue jsonMap )
     {
-        var                                 type   = @object.GetType();
-        OrderedMap< string, FieldMetadata > fields = GetFields( type );
+        var type   = obj.GetType();
+        var fields = GetFields( type );
 
+        Guard.ThrowIfNull( fields );
+        
         for ( var child = jsonMap.Child; child != null; child = child.Next )
         {
-            FieldMetadata metadata = fields.get( child.Name().replace( " ", "_" ) );
+            Guard.ValidateString( child.Name );
+            
+            var metadata = fields.Get( child.Name!.Replace( " ", "_" ) );
 
             if ( metadata == null )
             {
-                if ( child.Name.equals( typeName ) ) continue;
+                if ( child.Name.Equals( TypeName ) ) continue;
 
-                if ( ignoreUnknownFields || IgnoreUnknownField( type, child.Name ) )
+                if ( IgnoreUnknownFields || IgnoreUnknownField( type, child.Name ) )
                 {
-                    if ( debug ) System.out.
-                    println( "Ignoring unknown field: " + child.Name + " (" + type.getName() + ")" );
+                    Logger.Debug( $"Ignoring unknown field: {child.Name} ({type.Name})" );
 
                     continue;
                 }
-                else
-                {
-                    var ex = new SerializationException(
-                                                        "Field not found: " + child.Name + " (" + type.getName() + ")" );
-                    ex.addTrace( child.trace() );
 
-                    throw ex;
-                }
-            }
-            else
-            {
-                if ( ignoreDeprecated && !readDeprecated && metadata.deprecated ) continue;
-            }
-
-            Field field = metadata.field;
-
-            try
-            {
-                field.set( @object, ReadValue( field.getType(), metadata.elementType, child ) );
-            }
-            catch ( ReflectionException ex )
-            {
-                throw new SerializationException( "Error accessing field: " + field.getName() + " (" + type.getName() + ")", ex );
-            }
-            catch ( SerializationException ex )
-            {
-                ex.addTrace( field.getName() + " (" + type.getName() + ")" );
+                var ex = new SerializationException( $"Field not found: {child.Name} ({type.Name})" );
+                ex.AddTrace( child.Trace() );
 
                 throw ex;
             }
-            catch ( RuntimeException runtimeEx )
+
+            if ( IgnoreDeprecated && !ReadDeprecated && metadata.Deprecated ) continue;
+
+            var field = metadata.FieldInfo;
+
+            try
+            {
+                field.SetValue( obj, ReadValue<object>( field.GetType(), metadata.ElementType, child ) );
+            }
+            catch ( FieldAccessException ex )
+            {
+                throw new SerializationException( $"Error accessing field: {field.Name} ({type.Name})", ex );
+            }
+            catch ( SerializationException ex )
+            {
+                var newEx = new SerializationException( ex.Message );
+                newEx.AddTrace( $"{field.Name} ({type.Name})" );
+
+                throw newEx;
+            }
+            catch ( GdxRuntimeException runtimeEx )
             {
                 var ex = new SerializationException( runtimeEx );
-                ex.addTrace( child.trace() );
-                ex.addTrace( field.getName() + " (" + type.getName() + ")" );
+                ex.AddTrace( child.Trace() );
+                ex.AddTrace( $"{field.Name} ({type.Name})" );
 
                 throw ex;
             }
         }
     }
 
-    /** Called for each unknown field name encountered by {@link #readFields(object, JsonValue)} when {@link #ignoreUnknownFields}
-     * is false to determine whether the unknown field name should be ignored.
-     * @param type The object type being read.
-     * @param fieldName A field name encountered in the JSON for which there is no matching class field.
-     * @return true if the field name should be ignored and an exception won't be thrown by
-     *         {@link #readFields(object, JsonValue)}. */
-    protected bool IgnoreUnknownField( Type type, string fieldName )
+    /// <summary>
+    /// Called for each unknown field name encountered by <see cref="ReadFields(object,JsonValue)"/>
+    /// when <see cref="IgnoreUnknownFields"/> is false to determine whether the unknown field name
+    /// should be ignored.
+    /// </summary>
+    /// <param name="type"> The object type being read. </param>
+    /// <param name="fieldName">
+    /// A field name encountered in the JSON for which there is no matching class field.
+    /// </param>
+    /// <returns>
+    /// true if the field name should be ignored and an exception won't be thrown by
+    /// {@link #readFields(object, JsonValue)}.
+    /// </returns>
+    protected static bool IgnoreUnknownField( Type type, string fieldName )
     {
         return false;
     }
 
-    /** @param type May be null if the type is unknown.
-     * @return May be null. */
-    public T ReadValue< T >( string name, Type type, JsonValue jsonMap )
+    public T? ReadValue< T >( string name, Type? type, JsonValue? jsonMap )
     {
-        return ReadValue< T >( type, null, jsonMap.Get( name ) );
+        return ReadValue< T >( type, null, jsonMap?.Get( name ) );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @return May be null. */
-    public T ReadValue< T >( string name, Type type, T defaultValue, JsonValue jsonMap )
+    public T? ReadValue< T >( string name, Type? type, T defaultValue, JsonValue jsonMap )
     {
         var jsonValue = jsonMap.Get( name );
 
-        if ( jsonValue == null ) return defaultValue;
-
-        return ReadValue< T >( type, null, jsonValue );
+        return jsonValue == null ? defaultValue : ReadValue< T >( type, null, jsonValue );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     * @return May be null. */
-    public T ReadValue< T >( string name, Type type, Type elementType, JsonValue jsonMap )
+    public T? ReadValue< T >( string name, Type? type, Type? elementType, JsonValue jsonMap )
     {
         return ReadValue< T >( type, elementType, jsonMap.Get( name ) );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     * @return May be null. */
-    public T ReadValue< T >( string name, Type type, Type elementType, T defaultValue, JsonValue jsonMap )
+    public T? ReadValue< T >( string name, Type? type, Type? elementType, T defaultValue, JsonValue jsonMap )
     {
         var jsonValue = jsonMap.Get( name );
 
         return ReadValue< T >( type, elementType, defaultValue, jsonValue );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     * @return May be null. */
-    public T ReadValue< T >( Type type, Type elementType, T defaultValue, JsonValue jsonData )
+    public T? ReadValue< T >( Type? type, Type? elementType, T defaultValue, JsonValue? jsonData )
     {
-        if ( jsonData == null ) return defaultValue;
-
-        return ReadValue< T >( type, elementType, jsonData );
+        return jsonData == null ? defaultValue : ReadValue< T >( type, elementType, jsonData );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @return May be null. */
-    public T ReadValue< T >( Type type, JsonValue jsonData )
+    public T? ReadValue< T >( Type? type, JsonValue jsonData )
     {
         return ReadValue< T >( type, null, jsonData );
     }
@@ -562,8 +577,8 @@ public partial class Json
     /// <returns></returns>
     /// <exception cref="SerializationException"></exception>
     public T? ReadValue< T >( Type? type, Type? elementType, JsonValue? jsonData )
-    {
-        if ( jsonData == null ) return default;
+    { 
+        if ( jsonData == null ) return default( T );
 
         if ( jsonData.IsObject() )
         {
@@ -635,6 +650,8 @@ public partial class Json
 
                 var obj = Activator.CreateInstance( type );
 
+                Guard.ThrowIfNull( obj );
+                
                 if ( obj is IJsonSerializable serializable )
                 {
                     serializable.Read( this, jsonData );
@@ -771,6 +788,8 @@ public partial class Json
             {
                 var obj = Activator.CreateInstance( type );
 
+                Guard.ThrowIfNull( obj );
+                
                 ( ( IJsonSerializable )obj ).Read( this, jsonData );
 
                 return ( T )obj;
@@ -780,151 +799,195 @@ public partial class Json
         if ( jsonData.IsArray() )
         {
             // JSON array special cases.
-            if ( ( type == null ) || ( type == typeof( object ) ) ) type = typeof( List< object > );
+            if ( ( type == null ) || ( type == typeof( object ) ) )
+            {
+                type = typeof( List< object > );
+            }
 
             if ( typeof( IList ).IsAssignableFrom( type ) )
             {
                 var result = ( type == typeof( List< object > ) )
                     ? new List< object >()
-                    : ( IList )Activator.CreateInstance( type );
+                    : ( IList? )Activator.CreateInstance( type );
 
                 foreach ( var element in jsonData )
                 {
                     result?.Add( ReadValue< object >( elementType, null, element ) );
                 }
 
-                return ( T )result;
+                return ( T? )result;
+            }
+
+            if ( type.IsGenericType
+                 && typeof( ICollection<> ).IsAssignableFrom( type.GetGenericTypeDefinition() ) )
+            {
+                var genericArgument = type.GetGenericArguments()[ 0 ];
+                var listType        = typeof( List<> ).MakeGenericType( genericArgument );
+                var result          = ( IList? )Activator.CreateInstance( listType );
+
+                foreach ( var element in jsonData )
+                {
+                    result?.Add( ReadValue< object >( genericArgument, null, element ) );
+                }
+
+                return ( T? )result;
             }
 
             if ( typeof( Queue ).IsAssignableFrom( type ) )
             {
                 var result = ( type == typeof( Queue ) )
                     ? new Queue()
-                    : ( Queue )Activator.CreateInstance( type );
+                    : ( Queue? )Activator.CreateInstance( type );
 
                 foreach ( var element in jsonData )
                 {
                     result?.Enqueue( ReadValue< object >( elementType, null, element ) );
                 }
 
-                return ( T )( object )result;
+                return ( T? )( object? )result;
             }
 
-            if ( typeof( ICollection ).IsAssignableFrom( type ) )
-            {
-                var result = type.IsInterface
-                    ? new List< object >()
-                    : ( ICollection )Activator.CreateInstance( type );
+//            if ( type.IsArray )
+//            {
+//                var componentType = type.GetElementType();
+//
+//                if ( elementType == null )
+//                {
+//                    elementType = componentType;
+//                }
+//
+//                var list = new List< object >();
+//
+//                foreach ( var element in jsonData )
+//                {
+//                    list.Add( ReadValue< object >( elementType, null, element ) );
+//                }
+//
+//                var array = Array.CreateInstance( componentType, list.Count );
+//                Array.Copy( list.ToArray(), array, list.Count );
+//
+//                return (T)array;
+//            }
 
-                foreach ( var element in jsonData )
-                {
-                    result.Add( ReadValue< object >( elementType, null, element ) );
-                }
-
-                return ( T )result;
-            }
-
-            if ( type.IsArray )
-            {
-                var componentType                      = type.GetElementType();
-                if ( elementType == null ) elementType = componentType;
-                var list                               = new List< object >();
-
-                foreach ( var element in jsonData )
-                {
-                    list.Add( ReadValue< object >( elementType, null, element ) );
-                }
-
-                var array = Array.CreateInstance( componentType, list.Count );
-                Array.Copy( list.ToArray(), array, list.Count );
-
-                return ( T )array;
-            }
-
-            throw new SerializationException( "Unable to convert value to required type: " + jsonData + " (" + type.FullName + ")" );
+            throw new SerializationException( $"Unable to convert value to required type: {jsonData} ({type.FullName})" );
         }
 
-        if ( jsonData.isNumber() )
+        if ( jsonData.IsNumber() )
         {
             try
             {
-                if ( ( type == null ) || ( type == float. )class || type == Float.class) return ( T )( Float )jsonData.asFloat();
-
-                if ( type == int.class || type == Integer.class) return ( T )( Integer )jsonData.asInt();
-
-                if ( type == long.class || type == Long.class) return ( T )( Long )jsonData.asLong();
-
-                if ( type == double.class || type == Double.class) return ( T )( Double )jsonData.asDouble();
-
-                if ( type == string.class) return ( T )jsonData.asString();
-
-                if ( type == short.class || type == Short.class) return ( T )( Short )jsonData.AsShort();
-
-                if ( type == byte.class || type == Byte.class) return ( T )( Byte )jsonData.AsByte();
-            }
-            catch ( NumberFormatException ignored )
-            {
-            }
-
-            jsonData = new JsonValue( jsonData.asString() );
-        }
-
-        if ( jsonData.isBoolean() )
-        {
-            try
-            {
-                if ( ( type == null ) || ( type == bool. )class || type == Boolean.class) return ( T )( Boolean )jsonData.asBoolean();
-            }
-            catch ( NumberFormatException ignored )
-            {
-            }
-
-            jsonData = new JsonValue( jsonData.asString() );
-        }
-
-        if ( jsonData.isString() )
-        {
-            string string = jsonData.asString();
-            if ( ( type == null ) || ( type == string. )class) return ( T )string;
-
-            try
-            {
-                if ( type == int.class || type == Integer.class) return ( T )Integer.valueOf( string );
-
-                if ( type == float.class || type == Float.class) return ( T )Float.valueOf( string );
-
-                if ( type == long.class || type == Long.class) return ( T )Long.valueOf( string );
-
-                if ( type == double.class || type == Double.class) return ( T )Double.valueOf( string );
-
-                if ( type == short.class || type == Short.class) return ( T )Short.valueOf( string );
-
-                if ( type == byte.class || type == Byte.class) return ( T )Byte.valueOf( string );
-            }
-            catch ( NumberFormatException ignored )
-            {
-            }
-
-            if ( type == bool.class || type == Boolean.class) return ( T )Boolean.valueOf( string );
-
-            if ( type == char.class || type == Character.class) return ( T )( Character )string.charAt( 0 );
-
-            if ( ClassReflection.isAssignableFrom( Enum.class, type)) {
-                Enum[] constants = ( Enum[] )type.getEnumConstants();
-
-                for ( int i = 0, n = constants.length; i < n; i++ )
+                if ( ( type == null ) || ( type == typeof( float ) ) )
                 {
-                    var e = constants[ i ];
+                    return ( T )( object )jsonData.AsFloat();
+                }
 
-                    if ( string.equals( convertToString( e ) ) ) return ( T )e;
+                if ( type == typeof( int ) )
+                {
+                    return ( T )( object )jsonData.AsInt();
+                }
+
+                if ( type == typeof( long ) )
+                {
+                    return ( T )( object )jsonData.AsDouble();
+                }
+
+                if ( type == typeof( double ) )
+                {
+                    return ( T )( object )jsonData.AsDouble();
+                }
+
+                if ( type == typeof( string ) )
+                {
+                    return ( T )( object )jsonData.AsString()!;
+                }
+
+                if ( type == typeof( short ) )
+                {
+                    return ( T )( object )jsonData.AsShort();
+                }
+
+                if ( type == typeof( byte ) )
+                {
+                    return ( T )( object )jsonData.AsByte();
                 }
             }
-            if ( type == CharSequence.class) return ( T )string;
+            catch ( ArithmeticException ignored )
+            {
+                Logger.Error( $"ArithmeticException (IGNORED): {ignored.Message}" );
+            }
 
-            throw new SerializationException( "Unable to convert value to required type: " + jsonData + " (" + type.getName() + ")" );
+            jsonData = new JsonValue( jsonData.AsString() );
         }
 
-        return null;
+        if ( jsonData.IsBoolean() )
+        {
+            try
+            {
+                if ( ( type == null ) || ( type == typeof( bool ) ) )
+                {
+                    return ( T )( object )jsonData.AsBoolean();
+                }
+            }
+            catch ( ArithmeticException ignored )
+            {
+                Logger.Error( $"ArithmeticException (IGNORED): {ignored.Message}" );
+            }
+
+            jsonData = new JsonValue( jsonData.AsString() );
+        }
+
+        if ( jsonData.IsString() )
+        {
+            var str = jsonData.AsString();
+
+            Guard.ThrowIfNull( str );
+
+            if ( ( type == null ) || ( type == typeof( string ) ) )
+            {
+                return ( T )( object )str;
+            }
+
+            try
+            {
+                if ( type == typeof( int ) ) return ( T )( object )int.Parse( str );
+                if ( type == typeof( float ) ) return ( T )( object )float.Parse( str );
+                if ( type == typeof( long ) ) return ( T )( object )long.Parse( str );
+                if ( type == typeof( double ) ) return ( T )( object )double.Parse( str );
+                if ( type == typeof( short ) ) return ( T )( object )short.Parse( str );
+                if ( type == typeof( byte ) ) return ( T )( object )byte.Parse( str );
+            }
+            catch ( FormatException )
+            {
+                // Handle invalid number format
+            }
+
+            if ( type == typeof( bool ) )
+            {
+                return ( T )( object )bool.Parse( str );
+            }
+
+            if ( type == typeof( char ) )
+            {
+                return ( T )( object )str[ 0 ];
+            }
+
+            if ( type.IsEnum )
+            {
+                foreach ( var enumValue in Enum.GetValues( type ) )
+                {
+                    if ( str.Equals( ConvertToString( enumValue ) ) )
+                    {
+                        return ( T )enumValue;
+                    }
+                }
+            }
+
+            if ( type == typeof( System.Text.StringBuilder ) ) return ( T )( object )new System.Text.StringBuilder( str );
+
+            throw new SerializationException( $"Unable to convert value to required type: {jsonData} ({type.FullName})" );
+        }
+
+        return default( T );
     }
 
     /// <summary>
@@ -944,7 +1007,7 @@ public partial class Json
             var toField   = toFields?.Get( entry.Key );
             var fromField = entry.Value.FieldInfo;
 
-            if ( toField == null ) throw new SerializationException( "To object is missing field: " + entry.key );
+            if ( toField == null ) throw new SerializationException( $"To object is missing field: {entry.Key}" );
 
             try
             {
@@ -952,7 +1015,7 @@ public partial class Json
             }
             catch ( FieldAccessException ex )
             {
-                throw new SerializationException( "Error copying field: " + fromField.Name, ex );
+                throw new SerializationException( $"Error copying field: {fromField.Name}", ex );
             }
         }
     }
@@ -976,7 +1039,7 @@ public partial class Json
 
     // ========================================================================
 
-    protected object? NewInstance( Type type )
+    protected static object? NewInstance( Type type )
     {
         try
         {

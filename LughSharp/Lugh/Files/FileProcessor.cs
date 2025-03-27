@@ -24,6 +24,7 @@
 
 using System.Text.RegularExpressions;
 
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Guarding;
@@ -43,304 +44,177 @@ namespace LughSharp.Lugh.Files;
 [PublicAPI]
 public partial class FileProcessor
 {
-    public delegate bool FilenameFilter( DirectoryInfo dir, string filename );
+    public delegate bool FilenameFilter( string directory, string filename );
+
+    public List< Regex >   InputRegex    { get; } = new List< Regex >();
+    public string          OutputSuffix  { get; set; }
+    public List< Entry >   OutputFiles   { get; }      = new List< Entry >();
+    public bool            Recursive     { get; set; } = true;
+    public bool            FlattenOutput { get; set; }
+    public FilenameFilter? InputFilter   { get; set; }
+
+    public Comparison< FileInfo > Comparator { get; set; } = ( o1, o2 ) =>
+        string.Compare( o1.Name, o2.Name, StringComparison.Ordinal );
+
+    private Comparison<Entry> EntryComparator
+    {
+        get =>
+            ( o1, o2 ) =>
+            {
+                if ( o1.InputFile is FileInfo file1 && o2.InputFile is FileInfo file2 )
+                {
+                    return this.Comparator( file1, file2 ); // Use 'this.Comparator'
+                }
+                else if ( o1.InputFile is DirectoryInfo dir1 && o2.InputFile is DirectoryInfo dir2 )
+                {
+                    return String.Compare( dir1.Name, dir2.Name, StringComparison.Ordinal );
+                }
+                else
+                {
+                    return String.Compare( o1.InputFile.Name, o2.InputFile.Name, StringComparison.Ordinal );
+                }
+            };
+        set => throw new NotImplementedException();
+    }
 
     // ========================================================================
-
-    public Comparison< Entry >     EntryComparator { get; set; }
-    public Comparison< FileInfo >? Comparator      { get; set; }
-
-    // ========================================================================
-
-    private static Comparison< FileInfo? > _comparator = ( o1, o2 ) =>
-        string.Compare( o1?.Name, o2?.Name, StringComparison.Ordinal );
-
-    private static Comparison< Entry > _entryComparator = ( entry, entry1 ) =>
-        _comparator( entry.InputFile, entry1.InputFile );
-
-    // ========================================================================
-
-    private FilenameFilter? _inputFilter;
-    private List< Regex >   _inputRegex  = [ ];
-    private List< Entry >   _outputFiles = [ ];
-    private string          _outputSuffix;
-    private bool            _recursive;
-    private bool            _flattenOutput;
-
-    // ========================================================================
-
-    /// <summary>
-    /// Default Constructor
-    /// </summary>
+    
     public FileProcessor()
     {
-        Comparator      = ( o1, o2 ) => string.Compare( o1.Name, o2.Name, StringComparison.Ordinal );
-        EntryComparator = ( o1, o2 ) => Comparator( o1.InputFile, o2.InputFile );
-
-        _outputSuffix  = string.Empty;
-        _flattenOutput = false;
+        OutputSuffix  = string.Empty;
+        FlattenOutput = false;
 
         SetRecursive();
     }
 
-    /// <summary>
-    /// Creates a new FileProcessor instance from the supplied FileProcessor object.
-    /// </summary>
     public FileProcessor( FileProcessor processor )
     {
-        Comparator      = ( o1, o2 ) => string.Compare( o1.Name, o2.Name, StringComparison.Ordinal );
-        EntryComparator = ( o1, o2 ) => Comparator( o1.InputFile, o2.InputFile );
+        this.Comparator = processor.Comparator;
+        InputFilter     = processor.InputFilter;
 
-        _inputFilter   = processor._inputFilter;
-        _outputSuffix  = processor._outputSuffix;
-        _recursive     = processor._recursive;
-        _flattenOutput = processor._flattenOutput;
-
-        _inputRegex.AddAll( processor._inputRegex );
+        InputRegex.AddRange( processor.InputRegex );
+        
+        OutputSuffix  = processor.OutputSuffix;
+        Recursive     = processor.Recursive;
+        FlattenOutput = processor.FlattenOutput;
     }
 
     // ========================================================================
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="inputFilter"></param>
-    /// <returns></returns>
-    public FileProcessor SetInputFilter( FilenameFilter inputFilter )
-    {
-        _inputFilter = inputFilter;
-
-        return this;
-    }
-
-    /// <summary>
-    /// Set comparator to the provided value. By default the files are sorted by alpha.
-    /// </summary>
-    public FileProcessor SetComparator( Comparison< FileInfo? > comparator )
-    {
-        _comparator = comparator;
-
-        return this;
-    }
-
-    /// <summary>
-    /// Adds a case insensitive suffix for matching input files.
-    /// </summary>
     public FileProcessor AddInputSuffix( params string[] suffixes )
     {
         foreach ( var suffix in suffixes )
         {
-            AddInputRegex( $"(?i).*{Escape( suffix )}" );
+            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
         }
 
         return this;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="regexes"></param>
-    /// <returns></returns>
     public FileProcessor AddInputRegex( params string[] regexes )
     {
         foreach ( var regex in regexes )
         {
-            _inputRegex.Add( new Regex( regex ) );
+            InputRegex.Add( new Regex( regex ) );
         }
 
         return this;
     }
 
-    /// <summary>
-    /// Sets the suffix for output files, replacing the extension of the input file.
-    /// </summary>
     public FileProcessor SetOutputSuffix( string outputSuffix )
     {
-        this._outputSuffix = outputSuffix;
+        OutputSuffix = outputSuffix;
 
         return this;
     }
 
     public FileProcessor SetFlattenOutput( bool flattenOutput )
     {
-        this._flattenOutput = flattenOutput;
+        FlattenOutput = flattenOutput;
 
         return this;
     }
 
     public FileProcessor SetRecursive( bool recursive = true )
     {
-        _recursive = recursive;
+        Recursive = recursive;
 
         return this;
     }
 
-    // ========================================================================
-
     public List< Entry > Process( string inputFileOrDir, string? outputRoot )
     {
-        return Process( new FileInfo( inputFileOrDir ), outputRoot == null ? null : new FileInfo( outputRoot ) );
+        return Process( new FileInfo( inputFileOrDir ), outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
     }
 
-    /// <summary>
-    /// Processes the specified input file or directory.
-    /// </summary>
-    /// <param name="inputFileOrDir"></param>
-    /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
-    /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
-    public List< Entry > Process( FileSystemInfo inputFileOrDir, FileInfo? outputRoot )
+    public List< Entry > Process( FileInfo inputFileOrDir, DirectoryInfo? outputRoot )
     {
-        Guard.ThrowIfFileNullOrNotExist( inputFileOrDir );
-        Guard.ThrowIfNotFileOrDirectory( inputFileOrDir );
-        Guard.ThrowIfNull( outputRoot );
-
-        return inputFileOrDir switch
+        if ( !inputFileOrDir.Exists )
         {
-            FileInfo files            => Process( [ files ], outputRoot ),
-            DirectoryInfo directories => Process( [ directories ], outputRoot ),
-            var _                     => throw new GdxRuntimeException( "Cannot process file or directory." )
-        };
+            throw new ArgumentException( $"Input file does not exist: {inputFileOrDir.FullName}" );
+        }
+
+        if ( ( inputFileOrDir.Attributes & FileAttributes.Directory ) == 0 )
+        {
+            return Process( [ inputFileOrDir ], outputRoot );
+        }
+
+        return Process( new DirectoryInfo( inputFileOrDir.FullName ).GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(), outputRoot );
     }
 
-    /// <summary>
-    /// Processes the specified input files.
-    /// </summary>
-    /// <param name="files"></param>
-    /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
-    /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
-    public List< Entry > Process( FileInfo[] files, FileInfo outputRoot )
+    public List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
-        Guard.ThrowIfNull( files, nameof( files ) );
-        Guard.ThrowIfNull( outputRoot );
-        Guard.ThrowIfNull( outputRoot.Directory );
+        if ( outputRoot == null )
+        {
+            outputRoot = new DirectoryInfo( "" );
+        }
+        
+        OutputFiles.Clear();
 
-        _outputFiles.Clear();
+        var dirToEntries = new Dictionary< DirectoryInfo, List< Entry > >();
 
-        var dirToEntries = new Dictionary< FileInfo, List< Entry >? >();
-
-        ProcessFiles( files, outputRoot, outputRoot, dirToEntries!, 0 );
+        Process( files, outputRoot, outputRoot, dirToEntries, 0 );
 
         var allEntries = new List< Entry >();
 
-        foreach ( var (inputDir, dirEntries) in dirToEntries )
+        foreach ( var mapEntry in dirToEntries )
         {
-            if ( Comparator != null ) dirEntries?.Sort( EntryComparator );
+            var dirEntries = mapEntry.Value;
 
-            FileInfo newOutputDir = null!;
+            if ( Comparator != null )
+            {
+                dirEntries.Sort( EntryComparator );
+            }
 
-            if ( _flattenOutput )
+            var inputDir     = mapEntry.Key;
+            var newOutputDir = default( DirectoryInfo );
+
+            if ( FlattenOutput )
             {
                 newOutputDir = outputRoot;
             }
-            else if ( dirEntries?.Count > 0 )
-            {
-                newOutputDir = dirEntries[ 0 ].OutputFile;
-            }
-
-            var outputName = inputDir.Name;
-
-            if ( _outputSuffix != null )
-            {
-                outputName = MyRegex().Replace( outputName, "$1" ) + _outputSuffix;
-            }
-
-            var entry = new Entry
-            {
-                InputFile = inputDir,
-                OutputFile = newOutputDir.FullName.Length == 0
-                    ? new FileInfo( outputName )
-                    : new FileInfo( Path.Combine( newOutputDir.FullName, outputName ) ),
-                OutputDir = newOutputDir,
-            };
-
-            Guard.ThrowIfNull( dirEntries );
-
-            try
-            {
-                ProcessDir( entry, dirEntries );
-            }
-            catch ( Exception ex )
-            {
-                throw new Exception( $"Error processing directory: {entry.InputFile?.FullName}", ex );
-            }
-
-            allEntries.AddRange( dirEntries );
-        }
-
-        if ( Comparator != null )
-        {
-            allEntries.Sort( EntryComparator );
-        }
-
-        foreach ( var entry in allEntries )
-        {
-            try
-            {
-                ProcessFile( entry );
-            }
-            catch ( Exception ex )
-            {
-                throw new Exception( "Error processing file: " + entry.InputFile?.FullName, ex );
-            }
-        }
-
-        return _outputFiles;
-    }
-
-    /// <summary>
-    /// Processes the specified input directories.
-    /// </summary>
-    /// <param name="directories"></param>
-    /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
-    /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
-    public List< Entry > Process( DirectoryInfo[] directories, FileInfo outputRoot )
-    {
-        Guard.ThrowIfNull( directories, nameof( directories ) );
-        Guard.ThrowIfNull( outputRoot );
-        Guard.ThrowIfNull( outputRoot.Directory );
-
-        _outputFiles.Clear();
-
-        var dirToEntries = new Dictionary< FileInfo, List< Entry >? >();
-
-        Guard.ThrowIfNull( dirToEntries );
-
-        ProcessDirectories( directories, outputRoot.Directory!, outputRoot.Directory!, dirToEntries!, 0 );
-
-        var allEntries = new List< Entry >();
-
-        foreach ( var (inputDir, dirEntries) in dirToEntries )
-        {
-            if ( Comparator != null ) dirEntries?.Sort( EntryComparator );
-
-            FileInfo newOutputDir = null!;
-
-            if ( _flattenOutput )
-            {
-                newOutputDir = outputRoot.Directory!;
-            }
-            else if ( dirEntries?.Count > 0 )
+            else if ( dirEntries.Count > 0 )
             {
                 newOutputDir = dirEntries[ 0 ].OutputDir;
             }
-
+            
             var outputName = inputDir.Name;
 
-            if ( _outputSuffix != null )
+            if ( OutputSuffix != null )
             {
-                outputName = MyRegex().Replace( outputName, "$1" ) + _outputSuffix;
+                outputName = MyRegex().Replace(outputName, "$1") + OutputSuffix;
             }
 
             var entry = new Entry
             {
                 InputFile = inputDir,
-                OutputFile = newOutputDir.FullName.Length == 0
-                    ? new FileInfo( outputName )
-                    : new FileInfo( Path.Combine( newOutputDir.FullName, outputName ) ),
-                OutputDir = newOutputDir,
+                OutputDir = newOutputDir!,
             };
 
-            Guard.ThrowIfNull( dirEntries );
+            if ( newOutputDir != null )
+                entry.OutputFile = newOutputDir.FullName.Length == 0
+                    ? new FileInfo( outputName )
+                    : new FileInfo( Path.Combine( newOutputDir.FullName, outputName ) );
 
             try
             {
@@ -348,16 +222,13 @@ public partial class FileProcessor
             }
             catch ( Exception ex )
             {
-                throw new Exception( $"Error processing directory: {entry.InputFile?.FullName}", ex );
+                throw new Exception( $"Error processing directory: {entry.InputFile.FullName}", ex );
             }
 
             allEntries.AddRange( dirEntries );
         }
 
-        if ( Comparator != null )
-        {
-            allEntries.Sort( EntryComparator );
-        }
+        if ( Comparator != null ) allEntries.Sort( EntryComparator );
 
         foreach ( var entry in allEntries )
         {
@@ -367,41 +238,42 @@ public partial class FileProcessor
             }
             catch ( Exception ex )
             {
-                throw new Exception( "Error processing file: " + entry.InputFile?.FullName, ex );
+                throw new Exception( $"Error processing file: {entry.InputFile.FullName}", ex );
             }
         }
 
-        return _outputFiles;
+        return OutputFiles;
     }
 
-    private void Process( FileSystemInfo[] files, FileInfo outputRoot, FileInfo outputDir,
-                          Dictionary< FileInfo, List< Entry > > dirToEntries, int depth )
+    private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
+                          Dictionary< DirectoryInfo, List< Entry > > dirToEntries, int depth )
     {
-        // Store empty entries for every directory.
         foreach ( var file in files )
         {
-            var dir = file is FileInfo fileInfo ? fileInfo.Directory : ( ( FileInfo )file ).Parent;
-
-            if ( dir != null )
+            if ( file.DirectoryName == null )
             {
-                if ( !dirToEntries.ContainsKey( dir ) )
-                {
-                    dirToEntries[ dir ] = new List< Entry >();
-                }
+                Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
+            }
+            
+            var dir = new DirectoryInfo( file.DirectoryName! );
+
+            if ( !dirToEntries.ContainsKey( dir ) )
+            {
+                dirToEntries[ dir ] = [ ];
             }
         }
 
         foreach ( var file in files )
         {
-            if ( file is FileInfo fileInfo )
+            if ( ( file.Attributes & FileAttributes.Directory ) == 0 )
             {
-                if ( _inputRegex.Count > 0 )
+                if ( InputRegex.Count > 0 )
                 {
                     var found = false;
 
-                    foreach ( var pattern in _inputRegex )
+                    foreach ( var pattern in InputRegex )
                     {
-                        if ( pattern.IsMatch( fileInfo.Name ) )
+                        if ( pattern.IsMatch( file.Name ) )
                         {
                             found = true;
 
@@ -412,25 +284,31 @@ public partial class FileProcessor
                     if ( !found ) continue;
                 }
 
-                var dir = fileInfo.Directory;
-
-                Guard.ThrowIfNull( dir );
-
-                if ( ( _inputFilter != null ) && !_inputFilter( dir, fileInfo.Name ) ) continue;
-
-                var outputName = fileInfo.Name;
-
-                if ( _outputSuffix != null )
+                if ( file.DirectoryName == null )
                 {
-                    outputName = MyRegex().Replace( outputName, "$1" ) + _outputSuffix;
+                    Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
+                }
+
+                var dir = new DirectoryInfo( file.DirectoryName! );
+
+                if ( ( InputFilter != null ) && !InputFilter( dir.FullName, file.Name ) )
+                {
+                    continue;
+                }
+
+                var outputName = file.Name;
+
+                if ( OutputSuffix != null )
+                {
+                    outputName = MyRegex().Replace(outputName, "$1") + OutputSuffix;
                 }
 
                 var entry = new Entry
                 {
-                    Depth     = depth,
-                    InputFile = fileInfo.Directory!,
-                    OutputDir = outputDir,
-                    OutputFile = _flattenOutput
+                    Depth      = depth,
+                    InputFile  = file,
+                    OutputDir  = outputDir,
+                    OutputFile = FlattenOutput
                         ? new FileInfo( Path.Combine( outputRoot.FullName, outputName ) )
                         : new FileInfo( Path.Combine( outputDir.FullName, outputName ) ),
                 };
@@ -438,165 +316,40 @@ public partial class FileProcessor
                 dirToEntries[ dir ].Add( entry );
             }
 
-            if ( _recursive && file is FileInfo directoryInfo )
+            if ( Recursive && ( ( file.Attributes & FileAttributes.Directory ) != 0 ) )
             {
                 var subdir = outputDir.FullName.Length == 0
-                    ? new FileInfo( directoryInfo.Name )
-                    : new FileInfo( Path.Combine( outputDir.FullName, directoryInfo.Name ) );
-
-                Process( directoryInfo.GetFileSystemInfos().Where
-                             ( f => ( _inputFilter == null )
-                                    || f is FileInfo
-                                    || ( f is FileInfo fInfo
-                                         && _inputFilter( fInfo.Directory!, f.Name ) ) ).ToArray(),
+                    ? new DirectoryInfo( file.Name )
+                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
+                
+                Process( new DirectoryInfo( file.FullName )
+                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
                          outputRoot, subdir, dirToEntries, depth + 1 );
             }
         }
     }
 
-    // ========================================================================
-
-    private void ProcessFiles( FileInfo[] files,
-                               FileInfo outputRoot,
-                               FileInfo outputDir,
-                               Dictionary< FileInfo, List< Entry > > dirToEntries,
-                               int depth )
+    protected virtual void ProcessFile( Entry entry )
     {
-        // Store empty entries for every directory.
-        foreach ( var file in files )
-        {
-            if ( file.Directory != null )
-            {
-                if ( !dirToEntries.ContainsKey( file ) )
-                {
-                    dirToEntries[ file ] = [ ];
-                }
-            }
-        }
-
-        foreach ( var file in files )
-        {
-            if ( _inputRegex.Count > 0 )
-            {
-                var found = false;
-
-                foreach ( var pattern in _inputRegex )
-                {
-                    if ( pattern.IsMatch( file.Name ) )
-                    {
-                        found = true;
-
-                        break;
-                    }
-                }
-
-                if ( !found ) continue;
-            }
-
-            var dir = file.Directory;
-
-            Guard.ThrowIfNull( dir );
-
-            if ( ( _inputFilter != null ) && !_inputFilter( dir, file.Name ) ) continue;
-
-            var outputName = file.Name;
-
-            if ( _outputSuffix != null )
-            {
-                outputName = MyRegex().Replace( outputName, "$1" ) + _outputSuffix;
-            }
-
-            var entry = new Entry
-            {
-                Depth     = depth,
-                InputFile = file,
-                OutputDir = outputDir.Directory!,
-                OutputFile = _flattenOutput
-                    ? new FileInfo( Path.Combine( outputRoot.FullName, outputName ) )
-                    : new FileInfo( Path.Combine( outputDir.FullName, outputName ) ),
-            };
-
-            dirToEntries[ dir ].Add( entry );
-        }
     }
 
-    private void ProcessDirectories( DirectoryInfo[]? files,
-                                     DirectoryInfo outputRoot,
-                                     DirectoryInfo outputDir,
-                                     Dictionary< DirectoryInfo, List< Entry > > dirToEntries,
-                                     int depth )
+    protected virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
-        Guard.ThrowIfNull( files );
-
-        // Store empty entries for every directory.
-        foreach ( var file in files )
-        {
-            if ( !dirToEntries.ContainsKey( file ) )
-            {
-                dirToEntries[ file ] = [ ];
-            }
-        }
-
-        foreach ( var file in files )
-        {
-            if ( _recursive )
-            {
-                var subdir = outputDir.FullName.Length == 0
-                    ? new FileInfo( file.Name )
-                    : new FileInfo( Path.Combine( outputDir.FullName, file.Name ) );
-
-                Process( file.GetFileSystemInfos().Where
-                             ( f => ( _inputFilter == null )
-                                    || f is FileInfo
-                                    || ( f is FileInfo fInfo
-                                         && _inputFilter( fInfo, f.Name ) ) ).ToArray(),
-                         outputRoot, subdir, dirToEntries, depth + 1 );
-            }
-        }
     }
 
-    // ========================================================================
-
-    /// <summary>
-    /// Called with each input file.
-    /// </summary>
-    protected void ProcessFile( Entry entry )
-    {
-        //TODO:
-    }
-
-    /// <summary>
-    /// Called for each input directory. The files will be <see cref="SetComparator(Comparison{)" />
-    /// sorted. The specified files list can be modified to change which files are processed.
-    /// </summary>
-    protected void ProcessDir( Entry entryDir, List< Entry > files )
-    {
-        //TODO:
-    }
-
-    /// <summary>
-    /// This method should be called by <see cref="ProcessFile(Entry)" /> or
-    /// <see cref="ProcessDir(Entry, List{Entry})" /> if the return value of
-    /// <see cref="System.Diagnostics.Process" /> or <see cref="System.Diagnostics.Process" />
-    /// should return all the processed files.
-    /// </summary>
     protected void AddProcessedFile( Entry entry )
     {
-        _outputFiles.Add( entry );
+        OutputFiles.Add( entry );
     }
 
     // ========================================================================
-    // ========================================================================
 
-    [PublicAPI]
     public class Entry
     {
-        public FileInfo      InputFile  { get; set; } = null!;
-        public FileInfo      OutputFile { get; set; } = null!;
-        public DirectoryInfo OutputDir  { get; set; } = null!;
-        public int           Depth      { get; set; }
-
-        // ====================================================================
+        public FileSystemInfo InputFile  { get; set; } = null!;
+        public DirectoryInfo  OutputDir  { get; set; } = null!;
+        public FileInfo       OutputFile { get; set; } = null!;
+        public int            Depth      { get; set; }
 
         public Entry()
         {
@@ -608,16 +361,14 @@ public partial class FileProcessor
             OutputFile = outputFile;
         }
 
-        /// <inheritdoc />
-        public override string? ToString()
+        public override string ToString()
         {
             return InputFile.ToString();
         }
     }
 
     // ========================================================================
-    // ========================================================================
-
-    [GeneratedRegex( "(.*)\\..*" )]
+    
+    [GeneratedRegex("(.*)\\..*")]
     private static partial Regex MyRegex();
 }

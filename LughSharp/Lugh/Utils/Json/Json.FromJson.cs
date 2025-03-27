@@ -32,39 +32,27 @@ namespace LughSharp.Lugh.Utils.Json;
 
 public partial class Json
 {
-    /** @param type May be null if the type is unknown.
-     * @return May be null. */
-    public static T FromJson< T >( Type type, TextReader reader )
+    public T? FromJson< T >( Type type, TextReader reader )
     {
         return ReadValue< T >( type, null, new JsonReader().Parse( reader ) );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     * @return May be null. */
-    public static T FromJson< T >( Type type, Type elementType, TextReader reader )
+    public T? FromJson< T >( Type type, Type elementType, TextReader reader )
     {
         return ReadValue< T >( type, elementType, new JsonReader().Parse( reader ) );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @return May be null. */
-    public static T FromJson< T >( Type type, InputStream input )
+    public T? FromJson< T >( Type type, InputStream input )
     {
         return ReadValue< T >( type, null, new JsonReader().Parse( input ) );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     * @return May be null. */
-    public static T FromJson< T >( Type type, Type elementType, InputStream input )
+    public T? FromJson< T >( Type type, Type elementType, InputStream input )
     {
         return ReadValue< T >( type, elementType, new JsonReader().Parse( input ) );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @return May be null. */
-    public static T FromJson< T >( Type type, FileInfo file )
+    public T? FromJson< T >( Type type, FileInfo file )
     {
         try
         {
@@ -76,10 +64,7 @@ public partial class Json
         }
     }
 
-    /** @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     * @return May be null. */
-    public static T FromJson< T >( Type type, Type elementType, FileInfo file )
+    public T? FromJson< T >( Type type, Type elementType, FileInfo file )
     {
         try
         {
@@ -91,31 +76,22 @@ public partial class Json
         }
     }
 
-    /** @param type May be null if the type is unknown.
-     * @return May be null. */
-    public static T FromJson< T >( Type type, char[] data, int offset, int length )
+    public T? FromJson< T >( Type type, char[] data, int offset, int length )
     {
         return ReadValue< T >( type, null, new JsonReader().Parse( data, offset, length ) );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown.
-     * @return May be null. */
-    public static T FromJson< T >( Type type, Type elementType, char[] data, int offset, int length )
+    public T? FromJson< T >( Type type, Type elementType, char[] data, int offset, int length )
     {
         return ReadValue< T >( type, elementType, new JsonReader().Parse( data, offset, length ) );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @return May be null. */
-    public static T FromJson< T >( Type type, string json )
+    public T? FromJson< T >( Type type, string json )
     {
         return ReadValue< T >( type, null, new JsonReader().Parse( json ) );
     }
 
-    /** @param type May be null if the type is unknown.
-     * @return May be null. */
-    public static T FromJson< T >( Type type, Type elementType, string json )
+    public T? FromJson< T >( Type type, Type elementType, string json )
     {
         return ReadValue< T >( type, elementType, new JsonReader().Parse( json ) );
     }

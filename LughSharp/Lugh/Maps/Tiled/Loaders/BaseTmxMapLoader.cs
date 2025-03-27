@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.IO.Compression;
-using System.Runtime.Serialization;
 using System.Xml;
 
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
@@ -38,6 +37,8 @@ using LughSharp.Lugh.Maps.Tiled.Objects;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
+
+using SerializationException = LughSharp.Lugh.Utils.Exceptions.SerializationException;
 
 namespace LughSharp.Lugh.Maps.Tiled.Loaders;
 

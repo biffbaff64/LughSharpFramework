@@ -28,6 +28,8 @@ using System.IO;
 using System.Numerics;
 using System.Text;
 
+using LughSharp.Lugh.Utils.Guarding;
+
 namespace LughSharp.Lugh.Utils.Json;
 
 [PublicAPI]
@@ -52,14 +54,22 @@ public class JsonWriter : TextWriter
         return _writer;
     }
 
-    /** Sets the type of JSON output. Default is {@link JsonOutputType#minimal}. */
+    /// <summary>
+    /// Sets the type of JSON output. Default is <see cref="JsonOutputType.Minimal"/>.
+    /// </summary>
     public void SetOutputType( JsonOutputType? outputType )
     {
-        this._outputType = outputType;
+        Guard.ThrowIfNull( outputType );
+        
+        this._outputType = ( JsonOutputType )outputType;
     }
 
-    /** When true, quotes long, double, BigInteger, BigDecimal types to prevent truncation in languages like JavaScript and PHP.
-     * This is not necessary when using libgdx, which handles these types without truncation. Default is false. */
+    /// <summary>
+    /// When true, quotes long, double, BigInteger, BigDecimal types to prevent truncation in
+    /// languages like JavaScript and PHP. This is not necessary when using libgdx, which handles
+    /// these types without truncation.
+    /// Default is false.
+    /// </summary>
     public void SetQuoteLongValues( bool quoteLongValues )
     {
         this._quoteLongValues = quoteLongValues;
@@ -100,6 +110,7 @@ public class JsonWriter : TextWriter
     public JsonWriter Array()
     {
         RequireCommaOrName();
+        
         _stack.Push( _current = new JsonObject( true, _writer ) );
 
         return this;
@@ -136,7 +147,9 @@ public class JsonWriter : TextWriter
         return this;
     }
 
-    /** Writes the specified JSON value, without quoting or escaping. */
+    /// <summary>
+    /// Writes the specified JSON value, without quoting or escaping.
+    /// </summary>
     public JsonWriter Json( string json )
     {
         RequireCommaOrName();

@@ -31,4 +31,24 @@ public class JsonReader
     {
         throw new NotImplementedException();
     }
+    
+    public JsonValue Parse( TextReader reader )
+    {
+        throw new NotImplementedException();
+    }
+    
+    public JsonValue Parse( Stream stream )
+    {
+        throw new NotImplementedException();
+    }
+    
+    public JsonValue Parse( FileInfo file )
+    {
+        throw new NotImplementedException();
+    }
+
+    public JsonValue Parse( char[] data, int offset, int length )
+    {
+        throw new NotImplementedException();
+    }
 }

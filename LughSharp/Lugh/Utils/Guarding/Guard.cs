@@ -348,7 +348,7 @@ public class Guard
     /// Throws an <see cref="ArgumentException"/> if the supplied string is either Null, empty or
     /// consists only of whitespace characters.
     /// </summary>
-    public static void ValidateString( string input )
+    public static void ValidateString( string? input )
     {
         if ( string.IsNullOrWhiteSpace( input ) )
         {
