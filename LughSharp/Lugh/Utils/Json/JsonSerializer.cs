@@ -26,9 +26,10 @@ namespace LughSharp.Lugh.Utils.Json;
 
 // ========================================================================
 
+[PublicAPI]
 public abstract class ReadOnlySerializer< T > : IJsonSerializer
 {
-    public virtual void Write( Json json, object obj, Type knownType )
+    public virtual void Write( Json json, object obj, Type? knownType )
     {
     }
 
@@ -37,24 +38,27 @@ public abstract class ReadOnlySerializer< T > : IJsonSerializer
 
 // ========================================================================
 
+[PublicAPI]
 public interface IJsonSerializer
 {
-    void Write( Json json, object obj, Type knownType );
+    void Write( Json json, object obj, Type? knownType );
     
     object Read( Json json, JsonValue jsonData, Type? type );
 }
 
 // ========================================================================
 
+[PublicAPI]
 public interface IJsonSerializer< T >
 {
     void Write( Json json, T obj, Type knownType );
     
-    T Read( Json json, JsonValue jsonData, Type type );
+    T Read( Json json, JsonValue jsonData, Type? type );
 }
 
 // ========================================================================
 
+[PublicAPI]
 public interface IJsonSerializable
 {
     void Write( Json json );

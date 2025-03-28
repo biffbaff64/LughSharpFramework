@@ -22,12 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Numerics;
 using System.Text;
 
+using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Guarding;
 
 namespace LughSharp.Lugh.Utils.Json;
@@ -116,7 +114,7 @@ public class JsonWriter : TextWriter
         return this;
     }
 
-    public JsonWriter Value( object value )
+    public JsonWriter Value( object? value )
     {
         if ( _quoteLongValues && ( value is long or double or decimal or BigInteger ) )
         {
@@ -124,12 +122,12 @@ public class JsonWriter : TextWriter
         }
         else if ( value is int || value is long || value is float || value is double || value is decimal )
         {
-            if ( value is float floatValue && ( floatValue == ( long )floatValue ) )
+            if ( value is float floatValue && ( Math.Abs( floatValue - ( long )floatValue ) < Number.FLOAT_TOLERANCE ) )
             {
                 value = ( long )floatValue;
             }
 
-            if ( value is double doubleValue && ( doubleValue == ( long )doubleValue ) )
+            if ( value is double doubleValue && ( Math.Abs( doubleValue - ( long )doubleValue ) < Number.FLOAT_TOLERANCE ) )
             {
                 value = ( long )doubleValue;
             }
@@ -246,7 +244,7 @@ public class JsonWriter : TextWriter
     // Abstract Property from TextWriter
 
     /// <inheritdoc />
-    public override Encoding Encoding { get; }
+    public override Encoding Encoding { get; } = null!;
 
     // ========================================================================
     // ========================================================================

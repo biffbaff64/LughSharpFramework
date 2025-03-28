@@ -729,7 +729,7 @@ public class Array< T >
     /// <param name="type"> The <see cref="Type" /> of the array to create. </param>
     /// <returns> The new array. </returns>
     [MustUseReturnValue]
-    public virtual T[] ToArray( Type type )
+    public virtual T[] ToArray( Type? type )
     {
         var result = ( T[] )Array.CreateInstance( type, Size );
 

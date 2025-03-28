@@ -866,7 +866,9 @@ public class JsonValue : IEnumerable< JsonValue >
             switch ( value._valueType )
             {
                 case ValueType.StringValue:
-                    v = ( char )( value._stringValue.Length == 0 ? 0 : value._stringValue.ToCharArray()[ 0 ] );
+                    v = ( char )( value._stringValue?.Length == 0
+                        ? 0
+                        : value._stringValue!.ToCharArray()[ 0 ] );
 
                     break;
 
@@ -918,7 +920,7 @@ public class JsonValue : IEnumerable< JsonValue >
     {
         var child = Get( name );
 
-        return child == null ? null : child.Child;
+        return child?.Child;
     }
 
     /// <summary>
@@ -1024,7 +1026,7 @@ public class JsonValue : IEnumerable< JsonValue >
     /// Finds the child with the specified index and returns it as a string.
     /// </summary>
     /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public string GetString( string name )
+    public string? GetString( string name )
     {
         var child = Get( name );
 
@@ -1488,8 +1490,6 @@ public class JsonValue : IEnumerable< JsonValue >
             }
             else
             {
-                var start = buffer.Length;
-
                 while ( true )
                 {
                     buffer.Append( '{' );
@@ -1595,7 +1595,7 @@ public class JsonValue : IEnumerable< JsonValue >
             {
                 ValueType.ArrayValue  => "[]",
                 ValueType.ObjectValue => "{}",
-                _                     => ""
+                _                     => "",
             };
         }
 
@@ -1650,7 +1650,7 @@ public class JsonValue : IEnumerable< JsonValue >
         return buffer.ToString();
     }
 
-    private void PrettyPrint( JsonValue jsonval, StringBuilder buffer, int indent, PrettyPrintSettings settings )
+    private static void PrettyPrint( JsonValue jsonval, StringBuilder buffer, int indent, PrettyPrintSettings settings )
     {
         var outputType = settings.JsonOutputType;
 
@@ -1805,7 +1805,7 @@ public class JsonValue : IEnumerable< JsonValue >
         PrettyPrint( this, writer, 0, settings );
     }
 
-    private void PrettyPrint( JsonValue jsonval, TextWriter writer, int indent, PrettyPrintSettings settings )
+    private static void PrettyPrint( JsonValue jsonval, TextWriter writer, int indent, PrettyPrintSettings settings )
     {
         var outputType = settings.JsonOutputType;
 
@@ -2013,11 +2013,6 @@ public class JsonValue : IEnumerable< JsonValue >
             throw new NotSupportedException();
         }
 
-        /// <inheritdoc />
-        public void Dispose()
-        {
-        }
-
         public void Remove()
         {
             if ( _current == null )
@@ -2050,6 +2045,12 @@ public class JsonValue : IEnumerable< JsonValue >
         public IEnumerator< JsonValue > GetEnumerator() => this;
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            GC.SuppressFinalize( this );
+        }
     }
 
     // ========================================================================

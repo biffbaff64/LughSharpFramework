@@ -244,7 +244,7 @@ public void Dispose()
         Add( name, resource, resource.GetType() );
     }
 
-    public void Add( string? name, object? resource, Type type )
+    public void Add( string? name, object? resource, Type? type )
     {
         ArgumentNullException.ThrowIfNull( name );
         ArgumentNullException.ThrowIfNull( resource );
@@ -268,7 +268,7 @@ public void Dispose()
         typeResources.Put( name, resource );
     }
 
-    public void Remove( string name, Type type )
+    public void Remove( string name, Type? type )
     {
         ArgumentNullException.ThrowIfNull( name );
 
@@ -297,7 +297,7 @@ public void Dispose()
     /// Returns a named resource of the specified type.
     /// </summary>
     /// <exception cref="GdxRuntimeException">if the resource was not found.</exception>
-    public object Get( string name, Type type )
+    public object Get( string name, Type? type )
     {
         ArgumentNullException.ThrowIfNull( name );
 
@@ -354,7 +354,7 @@ public void Dispose()
         return ( T? )Resources[ typeof( T ) ]?.Get( name );
     }
 
-    public bool Has( string name, Type type )
+    public bool Has( string name, Type? type )
     {
         return Resources[ type ]!.ContainsKey( name );
     }
@@ -363,7 +363,7 @@ public void Dispose()
     /// Returns the name to resource mapping for the specified type, or
     /// null if no resources of that type exist.
     /// </summary>
-    public Dictionary< string, object >? GetAll( Type type )
+    public Dictionary< string, object >? GetAll( Type? type )
     {
         return Resources[ type ];
     }
@@ -836,7 +836,7 @@ public void Dispose()
         }
     }
 
-    private static MethodInfo? FindMethod( Type type, string name )
+    private static MethodInfo? FindMethod( Type? type, string name )
     {
         return type.GetMethod( name );
     }

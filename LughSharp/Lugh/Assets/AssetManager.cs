@@ -495,7 +495,7 @@ public partial class AssetManager
     /// <returns>The requested asset if found; otherwise, null if not required.</returns>
     /// <exception cref="ArgumentNullException">Thrown when the name or type is null.</exception>
     /// <exception cref="GdxRuntimeException">Thrown if the asset is not found and it is required.</exception>
-    public object? Get( string name, Type type, bool required )
+    public object? Get( string name, Type? type, bool required )
     {
         lock ( this )
         {
@@ -524,7 +524,7 @@ public partial class AssetManager
     /// Thrown if the <paramref name="type" /> or <paramref name="outArray" /> is null.
     /// </exception>
     /// <exception cref="GdxRuntimeException">Thrown if no assets of the specified type are found.</exception>
-    public List< T > GetAll< T >( Type type, List< T > outArray )
+    public List< T > GetAll< T >( Type? type, List< T > outArray )
     {
         lock ( this )
         {
@@ -956,7 +956,7 @@ public partial class AssetManager
     /// The file name (interpretation depends on <see cref="AssetLoader" />)
     /// </param>
     /// <param name="type"> the type of the asset. </param>
-    public void Load( string fileName, Type type )
+    public void Load( string fileName, Type? type )
     {
         lock ( this )
         {
@@ -1018,7 +1018,7 @@ public partial class AssetManager
     /// <param name="type">The type of the asset.</param>
     /// <param name="asset">The asset to add.</param>
     /// <exception cref="GdxRuntimeException">Thrown if the asset is null.</exception>
-    public void AddAsset( string fileName, Type type, object? asset )
+    public void AddAsset( string fileName, Type? type, object? asset )
     {
         ArgumentNullException.ThrowIfNull( fileName );
         ArgumentNullException.ThrowIfNull( type );
@@ -1110,7 +1110,7 @@ public partial class AssetManager
     /// the suffix the filename must have for this loader to be used or null
     /// to specify the default loader.
     /// </param>
-    public void SetLoader( Type type, AssetLoader loader, string? suffix = "" )
+    public void SetLoader( Type? type, AssetLoader loader, string? suffix = "" )
     {
         // Normalize the suffix: Use "" for null or empty strings
         suffix = string.IsNullOrEmpty( suffix ) ? "" : suffix;
@@ -1184,7 +1184,7 @@ public partial class AssetManager
     /// <summary>
     /// Returns TRUE if the asset identified by fileName and Type is loaded.
     /// </summary>
-    public bool IsLoaded( string fileName, Type type )
+    public bool IsLoaded( string fileName, Type? type )
     {
         lock ( this )
         {
@@ -1381,7 +1381,7 @@ public partial class AssetManager
     /// <returns>
     /// true if the asset was successfully found and removed from the load queue; otherwise, false.
     /// </returns>
-    private bool TryRemoveFromQueue( string fileName, Type type )
+    private bool TryRemoveFromQueue( string fileName, Type? type )
     {
         for ( var i = 0; i < _loadQueue.Count; i++ )
         {

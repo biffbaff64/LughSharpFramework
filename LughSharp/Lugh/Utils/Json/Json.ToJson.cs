@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
 using System.Text;
 
 namespace LughSharp.Lugh.Utils.Json;
@@ -32,15 +30,15 @@ public partial class Json
 {
     public string ToJson( object? obj )
     {
-        return ToJson( obj, obj?.GetType(), null );
+        return ToJson( obj, obj?.GetType(), elementType: null );
     }
 
     public string ToJson( object? obj, Type knownType )
     {
-        return ToJson( obj, knownType, null );
+        return ToJson( obj, knownType, elementType: null );
     }
 
-    public string ToJson( object? obj, Type knownType, Type elementType )
+    public string ToJson( object? obj, Type? knownType, Type? elementType )
     {
         using ( var buffer = new StringWriter() )
         {
@@ -60,7 +58,7 @@ public partial class Json
         ToJson( obj, knownType, null, file );
     }
 
-    public void ToJson( object? obj, Type knownType, Type? elementType, FileInfo file )
+    public void ToJson( object? obj, Type? knownType, Type? elementType, FileInfo file )
     {
         try
         {
@@ -85,7 +83,7 @@ public partial class Json
         ToJson( obj, knownType, null, writer );
     }
 
-    public void ToJson( object? obj, Type knownType, Type? elementType, TextWriter writer )
+    public void ToJson( object? obj, Type? knownType, Type? elementType, TextWriter writer )
     {
         SetWriter( writer );
 
@@ -95,8 +93,7 @@ public partial class Json
         }
         finally
         {
-            CloseQuietly( this.writer );
-            this.writer = null;
+            writer.Close();
         }
     }
 }

@@ -205,7 +205,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
                                        string title,
                                        string text,
                                        string hint,
-                                       IInput.OnscreenKeyboardType type = IInput.OnscreenKeyboardType.Default )
+                                       IInput.OnscreenKeyboardType? type = IInput.OnscreenKeyboardType.Default )
     {
         //FIXME: TextInput does nothing ( this fixme from Java/LibGdx )
         listener.Canceled();
@@ -640,7 +640,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     {
     }
 
-    public override void SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType type )
+    public override void SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType? type )
     {
     }
 

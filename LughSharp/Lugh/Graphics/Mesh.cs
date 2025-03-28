@@ -157,7 +157,7 @@ public class Mesh : IDisposable
     /// the <see cref="VertexAttribute" />s. Each vertex attribute defines one property
     /// of a vertex such as position, normal or texture coordinate
     /// </param>
-    public Mesh( VertexDataType type,
+    public Mesh( VertexDataType? type,
                  bool isStatic,
                  int maxVertices,
                  int maxIndices,
@@ -176,7 +176,7 @@ public class Mesh : IDisposable
     /// <param name="maxVertices">the maximum number of vertices this mesh can hold</param>
     /// <param name="maxIndices">the maximum number of indices this mesh can hold</param>
     /// <param name="attributes">the <see cref="VertexAttributes" />.</param>
-    public Mesh( VertexDataType type, bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
+    public Mesh( VertexDataType? type, bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
         switch ( type )
         {

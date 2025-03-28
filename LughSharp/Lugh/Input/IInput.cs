@@ -120,7 +120,7 @@ public interface IInput
                        string title,
                        string text,
                        string hint,
-                       OnscreenKeyboardType type );
+                       OnscreenKeyboardType? type );
 
     long GetCurrentEventTime();
 
@@ -578,7 +578,7 @@ public interface IInput
     float GetPitch();
     float GetRoll();
     void SetOnscreenKeyboardVisible( bool visible );
-    void SetOnscreenKeyboardVisible( bool visible, OnscreenKeyboardType type );
+    void SetOnscreenKeyboardVisible( bool visible, OnscreenKeyboardType? type );
     void Vibrate( int milliseconds );
     void Vibrate( long[] pattern, int repeat );
     void CancelVibrate();

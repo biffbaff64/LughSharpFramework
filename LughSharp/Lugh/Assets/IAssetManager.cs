@@ -191,7 +191,7 @@ public interface IAssetManager
     /// <returns>The requested asset if found; otherwise, null if not required.</returns>
     /// <exception cref="ArgumentNullException">Thrown when the name or type is null.</exception>
     /// <exception cref="GdxRuntimeException">Thrown if the asset is not found and it is required.</exception>
-    object? Get( string name, Type type, bool required );
+    object? Get( string name, Type? type, bool required );
 
     /// <summary>
     /// Retrieves all assets of the specified type and adds them to the provided list.
@@ -204,7 +204,7 @@ public interface IAssetManager
     /// Thrown if the <paramref name="type" /> or <paramref name="outArray" /> is null.
     /// </exception>
     /// <exception cref="GdxRuntimeException">Thrown if no assets of the specified type are found.</exception>
-    List< T > GetAll< T >( Type type, List< T > outArray );
+    List< T > GetAll< T >( Type? type, List< T > outArray );
 
     /// <summary>
     /// Gets the filename for the specified asset type.
@@ -249,7 +249,7 @@ public interface IAssetManager
     /// <summary>
     /// Returns TRUE if the asset identified by fileName and Type is loaded.
     /// </summary>
-    bool IsLoaded( string fileName, Type type );
+    bool IsLoaded( string fileName, Type? type );
 
     /// <summary>
     /// Adds the given asset to the loading queue of the AssetManager.
@@ -276,7 +276,7 @@ public interface IAssetManager
     /// <param name="type">The type of the asset.</param>
     /// <param name="asset">The asset to add.</param>
     /// <exception cref="GdxRuntimeException">Thrown if the asset is null.</exception>
-    void AddAsset( string fileName, Type type, object? asset );
+    void AddAsset( string fileName, Type? type, object? asset );
 
     /// <summary>
     /// Returns true when all assets are loaded. Can be called from any thread but
@@ -312,7 +312,7 @@ public interface IAssetManager
     /// the suffix the filename must have for this loader to be used or null
     /// to specify the default loader.
     /// </param>
-    void SetLoader( Type type, AssetLoader loader, string suffix = "" );
+    void SetLoader( Type? type, AssetLoader loader, string suffix = "" );
 
     /// <summary>
     /// Asynchronously unloads an asset from the AssetManager.

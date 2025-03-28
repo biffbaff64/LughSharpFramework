@@ -103,8 +103,10 @@ public static partial class OutputTypeExtensions
         return "\"" + buffer.Replace( '"'.ToString(), "\\\"" ) + "\"";
     }
 
-    public static string QuoteName( this JsonOutputType outputType, string value )
+    public static string QuoteName( this JsonOutputType outputType, string? value )
     {
+        Guard.ThrowIfNull( value );
+        
         var buffer = new StringBuilder( value );
         buffer.Replace( "\\", @"\\" ).Replace( "\r", "\\r" ).Replace( "\n", "\\n" ).Replace( "\t", "\\t" );
 

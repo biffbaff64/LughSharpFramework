@@ -22,43 +22,47 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Collections;
 using System.Runtime.Serialization;
 
-using LughSharp.Lugh.Maps;
 using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Collections.DeleteCandidates;
+using LughSharp.Lugh.Utils.Guarding;
 
 namespace LughSharp.Lugh.Utils.Json;
 
 public partial class Json
 {
-    /** Writes the value as a field on the current JSON object, without writing the actual class.
-     * @param value May be null.
-     * @see #WriteValue(string, object, Type, Type) */
-    public void WriteValue( string name, object value )
+    /// <summary>
+    /// Writes the value as a field on the current JSON object, without writing the actual class.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"> May be null. </param>
+    public void WriteValue( string name, object? value )
     {
         try
         {
-            writer.name( name );
+            JsonWriter?.Name( name );
         }
         catch ( IOException ex )
         {
             throw new SerializationException( ex.Message );
         }
 
-        WriteValue( value, value == null ? null : value.GetType(), null );
+        WriteValue( value, value?.GetType(), null );
     }
 
-    /** Writes the value as a field on the current JSON object, writing the class of the object if it differs from the specified
-     * known type.
-     * @param value May be null.
-     * @param knownType May be null if the type is unknown.
-     * @see #WriteValue(string, object, Type, Type) */
+    /// <summary>
+    /// Writes the value as a field on the current JSON object, writing the class of the object
+    /// if it differs from the specified known type.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"> May be null. </param>
+    /// <param name="knownType"> May be null if the type is unknown. </param>
     public void WriteValue( string name, object value, Type knownType )
     {
         try
         {
-            writer.name( name );
+            JsonWriter?.Name( name );
         }
         catch ( IOException ex )
         {
@@ -68,16 +72,20 @@ public partial class Json
         WriteValue( value, knownType, null );
     }
 
-    /** Writes the value as a field on the current JSON object, writing the class of the object if it differs from the specified
-     * known type. The specified element type is used as the default type for collections.
-     * @param value May be null.
-     * @param knownType May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown. */
+    /// <summary>
+    /// Writes the value as a field on the current JSON object, writing the class of the object
+    /// if it differs from the specified known type. The specified element type is used as the
+    /// default type for collections.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"> May be null. </param>
+    /// <param name="knownType"> May be null if the type is unknown. </param>
+    /// <param name="elementType"> May be null if the type is unknown. </param>
     public void WriteValue( string name, object value, Type knownType, Type elementType )
     {
         try
         {
-            writer.name( name );
+            JsonWriter?.Name( name );
         }
         catch ( IOException ex )
         {
@@ -87,53 +95,61 @@ public partial class Json
         WriteValue( value, knownType, elementType );
     }
 
-    /** Writes the value, without writing the class of the object.
-     * @param value May be null. */
-    public void WriteValue( object value )
+    /// <summary>
+    /// Writes the value, without writing the class of the object.
+    /// </summary>
+    /// <param name="value"> May be null. </param>
+    public void WriteValue( object? value )
     {
-        if ( value == null )
-        {
-            WriteValue( value, null, null );
-        }
-        else
-        {
-            WriteValue( value, value.GetType(), null );
-        }
+        WriteValue( value, value?.GetType(), null );
     }
 
-    /** Writes the value, writing the class of the object if it differs from the specified known type.
-     * @param value May be null.
-     * @param knownType May be null if the type is unknown. */
+    /// <summary>
+    /// Writes the value, writing the class of the object if it differs from the specified known type.
+    /// </summary>
+    /// <param name="value"> May be null. </param>
+    /// <param name="knownType"> May be null if the type is unknown. </param>
     public void WriteValue( object value, Type knownType )
     {
         WriteValue( value, knownType, null );
     }
 
-    /** Writes the value, writing the class of the object if it differs from the specified known type. The specified element type
-     * is used as the default type for collections.
-     * @param value May be null.
-     * @param knownType May be null if the type is unknown.
-     * @param elementType May be null if the type is unknown. */
-    public void WriteValue( object value, Type knownType, Type elementType )
+    /// <summary>
+    /// Writes the value, writing the class of the object if it differs from the specified known type.
+    /// The specified element type is used as the default type for collections.
+    /// </summary>
+    /// <param name="value"> May be null. </param>
+    /// <param name="knownType"> May be null if the type is unknown. </param>
+    /// <param name="elementType"> May be null if the type is unknown. </param>
+    public void WriteValue( object? value, Type? knownType, Type? elementType )
     {
         try
         {
             if ( value == null )
             {
-                writer.value( null );
+                JsonWriter?.Value( null );
 
                 return;
             }
 
-            if ( ( ( knownType != null ) && knownType.isPrimitive() ) || ( knownType == string. )class || knownType == Integer.class
-            || knownType == Boolean.class || knownType == Float.class || knownType == Long.class || knownType == Double.class
-            || knownType == Short.class || knownType == Byte.class || knownType == Character.class) {
-                writer.value( value );
+            if ( knownType is { IsPrimitive: true }
+                 || ( ( knownType == typeof( string ) )
+                      || ( knownType == typeof( int ) )
+                      || ( knownType == typeof( bool ) )
+                      || ( knownType == typeof( float ) )
+                      || ( knownType == typeof( long ) )
+                      || ( knownType == typeof( double ) )
+                      || ( knownType == typeof( short ) )
+                      || ( knownType == typeof( byte ) ) ) )
+
+//                || knownType == Character )
+            {
+                JsonWriter?.Value( value );
 
                 return;
             }
 
-            Type actualType = value.GetType();
+            var actualType = value.GetType();
 
             if ( actualType.IsPrimitive
                  || ( actualType == typeof( string ) )
@@ -153,38 +169,39 @@ public partial class Json
                 return;
             }
 
-            if ( value is Serializable )
+            if ( value is IJsonSerializable serializable )
             {
                 WriteObjectStart( actualType, knownType );
-                ( ( Serializable )value ).write( this );
+                serializable.Write( this );
                 WriteObjectEnd();
 
                 return;
             }
 
-            Serializer serializer = classToSerializer.get( actualType );
+            var serializer = _classToSerializer.Get( actualType );
 
             if ( serializer != null )
             {
-                serializer.write( this, value, knownType );
+                serializer.Write( this, value, knownType );
 
                 return;
             }
 
             // JSON array special cases.
-            if ( value is Array )
+            if ( value is Array array )
             {
-                if ( ( knownType != null ) && ( actualType != knownType ) && ( actualType != Array. )class)
-
-                throw new SerializationException( "Serialization of an Array other than the known type is not supported.\n"
-                                                  + "Known type: " + knownType + "\nActual type: " + actualType );
+                if ( ( knownType != null ) && ( actualType != knownType ) && ( actualType != typeof( Array ) ) )
+                {
+                    throw new SerializationException( $"Serialization of an Array other than the" +
+                                                      $"known type is not supported.\nKnown type: " +
+                                                      $"{knownType}\nActual type: {actualType}" );
+                }
 
                 WriteArrayStart();
-                var array = ( Array )value;
 
-                for ( int i = 0, n = array.size; i < n; i++ )
+                for ( int i = 0, n = array.Length; i < n; i++ )
                 {
-                    WriteValue( array.get( i ), elementType, null );
+                    WriteValue( array.GetValue( i ), elementType, null );
                 }
 
                 WriteArrayEnd();
@@ -192,19 +209,22 @@ public partial class Json
                 return;
             }
 
-            if ( value is Queue )
+            if ( value is Queue queue )
             {
-                if ( ( knownType != null ) && ( actualType != knownType ) && ( actualType != Queue. )class)
-
-                throw new SerializationException( "Serialization of a Queue other than the known type is not supported.\n"
-                                                  + "Known type: " + knownType + "\nActual type: " + actualType );
+                if ( ( knownType != null ) && ( actualType != knownType ) && ( actualType != typeof( Queue ) ) )
+                {
+                    throw new SerializationException( $"Serialization of a Queue other than the " +
+                                                      $"known type is not supported.\nKnown type: " +
+                                                      $"{knownType}\nActual type: {actualType}" );
+                }
 
                 WriteArrayStart();
-                Queue queue = ( Queue )value;
 
-                for ( int i = 0, n = queue.size; i < n; i++ )
+                var queueElements = queue.ToArray();
+
+                for ( int i = 0, n = queue.Count; i < n; i++ )
                 {
-                    WriteValue( queue.get( i ), elementType, null );
+                    WriteValue( queueElements[ i ], elementType, null );
                 }
 
                 WriteArrayEnd();
@@ -212,230 +232,230 @@ public partial class Json
                 return;
             }
 
-            if ( value is Collection )
-            {
-                if ( ( TypeName != null ) && ( actualType != List. )class && ( ( knownType == null ) || ( knownType != actualType ) )) {
-                    WriteObjectStart( actualType, knownType );
-                    WriteArrayStart( "items" );
-                    for ( object item :
-                    ( Collection )value)
-                    WriteValue( item, elementType, null );
-                    WriteArrayEnd();
-                    WriteObjectEnd();
-                } else {
-                    WriteArrayStart();
-                    for ( object item :
-                    ( Collection )value)
-                    WriteValue( item, elementType, null );
-                    WriteArrayEnd();
-                }
+//            if ( value is Collection )
+//            {
+//                if ( ( TypeName != null ) && ( actualType != List. )class && ( ( knownType == null ) || ( knownType != actualType ) )) {
+//                    WriteObjectStart( actualType, knownType );
+//                    WriteArrayStart( "items" );
+//                    for ( object item :
+//                    ( Collection )value)
+//                    WriteValue( item, elementType, null );
+//                    WriteArrayEnd();
+//                    WriteObjectEnd();
+//                } else {
+//                    WriteArrayStart();
+//                    for ( object item :
+//                    ( Collection )value)
+//                    WriteValue( item, elementType, null );
+//                    WriteArrayEnd();
+//                }
+//
+//                return;
+//            }
 
-                return;
-            }
-
-            if ( actualType.isArray() )
-            {
-                if ( elementType == null )
-                {
-                    elementType = actualType.getComponentType();
-                }
-
-                int length = ArrayReflection.getLength( value );
-                WriteArrayStart();
-
-                for ( var i = 0; i < length; i++ )
-                {
-                    WriteValue( ArrayReflection.get( value, i ), elementType, null );
-                }
-
-                WriteArrayEnd();
-
-                return;
-            }
+//            if ( actualType.isArray() )
+//            {
+//                if ( elementType == null )
+//                {
+//                    elementType = actualType.getComponentType();
+//                }
+//
+//                int length = ArrayReflection.getLength( value );
+//                WriteArrayStart();
+//
+//                for ( var i = 0; i < length; i++ )
+//                {
+//                    WriteValue( ArrayReflection.get( value, i ), elementType, null );
+//                }
+//
+//                WriteArrayEnd();
+//
+//                return;
+//            }
 
             // JSON object special cases.
-            if ( value is ObjectMap< , > )
-            {
-                if ( knownType == null )
-                {
-                    knownType = ObjectMap.
-                }class;
-                WriteObjectStart( actualType, knownType );
-                for ( Entry entry :
-                ( ( ObjectMap < ?,  ?>)value).entries()) {
-                    writer.name( convertToString( entry.key ) );
-                    WriteValue( entry.value, elementType, null );
-                }
-                WriteObjectEnd();
+//            if ( value is ObjectMap< , > )
+//            {
+//                if ( knownType == null )
+//                {
+//                    knownType = ObjectMap.
+//                }class;
+//                WriteObjectStart( actualType, knownType );
+//                for ( Entry entry :
+//                ( ( ObjectMap < ?,  ?>)value).entries()) {
+//                    writer.name( convertToString( entry.key ) );
+//                    WriteValue( entry.value, elementType, null );
+//                }
+//                WriteObjectEnd();
+//
+//                return;
+//            }
 
-                return;
-            }
+//            if ( value is ObjectIntMap )
+//            {
+//                if ( knownType == null )
+//                {
+//                    knownType = ObjectIntMap.
+//                }class;
+//                WriteObjectStart( actualType, knownType );
+//                for ( ObjectIntMap.Entry entry :
+//                ( ( ObjectIntMap < ?>)value).entries()) {
+//                    writer.name( convertToString( entry.key ) );
+//                    WriteValue( entry.value, Integer.class);
+//                }
+//                WriteObjectEnd();
+//
+//                return;
+//            }
 
-            if ( value is ObjectIntMap )
-            {
-                if ( knownType == null )
-                {
-                    knownType = ObjectIntMap.
-                }class;
-                WriteObjectStart( actualType, knownType );
-                for ( ObjectIntMap.Entry entry :
-                ( ( ObjectIntMap < ?>)value).entries()) {
-                    writer.name( convertToString( entry.key ) );
-                    WriteValue( entry.value, Integer.class);
-                }
-                WriteObjectEnd();
+//            if ( value is ObjectFloatMap )
+//            {
+//                if ( knownType == null )
+//                {
+//                    knownType = ObjectFloatMap.
+//                }class;
+//                WriteObjectStart( actualType, knownType );
+//                for ( ObjectFloatMap.Entry entry :
+//                ( ( ObjectFloatMap < ?>)value).entries()) {
+//                    writer.name( convertToString( entry.key ) );
+//                    WriteValue( entry.value, Float.class);
+//                }
+//                WriteObjectEnd();
+//
+//                return;
+//            }
 
-                return;
-            }
+//            if ( value is ObjectSet )
+//            {
+//                if ( knownType == null )
+//                {
+//                    knownType = ObjectSet.
+//                }class;
+//                WriteObjectStart( actualType, knownType );
+//                writer.name( "values" );
+//                WriteArrayStart();
+//                for ( object entry :
+//                ( ObjectSet )value)
+//                WriteValue( entry, elementType, null );
+//                WriteArrayEnd();
+//                WriteObjectEnd();
+//
+//                return;
+//            }
 
-            if ( value is ObjectFloatMap )
-            {
-                if ( knownType == null )
-                {
-                    knownType = ObjectFloatMap.
-                }class;
-                WriteObjectStart( actualType, knownType );
-                for ( ObjectFloatMap.Entry entry :
-                ( ( ObjectFloatMap < ?>)value).entries()) {
-                    writer.name( convertToString( entry.key ) );
-                    WriteValue( entry.value, Float.class);
-                }
-                WriteObjectEnd();
+//            if ( value is IntMap )
+//            {
+//                if ( knownType == null )
+//                {
+//                    knownType = IntMap.
+//                }class;
+//                WriteObjectStart( actualType, knownType );
+//                for ( IntMap.Entry entry :
+//                ( ( IntMap < ?>)value).entries()) {
+//                    writer.name( string.valueOf( entry.key ) );
+//                    WriteValue( entry.value, elementType, null );
+//                }
+//                WriteObjectEnd();
+//
+//                return;
+//            }
 
-                return;
-            }
+//            if ( value is LongMap )
+//            {
+//                if ( knownType == null )
+//                {
+//                    knownType = LongMap.
+//                }class;
+//                WriteObjectStart( actualType, knownType );
+//                for ( LongMap.Entry entry :
+//                ( ( LongMap < ?>)value).entries()) {
+//                    writer.name( string.valueOf( entry.key ) );
+//                    WriteValue( entry.value, elementType, null );
+//                }
+//                WriteObjectEnd();
+//
+//                return;
+//            }
 
-            if ( value is ObjectSet )
-            {
-                if ( knownType == null )
-                {
-                    knownType = ObjectSet.
-                }class;
-                WriteObjectStart( actualType, knownType );
-                writer.name( "values" );
-                WriteArrayStart();
-                for ( object entry :
-                ( ObjectSet )value)
-                WriteValue( entry, elementType, null );
-                WriteArrayEnd();
-                WriteObjectEnd();
+//            if ( value is IntSet )
+//            {
+//                if ( knownType == null )
+//                {
+//                    knownType = IntSet.
+//                }class;
+//                WriteObjectStart( actualType, knownType );
+//                writer.name( "values" );
+//                WriteArrayStart();
+//
+//                for ( IntSetIterator iter = ( ( IntSet )value ).iterator(); iter.hasNext; )
+//                {
+//                    WriteValue( iter.next(), Integer.
+//                }class, null);
+//                WriteArrayEnd();
+//                WriteObjectEnd();
+//
+//                return;
+//            }
 
-                return;
-            }
+//            if ( value is ArrayMap )
+//            {
+//                if ( knownType == null )
+//                {
+//                    knownType = ArrayMap.
+//                }class;
+//                WriteObjectStart( actualType, knownType );
+//                ArrayMap map = ( ArrayMap )value;
+//
+//                for ( int i = 0, n = map.size; i < n; i++ )
+//                {
+//                    writer.name( convertToString( map.keys[ i ] ) );
+//                    WriteValue( map.values[ i ], elementType, null );
+//                }
+//
+//                WriteObjectEnd();
+//
+//                return;
+//            }
 
-            if ( value is IntMap )
-            {
-                if ( knownType == null )
-                {
-                    knownType = IntMap.
-                }class;
-                WriteObjectStart( actualType, knownType );
-                for ( IntMap.Entry entry :
-                ( ( IntMap < ?>)value).entries()) {
-                    writer.name( string.valueOf( entry.key ) );
-                    WriteValue( entry.value, elementType, null );
-                }
-                WriteObjectEnd();
-
-                return;
-            }
-
-            if ( value is LongMap )
-            {
-                if ( knownType == null )
-                {
-                    knownType = LongMap.
-                }class;
-                WriteObjectStart( actualType, knownType );
-                for ( LongMap.Entry entry :
-                ( ( LongMap < ?>)value).entries()) {
-                    writer.name( string.valueOf( entry.key ) );
-                    WriteValue( entry.value, elementType, null );
-                }
-                WriteObjectEnd();
-
-                return;
-            }
-
-            if ( value is IntSet )
-            {
-                if ( knownType == null )
-                {
-                    knownType = IntSet.
-                }class;
-                WriteObjectStart( actualType, knownType );
-                writer.name( "values" );
-                WriteArrayStart();
-
-                for ( IntSetIterator iter = ( ( IntSet )value ).iterator(); iter.hasNext; )
-                {
-                    WriteValue( iter.next(), Integer.
-                }class, null);
-                WriteArrayEnd();
-                WriteObjectEnd();
-
-                return;
-            }
-
-            if ( value is ArrayMap )
-            {
-                if ( knownType == null )
-                {
-                    knownType = ArrayMap.
-                }class;
-                WriteObjectStart( actualType, knownType );
-                ArrayMap map = ( ArrayMap )value;
-
-                for ( int i = 0, n = map.size; i < n; i++ )
-                {
-                    writer.name( convertToString( map.keys[ i ] ) );
-                    WriteValue( map.values[ i ], elementType, null );
-                }
-
-                WriteObjectEnd();
-
-                return;
-            }
-
-            if ( value is Map )
-            {
-                if ( knownType == null )
-                {
-                    knownType = HashMap.
-                }class;
-                WriteObjectStart( actualType, knownType );
-                for ( Map.Entry entry :
-                ( ( Map < ?,  ?>)value).entrySet()) {
-                    writer.name( convertToString( entry.getKey() ) );
-                    WriteValue( entry.getValue(), elementType, null );
-                }
-                WriteObjectEnd();
-
-                return;
-            }
+//            if ( value is Map )
+//            {
+//                if ( knownType == null )
+//                {
+//                    knownType = HashMap.
+//                }class;
+//                WriteObjectStart( actualType, knownType );
+//                for ( Map.Entry entry :
+//                ( ( Map < ?,  ?>)value).entrySet()) {
+//                    writer.name( convertToString( entry.getKey() ) );
+//                    WriteValue( entry.getValue(), elementType, null );
+//                }
+//                WriteObjectEnd();
+//
+//                return;
+//            }
 
             // Enum special case.
-            if ( ClassReflection.isAssignableFrom( Enum.class, actualType)) {
-                if ( ( TypeName != null ) && ( ( knownType == null ) || ( knownType != actualType ) ) )
-                {
-                    // Ensures that enums with specific implementations (abstract logic) serialize correctly.
-                    if ( actualType.getEnumConstants() == null )
-                    {
-                        actualType = actualType.getSuperclass();
-                    }
-
-                    WriteObjectStart( actualType, null );
-                    writer.name( "value" );
-                    writer.value( convertToString( ( Enum )value ) );
-                    WriteObjectEnd();
-                }
-                else
-                {
-                    writer.value( convertToString( ( Enum )value ) );
-                }
-
-                return;
-            }
+//            if ( ClassReflection.isAssignableFrom( Enum.class, actualType)) {
+//                if ( ( TypeName != null ) && ( ( knownType == null ) || ( knownType != actualType ) ) )
+//                {
+//                    // Ensures that enums with specific implementations (abstract logic) serialize correctly.
+//                    if ( actualType.getEnumConstants() == null )
+//                    {
+//                        actualType = actualType.getSuperclass();
+//                    }
+//
+//                    WriteObjectStart( actualType, null );
+//                    writer.name( "value" );
+//                    writer.value( convertToString( ( Enum )value ) );
+//                    WriteObjectEnd();
+//                }
+//                else
+//                {
+//                    writer.value( convertToString( ( Enum )value ) );
+//                }
+//
+//                return;
+//            }
 
             WriteObjectStart( actualType, knownType );
             WriteFields( value );
@@ -447,31 +467,33 @@ public partial class Json
         }
     }
 
-    /** Writes all fields of the specified object to the current JSON object. */
-    public void WriteFields( object @object )
+    /// <summary>
+    /// Writes all fields of the specified object to the current JSON object.
+    /// </summary>
+    public void WriteFields( object obj )
     {
-        Type type = object.GetType();
-
+        var type          = obj.GetType();
         var defaultValues = GetDefaultValues( type );
+        var fields        = GetFields( type );
+        var fieldNames    = fields?.OrderedKeys();
+        var defaultIndex  = 0;
 
-        OrderedMap< string, FieldMetadata > fields       = GetFields( type );
-        var                                 defaultIndex = 0;
-        Array< string >                     fieldNames   = fields.OrderedKeys();
-
-        for ( int i = 0, n = fieldNames.size; i < n; i++ )
+        for ( int i = 0, n = fieldNames!.Count; i < n; i++ )
         {
-            FieldMetadata metadata = fields.get( fieldNames.get( i ) );
+            var metadata = fields?.Get( fieldNames[ i ] );
 
-            if ( ignoreDeprecated && metadata.deprecated )
+            Guard.ThrowIfNull( metadata );
+
+            if ( IgnoreDeprecated && metadata.Deprecated )
             {
                 continue;
             }
 
-            Field field = metadata.field;
+            var field = metadata.FieldInfo;
 
             try
             {
-                object value = field.get( object );
+                var value = field.GetValue( obj );
 
                 if ( defaultValues != null )
                 {
@@ -484,17 +506,17 @@ public partial class Json
 
                     if ( ( value != null ) && ( defaultValue != null ) )
                     {
-                        if ( value.equals( defaultValue ) )
+                        if ( value.Equals( defaultValue ) )
                         {
                             continue;
                         }
 
-                        if ( value.GetType().isArray() && defaultValue.GetType().isArray() )
+                        if ( value.GetType().IsArray && defaultValue.GetType().IsArray )
                         {
-                            equals1[ 0 ] = value;
-                            equals2[ 0 ] = defaultValue;
+                            _equals1[ 0 ] = value;
+                            _equals2[ 0 ] = defaultValue;
 
-                            if ( Arrays.deepEquals( equals1, equals2 ) )
+                            if ( SystemArrayUtils.DeepEquals( _equals1, _equals2 ) )
                             {
                                 continue;
                             }
@@ -502,97 +524,89 @@ public partial class Json
                     }
                 }
 
-                if ( debug )
-                {
-                    System.out.
-                }
+                Logger.Debug( $"Writing field: {field.Name} ({type.Name})" );
 
-                println( "Writing field: " + field.getName() + " (" + type.getName() + ")" );
-                writer.name( field.getName() );
-                writeValue( value, field.getType(), metadata.elementType );
+                JsonWriter?.Name( field.Name );
+                WriteValue( value, field.GetType(), metadata.ElementType );
             }
-            catch ( ReflectionException ex )
+            catch ( FieldAccessException ex )
             {
-                throw new SerializationException( "Error accessing field: " + field.getName() + " (" + type.getName() + ")", ex );
+                throw new SerializationException( $"Error accessing field: {field.Name} ({type.Name})", ex );
             }
             catch ( SerializationException ex )
             {
-                ex.addTrace( field + " (" + type.getName() + ")" );
+                var newEx = new Exceptions.SerializationException( ex.Message ); 
+                newEx.AddTrace( $"{field} ({type.Name})" );
 
-                throw ex;
+                throw newEx;
             }
             catch ( Exception runtimeEx )
             {
-                var ex = new SerializationException( runtimeEx );
-                ex.addTrace( field + " (" + type.getName() + ")" );
+                var ex = new Exceptions.SerializationException( runtimeEx );
+                ex.AddTrace( $"{field} ({type.Name})" );
 
                 throw ex;
             }
         }
     }
 
-    /** @see #WriteField(object, string, string, Type) */
-    public void WriteField( object @object, string name )
+    public void WriteField( object? obj, string name )
     {
-        WriteField( object, name, name, null );
+        WriteField( obj, name, name, null );
     }
 
-    /** @param elementType May be null if the type is unknown.
-     * @see #WriteField(object, string, string, Type) */
-    public void WriteField( object @object, string name, Type elementType )
+    public void WriteField( object? obj, string name, Type elementType )
     {
-        WriteField( object, name, name, elementType );
+        WriteField( obj, name, name, elementType );
     }
 
-    /** @see #WriteField(object, string, string, Type) */
-    public void WriteField( object @object, string fieldName, string jsonName )
+    public void WriteField( object? obj, string fieldName, string jsonName )
     {
-        WriteField( object, fieldName, jsonName, null );
+        WriteField( obj, fieldName, jsonName, null );
     }
 
-    /** Writes the specified field to the current JSON object.
-     * @param elementType May be null if the type is unknown. */
-    public void WriteField( object @object, string fieldName, string jsonName, Type elementType )
+    /// <summary>
+    /// Writes the specified field to the current JSON object.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="fieldName"></param>
+    /// <param name="jsonName"></param>
+    /// <param name="elementType"> May be null if the type is unknown. </param>
+    public void WriteField( object? obj, string fieldName, string jsonName, Type? elementType )
     {
-        Type          type     = object.GetType();
-        FieldMetadata metadata = GetFields( type ).get( fieldName );
+        var type     = obj?.GetType();
+        var metadata = GetFields( type )?.Get( fieldName );
 
         if ( metadata == null )
         {
-            throw new SerializationException( "Field not found: " + fieldName + " (" + type.getName() + ")" );
+            throw new SerializationException( $"Field not found: {fieldName} ({type?.Name})" );
         }
 
-        Field field                            = metadata.field;
-        if ( elementType == null )
-        {
-            elementType = metadata.elementType;
-        }
+        var field = metadata.FieldInfo;
+        elementType ??= metadata.ElementType;
 
         try
         {
-            if ( debug )
-            {
-                System.out.
-            }
+            Logger.Debug( $"Writing field: {field.Name} ({type?.Name})" );
 
-            println( "Writing field: " + field.getName() + " (" + type.getName() + ")" );
-            writer.name( jsonName );
-            writeValue( field.get( object ), field.getType(), elementType );
+            JsonWriter?.Name( jsonName );
+            WriteValue( field.GetValue( obj ), field.GetType(), elementType );
         }
-        catch ( ReflectionException ex )
+        catch ( FieldAccessException ex )
         {
-            throw new SerializationException( "Error accessing field: " + field.getName() + " (" + type.getName() + ")", ex );
+            throw new SerializationException( $"Error accessing field: {field.Name} ({type?.Name})", ex );
         }
         catch ( SerializationException ex )
         {
-            ex.addTrace( field + " (" + type.getName() + ")" );
+            var newEx = new Exceptions.SerializationException( ex.Message );
+            newEx.AddTrace( $"{field} ({type?.Name})" );
 
-            throw ex;
+            throw newEx;
         }
         catch ( Exception runtimeEx )
         {
-            var ex = new SerializationException( runtimeEx );
-            ex.addTrace( field + " (" + type.getName() + ")" );
+            var ex = new Utils.Exceptions.SerializationException( runtimeEx );
+            ex.AddTrace( $"{field} ({type?.Name})" );
 
             throw ex;
         }
@@ -602,7 +616,7 @@ public partial class Json
     {
         try
         {
-            writer.name( name );
+            JsonWriter?.Name( name );
         }
         catch ( IOException ex )
         {
@@ -612,12 +626,11 @@ public partial class Json
         WriteObjectStart();
     }
 
-    /** @param knownType May be null if the type is unknown. */
     public void WriteObjectStart( string name, Type actualType, Type knownType )
     {
         try
         {
-            writer.name( name );
+            JsonWriter?.Name( name );
         }
         catch ( IOException ex )
         {
@@ -631,7 +644,7 @@ public partial class Json
     {
         try
         {
-            writer.object();
+            JsonWriter?.Object();
         }
         catch ( IOException ex )
         {
@@ -639,13 +652,16 @@ public partial class Json
         }
     }
 
-    /** Starts writing an object, writing the actualType to a field if needed.
-     * @param knownType May be null if the type is unknown. */
+    /// <summary>
+    /// Starts writing an object, writing the actualType to a field if needed.
+    /// </summary>
+    /// <param name="actualType"></param>
+    /// <param name="knownType"> May be null if the type is unknown. </param>
     public void WriteObjectStart( Type actualType, Type? knownType )
     {
         try
         {
-            writer.object();
+            JsonWriter?.Object();
         }
         catch ( IOException ex )
         {
@@ -662,7 +678,7 @@ public partial class Json
     {
         try
         {
-            writer.pop();
+            JsonWriter?.Pop();
         }
         catch ( IOException ex )
         {
@@ -674,8 +690,8 @@ public partial class Json
     {
         try
         {
-            writer.name( name );
-            writer.array();
+            JsonWriter?.Name( name );
+            JsonWriter?.Array();
         }
         catch ( IOException ex )
         {
@@ -687,7 +703,7 @@ public partial class Json
     {
         try
         {
-            writer.array();
+            JsonWriter?.Array();
         }
         catch ( IOException ex )
         {
@@ -699,7 +715,7 @@ public partial class Json
     {
         try
         {
-            writer.pop();
+            JsonWriter?.Pop();
         }
         catch ( IOException ex )
         {
@@ -716,25 +732,15 @@ public partial class Json
 
         var className = GetTag( type );
 
-        if ( className == null )
-        {
-            className = type.getName();
-        }
-
         try
         {
-            writer.set( TypeName, className );
+            JsonWriter?.Set( TypeName, className );
         }
         catch ( IOException ex )
         {
             throw new SerializationException( ex.Message );
         }
 
-        if ( debug )
-        {
-            System.out.
-        }
-
-        println( "Writing type: " + type.getName() );
+        Logger.Debug( $"Writing type: {type.Name}" );
     }
 }

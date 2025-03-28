@@ -183,13 +183,13 @@ public abstract class AbstractInput : IInput
     public abstract bool IsCursorOverridden();
     public abstract void SetCursorPosition( int x, int y );
     public abstract void SetOnscreenKeyboardVisible( bool visible );
-    public abstract void SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType type );
+    public abstract void SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType? type );
 
     public abstract void GetTextInput( IInput.ITextInputListener listener,
                                        string title,
                                        string text,
                                        string hint,
-                                       IInput.OnscreenKeyboardType type = IInput.OnscreenKeyboardType.Default );
+                                       IInput.OnscreenKeyboardType? type = IInput.OnscreenKeyboardType.Default );
 
     #endregion abstract methods
 

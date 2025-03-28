@@ -99,8 +99,8 @@ public partial class Json
     private Dictionary< Type, string >                               _classToTag           = [ ];
     private Dictionary< Type, IJsonSerializer >                      _classToSerializer    = [ ];
     private Dictionary< Type, object[]? >                            _classToDefaultValues = [ ];
-    private object[]?                                                _equals1              = [ ];
-    private object[]?                                                _equals2              = [ ];
+    private object[]                                                 _equals1              = [ ];
+    private object[]                                                 _equals2              = [ ];
     private TextWriter?                                              _textWriter;
 
     // ========================================================================
@@ -166,13 +166,13 @@ public partial class Json
     /// class for each element in the collection does not need to be written unless
     /// different from the element type.
     /// </summary>
-    public void SetElementType( Type type, string fieldName, Type elementType )
+    public void SetElementType( Type? type, string fieldName, Type elementType )
     {
         var metadata = GetFields( type )?.Get( fieldName );
 
         if ( metadata == null )
         {
-            throw new SerializationException( $"Field not found: {fieldName} ({type.Name})" );
+            throw new SerializationException( $"Field not found: {fieldName} ({type?.Name})" );
         }
 
         metadata.ElementType = elementType;
@@ -182,13 +182,13 @@ public partial class Json
     /// The specified field will be treated as if it has or does not have the
     /// <see cref="System.ObsoleteAttribute"/> annotation.
     /// </summary>
-    public void SetDeprecated( Type type, string fieldName, bool deprecated )
+    public void SetDeprecated( Type? type, string fieldName, bool deprecated )
     {
         var metadata = GetFields( type )?.Get( fieldName );
 
         if ( metadata == null )
         {
-            throw new SerializationException( $"Field not found: {fieldName} ({type.Name})" );
+            throw new SerializationException( $"Field not found: {fieldName} ({type?.Name})" );
         }
 
         metadata.Deprecated = deprecated;
@@ -198,8 +198,10 @@ public partial class Json
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
-    private OrderedMap< string, FieldMetadata >? GetFields( Type type )
+    private OrderedMap< string, FieldMetadata >? GetFields( Type? type )
     {
+        Guard.ThrowIfNull( type );
+        
         if ( _typeToFields.TryGetValue( type, out var fields ) )
         {
             return fields;
@@ -283,7 +285,7 @@ public partial class Json
     /// <param name="type"></param>
     /// <returns></returns>
     /// <exception cref="SerializationException"></exception>
-    private object[]? GetDefaultValues( Type type )
+    private object?[]? GetDefaultValues( Type type )
     {
         if ( !UsePrototypes ) return null;
 
@@ -319,7 +321,7 @@ public partial class Json
         {
             var metadata = fields.Get( fieldNames[ i ] );
 
-            if ( IgnoreDeprecated && ( bool )metadata?.Deprecated ) continue;
+            if ( IgnoreDeprecated && ( bool )metadata?.Deprecated! ) continue;
 
             var field = metadata?.FieldInfo;
 
@@ -529,7 +531,7 @@ public partial class Json
     /// true if the field name should be ignored and an exception won't be thrown by
     /// {@link #readFields(object, JsonValue)}.
     /// </returns>
-    protected static bool IgnoreUnknownField( Type type, string fieldName )
+    protected static bool IgnoreUnknownField( Type? type, string fieldName )
     {
         return false;
     }
@@ -1027,7 +1029,7 @@ public partial class Json
         return EnumNames ? Enum.GetName( e.GetType(), e ) : e.ToString();
     }
 
-    private string? ConvertToString( object obj )
+    private string? ConvertToString( object? obj )
     {
         return obj switch
         {
