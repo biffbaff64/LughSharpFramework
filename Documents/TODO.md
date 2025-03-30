@@ -974,13 +974,16 @@ UTILS/JSON
     CODE   DOCUMENT
     ----   --------
     - DONE - IP   - Json
-    - IP   - IP   - Json.FromJson
+    - DONE - IP   - Json.FromJson
     - DONE - IP   - Json.ToJson
     - DONE - IP   - Json.WriteValue
     - DONE - IP   - JsonOutputType
     - IP   - IP   - JsonReader
+    - IP   - IP   - JsonReader.Data
     - DONE - IP   - JsonSerializer
-    - IP   - IP   - JsonValue
+    - DONE - IP   - JsonValue
+    - DONE - DONE - JsonValue.AsType
+    - DONE - DONE - JsonValue.GetType
     - DONE - IP   - JsonWriter
 
 UTILS/POOLING

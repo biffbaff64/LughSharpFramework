@@ -263,7 +263,10 @@ public static class Logger
     /// </summary>
     public static void NewLine()
     {
-        Console.WriteLine( Environment.NewLine );
+        if ( !IsEnabled( LOG_DEBUG ) )
+        {
+            Console.WriteLine( Environment.NewLine );
+        }
     }
     
     /// <summary>

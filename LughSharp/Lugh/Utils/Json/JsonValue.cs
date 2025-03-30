@@ -22,22 +22,20 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Guarding;
-using LughSharp.Lugh.Utils.Json;
+
+using ArgumentException = System.ArgumentException;
 
 namespace LughSharp.Lugh.Utils.Json;
 
 [PublicAPI]
-public class JsonValue : IEnumerable< JsonValue >
+public partial class JsonValue : IEnumerable< JsonValue >
 {
     public string?    Name   { get; set; }
     public JsonValue? Child  { get; set; }
@@ -56,16 +54,16 @@ public class JsonValue : IEnumerable< JsonValue >
     /// </summary>
     public JsonValue? Prev { get; set; }
 
-    private ValueType _valueType;
-    private string?   _stringValue;
-    private double?   _doubleValue;
-    private long?     _longValue;
+    internal ValueTypes ValueType;
+    internal string?    StringValue;
+    internal double?    DoubleValue;
+    internal long?      LongValue;
 
     // ========================================================================
 
-    public JsonValue( ValueType valueType )
+    public JsonValue( ValueTypes valueType )
     {
-        this._valueType = valueType;
+        this.ValueType = valueType;
     }
 
     public JsonValue( string? value )
@@ -73,24 +71,14 @@ public class JsonValue : IEnumerable< JsonValue >
         Set( value );
     }
 
-    public JsonValue( double value )
+    public JsonValue( double value, string stringValue = null! )
     {
-        Set( value, null );
+        Set( value, stringValue );
     }
 
-    public JsonValue( long value )
+    public JsonValue( long value, string stringValue = null! )
     {
-        Set( value, null );
-    }
-
-    public JsonValue( double value, string _stringValue )
-    {
-        Set( value, _stringValue );
-    }
-
-    public JsonValue( long value, string _stringValue )
-    {
-        Set( value, _stringValue );
+        Set( value, stringValue );
     }
 
     public JsonValue( bool value )
@@ -100,9 +88,12 @@ public class JsonValue : IEnumerable< JsonValue >
 
     // ========================================================================
 
-    /** Returns the child at the specified index. This requires walking the linked list to the specified entry, see
-     * {@link JsonValue} for how to iterate efficiently.
-     * @return May be null. */
+    /// <summary>
+    /// Returns the child at the specified index. This requires walking the linked list to the
+    /// specified entry, see <see cref="JsonValue"/> for how to iterate efficiently.
+    /// </summary>
+    /// <param name="index"> The index of the required child. </param>
+    /// <returns> May be null. </returns>
     public JsonValue? Get( int index )
     {
         var current = Child;
@@ -116,8 +107,12 @@ public class JsonValue : IEnumerable< JsonValue >
         return current;
     }
 
-    /** Returns the child with the specified name.
-     * @return May be null. */
+    /// <summary>
+    /// Returns the child with the specified name. This requires walking the linked list to the
+    /// specified entry, see <see cref="JsonValue"/> for how to iterate efficiently.
+    /// </summary>
+    /// <param name="name"> The name of the required child. </param>
+    /// <returns> May be null. </returns>
     public JsonValue? Get( string name )
     {
         var current = Child;
@@ -132,18 +127,18 @@ public class JsonValue : IEnumerable< JsonValue >
         return current;
     }
 
-    /** Returns the child at the specified index. This requires walking the linked list to the specified entry, see
-     * {@link JsonValue} for how to iterate efficiently.
-     * @throws ArgumentException if the child was not found. */
+    /// <summary>
+    /// Returns the child at the specified index. This requires walking the linked list to the
+    /// specified entry, see <see cref="JsonValue"/> for how to iterate efficiently.
+    /// This method works as <see cref="Get(int)"/> but requires the child to be present. If the
+    /// child is not found, an exception will be thrown.
+    /// </summary>
+    /// <param name="index"> The index of the required child. </param>
+    /// <returns> The requested child. </returns>
+    /// <exception cref="ArgumentException"> If the child was not found. </exception>
     public JsonValue Require( int index )
     {
-        var current = Child;
-
-        while ( ( current != null ) && ( index > 0 ) )
-        {
-            index--;
-            current = current.Next;
-        }
+        var current = Get( index );
 
         if ( current == null )
         {
@@ -153,8 +148,15 @@ public class JsonValue : IEnumerable< JsonValue >
         return current;
     }
 
-    /** Returns the child with the specified name.
-     * @throws ArgumentException if the child was not found. */
+    /// <summary>
+    /// Returns the child with the specified name. This requires walking the linked list to the
+    /// specified entry, see <see cref="JsonValue"/> for how to iterate efficiently.
+    /// This method works as <see cref="Get(string)"/> but requires the child to be present. If the
+    /// child is not found, an exception will be thrown.
+    /// </summary>
+    /// <param name="name"> The name of the required child. </param>
+    /// <returns> The requested child. </returns>
+    /// <exception cref="ArgumentException"> If the child was not found. </exception>
     public JsonValue Require( string name )
     {
         var current = Child;
@@ -174,9 +176,12 @@ public class JsonValue : IEnumerable< JsonValue >
         return current;
     }
 
-    /** Removes the child with the specified index. This requires walking the linked list to the specified entry, see
-     * {@link JsonValue} for how to iterate efficiently.
-     * @return May be null. */
+    /// <summary>
+    /// Removes the child at the specified index. This requires walking the linked list to the
+    /// specified entry, see <see cref="JsonValue"/> for how to iterate efficiently.
+    /// </summary>
+    /// <param name="index"> The index of the required child. </param>
+    /// <returns> May be null. </returns>
     public JsonValue? Remove( int index )
     {
         var child = Get( index );
@@ -210,8 +215,12 @@ public class JsonValue : IEnumerable< JsonValue >
         return child;
     }
 
-    /** Removes the child with the specified name.
-     * @return May be null. */
+    /// <summary>
+    /// Remves the child with the specified name. This requires walking the linked list to the
+    /// specified entry, see <see cref="JsonValue"/> for how to iterate efficiently.
+    /// </summary>
+    /// <param name="name"> The name of the required child. </param>
+    /// <returns> May be null. </returns>
     public JsonValue? Remove( string name )
     {
         var child = Get( name );
@@ -245,7 +254,10 @@ public class JsonValue : IEnumerable< JsonValue >
         return child;
     }
 
-    /** Removes this value from its parent. */
+    /// <summary>
+    /// Removes this value from its parent.
+    /// </summary>
+    /// <exception cref="ArgumentNullException"> If the parent is null. </exception>
     public void Remove()
     {
         Guard.ThrowIfNull( Parent );
@@ -272,629 +284,20 @@ public class JsonValue : IEnumerable< JsonValue >
         Parent!.Size--;
     }
 
-    /** Returns true if there are one or more children in the array or @object. */
+    /// <summary>
+    /// Returns true if there are one or more children in this JsonValue.
+    /// </summary>
     public bool NotEmpty()
     {
         return Size > 0;
     }
 
-    /** Returns true if there are not children in the array or @object. */
+    /// <summary>
+    /// Returns true if there are not children in this JsonValue.
+    /// </summary>
     public bool IsEmpty()
     {
         return Size == 0;
-    }
-
-    /** Returns this value as a string.
-     * @return May be null if this value is null.
-     * @throws InvalidOperationException if this an array or @object. */
-    public string? AsString()
-    {
-        return _valueType switch
-        {
-            ValueType.StringValue  => _stringValue,
-            ValueType.DoubleValue  => _stringValue ?? _doubleValue.ToString(),
-            ValueType.LongValue    => _stringValue ?? _longValue.ToString(),
-            ValueType.BooleanValue => _longValue != 0 ? "true" : "false",
-            ValueType.NullValue    => null,
-
-            var _ => throw new InvalidOperationException( $"Value cannot be converted to string: {_valueType}" ),
-        };
-    }
-
-    public float AsFloat()
-    {
-        switch ( _valueType )
-        {
-            case ValueType.StringValue:
-                return float.Parse( _stringValue );
-
-            case ValueType.DoubleValue:
-                return ( float )_doubleValue;
-
-            case ValueType.LongValue:
-                return ( float )_longValue;
-
-            case ValueType.BooleanValue:
-                return _longValue != 0 ? 1 : 0;
-            
-            default:
-                break;
-        }
-
-        throw new InvalidOperationException( $"Value cannot be converted to float: {_valueType}" );
-    }
-
-    /** Returns this value as a double.
-     * @throws InvalidOperationException if this an array or @object. */
-    public double AsDouble()
-    {
-        switch ( _valueType )
-        {
-            case ValueType.StringValue:
-                return double.Parse( _stringValue );
-
-            case ValueType.DoubleValue:
-                return ( double )_doubleValue!;
-
-            case ValueType.LongValue:
-                return ( double )_longValue!;
-
-            case ValueType.BooleanValue:
-                return _longValue != 0 ? 1 : 0;
-            
-            default:
-                break;
-        }
-
-        throw new InvalidOperationException( $"Value cannot be converted to double: {_valueType}" );
-    }
-
-    /** Returns this value as a long.
-     * @throws InvalidOperationException if this an array or @object. */
-    public long AsLong()
-    {
-        switch ( _valueType )
-        {
-            case ValueType.StringValue:
-                return long.Parse( _stringValue );
-
-            case ValueType.DoubleValue:
-                return ( long )_doubleValue;
-
-            case ValueType.LongValue:
-                return ( long )_longValue;
-
-            case ValueType.BooleanValue:
-                return _longValue != 0 ? 1 : 0;
-            
-            default:
-                break;
-        }
-
-        throw new InvalidOperationException( $"Value cannot be converted to long: {_valueType}" );
-    }
-
-    /** Returns this value as an int.
-     * @throws InvalidOperationException if this an array or @object. */
-    public int AsInt()
-    {
-        switch ( _valueType )
-        {
-            case ValueType.StringValue:
-                return int.Parse( _stringValue );
-
-            case ValueType.DoubleValue:
-                return ( int )_doubleValue;
-
-            case ValueType.LongValue:
-                return ( int )_longValue;
-
-            case ValueType.BooleanValue:
-                return _longValue != 0 ? 1 : 0;
-            
-            default:
-                break;
-        }
-
-        throw new InvalidOperationException( $"Value cannot be converted to int: {_valueType}" );
-    }
-
-    /** Returns this value as a bool.
-     * @throws InvalidOperationException if this an array or @object. */
-    public bool AsBoolean()
-    {
-        switch ( _valueType )
-        {
-            case ValueType.StringValue:
-                return _stringValue.Equals( "true", StringComparison.OrdinalIgnoreCase );
-
-            case ValueType.DoubleValue:
-                return _doubleValue != 0;
-
-            case ValueType.LongValue:
-                return _longValue != 0;
-
-            case ValueType.BooleanValue:
-                return _longValue != 0;
-            
-            default:
-                break;
-        }
-
-        throw new InvalidOperationException( $"Value cannot be converted to bool: {_valueType}" );
-    }
-
-    /** Returns this value as a byte.
-     * @throws InvalidOperationException if this an array or @object. */
-    public byte AsByte()
-    {
-        switch ( _valueType )
-        {
-            case ValueType.StringValue:
-                return byte.Parse( _stringValue );
-
-            case ValueType.DoubleValue:
-                return ( byte )_doubleValue;
-
-            case ValueType.LongValue:
-                return ( byte )_longValue;
-
-            case ValueType.BooleanValue:
-                return ( byte )( _longValue != 0 ? 1 : 0 );
-            
-            default:
-                break;
-        }
-
-        throw new InvalidOperationException( $"Value cannot be converted to byte: {_valueType}" );
-    }
-
-    public short AsShort()
-    {
-        switch ( _valueType )
-        {
-            case ValueType.StringValue:
-                return short.Parse( _stringValue );
-
-            case ValueType.DoubleValue:
-                return ( short )_doubleValue;
-
-            case ValueType.LongValue:
-                return ( short )_longValue;
-
-            case ValueType.BooleanValue:
-                return ( short )( _longValue != 0 ? 1 : 0 );
-            
-            default:
-                break;
-        }
-
-        throw new InvalidOperationException( $"Value cannot be converted to short: {_valueType}" );
-    }
-
-    /** Returns this value as a char.
-     * @throws InvalidOperationException if this an array or @object. */
-    public char AsChar()
-    {
-        Guard.ThrowIfNull( _stringValue );
-
-        return _valueType switch
-        {
-            ValueType.StringValue  => _stringValue.Length == 0 ? ( char )0 : _stringValue[ 0 ],
-            ValueType.DoubleValue  => ( char )_doubleValue,
-            ValueType.LongValue    => ( char )_longValue,
-            ValueType.BooleanValue => ( char )( _longValue != 0 ? 1 : 0 ),
-            var _                  => throw new InvalidOperationException( $"Value cannot be converted to char: {_valueType}" )
-        };
-    }
-
-    /// <summary>
-    /// Returns the children of this value as a newly allocated string array.
-    /// </summary>
-    /// <exception cref="InvalidOperationException"> if this is not an array. </exception>
-    public string[] AsStringArray()
-    {
-        if ( _valueType is not ValueType.ArrayValue )
-        {
-            throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
-        }
-
-        var array = new string[ Size ];
-        var i     = 0;
-
-        for ( var value = Child; value != null; value = value.Next, i++ )
-        {
-            string? v;
-
-            switch ( value._valueType )
-            {
-                case ValueType.StringValue:
-                    v = value._stringValue;
-
-                    break;
-
-                case ValueType.DoubleValue:
-                    v = _stringValue ?? value._doubleValue.ToString();
-
-                    break;
-
-                case ValueType.LongValue:
-                    v = _stringValue ?? value._longValue.ToString();
-
-                    break;
-
-                case ValueType.BooleanValue:
-                    v = value._longValue != 0 ? "true" : "false";
-
-                    break;
-
-                case ValueType.NullValue:
-                    v = null;
-
-                    break;
-
-                default:
-                    throw new InvalidOperationException( $"Value cannot be converted to string: {value._valueType}" );
-            }
-
-            array[ i ] = v!;
-        }
-
-        return array;
-    }
-
-    /** Returns the children of this value as a newly allocated float array.
-     * @throws InvalidOperationException if this is not an array. */
-    public float[] AsFloatArray()
-    {
-        if ( _valueType != ValueType.ArrayValue )
-        {
-            throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
-        }
-
-        var array = new float[ Size ];
-        var i     = 0;
-
-        for ( var value = Child; value != null; value = value.Next, i++ )
-        {
-            var v = value._valueType switch
-            {
-                ValueType.StringValue  => float.Parse( value._stringValue ),
-                ValueType.DoubleValue  => ( float )value._doubleValue,
-                ValueType.LongValue    => ( float )value._longValue,
-                ValueType.BooleanValue => value._longValue != 0 ? 1 : 0,
-
-                var _ => throw new InvalidOperationException( $"Value cannot be converted to float: {value._valueType}" )
-            };
-
-            array[ i ] = v;
-        }
-
-        return array;
-    }
-
-    /** Returns the children of this value as a newly allocated double array.
-     * @throws InvalidOperationException if this is not an array. */
-    public double[] AsDoubleArray()
-    {
-        if ( _valueType != ValueType.ArrayValue )
-        {
-            throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
-        }
-
-        var array = new double[ Size ];
-        var i     = 0;
-
-        for ( var value = Child; value != null; value = value.Next, i++ )
-        {
-            double v;
-
-            switch ( value._valueType )
-            {
-                case ValueType.StringValue:
-                    v = double.Parse( value._stringValue );
-
-                    break;
-
-                case ValueType.DoubleValue:
-                    v = ( double )value._doubleValue;
-
-                    break;
-
-                case ValueType.LongValue:
-                    v = ( double )value._longValue;
-
-                    break;
-
-                case ValueType.BooleanValue:
-                    v = value._longValue != 0 ? 1 : 0;
-
-                    break;
-
-                default:
-                    throw new InvalidOperationException( $"Value cannot be converted to double: {value._valueType}" );
-            }
-
-            array[ i ] = v;
-        }
-
-        return array;
-    }
-
-    /// <summary>
-    /// Returns the children of this value as a newly allocated long array.
-    /// </summary>
-    /// <exception cref="InvalidOperationException"> if this is not an array. </exception>
-    public long?[] AsLongArray()
-    {
-        if ( _valueType != ValueType.ArrayValue )
-        {
-            throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
-        }
-
-        var array = new long?[ Size ];
-        var i     = 0;
-
-        for ( var value = Child; value != null; value = value.Next, i++ )
-        {
-            var v = value._valueType switch
-            {
-                ValueType.StringValue  => long.Parse( value._stringValue! ),
-                ValueType.DoubleValue  => ( long )value._doubleValue!,
-                ValueType.LongValue    => value._longValue,
-                ValueType.BooleanValue => value._longValue != 0 ? 1 : 0,
-
-                var _ => throw new InvalidOperationException( $"Value cannot be converted to long: {value._valueType}" ),
-            };
-
-            array[ i ] = v!;
-        }
-
-        return array;
-    }
-
-    /// <summary>
-    /// Returns the children of this value as a newly allocated int array.
-    /// </summary>
-    /// <exception cref="InvalidOperationException"> if this is not an array. </exception>
-    public int[] AsIntArray()
-    {
-        if ( _valueType != ValueType.ArrayValue )
-        {
-            throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
-        }
-
-        var array = new int[ Size ];
-        var i     = 0;
-
-        for ( var value = Child; value != null; value = value.Next, i++ )
-        {
-            int v;
-
-            switch ( value._valueType )
-            {
-                case ValueType.StringValue:
-                    v = int.Parse( value._stringValue );
-
-                    break;
-
-                case ValueType.DoubleValue:
-                    v = ( int )value._doubleValue;
-
-                    break;
-
-                case ValueType.LongValue:
-                    v = ( int )value._longValue;
-
-                    break;
-
-                case ValueType.BooleanValue:
-                    v = value._longValue != 0 ? 1 : 0;
-
-                    break;
-
-                default:
-                    throw new InvalidOperationException( $"Value cannot be converted to int: {value._valueType}" );
-            }
-
-            array[ i ] = v;
-        }
-
-        return array;
-    }
-
-    /** Returns the children of this value as a newly allocated bool array.
-     * @throws InvalidOperationException if this is not an array. */
-    public bool[] AsBooleanArray()
-    {
-        if ( _valueType != ValueType.ArrayValue )
-        {
-            throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
-        }
-
-        var array = new bool[ Size ];
-        var i     = 0;
-
-        for ( var value = Child; value != null; value = value.Next, i++ )
-        {
-            bool v;
-
-            switch ( value._valueType )
-            {
-                case ValueType.StringValue:
-                    v = bool.Parse( value._stringValue );
-
-                    break;
-
-                case ValueType.DoubleValue:
-                    v = value._doubleValue == 0;
-
-                    break;
-
-                case ValueType.LongValue:
-                    v = value._longValue == 0;
-
-                    break;
-
-                case ValueType.BooleanValue:
-                    v = value._longValue != 0;
-
-                    break;
-
-                default:
-                    throw new InvalidOperationException( $"Value cannot be converted to bool: {value._valueType}" );
-            }
-
-            array[ i ] = v;
-        }
-
-        return array;
-    }
-
-    /** Returns the children of this value as a newly allocated byte array.
-     * @throws InvalidOperationException if this is not an array. */
-    public byte[] AsByteArray()
-    {
-        if ( _valueType != ValueType.ArrayValue )
-        {
-            throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
-        }
-
-        var array = new byte[ Size ];
-        var i     = 0;
-
-        for ( var value = Child; value != null; value = value.Next, i++ )
-        {
-            byte v;
-
-            switch ( value._valueType )
-            {
-                case ValueType.StringValue:
-                    v = byte.Parse( value._stringValue );
-
-                    break;
-
-                case ValueType.DoubleValue:
-                    v = ( byte )value._doubleValue;
-
-                    break;
-
-                case ValueType.LongValue:
-                    v = ( byte )value._longValue;
-
-                    break;
-
-                case ValueType.BooleanValue:
-                    v = ( byte )( value._longValue != 0 ? 1 : 0 );
-
-                    break;
-
-                default:
-                    throw new InvalidOperationException( $"Value cannot be converted to byte: {value._valueType}" );
-            }
-
-            array[ i ] = v;
-        }
-
-        return array;
-    }
-
-    /** Returns the children of this value as a newly allocated short array.
-     * @throws InvalidOperationException if this is not an array. */
-    public short[] AsShortArray()
-    {
-        if ( _valueType != ValueType.ArrayValue )
-        {
-            throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
-        }
-
-        var array = new short[ Size ];
-        var i     = 0;
-
-        for ( var value = Child; value != null; value = value.Next, i++ )
-        {
-            short v;
-
-            switch ( value._valueType )
-            {
-                case ValueType.StringValue:
-                    v = short.Parse( value._stringValue );
-
-                    break;
-
-                case ValueType.DoubleValue:
-                    v = ( short )value._doubleValue;
-
-                    break;
-
-                case ValueType.LongValue:
-                    v = ( short )value._longValue;
-
-                    break;
-
-                case ValueType.BooleanValue:
-                    v = ( short )( value._longValue != 0 ? 1 : 0 );
-
-                    break;
-
-                default:
-                    throw new InvalidOperationException( $"Value cannot be converted to short: {value._valueType}" );
-            }
-
-            array[ i ] = v;
-        }
-
-        return array;
-    }
-
-    /** Returns the children of this value as a newly allocated char array.
-     * @throws InvalidOperationException if this is not an array. */
-    public char[] AsCharArray()
-    {
-        if ( _valueType != ValueType.ArrayValue )
-        {
-            throw new InvalidOperationException( $"Value is not an array: {_valueType}" );
-        }
-
-        var array = new char[ Size ];
-        var i     = 0;
-
-        for ( var value = Child; value != null; value = value.Next, i++ )
-        {
-            char v;
-
-            switch ( value._valueType )
-            {
-                case ValueType.StringValue:
-                    v = ( char )( value._stringValue?.Length == 0
-                        ? 0
-                        : value._stringValue!.ToCharArray()[ 0 ] );
-
-                    break;
-
-                case ValueType.DoubleValue:
-                    v = ( char )value._doubleValue;
-
-                    break;
-
-                case ValueType.LongValue:
-                    v = ( char )value._longValue;
-
-                    break;
-
-                case ValueType.BooleanValue:
-                    v = ( char )( value._longValue != 0 ? 1 : 0 );
-
-                    break;
-
-                default:
-                    throw new InvalidOperationException( $"Value cannot be converted to char: {value._valueType}" );
-            }
-
-            array[ i ] = v;
-        }
-
-        return array;
     }
 
     /// <summary>
@@ -923,431 +326,70 @@ public class JsonValue : IEnumerable< JsonValue >
         return child?.Child;
     }
 
-    /// <summary>
-    /// Finds the child with the specified name and returns it as a string.
-    /// Returns defaultValue if not found.
-    /// </summary>
-    public string? GetString( string name, string? defaultValue )
-    {
-        var child = Get( name );
-
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsString();
-    }
+    // ========================================================================
 
     /// <summary>
-    /// Finds the child with the specified name and returns it as a float.
-    /// Returns defaultValue if not found.
     /// </summary>
-    public float GetFloat( string name, float defaultValue )
-    {
-        var child = Get( name );
-
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsFloat();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified name and returns it as a double.
-    /// Returns defaultValue if not found.
-    /// </summary>
-    public double GetDouble( string name, double defaultValue )
-    {
-        var child = Get( name );
-
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsDouble();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified name and returns it as a long.
-    /// Returns defaultValue if not found.
-    /// </summary>
-    public long GetLong( string name, long defaultValue )
-    {
-        var child = Get( name );
-
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsLong();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified name and returns it as a int.
-    /// Returns defaultValue if not found.
-    /// </summary>
-    public int GetInt( string name, int defaultValue )
-    {
-        var child = Get( name );
-
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsInt();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified name and returns it as a bool.
-    /// Returns defaultValue if not found.
-    /// </summary>
-    public bool GetBoolean( string name, bool defaultValue )
-    {
-        var child = Get( name );
-
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsBoolean();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified name and returns it as a byte.
-    /// Returns defaultValue if not found.
-    /// </summary>
-    public byte GetByte( string name, byte defaultValue )
-    {
-        var child = Get( name );
-
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsByte();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified name and returns it as a short.
-    /// Returns defaultValue if not found.
-    /// </summary>
-    public short GetShort( string name, short defaultValue )
-    {
-        var child = Get( name );
-
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsShort();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified name and returns it as a char.
-    /// Returns defaultValue if not found.
-    /// </summary>
-    public char GetChar( string name, char defaultValue )
-    {
-        var child = Get( name );
-
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsChar();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a string.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public string? GetString( string name )
-    {
-        var child = Get( name );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Named value not found: {name}" );
-        }
-
-        return child.AsString();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a float.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public float GetFloat( string name )
-    {
-        var child = Get( name );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Named value not found: {name}" );
-        }
-
-        return child.AsFloat();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a double.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public double GetDouble( string name )
-    {
-        var child = Get( name );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Named value not found: {name}" );
-        }
-
-        return child.AsDouble();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a long.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public long GetLong( string name )
-    {
-        var child = Get( name );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Named value not found: {name}" );
-        }
-
-        return child.AsLong();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a int.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public int GetInt( string name )
-    {
-        var child = Get( name );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Named value not found: {name}" );
-        }
-
-        return child.AsInt();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a bool.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public bool GetBoolean( string name )
-    {
-        var child = Get( name );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Named value not found: {name}" );
-        }
-
-        return child.AsBoolean();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a byte.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public byte GetByte( string name )
-    {
-        var child = Get( name );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Named value not found: {name}" );
-        }
-
-        return child.AsByte();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a short.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public short GetShort( string name )
-    {
-        var child = Get( name );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Named value not found: {name}" );
-        }
-
-        return child.AsShort();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a char.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public char GetChar( string name )
-    {
-        var child = Get( name );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Named value not found: {name}" );
-        }
-
-        return child.AsChar();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a string.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public string? GetString( int index )
-    {
-        var child = Get( index );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Indexed value not found: {Name}" );
-        }
-
-        return child.AsString();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a float.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public float GetFloat( int index )
-    {
-        var child = Get( index );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Indexed value not found: {Name}" );
-        }
-
-        return child.AsFloat();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a double.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public double GetDouble( int index )
-    {
-        var child = Get( index );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Indexed value not found: {Name}" );
-        }
-
-        return child.AsDouble();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a long.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public long GetLong( int index )
-    {
-        var child = Get( index );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Indexed value not found: {Name}" );
-        }
-
-        return child.AsLong();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a int.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public int GetInt( int index )
-    {
-        var child = Get( index );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Indexed value not found: {Name}" );
-        }
-
-        return child.AsInt();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a bool.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public bool GetBoolean( int index )
-    {
-        var child = Get( index );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Indexed value not found: {Name}" );
-        }
-
-        return child.AsBoolean();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a byte.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public byte GetByte( int index )
-    {
-        var child = Get( index );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Indexed value not found: {Name}" );
-        }
-
-        return child.AsByte();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a short.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public short GetShort( int index )
-    {
-        var child = Get( index );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Indexed value not found: {Name}" );
-        }
-
-        return child.AsShort();
-    }
-
-    /// <summary>
-    /// Finds the child with the specified index and returns it as a char.
-    /// </summary>
-    /// <exception cref="ArgumentException"> if the child was not found. </exception>
-    public char GetChar( int index )
-    {
-        var child = Get( index );
-
-        if ( child == null )
-        {
-            throw new ArgumentException( $"Indexed value not found: {Name}" );
-        }
-
-        return child.AsChar();
-    }
-
+    /// <returns></returns>
     public bool IsArray()
     {
-        return _valueType == ValueType.ArrayValue;
+        return ValueType == ValueTypes.ArrayValue;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
     public bool IsObject()
     {
-        return _valueType == ValueType.ObjectValue;
+        return ValueType == ValueTypes.ObjectValue;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
     public bool IsString()
     {
-        return _valueType == ValueType.StringValue;
+        return ValueType == ValueTypes.StringValue;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
     public bool IsNumber()
     {
-        return _valueType is ValueType.DoubleValue or ValueType.LongValue;
+        return ValueType is ValueTypes.DoubleValue or ValueTypes.LongValue;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
     public bool IsDouble()
     {
-        return _valueType == ValueType.DoubleValue;
+        return ValueType == ValueTypes.DoubleValue;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
     public bool IsLong()
     {
-        return _valueType == ValueType.LongValue;
+        return ValueType == ValueTypes.LongValue;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
     public bool IsBoolean()
     {
-        return _valueType == ValueType.BooleanValue;
+        return ValueType == ValueTypes.BooleanValue;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
     public bool IsNull()
     {
-        return _valueType == ValueType.NullValue;
+        return ValueType == ValueTypes.NullValue;
     }
 
     /// <summary>
@@ -1355,17 +397,15 @@ public class JsonValue : IEnumerable< JsonValue >
     /// </summary>
     public bool IsValue()
     {
-        switch ( _valueType )
+        return ValueType switch
         {
-            case ValueType.StringValue:
-            case ValueType.DoubleValue:
-            case ValueType.LongValue:
-            case ValueType.BooleanValue:
-            case ValueType.NullValue:
-                return true;
-        }
-
-        return false;
+            ValueTypes.StringValue
+                or ValueTypes.DoubleValue
+                or ValueTypes.LongValue
+                or ValueTypes.BooleanValue
+                or ValueTypes.NullValue => true,
+            var _ => false,
+        };
     }
 
     // ========================================================================
@@ -1381,7 +421,7 @@ public class JsonValue : IEnumerable< JsonValue >
         }
 
         value.Name = name;
-        
+
         AddChild( value );
     }
 
@@ -1423,8 +463,8 @@ public class JsonValue : IEnumerable< JsonValue >
     /// <param name="value"></param>
     public void Set( string? value )
     {
-        _stringValue = value;
-        _valueType   = value == null ? ValueType.NullValue : ValueType.StringValue;
+        StringValue = value;
+        ValueType   = value == null ? ValueTypes.NullValue : ValueTypes.StringValue;
     }
 
     /// <summary>
@@ -1435,10 +475,10 @@ public class JsonValue : IEnumerable< JsonValue >
     /// </param>
     public void Set( double value, string? stringValue )
     {
-        _doubleValue = value;
-        _longValue   = ( long )value;
-        _stringValue = stringValue;
-        _valueType   = ValueType.DoubleValue;
+        DoubleValue = value;
+        LongValue   = ( long )value;
+        StringValue = stringValue;
+        ValueType   = ValueTypes.DoubleValue;
     }
 
     /// <summary>
@@ -1449,10 +489,10 @@ public class JsonValue : IEnumerable< JsonValue >
     /// </param>
     public void Set( long value, string stringValue )
     {
-        _longValue   = value;
-        _doubleValue = value;
-        _stringValue = stringValue;
-        _valueType   = ValueType.LongValue;
+        LongValue   = value;
+        DoubleValue = value;
+        StringValue = stringValue;
+        ValueType   = ValueTypes.LongValue;
     }
 
     /// <summary>
@@ -1460,12 +500,16 @@ public class JsonValue : IEnumerable< JsonValue >
     /// <param name="value"></param>
     public void Set( bool value )
     {
-        _longValue = value ? 1 : 0;
-        _valueType = ValueType.BooleanValue;
+        LongValue = value ? 1 : 0;
+        ValueType = ValueTypes.BooleanValue;
     }
 
     // ========================================================================
 
+    /// <summary>
+    /// </summary>
+    /// <param name="outputType"></param>
+    /// <returns></returns>
     public string? ToJson( JsonOutputType outputType )
     {
         if ( IsValue() )
@@ -1480,6 +524,12 @@ public class JsonValue : IEnumerable< JsonValue >
         return buffer.ToString();
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="jsonval"></param>
+    /// <param name="buffer"></param>
+    /// <param name="outputType"></param>
+    /// <exception cref="SerializationException"></exception>
     private static void Json( JsonValue jsonval, StringBuilder buffer, JsonOutputType outputType )
     {
         if ( jsonval.IsObject() )
@@ -1571,7 +621,7 @@ public class JsonValue : IEnumerable< JsonValue >
     }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     public override string? ToString()
     {
@@ -1591,17 +641,17 @@ public class JsonValue : IEnumerable< JsonValue >
     {
         if ( Parent == null )
         {
-            return _valueType switch
+            return ValueType switch
             {
-                ValueType.ArrayValue  => "[]",
-                ValueType.ObjectValue => "{}",
-                _                     => "",
+                ValueTypes.ArrayValue  => "[]",
+                ValueTypes.ObjectValue => "{}",
+                _                      => "",
             };
         }
 
         string trace;
 
-        if ( Parent._valueType == ValueType.ArrayValue )
+        if ( Parent.ValueType == ValueTypes.ArrayValue )
         {
             trace = "[]";
             var i = 0;
@@ -1628,19 +678,30 @@ public class JsonValue : IEnumerable< JsonValue >
         return Parent.Trace() + trace;
     }
 
+    /// <summary>
+    /// Pretty-prints the JsonValue to a string using the specified output type and single line column limit.
+    /// </summary>
+    /// <param name="outputType">The desired JsonOutputType for the output string.</param>
+    /// <param name="singleLineColumns">The maximum number of characters allowed on a single line before wrapping.</param>
+    /// <returns>A pretty-printed string representation of the JsonValue.</returns>
     public string PrettyPrint( JsonOutputType? outputType, int singleLineColumns )
     {
         Guard.ThrowIfNull( outputType );
-        
+
         var settings = new PrettyPrintSettings
         {
             JsonOutputType    = ( JsonOutputType )outputType,
             SingleLineColumns = singleLineColumns,
         };
-        
+
         return PrettyPrint( settings );
     }
 
+    /// <summary>
+    /// Pretty-prints the JsonValue to a string using the provided PrettyPrintSettings.
+    /// </summary>
+    /// <param name="settings">The PrettyPrintSettings to control the output format.</param>
+    /// <returns>A pretty-printed string representation of the JsonValue.</returns>
     public string PrettyPrint( PrettyPrintSettings settings )
     {
         var buffer = new StringBuilder( 512 );
@@ -1650,6 +711,14 @@ public class JsonValue : IEnumerable< JsonValue >
         return buffer.ToString();
     }
 
+    /// <summary>
+    /// Pretty-prints a JsonValue to a StringBuilder with specified indentation and formatting settings.
+    /// </summary>
+    /// <param name="jsonval">The JsonValue to pretty-print.</param>
+    /// <param name="buffer">The StringBuilder to write the pretty-printed JSON to.</param>
+    /// <param name="indent">The current indentation level.</param>
+    /// <param name="settings">The PrettyPrintSettings that control the output format.</param>
+    /// <exception cref="SerializationException">Thrown when an unknown JsonValue type is encountered.</exception>
     private static void PrettyPrint( JsonValue jsonval, StringBuilder buffer, int indent, PrettyPrintSettings settings )
     {
         var outputType = settings.JsonOutputType;
@@ -1691,7 +760,7 @@ public class JsonValue : IEnumerable< JsonValue >
                         if ( !newLines && ( ( buffer.Length - start ) > settings.SingleLineColumns ) )
                         {
                             buffer.Length = start;
-                            newLines = true;
+                            newLines      = true;
 
                             goto outer;
                         }
@@ -1793,10 +862,15 @@ public class JsonValue : IEnumerable< JsonValue >
         }
     }
 
+    /// <summary>
+    /// Pretty-prints the JsonValue to a TextWriter using the specified JsonOutputType.
+    /// </summary>
+    /// <param name="outputType">The desired JsonOutputType for the output.</param>
+    /// <param name="writer">The TextWriter to write the pretty-printed JSON to.</param>
     public void PrettyPrint( JsonOutputType? outputType, TextWriter writer )
     {
         Guard.ThrowIfNull( outputType );
-        
+
         var settings = new PrettyPrintSettings
         {
             JsonOutputType = ( JsonOutputType )outputType,
@@ -1805,6 +879,14 @@ public class JsonValue : IEnumerable< JsonValue >
         PrettyPrint( this, writer, 0, settings );
     }
 
+    /// <summary>
+    /// Pretty-prints a JsonValue to a TextWriter with specified indentation and formatting settings.
+    /// </summary>
+    /// <param name="jsonval">The JsonValue to pretty-print.</param>
+    /// <param name="writer">The TextWriter to write the pretty-printed JSON to.</param>
+    /// <param name="indent">The current indentation level.</param>
+    /// <param name="settings">The PrettyPrintSettings that control the output format.</param>
+    /// <exception cref="SerializationException">Thrown when an unknown JsonValue type is encountered.</exception>
     private static void PrettyPrint( JsonValue jsonval, TextWriter writer, int indent, PrettyPrintSettings settings )
     {
         var outputType = settings.JsonOutputType;
@@ -1919,6 +1001,10 @@ public class JsonValue : IEnumerable< JsonValue >
         }
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="jsonval"></param>
+    /// <returns></returns>
     private static bool IsFlat( JsonValue jsonval )
     {
         for ( var child = jsonval.Child; child != null; child = child.Next )
@@ -1932,6 +1018,10 @@ public class JsonValue : IEnumerable< JsonValue >
         return true;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="jsonval"></param>
+    /// <returns></returns>
     private static bool IsNumeric( JsonValue jsonval )
     {
         for ( var child = jsonval.Child; child != null; child = child.Next )
@@ -1945,6 +1035,10 @@ public class JsonValue : IEnumerable< JsonValue >
         return true;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="count"></param>
+    /// <param name="buffer"></param>
     private static void Indent( int count, StringBuilder buffer )
     {
         for ( var i = 0; i < count; i++ )
@@ -1953,6 +1047,10 @@ public class JsonValue : IEnumerable< JsonValue >
         }
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="count"></param>
+    /// <param name="buffer"></param>
     private static void Indent( int count, TextWriter buffer )
     {
         for ( var i = 0; i < count; i++ )
@@ -1966,7 +1064,7 @@ public class JsonValue : IEnumerable< JsonValue >
     /// <inheritdoc />
     public IEnumerator< JsonValue > GetEnumerator()
     {
-        return new JsonIterator( this, this.Size );
+        return new JsonValueIterator( this, this.Size );
     }
 
     /// <inheritdoc />
@@ -1978,19 +1076,22 @@ public class JsonValue : IEnumerable< JsonValue >
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// </summary>
     [PublicAPI]
-    public class JsonIterator : IEnumerator< JsonValue >, IEnumerable< JsonValue >
+    public class JsonValueIterator : IEnumerator< JsonValue >, IEnumerable< JsonValue >
     {
         private JsonValue? _child;
         private JsonValue? _current;
         private int        _size;
 
-        public JsonIterator( JsonValue child, int size )
+        public JsonValueIterator( JsonValue child, int size )
         {
             this._child = child;
             this._size  = size;
         }
 
+        /// <inheritdoc />
         public bool MoveNext()
         {
             if ( _child != null )
@@ -2004,10 +1105,13 @@ public class JsonValue : IEnumerable< JsonValue >
             return false;
         }
 
+        /// <inheritdoc />
         public JsonValue Current => _current!;
 
+        /// <inheritdoc />
         object IEnumerator.Current => Current;
 
+        /// <inheritdoc />
         public void Reset()
         {
             throw new NotSupportedException();
@@ -2042,8 +1146,10 @@ public class JsonValue : IEnumerable< JsonValue >
             _size--;
         }
 
+        /// <inheritdoc />
         public IEnumerator< JsonValue > GetEnumerator() => this;
 
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <inheritdoc />
@@ -2055,8 +1161,11 @@ public class JsonValue : IEnumerable< JsonValue >
 
     // ========================================================================
 
+    /// <summary>
+    /// All valid <see cref="JsonValue"/> Types.
+    /// </summary>
     [PublicAPI]
-    public enum ValueType
+    public enum ValueTypes : int
     {
         ObjectValue,
         ArrayValue,
@@ -2069,10 +1178,15 @@ public class JsonValue : IEnumerable< JsonValue >
 
     // ========================================================================
 
+    /// <summary>
+    /// Settings for use with PrettyPrint methods.
+    /// </summary>
     [PublicAPI]
     public class PrettyPrintSettings
     {
         /// <summary>
+        /// The Json output type, one of <see cref="JsonOutputType.Minimal"/>,
+        /// <see cref="JsonOutputType.Json"/>, or <see cref="JsonOutputType.Javascript"/>.
         /// </summary>
         public JsonOutputType JsonOutputType { get; set; }
 

@@ -1041,6 +1041,11 @@ public partial class Json
 
     // ========================================================================
 
+    /// <summary>
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     protected static object? NewInstance( Type type )
     {
         try
@@ -1064,7 +1069,6 @@ public partial class Json
             }
             catch ( SecurityException )
             {
-                // Ignored
             }
             catch ( TargetInvocationException )
             {
@@ -1137,7 +1141,7 @@ public partial class Json
 
     private class FieldMetadata
     {
-        public FieldInfo FieldInfo   { get; set; }
+        public FieldInfo FieldInfo   { get; }
         public Type?     ElementType { get; set; }
         public bool      Deprecated  { get; set; }
 

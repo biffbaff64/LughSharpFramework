@@ -66,7 +66,12 @@ public static partial class OutputTypeExtensions
     private static readonly Regex _minimalValuePattern = MyRegex1();
     private static readonly Regex _minimalNamePattern  = MyRegex2();
 
-    public static string? QuoteValue( this JsonOutputType outputType, object? value )
+    /// <summary>
+    /// </summary>
+    /// <param name="outputType"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static string QuoteValue( this JsonOutputType outputType, object? value )
     {
         if ( value == null ) return "null";
 
@@ -103,6 +108,11 @@ public static partial class OutputTypeExtensions
         return "\"" + buffer.Replace( '"'.ToString(), "\\\"" ) + "\"";
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="outputType"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
     public static string QuoteName( this JsonOutputType outputType, string? value )
     {
         Guard.ThrowIfNull( value );
