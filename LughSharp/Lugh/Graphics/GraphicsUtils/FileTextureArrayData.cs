@@ -129,7 +129,10 @@ public class FileTextureArrayData : ITextureArrayData
 
         foreach ( var data in _textureData )
         {
-            if ( data == null ) continue;
+            if ( data == null )
+            {
+                continue;
+            }
 
             data.Prepare();
 

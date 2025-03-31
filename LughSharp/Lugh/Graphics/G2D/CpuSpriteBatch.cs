@@ -971,7 +971,8 @@ public class CpuSpriteBatch : SpriteBatch
                 Flush();
                 copyCount = Math.Min( Vertices.Length, count );
             }
-        } while ( count > 0 );
+        }
+        while ( count > 0 );
     }
 
     private static bool CheckEqual( Matrix4 a, Matrix4 b )

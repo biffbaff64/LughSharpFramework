@@ -681,17 +681,17 @@ public partial interface IGLBindings
 //    void MultiDrawElementsIndirect( int mode, int type, GLBindings.DrawElementsIndirectCommand indirect, int drawcount, int stride );
 //    void MultiDrawElementsIndirectCount( int mode, int type, GLBindings.DrawElementsIndirectCommand indirect, int drawcount, int maxdrawcount, int stride );
 
-/// <summary>
-/// Controls the parameters of polygon offset.
-/// </summary>
-/// <param name="factor">
-/// Specifies a scale factor that is used to create a variable depth offset for each polygon. The
-/// initial value is 0.
-/// </param>
-/// <param name="units">
-/// Is multiplied by an implementation-specific value to create a constant depth offset. The initial
-/// value is 0.
-/// </param>
-/// <param name="clamp">Specifies the maximum (or minimum) depth clamping value. The initial value is 0.</param>
-void PolygonOffsetClamp( float factor, float units, float clamp );
+    /// <summary>
+    /// Controls the parameters of polygon offset.
+    /// </summary>
+    /// <param name="factor">
+    /// Specifies a scale factor that is used to create a variable depth offset for each polygon. The
+    /// initial value is 0.
+    /// </param>
+    /// <param name="units">
+    /// Is multiplied by an implementation-specific value to create a constant depth offset. The initial
+    /// value is 0.
+    /// </param>
+    /// <param name="clamp">Specifies the maximum (or minimum) depth clamping value. The initial value is 0.</param>
+    void PolygonOffsetClamp( float factor, float units, float clamp );
 }

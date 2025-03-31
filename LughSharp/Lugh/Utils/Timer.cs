@@ -39,7 +39,7 @@ public class Timer
     private static readonly object _threadLock = new();
 
     // ========================================================================
-    
+
     private static     TimerThread?  _thread;
     protected readonly List< Task? > Tasks = new( 8 );
 

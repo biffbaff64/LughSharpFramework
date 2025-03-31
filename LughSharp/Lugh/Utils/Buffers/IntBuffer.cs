@@ -113,7 +113,10 @@ public class IntBuffer : Buffer, IDisposable
 
     public void PutInt( int value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( Position + sizeof( int ) );
 
@@ -137,7 +140,10 @@ public class IntBuffer : Buffer, IDisposable
 
     public void PutInt( int index, int value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( index + sizeof( int ) );
 
@@ -267,7 +273,10 @@ public class IntBuffer : Buffer, IDisposable
     /// <inheritdoc />
     public override void PutByte( byte value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         _byteBufferDelegate.PutByte( value );
     }
@@ -275,7 +284,10 @@ public class IntBuffer : Buffer, IDisposable
     /// <inheritdoc />
     public override void PutByte( int index, byte value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         _byteBufferDelegate.PutByte( index, value );
     }

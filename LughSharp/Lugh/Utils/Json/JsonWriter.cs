@@ -44,7 +44,7 @@ public class JsonWriter : TextWriter
 
     public JsonWriter( TextWriter writer )
     {
-        this._writer = writer;
+        _writer = writer;
     }
 
     public TextWriter GetWriter()
@@ -58,8 +58,8 @@ public class JsonWriter : TextWriter
     public void SetOutputType( JsonOutputType? outputType )
     {
         Guard.ThrowIfNull( outputType );
-        
-        this._outputType = ( JsonOutputType )outputType;
+
+        _outputType = ( JsonOutputType )outputType;
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class JsonWriter : TextWriter
     /// </summary>
     public void SetQuoteLongValues( bool quoteLongValues )
     {
-        this._quoteLongValues = quoteLongValues;
+        _quoteLongValues = quoteLongValues;
     }
 
     public JsonWriter Name( string name )
@@ -108,7 +108,7 @@ public class JsonWriter : TextWriter
     public JsonWriter Array()
     {
         RequireCommaOrName();
-        
+
         _stack.Push( _current = new JsonObject( true, _writer ) );
 
         return this;
@@ -116,7 +116,7 @@ public class JsonWriter : TextWriter
 
     public JsonWriter Value( object? value )
     {
-        if ( _quoteLongValues && ( value is long or double or decimal or BigInteger ) )
+        if ( _quoteLongValues && value is long or double or decimal or BigInteger )
         {
             value = value.ToString();
         }
@@ -258,8 +258,8 @@ public class JsonWriter : TextWriter
 
         public JsonObject( bool array, TextWriter writer )
         {
-            this.Array  = array;
-            this._writer = writer;
+            Array   = array;
+            _writer = writer;
             writer.Write( array ? '[' : '{' );
         }
 

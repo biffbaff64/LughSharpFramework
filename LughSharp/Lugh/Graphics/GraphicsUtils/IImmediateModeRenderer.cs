@@ -51,4 +51,3 @@ public interface IImmediateModeRenderer : IDisposable
 
     void SetColor( float colorBits );
 }
-

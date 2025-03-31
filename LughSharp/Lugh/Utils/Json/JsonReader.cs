@@ -130,7 +130,7 @@ public partial class JsonReader : IJsonReader
         }
         catch ( Exception ex )
         {
-            throw new Exceptions.SerializationException( "Error reading stream.", ex );
+            throw new SerializationException( "Error reading stream.", ex );
         }
 
         return Parse( reader );
@@ -146,7 +146,7 @@ public partial class JsonReader : IJsonReader
         }
         catch ( Exception ex )
         {
-            throw new Exceptions.SerializationException( "Error reading file: " + file, ex );
+            throw new SerializationException( "Error reading file: " + file, ex );
         }
 
         try
@@ -155,7 +155,7 @@ public partial class JsonReader : IJsonReader
         }
         catch ( Exception ex )
         {
-            throw new Exceptions.SerializationException( "Error parsing file: " + file, ex );
+            throw new SerializationException( "Error parsing file: " + file, ex );
         }
     }
 
@@ -237,7 +237,7 @@ public partial class JsonReader : IJsonReader
                                 }
                                 else
                                 {
-                                    trans += ( mid - keys );
+                                    trans += mid - keys;
 
                                     goto _match;
                                 }
@@ -273,7 +273,7 @@ public partial class JsonReader : IJsonReader
                                 }
                                 else
                                 {
-                                    trans += ( ( mid - keys ) >> 1 );
+                                    trans += ( mid - keys ) >> 1;
 
                                     goto _match;
                                 }
@@ -616,7 +616,7 @@ public partial class JsonReader : IJsonReader
 
                                     p--;
 
-                                    while ( Character.isSpace( data[ p ] ) )
+                                    while ( Character.IsSpace( data[ p ] ) )
                                     {
                                         p--;
                                     }
@@ -832,7 +832,7 @@ public partial class JsonReader : IJsonReader
             parseRuntimeEx = ex;
         }
 
-        var root = this._root;
+        var root = _root;
         _root    = null!;
         _current = null!;
         _lastChild.Clear();
@@ -852,10 +852,10 @@ public partial class JsonReader : IJsonReader
             var start = Math.Max( 0, p - 32 );
 
             //TODO: Why??
-            throw new Exceptions.SerializationException( $"Error parsing JSON on line {lineNumber} near: " +
-                                                         $"{new string( data, start, p - start )}*ERROR*" +
-                                                         $"{new string( data, p, Math.Min( 64, pe - p ) )}",
-                                                         parseRuntimeEx );
+            throw new SerializationException( $"Error parsing JSON on line {lineNumber} near: " +
+                                              $"{new string( data, start, p - start )}*ERROR*" +
+                                              $"{new string( data, p, Math.Min( 64, pe - p ) )}",
+                                              parseRuntimeEx );
         }
 
         if ( _elements.Count != 0 )
@@ -874,7 +874,7 @@ public partial class JsonReader : IJsonReader
 
         if ( parseRuntimeEx != null )
         {
-            throw new Exceptions.SerializationException( $"Error parsing JSON: {new string( data )}", parseRuntimeEx );
+            throw new SerializationException( $"Error parsing JSON: {new string( data )}", parseRuntimeEx );
         }
 
         return root;
@@ -1039,7 +1039,7 @@ public partial class JsonReader : IJsonReader
                     break;
 
                 default:
-                    throw new Exceptions.SerializationException( $"Illegal escaped character: \\{c}" );
+                    throw new SerializationException( $"Illegal escaped character: \\{c}" );
             }
 
             buffer.Append( c );

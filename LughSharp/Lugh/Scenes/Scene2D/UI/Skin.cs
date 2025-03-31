@@ -181,11 +181,11 @@ public class Skin : IDisposable
 //        var skin = this;
 //    }
 
-/// <summary>
-/// Disposes the <see cref="TextureAtlas" /> and all <see cref="IDisposable" />
-/// resources in the skin.
-/// </summary>
-public void Dispose()
+    /// <summary>
+    /// Disposes the <see cref="TextureAtlas" /> and all <see cref="IDisposable" />
+    /// resources in the skin.
+    /// </summary>
+    public void Dispose()
     {
         Atlas?.Dispose();
 

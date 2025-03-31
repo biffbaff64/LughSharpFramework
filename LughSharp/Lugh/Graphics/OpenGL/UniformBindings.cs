@@ -30,7 +30,6 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
-
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -160,7 +159,7 @@ public unsafe partial class GLBindings
         GetDelegateForFunction< PFNGLUNIFORM1FPROC >( "glUniform1f", out _glUniform1f );
 
         _glUniform1f( location, v0 );
-    } 
+    }
 
     // ========================================================================
 
@@ -506,7 +505,7 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
-    
+
     public void GetnUniformdv( GLuint program, GLint location, GLsizei bufSize, GLdouble* parameters )
     {
         GetDelegateForFunction< PFNGLGETNUNIFORMDVPROC >( "glGetnUniformdv", out _glGetnUniformdv );
@@ -1106,6 +1105,4 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
-
 }
-

@@ -951,7 +951,10 @@ public class PixmapPacker : IDisposable
                 return newNode;
             }
 
-            if ( node.Full ) return null;
+            if ( node.Full )
+            {
+                return null;
+            }
 
             if ( ( Math.Abs( node.Rect.Width - rect.Width ) < Number.FLOAT_TOLERANCE )
                  && ( Math.Abs( node.Rect.Height - rect.Height ) < Number.FLOAT_TOLERANCE ) )
@@ -959,7 +962,10 @@ public class PixmapPacker : IDisposable
                 return node;
             }
 
-            if ( ( node.Rect.Width < rect.Width ) || ( node.Rect.Height < rect.Height ) ) return null;
+            if ( ( node.Rect.Width < rect.Width ) || ( node.Rect.Height < rect.Height ) )
+            {
+                return null;
+            }
 
             node.LeftChild  = new Node();
             node.RightChild = new Node();
@@ -1066,11 +1072,25 @@ public class PixmapPacker : IDisposable
                 {
                     var row = page.Rows[ ii ];
 
-                    if ( ( row.X + rectWidth ) >= pageWidth ) continue;
-                    if ( ( row.Y + rectHeight ) >= pageHeight ) continue;
-                    if ( rectHeight > row.Height ) continue;
+                    if ( ( row.X + rectWidth ) >= pageWidth )
+                    {
+                        continue;
+                    }
 
-                    if ( ( bestRow == null ) || ( row.Height < bestRow.Height ) ) bestRow = row;
+                    if ( ( row.Y + rectHeight ) >= pageHeight )
+                    {
+                        continue;
+                    }
+
+                    if ( rectHeight > row.Height )
+                    {
+                        continue;
+                    }
+
+                    if ( ( bestRow == null ) || ( row.Height < bestRow.Height ) )
+                    {
+                        bestRow = row;
+                    }
                 }
 
                 if ( bestRow == null )
@@ -1078,7 +1098,10 @@ public class PixmapPacker : IDisposable
                     // Fit in last row, increasing Height.
                     var row = page.Rows.Peek();
 
-                    if ( ( row.Y + rectHeight ) >= pageHeight ) continue;
+                    if ( ( row.Y + rectHeight ) >= pageHeight )
+                    {
+                        continue;
+                    }
 
                     if ( ( row.X + rectWidth ) < pageWidth )
                     {
@@ -1134,13 +1157,19 @@ public class PixmapPacker : IDisposable
             public int Compare( Pixmap? x, Pixmap? y )
             {
                 if ( ReferenceEquals( x, y ) )
+                {
                     return 0;
+                }
 
                 if ( ReferenceEquals( null, y ) )
+                {
                     return 1;
+                }
 
                 if ( ReferenceEquals( null, x ) )
+                {
                     return -1;
+                }
 
                 return x.IsDisposed.CompareTo( y.IsDisposed );
             }

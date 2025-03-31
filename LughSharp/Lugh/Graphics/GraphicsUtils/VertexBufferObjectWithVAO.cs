@@ -81,7 +81,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
         _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
         _usage        = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
-        
+
         CreateVAO();
     }
 

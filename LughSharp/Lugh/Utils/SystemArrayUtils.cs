@@ -24,7 +24,7 @@
 
 namespace LughSharp.Lugh.Utils;
 
-using Array = System.Array;
+using Array = Array;
 
 [PublicAPI]
 public static class SystemArrayUtils

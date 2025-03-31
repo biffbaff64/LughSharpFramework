@@ -27,12 +27,10 @@ namespace LughSharp.Lugh.Files;
 [PublicAPI]
 public class File : IComparable< File >
 {
-    
-    
     // ========================================================================
     // From IComparable<>
     // ========================================================================
-    
+
     /// <inheritdoc />
     public int CompareTo( File? other )
     {

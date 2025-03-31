@@ -151,8 +151,15 @@ public class ByteArray
     /// <exception cref="IndexOutOfRangeException"></exception>
     public byte Get( int index )
     {
-        if ( index < 0 ) throw new IndexOutOfRangeException( "index cannot be < 0." );
-        if ( index >= Size ) throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        if ( index < 0 )
+        {
+            throw new IndexOutOfRangeException( "index cannot be < 0." );
+        }
+
+        if ( index >= Size )
+        {
+            throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        }
 
         return Items[ index ];
     }
@@ -164,8 +171,15 @@ public class ByteArray
     /// <exception cref="IndexOutOfRangeException"></exception>
     public void Set( int index, byte value )
     {
-        if ( index < 0 ) throw new IndexOutOfRangeException( "index cannot be < 0." );
-        if ( index >= Size ) throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        if ( index < 0 )
+        {
+            throw new IndexOutOfRangeException( "index cannot be < 0." );
+        }
+
+        if ( index >= Size )
+        {
+            throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        }
 
         Items[ index ] = value;
     }
@@ -177,8 +191,15 @@ public class ByteArray
     /// <exception cref="IndexOutOfRangeException"></exception>
     public void Incr( int index, byte value )
     {
-        if ( index < 0 ) throw new IndexOutOfRangeException( "index cannot be < 0." );
-        if ( index >= Size ) throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        if ( index < 0 )
+        {
+            throw new IndexOutOfRangeException( "index cannot be < 0." );
+        }
+
+        if ( index >= Size )
+        {
+            throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        }
 
         Items[ index ] += value;
     }
@@ -204,8 +225,15 @@ public class ByteArray
     /// </exception>
     public void Mul( int index, byte value )
     {
-        if ( index < 0 ) throw new IndexOutOfRangeException( "index cannot be < 0." );
-        if ( index >= Size ) throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        if ( index < 0 )
+        {
+            throw new IndexOutOfRangeException( "index cannot be < 0." );
+        }
+
+        if ( index >= Size )
+        {
+            throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        }
 
         Items[ index ] *= value;
     }
@@ -228,8 +256,15 @@ public class ByteArray
     /// <exception cref="IndexOutOfRangeException"></exception>
     public void Insert( int index, byte value )
     {
-        if ( index < 0 ) throw new IndexOutOfRangeException( "index cannot be < 0." );
-        if ( index >= Size ) throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        if ( index < 0 )
+        {
+            throw new IndexOutOfRangeException( "index cannot be < 0." );
+        }
+
+        if ( index >= Size )
+        {
+            throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        }
 
         if ( Size == Items.Length )
         {
@@ -256,8 +291,15 @@ public class ByteArray
     /// </summary>
     public void InsertRange( int index, int count )
     {
-        if ( index < 0 ) throw new IndexOutOfRangeException( "index cannot be < 0." );
-        if ( index >= Size ) throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        if ( index < 0 )
+        {
+            throw new IndexOutOfRangeException( "index cannot be < 0." );
+        }
+
+        if ( index >= Size )
+        {
+            throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        }
 
         var sizeNeeded = Size + count;
 
@@ -371,8 +413,15 @@ public class ByteArray
     /// <exception cref="IndexOutOfRangeException"></exception>
     public int RemoveIndex( int index )
     {
-        if ( index < 0 ) throw new IndexOutOfRangeException( "index cannot be < 0." );
-        if ( index >= Size ) throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        if ( index < 0 )
+        {
+            throw new IndexOutOfRangeException( "index cannot be < 0." );
+        }
+
+        if ( index >= Size )
+        {
+            throw new IndexOutOfRangeException( $"index can't be >= size: {index} >= {Size}" );
+        }
 
         int value = Items[ index ];
 
@@ -552,7 +601,10 @@ public class ByteArray
     /// <exception cref="ArgumentException"></exception>
     public byte[] SetSize( int newSize )
     {
-        if ( newSize < 0 ) throw new ArgumentException( $"newSize must be >= 0: {newSize}" );
+        if ( newSize < 0 )
+        {
+            throw new ArgumentException( $"newSize must be >= 0: {newSize}" );
+        }
 
         if ( newSize > Items.Length )
         {
@@ -617,7 +669,10 @@ public class ByteArray
     /// </summary>
     public void Truncate( int newSize )
     {
-        if ( Size > newSize ) Size = newSize;
+        if ( Size > newSize )
+        {
+            Size = newSize;
+        }
     }
 
     /// <summary>
@@ -660,14 +715,32 @@ public class ByteArray
     /// </summary>
     public override bool Equals( object? obj )
     {
-        if ( obj == this ) return true;
-        if ( !Ordered ) return false;
-        if ( obj is not ByteArray array ) return false;
-        if ( !array.Ordered ) return false;
+        if ( obj == this )
+        {
+            return true;
+        }
+
+        if ( !Ordered )
+        {
+            return false;
+        }
+
+        if ( obj is not ByteArray array )
+        {
+            return false;
+        }
+
+        if ( !array.Ordered )
+        {
+            return false;
+        }
 
         var n = Size;
 
-        if ( n != array.Size ) return false;
+        if ( n != array.Size )
+        {
+            return false;
+        }
 
         var items1 = Items;
         var items2 = array.Items;
@@ -686,7 +759,10 @@ public class ByteArray
     /// <inheritdoc />
     public override string ToString()
     {
-        if ( Size == 0 ) return "[]";
+        if ( Size == 0 )
+        {
+            return "[]";
+        }
 
         var items  = Items;
         var buffer = new StringBuilder( 32 );
@@ -711,7 +787,10 @@ public class ByteArray
     /// <returns></returns>
     public string ToString( string separator )
     {
-        if ( Size == 0 ) return "";
+        if ( Size == 0 )
+        {
+            return "";
+        }
 
         var items  = Items;
         var buffer = new StringBuilder( 32 );

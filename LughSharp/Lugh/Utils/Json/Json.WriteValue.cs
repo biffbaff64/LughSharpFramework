@@ -133,14 +133,14 @@ public partial class Json
             }
 
             if ( knownType is { IsPrimitive: true }
-                 || ( ( knownType == typeof( string ) )
-                      || ( knownType == typeof( int ) )
-                      || ( knownType == typeof( bool ) )
-                      || ( knownType == typeof( float ) )
-                      || ( knownType == typeof( long ) )
-                      || ( knownType == typeof( double ) )
-                      || ( knownType == typeof( short ) )
-                      || ( knownType == typeof( byte ) ) ) )
+                 || ( knownType == typeof( string ) )
+                 || ( knownType == typeof( int ) )
+                 || ( knownType == typeof( bool ) )
+                 || ( knownType == typeof( float ) )
+                 || ( knownType == typeof( long ) )
+                 || ( knownType == typeof( double ) )
+                 || ( knownType == typeof( short ) )
+                 || ( knownType == typeof( byte ) ) )
 
 //                || knownType == Character )
             {
@@ -535,7 +535,7 @@ public partial class Json
             }
             catch ( SerializationException ex )
             {
-                var newEx = new Exceptions.SerializationException( ex.Message ); 
+                var newEx = new Exceptions.SerializationException( ex.Message );
                 newEx.AddTrace( $"{field} ({type.Name})" );
 
                 throw newEx;

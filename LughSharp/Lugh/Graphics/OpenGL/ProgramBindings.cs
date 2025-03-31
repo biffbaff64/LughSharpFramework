@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-
 // ============================================================================
 
 using System.Text;
@@ -60,7 +59,7 @@ public unsafe partial class GLBindings
         GetDelegateForFunction< PFNGLCREATEPROGRAMPROC >( "glCreateProgram", out _glCreateProgram );
 
         //TODO: Error checking here
-        
+
         return _glCreateProgram();
     }
 
@@ -84,7 +83,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLLINKPROGRAMPROC >( "glLinkProgram", out _glLinkProgram );
 
@@ -100,7 +99,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLUSEPROGRAMPROC >( "glUseProgram", out _glUseProgram );
 
@@ -116,7 +115,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETPROGRAMIVPROC >( "glGetProgramiv", out _glGetProgramiv );
 
@@ -130,7 +129,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETPROGRAMIVPROC >( "glGetProgramiv", out _glGetProgramiv );
 
@@ -149,7 +148,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETPROGRAMINFOLOGPROC >( "glGetProgramInfoLog", out _glGetProgramInfoLog );
 
@@ -163,7 +162,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         var     infoLog = stackalloc GLchar[ bufSize ];
         GLsizei len;
@@ -184,7 +183,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLVALIDATEPROGRAMPROC >( "glValidateProgram", out _glValidateProgram );
 
@@ -1461,6 +1460,4 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
-
 }
-

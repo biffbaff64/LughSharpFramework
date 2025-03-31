@@ -59,7 +59,7 @@ public partial class ImageProcessor
 
     public ImageProcessor( TexturePacker.Settings settings )
     {
-        this._settings = settings;
+        _settings = settings;
     }
 
     public TexturePacker.Rect? AddImage( FileInfo file, string? rootPath )
@@ -75,7 +75,10 @@ public partial class ImageProcessor
             throw new GdxRuntimeException( "Error reading image: " + file, ex );
         }
 
-        if ( image == null ) throw new GdxRuntimeException( "Unable to read image: " + file );
+        if ( image == null )
+        {
+            throw new GdxRuntimeException( "Unable to read image: " + file );
+        }
 
         var name = Path.GetFullPath( file.FullName ).Replace( '\\', '/' );
 
@@ -93,11 +96,17 @@ public partial class ImageProcessor
         // Strip extension.
         var dotIndex = name.LastIndexOf( '.' );
 
-        if ( dotIndex != -1 ) name = name.Substring( 0, dotIndex );
+        if ( dotIndex != -1 )
+        {
+            name = name.Substring( 0, dotIndex );
+        }
 
         var rect = AddImage( image, name );
 
-        if ( ( rect != null ) && _settings.LimitMemory ) rect.UnloadImage( file );
+        if ( ( rect != null ) && _settings.LimitMemory )
+        {
+            rect.UnloadImage( file );
+        }
 
         return rect;
     }
@@ -111,7 +120,10 @@ public partial class ImageProcessor
 
         if ( rect == null )
         {
-            if ( !_settings.Silent ) Console.WriteLine( "Ignoring blank input image: " + name );
+            if ( !_settings.Silent )
+            {
+                Console.WriteLine( "Ignoring blank input image: " + name );
+            }
 
             return null;
         }
@@ -146,7 +158,7 @@ public partial class ImageProcessor
 
     public void SetResampling( Resampling resampling )
     {
-        this._resampling = resampling;
+        _resampling = resampling;
     }
 
     public List< TexturePacker.Rect > GetImages()
@@ -174,7 +186,10 @@ public partial class ImageProcessor
         ArgumentNullException.ThrowIfNull( image );
         ArgumentNullException.ThrowIfNull( name );
 
-        if ( _scale <= 0 ) throw new GdxRuntimeException( $"scale cannot be <= 0: {_scale}" );
+        if ( _scale <= 0 )
+        {
+            throw new GdxRuntimeException( $"scale cannot be <= 0: {_scale}" );
+        }
 
         var width  = image.Width;
         var height = image.Height;
@@ -207,13 +222,13 @@ public partial class ImageProcessor
             using ( image = new Bitmap( width, height, PixelFormat.Format32bppArgb ) )
             using ( var g = System.Drawing.Graphics.FromImage( image ) )
             {
-                g.DrawImage( image: image,
-                             destRect: new Rectangle( 1, 1, width + 1, height + 1 ),
-                             srcX: 0,
-                             srcY: 0,
-                             srcWidth: width,
-                             srcHeight: height,
-                             srcUnit: GraphicsUnit.Pixel );
+                g.DrawImage( image,
+                             new Rectangle( 1, 1, width + 1, height + 1 ),
+                             0,
+                             0,
+                             width,
+                             height,
+                             GraphicsUnit.Pixel );
             }
         }
 
@@ -285,7 +300,10 @@ public partial class ImageProcessor
         {
             rect = StripWhitespace( name, image );
 
-            if ( rect == null ) return null;
+            if ( rect == null )
+            {
+                return null;
+            }
         }
 
         rect.Name  = name;
@@ -314,18 +332,18 @@ public partial class ImageProcessor
                 }
             }
 
-            int top    = 0;
-            int bottom = source.Height;
+            var top    = 0;
+            var bottom = source.Height;
 
             if ( _settings.StripWhitespaceY )
             {
             outer1:
 
-                for ( int y = 0; y < source.Height; y++ )
+                for ( var y = 0; y < source.Height; y++ )
                 {
-                    for ( int x = 0; x < source.Width; x++ )
+                    for ( var x = 0; x < source.Width; x++ )
                     {
-                        int alpha = GetAlpha( alphaData, x, y );
+                        var alpha = GetAlpha( alphaData, x, y );
 
                         if ( alpha > _settings.AlphaThreshold )
                         {
@@ -338,11 +356,11 @@ public partial class ImageProcessor
 
             outer2:
 
-                for ( int y = source.Height - 1; y >= top; y-- )
+                for ( var y = source.Height - 1; y >= top; y-- )
                 {
-                    for ( int x = 0; x < source.Width; x++ )
+                    for ( var x = 0; x < source.Width; x++ )
                     {
-                        int alpha = GetAlpha( alphaData, x, y );
+                        var alpha = GetAlpha( alphaData, x, y );
 
                         if ( alpha > _settings.AlphaThreshold )
                         {
@@ -367,18 +385,18 @@ public partial class ImageProcessor
                 }
             }
 
-            int left  = 0;
-            int right = source.Width;
+            var left  = 0;
+            var right = source.Width;
 
             if ( _settings.StripWhitespaceX )
             {
             outer3:
 
-                for ( int x = 0; x < source.Width; x++ )
+                for ( var x = 0; x < source.Width; x++ )
                 {
-                    for ( int y = top; y < bottom; y++ )
+                    for ( var y = top; y < bottom; y++ )
                     {
-                        int alpha = GetAlpha( alphaData, x, y );
+                        var alpha = GetAlpha( alphaData, x, y );
 
                         if ( alpha > _settings.AlphaThreshold )
                         {
@@ -391,11 +409,11 @@ public partial class ImageProcessor
 
             outer4:
 
-                for ( int x = source.Width - 1; x >= left; x-- )
+                for ( var x = source.Width - 1; x >= left; x-- )
                 {
-                    for ( int y = top; y < bottom; y++ )
+                    for ( var y = top; y < bottom; y++ )
                     {
-                        int alpha = GetAlpha( alphaData, x, y );
+                        var alpha = GetAlpha( alphaData, x, y );
 
                         if ( alpha > _settings.AlphaThreshold )
                         {
@@ -420,8 +438,8 @@ public partial class ImageProcessor
                 }
             }
 
-            int newWidth  = right - left;
-            int newHeight = bottom - top;
+            var newWidth  = right - left;
+            var newHeight = bottom - top;
 
             if ( ( newWidth <= 0 ) || ( newHeight <= 0 ) )
             {
@@ -448,9 +466,9 @@ public partial class ImageProcessor
 
     private unsafe int GetAlpha( BitmapData data, int x, int y )
     {
-        byte* ptr      = ( byte* )data.Scan0;
-        byte* pixelPtr = ptr + ( y * data.Stride ) + ( x * 4 ); // 4 bytes per pixel (ARGB)
-        int   alpha    = pixelPtr[ 3 ];
+        var ptr      = ( byte* )data.Scan0;
+        var pixelPtr = ptr + ( y * data.Stride ) + ( x * 4 ); // 4 bytes per pixel (ARGB)
+        int alpha    = pixelPtr[ 3 ];
 
         return alpha;
     }
@@ -526,8 +544,15 @@ public partial class ImageProcessor
         var endX = 0;
         var endY = 0;
 
-        if ( startX != 0 ) endX = GetSplitPoint( image, name, startX + 1, bottom, false, true );
-        if ( startY != 0 ) endY = GetSplitPoint( image, name, right, startY + 1, false, false );
+        if ( startX != 0 )
+        {
+            endX = GetSplitPoint( image, name, startX + 1, bottom, false, true );
+        }
+
+        if ( startY != 0 )
+        {
+            endY = GetSplitPoint( image, name, right, startY + 1, false, false );
+        }
 
         // Ensure pixels after the end are not invalid.
         GetSplitPoint( image, name, endX + 1, bottom, true, true );
@@ -643,7 +668,10 @@ public partial class ImageProcessor
                     rgba[ 2 ] = pixelPtr[ 0 ]; // Blue
                     rgba[ 3 ] = pixelPtr[ 3 ]; // Alpha
 
-                    if ( rgba[ 3 ] == breakA ) return next;
+                    if ( rgba[ 3 ] == breakA )
+                    {
+                        return next;
+                    }
 
                     if ( !startPoint && ( ( rgba[ 0 ] != 0 ) || ( rgba[ 1 ] != 0 ) || ( rgba[ 2 ] != 0 ) || ( rgba[ 3 ] != 255 ) ) )
                     {
@@ -732,6 +760,5 @@ public partial class ImageProcessor
 
     // ========================================================================
 
-    [GeneratedRegex( "(.+)_(\\d+)$" )]
-    private static partial Regex MyRegex();
+    [GeneratedRegex( "(.+)_(\\d+)$" )] private static partial Regex MyRegex();
 }

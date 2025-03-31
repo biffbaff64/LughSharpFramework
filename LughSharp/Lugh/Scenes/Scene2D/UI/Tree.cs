@@ -794,10 +794,10 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 // ========================================================================
 // ========================================================================
 
-/// <summary>
-/// The style for a <see cref="Tree{TN,TV}" />.
-/// </summary>
-[PublicAPI]
+    /// <summary>
+    /// The style for a <see cref="Tree{TN,TV}" />.
+    /// </summary>
+    [PublicAPI]
     public class TreeStyle
     {
         public TreeStyle( IDrawable plus, IDrawable minus, IDrawable? selection )
@@ -1197,7 +1197,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
             {
                 level++;
                 current = current.Parent;
-            } while ( current != null );
+            }
+            while ( current != null );
 
             return level;
         }
@@ -1303,7 +1304,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                 }
 
                 current = current.Parent;
-            } while ( current != null );
+            }
+            while ( current != null );
 
             return false;
         }
@@ -1328,7 +1330,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                 }
 
                 parent = parent.Parent;
-            } while ( parent != null );
+            }
+            while ( parent != null );
 
             return false;
         }

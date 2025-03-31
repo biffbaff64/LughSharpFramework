@@ -108,4 +108,3 @@ public class PixelType
         return PixmapFormat.ToGLDataType( ToGdx2DPixmapPixelFormat( format ) );
     }
 }
-

@@ -538,7 +538,7 @@ public class Matrix4
 
         return this;
     }
-    
+
     /// <summary>
     /// Sets the matrix to an identity matrix.
     /// </summary>

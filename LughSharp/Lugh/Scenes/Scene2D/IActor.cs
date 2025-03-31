@@ -24,5 +24,4 @@
 
 namespace LughSharp.Lugh.Scenes.Scene2D;
 
-[PublicAPI]
-public interface IActor;
+[PublicAPI] public interface IActor;

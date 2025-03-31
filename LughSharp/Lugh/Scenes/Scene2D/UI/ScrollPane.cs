@@ -950,11 +950,11 @@ public partial class ScrollPane : WidgetGroup
 //        this.ScrollPositionY = pixelsY;
 //    }
 
-/// <summary>
-/// Sets the visual scroll amount equal to the scroll amount. This can
-/// be used when setting the scroll amount without animating.
-/// </summary>
-public void UpdateVisualScroll()
+    /// <summary>
+    /// Sets the visual scroll amount equal to the scroll amount. This can
+    /// be used when setting the scroll amount without animating.
+    /// </summary>
+    public void UpdateVisualScroll()
     {
         _visualAmountX = AmountX;
         _visualAmountY = AmountY;

@@ -162,8 +162,7 @@ public partial class PixmapPackerIO
         writer.Close();
     }
 
-    [GeneratedRegex( "(.+)_(\\d+)$" )]
-    private static partial Regex MyRegex();
+    [GeneratedRegex( "(.+)_(\\d+)$" )] private static partial Regex MyRegex();
 
     // ========================================================================
     // ========================================================================

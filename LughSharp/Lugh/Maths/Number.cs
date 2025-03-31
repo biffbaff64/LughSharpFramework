@@ -55,7 +55,7 @@ public abstract class Number
     public const float FLOAT_TOLERANCE   = 0.000000000000001f; // 32 bits
 
     // ========================================================================
-    
+
 //    public const float POSITIVE_INFINITY = float.PositiveInfinity;
 //    public const float NEGATIVE_INFINITY = float.NegativeInfinity;
 //    public const float NA_N              = float.NaN;
@@ -63,7 +63,7 @@ public abstract class Number
 //    public const float MIN_VALUE         = float.MinValue;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Returns the value of the specified number as an <tt>int</tt>
     /// which may involve rounding or truncation.
@@ -138,4 +138,3 @@ public abstract class Number
         return ( short )IntValue();
     }
 }
-

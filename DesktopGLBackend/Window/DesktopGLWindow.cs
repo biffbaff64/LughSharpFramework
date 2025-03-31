@@ -416,7 +416,7 @@ public partial class DesktopGLWindow : IDisposable
             return;
         }
 
-        List< GLFW.Image > buffer = new( images.Length );
+        List< Image > buffer = new( images.Length );
 
         Pixmap?[] tmpPixmaps = new Pixmap[ images.Length ];
 
@@ -432,7 +432,7 @@ public partial class DesktopGLWindow : IDisposable
                 tmpPixmaps[ i ] = rgba;
             }
 
-            GLFW.Image icon = new()
+            Image icon = new()
             {
                 Width  = images[ i ].Width,
                 Height = images[ i ].Height,

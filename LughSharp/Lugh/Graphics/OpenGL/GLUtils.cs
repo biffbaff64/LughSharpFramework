@@ -210,7 +210,7 @@ public static class GLUtils
         {
             return;
         }
-        
+
         Logger.Debug( $"sizeInBytes: {sizeInBytes}" );
         Logger.Debug( $"vertexSizeInFloats: {vertexSizeInFloats}" );
         Logger.Debug( $"data.Length: {data.Length}" );

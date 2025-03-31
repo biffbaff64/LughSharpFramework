@@ -36,23 +36,23 @@ public sealed class Bitstream
 {
 //TODO: much of the parsing currently occurs in the various decoders. This should be moved into this class and associated inner classes.
 
-/// <summary>
-/// Synchronization control constant for the initial
-/// synchronization to the start of a frame.
-/// </summary>
-public const sbyte INITIAL_SYNC = 0;
+    /// <summary>
+    /// Synchronization control constant for the initial
+    /// synchronization to the start of a frame.
+    /// </summary>
+    public const sbyte INITIAL_SYNC = 0;
 
-/// <summary>
-/// Synchronization control constant for non-inital frame
-/// synchronizations.
-/// </summary>
-public const sbyte STRICT_SYNC = 1;
+    /// <summary>
+    /// Synchronization control constant for non-inital frame
+    /// synchronizations.
+    /// </summary>
+    public const sbyte STRICT_SYNC = 1;
 
-/// <summary>
-/// Maximum size of the frame buffer:
-/// 1730 bytes per frame: 144 * 384kbit/s / 32000 Hz + 2 Bytes CRC
-/// </summary>
-private const int BUFFER_INT_SIZE = 433;
+    /// <summary>
+    /// Maximum size of the frame buffer:
+    /// 1730 bytes per frame: 144 * 384kbit/s / 32000 Hz + 2 Bytes CRC
+    /// </summary>
+    private const int BUFFER_INT_SIZE = 433;
 
     private readonly int[] _bitmask =
     [
@@ -284,7 +284,8 @@ private const int BUFFER_INT_SIZE = 433;
             }
 
             sync = IsSyncMark( headerstring, syncmode, _syncWord );
-        } while ( !sync );
+        }
+        while ( !sync );
 
         return headerstring;
     }

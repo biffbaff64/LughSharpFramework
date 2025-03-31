@@ -140,7 +140,7 @@ public class SpriteBatch : IBatch
     /// </param>
     private void Initialise( int size, ShaderProgram? defaultShader )
     {
-        OpenGL.GLUtils.CheckOpenGLContext();
+        GLUtils.CheckOpenGLContext();
 
         // Determine the vertex data type based on OpenGL version.
         // OpenGL 3.0 and later support Vertex Buffer Objects (VBOs) with Vertex Array Objects (VAOs),
@@ -202,8 +202,15 @@ public class SpriteBatch : IBatch
     /// <param name="depthMaskEnabled"> Enable or Disable DepthMask. Defaults to false. </param>
     public void Begin( bool depthMaskEnabled = false )
     {
-        if ( IsDrawing ) throw new InvalidOperationException( "End() must be called before Begin()" );
-        if ( _shader == null ) throw new NullReferenceException( "Shader is null" );
+        if ( IsDrawing )
+        {
+            throw new InvalidOperationException( "End() must be called before Begin()" );
+        }
+
+        if ( _shader == null )
+        {
+            throw new NullReferenceException( "Shader is null" );
+        }
 
         _originalDepthMask = GdxApi.Bindings.IsEnabled( ( int )EnableCap.DepthTest );
         GdxApi.Bindings.DepthMask( depthMaskEnabled );
@@ -260,7 +267,7 @@ public class SpriteBatch : IBatch
     /// </exception>
     public void Flush()
     {
-        OpenGL.GLUtils.CheckOpenGLContext();
+        GLUtils.CheckOpenGLContext();
 
         // Check if there is any data to flush.
         if ( Idx <= 0 )
@@ -317,7 +324,10 @@ public class SpriteBatch : IBatch
         // Copy the data from the Vertices array to the pooled _vertices array.
         Array.Copy( Vertices, _vertices, Idx );
 
-        if ( _mesh == null ) throw new NullReferenceException( "Mesh is null" );
+        if ( _mesh == null )
+        {
+            throw new NullReferenceException( "Mesh is null" );
+        }
 
         _mesh.SetVertices( _vertices, 0, Idx );
         _mesh.IndicesBuffer.Position = 0;
@@ -364,7 +374,10 @@ public class SpriteBatch : IBatch
     /// </summary>
     public void EnableBlending()
     {
-        if ( !BlendingDisabled ) return;
+        if ( !BlendingDisabled )
+        {
+            return;
+        }
 
         if ( Idx > 0 )
         {
@@ -380,7 +393,10 @@ public class SpriteBatch : IBatch
     /// </summary>
     public void DisableBlending()
     {
-        if ( BlendingDisabled ) return;
+        if ( BlendingDisabled )
+        {
+            return;
+        }
 
         if ( Idx > 0 )
         {
@@ -446,7 +462,10 @@ public class SpriteBatch : IBatch
 
         ProjectionMatrix.Set( projection );
 
-        if ( IsDrawing ) SetupMatrices();
+        if ( IsDrawing )
+        {
+            SetupMatrices();
+        }
     }
 
     /// <summary>
@@ -463,7 +482,10 @@ public class SpriteBatch : IBatch
 
         TransformMatrix.Set( transform );
 
-        if ( IsDrawing ) SetupMatrices();
+        if ( IsDrawing )
+        {
+            SetupMatrices();
+        }
     }
 
     /// <summary>
@@ -766,7 +788,10 @@ public class SpriteBatch : IBatch
     /// <param name="texture">The new texture to switch to. If null, no action is taken.</param>
     protected void SwitchTexture( Texture? texture )
     {
-        if ( texture == null ) return;
+        if ( texture == null )
+        {
+            return;
+        }
 
         if ( Idx > 0 )
         {

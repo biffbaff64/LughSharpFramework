@@ -41,8 +41,8 @@ public partial class GLBindings
     // ========================================================================
     // ========================================================================
 
-    [LibraryImport( "opengl32.dll", EntryPoint = "wglGetProcAddress", StringMarshalling = StringMarshalling.Utf16)]
-    [UnmanagedCallConv(CallConvs = [ typeof(System.Runtime.CompilerServices.CallConvStdcall) ] )]
+    [LibraryImport( "opengl32.dll", EntryPoint = "wglGetProcAddress", StringMarshalling = StringMarshalling.Utf16 )]
+    [UnmanagedCallConv( CallConvs = [ typeof( System.Runtime.CompilerServices.CallConvStdcall ) ] )]
     private static partial IntPtr wglGetProcAddress( string procname );
 
     /// <summary>
@@ -106,7 +106,7 @@ public partial class GLBindings
                 var functionDelegate = Marshal.GetDelegateForFunctionPointer< T >( functionPtr );
 
                 _loadedFunctions.Add( functionName, functionDelegate );
-                
+
                 return functionDelegate;
             }
             catch ( Exception ex )

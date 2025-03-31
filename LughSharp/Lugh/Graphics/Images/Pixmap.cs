@@ -687,10 +687,10 @@ public class Pixmap : IDisposable
         {
             //TODO:
             Gdx2DPixmap.Dispose();
-                
-            Color      = null!;
+
+            Color       = null!;
             Gdx2DPixmap = null!;
-            
+
             IsDisposed = true;
         }
     }

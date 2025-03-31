@@ -4012,12 +4012,12 @@ public partial interface IGLBindings
 //
 //    unsafe void UniformMatrix4fv( int location, int count, bool transpose, Buffer buffer );
 
-/// <summary>
-/// Validates a program object
-/// </summary>
-/// <param name="program">Specifies the handle of the program object to be validated</param>
-/// <returns><c>true</c> if validation is successful, <c>false</c> otherwise</returns>
-bool ValidateProgram( int program );
+    /// <summary>
+    /// Validates a program object
+    /// </summary>
+    /// <param name="program">Specifies the handle of the program object to be validated</param>
+    /// <returns><c>true</c> if validation is successful, <c>false</c> otherwise</returns>
+    bool ValidateProgram( int program );
 
     /// <summary>
     /// Specifies the value of a generic vertex attribute

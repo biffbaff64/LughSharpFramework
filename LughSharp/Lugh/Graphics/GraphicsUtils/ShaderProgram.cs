@@ -253,7 +253,7 @@ public class ShaderProgram : IDisposable
                     break;
 
                 default:
-                    throw new System.ArgumentException( "Matrix must be 2x2, 3x3 or 4x4" );
+                    throw new ArgumentException( "Matrix must be 2x2, 3x3 or 4x4" );
             }
         }
     }
@@ -510,7 +510,10 @@ public class ShaderProgram : IDisposable
             return;
         }
 
-        if ( size == 0 ) throw new GdxRuntimeException( "Size cannot be 0." );
+        if ( size == 0 )
+        {
+            throw new GdxRuntimeException( "Size cannot be 0." );
+        }
 
         GdxApi.Bindings.VertexAttribPointer( ( GLuint )location, size, type, normalize, stride, offset );
     }

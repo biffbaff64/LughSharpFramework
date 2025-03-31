@@ -46,7 +46,7 @@ public class SerializationException : System.Runtime.Serialization.Serialization
         : base( "", inner )
     {
     }
-    
+
     public void AddTrace( string traceMessage )
     {
         if ( Data.Contains( "Trace" ) )

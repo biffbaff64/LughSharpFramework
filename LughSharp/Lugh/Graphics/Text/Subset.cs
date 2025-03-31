@@ -22,24 +22,36 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
+using LughSharp.Lugh.Utils.Guarding;
 
-namespace LughSharp.Lugh.Utils;
+namespace LughSharp.Lugh.Graphics.Text;
 
-[PublicAPI]
-[AttributeUsage( AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Struct, Inherited = false )]
-[Conditional( "DEBUG" )]
-public sealed class InTestingAttribute : Attribute
+/// <summary>
+/// Instances of this class represent particular subsets of the Unicode character set.
+/// The only family of subsets defined in the <c>Character</c> class is <see cref="UnicodeBlock"/>.
+/// Other portions of the Java API may define other subsets for their own purposes.
+/// </summary>
+public class Subset
 {
-    public InTestingAttribute()
+    private readonly string _name;
+
+    /// <summary>
+    /// Constructs a new <c>Subset</c> instance.
+    /// </summary>
+    /// <param name="name"> The name of this subset </param>
+    /// <exception cref="NullReferenceException"> if name is <c>null</c>. </exception>
+    protected Subset( string name )
     {
-        Message = "This member is currently in testing and may change or be removed.";
+        Guard.ThrowIfNull( name );
+
+        _name = name;
     }
 
-    public InTestingAttribute( string message )
+    /// <summary>
+    /// Returns the name of this subset.
+    /// </summary>
+    public override string ToString()
     {
-        Message = message;
+        return _name;
     }
-
-    public string Message { get; private set; }
 }

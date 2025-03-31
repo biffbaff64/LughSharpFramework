@@ -42,7 +42,7 @@ public abstract class ReadOnlySerializer< T > : IJsonSerializer
 public interface IJsonSerializer
 {
     void Write( Json json, object obj, Type? knownType );
-    
+
     object Read( Json json, JsonValue jsonData, Type? type );
 }
 
@@ -52,7 +52,7 @@ public interface IJsonSerializer
 public interface IJsonSerializer< T >
 {
     void Write( Json json, T obj, Type knownType );
-    
+
     T Read( Json json, JsonValue jsonData, Type? type );
 }
 
@@ -62,6 +62,6 @@ public interface IJsonSerializer< T >
 public interface IJsonSerializable
 {
     void Write( Json json );
-    
+
     void Read( Json json, JsonValue jsonData );
 }

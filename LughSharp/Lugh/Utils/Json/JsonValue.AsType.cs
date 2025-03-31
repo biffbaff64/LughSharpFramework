@@ -62,7 +62,7 @@ public partial class JsonValue
             ValueTypes.DoubleValue  => ( float )DoubleValue!,
             ValueTypes.LongValue    => ( float )LongValue!,
             ValueTypes.BooleanValue => LongValue != 0 ? 1 : 0,
-            var _                   => throw new InvalidOperationException( $"Value cannot be converted to float: {ValueType}" )
+            var _                   => throw new InvalidOperationException( $"Value cannot be converted to float: {ValueType}" ),
         };
     }
 
@@ -79,7 +79,7 @@ public partial class JsonValue
             ValueTypes.DoubleValue  => ( double )DoubleValue!,
             ValueTypes.LongValue    => ( double )LongValue!,
             ValueTypes.BooleanValue => LongValue != 0 ? 1 : 0,
-            var _                   => throw new InvalidOperationException( $"Value cannot be converted to double: {ValueType}" )
+            var _                   => throw new InvalidOperationException( $"Value cannot be converted to double: {ValueType}" ),
         };
     }
 
@@ -96,7 +96,7 @@ public partial class JsonValue
             ValueTypes.DoubleValue  => ( long )DoubleValue!,
             ValueTypes.LongValue    => ( long )LongValue!,
             ValueTypes.BooleanValue => LongValue != 0 ? 1 : 0,
-            var _                   => throw new InvalidOperationException( $"Value cannot be converted to long: {ValueType}" )
+            var _                   => throw new InvalidOperationException( $"Value cannot be converted to long: {ValueType}" ),
         };
     }
 
@@ -113,7 +113,7 @@ public partial class JsonValue
             ValueTypes.DoubleValue  => ( int )DoubleValue!,
             ValueTypes.LongValue    => ( int )LongValue!,
             ValueTypes.BooleanValue => LongValue != 0 ? 1 : 0,
-            var _                   => throw new InvalidOperationException( $"Value cannot be converted to int: {ValueType}" )
+            var _                   => throw new InvalidOperationException( $"Value cannot be converted to int: {ValueType}" ),
         };
     }
 
@@ -130,7 +130,7 @@ public partial class JsonValue
             ValueTypes.DoubleValue  => DoubleValue != 0,
             ValueTypes.LongValue    => LongValue != 0,
             ValueTypes.BooleanValue => LongValue != 0,
-            var _                   => throw new InvalidOperationException( $"Value cannot be converted to bool: {ValueType}" )
+            var _                   => throw new InvalidOperationException( $"Value cannot be converted to bool: {ValueType}" ),
         };
     }
 
@@ -147,7 +147,7 @@ public partial class JsonValue
             ValueTypes.DoubleValue  => ( byte )DoubleValue!,
             ValueTypes.LongValue    => ( byte )LongValue!,
             ValueTypes.BooleanValue => ( byte )( LongValue != 0 ? 1 : 0 ),
-            var _                   => throw new InvalidOperationException( $"Value cannot be converted to byte: {ValueType}" )
+            var _                   => throw new InvalidOperationException( $"Value cannot be converted to byte: {ValueType}" ),
         };
     }
 
@@ -164,7 +164,7 @@ public partial class JsonValue
             ValueTypes.DoubleValue  => ( short )DoubleValue!,
             ValueTypes.LongValue    => ( short )LongValue!,
             ValueTypes.BooleanValue => ( short )( LongValue != 0 ? 1 : 0 ),
-            var _                   => throw new InvalidOperationException( $"Value cannot be converted to short: {ValueType}" )
+            var _                   => throw new InvalidOperationException( $"Value cannot be converted to short: {ValueType}" ),
         };
     }
 
@@ -183,7 +183,7 @@ public partial class JsonValue
             ValueTypes.DoubleValue  => ( char )DoubleValue!,
             ValueTypes.LongValue    => ( char )LongValue!,
             ValueTypes.BooleanValue => ( char )( LongValue != 0 ? 1 : 0 ),
-            var _                   => throw new InvalidOperationException( $"Value cannot be converted to char: {ValueType}" )
+            var _                   => throw new InvalidOperationException( $"Value cannot be converted to char: {ValueType}" ),
         };
     }
 
@@ -212,7 +212,7 @@ public partial class JsonValue
                 ValueTypes.LongValue    => StringValue ?? value.LongValue.ToString(),
                 ValueTypes.BooleanValue => value.LongValue != 0 ? "true" : "false",
                 ValueTypes.NullValue    => null,
-                var _                   => throw new InvalidOperationException( $"Value cannot be converted to string: {value.ValueType}" )
+                var _                   => throw new InvalidOperationException( $"Value cannot be converted to string: {value.ValueType}" ),
             };
 
             array[ i ] = v!;
@@ -244,7 +244,7 @@ public partial class JsonValue
                 ValueTypes.LongValue    => ( float )value.LongValue!,
                 ValueTypes.BooleanValue => value.LongValue != 0 ? 1 : 0,
 
-                var _ => throw new InvalidOperationException( $"Value cannot be converted to float: {value.ValueType}" )
+                var _ => throw new InvalidOperationException( $"Value cannot be converted to float: {value.ValueType}" ),
             };
 
             array[ i ] = v;
@@ -275,7 +275,7 @@ public partial class JsonValue
                 ValueTypes.DoubleValue  => ( double )value.DoubleValue!,
                 ValueTypes.LongValue    => ( double )value.LongValue!,
                 ValueTypes.BooleanValue => value.LongValue != 0 ? 1 : 0,
-                var _                   => throw new InvalidOperationException( $"Value cannot be converted to double: {value.ValueType}" )
+                var _                   => throw new InvalidOperationException( $"Value cannot be converted to double: {value.ValueType}" ),
             };
 
             array[ i ] = v;
@@ -332,13 +332,13 @@ public partial class JsonValue
 
         for ( var value = Child; value != null; value = value.Next, i++ )
         {
-            int v = value.ValueType switch
+            var v = value.ValueType switch
             {
                 ValueTypes.StringValue  => int.Parse( value.StringValue! ),
                 ValueTypes.DoubleValue  => ( int )value.DoubleValue!,
                 ValueTypes.LongValue    => ( int )value.LongValue!,
                 ValueTypes.BooleanValue => value.LongValue != 0 ? 1 : 0,
-                var _                   => throw new InvalidOperationException( $"Value cannot be converted to int: {value.ValueType}" )
+                var _                   => throw new InvalidOperationException( $"Value cannot be converted to int: {value.ValueType}" ),
             };
 
             array[ i ] = v;
@@ -369,7 +369,7 @@ public partial class JsonValue
                 ValueTypes.DoubleValue  => value.DoubleValue == 0,
                 ValueTypes.LongValue    => value.LongValue == 0,
                 ValueTypes.BooleanValue => value.LongValue != 0,
-                var _                   => throw new InvalidOperationException( $"Value cannot be converted to bool: {value.ValueType}" )
+                var _                   => throw new InvalidOperationException( $"Value cannot be converted to bool: {value.ValueType}" ),
             };
 
             array[ i ] = v;
@@ -400,7 +400,7 @@ public partial class JsonValue
                 ValueTypes.DoubleValue  => ( byte )value.DoubleValue!,
                 ValueTypes.LongValue    => ( byte )value.LongValue!,
                 ValueTypes.BooleanValue => ( byte )( value.LongValue != 0 ? 1 : 0 ),
-                var _                   => throw new InvalidOperationException( $"Value cannot be converted to byte: {value.ValueType}" )
+                var _                   => throw new InvalidOperationException( $"Value cannot be converted to byte: {value.ValueType}" ),
             };
 
             array[ i ] = v;
@@ -431,7 +431,7 @@ public partial class JsonValue
                 ValueTypes.DoubleValue  => ( short )value.DoubleValue!,
                 ValueTypes.LongValue    => ( short )value.LongValue!,
                 ValueTypes.BooleanValue => ( short )( value.LongValue != 0 ? 1 : 0 ),
-                var _                   => throw new InvalidOperationException( $"Value cannot be converted to short: {value.ValueType}" )
+                var _                   => throw new InvalidOperationException( $"Value cannot be converted to short: {value.ValueType}" ),
             };
 
             array[ i ] = v;
@@ -462,7 +462,7 @@ public partial class JsonValue
                 ValueTypes.DoubleValue  => ( char )value.DoubleValue!,
                 ValueTypes.LongValue    => ( char )value.LongValue!,
                 ValueTypes.BooleanValue => ( char )( value.LongValue != 0 ? 1 : 0 ),
-                var _                   => throw new InvalidOperationException( $"Value cannot be converted to char: {value.ValueType}" )
+                var _                   => throw new InvalidOperationException( $"Value cannot be converted to char: {value.ValueType}" ),
             };
 
             array[ i ] = v;
@@ -471,4 +471,3 @@ public partial class JsonValue
         return array;
     }
 }
-

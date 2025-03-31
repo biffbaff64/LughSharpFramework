@@ -44,8 +44,11 @@ public class GridPacker : TexturePacker.IPacker
     public List< TexturePacker.Page > Pack( TexturePacker.ProgressListener? progress, List< TexturePacker.Rect > inputRects )
     {
         ArgumentNullException.ThrowIfNull( progress );
-        
-        if ( !settings.Silent ) Console.WriteLine( "Packing" );
+
+        if ( !settings.Silent )
+        {
+            Console.WriteLine( "Packing" );
+        }
 
         // Rects are packed with right and top padding, so the max size is increased to match.
         // After packing the padding is subtracted from the page size.
@@ -93,7 +96,10 @@ public class GridPacker : TexturePacker.IPacker
         {
             progress.Count = ( n - inputRects.Count ) + 1;
 
-            if ( progress.Update( progress.Count, n ) ) break;
+            if ( progress.Update( progress.Count, n ) )
+            {
+                break;
+            }
 
             var page = PackPage( inputRects, cellWidth, cellHeight, maxWidth, maxHeight );
             page.Width  -= paddingX;
@@ -122,7 +128,10 @@ public class GridPacker : TexturePacker.IPacker
             {
                 y += cellHeight;
 
-                if ( y > ( maxHeight - cellHeight ) ) break;
+                if ( y > ( maxHeight - cellHeight ) )
+                {
+                    break;
+                }
 
                 x = 0;
             }
@@ -133,9 +142,9 @@ public class GridPacker : TexturePacker.IPacker
             rect.Y      =  y;
             rect.Width  += settings.PaddingX;
             rect.Height += settings.PaddingY;
-            
+
             page.OutputRects.Add( rect );
-            
+
             x           += cellWidth;
             page.Width  =  Math.Max( page.Width, x );
             page.Height =  Math.Max( page.Height, y + cellHeight );

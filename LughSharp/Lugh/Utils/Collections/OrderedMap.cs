@@ -109,7 +109,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
     /// <inheritdoc />
     public override TV? Put( TK key, TV? value )
     {
-        int i = LocateKey( key );
+        var i = LocateKey( key );
 
         if ( i >= 0 )
         {
@@ -277,7 +277,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         }
 
         Guard.ThrowIfNull( Entries2 );
-        
+
         if ( !Entries1.Valid )
         {
             Entries1.Reset();
@@ -314,7 +314,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             Values1 = new OrderedMapValues( this );
             Values2 = new OrderedMapValues( this );
         }
-        
+
         Guard.ThrowIfNull( Values2 );
 
         if ( !Values1.Valid )
@@ -349,13 +349,13 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         }
 
         Guard.ThrowIfNull( Keys2 );
-        
+
         if ( Keys1 == null )
         {
             Keys1 = new OrderedMapKeys( this );
             Keys2 = new OrderedMapKeys( this );
         }
-        
+
         if ( !Keys1.Valid )
         {
             Keys1.Reset();
@@ -373,7 +373,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
     }
 
     // ========================================================================
-    
+
     protected override string ToString( string separator, bool braces )
     {
         if ( Size == 0 )
@@ -450,7 +450,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             Entry.Value  = Map.Get( Entry.Key );
 
             NextIndex++;
-            
+
             HasNext = NextIndex < Map.Size;
 
             return Entry;
@@ -464,7 +464,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             }
 
             Map.Remove( Entry.Key! );
-            
+
             NextIndex--;
             CurrentIndex = -1;
         }
@@ -478,7 +478,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
     {
         private List< TK > _keys;
 
-        public OrderedMapKeys( OrderedMap< TK,TV > map ) : base( map )
+        public OrderedMapKeys( OrderedMap< TK, TV > map ) : base( map )
         {
             _keys = map._keys;
         }
@@ -519,7 +519,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             }
 
             ( ( OrderedMap< TK, TV > )Map ).RemoveIndex( CurrentIndex );
-            
+
             NextIndex    = CurrentIndex;
             CurrentIndex = -1;
         }
@@ -542,7 +542,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
 
     // ========================================================================
     // ========================================================================
-    
+
     [PublicAPI]
     public class OrderedMapValues : Values
     {
@@ -597,16 +597,16 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         public override List< TV > ToArray( List< TV > array )
         {
             var n = _keys.Count;
-            
+
             array.EnsureCapacity( n - NextIndex );
 
-            var keys = this._keys;
+            var keys = _keys;
 
             for ( var i = NextIndex; i < n; i++ )
             {
                 array.Add( Map.Get( keys[ i ] ) ?? throw new NullReferenceException() );
             }
-            
+
             CurrentIndex = n - 1;
             NextIndex    = n;
             HasNext      = false;
@@ -620,4 +620,3 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         }
     }
 }
-

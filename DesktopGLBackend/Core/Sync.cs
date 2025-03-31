@@ -37,7 +37,10 @@ public class Sync
 
     public void SyncFrameRate( int fps )
     {
-        if ( fps <= 0 ) return;
+        if ( fps <= 0 )
+        {
+            return;
+        }
 
         if ( !_initialised )
         {

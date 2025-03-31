@@ -66,7 +66,10 @@ public static class PropertiesUtils
         {
             var intVal = reader.Read();
 
-            if ( intVal == -1 ) break;
+            if ( intVal == -1 )
+            {
+                break;
+            }
 
             var nextChar = ( char )intVal;
 
@@ -87,7 +90,10 @@ public static class PropertiesUtils
                     {
                         unicode = ( unicode << 4 ) + digit;
 
-                        if ( ++count < 4 ) continue;
+                        if ( ++count < 4 )
+                        {
+                            continue;
+                        }
                     }
                     else if ( count <= 4 )
                     {
@@ -97,7 +103,10 @@ public static class PropertiesUtils
                     mode            = NONE;
                     buf[ offset++ ] = ( char )unicode;
 
-                    if ( nextChar != '\n' ) continue;
+                    if ( nextChar != '\n' )
+                    {
+                        continue;
+                    }
 
                     break;
             }
@@ -164,7 +173,10 @@ public static class PropertiesUtils
                                 {
                                     intVal = reader.Read();
 
-                                    if ( intVal == -1 ) break;
+                                    if ( intVal == -1 )
+                                    {
+                                        break;
+                                    }
 
                                     nextChar = ( char )intVal;
 
@@ -226,7 +238,10 @@ public static class PropertiesUtils
                     {
                         mode = mode == CONTINUE ? IGNORE : mode;
 
-                        if ( ( offset == 0 ) || ( offset == keyLength ) || ( mode == IGNORE ) ) continue;
+                        if ( ( offset == 0 ) || ( offset == keyLength ) || ( mode == IGNORE ) )
+                        {
+                            continue;
+                        }
 
                         if ( keyLength == -1 )
                         {

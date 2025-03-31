@@ -34,7 +34,7 @@ public partial class JsonValue
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsString();
+        return ( child == null ) || !child.IsValue() || child.IsNull() ? defaultValue : child.AsString();
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public partial class JsonValue
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsFloat();
+        return ( child == null ) || !child.IsValue() || child.IsNull() ? defaultValue : child.AsFloat();
     }
 
     /// <summary>
@@ -56,7 +56,7 @@ public partial class JsonValue
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsDouble();
+        return ( child == null ) || !child.IsValue() || child.IsNull() ? defaultValue : child.AsDouble();
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public partial class JsonValue
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsLong();
+        return ( child == null ) || !child.IsValue() || child.IsNull() ? defaultValue : child.AsLong();
     }
 
     /// <summary>
@@ -78,7 +78,7 @@ public partial class JsonValue
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsInt();
+        return ( child == null ) || !child.IsValue() || child.IsNull() ? defaultValue : child.AsInt();
     }
 
     /// <summary>
@@ -89,7 +89,7 @@ public partial class JsonValue
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsBoolean();
+        return ( child == null ) || !child.IsValue() || child.IsNull() ? defaultValue : child.AsBoolean();
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public partial class JsonValue
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsByte();
+        return ( child == null ) || !child.IsValue() || child.IsNull() ? defaultValue : child.AsByte();
     }
 
     /// <summary>
@@ -111,7 +111,7 @@ public partial class JsonValue
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsShort();
+        return ( child == null ) || !child.IsValue() || child.IsNull() ? defaultValue : child.AsShort();
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ public partial class JsonValue
     {
         var child = Get( name );
 
-        return ( ( child == null ) || !child.IsValue() || child.IsNull() ) ? defaultValue : child.AsChar();
+        return ( child == null ) || !child.IsValue() || child.IsNull() ? defaultValue : child.AsChar();
     }
 
     /// <summary>
@@ -413,4 +413,3 @@ public partial class JsonValue
         return child.AsChar();
     }
 }
-

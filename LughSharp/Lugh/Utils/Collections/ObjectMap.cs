@@ -356,13 +356,19 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// Helper method.
     /// Returns TRUE if Size is greater than zero.
     /// </summary>
-    public virtual bool NotEmpty() => Size > 0;
+    public virtual bool NotEmpty()
+    {
+        return Size > 0;
+    }
 
     /// <summary>
     /// Helper method.
     /// Returns TRUE if Size is zero.
     /// </summary>
-    public virtual bool IsEmpty() => Size == 0;
+    public virtual bool IsEmpty()
+    {
+        return Size == 0;
+    }
 
     /// <summary>
     /// Shrinks the map to the specified maximum capacity.
@@ -968,7 +974,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         {
             _currentIndex = -1;
             _nextIndex    = -1;
-            
+
             FindNextIndex();
         }
 

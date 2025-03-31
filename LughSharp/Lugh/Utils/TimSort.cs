@@ -249,7 +249,8 @@ public class TimSort< T >
             // Advance to find next run
             lo        += runLen;
             remaining -= runLen;
-        } while ( remaining != 0 );
+        }
+        while ( remaining != 0 );
 
 #if ALLOW_ASSERTS
         Debug.Assert( lo == hi );
@@ -334,7 +335,8 @@ public class TimSort< T >
             // Advance to find next run
             lo         += runLen;
             nRemaining -= runLen;
-        } while ( nRemaining != 0 );
+        }
+        while ( nRemaining != 0 );
 
 #if ALLOW_ASSERTS
         Debug.Assert( lo == hi );
@@ -1026,7 +1028,8 @@ public class TimSort< T >
                         goto outer;
                     }
                 }
-            } while ( ( count1 | count2 ) < minGallop );
+            }
+            while ( ( count1 | count2 ) < minGallop );
 
             // One run is winning so consistently that galloping may be a huge win.
             // So try that, and continue galloping until (if ever) neither run
@@ -1084,7 +1087,8 @@ public class TimSort< T >
                 }
 
                 minGallop--;
-            } while ( ( count1 >= MIN_GALLOP ) || ( count2 >= MIN_GALLOP ) );
+            }
+            while ( ( count1 >= MIN_GALLOP ) || ( count2 >= MIN_GALLOP ) );
 
             if ( minGallop < 0 )
             {
@@ -1218,7 +1222,8 @@ public class TimSort< T >
                         goto outer;
                     }
                 }
-            } while ( ( count1 | count2 ) < minGallop );
+            }
+            while ( ( count1 | count2 ) < minGallop );
 
             // One run is winning so consistently that galloping may be a huge win.
             // So try that, and continue galloping until (if ever) neither run appears
@@ -1276,7 +1281,8 @@ public class TimSort< T >
                 }
 
                 minGallop--;
-            } while ( ( count1 >= MIN_GALLOP ) || ( count2 >= MIN_GALLOP ) );
+            }
+            while ( ( count1 >= MIN_GALLOP ) || ( count2 >= MIN_GALLOP ) );
 
             if ( minGallop < 0 )
             {

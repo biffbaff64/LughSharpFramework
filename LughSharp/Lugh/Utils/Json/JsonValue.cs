@@ -63,7 +63,7 @@ public partial class JsonValue : IEnumerable< JsonValue >
 
     public JsonValue( ValueTypes valueType )
     {
-        this.ValueType = valueType;
+        ValueType = valueType;
     }
 
     public JsonValue( string? value )
@@ -193,11 +193,11 @@ public partial class JsonValue : IEnumerable< JsonValue >
 
         if ( child.Prev == null )
         {
-            this.Child = child.Next;
+            Child = child.Next;
 
-            if ( this.Child != null )
+            if ( Child != null )
             {
-                this.Child.Prev = null;
+                Child.Prev = null;
             }
         }
         else
@@ -232,11 +232,11 @@ public partial class JsonValue : IEnumerable< JsonValue >
 
         if ( child.Prev == null )
         {
-            this.Child = child.Next;
+            Child = child.Next;
 
-            if ( this.Child != null )
+            if ( Child != null )
             {
-                this.Child.Prev = null;
+                Child.Prev = null;
             }
         }
         else
@@ -645,7 +645,7 @@ public partial class JsonValue : IEnumerable< JsonValue >
             {
                 ValueTypes.ArrayValue  => "[]",
                 ValueTypes.ObjectValue => "{}",
-                _                      => "",
+                var _                  => "",
             };
         }
 
@@ -1064,7 +1064,7 @@ public partial class JsonValue : IEnumerable< JsonValue >
     /// <inheritdoc />
     public IEnumerator< JsonValue > GetEnumerator()
     {
-        return new JsonValueIterator( this, this.Size );
+        return new JsonValueIterator( this, Size );
     }
 
     /// <inheritdoc />
@@ -1087,8 +1087,8 @@ public partial class JsonValue : IEnumerable< JsonValue >
 
         public JsonValueIterator( JsonValue child, int size )
         {
-            this._child = child;
-            this._size  = size;
+            _child = child;
+            _size  = size;
         }
 
         /// <inheritdoc />
@@ -1147,10 +1147,16 @@ public partial class JsonValue : IEnumerable< JsonValue >
         }
 
         /// <inheritdoc />
-        public IEnumerator< JsonValue > GetEnumerator() => this;
+        public IEnumerator< JsonValue > GetEnumerator()
+        {
+            return this;
+        }
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         /// <inheritdoc />
         public void Dispose()

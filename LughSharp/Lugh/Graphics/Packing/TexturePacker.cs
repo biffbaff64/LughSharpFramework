@@ -58,9 +58,9 @@ public class TexturePacker
     // ========================================================================
     // ========================================================================
 
-    public TexturePacker( FileInfo? rootDir, TexturePacker.Settings settings )
+    public TexturePacker( FileInfo? rootDir, Settings settings )
     {
-        this._settings = settings;
+        _settings = settings;
 
         if ( settings.PowerOfTwo )
         {
@@ -145,14 +145,14 @@ public class TexturePacker
 
     public void SetPacker( IPacker packer )
     {
-        this._packer = packer;
+        _packer = packer;
     }
 
     public void SetListener( ProgressListener listener )
     {
-        this._progressListener = listener;
+        _progressListener = listener;
     }
-    
+
     /// <summary>
     /// Packs processed images into the a <see cref="Graphics.Atlases.TextureAtlas"/> with the
     /// specified filename. The atlas will be stored in the specified directory.
@@ -164,7 +164,7 @@ public class TexturePacker
     {
         ArgumentNullException.ThrowIfNull( outputDir );
         ArgumentNullException.ThrowIfNull( outputDir.Directory );
-        
+
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
             packFileName = packFileName.Substring( 0, packFileName.Length - _settings.AtlasExtension.Length );
@@ -257,12 +257,15 @@ public class TexturePacker
     {
         ArgumentNullException.ThrowIfNull( outputDir );
         ArgumentNullException.ThrowIfNull( _progressListener );
-        
+
         var packFileNoExt = Path.Combine( outputDir, scaledPackFileName );
         var packDir       = Path.GetDirectoryName( packFileNoExt );
         var imageName     = Path.GetFileName( packFileNoExt );
 
-        if ( packDir == null ) throw new GdxRuntimeException( "Error creating pack directory." );
+        if ( packDir == null )
+        {
+            throw new GdxRuntimeException( "Error creating pack directory." );
+        }
 
         var fileIndex = 1;
 
@@ -332,7 +335,10 @@ public class TexturePacker
 
                 outputFile = Path.Combine( packDir, name + "." + _settings.OutputFormat );
 
-                if ( !File.Exists( outputFile ) ) break;
+                if ( !File.Exists( outputFile ) )
+                {
+                    break;
+                }
             }
 
             // Create parent directories
@@ -353,7 +359,7 @@ public class TexturePacker
             {
                 throw new NullReferenceException( "OutputRects for page is null" );
             }
-            
+
             _progressListener.Start( 1f / pages.Count );
 
             for ( var r = 0; r < page.OutputRects.Count; r++ )
@@ -415,7 +421,8 @@ public class TexturePacker
                                     Plot( canvas, rectX - i, rectY - j, image.GetPixel( 0, 0 ) );
                                     Plot( canvas, rectX - i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( 0, ih - 1 ) );
                                     Plot( canvas, ( ( rectX + iw ) - 1 ) + i, rectY - j, image.GetPixel( iw - 1, 0 ) );
-                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( iw - 1, ih - 1 ) );
+                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j,
+                                          image.GetPixel( iw - 1, ih - 1 ) );
                                 }
                             }
 
@@ -483,9 +490,9 @@ public class TexturePacker
                         newGraphics.DrawImage( canvas, 0, 0 );
 
                         var jpgEncoder          = GetEncoder( ImageFormat.Jpeg );
-                        var            myEncoder           = System.Drawing.Imaging.Encoder.Quality;
-                        var            myEncoderParameters = new EncoderParameters( 1 );
-                        var            myEncoderParameter  = new EncoderParameter( myEncoder, ( long )( _settings.JpegQuality * 100 ) );
+                        var myEncoder           = Encoder.Quality;
+                        var myEncoderParameters = new EncoderParameters( 1 );
+                        var myEncoderParameter  = new EncoderParameter( myEncoder, ( long )( _settings.JpegQuality * 100 ) );
 
                         myEncoderParameters.Param[ 0 ] = myEncoderParameter;
                         newImage.Save( outputFile, jpgEncoder, myEncoderParameters );
@@ -519,7 +526,10 @@ public class TexturePacker
                 throw new Exception( "Error writing file: " + outputFile, ex );
             }
 
-            if ( _progressListener.Update( p + 1, pages.Count ) ) return;
+            if ( _progressListener.Update( p + 1, pages.Count ) )
+            {
+                return;
+            }
 
             _progressListener.Count++;
         }
@@ -542,7 +552,10 @@ public class TexturePacker
 
     private static void Plot( Bitmap dst, int x, int y, System.Drawing.Color argb )
     {
-        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) ) dst.SetPixel( x, y, argb );
+        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) )
+        {
+            dst.SetPixel( x, y, argb );
+        }
     }
 
     private static void Copy( Bitmap src, int x, int y, int w, int h, Bitmap dst, int dx, int dy, bool rotated )
@@ -578,7 +591,7 @@ public class TexturePacker
             foreach ( var page in pages )
             {
                 ArgumentNullException.ThrowIfNull( page.OutputRects );
-                
+
                 foreach ( var rect in page.OutputRects )
                 {
                     var rectName = Rect.GetAtlasName( rect.Name, _settings.FlattenPaths );
@@ -586,7 +599,7 @@ public class TexturePacker
                     foreach ( var region in textureAtlasData.Regions )
                     {
                         ArgumentNullException.ThrowIfNull( region.Name );
-                        
+
                         if ( region.Name.Equals( rectName ) )
                         {
                             throw new GdxRuntimeException( $"A region with the name \"{rectName}\" has already been packed: {rect.Name}" );
@@ -619,7 +632,7 @@ public class TexturePacker
                 {
                     throw new NullReferenceException();
                 }
-                
+
                 if ( _settings.LegacyOutput )
                 {
                     WritePageLegacy( writer, page );
@@ -642,7 +655,7 @@ public class TexturePacker
                     {
                         throw new GdxRuntimeException( "rect.Name must not be null or empty" );
                     }
-                    
+
                     if ( _settings.LegacyOutput )
                     {
                         WriteRectLegacy( writer, page, rect, rect.Name );
@@ -903,7 +916,10 @@ public class TexturePacker
         // be changed if any asset changes the atlas file.
         var outputFile = new FileInfo( packFullFileName );
 
-        if ( !File.Exists( outputFile.FullName ) ) return true;
+        if ( !File.Exists( outputFile.FullName ) )
+        {
+            return true;
+        }
 
         var inputFile = new FileInfo( input );
 
@@ -912,7 +928,7 @@ public class TexturePacker
             throw new ArgumentException( "Input file does not exist: " + inputFile.Name );
         }
 
-        return IsModified( inputFile.FullName, ( outputFile.LastWriteTimeUtc.Ticks / 10000 ) );
+        return IsModified( inputFile.FullName, outputFile.LastWriteTimeUtc.Ticks / 10000 );
     }
 
     /// <summary>
@@ -1086,10 +1102,10 @@ public class TexturePacker
 
         public Rect( Rect rect )
         {
-            this.X      = rect.X;
-            this.Y      = rect.Y;
-            this.Width  = rect.Width;
-            this.Height = rect.Height;
+            X      = rect.X;
+            Y      = rect.Y;
+            Width  = rect.Width;
+            Height = rect.Height;
         }
 
         public int CompareTo( Rect? o )
@@ -1125,7 +1141,10 @@ public class TexturePacker
         {
             ArgumentNullException.ThrowIfNull( imageProcessor );
 
-            if ( _bufferedImage != null ) return _bufferedImage;
+            if ( _bufferedImage != null )
+            {
+                return _bufferedImage;
+            }
 
             Bitmap image;
 
@@ -1138,11 +1157,17 @@ public class TexturePacker
                 throw new GdxRuntimeException( $"Error reading image: {_file}", ex );
             }
 
-            if ( image == null ) throw new GdxRuntimeException( $"Unable to read image: {_file}" );
+            if ( image == null )
+            {
+                throw new GdxRuntimeException( $"Unable to read image: {_file}" );
+            }
 
-            var name = this.Name;
+            var name = Name;
 
-            if ( _isPatch ) name += ".9";
+            if ( _isPatch )
+            {
+                name += ".9";
+            }
 
             var rect = imageProcessor.ProcessImage( image, name );
 
@@ -1203,20 +1228,36 @@ public class TexturePacker
         /// <inheritdoc />
         public override bool Equals( object? obj )
         {
-            if ( this == obj ) return true;
-            if ( obj == null ) return false;
+            if ( this == obj )
+            {
+                return true;
+            }
 
-            if ( GetType() != obj.GetType() ) return false;
+            if ( obj == null )
+            {
+                return false;
+            }
+
+            if ( GetType() != obj.GetType() )
+            {
+                return false;
+            }
 
             var other = ( Rect )obj;
 
             if ( Name == null )
             {
-                if ( other.Name != null ) return false;
+                if ( other.Name != null )
+                {
+                    return false;
+                }
             }
             else
             {
-                if ( !Name.Equals( other.Name ) ) return false;
+                if ( !Name.Equals( other.Name ) )
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -1279,7 +1320,10 @@ public class TexturePacker
 
         public void Start( float portion )
         {
-            if ( portion == 0 ) throw new ArgumentException( "portion cannot be 0." );
+            if ( portion == 0 )
+            {
+                throw new ArgumentException( "portion cannot be 0." );
+            }
 
             _portions.Add( _lastUpdate );
             _portions.Add( _scale * portion );

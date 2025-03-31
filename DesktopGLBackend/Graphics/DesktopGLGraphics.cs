@@ -42,7 +42,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     public DesktopGLWindow? GLWindow { get; set; }
 
     // ========================================================================
-    
+
     private IGraphics.DisplayMode? _displayModeBeforeFullscreen;
 
     private int  _fps;

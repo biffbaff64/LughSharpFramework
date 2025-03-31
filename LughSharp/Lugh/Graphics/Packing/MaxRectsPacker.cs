@@ -175,8 +175,8 @@ public class MaxRectsPacker : TexturePacker.IPacker
             {
                 if ( ( ( width > maxWidth ) || ( height > maxHeight ) ) && ( ( width > maxHeight ) || ( height > maxWidth ) ) )
                 {
-                    var paddingMessage = ( edgePadX || edgePadY )
-                        ? ( $" and edge padding {paddingX} *2, {paddingY} *2" )
+                    var paddingMessage = edgePadX || edgePadY
+                        ? $" and edge padding {paddingX} *2, {paddingY} *2"
                         : "";
 
                     throw new GdxRuntimeException( $"Image does not fit within max page size " +
@@ -188,7 +188,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
             {
                 if ( width > maxWidth )
                 {
-                    var paddingMessage = edgePadX ? ( $" and X edge padding {paddingX} *2" ) : "";
+                    var paddingMessage = edgePadX ? $" and X edge padding {paddingX} *2" : "";
 
                     throw new GdxRuntimeException( $"Image does not fit within max page width " +
                                                    $"{_settings.MaxWidth}{paddingMessage}: {rect.Name} {width}x{height}" );
@@ -196,7 +196,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
                 if ( ( height > maxHeight ) && ( !_settings.Rotation || ( width > maxHeight ) ) )
                 {
-                    var paddingMessage = edgePadY ? ( $" and Y edge padding {paddingY} *2" ) : "";
+                    var paddingMessage = edgePadY ? $" and Y edge padding {paddingY} *2" : "";
 
                     throw new GdxRuntimeException( $"Image does not fit within max page height " +
                                                    $"{_settings.MaxHeight}{paddingMessage}: {rect.Name} {width}x{height}" );
@@ -255,7 +255,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
                     {
                         Console.WriteLine();
                     }
-                    
+
                     Console.WriteLine( "." );
                 }
 
@@ -263,7 +263,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
                 size       = sizeSearch.Next( result == null );
             }
 
-            if ( !_settings.Silent ) Console.WriteLine();
+            if ( !_settings.Silent )
+            {
+                Console.WriteLine();
+            }
 
             // Rects don't fit on one page. Fill a whole page and return.
             if ( bestResult == null )
@@ -274,7 +277,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
             _sort.Sort( bestResult?.OutputRects, _rectComparator );
 
             GdxRuntimeException.ThrowIfNull( bestResult );
-            
+
             bestResult.Width  = Math.Max( bestResult.Width, bestResult.Height ) - paddingX;
             bestResult.Height = Math.Max( bestResult.Width, bestResult.Height ) - paddingY;
 
@@ -299,7 +302,11 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
                     if ( !_settings.Silent )
                     {
-                        if ( ( ++i % 70 ) == 0 ) Console.WriteLine();
+                        if ( ( ++i % 70 ) == 0 )
+                        {
+                            Console.WriteLine();
+                        }
+
                         Console.WriteLine( "." );
                     }
 
@@ -314,16 +321,25 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
                 bestResult = GetBest( bestResult, bestWidthResult );
 
-                if ( _settings.Square ) break;
+                if ( _settings.Square )
+                {
+                    break;
+                }
 
                 height = heightSearch.Next( bestWidthResult == null );
 
-                if ( height == -1 ) break;
+                if ( height == -1 )
+                {
+                    break;
+                }
 
                 width = widthSearch.Reset();
             }
 
-            if ( !_settings.Silent ) Console.WriteLine();
+            if ( !_settings.Silent )
+            {
+                Console.WriteLine();
+            }
 
             // Rects don't fit on one page. Fill a whole page and return.
             if ( bestResult == null )
@@ -389,8 +405,15 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
     private TexturePacker.Page? GetBest( TexturePacker.Page? result1, TexturePacker.Page? result2 )
     {
-        if ( result1 == null ) return result2;
-        if ( result2 == null ) return result1;
+        if ( result1 == null )
+        {
+            return result2;
+        }
+
+        if ( result2 == null )
+        {
+            return result1;
+        }
 
         return result1.Occupancy > result2.Occupancy ? result1 : result2;
     }
@@ -410,23 +433,23 @@ public class MaxRectsPacker : TexturePacker.IPacker
         {
             if ( pot )
             {
-                this._min = ( int )( Math.Log( MathUtils.NextPowerOfTwo( min ) ) / Math.Log( 2 ) );
-                this._max = ( int )( Math.Log( MathUtils.NextPowerOfTwo( max ) ) / Math.Log( 2 ) );
+                _min = ( int )( Math.Log( MathUtils.NextPowerOfTwo( min ) ) / Math.Log( 2 ) );
+                _max = ( int )( Math.Log( MathUtils.NextPowerOfTwo( max ) ) / Math.Log( 2 ) );
             }
             else if ( mod4 )
             {
-                this._min = ( min % 4 ) == 0 ? min : ( min + 4 ) - ( min % 4 );
-                this._max = ( max % 4 ) == 0 ? max : ( max + 4 ) - ( max % 4 );
+                _min = ( min % 4 ) == 0 ? min : ( min + 4 ) - ( min % 4 );
+                _max = ( max % 4 ) == 0 ? max : ( max + 4 ) - ( max % 4 );
             }
             else
             {
-                this._min = min;
-                this._max = max;
+                _min = min;
+                _max = max;
             }
 
-            this._fuzziness = pot ? 0 : fuzziness;
-            this._pot       = pot;
-            this._mod4      = mod4;
+            _fuzziness = pot ? 0 : fuzziness;
+            _pot       = pot;
+            _mod4      = mod4;
         }
 
         public int Reset()
@@ -435,25 +458,51 @@ public class MaxRectsPacker : TexturePacker.IPacker
             _high    = _max;
             _current = ( _low + _high ) >>> 1;
 
-            if ( _pot ) return ( int )Math.Pow( 2, _current );
-            if ( _mod4 ) return ( _current % 4 ) == 0 ? _current : ( _current + 4 ) - ( _current % 4 );
+            if ( _pot )
+            {
+                return ( int )Math.Pow( 2, _current );
+            }
+
+            if ( _mod4 )
+            {
+                return ( _current % 4 ) == 0 ? _current : ( _current + 4 ) - ( _current % 4 );
+            }
 
             return _current;
         }
 
         public int Next( bool result )
         {
-            if ( _low >= _high ) return -1;
+            if ( _low >= _high )
+            {
+                return -1;
+            }
 
             if ( result )
+            {
                 _low = _current + 1;
+            }
             else
+            {
                 _high = _current - 1;
+            }
+
             _current = ( _low + _high ) >>> 1;
 
-            if ( Math.Abs( _low - _high ) < _fuzziness ) return -1;
-            if ( _pot ) return ( int )Math.Pow( 2, _current );
-            if ( _mod4 ) return ( _current % 4 ) == 0 ? _current : ( _current + 4 ) - ( _current % 4 );
+            if ( Math.Abs( _low - _high ) < _fuzziness )
+            {
+                return -1;
+            }
+
+            if ( _pot )
+            {
+                return ( int )Math.Pow( 2, _current );
+            }
+
+            if ( _mod4 )
+            {
+                return ( _current % 4 ) == 0 ? _current : ( _current + 4 ) - ( _current % 4 );
+            }
 
             return _current;
         }
@@ -494,7 +543,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
         {
             var newNode = ScoreRect( rect, method );
 
-            if ( newNode.Height == 0 ) return null;
+            if ( newNode.Height == 0 )
+            {
+                return null;
+            }
 
             var numRectanglesToProcess = _freeRectangles.Count;
 
@@ -557,7 +609,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
                     }
                 }
 
-                if ( bestRectIndex == -1 ) break;
+                if ( bestRectIndex == -1 )
+                {
+                    break;
+                }
 
                 PlaceRect( bestNode );
                 rects.RemoveIndex( bestRectIndex );
@@ -889,7 +944,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
         // / Returns 0 if the two intervals i1 and i2 are disjoint, or the length of their overlap otherwise.
         private int CommonIntervalLength( int i1start, int i1end, int i2start, int i2end )
         {
-            if ( ( i1end < i2start ) || ( i2end < i1start ) ) return 0;
+            if ( ( i1end < i2start ) || ( i2end < i1start ) )
+            {
+                return 0;
+            }
 
             return Math.Min( i1end, i2end ) - Math.Max( i1start, i2start );
         }
@@ -898,8 +956,15 @@ public class MaxRectsPacker : TexturePacker.IPacker
         {
             var score = 0;
 
-            if ( ( x == 0 ) || ( ( x + width ) == _binWidth ) ) score   += height;
-            if ( ( y == 0 ) || ( ( y + height ) == _binHeight ) ) score += width;
+            if ( ( x == 0 ) || ( ( x + width ) == _binWidth ) )
+            {
+                score += height;
+            }
+
+            if ( ( y == 0 ) || ( ( y + height ) == _binHeight ) )
+            {
+                score += width;
+            }
 
             for ( int i = 0, n = _usedRectangles.Count; i < n; i++ )
             {
@@ -972,7 +1037,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
             // Test with SAT if the rectangles even intersect.
             if ( ( usedNode.X >= ( freeNode.X + freeNode.Width ) ) || ( ( usedNode.X + usedNode.Width ) <= freeNode.X )
                                                                    || ( usedNode.Y >= ( freeNode.Y + freeNode.Height ) ) ||
-                                                                   ( ( usedNode.Y + usedNode.Height ) <= freeNode.Y ) ) return false;
+                                                                   ( ( usedNode.Y + usedNode.Height ) <= freeNode.Y ) )
+            {
+                return false;
+            }
 
             if ( ( usedNode.X < ( freeNode.X + freeNode.Width ) ) && ( ( usedNode.X + usedNode.Width ) > freeNode.X ) )
             {
@@ -1072,6 +1140,6 @@ public class MaxRectsPacker : TexturePacker.IPacker
         BottomLeftRule,
 
         /** CP: Choosest the placement where the rectangle touches other rects as much as possible. */
-        ContactPointRule
+        ContactPointRule,
     };
 }

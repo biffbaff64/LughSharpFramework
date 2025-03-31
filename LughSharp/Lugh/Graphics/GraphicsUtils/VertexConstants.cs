@@ -55,7 +55,7 @@ public class VertexConstants
     public const string TEXCOORD_ATTRIBUTE = "a_texcoord";
 
     // Number of floats per vertex (x, y, color, u, v)
-    public const int VERTEX_SIZE = ( POSITION_COMPONENTS + COLOR_COMPONENTS + TEXCOORD_COMPONENTS );
+    public const int VERTEX_SIZE = POSITION_COMPONENTS + COLOR_COMPONENTS + TEXCOORD_COMPONENTS;
 
     // Vertex Size (in bytes)
     public const int VERTEX_SIZE_BYTES = VERTEX_SIZE * sizeof( float );

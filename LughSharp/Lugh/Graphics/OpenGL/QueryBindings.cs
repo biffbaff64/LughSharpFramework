@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-
 // ============================================================================
 
 using GLenum = int;
@@ -203,7 +202,7 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
-    
+
     public void CreateQueries( GLenum target, GLsizei n, GLuint* ids )
     {
         GetDelegateForFunction< PFNGLCREATEQUERIESPROC >( "glCreateQueries", out _glCreateQueries );
@@ -269,7 +268,7 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     /// <inheritdoc />
     public void QueryCounter( GLuint id, GLenum target )
@@ -322,5 +321,4 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
-
 }

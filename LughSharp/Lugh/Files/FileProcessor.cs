@@ -46,9 +46,9 @@ public partial class FileProcessor
 {
     public delegate bool FilenameFilter( string directory, string filename );
 
-    public List< Regex >   InputRegex    { get; } = new List< Regex >();
+    public List< Regex >   InputRegex    { get; } = new();
     public string          OutputSuffix  { get; set; }
-    public List< Entry >   OutputFiles   { get; }      = new List< Entry >();
+    public List< Entry >   OutputFiles   { get; }      = new();
     public bool            Recursive     { get; set; } = true;
     public bool            FlattenOutput { get; set; }
     public FilenameFilter? InputFilter   { get; set; }
@@ -56,29 +56,29 @@ public partial class FileProcessor
     public Comparison< FileInfo > Comparator { get; set; } = ( o1, o2 ) =>
         string.Compare( o1.Name, o2.Name, StringComparison.Ordinal );
 
-    private Comparison<Entry> EntryComparator
+    private Comparison< Entry > EntryComparator
     {
         get =>
             ( o1, o2 ) =>
             {
                 if ( o1.InputFile is FileInfo file1 && o2.InputFile is FileInfo file2 )
                 {
-                    return this.Comparator( file1, file2 ); // Use 'this.Comparator'
+                    return Comparator( file1, file2 ); // Use 'this.Comparator'
                 }
                 else if ( o1.InputFile is DirectoryInfo dir1 && o2.InputFile is DirectoryInfo dir2 )
                 {
-                    return String.Compare( dir1.Name, dir2.Name, StringComparison.Ordinal );
+                    return string.Compare( dir1.Name, dir2.Name, StringComparison.Ordinal );
                 }
                 else
                 {
-                    return String.Compare( o1.InputFile.Name, o2.InputFile.Name, StringComparison.Ordinal );
+                    return string.Compare( o1.InputFile.Name, o2.InputFile.Name, StringComparison.Ordinal );
                 }
             };
         set => throw new NotImplementedException();
     }
 
     // ========================================================================
-    
+
     public FileProcessor()
     {
         OutputSuffix  = string.Empty;
@@ -89,11 +89,11 @@ public partial class FileProcessor
 
     public FileProcessor( FileProcessor processor )
     {
-        this.Comparator = processor.Comparator;
-        InputFilter     = processor.InputFilter;
+        Comparator  = processor.Comparator;
+        InputFilter = processor.InputFilter;
 
         InputRegex.AddRange( processor.InputRegex );
-        
+
         OutputSuffix  = processor.OutputSuffix;
         Recursive     = processor.Recursive;
         FlattenOutput = processor.FlattenOutput;
@@ -105,7 +105,7 @@ public partial class FileProcessor
     {
         foreach ( var suffix in suffixes )
         {
-            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
+            AddInputRegex( $"(?i).*{Escape( suffix )}" );
         }
 
         return this;
@@ -159,7 +159,9 @@ public partial class FileProcessor
             return Process( [ inputFileOrDir ], outputRoot );
         }
 
-        return Process( new DirectoryInfo( inputFileOrDir.FullName ).GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(), outputRoot );
+        return
+            Process( new DirectoryInfo( inputFileOrDir.FullName ).GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
+                     outputRoot );
     }
 
     public List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
@@ -168,7 +170,7 @@ public partial class FileProcessor
         {
             outputRoot = new DirectoryInfo( "" );
         }
-        
+
         OutputFiles.Clear();
 
         var dirToEntries = new Dictionary< DirectoryInfo, List< Entry > >();
@@ -197,12 +199,12 @@ public partial class FileProcessor
             {
                 newOutputDir = dirEntries[ 0 ].OutputDir;
             }
-            
+
             var outputName = inputDir.Name;
 
             if ( OutputSuffix != null )
             {
-                outputName = MyRegex().Replace(outputName, "$1") + OutputSuffix;
+                outputName = MyRegex().Replace( outputName, "$1" ) + OutputSuffix;
             }
 
             var entry = new Entry
@@ -212,9 +214,11 @@ public partial class FileProcessor
             };
 
             if ( newOutputDir != null )
+            {
                 entry.OutputFile = newOutputDir.FullName.Length == 0
                     ? new FileInfo( outputName )
                     : new FileInfo( Path.Combine( newOutputDir.FullName, outputName ) );
+            }
 
             try
             {
@@ -228,7 +232,10 @@ public partial class FileProcessor
             allEntries.AddRange( dirEntries );
         }
 
-        if ( Comparator != null ) allEntries.Sort( EntryComparator );
+        if ( Comparator != null )
+        {
+            allEntries.Sort( EntryComparator );
+        }
 
         foreach ( var entry in allEntries )
         {
@@ -254,7 +261,7 @@ public partial class FileProcessor
             {
                 Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
             }
-            
+
             var dir = new DirectoryInfo( file.DirectoryName! );
 
             if ( !dirToEntries.ContainsKey( dir ) )
@@ -281,7 +288,10 @@ public partial class FileProcessor
                         }
                     }
 
-                    if ( !found ) continue;
+                    if ( !found )
+                    {
+                        continue;
+                    }
                 }
 
                 if ( file.DirectoryName == null )
@@ -300,14 +310,14 @@ public partial class FileProcessor
 
                 if ( OutputSuffix != null )
                 {
-                    outputName = MyRegex().Replace(outputName, "$1") + OutputSuffix;
+                    outputName = MyRegex().Replace( outputName, "$1" ) + OutputSuffix;
                 }
 
                 var entry = new Entry
                 {
-                    Depth      = depth,
-                    InputFile  = file,
-                    OutputDir  = outputDir,
+                    Depth     = depth,
+                    InputFile = file,
+                    OutputDir = outputDir,
                     OutputFile = FlattenOutput
                         ? new FileInfo( Path.Combine( outputRoot.FullName, outputName ) )
                         : new FileInfo( Path.Combine( outputDir.FullName, outputName ) ),
@@ -321,7 +331,7 @@ public partial class FileProcessor
                 var subdir = outputDir.FullName.Length == 0
                     ? new DirectoryInfo( file.Name )
                     : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
-                
+
                 Process( new DirectoryInfo( file.FullName )
                          .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
                          outputRoot, subdir, dirToEntries, depth + 1 );
@@ -368,7 +378,6 @@ public partial class FileProcessor
     }
 
     // ========================================================================
-    
-    [GeneratedRegex("(.*)\\..*")]
-    private static partial Regex MyRegex();
+
+    [GeneratedRegex( "(.*)\\..*" )] private static partial Regex MyRegex();
 }

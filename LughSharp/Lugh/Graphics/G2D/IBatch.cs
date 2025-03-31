@@ -154,7 +154,7 @@ public interface IBatch : IDisposable
     /// </summary>
     /// <param name="depthMaskEnabled"> Enable or Disable DepthMask. Defaults to false. </param>
     void Begin( bool depthMaskEnabled = false );
-    
+
     /// <summary>
     /// Finishes off rendering. Enables depth writes, disables blending and texturing.
     /// Must always be called after a call to <see cref="Begin()" />

@@ -72,7 +72,10 @@ public static class BytePointerToString
                 len++;
             }
 
-            if ( len == 0 ) return string.Empty; // Handle the case of an empty string
+            if ( len == 0 )
+            {
+                return string.Empty; // Handle the case of an empty string
+            }
 
             var bytes = new byte[ len ];
             Marshal.Copy( glCharPtr, bytes, 0, len );
@@ -81,7 +84,10 @@ public static class BytePointerToString
         }
         else // Length-specified string
         {
-            if ( length == 0 ) return string.Empty; //Handle the case of an empty string
+            if ( length == 0 )
+            {
+                return string.Empty; //Handle the case of an empty string
+            }
 
             var bytes = new byte[ length ];
             Marshal.Copy( glCharPtr, bytes, 0, length );

@@ -799,7 +799,8 @@ public class Huffman
             level = SupportClass.URShift( level, 1 );
 
             // MDM: ht[0] is always 0;
-        } while ( ( level != 0 ) || ( point < 0 ) );
+        }
+        while ( ( level != 0 ) || ( point < 0 ) );
 
         // put back any bits not consumed
         /*

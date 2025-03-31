@@ -48,7 +48,10 @@ public class BufferUtils
 
         var bytesToCopy = Math.Min( source.Remaining(), destination.Remaining() ); // Copy up to the smaller remaining size
 
-        if ( bytesToCopy < 0 ) bytesToCopy = 0; // Ensure non-negative if somehow Remaining is negative
+        if ( bytesToCopy < 0 )
+        {
+            bytesToCopy = 0; // Ensure non-negative if somehow Remaining is negative
+        }
 
         for ( var i = 0; i < bytesToCopy; i++ )
         {
@@ -73,7 +76,10 @@ public class BufferUtils
 
         if ( source == destination )
         {
-            if ( sourceOffset == destinationOffset ) return; // No copy needed if same buffer and offsets are same
+            if ( sourceOffset == destinationOffset )
+            {
+                return; // No copy needed if same buffer and offsets are same
+            }
 
             // Handle overlapping copy within the same buffer carefully if needed (more complex)
             // For now, throw exception if source and destination are same instance with different offsets:

@@ -142,14 +142,14 @@ public class BitmapFont
     }
 
     /// <summary>
-    /// Creates a BitmapFont from a BMFont file, using the specified image for
-    /// glyphs. Any image specified in the BMFont file is ignored.
+    /// Creates a BitmapFont from a BMFont file, using the specified image for glyphs. Any
+    /// image specified in the BMFont file is ignored.
     /// </summary>
     /// <param name="fontFile"> the font definition file.</param>
     /// <param name="imageFile"></param>
     /// <param name="flip">
-    /// If true, the glyphs will be flipped for use with a perspective where
-    /// 0,0 is the upper left corner.
+    /// If true, the glyphs will be flipped for use with a perspective where 0,0 is the upper
+    /// left corner.
     /// </param>
     /// <param name="integer"></param>
     public BitmapFont( FileInfo fontFile, FileInfo imageFile, bool flip, bool integer = true )
@@ -1400,7 +1400,8 @@ public class BitmapFont
                 {
                     start++;
                 }
-            } while ( start < end );
+            }
+            while ( start < end );
 
             if ( lastGlyph != null )
             {

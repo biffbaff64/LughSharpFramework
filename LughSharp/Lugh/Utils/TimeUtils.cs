@@ -31,7 +31,7 @@ public static class TimeUtils
     public const long NANOSECONDS_PER_SECOND = 1_000_000_000;
 
     // ========================================================================
-    
+
     /// <summary>
     /// The current value of the system timer, in nanoseconds.
     /// </summary>

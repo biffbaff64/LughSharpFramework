@@ -173,8 +173,10 @@ public class LayerIDecoder : IFrameDecoder
                 {
                     Filter2?.CalculatePcSamples( Buffer );
                 }
-            } while ( !writeReady );
-        } while ( !readReady );
+            }
+            while ( !writeReady );
+        }
+        while ( !readReady );
     }
 
     /// <summary>

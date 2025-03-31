@@ -34,7 +34,7 @@ public class GeometryUtils
     private static readonly Vector2 _tmp3 = new();
 
     // ========================================================================
-    
+
     /// <summary>
     /// Computes the barycentric coordinates v,w for the specified point in the triangle.
     /// <example>

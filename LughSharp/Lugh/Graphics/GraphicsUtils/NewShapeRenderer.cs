@@ -39,7 +39,7 @@ public class NewShapeRenderer : IDisposable
     }
 
     // ========================================================================
-    
+
     private readonly Color   _color                = new( 1, 1, 1, 1 );
     private readonly Matrix4 _combinedMatrix       = new();
     private readonly float   _defaultRectLineWidth = 0.75f;
@@ -48,9 +48,9 @@ public class NewShapeRenderer : IDisposable
     private          Matrix4 _projectionMatrix     = new();
     private          Matrix4 _transformMatrix      = new();
 
-    private          int     _programId;
-    private          int     _vaoId;
-    private          int     _vboId;
+    private int _programId;
+    private int _vaoId;
+    private int _vboId;
 
     // ========================================================================
 

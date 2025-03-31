@@ -55,13 +55,13 @@ public class Guard
     public static void ThrowIfNull( [NotNull] params object?[]? objects )
     {
         ArgumentNullException.ThrowIfNull( objects );
-        
+
         foreach ( var obj in objects )
         {
             ArgumentNullException.ThrowIfNull( obj, obj?.GetType().FullName );
         }
     }
-    
+
     /// <summary>
     /// Throws ArgumentNullException if argumentValue is null.
     /// Throws ArgumentException if argumentValue is string.Empty.
@@ -312,7 +312,7 @@ public class Guard
                 }
 
                 return;
-                
+
             case null:
                 throw new ArgumentNullException( $"The File {argumentName} cannot be null." );
 

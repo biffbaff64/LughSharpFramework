@@ -68,7 +68,7 @@ public abstract class GLTexture : IDisposable
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// The OpenGL target for the texture. A GL target, in the context of OpenGL (and
     /// by extension, OpenGL ES), refers to the type of texture object being manipulated
@@ -467,7 +467,7 @@ public abstract class GLTexture : IDisposable
         }
 
         GdxApi.Bindings.TexImage2D( target, miplevel, 0, pixmap );
-        
+
         if ( disposePixmap )
         {
             pixmap.Dispose();
@@ -495,10 +495,10 @@ public abstract class GLTexture : IDisposable
             Delete();
         }
     }
-    
+
     // ========================================================================
     // ========================================================================
-    
+
     #if DEBUG
     private static void DebugUploadImageData( int target, int miplevel, Pixmap pixmap )
     {
@@ -547,4 +547,3 @@ public abstract class GLTexture : IDisposable
     }
     #endif
 }
-

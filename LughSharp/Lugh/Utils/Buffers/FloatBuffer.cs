@@ -116,7 +116,10 @@ public class FloatBuffer : Buffer, IDisposable
     /// <inheritdoc cref="ByteBuffer.PutFloat(float)" />
     public void PutFloat( float value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( Position + sizeof( float ) );
 
@@ -141,7 +144,10 @@ public class FloatBuffer : Buffer, IDisposable
     /// <inheritdoc cref="ByteBuffer.PutFloat(int,float)" />
     public void PutFloat( int index, float value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( index + sizeof( float ) );
 
@@ -259,7 +265,10 @@ public class FloatBuffer : Buffer, IDisposable
     /// <inheritdoc />
     public override void PutByte( byte value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         _byteBufferDelegate.PutByte( value );
     }
@@ -267,7 +276,10 @@ public class FloatBuffer : Buffer, IDisposable
     /// <inheritdoc />
     public override void PutByte( int index, byte value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         _byteBufferDelegate.PutByte( index, value );
     }

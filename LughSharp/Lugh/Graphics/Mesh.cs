@@ -780,7 +780,10 @@ public class Mesh : IDisposable
     {
         ArgumentNullException.ThrowIfNull( shader );
 
-        if ( count == 0 ) return;
+        if ( count == 0 )
+        {
+            return;
+        }
 
         if ( autoBind )
         {
@@ -842,7 +845,10 @@ public class Mesh : IDisposable
             }
         }
 
-        if ( autoBind ) Unbind( shader );
+        if ( autoBind )
+        {
+            Unbind( shader );
+        }
     }
 
     #endregion render methods
@@ -1561,7 +1567,10 @@ public class Mesh : IDisposable
     {
         var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES );
 
-        if ( posAttr == null ) return;
+        if ( posAttr == null )
+        {
+            return;
+        }
 
         var offset      = posAttr.Offset / 4;
         var vertexSize  = VertexSize / 4;
@@ -1687,7 +1696,10 @@ public class Mesh : IDisposable
                 {
                     var a = GetVertexAttribute( t );
 
-                    if ( a == null ) continue;
+                    if ( a == null )
+                    {
+                        continue;
+                    }
 
                     for ( var j = 0; j < a.NumComponents; j++ )
                     {

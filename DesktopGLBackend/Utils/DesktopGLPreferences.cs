@@ -56,7 +56,7 @@ public class DesktopGLPreferences : IPreferences
     {
         _filePath       = AppContext.BaseDirectory + "logs" + Path.DirectorySeparatorChar;
         _propertiesFile = filename;
-        
+
         if ( !Directory.Exists( _filePath ) )
         {
             Directory.CreateDirectory( _filePath );
@@ -66,7 +66,7 @@ public class DesktopGLPreferences : IPreferences
         {
             File.Create( _filePath + _propertiesFile ).Dispose();
         }
-        
+
         try
         {
             _xDocument = XDocument.Load( _filePath + _propertiesFile );

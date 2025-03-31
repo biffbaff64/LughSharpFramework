@@ -299,7 +299,8 @@ public class Header
             {
                 stream.UnreadFrame();
             }
-        } while ( !sync );
+        }
+        while ( !sync );
 
         stream.ParseFrame();
 

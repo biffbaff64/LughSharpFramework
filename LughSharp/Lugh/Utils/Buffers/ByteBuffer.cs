@@ -122,7 +122,10 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public override void PutByte( byte value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( Position + 1 );
 
@@ -138,7 +141,10 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public override void PutByte( int index, byte value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( index + 1 );
 
@@ -322,7 +328,10 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutShort( short value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( Position + sizeof( short ) );
 
@@ -346,7 +355,10 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutShort( int index, short value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( index + sizeof( short ) );
 
@@ -506,7 +518,10 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutInt( int value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( Position + sizeof( int ) );
 
@@ -530,7 +545,10 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutInt( int index, int value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( index + sizeof( int ) );
 
@@ -689,7 +707,10 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutFloat( float value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( Position + sizeof( float ) );
 
@@ -713,7 +734,10 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="value"> The value to put. </param>
     public void PutFloat( int index, float value )
     {
-        if ( IsReadOnly ) throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
 
         EnsureCapacity( index + sizeof( float ) );
 

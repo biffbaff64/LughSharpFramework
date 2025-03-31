@@ -659,7 +659,8 @@ public class Actor : IActor, IComparable< Actor >
             }
 
             parent = parent.Parent;
-        } while ( parent != null );
+        }
+        while ( parent != null );
 
         return false;
     }
@@ -679,7 +680,8 @@ public class Actor : IActor, IComparable< Actor >
             }
 
             actor = actor.Parent;
-        } while ( actor != null );
+        }
+        while ( actor != null );
 
         return false;
     }
@@ -700,7 +702,8 @@ public class Actor : IActor, IComparable< Actor >
             }
 
             actor = actor.Parent;
-        } while ( actor != null );
+        }
+        while ( actor != null );
 
         return null;
     }
@@ -736,7 +739,8 @@ public class Actor : IActor, IComparable< Actor >
             }
 
             actor = actor.Parent;
-        } while ( actor != null );
+        }
+        while ( actor != null );
 
         return true;
     }
@@ -1436,7 +1440,8 @@ public class Actor : IActor, IComparable< Actor >
             {
                 break;
             }
-        } while ( actor != null );
+        }
+        while ( actor != null );
 
         return localCoords;
     }

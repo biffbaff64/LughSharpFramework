@@ -42,7 +42,7 @@ public interface IIntToByte
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Explicit )]
-public struct IntToByteLE : IIntToByte  //TODO: NOT finished
+public struct IntToByteLE : IIntToByte //TODO: NOT finished
 {
     [FieldOffset( 0 )] public int IntVal;
 

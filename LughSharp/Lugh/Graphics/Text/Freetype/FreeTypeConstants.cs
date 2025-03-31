@@ -104,4 +104,3 @@ public partial class FreeType
     public readonly int FtEncodingWansung       = Encode( 'w', 'a', 'n', 's' );
     public readonly int FtEncodingNone          = 0;
 }
-

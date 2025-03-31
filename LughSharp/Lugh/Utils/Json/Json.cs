@@ -201,7 +201,7 @@ public partial class Json
     private OrderedMap< string, FieldMetadata >? GetFields( Type? type )
     {
         Guard.ThrowIfNull( type );
-        
+
         if ( _typeToFields.TryGetValue( type, out var fields ) )
         {
             return fields;
@@ -232,9 +232,20 @@ public partial class Json
         {
             var field = allFields[ i ];
 
-            if ( field.GetCustomAttribute< NonSerializedAttribute >() != null ) continue;
-            if ( field.IsStatic ) continue;
-            if ( field.IsPrivate && field.Name.Contains( '<' ) ) continue;
+            if ( field.GetCustomAttribute< NonSerializedAttribute >() != null )
+            {
+                continue;
+            }
+
+            if ( field.IsStatic )
+            {
+                continue;
+            }
+
+            if ( field.IsPrivate && field.Name.Contains( '<' ) )
+            {
+                continue;
+            }
 
             if ( !field.IsPublic )
             {
@@ -275,9 +286,9 @@ public partial class Json
             writer = new JsonWriter( writer );
         }
 
-        this.JsonWriter = ( JsonWriter )writer;
-        this.JsonWriter.SetOutputType( OutputType );
-        this.JsonWriter.SetQuoteLongValues( QuoteLongValues );
+        JsonWriter = ( JsonWriter )writer;
+        JsonWriter.SetOutputType( OutputType );
+        JsonWriter.SetQuoteLongValues( QuoteLongValues );
     }
 
     /// <summary>
@@ -287,7 +298,10 @@ public partial class Json
     /// <exception cref="SerializationException"></exception>
     private object?[]? GetDefaultValues( Type type )
     {
-        if ( !UsePrototypes ) return null;
+        if ( !UsePrototypes )
+        {
+            return null;
+        }
 
         if ( _classToDefaultValues.TryGetValue( type, out var value ) )
         {
@@ -303,7 +317,7 @@ public partial class Json
         catch ( Exception ignored )
         {
             Logger.Error( $"Exception (IGNORED): {ignored.Message}" );
-            
+
             _classToDefaultValues[ type ] = null;
 
             return null;
@@ -321,7 +335,10 @@ public partial class Json
         {
             var metadata = fields.Get( fieldNames[ i ] );
 
-            if ( IgnoreDeprecated && ( bool )metadata?.Deprecated! ) continue;
+            if ( IgnoreDeprecated && ( bool )metadata?.Deprecated! )
+            {
+                continue;
+            }
 
             var field = metadata?.FieldInfo;
 
@@ -426,7 +443,10 @@ public partial class Json
     {
         var jsonValue = jsonMap.Get( jsonName );
 
-        if ( jsonValue == null ) return;
+        if ( jsonValue == null )
+        {
+            return;
+        }
 
         try
         {
@@ -464,16 +484,19 @@ public partial class Json
         var fields = GetFields( type );
 
         Guard.ThrowIfNull( fields );
-        
+
         for ( var child = jsonMap.Child; child != null; child = child.Next )
         {
             Guard.ValidateString( child.Name );
-            
+
             var metadata = fields.Get( child.Name!.Replace( " ", "_" ) );
 
             if ( metadata == null )
             {
-                if ( child.Name.Equals( TypeName ) ) continue;
+                if ( child.Name.Equals( TypeName ) )
+                {
+                    continue;
+                }
 
                 if ( IgnoreUnknownFields || IgnoreUnknownField( type, child.Name ) )
                 {
@@ -488,13 +511,16 @@ public partial class Json
                 throw ex;
             }
 
-            if ( IgnoreDeprecated && !ReadDeprecated && metadata.Deprecated ) continue;
+            if ( IgnoreDeprecated && !ReadDeprecated && metadata.Deprecated )
+            {
+                continue;
+            }
 
             var field = metadata.FieldInfo;
 
             try
             {
-                field.SetValue( obj, ReadValue<object>( field.GetType(), metadata.ElementType, child ) );
+                field.SetValue( obj, ReadValue< object >( field.GetType(), metadata.ElementType, child ) );
             }
             catch ( FieldAccessException ex )
             {
@@ -579,8 +605,11 @@ public partial class Json
     /// <returns></returns>
     /// <exception cref="SerializationException"></exception>
     public T? ReadValue< T >( Type? type, Type? elementType, JsonValue? jsonData )
-    { 
-        if ( jsonData == null ) return default( T );
+    {
+        if ( jsonData == null )
+        {
+            return default( T );
+        }
 
         if ( jsonData.IsObject() )
         {
@@ -653,7 +682,7 @@ public partial class Json
                 var obj = Activator.CreateInstance( type );
 
                 Guard.ThrowIfNull( obj );
-                
+
                 if ( obj is IJsonSerializable serializable )
                 {
                     serializable.Read( this, jsonData );
@@ -791,7 +820,7 @@ public partial class Json
                 var obj = Activator.CreateInstance( type );
 
                 Guard.ThrowIfNull( obj );
-                
+
                 ( ( IJsonSerializable )obj ).Read( this, jsonData );
 
                 return ( T )obj;
@@ -808,7 +837,7 @@ public partial class Json
 
             if ( typeof( IList ).IsAssignableFrom( type ) )
             {
-                var result = ( type == typeof( List< object > ) )
+                var result = type == typeof( List< object > )
                     ? new List< object >()
                     : ( IList? )Activator.CreateInstance( type );
 
@@ -837,7 +866,7 @@ public partial class Json
 
             if ( typeof( Queue ).IsAssignableFrom( type ) )
             {
-                var result = ( type == typeof( Queue ) )
+                var result = type == typeof( Queue )
                     ? new Queue()
                     : ( Queue? )Activator.CreateInstance( type );
 
@@ -951,12 +980,35 @@ public partial class Json
 
             try
             {
-                if ( type == typeof( int ) ) return ( T )( object )int.Parse( str );
-                if ( type == typeof( float ) ) return ( T )( object )float.Parse( str );
-                if ( type == typeof( long ) ) return ( T )( object )long.Parse( str );
-                if ( type == typeof( double ) ) return ( T )( object )double.Parse( str );
-                if ( type == typeof( short ) ) return ( T )( object )short.Parse( str );
-                if ( type == typeof( byte ) ) return ( T )( object )byte.Parse( str );
+                if ( type == typeof( int ) )
+                {
+                    return ( T )( object )int.Parse( str );
+                }
+
+                if ( type == typeof( float ) )
+                {
+                    return ( T )( object )float.Parse( str );
+                }
+
+                if ( type == typeof( long ) )
+                {
+                    return ( T )( object )long.Parse( str );
+                }
+
+                if ( type == typeof( double ) )
+                {
+                    return ( T )( object )double.Parse( str );
+                }
+
+                if ( type == typeof( short ) )
+                {
+                    return ( T )( object )short.Parse( str );
+                }
+
+                if ( type == typeof( byte ) )
+                {
+                    return ( T )( object )byte.Parse( str );
+                }
             }
             catch ( FormatException )
             {
@@ -984,7 +1036,10 @@ public partial class Json
                 }
             }
 
-            if ( type == typeof( System.Text.StringBuilder ) ) return ( T )( object )new System.Text.StringBuilder( str );
+            if ( type == typeof( System.Text.StringBuilder ) )
+            {
+                return ( T )( object )new System.Text.StringBuilder( str );
+            }
 
             throw new SerializationException( $"Unable to convert value to required type: {jsonData} ({type.FullName})" );
         }
@@ -1009,7 +1064,10 @@ public partial class Json
             var toField   = toFields?.Get( entry.Key );
             var fromField = entry.Value.FieldInfo;
 
-            if ( toField == null ) throw new SerializationException( $"To object is missing field: {entry.Key}" );
+            if ( toField == null )
+            {
+                throw new SerializationException( $"To object is missing field: {entry.Key}" );
+            }
 
             try
             {
@@ -1057,7 +1115,7 @@ public partial class Json
             try
             {
                 // Try a private constructor.
-                var constructor = type.GetConstructor( ( BindingFlags.Instance | BindingFlags.NonPublic ),
+                var constructor = type.GetConstructor( BindingFlags.Instance | BindingFlags.NonPublic,
                                                        null,
                                                        Type.EmptyTypes,
                                                        null );
@@ -1149,8 +1207,8 @@ public partial class Json
         {
             FieldInfo = field;
 
-            var index = ( typeof( IDictionary< , > ).IsAssignableFrom( field.FieldType.GetGenericTypeDefinition() )
-                          || typeof( System.Collections.IDictionary ).IsAssignableFrom( field.FieldType ) )
+            var index = typeof( IDictionary< , > ).IsAssignableFrom( field.FieldType.GetGenericTypeDefinition() )
+                        || typeof( IDictionary ).IsAssignableFrom( field.FieldType )
                 ? 1
                 : 0;
 

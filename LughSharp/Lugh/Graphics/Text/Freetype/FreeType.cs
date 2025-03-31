@@ -35,7 +35,7 @@ public partial class FreeType
 {
     private const string DLL_PATH = "lib/net8.0/freetype.dll";
 
-    public static FreeType.Library InitFreeType()
+    public static Library InitFreeType()
     {
 //        new SharedLibraryLoader().load("gdx-freetype");
 //        long address;   // = initFreeTypeJni();
@@ -77,7 +77,7 @@ public partial class FreeType
     {
         internal long Address;
 
-        public Pointer(long address)
+        public Pointer( long address )
         {
             Address = address;
         }
@@ -89,7 +89,7 @@ public partial class FreeType
     [PublicAPI]
     public class Library : Pointer, IDisposable
     {
-        public Library(long address) : base(address)
+        public Library( long address ) : base( address )
         {
         }
 
@@ -203,10 +203,10 @@ public partial class FreeType
 
             GC.SuppressFinalize( this );
         }
-        
+
         // ====================================================================
         // ====================================================================
-        
+
 //        private static extern void _doneFreeType( long library );
 //        private static extern long _newMemoryFace( long library, ByteBuffer data, int dataSize, int faceIndex );
 //        private static extern long _strokerNew( long library );
@@ -218,7 +218,7 @@ public partial class FreeType
     [PublicAPI]
     public class Face : Pointer
     {
-        public Face(long address, Library library) : base(address)
+        public Face( long address, Library library ) : base( address )
         {
             Library = library;
         }
@@ -293,7 +293,7 @@ public partial class FreeType
     {
         public SizeMetrics? Metrics;
 
-        public Size(long address) : base(address)
+        public Size( long address ) : base( address )
         {
         }
 
@@ -317,7 +317,7 @@ public partial class FreeType
     [PublicAPI]
     public class SizeMetrics : Pointer
     {
-        public SizeMetrics(long address) : base(address)
+        public SizeMetrics( long address ) : base( address )
         {
         }
 
@@ -348,7 +348,7 @@ public partial class FreeType
     [PublicAPI]
     public class GlyphSlot : Pointer
     {
-        public GlyphSlot(long address) : base(address)
+        public GlyphSlot( long address ) : base( address )
         {
         }
 
@@ -394,7 +394,7 @@ public partial class FreeType
     [PublicAPI]
     public class Glyph : Pointer
     {
-        public Glyph(long address) : base(address)
+        public Glyph( long address ) : base( address )
         {
         }
 
@@ -435,7 +435,7 @@ public partial class FreeType
     [PublicAPI]
     public class Bitmap : Pointer
     {
-        public Bitmap(long address) : base(address)
+        public Bitmap( long address ) : base( address )
         {
         }
 
@@ -478,48 +478,48 @@ public partial class FreeType
         /// 
         /// </summary>
         /// <param name="address"></param>
-        public GlyphMetrics(long address) : base(address)
+        public GlyphMetrics( long address ) : base( address )
         {
         }
 
         public int GetWidth()
         {
-            return 0;   //_getWidth( Address );
+            return 0; //_getWidth( Address );
         }
 
         public int GetHeight()
         {
-            return 0;   //_getHeight( Address );
+            return 0; //_getHeight( Address );
         }
 
         public int GetHoriBearingX()
         {
-            return 0;   //_getHoriBearingX( Address );
+            return 0; //_getHoriBearingX( Address );
         }
 
         public int GetHoriBearingY()
         {
-            return 0;   //_getHoriBearingY( Address );
+            return 0; //_getHoriBearingY( Address );
         }
 
         public int GetHoriAdvance()
         {
-            return 0;   //_getHoriAdvance( Address );
+            return 0; //_getHoriAdvance( Address );
         }
 
         public int GetVertBearingX()
         {
-            return 0;   //_getVertBearingX( Address );
+            return 0; //_getVertBearingX( Address );
         }
 
         public int GetVertBearingY()
         {
-            return 0;   //_getVertBearingY( Address );
+            return 0; //_getVertBearingY( Address );
         }
 
         public int GetVertAdvance()
         {
-            return 0;   //_getVertAdvance( Address );
+            return 0; //_getVertAdvance( Address );
         }
 
 //        private static extern int _getWidth( long metrics );
@@ -538,7 +538,7 @@ public partial class FreeType
     [PublicAPI]
     public class Stroker : Pointer, IDisposable
     {
-        public Stroker(long address) : base(address)
+        public Stroker( long address ) : base( address )
         {
         }
 

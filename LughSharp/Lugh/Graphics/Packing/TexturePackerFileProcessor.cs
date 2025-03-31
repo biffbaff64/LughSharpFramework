@@ -58,15 +58,15 @@ public class TexturePackerFileProcessor : FileProcessor
                                        string packFileName,
                                        TexturePacker.ProgressListener? progress )
     {
-        this._defaultSettings = defaultSettings;
-        this._progress        = progress;
+        _defaultSettings = defaultSettings;
+        _progress        = progress;
 
         if ( packFileName.ToLower().EndsWith( defaultSettings.AtlasExtension.ToLower() ) )
         {
             packFileName = packFileName.Substring( 0, packFileName.Length - defaultSettings.AtlasExtension.Length );
         }
 
-        this._packFileName = packFileName;
+        _packFileName = packFileName;
 
         SetFlattenOutput( true );
         AddInputSuffix( ".png", ".jpg", ".jpeg" );
@@ -108,7 +108,10 @@ public class TexturePackerFileProcessor : FileProcessor
 
             while ( true )
             {
-                if ( parent?.FullName == _root.FullName ) break;
+                if ( parent?.FullName == _root.FullName )
+                {
+                    break;
+                }
 
                 parent = parent?.Parent;
 
@@ -122,7 +125,10 @@ public class TexturePackerFileProcessor : FileProcessor
                 }
             }
 
-            if ( settings == null ) settings = NewSettings( _defaultSettings );
+            if ( settings == null )
+            {
+                settings = NewSettings( _defaultSettings );
+            }
 
             // Merge settings from current directory.
             Merge( settings, settingsFile );
@@ -149,7 +155,10 @@ public class TexturePackerFileProcessor : FileProcessor
         {
             var jsonString = File.ReadAllText( settingsFile.FullName );
 
-            if ( string.IsNullOrWhiteSpace( jsonString ) ) return; // Empty file.
+            if ( string.IsNullOrWhiteSpace( jsonString ) )
+            {
+                return; // Empty file.
+            }
 
             using ( var document = JsonDocument.Parse( jsonString ) )
             {
@@ -175,7 +184,10 @@ public class TexturePackerFileProcessor : FileProcessor
 
     {
         // Delete pack file and images.
-        if ( countOnly && outputRoot.exists() ) deleteOutput( outputRoot );
+        if ( countOnly && outputRoot.exists() )
+        {
+            deleteOutput( outputRoot );
+        }
 
         return base.Process( files, outputRoot );
     }
@@ -183,7 +195,7 @@ public class TexturePackerFileProcessor : FileProcessor
     protected void deleteOutput( File outputRoot )
     {
         // Load root settings to get scale.
-        File                   settingsFile = new File( root, "pack.json" );
+        var                    settingsFile = new File( root, "pack.json" );
         TexturePacker.Settings rootSettings = defaultSettings;
 
         if ( settingsFile.exists() )
@@ -192,14 +204,14 @@ public class TexturePackerFileProcessor : FileProcessor
             merge( rootSettings, settingsFile );
         }
 
-        string atlasExtension = rootSettings.atlasExtension == null ? "" : rootSettings.atlasExtension;
+        var atlasExtension = rootSettings.atlasExtension == null ? "" : rootSettings.atlasExtension;
         atlasExtension = Pattern.quote( atlasExtension );
 
         for ( int i = 0, n = rootSettings.scale.length; i < n; i++ )
         {
-            FileProcessor deleteProcessor = new FileProcessor()
+            var deleteProcessor = new FileProcessor()
             {
- 
+                ,
 
                 protected void processFile (Entry inputFile){
                 inputFile.inputFile.delete();
@@ -207,27 +219,40 @@ public class TexturePackerFileProcessor : FileProcessor
             };
             deleteProcessor.setRecursive( false );
 
-            File   packFile           = new File( rootSettings.getScaledPackFileName( packFileName, i ) );
+            var    packFile           = new File( rootSettings.getScaledPackFileName( packFileName, i ) );
             string scaledPackFileName = packFile.getName();
 
-            string prefix                = packFile.getName();
-            int    dotIndex              = prefix.lastIndexOf( '.' );
-            if ( dotIndex != -1 ) prefix = prefix.substring( 0, dotIndex );
+            string prefix   = packFile.getName();
+            int    dotIndex = prefix.lastIndexOf( '.' );
+
+            if ( dotIndex != -1 )
+            {
+                prefix = prefix.substring( 0, dotIndex );
+            }
+
             deleteProcessor.addInputRegex( "(?i)" + prefix + "-?\\d*\\.(png|jpg|jpeg)" );
             deleteProcessor.addInputRegex( "(?i)" + prefix + atlasExtension );
 
             string dir = packFile.getParent();
+
             if ( dir == null )
+            {
                 deleteProcessor.process( outputRoot, null );
+            }
             else if ( new File( outputRoot + "/" + dir ).exists() ) //
+            {
                 deleteProcessor.process( outputRoot + "/" + dir, null );
+            }
         }
     }
 
     protected void processDir( Entry
                                    inputDir, List< Dictionary< , >.Entry > files )
     {
-        if ( ignoreDirs.contains( inputDir.inputFile ) ) return;
+        if ( ignoreDirs.contains( inputDir.inputFile ) )
+        {
+            return;
+        }
 
         // Find first parent with settings, or use defaults.
         TexturePacker.Settings settings = null;
@@ -237,15 +262,28 @@ public class TexturePackerFileProcessor : FileProcessor
         {
             settings = dirToSettings.get( parent );
 
-            if ( settings != null ) break;
-            if ( parent == null || parent.equals( root ) ) break;
+            if ( settings != null )
+            {
+                break;
+            }
+
+            if ( ( parent == null ) || parent.equals( root ) )
+            {
+                break;
+            }
 
             parent = parent.getParentFile();
         }
 
-        if ( settings == null ) settings = defaultSettings;
+        if ( settings == null )
+        {
+            settings = defaultSettings;
+        }
 
-        if ( settings.ignore ) return;
+        if ( settings.ignore )
+        {
+            return;
+        }
 
         if ( settings.combineSubdirectories )
         {
@@ -255,7 +293,7 @@ public class TexturePackerFileProcessor : FileProcessor
             {
  
 
-                protected void processDir (Entry entryDir, List < Dictionary< , >.Entry > files) {
+                protected void processDir (Entry entryDir, ( List < Dictionary< , >.Entry ) > files) {
                 File file = entryDir.inputFile;
                 while (file != null && !file.equals(inputDir.inputFile)) {
                 if (new File(file, "pack.json").exists()) {
@@ -264,7 +302,12 @@ public class TexturePackerFileProcessor : FileProcessor
             }
             file = file.getParentFile();
             }
-            if ( !countOnly ) ignoreDirs.add( entryDir.inputFile );
+
+            if ( !countOnly )
+            {
+                ignoreDirs.add( entryDir.inputFile );
+            }
+
             }
 
             protected void processFile( Dictionary< , >.Entry entry )
@@ -275,7 +318,10 @@ public class TexturePackerFileProcessor : FileProcessor
             }.process( inputDir.inputFile, null );
         }
 
-        if ( files.isEmpty() ) return;
+        if ( files.isEmpty() )
+        {
+            return;
+        }
 
         if ( countOnly )
         {
@@ -321,7 +367,10 @@ public class TexturePackerFileProcessor : FileProcessor
 
         int compare = name1.compareTo( name2 );
 
-        if ( compare != 0 || num1 == num2 ) return compare;
+        if ( ( compare != 0 ) || ( num1 == num2 ) )
+        {
+            return compare;
+        }
 
         return num1 - num2;
 
@@ -355,14 +404,22 @@ public class TexturePackerFileProcessor : FileProcessor
                 {
                     rootPath  = rootPath.replace( '\\', '/' );
                     inputPath = inputPath.substring( rootPath.length() ).replace( '\\', '/' );
-                    if ( inputPath.startsWith( "/" ) ) inputPath = inputPath.substring( 1 );
+
+                    if ( inputPath.startsWith( "/" ) )
+                    {
+                        inputPath = inputPath.substring( 1 );
+                    }
                 }
             }
             catch ( IOException ignored )
             {
             }
 
-            if ( inputPath == null || inputPath.length() == 0 ) inputPath = inputDir.inputFile.getName();
+            if ( ( inputPath == null ) || ( inputPath.length() == 0 ) )
+            {
+                inputPath = inputDir.inputFile.getName();
+            }
+
             progress.setMessage( inputPath );
         }
 
@@ -371,7 +428,11 @@ public class TexturePackerFileProcessor : FileProcessor
         files)
         packer.addImage( file.inputFile );
         Pack( packer, inputDir );
-        if ( progress != null ) progress.end();
+
+        if ( progress != null )
+        {
+            progress.end();
+        }
     }
 
     protected void Pack( TexturePacker packer, Dictionary< FileInfo, TexturePacker.Settings >.Entry inputDir )

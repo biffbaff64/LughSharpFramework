@@ -170,8 +170,8 @@ public class ListBox< T > : Widget
 
         _prefWidth = 0;
 
-        Pool< GlyphLayout > layoutPool = Pools< GlyphLayout >.Get();
-        var                 layout     = layoutPool.Obtain();
+        var layoutPool = Pools< GlyphLayout >.Get();
+        var layout     = layoutPool.Obtain();
 
         foreach ( var item in Items )
         {

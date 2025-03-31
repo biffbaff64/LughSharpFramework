@@ -302,11 +302,17 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
             {
                 var cell = layer.GetCell( col, row );
 
-                if ( cell == null ) continue;
+                if ( cell == null )
+                {
+                    continue;
+                }
 
                 var tile = cell.GetTile();
 
-                if ( tile == null ) continue;
+                if ( tile == null )
+                {
+                    continue;
+                }
 
                 Count++;
 

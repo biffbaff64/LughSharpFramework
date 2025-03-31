@@ -140,7 +140,10 @@ public partial class AssetManager
                 }
 
                 // If we still have no tasks, we're done
-                if ( _tasks.Count == 0 ) return true;
+                if ( _tasks.Count == 0 )
+                {
+                    return true;
+                }
             }
 
             UpdateTask();
@@ -257,7 +260,10 @@ public partial class AssetManager
     {
         lock ( this )
         {
-            if ( fileName == null ) return false;
+            if ( fileName == null )
+            {
+                return false;
+            }
 
             if ( ( _tasks.Count > 0 )
                  && _tasks.First().AssetDesc is { } assetDescriptor
@@ -286,7 +292,10 @@ public partial class AssetManager
     {
         lock ( this )
         {
-            if ( ( fileName == null ) || ( type == null ) ) return false;
+            if ( ( fileName == null ) || ( type == null ) )
+            {
+                return false;
+            }
 
             if ( _tasks.Count > 0 )
             {

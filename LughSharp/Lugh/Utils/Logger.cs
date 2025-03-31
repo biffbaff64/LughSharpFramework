@@ -125,7 +125,10 @@ public static class Logger
             return;
         }
 
-        if ( boxedDebug ) Divider();
+        if ( boxedDebug )
+        {
+            Divider();
+        }
 
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
         var str      = CreateMessage( DEBUG_TAG, message, callerID );
@@ -134,11 +137,14 @@ public static class Logger
         {
             str += Environment.NewLine;
         }
-        
+
         Console.Write( str );
         WriteToFile( str );
 
-        if ( boxedDebug ) Divider();
+        if ( boxedDebug )
+        {
+            Divider();
+        }
     }
 
     /// <summary>
@@ -168,7 +174,7 @@ public static class Logger
         {
             str += Environment.NewLine;
         }
-        
+
         Console.Write( str );
 
         WriteToFile( str );
@@ -223,7 +229,10 @@ public static class Logger
             return;
         }
 
-        if ( lineBefore ) Divider();
+        if ( lineBefore )
+        {
+            Divider();
+        }
 
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
 
@@ -233,7 +242,10 @@ public static class Logger
 
         WriteToFile( message );
 
-        if ( lineAfter ) Divider();
+        if ( lineAfter )
+        {
+            Divider();
+        }
     }
 
     /// <summary>
@@ -268,7 +280,7 @@ public static class Logger
             Console.WriteLine( Environment.NewLine );
         }
     }
-    
+
     /// <summary>
     /// Opens a physical file for writing copies of debug messages to.
     /// </summary>
@@ -294,7 +306,7 @@ public static class Logger
             }
 
             // Get the base directory
-            string baseDirectory = AppContext.BaseDirectory;
+            var baseDirectory = AppContext.BaseDirectory;
 
             // Construct the log directory path
             _debugFilePath = $"{baseDirectory}logs{Path.DirectorySeparatorChar}";

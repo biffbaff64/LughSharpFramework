@@ -149,7 +149,10 @@ public class FreeTypeFontGenerator : IDisposable
         _library = FreeType.InitFreeType();
         _face    = _library.NewFace( fontFile, faceIndex );
 
-        if ( CheckForBitmapFont() ) return;
+        if ( CheckForBitmapFont() )
+        {
+            return;
+        }
 
         SetPixelSizes( 0, 15 );
     }
@@ -185,7 +188,10 @@ public class FreeTypeFontGenerator : IDisposable
     {
         var updateTextureRegions = ( data.Regions == null ) && ( parameter.Packer != null );
 
-        if ( updateTextureRegions ) data.Regions = [ ];
+        if ( updateTextureRegions )
+        {
+            data.Regions = [ ];
+        }
 
         GenerateData( parameter, data );
 
@@ -406,7 +412,10 @@ public class FreeTypeFontGenerator : IDisposable
         // determine x-height
         foreach ( var xChar in data.XChars )
         {
-            if ( !LoadChar( xChar, flags ) ) continue;
+            if ( !LoadChar( xChar, flags ) )
+            {
+                continue;
+            }
 
             data.XHeight = FreeType.ToInt( _face.GetGlyph().GetMetrics().GetHeight() );
 
@@ -421,7 +430,10 @@ public class FreeTypeFontGenerator : IDisposable
         // determine cap height
         foreach ( var capChar in data.CapChars )
         {
-            if ( !LoadChar( capChar, flags ) ) continue;
+            if ( !LoadChar( capChar, flags ) )
+            {
+                continue;
+            }
 
             data.CapHeight = FreeType.ToInt( _face.GetGlyph().GetMetrics().GetHeight() ) + Math.Abs( parameter.ShadowOffsetY );
 
@@ -460,7 +472,12 @@ public class FreeTypeFontGenerator : IDisposable
             {
                 var maxGlyphHeight = ( int )Math.Ceiling( data.LineHeight );
                 size = MathUtils.NextPowerOfTwo( ( int )Math.Sqrt( maxGlyphHeight * maxGlyphHeight * charactersLength ) );
-                if ( _maxTextureSize > 0 ) size = Math.Min( size, _maxTextureSize );
+
+                if ( _maxTextureSize > 0 )
+                {
+                    size = Math.Min( size, _maxTextureSize );
+                }
+
                 packStrategy = new PixmapPacker.SkylineStrategy();
             }
 
@@ -471,7 +488,10 @@ public class FreeTypeFontGenerator : IDisposable
             packer.TransparentColor.A = 0;
         }
 
-        if ( incremental ) data.GlyphsList = new List< BitmapFont.Glyph >( charactersLength + 32 );
+        if ( incremental )
+        {
+            data.GlyphsList = new List< BitmapFont.Glyph >( charactersLength + 32 );
+        }
 
         FreeType.Stroker? stroker = null;
 
@@ -501,7 +521,11 @@ public class FreeTypeFontGenerator : IDisposable
                 {
                     data.SetGlyph( '\0', missingGlyph );
                     data.MissingGlyph = missingGlyph;
-                    if ( incremental ) data.GlyphsList.Add( missingGlyph );
+
+                    if ( incremental )
+                    {
+                        data.GlyphsList.Add( missingGlyph );
+                    }
                 }
             }
         }
@@ -532,7 +556,11 @@ public class FreeTypeFontGenerator : IDisposable
                 if ( glyph != null )
                 {
                     data.SetGlyph( c, glyph );
-                    if ( incremental ) data.GlyphsList.Add( glyph );
+
+                    if ( incremental )
+                    {
+                        data.GlyphsList.Add( glyph );
+                    }
                 }
             }
 
@@ -542,7 +570,10 @@ public class FreeTypeFontGenerator : IDisposable
             ( characters[ best ], characters[ heightsCount ] ) = ( characters[ heightsCount ], characters[ best ] );
         }
 
-        if ( ( stroker != null ) && !incremental ) stroker.Dispose();
+        if ( ( stroker != null ) && !incremental )
+        {
+            stroker.Dispose();
+        }
 
         if ( incremental )
         {
@@ -562,7 +593,10 @@ public class FreeTypeFontGenerator : IDisposable
                 var firstChar = characters[ i ];
                 var first     = data.GetGlyph( firstChar );
 
-                if ( first == null ) continue;
+                if ( first == null )
+                {
+                    continue;
+                }
 
                 var firstIndex = _face.GetCharIndex( firstChar );
 
@@ -571,15 +605,26 @@ public class FreeTypeFontGenerator : IDisposable
                     var secondChar = characters[ ii ];
                     var second     = data.GetGlyph( secondChar );
 
-                    if ( second == null ) continue;
+                    if ( second == null )
+                    {
+                        continue;
+                    }
 
                     var secondIndex = _face.GetCharIndex( secondChar );
 
                     var kerning = _face.GetKerning( firstIndex, secondIndex, 0 ); // FT_KERNING_DEFAULT (scaled then rounded).
-                    if ( kerning != 0 ) first.SetKerning( secondChar, FreeType.ToInt( kerning ) );
+
+                    if ( kerning != 0 )
+                    {
+                        first.SetKerning( secondChar, FreeType.ToInt( kerning ) );
+                    }
 
                     kerning = _face.GetKerning( secondIndex, firstIndex, 0 ); // FT_KERNING_DEFAULT (scaled then rounded).
-                    if ( kerning != 0 ) second.SetKerning( firstChar, FreeType.ToInt( kerning ) );
+
+                    if ( kerning != 0 )
+                    {
+                        second.SetKerning( firstChar, FreeType.ToInt( kerning ) );
+                    }
                 }
             }
         }
@@ -605,7 +650,10 @@ public class FreeTypeFontGenerator : IDisposable
             data.SetGlyph( ' ', spaceGlyph );
         }
 
-        if ( spaceGlyph.Width == 0 ) spaceGlyph.Width = ( int )( spaceGlyph.Xadvance + data.PadRight );
+        if ( spaceGlyph.Width == 0 )
+        {
+            spaceGlyph.Width = ( int )( spaceGlyph.Xadvance + data.PadRight );
+        }
 
         return data;
     }
@@ -619,9 +667,15 @@ public class FreeTypeFontGenerator : IDisposable
     {
         var missing = ( _face.GetCharIndex( c ) == 0 ) && ( c != 0 );
 
-        if ( missing ) return null;
+        if ( missing )
+        {
+            return null;
+        }
 
-        if ( !LoadChar( c, GetLoadingFlags( parameter ) ) ) return null;
+        if ( !LoadChar( c, GetLoadingFlags( parameter ) ) )
+        {
+            return null;
+        }
 
         var slot      = _face.GetGlyph();
         var mainGlyph = slot.GetGlyph();
@@ -700,7 +754,10 @@ public class FreeTypeFontGenerator : IDisposable
                             var mainPixel = ( ( mainW * y ) + x ) * 4;
                             var mainA     = mainPixels.GetInt( mainPixel + 3 );
 
-                            if ( mainA == 0 ) continue;
+                            if ( mainA == 0 )
+                            {
+                                continue;
+                            }
 
                             var shadowPixel = ( shadowRow + x ) * 4;
                             shadowPixels.PutInt( shadowPixel, r );
@@ -962,7 +1019,10 @@ public class FreeTypeFontGenerator : IDisposable
                 var baseline = ( ( Flipped ? -Ascent : Ascent ) + CapHeight ) / ScaleY;
                 glyph = Generator.CreateGlyph( ch, this, Parameter, Stroker, baseline, Packer );
 
-                if ( glyph == null ) return MissingGlyph;
+                if ( glyph == null )
+                {
+                    return MissingGlyph;
+                }
 
                 SetGlyphRegion( glyph, Regions[ glyph.Page ] );
                 SetGlyph( ch, glyph );

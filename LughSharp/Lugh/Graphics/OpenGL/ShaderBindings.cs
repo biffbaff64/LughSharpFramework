@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-
 // ============================================================================
 
 using System.Text;
@@ -65,7 +64,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLATTACHSHADERPROC >( "glAttachShader", out _glAttachShader );
 
@@ -95,7 +94,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         var utf8 = Encoding.UTF8.GetBytes( name );
 
@@ -116,7 +115,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLCOMPILESHADERPROC >( "glCompileShader", out _glCompileShader );
 
@@ -131,7 +130,7 @@ public unsafe partial class GLBindings
         GetDelegateForFunction< PFNGLCREATESHADERPROC >( "glCreateShader", out _glCreateShader );
 
         //TODO: Error checking here
-        
+
         return _glCreateShader( type );
     }
 
@@ -144,7 +143,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         if ( GdxApi.Bindings.IsProgram( program ) && ( program != INVALID_SHADER_PROGRAM ) )
         {
@@ -163,7 +162,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLDELETESHADERPROC >( "glDeleteShader", out _glDeleteShader );
 
@@ -179,12 +178,12 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLDETACHSHADERPROC >( "glDetachShader", out _glDetachShader );
 
@@ -220,7 +219,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETACTIVEATTRIBPROC >( "glGetActiveAttrib", out _glGetActiveAttrib );
 
@@ -234,7 +233,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         var     name = stackalloc GLchar[ bufSize ];
         GLsizei len;
@@ -261,7 +260,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMPROC >( "glGetActiveUniform", out _glGetActiveUniform );
 
@@ -275,7 +274,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         var     name = stackalloc GLchar[ bufSize ];
         GLsizei len;
@@ -302,7 +301,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETATTACHEDSHADERSPROC >( "glGetAttachedShaders", out _glGetAttachedShaders );
 
@@ -316,7 +315,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         var     shaders = new GLuint[ maxCount ];
         GLsizei count;
@@ -342,7 +341,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETATTRIBLOCATIONPROC >( "glGetAttribLocation", out _glGetAttribLocation );
 
@@ -356,7 +355,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETATTRIBLOCATIONPROC >( "glGetAttribLocation", out _glGetAttribLocation );
 
@@ -375,7 +374,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETSHADERIVPROC >( "glGetShaderiv", out _glGetShaderiv );
 
@@ -389,7 +388,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETSHADERIVPROC >( "glGetShaderiv", out _glGetShaderiv );
 
@@ -408,7 +407,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETSHADERINFOLOGPROC >( "glGetShaderInfoLog", out _glGetShaderInfoLog );
 
@@ -422,7 +421,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         var     infoLog = stackalloc GLchar[ bufSize ];
         GLsizei len;
@@ -443,7 +442,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETSHADERSOURCEPROC >( "glGetShaderSource", out _glGetShaderSource );
 
@@ -457,7 +456,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         var     source = stackalloc GLchar[ bufSize ];
         GLsizei len;
@@ -580,7 +579,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLSHADERSOURCEPROC >( "glShaderSource", out _glShaderSource );
 
@@ -594,7 +593,7 @@ public unsafe partial class GLBindings
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
-        
+
         // Error checking is done internal to GetDelegateForFunction.
         var count   = stringParam.Length;
         var strings = new GLchar[ count ][];
@@ -1382,5 +1381,4 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
-
 }

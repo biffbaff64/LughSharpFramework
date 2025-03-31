@@ -145,8 +145,15 @@ public class ShapeRenderer : IDisposable
 
     public void Begin( ShapeTypes? type )
     {
-        if ( ShapeType != null ) throw new InvalidOperationException( "Call end() before beginning a new shape batch." );
-        if ( type == null ) throw new GdxRuntimeException( "Cannot BEGIN with NULL shape!" );
+        if ( ShapeType != null )
+        {
+            throw new InvalidOperationException( "Call end() before beginning a new shape batch." );
+        }
+
+        if ( type == null )
+        {
+            throw new GdxRuntimeException( "Cannot BEGIN with NULL shape!" );
+        }
 
         ShapeType = type;
 
@@ -173,7 +180,10 @@ public class ShapeRenderer : IDisposable
 
     public void Flush( ShapeTypes? shapeType )
     {
-        if ( shapeType == null ) return;
+        if ( shapeType == null )
+        {
+            return;
+        }
 
         End();
         Begin( shapeType );
@@ -181,10 +191,20 @@ public class ShapeRenderer : IDisposable
 
     public void Set( ShapeTypes type )
     {
-        if ( ShapeType == type ) return;
+        if ( ShapeType == type )
+        {
+            return;
+        }
 
-        if ( ShapeType == null ) throw new InvalidOperationException( "begin must be called first." );
-        if ( !AutoShapeType ) throw new InvalidOperationException( "autoShapeType must be enabled." );
+        if ( ShapeType == null )
+        {
+            throw new InvalidOperationException( "begin must be called first." );
+        }
+
+        if ( !AutoShapeType )
+        {
+            throw new InvalidOperationException( "autoShapeType must be enabled." );
+        }
 
         Flush( type );
     }
@@ -773,7 +793,10 @@ public class ShapeRenderer : IDisposable
 
     public void Arc( float x, float y, float radius, float start, float degrees, int segments )
     {
-        if ( segments <= 0 ) throw new ArgumentException( "segments must be > 0." );
+        if ( segments <= 0 )
+        {
+            throw new ArgumentException( "segments must be > 0." );
+        }
 
         var colorBits = _color.ToFloatBitsABGR();
         var theta     = ( 2 * MathUtils.PI * ( degrees / 360.0f ) ) / segments;
@@ -846,7 +869,10 @@ public class ShapeRenderer : IDisposable
 
     public void Circle( float x, float y, float radius, int segments )
     {
-        if ( segments <= 0 ) throw new ArgumentException( "segments must be > 0." );
+        if ( segments <= 0 )
+        {
+            throw new ArgumentException( "segments must be > 0." );
+        }
 
         var   colorBits = _color.ToFloatBitsABGR();
         var   angle     = ( 2 * MathUtils.PI ) / segments;
@@ -915,7 +941,10 @@ public class ShapeRenderer : IDisposable
 
     public void Ellipse( float x, float y, float width, float height, int segments )
     {
-        if ( segments <= 0 ) throw new ArgumentException( "segments must be > 0." );
+        if ( segments <= 0 )
+        {
+            throw new ArgumentException( "segments must be > 0." );
+        }
 
         Check( ShapeTypes.Lines, ShapeTypes.Filled, segments * 3 );
 
@@ -959,12 +988,15 @@ public class ShapeRenderer : IDisposable
     public void Ellipse( float x, float y, float width, float height, float rotation )
     {
         Ellipse( x, y, width, height, rotation, Math.Max( 1, ( int )( 12 * ( float )Math.Cbrt(
-                                                               Math.Max( width * 0.5f, height * 0.5f ) ) ) ) );
+                                                           Math.Max( width * 0.5f, height * 0.5f ) ) ) ) );
     }
 
     public void Ellipse( float x, float y, float width, float height, float rotation, int segments )
     {
-        if ( segments <= 0 ) throw new ArgumentException( "segments must be > 0." );
+        if ( segments <= 0 )
+        {
+            throw new ArgumentException( "segments must be > 0." );
+        }
 
         Check( ShapeTypes.Lines, ShapeTypes.Filled, segments * 3 );
 
@@ -1019,7 +1051,10 @@ public class ShapeRenderer : IDisposable
 
     public void Cone( float x, float y, float z, float radius, float height, int segments )
     {
-        if ( segments <= 0 ) throw new ArgumentException( "segments must be > 0." );
+        if ( segments <= 0 )
+        {
+            throw new ArgumentException( "segments must be > 0." );
+        }
 
         Check( ShapeTypes.Lines, ShapeTypes.Filled, ( segments * 4 ) + 2 );
 
@@ -1105,8 +1140,15 @@ public class ShapeRenderer : IDisposable
 
     public void Polygon( float[] vertices, int offset, int count )
     {
-        if ( count < 6 ) throw new ArgumentException( "Polygons must contain at least 3 points." );
-        if ( ( count % 2 ) != 0 ) throw new ArgumentException( "Polygons must have an even number of vertices." );
+        if ( count < 6 )
+        {
+            throw new ArgumentException( "Polygons must contain at least 3 points." );
+        }
+
+        if ( ( count % 2 ) != 0 )
+        {
+            throw new ArgumentException( "Polygons must have an even number of vertices." );
+        }
 
         Check( ShapeTypes.Lines, null, count );
 
@@ -1141,8 +1183,15 @@ public class ShapeRenderer : IDisposable
 
     public void Polyline( float[] vertices, int offset, int count )
     {
-        if ( count < 4 ) throw new ArgumentException( "Polylines must contain at least 2 points." );
-        if ( ( count % 2 ) != 0 ) throw new ArgumentException( "Polylines must have an even number of vertices." );
+        if ( count < 4 )
+        {
+            throw new ArgumentException( "Polylines must contain at least 2 points." );
+        }
+
+        if ( ( count % 2 ) != 0 )
+        {
+            throw new ArgumentException( "Polylines must have an even number of vertices." );
+        }
 
         Check( ShapeTypes.Lines, null, count );
 
@@ -1174,13 +1223,19 @@ public class ShapeRenderer : IDisposable
 
     private void Check( ShapeTypes preferred, ShapeTypes? other, int newVertices )
     {
-        if ( ShapeType == null ) throw new GdxRuntimeException( "Begin() must be called first." );
+        if ( ShapeType == null )
+        {
+            throw new GdxRuntimeException( "Begin() must be called first." );
+        }
 
         if ( ( ShapeType != preferred ) && ( ShapeType != other ) )
         {
             if ( !AutoShapeType ) // Shape type is not valid.
             {
-                if ( other == null ) throw new GdxRuntimeException( $"Must call Begin(ShapeType.{preferred})." );
+                if ( other == null )
+                {
+                    throw new GdxRuntimeException( $"Must call Begin(ShapeType.{preferred})." );
+                }
 
                 throw new GdxRuntimeException( $"Must call Begin(ShapeType.{preferred}) or Begin(ShapeType.{other})." );
             }

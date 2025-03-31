@@ -168,7 +168,7 @@ public class ColorBleedEffect
         public Mask( int[] rgb )
         {
             var n = rgb.Length;
-        
+
             _blank    = new bool[ n ];
             _pending  = new int[ n ];
             _changing = new int[ n ];
@@ -191,22 +191,31 @@ public class ColorBleedEffect
 
         private int RemoveIndex( int index )
         {
-            if ( index >= PendingSize ) throw new IndexOutOfRangeException( index.ToString() );
+            if ( index >= PendingSize )
+            {
+                throw new IndexOutOfRangeException( index.ToString() );
+            }
 
             var value = _pending[ index ];
-            
+
             PendingSize--;
             _pending[ index ] = _pending[ PendingSize ];
 
             return value;
         }
 
-        public MaskIterator NewMaskIterator() => new( this );
+        public MaskIterator NewMaskIterator()
+        {
+            return new MaskIterator( this );
+        }
 
-        private static int Alpha( int argb ) => ( argb >> 24 ) & 0xff;
+        private static int Alpha( int argb )
+        {
+            return ( argb >> 24 ) & 0xff;
+        }
 
         // ====================================================================
-        
+
         [PublicAPI]
         public class MaskIterator
         {
@@ -215,7 +224,7 @@ public class ColorBleedEffect
 
             public MaskIterator( Mask mask )
             {
-                this._mask = mask;
+                _mask = mask;
             }
 
             public bool HasNext()
@@ -225,7 +234,10 @@ public class ColorBleedEffect
 
             public int Next()
             {
-                if ( _index >= _mask.PendingSize ) throw new IndexOutOfRangeException( _index.ToString() );
+                if ( _index >= _mask.PendingSize )
+                {
+                    throw new IndexOutOfRangeException( _index.ToString() );
+                }
 
                 return _mask._pending[ _index++ ];
             }
@@ -245,7 +257,7 @@ public class ColorBleedEffect
                 {
                     _mask._blank[ _mask._changing[ i ] ] = false;
                 }
-                
+
                 _mask._changingSize = 0;
             }
         }

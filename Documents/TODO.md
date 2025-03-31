@@ -320,11 +320,7 @@ GRAPHICS/G2D
     CODE   DOCUMENT
     ----   --------
     - DONE - DONE - Animation
-    - IP   - IP   - BitmapFont                      Much work needed!
-    - IP   - IP   - BitmapFontCache                 Relies on the BitmapFont rewrite.
     - IP   - IP   - CpuSpriteBatch                  Some methods have too many parameters
-    - DONE - IP   - DistanceFieldFont
-    - DONE - IP   - GlyphLayout
     - DONE - DONE - IBatch
     - DONE - IP   - IPolygonBatch                   Some methods have too many parameters
     - DONE - IP   - NinePatch
@@ -481,6 +477,35 @@ GRAPHICS/PACKING
     -      -      - TexturePackerTest
     -      -      - TexturePackerUpscaleTest
     -      -      - TextureUnpacker
+
+GRAPHICS/TEXT
+-------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - IP   - IP   - BitmapFont                      Much work needed!
+    - IP   - IP   - BitmapFontCache                 Relies on the BitmapFont rewrite.
+    - DONE - DONE - Character                       C# System MUST already have this???
+    - DONE - IP   - DistanceFieldFont
+    - IP   - IP   - FontUtils
+    - DONE - IP   - GlyphLayout
+    - IP   - IP   - Subset
+    - IP   - IP   - UnicodeBlock
+    -      -      - 
+    -      -      - 
+    -      -      - 
+    -      -      - 
+
+GRAPHICS/TEXT/FREETYPE
+----------------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - IP   - IP   - FreeType
+    - IP   - IP   - FreeTypeConstants
+    - IP   - IP   - FreeTypeFontGenerator
+    - IP   - IP   - FreeTypeFontGeneratorLoader
+    - IP   - IP   - FreeTypeFontLoader
 
 GRAPHICS/VIEWPORT
 -----------------
@@ -847,7 +872,6 @@ UTILS
     - DONE - DONE - Bits
     - DONE - DONE - ByteOrder
     - DONE - DONE - BytePointerToString
-    - DONE - DONE - Character                       C# System MUST already have this???
     - DONE - IP   - ComparableTimSort
     - DONE - DONE - Constants
     - DONE - IP   - DataInput                       Check
