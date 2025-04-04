@@ -22,14 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Serialization.Json;
 using System.Runtime.Versioning;
-using System.Text.Json;
+using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Guarding;
-
-using File = System.IO.File;
+using LughSharp.Lugh.Utils.Json;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
@@ -37,87 +36,97 @@ namespace LughSharp.Lugh.Graphics.Packing;
 [SupportedOSPlatform( "windows" )]
 public class TexturePackerFileProcessor : FileProcessor
 {
-    private readonly TexturePacker.Settings                              _defaultSettings;
-    private readonly TexturePacker.ProgressListener?                     _progress;
-    private          Dictionary< DirectoryInfo, TexturePacker.Settings > _dirToSettings = [ ];
-    private          string                                              _packFileName;
-    private          FileInfo?                                           _root;
-    private          List< FileInfo >                                    _ignoreDirs = [ ];
-    private          bool                                                _countOnly;
-    private          int                                                 _packCount;
+    private readonly TexturePacker.Settings          _defaultSettings;
+    private readonly TexturePacker.ProgressListener? _progressListener;
+
+    private Dictionary< DirectoryInfo, TexturePacker.Settings > _dirToSettings = [ ]; //TODO: Rename
+    private List< DirectoryInfo >                               _dirsToIgnore  = [ ];
+    private List< FileInfo >                                    _settingsFiles = [ ];
+    private Json                                                _json          = new();
+    private DirectoryInfo                                       _rootDirectory;
+    private string                                              _packFileName;
+    private bool                                                _countOnly;
+    private int                                                 _packCount;
 
     // ========================================================================
-    // ========================================================================
 
+    /// <summary>
+    /// </summary>
     public TexturePackerFileProcessor()
         : this( new TexturePacker.Settings(), "pack.atlas", null )
     {
     }
 
-    public TexturePackerFileProcessor( TexturePacker.Settings defaultSettings,
+    /// <summary>
+    /// </summary>
+    /// <param name="defaultSettings"></param>
+    /// <param name="packFileName"></param>
+    /// <param name="progress"></param>
+    public TexturePackerFileProcessor( TexturePacker.Settings? defaultSettings,
                                        string packFileName,
                                        TexturePacker.ProgressListener? progress )
     {
-        _defaultSettings = defaultSettings;
-        _progress        = progress;
+        this._defaultSettings  = defaultSettings ?? new TexturePacker.Settings();
+        this._progressListener = progress ?? new TexturePacker.ProgressListenerImpl();
 
-        if ( packFileName.ToLower().EndsWith( defaultSettings.AtlasExtension.ToLower() ) )
+        if ( packFileName.ToLower().EndsWith( _defaultSettings.AtlasExtension.ToLower() ) )
         {
-            packFileName = packFileName.Substring( 0, packFileName.Length - defaultSettings.AtlasExtension.Length );
+            packFileName = packFileName.Substring( 0, packFileName.Length - _defaultSettings.AtlasExtension.Length );
         }
 
-        _packFileName = packFileName;
+        this._packFileName  = packFileName;
+        this._rootDirectory = new FileInfo( packFileName ).Directory!;
 
         SetFlattenOutput( true );
-        AddInputSuffix( ".png", ".jpg", ".jpeg" );
+        AddInputSuffix( ".png", ".jpg", ".jpeg" ); //TODO: Add .bmp
 
         // Sort input files by name to avoid platform-dependent atlas output changes.
-        SetComparator( Compare );
-
-        return;
-
-        // --------------------------------------------------------------------
-
-        static int Compare( FileInfo? file1, FileInfo? file2 )
-        {
-            return string.Compare( file1?.Name, file2?.Name, StringComparison.Ordinal );
-        }
+        SetComparator( ( file1, file2 ) =>
+                           string.Compare( file1.Name,
+                                           file2.Name,
+                                           StringComparison.Ordinal ) );
     }
 
-    // ========================================================================
-
-    public List< Entry > Process( FileInfo inputFile, FileInfo outputRoot )
+    /// <summary>
+    /// </summary>
+    /// <param name="inputFile"></param>
+    /// <param name="outputRoot"></param>
+    /// <returns></returns>
+    public override List< Entry > Process( FileInfo? inputFile, DirectoryInfo? outputRoot )
     {
-        _root = inputFile;
+        Guard.ThrowIfNull( inputFile?.Directory );
+
+        _rootDirectory = inputFile.Directory;
 
         // Collect pack.json setting files.
-        List< FileInfo > settingsFiles = [ ];
+        var settingsProcessor = new SettingsProcessor();
 
-        var settingsProcessor = new MyFileProcessor( settingsFiles );
+        settingsProcessor.FileProcessed += ( file ) => _settingsFiles.Add( file );
         settingsProcessor.AddInputRegex( "pack\\.json" );
         settingsProcessor.Process( inputFile, null );
 
-        // Sort input files by name to avoid platform-dependent atlas output changes.
-        Comparator = ( file1, file2 ) => string.Compare( file1.Name, file2.Name, StringComparison.Ordinal );
+        // Sort parent first.
+        _settingsFiles.Sort( ( file1, file2 ) => file1.ToString().Length - file2.ToString().Length );
 
-        foreach ( var settingsFile in settingsFiles )
+        foreach ( var settingsFile in _settingsFiles )
         {
             // Find first parent with settings, or use defaults.
             TexturePacker.Settings? settings = null;
-            var                     parent   = settingsFile.Directory;
+
+            var parent = settingsFile.Directory;
 
             while ( true )
             {
-                if ( parent?.FullName == _root.FullName )
+                if ( ( parent != null ) && parent.Equals( _rootDirectory ) )
                 {
                     break;
                 }
 
                 parent = parent?.Parent;
 
-                _dirToSettings.TryGetValue( parent!, out settings );
+                Guard.ThrowIfNull( parent );
 
-                if ( settings != null )
+                if ( _dirToSettings.TryGetValue( parent, out settings ) )
                 {
                     settings = NewSettings( settings );
 
@@ -142,340 +151,347 @@ public class TexturePackerFileProcessor : FileProcessor
         _countOnly = false;
 
         // Do actual processing.
-        _progress?.Start( 1 );
+        _progressListener?.Start( 1 );
         var result = base.Process( inputFile, outputRoot );
-        _progress?.End();
+        _progressListener?.End();
 
         return result;
     }
 
-    private void Merge( TexturePacker.Settings settings, FileInfo settingsFile )
+    /// <summary>
+    /// </summary>
+    /// <param name="files"></param>
+    /// <param name="outputRoot"></param>
+    /// <returns></returns>
+    public List< Entry > Process( FileInfo[] files, FileInfo outputRoot )
+    {
+        // Delete pack file and images.
+        if ( _countOnly && outputRoot.Exists )
+        {
+            DeleteOutput( outputRoot );
+        }
+
+        return base.Process( files, outputRoot.Directory );
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="settings"></param>
+    /// <param name="settingsFile"></param>
+    /// <exception cref="Exception"></exception>
+    public void Merge( TexturePacker.Settings settings, FileInfo settingsFile )
     {
         try
         {
-            var jsonString = File.ReadAllText( settingsFile.FullName );
+            var root = new JsonReader().Parse( new StreamReader( settingsFile.FullName ) );
 
-            if ( string.IsNullOrWhiteSpace( jsonString ) )
+            if ( root == null )
             {
                 return; // Empty file.
             }
 
-            using ( var document = JsonDocument.Parse( jsonString ) )
-            {
-                var root = document.RootElement;
-                settings.ReadFromJson( root ); // Assuming Settings class has a ReadFromJson method
-            }
-        }
-        catch ( JsonException ex )
-        {
-            throw new Exception( $"Error reading settings file: {settingsFile.FullName}, invalid JSON: {ex.Message}", ex );
-        }
-        catch ( FileNotFoundException ex )
-        {
-            throw new Exception( $"Error reading settings file: {settingsFile.FullName}, File not found: {ex.Message}", ex );
+            _json.ReadFields( settings, root );
         }
         catch ( Exception ex )
         {
-            throw new Exception( $"Error reading settings file: {settingsFile.FullName}, {ex.Message}", ex );
+            throw new Exception( "Error reading settings file: " + settingsFile, ex );
         }
     }
 
-    public List< Dictionary< , >.Entry > process( File[] files, File outputRoot )
-
-    {
-        // Delete pack file and images.
-        if ( countOnly && outputRoot.exists() )
-        {
-            deleteOutput( outputRoot );
-        }
-
-        return base.Process( files, outputRoot );
-    }
-
-    protected void deleteOutput( File outputRoot )
+    /// <summary>
+    /// </summary>
+    /// <param name="outputRoot"></param>
+    protected void DeleteOutput( FileInfo outputRoot )
     {
         // Load root settings to get scale.
-        var                    settingsFile = new File( root, "pack.json" );
-        TexturePacker.Settings rootSettings = defaultSettings;
+        var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, "pack.json" ) );
+        var rootSettings = _defaultSettings;
 
-        if ( settingsFile.exists() )
+        if ( settingsFile.Exists )
         {
-            rootSettings = newSettings( rootSettings );
-            merge( rootSettings, settingsFile );
+            rootSettings = NewSettings( rootSettings );
+            Merge( rootSettings, settingsFile );
         }
 
-        var atlasExtension = rootSettings.atlasExtension == null ? "" : rootSettings.atlasExtension;
-        atlasExtension = Pattern.quote( atlasExtension );
-
-        for ( int i = 0, n = rootSettings.scale.length; i < n; i++ )
+        var atlasExtension       = rootSettings.AtlasExtension;
+        var quotedAtlasExtension = Regex.Escape( atlasExtension );
+        
+        for ( int i = 0, n = rootSettings.Scale.Length; i < n; i++ )
         {
-            var deleteProcessor = new FileProcessor()
-            {
-                ,
+            var deleteProcessor = new DeleteProcessor();
+            deleteProcessor.OnDeleteFile += ( Entry inputFile ) => inputFile.InputFile?.Delete();
+            deleteProcessor.SetRecursive( false );
 
-                protected void processFile (Entry inputFile){
-                inputFile.inputFile.delete();
-            }
-            };
-            deleteProcessor.setRecursive( false );
-
-            var    packFile           = new File( rootSettings.getScaledPackFileName( packFileName, i ) );
-            string scaledPackFileName = packFile.getName();
-
-            string prefix   = packFile.getName();
-            int    dotIndex = prefix.lastIndexOf( '.' );
+            var packFile = new FileInfo( rootSettings.GetScaledPackFileName( _packFileName, i ) );
+            var prefix   = packFile.Name;
+            var dotIndex = prefix.LastIndexOf( '.' );
 
             if ( dotIndex != -1 )
             {
-                prefix = prefix.substring( 0, dotIndex );
+                prefix = prefix.Substring( 0, dotIndex );
             }
 
-            deleteProcessor.addInputRegex( "(?i)" + prefix + "-?\\d*\\.(png|jpg|jpeg)" );
-            deleteProcessor.addInputRegex( "(?i)" + prefix + atlasExtension );
+            deleteProcessor.AddInputRegex( "(?i)" + prefix + @"-?\d*\.(png|jpg|jpeg)" );
+            deleteProcessor.AddInputRegex( "(?i)" + prefix + quotedAtlasExtension );
 
-            string dir = packFile.getParent();
+            var dir = packFile.DirectoryName;
 
             if ( dir == null )
             {
-                deleteProcessor.process( outputRoot, null );
+                deleteProcessor.Process( outputRoot, null );
             }
-            else if ( new File( outputRoot + "/" + dir ).exists() ) //
+            else if ( Directory.Exists( Path.Combine( outputRoot.FullName, dir ) ) )
             {
-                deleteProcessor.process( outputRoot + "/" + dir, null );
+                deleteProcessor.Process( new FileInfo( Path.Combine( outputRoot.FullName, dir ) ), null );
             }
         }
     }
 
-    protected void processDir( Entry
-                                   inputDir, List< Dictionary< , >.Entry > files )
+    /// <summary>
+    /// </summary>
+    /// <param name="inputDir"></param>
+    /// <param name="files"></param>
+    public override void ProcessDir( Entry inputDir, List< Entry > files )
     {
-        if ( ignoreDirs.contains( inputDir.inputFile ) )
+        if ( _dirsToIgnore.Contains( inputDir.InputFile ) )
         {
             return;
         }
 
         // Find first parent with settings, or use defaults.
-        TexturePacker.Settings settings = null;
-        File                   parent   = inputDir.inputFile;
+        TexturePacker.Settings? settings = null;
+
+        var parent = ( DirectoryInfo? )inputDir.InputFile;
 
         while ( true )
         {
-            settings = dirToSettings.get( parent );
-
-            if ( settings != null )
+            if ( ( parent != null ) && _dirToSettings.TryGetValue( parent, out settings ) )
             {
                 break;
             }
 
-            if ( ( parent == null ) || parent.equals( root ) )
+            if ( ( parent == null ) || parent.Equals( _rootDirectory ) )
             {
                 break;
             }
 
-            parent = parent.getParentFile();
+            parent = parent.Parent;
         }
 
         if ( settings == null )
         {
-            settings = defaultSettings;
+            settings = _defaultSettings;
         }
 
-        if ( settings.ignore )
+        if ( settings.Ignore )
         {
             return;
         }
 
-        if ( settings.combineSubdirectories )
+        if ( settings.CombineSubdirectories )
         {
             // Collect all files under subdirectories except those with a pack.json file. A directory with its own settings can't be
             // combined since combined directories must use the settings of the parent directory.
             files = new FileProcessor( this )
             {
- 
+                ProcessDir = ( Entry entryDir, List< Entry > fileList ) =>
+                {
+                    FileInfo file = entryDir.InputFile;
 
-                protected void processDir (Entry entryDir, ( List < Dictionary< , >.Entry ) > files) {
-                File file = entryDir.inputFile;
-                while (file != null && !file.equals(inputDir.inputFile)) {
-                if (new File(file, "pack.json").exists()) {
-                files.clear();
-                return;
-            }
-            file = file.getParentFile();
-            }
+                    while ( ( file != null ) && !file.Equals( inputDir.InputFile ) )
+                    {
+                        if ( new FileInfo( Path.Combine( file.FullName, "pack.json" ) ).Exists )
+                        {
+                            fileList.Clear();
 
-            if ( !countOnly )
-            {
-                ignoreDirs.add( entryDir.inputFile );
-            }
+                            return;
+                        }
 
-            }
+                        file = file.Parent;
+                    }
 
-            protected void processFile( Dictionary< , >.Entry entry )
-            {
-                addProcessedFile( entry );
-            }
-
-            }.process( inputDir.inputFile, null );
+                    if ( !_countOnly ) _dirsToIgnore.Add( entryDir.InputFile );
+                },
+                ProcessFile = ( Entry entry ) => AddProcessedFile( entry )
+            }.Process( inputDir.InputFile, null );
         }
 
-        if ( files.isEmpty() )
-        {
-            return;
-        }
+        if ( files.Count == 0 ) return;
 
-        if ( countOnly )
+        if ( _countOnly )
         {
-            packCount++;
+            _packCount++;
 
             return;
         }
 
         // Sort by name using numeric suffix, then alpha.
-        Collections.sort( files, new Comparator< Dictionary< , >.Entry >()
+        files.Sort( ( entry1, entry2 ) =>
         {
-            Pattern digitSuffix = Pattern.compile("(.*?)(\\d+)$");
-            public int compare (Entry entry1, Entry entry2) {
-            string full1 = entry1.inputFile.getName();
-            int dotIndex = full1.lastIndexOf('.');
-            if (dotIndex != -1) full1 = full1.substring(0, dotIndex);
-            string full2 = entry2.inputFile.getName();
-            dotIndex = full2.lastIndexOf('.');
-            if (dotIndex != -1) full2 = full2.substring(0, dotIndex);
+            var full1                   = entry1.InputFile.Name;
+            var dotIndex                = full1.LastIndexOf( '.' );
+            if ( dotIndex != -1 ) full1 = full1.Substring( 0, dotIndex );
+
+            var full2 = entry2.InputFile.Name;
+            dotIndex = full2.LastIndexOf( '.' );
+            if ( dotIndex != -1 ) full2 = full2.Substring( 0, dotIndex );
+
             string name1 = full1, name2 = full2;
-            int num1 = 0, num2          = 0;
-            Matcher matcher = digitSuffix.matcher(full1);
-            if (matcher.matches()) {
-            try {
-            num1 = Integer.parseInt(matcher.group(2));
-            name1 = matcher.group(1);
-        } catch ( Exception ignored ) {
-        }
-        }
-        matcher = digitSuffix.matcher( full2 );
+            int    num1  = 0,     num2  = 0;
 
-        if ( matcher.matches() )
-        {
-            try
+            var matcher = Regex.Match( full1, "(.*?)(\\d+)$" );
+
+            if ( matcher.Success )
             {
-                num2  = Integer.parseInt( matcher.group( 2 ) );
-                name2 = matcher.group( 1 );
+                try
+                {
+                    num1  = int.Parse( matcher.Groups[ 2 ].Value );
+                    name1 = matcher.Groups[ 1 ].Value;
+                }
+                catch ( Exception )
+                {
+                }
             }
-            catch ( Exception ignored )
+
+            matcher = Regex.Match( full2, "(.*?)(\\d+)$" );
+
+            if ( matcher.Success )
             {
+                try
+                {
+                    num2  = int.Parse( matcher.Groups[ 2 ].Value );
+                    name2 = matcher.Groups[ 1 ].Value;
+                }
+                catch ( Exception )
+                {
+                }
             }
-        }
 
-        int compare = name1.compareTo( name2 );
+            var compare = name1.CompareTo( name2 );
 
-        if ( ( compare != 0 ) || ( num1 == num2 ) )
-        {
-            return compare;
-        }
+            if ( ( compare != 0 ) || ( num1 == num2 ) ) return compare;
 
-        return num1 - num2;
-
-        }
-        });
+            return num1 - num2;
+        } );
 
         // Pack.
         if ( !settings.silent )
         {
             try
             {
-                System.out.println( "Reading: " + inputDir.inputFile.getCanonicalPath() );
+                Console.WriteLine( "Reading: " + inputDir.InputFile.FullName );
             }
-            catch ( IOException ignored )
+            catch ( IOException )
             {
-                System.out.println( "Reading: " + inputDir.inputFile.getAbsolutePath() );
+                Console.WriteLine( "Reading: " + inputDir.InputFile.FullName );
             }
         }
 
-        if ( progress != null )
+        if ( _progressListener != null )
         {
-            progress.start( 1f / packCount );
+            _progressListener.Start( 1f / _packCount );
             string inputPath = null;
 
             try
             {
-                string rootPath = root.getCanonicalPath();
-                inputPath = inputDir.inputFile.getCanonicalPath();
+                var rootPath = _rootDirectory.FullName;
+                inputPath = inputDir.InputFile.FullName;
 
-                if ( inputPath.startsWith( rootPath ) )
+                if ( inputPath.StartsWith( rootPath ) )
                 {
-                    rootPath  = rootPath.replace( '\\', '/' );
-                    inputPath = inputPath.substring( rootPath.length() ).replace( '\\', '/' );
-
-                    if ( inputPath.startsWith( "/" ) )
-                    {
-                        inputPath = inputPath.substring( 1 );
-                    }
+                    rootPath  = rootPath.Replace( '\\', '/' );
+                    inputPath = inputPath.Substring( rootPath.Length ).Replace( '\\', '/' );
+                    if ( inputPath.StartsWith( "/" ) ) inputPath = inputPath.Substring( 1 );
                 }
             }
-            catch ( IOException ignored )
+            catch ( IOException )
             {
             }
 
-            if ( ( inputPath == null ) || ( inputPath.length() == 0 ) )
+            if ( ( inputPath == null ) || ( inputPath.Length == 0 ) )
             {
-                inputPath = inputDir.inputFile.getName();
+                inputPath = inputDir.InputFile.Name;
             }
 
-            progress.setMessage( inputPath );
+            _progressListener.Message = inputPath;
         }
 
-        TexturePacker packer = newTexturePacker( root, settings );
-        for ( Dictionary< , >.Entry file :
-        files)
-        packer.addImage( file.inputFile );
+        var packer = NewTexturePacker( _rootDirectory, settings );
+
+        foreach ( var file in files )
+        {
+            packer.AddImage( ( FileInfo )file.InputFile );
+        }
+
         Pack( packer, inputDir );
 
-        if ( progress != null )
-        {
-            progress.end();
-        }
+        _progressListener?.End();
     }
 
-    protected void Pack( TexturePacker packer, Dictionary< FileInfo, TexturePacker.Settings >.Entry inputDir )
+    /// <summary>
+    /// </summary>
+    /// <param name="packer"></param>
+    /// <param name="inputDir"></param>
+    protected virtual void Pack( TexturePacker packer, Entry inputDir )
     {
-        packer.Pack( inputDir.OutputDir, packFileName );
+        packer.Pack( inputDir.OutputDirectory, _packFileName );
     }
 
-    protected TexturePacker NewTexturePacker( FileInfo root, TexturePacker.Settings settings )
+    /// <summary>
+    /// </summary>
+    /// <param name="root"></param>
+    /// <param name="settings"></param>
+    /// <returns></returns>
+    protected virtual TexturePacker NewTexturePacker( FileInfo root, TexturePacker.Settings settings )
     {
-        Guard.ThrowIfNull( _progress );
-
         var packer = new TexturePacker( root, settings );
-
-        packer.SetListener( _progress );
+        packer.SetProgressListener( _progressListener );
 
         return packer;
     }
 
-    protected TexturePacker.Settings NewSettings( TexturePacker.Settings settings )
+    /// <summary>
+    /// </summary>
+    /// <param name="settings"></param>
+    /// <returns></returns>
+    protected virtual TexturePacker.Settings NewSettings( TexturePacker.Settings settings )
     {
         return new TexturePacker.Settings( settings );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
     public TexturePacker.ProgressListener? GetProgressListener()
     {
-        return _progress;
+        return _progressListener;
     }
+}
 
-    // ========================================================================
-    // ========================================================================
+// ============================================================================
+// ============================================================================
 
-    public class MyFileProcessor : FileProcessor
+[PublicAPI]
+public class DeleteProcessor : FileProcessor
+{
+    /// <inheritdoc />
+    public override void ProcessFile( Entry entry )
     {
-        public List< FileInfo > SettingsFiles { get; private set; }
+        entry.InputFile?.Delete();
+    }
+}
 
-        public MyFileProcessor( List< FileInfo > settingsFiles )
-        {
-            SettingsFiles = settingsFiles;
-        }
+// ============================================================================
+// ============================================================================
 
-        protected void ProcessInputFile( Entry inputFile )
-        {
-            SettingsFiles.Add( inputFile.InputFile );
-        }
+[PublicAPI]
+public class SettingsProcessor : FileProcessor
+{
+    /// <inheritdoc />
+    public override void ProcessFile( Entry entry )
+    {
+        Guard.ThrowIfNull( entry );
+
+        base.ProcessFile( entry );
     }
 }

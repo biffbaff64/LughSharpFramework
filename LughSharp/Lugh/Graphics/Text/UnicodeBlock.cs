@@ -2180,7 +2180,7 @@ public class UnicodeBlock : Subset
     /// </exception>
     public static UnicodeBlock? Of( int codePoint )
     {
-        if ( !Character.IsValidCodePoint( codePoint ) )
+        if ( !CharacterUtils.IsValidCodePoint( codePoint ) )
         {
             throw new ArgumentException( "Supplied codepoint is not valid" );
         }
@@ -2210,7 +2210,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Returns the UnicodeBlock with the given name. Block names are determined by The
     /// Unicode Standard. The file Blocks-&lt;version&gt;.txt defines blocks for a particular
-    /// version of the standard. The <see cref="Character"/> class specifies the version of
+    /// version of the standard. The <see cref="CharacterUtils"/> class specifies the version of
     /// the standard that it supports.
     /// <para>
     /// This method accepts block names in the following forms:

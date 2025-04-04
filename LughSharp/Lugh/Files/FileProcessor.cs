@@ -22,11 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Guarding;
 
 using static System.Text.RegularExpressions.Regex;
@@ -38,7 +37,7 @@ namespace LughSharp.Lugh.Files;
 /// Process files and the results are collected, either <see cref="ProcessFile(Entry)" />
 /// or <see cref="ProcessDir(Entry, List{Entry})" /> can be overridden, or both. The
 /// entries provided to the callbacks have the original file, the output directory,
-/// and the output file. If <see cref="SetFlattenOutput(bool)" /> is false, the output
+/// and the output file. If <see cref="SetFlattenOutput(bool)"/> is false, the output
 /// will match the directory structure of the input.
 /// </summary>
 [PublicAPI]
@@ -46,39 +45,59 @@ public partial class FileProcessor
 {
     public delegate bool FilenameFilter( string directory, string filename );
 
-    public List< Regex >   InputRegex    { get; } = new();
-    public string          OutputSuffix  { get; set; }
-    public List< Entry >   OutputFiles   { get; }      = new();
-    public bool            Recursive     { get; set; } = true;
-    public bool            FlattenOutput { get; set; }
-    public FilenameFilter? InputFilter   { get; set; }
+    // Delegate to signal a processed file
+    public delegate void FileProcessedHandler( FileInfo file );
+
+    // Delegate to process a file
+    public delegate void DeleteFileDelegate( Entry entry );
+    
+    // Events based on the delegates
+    public event FileProcessedHandler? FileProcessed;
+    public event DeleteFileDelegate?   OnDeleteFile;
+
+    // ========================================================================
+
+    public List< Regex >   InputRegex      { get; } = [ ];
+    public List< Entry >   OutputFilesList { get; } = [ ];
+    public string          OutputSuffix    { get; set; }
+    public bool            Recursive       { get; set; } = true;
+    public bool            FlattenOutput   { get; set; }
+    public FilenameFilter? InputFilter     { get; set; }
+
+    // ========================================================================
 
     public Comparison< FileInfo > Comparator { get; set; } = ( o1, o2 ) =>
         string.Compare( o1.Name, o2.Name, StringComparison.Ordinal );
 
+    [SuppressMessage( "ReSharper", "ConvertIfStatementToSwitchStatement" )]
     private Comparison< Entry > EntryComparator
     {
         get =>
             ( o1, o2 ) =>
             {
+                Guard.ThrowIfNull( o1.InputFile, o2.InputFile );
+
                 if ( o1.InputFile is FileInfo file1 && o2.InputFile is FileInfo file2 )
                 {
-                    return Comparator( file1, file2 ); // Use 'this.Comparator'
+                    return Comparator( file1, file2 );
                 }
-                else if ( o1.InputFile is DirectoryInfo dir1 && o2.InputFile is DirectoryInfo dir2 )
+
+                if ( o1.InputFile is DirectoryInfo dir1 && o2.InputFile is DirectoryInfo dir2 )
                 {
                     return string.Compare( dir1.Name, dir2.Name, StringComparison.Ordinal );
                 }
-                else
-                {
-                    return string.Compare( o1.InputFile.Name, o2.InputFile.Name, StringComparison.Ordinal );
-                }
+
+                return string.Compare( o1.InputFile?.Name, o2.InputFile?.Name, StringComparison.Ordinal );
             };
         set => throw new NotImplementedException();
     }
 
     // ========================================================================
 
+    /// <summary>
+    /// Default Constructor.
+    /// Creates a new <c>FileProcessor</c> object.
+    /// </summary>
     public FileProcessor()
     {
         OutputSuffix  = string.Empty;
@@ -87,6 +106,11 @@ public partial class FileProcessor
         SetRecursive();
     }
 
+    /// <summary>
+    /// Creates a new <c>FileProcessor</c> object, using the settings provided
+    /// by the supplied FileProcessor object.
+    /// </summary>
+    /// <param name="processor"> The FileProcessor to copy. </param>
     public FileProcessor( FileProcessor processor )
     {
         Comparator  = processor.Comparator;
@@ -101,6 +125,10 @@ public partial class FileProcessor
 
     // ========================================================================
 
+    /// <summary>
+    /// </summary>
+    /// <param name="suffixes"></param>
+    /// <returns></returns>
     public FileProcessor AddInputSuffix( params string[] suffixes )
     {
         foreach ( var suffix in suffixes )
@@ -111,6 +139,11 @@ public partial class FileProcessor
         return this;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="regexes"></param>
+    /// <returns></returns>
     public FileProcessor AddInputRegex( params string[] regexes )
     {
         foreach ( var regex in regexes )
@@ -121,6 +154,10 @@ public partial class FileProcessor
         return this;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="outputSuffix"></param>
+    /// <returns></returns>
     public FileProcessor SetOutputSuffix( string outputSuffix )
     {
         OutputSuffix = outputSuffix;
@@ -128,6 +165,10 @@ public partial class FileProcessor
         return this;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="flattenOutput"></param>
+    /// <returns></returns>
     public FileProcessor SetFlattenOutput( bool flattenOutput )
     {
         FlattenOutput = flattenOutput;
@@ -135,6 +176,10 @@ public partial class FileProcessor
         return this;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="recursive"></param>
+    /// <returns></returns>
     public FileProcessor SetRecursive( bool recursive = true )
     {
         Recursive = recursive;
@@ -142,12 +187,25 @@ public partial class FileProcessor
         return this;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="inputFileOrDir"></param>
+    /// <param name="outputRoot"></param>
+    /// <returns></returns>
     public List< Entry > Process( string inputFileOrDir, string? outputRoot )
     {
-        return Process( new FileInfo( inputFileOrDir ), outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
+        return Process( new FileInfo( inputFileOrDir ), outputRoot == null
+                            ? null
+                            : new DirectoryInfo( outputRoot ) );
     }
 
-    public List< Entry > Process( FileInfo inputFileOrDir, DirectoryInfo? outputRoot )
+    /// <summary>
+    /// </summary>
+    /// <param name="inputFileOrDir"></param>
+    /// <param name="outputRoot"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public virtual List< Entry > Process( FileInfo inputFileOrDir, DirectoryInfo? outputRoot )
     {
         if ( !inputFileOrDir.Exists )
         {
@@ -159,11 +217,16 @@ public partial class FileProcessor
             return Process( [ inputFileOrDir ], outputRoot );
         }
 
-        return
-            Process( new DirectoryInfo( inputFileOrDir.FullName ).GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
-                     outputRoot );
+        return Process( new DirectoryInfo( inputFileOrDir.FullName )
+                        .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(), outputRoot );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="files"></param>
+    /// <param name="outputRoot"></param>
+    /// <returns></returns>+
+    /// <exception cref="Exception"></exception>
     public List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
         if ( outputRoot == null )
@@ -171,7 +234,7 @@ public partial class FileProcessor
             outputRoot = new DirectoryInfo( "" );
         }
 
-        OutputFiles.Clear();
+        OutputFilesList.Clear();
 
         var dirToEntries = new Dictionary< DirectoryInfo, List< Entry > >();
 
@@ -197,7 +260,7 @@ public partial class FileProcessor
             }
             else if ( dirEntries.Count > 0 )
             {
-                newOutputDir = dirEntries[ 0 ].OutputDir;
+                newOutputDir = dirEntries[ 0 ].OutputDirectory;
             }
 
             var outputName = inputDir.Name;
@@ -209,8 +272,8 @@ public partial class FileProcessor
 
             var entry = new Entry
             {
-                InputFile = inputDir,
-                OutputDir = newOutputDir!,
+                InputFile       = inputDir,
+                OutputDirectory = newOutputDir!,
             };
 
             if ( newOutputDir != null )
@@ -245,13 +308,20 @@ public partial class FileProcessor
             }
             catch ( Exception ex )
             {
-                throw new Exception( $"Error processing file: {entry.InputFile.FullName}", ex );
+                throw new Exception( $"Error processing file: {entry.InputFile?.FullName}", ex );
             }
         }
 
-        return OutputFiles;
+        return OutputFilesList;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="files"></param>
+    /// <param name="outputRoot"></param>
+    /// <param name="outputDir"></param>
+    /// <param name="dirToEntries"></param>
+    /// <param name="depth"></param>
     private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                           Dictionary< DirectoryInfo, List< Entry > > dirToEntries, int depth )
     {
@@ -315,9 +385,9 @@ public partial class FileProcessor
 
                 var entry = new Entry
                 {
-                    Depth     = depth,
-                    InputFile = file,
-                    OutputDir = outputDir,
+                    Depth           = depth,
+                    InputFile       = file,
+                    OutputDirectory = outputDir,
                     OutputFile = FlattenOutput
                         ? new FileInfo( Path.Combine( outputRoot.FullName, outputName ) )
                         : new FileInfo( Path.Combine( outputDir.FullName, outputName ) ),
@@ -339,45 +409,65 @@ public partial class FileProcessor
         }
     }
 
-    protected virtual void ProcessFile( Entry entry )
+    /// <summary>
+    /// </summary>
+    /// <param name="entry"></param>
+    public virtual void ProcessFile( Entry entry )
+    {
+        Guard.ThrowIfNull( entry.InputFile );
+
+        FileProcessed?.Invoke( ( FileInfo )entry.InputFile );
+        OnDeleteFile?.Invoke( entry );
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="entryDir"></param>
+    /// <param name="files"></param>
+    public virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
     }
 
-    protected virtual void ProcessDir( Entry entryDir, List< Entry > files )
+    /// <summary>
+    /// Sets the comparator for <see cref="ProcessDir(Entry, List{Entry})"/>.
+    /// By default the files are sorted by alpha.
+    /// </summary>
+    public FileProcessor SetComparator( Comparison< FileInfo > comparator )
     {
+        this.Comparator = comparator;
+
+        return this;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="entry"></param>
     protected void AddProcessedFile( Entry entry )
     {
-        OutputFiles.Add( entry );
+        OutputFilesList.Add( entry );
     }
 
     // ========================================================================
 
+    /// <summary>
+    /// </summary>
+    [PublicAPI]
     public class Entry
     {
-        public FileSystemInfo InputFile  { get; set; } = null!;
-        public DirectoryInfo  OutputDir  { get; set; } = null!;
-        public FileInfo       OutputFile { get; set; } = null!;
-        public int            Depth      { get; set; }
-
-        public Entry()
-        {
-        }
-
-        public Entry( FileInfo inputFile, FileInfo outputFile )
-        {
-            InputFile  = inputFile;
-            OutputFile = outputFile;
-        }
+        public FileSystemInfo? InputFile       { get; set; } = null!;
+        public FileInfo?       OutputFile      { get; set; } = null!;
+        public DirectoryInfo?  OutputDirectory { get; set; } = null!;
+        public int             Depth           { get; set; }
 
         public override string ToString()
         {
-            return InputFile.ToString();
+            return InputFile?.ToString() ?? "";
         }
     }
 
     // ========================================================================
 
     [GeneratedRegex( "(.*)\\..*" )] private static partial Regex MyRegex();
+
+    // ========================================================================
 }

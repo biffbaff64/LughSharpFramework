@@ -29,7 +29,7 @@ namespace LughSharp.Lugh.Utils.Json;
 [PublicAPI]
 public interface IJsonReader
 {
-    JsonValue Parse( InputStream input );
+    JsonValue? Parse( InputStream input );
 
-    JsonValue Parse( FileInfo file );
+    JsonValue? Parse( FileInfo file );
 }

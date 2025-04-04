@@ -22,62 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Globalization;
-
-namespace LughSharp.Lugh.Utils;
+namespace LughSharp.Lugh.Utils.Exceptions;
 
 [PublicAPI]
-public static class StringUtils
+public class NumberFormatException : FormatException
 {
-    public static string ToHexString( int? value )
-    {
-        return value == null ? "null" : ( ( int )value ).ToString( "X" ).ToUpper();
-    }
-    
-    // ========================================================================
-    
-    public static string? ValueOf( object? obj )
-    {
-        return obj == null ? "null" : obj.ToString();
-    }
-
-    public static string ValueOf( char[]? data )
-    {
-        return data == null ? "null" : new string( data );
-    }
-
-    public static string ValueOf( char[]? data, int offset, int count )
-    {
-        return data == null ? "null" : new string( data, offset, count );
-    }
-
-    public static string ValueOf( bool b )
-    {
-        return b.ToString().ToLower();
-    }
-
-    public static string ValueOf( char c )
-    {
-        return c.ToString();
-    }
-
-    public static string ValueOf( int i )
-    {
-        return i.ToString();
-    }
-
-    public static string ValueOf( long l )
-    {
-        return l.ToString();
-    }
-
-    public static string ValueOf( float f )
-    {
-        return f.ToString( CultureInfo.InvariantCulture );
-    }
-
-    public static string ValueOf( double d )
-    {
-        return d.ToString( CultureInfo.InvariantCulture );
-    }
 }

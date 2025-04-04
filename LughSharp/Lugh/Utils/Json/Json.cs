@@ -1010,9 +1010,10 @@ public partial class Json
                     return ( T )( object )byte.Parse( str );
                 }
             }
-            catch ( FormatException )
+            catch ( FormatException ignored )
             {
                 // Handle invalid number format
+                Logger.Error( $"FormatException (IGNORED): {ignored.Message}" );
             }
 
             if ( type == typeof( bool ) )
@@ -1041,7 +1042,8 @@ public partial class Json
                 return ( T )( object )new System.Text.StringBuilder( str );
             }
 
-            throw new SerializationException( $"Unable to convert value to required type: {jsonData} ({type.FullName})" );
+            throw new SerializationException( $"Unable to convert value to required type: " +
+                                              $"{jsonData} ({type.FullName})" );
         }
 
         return default( T );

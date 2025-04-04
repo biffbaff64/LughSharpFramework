@@ -979,9 +979,9 @@ public class BitmapFont
                     var second = int.Parse( tokens.NextToken() );
 
                     if ( ( first < 0 )
-                         || ( first > Character.MAX_VALUE )
+                         || ( first > CharacterUtils.MAX_VALUE )
                          || ( second < 0 )
-                         || ( second > Character.MAX_VALUE ) )
+                         || ( second > CharacterUtils.MAX_VALUE ) )
                     {
                         continue;
                     }

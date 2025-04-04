@@ -22,18 +22,17 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Runtime.Versioning;
 using System.Text.Json;
 
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Guarding;
 
 using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
@@ -45,19 +44,22 @@ namespace LughSharp.Lugh.Graphics.Packing;
 [SupportedOSPlatform( "windows" )]
 public class TexturePacker
 {
-    public string? RootPath { get; private set; }
-
-    // ========================================================================
-
     private Settings           _settings;
     private IPacker            _packer;
     private ImageProcessor     _imageProcessor;
     private List< InputImage > _inputImages = [ ];
     private ProgressListener?  _progressListener;
+    private string?            _rootPath;
 
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new TexturePacker object.
+    /// </summary>
+    /// <param name="rootDir"> The root folder of the source textures. </param>
+    /// <param name="settings"> The <see cref="Settings"/> to use when packing. </param>
+    /// <exception cref="GdxRuntimeException"></exception>
     public TexturePacker( FileInfo? rootDir, Settings settings )
     {
         _settings = settings;
@@ -94,30 +96,56 @@ public class TexturePacker
         SetRootDir( rootDir );
     }
 
-    public TexturePacker( Settings settings ) : this( null, settings )
+    /// <summary>
+    /// </summary>
+    /// <param name="settings"></param>
+    public TexturePacker( Settings settings )
+        : this( null, settings )
     {
     }
 
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// </summary>
+    /// <param name="settings"></param>
+    /// <returns></returns>
     protected static ImageProcessor NewImageProcessor( Settings settings )
     {
         return new ImageProcessor( settings );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <returns></returns>
+    public string? GetRootPath() => _rootPath;
+
+    /// <summary>
+    /// </summary>
+    /// <param name="value"></param>
+    private void SetRootPath( string? value ) => _rootPath = value;
+
+    /// <summary>
+    /// </summary>
+    /// <param name="rootDir"></param>
     public void SetRootDir( FileInfo? rootDir )
     {
         if ( rootDir == null )
         {
-            RootPath = null;
+            SetRootPath( null );
 
             return;
         }
 
-        RootPath = Path.GetFullPath( rootDir.FullName );
-        RootPath = RootPath.Replace( '\\', '/' );
+        Guard.ThrowIfNull( GetRootPath() );
+        
+        SetRootPath( Path.GetFullPath( rootDir.FullName ) );
+        SetRootPath( GetRootPath()!.Replace( '\\', '/' ) );
 
-        if ( !RootPath.EndsWith( '/' ) )
+        if ( !GetRootPath()!.EndsWith( '/' ) )
         {
-            RootPath += "/";
+            SetRootPath( GetRootPath() + "/" );
         }
     }
 
@@ -126,7 +154,7 @@ public class TexturePacker
         var inputImage = new InputImage
         {
             FileInfo = file,
-            RootPath = RootPath,
+            RootPath = GetRootPath(),
         };
 
         _inputImages.Add( inputImage );
@@ -148,7 +176,7 @@ public class TexturePacker
         _packer = packer;
     }
 
-    public void SetListener( ProgressListener listener )
+    public void SetProgressListener( ProgressListener? listener )
     {
         _progressListener = listener;
     }
@@ -160,10 +188,9 @@ public class TexturePacker
     /// <param name="outputDir"> The destination directory. </param>
     /// <param name="packFileName"> The name for the resulting TextureAtlas. </param>
     /// <exception cref="GdxRuntimeException"></exception>
-    public void Pack( FileInfo outputDir, string packFileName )
+    public void Pack( DirectoryInfo outputDir, string packFileName )
     {
         ArgumentNullException.ThrowIfNull( outputDir );
-        ArgumentNullException.ThrowIfNull( outputDir.Directory );
 
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
@@ -234,7 +261,7 @@ public class TexturePacker
 
             try
             {
-                WritePackFile( outputDir.Directory, scaledPackFileName, pages );
+                WritePackFile( outputDir, scaledPackFileName, pages );
             }
             catch ( IOException ex )
             {
@@ -253,6 +280,14 @@ public class TexturePacker
         _progressListener.End();
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="outputDir"></param>
+    /// <param name="scaledPackFileName"></param>
+    /// <param name="pages"></param>
+    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="NullReferenceException"></exception>
+    /// <exception cref="Exception"></exception>
     private void WriteImages( string outputDir, string scaledPackFileName, List< Page > pages )
     {
         ArgumentNullException.ThrowIfNull( outputDir );
@@ -341,7 +376,7 @@ public class TexturePacker
                 }
             }
 
-            // Create parent directories
+            // Create output directories
             Directory.CreateDirectory( Path.GetDirectoryName( outputFile )
                                        ?? throw new GdxRuntimeException( "Error creating output directory" ) );
 
@@ -352,7 +387,7 @@ public class TexturePacker
 
             if ( !_settings.Silent )
             {
-                Console.WriteLine( $"Writing {canvas.Width}x{canvas.Height}: {outputFile}" );
+                Logger.Debug( $"Writing {canvas.Width}x{canvas.Height}: {outputFile}" );
             }
 
             if ( page.OutputRects == null )
@@ -535,6 +570,11 @@ public class TexturePacker
         }
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    /// <exception cref="GdxRuntimeException"></exception>
     private static ImageCodecInfo GetEncoder( ImageFormat format )
     {
         var codecs = ImageCodecInfo.GetImageEncoders();
@@ -550,6 +590,12 @@ public class TexturePacker
         throw new GdxRuntimeException( $"Decode for ImageFormat {format} not found" );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="dst"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="argb"></param>
     private static void Plot( Bitmap dst, int x, int y, System.Drawing.Color argb )
     {
         if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) )
@@ -871,11 +917,6 @@ public class TexturePacker
         Process( new Settings(), input, output, packFileName );
     }
 
-    public static void Process( Settings settings, string input, string output, string packFileName )
-    {
-        Process( settings, input, output, packFileName, null );
-    }
-
     /// <summary>
     /// </summary>
     /// <param name="settings"></param>
@@ -883,12 +924,16 @@ public class TexturePacker
     /// <param name="output"> Directory where the pack file and page images will be written. </param>
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
     /// <param name="progress"> May be null. </param>
-    public static void Process( Settings settings, string input, string output, string packFileName, ProgressListener? progress )
+    public static void Process( Settings settings,
+                                string input,
+                                string output,
+                                string packFileName,
+                                ProgressListener? progress = null )
     {
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
-            processor.Process( new FileInfo( input ), new FileInfo( output ) );
+            processor.Process( input, output );
         }
         catch ( Exception ex )
         {

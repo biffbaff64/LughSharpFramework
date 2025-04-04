@@ -22,9 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -62,7 +64,7 @@ public partial class JsonReader : IJsonReader
     /// </summary>
     /// <param name="json"></param>
     /// <returns></returns>
-    public JsonValue Parse( string json )
+    public JsonValue? Parse( string json )
     {
         var data = json.ToCharArray();
 
@@ -74,7 +76,7 @@ public partial class JsonReader : IJsonReader
     /// <param name="reader"></param>
     /// <returns></returns>
     /// <exception cref="SerializationException"></exception>
-    public JsonValue Parse( TextReader reader )
+    public JsonValue? Parse( TextReader reader )
     {
         var data   = new char[ 1024 ];
         var offset = 0;
@@ -120,7 +122,7 @@ public partial class JsonReader : IJsonReader
     /// <param name="input"></param>
     /// <returns></returns>
     /// <exception cref="SerializationException"></exception>
-    public JsonValue Parse( InputStream input )
+    public JsonValue? Parse( InputStream input )
     {
         StreamReader reader;
 
@@ -136,7 +138,7 @@ public partial class JsonReader : IJsonReader
         return Parse( reader );
     }
 
-    public JsonValue Parse( FileInfo file )
+    public JsonValue? Parse( FileInfo file )
     {
         StreamReader reader;
 
@@ -159,11 +161,10 @@ public partial class JsonReader : IJsonReader
         }
     }
 
-    public JsonValue Parse( char[] data, int offset, int length )
+    [SuppressMessage( "ReSharper", "ConditionIsAlwaysTrueOrFalse" )]
+    public JsonValue? Parse( char[] data, int offset, int length )
     {
         var p                = offset;
-        var pe               = length;
-        var eof              = pe;
         var stack            = new int[ 4 ];
         var s                = 0;
         var nameList         = new List< string >( 8 );
@@ -187,7 +188,7 @@ public partial class JsonReader : IJsonReader
             {
                 if ( gotoTarg == 0 )
                 {
-                    if ( p == pe )
+                    if ( p == length )
                     {
                         gotoTarg = 4;
 
@@ -294,6 +295,8 @@ public partial class JsonReader : IJsonReader
 
                         while ( nacts-- > 0 )
                         {
+                            string? name;
+
                             switch ( _jsonActions[ acts++ ] )
                             {
                                 case 0:
@@ -321,7 +324,7 @@ public partial class JsonReader : IJsonReader
                                     }
                                     else
                                     {
-                                        string name = nameList.size > 0 ? nameList.pop() : null;
+                                        name = nameList.Count > 0 ? nameList.Pop() : null;
 
                                         if ( stringIsUnquoted )
                                         {
@@ -329,7 +332,7 @@ public partial class JsonReader : IJsonReader
                                             {
                                                 Logger.Debug( "bool: " + name + "=true" );
 
-                                                Boolean( name, true );
+                                                AddBooleanChild( name, true );
 
                                                 goto outer;
                                             }
@@ -338,14 +341,14 @@ public partial class JsonReader : IJsonReader
                                             {
                                                 Logger.Debug( "bool: " + name + "=false" );
 
-                                                Boolean( name, false );
+                                                AddBooleanChild( name, false );
 
                                                 goto outer;
                                             }
 
                                             if ( value.Equals( "null" ) )
                                             {
-                                                String( name, null );
+                                                AddStringChild( name, null );
 
                                                 goto outer;
                                             }
@@ -393,11 +396,11 @@ public partial class JsonReader : IJsonReader
                                                 {
                                                     Logger.Debug( "double: " + name + "=" + double.Parse( value ) );
 
-                                                    Number( name, ( double )double.Parse( value ), value );
+                                                    AddNumberChild( name, ( double )double.Parse( value ), value );
 
                                                     goto outer;
                                                 }
-                                                catch ( ArithmeticException ignored )
+                                                catch ( ArithmeticException )
                                                 {
                                                 }
                                             }
@@ -407,7 +410,7 @@ public partial class JsonReader : IJsonReader
 
                                                 try
                                                 {
-                                                    Number( name, ( double )long.Parse( value ), value );
+                                                    AddNumberChild( name, ( double )long.Parse( value ), value );
 
                                                     goto outer;
                                                 }
@@ -419,7 +422,7 @@ public partial class JsonReader : IJsonReader
 
                                         Logger.Debug( "string: " + name + "=" + value );
 
-                                        String( name, value );
+                                        AddStringChild( name, value );
                                     }
 
                                     stringIsUnquoted = false;
@@ -428,7 +431,7 @@ public partial class JsonReader : IJsonReader
                                     break;
 
                                 case 2:
-                                    var name = nameList.Count > 0 ? nameList.Pop() : null;
+                                    name = nameList.Count > 0 ? nameList.Pop() : null;
 
                                     Logger.Debug( "startObject: " + name );
 
@@ -459,7 +462,7 @@ public partial class JsonReader : IJsonReader
                                     goto _goto;
 
                                 case 4:
-                                    var name = nameList.Count > 0 ? nameList.Pop() : null;
+                                    name = nameList.Count > 0 ? nameList.Pop() : null;
 
                                     Logger.Debug( $"startArray: {name}" );
 
@@ -495,7 +498,7 @@ public partial class JsonReader : IJsonReader
 
                                     if ( data[ p++ ] == '/' )
                                     {
-                                        while ( ( p != eof ) && ( data[ p ] != '\n' ) )
+                                        while ( ( p != length ) && ( data[ p ] != '\n' ) )
                                         {
                                             p++;
                                         }
@@ -504,7 +507,7 @@ public partial class JsonReader : IJsonReader
                                     }
                                     else
                                     {
-                                        while ( ( ( ( p + 1 ) < eof ) && ( data[ p ] != '*' ) ) || ( data[ p + 1 ] != '/' ) )
+                                        while ( ( ( ( p + 1 ) < length ) && ( data[ p ] != '*' ) ) || ( data[ p + 1 ] != '/' ) )
                                         {
                                             p++;
                                         }
@@ -537,7 +540,7 @@ public partial class JsonReader : IJsonReader
                                                     break;
 
                                                 case '/':
-                                                    if ( ( p + 1 ) == eof )
+                                                    if ( ( p + 1 ) == length )
                                                     {
                                                         break;
                                                     }
@@ -561,7 +564,7 @@ public partial class JsonReader : IJsonReader
 
                                             p++;
 
-                                            if ( p == eof )
+                                            if ( p == length )
                                             {
                                                 break;
                                             }
@@ -581,7 +584,7 @@ public partial class JsonReader : IJsonReader
                                                     break;
 
                                                 case '/':
-                                                    if ( ( p + 1 ) == eof )
+                                                    if ( ( p + 1 ) == length )
                                                     {
                                                         break;
                                                     }
@@ -607,7 +610,7 @@ public partial class JsonReader : IJsonReader
 
                                             p++;
 
-                                            if ( p == eof )
+                                            if ( p == length )
                                             {
                                                 break;
                                             }
@@ -616,7 +619,7 @@ public partial class JsonReader : IJsonReader
 
                                     p--;
 
-                                    while ( Character.IsSpace( data[ p ] ) )
+                                    while ( CharacterUtils.IsSpaceChar( data[ p ] ) )
                                     {
                                         p--;
                                     }
@@ -624,15 +627,12 @@ public partial class JsonReader : IJsonReader
                                     break;
 
                                 case 8:
-                                    if ( debug )
-                                    {
-                                        System.out.
-                                    }
+                                    Logger.Debug( "quotedChars" );
 
-                                    println( "quotedChars" );
                                     s             = ++p;
                                     needsUnescape = false;
-                                outer:
+                                    
+                                outer4:
 
                                     while ( true )
                                     {
@@ -645,13 +645,14 @@ public partial class JsonReader : IJsonReader
                                                 break;
 
                                             case '"':
-                                                break outer;
+                                                goto outer4;
                                         }
 
-                                        // if (debug) System.out.println("quotedChar: '" + data[p] + "'");
+                                        Logger.Debug( "quotedChar: '" + data[ p ] + "'" );
+
                                         p++;
 
-                                        if ( p == eof )
+                                        if ( p == length )
                                         {
                                             break;
                                         }
@@ -674,7 +675,7 @@ public partial class JsonReader : IJsonReader
                         goto _goto;
                     }
 
-                    if ( ++p != pe )
+                    if ( ++p != length )
                     {
                         gotoTarg = 1;
 
@@ -684,7 +685,7 @@ public partial class JsonReader : IJsonReader
 
                 if ( gotoTarg == 4 )
                 {
-                    if ( p == eof )
+                    if ( p == length )
                     {
                         int acts  = _jsonEofActions[ cs ];
                         var nacts = ( int )_jsonActions[ acts++ ];
@@ -721,7 +722,7 @@ public partial class JsonReader : IJsonReader
                                             {
                                                 Logger.Debug( $"bool: {name}=true" );
 
-                                                Boolean( name, true );
+                                                AddBooleanChild( name, true );
 
                                                 goto outer;
                                             }
@@ -730,14 +731,14 @@ public partial class JsonReader : IJsonReader
                                             {
                                                 Logger.Debug( $"bool: {name}=false" );
 
-                                                Boolean( name, false );
+                                                AddBooleanChild( name, false );
 
                                                 goto outer;
                                             }
 
                                             if ( value.Equals( "null" ) )
                                             {
-                                                String( name, null );
+                                                AddStringChild( name, null );
 
                                                 goto outer;
                                             }
@@ -786,11 +787,11 @@ public partial class JsonReader : IJsonReader
                                                 {
                                                     Logger.Debug( $"double: {name}={double.Parse( value )}" );
 
-                                                    Number( name, ( double )double.Parse( value ), value );
+                                                    AddNumberChild( name, ( double )double.Parse( value ), value );
 
                                                     goto outer;
                                                 }
-                                                catch ( ArithmeticException ignored )
+                                                catch ( ArithmeticException )
                                                 {
                                                 }
                                             }
@@ -800,11 +801,11 @@ public partial class JsonReader : IJsonReader
 
                                                 try
                                                 {
-                                                    Number( name, ( double )long.Parse( value ), value );
+                                                    AddNumberChild( name, ( double )long.Parse( value ), value );
 
                                                     goto outer;
                                                 }
-                                                catch ( ArithmeticException ignored )
+                                                catch ( ArithmeticException )
                                                 {
                                                 }
                                             }
@@ -812,7 +813,7 @@ public partial class JsonReader : IJsonReader
 
                                         Logger.Debug( $"string: {name}={value}" );
 
-                                        String( name, value );
+                                        AddStringChild( name, value );
                                     }
 
                                     stringIsUnquoted = false;
@@ -837,7 +838,7 @@ public partial class JsonReader : IJsonReader
         _current = null!;
         _lastChild.Clear();
 
-        if ( p < pe )
+        if ( p < length )
         {
             var lineNumber = 1;
 
@@ -851,10 +852,9 @@ public partial class JsonReader : IJsonReader
 
             var start = Math.Max( 0, p - 32 );
 
-            //TODO: Why??
             throw new SerializationException( $"Error parsing JSON on line {lineNumber} near: " +
                                               $"{new string( data, start, p - start )}*ERROR*" +
-                                              $"{new string( data, p, Math.Min( 64, pe - p ) )}",
+                                              $"{new string( data, p, Math.Min( 64, length - p ) )}",
                                               parseRuntimeEx );
         }
 
@@ -868,7 +868,6 @@ public partial class JsonReader : IJsonReader
                 throw new SerializationException( "Error parsing JSON, unmatched brace." );
             }
 
-            //TODO: Why??
             throw new SerializationException( "Error parsing JSON, unmatched bracket." );
         }
 
@@ -880,6 +879,10 @@ public partial class JsonReader : IJsonReader
         return root;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="child"></param>
     private void AddChild( string? name, JsonValue child )
     {
         child.Name = name;
@@ -913,6 +916,9 @@ public partial class JsonReader : IJsonReader
         }
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="name"></param>
     protected void StartObject( string? name )
     {
         var value = new JsonValue( JsonValue.ValueTypes.ObjectValue );
@@ -926,6 +932,9 @@ public partial class JsonReader : IJsonReader
         _current = value;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="name"></param>
     protected void StartArray( string? name )
     {
         var value = new JsonValue( JsonValue.ValueTypes.ArrayValue );
@@ -939,6 +948,8 @@ public partial class JsonReader : IJsonReader
         _current = value;
     }
 
+    /// <summary>
+    /// </summary>
     protected void Pop()
     {
         _root = _elements.Pop();
@@ -953,29 +964,52 @@ public partial class JsonReader : IJsonReader
 
     // ========================================================================
 
-    protected void String( string name, string value )
+    /// <summary>
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    protected void AddStringChild( string? name, string? value )
     {
         AddChild( name, new JsonValue( value ) );
     }
 
-    protected void Number( string name, double value, string stringValue )
+    /// <summary>
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <param name="stringValue"></param>
+    protected void AddNumberChild( string? name, double value, string stringValue )
     {
         AddChild( name, new JsonValue( value, stringValue ) );
     }
 
-    protected void Number( string name, long value, string stringValue )
+    /// <summary>
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <param name="stringValue"></param>
+    protected void AddNumberChild( string? name, long value, string stringValue )
     {
         AddChild( name, new JsonValue( value, stringValue ) );
     }
 
-    protected void Boolean( string name, bool value )
+    /// <summary>
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    protected void AddBooleanChild( string? name, bool value )
     {
         AddChild( name, new JsonValue( value ) );
     }
 
     // ========================================================================
 
-    private string Unescape( string value )
+    /// <summary>
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    /// <exception cref="SerializationException"></exception>
+    private static string Unescape( string value )
     {
         var length = value.Length;
         var buffer = new StringBuilder( length + 16 );
