@@ -67,7 +67,7 @@ public class DataInput( Stream input ) : BinaryReader( input )
     /// <summary>
     /// Reads the length and string of UTF8 characters, or null.
     /// </summary>
-    public string? ReadStringUTF8()
+    public string? ReadStringUtf8()
     {
         var charCount = ReadInt( true );
 

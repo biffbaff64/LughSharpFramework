@@ -1166,34 +1166,34 @@ public partial class Json
     // ========================================================================
     // PrettyPrint Methods
 
-    public string PrettyPrint( object obj )
+    public string? PrettyPrint( object obj )
     {
         return PrettyPrint( obj, 0 );
     }
 
-    public string PrettyPrint( string json )
+    public string? PrettyPrint( string json )
     {
         return PrettyPrint( json, 0 );
     }
 
-    public string PrettyPrint( object obj, int singleLineColumns )
+    public string? PrettyPrint( object obj, int singleLineColumns )
     {
         return PrettyPrint( ToJson( obj ), singleLineColumns );
     }
 
-    public string PrettyPrint( string json, int singleLineColumns )
+    public string? PrettyPrint( string json, int singleLineColumns )
     {
-        return new JsonReader().Parse( json ).PrettyPrint( OutputType, singleLineColumns );
+        return new JsonReader().Parse( json )?.PrettyPrint( OutputType, singleLineColumns );
     }
 
-    public string PrettyPrint( object obj, JsonValue.PrettyPrintSettings settings )
+    public string? PrettyPrint( object obj, JsonValue.PrettyPrintSettings settings )
     {
         return PrettyPrint( ToJson( obj ), settings );
     }
 
-    public string PrettyPrint( string json, JsonValue.PrettyPrintSettings settings )
+    public string? PrettyPrint( string json, JsonValue.PrettyPrintSettings settings )
     {
-        return new JsonReader().Parse( json ).PrettyPrint( settings );
+        return new JsonReader().Parse( json )?.PrettyPrint( settings );
     }
 
     // ========================================================================

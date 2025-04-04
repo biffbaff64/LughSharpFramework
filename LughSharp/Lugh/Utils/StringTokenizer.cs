@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.Text;
+using LughSharp.Lugh.Utils.Guarding;
+
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>
@@ -58,7 +61,7 @@ namespace LughSharp.Lugh.Utils;
 /// StringTokenizer st = new StringTokenizer( "this is a test" );
 /// while ( st.HasMoreTokens() )
 /// {
-/// Console.WriteLine( st.NextToken() );
+///     Console.WriteLine( st.NextToken() );
 /// }
 /// </code>
 /// </para>
@@ -84,7 +87,7 @@ namespace LughSharp.Lugh.Utils;
 /// string[] result = "this is a test".split("\\s");
 /// for ( int x=0; x&lt;result.Length; x++ )
 /// {
-/// Console.WriteLine( result[ x ] );
+///     Console.WriteLine( result[ x ] );
 /// }
 /// </code>
 /// </para>
@@ -117,21 +120,19 @@ public class StringTokenizer
     private bool    _delimsChanged;
 
     /// <summary>
-    /// If delimiters include any surrogates (including surrogate pairs),
-    /// <c>_hasSurrogates</c> is true and the tokenizer uses the different code
-    /// path. This is because <c>string.IndexOf(int)</c> doesn't handle unpaired
-    /// surrogates as a single character.
+    /// If delimiters include any surrogates (including surrogate pairs), <c>_hasSurrogates</c> is
+    /// true and the tokenizer uses the different code path. This is because <c>string.IndexOf(int)</c>
+    /// doesn't handle unpaired surrogates as a single character.
     /// </summary>
     private bool _hasSurrogates = false;
 
     /// <summary>
-    /// maxDelimCodePoint stores the value of the delimiter character with the
-    /// highest value. It is used to optimize the detection of delimiter
-    /// characters.
+    /// maxDelimCodePoint stores the value of the delimiter character with the highest value. It is
+    /// used to optimize the detection of delimiter characters.
     /// <para>
-    /// It is unlikely to provide any optimization benefit in the hasSurrogates
-    /// case because most string characters will be smaller than the limit, but
-    /// we keep it so that the two code paths remain similar.
+    /// It is unlikely to provide any optimization benefit in the hasSurrogates case because most
+    /// string characters will be smaller than the limit, but we keep it so that the two code paths
+    /// remain similar.
     /// </para>
     /// </summary>
     private int _maxDelimCodePoint;
@@ -139,25 +140,22 @@ public class StringTokenizer
     private int _newPosition;
 
     /// <summary>
-    /// Constructs a string tokenizer for the specified string. All characters
-    /// in the <c>delim</c> argument are the delimitersfor separating tokens.
+    /// Constructs a string tokenizer for the specified string. All characters in the <c>delim</c>
+    /// argument are the delimitersfor separating tokens.
     /// <para>
-    /// If the <c>returnDelims</c> flag is <c>true</c>, then the delimiter
-    /// characters are also returned as tokens. Each delimiter is returned as
-    /// a string of length one. If the flag is <c>false</c>, the delimiter
-    /// characters are skipped and only serve as separators between tokens.
+    /// If the <c>returnDelims</c> flag is <c>true</c>, then the delimiter characters are also returned
+    /// as tokens. Each delimiter is returned as a string of length one. If the flag is <c>false</c>,
+    /// the delimiter characters are skipped and only serve as separators between tokens.
     /// </para>
     /// <para>
-    /// Note that if <c>delim</c> is <c>null</c>, this constructor does
-    /// not throw an exception. However, trying to invoke other methods on the
-    /// resulting <c>StringTokenizer</c> may result in a <c>NullReferenceException</c>.
+    /// Note that if <c>delim</c> is <c>null</c>, this constructor does not throw an exception.
+    /// However, trying to invoke other methods on the resulting <c>StringTokenizer</c> may result
+    /// in a <c>NullReferenceException</c>.
     /// </para>
     /// </summary>
     /// <param name="str">a string to be parsed.</param>
     /// <param name="delim">the delimiters.</param>
-    /// <param name="returnDelims">
-    /// flag indicating whether to return the delimiters as tokens.
-    /// </param>
+    /// <param name="returnDelims"> flag indicating whether to return the delimiters as tokens. </param>
     public StringTokenizer( string str, string delim = " \t\n\r\f", bool returnDelims = false )
     {
         _currentPosition = 0;
@@ -191,7 +189,7 @@ public class StringTokenizer
         {
             c = _delimiters[ i ];
 
-            if ( c is >= Character.MIN_HIGH_SURROGATE and <= Character.MAX_LOW_SURROGATE )
+            if ( c is >= CharacterUtils.MIN_HIGH_SURROGATE and <= CharacterUtils.MAX_LOW_SURROGATE )
             {
                 c = char.ConvertToUtf32( _delimiters, i );
 
@@ -222,16 +220,13 @@ public class StringTokenizer
     }
 
     /// <summary>
-    /// Skips delimiters starting from the specified position. If retDelims
-    /// is false, returns the index of the first non-delimiter character at or
-    /// after startPos. If retDelims is true, startPos is returned.
+    /// Skips delimiters starting from the specified position. If retDelims is false, returns the
+    /// index of the first non-delimiter character at or after startPos. If retDelims is true,
+    /// startPos is returned.
     /// </summary>
     private int SkipDelimiters( int startPos )
     {
-        if ( _delimiters == null )
-        {
-            throw new NullReferenceException();
-        }
+        Guard.ThrowIfNull( _delimiters );
 
         var position = startPos;
 
@@ -257,7 +252,7 @@ public class StringTokenizer
                     break;
                 }
 
-                position += Character.CharCount( c );
+                position += CharacterUtils.CharCount( c );
             }
         }
 
@@ -294,7 +289,7 @@ public class StringTokenizer
                     break;
                 }
 
-                position += Character.CharCount( c );
+                position += CharacterUtils.CharCount( c );
             }
         }
 
@@ -315,7 +310,7 @@ public class StringTokenizer
 
                 if ( ( c <= _maxDelimCodePoint ) && IsDelimiter( c ) )
                 {
-                    position += Character.CharCount( c );
+                    position += CharacterUtils.CharCount( c );
                 }
             }
         }
@@ -345,13 +340,13 @@ public class StringTokenizer
     }
 
     /// <summary>
-    /// Tests if there are more tokens available from this tokenizer's string.
-    /// If this method returns <c>true</c>, then a subsequent call to
-    /// <c>nextToken</c> with no argument will successfully return a token.
+    /// Tests if there are more tokens available from this tokenizer's string. If this method returns
+    /// <c>true</c>, then a subsequent call to <c>nextToken</c> with no argument will successfully
+    /// return a token.
     /// </summary>
     /// <returns>
-    /// <c>true</c> if and only if there is at least one token in the string
-    /// after the current position; <c>false</c> otherwise.
+    /// <c>true</c> if and only if there is at least one token in the string after the current position;
+    /// <c>false</c> otherwise.
     /// </returns>
     public bool HasMoreTokens()
     {
@@ -395,13 +390,11 @@ public class StringTokenizer
     }
 
     /// <summary>
-    /// Returns the next token in this string tokenizer's string. First,
-    /// the set of characters considered to be delimiters by this
-    /// <c>StringTokenizer</c> object is changed to be the characters in
-    /// the string <c>delim</c>. Then the next token in the string
-    /// after the current position is returned. The current position is
-    /// advanced beyond the recognized token.  The new delimiter set
-    /// remains the default after this call.
+    /// Returns the next token in this string tokenizer's string. First, the set of characters
+    /// considered to be delimiters by this <c>StringTokenizer</c> object is changed to be the
+    /// characters in the string <c>delim</c>. Then the next token in the string after the current
+    /// position is returned. The current position is advanced beyond the recognized token. The
+    /// new delimiter set remains the default after this call.
     /// </summary>
     /// <param name="delim">the new delimiters.</param>
     /// <returns>the next token, after switching to the new delimiter set.</returns>
@@ -418,9 +411,8 @@ public class StringTokenizer
     }
 
     /// <summary>
-    /// Calculates the number of times that this tokenizer's <c>NextToken</c>
-    /// method can be called before it generates an exception. The current
-    /// position is not advanced.
+    /// Calculates the number of times that this tokenizer's <c>NextToken</c> method can be called
+    /// before it generates an exception. The current position is not advanced.
     /// </summary>
     /// <returns>
     /// the number of tokens remaining in the string using the current delimiter set.
@@ -446,3 +438,4 @@ public class StringTokenizer
         return count;
     }
 }
+

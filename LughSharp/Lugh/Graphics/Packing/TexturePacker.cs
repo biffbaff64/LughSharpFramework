@@ -60,7 +60,7 @@ public class TexturePacker
     /// <param name="rootDir"> The root folder of the source textures. </param>
     /// <param name="settings"> The <see cref="Settings"/> to use when packing. </param>
     /// <exception cref="GdxRuntimeException"></exception>
-    public TexturePacker( FileInfo? rootDir, Settings settings )
+    public TexturePacker( DirectoryInfo? rootDir, Settings settings )
     {
         _settings = settings;
 
@@ -129,7 +129,7 @@ public class TexturePacker
     /// <summary>
     /// </summary>
     /// <param name="rootDir"></param>
-    public void SetRootDir( FileInfo? rootDir )
+    public void SetRootDir( DirectoryInfo? rootDir )
     {
         if ( rootDir == null )
         {

@@ -49,7 +49,7 @@ public class FPSLogger
     /// <summary>
     /// Logs the current frames per second to the console.
     /// </summary>
-    public void Log()
+    public void LogFPS()
     {
         var currentTime = TimeUtils.NanoTime();
         var elapsedTime = TimeSpan.FromTicks( currentTime - _lastLogTime );

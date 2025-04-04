@@ -27,6 +27,8 @@ using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Guarding;
 using LughSharp.Lugh.Utils.Json;
 
@@ -34,7 +36,7 @@ namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public class TexturePackerFileProcessor : FileProcessor
+public partial class TexturePackerFileProcessor : FileProcessor
 {
     private readonly TexturePacker.Settings          _defaultSettings;
     private readonly TexturePacker.ProgressListener? _progressListener;
@@ -163,8 +165,10 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="files"></param>
     /// <param name="outputRoot"></param>
     /// <returns></returns>
-    public List< Entry > Process( FileInfo[] files, FileInfo outputRoot )
+    public List< Entry > Process( FileInfo[] files, FileInfo? outputRoot )
     {
+        Guard.ThrowIfNull( outputRoot );
+        
         // Delete pack file and images.
         if ( _countOnly && outputRoot.Exists )
         {
@@ -201,7 +205,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <summary>
     /// </summary>
     /// <param name="outputRoot"></param>
-    protected void DeleteOutput( FileInfo outputRoot )
+    protected void DeleteOutput( FileInfo? outputRoot )
     {
         // Load root settings to get scale.
         var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, "pack.json" ) );
@@ -215,11 +219,11 @@ public class TexturePackerFileProcessor : FileProcessor
 
         var atlasExtension       = rootSettings.AtlasExtension;
         var quotedAtlasExtension = Regex.Escape( atlasExtension );
-        
+
         for ( int i = 0, n = rootSettings.Scale.Length; i < n; i++ )
         {
             var deleteProcessor = new DeleteProcessor();
-            deleteProcessor.OnDeleteFile += ( Entry inputFile ) => inputFile.InputFile?.Delete();
+            deleteProcessor.OnProcessFile += ( Entry inputFile ) => inputFile.InputFile?.Delete();
             deleteProcessor.SetRecursive( false );
 
             var packFile = new FileInfo( rootSettings.GetScaledPackFileName( _packFileName, i ) );
@@ -240,7 +244,7 @@ public class TexturePackerFileProcessor : FileProcessor
             {
                 deleteProcessor.Process( outputRoot, null );
             }
-            else if ( Directory.Exists( Path.Combine( outputRoot.FullName, dir ) ) )
+            else if ( Directory.Exists( Path.Combine( outputRoot!.FullName, dir ) ) )
             {
                 deleteProcessor.Process( new FileInfo( Path.Combine( outputRoot.FullName, dir ) ), null );
             }
@@ -290,15 +294,18 @@ public class TexturePackerFileProcessor : FileProcessor
 
         if ( settings.CombineSubdirectories )
         {
-            // Collect all files under subdirectories except those with a pack.json file. A directory with its own settings can't be
-            // combined since combined directories must use the settings of the parent directory.
-            files = new FileProcessor( this )
+            // Collect all files under subdirectories except those with a pack.json file.
+            // A directory with its own settings can't be combined since combined directories
+            // must use the settings of the parent directory.
+            if ( settings.CombineSubdirectories )
             {
-                ProcessDir = ( Entry entryDir, List< Entry > fileList ) =>
-                {
-                    FileInfo file = entryDir.InputFile;
+                var combiningProcessor = new CombiningProcessor();
 
-                    while ( ( file != null ) && !file.Equals( inputDir.InputFile ) )
+                combiningProcessor.OnProcessDir += ( entryDir, fileList ) =>
+                {
+                    for ( var file = ( DirectoryInfo? )entryDir.InputFile;
+                         ( file != null ) && !file.Equals( inputDir.InputFile );
+                         file = file.Parent )
                     {
                         if ( new FileInfo( Path.Combine( file.FullName, "pack.json" ) ).Exists )
                         {
@@ -306,126 +313,158 @@ public class TexturePackerFileProcessor : FileProcessor
 
                             return;
                         }
-
-                        file = file.Parent;
                     }
 
-                    if ( !_countOnly ) _dirsToIgnore.Add( entryDir.InputFile );
-                },
-                ProcessFile = ( Entry entry ) => AddProcessedFile( entry )
-            }.Process( inputDir.InputFile, null );
-        }
+                    if ( !this._countOnly )
+                    {
+                        this._dirsToIgnore.Add( ( DirectoryInfo )entryDir.InputFile! );
+                    }
+                };
 
-        if ( files.Count == 0 ) return;
+                combiningProcessor.OnProcessFile += ( entry ) => combiningProcessor.AddProcessedFile( entry );
 
-        if ( _countOnly )
-        {
-            _packCount++;
+                files = combiningProcessor.Process( ( FileInfo? )inputDir.InputFile, null ).ToList();
+            }
 
-            return;
-        }
+            if ( files.Count == 0 )
+            {
+                return;
+            }
 
-        // Sort by name using numeric suffix, then alpha.
-        files.Sort( ( entry1, entry2 ) =>
-        {
-            var full1                   = entry1.InputFile.Name;
-            var dotIndex                = full1.LastIndexOf( '.' );
-            if ( dotIndex != -1 ) full1 = full1.Substring( 0, dotIndex );
+            if ( _countOnly )
+            {
+                _packCount++;
 
-            var full2 = entry2.InputFile.Name;
-            dotIndex = full2.LastIndexOf( '.' );
-            if ( dotIndex != -1 ) full2 = full2.Substring( 0, dotIndex );
+                return;
+            }
 
-            string name1 = full1, name2 = full2;
-            int    num1  = 0,     num2  = 0;
+            // Sort by name using numeric suffix, then alpha.
+            files.Sort( ( entry1, entry2 ) =>
+            {
+                var full1    = entry1.InputFile?.Name;
+                var dotIndex = full1?.LastIndexOf( '.' );
 
-            var matcher = Regex.Match( full1, "(.*?)(\\d+)$" );
+                if ( dotIndex != -1 )
+                {
+                    full1 = full1?.Substring( 0, ( int )dotIndex! );
+                }
 
-            if ( matcher.Success )
+                var full2 = entry2.InputFile?.Name;
+                dotIndex = full2?.LastIndexOf( '.' );
+
+                if ( dotIndex != -1 )
+                {
+                    full2 = full2?.Substring( 0, ( int )dotIndex! );
+                }
+
+                var name1 = full1;
+                var name2 = full2;
+                var num1  = 0;
+                var num2  = 0;
+
+                var matcher = MyRegex1().Match( full1! );
+
+                if ( matcher.Success )
+                {
+                    try
+                    {
+                        num1  = int.Parse( matcher.Groups[ 2 ].Value );
+                        name1 = matcher.Groups[ 1 ].Value;
+                    }
+                    catch ( Exception e )
+                    {
+                        Logger.Error( $"Exception ignored: {e.Message}" );
+                    }
+                }
+
+                matcher = MyRegex1().Match( full2! );
+
+                if ( matcher.Success )
+                {
+                    try
+                    {
+                        num2  = int.Parse( matcher.Groups[ 2 ].Value );
+                        name2 = matcher.Groups[ 1 ].Value;
+                    }
+                    catch ( Exception e )
+                    {
+                        Logger.Error( $"Exception ignored: {e.Message}" );
+                    }
+                }
+
+                var compare = string.Compare( name1, name2, StringComparison.Ordinal );
+
+                if ( ( compare != 0 ) || ( num1 == num2 ) )
+                {
+                    return compare;
+                }
+
+                return num1 - num2;
+            } );
+
+            // Pack.
+            if ( !settings.Silent )
             {
                 try
                 {
-                    num1  = int.Parse( matcher.Groups[ 2 ].Value );
-                    name1 = matcher.Groups[ 1 ].Value;
+                    Console.WriteLine( "Reading: " + inputDir.InputFile?.FullName );
                 }
-                catch ( Exception )
+                catch ( IOException )
                 {
+                    Console.WriteLine( "Reading: " + inputDir.InputFile?.FullName );
                 }
             }
 
-            matcher = Regex.Match( full2, "(.*?)(\\d+)$" );
-
-            if ( matcher.Success )
+            if ( _progressListener != null )
             {
+                _progressListener.Start( 1f / _packCount );
+
+                string? inputPath = null;
+
                 try
                 {
-                    num2  = int.Parse( matcher.Groups[ 2 ].Value );
-                    name2 = matcher.Groups[ 1 ].Value;
+                    var rootPath = _rootDirectory.FullName;
+                    inputPath = inputDir.InputFile!.FullName;
+
+                    if ( inputPath.StartsWith( rootPath ) )
+                    {
+                        rootPath  = rootPath.Replace( '\\', '/' );
+                        inputPath = inputPath.Substring( rootPath.Length ).Replace( '\\', '/' );
+
+                        if ( inputPath.StartsWith( '/' ) )
+                        {
+                            inputPath = inputPath.Substring( 1 );
+                        }
+                    }
                 }
-                catch ( Exception )
+                catch ( IOException )
                 {
                 }
-            }
 
-            var compare = name1.CompareTo( name2 );
-
-            if ( ( compare != 0 ) || ( num1 == num2 ) ) return compare;
-
-            return num1 - num2;
-        } );
-
-        // Pack.
-        if ( !settings.silent )
-        {
-            try
-            {
-                Console.WriteLine( "Reading: " + inputDir.InputFile.FullName );
-            }
-            catch ( IOException )
-            {
-                Console.WriteLine( "Reading: " + inputDir.InputFile.FullName );
-            }
-        }
-
-        if ( _progressListener != null )
-        {
-            _progressListener.Start( 1f / _packCount );
-            string inputPath = null;
-
-            try
-            {
-                var rootPath = _rootDirectory.FullName;
-                inputPath = inputDir.InputFile.FullName;
-
-                if ( inputPath.StartsWith( rootPath ) )
+                if ( ( inputPath == null ) || ( inputPath.Length == 0 ) )
                 {
-                    rootPath  = rootPath.Replace( '\\', '/' );
-                    inputPath = inputPath.Substring( rootPath.Length ).Replace( '\\', '/' );
-                    if ( inputPath.StartsWith( "/" ) ) inputPath = inputPath.Substring( 1 );
+                    inputPath = inputDir.InputFile?.Name;
                 }
+
+                _progressListener.Message = inputPath!;
             }
-            catch ( IOException )
+
+            var packer = NewTexturePacker( _rootDirectory, settings );
+
+            foreach ( var file in files )
             {
+                if ( file.InputFile == null )
+                {
+                    continue;
+                }
+
+                packer.AddImage( ( FileInfo )file.InputFile );
             }
 
-            if ( ( inputPath == null ) || ( inputPath.Length == 0 ) )
-            {
-                inputPath = inputDir.InputFile.Name;
-            }
+            Pack( packer, inputDir );
 
-            _progressListener.Message = inputPath;
+            _progressListener?.End();
         }
-
-        var packer = NewTexturePacker( _rootDirectory, settings );
-
-        foreach ( var file in files )
-        {
-            packer.AddImage( ( FileInfo )file.InputFile );
-        }
-
-        Pack( packer, inputDir );
-
-        _progressListener?.End();
     }
 
     /// <summary>
@@ -434,6 +473,11 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="inputDir"></param>
     protected virtual void Pack( TexturePacker packer, Entry inputDir )
     {
+        if ( inputDir.OutputDirectory == null )
+        {
+            throw new GdxRuntimeException( "Cannot perform Pack, output directory is null" );
+        }
+        
         packer.Pack( inputDir.OutputDirectory, _packFileName );
     }
 
@@ -442,7 +486,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="root"></param>
     /// <param name="settings"></param>
     /// <returns></returns>
-    protected virtual TexturePacker NewTexturePacker( FileInfo root, TexturePacker.Settings settings )
+    protected virtual TexturePacker NewTexturePacker( DirectoryInfo root, TexturePacker.Settings settings )
     {
         var packer = new TexturePacker( root, settings );
         packer.SetProgressListener( _progressListener );
@@ -466,6 +510,8 @@ public class TexturePackerFileProcessor : FileProcessor
     {
         return _progressListener;
     }
+
+    [GeneratedRegex( "(.*?)(\\d+)$" )] private static partial Regex MyRegex1();
 }
 
 // ============================================================================
@@ -494,4 +540,32 @@ public class SettingsProcessor : FileProcessor
 
         base.ProcessFile( entry );
     }
+}
+
+// ============================================================================
+// ============================================================================
+
+[PublicAPI]
+public class CombiningProcessor : FileProcessor
+{
+//    /// <inheritdoc />
+//    public override void ProcessDir( Entry entry, List< Entry > files )
+//    {
+//        for ( var file = ( DirectoryInfo? )entryDir.InputFile;
+//             ( file != null ) && !file.Equals( inputDir.InputFile );
+//             file = file.Parent )
+//        {
+//            if ( new FileInfo( Path.Combine( file.FullName, "pack.json" ) ).Exists )
+//            {
+//                files.Clear();
+//
+//                return;
+//            }
+//        }
+//
+//        if ( !this._countOnly )
+//        {
+//            this._dirsToIgnore.Add( ( DirectoryInfo )entryDir.InputFile! );
+//        }
+//    }
 }

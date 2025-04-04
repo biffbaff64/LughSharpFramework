@@ -23,6 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.Versioning;
 
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -35,7 +37,7 @@ namespace LughSharp.Lugh.Graphics.Packing;
 /// <b>Usage:</b>
 /// <li>instanciate an ImagePacker instance,</li>
 /// <li>load and optionally sort the images you want to add by size (e.g. area),</li>
-/// <li>then insert each image via a call to <see cref="InsertImage(String, Image{Rgba32})"/>.</li>
+/// <li>then insert each image via a call to <see cref="InsertImage(String, Bitmap)"/>.</li>
 /// <para>
 /// When you are done with inserting images you can reference the property <see cref="Image" />
 /// for the actual Image that holds the packed images. Additionally you can get a Dictionary
@@ -78,9 +80,10 @@ namespace LughSharp.Lugh.Graphics.Packing;
 /// </para>
 /// </summary>
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class ImagePacker
 {
-    public Image< Rgba32 >                 Image { get; }
+    public Bitmap                          Image { get; }
     public Dictionary< string, Rectangle > Rects { get; } = new();
 
     // ========================================================================
@@ -104,7 +107,7 @@ public class ImagePacker
     /// <param name="duplicateBorder"> whether to duplicate the border </param>
     public ImagePacker( int width, int height, int padding, bool duplicateBorder )
     {
-        Image            = new Image< Rgba32 >( width, height );
+        Image            = new Bitmap( width, height );
         _padding         = padding;
         _duplicateBorder = duplicateBorder;
         _root            = new Node( 0, 0, width, height );
@@ -118,40 +121,94 @@ public class ImagePacker
     /// <exception cref="GdxRuntimeException">
     /// Thrown when the image does not fit or when an image with the same name already exists.
     /// </exception>
-    public void InsertImage( string name, Image< Rgba32 > image )
+    public void InsertImage( string name, Bitmap image )
     {
-        if ( Rects.ContainsKey( name ) )
+        if ( this.Rects.ContainsKey( name ) )
         {
-            throw new GdxRuntimeException( $"Key with name '{name}' is already in map" );
+            throw new Exception( $"Key with name '{name}' is already in map" );
         }
-
-        var borderPixels = ( _padding + ( _duplicateBorder ? 1 : 0 ) ) * 2;
-        var rect         = new Rectangle( 0, 0, image.Width + borderPixels, image.Height + borderPixels );
-        var node         = Insert( rect );
-
-        if ( node == null )
+        else
         {
-            throw new GdxRuntimeException( "Image didn't fit" );
-        }
+            var borderPixels = this._padding + ( this._duplicateBorder ? 1 : 0 );
+            
+            borderPixels <<= 1;
+            
+            var rect = new Rectangle( 0, 0, image.Width + borderPixels, image.Height + borderPixels );
+            var      node = this.Insert( rect );
 
-        node.LeaveName = name;
-
-        rect = new Rectangle( node.Rect.X + ( borderPixels / 2 ),
-                              node.Rect.Y + ( borderPixels / 2 ),
-                              node.Rect.Width - borderPixels,
-                              node.Rect.Height - borderPixels );
-
-        Rects[ name ] = rect;
-
-        Image.Mutate( ctx =>
-        {
-            ctx.DrawImage( image, new Point( rect.X, rect.Y ), 1f );
-
-            if ( _duplicateBorder )
+            if ( node == null )
             {
-                DuplicateBorder( ctx, image, rect );
+                throw new Exception( "Image didn't fit" );
             }
-        } );
+            else
+            {
+                node.LeaveName =   name;
+                rect           =   new Rectangle( node.Rect.X, node.Rect.Y, node.Rect.Width, node.Rect.Height );
+                rect.Width     -=  borderPixels;
+                rect.Height    -=  borderPixels;
+                borderPixels   >>= 1;
+                rect.X         +=  borderPixels;
+                rect.Y         +=  borderPixels;
+
+                this.Rects.Add( name, rect );
+
+                using ( var g = System.Drawing.Graphics.FromImage( this.Image ) )
+                {
+                    g.DrawImage( image, rect.X, rect.Y );
+
+                    if ( this._duplicateBorder )
+                    {
+                        // Duplicate top border
+                        g.DrawImage( image,
+                                     new Rectangle( rect.X, rect.Y - 1, rect.Width, 1 ),
+                                     new Rectangle( 0, 0, image.Width, 1 ),
+                                     GraphicsUnit.Pixel );
+
+                        // Duplicate bottom border
+                        g.DrawImage( image,
+                                     new Rectangle( rect.X, rect.Y + rect.Height, rect.Width, 1 ),
+                                     new Rectangle( 0, image.Height - 1, image.Width, 1 ),
+                                     GraphicsUnit.Pixel );
+
+                        // Duplicate left border
+                        g.DrawImage( image,
+                                     new Rectangle( rect.X - 1, rect.Y, 1, rect.Height ),
+                                     new Rectangle( 0, 0, 1, image.Height ),
+                                     GraphicsUnit.Pixel );
+
+                        // Duplicate right border
+                        g.DrawImage( image,
+                                     new Rectangle( rect.X + rect.Width, rect.Y, 1, rect.Height ),
+                                     new Rectangle( image.Width - 1, 0, 1, image.Height ),
+                                     GraphicsUnit.Pixel );
+
+                        // Duplicate top-left corner
+                        g.DrawImage( image,
+                                     new Rectangle( rect.X - 1, rect.Y - 1, 1, 1 ),
+                                     new Rectangle( 0, 0, 1, 1 ),
+                                     GraphicsUnit.Pixel );
+
+                        // Duplicate top-right corner
+                        g.DrawImage( image,
+                                     new Rectangle( rect.X + rect.Width, rect.Y - 1, 1, 1 ),
+                                     new Rectangle( image.Width - 1, 0, 1, 1 ),
+                                     GraphicsUnit.Pixel );
+
+                        // Duplicate bottom-left corner
+                        g.DrawImage( image,
+                                     new Rectangle( rect.X - 1, rect.Y + rect.Height, 1, 1 ),
+                                     new Rectangle( 0, image.Height - 1, 1, 1 ),
+                                     GraphicsUnit.Pixel );
+
+                        // Duplicate bottom-right corner
+                        g.DrawImage( image,
+                                     new Rectangle( rect.X + rect.Width, rect.Y + rect.Height, 1, 1 ),
+                                     new Rectangle( image.Width - 1, image.Height - 1, 1, 1 ),
+                                     GraphicsUnit.Pixel );
+                    }
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -200,50 +257,15 @@ public class ImagePacker
     }
 
     /// <summary>
-    /// Duplicates the border of the given image around the specified rectangle to handle padding.
-    /// </summary>
-    /// <param name="ctx">The image processing context.</param>
-    /// <param name="image">The image whose border is to be duplicated.</param>
-    /// <param name="rect">
-    /// The rectangle that outlines where the image should be drawn and the border duplicated.
-    /// </param>
-    private static void DuplicateBorder( IImageProcessingContext ctx, Image< Rgba32 > image, Rectangle rect )
-    {
-        // Top
-        ctx.DrawImage( image, new Point( rect.X, rect.Y - 1 ), new Rectangle( 0, 0, image.Width, 1 ), 1 );
-
-        // Bottom
-        ctx.DrawImage( image, new Point( rect.X, rect.Bottom ), new Rectangle( 0, image.Height - 1, image.Width, 1 ), 1 );
-
-        // Left
-        ctx.DrawImage( image, new Point( rect.X - 1, rect.Y ), new Rectangle( 0, 0, 1, image.Height ), 1 );
-
-        // Right
-        ctx.DrawImage( image, new Point( rect.Right, rect.Y ), new Rectangle( image.Width - 1, 0, 1, image.Height ), 1 );
-
-        // Top-left corner
-        ctx.DrawImage( image, new Point( rect.X - 1, rect.Y - 1 ), new Rectangle( 0, 0, 1, 1 ), 1 );
-
-        // Top-right corner
-        ctx.DrawImage( image, new Point( rect.Right, rect.Y - 1 ), new Rectangle( image.Width - 1, 0, 1, 1 ), 1 );
-
-        // Bottom-left corner
-        ctx.DrawImage( image, new Point( rect.X - 1, rect.Bottom ), new Rectangle( 0, image.Height - 1, 1, 1 ), 1 );
-
-        // Bottom-right corner
-        ctx.DrawImage( image, new Point( rect.Right, rect.Bottom ), new Rectangle( image.Width - 1, image.Height - 1, 1, 1 ), 1 );
-    }
-
-    /// <summary>
     /// Creates a new image with the specified width, height, and background color.
     /// </summary>
     /// <param name="width">The width of the image to create.</param>
     /// <param name="height">The height of the image to create.</param>
-    /// <param name="color">The background color of the image.</param>
+    /// <param name="pixelFormat"></param>
     /// <returns>A new image with the specified dimensions and background color.</returns>
-    private static Image< Rgba32 > CreateImage( int width, int height, SixLabors.ImageSharp.Color color )
+    private static Bitmap CreateImage( int width, int height, PixelFormat pixelFormat )
     {
-        return new Image< Rgba32 >( width, height, color );
+        return new Bitmap( width, height, pixelFormat );
     }
 
     // ========================================================================
@@ -283,3 +305,4 @@ public class ImagePacker
         }
     }
 }
+

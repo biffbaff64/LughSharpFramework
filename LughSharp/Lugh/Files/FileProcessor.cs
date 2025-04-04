@@ -43,17 +43,22 @@ namespace LughSharp.Lugh.Files;
 [PublicAPI]
 public partial class FileProcessor
 {
+    // Delegate to filter filenames in a directory
     public delegate bool FilenameFilter( string directory, string filename );
 
     // Delegate to signal a processed file
     public delegate void FileProcessedHandler( FileInfo file );
 
     // Delegate to process a file
-    public delegate void DeleteFileDelegate( Entry entry );
-    
+    public delegate void ProcessFileDelegate( Entry entry );
+
+    // Delegate to process a directory
+    public delegate void ProcessDirDelegate( Entry entry, List< Entry > files );
+
     // Events based on the delegates
     public event FileProcessedHandler? FileProcessed;
-    public event DeleteFileDelegate?   OnDeleteFile;
+    public event ProcessFileDelegate?  OnProcessFile;
+    public event ProcessDirDelegate?   OnProcessDir;
 
     // ========================================================================
 
@@ -205,7 +210,7 @@ public partial class FileProcessor
     /// <param name="outputRoot"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    public virtual List< Entry > Process( FileInfo inputFileOrDir, DirectoryInfo? outputRoot )
+    public virtual List< Entry > Process( FileInfo? inputFileOrDir, DirectoryInfo? outputRoot )
     {
         if ( !inputFileOrDir.Exists )
         {
@@ -417,7 +422,7 @@ public partial class FileProcessor
         Guard.ThrowIfNull( entry.InputFile );
 
         FileProcessed?.Invoke( ( FileInfo )entry.InputFile );
-        OnDeleteFile?.Invoke( entry );
+        OnProcessFile?.Invoke( entry );
     }
 
     /// <summary>
@@ -442,7 +447,7 @@ public partial class FileProcessor
     /// <summary>
     /// </summary>
     /// <param name="entry"></param>
-    protected void AddProcessedFile( Entry entry )
+    public void AddProcessedFile( Entry entry )
     {
         OutputFilesList.Add( entry );
     }
