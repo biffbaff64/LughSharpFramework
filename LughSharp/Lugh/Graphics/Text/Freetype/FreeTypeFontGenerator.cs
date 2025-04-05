@@ -661,7 +661,7 @@ public class FreeTypeFontGenerator : IDisposable
     protected BitmapFont.Glyph? CreateGlyph( char c,
                                              FreeTypeBitmapFontData data,
                                              FreeTypeFontParameter parameter,
-                                             FreeType.Stroker stroker,
+                                             FreeType.Stroker? stroker,
                                              float baseLine,
                                              PixmapPacker packer )
     {
@@ -879,9 +879,6 @@ public class FreeTypeFontGenerator : IDisposable
     /// The power-of-two square texture size will be capped to the given <see cref="texSize" />.
     /// It is recommended that a power-of-two value be used here.
     /// Multiple pages may be used to fit all the generated glyphs.
-    /// You can query the resulting number of pages by calling <see cref="BitmapFont.GetRegions().Length" />
-    /// or <see cref="FreeTypeFontGenerator.FreeTypeBitmapFontData.GetRegions().Length" />.
-    /// If PixmapPacker is specified when calling generateData, this parameter is ignored.
     /// </summary>
     /// <param name="texSize"> the maximum texture size for one page of glyphs </param>
     public static void SetMaxTextureSize( int texSize )

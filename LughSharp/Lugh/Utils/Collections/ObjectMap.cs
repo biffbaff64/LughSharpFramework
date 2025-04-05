@@ -211,7 +211,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// </returns>
     /// <exception cref="ArgumentNullException">Thrown when the key is null.</exception>
     /// <exception cref="NullReferenceException">Thrown when the KeyTable is null.</exception>
-    protected int LocateKey( TK key )
+    public virtual int LocateKey( TK key )
     {
         ArgumentNullException.ThrowIfNull( key );
 

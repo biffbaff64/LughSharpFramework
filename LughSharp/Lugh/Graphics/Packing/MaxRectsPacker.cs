@@ -28,6 +28,7 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Guarding;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
@@ -114,7 +115,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
         List< TexturePacker.Page > pages = [ ];
 
-        while ( inputRects?.Count > 0 )
+        while ( inputRects.Count > 0 )
         {
             progress.Count = ( n - inputRects.Count ) + 1;
 
@@ -280,8 +281,6 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
             bestResult.Width  = Math.Max( bestResult.Width, bestResult.Height ) - paddingX;
             bestResult.Height = Math.Max( bestResult.Width, bestResult.Height ) - paddingY;
-
-            return bestResult;
         }
         else
         {
@@ -347,16 +346,23 @@ public class MaxRectsPacker : TexturePacker.IPacker
                 bestResult = PackAtSize( false, _settings.MaxWidth + adjustX, _settings.MaxHeight + adjustY, inputRects );
             }
 
-            _sort.Sort( bestResult.OutputRects, _rectComparator );
+            _sort.Sort( bestResult!.OutputRects, _rectComparator );
             bestResult.Width  -= paddingX;
             bestResult.Height -= paddingY;
-
-            return bestResult;
         }
+
+        return bestResult;
     }
 
-    /** @param fully If true, the only results that pack all rects will be considered. If false, all results are considered, not
-     *           all rects may be packed. */
+    /// <summary>
+    /// </summary>
+    /// <param name="fully">
+    /// If true, the only results that pack all rects will be considered. If false, all results
+    /// are considered, not all rects may be packed.
+    /// </param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="inputRects"></param>
     private TexturePacker.Page? PackAtSize( bool fully, int width, int height, List< TexturePacker.Rect > inputRects )
     {
         TexturePacker.Page? bestResult = null;
@@ -391,8 +397,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
                 result.RemainingRects = remaining;
             }
 
-            if ( ( fully && ( result.RemainingRects?.Count > 0 ) )
-                 || ( result.OutputRects?.Count == 0 ) )
+            if ( ( fully && ( result.RemainingRects?.Count > 0 ) ) || ( result.OutputRects?.Count == 0 ) )
             {
                 continue;
             }
@@ -418,6 +423,9 @@ public class MaxRectsPacker : TexturePacker.IPacker
         return result1.Occupancy > result2.Occupancy ? result1 : result2;
     }
 
+    // ========================================================================
+
+    [PublicAPI]
     public class BinarySearch
     {
         private readonly bool _pot;
@@ -508,16 +516,19 @@ public class MaxRectsPacker : TexturePacker.IPacker
         }
     }
 
+    // ========================================================================
+
     /// <summary>
     /// Maximal rectangles bin packing algorithm. Adapted from this C++ public domain source:
     /// http://clb.demon.fi/projects/even-more-rectangle-bin-packing
     /// </summary>
     private class MaxRects
     {
-        private          int                        _binWidth;
-        private          int                        _binHeight;
         private readonly List< TexturePacker.Rect > _usedRectangles = [ ];
         private readonly List< TexturePacker.Rect > _freeRectangles = [ ];
+
+        private int _binWidth;
+        private int _binHeight;
 
         public void Init( int width, int height )
         {
@@ -538,10 +549,14 @@ public class MaxRectsPacker : TexturePacker.IPacker
             _freeRectangles.Add( n );
         }
 
-        /** Packs a single image. Order is defined externally. */
+        /// <summary>
+        /// Packs a single image. Order is defined externally.
+        /// </summary>
         public TexturePacker.Rect? Insert( TexturePacker.Rect rect, FreeRectChoiceHeuristic method )
         {
             var newNode = ScoreRect( rect, method );
+
+            Guard.ThrowIfNull( newNode );
 
             if ( newNode.Height == 0 )
             {
@@ -577,7 +592,9 @@ public class MaxRectsPacker : TexturePacker.IPacker
             return bestNode;
         }
 
-        /** For each rectangle, packs each one then chooses the best and packs that. Slow! */
+        /// <summary>
+        /// For each rectangle, packs each one then chooses the best and packs that. Slow!
+        /// </summary>
         public TexturePacker.Page Pack( List< TexturePacker.Rect > rects, FreeRectChoiceHeuristic method )
         {
             rects = new List< TexturePacker.Rect >( rects ); //TODO: ??
@@ -585,17 +602,19 @@ public class MaxRectsPacker : TexturePacker.IPacker
             while ( rects.Count > 0 )
             {
                 var bestRectIndex = -1;
-                var bestNode      = new TexturePacker.Rect();
-                bestNode.Score1 = int.MaxValue;
-                bestNode.Score2 = int.MaxValue;
+                var bestNode = new TexturePacker.Rect
+                {
+                    Score1 = int.MaxValue,
+                    Score2 = int.MaxValue,
+                };
 
                 // Find the next rectangle that packs best.
                 for ( var i = 0; i < rects.Count; i++ )
                 {
                     var newNode = ScoreRect( rects[ i ], method );
 
-                    if ( ( newNode.Score1 < bestNode.Score1 )
-                         || ( ( newNode.Score1 == bestNode.Score1 ) && ( newNode.Score2 < bestNode.Score2 ) ) )
+                    if ( ( newNode?.Score1 < bestNode.Score1 )
+                         || ( ( newNode?.Score1 == bestNode.Score1 ) && ( newNode.Score2 < bestNode.Score2 ) ) )
                     {
                         bestNode.Set( rects[ i ] );
                         bestNode.Score1  = newNode.Score1;
@@ -628,18 +647,19 @@ public class MaxRectsPacker : TexturePacker.IPacker
         {
             int w = 0, h = 0;
 
-            for ( var i = 0; i < _usedRectangles.Count; i++ )
+            foreach ( var rect in _usedRectangles )
             {
-                var rect = _usedRectangles[ i ];
                 w = Math.Max( w, rect.X + rect.Width );
                 h = Math.Max( h, rect.Y + rect.Height );
             }
 
-            var result = new TexturePacker.Page();
-            result.OutputRects = [ ];
-            result.Occupancy   = GetOccupancy();
-            result.Width       = w;
-            result.Height      = h;
+            var result = new TexturePacker.Page
+            {
+                OutputRects = [ ],
+                Occupancy   = GetOccupancy(),
+                Width       = w,
+                Height      = h,
+            };
 
             return result;
         }
@@ -663,7 +683,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
             _usedRectangles.Add( node );
         }
 
-        private TexturePacker.Rect ScoreRect( TexturePacker.Rect rect, FreeRectChoiceHeuristic method )
+        private TexturePacker.Rect? ScoreRect( TexturePacker.Rect rect, FreeRectChoiceHeuristic method )
         {
             var width         = rect.Width;
             var height        = rect.Height;
@@ -671,7 +691,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
             var rotatedHeight = ( width - _settings.PaddingX ) + _settings.PaddingY;
             var rotate        = rect.CanRotate && _settings.Rotation;
 
-            TexturePacker.Rect newNode = null;
+            TexturePacker.Rect? newNode;
 
             switch ( method )
             {
@@ -700,10 +720,15 @@ public class MaxRectsPacker : TexturePacker.IPacker
                     newNode = FindPositionForNewNodeBestAreaFit( width, height, rotatedWidth, rotatedHeight, rotate );
 
                     break;
+
+                default:
+                    newNode = null;
+
+                    break;
             }
 
             // Cannot fit the current rectangle.
-            if ( newNode.Height == 0 )
+            if ( newNode?.Height == 0 )
             {
                 newNode.Score1 = int.MaxValue;
                 newNode.Score2 = int.MaxValue;
@@ -717,54 +742,58 @@ public class MaxRectsPacker : TexturePacker.IPacker
         {
             var usedSurfaceArea = 0;
 
-            for ( var i = 0; i < _usedRectangles.Count; i++ )
+            foreach ( var rect in _usedRectangles )
             {
-                usedSurfaceArea += _usedRectangles[ i ].Width * _usedRectangles[ i ].Height;
+                usedSurfaceArea += rect.Width * rect.Height;
             }
 
             return ( float )usedSurfaceArea / ( _binWidth * _binHeight );
         }
 
-        private TexturePacker.Rect FindPositionForNewNodeBottomLeft( int width, int height, int rotatedWidth, int rotatedHeight,
+        private TexturePacker.Rect FindPositionForNewNodeBottomLeft( int width,
+                                                                     int height,
+                                                                     int rotatedWidth,
+                                                                     int rotatedHeight,
                                                                      bool rotate )
         {
-            var bestNode = new TexturePacker.Rect();
+            var bestNode = new TexturePacker.Rect
+            {
+                Score1 = int.MaxValue, // best y, _score2 is best x
+            };
 
-            bestNode.Score1 = int.MaxValue; // best y, _score2 is best x
-
-            for ( var i = 0; i < _freeRectangles.Count; i++ )
+            foreach ( var rect in _freeRectangles )
             {
                 // Try to place the rectangle in upright (non-rotated) orientation.
-                if ( ( _freeRectangles[ i ].Width >= width ) && ( _freeRectangles[ i ].Height >= height ) )
+                if ( ( rect.Width >= width ) && ( rect.Height >= height ) )
                 {
-                    var topSideY = _freeRectangles[ i ].Y + height;
+                    var topSideY = rect.Y + height;
 
                     if ( ( topSideY < bestNode.Score1 ) ||
-                         ( ( topSideY == bestNode.Score1 ) && ( _freeRectangles[ i ].X < bestNode.Score2 ) ) )
+                         ( ( topSideY == bestNode.Score1 ) && ( rect.X < bestNode.Score2 ) ) )
                     {
-                        bestNode.X       = _freeRectangles[ i ].X;
-                        bestNode.Y       = _freeRectangles[ i ].Y;
+                        bestNode.X       = rect.X;
+                        bestNode.Y       = rect.Y;
                         bestNode.Width   = width;
                         bestNode.Height  = height;
                         bestNode.Score1  = topSideY;
-                        bestNode.Score2  = _freeRectangles[ i ].X;
+                        bestNode.Score2  = rect.X;
                         bestNode.Rotated = false;
                     }
                 }
 
-                if ( rotate && ( _freeRectangles[ i ].Width >= rotatedWidth ) && ( _freeRectangles[ i ].Height >= rotatedHeight ) )
+                if ( rotate && ( rect.Width >= rotatedWidth ) && ( rect.Height >= rotatedHeight ) )
                 {
-                    var topSideY = _freeRectangles[ i ].Y + rotatedHeight;
+                    var topSideY = rect.Y + rotatedHeight;
 
                     if ( ( topSideY < bestNode.Score1 ) ||
-                         ( ( topSideY == bestNode.Score1 ) && ( _freeRectangles[ i ].X < bestNode.Score2 ) ) )
+                         ( ( topSideY == bestNode.Score1 ) && ( rect.X < bestNode.Score2 ) ) )
                     {
-                        bestNode.X       = _freeRectangles[ i ].X;
-                        bestNode.Y       = _freeRectangles[ i ].Y;
+                        bestNode.X       = rect.X;
+                        bestNode.Y       = rect.Y;
                         bestNode.Width   = rotatedWidth;
                         bestNode.Height  = rotatedHeight;
                         bestNode.Score1  = topSideY;
-                        bestNode.Score2  = _freeRectangles[ i ].X;
+                        bestNode.Score2  = rect.X;
                         bestNode.Rotated = true;
                     }
                 }
@@ -779,24 +808,26 @@ public class MaxRectsPacker : TexturePacker.IPacker
                                                                            int rotatedHeight,
                                                                            bool rotate )
         {
-            var bestNode = new TexturePacker.Rect();
-            bestNode.Score1 = int.MaxValue;
+            var bestNode = new TexturePacker.Rect
+            {
+                Score1 = int.MaxValue,
+            };
 
-            for ( var i = 0; i < _freeRectangles.Count; i++ )
+            foreach ( var rect in _freeRectangles )
             {
                 // Try to place the rectangle in upright (non-rotated) orientation.
-                if ( ( _freeRectangles[ i ].Width >= width ) && ( _freeRectangles[ i ].Height >= height ) )
+                if ( ( rect.Width >= width ) && ( rect.Height >= height ) )
                 {
-                    var leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - width );
-                    var leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - height );
+                    var leftoverHoriz = Math.Abs( rect.Width - width );
+                    var leftoverVert  = Math.Abs( rect.Height - height );
                     var shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
                     var longSideFit   = Math.Max( leftoverHoriz, leftoverVert );
 
                     if ( ( shortSideFit < bestNode.Score1 ) ||
                          ( ( shortSideFit == bestNode.Score1 ) && ( longSideFit < bestNode.Score2 ) ) )
                     {
-                        bestNode.X       = _freeRectangles[ i ].X;
-                        bestNode.Y       = _freeRectangles[ i ].Y;
+                        bestNode.X       = rect.X;
+                        bestNode.Y       = rect.Y;
                         bestNode.Width   = width;
                         bestNode.Height  = height;
                         bestNode.Score1  = shortSideFit;
@@ -805,18 +836,18 @@ public class MaxRectsPacker : TexturePacker.IPacker
                     }
                 }
 
-                if ( rotate && ( _freeRectangles[ i ].Width >= rotatedWidth ) && ( _freeRectangles[ i ].Height >= rotatedHeight ) )
+                if ( rotate && ( rect.Width >= rotatedWidth ) && ( rect.Height >= rotatedHeight ) )
                 {
-                    var flippedLeftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - rotatedWidth );
-                    var flippedLeftoverVert  = Math.Abs( _freeRectangles[ i ].Height - rotatedHeight );
+                    var flippedLeftoverHoriz = Math.Abs( rect.Width - rotatedWidth );
+                    var flippedLeftoverVert  = Math.Abs( rect.Height - rotatedHeight );
                     var flippedShortSideFit  = Math.Min( flippedLeftoverHoriz, flippedLeftoverVert );
                     var flippedLongSideFit   = Math.Max( flippedLeftoverHoriz, flippedLeftoverVert );
 
                     if ( ( flippedShortSideFit < bestNode.Score1 )
                          || ( ( flippedShortSideFit == bestNode.Score1 ) && ( flippedLongSideFit < bestNode.Score2 ) ) )
                     {
-                        bestNode.X       = _freeRectangles[ i ].X;
-                        bestNode.Y       = _freeRectangles[ i ].Y;
+                        bestNode.X       = rect.X;
+                        bestNode.Y       = rect.Y;
                         bestNode.Width   = rotatedWidth;
                         bestNode.Height  = rotatedHeight;
                         bestNode.Score1  = flippedShortSideFit;
@@ -829,31 +860,40 @@ public class MaxRectsPacker : TexturePacker.IPacker
             return bestNode;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="rotatedWidth"></param>
+        /// <param name="rotatedHeight"></param>
+        /// <param name="rotate"></param>
+        /// <returns></returns>
         private TexturePacker.Rect FindPositionForNewNodeBestLongSideFit( int width,
                                                                           int height,
                                                                           int rotatedWidth,
                                                                           int rotatedHeight,
                                                                           bool rotate )
         {
-            var bestNode = new TexturePacker.Rect();
+            var bestNode = new TexturePacker.Rect
+            {
+                Score2 = int.MaxValue,
+            };
 
-            bestNode.Score2 = int.MaxValue;
-
-            for ( var i = 0; i < _freeRectangles.Count; i++ )
+            foreach ( var rect in _freeRectangles )
             {
                 // Try to place the rectangle in upright (non-rotated) orientation.
-                if ( ( _freeRectangles[ i ].Width >= width ) && ( _freeRectangles[ i ].Height >= height ) )
+                if ( ( rect.Width >= width ) && ( rect.Height >= height ) )
                 {
-                    var leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - width );
-                    var leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - height );
+                    var leftoverHoriz = Math.Abs( rect.Width - width );
+                    var leftoverVert  = Math.Abs( rect.Height - height );
                     var shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
                     var longSideFit   = Math.Max( leftoverHoriz, leftoverVert );
 
                     if ( ( longSideFit < bestNode.Score2 ) ||
                          ( ( longSideFit == bestNode.Score2 ) && ( shortSideFit < bestNode.Score1 ) ) )
                     {
-                        bestNode.X       = _freeRectangles[ i ].X;
-                        bestNode.Y       = _freeRectangles[ i ].Y;
+                        bestNode.X       = rect.X;
+                        bestNode.Y       = rect.Y;
                         bestNode.Width   = width;
                         bestNode.Height  = height;
                         bestNode.Score1  = shortSideFit;
@@ -862,18 +902,18 @@ public class MaxRectsPacker : TexturePacker.IPacker
                     }
                 }
 
-                if ( rotate && ( _freeRectangles[ i ].Width >= rotatedWidth ) && ( _freeRectangles[ i ].Height >= rotatedHeight ) )
+                if ( rotate && ( rect.Width >= rotatedWidth ) && ( rect.Height >= rotatedHeight ) )
                 {
-                    var leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - rotatedWidth );
-                    var leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - rotatedHeight );
+                    var leftoverHoriz = Math.Abs( rect.Width - rotatedWidth );
+                    var leftoverVert  = Math.Abs( rect.Height - rotatedHeight );
                     var shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
                     var longSideFit   = Math.Max( leftoverHoriz, leftoverVert );
 
                     if ( ( longSideFit < bestNode.Score2 ) ||
                          ( ( longSideFit == bestNode.Score2 ) && ( shortSideFit < bestNode.Score1 ) ) )
                     {
-                        bestNode.X       = _freeRectangles[ i ].X;
-                        bestNode.Y       = _freeRectangles[ i ].Y;
+                        bestNode.X       = rect.X;
+                        bestNode.Y       = rect.Y;
                         bestNode.Width   = rotatedWidth;
                         bestNode.Height  = rotatedHeight;
                         bestNode.Score1  = shortSideFit;
@@ -886,31 +926,41 @@ public class MaxRectsPacker : TexturePacker.IPacker
             return bestNode;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="rotatedWidth"></param>
+        /// <param name="rotatedHeight"></param>
+        /// <param name="rotate"></param>
+        /// <returns></returns>
         private TexturePacker.Rect FindPositionForNewNodeBestAreaFit( int width,
                                                                       int height,
                                                                       int rotatedWidth,
                                                                       int rotatedHeight,
                                                                       bool rotate )
         {
-            var bestNode = new TexturePacker.Rect();
-
-            bestNode.Score1 = int.MaxValue; // best area fit, _score2 is best short side fit
-
-            for ( var i = 0; i < _freeRectangles.Count; i++ )
+            var bestNode = new TexturePacker.Rect
             {
-                var areaFit = ( _freeRectangles[ i ].Width * _freeRectangles[ i ].Height ) - ( width * height );
+                Score1 = int.MaxValue, // best area fit, _score2 is best short side fit
+            };
+
+            foreach ( var rect in _freeRectangles )
+            {
+                var areaFit = ( rect.Width * rect.Height ) - ( width * height );
 
                 // Try to place the rectangle in upright (non-rotated) orientation.
-                if ( ( _freeRectangles[ i ].Width >= width ) && ( _freeRectangles[ i ].Height >= height ) )
+                if ( ( rect.Width >= width ) && ( rect.Height >= height ) )
                 {
-                    var leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - width );
-                    var leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - height );
+                    var leftoverHoriz = Math.Abs( rect.Width - width );
+                    var leftoverVert  = Math.Abs( rect.Height - height );
                     var shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
 
-                    if ( ( areaFit < bestNode.Score1 ) || ( ( areaFit == bestNode.Score1 ) && ( shortSideFit < bestNode.Score2 ) ) )
+                    if ( ( areaFit < bestNode.Score1 )
+                         || ( ( areaFit == bestNode.Score1 ) && ( shortSideFit < bestNode.Score2 ) ) )
                     {
-                        bestNode.X       = _freeRectangles[ i ].X;
-                        bestNode.Y       = _freeRectangles[ i ].Y;
+                        bestNode.X       = rect.X;
+                        bestNode.Y       = rect.Y;
                         bestNode.Width   = width;
                         bestNode.Height  = height;
                         bestNode.Score2  = shortSideFit;
@@ -919,16 +969,17 @@ public class MaxRectsPacker : TexturePacker.IPacker
                     }
                 }
 
-                if ( rotate && ( _freeRectangles[ i ].Width >= rotatedWidth ) && ( _freeRectangles[ i ].Height >= rotatedHeight ) )
+                if ( rotate && ( rect.Width >= rotatedWidth ) && ( rect.Height >= rotatedHeight ) )
                 {
-                    var leftoverHoriz = Math.Abs( _freeRectangles[ i ].Width - rotatedWidth );
-                    var leftoverVert  = Math.Abs( _freeRectangles[ i ].Height - rotatedHeight );
+                    var leftoverHoriz = Math.Abs( rect.Width - rotatedWidth );
+                    var leftoverVert  = Math.Abs( rect.Height - rotatedHeight );
                     var shortSideFit  = Math.Min( leftoverHoriz, leftoverVert );
 
-                    if ( ( areaFit < bestNode.Score1 ) || ( ( areaFit == bestNode.Score1 ) && ( shortSideFit < bestNode.Score2 ) ) )
+                    if ( ( areaFit < bestNode.Score1 )
+                         || ( ( areaFit == bestNode.Score1 ) && ( shortSideFit < bestNode.Score2 ) ) )
                     {
-                        bestNode.X       = _freeRectangles[ i ].X;
-                        bestNode.Y       = _freeRectangles[ i ].Y;
+                        bestNode.X       = rect.X;
+                        bestNode.Y       = rect.Y;
                         bestNode.Width   = rotatedWidth;
                         bestNode.Height  = rotatedHeight;
                         bestNode.Score2  = shortSideFit;
@@ -941,15 +992,17 @@ public class MaxRectsPacker : TexturePacker.IPacker
             return bestNode;
         }
 
-        // / Returns 0 if the two intervals i1 and i2 are disjoint, or the length of their overlap otherwise.
-        private int CommonIntervalLength( int i1start, int i1end, int i2start, int i2end )
+        /// <summary>
+        /// Returns 0 if the two intervals i1 and i2 are disjoint, or the length of their overlap otherwise.
+        /// </summary>
+        private static int CommonIntervalLength( int i1Start, int i1End, int i2Start, int i2End )
         {
-            if ( ( i1end < i2start ) || ( i2end < i1start ) )
+            if ( ( i1End < i2Start ) || ( i2End < i1Start ) )
             {
                 return 0;
             }
 
-            return Math.Min( i1end, i2end ) - Math.Max( i1start, i2start );
+            return Math.Min( i1End, i2End ) - Math.Max( i1Start, i2Start );
         }
 
         private int ContactPointScoreNode( int x, int y, int width, int height )
@@ -990,8 +1043,10 @@ public class MaxRectsPacker : TexturePacker.IPacker
                                                                        int rotatedHeight,
                                                                        bool rotate )
         {
-            var bestNode = new TexturePacker.Rect();
-            bestNode.Score1 = -1; // best contact score
+            var bestNode = new TexturePacker.Rect
+            {
+                Score1 = -1, // best contact score
+            };
 
             for ( int i = 0, n = _freeRectangles.Count; i < n; i++ )
             {
@@ -1032,17 +1087,18 @@ public class MaxRectsPacker : TexturePacker.IPacker
             return bestNode;
         }
 
-        private bool SplitFreeNode( TexturePacker.Rect freeNode, TexturePacker.Rect usedNode )
+        private bool SplitFreeNode( TexturePacker.Rect freeNode, TexturePacker.Rect? usedNode )
         {
             // Test with SAT if the rectangles even intersect.
-            if ( ( usedNode.X >= ( freeNode.X + freeNode.Width ) ) || ( ( usedNode.X + usedNode.Width ) <= freeNode.X )
-                                                                   || ( usedNode.Y >= ( freeNode.Y + freeNode.Height ) ) ||
-                                                                   ( ( usedNode.Y + usedNode.Height ) <= freeNode.Y ) )
+            if ( ( usedNode?.X >= ( freeNode.X + freeNode.Width ) )
+                 || ( ( usedNode?.X + usedNode?.Width ) <= freeNode.X )
+                 || ( usedNode?.Y >= ( freeNode.Y + freeNode.Height ) ) ||
+                 ( ( usedNode?.Y + usedNode?.Height ) <= freeNode.Y ) )
             {
                 return false;
             }
 
-            if ( ( usedNode.X < ( freeNode.X + freeNode.Width ) ) && ( ( usedNode.X + usedNode.Width ) > freeNode.X ) )
+            if ( ( usedNode?.X < ( freeNode.X + freeNode.Width ) ) && ( ( usedNode.X + usedNode.Width ) > freeNode.X ) )
             {
                 // New node at the top side of the used node.
                 if ( ( usedNode.Y > freeNode.Y ) && ( usedNode.Y < ( freeNode.Y + freeNode.Height ) ) )
@@ -1055,29 +1111,37 @@ public class MaxRectsPacker : TexturePacker.IPacker
                 // New node at the bottom side of the used node.
                 if ( ( usedNode.Y + usedNode.Height ) < ( freeNode.Y + freeNode.Height ) )
                 {
-                    var newNode = new TexturePacker.Rect( freeNode );
-                    newNode.Y      = usedNode.Y + usedNode.Height;
-                    newNode.Height = ( freeNode.Y + freeNode.Height ) - ( usedNode.Y + usedNode.Height );
+                    var newNode = new TexturePacker.Rect( freeNode )
+                    {
+                        Y      = usedNode.Y + usedNode.Height,
+                        Height = ( freeNode.Y + freeNode.Height ) - ( usedNode.Y + usedNode.Height ),
+                    };
+
                     _freeRectangles.Add( newNode );
                 }
             }
 
-            if ( ( usedNode.Y < ( freeNode.Y + freeNode.Height ) ) && ( ( usedNode.Y + usedNode.Height ) > freeNode.Y ) )
+            if ( ( usedNode?.Y < ( freeNode.Y + freeNode.Height ) )
+                 && ( ( usedNode.Y + usedNode.Height ) > freeNode.Y ) )
             {
                 // New node at the left side of the used node.
                 if ( ( usedNode.X > freeNode.X ) && ( usedNode.X < ( freeNode.X + freeNode.Width ) ) )
                 {
                     var newNode = new TexturePacker.Rect( freeNode );
                     newNode.Width = usedNode.X - newNode.X;
+                    
                     _freeRectangles.Add( newNode );
                 }
 
                 // New node at the right side of the used node.
                 if ( ( usedNode.X + usedNode.Width ) < ( freeNode.X + freeNode.Width ) )
                 {
-                    var newNode = new TexturePacker.Rect( freeNode );
-                    newNode.X     = usedNode.X + usedNode.Width;
-                    newNode.Width = ( freeNode.X + freeNode.Width ) - ( usedNode.X + usedNode.Width );
+                    var newNode = new TexturePacker.Rect( freeNode )
+                    {
+                        X     = usedNode.X + usedNode.Width,
+                        Width = ( freeNode.X + freeNode.Width ) - ( usedNode.X + usedNode.Width ),
+                    };
+                    
                     _freeRectangles.Add( newNode );
                 }
             }
@@ -1125,6 +1189,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
     // ========================================================================
 
+    [PublicAPI]
     public enum FreeRectChoiceHeuristic
     {
         /** BSSF: Positions the rectangle against the short side of a free rectangle into which it fits the best. */
@@ -1143,3 +1208,5 @@ public class MaxRectsPacker : TexturePacker.IPacker
         ContactPointRule,
     };
 }
+
+

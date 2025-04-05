@@ -385,7 +385,6 @@ GRAPHICS/IMAGES
     CODE   DOCUMENT
     ----   --------
     - DONE - DONE - BMPFormatStructs
-    - IP   - IP   - BufferedImage
     - DONE - IP   - Gdx2DPixmap
     - DONE - IP   - Gdx2DPixmapExtensions
     - DONE - IP   - Gdx2DPixmapUtils
@@ -473,7 +472,7 @@ GRAPHICS/PACKING
     - IP   - IP   - MaxRectsPacker
     - DONE - IP   - TexturePacker
     - DONE - IP   - TexturePacker.Resampling
-    -      -      - TexturePackerFileProcessor
+    - IP   - IP   - TexturePackerFileProcessor
     -      -      - TexturePackerTest
     -      -      - TexturePackerUpscaleTest
     -      -      - TextureUnpacker
@@ -484,17 +483,13 @@ GRAPHICS/TEXT
     CODE   DOCUMENT
     ----   --------
     - IP   - IP   - BitmapFont                      Much work needed!
-    - IP   - IP   - BitmapFontCache                 Relies on the BitmapFont rewrite.
-    - DONE - DONE - Character                       C# System MUST already have this???
+    - IP   - IP   - BitmapFontCache                 Relies on BitmapFont
+    - DONE - DONE - CharacterUtils                  May be added to
     - DONE - IP   - DistanceFieldFont
     - IP   - IP   - FontUtils
     - DONE - IP   - GlyphLayout
     - IP   - IP   - Subset
     - IP   - IP   - UnicodeBlock
-    -      -      - 
-    -      -      - 
-    -      -      - 
-    -      -      - 
 
 GRAPHICS/TEXT/FREETYPE
 ----------------------

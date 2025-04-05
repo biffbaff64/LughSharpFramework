@@ -370,9 +370,7 @@ public class BitmapFont
     /// <summary>
     /// Returns the array of TextureRegions that represents each texture page of glyphs.
     /// </summary>
-    /// <returns>
-    /// the array of texture regions; modifying it may produce undesirable results
-    /// </returns>
+    /// <returns> The array of texture regions; modifying it may produce undesirable results </returns>
     public List< TextureRegion > GetRegions()
     {
         return _regions;
@@ -856,7 +854,7 @@ public class BitmapFont
                         break; // EOF
                     }
 
-                    Logger.Debug( line! );
+                    Logger.Debug( line );
 
                     if ( line.StartsWith( "kernings " ) )
                     {

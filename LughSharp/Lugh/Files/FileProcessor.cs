@@ -212,9 +212,9 @@ public partial class FileProcessor
     /// <exception cref="ArgumentException"></exception>
     public virtual List< Entry > Process( FileInfo? inputFileOrDir, DirectoryInfo? outputRoot )
     {
-        if ( !inputFileOrDir.Exists )
+        if ( inputFileOrDir is not { Exists: true } )
         {
-            throw new ArgumentException( $"Input file does not exist: {inputFileOrDir.FullName}" );
+            throw new ArgumentException( $"Input file does not exist: {inputFileOrDir?.FullName}" );
         }
 
         if ( ( inputFileOrDir.Attributes & FileAttributes.Directory ) == 0 )
@@ -431,6 +431,7 @@ public partial class FileProcessor
     /// <param name="files"></param>
     public virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
+        OnProcessDir?.Invoke( entryDir, files );
     }
 
     /// <summary>

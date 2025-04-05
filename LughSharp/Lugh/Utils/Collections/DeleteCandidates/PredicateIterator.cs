@@ -32,6 +32,13 @@ namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 [Obsolete( "Obsolete" )]
 public class PredicateIterator< T > : IEnumerator< T >, IDisposable
 {
+    public IEnumerator< T? > Enumerator { get; set; }
+    public IPredicate< T >   Predicate  { get; set; }
+    public bool              End        { get; set; }
+    public bool              Peeked     { get; set; }
+    public T?                NextItem   { get; set; }
+    public T                 Current    { get; }
+
     // ========================================================================
 
     /// <summary>
@@ -56,13 +63,6 @@ public class PredicateIterator< T > : IEnumerator< T >, IDisposable
         NextItem   = default( T? );
         Current    = default( T? )!;
     }
-
-    public IEnumerator< T? > Enumerator { get; set; }
-    public IPredicate< T >   Predicate  { get; set; }
-    public bool              End        { get; set; }
-    public bool              Peeked     { get; set; }
-    public T?                NextItem   { get; set; }
-    public T                 Current    { get; }
 
     // ========================================================================
 

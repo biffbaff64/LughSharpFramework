@@ -29,12 +29,8 @@ using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
-using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
-
-using Image = System.Drawing.Image;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
@@ -206,7 +202,7 @@ public partial class ImageProcessor
         var                 isPatch = name.EndsWith( ".9" );
         int[]?              splits  = null;
         int[]?              pads    = null;
-        TexturePacker.Rect? rect    = null;
+        TexturePacker.Rect? rect;
 
         if ( isPatch )
         {

@@ -40,13 +40,14 @@ public class NewShapeRenderer : IDisposable
 
     // ========================================================================
 
-    private readonly Color   _color                = new( 1, 1, 1, 1 );
-    private readonly Matrix4 _combinedMatrix       = new();
-    private readonly float   _defaultRectLineWidth = 0.75f;
-    private readonly Vector2 _tmp                  = new();
-    private          bool    _matrixDirty          = false;
-    private          Matrix4 _projectionMatrix     = new();
-    private          Matrix4 _transformMatrix      = new();
+    private readonly Color   _color            = new( 1, 1, 1, 1 );
+    private readonly Matrix4 _combinedMatrix   = new();
+    private readonly Vector2 _tmp              = new();
+    private          Matrix4 _projectionMatrix = new();
+    private          Matrix4 _transformMatrix  = new();
+
+//TODO:    private readonly float _defaultRectLineWidth = 0.75f;
+//TODO:    private          bool  _matrixDirty          = false;
 
     private int _programId;
     private int _vaoId;

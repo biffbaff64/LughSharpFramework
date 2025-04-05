@@ -258,13 +258,13 @@ public partial class AssetManager
     /// </summary>
     public bool Contains( string? fileName )
     {
+        if ( fileName == null )
+        {
+            return false;
+        }
+
         lock ( this )
         {
-            if ( fileName == null )
-            {
-                return false;
-            }
-
             if ( ( _tasks.Count > 0 )
                  && _tasks.First().AssetDesc is { } assetDescriptor
                  && assetDescriptor.AssetName.Equals( fileName ) )
@@ -290,13 +290,13 @@ public partial class AssetManager
     /// </summary>
     public bool Contains( string? fileName, Type? type )
     {
+        if ( ( fileName == null ) || ( type == null ) )
+        {
+            return false;
+        }
+
         lock ( this )
         {
-            if ( ( fileName == null ) || ( type == null ) )
-            {
-                return false;
-            }
-
             if ( _tasks.Count > 0 )
             {
                 if ( _tasks.First().AssetDesc is { } assetDesc
@@ -325,13 +325,13 @@ public partial class AssetManager
     /// </summary>
     public bool ContainsAsset< T >( T asset )
     {
+        if ( asset == null )
+        {
+            return false;
+        }
+
         lock ( this )
         {
-            if ( asset == null )
-            {
-                return false;
-            }
-
             var assetsByType = _assets[ asset.GetType() ] ?? throw new NullReferenceException();
 
             foreach ( var fileName in assetsByType.Keys )
@@ -487,10 +487,10 @@ public partial class AssetManager
     /// </exception>
     public object? Get( AssetDescriptor assetDescriptor )
     {
+        ArgumentNullException.ThrowIfNull( assetDescriptor );
+
         lock ( this )
         {
-            ArgumentNullException.ThrowIfNull( assetDescriptor );
-
             return Get( assetDescriptor.AssetName, assetDescriptor.AssetType, true );
         }
     }
@@ -506,6 +506,8 @@ public partial class AssetManager
     /// <exception cref="GdxRuntimeException">Thrown if the asset is not found and it is required.</exception>
     public object? Get( string name, Type? type, bool required )
     {
+        Guard.ThrowIfNull( type );
+        
         lock ( this )
         {
             try
@@ -535,11 +537,11 @@ public partial class AssetManager
     /// <exception cref="GdxRuntimeException">Thrown if no assets of the specified type are found.</exception>
     public List< T > GetAll< T >( Type? type, List< T > outArray )
     {
+        ArgumentNullException.ThrowIfNull( type );
+        ArgumentNullException.ThrowIfNull( outArray );
+
         lock ( this )
         {
-            ArgumentNullException.ThrowIfNull( type );
-            ArgumentNullException.ThrowIfNull( outArray );
-
             lock ( this )
             {
                 if ( !_assets.TryGetValue( type, out var assetsByType ) )
@@ -566,10 +568,10 @@ public partial class AssetManager
     /// </summary>
     public string? GetAssetFileName< T >( T asset )
     {
+        GdxRuntimeException.ThrowIfNull( _assets );
+
         lock ( this )
         {
-            GdxRuntimeException.ThrowIfNull( _assets );
-
             if ( asset == null )
             {
                 return null;
@@ -755,10 +757,10 @@ public partial class AssetManager
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="parentAssetFilename" /> is null.</exception>
     public void InjectDependencies( string parentAssetFilename, List< AssetDescriptor > dependendAssetDescs )
     {
+        ArgumentNullException.ThrowIfNull( parentAssetFilename );
+
         lock ( this )
         {
-            ArgumentNullException.ThrowIfNull( parentAssetFilename );
-
             foreach ( var desc in dependendAssetDescs )
             {
                 Guard.ThrowIfNull( desc.AssetName );
@@ -950,10 +952,10 @@ public partial class AssetManager
     /// <param name="desc">the <see cref="AssetDescriptor" /></param>
     public void Load( AssetDescriptor desc )
     {
+        ArgumentNullException.ThrowIfNull( desc );
+
         lock ( this )
         {
-            ArgumentNullException.ThrowIfNull( desc );
-
             Load( desc.AssetName, desc.AssetType, desc.Parameters );
         }
     }
@@ -1119,7 +1121,7 @@ public partial class AssetManager
     /// the suffix the filename must have for this loader to be used or null
     /// to specify the default loader.
     /// </param>
-    public void SetLoader( Type? type, AssetLoader loader, string? suffix = "" )
+    public void SetLoader( Type type, AssetLoader loader, string? suffix = "" )
     {
         // Normalize the suffix: Use "" for null or empty strings
         suffix = string.IsNullOrEmpty( suffix ) ? "" : suffix;
@@ -1195,11 +1197,11 @@ public partial class AssetManager
     /// </summary>
     public bool IsLoaded( string fileName, Type? type )
     {
+        ArgumentNullException.ThrowIfNull( type );
+        GdxRuntimeException.ThrowIfNull( _assets );
+
         lock ( this )
         {
-            ArgumentNullException.ThrowIfNull( type );
-            GdxRuntimeException.ThrowIfNull( _assets );
-
             // Retrieve all assets of the required type
             var assetsByType = _assets.Get( type );
             var isLoaded = ( fileName.Length != 0 ) && ( assetsByType != null )

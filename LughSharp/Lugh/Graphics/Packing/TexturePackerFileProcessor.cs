@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.Serialization.Json;
 using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
@@ -89,6 +88,8 @@ public partial class TexturePackerFileProcessor : FileProcessor
                                            StringComparison.Ordinal ) );
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// </summary>
     /// <param name="inputFile"></param>

@@ -59,7 +59,7 @@ public static class Pools< T >
     /// Sets an existing pool for the specified type, stored in a Class
     /// to <see cref="Pool{T}" /> map.
     /// </summary>
-    public static void Set( Type? type, Pool< T > pool )
+    public static void Set( Type type, Pool< T > pool )
     {
         _typePools[ type ] = pool;
     }

@@ -20,6 +20,7 @@
   &lt;Assembly Path="C:\Users\richi\.nuget\packages\sixlabors.imagesharp\3.1.7\lib\net6.0\SixLabors.ImageSharp.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Users\richi\.nuget\packages\sixlabors.imagesharp.drawing\2.1.5\lib\net6.0\SixLabors.ImageSharp.Drawing.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\Program Files\dotnet\packs\Microsoft.NETCore.App.Ref\8.0.13\ref\net8.0\System.Text.Json.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\Users\richi\.nuget\packages\system.drawing.common\9.0.2\lib\net8.0\System.Drawing.Common.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	
 	</wpf:ResourceDictionary>

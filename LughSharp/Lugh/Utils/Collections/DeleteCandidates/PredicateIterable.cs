@@ -33,6 +33,10 @@ namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 [Obsolete( "Obsolete" )]
 public class PredicateIterable< T > : IEnumerable< T >
 {
+    public IEnumerable< T >        Enumerable { get; set; }
+    public IPredicate< T >         Predicate  { get; set; }
+    public PredicateIterator< T >? Enumerator { get; set; }
+
     /// <summary>
     /// </summary>
     /// <param name="enumerable"></param>
@@ -42,10 +46,6 @@ public class PredicateIterable< T > : IEnumerable< T >
         Enumerable = enumerable;
         Predicate  = predicate;
     }
-
-    public IEnumerable< T >        Enumerable { get; set; }
-    public IPredicate< T >         Predicate  { get; set; }
-    public PredicateIterator< T >? Enumerator { get; set; }
 
     /// <summary>
     /// </summary>

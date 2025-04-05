@@ -27,6 +27,7 @@ using System.Text;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Guarding;
 
 namespace LughSharp.Lugh.Utils.Collections;
 
@@ -39,6 +40,12 @@ namespace LughSharp.Lugh.Utils.Collections;
 [PublicAPI]
 public class Array< T >
 {
+    public T[]  Items   { get; set; }
+    public int  Size    { get; set; }
+    public bool Ordered { get; set; }
+
+    // ========================================================================
+
     //TODO:
     private PredicateIterable< T >? _predicateIEnumerable;
 
@@ -98,10 +105,6 @@ public class Array< T >
         Array.Copy( array, start, Items, 0, Size );
     }
 
-    public T[]  Items   { get; set; }
-    public int  Size    { get; set; }
-    public bool Ordered { get; set; }
-
     /// <summary>
     /// Adds the specified value to this array.
     /// </summary>
@@ -146,8 +149,8 @@ public class Array< T >
 
         if ( ( start + count ) > array.Count )
         {
-            throw new ArgumentOutOfRangeException
-                ( $"start + count must be <= size - {start} + {count} <= {array.Count}" );
+            throw new ArgumentOutOfRangeException( $"start + count must be <= size - " +
+                                                   $"{start} + {count} <= {array.Count}" );
         }
 
         AddAll( array.ToArray(), start, count );
@@ -252,13 +255,10 @@ public class Array< T >
     {
         if ( index > Size )
         {
-            throw new IndexOutOfRangeException( "index can't be > size - " + index + " > " + Size );
+            throw new IndexOutOfRangeException( $"index can't be > size - {index} > {Size}" );
         }
 
-        if ( Items == null )
-        {
-            throw new GdxRuntimeException( "Items cannot be null!" );
-        }
+        Guard.ThrowIfNull( Items );
 
         var sizeNeeded = Size + count;
 
@@ -282,12 +282,12 @@ public class Array< T >
     {
         if ( first >= Size )
         {
-            throw new ArgumentOutOfRangeException( "first can't be >= size - " + first + " >= " + Size );
+            throw new ArgumentOutOfRangeException( $"first can't be >= size - {first} >= {Size}" );
         }
 
         if ( second >= Size )
         {
-            throw new ArgumentOutOfRangeException( "second can't be >= size - " + second + " >= " + Size );
+            throw new ArgumentOutOfRangeException( $"second can't be >= size - {second} >= {Size}" );
         }
 
         if ( Items == null )
@@ -359,7 +359,7 @@ public class Array< T >
     {
         if ( index >= Size )
         {
-            throw new ArgumentOutOfRangeException( "index can't be >= size - " + index + " >= " + Size );
+            throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Size}" );
         }
 
         var value = Items[ index ];
@@ -390,12 +390,12 @@ public class Array< T >
     {
         if ( end >= Size )
         {
-            throw new ArgumentOutOfRangeException( "end can't be >= size - " + end + " >= " + Size );
+            throw new ArgumentOutOfRangeException( $"end can't be >= size - {end} >= {Size}" );
         }
 
         if ( start > end )
         {
-            throw new ArgumentOutOfRangeException( "start can't be > end - " + start + " > " + end );
+            throw new ArgumentOutOfRangeException( $"start can't be > end - {start} > {end}" );
         }
 
         var count = ( end - start ) + 1;
@@ -729,7 +729,7 @@ public class Array< T >
     /// <param name="type"> The <see cref="Type" /> of the array to create. </param>
     /// <returns> The new array. </returns>
     [MustUseReturnValue]
-    public virtual T[] ToArray( Type? type )
+    public virtual T[] ToArray( Type type )
     {
         var result = ( T[] )Array.CreateInstance( type, Size );
 

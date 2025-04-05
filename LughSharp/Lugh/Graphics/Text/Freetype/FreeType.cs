@@ -423,7 +423,7 @@ public partial class FreeType
             throw new NotImplementedException();
         }
 
-        public void StrokeBorder( Stroker stroker, bool b )
+        public void StrokeBorder( Stroker? stroker, bool b )
         {
             throw new NotImplementedException();
         }

@@ -161,13 +161,13 @@ public class CircularByteBuffer
     /// </summary>
     public byte Pop()
     {
+        if ( _numValid == 0 )
+        {
+            throw new Exception( "Can't pop off an empty CircularByteBuffer" );
+        }
+
         lock ( this )
         {
-            if ( _numValid == 0 )
-            {
-                throw new Exception( "Can't pop off an empty CircularByteBuffer" );
-            }
-
             _numValid--;
 
             return this[ _numValid ];

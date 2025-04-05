@@ -99,9 +99,10 @@ public partial class Json
     private Dictionary< Type, string >                               _classToTag           = [ ];
     private Dictionary< Type, IJsonSerializer >                      _classToSerializer    = [ ];
     private Dictionary< Type, object[]? >                            _classToDefaultValues = [ ];
-    private object[]                                                 _equals1              = [ ];
-    private object[]                                                 _equals2              = [ ];
-    private TextWriter?                                              _textWriter;
+
+    private object[]    _equals1 = [ ];
+    private object[]    _equals2 = [ ];
+//TODO:    private TextWriter? _textWriter;
 
     // ========================================================================
 

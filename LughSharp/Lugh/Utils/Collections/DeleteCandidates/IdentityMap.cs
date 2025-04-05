@@ -24,6 +24,8 @@
 
 using System.Runtime.Serialization;
 
+using LughSharp.Lugh.Utils.Guarding;
+
 namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 
 /// <summary>
@@ -101,6 +103,9 @@ public class IdentityMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     {
     }
 
+    // ========================================================================
+    // ========================================================================
+
     /// <summary>
     /// </summary>
     /// <param name="item"></param>
@@ -114,11 +119,11 @@ public class IdentityMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         return ( int )( ( id * 0x9E3779B97F4A7C15L ) >>> Shift );
     }
 
-    public int LocateKey( TK key )
+    public override int LocateKey( TK key )
     {
-        ArgumentNullException.ThrowIfNull( key );
+        Guard.ThrowIfNull( key );
 
-        TK?[] keytab = KeyTable;
+        var keytab = KeyTable;
 
         for ( var i = Place( key );; i = ( i + 1 ) & Mask )
         {

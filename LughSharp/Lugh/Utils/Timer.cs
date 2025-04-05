@@ -112,17 +112,17 @@ public class Timer
     /// <param name="repeatCount"> If negative, the task will repeat forever.</param>
     protected virtual Task ScheduleTask( Task task, float delaySeconds, float intervalSeconds, int repeatCount = -1 )
     {
+        if ( task.Timer != null )
+        {
+            throw new ArgumentException( "The same task may not be scheduled twice." );
+        }
+
         lock ( _threadLock )
         {
             lock ( this )
             {
                 lock ( task )
                 {
-                    if ( task.Timer != null )
-                    {
-                        throw new ArgumentException( "The same task may not be scheduled twice." );
-                    }
-
                     task.Timer = this;
 
                     var timeMillis        = TimeUtils.NanoTime() / 1000000;

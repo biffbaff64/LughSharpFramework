@@ -22,44 +22,61 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Versioning;
+
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class GridPacker : TexturePacker.IPacker
 {
-    private readonly TexturePacker.Settings settings;
+    private readonly TexturePacker.Settings _settings;
 
+    // ========================================================================
+    
     public GridPacker( TexturePacker.Settings settings )
     {
-        this.settings = settings;
+        this._settings = settings;
     }
 
+    // ========================================================================
+
+    /// <summary>
+    /// </summary>
+    /// <param name="inputRects"></param>
+    /// <returns></returns>
     public List< TexturePacker.Page > Pack( List< TexturePacker.Rect > inputRects )
     {
         return Pack( null, inputRects );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="progress"></param>
+    /// <param name="inputRects"></param>
+    /// <returns></returns>
     public List< TexturePacker.Page > Pack( TexturePacker.ProgressListener? progress, List< TexturePacker.Rect > inputRects )
     {
         ArgumentNullException.ThrowIfNull( progress );
 
-        if ( !settings.Silent )
+        if ( !_settings.Silent )
         {
-            Console.WriteLine( "Packing" );
+            Logger.Debug( "Packing" );
         }
 
-        // Rects are packed with right and top padding, so the max size is increased to match.
-        // After packing the padding is subtracted from the page size.
-        var paddingX = settings.PaddingX;
-        var paddingY = settings.PaddingY;
+        // Rects are packed with right and top padding, so the max size is increased
+        // to match. After packing the padding is subtracted from the page size.
+        var paddingX = _settings.PaddingX;
+        var paddingY = _settings.PaddingY;
         var adjustX  = paddingX;
         var adjustY  = paddingY;
 
-        if ( settings.EdgePadding )
+        if ( _settings.EdgePadding )
         {
-            if ( settings.DuplicatePadding )
+            if ( _settings.DuplicatePadding )
             {
                 adjustX -= paddingX;
                 adjustY -= paddingY;
@@ -71,8 +88,8 @@ public class GridPacker : TexturePacker.IPacker
             }
         }
 
-        var maxWidth   = settings.MaxWidth + adjustX;
-        var maxHeight  = settings.MaxHeight + adjustY;
+        var maxWidth   = _settings.MaxWidth + adjustX;
+        var maxHeight  = _settings.MaxHeight + adjustY;
         var n          = inputRects.Count;
         var cellWidth  = 0;
         var cellHeight = 0;
@@ -111,6 +128,14 @@ public class GridPacker : TexturePacker.IPacker
         return pages;
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="inputRects"></param>
+    /// <param name="cellWidth"></param>
+    /// <param name="cellHeight"></param>
+    /// <param name="maxWidth"></param>
+    /// <param name="maxHeight"></param>
+    /// <returns></returns>
     private TexturePacker.Page PackPage( List< TexturePacker.Rect > inputRects, int cellWidth, int cellHeight, int maxWidth, int maxHeight )
     {
         TexturePacker.Page page = new()
@@ -140,8 +165,8 @@ public class GridPacker : TexturePacker.IPacker
 
             rect.X      =  x;
             rect.Y      =  y;
-            rect.Width  += settings.PaddingX;
-            rect.Height += settings.PaddingY;
+            rect.Width  += _settings.PaddingX;
+            rect.Height += _settings.PaddingY;
 
             page.OutputRects.Add( rect );
 
@@ -160,3 +185,5 @@ public class GridPacker : TexturePacker.IPacker
         return page;
     }
 }
+
+
