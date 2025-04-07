@@ -67,6 +67,8 @@ public partial class TexturePackerFileProcessor : FileProcessor
                                        string packFileName,
                                        TexturePacker.ProgressListener? progress )
     {
+        Logger.Checkpoint();
+        
         this._defaultSettings  = defaultSettings ?? new TexturePacker.Settings();
         this._progressListener = progress ?? new TexturePacker.ProgressListenerImpl();
 
@@ -78,6 +80,9 @@ public partial class TexturePackerFileProcessor : FileProcessor
         this._packFileName  = packFileName;
         this._rootDirectory = new FileInfo( packFileName ).Directory!;
 
+        Logger.Debug( $"_packFileName: {this._packFileName}" );
+        Logger.Debug( $"_rootDirectory: {this._rootDirectory.FullName }" );
+        
         SetFlattenOutput( true );
         AddInputSuffix( ".png", ".jpg", ".jpeg" ); //TODO: Add .bmp
 

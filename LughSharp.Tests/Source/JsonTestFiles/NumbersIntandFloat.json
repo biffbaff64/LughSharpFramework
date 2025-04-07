@@ -1,0 +1,8 @@
+﻿{
+  "integer": 12345,
+  "negativeInteger": -6789,
+  "float": 3.14159,
+  "negativeFloat": -2.71828,
+  "exponent": 1.23e+5,
+  "negativeExponent": 4.56e-3
+}

@@ -120,11 +120,17 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <param name="loadFactor">
     /// The load factor of the map. Must be greater than 0 and less than 1. Defaults to 0.8.
     /// </param>
+    /// <param name="debug"></param>
     /// <exception cref="ArgumentException">
     /// Thrown when the load factor is less than or equal to 0, or greater than or equal to 1.
     /// </exception>
-    public ObjectMap( int initialCapacity = DEFAULT_CAPACITY, float loadFactor = DEFAULT_LOAD_FACTOR )
+    public ObjectMap( int initialCapacity = DEFAULT_CAPACITY, float loadFactor = DEFAULT_LOAD_FACTOR, bool debug = false )
     {
+        if ( debug )
+        {
+            Logger.Checkpoint();
+        }
+        
         if ( loadFactor is <= 0f or >= 1f )
         {
             throw new ArgumentException( "loadFactor must be > 0 and < 1: " + loadFactor );
@@ -139,6 +145,14 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         Shift      = int.LeadingZeroCount( Mask );
         KeyTable   = new TK[ tableSize ];
         ValueTable = new TV[ tableSize ];
+
+        if ( debug )
+        {
+            Logger.Debug( $"initialCapacity: {initialCapacity}" );
+            Logger.Debug( $"initialCapacity * loadFactor: {initialCapacity * loadFactor}" );
+            Logger.Debug( $"KeyTable.Size: {KeyTable.Length}" );
+            Logger.Debug( $"ValueTable.Size: {ValueTable.Length}" );
+        }
     }
 
     /// <summary>
@@ -213,27 +227,35 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <exception cref="NullReferenceException">Thrown when the KeyTable is null.</exception>
     public virtual int LocateKey( TK key )
     {
-        ArgumentNullException.ThrowIfNull( key );
-
+        Logger.Checkpoint();
+        
         if ( KeyTable == null )
         {
             throw new NullReferenceException( "_keyTable is null" );
         }
 
+        int retVal;
+        
         for ( var i = Place( key ); /*..*/; i = ( i + 1 ) & Mask )
         {
             var other = KeyTable[ i ];
 
             if ( other == null )
             {
-                return -( i + 1 ); // Empty space is available.
+                retVal = -( i + 1 ); // Empty space is available.
+
+                break;
             }
 
             if ( other.Equals( key ) )
             {
-                return i; // Same key was found.
+                retVal = i; // Same key was found.
+
+                break;
             }
         }
+        
+        return retVal;
     }
 
     /// <summary>
@@ -245,11 +267,12 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <returns></returns>
     public virtual TV? Put( TK key, TV? value )
     {
-        ArgumentNullException.ThrowIfNull( KeyTable );
-        ArgumentNullException.ThrowIfNull( ValueTable );
-
+        Logger.Checkpoint();
+        
         var i = LocateKey( key );
 
+        Logger.Debug( $"LocateKey: {i}" );
+        
         if ( i >= 0 )
         {
             // Existing key was found.
@@ -261,6 +284,8 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         i = -( i + 1 ); // Empty space was found.
 
+        Logger.Debug( $"Empty space at: {i}" );
+        
         KeyTable[ i ]   = key;
         ValueTable[ i ] = value;
 

@@ -977,7 +977,9 @@ UTILS/EXCEPTIONS
     - DONE - DONE - BufferOverflowException
     - DONE - DONE - BufferUnderflowException
     - DONE - DONE - GdxRuntimeException
+    - DONE - DONE - NumberFormatException
     - DONE - DONE - ReadOnlyBufferException
+    - DONE - DONE - SerializationException
     - DONE - DONE - SpriteBatchException
 
 UTILS/GUARDING
@@ -985,25 +987,27 @@ UTILS/GUARDING
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - Guard
+    - DONE - DONE - Guard
 
 UTILS/JSON
 ----------
 
+  **** Using LughSharp.Tests.JsonTest testing ****
+
     CODE   DOCUMENT
     ----   --------
-    - DONE - IP   - Json
-    - DONE - IP   - Json.FromJson
-    - DONE - IP   - Json.ToJson
-    - DONE - IP   - Json.WriteValue
-    - DONE - IP   - JsonOutputType
+    - IP   - IP   - Json
+    - IP   - IP   - Json.FromJson
+    - IP   - IP   - Json.ToJson
+    - IP   - IP   - Json.WriteValue
+    - IP   - IP   - JsonOutputType
     - IP   - IP   - JsonReader
     - IP   - IP   - JsonReader.Data
-    - DONE - IP   - JsonSerializer
-    - DONE - IP   - JsonValue
-    - DONE - DONE - JsonValue.AsType
-    - DONE - DONE - JsonValue.GetType
-    - DONE - IP   - JsonWriter
+    - IP   - IP   - JsonSerializer
+    - IP   - IP   - JsonValue
+    - IP   - IP   - JsonValue.AsType
+    - IP   - IP   - JsonValue.GetType
+    - IP   - IP   - JsonWriter
 
 UTILS/POOLING
 -------------

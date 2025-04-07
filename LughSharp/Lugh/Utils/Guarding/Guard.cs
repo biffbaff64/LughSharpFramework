@@ -326,7 +326,7 @@ public class Guard
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Throws an exception if the supplied integer is not a valid positive integer value.
     /// </summary>
     public static void ValidPositiveInteger( int value,
                                              [CallerArgumentExpression( nameof( value ) )]

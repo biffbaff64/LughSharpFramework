@@ -105,6 +105,11 @@ public static class DictionaryExtension
         self.Add( key, value );
     }
 
+    public static void Put< T, T1 >( this Dictionary< object, object > self, ulong key, T1 goldenRatio )
+    {
+        throw new NotImplementedException();
+    }
+
     /// <summary>
     /// Puts all values in <paramref name="map" /> into <paramref name="self" />.
     /// </summary>

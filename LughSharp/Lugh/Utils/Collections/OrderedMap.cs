@@ -133,6 +133,10 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         return default( TV );
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="map"></param>
+    /// <exception cref="NullReferenceException"></exception>
     public void PutAll( OrderedMap< TK, TV > map )
     {
         EnsureCapacity( map.Size );

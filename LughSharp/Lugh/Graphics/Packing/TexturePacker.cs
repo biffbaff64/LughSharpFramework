@@ -970,7 +970,7 @@ public class TexturePacker
 
         if ( !File.Exists( inputFile.FullName ) )
         {
-            throw new ArgumentException( "Input file does not exist: " + inputFile.Name );
+            throw new ArgumentException( "TexturePacker#IsModified: Input file does not exist: " + inputFile.Name );
         }
 
         return IsModified( inputFile.FullName, outputFile.LastWriteTimeUtc.Ticks / 10000 );

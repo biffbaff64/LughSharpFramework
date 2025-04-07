@@ -1,0 +1,4 @@
+﻿{
+  "_comment": "Deliberately faulty Json for error testing",
+  "name": "Error",
+  "value": 123,

@@ -22,7 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Utils.Buffers;
+using JetBrains.Annotations;
+
+using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Buffers;
+
+namespace LughSharp.Tests.Source;
 
 [PublicAPI]
 public class BufferTests

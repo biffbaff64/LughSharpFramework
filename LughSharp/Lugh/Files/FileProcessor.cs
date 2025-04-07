@@ -133,7 +133,7 @@ public partial class FileProcessor
     /// <summary>
     /// </summary>
     /// <param name="suffixes"></param>
-    /// <returns></returns>
+    /// <returns> This FileProcessor for chaining. </returns>
     public FileProcessor AddInputSuffix( params string[] suffixes )
     {
         foreach ( var suffix in suffixes )
@@ -148,7 +148,7 @@ public partial class FileProcessor
     /// 
     /// </summary>
     /// <param name="regexes"></param>
-    /// <returns></returns>
+    /// <returns> This FileProcessor for chaining. </returns>
     public FileProcessor AddInputRegex( params string[] regexes )
     {
         foreach ( var regex in regexes )
@@ -162,7 +162,7 @@ public partial class FileProcessor
     /// <summary>
     /// </summary>
     /// <param name="outputSuffix"></param>
-    /// <returns></returns>
+    /// <returns> This FileProcessor for chaining. </returns>
     public FileProcessor SetOutputSuffix( string outputSuffix )
     {
         OutputSuffix = outputSuffix;
@@ -173,7 +173,7 @@ public partial class FileProcessor
     /// <summary>
     /// </summary>
     /// <param name="flattenOutput"></param>
-    /// <returns></returns>
+    /// <returns> This FileProcessor for chaining. </returns>
     public FileProcessor SetFlattenOutput( bool flattenOutput )
     {
         FlattenOutput = flattenOutput;
@@ -184,7 +184,7 @@ public partial class FileProcessor
     /// <summary>
     /// </summary>
     /// <param name="recursive"></param>
-    /// <returns></returns>
+    /// <returns> This FileProcessor for chaining. </returns>
     public FileProcessor SetRecursive( bool recursive = true )
     {
         Recursive = recursive;
@@ -199,6 +199,10 @@ public partial class FileProcessor
     /// <returns></returns>
     public List< Entry > Process( string inputFileOrDir, string? outputRoot )
     {
+        Logger.Checkpoint();
+        Logger.Debug( $"inputFileOrDir: {inputFileOrDir}" );
+        Logger.Debug( $"outputRoot: {outputRoot}" );
+        
         return Process( new FileInfo( inputFileOrDir ), outputRoot == null
                             ? null
                             : new DirectoryInfo( outputRoot ) );
@@ -214,7 +218,9 @@ public partial class FileProcessor
     {
         if ( inputFileOrDir is not { Exists: true } )
         {
-            throw new ArgumentException( $"Input file does not exist: {inputFileOrDir?.FullName}" );
+            // 'inputFileOrDir is either null, or it doesn't exist.
+            // Would it not be better to create the folder if it is not null but doesn't exist?
+            throw new ArgumentException( $"FileProcessor#Process: Input file does not exist: {inputFileOrDir?.FullName}" );
         }
 
         if ( ( inputFileOrDir.Attributes & FileAttributes.Directory ) == 0 )
