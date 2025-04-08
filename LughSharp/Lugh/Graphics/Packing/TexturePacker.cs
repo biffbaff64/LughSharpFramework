@@ -933,7 +933,7 @@ public class TexturePacker
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
-            processor.Process( input, output );
+            processor.Process( new FileInfo( input ), new DirectoryInfo( output ) );
         }
         catch ( Exception ex )
         {

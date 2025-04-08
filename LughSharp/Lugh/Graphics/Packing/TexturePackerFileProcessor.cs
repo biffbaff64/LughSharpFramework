@@ -80,41 +80,51 @@ public partial class TexturePackerFileProcessor : FileProcessor
         this._packFileName  = packFileName;
         this._rootDirectory = new FileInfo( packFileName ).Directory!;
 
-        Logger.Debug( $"_packFileName: {this._packFileName}" );
-        Logger.Debug( $"_rootDirectory: {this._rootDirectory.FullName }" );
-        
         SetFlattenOutput( true );
         AddInputSuffix( ".png", ".jpg", ".jpeg" ); //TODO: Add .bmp
 
         // Sort input files by name to avoid platform-dependent atlas output changes.
-        SetComparator( ( file1, file2 ) =>
-                           string.Compare( file1.Name,
-                                           file2.Name,
-                                           StringComparison.Ordinal ) );
+        SetComparator( ( file1, file2 ) => string.Compare( file1.Name,
+                                                           file2.Name,
+                                                           StringComparison.Ordinal ) );
     }
 
     // ========================================================================
     
     /// <summary>
     /// </summary>
-    /// <param name="inputFile"></param>
+    /// <param name="inputRoot"></param>
     /// <param name="outputRoot"></param>
     /// <returns></returns>
-    public override List< Entry > Process( FileInfo? inputFile, DirectoryInfo? outputRoot )
+    public override List< Entry > Process( FileInfo? inputRoot, DirectoryInfo? outputRoot )
     {
-        Guard.ThrowIfNull( inputFile?.Directory );
+        Guard.ThrowIfNull( inputRoot );
+        Guard.ThrowIfNull( inputRoot.Directory );
 
-        _rootDirectory = inputFile.Directory;
+        _rootDirectory = inputRoot.Directory;
 
+        Logger.Debug( $"inputFile: {inputRoot.FullName }" );
+        Logger.Debug( $"outputRoot: {outputRoot?.FullName }" );
+        Logger.Debug( $"_rootDirectory: {_rootDirectory?.FullName }" );
+        
         // Collect pack.json setting files.
-        var settingsProcessor = new SettingsProcessor();
+        var settingsProcessor = new SettingsProcessor
+        {
+            FileProcessedHandler = ( file ) => _settingsFiles.Add( file ),
+        };
 
-        settingsProcessor.FileProcessed += ( file ) => _settingsFiles.Add( file );
+        Logger.Checkpoint();
+
         settingsProcessor.AddInputRegex( "pack\\.json" );
-        settingsProcessor.Process( inputFile, null );
+        Logger.Checkpoint();
+        settingsProcessor.Process( inputRoot, null );
+
+        Logger.Checkpoint();
 
         // Sort parent first.
         _settingsFiles.Sort( ( file1, file2 ) => file1.ToString().Length - file2.ToString().Length );
+
+        Logger.Checkpoint();
 
         foreach ( var settingsFile in _settingsFiles )
         {
@@ -153,15 +163,21 @@ public partial class TexturePackerFileProcessor : FileProcessor
             _dirToSettings[ settingsFile.Directory! ] = settings;
         }
 
+        Logger.Checkpoint();
+
         // Count the number of texture packer invocations.
         _countOnly = true;
-        base.Process( inputFile, outputRoot );
+        base.Process( inputRoot, outputRoot );
         _countOnly = false;
+
+        Logger.Checkpoint();
 
         // Do actual processing.
         _progressListener?.Start( 1 );
-        var result = base.Process( inputFile, outputRoot );
+        var result = base.Process( inputRoot, outputRoot );
         _progressListener?.End();
+
+        Logger.Checkpoint();
 
         return result;
     }
@@ -228,8 +244,11 @@ public partial class TexturePackerFileProcessor : FileProcessor
 
         for ( int i = 0, n = rootSettings.Scale.Length; i < n; i++ )
         {
-            var deleteProcessor = new DeleteProcessor();
-            deleteProcessor.OnProcessFile += ( Entry inputFile ) => inputFile.InputFile?.Delete();
+            var deleteProcessor = new DeleteProcessor
+            {
+                ProcessFileDelegate = ( Entry inputFile ) => inputFile.InputFile?.Delete(),
+            };
+            
             deleteProcessor.SetRecursive( false );
 
             var packFile = new FileInfo( rootSettings.GetScaledPackFileName( _packFileName, i ) );
@@ -305,29 +324,29 @@ public partial class TexturePackerFileProcessor : FileProcessor
             // must use the settings of the parent directory.
             if ( settings.CombineSubdirectories )
             {
-                var combiningProcessor = new CombiningProcessor();
-
-                combiningProcessor.OnProcessDir += ( entryDir, fileList ) =>
+                var combiningProcessor = new CombiningProcessor
                 {
-                    for ( var file = ( DirectoryInfo? )entryDir.InputFile;
-                         ( file != null ) && !file.Equals( inputDir.InputFile );
-                         file = file.Parent )
+                    ProcessDirDelegate = ( entryDir, fileList ) =>
                     {
-                        if ( new FileInfo( Path.Combine( file.FullName, "pack.json" ) ).Exists )
+                        for ( var file = ( DirectoryInfo? )entryDir.InputFile;
+                             ( file != null ) && !file.Equals( inputDir.InputFile );
+                             file = file.Parent )
                         {
-                            fileList.Clear();
+                            if ( new FileInfo( Path.Combine( file.FullName, "pack.json" ) ).Exists )
+                            {
+                                fileList.Clear();
 
-                            return;
+                                return;
+                            }
                         }
-                    }
 
-                    if ( !this._countOnly )
-                    {
-                        this._dirsToIgnore.Add( ( DirectoryInfo )entryDir.InputFile! );
-                    }
+                        if ( !this._countOnly )
+                        {
+                            this._dirsToIgnore.Add( ( DirectoryInfo )entryDir.InputFile! );
+                        }
+                    },
+                    ProcessFileDelegate = AddProcessedFile,
                 };
-
-                combiningProcessor.OnProcessFile += ( entry ) => combiningProcessor.AddProcessedFile( entry );
 
                 files = combiningProcessor.Process( ( FileInfo? )inputDir.InputFile, null ).ToList();
             }

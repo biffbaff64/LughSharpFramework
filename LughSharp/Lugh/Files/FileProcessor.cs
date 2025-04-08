@@ -44,21 +44,16 @@ namespace LughSharp.Lugh.Files;
 public partial class FileProcessor
 {
     // Delegate to filter filenames in a directory
-    public delegate bool FilenameFilter( string directory, string filename );
+    public Func< string, string, bool >? FilenameFilter { get; set; }
 
     // Delegate to signal a processed file
-    public delegate void FileProcessedHandler( FileInfo file );
+    public Action< FileInfo >? FileProcessedHandler { get; set; }
 
     // Delegate to process a file
-    public delegate void ProcessFileDelegate( Entry entry );
+    public Action< Entry >? ProcessFileDelegate { get; set; }
 
     // Delegate to process a directory
-    public delegate void ProcessDirDelegate( Entry entry, List< Entry > files );
-
-    // Events based on the delegates
-    public event FileProcessedHandler? FileProcessed;
-    public event ProcessFileDelegate?  OnProcessFile;
-    public event ProcessDirDelegate?   OnProcessDir;
+    public Action< Entry, List< Entry > >? ProcessDirDelegate { get; set; }
 
     // ========================================================================
 
@@ -67,7 +62,7 @@ public partial class FileProcessor
     public string          OutputSuffix    { get; set; }
     public bool            Recursive       { get; set; } = true;
     public bool            FlattenOutput   { get; set; }
-    public FilenameFilter? InputFilter     { get; set; }
+//    public FilenameFilter? InputFilter     { get; set; }
 
     // ========================================================================
 
@@ -119,7 +114,6 @@ public partial class FileProcessor
     public FileProcessor( FileProcessor processor )
     {
         Comparator  = processor.Comparator;
-        InputFilter = processor.InputFilter;
 
         InputRegex.AddRange( processor.InputRegex );
 
@@ -199,27 +193,21 @@ public partial class FileProcessor
     /// <returns></returns>
     public List< Entry > Process( string inputFileOrDir, string? outputRoot )
     {
-        Logger.Checkpoint();
-        Logger.Debug( $"inputFileOrDir: {inputFileOrDir}" );
-        Logger.Debug( $"outputRoot: {outputRoot}" );
-        
-        return Process( new FileInfo( inputFileOrDir ), outputRoot == null
-                            ? null
-                            : new DirectoryInfo( outputRoot ) );
+        return Process( new FileInfo( inputFileOrDir ),
+                        outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
     }
 
     /// <summary>
+    /// Processes the specified input file or directory.
     /// </summary>
     /// <param name="inputFileOrDir"></param>
-    /// <param name="outputRoot"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
-    public virtual List< Entry > Process( FileInfo? inputFileOrDir, DirectoryInfo? outputRoot )
+    /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
+    /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
+    public virtual List< Entry > Process( FileInfo inputFileOrDir, DirectoryInfo? outputRoot )
     {
-        if ( inputFileOrDir is not { Exists: true } )
+        //TODO: Chec this method against the java
+        if ( !inputFileOrDir.Exists )
         {
-            // 'inputFileOrDir is either null, or it doesn't exist.
-            // Would it not be better to create the folder if it is not null but doesn't exist?
             throw new ArgumentException( $"FileProcessor#Process: Input file does not exist: {inputFileOrDir?.FullName}" );
         }
 
@@ -382,7 +370,12 @@ public partial class FileProcessor
 
                 var dir = new DirectoryInfo( file.DirectoryName! );
 
-                if ( ( InputFilter != null ) && !InputFilter( dir.FullName, file.Name ) )
+//                if ( ( InputFilter != null ) && !InputFilter( dir.FullName, file.Name ) )
+//                {
+//                    continue;
+//                }
+
+                if ( ( FilenameFilter != null ) && !FilenameFilter( dir.FullName, file.Name ) )
                 {
                     continue;
                 }
@@ -427,8 +420,11 @@ public partial class FileProcessor
     {
         Guard.ThrowIfNull( entry.InputFile );
 
-        FileProcessed?.Invoke( ( FileInfo )entry.InputFile );
-        OnProcessFile?.Invoke( entry );
+//        FileProcessed?.Invoke( ( FileInfo )entry.InputFile );
+//        OnProcessFile?.Invoke( entry );
+        
+        FileProcessedHandler?.Invoke( ( FileInfo )entry.InputFile );
+        ProcessFileDelegate?.Invoke( entry );
     }
 
     /// <summary>
@@ -437,7 +433,9 @@ public partial class FileProcessor
     /// <param name="files"></param>
     public virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
-        OnProcessDir?.Invoke( entryDir, files );
+//        OnProcessDir?.Invoke( entryDir, files );
+
+        ProcessDirDelegate?.Invoke( entryDir, files );
     }
 
     /// <summary>
