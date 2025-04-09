@@ -193,7 +193,7 @@ public partial class FileProcessor
     /// <returns></returns>
     public List< Entry > Process( string inputFileOrDir, string? outputRoot )
     {
-        return Process( new FileInfo( inputFileOrDir ),
+        return Process( new DirectoryInfo( inputFileOrDir ),
                         outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
     }
 
@@ -203,21 +203,38 @@ public partial class FileProcessor
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
     /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
-    public virtual List< Entry > Process( FileInfo inputFileOrDir, DirectoryInfo? outputRoot )
+    public virtual List< Entry > Process( DirectoryInfo inputFileOrDir, DirectoryInfo? outputRoot )
     {
-        //TODO: Chec this method against the java
         if ( !inputFileOrDir.Exists )
         {
-            throw new ArgumentException( $"FileProcessor#Process: Input file does not exist: {inputFileOrDir?.FullName}" );
+            throw new ArgumentException( $"FileProcessor#Process: Input file does not exist: {inputFileOrDir.FullName}" );
         }
 
+        List< Entry > retval;
+        
         if ( ( inputFileOrDir.Attributes & FileAttributes.Directory ) == 0 )
         {
-            return Process( [ inputFileOrDir ], outputRoot );
+            retval = Process( inputFileOrDir, outputRoot );
         }
+        else
+        {
+            Logger.Debug( $"inputFileOrDir.FullName: {inputFileOrDir.FullName}" );
+            Logger.Debug( $"outputRoot.FullName: {outputRoot?.FullName ?? "null"}" );
+            
+            var files = new DirectoryInfo( inputFileOrDir.FullName )
+                        .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
 
-        return Process( new DirectoryInfo( inputFileOrDir.FullName )
-                        .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(), outputRoot );
+            Logger.Debug( $"files.Length: {files.Length}" );
+
+            foreach ( var f in files )
+            {
+                Logger.Debug( $"{f.FullName}::{f.Name}" );
+            }
+            
+            retval = Process( files, outputRoot );
+        }
+        
+        return retval;
     }
 
     /// <summary>
@@ -228,11 +245,14 @@ public partial class FileProcessor
     /// <exception cref="Exception"></exception>
     public List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
-        if ( outputRoot == null )
+        if ( ( outputRoot?.FullName == null )
+             || !Path.Exists( outputRoot.FullName ) )
         {
+            Logger.Error( "Output folder does not exist!" );
+
             outputRoot = new DirectoryInfo( "" );
         }
-
+        
         OutputFilesList.Clear();
 
         var dirToEntries = new Dictionary< DirectoryInfo, List< Entry > >();

@@ -247,7 +247,6 @@ FILES
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - File
     - IP   - IP   - FileHandle
     - IP   - IP   - FileProcessor
     - IP   - IP   - IFilenameFilter

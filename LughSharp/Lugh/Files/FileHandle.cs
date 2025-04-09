@@ -30,8 +30,13 @@ namespace LughSharp.Lugh.Files;
 /// defaults to <see cref="PathTypes.Internal" />.
 /// </summary>
 [PublicAPI]
+[Obsolete( "To be removed" )]
 public class FileHandle
 {
+    public PathTypes     PathType { get; set; }
+    public FileInfo      File     { get; set; }
+    public DirectoryInfo Dir      { get; set; }
+
     // ========================================================================
     // ========================================================================
 
@@ -42,6 +47,7 @@ public class FileHandle
     protected FileHandle()
     {
         File     = new FileInfo( "" );
+        Dir      = new DirectoryInfo( "" );
         PathType = PathTypes.Internal;
     }
 
@@ -53,6 +59,7 @@ public class FileHandle
     public FileHandle( string fileName )
     {
         File     = new FileInfo( fileName );
+        Dir      = new DirectoryInfo( File.FullName );
         PathType = PathTypes.Internal;
     }
 
@@ -63,6 +70,7 @@ public class FileHandle
     public FileHandle( FileInfo file )
     {
         File     = file;
+        Dir      = new DirectoryInfo( File.FullName );
         PathType = PathTypes.Internal;
     }
 
@@ -74,6 +82,7 @@ public class FileHandle
     public FileHandle( string fileName, PathTypes type )
     {
         File     = new FileInfo( fileName );
+        Dir      = new DirectoryInfo( File.FullName );
         PathType = type;
     }
 
@@ -85,11 +94,9 @@ public class FileHandle
     public FileHandle( FileInfo file, PathTypes type )
     {
         File     = file;
+        Dir      = new DirectoryInfo( File.FullName );
         PathType = type;
     }
-
-    public PathTypes PathType { get; set; }
-    public FileInfo  File     { get; set; }
 
     // ========================================================================
 
