@@ -29,6 +29,10 @@ namespace LughSharp.Lugh.Files;
 [PublicAPI]
 public class IOData
 {
+    public static readonly string ExternalPath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile );
+    public static readonly string InternalPath = Directory.GetCurrentDirectory();
+    public static readonly string LocalPath    = $"{Path.PathSeparator}";
+
     // ========================================================================
 
     public static readonly string? AssemblyPath      = Assembly.GetExecutingAssembly().Location;
@@ -36,4 +40,9 @@ public class IOData
     public static readonly string? AssetsPath        = Path.Combine( AssemblyDirectory ?? "", "Assets" );
 
     // ========================================================================
+
+    public static bool IsDirectory( FileSystemInfo inputFileOrDir )
+    {
+        return ( inputFileOrDir.Attributes & FileAttributes.Directory ) != 0;
+    }
 }

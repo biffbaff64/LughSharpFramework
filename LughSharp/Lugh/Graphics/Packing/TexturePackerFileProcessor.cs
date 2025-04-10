@@ -67,8 +67,6 @@ public partial class TexturePackerFileProcessor : FileProcessor
                                        string packFileName,
                                        TexturePacker.ProgressListener? progress )
     {
-        Logger.Checkpoint();
-        
         this._defaultSettings  = defaultSettings ?? new TexturePacker.Settings();
         this._progressListener = progress ?? new TexturePacker.ProgressListenerImpl();
 
@@ -90,26 +88,26 @@ public partial class TexturePackerFileProcessor : FileProcessor
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// </summary>
     /// <param name="inputRoot"></param>
     /// <param name="outputRoot"></param>
     /// <returns></returns>
-    public override List< Entry > Process( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
+    public override List< Entry > Process( FileSystemInfo? inputRoot, DirectoryInfo? outputRoot )
     {
         Guard.ThrowIfNull( inputRoot );
 
-        _rootDirectory = inputRoot;
+        _rootDirectory = new DirectoryInfo( inputRoot.FullName );
 
-        Logger.Debug( $"inputFile: {inputRoot.FullName }" );
-        Logger.Debug( $"outputRoot: {outputRoot?.FullName }" );
-        Logger.Debug( $"_rootDirectory: {_rootDirectory?.FullName }" );
-        
         // Collect pack.json setting files.
         var settingsProcessor = new SettingsProcessor
         {
-            FileProcessedHandler = ( file ) => _settingsFiles.Add( file ),
+            FileProcessedHandler = ( file ) =>
+            {
+                Logger.Debug( $"Adding settings file: {file.Name}" );
+                _settingsFiles.Add( file );
+            },
         };
 
         settingsProcessor.AddInputRegex( "pack\\.json" );
@@ -176,7 +174,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
     public List< Entry > Process( FileInfo[] files, FileInfo? outputRoot )
     {
         Guard.ThrowIfNull( outputRoot );
-        
+
         // Delete pack file and images.
         if ( _countOnly && outputRoot.Exists )
         {
@@ -206,7 +204,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
         }
         catch ( Exception ex )
         {
-            throw new Exception( "Error reading settings file: " + settingsFile, ex );
+            throw new Exception( $"Error reading settings file: {settingsFile}", ex );
         }
     }
 
@@ -234,7 +232,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
             {
                 ProcessFileDelegate = ( Entry inputFile ) => inputFile.InputFile?.Delete(),
             };
-            
+
             deleteProcessor.SetRecursive( false );
 
             var packFile = new FileInfo( rootSettings.GetScaledPackFileName( _packFileName, i ) );
@@ -272,7 +270,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
         {
             return;
         }
-
+        
         // Find first parent with settings, or use defaults.
         TexturePacker.Settings? settings = null;
 
@@ -418,11 +416,11 @@ public partial class TexturePackerFileProcessor : FileProcessor
             {
                 try
                 {
-                    Console.WriteLine( "Reading: " + inputDir.InputFile?.FullName );
+                    Logger.Debug( $"Reading: {inputDir.InputFile?.FullName}" );
                 }
                 catch ( IOException )
                 {
-                    Console.WriteLine( "Reading: " + inputDir.InputFile?.FullName );
+                    Logger.Debug( $"Reading: {inputDir.InputFile?.FullName}" );
                 }
             }
 
@@ -488,7 +486,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
         {
             throw new GdxRuntimeException( "Cannot perform Pack, output directory is null" );
         }
-        
+
         packer.Pack( inputDir.OutputDirectory, _packFileName );
     }
 
@@ -522,7 +520,8 @@ public partial class TexturePackerFileProcessor : FileProcessor
         return _progressListener;
     }
 
-    [GeneratedRegex( "(.*?)(\\d+)$" )] private static partial Regex MyRegex1();
+    [GeneratedRegex( "(.*?)(\\d+)$" )]
+    private static partial Regex MyRegex1();
 }
 
 // ============================================================================
@@ -542,41 +541,10 @@ public class DeleteProcessor : FileProcessor
 // ============================================================================
 
 [PublicAPI]
-public class SettingsProcessor : FileProcessor
-{
-    /// <inheritdoc />
-    public override void ProcessFile( Entry entry )
-    {
-        Guard.ThrowIfNull( entry );
-
-        base.ProcessFile( entry );
-    }
-}
+public class SettingsProcessor : FileProcessor;
 
 // ============================================================================
 // ============================================================================
 
 [PublicAPI]
-public class CombiningProcessor : FileProcessor
-{
-//    /// <inheritdoc />
-//    public override void ProcessDir( Entry entry, List< Entry > files )
-//    {
-//        for ( var file = ( DirectoryInfo? )entryDir.InputFile;
-//             ( file != null ) && !file.Equals( inputDir.InputFile );
-//             file = file.Parent )
-//        {
-//            if ( new FileInfo( Path.Combine( file.FullName, "pack.json" ) ).Exists )
-//            {
-//                files.Clear();
-//
-//                return;
-//            }
-//        }
-//
-//        if ( !this._countOnly )
-//        {
-//            this._dirsToIgnore.Add( ( DirectoryInfo )entryDir.InputFile! );
-//        }
-//    }
-}
+public class CombiningProcessor : FileProcessor;

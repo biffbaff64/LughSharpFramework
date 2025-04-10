@@ -25,6 +25,8 @@
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils.Exceptions;
 
+using FileInfo = System.IO.FileInfo;
+
 namespace DesktopGLBackend.Files;
 
 /// <summary>
@@ -98,18 +100,14 @@ public class DesktopGLFileHandle : FileHandle
     /// </summary>
     public FileInfo GetFile()
     {
-        if ( PathType == PathTypes.External )
+        return PathType switch
         {
-            return new FileInfo( DesktopGLFiles.ExternalPath + FileName );
-        }
+            PathTypes.External => new FileInfo( IOData.ExternalPath + FileName ),
+            PathTypes.Internal => new FileInfo( IOData.InternalPath + FileName ),
 
-        if ( PathType == PathTypes.Internal )
-        {
-            return new FileInfo( DesktopGLFiles.InternalPath + FileName );
-        }
-
-        return PathType == PathTypes.Local
-            ? new FileInfo( DesktopGLFiles.LocalPath + FileName )
-            : File;
+            var _ => PathType == PathTypes.Local
+                ? new FileInfo( IOData.LocalPath + FileName )
+                : File,
+        };
     }
 }

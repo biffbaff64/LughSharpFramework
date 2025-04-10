@@ -139,7 +139,7 @@ public class TexturePacker
         }
 
         Guard.ThrowIfNull( GetRootPath() );
-        
+
         SetRootPath( Path.GetFullPath( rootDir.FullName ) );
         SetRootPath( GetRootPath()!.Replace( '\\', '/' ) );
 
@@ -871,42 +871,30 @@ public class TexturePacker
 
     private string? GetRepeatValue()
     {
-        if ( _settings is { WrapX: Texture.TextureWrap.Repeat, WrapY: Texture.TextureWrap.Repeat } )
+        return _settings switch
         {
-            return "xy";
-        }
+            { WrapX: Texture.TextureWrap.Repeat, WrapY     : Texture.TextureWrap.Repeat }      => "xy",
+            { WrapX: Texture.TextureWrap.Repeat, WrapY     : Texture.TextureWrap.ClampToEdge } => "x",
+            { WrapX: Texture.TextureWrap.ClampToEdge, WrapY: Texture.TextureWrap.Repeat }      => "y",
 
-        if ( _settings is { WrapX: Texture.TextureWrap.Repeat, WrapY: Texture.TextureWrap.ClampToEdge } )
-        {
-            return "x";
-        }
-
-        if ( _settings is { WrapX: Texture.TextureWrap.ClampToEdge, WrapY: Texture.TextureWrap.Repeat } )
-        {
-            return "y";
-        }
-
-        return null;
+            var _ => null,
+        };
     }
 
     private PixelFormat GetPixelFormat( PixelType.Format format )
     {
-        switch ( format )
+        return format switch
         {
-            case PixelType.Format.RGBA8888:
-            case PixelType.Format.RGBA4444:
-                return PixelFormat.Format32bppArgb;
+            PixelType.Format.RGBA8888
+                or PixelType.Format.RGBA4444 => PixelFormat.Format32bppArgb,
 
-            case PixelType.Format.RGB565:
-            case PixelType.Format.RGB888:
-                return PixelFormat.Format32bppRgb;
+            PixelType.Format.RGB565
+                or PixelType.Format.RGB888 => PixelFormat.Format32bppRgb,
 
-            case PixelType.Format.Alpha:
-                return PixelFormat.Alpha;
+            PixelType.Format.Alpha => PixelFormat.Alpha,
 
-            default:
-                throw new GdxRuntimeException( $"Unsupported format: {_settings.Format}" );
-        }
+            var _ => throw new GdxRuntimeException( $"Unsupported format: {_settings.Format}" ),
+        };
     }
 
     /// <summary>
@@ -919,7 +907,7 @@ public class TexturePacker
 
     /// <summary>
     /// </summary>
-    /// <param name="settings"></param>
+    /// <param name="settings"> The <see cref="TexturePacker.Settings"/> to use. </param>
     /// <param name="input"> Directory containing individual images to be packed. </param>
     /// <param name="output"> Directory where the pack file and page images will be written. </param>
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
@@ -970,7 +958,7 @@ public class TexturePacker
 
         if ( !File.Exists( inputFile.FullName ) )
         {
-            throw new ArgumentException( "TexturePacker#IsModified: Input file does not exist: " + inputFile.Name );
+            throw new ArgumentException( $"TexturePacker#IsModified: Input file does not exist: {inputFile.Name}" );
         }
 
         return IsModified( inputFile.FullName, outputFile.LastWriteTimeUtc.Ticks / 10000 );

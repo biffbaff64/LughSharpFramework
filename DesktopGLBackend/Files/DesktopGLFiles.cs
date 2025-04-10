@@ -32,11 +32,6 @@ namespace DesktopGLBackend.Files;
 [PublicAPI]
 public class DesktopGLFiles : IFiles
 {
-    public static readonly string ExternalPath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile );
-    public static readonly string InternalPath = Directory.GetCurrentDirectory();
-    public static readonly string LocalPath    = $"{Path.PathSeparator}";
-
-    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -65,7 +60,7 @@ public class DesktopGLFiles : IFiles
     /// </summary>
     public FileHandle Internal( string path )
     {
-        return GetFileHandle( $"{InternalPath}{'/'}{path}", PathTypes.Internal );
+        return GetFileHandle( $"{IOData.InternalPath}{'/'}{path}", PathTypes.Internal );
     }
 
     /// <summary>
@@ -98,7 +93,7 @@ public class DesktopGLFiles : IFiles
     /// </summary>
     public string GetExternalStoragePath()
     {
-        return ExternalPath;
+        return IOData.ExternalPath;
     }
 
     /// <summary>
@@ -115,7 +110,7 @@ public class DesktopGLFiles : IFiles
     /// </summary>
     public string GetLocalStoragePath()
     {
-        return LocalPath;
+        return IOData.LocalPath;
     }
 
     /// <summary>
