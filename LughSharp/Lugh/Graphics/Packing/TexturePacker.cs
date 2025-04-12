@@ -24,7 +24,6 @@
 
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
-using System.Text.Json;
 
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.Images;
@@ -40,9 +39,95 @@ using Pen = System.Drawing.Pen;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
+/// <summary>
+/// TexturePacker can pack all images for an application in one shot. Given a directory, it
+/// recursively scans for image files. For each directory of images TexturePacker encounters,
+/// it packs the images on to a larger texture, called a page. If the images in a directory
+/// don’t fit on the max size of a single page, multiple pages will be used.
+/// <para>
+/// Images in the same directory go on the same set of pages. If all images fit on a single page,
+/// no subdirectories should be used because with one page the app will only ever perform one
+/// texture bind. Otherwise, subdirectories can be used to segregate related images to minimize
+/// texture binds.
+/// </para>
+/// <para>
+/// Eg, an application may want to place all the “game” images in a separate directory from the
+/// “pause menu” images, since these two sets of images are drawn serially: all the game images
+/// are drawn (one bind), then the pause menu is drawn on top (another bind). If the images were
+/// in a single directory that resulted in more than one page, each page could contain a mix of
+/// game and pause menu images. This would cause multiple texture binds to render the game and
+/// pause menu instead of just one each.
+/// </para>
+/// <para>
+/// Subdirectories are also useful to group images with related texture settings. Settings like
+/// runtime memory format (RGBA, RGB, etc) and filtering (nearest, linear, etc) are per texture.
+/// Images that need different per texture settings need to go on separate pages, so should be
+/// placed in separate subdirectories.
+/// </para>
+/// <para>
+/// To use subdirectories for organization without TexturePacker outputting a set of pages for
+/// each subdirectory, see the combineSubdirectories setting.
+/// To avoid subdirectory paths being used in image names in the atlas file, see the flattenPaths
+/// setting.
+/// </para>
+/// <para>
+/// Each directory may contain a “pack.json” file, which is a JSON representation of the
+/// <see cref="TexturePacker.Settings"/> class. Each subdirectory inherits all the settings from
+/// its parent directory. Any settings set in the subdirectory override those set in the parent
+/// directory.
+/// </para>
+/// <para>
+/// Below is a JSON example with every available setting and the default value for each. All settings
+/// do not need to be specified, any or all may be omitted. If a setting is not specified for a
+/// directory or any parent directory, the default value is used.
+/// <code>
+/// {
+///     "pot": true,
+///     "paddingX": 2,
+///     "paddingY": 2,
+///     "bleed": true,
+///     "bleedIterations": 2,
+///     "edgePadding": true,
+///     "duplicatePadding": false,
+///     "rotation": false,
+///     "minWidth": 16,
+///     "minHeight": 16,
+///     "maxWidth": 1024,
+///     "maxHeight": 1024,
+///     "square": false,
+///     "stripWhitespaceX": false,
+///     "stripWhitespaceY": false,
+///     "alphaThreshold": 0,
+///     "filterMin": "Nearest",
+///     "filterMag": "Nearest",
+///     "wrapX": "ClampToEdge",
+///     "wrapY": "ClampToEdge",
+///     "format": "RGBA8888",
+///     "alias": true,
+///     "outputFormat": "png",
+///     `"jpegQuality": 0.9,
+///     "ignoreBlankImages": true,
+///     "fast": false,
+///     "debug": false,
+///     "combineSubdirectories": false,
+///     "flattenPaths": false,
+///     "premultiplyAlpha": false,
+///     "useIndexes": true,
+///     "limitMemory": true,
+///     "grid": false,
+///     "scale": [ 1 ],
+///     "scaleSuffix": [ "" ],
+///     "scaleResampling": [ "bicubic" ],
+///     "atlasExtension": ".atlas",
+///     "prettyPrint": true,
+///     "legacyOutput": true
+/// }
+/// </code>
+/// </para>
+/// </summary>
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public class TexturePacker
+public partial class TexturePacker
 {
     private Settings           _settings;
     private IPacker            _packer;
@@ -1337,6 +1422,9 @@ public class TexturePacker
         }
     }
 
+    // ========================================================================
+    // ========================================================================
+
     [PublicAPI]
     public abstract class ProgressListener
     {
@@ -1416,154 +1504,4 @@ public class TexturePacker
 
     // ========================================================================
     // ========================================================================
-
-    [PublicAPI]
-    [SupportedOSPlatform( "windows" )]
-    public class Settings
-    {
-        public bool                  MultipleOfFour        { get; set; }
-        public bool                  Rotation              { get; set; }
-        public bool                  PowerOfTwo            { get; set; } = true;
-        public int                   PaddingX              { get; set; } = 2;
-        public int                   PaddingY              { get; set; } = 2;
-        public bool                  EdgePadding           { get; set; } = true;
-        public bool                  DuplicatePadding      { get; set; } = false;
-        public int                   MinWidth              { get; set; } = 16;
-        public int                   MinHeight             { get; set; } = 16;
-        public int                   MaxWidth              { get; set; } = 1024;
-        public int                   MaxHeight             { get; set; } = 1024;
-        public bool                  Square                { get; set; } = false;
-        public bool                  StripWhitespaceX      { get; set; }
-        public bool                  StripWhitespaceY      { get; set; }
-        public int                   AlphaThreshold        { get; set; }
-        public Texture.TextureFilter FilterMin             { get; set; } = Texture.TextureFilter.Nearest;
-        public Texture.TextureFilter FilterMag             { get; set; } = Texture.TextureFilter.Nearest;
-        public Texture.TextureWrap   WrapX                 { get; set; } = Texture.TextureWrap.ClampToEdge;
-        public Texture.TextureWrap   WrapY                 { get; set; } = Texture.TextureWrap.ClampToEdge;
-        public PixelFormat           Format                { get; set; } = PixelFormat.Format32bppArgb;
-        public bool                  IsAlias               { get; set; } = true;
-        public string                OutputFormat          { get; set; } = "png";
-        public float                 JpegQuality           { get; set; } = 0.9f;
-        public bool                  IgnoreBlankImages     { get; set; } = true;
-        public bool                  Fast                  { get; set; }
-        public bool                  Debug                 { get; set; }
-        public bool                  Silent                { get; set; }
-        public bool                  CombineSubdirectories { get; set; }
-        public bool                  Ignore                { get; set; }
-        public bool                  FlattenPaths          { get; set; }
-        public bool                  PremultiplyAlpha      { get; set; }
-        public bool                  UseIndexes            { get; set; } = true;
-        public bool                  Bleed                 { get; set; } = true;
-        public int                   BleedIterations       { get; set; } = 2;
-        public bool                  LimitMemory           { get; set; } = true;
-        public bool                  Grid                  { get; set; }
-        public float[]               Scale                 { get; set; } = [ 1 ];
-        public string[]              ScaleSuffix           { get; set; } = [ "" ];
-        public Resampling[]          ScaleResampling       { get; set; } = [ Resampling.Bicubic ];
-        public string                AtlasExtension        { get; set; } = ".atlas";
-        public bool                  PrettyPrint           { get; set; } = true;
-        public bool                  LegacyOutput          { get; set; } = true;
-
-        // ====================================================================
-
-        public Settings()
-        {
-        }
-
-        public Settings( Settings settings )
-        {
-            Set( settings );
-        }
-
-        // ====================================================================
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="settings"></param>
-        public void Set( Settings settings )
-        {
-            MinWidth  = settings.MinWidth;
-            MinHeight = settings.MinHeight;
-            MaxWidth  = settings.MaxWidth;
-            MaxHeight = settings.MaxHeight;
-
-            Fast                  = settings.Fast;
-            Rotation              = settings.Rotation;
-            PowerOfTwo            = settings.PowerOfTwo;
-            MultipleOfFour        = settings.MultipleOfFour;
-            PaddingX              = settings.PaddingX;
-            PaddingY              = settings.PaddingY;
-            EdgePadding           = settings.EdgePadding;
-            DuplicatePadding      = settings.DuplicatePadding;
-            AlphaThreshold        = settings.AlphaThreshold;
-            IgnoreBlankImages     = settings.IgnoreBlankImages;
-            StripWhitespaceX      = settings.StripWhitespaceX;
-            StripWhitespaceY      = settings.StripWhitespaceY;
-            IsAlias               = settings.IsAlias;
-            Format                = settings.Format;
-            JpegQuality           = settings.JpegQuality;
-            OutputFormat          = settings.OutputFormat;
-            FilterMin             = settings.FilterMin;
-            FilterMag             = settings.FilterMag;
-            WrapX                 = settings.WrapX;
-            WrapY                 = settings.WrapY;
-            Debug                 = settings.Debug;
-            Silent                = settings.Silent;
-            CombineSubdirectories = settings.CombineSubdirectories;
-            Ignore                = settings.Ignore;
-            FlattenPaths          = settings.FlattenPaths;
-            PremultiplyAlpha      = settings.PremultiplyAlpha;
-            Square                = settings.Square;
-            UseIndexes            = settings.UseIndexes;
-            Bleed                 = settings.Bleed;
-            BleedIterations       = settings.BleedIterations;
-            LimitMemory           = settings.LimitMemory;
-            Grid                  = settings.Grid;
-            AtlasExtension        = settings.AtlasExtension;
-            PrettyPrint           = settings.PrettyPrint;
-            LegacyOutput          = settings.LegacyOutput;
-
-            settings.Scale.CopyTo( Scale, 0 );
-            settings.ScaleSuffix.CopyTo( ScaleSuffix, 0 );
-            settings.ScaleResampling.CopyTo( ScaleResampling, 0 );
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="packFileName"></param>
-        /// <param name="scaleIndex"></param>
-        /// <returns></returns>
-        public string GetScaledPackFileName( string packFileName, int scaleIndex )
-        {
-            // Use suffix if not empty string.
-            if ( ScaleSuffix[ scaleIndex ].Length > 0 )
-            {
-                packFileName += ScaleSuffix[ scaleIndex ];
-            }
-            else
-            {
-                // Otherwise if scale != 1 or multiple scales, use subdirectory.
-                var scaleValue = Scale[ scaleIndex ];
-
-                if ( Scale.Length != 1 )
-                {
-                    packFileName = ( ( scaleValue % 1 ) == 0f ? $"{( int )scaleValue}" : $"{scaleValue}" )
-                                   + "/"
-                                   + packFileName;
-                }
-            }
-
-            return packFileName;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="root"></param>
-        public void ReadFromJson( JsonElement root )
-        {
-        }
-    }
 }

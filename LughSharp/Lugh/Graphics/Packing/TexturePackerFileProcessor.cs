@@ -150,7 +150,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
             // Merge settings from current directory.
             Merge( settings, settingsFile );
 
-            _dirToSettings[ settingsFile.Directory! ] = settings;
+            _dirToSettings.Add( settingsFile.Directory!, settings );
         }
 
         // Count the number of texture packer invocations.
