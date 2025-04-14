@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
@@ -39,15 +40,92 @@ namespace LughSharp.Lugh.Files;
 /// entries provided to the callbacks have the original file, the output directory,
 /// and the output file. If <see cref="SetFlattenOutput(bool)"/> is false, the output
 /// will match the directory structure of the input.
+/// <br/>
+/// <para>
+/// <b>Potential Areas for Improvement and Questions:</b>
+/// </para>
+/// <para>
+/// <b>Error Handling in Process(FileSystemInfo, DirectoryInfo?):</b>
+/// When inputFileOrDir is a directory, the code retrieves FileSystemInfo and casts them to
+/// FileInfo. What happens if a subdirectory is encountered at the top level? It seems it would
+/// be skipped in this initial call. Is that the intended behavior? Perhaps a check for
+/// IsDirectory and a recursive call here as well might be needed if the initial input can be
+/// a directory and recursive processing should start from there.
+/// </para>
+/// <br/>
+/// <para>
+/// <b>ProcessDir Output Directory:</b>
+/// In the Process(FileInfo[], DirectoryInfo?) method, the newOutputDir for ProcessDir is
+/// determined based on FlattenOutput or the OutputDirectory of the first entry in dirEntries.
+/// If the entries in dirEntries logically belong to different subdirectories of the input,
+/// this might lead to an incorrect OutputDirectory being set for the entry passed to ProcessDir.
+/// Consider if the OutputDirectory for the Entry passed to ProcessDir should somehow reflect
+/// the original input subdirectory structure.
+/// </para>
+/// <para>
+/// <b>Handling Root Directory Input:</b>
+/// If inputFileOrDir in the initial Process call is a root directory (e.g., "C:"), the file.Directory
+/// in the recursive Process method might be null. The current code logs an error. Consider if a
+/// different handling mechanism is needed for root directories (e.g., processing files directly
+/// under the root without a parent directory concept for grouping).
+/// </para>
+/// <para>
+/// <b>Clarity of outputDir in Recursive Calls:</b>
+/// In the recursive Process call, outputDir is constructed based on file.Name. This seems correct
+/// for maintaining the output directory structure. However, ensure this aligns with the overall
+/// intention of FlattenOutput. If FlattenOutput is true, the outputDir in the recursive calls might
+/// still be creating a subdirectory structure.
+/// </para>
+/// <para>
+/// <b>Comparator and Directories:</b>
+/// The Comparator is defined for FileInfo. The EntryComparator handles DirectoryInfo by comparing
+/// names. Is there a specific requirement for sorting directories differently? If not, the default
+/// name comparison seems reasonable.
+/// </para>
+/// <para>
+/// <b>OutputFilesList Population:</b>
+/// The OutputFilesList is cleared at the beginning of the Process(FileInfo[], DirectoryInfo?) method.
+/// The AddProcessedFile(Entry) method adds to this list. Ensure that AddProcessedFile is called
+/// appropriately within ProcessFile or elsewhere to collect the processed files. It's not explicitly
+/// called within the provided Process methods.
+/// </para>
+/// <para>
+/// <b>Thread Safety:</b>
+/// If this class is intended to be used in a multi-threaded environment, consider potential thread
+/// safety issues, especially with the shared InputRegex and OutputFilesList.
+/// </para>
+/// <para>
+/// <b>Cancellation/Progress Reporting:</b>
+/// For long-running operations, consider adding mechanisms for cancellation or progress reporting.
+/// </para>
+/// <para>
+/// <b>Specific Questions:</b>
+/// <li>
+/// When and where is AddProcessedFile(Entry) intended to be called? It's crucial for populating the
+/// OutputFilesList that the Process methods ultimately return.
+/// </li>
+/// <li>
+/// What is the intended behavior when the initial inputFileOrDir in Process(FileSystemInfo, DirectoryInfo?)
+/// is a directory, and recursive processing should occur?
+/// </li>
+/// <li>
+/// How should root directories be handled?
+/// </li>
+/// <li>
+/// Does FlattenOutput apply to the directory structure created during recursion, or only to the final
+/// output file path within the outputRoot?
+/// </li>
+/// <br/>
+/// </para>
 /// </summary>
 [PublicAPI]
 public partial class FileProcessor
 {
     // Delegate to filter filenames in a directory
-    public Func< string, string, bool >? FilenameFilter { get; set; }
+    public Func< string, string, bool >? FilenameFilterDelegate { get; set; }
 
     // Delegate to signal a processed file
-    public Action< FileInfo >? FileProcessedHandler { get; set; }
+    public virtual Action< FileSystemInfo >? FileProcessedDelegate { get; set; }
 
     // Delegate to process a file
     public Action< Entry >? ProcessFileDelegate { get; set; }
@@ -71,10 +149,12 @@ public partial class FileProcessor
     /// </summary>
     public FileProcessor()
     {
-        OutputSuffix  = string.Empty;
-        FlattenOutput = false;
+        InputRegex      = [ ];
+        OutputFilesList = [ ];
+        OutputSuffix    = string.Empty;
+        FlattenOutput   = false;
 
-        SetRecursive();
+        SetRecursive( true );
     }
 
     /// <summary>
@@ -121,7 +201,7 @@ public partial class FileProcessor
 
         List< Entry > retval;
 
-        if ( ( inputFileOrDir.Attributes & FileAttributes.Directory ) == 0 )
+        if ( IOData.IsFile( inputFileOrDir ) )
         {
             retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
         }
@@ -154,22 +234,11 @@ public partial class FileProcessor
 
         OutputFilesList.Clear();
 
-//        var dirToEntries = new Dictionary< DirectoryInfo, List< Entry > >();
-//        Process( files, outputRoot, outputRoot, dirToEntries, 0 );
-//        Logger.Debug( $"Keys  : {dirToEntries.Keys.Count}" );
-//        Logger.Debug( $"Values: {dirToEntries.Values.Count}" );
-
         var stringToEntries = new Dictionary< string, List< Entry > >();
+        var allEntries      = new List< Entry >();
 
         Process( files, outputRoot, outputRoot, stringToEntries, 0 );
 
-        Logger.Debug( $"stringToEntries: {stringToEntries.Count}" );
-        Logger.Debug( $"Keys: {stringToEntries.Keys.Count}" );
-        Logger.Debug( $"Values: {stringToEntries.Values.Count}" );
-
-        var allEntries = new List< Entry >();
-
-//        foreach ( var (inputDir, dirEntries) in dirToEntries )
         foreach ( var (inputDir, dirEntries) in stringToEntries )
         {
             if ( Comparator != null )
@@ -188,7 +257,6 @@ public partial class FileProcessor
                 newOutputDir = dirEntries[ 0 ].OutputDirectory;
             }
 
-//            var outputName = inputDir.Name;
             var outputName = inputDir;
 
             if ( OutputSuffix != null )
@@ -198,7 +266,6 @@ public partial class FileProcessor
 
             var entry = new Entry
             {
-//                InputFile = inputDir,
                 InputFile       = new DirectoryInfo( inputDir ),
                 OutputDirectory = newOutputDir!,
             };
@@ -274,7 +341,7 @@ public partial class FileProcessor
 
         foreach ( var file in files )
         {
-            if ( ( file.Attributes & FileAttributes.Directory ) == 0 )
+            if ( !IOData.IsDirectory( file ) )
             {
                 if ( InputRegex.Count > 0 )
                 {
@@ -301,7 +368,7 @@ public partial class FileProcessor
                     Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
                 }
 
-                if ( ( FilenameFilter != null ) && !FilenameFilter( file.Directory!.FullName, file.Name ) )
+                if ( ( FilenameFilterDelegate != null ) && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
                 {
                     continue;
                 }
@@ -325,17 +392,15 @@ public partial class FileProcessor
 
                 var dir = file.Directory!;
 
-                if ( dirToEntries.TryGetValue( dir, out var value ) )
+                if ( !dirToEntries.ContainsKey( dir ) )
                 {
-                    value.Add( entry );
+                    dirToEntries.Add( dir, [ ] );
                 }
-                else
-                {
-                    Logger.Error( $"Key not found in dirToEntries: {dir}" );
-                }
+
+                dirToEntries[ dir ].Add( entry );
             }
 
-            if ( Recursive && ( ( file.Attributes & FileAttributes.Directory ) != 0 ) )
+            if ( Recursive && IOData.IsDirectory( file ) )
             {
                 var subdir = outputDir.FullName.Length == 0
                     ? new DirectoryInfo( file.Name )
@@ -358,30 +423,6 @@ public partial class FileProcessor
     private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                           Dictionary< string, List< Entry > > stringToEntries, int depth )
     {
-//        foreach ( var file in files )
-//        {
-//            Logger.Debug( $"Processing file: {file.FullName}, (directory: {file.Directory?.FullName} )" );
-//
-//            var dir = file.Directory?.FullName; // Get the parent directory name
-//
-//            if ( dir != null )
-//            {
-//                if ( !stringToEntries.ContainsKey( dir ) )
-//                {
-//                    Logger.Debug( $"Adding key {dir}" );
-//
-//                    stringToEntries.Add( dir, [ ] );
-//                }
-//            }
-//            else
-//            {
-//                // Handle the case where a file has no parent directory (e.g., root level)
-//                // Either log a warning, throw an exception, or handle it differently
-//                // ( Logging a warning for now... )
-//                Logger.Error( $"WARNING: File '{file.FullName}' has no parent directory." );
-//            }
-//        }
-
         foreach ( var file in files )
         {
             if ( ( file.Attributes & FileAttributes.Directory ) == 0 )
@@ -411,7 +452,7 @@ public partial class FileProcessor
                     Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
                 }
 
-                if ( ( FilenameFilter != null ) && !FilenameFilter( file.Directory!.FullName, file.Name ) )
+                if ( ( FilenameFilterDelegate != null ) && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
                 {
                     continue;
                 }
@@ -439,23 +480,10 @@ public partial class FileProcessor
 
                 if ( !stringToEntries.ContainsKey( dir ) )
                 {
-                    Logger.Debug( $"Adding new key: {dir}" );
-                    
                     stringToEntries.Add( dir, [ ] );
                 }
 
-                Logger.Debug( $"Adding value to dictionary at key: {dir}" );
-
                 stringToEntries[ dir ].Add( entry );
-
-//                if ( stringToEntries.TryGetValue( dir, out var value ) )
-//                {
-//                    value.Add( entry );
-//                }
-//                else
-//                {
-//                    Logger.Error( $"Key not found in dirToEntries: {dir}" );
-//                }
             }
 
             if ( Recursive && ( ( file.Attributes & FileAttributes.Directory ) != 0 ) )
@@ -469,6 +497,10 @@ public partial class FileProcessor
                          outputRoot, subdir, stringToEntries, depth + 1 );
             }
         }
+
+        // Note:
+        // To get the count of files stores in the List< Entry >, use something like:-
+        // var totalEntries = stringToEntries.Values.Sum(list => list.Count);
     }
 
     /// <summary>
@@ -476,40 +508,35 @@ public partial class FileProcessor
     /// <param name="entry"></param>
     public virtual void ProcessFile( Entry entry )
     {
+        Logger.Checkpoint();
+
         Guard.ThrowIfNull( entry.InputFile );
 
-        FileProcessedHandler?.Invoke( ( FileInfo )entry.InputFile );
+        FileProcessedDelegate?.Invoke( ( FileInfo )entry.InputFile );
         ProcessFileDelegate?.Invoke( entry );
     }
 
     /// <summary>
-    /// 
     /// </summary>
     /// <param name="entryDir"></param>
     /// <param name="files"></param>
     public virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
-        ProcessDirDelegate?.Invoke( entryDir, files );
+        Logger.Checkpoint();
+
+        if ( ProcessDirDelegate == null )
+        {
+            Logger.Debug( "ProcessDirDelegate is not set!" );
+
+            return;
+        }
+
+        ProcessDirDelegate.Invoke( entryDir, files );
     }
 
     // ========================================================================
 
     /// <summary>
-    /// </summary>
-    /// <param name="suffixes"></param>
-    /// <returns> This FileProcessor for chaining. </returns>
-    public FileProcessor AddInputSuffix( params string[] suffixes )
-    {
-        foreach ( var suffix in suffixes )
-        {
-            AddInputRegex( $"(?i).*{Escape( suffix )}" );
-        }
-
-        return this;
-    }
-
-    /// <summary>
-    /// 
     /// </summary>
     /// <param name="regexes"></param>
     /// <returns> This FileProcessor for chaining. </returns>
@@ -524,6 +551,22 @@ public partial class FileProcessor
     }
 
     /// <summary>
+    /// Adds a case insensitive suffix for matching input files.
+    /// </summary>
+    /// <param name="suffixes"></param>
+    /// <returns> This FileProcessor for chaining. </returns>
+    public FileProcessor AddInputSuffix( params string[] suffixes )
+    {
+        foreach ( var suffix in suffixes )
+        {
+            AddInputRegex( $"(?i).*{Escape( suffix )}" );
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Sets the suffix for output files, replacing the extension of the input file.
     /// </summary>
     /// <param name="outputSuffix"></param>
     /// <returns> This FileProcessor for chaining. </returns>
@@ -549,7 +592,7 @@ public partial class FileProcessor
     /// </summary>
     /// <param name="recursive"></param>
     /// <returns> This FileProcessor for chaining. </returns>
-    public FileProcessor SetRecursive( bool recursive = true )
+    public FileProcessor SetRecursive( bool recursive )
     {
         Recursive = recursive;
 
@@ -568,9 +611,16 @@ public partial class FileProcessor
     }
 
     /// <summary>
+    /// Adds a processed <see cref="Entry"/> to the <see cref="OutputFilesList"/>.
+    /// This method should be called by:-
+    /// <li><see cref="ProcessFile(Entry)"/> or,</li>
+    /// <li><see cref="ProcessDir(Entry, List{Entry})"/></li>
+    /// if the return value of <see cref="Process(FileSystemInfo, DirectoryInfo)"/> or
+    /// <see cref="Process(FileInfo[], DirectoryInfo)"/> should return all the processed
+    /// files.
     /// </summary>
     /// <param name="entry"></param>
-    public void AddProcessedFile( Entry entry )
+    public virtual void AddProcessedFile( Entry entry )
     {
         OutputFilesList.Add( entry );
     }

@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -34,7 +35,9 @@ namespace LughSharp.Lugh.Utils.Guarding;
 public class Guard
 {
     // ========================================================================
-    // Null checks
+
+    #region Null checks
+
     // ========================================================================
 
     /// <summary>
@@ -91,8 +94,12 @@ public class Guard
         ArgumentNullException.ThrowIfNull( argumentValue, argumentName );
     }
 
+    #endregion
+
     // ========================================================================
-    // Range checks
+
+    #region Range checks
+
     // ========================================================================
 
     /// <summary>
@@ -149,8 +156,12 @@ public class Guard
         }
     }
 
+    #endregion
+
     // ========================================================================
-    // Type checks
+
+    #region Type checks
+
     // ========================================================================
 
     /// <summary>
@@ -184,8 +195,12 @@ public class Guard
         throw new ArgumentException( $"Type {argumentValue} must be assignable to {typeof( T )}" );
     }
 
+    #endregion
+
     // ========================================================================
-    // Boolean checks
+
+    #region Boolean checks
+
     // ========================================================================
 
     /// <summary>
@@ -220,8 +235,12 @@ public class Guard
         throw new ArgumentException( $"The result of expression {argumentValue} should be FALSE." );
     }
 
+    #endregion
+
     // ========================================================================
-    // Collection checks
+
+    #region Collection checks
+
     // ========================================================================
 
     /// <summary>
@@ -261,12 +280,34 @@ public class Guard
         }
     }
 
-    // ========================================================================
-    // Custom Validation checks
-    // ========================================================================
+    #endregion
 
     // ========================================================================
-    // File Validation checks
+
+    #region Miscellaneous Validation checks
+
+    // ========================================================================
+
+    /// <summary>
+    /// Logs a message to the debug console if the supplied copndition is <b>false</b>
+    /// </summary>
+    /// <param name="condition"> The condition to check. </param>
+    /// <param name="message"> The message to log if the condition is false. </param>
+    [Conditional("DEBUG")]
+    public static void Assert( bool condition, string message )
+    {
+        if ( !condition )
+        {
+            Logger.Debug( message );
+        }
+    }
+
+    #endregion
+
+    // ========================================================================
+
+    #region File Validation checks
+
     // ========================================================================
 
     /// <summary>
@@ -321,8 +362,12 @@ public class Guard
         }
     }
 
+    #endregion
+
     // ========================================================================
-    // Number / Maths checks
+
+    #region Number / Maths checks
+
     // ========================================================================
 
     /// <summary>
@@ -340,8 +385,12 @@ public class Guard
         throw new ArithmeticException( $"Value {value} must be positive." );
     }
 
+    #endregion
+
     // ========================================================================
-    // String checks
+
+    #region String checks
+
     // ========================================================================
 
     /// <summary>
@@ -369,4 +418,6 @@ public class Guard
 
         throw new ArgumentException( $"Supplied string length must be less than or equal to {maxLength}" );
     }
+
+    #endregion
 }

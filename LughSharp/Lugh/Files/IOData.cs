@@ -24,6 +24,8 @@
 
 using System.Reflection;
 
+using LughSharp.Lugh.Utils;
+
 namespace LughSharp.Lugh.Files;
 
 [PublicAPI]
@@ -44,5 +46,44 @@ public class IOData
     public static bool IsDirectory( FileSystemInfo inputFileOrDir )
     {
         return ( inputFileOrDir.Attributes & FileAttributes.Directory ) != 0;
+    }
+
+    public static bool IsFile( FileSystemInfo inputFileOrDir )
+    {
+        return ( inputFileOrDir.Attributes & FileAttributes.Directory ) == 0;
+    }
+
+    public static PathType GetPathType( string path )
+    {
+        if ( string.IsNullOrEmpty( path ) )
+        {
+            return PathType.Unknown;
+        }
+
+        try
+        {
+            if ( Directory.Exists( path ) )
+            {
+                return PathType.Directory;
+            }
+
+            return File.Exists( path ) ? PathType.File : PathType.DoesNotExist;
+        }
+        catch ( Exception e ) // Handle potential exceptions like PathTooLongException, SecurityException, etc.
+        {
+            Logger.Error( $"Exception ignored: {e.Message}" );
+            
+            return PathType.Invalid;
+        }
+    }
+
+    [PublicAPI]
+    public enum PathType
+    {
+        Unknown,
+        File,
+        Directory,
+        DoesNotExist,
+        Invalid,
     }
 }

@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Reflection;
 using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
@@ -42,7 +43,6 @@ public partial class TexturePackerFileProcessor : FileProcessor
 
     private Dictionary< DirectoryInfo, TexturePacker.Settings > _dirToSettings = [ ]; //TODO: Rename
     private List< DirectoryInfo >                               _dirsToIgnore  = [ ];
-    private List< FileInfo >                                    _settingsFiles = [ ];
     private Json                                                _json          = new();
     private DirectoryInfo                                       _rootDirectory;
     private string                                              _packFileName;
@@ -100,13 +100,18 @@ public partial class TexturePackerFileProcessor : FileProcessor
 
         _rootDirectory = new DirectoryInfo( inputRoot.FullName );
 
+        List< FileInfo > settingsFiles = [ ];
+
         // Collect pack.json setting files.
         var settingsProcessor = new SettingsProcessor
         {
-            FileProcessedHandler = ( file ) =>
+            FileProcessedDelegate = ( file ) =>
             {
-                Logger.Debug( $"Adding settings file: {file.Name}" );
-                _settingsFiles.Add( file );
+                if ( file is FileInfo fileInfo )
+                {
+                    Logger.Debug( $"Adding settings file: {fileInfo.Name}" );
+                    settingsFiles.Add( fileInfo );
+                }
             },
         };
 
@@ -114,9 +119,9 @@ public partial class TexturePackerFileProcessor : FileProcessor
         settingsProcessor.Process( inputRoot, null );
 
         // Sort parent first.
-        _settingsFiles.Sort( ( file1, file2 ) => file1.ToString().Length - file2.ToString().Length );
+        settingsFiles.Sort( ( file1, file2 ) => file1.ToString().Length - file2.ToString().Length );
 
-        foreach ( var settingsFile in _settingsFiles )
+        foreach ( var settingsFile in settingsFiles )
         {
             // Find first parent with settings, or use defaults.
             TexturePacker.Settings? settings = null;
@@ -270,7 +275,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
         {
             return;
         }
-        
+
         // Find first parent with settings, or use defaults.
         TexturePacker.Settings? settings = null;
 
@@ -520,8 +525,12 @@ public partial class TexturePackerFileProcessor : FileProcessor
         return _progressListener;
     }
 
+    // ============================================================================
+
     [GeneratedRegex( "(.*?)(\\d+)$" )]
     private static partial Regex MyRegex1();
+
+    // ============================================================================
 }
 
 // ============================================================================
@@ -541,7 +550,13 @@ public class DeleteProcessor : FileProcessor
 // ============================================================================
 
 [PublicAPI]
-public class SettingsProcessor : FileProcessor;
+public class SettingsProcessor : FileProcessor
+{
+    public void ProcessSettings( Entry input )
+    {
+        FileProcessedDelegate?.Invoke( input.InputFile! );
+    }
+}
 
 // ============================================================================
 // ============================================================================
