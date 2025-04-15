@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Packing;
-
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>

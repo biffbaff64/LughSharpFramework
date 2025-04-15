@@ -975,18 +975,12 @@ UTILS/EXCEPTIONS
     - DONE - DONE - AssetNotLoadedException
     - DONE - DONE - BufferOverflowException
     - DONE - DONE - BufferUnderflowException
+    - DONE - DONE - Guard
     - DONE - DONE - GdxRuntimeException
     - DONE - DONE - NumberFormatException
     - DONE - DONE - ReadOnlyBufferException
     - DONE - DONE - SerializationException
     - DONE - DONE - SpriteBatchException
-
-UTILS/GUARDING
---------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - DONE - Guard
 
 UTILS/JSON
 ----------
@@ -1002,6 +996,7 @@ UTILS/JSON
     - IP   - IP   - JsonOutputType
     - IP   - IP   - JsonReader
     - IP   - IP   - JsonReader.Data
+    - IP   - IP   - JsonReader.Parse
     - IP   - IP   - JsonSerializer
     - IP   - IP   - JsonValue
     - IP   - IP   - JsonValue.AsType

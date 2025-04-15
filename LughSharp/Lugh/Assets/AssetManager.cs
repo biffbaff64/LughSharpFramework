@@ -35,7 +35,6 @@ using LughSharp.Lugh.Scenes.Scene2D.UI;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Guarding;
 
 namespace LughSharp.Lugh.Assets;
 

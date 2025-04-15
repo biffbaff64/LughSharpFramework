@@ -25,8 +25,6 @@
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Environment = System.Environment;
-
 namespace DesktopGLBackend.Files;
 
 [PublicAPI]

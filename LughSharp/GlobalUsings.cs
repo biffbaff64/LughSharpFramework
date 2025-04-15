@@ -58,3 +58,8 @@ global using Vector2 = LughSharp.Lugh.Maths.Vector2;
 global using Vector3 = LughSharp.Lugh.Maths.Vector3;
 
 // ============================================================================
+
+global using SerializationException = LughSharp.Lugh.Utils.Exceptions.SerializationException;
+
+// ============================================================================
+

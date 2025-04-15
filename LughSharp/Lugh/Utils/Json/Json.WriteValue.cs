@@ -23,10 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
-using System.Runtime.Serialization;
 
 using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Guarding;
+using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Utils.Json;
 
@@ -127,10 +126,14 @@ public partial class Json
         {
             if ( value == null )
             {
+                Logger.Debug( "Value is null, returning." );
+
                 JsonWriter?.Value( null );
 
                 return;
             }
+
+            Logger.Checkpoint();
 
             if ( knownType is { IsPrimitive: true }
                  || ( knownType == typeof( string ) )
@@ -140,14 +143,17 @@ public partial class Json
                  || ( knownType == typeof( long ) )
                  || ( knownType == typeof( double ) )
                  || ( knownType == typeof( short ) )
-                 || ( knownType == typeof( byte ) ) )
-
-//                || knownType == Character )
+                 || ( knownType == typeof( byte ) )
+                 || ( knownType == typeof( char ) ) )
             {
+                Logger.Debug( "Writing knownType." );
+
                 JsonWriter?.Value( value );
 
                 return;
             }
+
+            Logger.Checkpoint();
 
             var actualType = value.GetType();
 
@@ -162,6 +168,8 @@ public partial class Json
                  || ( actualType == typeof( byte ) )
                  || ( actualType == typeof( char ) ) )
             {
+                Logger.Debug( "Writing actualType." );
+
                 WriteObjectStart( actualType, null );
                 WriteValue( "value", value );
                 WriteObjectEnd();
@@ -169,14 +177,20 @@ public partial class Json
                 return;
             }
 
+            Logger.Checkpoint();
+
             if ( value is IJsonSerializable serializable )
             {
+                Logger.Debug( "Writing serializable type." );
+
                 WriteObjectStart( actualType, knownType );
                 serializable.Write( this );
                 WriteObjectEnd();
 
                 return;
             }
+
+            Logger.Checkpoint();
 
             var serializer = _classToSerializer.Get( actualType );
 
@@ -186,6 +200,8 @@ public partial class Json
 
                 return;
             }
+
+            Logger.Checkpoint();
 
             // JSON array special cases.
             if ( value is Array array )
@@ -208,6 +224,8 @@ public partial class Json
 
                 return;
             }
+
+            Logger.Checkpoint();
 
             if ( value is Queue queue )
             {
@@ -232,46 +250,67 @@ public partial class Json
                 return;
             }
 
-//            if ( value is Collection )
-//            {
-//                if ( ( TypeName != null ) && ( actualType != List. )class && ( ( knownType == null ) || ( knownType != actualType ) )) {
-//                    WriteObjectStart( actualType, knownType );
-//                    WriteArrayStart( "items" );
-//                    for ( object item :
-//                    ( Collection )value)
-//                    WriteValue( item, elementType, null );
-//                    WriteArrayEnd();
-//                    WriteObjectEnd();
-//                } else {
-//                    WriteArrayStart();
-//                    for ( object item :
-//                    ( Collection )value)
-//                    WriteValue( item, elementType, null );
-//                    WriteArrayEnd();
-//                }
-//
-//                return;
-//            }
+            Logger.Checkpoint();
 
-//            if ( actualType.isArray() )
-//            {
-//                if ( elementType == null )
-//                {
-//                    elementType = actualType.getComponentType();
-//                }
-//
-//                int length = ArrayReflection.getLength( value );
-//                WriteArrayStart();
-//
-//                for ( var i = 0; i < length; i++ )
-//                {
-//                    WriteValue( ArrayReflection.get( value, i ), elementType, null );
-//                }
-//
-//                WriteArrayEnd();
-//
-//                return;
-//            }
+            if ( value is ICollection collection )
+            {
+                Logger.Checkpoint();
+
+                var type = value.GetType();
+
+                if ( ( type != typeof( List< object > ) )
+                     && ( ( knownType == null ) || ( knownType != type ) ) )
+                {
+                    WriteObjectStart( type, knownType );
+                    WriteArrayStart( "items" );
+
+                    foreach ( var item in collection )
+                    {
+                        WriteValue( item, elementType, null );
+                    }
+
+                    WriteArrayEnd();
+                    WriteObjectEnd();
+                }
+                else
+                {
+                    WriteArrayStart();
+
+                    foreach ( var item in collection )
+                    {
+                        WriteValue( item, elementType, null );
+                    }
+
+                    WriteArrayEnd();
+                }
+
+                return;
+            }
+
+            if ( value.GetType().IsArray )
+            {
+                var type    = value.GetType();
+                var componentType = type.GetElementType();
+
+                if ( elementType == null )
+                {
+                    elementType = componentType;
+                }
+
+                var arr  = ( Array )value;
+                var length = arr.Length;
+                
+                WriteArrayStart();
+
+                for ( var i = 0; i < length; i++ )
+                {
+                    WriteValue( arr.GetValue( i ), elementType, null );
+                }
+
+                WriteArrayEnd();
+
+                return;
+            }
 
             // JSON object special cases.
 //            if ( value is ObjectMap< , > )
@@ -456,6 +495,8 @@ public partial class Json
 //
 //                return;
 //            }
+
+            Logger.Checkpoint();
 
             WriteObjectStart( actualType, knownType );
             WriteFields( value );

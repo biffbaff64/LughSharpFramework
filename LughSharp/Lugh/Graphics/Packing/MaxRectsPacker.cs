@@ -28,7 +28,6 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Guarding;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 

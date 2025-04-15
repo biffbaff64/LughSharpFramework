@@ -28,7 +28,6 @@ using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
 
 using Timer = LughSharp.Lugh.Utils.Timer;
-using Utils_Timer = LughSharp.Lugh.Utils.Timer;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Listeners;
 

@@ -24,7 +24,7 @@
 
 using System.Globalization;
 
-using LughSharp.Lugh.Utils.Guarding;
+using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Utils.Json;
 

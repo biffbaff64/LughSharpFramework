@@ -25,7 +25,6 @@
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Maths.Collision;
-using LughSharp.Lugh.Utils;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 using Quaternion = LughSharp.Lugh.Maths.Quaternion;

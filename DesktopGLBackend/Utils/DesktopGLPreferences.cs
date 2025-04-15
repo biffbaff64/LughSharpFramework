@@ -29,8 +29,6 @@ using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Environment = System.Environment;
-
 namespace DesktopGLBackend.Utils;
 
 /// <summary>

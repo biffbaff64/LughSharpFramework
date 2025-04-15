@@ -22,14 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Reflection;
 using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Guarding;
 using LughSharp.Lugh.Utils.Json;
 
 namespace LughSharp.Lugh.Graphics.Packing;
@@ -102,7 +100,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
 
         List< FileInfo > settingsFiles = [ ];
 
-        // Collect pack.json setting files.
+        // Collect any pack.json setting files present in the folder, and process them.
         var settingsProcessor = new SettingsProcessor
         {
             FileProcessedDelegate = ( file ) =>
@@ -137,8 +135,11 @@ public partial class TexturePackerFileProcessor : FileProcessor
 
                 parent = parent?.Parent;
 
-                Guard.ThrowIfNull( parent );
-
+                if ( parent == null )
+                {
+                    break;
+                }
+                
                 if ( _dirToSettings.TryGetValue( parent, out settings ) )
                 {
                     settings = NewSettings( settings );
@@ -153,7 +154,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
             }
 
             // Merge settings from current directory.
-            Merge( settings, settingsFile );
+            MergeSettings( settings, settingsFile );
 
             _dirToSettings.Add( settingsFile.Directory!, settings );
         }
@@ -194,7 +195,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
     /// <param name="settings"></param>
     /// <param name="settingsFile"></param>
     /// <exception cref="Exception"></exception>
-    public void Merge( TexturePacker.Settings settings, FileInfo settingsFile )
+    public void MergeSettings( TexturePacker.Settings settings, FileInfo settingsFile )
     {
         try
         {
@@ -225,7 +226,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
         if ( settingsFile.Exists )
         {
             rootSettings = NewSettings( rootSettings );
-            Merge( rootSettings, settingsFile );
+            MergeSettings( rootSettings, settingsFile );
         }
 
         var atlasExtension       = rootSettings.AtlasExtension;
@@ -271,6 +272,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
     /// <param name="files"></param>
     public override void ProcessDir( Entry inputDir, List< Entry > files )
     {
+        // Don not proceed if this dir is one of those to ignore
         if ( _dirsToIgnore.Contains( inputDir.InputFile ) )
         {
             return;
@@ -281,25 +283,22 @@ public partial class TexturePackerFileProcessor : FileProcessor
 
         var parent = ( DirectoryInfo? )inputDir.InputFile;
 
-        while ( true )
+        for ( ;
+             ( parent != null )
+             && !_dirToSettings.TryGetValue( parent, out settings )
+             && !parent.Equals( _rootDirectory );
+             parent = parent.Parent )
         {
-            if ( ( parent != null ) && _dirToSettings.TryGetValue( parent, out settings ) )
-            {
-                break;
-            }
-
-            if ( ( parent == null ) || parent.Equals( _rootDirectory ) )
-            {
-                break;
-            }
-
-            parent = parent.Parent;
+            // The loop continues as long as 'parent' is not null,
+            // the settings for 'parent' are not found, and 'parent' is not the root directory.
+            // 'parent' is updated to its parent in each iteration.
         }
 
-        if ( settings == null )
-        {
-            settings = _defaultSettings;
-        }
+        // After the loop, 'settings' will contain the found settings (if any),
+        // and 'current' will be either null, the directory with settings, or the
+        // root directory.
+
+        settings ??= _defaultSettings;
 
         if ( settings.Ignore )
         {

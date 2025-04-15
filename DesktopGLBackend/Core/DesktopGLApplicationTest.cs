@@ -23,7 +23,6 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
 
 using GLBindings = LughSharp.Lugh.Graphics.OpenGL.GLBindings;

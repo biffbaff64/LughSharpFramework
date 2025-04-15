@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.UI;

@@ -24,7 +24,7 @@
 
 using System.Runtime.Serialization;
 
-using LughSharp.Lugh.Utils.Guarding;
+using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 

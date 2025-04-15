@@ -38,8 +38,6 @@ using LughSharp.Lugh.Maps.Tiled.Tiles;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using SerializationException = LughSharp.Lugh.Utils.Exceptions.SerializationException;
-
 namespace LughSharp.Lugh.Maps.Tiled.Loaders;
 
 [PublicAPI]

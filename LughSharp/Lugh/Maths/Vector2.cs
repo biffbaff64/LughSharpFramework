@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Exception = System.Exception;

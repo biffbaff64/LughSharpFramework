@@ -28,7 +28,6 @@ using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 

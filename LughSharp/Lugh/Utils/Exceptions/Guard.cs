@@ -29,7 +29,7 @@ using System.Runtime.CompilerServices;
 
 using NotNull = System.Diagnostics.CodeAnalysis.NotNullAttribute;
 
-namespace LughSharp.Lugh.Utils.Guarding;
+namespace LughSharp.Lugh.Utils.Exceptions;
 
 [PublicAPI]
 public class Guard

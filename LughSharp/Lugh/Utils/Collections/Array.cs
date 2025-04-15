@@ -27,7 +27,6 @@ using System.Text;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Collections.DeleteCandidates;
 using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Guarding;
 
 namespace LughSharp.Lugh.Utils.Collections;
 

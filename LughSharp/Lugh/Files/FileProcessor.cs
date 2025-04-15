@@ -22,12 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Guarding;
+using LughSharp.Lugh.Utils.Exceptions;
 
 using static System.Text.RegularExpressions.Regex;
 
