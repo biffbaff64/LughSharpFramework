@@ -22,7 +22,74 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+
 namespace LughSharp.Lugh.Utils.Json;
+
+// ========================================================================
+
+[PublicAPI]
+public class JsonSerializer
+{
+    public string? SerializeToString( object obj )
+    {
+        using ( var stringWriter = new StringWriter() )
+        using ( var jsonWriter = new JsonTextWriter( stringWriter ) )
+        {
+            WriteValue( obj, null, null, jsonWriter );
+
+            return jsonWriter.ToString();
+        }
+    }
+
+    public void SerializeToFileUTF8( object obj, string filePath )
+    {
+        SerializeToFile( obj, filePath, Encoding.UTF8 );
+    }
+    
+    public void SerializeToFile( object obj, string filePath, Encoding encoding )
+    {
+        using ( var fileStream = new FileStream( filePath, FileMode.Create, FileAccess.Write ) )
+        using ( var streamWriter = new StreamWriter( fileStream, encoding ) )
+        using ( var jsonWriter = new JsonTextWriter( streamWriter ) )
+        {
+            WriteValue( obj, null, null, jsonWriter );
+        }
+    }
+
+    private void WriteValue( object? value, Type? elementType, Type? knownType, TextWriter writer )
+    {
+        if ( value == null )
+        {
+            writer.Write( "null" );
+
+            return;
+        }
+
+        var actualType = value.GetType();
+
+        if ( actualType == typeof( string ) )
+        {
+            WriteString( ( string )value, writer );
+        }
+        else if ( actualType.IsPrimitive )
+        {
+            writer.Write( value.ToString() );
+        }
+
+        // ... and so on, using writer.Write() ...
+    }
+
+    private static void WriteString( string value, TextWriter writer )
+    {
+        writer.Write( $"\"{EscapeString( value )}\"" );
+    }
+
+    private static string EscapeString( string str )
+    {
+        return str.Replace( "\\", @"\\" ).Replace( "\"", "\\\"" );
+    }
+}
 
 // ========================================================================
 

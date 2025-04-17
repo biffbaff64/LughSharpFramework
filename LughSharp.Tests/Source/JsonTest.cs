@@ -23,9 +23,11 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
+using System.Text;
 
 using JetBrains.Annotations;
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -35,9 +37,9 @@ namespace LughSharp.Tests.Source;
 
 public class Person
 {
-    public string              Name    { get; set; }
+    public string              Name    { get; set; } = "";
     public int                 Age     { get; set; }
-    public List< PhoneNumber > Numbers { get; set; }
+    public List< PhoneNumber > Numbers { get; set; } = null!;
 }
 
 public class PhoneNumber
@@ -79,198 +81,24 @@ public class JsonTest : LughTestAdapter
 
         Logger.Debug( _json.ToJson( person ) );
         
-//        var test = new Test1
-//        {
-//            BooleanField    = true,
-//            ByteField       = 123,
-//            CharField       = 'Z',
-//            ShortField      = 12345,
-//            IntField        = 123456,
-//            LongField       = 123456789,
-//            FloatField      = 123.456f,
-//            DoubleField     = 1.23456d,
-//            WBooleanField   = true,
-//            WByteField      = -12,
-//            WCharacterField = 'X',
-//            WShortField     = -12345,
-//            WIntegerField   = -123456,
-//            WLongField      = -123456789L,
-//            WFloatField     = -123.3f,
-//            WDoubleField    = -0.121231d,
-//            StringField     = "stringvalue",
-//            ByteArrayField  = [ 2, 1, 0, -1, -2 ],
-//            Map             = [ ],
-//        };
-//
-//        Logger.Checkpoint();
-//
-//        test.Map.Put( "one", 1 );
-//        test.Map.Put( "two", 2 );
-//        test.Map.Put( "nine", 9 );
-//        test.StringArray =
-//        [
-//            "meow",
-//            "moo",
-//        ];
-//        test.ObjectArray =
-//        [
-//            "meow",
-//            new Test1(),
-//        ];
-//        test.LongMap = new Dictionary< long, string >( 4 );
-//        test.LongMap.Put( 42L, "The Answer" );
-//        test.LongMap.Put( 1964, "A Great Year" );
-//        test.StringFloatMap = new Dictionary< string, float >( 4 );
-//        test.StringFloatMap.Put( "point one", 0.1f );
-//        test.StringFloatMap.Put( "point double oh seven", 0.007f );
-//        test.SomeEnum = SomeEnum.B;
-//
-//        Logger.Checkpoint();
-//        
-//        // IntIntMap can be written, but only as a normal obj, not as a kind of map.
-//        test.IntsToIntsUnboxed = [ ];
-//        test.IntsToIntsUnboxed.Put( 102, 14 );
-//        test.IntsToIntsUnboxed.Put( 107, 1 );
-//        test.IntsToIntsUnboxed.Put( 10, 2 );
-//        test.IntsToIntsUnboxed.Put( 2, 1 );
-//        test.IntsToIntsUnboxed.Put( 7, 3 );
-//        test.IntsToIntsUnboxed.Put( 101, 63 );
-//        test.IntsToIntsUnboxed.Put( 4, 2 );
-//        test.IntsToIntsUnboxed.Put( 106, 4 );
-//        test.IntsToIntsUnboxed.Put( 1, 1 );
-//        test.IntsToIntsUnboxed.Put( 103, 2 );
-//        test.IntsToIntsUnboxed.Put( 6, 2 );
-//        test.IntsToIntsUnboxed.Put( 3, 1 );
-//        test.IntsToIntsUnboxed.Put( 105, 6 );
-//        test.IntsToIntsUnboxed.Put( 8, 2 );
-//
-//        Logger.Checkpoint();
-//
-//        // The above "should" print like this:
-//        // {size:14,keyTable:[0,0,102,0,0,0,0,0,107,0,0,10,0,0,0,2,0,0,0,0,7,0,0,0,0,0,101,0,0,0,4,0,106,
-//        //                    0,0,0,0,0,0,1,0,0,103,0,0,6,0,0,0,0,0,0,0,0,3,0,0,105,0,0,8,0,0,0],
-//        //                    valueTable:[0,0,14,0,0,0,0,0,1,0,0,2,0,0,0,1,0,0,0,0,3,0,0,0,0,0,63,0,0,0,2,
-//        //                    0,4,0,0,0,0,0,0,1,0,0,2,0,0,2,0,0,0,0,0,0,0,0,1,0,0,6,0,0,2,0,0,0]}
-//        // This is potentially correct, but also quite large considering the contents.
-//        // It would be nice to have IntIntMap look like IntMap<Integer> does, below.
-//
-//        // IntMap gets special treatment and is written as a kind of map.
-//        test.IntsToIntsBoxed = [ ];
-//        test.IntsToIntsBoxed.Put( 102, 14 );
-//        test.IntsToIntsBoxed.Put( 107, 1 );
-//        test.IntsToIntsBoxed.Put( 10, 2 );
-//        test.IntsToIntsBoxed.Put( 2, 1 );
-//        test.IntsToIntsBoxed.Put( 7, 3 );
-//        test.IntsToIntsBoxed.Put( 101, 63 );
-//        test.IntsToIntsBoxed.Put( 4, 2 );
-//        test.IntsToIntsBoxed.Put( 106, 4 );
-//        test.IntsToIntsBoxed.Put( 1, 1 );
-//        test.IntsToIntsBoxed.Put( 103, 2 );
-//        test.IntsToIntsBoxed.Put( 6, 2 );
-//        test.IntsToIntsBoxed.Put( 3, 1 );
-//        test.IntsToIntsBoxed.Put( 105, 6 );
-//        test.IntsToIntsBoxed.Put( 8, 2 );
-//
-//        Logger.Checkpoint();
-//        
-//        // The above should print like this:
-//        // {102:14,107:1,10:2,2:1,7:3,101:63,4:2,106:4,1:1,103:2,6:2,3:1,105:6,8:2}
-//
-//        RoundTrip( test );
-//        var sum = 0;
-//
-//        // iterate over an Dictionary<int,int> so one of its Entries is instantiated
-//        foreach ( var e in test.IntsToIntsUnboxed )
-//        {
-//            sum += e.Value + 1;
-//        }
-//
-//        // also iterate over an Array, which does not have any problems
-//        var concat = "";
-//
-//        foreach ( var s in test.StringArray )
-//        {
-//            concat += s;
-//        }
-//
-//        // by round-tripping again, we verify that the Entries is correctly skipped
-//        RoundTrip( test );
-//        var sum2 = 0;
-//
-//        // check and make sure that no entries are skipped over or incorrectly added
-//        foreach ( var e in test.IntsToIntsUnboxed )
-//        {
-//            sum2 += e.Value + 1;
-//        }
-//
-//        var concat2 = "";
-//
-//        // also check the Array again
-//        foreach ( var s in test.StringArray )
-//        {
-//            concat2 += s;
-//        }
-//
-//        Logger.Debug( "before: " + sum + ", after: " + sum2 );
-//        Logger.Debug( "before: " + concat + ", after: " + concat2 );
-//
-//        test.SomeEnum = default( SomeEnum );
-//        RoundTrip( test );
-//
-//        test = new Test1();
-//        RoundTrip( test );
-//
-//        test.StringArray = [ ];
-//        RoundTrip( test );
-//
-//        test.StringArray.Add( "meow" );
-//        RoundTrip( test );
-//
-//        test.StringArray.Add( "moo" );
-//        RoundTrip( test );
-//
-//        var objectGraph = new TestMapGraph();
-//        TestObjectGraph( objectGraph, "exoticTypeName" );
-//
-//        test = new Test1
-//        {
-//            Map = [ ],
-//        };
-//
-//        RoundTrip( test );
-//
-//        test.Map.Put( "one", 1 );
-//        RoundTrip( test );
-//
-//        test.Map.Put( "two", 2 );
-//        test.Map.Put( "nine", 9 );
-//        RoundTrip( test );
-//
-//        test.Map.Put( "\nst\nuff\n", 9 );
-//        test.Map.Put( "\r\nst\r\nuff\r\n", 9 );
-//        RoundTrip( test );
-//
-//        Equals( _json.ToJson( "meow" ), "meow" );
-//        Equals( _json.ToJson( "meow " ), "\"meow \"" );
-//        Equals( _json.ToJson( " meow" ), "\" meow\"" );
-//        Equals( _json.ToJson( " meow " ), "\" meow \"" );
-//        Equals( _json.ToJson( "\nmeow\n" ), @"\nmeow\n" );
-//
-//        var arr1 = new[] { 1, 2, 3 };
-//        var arr2 = new[] { "1", "2", "3" };
-//        var arr3 = new[] { " 1", "2 ", " 3 " };
-//        var arr4 = new[] { "1", "", "3" };
-//
-//        Equals( _json.ToJson( arr1, null, typeof( int ) ), "[1,2,3]" );
-//        Equals( _json.ToJson( arr2, null, typeof( string ) ), "[1,2,3]" );
-//        Equals( _json.ToJson( arr3, null, typeof( string ) ), "[\" 1\",\"2 \",\" 3 \"]" );
-//        Equals( _json.ToJson( arr4, null, typeof( string ) ), "[1,\"\",3]" );
+        var arr1 = new[] { 1, 2, 3 };
+        var arr2 = new[] { "1", "2", "3" };
+        var arr3 = new[] { " 1", "2 ", " 3 " };
+        var arr4 = new[] { "1", "", "3" };
 
-        Logger.NewLine();
+        var sb = new StringBuilder();
+        
+        sb.Append( _json.ToJson( arr1, null, typeof( int ) ) );
+        sb.Append( _json.ToJson( arr2, null, typeof( string ) ) );
+        sb.Append( _json.ToJson( arr3, null, typeof( string ) ) );
+        sb.Append( _json.ToJson( arr4, null, typeof( string ) ) );
+
+        Logger.Debug( sb.ToString() );        
+        Logger.Debug( _json.PrettyPrint( sb.ToString(), new JsonValue.PrettyPrintSettings() ) ?? sb.ToString() );
         Logger.Debug( "Finished" );
     }
 
-    private string? RoundTrip( object? obj )
+    private string? PerformTests( object? obj )
     {
         Logger.Checkpoint();
 

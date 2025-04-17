@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
+using System.Reflection;
 
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -126,15 +127,17 @@ public partial class Json
         {
             if ( value == null )
             {
-                Logger.Debug( "Value is null, returning." );
+                Logger.Debug( "Value is null, quitting." );
 
                 JsonWriter?.Value( null );
 
                 return;
             }
 
-            Logger.Checkpoint();
-
+            Logger.Debug( $"knownType: {knownType}" );
+            Logger.Debug( $"elementType: {elementType}" );
+            Logger.Debug( $"knownType is Primitive: {knownType?.IsPrimitive ?? false}" );
+            
             if ( knownType is { IsPrimitive: true }
                  || ( knownType == typeof( string ) )
                  || ( knownType == typeof( int ) )
@@ -146,16 +149,16 @@ public partial class Json
                  || ( knownType == typeof( byte ) )
                  || ( knownType == typeof( char ) ) )
             {
-                Logger.Debug( "Writing knownType." );
+                Logger.Debug( "Writing knownType as primitive." );
 
                 JsonWriter?.Value( value );
 
                 return;
             }
 
-            Logger.Checkpoint();
-
             var actualType = value.GetType();
+
+            Logger.Debug( $"actualType is Primitive: {actualType.IsPrimitive}" );
 
             if ( actualType.IsPrimitive
                  || ( actualType == typeof( string ) )
@@ -177,11 +180,9 @@ public partial class Json
                 return;
             }
 
-            Logger.Checkpoint();
-
             if ( value is IJsonSerializable serializable )
             {
-                Logger.Debug( "Writing serializable type." );
+                Logger.Debug( "value is serializable." );
 
                 WriteObjectStart( actualType, knownType );
                 serializable.Write( this );
@@ -190,22 +191,22 @@ public partial class Json
                 return;
             }
 
-            Logger.Checkpoint();
-
             var serializer = _classToSerializer.Get( actualType );
 
             if ( serializer != null )
             {
+                Logger.Debug( "calling serializer.Write" );
+
                 serializer.Write( this, value, knownType );
 
                 return;
             }
 
-            Logger.Checkpoint();
-
             // JSON array special cases.
             if ( value is Array array )
             {
+                Logger.Debug( "value is Array" );
+
                 if ( ( knownType != null ) && ( actualType != knownType ) && ( actualType != typeof( Array ) ) )
                 {
                     throw new SerializationException( $"Serialization of an Array other than the" +
@@ -225,10 +226,10 @@ public partial class Json
                 return;
             }
 
-            Logger.Checkpoint();
-
             if ( value is Queue queue )
             {
+                Logger.Debug( "value is Queue" );
+
                 if ( ( knownType != null ) && ( actualType != knownType ) && ( actualType != typeof( Queue ) ) )
                 {
                     throw new SerializationException( $"Serialization of a Queue other than the " +
@@ -250,11 +251,9 @@ public partial class Json
                 return;
             }
 
-            Logger.Checkpoint();
-
             if ( value is ICollection collection )
             {
-                Logger.Checkpoint();
+                Logger.Debug( "value is ICollection" );
 
                 var type = value.GetType();
 
@@ -289,7 +288,9 @@ public partial class Json
 
             if ( value.GetType().IsArray )
             {
-                var type    = value.GetType();
+                Logger.Debug( "value is [ ] Array" );
+
+                var type          = value.GetType();
                 var componentType = type.GetElementType();
 
                 if ( elementType == null )
@@ -297,9 +298,9 @@ public partial class Json
                     elementType = componentType;
                 }
 
-                var arr  = ( Array )value;
+                var arr    = ( Array )value;
                 var length = arr.Length;
-                
+
                 WriteArrayStart();
 
                 for ( var i = 0; i < length; i++ )
@@ -312,191 +313,100 @@ public partial class Json
                 return;
             }
 
-            // JSON object special cases.
-//            if ( value is ObjectMap< , > )
-//            {
-//                if ( knownType == null )
-//                {
-//                    knownType = ObjectMap.
-//                }class;
-//                WriteObjectStart( actualType, knownType );
-//                for ( Entry entry :
-//                ( ( ObjectMap < ?,  ?>)value).entries()) {
-//                    writer.name( convertToString( entry.key ) );
-//                    WriteValue( entry.value, elementType, null );
-//                }
-//                WriteObjectEnd();
-//
-//                return;
-//            }
+            if ( value.GetType().IsGenericType
+                 && ( value.GetType().GetGenericTypeDefinition() == typeof( Dictionary< , > ) ) )
+            {
+                Logger.Debug( "value is Dictionary<,>" );
 
-//            if ( value is ObjectIntMap )
-//            {
-//                if ( knownType == null )
-//                {
-//                    knownType = ObjectIntMap.
-//                }class;
-//                WriteObjectStart( actualType, knownType );
-//                for ( ObjectIntMap.Entry entry :
-//                ( ( ObjectIntMap < ?>)value).entries()) {
-//                    writer.name( convertToString( entry.key ) );
-//                    WriteValue( entry.value, Integer.class);
-//                }
-//                WriteObjectEnd();
-//
-//                return;
-//            }
+                var dictionary = ( IDictionary )value;
 
-//            if ( value is ObjectFloatMap )
-//            {
-//                if ( knownType == null )
-//                {
-//                    knownType = ObjectFloatMap.
-//                }class;
-//                WriteObjectStart( actualType, knownType );
-//                for ( ObjectFloatMap.Entry entry :
-//                ( ( ObjectFloatMap < ?>)value).entries()) {
-//                    writer.name( convertToString( entry.key ) );
-//                    WriteValue( entry.value, Float.class);
-//                }
-//                WriteObjectEnd();
-//
-//                return;
-//            }
+                WriteObjectStart( actualType, knownType );
 
-//            if ( value is ObjectSet )
-//            {
-//                if ( knownType == null )
-//                {
-//                    knownType = ObjectSet.
-//                }class;
-//                WriteObjectStart( actualType, knownType );
-//                writer.name( "values" );
-//                WriteArrayStart();
-//                for ( object entry :
-//                ( ObjectSet )value)
-//                WriteValue( entry, elementType, null );
-//                WriteArrayEnd();
-//                WriteObjectEnd();
-//
-//                return;
-//            }
+                foreach ( var key in dictionary.Keys )
+                {
+                    if ( key != null )
+                    {
+                        JsonWriter?.Name( ConvertToString( key )! );
+                        WriteValue( dictionary[ key ], elementType, null );
+                    }
+                }
 
-//            if ( value is IntMap )
-//            {
-//                if ( knownType == null )
-//                {
-//                    knownType = IntMap.
-//                }class;
-//                WriteObjectStart( actualType, knownType );
-//                for ( IntMap.Entry entry :
-//                ( ( IntMap < ?>)value).entries()) {
-//                    writer.name( string.valueOf( entry.key ) );
-//                    WriteValue( entry.value, elementType, null );
-//                }
-//                WriteObjectEnd();
-//
-//                return;
-//            }
+                WriteObjectEnd();
 
-//            if ( value is LongMap )
-//            {
-//                if ( knownType == null )
-//                {
-//                    knownType = LongMap.
-//                }class;
-//                WriteObjectStart( actualType, knownType );
-//                for ( LongMap.Entry entry :
-//                ( ( LongMap < ?>)value).entries()) {
-//                    writer.name( string.valueOf( entry.key ) );
-//                    WriteValue( entry.value, elementType, null );
-//                }
-//                WriteObjectEnd();
-//
-//                return;
-//            }
-
-//            if ( value is IntSet )
-//            {
-//                if ( knownType == null )
-//                {
-//                    knownType = IntSet.
-//                }class;
-//                WriteObjectStart( actualType, knownType );
-//                writer.name( "values" );
-//                WriteArrayStart();
-//
-//                for ( IntSetIterator iter = ( ( IntSet )value ).iterator(); iter.hasNext; )
-//                {
-//                    WriteValue( iter.next(), Integer.
-//                }class, null);
-//                WriteArrayEnd();
-//                WriteObjectEnd();
-//
-//                return;
-//            }
-
-//            if ( value is ArrayMap )
-//            {
-//                if ( knownType == null )
-//                {
-//                    knownType = ArrayMap.
-//                }class;
-//                WriteObjectStart( actualType, knownType );
-//                ArrayMap map = ( ArrayMap )value;
-//
-//                for ( int i = 0, n = map.size; i < n; i++ )
-//                {
-//                    writer.name( convertToString( map.keys[ i ] ) );
-//                    WriteValue( map.values[ i ], elementType, null );
-//                }
-//
-//                WriteObjectEnd();
-//
-//                return;
-//            }
-
-//            if ( value is Map )
-//            {
-//                if ( knownType == null )
-//                {
-//                    knownType = HashMap.
-//                }class;
-//                WriteObjectStart( actualType, knownType );
-//                for ( Map.Entry entry :
-//                ( ( Map < ?,  ?>)value).entrySet()) {
-//                    writer.name( convertToString( entry.getKey() ) );
-//                    WriteValue( entry.getValue(), elementType, null );
-//                }
-//                WriteObjectEnd();
-//
-//                return;
-//            }
+                return;
+            }
 
             // Enum special case.
-//            if ( ClassReflection.isAssignableFrom( Enum.class, actualType)) {
-//                if ( ( TypeName != null ) && ( ( knownType == null ) || ( knownType != actualType ) ) )
-//                {
-//                    // Ensures that enums with specific implementations (abstract logic) serialize correctly.
-//                    if ( actualType.getEnumConstants() == null )
-//                    {
-//                        actualType = actualType.getSuperclass();
-//                    }
-//
-//                    WriteObjectStart( actualType, null );
-//                    writer.name( "value" );
-//                    writer.value( convertToString( ( Enum )value ) );
-//                    WriteObjectEnd();
-//                }
-//                else
-//                {
-//                    writer.value( convertToString( ( Enum )value ) );
-//                }
-//
-//                return;
-//            }
+            if ( value.GetType().IsEnum )
+            {
+                Logger.Debug( "value is Enum" );
+
+                if ( ( TypeName != null ) && ( ( knownType == null ) || ( knownType != actualType ) ) )
+                {
+                    if ( !actualType.IsDefined( typeof( FlagsAttribute ), false )
+                         && ( Enum.GetUnderlyingType( actualType ) == typeof( int ) )
+                         && ( Enum.GetValues( actualType ).Length == 0 ) )
+                    {
+                        actualType = actualType.BaseType;
+                    }
+
+                    Guard.ThrowIfNull( actualType );
+
+                    WriteObjectStart( actualType, null );
+                    JsonWriter?.Name( "value" );
+                    JsonWriter?.Value( ConvertToString( ( Enum )value ) );
+                    WriteObjectEnd();
+                }
+                else
+                {
+                    JsonWriter?.Value( ConvertToString( value ) );
+                }
+            }
+
+            // Other types
+            if ( !actualType.IsPrimitive
+                 && ( actualType != typeof( string ) )
+                 && ( actualType != typeof( decimal ) )
+                 && ( actualType != typeof( DateTime ) ) ) // Basic check to identify complex objects
+            {
+                Logger.Debug( "value is simpler type" );
+                
+                AddClassTag( actualType.Name, actualType );
+                
+                WriteObjectStart( actualType, knownType );
+
+                Logger.Checkpoint();
+                
+                var properties    = actualType.GetProperties( BindingFlags.Public | BindingFlags.Instance );
+                var firstProperty = true;
+
+                foreach ( var property in properties )
+                {
+                    if ( property.CanRead )
+                    {
+                        var propertyValue = property.GetValue( value );
+
+                        if ( !firstProperty )
+                        {
+                            Console.Write( "," ); // Add comma between properties
+                        }
+
+                        JsonWriter?.Name( property.Name );
+                        WriteValue( propertyValue, property.PropertyType, null ); // Recursive call for property value
+
+                        firstProperty = false;
+                    }
+                }
+
+                WriteObjectEnd();
+
+                return;
+            }
 
             Logger.Checkpoint();
+            Logger.Debug( $"actualType: {actualType.Name}" );
+            Logger.Debug( $"knownType: {knownType?.Name}" );
+            Logger.Debug( $"value: {value.GetType().Name}" );
 
             WriteObjectStart( actualType, knownType );
             WriteFields( value );
@@ -771,7 +681,7 @@ public partial class Json
             return;
         }
 
-        var className = GetTag( type );
+        var className = GetTag( type ) ?? type.Name;
 
         try
         {

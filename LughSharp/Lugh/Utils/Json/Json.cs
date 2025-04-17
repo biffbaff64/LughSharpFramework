@@ -85,7 +85,7 @@ public partial class Json
     /// </summary>
     public bool SortFields { get; set; }
 
-    public JsonWriter?     JsonWriter      { get; set; }
+    public JsonTextWriter?     JsonWriter      { get; set; }
     public JsonOutputType? OutputType      { get; set; }
     public bool            QuoteLongValues { get; set; } = false;
 
@@ -121,6 +121,8 @@ public partial class Json
     /// </summary>
     public void AddClassTag( string tag, Type type )
     {
+        Logger.Debug( $"{tag}::{type}" );
+        
         _tagToClass[ tag ]  = type;
         _classToTag[ type ] = tag;
     }
@@ -130,13 +132,13 @@ public partial class Json
     /// </summary>
     public Type? GetType( string tag )
     {
-        return _tagToClass[ tag ];
+        return _tagToClass[ tag ] ?? null;
     }
 
     /// <summary>
     /// Returns the tag for the specified class, or null.
     /// </summary>
-    public string GetTag( Type type )
+    public string? GetTag( Type type )
     {
         return _classToTag[ type ];
     }
@@ -279,12 +281,12 @@ public partial class Json
     /// </summary>
     public void SetWriter( TextWriter writer )
     {
-        if ( writer is not Utils.Json.JsonWriter )
+        if ( writer is not LughSharp.Lugh.Utils.Json.JsonTextWriter )
         {
-            writer = new JsonWriter( writer );
+            writer = new JsonTextWriter( writer );
         }
 
-        JsonWriter = ( JsonWriter )writer;
+        JsonWriter = ( JsonTextWriter )writer;
         JsonWriter.SetOutputType( OutputType );
         JsonWriter.SetQuoteLongValues( QuoteLongValues );
     }

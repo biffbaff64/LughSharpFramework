@@ -22,6 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -44,13 +47,112 @@ public partial class JsonReader
 
     // ========================================================================
 
+    /// <summary>
+    /// </summary>
+    /// <param name="json"></param>
+    /// <returns></returns>
+    public JsonValue? Parse( string json )
+    {
+        var data = json.ToCharArray();
+
+        return Parse( data, 0, data.Length );
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="reader"></param>
+    /// <returns></returns>
+    /// <exception cref="SerializationException"></exception>
+    public JsonValue? Parse( TextReader reader )
+    {
+        var data   = new char[ 1024 ];
+        var offset = 0;
+
+        try
+        {
+            while ( true )
+            {
+                var length = reader.Read( data, offset, data.Length - offset );
+
+                if ( length == -1 )
+                {
+                    break;
+                }
+
+                if ( length == 0 )
+                {
+                    var newData = new char[ data.Length * 2 ];
+
+                    Array.Copy( data, 0, newData, 0, data.Length );
+                    data = newData;
+                }
+                else
+                {
+                    offset += length;
+                }
+            }
+        }
+        catch ( IOException ex )
+        {
+            throw new SerializationException( "Error reading input.", ex );
+        }
+        finally
+        {
+            reader.Close();
+        }
+
+        return Parse( data, 0, offset );
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    /// <exception cref="SerializationException"></exception>
+    public JsonValue? Parse( InputStream input )
+    {
+        StreamReader reader;
+
+        try
+        {
+            reader = new StreamReader( input, Encoding.UTF8 );
+        }
+        catch ( Exception ex )
+        {
+            throw new SerializationException( "Error reading stream.", ex );
+        }
+
+        return Parse( reader );
+    }
+
+    public JsonValue? Parse( FileInfo file )
+    {
+        StreamReader reader;
+
+        try
+        {
+            reader = new StreamReader( file.Name, Encoding.UTF8 );
+        }
+        catch ( Exception ex )
+        {
+            throw new SerializationException( "Error reading file: " + file, ex );
+        }
+
+        try
+        {
+            return Parse( reader );
+        }
+        catch ( Exception ex )
+        {
+            throw new SerializationException( "Error parsing file: " + file, ex );
+        }
+    }
+
     public JsonValue? Parse( char[] data, int offset, int length )
     {
         _parseData     = data;
         _parsePosition = offset;
         _parseLength   = length;
-
-        Logger.Debug( $"{StringUtils.ValueOf( _parseData )}" );
 
         return ParseInternal();
     }
@@ -68,7 +170,7 @@ public partial class JsonReader
 
         _parseNameList.Clear();
 
-        Logger.NewLine();
+        Logger.Debug( $"_parsePosition: {_parsePosition}, _parseLength: {_parseLength}" );
 
         try
         {
@@ -95,6 +197,51 @@ public partial class JsonReader
         return FinalizeParsing();
     }
 
+    private JsonValue? FinalizeParsing()
+    {
+        var root = _root;
+
+        _root    = null!;
+        _current = null!;
+
+        _lastChild.Clear();
+
+        if ( _parsePosition < _parseLength )
+        {
+            var lineNumber = _parseData.Take( _parsePosition ).Count( c => c == '\n' ) + 1;
+            var start      = Math.Max( 0, _parsePosition - 32 );
+
+            Logger.Checkpoint();
+            Logger.Error( $"start: {start}" );
+            Logger.Error( $"_parsePosition: {_parsePosition}" );
+            Logger.Error( $"_parseLength: {_parseLength}" );
+            Logger.Error( $"Math.Min( 32, _parsePosition - start ): {Math.Min( 32, _parsePosition - start )}" );
+            Logger.Error( $"Math.Min( 64, _parseLength - _parsePosition ): {Math.Min( 64, _parseLength - _parsePosition )}" );
+            Logger.Error( $"_parseData: {_parseData}" );
+            
+            throw new SerializationException( $"Error parsing JSON on line {lineNumber} near: " +
+                                              $"{new string( _parseData, start, Math.Min( 32, _parsePosition - start ) )}" +
+                                              $"*ERROR*{new string( _parseData, _parsePosition, Math.Min( 64, _parseLength - _parsePosition ) )}",
+                                              _parseException! );
+        }
+
+        if ( _elements.Count != 0 )
+        {
+            var element = _elements.Peek();
+            _elements.Clear();
+
+            throw new SerializationException( $"Error parsing JSON, unmatched " +
+                                              $"{( element.IsObject() ? "brace" : "bracket" )}." );
+        }
+
+        if ( _parseException != null )
+        {
+            throw new SerializationException( $"Error parsing JSON: {new string( _parseData )}", _parseException );
+        }
+
+        return root;
+    }
+
     private int ProcessState( int currentState )
     {
         if ( currentState == 0 )
@@ -107,6 +254,7 @@ public partial class JsonReader
         if ( trans != -1 )
         {
             int nextState = _jsonTransTargs[ trans ];
+            
             ExecuteActions( _jsonTransActions[ trans ] );
 
             if ( _parseException != null )
@@ -121,13 +269,15 @@ public partial class JsonReader
 
         if ( _parsePosition == _parseLength )
         {
-            return currentState; // Allow EOF actions
+            // Allow EOF actions
+            return currentState;
         }
 
         // No valid transition found for the current character
         // This should ideally lead to a parsing error
-        _parseException = new GdxRuntimeException( $"Unexpected character '{_parseData[ _parsePosition ]}' at position {_parsePosition}" );
-
+        _parseException = new GdxRuntimeException( $"Unexpected character '{_parseData[ _parsePosition ]}' " +
+                                                   $"at position {_parsePosition}" );
+        
         return currentState;
     }
 
@@ -137,7 +287,9 @@ public partial class JsonReader
         int klen  = _jsonSingleLengths[ currentState ];
         int trans = _jsonIndexOffsets[ currentState ];
 
-        var currentChar = ( _parsePosition < _parseLength ) ? _parseData[ _parsePosition ] : ( char )0; // EOF char
+        var currentChar = ( _parsePosition < _parseLength )
+            ? _parseData[ _parsePosition ]
+            : ( char )0; // EOF char
 
         // Single character transitions
         if ( klen > 0 )
@@ -634,44 +786,5 @@ public partial class JsonReader
 
             // Add handling for other EOF actions if they exist
         }
-    }
-
-    private JsonValue? FinalizeParsing()
-    {
-        var root = _root;
-
-        _root    = null!;
-        _current = null!;
-
-        _lastChild.Clear();
-
-        if ( _parsePosition < _parseLength )
-        {
-            var lineNumber = _parseData.Take( _parsePosition ).Count( c => c == '\n' ) + 1;
-            var start      = Math.Max( 0, _parsePosition - 32 );
-
-            Logger.Checkpoint();
-
-            throw new SerializationException( $"Error parsing JSON on line {lineNumber} near: " +
-                                              $"{new string( _parseData, start, Math.Min( 32, _parsePosition - start ) )}" +
-                                              $"*ERROR*{new string( _parseData, _parsePosition, Math.Min( 64, _parseLength - _parsePosition ) )}",
-                                              _parseException! );
-        }
-
-        if ( _elements.Count != 0 )
-        {
-            var element = _elements.Peek();
-            _elements.Clear();
-
-            throw new SerializationException( $"Error parsing JSON, unmatched " +
-                                              $"{( element.IsObject() ? "brace" : "bracket" )}." );
-        }
-
-        if ( _parseException != null )
-        {
-            throw new SerializationException( $"Error parsing JSON: {new string( _parseData )}", _parseException );
-        }
-
-        return root;
     }
 }

@@ -31,7 +31,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Utils.Json;
 
 [PublicAPI]
-public class JsonWriter : TextWriter
+public class JsonTextWriter : TextWriter
 {
     private readonly TextWriter          _writer;
     private readonly Stack< JsonObject > _stack = new();
@@ -42,15 +42,16 @@ public class JsonWriter : TextWriter
 
     // ========================================================================
 
-    public JsonWriter( TextWriter writer )
+    public JsonTextWriter() : this( new StringWriter() )
+    {
+    }
+    
+    public JsonTextWriter( TextWriter writer )
     {
         _writer = writer;
     }
 
-    public TextWriter GetWriter()
-    {
-        return _writer;
-    }
+    // ========================================================================
 
     /// <summary>
     /// Sets the type of JSON output. Default is <see cref="JsonOutputType.Minimal"/>.
@@ -73,7 +74,7 @@ public class JsonWriter : TextWriter
         _quoteLongValues = quoteLongValues;
     }
 
-    public JsonWriter Name( string name )
+    public JsonTextWriter Name( string name )
     {
         if ( ( _current == null ) || _current.Array )
         {
@@ -96,7 +97,7 @@ public class JsonWriter : TextWriter
         return this;
     }
 
-    public JsonWriter Object()
+    public JsonTextWriter Object()
     {
         RequireCommaOrName();
 
@@ -105,7 +106,12 @@ public class JsonWriter : TextWriter
         return this;
     }
 
-    public JsonWriter Array()
+    public JsonTextWriter Object( string name )
+    {
+        return Name( name ).Object();
+    }
+
+    public JsonTextWriter Array()
     {
         RequireCommaOrName();
 
@@ -114,13 +120,38 @@ public class JsonWriter : TextWriter
         return this;
     }
 
-    public JsonWriter Value( object? value )
+    public JsonTextWriter Array( string name )
+    {
+        return Name( name ).Array();
+    }
+
+    /// <summary>
+    /// Writes the specified JSON value, without quoting or escaping.
+    /// </summary>
+    public JsonTextWriter Json( string json )
+    {
+        RequireCommaOrName();
+
+        _writer.Write( json );
+
+        return this;
+    }
+
+    /// <summary>
+    /// Writes the specified JSON value, without quoting or escaping.
+    /// </summary>
+    public JsonTextWriter Json( string name, string json )
+    {
+        return Name( name ).Json( json );
+    }
+
+    public JsonTextWriter Value( object? value )
     {
         if ( _quoteLongValues && value is long or double or decimal or BigInteger )
         {
             value = value.ToString();
         }
-        else if ( value is int || value is long || value is float || value is double || value is decimal )
+        else if ( value is int or long or float or double or decimal )
         {
             if ( value is float floatValue && ( Math.Abs( floatValue - ( long )floatValue ) < Number.FLOAT_TOLERANCE ) )
             {
@@ -145,16 +176,53 @@ public class JsonWriter : TextWriter
         return this;
     }
 
-    /// <summary>
-    /// Writes the specified JSON value, without quoting or escaping.
-    /// </summary>
-    public JsonWriter Json( string json )
+    public JsonTextWriter Set( string name, object value )
     {
-        RequireCommaOrName();
+        return Name( name ).Value( value );
+    }
 
-        _writer.Write( json );
+    public JsonTextWriter Pop()
+    {
+        if ( _named )
+        {
+            throw new InvalidOperationException( "Expected an object, array, or value since a name was set." );
+        }
+
+        _stack.Pop().Close();
+        _current = _stack.Count == 0 ? null : _stack.Peek();
 
         return this;
+    }
+
+    public override void Write( char[] cbuf, int off, int len )
+    {
+        _writer.Write( cbuf, off, len );
+    }
+
+    /// <inheritdoc />
+    public override void Write( char value )
+    {
+        _writer.Write( value );
+    }
+
+    public override void Flush()
+    {
+        _writer.Flush();
+    }
+
+    public TextWriter GetWriter()
+    {
+        return _writer;
+    }
+
+    public override void Close()
+    {
+        while ( _stack.Count > 0 )
+        {
+            Pop();
+        }
+
+        _writer.Close();
     }
 
     private void RequireCommaOrName()
@@ -186,60 +254,6 @@ public class JsonWriter : TextWriter
         }
     }
 
-    public JsonWriter Object( string name )
-    {
-        return Name( name ).Object();
-    }
-
-    public JsonWriter Array( string name )
-    {
-        return Name( name ).Array();
-    }
-
-    public JsonWriter Set( string name, object value )
-    {
-        return Name( name ).Value( value );
-    }
-
-    /** Writes the specified JSON value, without quoting or escaping. */
-    public JsonWriter Json( string name, string json )
-    {
-        return Name( name ).Json( json );
-    }
-
-    public JsonWriter Pop()
-    {
-        if ( _named )
-        {
-            throw new InvalidOperationException( "Expected an object, array, or value since a name was set." );
-        }
-
-        _stack.Pop().Close();
-        _current = _stack.Count == 0 ? null : _stack.Peek();
-
-        return this;
-    }
-
-    public override void Write( char[] cbuf, int off, int len )
-    {
-        _writer.Write( cbuf, off, len );
-    }
-
-    public override void Flush()
-    {
-        _writer.Flush();
-    }
-
-    public override void Close()
-    {
-        while ( _stack.Count > 0 )
-        {
-            Pop();
-        }
-
-        _writer.Close();
-    }
-
     // ========================================================================
     // Abstract Property from TextWriter
 
@@ -260,6 +274,7 @@ public class JsonWriter : TextWriter
         {
             Array   = array;
             _writer = writer;
+
             writer.Write( array ? '[' : '{' );
         }
 
