@@ -325,14 +325,6 @@ public partial class JsonReader
             var lineNumber = _parseData.Take( _parsePosition ).Count( c => c == '\n' ) + 1;
             var start      = Math.Max( 0, _parsePosition - 32 );
 
-            Logger.Checkpoint();
-            Logger.Error( $"start: {start}" );
-            Logger.Error( $"_parsePosition: {_parsePosition}" );
-            Logger.Error( $"_parseLength: {_parseLength}" );
-            Logger.Error( $"new string( _parseData, start, Math.Min( 32, _parsePosition - start ) ): {new string( _parseData, start, Math.Min( 32, _parsePosition - start ) )}" );
-            Logger.Error( $"new string( _parseData, _parsePosition, Math.Min( 64, _parseLength - _parsePosition ) ): {new string( _parseData, _parsePosition, Math.Min( 64, _parseLength - _parsePosition ) )}" );
-            Logger.Error( $"_parseData: {_parseData}" );
-
             throw new SerializationException( $"Error parsing JSON on line {lineNumber} near: " +
                                               $"{new string( _parseData, start, Math.Min( 32, _parsePosition - start ) )}" +
                                               $"*ERROR*{new string( _parseData, _parsePosition, Math.Min( 64, _parseLength - _parsePosition ) )}",
@@ -358,8 +350,6 @@ public partial class JsonReader
 
     private void ExecuteActions( int actionOffset )
     {
-        Logger.Debug( $"actionOffset: {actionOffset}" );
-
         if ( actionOffset == 0 )
         {
             return;
@@ -418,8 +408,6 @@ public partial class JsonReader
                     break;
             }
         }
-
-        Logger.Debug( "Done" );
     }
 
     private void HandleStringValue()
