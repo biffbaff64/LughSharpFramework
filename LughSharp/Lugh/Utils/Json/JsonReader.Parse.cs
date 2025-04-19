@@ -43,7 +43,7 @@ public partial class JsonReader
     private bool                 _stringIsName;
     private bool                 _stringIsUnquoted;
     private GdxRuntimeException? _parseException;
-    private int                  _s; // Start position for string values
+    private int                  _stringValueStartPos; // Start position for string values
 
     // ========================================================================
 
@@ -170,11 +170,9 @@ public partial class JsonReader
 
         _parseNameList.Clear();
 
-        Logger.Debug( $"_parsePosition: {_parsePosition}, _parseLength: {_parseLength}" );
-
         try
         {
-            while ( ( _parsePosition < _parseLength ) || ( currentState != 0 ) )
+            while ( _parsePosition < _parseLength )
             {
                 currentState = ProcessState( currentState );
 
@@ -184,7 +182,8 @@ public partial class JsonReader
                 }
             }
 
-            if ( ( _parseException == null ) && ( currentState != 0 ) )
+            // Handle EOF actions if no error occurred
+            if ( _parseException == null )
             {
                 HandleEofActions( currentState );
             }
@@ -194,10 +193,125 @@ public partial class JsonReader
             _parseException = ex;
         }
 
-        return FinalizeParsing();
+        return FinalizeParsing( currentState );
     }
 
-    private JsonValue? FinalizeParsing()
+    private int ProcessState( int currentState )
+    {
+        if ( currentState == 0 )
+        {
+            return 0; // End state
+        }
+
+        var transition = FindTransition( currentState );
+
+        if ( transition != -1 )
+        {
+            ExecuteActions( _jsonTransitionActions[ transition ] );
+            
+            if ( _parseException != null )
+            {
+                return currentState; // Stop if error
+            }
+            
+            _parsePosition++;
+            
+            return _jsonTransitionTargs[ transition ];
+        }
+
+        if ( _parsePosition <  _parseLength )
+        {
+            // No valid transition found for the current character
+            // This should ideally lead to a parsing error
+            _parseException = new GdxRuntimeException( $"Unexpected character '{_parseData[ _parsePosition ]}' " +
+                                                       $"at position {_parsePosition}" );
+        }
+        
+        // Stay in the current state
+        return currentState;
+    }
+
+    private int FindTransition( int currentState )
+    {
+        int keys       = _jsonKeyOffsets[ currentState ];
+        int keylength  = _jsonSingleLengths[ currentState ];
+        int transition = _jsonIndexOffsets[ currentState ];
+
+        char currentChar;
+            
+        if ( ( _parsePosition < _parseLength ) && ( _parsePosition < _parseData.Length ) )
+        {
+            currentChar = _parseData[ _parsePosition ];
+        }
+        else
+        {
+            currentChar = ( char )0;
+        }
+
+        // Single character transitions
+        if ( keylength > 0 )
+        {
+            var lower = keys;
+            var upper = ( keys + keylength ) - 1;
+
+            while ( lower <= upper )
+            {
+                var middle = lower + ( ( upper - lower ) >> 1 );
+
+                if ( currentChar < _jsonTransitionKeys[ middle ] )
+                {
+                    upper = middle - 1;
+                }
+                else if ( currentChar > _jsonTransitionKeys[ middle ] )
+                {
+                    lower = middle + 1;
+                }
+                else
+                {
+                    return transition + ( middle - keys );
+                }
+            }
+
+            transition += keylength;
+        }
+
+        // Range transitions
+        keylength = _jsonRangeLengths[ currentState ];
+
+        if ( keylength > 0 )
+        {
+            var lower = keys;
+            var upper = ( keys + ( keylength << 1 ) ) - 2;
+
+            while ( lower <= upper )
+            {
+                var mid = lower + ( ( ( upper - lower ) >> 1 ) & ~1 );
+
+                if ( currentChar < _jsonTransitionKeys[ mid ] )
+                {
+                    upper = mid - 2;
+                }
+                else if ( currentChar > _jsonTransitionKeys[ mid + 1 ] )
+                {
+                    lower = mid + 2;
+                }
+                else
+                {
+                    return transition + ( ( mid - keys ) >> 1 );
+                }
+            }
+
+            transition += keylength;
+        }
+
+        Logger.Checkpoint();
+        
+        return ( ( _parsePosition == _parseLength ) && ( _jsonEofActions[ currentState ] != 0 ) )
+            ? _jsonEofActions[ currentState ]
+            : -1; // No transition
+    }
+
+    private JsonValue? FinalizeParsing( int currentState )
     {
         var root = _root;
 
@@ -215,10 +329,10 @@ public partial class JsonReader
             Logger.Error( $"start: {start}" );
             Logger.Error( $"_parsePosition: {_parsePosition}" );
             Logger.Error( $"_parseLength: {_parseLength}" );
-            Logger.Error( $"Math.Min( 32, _parsePosition - start ): {Math.Min( 32, _parsePosition - start )}" );
-            Logger.Error( $"Math.Min( 64, _parseLength - _parsePosition ): {Math.Min( 64, _parseLength - _parsePosition )}" );
+            Logger.Error( $"new string( _parseData, start, Math.Min( 32, _parsePosition - start ) ): {new string( _parseData, start, Math.Min( 32, _parsePosition - start ) )}" );
+            Logger.Error( $"new string( _parseData, _parsePosition, Math.Min( 64, _parseLength - _parsePosition ) ): {new string( _parseData, _parsePosition, Math.Min( 64, _parseLength - _parsePosition ) )}" );
             Logger.Error( $"_parseData: {_parseData}" );
-            
+
             throw new SerializationException( $"Error parsing JSON on line {lineNumber} near: " +
                                               $"{new string( _parseData, start, Math.Min( 32, _parsePosition - start ) )}" +
                                               $"*ERROR*{new string( _parseData, _parsePosition, Math.Min( 64, _parseLength - _parsePosition ) )}",
@@ -242,119 +356,10 @@ public partial class JsonReader
         return root;
     }
 
-    private int ProcessState( int currentState )
-    {
-        if ( currentState == 0 )
-        {
-            return 0; // End state
-        }
-
-        var trans = FindTransition( currentState );
-
-        if ( trans != -1 )
-        {
-            int nextState = _jsonTransTargs[ trans ];
-            
-            ExecuteActions( _jsonTransActions[ trans ] );
-
-            if ( _parseException != null )
-            {
-                return nextState; // Stop if error
-            }
-
-            _parsePosition++;
-
-            return nextState;
-        }
-
-        if ( _parsePosition == _parseLength )
-        {
-            // Allow EOF actions
-            return currentState;
-        }
-
-        // No valid transition found for the current character
-        // This should ideally lead to a parsing error
-        _parseException = new GdxRuntimeException( $"Unexpected character '{_parseData[ _parsePosition ]}' " +
-                                                   $"at position {_parsePosition}" );
-        
-        return currentState;
-    }
-
-    private int FindTransition( int currentState )
-    {
-        int keys  = _jsonKeyOffsets[ currentState ];
-        int klen  = _jsonSingleLengths[ currentState ];
-        int trans = _jsonIndexOffsets[ currentState ];
-
-        var currentChar = ( _parsePosition < _parseLength )
-            ? _parseData[ _parsePosition ]
-            : ( char )0; // EOF char
-
-        // Single character transitions
-        if ( klen > 0 )
-        {
-            var lower = keys;
-            var upper = ( keys + klen ) - 1;
-
-            while ( lower <= upper )
-            {
-                var mid = lower + ( ( upper - lower ) >> 1 );
-
-                if ( currentChar < _jsonTransKeys[ mid ] )
-                {
-                    upper = mid - 1;
-                }
-                else if ( currentChar > _jsonTransKeys[ mid ] )
-                {
-                    lower = mid + 1;
-                }
-                else
-                {
-                    return trans + ( mid - keys );
-                }
-            }
-
-            trans += klen;
-        }
-
-        // Range transitions
-        klen = _jsonRangeLengths[ currentState ];
-
-        if ( klen > 0 )
-        {
-            var lower = keys;
-            var upper = ( keys + ( klen << 1 ) ) - 2;
-
-            while ( lower <= upper )
-            {
-                var mid = lower + ( ( ( upper - lower ) >> 1 ) & ~1 );
-
-                if ( currentChar < _jsonTransKeys[ mid ] )
-                {
-                    upper = mid - 2;
-                }
-                else if ( currentChar > _jsonTransKeys[ mid + 1 ] )
-                {
-                    lower = mid + 2;
-                }
-                else
-                {
-                    return trans + ( ( mid - keys ) >> 1 );
-                }
-            }
-
-            trans += klen;
-        }
-
-        return ( ( _parsePosition == _parseLength )
-                 && ( _jsonEofActions[ currentState ] != 0 ) )
-            ? _jsonEofActions[ currentState ]
-            : -1; // No transition
-    }
-
     private void ExecuteActions( int actionOffset )
     {
+        Logger.Debug( $"actionOffset: {actionOffset}" );
+
         if ( actionOffset == 0 )
         {
             return;
@@ -413,11 +418,13 @@ public partial class JsonReader
                     break;
             }
         }
+
+        Logger.Debug( "Done" );
     }
 
     private void HandleStringValue()
     {
-        var value = new string( _parseData, _s, _parsePosition - _s );
+        var value = new string( _parseData, _stringValueStartPos, _parsePosition - _stringValueStartPos );
 
         if ( _needsUnescape )
         {
@@ -479,15 +486,15 @@ public partial class JsonReader
             }
         }
 
-        _stringIsUnquoted = false;
-        _s                = _parsePosition;
+        _stringIsUnquoted    = false;
+        _stringValueStartPos = _parsePosition;
     }
 
     private bool TryParseNumber( string? name, string value )
     {
         bool couldBeDouble = false, couldBeLong = true;
 
-        for ( var i = _s; i < _parsePosition; i++ )
+        for ( var i = _stringValueStartPos; i < _parsePosition; i++ )
         {
             switch ( _parseData[ i ] )
             {
@@ -635,9 +642,9 @@ public partial class JsonReader
     {
         Logger.Debug( "unquotedChars" );
 
-        _s                = _parsePosition;
-        _needsUnescape    = false;
-        _stringIsUnquoted = true;
+        _stringValueStartPos = _parsePosition;
+        _needsUnescape       = false;
+        _stringIsUnquoted    = true;
         var shouldBreak = false;
 
         if ( _stringIsName )
@@ -729,14 +736,16 @@ public partial class JsonReader
         }
 
         _parsePosition++;
+
+        Logger.Debug( "Done" );
     }
 
     private void HandleQuotedChars()
     {
         Logger.Debug( "quotedChars" );
 
-        _s             = ++_parsePosition;
-        _needsUnescape = false;
+        _stringValueStartPos = ++_parsePosition;
+        _needsUnescape       = false;
 
         while ( _parsePosition < _parseLength )
         {
@@ -770,10 +779,14 @@ public partial class JsonReader
         }
 
         _parsePosition--;
+
+        Logger.Debug( "Done" );
     }
 
     private void HandleEofActions( int currentState )
     {
+        Logger.Debug( "Eof Actions" );
+
         int acts  = _jsonEofActions[ currentState ];
         var nacts = ( int )_jsonActions[ acts++ ];
 
@@ -786,5 +799,7 @@ public partial class JsonReader
 
             // Add handling for other EOF actions if they exist
         }
+
+        Logger.Debug( "Done" );
     }
 }

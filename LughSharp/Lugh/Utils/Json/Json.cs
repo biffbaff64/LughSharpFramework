@@ -85,7 +85,7 @@ public partial class Json
     /// </summary>
     public bool SortFields { get; set; }
 
-    public JsonTextWriter?     JsonWriter      { get; set; }
+    public JsonTextWriter? JsonWriter      { get; set; }
     public JsonOutputType? OutputType      { get; set; }
     public bool            QuoteLongValues { get; set; } = false;
 
@@ -97,8 +97,9 @@ public partial class Json
     private Dictionary< Type, IJsonSerializer >                      _classToSerializer    = [ ];
     private Dictionary< Type, object[]? >                            _classToDefaultValues = [ ];
 
-    private object[]    _equals1 = [ ];
-    private object[]    _equals2 = [ ];
+    private object[] _equals1 = [ ];
+    private object[] _equals2 = [ ];
+
 //TODO:    private TextWriter? _textWriter;
 
     // ========================================================================
@@ -122,7 +123,7 @@ public partial class Json
     public void AddClassTag( string tag, Type type )
     {
         Logger.Debug( $"{tag}::{type}" );
-        
+
         _tagToClass[ tag ]  = type;
         _classToTag[ type ] = tag;
     }
@@ -1166,34 +1167,38 @@ public partial class Json
     // ========================================================================
     // PrettyPrint Methods
 
-    public string? PrettyPrint( object obj )
+    public string PrettyPrint( object obj )
     {
         return PrettyPrint( obj, 0 );
     }
 
-    public string? PrettyPrint( string json )
+    public string PrettyPrint( string json )
     {
         return PrettyPrint( json, 0 );
     }
 
-    public string? PrettyPrint( object obj, int singleLineColumns )
+    public string PrettyPrint( object obj, int singleLineColumns )
     {
         return PrettyPrint( ToJson( obj ), singleLineColumns );
     }
 
-    public string? PrettyPrint( string json, int singleLineColumns )
-    {
-        return new JsonReader().Parse( json )?.PrettyPrint( OutputType, singleLineColumns );
-    }
-
-    public string? PrettyPrint( object obj, JsonValue.PrettyPrintSettings settings )
+    public string PrettyPrint( object obj, JsonValue.PrettyPrintSettings settings )
     {
         return PrettyPrint( ToJson( obj ), settings );
     }
 
-    public string? PrettyPrint( string json, JsonValue.PrettyPrintSettings settings )
+    public string PrettyPrint( string json, int singleLineColumns )
     {
-        return new JsonReader().Parse( json )?.PrettyPrint( settings );
+        var jval = new JsonReader().Parse( json );
+
+        return ( jval != null ) ? jval.PrettyPrint( OutputType, singleLineColumns ) : "**ERROR**";
+    }
+
+    public static string PrettyPrint( string json, JsonValue.PrettyPrintSettings settings )
+    {
+        var jval = new JsonReader().Parse( json );
+
+        return ( jval != null ) ? jval.PrettyPrint( settings ) : "**ERROR**";
     }
 
     // ========================================================================

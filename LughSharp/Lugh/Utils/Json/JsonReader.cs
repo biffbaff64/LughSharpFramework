@@ -43,8 +43,6 @@ namespace LughSharp.Lugh.Utils.Json;
 [PublicAPI]
 public partial class JsonReader : IJsonReader
 {
-    private static readonly byte[] _jsonEofActions = init__json_eof_actions_0();
-
     private const int JSON_START       = 1;
     private const int JSON_FIRST_FINAL = 35;
     private const int JSON_ERROR       = 0;

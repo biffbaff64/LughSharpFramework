@@ -148,6 +148,30 @@ public static class Logger
     }
 
     /// <summary>
+    /// Send data to the output window/console/File, without time/data and filestamp information.
+    /// </summary>
+    /// <param name="message"> The message to send. </param>
+    /// <param name="addNewLine"> Adds a NewLine to the message string if TRUE (default). </param>
+    [Conditional("DEBUG")]
+    public static void Data( string message, bool addNewLine = true )
+    {
+        if ( !IsEnabled( LOG_DEBUG ) )
+        {
+            return;
+        }
+
+        var str = CreateMessage( null, message, null );
+
+        if ( addNewLine )
+        {
+            str += Environment.NewLine;
+        }
+
+        Console.Write( str );
+        WriteToFile( str );
+    }
+
+    /// <summary>
     /// Send a DEBUG message to output window/console/File.
     /// </summary>
     /// <param name="message"> The message to send. </param>
@@ -282,7 +306,7 @@ public static class Logger
     {
         if ( !IsEnabled( LOG_DEBUG ) )
         {
-            Console.WriteLine( Environment.NewLine );
+            Console.WriteLine( $"{Environment.NewLine}" );
         }
     }
 
@@ -389,16 +413,19 @@ public static class Logger
     /// <param name="formatString">The base message</param>
     /// <param name="cid">Stack trace info from the calling method/file.</param>
     /// <returns></returns>
-    private static string CreateMessage( string tag, string formatString, CallerID cid )
+    private static string CreateMessage( string? tag, string formatString, CallerID? cid )
     {
-        var sb = new StringBuilder( tag );
+        var sb = new StringBuilder( tag ?? "" );
 
-        sb.Append( " : " );
-        sb.Append( GetTimeStampInfo() );
-        sb.Append( " : " );
-        sb.Append( GetCallerInfo( cid ) );
-        sb.Append( " : " );
-
+        if ( cid != null )
+        {
+            sb.Append( " : " );
+            sb.Append( GetTimeStampInfo() );
+            sb.Append( " : " );
+            sb.Append( GetCallerInfo( ( CallerID )cid ) );
+            sb.Append( " : " );
+        }
+        
         if ( !string.IsNullOrEmpty( formatString ) )
         {
             sb.Append( formatString );
