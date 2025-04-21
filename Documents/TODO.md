@@ -985,6 +985,7 @@ UTILS/EXCEPTIONS
 UTILS/JSON
 ----------
 
+  **** This is a work-in-progress, and will eventually replace the current System.Text.Json library ****
   **** Using LughSharp.Tests.JsonTest testing ****
 
     CODE   DOCUMENT

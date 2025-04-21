@@ -30,7 +30,7 @@ using System.Security;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Json;
+namespace LughSharp.Lugh.Utils.JsonDevelopment;
 
 [PublicAPI]
 public partial class Json
@@ -282,7 +282,7 @@ public partial class Json
     /// </summary>
     public void SetWriter( TextWriter writer )
     {
-        if ( writer is not LughSharp.Lugh.Utils.Json.JsonTextWriter )
+        if ( writer is not JsonTextWriter )
         {
             writer = new JsonTextWriter( writer );
         }
@@ -1196,8 +1196,12 @@ public partial class Json
 
     public static string PrettyPrint( string json, JsonValue.PrettyPrintSettings settings )
     {
+        Logger.Checkpoint();
+        
         var jval = new JsonReader().Parse( json );
 
+        Logger.Debug( $"jval: {jval}" );
+        
         return ( jval != null ) ? jval.PrettyPrint( settings ) : "**ERROR**";
     }
 

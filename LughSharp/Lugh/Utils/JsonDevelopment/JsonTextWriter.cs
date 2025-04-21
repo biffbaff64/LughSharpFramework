@@ -28,7 +28,7 @@ using System.Text;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Json;
+namespace LughSharp.Lugh.Utils.JsonDevelopment;
 
 [PublicAPI]
 public class JsonTextWriter : TextWriter

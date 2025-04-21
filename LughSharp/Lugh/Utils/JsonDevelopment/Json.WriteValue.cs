@@ -28,7 +28,7 @@ using System.Reflection;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Json;
+namespace LughSharp.Lugh.Utils.JsonDevelopment;
 
 public partial class Json
 {
@@ -149,16 +149,12 @@ public partial class Json
                  || ( knownType == typeof( byte ) )
                  || ( knownType == typeof( char ) ) )
             {
-                Logger.Debug( "Writing knownType as primitive." );
-
                 JsonWriter?.Value( value );
 
                 return;
             }
 
             var actualType = value.GetType();
-
-            Logger.Debug( $"actualType is Primitive: {actualType.IsPrimitive}" );
 
             if ( actualType.IsPrimitive
                  || ( actualType == typeof( string ) )
@@ -171,8 +167,6 @@ public partial class Json
                  || ( actualType == typeof( byte ) )
                  || ( actualType == typeof( char ) ) )
             {
-                Logger.Debug( "Writing actualType." );
-
                 WriteObjectStart( actualType, null );
                 WriteValue( "value", value );
                 WriteObjectEnd();
@@ -182,8 +176,6 @@ public partial class Json
 
             if ( value is IJsonSerializable serializable )
             {
-                Logger.Debug( "value is serializable." );
-
                 WriteObjectStart( actualType, knownType );
                 serializable.Write( this );
                 WriteObjectEnd();
@@ -195,8 +187,6 @@ public partial class Json
 
             if ( serializer != null )
             {
-                Logger.Debug( "calling serializer.Write" );
-
                 serializer.Write( this, value, knownType );
 
                 return;
@@ -205,8 +195,6 @@ public partial class Json
             // JSON array special cases.
             if ( value is Array array )
             {
-                Logger.Debug( "value is Array" );
-
                 if ( ( knownType != null ) && ( actualType != knownType ) && ( actualType != typeof( Array ) ) )
                 {
                     throw new SerializationException( $"Serialization of an Array other than the" +
@@ -228,8 +216,6 @@ public partial class Json
 
             if ( value is Queue queue )
             {
-                Logger.Debug( "value is Queue" );
-
                 if ( ( knownType != null ) && ( actualType != knownType ) && ( actualType != typeof( Queue ) ) )
                 {
                     throw new SerializationException( $"Serialization of a Queue other than the " +
@@ -253,8 +239,6 @@ public partial class Json
 
             if ( value is ICollection collection )
             {
-                Logger.Debug( "value is ICollection" );
-
                 var type = value.GetType();
 
                 if ( ( type != typeof( List< object > ) )
@@ -288,8 +272,6 @@ public partial class Json
 
             if ( value.GetType().IsArray )
             {
-                Logger.Debug( "value is [ ] Array" );
-
                 var type          = value.GetType();
                 var componentType = type.GetElementType();
 
@@ -316,8 +298,6 @@ public partial class Json
             if ( value.GetType().IsGenericType
                  && ( value.GetType().GetGenericTypeDefinition() == typeof( Dictionary< , > ) ) )
             {
-                Logger.Debug( "value is Dictionary<,>" );
-
                 var dictionary = ( IDictionary )value;
 
                 WriteObjectStart( actualType, knownType );
@@ -339,8 +319,6 @@ public partial class Json
             // Enum special case.
             if ( value.GetType().IsEnum )
             {
-                Logger.Debug( "value is Enum" );
-
                 if ( ( TypeName != null ) && ( ( knownType == null ) || ( knownType != actualType ) ) )
                 {
                     if ( !actualType.IsDefined( typeof( FlagsAttribute ), false )
@@ -369,8 +347,6 @@ public partial class Json
                  && ( actualType != typeof( decimal ) )
                  && ( actualType != typeof( DateTime ) ) ) // Basic check to identify complex objects
             {
-                Logger.Debug( "value is simpler type" );
-                
                 AddClassTag( actualType.Name, actualType );
                 
                 WriteObjectStart( actualType, knownType );

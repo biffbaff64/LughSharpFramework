@@ -27,11 +27,10 @@ using System.Text;
 
 using JetBrains.Annotations;
 
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Json;
+using LughSharp.Lugh.Utils.JsonDevelopment;
 
 namespace LughSharp.Tests.Source;
 
@@ -49,7 +48,7 @@ public class PhoneNumber
 
     public PhoneNumber( string name, string number )
     {
-        Name = name;
+        Name   = name;
         Number = number;
     }
 }
@@ -68,33 +67,41 @@ public class JsonTest : LughTestAdapter
             Name = "Richard",
             Age  = 61,
         };
-        
+
         List< PhoneNumber > numbers =
         [
             new( "Home", "123-1234-12345" ),
             new( "Work", "456-7890-12345" ),
         ];
-        
+
         person.Numbers = numbers;
 
         _json = new Json();
 
         Logger.Debug( _json.ToJson( person ) );
-        
+
 //        var arr1 = new[] { 1, 2, 3 };
         var arr2 = new[] { "4", "5", "6" };
         var arr3 = new[] { " 1", "2 ", " 3 " };
         var arr4 = new[] { "7", "", "9" };
 
         var sb = new StringBuilder();
-        
+
 //        sb.Append( _json.ToJson( arr1, null, typeof( int ) ) );
         sb.Append( _json.ToJson( arr2, null, typeof( string ) ) );
         sb.Append( _json.ToJson( arr3, null, typeof( string ) ) );
         sb.Append( _json.ToJson( arr4, null, typeof( string ) ) );
 
-        Logger.Debug( sb.ToString() );        
-        Logger.Debug( _json.PrettyPrint( sb.ToString(), new JsonValue.PrettyPrintSettings() ) );
+        Logger.Debug( sb.ToString() );
+
+        var settings = new JsonValue.PrettyPrintSettings
+        {
+            JsonOutputType    = JsonOutputType.Json,
+            SingleLineColumns = 1,
+            WrapNumericArrays = false,
+        };
+
+        Logger.Debug( _json.PrettyPrint( sb.ToString(), settings ) );
         Logger.Debug( "Finished" );
     }
 

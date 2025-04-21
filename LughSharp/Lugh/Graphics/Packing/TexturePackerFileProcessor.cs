@@ -28,7 +28,6 @@ using System.Text.RegularExpressions;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Json;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
@@ -40,12 +39,14 @@ public partial class TexturePackerFileProcessor : FileProcessor
     private readonly TexturePacker.ProgressListener? _progressListener;
 
     private Dictionary< DirectoryInfo, TexturePacker.Settings > _dirToSettings = [ ]; //TODO: Rename
-    private List< DirectoryInfo >                               _dirsToIgnore  = [ ];
-    private Json                                                _json          = new();
-    private DirectoryInfo                                       _rootDirectory;
-    private string                                              _packFileName;
-    private bool                                                _countOnly;
-    private int                                                 _packCount;
+
+    private List< DirectoryInfo > _dirsToIgnore = [ ];
+
+//    private Json                                                _json          = new();
+    private DirectoryInfo _rootDirectory;
+    private string        _packFileName;
+    private bool          _countOnly;
+    private int           _packCount;
 
     // ========================================================================
 
@@ -139,7 +140,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
                 {
                     break;
                 }
-                
+
                 if ( _dirToSettings.TryGetValue( parent, out settings ) )
                 {
                     settings = NewSettings( settings );
@@ -195,21 +196,32 @@ public partial class TexturePackerFileProcessor : FileProcessor
     /// <param name="settings"></param>
     /// <param name="settingsFile"></param>
     /// <exception cref="Exception"></exception>
-    public void MergeSettings( TexturePacker.Settings settings, FileInfo settingsFile )
+    public TexturePacker.Settings MergeSettings( TexturePacker.Settings settings, FileInfo settingsFile )
     {
+        Logger.Debug( $"settings file: {settingsFile.FullName}" );
+
         try
         {
-            var root = new JsonReader().Parse( new StreamReader( settingsFile.FullName ) );
+            var jsonString = File.ReadAllText( settingsFile.FullName );
+            var data       = JsonSerializer.Deserialize< TexturePacker.Settings >( jsonString );
 
-            if ( root == null )
-            {
-                return; // Empty file.
-            }
+            settings.Merge( data );
 
-            _json.ReadFields( settings, root );
+            return settings;
+
+//            var root = new JsonReader().Parse( new StreamReader( settingsFile.FullName ) );
+//
+//            if ( root == null )
+//            {
+//                return; // Empty file.
+//            }
+//
+//            _json.ReadFields( settings, root );
         }
         catch ( Exception ex )
         {
+            Logger.Debug( ex.Message );
+
             throw new Exception( $"Error reading settings file: {settingsFile}", ex );
         }
     }
@@ -272,6 +284,8 @@ public partial class TexturePackerFileProcessor : FileProcessor
     /// <param name="files"></param>
     public override void ProcessDir( Entry inputDir, List< Entry > files )
     {
+        Logger.Checkpoint();
+
         // Don not proceed if this dir is one of those to ignore
         if ( _dirsToIgnore.Contains( inputDir.InputFile ) )
         {

@@ -280,11 +280,10 @@ public partial class TexturePacker
         /// <param name="settings"></param>
         public void Set( Settings settings )
         {
-            MinWidth  = settings.MinWidth;
-            MinHeight = settings.MinHeight;
-            MaxWidth  = settings.MaxWidth;
-            MaxHeight = settings.MaxHeight;
-
+            MinWidth              = settings.MinWidth;
+            MinHeight             = settings.MinHeight;
+            MaxWidth              = settings.MaxWidth;
+            MaxHeight             = settings.MaxHeight;
             Fast                  = settings.Fast;
             Rotation              = settings.Rotation;
             PowerOfTwo            = settings.PowerOfTwo;
@@ -355,11 +354,69 @@ public partial class TexturePacker
             return packFileName;
         }
 
+        public void Merge( TexturePacker.Settings? source )
+        {
+            if ( source == null )
+            {
+                return;
+            }
+
+            var properties = typeof( TexturePacker.Settings ).GetProperties( System.Reflection.BindingFlags.Public
+                                                                             | System.Reflection.BindingFlags.Instance );
+
+            foreach ( var property in properties )
+            {
+                switch ( property )
+                {
+                    case { CanRead: true, CanWrite: true } when ( property.PropertyType == typeof( bool ) ):
+                    {
+                        var sourceValue = ( bool? )property.GetValue( source ); // Treat as nullable to check if set
+                        var targetValue = ( bool? )property.GetValue( this );
+
+                        // Example: Update if the source value has any value (true or false)
+                        if ( sourceValue.HasValue && ( sourceValue.Value != targetValue ) )
+                        {
+                            property.SetValue( this, sourceValue.Value );
+                        }
+
+                        // Or: Update only if the source value is true (to selectively enable features)
+                        // if (sourceValue.HasValue && sourceValue.Value)
+                        // {
+                        //     property.SetValue(target, true);
+                        // }
+                        // Or: Update only if the source value is explicitly set (regardless of true/false)
+                        // (This is the most common scenario for booleans)
+                        // property.SetValue(target, sourceValue); // If source is nullable bool
+                        // or
+                        // property.SetValue(target, property.GetValue(source)); // If source is non-nullable bool
+                        break;
+                    }
+
+                    // Handle other property types as needed (see previous examples)
+                    case { CanRead: true, CanWrite: true } when ( property.PropertyType != typeof( bool ) ):
+                    {
+                        var sourceValue = property.GetValue( source );
+
+                        if ( sourceValue != null )
+                        {
+                            property.SetValue( this, sourceValue );
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="root"></param>
         public void ReadFromJson( JsonElement root )
+        {
+        }
+
+        public void WriteToJson()
         {
         }
     }

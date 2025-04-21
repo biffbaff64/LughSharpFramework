@@ -31,7 +31,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 using ArgumentException = System.ArgumentException;
 
-namespace LughSharp.Lugh.Utils.Json;
+namespace LughSharp.Lugh.Utils.JsonDevelopment;
 
 [PublicAPI]
 public partial class JsonValue : IEnumerable< JsonValue >
@@ -703,6 +703,8 @@ public partial class JsonValue : IEnumerable< JsonValue >
     /// <returns>A pretty-printed string representation of the JsonValue.</returns>
     public string PrettyPrint( PrettyPrintSettings settings )
     {
+        Logger.Checkpoint();
+        
         var buffer = new StringBuilder( 512 );
 
         PrettyPrint( this, buffer, 0, settings );

@@ -2,7 +2,7 @@
 ------------------------------------------------------------------
 
 Identify the States: Even without fully understanding the table contents, try to infer the different states
-your parser currently operates in.
+the parser currently operates in.
 Look at the constants (like JSON_START) and any other numerical values used as states. What aspects of JSON
 parsing do these likely correspond to (e.g., parsing an object key, parsing an array element, parsing a string, etc.)?
 
@@ -11,12 +11,12 @@ trace how the currentState changes based on the input characters and the FindTra
 don't understand why a specific transition happens, try to map the input character and current state to the next state.
 
 Identify Actions: Look at the ExecuteActions method and the _jsonActions table. What kinds of actions are being
-performed? These actions will need to be reimplemented in your new structure.
+performed? These actions will need to be reimplemented in the new structure.
 
 Phase 2: Designing the New Code-Based State Machine
 ---------------------------------------------------
 
-Define States as an Enum: Create a clear enum to represent the different states of your JSON parser 
+Define States as an Enum: Create a clear enum to represent the different states of the JSON parser 
 (e.g., Start, ObjectStart, ObjectKey, ValueStart, String, Number, ArrayStart, ArrayElement, End). 
 Choose descriptive names that reflect the parsing context.
 
@@ -31,22 +31,22 @@ Code-Based Table (Simpler): You could create a simpler, more explicit table in c
 states and input characters to next states. This would be more readable than the current table structure.
 
 Implement Action Handling: Instead of the _jsonActions table, you would directly embed the actions within 
-your state transition logic. For example, when transitioning to the ObjectKey state after encountering an 
+the state transition logic. For example, when transitioning to the ObjectKey state after encountering an 
 opening brace, you would have code that sets the _stringIsName flag.
 
 Phase 3: Refactoring ParseInternal and ProcessState
 ---------------------------------------------------
 
-Update ParseInternal: Modify the while loop to iterate through the input, and within the loop, call your
+Update ParseInternal: Modify the while loop to iterate through the input, and within the loop, call the
 new state transition function to get the nextState.
 
-Implement ProcessState (or Integrate into the Loop): The logic of ProcessState would be replaced by your
+Implement ProcessState (or Integrate into the Loop): The logic of ProcessState would be replaced by the
 state transition function and the direct execution of actions based on the transitions.
 
-Handle EOF: Explicitly handle the end of the input within your state machine logic. Define transitions
+Handle EOF: Explicitly handle the end of the input within the state machine logic. Define transitions
 that occur when the end of the input is reached in a particular state.
 
-Implement Error Handling: As you define your state transitions, explicitly handle invalid characters or
+Implement Error Handling: As you define the state transitions, explicitly handle invalid characters or
 unexpected input for each state by setting the _parseException.
 
 Phase 4: Testing and Iteration
@@ -56,10 +56,10 @@ Write Unit Tests: Create a comprehensive suite of unit tests covering various va
 including edge cases.
 
 Refactor Incrementally: Don't try to rewrite the entire parser at once. Focus on one part of the JSON 
-grammar (e.g., parsing strings) and refactor that first, ensuring it passes your tests. 
+grammar (e.g., parsing strings) and refactor that first, ensuring it passes the tests. 
 Then move on to other parts.
 
-Compare Behavior: For each refactored part, compare the behavior of your new code with the old table-driven 
+Compare Behavior: For each refactored part, compare the behavior of the new code with the old table-driven 
 logic (using the same inputs) to ensure correctness.
 
 Example Snippet (Illustrative - Function-Based State Machine):
@@ -127,9 +127,11 @@ private JsonValue? ParseInternal()
 
     return FinalizeParsing(currentState);
 }
-This is just a very basic illustration. Your actual state machine will be more complex.
+
+This is just a very basic illustration. The actual state machine will be more complex.
 
 Key Benefits of Refactoring:
+----------------------------
 
 Increased Readability: Code-driven logic is generally easier to follow than data tables, especially 
 without proper documentation.
@@ -142,8 +144,9 @@ certain decisions.
 
 Easier Collaboration: Other developers will find it easier to understand and contribute to the codebase.
 
-This will be a significant undertaking, but the long-term benefits for your JSON library will be substantial.
-Take it one step at a time, test frequently, and don't hesitate to ask for help or clarification as you go!
+This will be a significant undertaking, but the long-term benefits for the JSON library will be substantial.
+
+Test frequently!!!
 
 
 

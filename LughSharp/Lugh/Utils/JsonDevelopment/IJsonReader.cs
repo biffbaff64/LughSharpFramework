@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Files;
 
-namespace LughSharp.Lugh.Utils.Json;
+namespace LughSharp.Lugh.Utils.JsonDevelopment;
 
 [PublicAPI]
 public interface IJsonReader

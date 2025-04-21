@@ -22,132 +22,14 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Json;
+namespace LughSharp.Lugh.Utils.JsonDevelopment;
 
 public partial class JsonReader
 {
-    private char[]               _parseData     = null!;
-    private int[]                _parseStack    = new int[ 4 ];
-    private int                  _stackPointer  = 0;
-    private List< string >       _parseNameList = new( 8 );
-    private int                  _parsePosition;
-    private int                  _parseLength;
-    private bool                 _needsUnescape;
-    private bool                 _stringIsName;
-    private bool                 _stringIsUnquoted;
-    private GdxRuntimeException? _parseException;
-    private int                  _stringValueStartPos; // Start position for string values
-
-    // ========================================================================
-
-    /// <summary>
-    /// </summary>
-    /// <param name="json"></param>
-    /// <returns></returns>
-    public JsonValue? Parse( string json )
-    {
-        var data = json.ToCharArray();
-
-        return Parse( data, 0, data.Length );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="reader"></param>
-    /// <returns></returns>
-    /// <exception cref="SerializationException"></exception>
-    public JsonValue? Parse( TextReader reader )
-    {
-        var data   = new char[ 1024 ];
-        var offset = 0;
-
-        try
-        {
-            while ( true )
-            {
-                var length = reader.Read( data, offset, data.Length - offset );
-
-                if ( length == -1 )
-                {
-                    break;
-                }
-
-                if ( length == 0 )
-                {
-                    var newData = new char[ data.Length * 2 ];
-
-                    Array.Copy( data, 0, newData, 0, data.Length );
-                    data = newData;
-                }
-                else
-                {
-                    offset += length;
-                }
-            }
-        }
-        catch ( IOException ex )
-        {
-            throw new SerializationException( "Error reading input.", ex );
-        }
-        finally
-        {
-            reader.Close();
-        }
-
-        return Parse( data, 0, offset );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="input"></param>
-    /// <returns></returns>
-    /// <exception cref="SerializationException"></exception>
-    public JsonValue? Parse( InputStream input )
-    {
-        StreamReader reader;
-
-        try
-        {
-            reader = new StreamReader( input, Encoding.UTF8 );
-        }
-        catch ( Exception ex )
-        {
-            throw new SerializationException( "Error reading stream.", ex );
-        }
-
-        return Parse( reader );
-    }
-
-    public JsonValue? Parse( FileInfo file )
-    {
-        StreamReader reader;
-
-        try
-        {
-            reader = new StreamReader( file.Name, Encoding.UTF8 );
-        }
-        catch ( Exception ex )
-        {
-            throw new SerializationException( "Error reading file: " + file, ex );
-        }
-
-        try
-        {
-            return Parse( reader );
-        }
-        catch ( Exception ex )
-        {
-            throw new SerializationException( "Error parsing file: " + file, ex );
-        }
-    }
-
     public JsonValue? Parse( char[] data, int offset, int length )
     {
         _parseData     = data;
@@ -166,7 +48,6 @@ public partial class JsonReader
         _stringIsName     = false;
         _stringIsUnquoted = false;
         _parseException   = null!;
-        _parsePosition    = 0; // Reset parse position
 
         _parseNameList.Clear();
 
@@ -208,106 +89,128 @@ public partial class JsonReader
         if ( transition != -1 )
         {
             ExecuteActions( _jsonTransitionActions[ transition ] );
-            
+
             if ( _parseException != null )
             {
                 return currentState; // Stop if error
             }
-            
+
             _parsePosition++;
-            
+
             return _jsonTransitionTargs[ transition ];
         }
 
-        if ( _parsePosition <  _parseLength )
+        if ( _parsePosition < _parseLength )
         {
             // No valid transition found for the current character
             // This should ideally lead to a parsing error
             _parseException = new GdxRuntimeException( $"Unexpected character '{_parseData[ _parsePosition ]}' " +
                                                        $"at position {_parsePosition}" );
         }
-        
+
         // Stay in the current state
         return currentState;
     }
 
     private int FindTransition( int currentState )
     {
-        int keys       = _jsonKeyOffsets[ currentState ];
-        int keylength  = _jsonSingleLengths[ currentState ];
-        int transition = _jsonIndexOffsets[ currentState ];
+        int transition;
+        var exit = false;
 
-        char currentChar;
-            
-        if ( ( _parsePosition < _parseLength ) && ( _parsePosition < _parseData.Length ) )
+        do
         {
-            currentChar = _parseData[ _parsePosition ];
-        }
-        else
-        {
-            currentChar = ( char )0;
-        }
+            int keys      = _jsonKeyOffsets[ currentState ];
+            int keylength = _jsonSingleLengths[ currentState ];
 
-        // Single character transitions
-        if ( keylength > 0 )
-        {
-            var lower = keys;
-            var upper = ( keys + keylength ) - 1;
+            transition = _jsonIndexOffsets[ currentState ];
 
-            while ( lower <= upper )
+            char currentChar;
+
+            if ( ( _parsePosition < _parseLength ) && ( _parsePosition < _parseData.Length ) )
             {
-                var middle = lower + ( ( upper - lower ) >> 1 );
+                currentChar = _parseData[ _parsePosition ];
+            }
+            else
+            {
+                currentChar = ( char )0;
+            }
 
-                if ( currentChar < _jsonTransitionKeys[ middle ] )
+            // Single character transitions
+            if ( keylength > 0 )
+            {
+                var lower = keys;
+                var upper = ( keys + keylength ) - 1;
+
+                while ( lower <= upper )
                 {
-                    upper = middle - 1;
+                    var middle = lower + ( ( upper - lower ) >> 1 );
+
+                    if ( currentChar < _jsonTransitionKeys[ middle ] )
+                    {
+                        upper = middle - 1;
+                    }
+                    else if ( currentChar > _jsonTransitionKeys[ middle ] )
+                    {
+                        lower = middle + 1;
+                    }
+                    else
+                    {
+                        transition += ( middle - keys );
+                        exit       =  true;
+                    }
                 }
-                else if ( currentChar > _jsonTransitionKeys[ middle ] )
+
+                if ( !exit )
                 {
-                    lower = middle + 1;
-                }
-                else
-                {
-                    return transition + ( middle - keys );
+                    keys       += keylength;
+                    transition += keylength;
                 }
             }
 
-            transition += keylength;
-        }
-
-        // Range transitions
-        keylength = _jsonRangeLengths[ currentState ];
-
-        if ( keylength > 0 )
-        {
-            var lower = keys;
-            var upper = ( keys + ( keylength << 1 ) ) - 2;
-
-            while ( lower <= upper )
+            if ( !exit )
             {
-                var mid = lower + ( ( ( upper - lower ) >> 1 ) & ~1 );
+                // Range transitions
+                keylength = _jsonRangeLengths[ currentState ];
 
-                if ( currentChar < _jsonTransitionKeys[ mid ] )
+                if ( keylength > 0 )
                 {
-                    upper = mid - 2;
-                }
-                else if ( currentChar > _jsonTransitionKeys[ mid + 1 ] )
-                {
-                    lower = mid + 2;
-                }
-                else
-                {
-                    return transition + ( ( mid - keys ) >> 1 );
+                    var lower = keys;
+                    var upper = ( keys + ( keylength << 1 ) ) - 2;
+
+                    while ( lower <= upper )
+                    {
+                        var mid = lower + ( ( ( upper - lower ) >> 1 ) & ~1 );
+
+                        if ( currentChar < _jsonTransitionKeys[ mid ] )
+                        {
+                            upper = mid - 2;
+                        }
+                        else if ( currentChar > _jsonTransitionKeys[ mid + 1 ] )
+                        {
+                            lower = mid + 2;
+                        }
+                        else
+                        {
+                            transition += ( ( mid - keys ) >> 1 );
+                            exit       =  true;
+                        }
+                    }
+
+                    if ( !exit )
+                    {
+                        transition += keylength;
+                    }
                 }
             }
-
-            transition += keylength;
         }
+        while ( !exit );
 
-        Logger.Checkpoint();
+        transition    = _jsonIndicies[ transition ];
+        _currentState = _jsonTransitionTargs[ transition ];
         
-        return ( ( _parsePosition == _parseLength ) && ( _jsonEofActions[ currentState ] != 0 ) )
-            ? _jsonEofActions[ currentState ]
+        return ( ( _parsePosition == _parseLength )
+                 && ( _jsonEofActions[ _currentState ] != 0 ) )
+            ? _jsonEofActions[ _currentState ]
             : -1; // No transition
     }
 
@@ -350,6 +253,8 @@ public partial class JsonReader
 
     private void ExecuteActions( int actionOffset )
     {
+        Logger.Checkpoint();
+
         if ( actionOffset == 0 )
         {
             return;
@@ -573,24 +478,6 @@ public partial class JsonReader
         PopState();
     }
 
-    private void PushState( int state )
-    {
-        if ( _stackPointer == _parseStack.Length )
-        {
-            Array.Resize( ref _parseStack, _parseStack.Length * 2 );
-        }
-
-        _parseStack[ _stackPointer++ ] = state;
-    }
-
-    private void PopState()
-    {
-        if ( _stackPointer > 0 )
-        {
-            _stackPointer--;
-        }
-    }
-
     private void SkipComment()
     {
         var start = _parsePosition - 1;
@@ -628,12 +515,15 @@ public partial class JsonReader
 
     private void HandleUnquotedChars()
     {
-        Logger.Debug( "unquotedChars" );
-
         _stringValueStartPos = _parsePosition;
         _needsUnescape       = false;
         _stringIsUnquoted    = true;
+
         var shouldBreak = false;
+
+        Logger.Debug( $"_stringIsName : {_stringIsName}" );
+        Logger.Debug( $"_parsePosition: {_parsePosition}" );
+        Logger.Debug( $"_parseLength  : {_parseLength}" );
 
         if ( _stringIsName )
         {
@@ -668,8 +558,6 @@ public partial class JsonReader
 
                 if ( !shouldBreak )
                 {
-                    Logger.Debug( $"unquotedChar (name): '{currentChar}'" );
-
                     _parsePosition++;
                 }
             }
@@ -709,12 +597,12 @@ public partial class JsonReader
 
                 if ( !shouldBreak )
                 {
-                    Logger.Debug( $"unquotedChar (value): '{currentChar}'" );
-
                     _parsePosition++;
                 }
             }
         }
+
+        Logger.Checkpoint();
 
         _parsePosition--;
 
@@ -724,14 +612,10 @@ public partial class JsonReader
         }
 
         _parsePosition++;
-
-        Logger.Debug( "Done" );
     }
 
     private void HandleQuotedChars()
     {
-        Logger.Debug( "quotedChars" );
-
         _stringValueStartPos = ++_parsePosition;
         _needsUnescape       = false;
 
@@ -753,28 +637,20 @@ public partial class JsonReader
 
                 if ( _parsePosition < _parseLength )
                 {
-                    Logger.Debug( $"escapedChar: '{_parseData[ _parsePosition ]}'" );
-
                     _parsePosition++; // Skip the escaped character
                 }
             }
             else
             {
-                Logger.Debug( $"quotedChar: '{currentChar}'" );
-
                 _parsePosition++;
             }
         }
 
         _parsePosition--;
-
-        Logger.Debug( "Done" );
     }
 
     private void HandleEofActions( int currentState )
     {
-        Logger.Debug( "Eof Actions" );
-
         int acts  = _jsonEofActions[ currentState ];
         var nacts = ( int )_jsonActions[ acts++ ];
 
@@ -787,7 +663,23 @@ public partial class JsonReader
 
             // Add handling for other EOF actions if they exist
         }
+    }
 
-        Logger.Debug( "Done" );
+    private void PushState( int state )
+    {
+        if ( _stackPointer == _parseStack.Length )
+        {
+            Array.Resize( ref _parseStack, _parseStack.Length * 2 );
+        }
+
+        _parseStack[ _stackPointer++ ] = state;
+    }
+
+    private void PopState()
+    {
+        if ( _stackPointer > 0 )
+        {
+            _stackPointer--;
+        }
     }
 }

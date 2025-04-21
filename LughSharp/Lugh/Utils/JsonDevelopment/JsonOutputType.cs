@@ -27,7 +27,7 @@ using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Json;
+namespace LughSharp.Lugh.Utils.JsonDevelopment;
 
 [PublicAPI]
 public enum JsonOutputType

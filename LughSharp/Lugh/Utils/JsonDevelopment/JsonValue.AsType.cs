@@ -26,7 +26,7 @@ using System.Globalization;
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Json;
+namespace LughSharp.Lugh.Utils.JsonDevelopment;
 
 public partial class JsonValue
 {
