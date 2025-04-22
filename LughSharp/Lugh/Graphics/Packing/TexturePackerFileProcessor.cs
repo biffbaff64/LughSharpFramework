@@ -200,13 +200,19 @@ public partial class TexturePackerFileProcessor : FileProcessor
     {
         Logger.Debug( $"settings file: {settingsFile.FullName}" );
 
-        settings.WriteToJsonFile( "TestPack.json" );
+//        settings.WriteToJsonFile( "TestPack.json" );
         
         try
         {
+            Logger.Checkpoint();
+            
             var data = TexturePacker.Settings.ReadFromJsonFile( settingsFile );
             
+            Logger.Checkpoint();
+
             settings.Merge( data );
+
+            Logger.Checkpoint();
 
             return settings;
         }

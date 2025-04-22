@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing.Imaging;
+using System.Runtime.Versioning;
+
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -245,6 +248,24 @@ public class PixmapFormat
             Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
+
+            var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
+        };
+    }
+
+    [SupportedOSPlatform( "windows" )]
+    public static System.Drawing.Imaging.PixelFormat ToPixelFormat( PixelType.Format format )
+    {
+        var cformat = ToGdx2DPixelFormat( format );
+
+        return cformat switch
+        {
+            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => PixelFormat.Alpha,
+            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
 
             var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
         };

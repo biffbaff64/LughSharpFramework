@@ -22,34 +22,24 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing.Drawing2D;
-using System.Runtime.Serialization;
-using System.Runtime.Versioning;
+using System.Drawing.Imaging;
+using System.Text.Json.Serialization;
 
-namespace LughSharp.Lugh.Graphics.Packing;
+using LughSharp.Lugh.Graphics.Packing;
 
-[PublicAPI]
-public enum Resampling
-{
-    None,
-    Nearest,
-    Bilinear,
-    Bicubic,
-}
+namespace LughSharp.Lugh.Utils;
 
 [PublicAPI]
-public static class ResamplingExtensions
+public class JsonTextureResamplingConverter : JsonConverter< Resampling >
 {
-    //TODO:
-    [SupportedOSPlatform( "windows" )]
-    public static InterpolationMode ToInterpolationMode( this Resampling resampling )
+    /// <inheritdoc />
+    public override Resampling Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
     {
-        return resampling switch
-        {
-            Resampling.Nearest  => InterpolationMode.NearestNeighbor,
-            Resampling.Bilinear => InterpolationMode.Bilinear,
-            Resampling.Bicubic  => InterpolationMode.Bicubic,
-            var _               => InterpolationMode.Default,
-        };
+        return Resampling.None;
+    }
+
+    /// <inheritdoc />
+    public override void Write( Utf8JsonWriter writer, Resampling value, JsonSerializerOptions options )
+    {
     }
 }

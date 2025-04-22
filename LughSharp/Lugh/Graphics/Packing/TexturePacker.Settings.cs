@@ -23,9 +23,12 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Drawing.Imaging;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils;
@@ -120,27 +123,37 @@ public partial class TexturePacker
         /// <summary>
         /// The minification filter for the texture.
         /// </summary>
+        [JsonPropertyName( "FilterMin" )]
+        [JsonConverter( typeof( JsonStringEnumConverter ) )]
         public Texture.TextureFilter FilterMin { get; set; } = Texture.TextureFilter.Nearest;
 
         /// <summary>
         /// The magnification filter for the texture.
         /// </summary>
+        [JsonPropertyName( "FilterMag" )]
+        [JsonConverter( typeof( JsonStringEnumConverter ) )]
         public Texture.TextureFilter FilterMag { get; set; } = Texture.TextureFilter.Nearest;
 
         /// <summary>
         /// The wrap setting in the x direction for the texture.
         /// </summary>
+        [JsonPropertyName( "WrapX" )]
+        [JsonConverter( typeof( JsonStringEnumConverter ) )]
         public Texture.TextureWrap WrapX { get; set; } = Texture.TextureWrap.ClampToEdge;
 
         /// <summary>
         /// The wrap setting in the y direction for the texture.
         /// </summary>
+        [JsonPropertyName( "WrapY" )]
+        [JsonConverter( typeof( JsonStringEnumConverter ) )]
         public Texture.TextureWrap WrapY { get; set; } = Texture.TextureWrap.ClampToEdge;
 
         /// <summary>
         /// The <see cref="PixelFormat"/> the texture will use in-memory.
         /// </summary>
-        public PixelFormat Format { get; set; } = PixelFormat.Format32bppArgb;
+        [JsonPropertyName( "Format" )]
+        [JsonConverter( typeof( JsonStringEnumConverter ) )]
+        public PixelType.Format Format { get; set; } = PixelType.Format.RGBA8888;
 
         /// <summary>
         /// If true, two images that are pixel for pixel the same will only be packed once.
@@ -369,13 +382,14 @@ public partial class TexturePacker
         /// </summary>
         public void Merge( TexturePacker.Settings? source )
         {
+#if ALLOW_MERGE
             if ( source == null )
             {
                 return;
             }
 
-            var properties = typeof( TexturePacker.Settings ).GetProperties( System.Reflection.BindingFlags.Public
-                                                                             | System.Reflection.BindingFlags.Instance );
+            var properties = typeof( Settings ).GetProperties( BindingFlags.Public
+                                                               | BindingFlags.Instance );
 
             foreach ( var property in properties )
             {
@@ -409,6 +423,7 @@ public partial class TexturePacker
                     }
                 }
             }
+  #endif
         }
 
         /// <summary>
@@ -450,6 +465,45 @@ public partial class TexturePacker
         public string WriteToJsonString()
         {
             return JsonSerializer.Serialize( this, _jsonSerializerOptions );
+        }
+
+        public void ScaleResamplingTest()
+        {
+            try
+            {
+                const string JSON_SCALE_RESAMPLING = """
+                                                     "ScaleResampling": [ "Nearest", "Bicubic" ]
+                                                     """; // A snippet
+
+                using var doc = JsonDocument.Parse( $"{JSON_SCALE_RESAMPLING}" );
+
+                if ( doc.RootElement.TryGetProperty( nameof( ScaleResampling ), out var scaleResamplingElement ) )
+                {
+                    var resamplingArray = JsonSerializer.Deserialize< Resampling[] >( scaleResamplingElement.GetRawText() );
+
+                    if ( resamplingArray != null )
+                    {
+                        Console.WriteLine( "Successfully deserialized ScaleResampling array." );
+
+                        foreach ( var item in resamplingArray )
+                        {
+                            Console.WriteLine( item );
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine( "Failed to deserialize ScaleResampling array." );
+                    }
+                }
+                else
+                {
+                    Console.WriteLine( "Could not find ScaleResampling property." );
+                }
+            }
+            catch ( JsonException ex )
+            {
+                Console.WriteLine( $"JSON Deserialization Exception (ScaleResampling only): {ex.Message}" );
+            }
         }
     }
 }

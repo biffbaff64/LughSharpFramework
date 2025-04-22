@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Serialization;
+
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Images;
@@ -32,18 +34,33 @@ public class PixelType
     [PublicAPI]
     public enum Format : int
     {
+        [EnumMember( Value = "Dummy" )]
         Dummy = 0,
 
         // ----------
+        [EnumMember( Value = "Alpha" )]
         Alpha          = 1,
+        
+        [EnumMember( Value = "LuminanceAlpha" )]
         LuminanceAlpha = 2,
+        
+        [EnumMember( Value = "RGB888" )]
         RGB888         = 3,
+        
+        [EnumMember( Value = "RGBA8888" )]
         RGBA8888       = 4,
+
+        [EnumMember( Value = "RGB565" )]
         RGB565         = 5,
+        
+        [EnumMember( Value = "RBGA4444" )]
         RGBA4444       = 6,
+        
+        [EnumMember( Value = "Intensity" )]
         Intensity      = 7,
 
-        // ----------
+        // ----------=
+        [EnumMember( Value = "Default" )]
         Default = RGBA8888,
     }
 
