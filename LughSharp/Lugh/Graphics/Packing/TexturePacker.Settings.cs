@@ -24,9 +24,11 @@
 
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
+using System.Text;
 using System.Text.Json;
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
@@ -263,6 +265,14 @@ public partial class TexturePacker
 
         // ====================================================================
 
+        private JsonSerializerOptions _jsonSerializerOptions = new()
+        {
+            DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented       = true,
+        };
+
+        // ====================================================================
+
         public Settings()
         {
         }
@@ -354,6 +364,9 @@ public partial class TexturePacker
             return packFileName;
         }
 
+        /// <summary>
+        /// Merges the supplied Settings instance with this one.
+        /// </summary>
         public void Merge( TexturePacker.Settings? source )
         {
             if ( source == null )
@@ -373,26 +386,16 @@ public partial class TexturePacker
                         var sourceValue = ( bool? )property.GetValue( source ); // Treat as nullable to check if set
                         var targetValue = ( bool? )property.GetValue( this );
 
-                        // Example: Update if the source value has any value (true or false)
+                        // Update if the source value has any value (true or false)
                         if ( sourceValue.HasValue && ( sourceValue.Value != targetValue ) )
                         {
                             property.SetValue( this, sourceValue.Value );
                         }
 
-                        // Or: Update only if the source value is true (to selectively enable features)
-                        // if (sourceValue.HasValue && sourceValue.Value)
-                        // {
-                        //     property.SetValue(target, true);
-                        // }
-                        // Or: Update only if the source value is explicitly set (regardless of true/false)
-                        // (This is the most common scenario for booleans)
-                        // property.SetValue(target, sourceValue); // If source is nullable bool
-                        // or
-                        // property.SetValue(target, property.GetValue(source)); // If source is non-nullable bool
                         break;
                     }
 
-                    // Handle other property types as needed (see previous examples)
+                    // Handle other property types as needed
                     case { CanRead: true, CanWrite: true } when ( property.PropertyType != typeof( bool ) ):
                     {
                         var sourceValue = property.GetValue( source );
@@ -409,15 +412,44 @@ public partial class TexturePacker
         }
 
         /// <summary>
-        /// 
+        /// Read Json from the supplied file and return as a Settings object.
+        /// The value return may be NULL/
         /// </summary>
-        /// <param name="root"></param>
-        public void ReadFromJson( JsonElement root )
+        public static Settings? ReadFromJsonFile( FileInfo settingsFile )
         {
+            var jsonString = File.ReadAllText( settingsFile.FullName );
+
+            return JsonSerializer.Deserialize< TexturePacker.Settings >( jsonString );
         }
 
-        public void WriteToJson()
+        /// <summary>
+        /// Writes this Settings object to a Json string and saves that string
+        /// to a .json file with the specified name.
+        /// </summary>
+        /// <param name="fileName"></param>
+        public void WriteToJsonFile( string fileName )
         {
+            var jsonString      = WriteToJsonString();
+            var writeableString = new UTF8Encoding( true ).GetBytes( jsonString );
+
+            if ( writeableString.Length > 0 )
+            {
+                using var fs = System.IO.File.Create( fileName );
+
+                fs.Write( writeableString );
+                fs.Close();
+
+                Logger.Debug( writeableString.ToString()! );
+            }
+        }
+
+        /// <summary>
+        /// Returns this Settings object as a Json string.
+        /// </summary>
+        /// <returns></returns>
+        public string WriteToJsonString()
+        {
+            return JsonSerializer.Serialize( this, _jsonSerializerOptions );
         }
     }
 }

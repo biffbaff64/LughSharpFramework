@@ -200,23 +200,15 @@ public partial class TexturePackerFileProcessor : FileProcessor
     {
         Logger.Debug( $"settings file: {settingsFile.FullName}" );
 
+        settings.WriteToJsonFile( "TestPack.json" );
+        
         try
         {
-            var jsonString = File.ReadAllText( settingsFile.FullName );
-            var data       = JsonSerializer.Deserialize< TexturePacker.Settings >( jsonString );
-
+            var data = TexturePacker.Settings.ReadFromJsonFile( settingsFile );
+            
             settings.Merge( data );
 
             return settings;
-
-//            var root = new JsonReader().Parse( new StreamReader( settingsFile.FullName ) );
-//
-//            if ( root == null )
-//            {
-//                return; // Empty file.
-//            }
-//
-//            _json.ReadFields( settings, root );
         }
         catch ( Exception ex )
         {
