@@ -35,18 +35,18 @@ namespace LughSharp.Lugh.Graphics.Packing;
 [SupportedOSPlatform( "windows" )]
 public partial class TexturePackerFileProcessor : FileProcessor
 {
+    public const string DEFAULT_PACKFILE_NAME = "pack.json";
+
     private readonly TexturePacker.Settings          _defaultSettings;
     private readonly TexturePacker.ProgressListener? _progressListener;
 
     private Dictionary< DirectoryInfo, TexturePacker.Settings > _dirToSettings = [ ]; //TODO: Rename
 
     private List< DirectoryInfo > _dirsToIgnore = [ ];
-
-//    private Json                                                _json          = new();
-    private DirectoryInfo _rootDirectory;
-    private string        _packFileName;
-    private bool          _countOnly;
-    private int           _packCount;
+    private DirectoryInfo         _rootDirectory;
+    private string                _packFileName;
+    private bool                  _countOnly;
+    private int                   _packCount;
 
     // ========================================================================
 
@@ -108,7 +108,6 @@ public partial class TexturePackerFileProcessor : FileProcessor
             {
                 if ( file is FileInfo fileInfo )
                 {
-                    Logger.Debug( $"Adding settings file: {fileInfo.Name}" );
                     settingsFiles.Add( fileInfo );
                 }
             },
@@ -198,21 +197,11 @@ public partial class TexturePackerFileProcessor : FileProcessor
     /// <exception cref="Exception"></exception>
     public TexturePacker.Settings MergeSettings( TexturePacker.Settings settings, FileInfo settingsFile )
     {
-        Logger.Debug( $"settings file: {settingsFile.FullName}" );
-
-//        settings.WriteToJsonFile( "TestPack.json" );
-        
         try
         {
-            Logger.Checkpoint();
-            
-            var data = TexturePacker.Settings.ReadFromJsonFile( settingsFile );
-            
-            Logger.Checkpoint();
+            var data = settings.ReadFromJsonFile( settingsFile );
 
             settings.Merge( data );
-
-            Logger.Checkpoint();
 
             return settings;
         }
@@ -230,7 +219,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
     protected void DeleteOutput( FileInfo? outputRoot )
     {
         // Load root settings to get scale.
-        var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, "pack.json" ) );
+        var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, DEFAULT_PACKFILE_NAME ) );
         var rootSettings = _defaultSettings;
 
         if ( settingsFile.Exists )
@@ -332,7 +321,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
                              ( file != null ) && !file.Equals( inputDir.InputFile );
                              file = file.Parent )
                         {
-                            if ( new FileInfo( Path.Combine( file.FullName, "pack.json" ) ).Exists )
+                            if ( new FileInfo( Path.Combine( file.FullName, DEFAULT_PACKFILE_NAME ) ).Exists )
                             {
                                 fileList.Clear();
 
@@ -436,7 +425,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
                 }
                 catch ( IOException )
                 {
-                    Logger.Debug( $"Reading: {inputDir.InputFile?.FullName}" );
+                    Logger.Debug( $"Reading: {inputDir.InputFile?.FullName} ( IOException )" );
                 }
             }
 

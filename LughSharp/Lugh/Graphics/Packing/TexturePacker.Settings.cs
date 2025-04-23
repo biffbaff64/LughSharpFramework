@@ -123,36 +123,26 @@ public partial class TexturePacker
         /// <summary>
         /// The minification filter for the texture.
         /// </summary>
-        [JsonPropertyName( "FilterMin" )]
-        [JsonConverter( typeof( JsonStringEnumConverter ) )]
         public Texture.TextureFilter FilterMin { get; set; } = Texture.TextureFilter.Nearest;
 
         /// <summary>
         /// The magnification filter for the texture.
         /// </summary>
-        [JsonPropertyName( "FilterMag" )]
-        [JsonConverter( typeof( JsonStringEnumConverter ) )]
         public Texture.TextureFilter FilterMag { get; set; } = Texture.TextureFilter.Nearest;
 
         /// <summary>
         /// The wrap setting in the x direction for the texture.
         /// </summary>
-        [JsonPropertyName( "WrapX" )]
-        [JsonConverter( typeof( JsonStringEnumConverter ) )]
         public Texture.TextureWrap WrapX { get; set; } = Texture.TextureWrap.ClampToEdge;
 
         /// <summary>
         /// The wrap setting in the y direction for the texture.
         /// </summary>
-        [JsonPropertyName( "WrapY" )]
-        [JsonConverter( typeof( JsonStringEnumConverter ) )]
         public Texture.TextureWrap WrapY { get; set; } = Texture.TextureWrap.ClampToEdge;
 
         /// <summary>
         /// The <see cref="PixelFormat"/> the texture will use in-memory.
         /// </summary>
-        [JsonPropertyName( "Format" )]
-        [JsonConverter( typeof( JsonStringEnumConverter ) )]
         public PixelType.Format Format { get; set; } = PixelType.Format.RGBA8888;
 
         /// <summary>
@@ -258,7 +248,7 @@ public partial class TexturePacker
         /// For each scale, the type of interpolation used for resampling the source to the scaled
         /// size. One of nearest, bilinear or bicubic.
         /// </summary>
-        public Resampling[] ScaleResampling { get; set; } = [ Resampling.Bicubic ];
+        public List< Resampling > ScaleResampling { get; set; } = [ Resampling.Bicubic ];
 
         /// <summary>
         /// The file extension to be appended to the atlas filename.
@@ -278,10 +268,14 @@ public partial class TexturePacker
 
         // ====================================================================
 
-        private JsonSerializerOptions _jsonSerializerOptions = new()
+        private JsonSerializerOptions _defaultJsonSerializerOptions = new()
         {
             DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
             WriteIndented       = true,
+            Converters =
+            {
+                new JsonStringEnumConverter()
+            },
         };
 
         // ====================================================================
@@ -345,7 +339,7 @@ public partial class TexturePacker
 
             settings.Scale.CopyTo( Scale, 0 );
             settings.ScaleSuffix.CopyTo( ScaleSuffix, 0 );
-            settings.ScaleResampling.CopyTo( ScaleResampling, 0 );
+            ScaleResampling = settings.ScaleResampling.ToList();
         }
 
         /// <summary>
@@ -382,7 +376,6 @@ public partial class TexturePacker
         /// </summary>
         public void Merge( TexturePacker.Settings? source )
         {
-#if ALLOW_MERGE
             if ( source == null )
             {
                 return;
@@ -423,18 +416,17 @@ public partial class TexturePacker
                     }
                 }
             }
-  #endif
         }
 
         /// <summary>
         /// Read Json from the supplied file and return as a Settings object.
-        /// The value return may be NULL/
+        /// The value return may be NULL.
         /// </summary>
-        public static Settings? ReadFromJsonFile( FileInfo settingsFile )
+        public Settings? ReadFromJsonFile( FileInfo settingsFile )
         {
             var jsonString = File.ReadAllText( settingsFile.FullName );
 
-            return JsonSerializer.Deserialize< TexturePacker.Settings >( jsonString );
+            return JsonSerializer.Deserialize< TexturePacker.Settings >( jsonString, _defaultJsonSerializerOptions );
         }
 
         /// <summary>
@@ -453,8 +445,6 @@ public partial class TexturePacker
 
                 fs.Write( writeableString );
                 fs.Close();
-
-                Logger.Debug( writeableString.ToString()! );
             }
         }
 
@@ -464,46 +454,7 @@ public partial class TexturePacker
         /// <returns></returns>
         public string WriteToJsonString()
         {
-            return JsonSerializer.Serialize( this, _jsonSerializerOptions );
-        }
-
-        public void ScaleResamplingTest()
-        {
-            try
-            {
-                const string JSON_SCALE_RESAMPLING = """
-                                                     "ScaleResampling": [ "Nearest", "Bicubic" ]
-                                                     """; // A snippet
-
-                using var doc = JsonDocument.Parse( $"{JSON_SCALE_RESAMPLING}" );
-
-                if ( doc.RootElement.TryGetProperty( nameof( ScaleResampling ), out var scaleResamplingElement ) )
-                {
-                    var resamplingArray = JsonSerializer.Deserialize< Resampling[] >( scaleResamplingElement.GetRawText() );
-
-                    if ( resamplingArray != null )
-                    {
-                        Console.WriteLine( "Successfully deserialized ScaleResampling array." );
-
-                        foreach ( var item in resamplingArray )
-                        {
-                            Console.WriteLine( item );
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine( "Failed to deserialize ScaleResampling array." );
-                    }
-                }
-                else
-                {
-                    Console.WriteLine( "Could not find ScaleResampling property." );
-                }
-            }
-            catch ( JsonException ex )
-            {
-                Console.WriteLine( $"JSON Deserialization Exception (ScaleResampling only): {ex.Message}" );
-            }
+            return JsonSerializer.Serialize( this );
         }
     }
 }

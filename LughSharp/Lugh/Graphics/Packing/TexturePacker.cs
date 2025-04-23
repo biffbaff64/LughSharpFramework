@@ -295,7 +295,7 @@ public partial class TexturePacker
             _imageProcessor.Scale = _settings.Scale[ i ];
 
             if ( ( _settings.ScaleResampling != null )
-                 && ( _settings.ScaleResampling.Length > i )
+                 && ( _settings.ScaleResampling.Count > i )
                  && ( _settings.ScaleResampling[ i ] != Resampling.None ) )
             {
                 _imageProcessor.SetResampling( _settings.ScaleResampling[ i ] );
@@ -1005,6 +1005,9 @@ public partial class TexturePacker
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
+
+            Logger.Checkpoint();
+            
             processor.Process( new DirectoryInfo( input ), new DirectoryInfo( output ) );
         }
         catch ( Exception ex )

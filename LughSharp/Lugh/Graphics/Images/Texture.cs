@@ -71,46 +71,39 @@ public class Texture : GLTexture, IManaged
         /// <summary>
         /// Fetch the nearest texel that best maps to the pixel on screen.
         /// </summary>
-        [EnumMember( Value = "Nearest" )]
         Nearest = IGL.GL_NEAREST,
 
         /// <summary>
         /// Fetch four nearest texels that best map to the pixel on screen.
         /// </summary>
-        [EnumMember( Value = "Linear" )]
         Linear = IGL.GL_LINEAR,
 
         /// <summary>
         /// </summary>
-        [EnumMember( Value = "MipMap" )]
         MipMap = IGL.GL_LINEAR_MIPMAP_LINEAR,
 
         /// <summary>
         /// Fetch the best fitting image from the mip map chain based on the pixel/texel ratio and
         /// then sample the texels with a nearest filter.
         /// </summary>
-        [EnumMember( Value = "MipMapNearestNearest" )]
         MipMapNearestNearest = IGL.GL_NEAREST_MIPMAP_NEAREST,
 
         /// <summary>
         /// Fetch the best fitting image from the mip map chain based on the pixel/texel ratio and
         /// then sample the texels with a linear filter.
         /// </summary>
-        [EnumMember( Value = "MipMapLinearNearest" )]
         MipMapLinearNearest = IGL.GL_LINEAR_MIPMAP_NEAREST,
 
         /// <summary>
         /// Fetch the two best fitting images from the mip map chain and then sample the nearest texel
         /// from each of the two images, combining them to the final output pixel.
         /// </summary>
-        [EnumMember( Value = "MipMapNearestLinear" )]
         MipMapNearestLinear = IGL.GL_NEAREST_MIPMAP_LINEAR,
 
         /// <summary>
         /// Fetch the two best fitting images from the mip map chain and then sample the four nearest
         /// texels from each of the two images, combining them to the final output pixel.
         /// </summary>
-        [EnumMember( Value = "MipMapLinearLinear" )]
         MipMapLinearLinear = MipMap,
     }
 
@@ -120,13 +113,10 @@ public class Texture : GLTexture, IManaged
     [PublicAPI]
     public enum TextureWrap : int
     {
-        [EnumMember( Value = "MirroredRepeat" )]
         MirroredRepeat = IGL.GL_MIRRORED_REPEAT,
 
-        [EnumMember( Value = "ClampToEdge" )]
         ClampToEdge = IGL.GL_CLAMP_TO_EDGE,
 
-        [EnumMember( Value = "Repeat" )]
         Repeat = IGL.GL_REPEAT,
     }
 
