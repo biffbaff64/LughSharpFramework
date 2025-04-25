@@ -81,45 +81,48 @@ namespace LughSharp.Lugh.Graphics.Packing;
 /// directory or any parent directory, the default value is used.
 /// <code>
 /// {
-///     "pot": true,
-///     "paddingX": 2,
-///     "paddingY": 2,
-///     "bleed": true,
-///     "bleedIterations": 2,
-///     "edgePadding": true,
-///     "duplicatePadding": false,
-///     "rotation": false,
-///     "minWidth": 16,
-///     "minHeight": 16,
-///     "maxWidth": 1024,
-///     "maxHeight": 1024,
-///     "square": false,
-///     "stripWhitespaceX": false,
-///     "stripWhitespaceY": false,
-///     "alphaThreshold": 0,
-///     "filterMin": "Nearest",
-///     "filterMag": "Nearest",
-///     "wrapX": "ClampToEdge",
-///     "wrapY": "ClampToEdge",
-///     "format": "RGBA8888",
-///     "alias": true,
-///     "outputFormat": "png",
-///     `"jpegQuality": 0.9,
-///     "ignoreBlankImages": true,
-///     "fast": false,
-///     "debug": false,
-///     "combineSubdirectories": false,
-///     "flattenPaths": false,
-///     "premultiplyAlpha": false,
-///     "useIndexes": true,
-///     "limitMemory": true,
-///     "grid": false,
-///     "scale": [ 1 ],
-///     "scaleSuffix": [ "" ],
-///     "scaleResampling": [ "bicubic" ],
-///     "atlasExtension": ".atlas",
-///     "prettyPrint": true,
-///     "legacyOutput": true
+///     "MultipleOfFour": true,
+///     "Rotation": false,
+///     "PowerOfTwo": true,
+///     "PaddingX": 2,
+///     "PaddingY": 2,
+///     "EdgePadding": true,
+///     "DuplicatePadding": false,
+///     "MinWidth": 16,
+///     "MinHeight": 16,
+///     "MaxWidth": 1024,
+///     "MaxHeight": 1024,
+///     "Square": false,
+///     "StripWhitespaceX": false,
+///     "StripWhitespaceY": false,
+///     "AlphaThreshold": 0,
+///     "FilterMin": "Nearest",
+///     "FilterMag": "Nearest",
+///     "WrapX": "ClampToEdge",
+///     "WrapY": "ClampToEdge",
+///     "Format": "RGBA8888",
+///     "Alias": true,
+///     "OutputFormat": "png",
+///     "JpegQuality": 0.9,
+///     "IgnoreBlankImages": true,
+///     "Fast": false,
+///     "Debug": false,
+///     "Silent": false,
+///     "CombineSubdirectories": false,
+///     "Ignore": true,
+///     "FlattenPaths": false,
+///     "PremultiplyAlpha": false,
+///     "UseIndexes": true,
+///     "Bleed": true,
+///     "BleedIterations": 2,
+///     "LimitMemory": true,
+///     "Grid": false,
+///     "Scale": [ 1 ],
+///     "ScaleSuffix": [ "" ],
+///     "ScaleResampling": [ "Bicubic" ],
+///     "AtlasExtension": ".atlas",
+///     "PrettyPrint": true,
+///     "LegacyOutput": true
 /// }
 /// </code>
 /// </para>
@@ -992,13 +995,13 @@ public partial class TexturePacker
     /// <summary>
     /// </summary>
     /// <param name="settings"> The <see cref="TexturePacker.Settings"/> to use. </param>
-    /// <param name="input"> Directory containing individual images to be packed. </param>
-    /// <param name="output"> Directory where the pack file and page images will be written. </param>
+    /// <param name="inputFolder"> Directory containing individual images to be packed. </param>
+    /// <param name="outputFolder"> Directory where the pack file and page images will be written. </param>
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
     /// <param name="progress"> May be null. </param>
     public static void Process( Settings settings,
-                                string input,
-                                string output,
+                                string inputFolder,
+                                string outputFolder,
                                 string packFileName,
                                 ProgressListener? progress = null )
     {
@@ -1006,9 +1009,7 @@ public partial class TexturePacker
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
 
-            Logger.Checkpoint();
-            
-            processor.Process( new DirectoryInfo( input ), new DirectoryInfo( output ) );
+            processor.Process( new DirectoryInfo( inputFolder ), new DirectoryInfo( outputFolder ) );
         }
         catch ( Exception ex )
         {
@@ -1052,9 +1053,10 @@ public partial class TexturePacker
     }
 
     /// <summary>
-    /// 
+    /// Returns true if the output file does not yet exist or its last modification date
+    /// is before the last modification date of the input file
     /// </summary>
-    /// <param name="filePath"></param>
+    /// <param name="filePath"> Output file path. </param>
     /// <param name="lastModified"></param>
     /// <returns></returns>
     public static bool IsModified( string filePath, long lastModified )
@@ -1076,7 +1078,6 @@ public partial class TexturePacker
                 {
                     foreach ( var child in children )
                     {
-                        //TODO:
                         if ( IsModified( child, lastModified ) )
                         {
                             return true;
@@ -1093,22 +1094,20 @@ public partial class TexturePacker
         }
     }
 
-    public static bool ProcessIfModified( string input, string output, string packFileName )
+    /// <summary>
+    /// </summary>
+    /// <param name="input"></param>
+    /// <param name="output"></param>
+    /// <param name="packFileName"></param>
+    /// <param name="settings"></param>
+    /// <returns></returns>
+    public static bool ProcessIfModified( string input, string output, string packFileName, Settings? settings = null )
     {
-        var settings = new Settings();
-
-        if ( IsModified( input, output, packFileName, settings ) )
+        if ( settings == null )
         {
-            Process( settings, input, output, packFileName );
-
-            return true;
+            settings = new Settings();
         }
-
-        return false;
-    }
-
-    public static bool ProcessIfModified( Settings settings, string input, string output, string packFileName )
-    {
+        
         if ( IsModified( input, output, packFileName, settings ) )
         {
             Process( settings, input, output, packFileName );
@@ -1256,7 +1255,6 @@ public partial class TexturePacker
             _bufferedImage = null;
         }
 
-        [SupportedOSPlatform( "windows" )]
         public Bitmap GetImage( ImageProcessor? imageProcessor )
         {
             ArgumentNullException.ThrowIfNull( imageProcessor );

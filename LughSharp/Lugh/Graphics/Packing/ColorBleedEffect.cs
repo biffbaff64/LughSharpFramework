@@ -78,7 +78,7 @@ public class ColorBleedEffect
         return processedImage;
     }
 
-    private void ExecuteIteration( int[] rgb, Mask mask, int width, int height )
+    private static void ExecuteIteration( int[] rgb, Mask mask, int width, int height )
     {
         var iterator = mask.NewMaskIterator();
 
@@ -97,9 +97,6 @@ public class ColorBleedEffect
 
                 if ( ( column < 0 ) || ( column >= width ) || ( row < 0 ) || ( row >= height ) )
                 {
-                    column = x;
-                    row    = y;
-
                     continue;
                 }
 

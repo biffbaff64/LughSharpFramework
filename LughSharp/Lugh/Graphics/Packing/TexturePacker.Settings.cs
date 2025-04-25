@@ -24,14 +24,11 @@
 
 using System.Drawing.Imaging;
 using System.Reflection;
-using System.Runtime.Serialization;
 using System.Runtime.Versioning;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
@@ -274,7 +271,7 @@ public partial class TexturePacker
             WriteIndented       = true,
             Converters =
             {
-                new JsonStringEnumConverter()
+                new JsonStringEnumConverter(),
             },
         };
 
@@ -454,7 +451,7 @@ public partial class TexturePacker
         /// <returns></returns>
         public string WriteToJsonString()
         {
-            return JsonSerializer.Serialize( this );
+            return JsonSerializer.Serialize( this, _defaultJsonSerializerOptions );
         }
     }
 }

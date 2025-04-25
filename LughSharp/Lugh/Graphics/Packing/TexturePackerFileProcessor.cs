@@ -104,7 +104,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
         // Collect any pack.json setting files present in the folder, and process them.
         var settingsProcessor = new SettingsProcessor
         {
-            FileProcessedDelegate = ( file ) =>
+            FileProcessedDelegate = file =>
             {
                 if ( file is FileInfo fileInfo )
                 {
@@ -155,7 +155,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
 
             // Merge settings from current directory.
             MergeSettings( settings, settingsFile );
-
+            
             _dirToSettings.Add( settingsFile.Directory!, settings );
         }
 
@@ -195,7 +195,7 @@ public partial class TexturePackerFileProcessor : FileProcessor
     /// <param name="settings"></param>
     /// <param name="settingsFile"></param>
     /// <exception cref="Exception"></exception>
-    public TexturePacker.Settings MergeSettings( TexturePacker.Settings settings, FileInfo settingsFile )
+    public static TexturePacker.Settings MergeSettings( TexturePacker.Settings settings, FileInfo settingsFile )
     {
         try
         {

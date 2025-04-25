@@ -193,19 +193,25 @@ public partial class FileProcessor
     /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
     public virtual List< Entry > Process( FileSystemInfo inputFileOrDir, DirectoryInfo? outputRoot )
     {
+        Logger.Debug( $"Processing..." );
+        
         if ( !inputFileOrDir.Exists )
         {
-            throw new ArgumentException( $"FileProcessor#Process: Input file does not exist: {inputFileOrDir.FullName}" );
+            throw new ArgumentException( $"FileProcessor#Process: Input file/dir does not exist: {inputFileOrDir.FullName}" );
         }
 
         List< Entry > retval;
 
         if ( IOData.IsFile( inputFileOrDir ) )
         {
+            Logger.Debug( $"Processing file: {( ( FileInfo )inputFileOrDir ).Name}" );
+
             retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
         }
         else
         {
+            Logger.Debug( $"Processing folder: {( ( DirectoryInfo )inputFileOrDir ).Name}" );
+
             var files = new DirectoryInfo( inputFileOrDir.FullName )
                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
 
@@ -216,6 +222,7 @@ public partial class FileProcessor
     }
 
     /// <summary>
+    /// Processes a collection of files for sending to the ouitput folder.
     /// </summary>
     /// <param name="files"></param>
     /// <param name="outputRoot"></param>
@@ -269,6 +276,8 @@ public partial class FileProcessor
                 OutputDirectory = newOutputDir!,
             };
 
+            entry.Debug();
+            
             if ( newOutputDir != null )
             {
                 entry.OutputFile = newOutputDir.FullName.Length == 0
@@ -367,7 +376,8 @@ public partial class FileProcessor
                     Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
                 }
 
-                if ( ( FilenameFilterDelegate != null ) && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
+                if ( ( FilenameFilterDelegate != null )
+                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
                 {
                     continue;
                 }
@@ -686,6 +696,7 @@ public partial class FileProcessor
 
         // ====================================================================
 
+        #if DEBUG
         public void Debug()
         {
             Logger.Debug( $"InputFile      : {InputFile?.FullName}" );
@@ -693,6 +704,7 @@ public partial class FileProcessor
             Logger.Debug( $"OutputDirectory: {OutputDirectory?.FullName}" );
             Logger.Debug( $"Depth          : {Depth}" );
         }
+        #endif
     }
 
     // ========================================================================

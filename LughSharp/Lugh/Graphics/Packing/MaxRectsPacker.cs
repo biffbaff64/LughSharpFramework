@@ -407,7 +407,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
         return bestResult;
     }
 
-    private TexturePacker.Page? GetBest( TexturePacker.Page? result1, TexturePacker.Page? result2 )
+    private static  TexturePacker.Page? GetBest( TexturePacker.Page? result1, TexturePacker.Page? result2 )
     {
         if ( result1 == null )
         {
@@ -1205,7 +1205,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
 
         /** CP: Choosest the placement where the rectangle touches other rects as much as possible. */
         ContactPointRule,
-    };
+    }
 }
 
 

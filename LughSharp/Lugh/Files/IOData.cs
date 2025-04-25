@@ -77,6 +77,16 @@ public class IOData
         }
     }
 
+    public static void DebugFileList( string directoryPath )
+    {
+        var filesList = Directory.GetFiles( directoryPath );
+
+        foreach ( var f in filesList )
+        {
+            Logger.Debug( f );
+        }
+    }
+
     [PublicAPI]
     public enum PathType
     {

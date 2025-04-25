@@ -32,11 +32,15 @@ namespace LughSharp.Lugh.Graphics.Atlases;
 [PublicAPI]
 public partial class TextureAtlasData
 {
-    internal static readonly bool[] HasIndexes = [ false ];
+    public List< Page >   Pages   { get; set; } = [ ];
+    public List< Region > Regions { get; set; } = [ ];
+    public string[]       Entry   { get; set; } = new string[ 5 ];
 
     // ========================================================================
 
-    #region Constructors
+    internal static readonly bool[] HasIndexes = [ false ];
+
+    // ========================================================================
 
     /// <summary>
     /// </summary>
@@ -50,12 +54,6 @@ public partial class TextureAtlasData
             Load( packFile, imagesDir, flip );
         }
     }
-
-    #endregion
-
-    public List< Page >   Pages   { get; set; } = [ ];
-    public List< Region > Regions { get; set; } = [ ];
-    public string[]       Entry   { get; set; } = new string[ 5 ];
 
     // ========================================================================
 
@@ -289,17 +287,15 @@ public partial class TextureAtlasData
 
     // ========================================================================
 
+    [PublicAPI]
     protected interface IField< in T >
     {
         void Parse( T obj, params string[] entry );
     }
 
-    // ######################################################################
-    //      Companions.
-    // ######################################################################
-
-    #region Companions
-
+    // ========================================================================
+    // ========================================================================
+    
     [PublicAPI]
     public record Page
     {
@@ -361,6 +357,5 @@ public partial class TextureAtlasData
             return null;
         }
     }
-
-    #endregion
 }
+

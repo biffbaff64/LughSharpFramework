@@ -439,14 +439,7 @@ public partial class ImageProcessor
 
             if ( ( newWidth <= 0 ) || ( newHeight <= 0 ) )
             {
-                if ( _settings.IgnoreBlankImages )
-                {
-                    return null;
-                }
-                else
-                {
-                    return new TexturePacker.Rect( _emptyImage, 0, 0, 1, 1, false );
-                }
+                return _settings.IgnoreBlankImages ? null : new TexturePacker.Rect( _emptyImage, 0, 0, 1, 1, false );
             }
 
             return new TexturePacker.Rect( source, left, top, newWidth, newHeight, false );
@@ -554,49 +547,50 @@ public partial class ImageProcessor
         GetSplitPoint( image, name, endX + 1, bottom, true, true );
         GetSplitPoint( image, name, right, endY + 1, true, false );
 
-        // No pads.
-        if ( ( startX == 0 ) && ( endX == 0 ) && ( startY == 0 ) && ( endY == 0 ) )
+        switch ( startX )
         {
-            return null;
-        }
+            // No pads.
+            case 0 when ( endX == 0 ) && ( startY == 0 ) && ( endY == 0 ):
+                return null;
 
-        // -2 here is because the coordinates were computed before the 1px border was stripped.
-        if ( ( startX == 0 ) && ( endX == 0 ) )
-        {
-            startX = -1;
-            endX   = -1;
-        }
-        else
-        {
-            if ( startX > 0 )
-            {
+            case 0 when ( endX == 0 ):
+                startX = -1;
+                endX   = -1;
+
+                break;
+
+            case > 0:
                 startX--;
                 endX = image.Width - 2 - ( endX - 1 );
-            }
-            else
-            {
+
+                break;
+
+            default:
                 // If no start point was ever found, we assume full stretch.
                 endX = image.Width - 2;
-            }
+
+                break;
         }
 
-        if ( ( startY == 0 ) && ( endY == 0 ) )
+        switch ( startY )
         {
-            startY = -1;
-            endY   = -1;
-        }
-        else
-        {
-            if ( startY > 0 )
-            {
+            case 0 when ( endY == 0 ):
+                startY = -1;
+                endY   = -1;
+
+                break;
+
+            case > 0:
                 startY--;
                 endY = image.Height - 2 - ( endY - 1 );
-            }
-            else
-            {
+
+                break;
+
+            default:
                 // If no start point was ever found, we assume full stretch.
                 endY = image.Height - 2;
-            }
+
+                break;
         }
 
         if ( Math.Abs( _scale - 1.0f ) > Number.FLOAT_TOLERANCE )
@@ -716,17 +710,19 @@ public partial class ImageProcessor
 
             try
             {
-                var bytesPerPixel = 4; // 32bppArgb = 4 bytes per pixel
-                var pixels        = new byte[ width * bytesPerPixel ];
+                const int BYTES_PER_PIXEL = 4; // 32bppArgb = 4 bytes per pixel
+
+                var pixels = new byte[ width * BYTES_PER_PIXEL ];
 
                 for ( var y = 0; y < height; y++ )
                 {
                     var row = bitmapData.Scan0 + ( y * bitmapData.Stride );
-                    System.Runtime.InteropServices.Marshal.Copy( row, pixels, 0, width * bytesPerPixel );
+                    
+                    System.Runtime.InteropServices.Marshal.Copy( row, pixels, 0, width * BYTES_PER_PIXEL );
 
                     for ( var x = 0; x < width; x++ )
                     {
-                        var pixelValue = BitConverter.ToInt32( pixels, x * bytesPerPixel );
+                        var pixelValue = BitConverter.ToInt32( pixels, x * BYTES_PER_PIXEL );
                         Hash( sha1, pixelValue );
                     }
                 }

@@ -127,86 +127,87 @@ public class ImagePacker
         {
             throw new Exception( $"Key with name '{name}' is already in map" );
         }
-        else
+
+        var borderPixels = this._padding + ( this._duplicateBorder ? 1 : 0 );
+            
+        borderPixels <<= 1;
+            
+        var rect = new Rectangle( 0, 0, image.Width + borderPixels, image.Height + borderPixels );
+        var node = this.Insert( rect );
+
+        if ( node == null )
         {
-            var borderPixels = this._padding + ( this._duplicateBorder ? 1 : 0 );
-            
-            borderPixels <<= 1;
-            
-            var rect = new Rectangle( 0, 0, image.Width + borderPixels, image.Height + borderPixels );
-            var      node = this.Insert( rect );
+            throw new Exception( "Image didn't fit" );
+        }
 
-            if ( node == null )
+        node.LeaveName =   name;
+        rect           =   new Rectangle( node.Rect.X, node.Rect.Y, node.Rect.Width, node.Rect.Height );
+        rect.Width     -=  borderPixels;
+        rect.Height    -=  borderPixels;
+        borderPixels   >>= 1;
+        rect.X         +=  borderPixels;
+        rect.Y         +=  borderPixels;
+
+        this.Rects.Add( name, rect );
+
+        using ( var g = System.Drawing.Graphics.FromImage( this.Image ) )
+        {
+            g.DrawImage( image, rect.X, rect.Y );
+
+            if ( this._duplicateBorder )
             {
-                throw new Exception( "Image didn't fit" );
-            }
-            else
-            {
-                node.LeaveName =   name;
-                rect           =   new Rectangle( node.Rect.X, node.Rect.Y, node.Rect.Width, node.Rect.Height );
-                rect.Width     -=  borderPixels;
-                rect.Height    -=  borderPixels;
-                borderPixels   >>= 1;
-                rect.X         +=  borderPixels;
-                rect.Y         +=  borderPixels;
+                // Duplicate top border
+                g.DrawImage( image,
+                             // Note to self:
+                             // the 'with' expression here essentially creates a new Rectangle
+                             // using the dimensions of 'rect', with Y being set to rect.Y-1,
+                             // and Height being set to 1.
+                             // ie. new Rectangle( rect.X, rect.Y - 1, rect.Width, 1 ),
+                             rect with { Y = rect.Y - 1, Height = 1 },
+                             new Rectangle( 0, 0, image.Width, 1 ),
+                             GraphicsUnit.Pixel );
 
-                this.Rects.Add( name, rect );
+                // Duplicate bottom border
+                g.DrawImage( image,
+                             rect with { Y = rect.Y + rect.Height, Height = 1 },
+                             new Rectangle( 0, image.Height - 1, image.Width, 1 ),
+                             GraphicsUnit.Pixel );
 
-                using ( var g = System.Drawing.Graphics.FromImage( this.Image ) )
-                {
-                    g.DrawImage( image, rect.X, rect.Y );
+                // Duplicate left border
+                g.DrawImage( image,
+                             rect with { X = rect.X - 1, Width = 1 },
+                             new Rectangle( 0, 0, 1, image.Height ),
+                             GraphicsUnit.Pixel );
 
-                    if ( this._duplicateBorder )
-                    {
-                        // Duplicate top border
-                        g.DrawImage( image,
-                                     new Rectangle( rect.X, rect.Y - 1, rect.Width, 1 ),
-                                     new Rectangle( 0, 0, image.Width, 1 ),
-                                     GraphicsUnit.Pixel );
+                // Duplicate right border
+                g.DrawImage( image,
+                             rect with { X = rect.X + rect.Width, Width = 1 },
+                             new Rectangle( image.Width - 1, 0, 1, image.Height ),
+                             GraphicsUnit.Pixel );
 
-                        // Duplicate bottom border
-                        g.DrawImage( image,
-                                     new Rectangle( rect.X, rect.Y + rect.Height, rect.Width, 1 ),
-                                     new Rectangle( 0, image.Height - 1, image.Width, 1 ),
-                                     GraphicsUnit.Pixel );
+                // Duplicate top-left corner
+                g.DrawImage( image,
+                             new Rectangle( rect.X - 1, rect.Y - 1, 1, 1 ),
+                             new Rectangle( 0, 0, 1, 1 ),
+                             GraphicsUnit.Pixel );
 
-                        // Duplicate left border
-                        g.DrawImage( image,
-                                     new Rectangle( rect.X - 1, rect.Y, 1, rect.Height ),
-                                     new Rectangle( 0, 0, 1, image.Height ),
-                                     GraphicsUnit.Pixel );
+                // Duplicate top-right corner
+                g.DrawImage( image,
+                             new Rectangle( rect.X + rect.Width, rect.Y - 1, 1, 1 ),
+                             new Rectangle( image.Width - 1, 0, 1, 1 ),
+                             GraphicsUnit.Pixel );
 
-                        // Duplicate right border
-                        g.DrawImage( image,
-                                     new Rectangle( rect.X + rect.Width, rect.Y, 1, rect.Height ),
-                                     new Rectangle( image.Width - 1, 0, 1, image.Height ),
-                                     GraphicsUnit.Pixel );
+                // Duplicate bottom-left corner
+                g.DrawImage( image,
+                             new Rectangle( rect.X - 1, rect.Y + rect.Height, 1, 1 ),
+                             new Rectangle( 0, image.Height - 1, 1, 1 ),
+                             GraphicsUnit.Pixel );
 
-                        // Duplicate top-left corner
-                        g.DrawImage( image,
-                                     new Rectangle( rect.X - 1, rect.Y - 1, 1, 1 ),
-                                     new Rectangle( 0, 0, 1, 1 ),
-                                     GraphicsUnit.Pixel );
-
-                        // Duplicate top-right corner
-                        g.DrawImage( image,
-                                     new Rectangle( rect.X + rect.Width, rect.Y - 1, 1, 1 ),
-                                     new Rectangle( image.Width - 1, 0, 1, 1 ),
-                                     GraphicsUnit.Pixel );
-
-                        // Duplicate bottom-left corner
-                        g.DrawImage( image,
-                                     new Rectangle( rect.X - 1, rect.Y + rect.Height, 1, 1 ),
-                                     new Rectangle( 0, image.Height - 1, 1, 1 ),
-                                     GraphicsUnit.Pixel );
-
-                        // Duplicate bottom-right corner
-                        g.DrawImage( image,
-                                     new Rectangle( rect.X + rect.Width, rect.Y + rect.Height, 1, 1 ),
-                                     new Rectangle( image.Width - 1, image.Height - 1, 1, 1 ),
-                                     GraphicsUnit.Pixel );
-                    }
-                }
+                // Duplicate bottom-right corner
+                g.DrawImage( image,
+                             new Rectangle( rect.X + rect.Width, rect.Y + rect.Height, 1, 1 ),
+                             new Rectangle( image.Width - 1, image.Height - 1, 1, 1 ),
+                             GraphicsUnit.Pixel );
             }
         }
     }
