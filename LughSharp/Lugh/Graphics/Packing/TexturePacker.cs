@@ -1009,7 +1009,16 @@ public partial class TexturePacker
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
 
-            processor.Process( new DirectoryInfo( inputFolder ), new DirectoryInfo( outputFolder ) );
+            var result = processor.Process( new DirectoryInfo( inputFolder ), new DirectoryInfo( outputFolder ) );
+
+            Logger.Debug( "Results:-" );
+            foreach ( var e in result )
+            {
+                Logger.Debug( $"InputFile      : {e.InputFile}" );
+                Logger.Debug( $"OutputFile     : {e.OutputFile}" );
+                Logger.Debug( $"OutputDirectory: {e.OutputDirectory}" );
+                Logger.Divider();
+            }
         }
         catch ( Exception ex )
         {
@@ -1107,7 +1116,7 @@ public partial class TexturePacker
         {
             settings = new Settings();
         }
-        
+
         if ( IsModified( input, output, packFileName, settings ) )
         {
             Process( settings, input, output, packFileName );

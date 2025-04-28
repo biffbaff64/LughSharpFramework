@@ -1,122 +1,36 @@
-﻿// ///////////////////////////////////////////////////////////////////////////////
-// MIT License
-//
-// Copyright (c) 2024 Richard Ikin.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-// ///////////////////////////////////////////////////////////////////////////////
+﻿// /////////////////////////////////////////////////////////////////////////////
+//  MIT License
+// 
+//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
+// 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+// /////////////////////////////////////////////////////////////////////////////
 
 using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using static System.Text.RegularExpressions.Regex;
+namespace LughSharp.Lugh.Graphics.Packing;
 
-namespace LughSharp.Lugh.Files;
-
-/// <summary>
-/// Collects files recursively, filtering by file name. Callbacks are provided to
-/// Process files and the results are collected, either <see cref="ProcessFile(Entry)" />
-/// or <see cref="ProcessDir(Entry, List{Entry})" /> can be overridden, or both. The
-/// entries provided to the callbacks have the original file, the output directory,
-/// and the output file. If <see cref="SetFlattenOutput(bool)"/> is false, the output
-/// will match the directory structure of the input.
-/// <br/>
-/// <para>
-/// <b>Potential Areas for Improvement and Questions:</b>
-/// </para>
-/// <para>
-/// <b>Error Handling in Process(FileSystemInfo, DirectoryInfo?):</b>
-/// When inputFileOrDir is a directory, the code retrieves FileSystemInfo and casts them to
-/// FileInfo. What happens if a subdirectory is encountered at the top level? It seems it would
-/// be skipped in this initial call. Is that the intended behavior? Perhaps a check for
-/// IsDirectory and a recursive call here as well might be needed if the initial input can be
-/// a directory and recursive processing should start from there.
-/// </para>
-/// <br/>
-/// <para>
-/// <b>ProcessDir Output Directory:</b>
-/// In the Process(FileInfo[], DirectoryInfo?) method, the newOutputDir for ProcessDir is
-/// determined based on FlattenOutput or the OutputDirectory of the first entry in dirEntries.
-/// If the entries in dirEntries logically belong to different subdirectories of the input,
-/// this might lead to an incorrect OutputDirectory being set for the entry passed to ProcessDir.
-/// Consider if the OutputDirectory for the Entry passed to ProcessDir should somehow reflect
-/// the original input subdirectory structure.
-/// </para>
-/// <para>
-/// <b>Handling Root Directory Input:</b>
-/// If inputFileOrDir in the initial Process call is a root directory (e.g., "C:"), the file.Directory
-/// in the recursive Process method might be null. The current code logs an error. Consider if a
-/// different handling mechanism is needed for root directories (e.g., processing files directly
-/// under the root without a parent directory concept for grouping).
-/// </para>
-/// <para>
-/// <b>Clarity of outputDir in Recursive Calls:</b>
-/// In the recursive Process call, outputDir is constructed based on file.Name. This seems correct
-/// for maintaining the output directory structure. However, ensure this aligns with the overall
-/// intention of FlattenOutput. If FlattenOutput is true, the outputDir in the recursive calls might
-/// still be creating a subdirectory structure.
-/// </para>
-/// <para>
-/// <b>Comparator and Directories:</b>
-/// The Comparator is defined for FileInfo. The EntryComparator handles DirectoryInfo by comparing
-/// names. Is there a specific requirement for sorting directories differently? If not, the default
-/// name comparison seems reasonable.
-/// </para>
-/// <para>
-/// <b>OutputFilesList Population:</b>
-/// The OutputFilesList is cleared at the beginning of the Process(FileInfo[], DirectoryInfo?) method.
-/// The AddProcessedFile(Entry) method adds to this list. Ensure that AddProcessedFile is called
-/// appropriately within ProcessFile or elsewhere to collect the processed files. It's not explicitly
-/// called within the provided Process methods.
-/// </para>
-/// <para>
-/// <b>Thread Safety:</b>
-/// If this class is intended to be used in a multi-threaded environment, consider potential thread
-/// safety issues, especially with the shared InputRegex and OutputFilesList.
-/// </para>
-/// <para>
-/// <b>Cancellation/Progress Reporting:</b>
-/// For long-running operations, consider adding mechanisms for cancellation or progress reporting.
-/// </para>
-/// <para>
-/// <b>Specific Questions:</b>
-/// <li>
-/// When and where is AddProcessedFile(Entry) intended to be called? It's crucial for populating the
-/// OutputFilesList that the Process methods ultimately return.
-/// </li>
-/// <li>
-/// What is the intended behavior when the initial inputFileOrDir in Process(FileSystemInfo, DirectoryInfo?)
-/// is a directory, and recursive processing should occur?
-/// </li>
-/// <li>
-/// How should root directories be handled?
-/// </li>
-/// <li>
-/// Does FlattenOutput apply to the directory structure created during recursion, or only to the final
-/// output file path within the outputRoot?
-/// </li>
-/// <br/>
-/// </para>
-/// </summary>
 [PublicAPI]
 public partial class FileProcessor
 {
@@ -127,19 +41,48 @@ public partial class FileProcessor
     public virtual Action< FileSystemInfo >? FileProcessedDelegate { get; set; }
 
     // Delegate to process a file
-    public Action< Entry >? ProcessFileDelegate { get; set; }
+    public Action< TexturePackerEntry >? ProcessFileDelegate { get; set; }
 
     // Delegate to process a directory
-    public Action< Entry, List< Entry > >? ProcessDirDelegate { get; set; }
+    public Action< TexturePackerEntry, List< TexturePackerEntry > >? ProcessDirDelegate { get; set; }
 
     // ========================================================================
 
-    public List< Regex > InputRegex      { get; } = [ ];
-    public List< Entry > OutputFilesList { get; } = [ ];
-    public string        OutputSuffix    { get; set; }
-    public bool          Recursive       { get; set; } = true;
-    public bool          FlattenOutput   { get; set; }
+    public List< Regex >              InputRegex      { get; set; } = [ ];
+    public List< TexturePackerEntry > OutputFilesList { get; set; } = [ ];
+    public string                     OutputSuffix    { get; set; }
+    public bool                       Recursive       { get; set; } = true;
+    public bool                       FlattenOutput   { get; set; }
 
+    // ========================================================================
+
+    public Comparison< FileInfo > Comparator { get; set; } = ( o1, o2 ) =>
+        string.Compare( o1.Name, o2.Name, StringComparison.Ordinal );
+
+    [SuppressMessage( "ReSharper", "ConvertIfStatementToSwitchStatement" )]
+    public Comparison< TexturePackerEntry > EntryComparator
+    {
+        get =>
+            ( o1, o2 ) =>
+            {
+                Guard.ThrowIfNull( o1.InputFile, o2.InputFile );
+
+                if ( o1.InputFile is FileInfo file1 && o2.InputFile is FileInfo file2 )
+                {
+                    return Comparator( file1, file2 );
+                }
+
+                if ( o1.InputFile is DirectoryInfo dir1 && o2.InputFile is DirectoryInfo dir2 )
+                {
+                    return string.Compare( dir1.Name, dir2.Name, StringComparison.Ordinal );
+                }
+
+                return string.Compare( o1.InputFile?.Name, o2.InputFile?.Name, StringComparison.Ordinal );
+            };
+        set => throw new NotImplementedException();
+    }
+
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -179,7 +122,7 @@ public partial class FileProcessor
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"></param>
     /// <returns></returns>
-    public List< Entry > Process( string inputFileOrDir, string? outputRoot )
+    public List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot )
     {
         return Process( new DirectoryInfo( inputFileOrDir ),
                         outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
@@ -190,28 +133,23 @@ public partial class FileProcessor
     /// </summary>
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
-    /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
-    public virtual List< Entry > Process( FileSystemInfo inputFileOrDir, DirectoryInfo? outputRoot )
+    /// <returns> the processed files added with <see cref="AddProcessedFile(TexturePackerEntry)"/>. </returns>
+    public virtual List< TexturePackerEntry > Process( FileSystemInfo inputFileOrDir, DirectoryInfo? outputRoot )
     {
-        Logger.Debug( $"Processing..." );
-        
         if ( !inputFileOrDir.Exists )
         {
-            throw new ArgumentException( $"FileProcessor#Process: Input file/dir does not exist: {inputFileOrDir.FullName}" );
+            throw new ArgumentException( $"FileProcessor#Process: Input file/dir does not " +
+                                         $"exist: {inputFileOrDir.FullName}" );
         }
 
-        List< Entry > retval;
+        List< TexturePackerEntry > retval;
 
         if ( IOData.IsFile( inputFileOrDir ) )
         {
-            Logger.Debug( $"Processing file: {( ( FileInfo )inputFileOrDir ).Name}" );
-
             retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
         }
         else
         {
-            Logger.Debug( $"Processing folder: {( ( DirectoryInfo )inputFileOrDir ).Name}" );
-
             var files = new DirectoryInfo( inputFileOrDir.FullName )
                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
 
@@ -226,22 +164,23 @@ public partial class FileProcessor
     /// </summary>
     /// <param name="files"></param>
     /// <param name="outputRoot"></param>
-    /// <returns></returns>+
+    /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
+    public virtual List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
         Logger.Checkpoint();
-        Logger.Debug( $"Num files: {files.Length}" );
-
+        
         if ( outputRoot == null )
         {
+            Logger.Debug( $"Setting outputRoot to InternalPath: {IOData.InternalPath}" );
+
             outputRoot = new DirectoryInfo( IOData.InternalPath );
         }
 
         OutputFilesList.Clear();
 
-        var stringToEntries = new Dictionary< string, List< Entry > >();
-        var allEntries      = new List< Entry >();
+        var stringToEntries = new Dictionary< DirectoryInfo, List< TexturePackerEntry > >();
+        var allEntries      = new List< TexturePackerEntry >();
 
         Process( files, outputRoot, outputRoot, stringToEntries, 0 );
 
@@ -252,7 +191,7 @@ public partial class FileProcessor
                 dirEntries.Sort( EntryComparator );
             }
 
-            var newOutputDir = default( DirectoryInfo );
+            DirectoryInfo? newOutputDir = null;
 
             if ( FlattenOutput )
             {
@@ -263,24 +202,22 @@ public partial class FileProcessor
                 newOutputDir = dirEntries[ 0 ].OutputDirectory;
             }
 
-            var outputName = inputDir;
+            var outputName = inputDir.Name;
 
             if ( OutputSuffix != null )
             {
-                outputName = MyRegex().Replace( outputName, "$1" ) + OutputSuffix;
+                outputName = FpRegex().Replace( outputName, "$1" ) + OutputSuffix;
             }
 
-            var entry = new Entry
+            var entry = new TexturePackerEntry
             {
-                InputFile       = new DirectoryInfo( inputDir ),
+                InputFile       = inputDir,
                 OutputDirectory = newOutputDir!,
             };
 
-            entry.Debug();
-            
             if ( newOutputDir != null )
             {
-                entry.OutputFile = newOutputDir.FullName.Length == 0
+                entry.OutputFile = ( newOutputDir.FullName.Length == 0 )
                     ? new FileInfo( outputName )
                     : new FileInfo( Path.Combine( newOutputDir.FullName, outputName ) );
             }
@@ -291,7 +228,7 @@ public partial class FileProcessor
             }
             catch ( Exception ex )
             {
-                throw new Exception( $"Error processing directory: {entry.InputFile.FullName}", ex );
+                throw new Exception( $"Error processing directory: {entry.InputFile?.FullName}", ex );
             }
 
             allEntries.AddRange( dirEntries );
@@ -325,7 +262,7 @@ public partial class FileProcessor
     /// <param name="dirToEntries"></param>
     /// <param name="depth"></param>
     private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                          Dictionary< DirectoryInfo, List< Entry > > dirToEntries, int depth )
+                          Dictionary< DirectoryInfo, List< TexturePackerEntry > > dirToEntries, int depth )
     {
         foreach ( var file in files )
         {
@@ -386,10 +323,10 @@ public partial class FileProcessor
 
                 if ( OutputSuffix != null )
                 {
-                    outputName = MyRegex().Replace( outputName, "$1" ) + OutputSuffix;
+                    outputName = FpRegex().Replace( outputName, "$1" ) + OutputSuffix;
                 }
 
-                var entry = new Entry
+                var entry = new TexturePackerEntry
                 {
                     Depth           = depth,
                     InputFile       = file,
@@ -430,7 +367,7 @@ public partial class FileProcessor
     /// <param name="stringToEntries"></param>
     /// <param name="depth"></param>
     private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                          Dictionary< string, List< Entry > > stringToEntries, int depth )
+                          Dictionary< string, List< TexturePackerEntry > > stringToEntries, int depth )
     {
         foreach ( var file in files )
         {
@@ -470,10 +407,10 @@ public partial class FileProcessor
 
                 if ( OutputSuffix != null )
                 {
-                    outputName = MyRegex().Replace( outputName, "$1" ) + OutputSuffix;
+                    outputName = FpRegex().Replace( outputName, "$1" ) + OutputSuffix;
                 }
 
-                var entry = new Entry
+                var entry = new TexturePackerEntry
                 {
                     Depth           = depth,
                     InputFile       = file,
@@ -508,17 +445,15 @@ public partial class FileProcessor
         }
 
         // Note:
-        // To get the count of files stores in the List< Entry >, use something like:-
+        // To get the count of files stores in the List< TexturePackerEntry >, use something like:-
         // var totalEntries = stringToEntries.Values.Sum(list => list.Count);
     }
 
     /// <summary>
     /// </summary>
     /// <param name="entry"></param>
-    public virtual void ProcessFile( Entry entry )
+    public virtual void ProcessFile( TexturePackerEntry entry )
     {
-        Logger.Checkpoint();
-
         Guard.ThrowIfNull( entry.InputFile );
 
         FileProcessedDelegate?.Invoke( ( FileInfo )entry.InputFile );
@@ -529,18 +464,23 @@ public partial class FileProcessor
     /// </summary>
     /// <param name="entryDir"></param>
     /// <param name="files"></param>
-    public virtual void ProcessDir( Entry entryDir, List< Entry > files )
+    public virtual void ProcessDir( TexturePackerEntry entryDir, List< TexturePackerEntry > files )
     {
-        Logger.Checkpoint();
-
-        if ( ProcessDirDelegate == null )
-        {
-            Logger.Debug( "ProcessDirDelegate is not set!" );
-
-            return;
-        }
-
-        ProcessDirDelegate.Invoke( entryDir, files );
+//        Logger.Checkpoint();
+//
+//        if ( ProcessDirDelegate == null )
+//        {
+//            Logger.Debug( "ProcessDirDelegate is not set!" );
+//
+//            ProcessDirDelegate = ( dir, fileList ) =>
+//            {
+//                Logger.Debug( "Dummy method" );
+//                
+//                // Dummy method
+//            };
+//        }
+//
+//        ProcessDirDelegate.Invoke( entryDir, files );
     }
 
     // ========================================================================
@@ -568,7 +508,7 @@ public partial class FileProcessor
     {
         foreach ( var suffix in suffixes )
         {
-            AddInputRegex( $"(?i).*{Escape( suffix )}" );
+            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
         }
 
         return this;
@@ -609,7 +549,7 @@ public partial class FileProcessor
     }
 
     /// <summary>
-    /// Sets the comparator for <see cref="ProcessDir(Entry, List{Entry})"/>.
+    /// Sets the comparator for <see cref="ProcessDir(TexturePackerEntry, List{TexturePackerEntry})"/>.
     /// By default the files are sorted by alpha.
     /// </summary>
     public FileProcessor SetComparator( Comparison< FileInfo > comparator )
@@ -620,97 +560,24 @@ public partial class FileProcessor
     }
 
     /// <summary>
-    /// Adds a processed <see cref="Entry"/> to the <see cref="OutputFilesList"/>.
+    /// Adds a processed <see cref="TexturePackerEntry"/> to the <see cref="OutputFilesList"/>.
     /// This method should be called by:-
-    /// <li><see cref="ProcessFile(Entry)"/> or,</li>
-    /// <li><see cref="ProcessDir(Entry, List{Entry})"/></li>
+    /// <li><see cref="ProcessFile(TexturePackerEntry)"/> or,</li>
+    /// <li><see cref="ProcessDir(TexturePackerEntry, List{TexturePackerEntry})"/></li>
     /// if the return value of <see cref="Process(FileSystemInfo, DirectoryInfo)"/> or
     /// <see cref="Process(FileInfo[], DirectoryInfo)"/> should return all the processed
     /// files.
     /// </summary>
     /// <param name="entry"></param>
-    public virtual void AddProcessedFile( Entry entry )
+    public virtual void AddProcessedFile( TexturePackerEntry entry )
     {
         OutputFilesList.Add( entry );
     }
 
     // ========================================================================
 
-    public Comparison< FileInfo > Comparator { get; set; } = ( o1, o2 ) =>
-        string.Compare( o1.Name, o2.Name, StringComparison.Ordinal );
-
-    [SuppressMessage( "ReSharper", "ConvertIfStatementToSwitchStatement" )]
-    private Comparison< Entry > EntryComparator
-    {
-        get =>
-            ( o1, o2 ) =>
-            {
-                Guard.ThrowIfNull( o1.InputFile, o2.InputFile );
-
-                if ( o1.InputFile is FileInfo file1 && o2.InputFile is FileInfo file2 )
-                {
-                    return Comparator( file1, file2 );
-                }
-
-                if ( o1.InputFile is DirectoryInfo dir1 && o2.InputFile is DirectoryInfo dir2 )
-                {
-                    return string.Compare( dir1.Name, dir2.Name, StringComparison.Ordinal );
-                }
-
-                return string.Compare( o1.InputFile?.Name, o2.InputFile?.Name, StringComparison.Ordinal );
-            };
-        set => throw new NotImplementedException();
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// File processing information, detauiling:-
-    /// <li>The input file, or directory, to be processed.</li>
-    /// <li>The name of the final output file.</li>
-    /// <li>The output directory, where the final output file will be stored.</li>
-    /// <li>tbc</li>
-    /// </summary>
-    [PublicAPI]
-    public class Entry
-    {
-        /// <summary>
-        /// The input file, or directory, to be processed.
-        /// </summary>
-        public FileSystemInfo? InputFile { get; set; } = null!;
-
-        /// <summary>
-        /// The name of the final output file.
-        /// </summary>
-        public FileInfo? OutputFile { get; set; } = null!;
-
-        /// <summary>
-        /// The output directory, where the final output file will be stored.
-        /// </summary>
-        public DirectoryInfo? OutputDirectory { get; set; } = null!;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public int Depth { get; set; }
-
-        // ====================================================================
-
-        #if DEBUG
-        public void Debug()
-        {
-            Logger.Debug( $"InputFile      : {InputFile?.FullName}" );
-            Logger.Debug( $"OutputFile     : {OutputFile?.FullName}" );
-            Logger.Debug( $"OutputDirectory: {OutputDirectory?.FullName}" );
-            Logger.Debug( $"Depth          : {Depth}" );
-        }
-        #endif
-    }
-
-    // ========================================================================
-
-    [GeneratedRegex( "(.*)\\..*" )]
-    private static partial Regex MyRegex();
+    [GeneratedRegex( "(.*)\\..*", RegexOptions.Compiled, "en-US" )]
+    private static partial Regex FpRegex();
 
     // ========================================================================
 }
