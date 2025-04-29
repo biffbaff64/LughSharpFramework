@@ -25,6 +25,7 @@
 using System.Reflection;
 using System.Text.RegularExpressions;
 
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -59,7 +60,7 @@ public partial class LughVersion
 
         try
         {
-            var matches = MyRegex().Matches( _version.ToString() );
+            var matches = RegexUtils.VersionNumberRegex().Matches( _version.ToString() );
             var v       = string.Empty;
 
             foreach ( var match in matches )
@@ -150,10 +151,4 @@ public partial class LughVersion
 
         return LughRevisionVersion <= revision;
     }
-
-    /// <summary>
-    /// </summary>
-    /// <returns></returns>
-    [GeneratedRegex( "\\d+" )]
-    private static partial Regex MyRegex();
 }

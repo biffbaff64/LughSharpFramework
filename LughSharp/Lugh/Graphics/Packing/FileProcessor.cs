@@ -26,8 +26,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
+
+using DirectoryInfo = System.IO.DirectoryInfo;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
@@ -122,8 +125,10 @@ public partial class FileProcessor
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"></param>
     /// <returns></returns>
-    public List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot )
+    public List< TexturePackerEntry >? Process( string inputFileOrDir, string? outputRoot )
     {
+        Logger.Checkpoint();
+
         return Process( new DirectoryInfo( inputFileOrDir ),
                         outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
     }
@@ -134,12 +139,14 @@ public partial class FileProcessor
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
     /// <returns> the processed files added with <see cref="AddProcessedFile(TexturePackerEntry)"/>. </returns>
-    public virtual List< TexturePackerEntry > Process( FileSystemInfo inputFileOrDir, DirectoryInfo? outputRoot )
+    public virtual List< TexturePackerEntry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot )
     {
-        if ( !inputFileOrDir.Exists )
+        Logger.Checkpoint();
+
+        if ( ( inputFileOrDir == null ) || !inputFileOrDir.Exists )
         {
             throw new ArgumentException( $"FileProcessor#Process: Input file/dir does not " +
-                                         $"exist: {inputFileOrDir.FullName}" );
+                                         $"exist: {inputFileOrDir?.FullName}" );
         }
 
         List< TexturePackerEntry > retval;
@@ -169,7 +176,7 @@ public partial class FileProcessor
     public virtual List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
         Logger.Checkpoint();
-        
+
         if ( outputRoot == null )
         {
             Logger.Debug( $"Setting outputRoot to InternalPath: {IOData.InternalPath}" );
@@ -224,7 +231,14 @@ public partial class FileProcessor
 
             try
             {
-                ProcessDir( entry, dirEntries );
+                //TODO: I will be using Null Propogation here when testing is finished
+                // I'm leaving room for debug messages inside the if statement.
+                //
+                // ReSharper disable once UseNullPropagation
+                if ( ProcessDirDelegate != null )
+                {
+                    ProcessDirDelegate.Invoke( entry, dirEntries );
+                }
             }
             catch ( Exception ex )
             {
@@ -264,6 +278,8 @@ public partial class FileProcessor
     private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                           Dictionary< DirectoryInfo, List< TexturePackerEntry > > dirToEntries, int depth )
     {
+        Logger.Checkpoint();
+
         foreach ( var file in files )
         {
             var dir = file.Directory; // Get the parent directory
@@ -369,6 +385,8 @@ public partial class FileProcessor
     private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                           Dictionary< string, List< TexturePackerEntry > > stringToEntries, int depth )
     {
+        Logger.Checkpoint();
+
         foreach ( var file in files )
         {
             if ( ( file.Attributes & FileAttributes.Directory ) == 0 )
@@ -407,7 +425,7 @@ public partial class FileProcessor
 
                 if ( OutputSuffix != null )
                 {
-                    outputName = FpRegex().Replace( outputName, "$1" ) + OutputSuffix;
+                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
                 }
 
                 var entry = new TexturePackerEntry
@@ -573,11 +591,6 @@ public partial class FileProcessor
     {
         OutputFilesList.Add( entry );
     }
-
-    // ========================================================================
-
-    [GeneratedRegex( "(.*)\\..*", RegexOptions.Compiled, "en-US" )]
-    private static partial Regex FpRegex();
 
     // ========================================================================
 }

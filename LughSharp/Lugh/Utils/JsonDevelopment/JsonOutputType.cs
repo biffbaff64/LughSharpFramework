@@ -152,12 +152,12 @@ public static partial class OutputTypeExtensions
 
     // ====================================================================
 
-    [GeneratedRegex( "^[a-zA-Z_$][a-zA-Z_$0-9]*$" )]
-    private static partial Regex MyRegex();
+//    [GeneratedRegex( "^[a-zA-Z_$][a-zA-Z_$0-9]*$" )]
+//    private static partial Regex MyRegex();
 
-    [GeneratedRegex( "^[^\":,{\\[\\]/ ][^}\\],]*$" )]
-    private static partial Regex MyRegex1();
+//    [GeneratedRegex( "^[^\":,{\\[\\]/ ][^}\\],]*$" )]
+//    private static partial Regex MyRegex1();
 
-    [GeneratedRegex( "^[^\":,}/ ][^:]*$" )]
-    private static partial Regex MyRegex2();
+//    [GeneratedRegex( "^[^\":,}/ ][^:]*$" )]
+//    private static partial Regex MyRegex2();
 }

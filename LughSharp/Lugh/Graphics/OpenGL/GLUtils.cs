@@ -138,7 +138,7 @@ public static class GLUtils
     /// </summary>
     public static void GLDebug()
     {
-        Logger.Debug( "Setting up GL Debug" );
+        Logger.Debug( "********** SETTING UP GL DEBUG **********" );
 
         unsafe
         {

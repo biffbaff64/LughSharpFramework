@@ -44,57 +44,6 @@ public class Gdx
     // ========================================================================
     // ========================================================================
 
-    /// <summary>
-    /// This is here, in line with my faith.
-    /// </summary>
-    private const string A_PRAYER_TO_THE_GODDESS =
-        "Mother Earth, enlighten what's dark in me. "
-        + "Strengthen what's weak in me. "
-        + "Mend what's broken in me. "
-        + "Bind what's bruised in me. "
-        + "Heal what's sick in me. "
-        + "Revive whatever peace & love has died in me.";
-
-    // ========================================================================
-    // ========================================================================
-
-    private IGLBindings? _glBindings;
-
-    // ========================================================================
-    // ========================================================================
-
-    private Gdx()
-    {
-    }
-
-    /// <summary>
-    /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings" /> interface.
-    /// Initially initialised as an instance of <see cref="GLBindings" />, it can be modified to
-    /// reference any class inheriting from IGLBindings.
-    /// The property will check internally for null, and initialise itself to reference GLBindings
-    /// by default if that is the case.
-    /// </summary>
-    public IGLBindings Bindings
-    {
-        get
-        {
-            if ( _glBindings == null )
-            {
-                _glBindings = new GLBindings();
-
-                Logger.Debug( "Gdx.Bindings is null, initialised to reference GLBindings." );
-            }
-
-            return _glBindings;
-        }
-        set
-        {
-            _glBindings = value;
-
-            Logger.Debug( $"Gdx.Bindings set to reference {value.GetType().Name}" );
-        }
-    }
-
     public IApplication App      { get; set; } = null!;
     public IAudio       Audio    { get; set; } = null!;
     public IInput       Input    { get; set; } = null!;
@@ -129,13 +78,49 @@ public class Gdx
     public bool DevMode { get; set; } = false;
 
     // ========================================================================
-    // ========================================================================
 
     public static Gdx         GdxApi => Nested.Instance;
     public static IGLBindings GL     => Nested.Instance.Bindings;
 
     // ========================================================================
+
+    private IGLBindings? _glBindings;
+
     // ========================================================================
+
+    private Gdx()
+    {
+    }
+
+    /// <summary>
+    /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings" /> interface.
+    /// Initially initialised as an instance of <see cref="GLBindings" />, it can be modified to
+    /// reference any class inheriting from IGLBindings.
+    /// The property will check internally for null, and initialise itself to reference GLBindings
+    /// by default if that is the case.
+    /// </summary>
+    public IGLBindings Bindings
+    {
+        get
+        {
+            if ( _glBindings == null )
+            {
+                _glBindings = new GLBindings();
+
+                Logger.Debug( "********** Gdx.Bindings is null, initialised " +
+                              "to reference GLBindings. **********" );
+            }
+
+            return _glBindings;
+        }
+        set
+        {
+            _glBindings = value;
+
+            Logger.Debug( $"********** Gdx.Bindings set to reference " +
+                          $"{value.GetType().Name} **********" );
+        }
+    }
 
     /// <summary>
     /// Performs essential tasks, which MUST be performed to allow the
@@ -196,19 +181,6 @@ public class Gdx
         return this;
     }
 
-    private static bool CheckEnvironmentVar( string envVar, string value )
-    {
-        if ( Environment.GetEnvironmentVariables().Contains( envVar ) )
-        {
-            return Environment.GetEnvironmentVariable( envVar )!.ToUpper() == value;
-        }
-
-        return false;
-    }
-
-    // ========================================================================
-    // ========================================================================
-
     /// <summary>
     /// </summary>
     public void GLErrorCheck()
@@ -219,6 +191,19 @@ public class Gdx
         {
             Logger.Error( $"GL Error: {error}" );
         }
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    private static bool CheckEnvironmentVar( string envVar, string value )
+    {
+        if ( Environment.GetEnvironmentVariables().Contains( envVar ) )
+        {
+            return Environment.GetEnvironmentVariable( envVar )!.ToUpper() == value;
+        }
+
+        return false;
     }
 
     // Fully Lazy instantiation.
@@ -232,7 +217,19 @@ public class Gdx
         {
         }
     }
+    
+    // ========================================================================
+    // ========================================================================
 
-    // ========================================================================
-    // ========================================================================
+    /// <summary>
+    /// Love and Light Blessings.
+    /// </summary>
+    private const string A_PRAYER_TO_THE_GODDESS =
+        "Oh Blessed Goddess, enlighten what is dark in me. "
+        + "Strengthen what is weak in me. "
+        + "Mend what is broken in me. "
+        + "Bind what is bruised in me. "
+        + "Heal what is sick in me. "
+        + "Revive whatever peace & love has died in me.";
 }
+

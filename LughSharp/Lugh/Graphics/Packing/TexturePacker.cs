@@ -131,12 +131,15 @@ namespace LughSharp.Lugh.Graphics.Packing;
 [SupportedOSPlatform( "windows" )]
 public partial class TexturePacker
 {
+    public string? RootPath { get; set; }
+    public IPacker Packer   { get; set; }
+
+    // ========================================================================
+
     private Settings           _settings;
-    private IPacker            _packer;
     private ImageProcessor     _imageProcessor;
     private List< InputImage > _inputImages = [ ];
     private ProgressListener?  _progressListener;
-    private string?            _rootPath;
 
     // ========================================================================
     // ========================================================================
@@ -155,12 +158,14 @@ public partial class TexturePacker
         {
             if ( settings.MaxWidth != MathUtils.NextPowerOfTwo( settings.MaxWidth ) )
             {
-                throw new GdxRuntimeException( $"If pot is true, maxWidth must be a power of two: {settings.MaxWidth}" );
+                throw new GdxRuntimeException( $"If pot is true, maxWidth must be a power " +
+                                               $"of two: {settings.MaxWidth}" );
             }
 
             if ( settings.MaxHeight != MathUtils.NextPowerOfTwo( settings.MaxHeight ) )
             {
-                throw new GdxRuntimeException( $"If pot is true, maxHeight must be a power of two: {settings.MaxHeight}" );
+                throw new GdxRuntimeException( $"If pot is true, maxHeight must be a power " +
+                                               $"of two: {settings.MaxHeight}" );
             }
         }
 
@@ -168,16 +173,18 @@ public partial class TexturePacker
         {
             if ( ( settings.MaxWidth % 4 ) != 0 )
             {
-                throw new GdxRuntimeException( $"If mod4 is true, maxWidth must be evenly divisible by 4: {settings.MaxWidth}" );
+                throw new GdxRuntimeException( $"If mod4 is true, maxWidth must be evenly " +
+                                               $"divisible by 4: {settings.MaxWidth}" );
             }
 
             if ( ( settings.MaxHeight % 4 ) != 0 )
             {
-                throw new GdxRuntimeException( $"If mod4 is true, maxHeight must be evenly divisible by 4: {settings.MaxHeight}" );
+                throw new GdxRuntimeException( $"If mod4 is true, maxHeight must be evenly " +
+                                               $"divisible by 4: {settings.MaxHeight}" );
             }
         }
 
-        _packer         = settings.Grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
+        Packer          = settings.Grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
         _imageProcessor = NewImageProcessor( settings );
 
         SetRootDir( rootDir );
@@ -196,43 +203,24 @@ public partial class TexturePacker
 
     /// <summary>
     /// </summary>
-    /// <param name="settings"></param>
-    /// <returns></returns>
-    protected static ImageProcessor NewImageProcessor( Settings settings )
-    {
-        return new ImageProcessor( settings );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <returns></returns>
-    public string? GetRootPath() => _rootPath;
-
-    /// <summary>
-    /// </summary>
-    /// <param name="value"></param>
-    private void SetRootPath( string? value ) => _rootPath = value;
-
-    /// <summary>
-    /// </summary>
     /// <param name="rootDir"></param>
     public void SetRootDir( DirectoryInfo? rootDir )
     {
         if ( rootDir == null )
         {
-            SetRootPath( null );
+            RootPath = null;
 
             return;
         }
 
-        Guard.ThrowIfNull( GetRootPath() );
+        Guard.ThrowIfNull( RootPath );
 
-        SetRootPath( Path.GetFullPath( rootDir.FullName ) );
-        SetRootPath( GetRootPath()!.Replace( '\\', '/' ) );
+        RootPath = Path.GetFullPath( rootDir.FullName );
+        RootPath = RootPath!.Replace( '\\', '/' );
 
-        if ( !GetRootPath()!.EndsWith( '/' ) )
+        if ( !RootPath!.EndsWith( '/' ) )
         {
-            SetRootPath( GetRootPath() + "/" );
+            RootPath += "/";
         }
     }
 
@@ -241,7 +229,7 @@ public partial class TexturePacker
         var inputImage = new InputImage
         {
             FileInfo = file,
-            RootPath = GetRootPath(),
+            RootPath = this.RootPath,
         };
 
         _inputImages.Add( inputImage );
@@ -256,11 +244,6 @@ public partial class TexturePacker
         };
 
         _inputImages.Add( inputImage );
-    }
-
-    public void SetPacker( IPacker packer )
-    {
-        _packer = packer;
     }
 
     public void SetProgressListener( ProgressListener? listener )
@@ -301,7 +284,7 @@ public partial class TexturePacker
                  && ( _settings.ScaleResampling.Count > i )
                  && ( _settings.ScaleResampling[ i ] != Resampling.None ) )
             {
-                _imageProcessor.SetResampling( _settings.ScaleResampling[ i ] );
+                _imageProcessor.Resampling = _settings.ScaleResampling[ i ];
             }
 
             _progressListener.Start( 0.35f );
@@ -330,9 +313,9 @@ public partial class TexturePacker
             _progressListener.End();
             _progressListener.Start( 0.35f );
             _progressListener.Count = 0;
-            _progressListener.Total = _imageProcessor.GetImages().Count;
+            _progressListener.Total = _imageProcessor.ImageRects.Count;
 
-            var pages = _packer.Pack( _progressListener, _imageProcessor.GetImages() );
+            var pages = Packer.Pack( _progressListener, _imageProcessor.ImageRects );
 
             _progressListener.End();
             _progressListener.Start( 0.29f );
@@ -993,6 +976,7 @@ public partial class TexturePacker
     }
 
     /// <summary>
+    /// Packs the images in the supplied input folder into a texture atlas.
     /// </summary>
     /// <param name="settings"> The <see cref="TexturePacker.Settings"/> to use. </param>
     /// <param name="inputFolder"> Directory containing individual images to be packed. </param>
@@ -1005,13 +989,23 @@ public partial class TexturePacker
                                 string packFileName,
                                 ProgressListener? progress = null )
     {
+        Logger.Debug( $"inputFolder : {inputFolder}" );
+        Logger.Debug( $"outputFolder: {outputFolder}" );
+        Logger.Debug( $"packFileName: {packFileName}" );
+
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
 
-            var result = processor.Process( new DirectoryInfo( inputFolder ), new DirectoryInfo( outputFolder ) );
+            Logger.Debug( $"processor _packFileName: {processor.GetPackFileName()}" );
+            Logger.Debug( $"processor _rootDirectory: {processor.GetRootDirectory()}" );
 
-            Logger.Debug( "Results:-" );
+            var result = processor.Process( new DirectoryInfo( inputFolder ),
+                                            new DirectoryInfo( outputFolder ) );
+
+            #if DEBUG
+            Logger.Debug( $"Results:- ( {result?.Count} )" );
+
             foreach ( var e in result )
             {
                 Logger.Debug( $"InputFile      : {e.InputFile}" );
@@ -1019,6 +1013,7 @@ public partial class TexturePacker
                 Logger.Debug( $"OutputDirectory: {e.OutputDirectory}" );
                 Logger.Divider();
             }
+            #endif
         }
         catch ( Exception ex )
         {
@@ -1125,6 +1120,15 @@ public partial class TexturePacker
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="settings"></param>
+    /// <returns></returns>
+    protected static ImageProcessor NewImageProcessor( Settings settings )
+    {
+        return new ImageProcessor( settings );
     }
 
     // ========================================================================

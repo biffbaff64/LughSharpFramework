@@ -179,15 +179,11 @@ public class SpriteBatch : IBatch
         // If a default shader is not provided, create one.
         if ( defaultShader == null )
         {
-            Logger.Debug( "Creating Default Shader" );
-
             _shader     = CreateDefaultShader();
             _ownsShader = true; // Indicate that this class owns the shader.
         }
         else
         {
-            Logger.Debug( "Using Default Shader" );
-
             _shader = defaultShader;
         }
 
@@ -728,8 +724,6 @@ public class SpriteBatch : IBatch
 
         _combinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( _shader.ShaderProgramHandle,
                                                                       "u_combinedMatrix" );
-
-        Logger.Debug( $"_combinedMatrixLocation: {_combinedMatrixLocation}" );
     }
 
     /// <summary>

@@ -70,6 +70,7 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
         this._defaultSettings  = packerSettings ?? new TexturePacker.Settings();
         this._progressListener = progress ?? new TexturePacker.ProgressListenerImpl();
 
+        // Strip off the .atlas extension name from the packfile if it has been pre-added.
         if ( packFileName.ToLower().EndsWith( _defaultSettings.AtlasExtension.ToLower() ) )
         {
             packFileName = packFileName.Substring( 0, packFileName.Length - _defaultSettings.AtlasExtension.Length );
@@ -81,7 +82,8 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
         FlattenOutput      = true;
         ProcessDirDelegate = this.ProcessDir;
 
-        AddInputSuffix( ".png", ".jpg", ".jpeg" ); //TODO: Add .bmp
+        // Set the default file extensions for processable images.
+        AddInputSuffix( ".png", ".jpg", ".jpeg" ); //TODO: Add .bmp support
 
         // Sort input files by name to avoid platform-dependent atlas output changes.
         Comparator = ( ( file1, file2 ) => string.Compare( file1.Name,
@@ -98,13 +100,15 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
     /// <returns></returns>
     public override List< TexturePackerEntry > Process( FileSystemInfo? inputRoot, DirectoryInfo? outputRoot )
     {
+        Logger.Checkpoint();
+
         Guard.ThrowIfNull( inputRoot );
 
         _rootDirectory = new DirectoryInfo( inputRoot.FullName );
 
         List< FileInfo > settingsFiles = [ ];
 
-        // Collect any pack.json setting files present in the folder, and process them.
+        // Collect any pack.json setting files present in the folder.
         var settingsProcessor = new PackingSettingsProcessor
         {
             FileProcessedDelegate = file =>
@@ -165,12 +169,12 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
 
         // Count the number of texture packer invocations.
         _countOnly = true;
-        _ = ProcessIO( inputRoot, outputRoot );
+        _          = base.Process( inputRoot, outputRoot );
         _countOnly = false;
 
         // Do actual processing.
         _progressListener?.Start( 1 );
-        var result = ProcessIO( inputRoot, outputRoot );
+        var result = base.Process( inputRoot, outputRoot );
         _progressListener?.End();
 
         return result;
@@ -183,6 +187,8 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
     /// <returns></returns>
     public List< TexturePackerEntry > Process( FileInfo[] files, FileInfo? outputRoot )
     {
+        Logger.Checkpoint();
+        
         Guard.ThrowIfNull( outputRoot );
 
         // Delete pack file and images.
@@ -204,6 +210,8 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
     private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                           Dictionary< DirectoryInfo, List< TexturePackerEntry > > dirToEntries, int depth )
     {
+        Logger.Checkpoint();
+
         foreach ( var file in files )
         {
             var dir = file.Directory; // Get the parent directory
@@ -300,53 +308,12 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
     }
 
     /// <summary>
-    /// Processes the specified input file or directory.
-    /// </summary>
-    /// <param name="inputFileOrDir"></param>
-    /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
-    /// <returns>
-    /// the processed files added with <see cref="FileProcessor.AddProcessedFile(TexturePackerEntry)"/>.
-    /// </returns>
-    public List< TexturePackerEntry > ProcessIO( FileSystemInfo inputFileOrDir, DirectoryInfo? outputRoot )
-    {
-        if ( !inputFileOrDir.Exists )
-        {
-            throw new ArgumentException( $"FileProcessor#Process: Input file/dir does not " +
-                                         $"exist: {inputFileOrDir.FullName}" );
-        }
-
-        List< TexturePackerEntry > retval;
-
-        if ( IOData.IsFile( inputFileOrDir ) )
-        {
-            retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
-        }
-        else
-        {
-            var files = new DirectoryInfo( inputFileOrDir.FullName )
-                        .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
-
-            retval = Process( files, outputRoot );
-            
-            Logger.Debug( $"files.Length: {files.Length}" );
-            Logger.Debug( $"outputRoot: {outputRoot?.Name}" );
-
-            foreach ( var file in files )
-            {
-                Logger.Debug( $"file: {file.FullName}" );
-            }
-        }
-
-        return retval;
-    }
-
-    /// <summary>
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="files"></param>
     public override void ProcessDir( TexturePackerEntry inputDir, List< TexturePackerEntry > files )
     {
-        Logger.Checkpoint();
+        Logger.Debug( $"_countOnly: {_countOnly}" );
 
         // Do not proceed if this dir is one of those to ignore
         if ( _dirsToIgnore.Contains( inputDir.InputFile ) )
@@ -399,7 +366,7 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
                     ProcessDirDelegate = ( entryDir, fileList ) =>
                     {
                         Logger.Checkpoint();
-                        
+
                         for ( var file = ( DirectoryInfo? )entryDir.InputFile;
                              ( file != null ) && !file.Equals( inputDir.InputFile );
                              file = file.Parent )
@@ -420,7 +387,7 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
                     ProcessFileDelegate = AddProcessedFile,
                 };
 
-                files = combiningProcessor.Process( ( DirectoryInfo )inputDir.InputFile!, null ).ToList();
+                files = combiningProcessor.Process( ( DirectoryInfo? )inputDir.InputFile, null )!.ToList();
             }
 
             if ( files.Count == 0 )
@@ -679,15 +646,16 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
     /// <summary>
     /// </summary>
     /// <returns></returns>
-    public virtual TexturePacker.ProgressListener? GetProgressListener()
-    {
-        return _progressListener;
-    }
+    public virtual TexturePacker.ProgressListener? GetProgressListener() => _progressListener;
+
+    public string GetPackFileName() => _packFileName;
+
+    public DirectoryInfo? GetRootDirectory() => _rootDirectory;
 
     // ============================================================================
 
-    [GeneratedRegex( "(.*?)(\\d+)$" )]
-    private static partial Regex MyRegex1();
+//    [GeneratedRegex( "(.*?)(\\d+)$", RegexOptions.Compiled, "en-US" )]
+//    private static partial Regex MyRegex1();
 
     // ============================================================================
 }

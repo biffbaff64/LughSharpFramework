@@ -26,6 +26,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.Text;
 
 namespace LughSharp.Lugh.Graphics.G2D;
 
@@ -107,9 +108,7 @@ public partial class PixmapPackerIO
 
                     if ( parameters.UseIndexes )
                     {
-                        var rx = MyRegex();
-
-                        var matches = rx.Matches( imageName );
+                        var matches = RegexUtils.ItemWithUnderscoreSuffixRegex().Matches( imageName );
 
                         if ( matches.Count > 0 )
                         {
@@ -161,8 +160,6 @@ public partial class PixmapPackerIO
 
         writer.Close();
     }
-
-    [GeneratedRegex( "(.+)_(\\d+)$" )] private static partial Regex MyRegex();
 
     // ========================================================================
     // ========================================================================

@@ -97,8 +97,6 @@ public class ShaderProgram : IDisposable
     /// <param name="fragmentShader"></param>
     public ShaderProgram( string vertexShader, string fragmentShader )
     {
-        Logger.Checkpoint();
-
         VertexShaderSource   = vertexShader;
         FragmentShaderSource = fragmentShader;
 

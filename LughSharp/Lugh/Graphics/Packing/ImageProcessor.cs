@@ -38,24 +38,26 @@ namespace LughSharp.Lugh.Graphics.Packing;
 [SupportedOSPlatform( "windows" )]
 public partial class ImageProcessor
 {
-    public float Scale { get; set; }
+    public float                      Scale      { get; set; }
+    public Resampling                 Resampling { get; set; } = Resampling.Bicubic;
+    public List< TexturePacker.Rect > ImageRects { get; set; } = [ ];
+    public TexturePacker.Settings     Settings   { get; }
 
     // ========================================================================
 
-    private static readonly Bitmap                                    _emptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
-    private static          Regex                                     _indexPattern = MyRegex();
-    private readonly        TexturePacker.Settings                    _settings;
-    private readonly        Dictionary< string, TexturePacker.Rect? > _crcs       = [ ];
-    private readonly        List< TexturePacker.Rect >                _rects      = [ ];
-    private                 float                                     _scale      = 1;
-    private                 Resampling                                _resampling = Resampling.Bicubic;
+    private static readonly Bitmap _emptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
+    private static          Regex  _indexPattern = MyRegex();
+
+    private readonly Dictionary< string, TexturePacker.Rect? > _crcs = [ ];
+
+    private float _scale = 1;
 
     // ========================================================================
     // ========================================================================
 
     public ImageProcessor( TexturePacker.Settings settings )
     {
-        _settings = settings;
+        Settings = settings;
     }
 
     public TexturePacker.Rect? AddImage( FileInfo file, string? rootPath )
@@ -99,7 +101,7 @@ public partial class ImageProcessor
 
         var rect = AddImage( image, name );
 
-        if ( ( rect != null ) && _settings.LimitMemory )
+        if ( ( rect != null ) && Settings.LimitMemory )
         {
             rect.UnloadImage( file );
         }
@@ -116,7 +118,7 @@ public partial class ImageProcessor
 
         if ( rect == null )
         {
-            if ( !_settings.Silent )
+            if ( !Settings.Silent )
             {
                 Console.WriteLine( "Ignoring blank input image: " + name );
             }
@@ -124,14 +126,14 @@ public partial class ImageProcessor
             return null;
         }
 
-        if ( _settings.IsAlias )
+        if ( Settings.IsAlias )
         {
             var crc      = Hash( rect.GetImage( this ) );
             var existing = _crcs[ crc ];
 
             if ( existing != null )
             {
-                if ( !_settings.Silent )
+                if ( !Settings.Silent )
                 {
                     var rectName     = rect.Name + ( rect.Index != -1 ? "_" + rect.Index : "" );
                     var existingName = existing.Name + ( existing.Index != -1 ? "_" + existing.Index : "" );
@@ -147,29 +149,14 @@ public partial class ImageProcessor
             _crcs[ crc ] = rect;
         }
 
-        _rects.Add( rect );
+        ImageRects.Add( rect );
 
         return rect;
     }
 
-    public void SetResampling( Resampling resampling )
-    {
-        _resampling = resampling;
-    }
-
-    public List< TexturePacker.Rect > GetImages()
-    {
-        return _rects;
-    }
-
-    public TexturePacker.Settings GetSettings()
-    {
-        return _settings;
-    }
-
     public void Clear()
     {
-        _rects.Clear();
+        ImageRects.Clear();
         _crcs.Clear();
     }
 
@@ -245,7 +232,7 @@ public partial class ImageProcessor
                 else
                 {
                     g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-                    g.InterpolationMode  = _resampling.ToInterpolationMode();
+                    g.InterpolationMode  = Resampling.ToInterpolationMode();
                     g.DrawImage( image, new Rectangle( 0, 0, width, height ), 0, 0, width, height, GraphicsUnit.Pixel );
                 }
 
@@ -256,7 +243,7 @@ public partial class ImageProcessor
         // Strip digits off end of name and use as index.
         var index = -1;
 
-        if ( _settings.UseIndexes )
+        if ( Settings.UseIndexes )
         {
             var match = _indexPattern.Match( name );
 
@@ -322,7 +309,7 @@ public partial class ImageProcessor
 
             if ( alphaData.Stride == ( source.Width * 4 ) )
             {
-                if ( _settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
+                if ( Settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
                 {
                     return new TexturePacker.Rect( source, 0, 0, source.Width, source.Height, false );
                 }
@@ -331,7 +318,7 @@ public partial class ImageProcessor
             var top    = 0;
             var bottom = source.Height;
 
-            if ( _settings.StripWhitespaceY )
+            if ( Settings.StripWhitespaceY )
             {
             outer1:
 
@@ -341,7 +328,7 @@ public partial class ImageProcessor
                     {
                         var alpha = GetAlpha( alphaData, x, y );
 
-                        if ( alpha > _settings.AlphaThreshold )
+                        if ( alpha > Settings.AlphaThreshold )
                         {
                             goto outer1;
                         }
@@ -358,7 +345,7 @@ public partial class ImageProcessor
                     {
                         var alpha = GetAlpha( alphaData, x, y );
 
-                        if ( alpha > _settings.AlphaThreshold )
+                        if ( alpha > Settings.AlphaThreshold )
                         {
                             goto outer2;
                         }
@@ -367,7 +354,7 @@ public partial class ImageProcessor
                     bottom--;
                 }
 
-                if ( _settings.DuplicatePadding )
+                if ( Settings.DuplicatePadding )
                 {
                     if ( top > 0 )
                     {
@@ -384,7 +371,7 @@ public partial class ImageProcessor
             var left  = 0;
             var right = source.Width;
 
-            if ( _settings.StripWhitespaceX )
+            if ( Settings.StripWhitespaceX )
             {
             outer3:
 
@@ -394,7 +381,7 @@ public partial class ImageProcessor
                     {
                         var alpha = GetAlpha( alphaData, x, y );
 
-                        if ( alpha > _settings.AlphaThreshold )
+                        if ( alpha > Settings.AlphaThreshold )
                         {
                             goto outer3;
                         }
@@ -411,7 +398,7 @@ public partial class ImageProcessor
                     {
                         var alpha = GetAlpha( alphaData, x, y );
 
-                        if ( alpha > _settings.AlphaThreshold )
+                        if ( alpha > Settings.AlphaThreshold )
                         {
                             goto outer4;
                         }
@@ -420,7 +407,7 @@ public partial class ImageProcessor
                     right--;
                 }
 
-                if ( _settings.DuplicatePadding )
+                if ( Settings.DuplicatePadding )
                 {
                     if ( left > 0 )
                     {
@@ -439,7 +426,7 @@ public partial class ImageProcessor
 
             if ( ( newWidth <= 0 ) || ( newHeight <= 0 ) )
             {
-                return _settings.IgnoreBlankImages ? null : new TexturePacker.Rect( _emptyImage, 0, 0, 1, 1, false );
+                return Settings.IgnoreBlankImages ? null : new TexturePacker.Rect( _emptyImage, 0, 0, 1, 1, false );
             }
 
             return new TexturePacker.Rect( source, left, top, newWidth, newHeight, false );
@@ -717,7 +704,7 @@ public partial class ImageProcessor
                 for ( var y = 0; y < height; y++ )
                 {
                     var row = bitmapData.Scan0 + ( y * bitmapData.Stride );
-                    
+
                     System.Runtime.InteropServices.Marshal.Copy( row, pixels, 0, width * BYTES_PER_PIXEL );
 
                     for ( var x = 0; x < width; x++ )
@@ -752,5 +739,6 @@ public partial class ImageProcessor
 
     // ========================================================================
 
-    [GeneratedRegex( "(.+)_(\\d+)$" )] private static partial Regex MyRegex();
+//    [GeneratedRegex( "(.+)_(\\d+)$" )]
+//    private static partial Regex MyRegex();
 }
