@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// PixmapPacker I/O, saves PixmapPackers to files.
 /// </summary>
 [PublicAPI]
-public partial class PixmapPackerIO
+public class PixmapPackerIO
 {
     /// <summary>
     /// Saves the provided PixmapPacker to the provided file. The resulting

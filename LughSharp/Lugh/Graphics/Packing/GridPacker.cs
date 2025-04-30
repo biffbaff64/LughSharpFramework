@@ -58,7 +58,7 @@ public class GridPacker : TexturePacker.IPacker
     /// <param name="progress"></param>
     /// <param name="inputRects"></param>
     /// <returns></returns>
-    public List< TexturePacker.Page > Pack( TexturePacker.ProgressListener? progress, List< TexturePacker.Rect > inputRects )
+    public List< TexturePacker.Page > Pack( TexturePacker.AbstractProgressListener? progress, List< TexturePacker.Rect > inputRects )
     {
         ArgumentNullException.ThrowIfNull( progress );
 

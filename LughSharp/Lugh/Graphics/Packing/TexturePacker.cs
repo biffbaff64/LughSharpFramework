@@ -131,15 +131,15 @@ namespace LughSharp.Lugh.Graphics.Packing;
 [SupportedOSPlatform( "windows" )]
 public partial class TexturePacker
 {
-    public string? RootPath { get; set; }
-    public IPacker Packer   { get; set; }
+    public string?                   RootPath         { get; set; }
+    public IPacker                   Packer           { get; set; }
+    public AbstractProgressListener? ProgressListener { get; set; }
 
     // ========================================================================
 
     private Settings           _settings;
     private ImageProcessor     _imageProcessor;
     private List< InputImage > _inputImages = [ ];
-    private ProgressListener?  _progressListener;
 
     // ========================================================================
     // ========================================================================
@@ -199,29 +199,83 @@ public partial class TexturePacker
     }
 
     // ========================================================================
-    // ========================================================================
+
+    /// <summary>
+    /// Packs using defaults settings.
+    /// </summary>
+    public static void Process( string input, string output, string packFileName )
+    {
+        Process( new Settings(), input, output, packFileName );
+    }
+
+    /// <summary>
+    /// Packs the images in the supplied input folder into a texture atlas.
+    /// </summary>
+    /// <param name="settings"> The <see cref="TexturePacker.Settings"/> to use. </param>
+    /// <param name="inputFolder"> Directory containing individual images to be packed. </param>
+    /// <param name="outputFolder"> Directory where the pack file and page images will be written. </param>
+    /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
+    /// <param name="progress"> May be null. </param>
+    public static void Process( Settings settings,
+                                string inputFolder,
+                                string outputFolder,
+                                string packFileName,
+                                AbstractProgressListener? progress = null )
+    {
+        Logger.Debug( $"inputFolder : {inputFolder}" );
+        Logger.Debug( $"outputFolder: {outputFolder}" );
+        Logger.Debug( $"packFileName: {packFileName}" );
+
+        try
+        {
+            var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
+
+            Logger.Debug( $"processor _packFileName: {processor.GetPackFileName()}" );
+            Logger.Debug( $"processor _rootDirectory: {processor.GetRootDirectory()}" );
+
+            var result = processor.Process( new DirectoryInfo( inputFolder ),
+                                            new DirectoryInfo( outputFolder ) );
+
+            #if DEBUG
+            Logger.Debug( $"Results:- ( {result.Count} )" );
+
+            foreach ( var e in result )
+            {
+                Logger.Debug( $"InputFile      : {e.InputFile}" );
+                Logger.Debug( $"OutputFile     : {e.OutputFile}" );
+                Logger.Debug( $"OutputDirectory: {e.OutputDirectory}" );
+                Logger.Divider();
+            }
+            #endif
+        }
+        catch ( Exception ex )
+        {
+            throw new GdxRuntimeException( "Error packing images.", ex );
+        }
+    }
 
     /// <summary>
     /// </summary>
-    /// <param name="rootDir"></param>
-    public void SetRootDir( DirectoryInfo? rootDir )
+    /// <param name="input"></param>
+    /// <param name="output"></param>
+    /// <param name="packFileName"></param>
+    /// <param name="settings"></param>
+    /// <returns></returns>
+    public static bool ProcessIfModified( string input, string output, string packFileName, Settings? settings = null )
     {
-        if ( rootDir == null )
+        if ( settings == null )
         {
-            RootPath = null;
-
-            return;
+            settings = new Settings();
         }
 
-        Guard.ThrowIfNull( RootPath );
-
-        RootPath = Path.GetFullPath( rootDir.FullName );
-        RootPath = RootPath!.Replace( '\\', '/' );
-
-        if ( !RootPath!.EndsWith( '/' ) )
+        if ( IsModified( input, output, packFileName, settings ) )
         {
-            RootPath += "/";
+            Process( settings, input, output, packFileName );
+
+            return true;
         }
+
+        return false;
     }
 
     public void AddImage( FileInfo file )
@@ -246,11 +300,6 @@ public partial class TexturePacker
         _inputImages.Add( inputImage );
     }
 
-    public void SetProgressListener( ProgressListener? listener )
-    {
-        _progressListener = listener;
-    }
-
     /// <summary>
     /// Packs processed images into the a <see cref="Graphics.Atlases.TextureAtlas"/> with the
     /// specified filename. The atlas will be stored in the specified directory.
@@ -269,14 +318,14 @@ public partial class TexturePacker
 
         Directory.CreateDirectory( outputDir.FullName );
 
-        _progressListener ??= new ProgressListenerImpl();
-        _progressListener.Start( 1 );
+        ProgressListener ??= new AbstractProgressListenerImpl();
+        ProgressListener.Start( 1 );
 
         var n = _settings.Scale.Length;
 
         for ( var i = 0; i < n; i++ )
         {
-            _progressListener.Start( 1f / n );
+            ProgressListener.Start( 1f / n );
 
             _imageProcessor.Scale = _settings.Scale[ i ];
 
@@ -287,11 +336,11 @@ public partial class TexturePacker
                 _imageProcessor.Resampling = _settings.ScaleResampling[ i ];
             }
 
-            _progressListener.Start( 0.35f );
-            _progressListener.Count = 0;
-            _progressListener.Total = _inputImages.Count;
+            ProgressListener.Start( 0.35f );
+            ProgressListener.Count = 0;
+            ProgressListener.Total = _inputImages.Count;
 
-            for ( int ii = 0, nn = _inputImages.Count; ii < nn; ii++, _progressListener.Count++ )
+            for ( int ii = 0, nn = _inputImages.Count; ii < nn; ii++, ProgressListener.Count++ )
             {
                 var inputImage = _inputImages[ ii ];
 
@@ -304,30 +353,30 @@ public partial class TexturePacker
                     _imageProcessor.AddImage( inputImage.Image, inputImage.Name );
                 }
 
-                if ( _progressListener.Update( ii + 1, nn ) )
+                if ( ProgressListener.Update( ii + 1, nn ) )
                 {
                     return;
                 }
             }
 
-            _progressListener.End();
-            _progressListener.Start( 0.35f );
-            _progressListener.Count = 0;
-            _progressListener.Total = _imageProcessor.ImageRects.Count;
+            ProgressListener.End();
+            ProgressListener.Start( 0.35f );
+            ProgressListener.Count = 0;
+            ProgressListener.Total = _imageProcessor.ImageRects.Count;
 
-            var pages = Packer.Pack( _progressListener, _imageProcessor.ImageRects );
+            var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
-            _progressListener.End();
-            _progressListener.Start( 0.29f );
-            _progressListener.Count = 0;
-            _progressListener.Total = pages.Count;
+            ProgressListener.End();
+            ProgressListener.Start( 0.29f );
+            ProgressListener.Count = 0;
+            ProgressListener.Total = pages.Count;
 
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
 
             WriteImages( outputDir.FullName, scaledPackFileName, pages );
 
-            _progressListener.End();
-            _progressListener.Start( 0.01f );
+            ProgressListener.End();
+            ProgressListener.Start( 0.01f );
 
             try
             {
@@ -339,15 +388,47 @@ public partial class TexturePacker
             }
 
             _imageProcessor.Clear();
-            _progressListener.End();
+            ProgressListener.End();
 
-            if ( _progressListener.Update( i + 1, n ) )
+            if ( ProgressListener.Update( i + 1, n ) )
             {
                 return;
             }
         }
 
-        _progressListener.End();
+        ProgressListener.End();
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="dst"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="argb"></param>
+    private static void Plot( Bitmap dst, int x, int y, System.Drawing.Color argb )
+    {
+        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) )
+        {
+            dst.SetPixel( x, y, argb );
+        }
+    }
+
+    private static void Copy( Bitmap src, int x, int y, int w, int h, Bitmap dst, int dx, int dy, bool rotated )
+    {
+        for ( var i = 0; i < w; i++ )
+        {
+            for ( var j = 0; j < h; j++ )
+            {
+                if ( rotated )
+                {
+                    Plot( dst, dx + j, ( dy + w ) - i - 1, src.GetPixel( x + i, y + j ) );
+                }
+                else
+                {
+                    Plot( dst, dx + i, dy + j, src.GetPixel( x + i, y + j ) );
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -361,7 +442,7 @@ public partial class TexturePacker
     private void WriteImages( string outputDir, string scaledPackFileName, List< Page > pages )
     {
         ArgumentNullException.ThrowIfNull( outputDir );
-        ArgumentNullException.ThrowIfNull( _progressListener );
+        ArgumentNullException.ThrowIfNull( ProgressListener );
 
         var packFileNoExt = Path.Combine( outputDir, scaledPackFileName );
         var packDir       = Path.GetDirectoryName( packFileNoExt );
@@ -465,7 +546,7 @@ public partial class TexturePacker
                 throw new NullReferenceException( "OutputRects for page is null" );
             }
 
-            _progressListener.Start( 1f / pages.Count );
+            ProgressListener.Start( 1f / pages.Count );
 
             for ( var r = 0; r < page.OutputRects.Count; r++ )
             {
@@ -557,14 +638,14 @@ public partial class TexturePacker
                         }
                     }
 
-                    if ( _progressListener.Update( r + 1, page.OutputRects.Count ) )
+                    if ( ProgressListener.Update( r + 1, page.OutputRects.Count ) )
                     {
                         return;
                     }
                 }
             }
 
-            _progressListener.End();
+            ProgressListener.End();
 
             if ( _settings is { Bleed: true, PremultiplyAlpha: false }
                  && !( _settings.OutputFormat.Equals( "jpg", StringComparison.OrdinalIgnoreCase ) ||
@@ -631,64 +712,12 @@ public partial class TexturePacker
                 throw new Exception( "Error writing file: " + outputFile, ex );
             }
 
-            if ( _progressListener.Update( p + 1, pages.Count ) )
+            if ( ProgressListener.Update( p + 1, pages.Count ) )
             {
                 return;
             }
 
-            _progressListener.Count++;
-        }
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
-    private static ImageCodecInfo GetEncoder( ImageFormat format )
-    {
-        var codecs = ImageCodecInfo.GetImageEncoders();
-
-        foreach ( var codec in codecs )
-        {
-            if ( codec.FormatID == format.Guid )
-            {
-                return codec;
-            }
-        }
-
-        throw new GdxRuntimeException( $"Decode for ImageFormat {format} not found" );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="dst"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="argb"></param>
-    private static void Plot( Bitmap dst, int x, int y, System.Drawing.Color argb )
-    {
-        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) )
-        {
-            dst.SetPixel( x, y, argb );
-        }
-    }
-
-    private static void Copy( Bitmap src, int x, int y, int w, int h, Bitmap dst, int dx, int dy, bool rotated )
-    {
-        for ( var i = 0; i < w; i++ )
-        {
-            for ( var j = 0; j < h; j++ )
-            {
-                if ( rotated )
-                {
-                    Plot( dst, dx + j, ( dy + w ) - i - 1, src.GetPixel( x + i, y + j ) );
-                }
-                else
-                {
-                    Plot( dst, dx + i, dy + j, src.GetPixel( x + i, y + j ) );
-                }
-            }
+            ProgressListener.Count++;
         }
     }
 
@@ -968,57 +997,23 @@ public partial class TexturePacker
     }
 
     /// <summary>
-    /// Packs using defaults settings.
     /// </summary>
-    public static void Process( string input, string output, string packFileName )
+    /// <param name="format"></param>
+    /// <returns></returns>
+    /// <exception cref="GdxRuntimeException"></exception>
+    private static ImageCodecInfo GetEncoder( ImageFormat format )
     {
-        Process( new Settings(), input, output, packFileName );
-    }
+        var codecs = ImageCodecInfo.GetImageEncoders();
 
-    /// <summary>
-    /// Packs the images in the supplied input folder into a texture atlas.
-    /// </summary>
-    /// <param name="settings"> The <see cref="TexturePacker.Settings"/> to use. </param>
-    /// <param name="inputFolder"> Directory containing individual images to be packed. </param>
-    /// <param name="outputFolder"> Directory where the pack file and page images will be written. </param>
-    /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
-    /// <param name="progress"> May be null. </param>
-    public static void Process( Settings settings,
-                                string inputFolder,
-                                string outputFolder,
-                                string packFileName,
-                                ProgressListener? progress = null )
-    {
-        Logger.Debug( $"inputFolder : {inputFolder}" );
-        Logger.Debug( $"outputFolder: {outputFolder}" );
-        Logger.Debug( $"packFileName: {packFileName}" );
-
-        try
+        foreach ( var codec in codecs )
         {
-            var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
-
-            Logger.Debug( $"processor _packFileName: {processor.GetPackFileName()}" );
-            Logger.Debug( $"processor _rootDirectory: {processor.GetRootDirectory()}" );
-
-            var result = processor.Process( new DirectoryInfo( inputFolder ),
-                                            new DirectoryInfo( outputFolder ) );
-
-            #if DEBUG
-            Logger.Debug( $"Results:- ( {result?.Count} )" );
-
-            foreach ( var e in result )
+            if ( codec.FormatID == format.Guid )
             {
-                Logger.Debug( $"InputFile      : {e.InputFile}" );
-                Logger.Debug( $"OutputFile     : {e.OutputFile}" );
-                Logger.Debug( $"OutputDirectory: {e.OutputDirectory}" );
-                Logger.Divider();
+                return codec;
             }
-            #endif
         }
-        catch ( Exception ex )
-        {
-            throw new GdxRuntimeException( "Error packing images.", ex );
-        }
+
+        throw new GdxRuntimeException( $"Decode for ImageFormat {format} not found" );
     }
 
     /// <summary>
@@ -1100,35 +1095,34 @@ public partial class TexturePacker
 
     /// <summary>
     /// </summary>
-    /// <param name="input"></param>
-    /// <param name="output"></param>
-    /// <param name="packFileName"></param>
-    /// <param name="settings"></param>
-    /// <returns></returns>
-    public static bool ProcessIfModified( string input, string output, string packFileName, Settings? settings = null )
-    {
-        if ( settings == null )
-        {
-            settings = new Settings();
-        }
-
-        if ( IsModified( input, output, packFileName, settings ) )
-        {
-            Process( settings, input, output, packFileName );
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// </summary>
     /// <param name="settings"></param>
     /// <returns></returns>
     protected static ImageProcessor NewImageProcessor( Settings settings )
     {
         return new ImageProcessor( settings );
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="rootDir"></param>
+    public void SetRootDir( DirectoryInfo? rootDir )
+    {
+        if ( rootDir == null )
+        {
+            RootPath = null;
+
+            return;
+        }
+
+        Guard.ThrowIfNull( RootPath );
+
+        RootPath = Path.GetFullPath( rootDir.FullName );
+        RootPath = RootPath!.Replace( '\\', '/' );
+
+        if ( !RootPath!.EndsWith( '/' ) )
+        {
+            RootPath += "/";
+        }
     }
 
     // ========================================================================
@@ -1408,7 +1402,7 @@ public partial class TexturePacker
     public interface IPacker
     {
         public List< Page > Pack( List< Rect > inputRects );
-        public List< Page > Pack( ProgressListener progressListener, List< Rect > inputRects );
+        public List< Page > Pack( AbstractProgressListener progressListener, List< Rect > inputRects );
     }
 
     // ========================================================================
@@ -1427,7 +1421,7 @@ public partial class TexturePacker
     // ========================================================================
 
     [PublicAPI]
-    public class ProgressListenerImpl : ProgressListener
+    public class AbstractProgressListenerImpl : AbstractProgressListener
     {
         /// <inheritdoc />
         protected override void Progress( float progress )
@@ -1439,7 +1433,7 @@ public partial class TexturePacker
     // ========================================================================
 
     [PublicAPI]
-    public abstract class ProgressListener
+    public abstract class AbstractProgressListener
     {
         public int  Count    { get; set; }
         public int  Total    { get; set; }

@@ -25,6 +25,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Utils.JsonDevelopment;
@@ -59,11 +60,11 @@ public enum JsonOutputType
 }
 
 [PublicAPI]
-public static partial class OutputTypeExtensions
+public static class OutputTypeExtensions
 {
-    private static readonly Regex _javascriptPattern   = MyRegex();
-    private static readonly Regex _minimalValuePattern = MyRegex1();
-    private static readonly Regex _minimalNamePattern  = MyRegex2();
+    private static readonly Regex _javascriptPattern   = RegexUtils.JavascriptPatternRegex();
+    private static readonly Regex _minimalValuePattern = RegexUtils.MinimalValuePatternRegex();
+    private static readonly Regex _minimalNamePattern  = RegexUtils.MinimalNamePatternRegex();
 
     /// <summary>
     /// </summary>
@@ -149,15 +150,4 @@ public static partial class OutputTypeExtensions
 
         return "\"" + buffer.Replace( '"'.ToString(), "\\\"" ) + "\"";
     }
-
-    // ====================================================================
-
-//    [GeneratedRegex( "^[a-zA-Z_$][a-zA-Z_$0-9]*$" )]
-//    private static partial Regex MyRegex();
-
-//    [GeneratedRegex( "^[^\":,{\\[\\]/ ][^}\\],]*$" )]
-//    private static partial Regex MyRegex1();
-
-//    [GeneratedRegex( "^[^\":,}/ ][^:]*$" )]
-//    private static partial Regex MyRegex2();
 }

@@ -52,4 +52,13 @@ public partial class RegexUtils
 
     [GeneratedRegex( "(.+)_(\\d+)$", RegexOptions.Compiled )]
     public static partial Regex ItemWithUnderscoreSuffixRegex();
+
+    [GeneratedRegex( "^[a-zA-Z_$][a-zA-Z_$0-9]*$" )]
+    public static partial Regex JavascriptPatternRegex();
+    
+    [GeneratedRegex( "^[^\":,{\\[\\]/ ][^}\\],]*$" )]
+    public static partial Regex MinimalValuePatternRegex();
+
+    [GeneratedRegex( "^[^\":,}/ ][^:]*$" )]
+    public static partial Regex MinimalNamePatternRegex();
 }

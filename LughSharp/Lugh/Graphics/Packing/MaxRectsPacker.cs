@@ -72,7 +72,7 @@ public class MaxRectsPacker : TexturePacker.IPacker
         return Pack( null, inputRects );
     }
 
-    public List< TexturePacker.Page > Pack( TexturePacker.ProgressListener? progress, List< TexturePacker.Rect > inputRects )
+    public List< TexturePacker.Page > Pack( TexturePacker.AbstractProgressListener? progress, List< TexturePacker.Rect > inputRects )
     {
         ArgumentNullException.ThrowIfNull( progress );
 

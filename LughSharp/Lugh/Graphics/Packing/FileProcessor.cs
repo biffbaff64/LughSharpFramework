@@ -35,7 +35,7 @@ using DirectoryInfo = System.IO.DirectoryInfo;
 namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
-public partial class FileProcessor
+public class FileProcessor
 {
     // Delegate to filter filenames in a directory
     public Func< string, string, bool >? FilenameFilterDelegate { get; set; }
@@ -125,7 +125,7 @@ public partial class FileProcessor
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"></param>
     /// <returns></returns>
-    public List< TexturePackerEntry >? Process( string inputFileOrDir, string? outputRoot )
+    public List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot )
     {
         Logger.Checkpoint();
 
@@ -167,7 +167,7 @@ public partial class FileProcessor
     }
 
     /// <summary>
-    /// Processes a collection of files for sending to the ouitput folder.
+    /// Processes a collection of files for sending to the output folder.
     /// </summary>
     /// <param name="files"></param>
     /// <param name="outputRoot"></param>
@@ -189,7 +189,12 @@ public partial class FileProcessor
         var stringToEntries = new Dictionary< DirectoryInfo, List< TexturePackerEntry > >();
         var allEntries      = new List< TexturePackerEntry >();
 
+        Logger.Debug( $"stringToEntries.Count: {stringToEntries.Count}" );
+        Logger.Debug( $"Number of files: {files.Length}" );
+
         Process( files, outputRoot, outputRoot, stringToEntries, 0 );
+
+        Logger.Debug( $"stringToEntries.Count: {stringToEntries.Count}" );
 
         foreach ( var (inputDir, dirEntries) in stringToEntries )
         {
@@ -213,7 +218,7 @@ public partial class FileProcessor
 
             if ( OutputSuffix != null )
             {
-                outputName = FpRegex().Replace( outputName, "$1" ) + OutputSuffix;
+                outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
             }
 
             var entry = new TexturePackerEntry
@@ -276,19 +281,36 @@ public partial class FileProcessor
     /// <param name="dirToEntries"></param>
     /// <param name="depth"></param>
     private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                          Dictionary< DirectoryInfo, List< TexturePackerEntry > > dirToEntries, int depth )
+                          Dictionary< DirectoryInfo, List< TexturePackerEntry >? > dirToEntries, int depth )
     {
         Logger.Checkpoint();
 
+        var loopCount = 0;
+
+        Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
+
         foreach ( var file in files )
         {
-            var dir = file.Directory; // Get the parent directory
+            ++loopCount;
+
+            // Get the parent directory
+            var dir = file.Directory;
 
             if ( dir != null )
             {
-                if ( !dirToEntries.ContainsKey( dir ) )
+                if ( dirToEntries.ContainsKey( dir ) )
                 {
-                    dirToEntries[ dir ] = [ ];
+                    var entries = dirToEntries[ dir ];
+
+                    if ( entries == null )
+                    {
+                        entries             = [ ];
+                        dirToEntries[ dir ] = entries;
+                    }
+                }
+                else
+                {
+                    Logger.Debug( $"dirToEntries does not contain key: {dir.Name}" );
                 }
             }
             else
@@ -300,8 +322,15 @@ public partial class FileProcessor
             }
         }
 
+        Logger.Debug( $"LoopCount: {loopCount}" );
+        Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
+
+        loopCount = 0;
+
         foreach ( var file in files )
         {
+            ++loopCount;
+
             if ( !IOData.IsDirectory( file ) )
             {
                 if ( InputRegex.Count > 0 )
@@ -339,7 +368,7 @@ public partial class FileProcessor
 
                 if ( OutputSuffix != null )
                 {
-                    outputName = FpRegex().Replace( outputName, "$1" ) + OutputSuffix;
+                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
                 }
 
                 var entry = new TexturePackerEntry
@@ -359,7 +388,7 @@ public partial class FileProcessor
                     dirToEntries.Add( dir, [ ] );
                 }
 
-                dirToEntries[ dir ].Add( entry );
+                dirToEntries[ dir ]?.Add( entry );
             }
 
             if ( Recursive && IOData.IsDirectory( file ) )
@@ -373,6 +402,9 @@ public partial class FileProcessor
                          outputRoot, subdir, dirToEntries, depth + 1 );
             }
         }
+
+        Logger.Debug( $"LoopCount: {loopCount}" );
+        Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
     }
 
     /// <summary>

@@ -38,7 +38,7 @@ namespace LughSharp.Lugh.Core;
 /// </summary>
 /// <remarks> Class name changed from GDXVersion 07/10/2024. </remarks>
 [PublicAPI]
-public partial class LughVersion
+public class LughVersion
 {
     private readonly Version? _version;
 

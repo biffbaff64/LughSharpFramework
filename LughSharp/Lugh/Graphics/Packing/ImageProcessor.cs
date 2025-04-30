@@ -29,6 +29,7 @@ using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -36,7 +37,7 @@ namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public partial class ImageProcessor
+public class ImageProcessor
 {
     public float                      Scale      { get; set; }
     public Resampling                 Resampling { get; set; } = Resampling.Bicubic;
@@ -46,7 +47,7 @@ public partial class ImageProcessor
     // ========================================================================
 
     private static readonly Bitmap _emptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
-    private static          Regex  _indexPattern = MyRegex();
+    private static          Regex  _indexPattern = RegexUtils.ItemWithUnderscoreSuffixRegex();
 
     private readonly Dictionary< string, TexturePacker.Rect? > _crcs = [ ];
 
@@ -736,9 +737,4 @@ public partial class ImageProcessor
     {
         digest.TransformBlock( BitConverter.GetBytes( value ), 0, 4, null, 0 );
     }
-
-    // ========================================================================
-
-//    [GeneratedRegex( "(.+)_(\\d+)$" )]
-//    private static partial Regex MyRegex();
 }

@@ -248,7 +248,6 @@ FILES
     CODE   DOCUMENT
     ----   --------
     - IP   - IP   - FileHandle
-    - IP   - IP   - FileProcessor
     - IP   - IP   - IFilenameFilter
     - DONE - DONE - IFiles
     - IP   - IP   - InputStream
@@ -465,16 +464,18 @@ GRAPHICS/PACKING
     CODE   DOCUMENT
     ----   --------
     - DONE - IP   - ColorBleedEffect
+    - IP   - IP   - FileProcessor
     - DONE - IP   - GridPacker
     - DONE - DONE - ImagePacker
     - DONE - IP   - ImageProcessor
     - IP   - IP   - MaxRectsPacker
+    - DONE - **** - SamplePackFile.json
     - DONE - IP   - TexturePacker
     - DONE - IP   - TexturePacker.Resampling
     - IP   - IP   - TexturePackerFileProcessor
     -      -      - TexturePackerTest
     -      -      - TexturePackerUpscaleTest
-    -      -      - TextureUnpacker
+    - IP   - IP   - TextureUnpacker
 
 GRAPHICS/TEXT
 -------------
@@ -487,6 +488,7 @@ GRAPHICS/TEXT
     - DONE - IP   - DistanceFieldFont
     - IP   - IP   - FontUtils
     - DONE - IP   - GlyphLayout
+    - IP   - IP   - RegexUtils
     - IP   - IP   - Subset
     - IP   - IP   - UnicodeBlock
 
@@ -877,7 +879,6 @@ UTILS
     - DONE - DONE - IClipboard                      Convert - Interface, clipboard handled in backends.
     - DONE - DONE - ICloseable
     - DONE - DONE - IManaged
-    - IP   - IP   - InTestingAttribute
     - DONE - DONE - IReadable
     - DONE - DONE - IResetable
     - DONE - DONE - IRunnable                       Done, but is it needed?

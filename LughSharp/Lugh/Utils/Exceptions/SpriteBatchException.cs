@@ -76,7 +76,6 @@ public class SpriteBatchException : ApplicationException
     /// Throws an SpriteBatchException if End, or Draw, is called before Begin.
     /// </summary>
     /// <param name="batch"> </param>
-    [InTesting]
     public static void ThrowIfEndBeforeBegin( IBatch batch )
     {
         if ( batch.IsDrawing )
@@ -89,7 +88,6 @@ public class SpriteBatchException : ApplicationException
     /// Throws an SpriteBatchException if Begin is called before End and the batch is currently drawing.
     /// </summary>
     /// <param name="batch"> </param>
-    [InTesting]
     public static void ThrowIfBeginBeforeEnd( IBatch batch )
     {
         if ( !batch.IsDrawing )

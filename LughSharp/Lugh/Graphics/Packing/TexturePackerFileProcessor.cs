@@ -26,6 +26,7 @@ using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -33,12 +34,12 @@ namespace LughSharp.Lugh.Graphics.Packing;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public partial class TexturePackerFileProcessor : Packing.FileProcessor
+public class TexturePackerFileProcessor : Packing.FileProcessor
 {
-    private const string DEFAULT_PACKFILE_NAME = "pack.atlas";
+    public const string DEFAULT_PACKFILE_NAME = "pack.atlas";
 
     private readonly TexturePacker.Settings          _defaultSettings;
-    private readonly TexturePacker.ProgressListener? _progressListener;
+    private readonly TexturePacker.AbstractProgressListener? _progressListener;
 
     private Dictionary< DirectoryInfo, TexturePacker.Settings > _dirToSettings = [ ]; //TODO: Rename
 
@@ -65,10 +66,10 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
     /// <param name="progress"></param>
     public TexturePackerFileProcessor( TexturePacker.Settings? packerSettings,
                                        string packFileName,
-                                       TexturePacker.ProgressListener? progress )
+                                       TexturePacker.AbstractProgressListener? progress )
     {
         this._defaultSettings  = packerSettings ?? new TexturePacker.Settings();
-        this._progressListener = progress ?? new TexturePacker.ProgressListenerImpl();
+        this._progressListener = progress ?? new TexturePacker.AbstractProgressListenerImpl();
 
         // Strip off the .atlas extension name from the packfile if it has been pre-added.
         if ( packFileName.ToLower().EndsWith( _defaultSettings.AtlasExtension.ToLower() ) )
@@ -106,6 +107,8 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
 
         _rootDirectory = new DirectoryInfo( inputRoot.FullName );
 
+        Logger.Debug( $"_rootDirectory: {_rootDirectory}" );
+        
         List< FileInfo > settingsFiles = [ ];
 
         // Collect any pack.json setting files present in the folder.
@@ -126,6 +129,8 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
         // Sort parent first.
         settingsFiles.Sort( ( file1, file2 ) => file1.ToString().Length - file2.ToString().Length );
 
+        Logger.Debug( $"num Settings files found: {settingsFiles.Count}" );
+        
         // Establish the settings to use for processing
         foreach ( var settingsFile in settingsFiles )
         {
@@ -167,15 +172,21 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
             _dirToSettings.Add( settingsFile.Directory!, settings );
         }
 
+        Logger.Checkpoint();
+
         // Count the number of texture packer invocations.
         _countOnly = true;
         _          = base.Process( inputRoot, outputRoot );
         _countOnly = false;
 
+        Logger.Checkpoint();
+        
         // Do actual processing.
         _progressListener?.Start( 1 );
         var result = base.Process( inputRoot, outputRoot );
         _progressListener?.End();
+
+        Logger.Checkpoint();
 
         return result;
     }
@@ -271,7 +282,7 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
 
                 if ( OutputSuffix != null )
                 {
-                    outputName = MyRegex1().Replace( outputName, "$1" ) + OutputSuffix;
+                    outputName = RegexUtils.NumberSuffixRegex().Replace( outputName, "$1" ) + OutputSuffix;
                 }
 
                 var entry = new TexturePackerEntry
@@ -357,38 +368,33 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
             // Collect all files under subdirectories except those with a pack.json file.
             // A directory with its own settings can't be combined since combined directories
             // must use the settings of the parent directory.
-            if ( settings.CombineSubdirectories )
+            Logger.Debug( "Setting up SettingsCombiningProcessor ProcessDir delegate..." );
+
+            var combiningProcessor = new SettingsCombiningProcessor
             {
-                Logger.Checkpoint();
-
-                var combiningProcessor = new SettingsCombiningProcessor
+                ProcessDirDelegate = ( entryDir, fileList ) =>
                 {
-                    ProcessDirDelegate = ( entryDir, fileList ) =>
+                    for ( var file = ( DirectoryInfo? )entryDir.InputFile;
+                         ( file != null ) && !file.Equals( inputDir.InputFile );
+                         file = file.Parent )
                     {
-                        Logger.Checkpoint();
-
-                        for ( var file = ( DirectoryInfo? )entryDir.InputFile;
-                             ( file != null ) && !file.Equals( inputDir.InputFile );
-                             file = file.Parent )
+                        if ( new FileInfo( Path.Combine( file.FullName, DEFAULT_PACKFILE_NAME ) ).Exists )
                         {
-                            if ( new FileInfo( Path.Combine( file.FullName, DEFAULT_PACKFILE_NAME ) ).Exists )
-                            {
-                                fileList.Clear();
+                            fileList.Clear();
 
-                                return;
-                            }
+                            return;
                         }
+                    }
 
-                        if ( !this._countOnly )
-                        {
-                            this._dirsToIgnore.Add( ( DirectoryInfo )entryDir.InputFile! );
-                        }
-                    },
-                    ProcessFileDelegate = AddProcessedFile,
-                };
+                    if ( !this._countOnly )
+                    {
+                        this._dirsToIgnore.Add( ( DirectoryInfo )entryDir.InputFile! );
+                    }
+                },
+                ProcessFileDelegate = AddProcessedFile,
+            };
 
-                files = combiningProcessor.Process( ( DirectoryInfo? )inputDir.InputFile, null )!.ToList();
-            }
+            files = combiningProcessor.Process( ( DirectoryInfo? )inputDir.InputFile, null )!.ToList();
 
             if ( files.Count == 0 )
             {
@@ -426,7 +432,7 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
                 var num1  = 0;
                 var num2  = 0;
 
-                var matcher = MyRegex1().Match( full1! );
+                var matcher = RegexUtils.NumberSuffixRegex().Match( full1! );
 
                 if ( matcher.Success )
                 {
@@ -441,7 +447,7 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
                     }
                 }
 
-                matcher = MyRegex1().Match( full2! );
+                matcher = RegexUtils.NumberSuffixRegex().Match( full2! );
 
                 if ( matcher.Success )
                 {
@@ -530,7 +536,7 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
             _progressListener?.End();
         }
     }
-
+    
     /// <summary>
     /// </summary>
     /// <param name="settings"></param>
@@ -628,8 +634,10 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
     /// <returns></returns>
     protected virtual TexturePacker NewTexturePacker( DirectoryInfo root, TexturePacker.Settings settings )
     {
-        var packer = new TexturePacker( root, settings );
-        packer.SetProgressListener( _progressListener );
+        var packer = new TexturePacker( root, settings )
+        {
+            ProgressListener = _progressListener,
+        };
 
         return packer;
     }
@@ -646,18 +654,11 @@ public partial class TexturePackerFileProcessor : Packing.FileProcessor
     /// <summary>
     /// </summary>
     /// <returns></returns>
-    public virtual TexturePacker.ProgressListener? GetProgressListener() => _progressListener;
+    public virtual TexturePacker.AbstractProgressListener? GetProgressListener() => _progressListener;
 
     public string GetPackFileName() => _packFileName;
 
     public DirectoryInfo? GetRootDirectory() => _rootDirectory;
-
-    // ============================================================================
-
-//    [GeneratedRegex( "(.*?)(\\d+)$", RegexOptions.Compiled, "en-US" )]
-//    private static partial Regex MyRegex1();
-
-    // ============================================================================
 }
 
 /// <summary>
