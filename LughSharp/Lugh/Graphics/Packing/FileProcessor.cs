@@ -33,8 +33,6 @@ using DirectoryInfo = System.IO.DirectoryInfo;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
-//TODO: To be removed.
-
 [PublicAPI]
 public class FileProcessor
 {
@@ -103,36 +101,34 @@ public class FileProcessor
         Recursive       = true;
     }
 
-    /// <summary>
-    /// Creates a new <c>IFileProcessor</c> object, using the settings provided
-    /// by the supplied IFileProcessor object.
-    /// </summary>
-    /// <param name="processor"> The IFileProcessor to copy. </param>
-    public FileProcessor( IFileProcessor processor )
-    {
-        Comparator = processor.Comparator;
-
-        InputRegex.AddRange( processor.InputRegex );
-
-        OutputSuffix  = processor.OutputSuffix;
-        Recursive     = processor.Recursive;
-        FlattenOutput = processor.FlattenOutput;
-    }
+//    /// <summary>
+//    /// Creates a new <c>IFileProcessor</c> object, using the settings provided
+//    /// by the supplied IFileProcessor object.
+//    /// </summary>
+//    /// <param name="processor"> The IFileProcessor to copy. </param>
+//    public FileProcessor( IFileProcessor processor )
+//    {
+//        Comparator = processor.Comparator;
+//
+//        InputRegex.AddRange( processor.InputRegex );
+//
+//        OutputSuffix  = processor.OutputSuffix;
+//        Recursive     = processor.Recursive;
+//        FlattenOutput = processor.FlattenOutput;
+//    }
 
     // ========================================================================
 
-    /// <summary>
-    /// </summary>
-    /// <param name="inputFileOrDir"></param>
-    /// <param name="outputRoot"></param>
-    /// <returns></returns>
-    public virtual List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot )
-    {
-        Logger.Checkpoint();
-
-        return Process( new DirectoryInfo( inputFileOrDir ),
-                        outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
-    }
+//    /// <summary>
+//    /// </summary>
+//    /// <param name="inputFileOrDir"></param>
+//    /// <param name="outputRoot"></param>
+//    /// <returns></returns>
+//    public virtual List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot )
+//    {
+//        return Process( new DirectoryInfo( inputFileOrDir ),
+//                        outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
+//    }
 
     /// <summary>
     /// Processes the specified input file or directory.
@@ -142,8 +138,6 @@ public class FileProcessor
     /// <returns> the processed files added with <see cref="AddProcessedFile(TexturePackerEntry)"/>. </returns>
     public virtual List< TexturePackerEntry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         if ( inputFileOrDir is not { Exists: true } )
         {
             throw new ArgumentException( $"IFileProcessor#Process: Input file/dir does not " +
@@ -230,14 +224,7 @@ public class FileProcessor
 
             try
             {
-                //TODO: I will be using Null Propogation here when testing is finished
-                // I'm leaving room for debug messages inside the if statement.
-                //
-                // ReSharper disable once UseNullPropagation
-                if ( ProcessDirDelegate != null )
-                {
-                    ProcessDirDelegate.Invoke( entry, dirEntries );
-                }
+                ProcessDirDelegate?.Invoke( entry, dirEntries );
             }
             catch ( Exception ex )
             {
@@ -391,8 +378,6 @@ public class FileProcessor
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                                  Dictionary< string, List< TexturePackerEntry > > stringToEntries, int depth )
     {
-        Logger.Checkpoint();
-
         foreach ( var file in files )
         {
             if ( ( file.Attributes & FileAttributes.Directory ) == 0 )
@@ -479,8 +464,6 @@ public class FileProcessor
     /// <param name="entry"></param>
     public virtual void ProcessFile( TexturePackerEntry entry )
     {
-        Logger.Checkpoint();
-        
         Guard.ThrowIfNull( entry.InputFile );
 
         FileProcessedDelegate?.Invoke( ( FileInfo )entry.InputFile );
@@ -507,8 +490,6 @@ public class FileProcessor
     /// <param name="entry"></param>
     public virtual void AddProcessedFile( TexturePackerEntry entry )
     {
-        Logger.Checkpoint();
-        
         OutputFilesList.Add( entry );
     }
 
@@ -528,66 +509,64 @@ public class FileProcessor
         return this;
     }
 
-    /// <summary>
-    /// Adds a case insensitive suffix for matching input files.
-    /// </summary>
-    /// <param name="suffixes"></param>
-    /// <returns> This IFileProcessor for chaining. </returns>
-    public virtual FileProcessor AddInputSuffix( params string[] suffixes )
-    {
-        foreach ( var suffix in suffixes )
-        {
-            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
-        }
+//    /// <summary>
+//    /// Adds a case insensitive suffix for matching input files.
+//    /// </summary>
+//    /// <param name="suffixes"></param>
+//    /// <returns> This IFileProcessor for chaining. </returns>
+//    public virtual FileProcessor AddInputSuffix( params string[] suffixes )
+//    {
+//        foreach ( var suffix in suffixes )
+//        {
+//            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
+//        }
+//
+//        return this;
+//    }
 
-        return this;
-    }
+//    /// <summary>
+//    /// Sets the suffix for output files, replacing the extension of the input file.
+//    /// </summary>
+//    /// <param name="outputSuffix"></param>
+//    /// <returns> This IFileProcessor for chaining. </returns>
+//    public virtual FileProcessor SetOutputSuffix( string outputSuffix )
+//    {
+//        OutputSuffix = outputSuffix;
+//
+//        return this;
+//    }
 
-    /// <summary>
-    /// Sets the suffix for output files, replacing the extension of the input file.
-    /// </summary>
-    /// <param name="outputSuffix"></param>
-    /// <returns> This IFileProcessor for chaining. </returns>
-    public virtual FileProcessor SetOutputSuffix( string outputSuffix )
-    {
-        OutputSuffix = outputSuffix;
+//    /// <summary>
+//    /// </summary>
+//    /// <param name="flattenOutput"></param>
+//    /// <returns> This IFileProcessor for chaining. </returns>
+//    public virtual FileProcessor SetFlattenOutput( bool flattenOutput )
+//    {
+//        FlattenOutput = flattenOutput;
+//
+//        return this;
+//    }
 
-        return this;
-    }
+//    /// <summary>
+//    /// </summary>
+//    /// <param name="recursive"></param>
+//    /// <returns> This IFileProcessor for chaining. </returns>
+//    public virtual FileProcessor SetRecursive( bool recursive )
+//    {
+//        Recursive = recursive;
+//
+//        return this;
+//    }
 
-    /// <summary>
-    /// </summary>
-    /// <param name="flattenOutput"></param>
-    /// <returns> This IFileProcessor for chaining. </returns>
-    public virtual FileProcessor SetFlattenOutput( bool flattenOutput )
-    {
-        FlattenOutput = flattenOutput;
-
-        return this;
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="recursive"></param>
-    /// <returns> This IFileProcessor for chaining. </returns>
-    public virtual FileProcessor SetRecursive( bool recursive )
-    {
-        Recursive = recursive;
-
-        return this;
-    }
-
-    /// <summary>
-    /// Sets the comparator for <see cref="ProcessDir(TexturePackerEntry, List{TexturePackerEntry})"/>.
-    /// By default the files are sorted by alpha.
-    /// </summary>
-    public virtual FileProcessor SetComparator( Comparison< FileInfo > comparator )
-    {
-        this.Comparator = comparator;
-
-        return this;
-    }
-
-    // ========================================================================
+//    /// <summary>
+//    /// Sets the comparator for <see cref="ProcessDir(TexturePackerEntry, List{TexturePackerEntry})"/>.
+//    /// By default the files are sorted by alpha.
+//    /// </summary>
+//    public virtual FileProcessor SetComparator( Comparison< FileInfo > comparator )
+//    {
+//        this.Comparator = comparator;
+//
+//        return this;
+//    }
 }
 

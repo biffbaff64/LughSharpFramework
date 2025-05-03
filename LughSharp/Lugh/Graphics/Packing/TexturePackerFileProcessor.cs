@@ -237,7 +237,7 @@ public class TexturePackerFileProcessor : IFileProcessor
         var result = ProcessIO( inputRoot, outputRoot );
         _progressListener?.End();
 
-        Logger.Debug( $"result: {result.Count}" );
+        Logger.Debug( $"result.Count: {result.Count}" );
         
         return result;
     }
@@ -262,14 +262,28 @@ public class TexturePackerFileProcessor : IFileProcessor
 
         if ( IOData.IsFile( inputFileOrDir ) )
         {
+            Logger.Debug( "Processing files");
+            Logger.Debug( $"inputFileOrDir: {inputFileOrDir.FullName}" );
+            
             retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
         }
         else
         {
+            Logger.Debug( "Processing Folder");
+            Logger.Debug( $"inputFileOrDir: {inputFileOrDir.FullName}" );
+
             var files = new DirectoryInfo( inputFileOrDir.FullName )
                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
 
+            var num = 1;
+            foreach ( var file in files )
+            {
+                Logger.Debug( $"{num++}: {file.FullName}" );
+            }
+            
             retval = Process( files, outputRoot );
+            
+            Logger.Debug( $"retval.Count: {retval.Count}" );
         }
 
         return retval;
@@ -304,6 +318,8 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// <exception cref="Exception"></exception>
     public virtual List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
+        Logger.Debug( $"files.Length: {files.Length}" );
+        
         if ( outputRoot == null )
         {
             Logger.Debug( $"Setting outputRoot to InternalPath: {IOData.InternalPath}" );
@@ -316,7 +332,11 @@ public class TexturePackerFileProcessor : IFileProcessor
         var stringToEntries = new Dictionary< DirectoryInfo, List< TexturePackerEntry > >();
         var allEntries      = new List< TexturePackerEntry >();
 
+        Logger.Checkpoint();
+        
         Process( files, outputRoot, outputRoot, stringToEntries!, 0 );
+
+        Logger.Checkpoint();
 
         foreach ( var (inputDir, dirEntries) in stringToEntries )
         {
@@ -418,10 +438,10 @@ public class TexturePackerFileProcessor : IFileProcessor
                 Logger.Warning( $"WARNING: File '{file.FullName}' has no parent directory." );
             }
         }
-
+        
         foreach ( var file in files )
         {
-            if ( !IOData.IsDirectory( file ) )
+            if ( IOData.IsFile( file ) )
             {
                 if ( InputRegex.Count > 0 )
                 {
@@ -461,6 +481,8 @@ public class TexturePackerFileProcessor : IFileProcessor
                     outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
                 }
 
+                Logger.Debug( $"outputName: {outputName}" );
+                
                 var entry = new TexturePackerEntry
                 {
                     Depth           = depth,
@@ -471,26 +493,29 @@ public class TexturePackerFileProcessor : IFileProcessor
                         : new FileInfo( Path.Combine( outputDir.FullName, outputName ) ),
                 };
 
+                entry.Debug();
+                
                 var dir = file.Directory!;
 
-                if ( !dirToEntries.TryGetValue( dir, out List< TexturePackerEntry >? value ) )
+                if ( !dirToEntries.TryGetValue( dir, out var value ) )
                 {
                     value?.Add( entry );
                 }
                 else
                 {
                     // This should ideally not happen if the first loop worked correctly.
-                    // You might want to log a warning here for unexpected cases.
 
                     Logger.Warning( $"Directory '{dir.FullName}' not found in dirToEntries during file processing." );
 
-                    // Potentially create a new list here if you have a specific fallback behavior:
+                    // Potentially create a new list here if there is a specific fallback behavior:
                     // dirToEntries[dir] = new List<TexturePackerEntry> { entry };
                 }
             }
 
             if ( Recursive && IOData.IsDirectory( file ) )
             {
+                Logger.Checkpoint();
+                
                 var subdir = outputDir.FullName.Length == 0
                     ? new DirectoryInfo( file.Name )
                     : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
@@ -499,6 +524,13 @@ public class TexturePackerFileProcessor : IFileProcessor
                          .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
                          outputRoot, subdir, dirToEntries, depth + 1 );
             }
+        }
+
+        Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
+
+        foreach ( var entry in dirToEntries )
+        {
+            Logger.Debug( $"{entry.Key.FullName}: {entry.Value?.Count}" );
         }
     }
 

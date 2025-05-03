@@ -54,7 +54,7 @@ public class PackingSettingsProcessor : FileProcessor
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public class DeleteProcessor : TexturePackerFileProcessor
+public class DeleteProcessor : FileProcessor
 {
     public DeleteProcessor()
     {
