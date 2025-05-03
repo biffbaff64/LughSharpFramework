@@ -149,7 +149,7 @@ public class ShaderProgramLoader : AsynchronousAssetLoader
 
         if ( ( ( p == null ) || p.LogOnCompileFailure ) && !shaderProgram.IsCompiled )
         {
-            Logger.Error( $"ShaderProgram {file.Name} failed to compile:\n{shaderProgram.ShaderLog}" );
+            Logger.Warning( $"ShaderProgram {file.Name} failed to compile:\n{shaderProgram.ShaderLog}" );
         }
 
         return shaderProgram;

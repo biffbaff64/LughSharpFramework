@@ -268,7 +268,7 @@ public class SpriteBatch : IBatch
         // Check if there is any data to flush.
         if ( Idx <= 0 )
         {
-            Logger.Error( $"Flush cancelled: Idx: {Idx}" );
+            Logger.Warning( $"Flush cancelled: Idx: {Idx}" );
 
             // Ensure that Idx is reset to zero.
             Idx = 0;
@@ -295,7 +295,7 @@ public class SpriteBatch : IBatch
             Idx = 0;
             _nullTextureCount++;
 
-            Logger.Error( $"Attempt to flush with null texture. This batch will be skipped. " +
+            Logger.Warning( $"Attempt to flush with null texture. This batch will be skipped. " +
                           $"Null texture count: {_nullTextureCount}. " +
                           $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
 
@@ -842,7 +842,7 @@ public class SpriteBatch : IBatch
         if ( maxTextureUnits[ 0 ] < 32 )
         {
             Logger.Divider( '#', 100 );
-            Logger.Error( $"Warning: Low MaxTextureUnits detected ({maxTextureUnits[ 0 ]}." );
+            Logger.Warning( $"Warning: Low MaxTextureUnits detected ({maxTextureUnits[ 0 ]}." );
             Logger.Divider( '#', 100 );
         }
 

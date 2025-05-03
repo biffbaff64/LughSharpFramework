@@ -222,31 +222,13 @@ public partial class TexturePacker
                                 string packFileName,
                                 AbstractProgressListener? progress = null )
     {
-        Logger.Debug( $"inputFolder : {inputFolder}" );
-        Logger.Debug( $"outputFolder: {outputFolder}" );
-        Logger.Debug( $"packFileName: {packFileName}" );
+        Logger.Checkpoint();
 
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
-
-            Logger.Debug( $"processor _packFileName: {processor.GetPackFileName()}" );
-            Logger.Debug( $"processor _rootDirectory: {processor.GetRootDirectory()}" );
-
-            var result = processor.Process( new DirectoryInfo( inputFolder ),
-                                            new DirectoryInfo( outputFolder ) );
-
-            #if DEBUG
-            Logger.Debug( $"Results:- ( {result.Count} )" );
-
-            foreach ( var e in result )
-            {
-                Logger.Debug( $"InputFile      : {e.InputFile}" );
-                Logger.Debug( $"OutputFile     : {e.OutputFile}" );
-                Logger.Debug( $"OutputDirectory: {e.OutputDirectory}" );
-                Logger.Divider();
-            }
-            #endif
+            _ = processor.Process( new DirectoryInfo( inputFolder ),
+                                   new DirectoryInfo( outputFolder ) );
         }
         catch ( Exception ex )
         {

@@ -443,7 +443,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     {
         _errorCallback = ( error, description ) =>
         {
-            Logger.Error( $"ErrorCode: {error}, {description}" );
+            Logger.Warning( $"ErrorCode: {error}, {description}" );
 
             if ( error == ErrorCode.InvalidEnum )
             {

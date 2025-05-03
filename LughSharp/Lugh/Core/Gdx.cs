@@ -189,7 +189,7 @@ public class Gdx
 
         if ( ( error = Bindings.GetError() ) != IGL.GL_NO_ERROR )
         {
-            Logger.Error( $"GL Error: {error}" );
+            Logger.Warning( $"GL Error: {error}" );
         }
     }
 

@@ -408,7 +408,7 @@ public abstract class GLTexture : IDisposable
     {
         if ( data == null )
         {
-            Logger.Error( "NULL ITextureData supplied!" );
+            Logger.Warning( "NULL ITextureData supplied!" );
 
             // TODO: remove texture on target?
             return;

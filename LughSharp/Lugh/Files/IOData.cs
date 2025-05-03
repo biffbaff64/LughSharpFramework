@@ -71,7 +71,7 @@ public class IOData
         }
         catch ( Exception e ) // Handle potential exceptions like PathTooLongException, SecurityException, etc.
         {
-            Logger.Error( $"Exception ignored: {e.Message}" );
+            Logger.Warning( $"Exception ignored: {e.Message}" );
             
             return PathType.Invalid;
         }

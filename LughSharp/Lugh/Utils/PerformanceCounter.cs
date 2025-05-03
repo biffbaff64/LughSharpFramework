@@ -116,7 +116,7 @@ public class PerformanceCounter
     {
         if ( !Valid )
         {
-            Logger.Error( "Invalid data, check if you called PerformanceCounter#stop()" );
+            Logger.Warning( "Invalid data, check if you called PerformanceCounter#stop()" );
 
             return;
         }

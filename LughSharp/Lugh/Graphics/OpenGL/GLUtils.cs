@@ -111,7 +111,7 @@ public static class GLUtils
 
         if ( currentBuffer[ 0 ] != expectedBuffer )
         {
-            Logger.Error( $"Buffer not bound correctly! Expected {expectedBuffer}, got {currentBuffer[ 0 ]}" );
+            Logger.Warning( $"Buffer not bound correctly! Expected {expectedBuffer}, got {currentBuffer[ 0 ]}" );
         }
     }
 

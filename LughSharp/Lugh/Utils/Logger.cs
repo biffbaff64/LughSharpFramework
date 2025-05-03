@@ -48,7 +48,6 @@ public static class Logger
     // ========================================================================
 
     private static string _debugFilePath = "";
-
     private static string _debugFileName = "";
 
     // ========================================================================
@@ -87,7 +86,7 @@ public static class Logger
     /// <param name="logLevel"> The initially enabled log level(s). </param>
     /// <param name="enableWriteToFile"> TRUE to enable outputting messages to a file. </param>
     /// <param name="filename"> The name of the file to write to. Default is trace.txt. </param>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void Initialise( int logLevel = LOG_DEBUG | LOG_ERROR,
                                    bool enableWriteToFile = true,
                                    string filename = DEFAULT_TRACE_FILENAME )
@@ -112,7 +111,7 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void Debug( string message,
                               bool boxedDebug = false,
                               bool addNewLine = true,
@@ -152,7 +151,7 @@ public static class Logger
     /// </summary>
     /// <param name="message"> The message to send. </param>
     /// <param name="addNewLine"> Adds a NewLine to the message string if TRUE (default). </param>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void Data( string message, bool addNewLine = true )
     {
         if ( !IsEnabled( LOG_DEBUG ) )
@@ -179,12 +178,12 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    [Conditional("DEBUG")]
-    public static void Error( string message,
-                              bool addNewLine = true,
-                              [CallerFilePath] string callerFilePath = "",
-                              [CallerMemberName] string callerMethod = "",
-                              [CallerLineNumber] int callerLine = 0 )
+    [Conditional( "DEBUG" )]
+    public static void Warning( string message,
+                                bool addNewLine = true,
+                                [CallerFilePath] string callerFilePath = "",
+                                [CallerMemberName] string callerMethod = "",
+                                [CallerLineNumber] int callerLine = 0 )
     {
         if ( !IsEnabled( LOG_ERROR ) )
         {
@@ -213,7 +212,7 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void DebugCondition( string message,
                                        bool condition = false,
                                        [CallerFilePath] string callerFilePath = "",
@@ -244,7 +243,7 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void Checkpoint( bool lineBefore = false,
                                    bool lineAfter = false,
                                    [CallerFilePath] string callerFilePath = "",
@@ -280,7 +279,7 @@ public static class Logger
     /// </summary>
     /// <param name="ch"> The character to use, default is '-' </param>
     /// <param name="length"> The line length, default is 80. </param>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void Divider( char ch = '-', int length = 80 )
     {
         var sb = new StringBuilder( DEBUG_TAG );
@@ -296,12 +295,27 @@ public static class Logger
     }
 
     /// <summary>
+    /// Adds a dividing line to text output, but only if then supplied condition is true.
+    /// </summary>
+    /// <param name="condition"> The condition. </param>
+    /// <param name="ch"> The character to use, default is '-' </param>
+    /// <param name="length"> The line length, default is 80. </param>
+    [Conditional( "DEBUG" )]
+    public static void DividerConditional( bool condition, char ch = '-', int length = 80 )
+    {
+        if ( condition )
+        {
+            Divider( ch, length );
+        }
+    }
+
+    /// <summary>
     /// Writes an <see cref="Environment.NewLine"/> to console.
     /// Does NOT create a string holding caller data or timestamp. This is purely for use
-    /// when calling <see cref="Debug"/> or <see cref="Error"/> with the 'addNewLine'
+    /// when calling <see cref="Debug"/> or <see cref="Warning"/> with the 'addNewLine'
     /// flag disabled.
     /// </summary>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void NewLine()
     {
         if ( !IsEnabled( LOG_DEBUG ) )
@@ -320,7 +334,7 @@ public static class Logger
     /// <param name="deleteExisting">
     /// True to delete existing copies of the file, False to append to existing file.
     /// </param>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void OpenDebugFile( string fileName, bool deleteExisting )
     {
         try
@@ -367,7 +381,7 @@ public static class Logger
     /// <summary>
     /// Disables DEBUG Log messages without affecting other types.
     /// </summary>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void DisableDebugLogging()
     {
         TraceLevel &= ~LOG_DEBUG;
@@ -376,7 +390,7 @@ public static class Logger
     /// <summary>
     /// Disables Error Log messages without affecting other types.
     /// </summary>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void DisableErrorLogging()
     {
         TraceLevel &= ~LOG_ERROR;
@@ -385,7 +399,7 @@ public static class Logger
     /// <summary>
     /// Enables DEBUG Log messages without affecting other types.
     /// </summary>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void EnableDebugLogging()
     {
         TraceLevel |= LOG_DEBUG;
@@ -394,7 +408,7 @@ public static class Logger
     /// <summary>
     /// Enables ERROR Log messages without affecting other types.
     /// </summary>
-    [Conditional("DEBUG")]
+    [Conditional( "DEBUG" )]
     public static void EnableErrorLogging()
     {
         TraceLevel |= LOG_ERROR;
@@ -425,7 +439,7 @@ public static class Logger
             sb.Append( GetCallerInfo( ( CallerID )cid ) );
             sb.Append( " : " );
         }
-        
+
         if ( !string.IsNullOrEmpty( formatString ) )
         {
             sb.Append( formatString );

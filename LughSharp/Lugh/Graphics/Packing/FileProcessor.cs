@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
@@ -34,9 +33,13 @@ using DirectoryInfo = System.IO.DirectoryInfo;
 
 namespace LughSharp.Lugh.Graphics.Packing;
 
+//TODO: To be removed.
+
 [PublicAPI]
 public class FileProcessor
 {
+    public const string DEFAULT_PACKFILE_NAME = "pack.atlas";
+
     // Delegate to filter filenames in a directory
     public Func< string, string, bool >? FilenameFilterDelegate { get; set; }
 
@@ -54,7 +57,7 @@ public class FileProcessor
     public List< Regex >              InputRegex      { get; set; } = [ ];
     public List< TexturePackerEntry > OutputFilesList { get; set; } = [ ];
     public string                     OutputSuffix    { get; set; }
-    public bool                       Recursive       { get; set; } = true;
+    public bool                       Recursive       { get; set; }
     public bool                       FlattenOutput   { get; set; }
 
     // ========================================================================
@@ -62,7 +65,6 @@ public class FileProcessor
     public Comparison< FileInfo > Comparator { get; set; } = ( o1, o2 ) =>
         string.Compare( o1.Name, o2.Name, StringComparison.Ordinal );
 
-    [SuppressMessage( "ReSharper", "ConvertIfStatementToSwitchStatement" )]
     public Comparison< TexturePackerEntry > EntryComparator
     {
         get =>
@@ -90,7 +92,7 @@ public class FileProcessor
 
     /// <summary>
     /// Default Constructor.
-    /// Creates a new <c>FileProcessor</c> object.
+    /// Creates a new <c>IFileProcessor</c> object.
     /// </summary>
     public FileProcessor()
     {
@@ -98,16 +100,15 @@ public class FileProcessor
         OutputFilesList = [ ];
         OutputSuffix    = string.Empty;
         FlattenOutput   = false;
-
-        SetRecursive( true );
+        Recursive       = true;
     }
 
     /// <summary>
-    /// Creates a new <c>FileProcessor</c> object, using the settings provided
-    /// by the supplied FileProcessor object.
+    /// Creates a new <c>IFileProcessor</c> object, using the settings provided
+    /// by the supplied IFileProcessor object.
     /// </summary>
-    /// <param name="processor"> The FileProcessor to copy. </param>
-    public FileProcessor( FileProcessor processor )
+    /// <param name="processor"> The IFileProcessor to copy. </param>
+    public FileProcessor( IFileProcessor processor )
     {
         Comparator = processor.Comparator;
 
@@ -125,7 +126,7 @@ public class FileProcessor
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"></param>
     /// <returns></returns>
-    public List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot )
+    public virtual List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot )
     {
         Logger.Checkpoint();
 
@@ -143,9 +144,9 @@ public class FileProcessor
     {
         Logger.Checkpoint();
 
-        if ( ( inputFileOrDir == null ) || !inputFileOrDir.Exists )
+        if ( inputFileOrDir is not { Exists: true } )
         {
-            throw new ArgumentException( $"FileProcessor#Process: Input file/dir does not " +
+            throw new ArgumentException( $"IFileProcessor#Process: Input file/dir does not " +
                                          $"exist: {inputFileOrDir?.FullName}" );
         }
 
@@ -175,8 +176,6 @@ public class FileProcessor
     /// <exception cref="Exception"></exception>
     public virtual List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         if ( outputRoot == null )
         {
             Logger.Debug( $"Setting outputRoot to InternalPath: {IOData.InternalPath}" );
@@ -189,12 +188,7 @@ public class FileProcessor
         var stringToEntries = new Dictionary< DirectoryInfo, List< TexturePackerEntry > >();
         var allEntries      = new List< TexturePackerEntry >();
 
-        Logger.Debug( $"stringToEntries.Count: {stringToEntries.Count}" );
-        Logger.Debug( $"Number of files: {files.Length}" );
-
-        Process( files, outputRoot, outputRoot, stringToEntries, 0 );
-
-        Logger.Debug( $"stringToEntries.Count: {stringToEntries.Count}" );
+        Process( files, outputRoot, outputRoot, stringToEntries!, 0 );
 
         foreach ( var (inputDir, dirEntries) in stringToEntries )
         {
@@ -280,37 +274,19 @@ public class FileProcessor
     /// <param name="outputDir"></param>
     /// <param name="dirToEntries"></param>
     /// <param name="depth"></param>
-    private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                          Dictionary< DirectoryInfo, List< TexturePackerEntry >? > dirToEntries, int depth )
+    public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
+                                 Dictionary< DirectoryInfo, List< TexturePackerEntry >? > dirToEntries, int depth )
     {
-        Logger.Checkpoint();
-
-        var loopCount = 0;
-
-        Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
-
         foreach ( var file in files )
         {
-            ++loopCount;
-
-            // Get the parent directory
             var dir = file.Directory;
 
             if ( dir != null )
             {
-                if ( dirToEntries.ContainsKey( dir ) )
+                if ( !dirToEntries.ContainsKey( dir ) )
                 {
-                    var entries = dirToEntries[ dir ];
-
-                    if ( entries == null )
-                    {
-                        entries             = [ ];
-                        dirToEntries[ dir ] = entries;
-                    }
-                }
-                else
-                {
-                    Logger.Debug( $"dirToEntries does not contain key: {dir.Name}" );
+                    // If the directory is not already a key in the dictionary, add it
+                    dirToEntries[ dir ] = [];
                 }
             }
             else
@@ -318,19 +294,12 @@ public class FileProcessor
                 // Handle the case where a file has no parent directory (e.g., root level)
                 // Either log a warning, throw an exception, or handle it differently
                 // ( Logging a warning for now... )
-                Logger.Error( $"WARNING: File '{file.FullName}' has no parent directory." );
+                Logger.Warning( $"WARNING: File '{file.FullName}' has no parent directory." );
             }
         }
 
-        Logger.Debug( $"LoopCount: {loopCount}" );
-        Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
-
-        loopCount = 0;
-
         foreach ( var file in files )
         {
-            ++loopCount;
-
             if ( !IOData.IsDirectory( file ) )
             {
                 if ( InputRegex.Count > 0 )
@@ -383,12 +352,20 @@ public class FileProcessor
 
                 var dir = file.Directory!;
 
-                if ( !dirToEntries.ContainsKey( dir ) )
+                if ( !dirToEntries.TryGetValue( dir, out List<TexturePackerEntry>? value ) )
                 {
-                    dirToEntries.Add( dir, [ ] );
+                    value?.Add( entry );
                 }
+                else
+                {
+                    // This should ideally not happen if the first loop worked correctly.
+                    // You might want to log a warning here for unexpected cases.
 
-                dirToEntries[ dir ]?.Add( entry );
+                    Logger.Warning( $"Directory '{dir.FullName}' not found in dirToEntries during file processing." );
+
+                    // Potentially create a new list here if you have a specific fallback behavior:
+                    // dirToEntries[dir] = new List<TexturePackerEntry> { entry };
+                }
             }
 
             if ( Recursive && IOData.IsDirectory( file ) )
@@ -402,9 +379,6 @@ public class FileProcessor
                          outputRoot, subdir, dirToEntries, depth + 1 );
             }
         }
-
-        Logger.Debug( $"LoopCount: {loopCount}" );
-        Logger.Debug( $"dirToEntries.Count: {dirToEntries.Count}" );
     }
 
     /// <summary>
@@ -414,8 +388,8 @@ public class FileProcessor
     /// <param name="outputDir"></param>
     /// <param name="stringToEntries"></param>
     /// <param name="depth"></param>
-    private void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                          Dictionary< string, List< TexturePackerEntry > > stringToEntries, int depth )
+    public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
+                                 Dictionary< string, List< TexturePackerEntry > > stringToEntries, int depth )
     {
         Logger.Checkpoint();
 
@@ -474,12 +448,13 @@ public class FileProcessor
 
                 var dir = file.Directory!.FullName;
 
-                if ( !stringToEntries.ContainsKey( dir ) )
+                if ( !stringToEntries.TryGetValue( dir, out List<TexturePackerEntry>? value ) )
                 {
-                    stringToEntries.Add( dir, [ ] );
+                    value =  [ ] ;
+                    stringToEntries.Add( dir, value );
                 }
 
-                stringToEntries[ dir ].Add( entry );
+                value.Add( entry );
             }
 
             if ( Recursive && ( ( file.Attributes & FileAttributes.Directory ) != 0 ) )
@@ -504,6 +479,8 @@ public class FileProcessor
     /// <param name="entry"></param>
     public virtual void ProcessFile( TexturePackerEntry entry )
     {
+        Logger.Checkpoint();
+        
         Guard.ThrowIfNull( entry.InputFile );
 
         FileProcessedDelegate?.Invoke( ( FileInfo )entry.InputFile );
@@ -516,97 +493,6 @@ public class FileProcessor
     /// <param name="files"></param>
     public virtual void ProcessDir( TexturePackerEntry entryDir, List< TexturePackerEntry > files )
     {
-//        Logger.Checkpoint();
-//
-//        if ( ProcessDirDelegate == null )
-//        {
-//            Logger.Debug( "ProcessDirDelegate is not set!" );
-//
-//            ProcessDirDelegate = ( dir, fileList ) =>
-//            {
-//                Logger.Debug( "Dummy method" );
-//                
-//                // Dummy method
-//            };
-//        }
-//
-//        ProcessDirDelegate.Invoke( entryDir, files );
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// </summary>
-    /// <param name="regexes"></param>
-    /// <returns> This FileProcessor for chaining. </returns>
-    public FileProcessor AddInputRegex( params string[] regexes )
-    {
-        foreach ( var regex in regexes )
-        {
-            InputRegex.Add( new Regex( regex ) );
-        }
-
-        return this;
-    }
-
-    /// <summary>
-    /// Adds a case insensitive suffix for matching input files.
-    /// </summary>
-    /// <param name="suffixes"></param>
-    /// <returns> This FileProcessor for chaining. </returns>
-    public FileProcessor AddInputSuffix( params string[] suffixes )
-    {
-        foreach ( var suffix in suffixes )
-        {
-            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
-        }
-
-        return this;
-    }
-
-    /// <summary>
-    /// Sets the suffix for output files, replacing the extension of the input file.
-    /// </summary>
-    /// <param name="outputSuffix"></param>
-    /// <returns> This FileProcessor for chaining. </returns>
-    public FileProcessor SetOutputSuffix( string outputSuffix )
-    {
-        OutputSuffix = outputSuffix;
-
-        return this;
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="flattenOutput"></param>
-    /// <returns> This FileProcessor for chaining. </returns>
-    public FileProcessor SetFlattenOutput( bool flattenOutput )
-    {
-        FlattenOutput = flattenOutput;
-
-        return this;
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="recursive"></param>
-    /// <returns> This FileProcessor for chaining. </returns>
-    public FileProcessor SetRecursive( bool recursive )
-    {
-        Recursive = recursive;
-
-        return this;
-    }
-
-    /// <summary>
-    /// Sets the comparator for <see cref="ProcessDir(TexturePackerEntry, List{TexturePackerEntry})"/>.
-    /// By default the files are sorted by alpha.
-    /// </summary>
-    public FileProcessor SetComparator( Comparison< FileInfo > comparator )
-    {
-        this.Comparator = comparator;
-
-        return this;
     }
 
     /// <summary>
@@ -621,8 +507,87 @@ public class FileProcessor
     /// <param name="entry"></param>
     public virtual void AddProcessedFile( TexturePackerEntry entry )
     {
+        Logger.Checkpoint();
+        
         OutputFilesList.Add( entry );
     }
 
     // ========================================================================
+
+    /// <summary>
+    /// </summary>
+    /// <param name="regexes"></param>
+    /// <returns> This IFileProcessor for chaining. </returns>
+    public virtual FileProcessor AddInputRegex( params string[] regexes )
+    {
+        foreach ( var regex in regexes )
+        {
+            InputRegex.Add( new Regex( regex ) );
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Adds a case insensitive suffix for matching input files.
+    /// </summary>
+    /// <param name="suffixes"></param>
+    /// <returns> This IFileProcessor for chaining. </returns>
+    public virtual FileProcessor AddInputSuffix( params string[] suffixes )
+    {
+        foreach ( var suffix in suffixes )
+        {
+            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
+        }
+
+        return this;
+    }
+
+    /// <summary>
+    /// Sets the suffix for output files, replacing the extension of the input file.
+    /// </summary>
+    /// <param name="outputSuffix"></param>
+    /// <returns> This IFileProcessor for chaining. </returns>
+    public virtual FileProcessor SetOutputSuffix( string outputSuffix )
+    {
+        OutputSuffix = outputSuffix;
+
+        return this;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="flattenOutput"></param>
+    /// <returns> This IFileProcessor for chaining. </returns>
+    public virtual FileProcessor SetFlattenOutput( bool flattenOutput )
+    {
+        FlattenOutput = flattenOutput;
+
+        return this;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="recursive"></param>
+    /// <returns> This IFileProcessor for chaining. </returns>
+    public virtual FileProcessor SetRecursive( bool recursive )
+    {
+        Recursive = recursive;
+
+        return this;
+    }
+
+    /// <summary>
+    /// Sets the comparator for <see cref="ProcessDir(TexturePackerEntry, List{TexturePackerEntry})"/>.
+    /// By default the files are sorted by alpha.
+    /// </summary>
+    public virtual FileProcessor SetComparator( Comparison< FileInfo > comparator )
+    {
+        this.Comparator = comparator;
+
+        return this;
+    }
+
+    // ========================================================================
 }
+

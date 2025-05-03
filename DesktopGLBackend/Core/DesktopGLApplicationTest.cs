@@ -52,7 +52,7 @@ public class DesktopGLApplicationTest : IApplication
         static void ErrorCallback( ErrorCode error, string description )
         {
             Logger.Checkpoint();
-            Logger.Error( $"ErrorCode: {error}, {description}" );
+            Logger.Warning( $"ErrorCode: {error}, {description}" );
         }
     }
 

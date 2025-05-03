@@ -72,7 +72,7 @@ public class Pixmap : IDisposable
         {
             format = PixelType.Format.Default;
 
-            Logger.Error( "Supplied Pixel Format is null. Default format applied." );
+            Logger.Warning( "Supplied Pixel Format is null. Default format applied." );
         }
 
         Gdx2DPixmap = new Gdx2DPixmap( width, height, PixmapFormat.ToGdx2DPixelFormat( format ) );

@@ -151,7 +151,7 @@ public partial class AssetManager
         }
         catch ( Exception t )
         {
-            Logger.Error( $"Error loading asset: {t}" );
+            Logger.Warning( $"Error loading asset: {t}" );
 
             GdxRuntimeException.ThrowIfTrue( _tasks.Count == 0 );
 
@@ -223,7 +223,7 @@ public partial class AssetManager
         }
         catch ( Exception t )
         {
-            Logger.Error( $"Error loading asset: {t}" );
+            Logger.Warning( $"Error loading asset: {t}" );
 
             GdxRuntimeException.ThrowIfTrue( _tasks.Count == 0 );
 
@@ -616,7 +616,7 @@ public partial class AssetManager
     /// <param name="t"></param>
     public void HandleTaskError( Exception t )
     {
-        Logger.Error( $"Error loading asset: {t}" );
+        Logger.Warning( $"Error loading asset: {t}" );
 
         if ( _tasks.Count == 0 )
         {
@@ -1268,7 +1268,7 @@ public partial class AssetManager
             }
             catch ( Exception )
             {
-                Logger.Error( $"Error loading asset: {task.AssetDesc.AssetName}" );
+                Logger.Warning( $"Error loading asset: {task.AssetDesc.AssetName}" );
                 task.Cancel = true;
             }
             finally
