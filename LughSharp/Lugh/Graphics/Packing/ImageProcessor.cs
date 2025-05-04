@@ -31,6 +31,7 @@ using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Maths;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Packing;
@@ -61,15 +62,18 @@ public class ImageProcessor
         Settings = settings;
     }
 
-    public TexturePacker.Rect? AddImage( FileInfo file, string? rootPath )
+    public TexturePacker.Rect? AddImage( FileInfo? file, string? rootPath )
     {
+        Logger.Debug( $"file.FullName: {file?.FullName ?? "NULL"}" );
+        Logger.Debug( $"rootPath     : {rootPath}" );
+        
         Bitmap image;
 
         try
         {
-            image = new Bitmap( file.Name );
+            image = new Bitmap( file!.FullName );
         }
-        catch ( IOException ex )
+        catch ( Exception ex )
         {
             throw new GdxRuntimeException( "Error reading image: " + file, ex );
         }
@@ -81,7 +85,7 @@ public class ImageProcessor
 
         var name = Path.GetFullPath( file.FullName ).Replace( '\\', '/' );
 
-        // Strip root dir off front of image path.
+        // Strip root dir from the front of the image path.
         if ( rootPath != null )
         {
             if ( !name.StartsWith( rootPath ) )
@@ -112,9 +116,6 @@ public class ImageProcessor
 
     public TexturePacker.Rect? AddImage( Bitmap? image, string? name )
     {
-        ArgumentNullException.ThrowIfNull( image );
-        ArgumentNullException.ThrowIfNull( name );
-
         var rect = ProcessImage( image, name );
 
         if ( rect == null )

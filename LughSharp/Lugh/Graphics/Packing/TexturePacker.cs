@@ -184,10 +184,19 @@ public partial class TexturePacker
             }
         }
 
-        Packer          = settings.Grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
+        Logger.Checkpoint();
+
+        Packer = settings.Grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
+
+        Logger.Checkpoint();
+
         _imageProcessor = NewImageProcessor( settings );
 
+        Logger.Checkpoint();
+
         SetRootDir( rootDir );
+
+        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -262,6 +271,8 @@ public partial class TexturePacker
 
     public void AddImage( FileInfo file )
     {
+        Logger.Debug( file.Name );
+
         var inputImage = new InputImage
         {
             FileInfo = file,
@@ -291,36 +302,52 @@ public partial class TexturePacker
     /// <exception cref="GdxRuntimeException"></exception>
     public void Pack( DirectoryInfo outputDir, string packFileName )
     {
-        ArgumentNullException.ThrowIfNull( outputDir );
+        Logger.Checkpoint();
 
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
             packFileName = packFileName.Substring( 0, packFileName.Length - _settings.AtlasExtension.Length );
         }
 
+        Logger.Checkpoint();
+
         Directory.CreateDirectory( outputDir.FullName );
+
+        Logger.Checkpoint();
 
         ProgressListener ??= new AbstractProgressListenerImpl();
         ProgressListener.Start( 1 );
+
+        Logger.Checkpoint();
 
         var n = _settings.Scale.Length;
 
         for ( var i = 0; i < n; i++ )
         {
+            Logger.Checkpoint();
+            
             ProgressListener.Start( 1f / n );
 
+            Logger.Checkpoint();
+            
             _imageProcessor.Scale = _settings.Scale[ i ];
 
             if ( ( _settings.ScaleResampling != null )
                  && ( _settings.ScaleResampling.Count > i )
                  && ( _settings.ScaleResampling[ i ] != Resampling.None ) )
             {
+                Logger.Checkpoint();
+            
                 _imageProcessor.Resampling = _settings.ScaleResampling[ i ];
             }
 
+            Logger.Checkpoint();
+            
             ProgressListener.Start( 0.35f );
             ProgressListener.Count = 0;
             ProgressListener.Total = _inputImages.Count;
+
+            Logger.Checkpoint();
 
             for ( int ii = 0, nn = _inputImages.Count; ii < nn; ii++, ProgressListener.Count++ )
             {
@@ -328,37 +355,66 @@ public partial class TexturePacker
 
                 if ( inputImage.FileInfo != null )
                 {
+                    Logger.Checkpoint();
+                
                     _imageProcessor.AddImage( inputImage.FileInfo, inputImage.RootPath );
                 }
                 else
                 {
+                    Logger.Debug( $"inputImage.FileInfo is null" );
+
+                    if ( inputImage.Image == null )
+                    {
+                        Logger.Debug( $"inputImage.Image is null" );
+                        
+                        continue;
+                    }
+                    
                     _imageProcessor.AddImage( inputImage.Image, inputImage.Name );
                 }
+
+                Logger.Checkpoint();
 
                 if ( ProgressListener.Update( ii + 1, nn ) )
                 {
                     return;
                 }
+
+                Logger.Checkpoint();
             }
 
+            Logger.Checkpoint();
+            
             ProgressListener.End();
             ProgressListener.Start( 0.35f );
             ProgressListener.Count = 0;
             ProgressListener.Total = _imageProcessor.ImageRects.Count;
 
+            Logger.Checkpoint();
+
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
+
+            Logger.Checkpoint();
 
             ProgressListener.End();
             ProgressListener.Start( 0.29f );
             ProgressListener.Count = 0;
             ProgressListener.Total = pages.Count;
 
+            Logger.Checkpoint();
+            
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
+
+            Logger.Checkpoint();
 
             WriteImages( outputDir.FullName, scaledPackFileName, pages );
 
+            Logger.Checkpoint();
+
             ProgressListener.End();
             ProgressListener.Start( 0.01f );
+
+            Logger.Checkpoint();
 
             try
             {
@@ -369,14 +425,22 @@ public partial class TexturePacker
                 throw new GdxRuntimeException( "Error writing pack file.", ex );
             }
 
+            Logger.Checkpoint();
+
             _imageProcessor.Clear();
             ProgressListener.End();
+
+            Logger.Checkpoint();
 
             if ( ProgressListener.Update( i + 1, n ) )
             {
                 return;
             }
+            
+            Logger.Checkpoint();
         }
+
+        Logger.Checkpoint();
 
         ProgressListener.End();
     }
@@ -1096,8 +1160,6 @@ public partial class TexturePacker
             return;
         }
 
-        Guard.ThrowIfNull( RootPath );
-
         RootPath = Path.GetFullPath( rootDir.FullName );
         RootPath = RootPath!.Replace( '\\', '/' );
 
@@ -1420,6 +1482,8 @@ public partial class TexturePacker
         public int  Count    { get; set; }
         public int  Total    { get; set; }
         public bool Canceled { get; set; }
+
+        // ====================================================================
 
         private          float         _scale = 1;
         private          float         _lastUpdate;

@@ -109,7 +109,7 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// <param name="progress"></param>
     public TexturePackerFileProcessor( TexturePacker.Settings? packerSettings,
                                        string packFileName,
-                                       TexturePacker.AbstractProgressListener? progress )
+                                       TexturePacker.AbstractProgressListener? progress = null )
     {
         Logger.Checkpoint();
 
@@ -119,7 +119,7 @@ public class TexturePackerFileProcessor : IFileProcessor
         this.FlattenOutput     = false;
         this.Recursive         = true;
         this._defaultSettings  = packerSettings ?? new TexturePacker.Settings();
-        this._progressListener = progress ?? new TexturePacker.AbstractProgressListenerImpl();
+        this._progressListener = progress; // ?? new TexturePacker.AbstractProgressListenerImpl();
 
         // Strip off the .atlas extension name from the packfile if it has been pre-added.
         if ( packFileName.ToLower().EndsWith( _defaultSettings.AtlasExtension.ToLower() ) )
@@ -153,8 +153,6 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// <returns></returns>
     public virtual List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot )
     {
-        Logger.Checkpoint();
-
         return Process( new DirectoryInfo( inputFileOrDir ),
                         outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
     }
@@ -166,8 +164,6 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// <returns></returns>
     public virtual List< TexturePackerEntry > Process( FileSystemInfo? inputRoot, DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         Guard.ThrowIfNull( inputRoot );
 
         _rootDirectory = new DirectoryInfo( inputRoot.FullName );
@@ -226,7 +222,7 @@ public class TexturePackerFileProcessor : IFileProcessor
         }
 
         Logger.Debug( $"_dirToSettings.Count: {_dirToSettings.Count}" );
-        
+
         // Count the number of texture packer invocations.
         CountOnly = true;
         _         = ProcessIO( inputRoot, outputRoot );
@@ -238,41 +234,8 @@ public class TexturePackerFileProcessor : IFileProcessor
         _progressListener?.End();
 
         Logger.Debug( $"result.Count: {result.Count}" );
-        
+
         return result;
-    }
-
-    /// <summary>
-    /// Processes the specified input file or directory.
-    /// </summary>
-    /// <param name="inputFileOrDir"></param>
-    /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
-    /// <returns> the processed files added with <see cref="AddProcessedFile(TexturePackerEntry)"/>. </returns>
-    public virtual List< TexturePackerEntry > ProcessIO( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot )
-    {
-        Logger.Checkpoint();
-
-        if ( inputFileOrDir is not { Exists: true } )
-        {
-            throw new ArgumentException( $"IFileProcessor#Process: Input file/dir does not " +
-                                         $"exist: {inputFileOrDir?.FullName}" );
-        }
-
-        List< TexturePackerEntry > retval;
-
-        if ( IOData.IsFile( inputFileOrDir ) )
-        {
-            retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
-        }
-        else
-        {
-            var files = new DirectoryInfo( inputFileOrDir.FullName )
-                        .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
-
-            retval = Process( files, outputRoot );
-        }
-
-        return retval;
     }
 
     /// <summary>
@@ -282,8 +245,6 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// <returns></returns>
     public virtual List< TexturePackerEntry > Process( FileInfo[] files, FileInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         Guard.ThrowIfNull( outputRoot );
 
         // Delete pack file and images.
@@ -318,11 +279,9 @@ public class TexturePackerFileProcessor : IFileProcessor
 
         Process( files, outputRoot, outputRoot, stringToEntries, 0 );
 
-        //TODO:
-        // Note: Debug shows that 'stringToEntries' is populated
-        // correctly at this point.
-        //
-        
+        // NOTE: Debug shows that 'stringToEntries' is populated correctly at this point.
+        Logger.Checkpoint();
+
         foreach ( var (inputDir, dirEntries) in stringToEntries )
         {
             if ( Comparator != null )
@@ -361,9 +320,6 @@ public class TexturePackerFileProcessor : IFileProcessor
                     : new FileInfo( Path.Combine( newOutputDir.FullName, outputName ) );
             }
 
-            Logger.Divider();
-            entry.Debug();
-            
             try
             {
                 ProcessDir( entry, dirEntries );
@@ -403,6 +359,7 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// <param name="outputDir"></param>
     /// <param name="dirToEntries"></param>
     /// <param name="depth"></param>
+    [Obsolete( "Use Process( FileInfo[], DirectoryInfo, DirectoryInfo, Dictionary<string, List<TexturePackerEntry>>, int ) instead" )]
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                                  Dictionary< DirectoryInfo, List< TexturePackerEntry >? > dirToEntries, int depth )
     {
@@ -426,7 +383,7 @@ public class TexturePackerFileProcessor : IFileProcessor
                 Logger.Warning( $"WARNING: File '{file.FullName}' has no parent directory." );
             }
         }
-        
+
         foreach ( var file in files )
         {
             if ( IOData.IsFile( file ) )
@@ -469,8 +426,6 @@ public class TexturePackerFileProcessor : IFileProcessor
                     outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
                 }
 
-                Logger.Debug( $"outputName: {outputName}" );
-                
                 var entry = new TexturePackerEntry
                 {
                     Depth           = depth,
@@ -500,8 +455,6 @@ public class TexturePackerFileProcessor : IFileProcessor
 
             if ( Recursive && IOData.IsDirectory( file ) )
             {
-                Logger.Checkpoint();
-                
                 var subdir = outputDir.FullName.Length == 0
                     ? new DirectoryInfo( file.Name )
                     : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
@@ -523,6 +476,8 @@ public class TexturePackerFileProcessor : IFileProcessor
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                                  Dictionary< string, List< TexturePackerEntry > > dirToEntries, int depth )
     {
+        Logger.Checkpoint();
+
         foreach ( var file in files )
         {
             var dir = file.Directory;
@@ -543,7 +498,7 @@ public class TexturePackerFileProcessor : IFileProcessor
                 Logger.Warning( $"WARNING: File '{file.FullName}' has no parent directory." );
             }
         }
-        
+
         foreach ( var file in files )
         {
             if ( IOData.IsFile( file ) )
@@ -596,11 +551,14 @@ public class TexturePackerFileProcessor : IFileProcessor
                         : new FileInfo( Path.Combine( outputDir.FullName, outputName ) ),
                 };
 
+//                Logger.Divider();
+//                entry.Debug();
+
                 var dir = file.Directory!.FullName;
 
                 if ( dirToEntries.TryGetValue( dir, out var value ) )
                 {
-                    value?.Add( entry );
+                    value.Add( entry );
                 }
                 else
                 {
@@ -616,7 +574,7 @@ public class TexturePackerFileProcessor : IFileProcessor
             if ( Recursive && IOData.IsDirectory( file ) )
             {
                 Logger.Checkpoint();
-                
+
                 var subdir = outputDir.FullName.Length == 0
                     ? new DirectoryInfo( file.Name )
                     : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
@@ -626,21 +584,37 @@ public class TexturePackerFileProcessor : IFileProcessor
                          outputRoot, subdir, dirToEntries, depth + 1 );
             }
         }
+    }
 
-//        Logger.Divider( '=' );
-//        Logger.Debug( $"Number of Keys: {dirToEntries.Keys.Count}" );
-//
-//        foreach ( var key in dirToEntries.Keys )
-//        {
-//            Logger.Debug( $"Key: {key}" );
-//            
-//            foreach ( var value in dirToEntries[ key ] )
-//            {
-//                Logger.Debug( $"InputFile       - {value.InputFile?.Name}" );
-//                Logger.Debug( $"OutputFile      - {value.OutputFile?.Name}" );
-//                Logger.Debug( $"OutputDirectory - {value.OutputDirectory?.Name}" );
-//            }
-//        }
+    /// <summary>
+    /// Processes the specified input file or directory.
+    /// </summary>
+    /// <param name="inputFileOrDir"></param>
+    /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
+    /// <returns> the processed files added with <see cref="AddProcessedFile(TexturePackerEntry)"/>. </returns>
+    public virtual List< TexturePackerEntry > ProcessIO( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot )
+    {
+        if ( inputFileOrDir is not { Exists: true } )
+        {
+            throw new ArgumentException( $"IFileProcessor#Process: Input file/dir does not " +
+                                         $"exist: {inputFileOrDir?.FullName}" );
+        }
+
+        List< TexturePackerEntry > retval;
+
+        if ( IOData.IsFile( inputFileOrDir ) )
+        {
+            retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
+        }
+        else
+        {
+            var files = new DirectoryInfo( inputFileOrDir.FullName )
+                        .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
+
+            retval = Process( files, outputRoot );
+        }
+
+        return retval;
     }
 
     /// <summary>
@@ -659,6 +633,8 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// <param name="files"></param>
     public virtual void ProcessDir( TexturePackerEntry inputDir, List< TexturePackerEntry > files )
     {
+        Logger.Checkpoint();
+
         // Do not proceed if this dir is one of those to ignore
         if ( DirsToIgnore.Contains( inputDir.InputFile ) )
         {
@@ -691,11 +667,15 @@ public class TexturePackerFileProcessor : IFileProcessor
 
         if ( settings.Ignore )
         {
+            Logger.Debug( "Returning: setting.ignore is TRUE" );
+
             return;
         }
 
         if ( settings.CombineSubdirectories )
         {
+            Logger.Debug( "Combinging subdirectories" );
+
             // Collect all files under subdirectories except those with a pack.json file.
             // A directory with its own settings can't be combined since combined directories
             // must use the settings of the parent directory.
@@ -704,145 +684,171 @@ public class TexturePackerFileProcessor : IFileProcessor
             var combiningProcessor = new SettingsCombiningProcessor( inputDir );
 
             files = combiningProcessor.Process( ( DirectoryInfo? )inputDir.InputFile, null ).ToList();
+        }
 
-            if ( files.Count == 0 )
+        if ( files.Count == 0 )
+        {
+            Logger.Debug( "Returning: no files were found." );
+
+            return;
+        }
+
+        if ( CountOnly )
+        {
+            _packCount++;
+
+            return;
+        }
+
+        Logger.Debug( "Sorting files by name" );
+
+        // Sort by name using numeric suffix, then alpha.
+        files.Sort( ( entry1, entry2 ) =>
+        {
+            var full1    = entry1.InputFile?.Name;
+            var dotIndex = full1?.LastIndexOf( '.' );
+
+            if ( dotIndex != -1 )
             {
-                return;
+                full1 = full1?.Substring( 0, ( int )dotIndex! );
             }
 
-            if ( CountOnly )
-            {
-                _packCount++;
+            var full2 = entry2.InputFile?.Name;
+            dotIndex = full2?.LastIndexOf( '.' );
 
-                return;
+            if ( dotIndex != -1 )
+            {
+                full2 = full2?.Substring( 0, ( int )dotIndex! );
             }
 
-            // Sort by name using numeric suffix, then alpha.
-            files.Sort( ( entry1, entry2 ) =>
-            {
-                var full1    = entry1.InputFile?.Name;
-                var dotIndex = full1?.LastIndexOf( '.' );
+            var name1 = full1;
+            var name2 = full2;
+            var num1  = 0;
+            var num2  = 0;
 
-                if ( dotIndex != -1 )
-                {
-                    full1 = full1?.Substring( 0, ( int )dotIndex! );
-                }
+            var matcher = RegexUtils.NumberSuffixRegex().Match( full1! );
 
-                var full2 = entry2.InputFile?.Name;
-                dotIndex = full2?.LastIndexOf( '.' );
-
-                if ( dotIndex != -1 )
-                {
-                    full2 = full2?.Substring( 0, ( int )dotIndex! );
-                }
-
-                var name1 = full1;
-                var name2 = full2;
-                var num1  = 0;
-                var num2  = 0;
-
-                var matcher = RegexUtils.NumberSuffixRegex().Match( full1! );
-
-                if ( matcher.Success )
-                {
-                    try
-                    {
-                        num1  = int.Parse( matcher.Groups[ 2 ].Value );
-                        name1 = matcher.Groups[ 1 ].Value;
-                    }
-                    catch ( Exception e )
-                    {
-                        Logger.Warning( $"Exception ignored: {e.Message}" );
-                    }
-                }
-
-                matcher = RegexUtils.NumberSuffixRegex().Match( full2! );
-
-                if ( matcher.Success )
-                {
-                    try
-                    {
-                        num2  = int.Parse( matcher.Groups[ 2 ].Value );
-                        name2 = matcher.Groups[ 1 ].Value;
-                    }
-                    catch ( Exception e )
-                    {
-                        Logger.Warning( $"Exception ignored: {e.Message}" );
-                    }
-                }
-
-                var compare = string.Compare( name1, name2, StringComparison.Ordinal );
-
-                if ( ( compare != 0 ) || ( num1 == num2 ) )
-                {
-                    return compare;
-                }
-
-                return num1 - num2;
-            } );
-
-            // Pack.
-            if ( !settings.Silent )
+            if ( matcher.Success )
             {
                 try
                 {
-                    Logger.Debug( $"Reading: {inputDir.InputFile?.FullName}" );
+                    num1  = int.Parse( matcher.Groups[ 2 ].Value );
+                    name1 = matcher.Groups[ 1 ].Value;
                 }
-                catch ( IOException )
+                catch ( Exception e )
                 {
-                    Logger.Debug( $"Reading: {inputDir.InputFile?.FullName} ( IOException )" );
+                    Logger.Warning( $"Exception ignored: {e.Message}" );
                 }
             }
 
-            if ( _progressListener != null )
+            matcher = RegexUtils.NumberSuffixRegex().Match( full2! );
+
+            if ( matcher.Success )
             {
-                _progressListener.Start( 1f / _packCount );
-
-                string? inputPath = null;
-
                 try
                 {
-                    var rootPath = _rootDirectory.FullName;
-                    inputPath = inputDir.InputFile!.FullName;
+                    num2  = int.Parse( matcher.Groups[ 2 ].Value );
+                    name2 = matcher.Groups[ 1 ].Value;
+                }
+                catch ( Exception e )
+                {
+                    Logger.Warning( $"Exception ignored: {e.Message}" );
+                }
+            }
 
-                    if ( inputPath.StartsWith( rootPath ) )
+            var compare = string.Compare( name1, name2, StringComparison.Ordinal );
+
+            if ( ( compare != 0 ) || ( num1 == num2 ) )
+            {
+                return compare;
+            }
+
+            return num1 - num2;
+        } );
+
+        // Pack.
+        if ( !settings.Silent )
+        {
+            try
+            {
+                Logger.Debug( $"Reading: {inputDir.InputFile?.FullName}" );
+            }
+            catch ( IOException )
+            {
+                Logger.Debug( $"Reading: {inputDir.InputFile?.FullName} ( IOException )" );
+            }
+        }
+
+        if ( _progressListener != null )
+        {
+            Logger.Debug( "Starting ProgressListener" );
+
+            _progressListener.Start( 1f / _packCount );
+
+            string? inputPath = null;
+            string? rootPath  = null;
+
+            Logger.Debug( "Finalising paths..." );
+
+            try
+            {
+                rootPath  = _rootDirectory.FullName;
+                inputPath = inputDir.InputFile!.FullName;
+
+                if ( inputPath.StartsWith( rootPath ) )
+                {
+                    rootPath  = rootPath.Replace( '\\', '/' );
+                    inputPath = inputPath.Substring( rootPath.Length ).Replace( '\\', '/' );
+
+                    if ( inputPath.StartsWith( '/' ) )
                     {
-                        rootPath  = rootPath.Replace( '\\', '/' );
-                        inputPath = inputPath.Substring( rootPath.Length ).Replace( '\\', '/' );
-
-                        if ( inputPath.StartsWith( '/' ) )
-                        {
-                            inputPath = inputPath.Substring( 1 );
-                        }
+                        inputPath = inputPath.Substring( 1 );
                     }
                 }
-                catch ( IOException )
-                {
-                }
-
-                if ( ( inputPath == null ) || ( inputPath.Length == 0 ) )
-                {
-                    inputPath = inputDir.InputFile?.Name;
-                }
-
-                _progressListener.Message = inputPath!;
             }
-
-            var packer = NewTexturePacker( _rootDirectory, settings );
-
-            foreach ( var file in files )
+            catch ( IOException ioe )
             {
-                if ( file.InputFile == null )
-                {
-                    continue;
-                }
-
-                packer.AddImage( ( FileInfo )file.InputFile );
+                Logger.Warning( ioe.Message );
             }
 
-            Pack( packer, inputDir );
+            if ( ( inputPath == null ) || ( inputPath.Length == 0 ) )
+            {
+                Logger.Checkpoint();
 
-            _progressListener?.End();
+                inputPath = inputDir.InputFile?.Name;
+            }
+
+            Logger.Debug( $"rootPath : {rootPath}" );
+            Logger.Debug( $"inputPath: {inputPath}" );
+
+            _progressListener.Message = inputPath!;
+        }
+
+        Logger.Debug( "Creating a new TexturePacker" );
+        
+        var packer = NewTexturePacker( _rootDirectory, settings );
+
+        Logger.Checkpoint();
+        
+        foreach ( var file in files )
+        {
+            if ( file.InputFile == null )
+            {
+                continue;
+            }
+
+            packer.AddImage( ( FileInfo )file.InputFile );
+        }
+
+        Logger.Debug( "Packing..." );
+        
+        Pack( packer, inputDir );
+
+        if ( _progressListener != null )
+        {
+            _progressListener.End();
+            
+            Logger.Debug( "Ending ProgressListener" );
         }
     }
 
@@ -925,6 +931,8 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// <param name="inputDir"></param>
     public virtual void Pack( TexturePacker packer, TexturePackerEntry inputDir )
     {
+        Logger.Checkpoint();
+
         if ( inputDir.OutputDirectory == null )
         {
             throw new GdxRuntimeException( "Cannot perform Pack, output directory is null" );
