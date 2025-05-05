@@ -94,6 +94,46 @@ public class Guard
         ArgumentNullException.ThrowIfNull( argumentValue, argumentName );
     }
 
+    
+    /// <summary>
+    /// Writes a <see cref="Logger.Warning"/> message if obj is null.
+    /// Provides a clear error message with the argumentName.
+    /// <para>
+    /// Note that using this method does not suppress subsequent nullability
+    /// warnings in the way that <see cref="ThrowIfNull(object?, string)"/> does.
+    /// </para>
+    /// </summary>
+    public static void WarningIfNull( object? obj,
+                                    [CallerArgumentExpression( nameof( obj ) )]
+                                    string argumentName = "" )
+    {
+        if ( obj == null )
+        {
+            Logger.Warning( $"WARNING: Object {argumentName} cannot be null." );
+        }
+    }
+    
+    /// <summary>
+    /// Writes a <see cref="Logger.Warning"/> message if any of the objects in the
+    /// 'objects[]' array is null. Provides a clear error message with the argumentName.
+    /// <para>
+    /// Note that using this method does not suppress subsequent nullability
+    /// warnings in the way that <see cref="ThrowIfNull(object?, string)"/> does.
+    /// </para>
+    /// </summary>
+    public static void WarningIfNull( params object?[]? objects )
+    {
+        ArgumentNullException.ThrowIfNull( objects );
+
+        foreach ( var obj in objects )
+        {
+            if ( obj == null )
+            {
+                Logger.Warning( $"WARNING: Object {obj?.GetType().FullName} cannot be null." );
+            }
+        }
+    }
+
     #endregion
 
     // ========================================================================
@@ -168,7 +208,7 @@ public class Guard
     /// Throws ArgumentException if argumentValue is not of type T.
     /// Provides a clear error message with the argumentName and the expected type.
     /// </summary>
-    public static void OfType< T >( object argumentValue,
+    public static void IsOfType< T >( object argumentValue,
                                     [CallerArgumentExpression( nameof( argumentValue ) )]
                                     string argumentName = "" )
     {
@@ -183,7 +223,7 @@ public class Guard
     /// <summary>
     /// Throws ArgumentException if argumentValue is not assignable to type T.
     /// </summary>
-    public static void AssignableTo< T >( object argumentValue,
+    public static void IsAssignableTo< T >( object argumentValue,
                                           [CallerArgumentExpression( nameof( argumentValue ) )]
                                           string argumentName = "" )
     {

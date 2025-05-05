@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Numerics;
 using System.Runtime.Versioning;
@@ -48,7 +49,7 @@ public class ImageProcessor
     // ========================================================================
 
     private static readonly Bitmap _emptyImage   = new( 1, 1, PixelFormat.Format32bppArgb );
-    private static          Regex  _indexPattern = RegexUtils.ItemWithUnderscoreSuffixRegex();
+    private static readonly Regex  _indexPattern = RegexUtils.ItemWithUnderscoreSuffixRegex();
 
     private readonly Dictionary< string, TexturePacker.Rect? > _crcs = [ ];
 
@@ -62,11 +63,20 @@ public class ImageProcessor
         Settings = settings;
     }
 
+    /// <summary>
+    /// Gets the image from the specified path and adds it to the list of images.
+    /// The resolved image will not be kept in-memory during packing if
+    /// <see cref="TexturePacker.Settings.LimitMemory"/> is true.
+    /// </summary>
+    /// <param name="file"> The path to the image file. </param>
+    /// <param name="rootPath">
+    /// Used to strip the root directory prefix from image file names, can be null.
+    /// </param>
     public TexturePacker.Rect? AddImage( FileInfo? file, string? rootPath )
     {
         Logger.Debug( $"file.FullName: {file?.FullName ?? "NULL"}" );
         Logger.Debug( $"rootPath     : {rootPath}" );
-        
+
         Bitmap image;
 
         try
@@ -97,12 +107,9 @@ public class ImageProcessor
         }
 
         // Strip extension.
-        var dotIndex = name.LastIndexOf( '.' );
+        name = Path.GetFileNameWithoutExtension( name );
 
-        if ( dotIndex != -1 )
-        {
-            name = name.Substring( 0, dotIndex );
-        }
+        Logger.Debug( $"name: {name}" );
 
         var rect = AddImage( image, name );
 
@@ -114,15 +121,27 @@ public class ImageProcessor
         return rect;
     }
 
+    /// <summary>
+    /// Adds the provided <see cref="Bitmap"/> image to the list.
+    /// </summary>
+    /// <param name="image"> The Image. </param>
+    /// <param name="name"> The Image namem, without patch or extension! </param>
+    /// <returns></returns>
     public TexturePacker.Rect? AddImage( Bitmap? image, string? name )
     {
+        Logger.Checkpoint();
+
         var rect = ProcessImage( image, name );
+
+        Logger.Checkpoint();
 
         if ( rect == null )
         {
+            Logger.Debug( "Returning early: Rect is null" );
+
             if ( !Settings.Silent )
             {
-                Console.WriteLine( "Ignoring blank input image: " + name );
+                Logger.Debug( "Ignoring blank input image: " + name );
             }
 
             return null;
@@ -130,6 +149,8 @@ public class ImageProcessor
 
         if ( Settings.IsAlias )
         {
+            Logger.Debug( "IsAlias: true" );
+
             var crc      = Hash( rect.GetImage( this ) );
             var existing = _crcs[ crc ];
 
@@ -140,7 +161,7 @@ public class ImageProcessor
                     var rectName     = rect.Name + ( rect.Index != -1 ? "_" + rect.Index : "" );
                     var existingName = existing.Name + ( existing.Index != -1 ? "_" + existing.Index : "" );
 
-                    Console.WriteLine( rectName + " (alias of " + existingName + ")" );
+                    Logger.Debug( rectName + " (alias of " + existingName + ")" );
                 }
 
                 existing.Aliases.Add( new TexturePacker.Alias( rect ) );
@@ -156,6 +177,9 @@ public class ImageProcessor
         return rect;
     }
 
+    /// <summary>
+    /// Clears the image and crc collections.
+    /// </summary>
     public void Clear()
     {
         ImageRects.Clear();
@@ -168,19 +192,26 @@ public class ImageProcessor
     /// </summary>
     public TexturePacker.Rect? ProcessImage( Bitmap? image, string? name )
     {
-        ArgumentNullException.ThrowIfNull( image );
-        ArgumentNullException.ThrowIfNull( name );
+        Logger.Checkpoint();
 
         if ( _scale <= 0 )
         {
             throw new GdxRuntimeException( $"scale cannot be <= 0: {_scale}" );
         }
 
+        Guard.ThrowIfNull( image );
+
+        Logger.Checkpoint();
+
+        name ??= string.Empty;
+
         var width  = image.Width;
         var height = image.Height;
 
         if ( image.PixelFormat != PixelFormat.Format32bppArgb )
         {
+            Logger.Checkpoint();
+
             using ( image = new Bitmap( width, height, PixelFormat.Format32bppArgb ) )
             using ( var g = System.Drawing.Graphics.FromImage( image ) )
             {
@@ -188,13 +219,18 @@ public class ImageProcessor
             }
         }
 
-        var                 isPatch = name.EndsWith( ".9" );
-        int[]?              splits  = null;
-        int[]?              pads    = null;
+        Logger.Checkpoint();
+
+        var    isPatch = name.EndsWith( ".9" );
+        int[]? splits  = null;
+        int[]? pads    = null;
+
         TexturePacker.Rect? rect;
 
         if ( isPatch )
         {
+            Logger.Checkpoint();
+
             // Strip ".9" from file name, read ninepatch split pixels, and strip ninepatch split pixels.
             name   = name.Substring( 0, name.Length - 2 );
             splits = GetSplits( image, name );
@@ -217,36 +253,54 @@ public class ImageProcessor
             }
         }
 
+        Logger.Checkpoint();
+
         // Scale image.
         if ( Math.Abs( _scale - 1f ) > Number.FLOAT_TOLERANCE )
         {
+            Logger.Checkpoint();
+
             width  = ( int )Math.Max( 1, Math.Round( width * _scale ) );
             height = ( int )Math.Max( 1, Math.Round( height * _scale ) );
 
-            using ( var newImage = new Bitmap( width, height, PixelFormat.Format32bppArgb ) )
-            using ( var g = System.Drawing.Graphics.FromImage( newImage ) )
-            {
-                if ( _scale < 1 )
-                {
-                    //TODO:
-//                    g.DrawImage( image.GetScaledInstance( width, height, Image.SCALE_AREA_AVERAGING ), 0, 0, null );
-                }
-                else
-                {
-                    g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-                    g.InterpolationMode  = Resampling.ToInterpolationMode();
-                    g.DrawImage( image, new Rectangle( 0, 0, width, height ), 0, 0, width, height, GraphicsUnit.Pixel );
-                }
+            var newImage = new Bitmap( width, height, PixelFormat.Format32bppArgb );
 
-                image = newImage;
+            if ( _scale < 1 )
+            {
+                Logger.Checkpoint();
+
+                // Scaling down: Use HighQualityBicubic for good quality downscaling
+                using ( var g = System.Drawing.Graphics.FromImage( newImage ) )
+                {
+                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    g.DrawImage( image, 0, 0, width, height );
+                }
+            }
+            else
+            {
+                Logger.Checkpoint();
+
+                // Scaling up or no scaling: Apply rendering hints
+                using ( var g = System.Drawing.Graphics.FromImage( newImage ) )
+                {
+                    g.CompositingQuality = CompositingQuality.HighQuality;     // VALUE_RENDER_QUALITY
+                    g.InterpolationMode  = GetInterpolationMode( Resampling ); // Map resampling value
+
+                    // Draw the image
+                    g.DrawImage( image, 0, 0, width, height );
+                }
             }
         }
 
-        // Strip digits off end of name and use as index.
+        Logger.Checkpoint();
+
+        // Strip digits, if any, off end of name and use as index.
         var index = -1;
 
         if ( Settings.UseIndexes )
         {
+            Logger.Debug( $"name: {name}" );
+
             var match = _indexPattern.Match( name );
 
             if ( match.Success )
@@ -258,21 +312,15 @@ public class ImageProcessor
                     // index now contains the parsed integer value.
                     // name now contains the first group's value.
                 }
-                else
-                {
-                    // Handle the case where the second group is not a valid integer.
-                    Console.WriteLine( "Error: Index is not a valid integer." );
-                }
-            }
-            else
-            {
-                // Handle the case where the pattern does not match.
-                Console.WriteLine( "Pattern did not match." );
             }
         }
 
+        Logger.Checkpoint();
+
         if ( isPatch )
         {
+            Logger.Checkpoint();
+
             // Ninepatches aren't rotated or whitespace stripped.
             rect = new TexturePacker.Rect( image, 0, 0, width, height, true )
             {
@@ -283,6 +331,8 @@ public class ImageProcessor
         }
         else
         {
+            Logger.Checkpoint();
+
             rect = StripWhitespace( name, image );
 
             if ( rect == null )
@@ -291,10 +341,50 @@ public class ImageProcessor
             }
         }
 
+        Logger.Checkpoint();
+
         rect.Name  = name;
         rect.Index = index;
 
         return rect;
+    }
+
+    private InterpolationMode GetInterpolationMode( object? resamplingValue )
+    {
+        // You'll need to adapt this based on the actual type and values of 'resampling.value' in your Java code.
+        // This is the CRUCIAL part to get right.  I'm making assumptions here, you MUST replace these.
+
+        if ( resamplingValue == null )
+        {
+            return InterpolationMode.Default;
+        }
+
+        // Convert to string for easier comparison
+        var resamplingString = resamplingValue.ToString() ?? "";
+
+        if ( resamplingString.Equals( "VALUE_INTERPOLATION_NEAREST_NEIGHBOR", StringComparison.OrdinalIgnoreCase ) )
+        {
+            return InterpolationMode.NearestNeighbor;
+        }
+
+        if ( resamplingString.Equals( "VALUE_INTERPOLATION_LINEAR", StringComparison.OrdinalIgnoreCase ) ||
+             resamplingString.Equals( "VALUE_INTERPOLATION_BILINEAR", StringComparison.OrdinalIgnoreCase ) )
+        {
+            return InterpolationMode.Bilinear;
+        }
+
+        if ( resamplingString.Equals( "VALUE_INTERPOLATION_CUBIC", StringComparison.OrdinalIgnoreCase ) ||
+             resamplingString.Equals( "VALUE_INTERPOLATION_BICUBIC", StringComparison.OrdinalIgnoreCase ) )
+        {
+            return InterpolationMode.Bicubic;
+        }
+
+        if ( resamplingString.Equals( "VALUE_INTERPOLATION_HIGH", StringComparison.OrdinalIgnoreCase ) )
+        {
+            return InterpolationMode.HighQualityBicubic; // Or HighQualityBilinear?
+        }
+
+        return InterpolationMode.Default; // Default if no match
     }
 
     /// <summary>
@@ -302,145 +392,302 @@ public class ImageProcessor
     /// </summary>
     protected TexturePacker.Rect? StripWhitespace( string name, Bitmap source )
     {
-        BitmapData? alphaData = null;
-
-        try
+        Guard.ThrowIfNull( source );
+        
+        Logger.Debug( $"name: {name}" );
+        Logger.Debug( $"Bitmap size: {source.Width} x {source.Height}" );
+        
+        // Check the PixelFormat of the Bitmap. If it doesn't have an alpha channel,
+        // or if both StripWhitespaceX and StripWhitespaceY are false, a new Rect
+        // encompassing the entire source image is returned.
+        if ( !System.Drawing.Image.IsAlphaPixelFormat( source.PixelFormat )
+             || Settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
         {
-            alphaData = source.LockBits( new Rectangle( 0, 0, source.Width, source.Height ), ImageLockMode.ReadOnly,
-                                         PixelFormat.Format32bppArgb );
+            return new TexturePacker.Rect( source, 0, 0, source.Width, source.Height, false );
+        }
 
-            if ( alphaData.Stride == ( source.Width * 4 ) )
+        var top    = 0;
+        var bottom = source.Height;
+
+        if ( Settings.StripWhitespaceY )
+        {
+        outer1:
+
+            for ( var y = 0; y < source.Height; y++ )
             {
-                if ( Settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
-                {
-                    return new TexturePacker.Rect( source, 0, 0, source.Width, source.Height, false );
-                }
-            }
-
-            var top    = 0;
-            var bottom = source.Height;
-
-            if ( Settings.StripWhitespaceY )
-            {
-            outer1:
-
-                for ( var y = 0; y < source.Height; y++ )
-                {
-                    for ( var x = 0; x < source.Width; x++ )
-                    {
-                        var alpha = GetAlpha( alphaData, x, y );
-
-                        if ( alpha > Settings.AlphaThreshold )
-                        {
-                            goto outer1;
-                        }
-                    }
-
-                    top++;
-                }
-
-            outer2:
-
-                for ( var y = source.Height - 1; y >= top; y-- )
-                {
-                    for ( var x = 0; x < source.Width; x++ )
-                    {
-                        var alpha = GetAlpha( alphaData, x, y );
-
-                        if ( alpha > Settings.AlphaThreshold )
-                        {
-                            goto outer2;
-                        }
-                    }
-
-                    bottom--;
-                }
-
-                if ( Settings.DuplicatePadding )
-                {
-                    if ( top > 0 )
-                    {
-                        top--;
-                    }
-
-                    if ( bottom < source.Height )
-                    {
-                        bottom++;
-                    }
-                }
-            }
-
-            var left  = 0;
-            var right = source.Width;
-
-            if ( Settings.StripWhitespaceX )
-            {
-            outer3:
-
                 for ( var x = 0; x < source.Width; x++ )
                 {
-                    for ( var y = top; y < bottom; y++ )
+                    var pixel = source.GetPixel( x, y );
+
+                    if ( pixel.A > Settings.AlphaThreshold )
                     {
-                        var alpha = GetAlpha( alphaData, x, y );
-
-                        if ( alpha > Settings.AlphaThreshold )
-                        {
-                            goto outer3;
-                        }
-                    }
-
-                    left++;
-                }
-
-            outer4:
-
-                for ( var x = source.Width - 1; x >= left; x-- )
-                {
-                    for ( var y = top; y < bottom; y++ )
-                    {
-                        var alpha = GetAlpha( alphaData, x, y );
-
-                        if ( alpha > Settings.AlphaThreshold )
-                        {
-                            goto outer4;
-                        }
-                    }
-
-                    right--;
-                }
-
-                if ( Settings.DuplicatePadding )
-                {
-                    if ( left > 0 )
-                    {
-                        left--;
-                    }
-
-                    if ( right < source.Width )
-                    {
-                        right++;
+                        goto outer1;
                     }
                 }
+
+                top++;
             }
 
-            var newWidth  = right - left;
-            var newHeight = bottom - top;
+        outer2:
 
-            if ( ( newWidth <= 0 ) || ( newHeight <= 0 ) )
+            for ( var y = source.Height - 1; y >= top; y-- )
             {
-                return Settings.IgnoreBlankImages ? null : new TexturePacker.Rect( _emptyImage, 0, 0, 1, 1, false );
+                for ( var x = 0; x < source.Width; x++ )
+                {
+                    var pixel = source.GetPixel( x, y );
+
+                    if ( pixel.A > Settings.AlphaThreshold )
+                    {
+                        goto outer2;
+                    }
+                }
+
+                bottom--;
             }
 
-            return new TexturePacker.Rect( source, left, top, newWidth, newHeight, false );
+            if ( Settings.DuplicatePadding )
+            {
+                if ( top > 0 )
+                {
+                    top--;
+                }
+
+                if ( bottom < source.Height )
+                {
+                    bottom++;
+                }
+            }
         }
-        finally
+
+        var left  = 0;
+        var right = source.Width;
+
+        if ( Settings.StripWhitespaceX )
         {
-            if ( alphaData != null )
+        outer3:
+
+            for ( var x = 0; x < source.Width; x++ )
             {
-                source.UnlockBits( alphaData );
+                for ( var y = top; y < bottom; y++ )
+                {
+                    var pixel = source.GetPixel( x, y );
+
+                    if ( pixel.A > Settings.AlphaThreshold )
+                    {
+                        goto outer3;
+                    }
+                }
+
+                left++;
+            }
+
+        outer4:
+
+            for ( var x = source.Width - 1; x >= left; x-- )
+            {
+                for ( var y = top; y < bottom; y++ )
+                {
+                    var pixel = source.GetPixel( x, y );
+
+                    if ( pixel.A > Settings.AlphaThreshold )
+                    {
+                        goto outer4;
+                    }
+                }
+
+                right--;
+            }
+
+            if ( Settings.DuplicatePadding )
+            {
+                if ( left > 0 )
+                {
+                    left--;
+                }
+
+                if ( right < source.Width )
+                {
+                    right++;
+                }
             }
         }
+
+        var newWidth  = right - left;
+        var newHeight = bottom - top;
+
+        if ( ( newWidth <= 0 ) || ( newHeight <= 0 ) )
+        {
+            return Settings.IgnoreBlankImages
+                ? null
+                : new TexturePacker.Rect( _emptyImage, 0, 0, 1, 1, false );
+        }
+
+        // Create a new Bitmap representing the stripped area
+        var strippedImage = new Bitmap( newWidth, newHeight, source.PixelFormat );
+
+        using ( var g = System.Drawing.Graphics.FromImage( strippedImage ) )
+        {
+            g.DrawImage( source, new Rectangle( 0, 0, newWidth, newHeight ), new Rectangle( left, top, newWidth, newHeight ),
+                         GraphicsUnit.Pixel );
+        }
+
+        return new TexturePacker.Rect( strippedImage, 0, 0, newWidth, newHeight, false );
     }
+
+//    protected TexturePacker.Rect? StripWhitespace( string name, Bitmap source )
+//    {
+//        Logger.Checkpoint();
+//        
+//        BitmapData? alphaData = null;
+//
+//        try
+//        {
+//            alphaData = source.LockBits( new Rectangle( 0, 0, source.Width, source.Height ),
+//                                         ImageLockMode.ReadOnly,
+//                                         PixelFormat.Format32bppArgb );
+//
+//            Logger.Checkpoint();
+//
+//            if ( alphaData.Stride == ( source.Width * 4 ) )
+//            {
+//                if ( Settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
+//                {
+//                    Logger.Checkpoint();
+//
+//                    return new TexturePacker.Rect( source, 0, 0, source.Width, source.Height, false );
+//                }
+//            }
+//
+//            Logger.Checkpoint();
+//
+//            var top    = 0;
+//            var bottom = source.Height;
+//
+//            if ( Settings.StripWhitespaceY )
+//            {
+//            outer1:
+//
+//                for ( var y = 0; y < source.Height; y++ )
+//                {
+//                    for ( var x = 0; x < source.Width; x++ )
+//                    {
+//                        var alpha = GetAlpha( alphaData, x, y );
+//
+//                        if ( alpha > Settings.AlphaThreshold )
+//                        {
+//                            goto outer1;
+//                        }
+//                    }
+//
+//                    top++;
+//                }
+//
+//            outer2:
+//
+//                for ( var y = source.Height - 1; y >= top; y-- )
+//                {
+//                    for ( var x = 0; x < source.Width; x++ )
+//                    {
+//                        var alpha = GetAlpha( alphaData, x, y );
+//
+//                        if ( alpha > Settings.AlphaThreshold )
+//                        {
+//                            goto outer2;
+//                        }
+//                    }
+//
+//                    bottom--;
+//                }
+//
+//                if ( Settings.DuplicatePadding )
+//                {
+//                    if ( top > 0 )
+//                    {
+//                        top--;
+//                    }
+//
+//                    if ( bottom < source.Height )
+//                    {
+//                        bottom++;
+//                    }
+//                }
+//            }
+//
+//            var left  = 0;
+//            var right = source.Width;
+//
+//            if ( Settings.StripWhitespaceX )
+//            {
+//            outer3:
+//
+//                for ( var x = 0; x < source.Width; x++ )
+//                {
+//                    for ( var y = top; y < bottom; y++ )
+//                    {
+//                        var alpha = GetAlpha( alphaData, x, y );
+//
+//                        if ( alpha > Settings.AlphaThreshold )
+//                        {
+//                            goto outer3;
+//                        }
+//                    }
+//
+//                    left++;
+//                }
+//
+//            outer4:
+//
+//                for ( var x = source.Width - 1; x >= left; x-- )
+//                {
+//                    for ( var y = top; y < bottom; y++ )
+//                    {
+//                        var alpha = GetAlpha( alphaData, x, y );
+//
+//                        if ( alpha > Settings.AlphaThreshold )
+//                        {
+//                            goto outer4;
+//                        }
+//                    }
+//
+//                    right--;
+//                }
+//
+//                if ( Settings.DuplicatePadding )
+//                {
+//                    if ( left > 0 )
+//                    {
+//                        left--;
+//                    }
+//
+//                    if ( right < source.Width )
+//                    {
+//                        right++;
+//                    }
+//                }
+//            }
+//
+//            var newWidth  = right - left;
+//            var newHeight = bottom - top;
+//
+//            if ( ( newWidth <= 0 ) || ( newHeight <= 0 ) )
+//            {
+//                return Settings.IgnoreBlankImages ? null : new TexturePacker.Rect( _emptyImage, 0, 0, 1, 1, false );
+//            }
+//
+//            return new TexturePacker.Rect( source, left, top, newWidth, newHeight, false );
+//        }
+//        catch ( Exception e )
+//        {
+//            throw new GdxRuntimeException( e.Message );
+//        }
+//        finally
+//        {
+//            if ( alphaData != null )
+//            {
+//                source.UnlockBits( alphaData );
+//            }
+//        }
+//    }
 
     private unsafe int GetAlpha( BitmapData data, int x, int y )
     {

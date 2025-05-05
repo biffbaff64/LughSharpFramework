@@ -302,52 +302,34 @@ public partial class TexturePacker
     /// <exception cref="GdxRuntimeException"></exception>
     public void Pack( DirectoryInfo outputDir, string packFileName )
     {
-        Logger.Checkpoint();
-
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
             packFileName = packFileName.Substring( 0, packFileName.Length - _settings.AtlasExtension.Length );
         }
 
-        Logger.Checkpoint();
-
         Directory.CreateDirectory( outputDir.FullName );
-
-        Logger.Checkpoint();
 
         ProgressListener ??= new AbstractProgressListenerImpl();
         ProgressListener.Start( 1 );
-
-        Logger.Checkpoint();
 
         var n = _settings.Scale.Length;
 
         for ( var i = 0; i < n; i++ )
         {
-            Logger.Checkpoint();
-            
             ProgressListener.Start( 1f / n );
 
-            Logger.Checkpoint();
-            
             _imageProcessor.Scale = _settings.Scale[ i ];
 
             if ( ( _settings.ScaleResampling != null )
                  && ( _settings.ScaleResampling.Count > i )
                  && ( _settings.ScaleResampling[ i ] != Resampling.None ) )
             {
-                Logger.Checkpoint();
-            
                 _imageProcessor.Resampling = _settings.ScaleResampling[ i ];
             }
 
-            Logger.Checkpoint();
-            
             ProgressListener.Start( 0.35f );
             ProgressListener.Count = 0;
             ProgressListener.Total = _inputImages.Count;
-
-            Logger.Checkpoint();
 
             for ( int ii = 0, nn = _inputImages.Count; ii < nn; ii++, ProgressListener.Count++ )
             {
@@ -355,8 +337,6 @@ public partial class TexturePacker
 
                 if ( inputImage.FileInfo != null )
                 {
-                    Logger.Checkpoint();
-                
                     _imageProcessor.AddImage( inputImage.FileInfo, inputImage.RootPath );
                 }
                 else
