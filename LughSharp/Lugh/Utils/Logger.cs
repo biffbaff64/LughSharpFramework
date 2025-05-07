@@ -60,7 +60,7 @@ public static class Logger
     public const int LOG_ERROR = 2;
 
     private const string DEBUG_TAG              = "[DEBUG.....]";
-    private const string ERROR_TAG              = "[ERROR.....]";
+    private const string ERROR_TAG              = "[WARNING...]";
     private const string CHECKPOINT_TAG         = "[CHECKPOINT]";
     private const string PREFS_FOLDER           = "logs";
     private const string DEFAULT_TRACE_FILENAME = "trace.txt";
@@ -309,6 +309,14 @@ public static class Logger
         }
     }
 
+    public static void Dot()
+    {
+        if ( IsEnabled( LOG_DEBUG ) )
+        {
+            Console.Write( "." );
+        }
+    }
+    
     /// <summary>
     /// Writes an <see cref="Environment.NewLine"/> to console.
     /// Does NOT create a string holding caller data or timestamp. This is purely for use
@@ -318,7 +326,7 @@ public static class Logger
     [Conditional( "DEBUG" )]
     public static void NewLine()
     {
-        if ( !IsEnabled( LOG_DEBUG ) )
+        if ( IsEnabled( LOG_DEBUG ) )
         {
             Console.WriteLine( $"{Environment.NewLine}" );
         }

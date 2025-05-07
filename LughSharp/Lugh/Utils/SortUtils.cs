@@ -33,7 +33,7 @@ namespace LughSharp.Lugh.Utils;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class SortUtils
+public static class SortUtils
 {
     /// <summary>
     /// Sorts the elements of the specified list using the default comparer.
@@ -119,8 +119,34 @@ public class SortUtils
         comparableTimSort.DoSort( a, from, to );
     }
 
-    public void Sort< T >( List< T >? list, Comparison< T > rectComparator )
+    /// <summary>
+    /// Sorts the elements of the specified list using the specified comparison.
+    /// </summary>
+    /// <typeparam name="T">The type of the elements in the list.</typeparam>
+    /// <param name="list">The list to sort.</param>
+    /// <param name="comparison">The comparison delegate to use.</param>
+    public static void Sort< T >( List< T >? list, Comparison< T >? comparison )
     {
-        throw new NotImplementedException();
+        if (( list == null ) || ( comparison == null ))
+        {
+            return; // Or throw an ArgumentNullException if you prefer
+        }
+
+        // Convert the List to an array for TimSort
+        var arrayToSort = list.ToArray();
+
+        // Create a TimSort instance
+        var timSort = new TimSort<T>();
+
+        // Create an IComparer<T> from the Comparison<T> delegate
+        var comparer = Comparer<T>.Create(comparison);
+
+        // Perform the sort on the array
+        timSort.DoSort(arrayToSort, comparer, 0, arrayToSort.Length);
+
+        // Copy the sorted array back to the List
+        list.Clear();
+        list.AddRange(arrayToSort);
     }
 }
+

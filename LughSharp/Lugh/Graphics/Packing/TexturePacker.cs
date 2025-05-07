@@ -184,19 +184,11 @@ public partial class TexturePacker
             }
         }
 
-        Logger.Checkpoint();
-
         Packer = settings.Grid ? new GridPacker( settings ) : new MaxRectsPacker( settings );
-
-        Logger.Checkpoint();
 
         _imageProcessor = NewImageProcessor( settings );
 
-        Logger.Checkpoint();
-
         SetRootDir( rootDir );
-
-        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -231,8 +223,6 @@ public partial class TexturePacker
                                 string packFileName,
                                 AbstractProgressListener? progress = null )
     {
-        Logger.Checkpoint();
-
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
@@ -337,6 +327,8 @@ public partial class TexturePacker
 
                 if ( inputImage.FileInfo != null )
                 {
+                    Logger.Debug( $"inputImage.FileInfo: {inputImage.FileInfo.FullName}" );
+                    
                     _imageProcessor.AddImage( inputImage.FileInfo, inputImage.RootPath );
                 }
                 else
@@ -353,48 +345,30 @@ public partial class TexturePacker
                     _imageProcessor.AddImage( inputImage.Image, inputImage.Name );
                 }
 
-                Logger.Checkpoint();
-
                 if ( ProgressListener.Update( ii + 1, nn ) )
                 {
                     return;
                 }
-
-                Logger.Checkpoint();
             }
 
-            Logger.Checkpoint();
-            
             ProgressListener.End();
             ProgressListener.Start( 0.35f );
             ProgressListener.Count = 0;
             ProgressListener.Total = _imageProcessor.ImageRects.Count;
 
-            Logger.Checkpoint();
-
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
-
-            Logger.Checkpoint();
 
             ProgressListener.End();
             ProgressListener.Start( 0.29f );
             ProgressListener.Count = 0;
             ProgressListener.Total = pages.Count;
 
-            Logger.Checkpoint();
-            
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
-
-            Logger.Checkpoint();
 
             WriteImages( outputDir.FullName, scaledPackFileName, pages );
 
-            Logger.Checkpoint();
-
             ProgressListener.End();
             ProgressListener.Start( 0.01f );
-
-            Logger.Checkpoint();
 
             try
             {
@@ -405,22 +379,14 @@ public partial class TexturePacker
                 throw new GdxRuntimeException( "Error writing pack file.", ex );
             }
 
-            Logger.Checkpoint();
-
             _imageProcessor.Clear();
             ProgressListener.End();
-
-            Logger.Checkpoint();
 
             if ( ProgressListener.Update( i + 1, n ) )
             {
                 return;
             }
-            
-            Logger.Checkpoint();
         }
-
-        Logger.Checkpoint();
 
         ProgressListener.End();
     }
@@ -1165,6 +1131,20 @@ public partial class TexturePacker
         public int           Height         { get; set; }
         public int           ImageWidth     { get; set; }
         public int           ImageHeight    { get; set; }
+
+        public void Debug()
+        {
+            Logger.Debug( $"ImageName: {ImageName}" );
+            Logger.Debug( $"OutputRects: {OutputRects?.Count}" );
+            Logger.Debug( $"RemainingRects: {RemainingRects?.Count}" );
+            Logger.Debug( $"Occupancy: {Occupancy}" );
+            Logger.Debug( $"X: {X}" );
+            Logger.Debug( $"Y: {Y}" );
+            Logger.Debug( $"Width: {Width}" );
+            Logger.Debug( $"Height: {Height}" );
+            Logger.Debug( $"ImageWidth: {ImageWidth}" );
+            Logger.Debug( $"ImageHeight: {ImageHeight}" );
+        }
     }
 
     // ========================================================================

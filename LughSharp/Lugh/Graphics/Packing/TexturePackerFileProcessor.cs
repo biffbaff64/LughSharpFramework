@@ -700,6 +700,7 @@ public class TexturePackerFileProcessor : IFileProcessor
             return;
         }
 
+        Logger.Debug( $"Files found: {files.Count}" );
         Logger.Debug( "Sorting files by name" );
 
         // Sort by name using numeric suffix, then alpha.
