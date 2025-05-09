@@ -42,10 +42,19 @@ public abstract class Buffer : IDisposable
 
     // ========================================================================
 
-    public const int DEFAULT_MAC_100MB = 100 * 1024 * 1024;
-    public const int DEFAULT_MAC_500MB = 500 * 1024 * 1024;
-    public const int DEFAULT_MAC_1GB   = 1000 * 1024 * 1024;
-    public const int DEFAULT_MAC_2GB   = 2000 * 1024 * 1024;
+    public const int DEFAULT_MAC_100_MB = 100 * 1024 * 1024;
+    public const int DEFAULT_MAC_500_MB = 500 * 1024 * 1024;
+    public const int DEFAULT_MAC_1_GB   = 1000 * 1024 * 1024;
+    public const int DEFAULT_MAC_2_GB   = 2000 * 1024 * 1024;
+
+    public bool IsReadOnly        { get; protected set; }
+    public bool IsDirect          { get; protected set; }
+    public int  Capacity          { get; protected set; }
+    public int  Position          { get; set; }
+    public int  Limit             { get; set; }
+    public int  Length            { get; protected set; }
+    public bool IsBigEndian       { get; set; }
+    public bool AutoResizeEnabled { get; set; } = true;
 
     // ========================================================================
 
@@ -53,7 +62,7 @@ public abstract class Buffer : IDisposable
     protected const bool IS_DIRECT_DEFAULT    = false;
 
     private int _markPosition       = -1;
-    private int _maxAllowedCapacity = DEFAULT_MAC_1GB;
+    private int _maxAllowedCapacity = DEFAULT_MAC_1_GB;
 
     // ========================================================================
 
@@ -78,17 +87,6 @@ public abstract class Buffer : IDisposable
 
         SetBufferStatus( READ_WRITE, NOT_DIRECT ); // Set default status
     }
-
-    // ========================================================================
-
-    public bool IsReadOnly        { get; protected set; }
-    public bool IsDirect          { get; protected set; }
-    public int  Capacity          { get; protected set; }
-    public int  Position          { get; set; }
-    public int  Limit             { get; set; }
-    public int  Length            { get; protected set; }
-    public bool IsBigEndian       { get; set; }
-    public bool AutoResizeEnabled { get; set; } = true;
 
     // ========================================================================
 

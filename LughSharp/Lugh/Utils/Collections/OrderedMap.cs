@@ -50,11 +50,14 @@ namespace LughSharp.Lugh.Utils.Collections;
 /// <p>
 /// This implementation uses linear probing with the backward shift algorithm for removal. Hashcodes
 /// are rehashed using Fibonacci hashing, instead of the more common power-of-two mask, to better
-/// distribute poor hashCodes (see <a href= "https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/">
-/// Malte Skarupke's blog post</a>). Linear probing continues to work even when all hashCodes collide,
+/// distribute poor hashCodes . Linear probing continues to work even when all hashCodes collide,
 /// just more slowly.
 /// </p>
 /// </summary>
+/// <remarks>
+/// See <a href= "https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/">
+/// Malte Skarupke's blog post</a> for further details.
+/// </remarks>
 [PublicAPI]
 public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
 {
@@ -248,6 +251,9 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
         base.Clear();
     }
 
+    /// <summary>
+    /// Returns the <see cref="_keys"/> list.
+    /// </summary>
     public List< TK > OrderedKeys()
     {
         return _keys;
@@ -377,6 +383,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
 
     // ========================================================================
 
+    /// <inheritdoc />
     protected override string ToString( string separator, bool braces )
     {
         if ( Size == 0 )
@@ -424,11 +431,13 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
     {
         private List< TK > _keys;
 
+        /// <inheritdoc />
         public OrderedMapEntries( OrderedMap< TK, TV > map ) : base( map )
         {
             _keys = map._keys;
         }
 
+        /// <inheritdoc />
         public override void Reset()
         {
             CurrentIndex = -1;
@@ -436,6 +445,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             HasNext      = Map.Size > 0;
         }
 
+        /// <inheritdoc />
         public override Entry Next()
         {
             if ( !HasNext )
@@ -459,6 +469,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             return Entry;
         }
 
+        /// <inheritdoc />
         public override void Remove()
         {
             if ( CurrentIndex < 0 )
@@ -481,11 +492,13 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
     {
         private List< TK > _keys;
 
+        /// <inheritdoc />
         public OrderedMapKeys( OrderedMap< TK, TV > map ) : base( map )
         {
             _keys = map._keys;
         }
 
+        /// <inheritdoc />
         public override void Reset()
         {
             CurrentIndex = -1;
@@ -493,6 +506,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             HasNext      = Map.Size > 0;
         }
 
+        /// <inheritdoc />
         public override TK Next()
         {
             if ( !HasNext )
@@ -514,6 +528,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             return key;
         }
 
+        /// <inheritdoc />
         public override void Remove()
         {
             if ( CurrentIndex < 0 )
@@ -527,6 +542,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             CurrentIndex = -1;
         }
 
+        /// <inheritdoc />
         public override List< TK > ToArray( List< TK > array )
         {
             array.AddAll( _keys, NextIndex, _keys.Count - NextIndex );
@@ -537,6 +553,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             return array;
         }
 
+        /// <inheritdoc />
         public override List< TK > ToArray()
         {
             return ToArray( new List< TK >( _keys.Count - NextIndex ) );
@@ -551,11 +568,13 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
     {
         private List< TK > _keys;
 
+        /// <inheritdoc />
         public OrderedMapValues( OrderedMap< TK, TV > map ) : base( map )
         {
             _keys = map._keys;
         }
 
+        /// <inheritdoc />
         public override void Reset()
         {
             CurrentIndex = -1;
@@ -563,6 +582,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             HasNext      = Map.Size > 0;
         }
 
+        /// <inheritdoc />
         public override TV? Next()
         {
             if ( !HasNext )
@@ -584,6 +604,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             return value;
         }
 
+        /// <inheritdoc />
         public override void Remove()
         {
             if ( CurrentIndex < 0 )
@@ -597,6 +618,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             CurrentIndex = -1;
         }
 
+        /// <inheritdoc />
         public override List< TV > ToArray( List< TV > array )
         {
             var n = _keys.Count;
@@ -617,9 +639,11 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV >
             return array;
         }
 
-        public new List< TV > ToArray()
+        /// <inheritdoc />
+        public override List< TV > ToArray()
         {
             return ToArray( new List< TV >( _keys.Count - NextIndex ) );
         }
     }
 }
+

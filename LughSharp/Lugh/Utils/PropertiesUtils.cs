@@ -42,6 +42,8 @@ public static class PropertiesUtils
     private const int    IGNORE         = 5;
     private const string LINE_SEPARATOR = "\n";
 
+    // ========================================================================
+    
     /// <summary>
     /// Loads properties from the specified <see cref="StreamReader" /> into the provided dictionary.
     /// </summary>
@@ -309,7 +311,7 @@ public static class PropertiesUtils
 
         var sb = new StringBuilder( 200 );
 
-        foreach ( KeyValuePair< string, string > entry in properties )
+        foreach ( var entry in properties )
         {
             DumpString( sb, entry.Key, true, escapeUnicode );
             sb.Append( '=' );

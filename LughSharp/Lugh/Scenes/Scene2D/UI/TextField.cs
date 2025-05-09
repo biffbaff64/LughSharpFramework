@@ -937,13 +937,13 @@ public class TextField : Widget
         }
     }
 
-    private TextField? FindNextTextField( SnapshotArray< Actor > actors,
+    private TextField? FindNextTextField( SnapshotArrayList< Actor > actors,
                                           TextField? best,
                                           Vector2 bestCoords,
                                           Vector2 currentCoords,
                                           bool up )
     {
-        for ( int i = 0, n = actors.Size; i < n; i++ )
+        for ( int i = 0, n = actors.Count; i < n; i++ )
         {
             var actor = actors.GetAt( i );
 

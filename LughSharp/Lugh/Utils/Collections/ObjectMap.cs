@@ -90,6 +90,9 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
     // ========================================================================
 
+    protected const int   DEFAULT_CAPACITY    = 51;
+    protected const float DEFAULT_LOAD_FACTOR = 0.8f;
+
     protected readonly float LoadFactor;
     protected          TK?[] KeyTable;
     protected          int   Threshold;
@@ -103,9 +106,6 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     protected Values?  Values2;
 
     // ========================================================================
-
-    private const int   DEFAULT_CAPACITY    = 51;
-    private const float DEFAULT_LOAD_FACTOR = 0.8f;
 
     private readonly object _dummy = new();
 
@@ -123,7 +123,9 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <exception cref="ArgumentException">
     /// Thrown when the load factor is less than or equal to 0, or greater than or equal to 1.
     /// </exception>
-    public ObjectMap( int initialCapacity = DEFAULT_CAPACITY, float loadFactor = DEFAULT_LOAD_FACTOR, bool debug = false )
+    public ObjectMap( int initialCapacity = DEFAULT_CAPACITY,
+                      float loadFactor = DEFAULT_LOAD_FACTOR,
+                      bool debug = false )
     {
         if ( debug )
         {

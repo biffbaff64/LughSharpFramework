@@ -30,13 +30,15 @@ namespace LughSharp.Lugh.Utils.Pooling;
 [PublicAPI]
 public class PooledLinkedList< T >
 {
-    // ========================================================================
+    public int Size { get; set; } = 0;
 
+    // ========================================================================
+    
     private readonly Pool< Item< T > > _pool;
 
-    private Item< T >? _curr;
+    private Item< T >? _current;
     private Item< T >? _head;
-    private Item< T >? _iter;
+    private Item< T >? _iterator;
     private Item< T >? _tail;
 
     // ========================================================================
@@ -55,8 +57,6 @@ public class PooledLinkedList< T >
             NewObject = GetNewObject,
         };
     }
-
-    public int Size { get; set; } = 0;
 
     /// <summary>
     /// Creates, and returns, a new <see cref="Item{T}" />
@@ -131,7 +131,7 @@ public class PooledLinkedList< T >
     /// </summary>
     protected void Iterate()
     {
-        _iter = _head;
+        _iterator = _head;
     }
 
     /// <summary>
@@ -139,7 +139,7 @@ public class PooledLinkedList< T >
     /// </summary>
     public void IterateReverse()
     {
-        _iter = _tail;
+        _iterator = _tail;
     }
 
     /// <summary>
@@ -148,15 +148,15 @@ public class PooledLinkedList< T >
     /// <returns> the next item in the list or null if there are no more items</returns>
     protected T? Next()
     {
-        if ( _iter == null )
+        if ( _iterator == null )
         {
             return default( T? );
         }
 
-        var payload = _iter.Payload;
+        var payload = _iterator.Payload;
 
-        _curr = _iter;
-        _iter = _iter.Next;
+        _current = _iterator;
+        _iterator = _iterator.Next;
 
         return payload;
     }
@@ -167,15 +167,15 @@ public class PooledLinkedList< T >
     /// <returns> the previous item in the list or null if there are no more items </returns>
     public T? Previous()
     {
-        if ( _iter == null )
+        if ( _iterator == null )
         {
             return default( T? );
         }
 
-        var payload = _iter.Payload;
+        var payload = _iterator.Payload;
 
-        _curr = _iter;
-        _iter = _iter.Prev;
+        _current = _iterator;
+        _iterator = _iterator.Prev;
 
         return payload;
     }
@@ -185,19 +185,19 @@ public class PooledLinkedList< T >
     /// </summary>
     protected void Remove()
     {
-        if ( ( _curr?.Prev == null ) || ( _curr.Next == null ) )
+        if ( ( _current?.Prev == null ) || ( _current.Next == null ) )
         {
             return;
         }
 
         Size--;
 
-        var c = _curr;
-        var n = _curr.Next;
-        var p = _curr.Prev;
+        var c = _current;
+        var n = _current.Next;
+        var p = _current.Prev;
 
-        _pool.Free( _curr );
-        _curr = null;
+        _pool.Free( _current );
+        _current = null;
 
         if ( Size == 0 )
         {

@@ -82,7 +82,7 @@ public static class Pools< T >
     /// Frees the specified objects from the pool.
     /// Null objects within the array are silently ignored.
     /// </summary>
-    /// <param name="objects"></param>
+    /// <param name="objects"> The objects to free. </param>
     /// <param name="samePool">
     /// If true, objects don't need to be from the same pool but the
     /// pool must be looked up for each object.
@@ -109,3 +109,4 @@ public static class Pools< T >
         }
     }
 }
+

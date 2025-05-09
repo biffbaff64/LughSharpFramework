@@ -78,9 +78,9 @@ public class VerticalGroup : WidgetGroup
     {
         _sizeInvalid = false;
 
-        SnapshotArray< Actor > children = Children;
+        SnapshotArrayList< Actor > children = Children;
 
-        var n = children.Size;
+        var n = children.Count;
 
         _prefWidth = 0;
 
@@ -254,10 +254,10 @@ public class VerticalGroup : WidgetGroup
 
         align = _columnAlign;
 
-        SnapshotArray< Actor > children = Children;
+        SnapshotArrayList< Actor > children = Children;
 
         var i    = 0;
-        var n    = children.Size;
+        var n    = children.Count;
         var incr = 1;
 
         if ( _reverse )
@@ -380,10 +380,10 @@ public class VerticalGroup : WidgetGroup
         align       =  _columnAlign;
 
         var                    columnSizes = _columnSizes!;
-        SnapshotArray< Actor > children    = Children;
+        SnapshotArrayList< Actor > children    = Children;
 
         var i    = 0;
-        var n    = children.Size;
+        var n    = children.Count;
         var incr = 1;
 
         if ( _reverse )

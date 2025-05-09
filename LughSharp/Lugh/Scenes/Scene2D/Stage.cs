@@ -129,7 +129,7 @@ public class Stage : InputAdapter, IDisposable
         viewport.Update( GdxApi.Graphics.Width, GdxApi.Graphics.Height, true );
     }
 
-    public SnapshotArray< TouchFocus > TouchFocuses { get; }      = new( true, 4 );
+    public SnapshotArrayList< TouchFocus > TouchFocuses { get; }      = new( true, 4 );
     public Camera?                     Camera       { get; set; } = null!;
     public Viewport                    Viewport     { get; }
     public IBatch                      Batch        { get; }
@@ -283,7 +283,7 @@ public class Stage : InputAdapter, IDisposable
     /// Returns the root's child actors.
     /// </summary>
     /// <see cref="Group.Children " />
-    public SnapshotArray< Actor > Actors => Root.Children;
+    public SnapshotArrayList< Actor > Actors => Root.Children;
 
     /// <summary>
     /// If true, any actions executed during a call to <see cref="Act()" />)
@@ -620,7 +620,7 @@ public class Stage : InputAdapter, IDisposable
         _mouseScreenX              = screenX;
         _mouseScreenY              = screenY;
 
-        if ( TouchFocuses.Size == 0 )
+        if ( TouchFocuses.Count == 0 )
         {
             return false;
         }
@@ -642,7 +642,7 @@ public class Stage : InputAdapter, IDisposable
 
         TouchFocus?[] focuses = TouchFocuses.Begin();
 
-        for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
+        for ( int i = 0, n = TouchFocuses.Count; i < n; i++ )
         {
             var focus = focuses[ i ];
 
@@ -687,7 +687,7 @@ public class Stage : InputAdapter, IDisposable
         _pointerScreenX[ pointer ] = screenX;
         _pointerScreenY[ pointer ] = screenY;
 
-        if ( TouchFocuses.Size == 0 )
+        if ( TouchFocuses.Count == 0 )
         {
             return false;
         }
@@ -710,7 +710,7 @@ public class Stage : InputAdapter, IDisposable
 
         TouchFocus?[] focuses = TouchFocuses.Begin();
 
-        for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
+        for ( int i = 0, n = TouchFocuses.Count; i < n; i++ )
         {
             var focus = focuses[ i ];
 
@@ -936,7 +936,7 @@ public class Stage : InputAdapter, IDisposable
                                   int pointer,
                                   int button )
     {
-        for ( var i = TouchFocuses.Size - 1; i >= 0; i-- )
+        for ( var i = TouchFocuses.Count - 1; i >= 0; i-- )
         {
             var focus = TouchFocuses.GetAt( i );
 
@@ -963,7 +963,7 @@ public class Stage : InputAdapter, IDisposable
         InputEvent?   inputEvent = null;
         TouchFocus?[] items      = TouchFocuses.Begin();
 
-        for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
+        for ( int i = 0, n = TouchFocuses.Count; i < n; i++ )
         {
             var focus = items[ i ];
 
@@ -1044,7 +1044,7 @@ public class Stage : InputAdapter, IDisposable
         // allowing for concurrent modification, and never cancel the same focus twice.
         TouchFocus?[] items = TouchFocuses.Begin();
 
-        for ( int i = 0, n = TouchFocuses.Size; i < n; i++ )
+        for ( int i = 0, n = TouchFocuses.Count; i < n; i++ )
         {
             var focus = items[ i ];
 
@@ -1386,7 +1386,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( actor is Group group )
         {
-            for ( int i = 0, n = group.Children.Size; i < n; i++ )
+            for ( int i = 0, n = group.Children.Count; i < n; i++ )
             {
                 if ( group.Children.GetAt( i ) != except )
                 {

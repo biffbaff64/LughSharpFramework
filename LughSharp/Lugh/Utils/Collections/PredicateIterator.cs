@@ -26,10 +26,9 @@ using System.Collections;
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
+namespace LughSharp.Lugh.Utils.Collections;
 
 [PublicAPI]
-[Obsolete( "Obsolete" )]
 public class PredicateIterator< T > : IEnumerator< T >, IDisposable
 {
     public IEnumerator< T? > Enumerator { get; set; }

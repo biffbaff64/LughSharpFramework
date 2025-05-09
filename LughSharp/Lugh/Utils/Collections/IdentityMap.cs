@@ -26,7 +26,7 @@ using System.Runtime.Serialization;
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
+namespace LughSharp.Lugh.Utils.Collections;
 
 /// <summary>
 /// An unordered map that uses identity comparison for the object keys. Null keys are not allowed.

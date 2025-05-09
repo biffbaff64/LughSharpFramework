@@ -38,7 +38,7 @@ namespace LughSharp.Lugh.Utils.Collections;
 /// </para>
 /// <para>
 /// Code using this class must not rely on items being removed immediately. Consider using
-/// <see cref="SnapshotArray{T}" /> if this is a problem.
+/// <see cref="SnapshotArrayList{T}" /> if this is a problem.
 /// </para>
 /// </summary>
 [PublicAPI]

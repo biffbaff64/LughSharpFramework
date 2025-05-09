@@ -54,7 +54,7 @@ public class DialogFocusListener : FocusListener
     private void FocusChanged( FocusEvent ev )
     {
         if ( _dialog is { IsModal: true, Stage: not null }
-             && ( _dialog.Stage.Root.Children.Size > 0 )
+             && ( _dialog.Stage.Root.Children.Count > 0 )
              && ( _dialog.Stage.Root.Children.Peek() == _dialog ) )
         {
             // Dialog is top most actor.

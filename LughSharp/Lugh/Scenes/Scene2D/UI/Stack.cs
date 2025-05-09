@@ -139,9 +139,9 @@ public class Stack : WidgetGroup
         _maxWidth    = 0;
         _maxHeight   = 0;
 
-        SnapshotArray< Actor > children = Children;
+        SnapshotArrayList< Actor > children = Children;
 
-        for ( int i = 0, n = children.Size; i < n; i++ )
+        for ( int i = 0, n = children.Count; i < n; i++ )
         {
             var   child = children.GetAt( i );
             float childMaxWidth, childMaxHeight;
@@ -194,9 +194,9 @@ public class Stack : WidgetGroup
         var width  = Width;
         var height = Height;
 
-        SnapshotArray< Actor > children = Children;
+        SnapshotArrayList< Actor > children = Children;
 
-        for ( int i = 0, n = children.Size; i < n; i++ )
+        for ( int i = 0, n = children.Count; i < n; i++ )
         {
             var child = children.GetAt( i );
             child.SetBounds( 0, 0, width, height );

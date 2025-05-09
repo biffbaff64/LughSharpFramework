@@ -22,24 +22,65 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing.Imaging;
-using System.Text.Json.Serialization;
+using System.Collections;
 
-using LughSharp.Lugh.Graphics.Packing;
-
-namespace LughSharp.Lugh.Utils;
+namespace LughSharp.Lugh.Utils.Collections;
 
 [PublicAPI]
-public class JsonTextureResamplingConverter : JsonConverter< Resampling >
+public class ArrayListEnumerator< T > : IEnumerator< T >
 {
-    /// <inheritdoc />
-    public override Resampling Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+    private int _position = -1;
+
+    private readonly ArrayList< T > _list;
+
+    // ========================================================================
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="list">The list to enumerate.</param>
+    public ArrayListEnumerator( ArrayList< T > list )
     {
-        return Resampling.None;
+        _list = list;
     }
 
-    /// <inheritdoc />
-    public override void Write( Utf8JsonWriter writer, Resampling value, JsonSerializerOptions options )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    public bool MoveNext()
     {
+        _position++;
+
+        return ( _position < _list.Count );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Reset()
+    {
+        _position = -1;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <exception cref="Exception"></exception>
+    public T Current => _list[ _position ];
+
+    /// <summary>
+    /// 
+    /// </summary>
+    object? IEnumerator.Current => Current;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void Dispose()
+    {
+        _list.Clear();
+        
+        GC.SuppressFinalize( this );
     }
 }

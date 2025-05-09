@@ -772,7 +772,7 @@ public class Actor : IActor, IComparable< Actor >
             return false;
         }
 
-        for ( int i = 0, n = Stage.TouchFocuses.Size; i < n; i++ )
+        for ( int i = 0, n = Stage.TouchFocuses.Count; i < n; i++ )
         {
             if ( Stage.TouchFocuses.GetAt( i ).Target == this )
             {
@@ -794,7 +794,7 @@ public class Actor : IActor, IComparable< Actor >
             return false;
         }
 
-        for ( int i = 0, n = Stage.TouchFocuses.Size; i < n; i++ )
+        for ( int i = 0, n = Stage.TouchFocuses.Count; i < n; i++ )
         {
             if ( Stage.TouchFocuses.GetAt( i ).ListenerActor == this )
             {
@@ -1183,12 +1183,12 @@ public class Actor : IActor, IComparable< Actor >
             throw new ArgumentException( "ZIndex cannot be < 0." );
         }
 
-        if ( ( Parent == null ) || ( Parent.Children.Size <= 1 ) )
+        if ( ( Parent == null ) || ( Parent.Children.Count <= 1 ) )
         {
             return false;
         }
 
-        index = Math.Min( index, Parent.Children.Size - 1 );
+        index = Math.Min( index, Parent.Children.Count - 1 );
 
         if ( Parent.Children.GetAt( index ) == this )
         {

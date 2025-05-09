@@ -51,7 +51,7 @@ public class ByteBuffer : Buffer, IDisposable
     /// The value at which to set the maximum allowed buffer capacity. The default for this is 1GB, and
     /// can be changed to whatever the user requires.
     /// </param>
-    public ByteBuffer( int capacityInBytes, bool allowAutoResize = true, int maxCapacity = DEFAULT_MAC_1GB )
+    public ByteBuffer( int capacityInBytes, bool allowAutoResize = true, int maxCapacity = DEFAULT_MAC_1_GB )
         : base( capacityInBytes )
     {
         _backingArray = new byte[ capacityInBytes ];

@@ -372,22 +372,24 @@ public class ImageProcessor
     {
         Guard.ThrowIfNull( source );
 
-//        try
-//        {
-//            var size = source.Size; // Accessing Size might throw if disposed
-//        }
-//        catch ( ObjectDisposedException )
-//        {
-//            Logger.Warning( $"Bitmap '{name}' has already been disposed!" );
-//
-//            return null; // Or handle the error appropriately
-//        }
-//        catch ( ArgumentException ex )
-//        {
-//            Logger.Warning( $"ArgumentException accessing Bitmap '{name}' size: {ex.Message}" );
-//
-//            return null; // Or handle the error appropriately
-//        }
+        Size size;
+        
+        try
+        {
+            size = source.Size; // Accessing Size might throw if disposed
+        }
+        catch ( ObjectDisposedException )
+        {
+            Logger.Warning( $"Bitmap '{name}' has already been disposed!" );
+
+            return null; // Or handle the error appropriately
+        }
+        catch ( ArgumentException ex )
+        {
+            Logger.Warning( $"ArgumentException accessing Bitmap '{name}' size: {ex.Message}" );
+
+            return null; // Or handle the error appropriately
+        }
 
         // Check the PixelFormat of the Bitmap. If it doesn't have an alpha channel,
         // or if both StripWhitespaceX and StripWhitespaceY are false, a new Rect
@@ -395,19 +397,19 @@ public class ImageProcessor
         if ( !System.Drawing.Image.IsAlphaPixelFormat( source.PixelFormat )
              || Settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
         {
-            return new TexturePacker.Rect( source, 0, 0, source.Width, source.Height, false );
+            return new TexturePacker.Rect( source, 0, 0, size.Width, size.Height, false );
         }
 
         var top    = 0;
-        var bottom = source.Height;
+        var bottom = size.Height;
 
         if ( Settings.StripWhitespaceY )
         {
         outer1:
 
-            for ( var y = 0; y < source.Height; y++ )
+            for ( var y = 0; y < size.Height; y++ )
             {
-                for ( var x = 0; x < source.Width; x++ )
+                for ( var x = 0; x < size.Width; x++ )
                 {
                     var pixel = source.GetPixel( x, y );
 
@@ -422,9 +424,9 @@ public class ImageProcessor
 
         outer2:
 
-            for ( var y = source.Height - 1; y >= top; y-- )
+            for ( var y = size.Height - 1; y >= top; y-- )
             {
-                for ( var x = 0; x < source.Width; x++ )
+                for ( var x = 0; x < size.Width; x++ )
                 {
                     var pixel = source.GetPixel( x, y );
 
@@ -444,7 +446,7 @@ public class ImageProcessor
                     top--;
                 }
 
-                if ( bottom < source.Height )
+                if ( bottom < size.Height )
                 {
                     bottom++;
                 }
@@ -452,13 +454,13 @@ public class ImageProcessor
         }
 
         var left  = 0;
-        var right = source.Width;
+        var right = size.Width;
 
         if ( Settings.StripWhitespaceX )
         {
         outer3:
 
-            for ( var x = 0; x < source.Width; x++ )
+            for ( var x = 0; x < size.Width; x++ )
             {
                 for ( var y = top; y < bottom; y++ )
                 {
@@ -475,7 +477,7 @@ public class ImageProcessor
 
         outer4:
 
-            for ( var x = source.Width - 1; x >= left; x-- )
+            for ( var x = size.Width - 1; x >= left; x-- )
             {
                 for ( var y = top; y < bottom; y++ )
                 {
@@ -519,7 +521,9 @@ public class ImageProcessor
 
         using ( var g = System.Drawing.Graphics.FromImage( strippedImage ) )
         {
-            g.DrawImage( source, new Rectangle( 0, 0, newWidth, newHeight ), new Rectangle( left, top, newWidth, newHeight ),
+            g.DrawImage( source,
+                         new Rectangle( 0, 0, newWidth, newHeight ),
+                         new Rectangle( left, top, newWidth, newHeight ),
                          GraphicsUnit.Pixel );
         }
 
@@ -805,8 +809,6 @@ public class ImageProcessor
 
                 // Finalize the hash
                 sha1.TransformFinalBlock( [ ], 0, 0 ); // Pass an empty byte array
-
-                Logger.Checkpoint();
 
                 var hashBytes = sha1.Hash;
 

@@ -315,7 +315,7 @@ public class Button : Table, IDisableable
 
         if ( offset )
         {
-            for ( var i = 0; i < Children.Size; i++ )
+            for ( var i = 0; i < Children.Count; i++ )
             {
                 Children.GetAt( i ).MoveBy( -offsetX, -offsetY );
             }

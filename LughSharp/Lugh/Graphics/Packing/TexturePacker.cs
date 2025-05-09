@@ -25,6 +25,7 @@
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
@@ -225,6 +226,9 @@ public partial class TexturePacker
     {
         try
         {
+            inputFolder  = $"{IOData.InternalPath}{inputFolder}";
+            outputFolder = $"{IOData.InternalPath}{outputFolder}";
+
             var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
             _ = processor.Process( new DirectoryInfo( inputFolder ),
                                    new DirectoryInfo( outputFolder ) );
@@ -259,6 +263,10 @@ public partial class TexturePacker
         return false;
     }
 
+    /// <summary>
+    /// Adds an image to the list of Input Images.
+    /// </summary>
+    /// <param name="file"></param>
     public void AddImage( FileInfo file )
     {
         Logger.Debug( file.Name );
@@ -272,6 +280,11 @@ public partial class TexturePacker
         _inputImages.Add( inputImage );
     }
 
+    /// <summary>
+    /// Adds an image to the list of Input Images.
+    /// </summary>
+    /// <param name="image"></param>
+    /// <param name="name"></param>
     public void AddImage( Bitmap image, string name )
     {
         var inputImage = new InputImage
@@ -289,7 +302,6 @@ public partial class TexturePacker
     /// </summary>
     /// <param name="outputDir"> The destination directory. </param>
     /// <param name="packFileName"> The name for the resulting TextureAtlas. </param>
-    /// <exception cref="GdxRuntimeException"></exception>
     public void Pack( DirectoryInfo outputDir, string packFileName )
     {
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
@@ -328,7 +340,7 @@ public partial class TexturePacker
                 if ( inputImage.FileInfo != null )
                 {
                     Logger.Debug( $"inputImage.FileInfo: {inputImage.FileInfo.FullName}" );
-                    
+
                     _imageProcessor.AddImage( inputImage.FileInfo, inputImage.RootPath );
                 }
                 else
@@ -338,10 +350,10 @@ public partial class TexturePacker
                     if ( inputImage.Image == null )
                     {
                         Logger.Debug( $"inputImage.Image is null" );
-                        
+
                         continue;
                     }
-                    
+
                     _imageProcessor.AddImage( inputImage.Image, inputImage.Name );
                 }
 

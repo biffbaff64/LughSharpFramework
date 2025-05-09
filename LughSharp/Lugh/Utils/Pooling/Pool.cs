@@ -30,9 +30,12 @@ namespace LughSharp.Lugh.Utils.Pooling;
 /// A pool of objects that can be reused to avoid allocation.
 /// </summary>
 [PublicAPI]
-public class Pool< T > // : IPoolable< T >
+public class Pool< T > : IPoolable< T >
 {
     public delegate T? NewObjectHandler();
+
+    public int Max  { get; }      // The maximum number of objects that will be pooled.
+    public int Peak { get; set; } // The highest number of free objects. Can be reset any time.
 
     // ========================================================================
 
@@ -57,9 +60,6 @@ public class Pool< T > // : IPoolable< T >
         _freeObjects = new List< T? >( initialCapacity );
         Max          = max;
     }
-
-    public int Max  { get; }      // The maximum number of objects that will be pooled.
-    public int Peak { get; set; } // The highest number of free objects. Can be reset any time.
 
     public virtual NewObjectHandler? NewObject { get; set; } = null;
 
@@ -204,3 +204,4 @@ public class Pool< T > // : IPoolable< T >
         return _freeObjects.Count;
     }
 }
+

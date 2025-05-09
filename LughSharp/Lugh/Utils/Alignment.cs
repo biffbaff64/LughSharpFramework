@@ -49,8 +49,6 @@ public enum Align
 [PublicAPI]
 public sealed class Alignment
 {
-    // ========================================================================
-
     public const int NONE   = 0;
     public const int CENTER = 1 << 0;
     public const int TOP    = 1 << 1;

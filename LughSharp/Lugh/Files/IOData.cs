@@ -96,4 +96,14 @@ public class IOData
         DoesNotExist,
         Invalid,
     }
+
+    public static string StripExtension( string fileName, string extension )
+    {
+        if ( fileName.ToLower().EndsWith( extension.ToLower() ) )
+        {
+            fileName = fileName.Substring( 0, fileName.Length - extension.Length );
+        }
+
+        return fileName;
+    }
 }

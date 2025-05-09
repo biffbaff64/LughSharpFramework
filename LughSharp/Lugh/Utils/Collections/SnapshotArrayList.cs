@@ -41,7 +41,7 @@ namespace LughSharp.Lugh.Utils.Collections;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class SnapshotArray< T > : Array< T >, IEnumerable< T >
+public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
 {
     private T[]? _recycled;
     private T[]? _snapshot;
@@ -54,33 +54,33 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     /// The created array will be Ordered.
     /// </summary>
     /// <param name="capacity"> Initial capacity, default is 0. </param>
-    public SnapshotArray( int capacity = 0 )
+    public SnapshotArrayList( int capacity = 0 )
         : this( true, capacity )
     {
     }
 
     /// <summary>
-    /// Creates a new SnapshotArray from the supplied <see cref="Array{T}" />
+    /// Creates a new SnapshotArray from the supplied <see cref="ArrayList{T}" />
     /// </summary>
-    public SnapshotArray( Array< T > array )
+    public SnapshotArrayList( ArrayList< T > arrayList )
     {
-        ArgumentNullException.ThrowIfNull( array );
-        ArgumentNullException.ThrowIfNull( array.Items );
+        ArgumentNullException.ThrowIfNull( arrayList );
+        ArgumentNullException.ThrowIfNull( arrayList.Items );
 
-        Ordered = array.Ordered;
-        Size    = array.Size;
-        Items   = new T[ Size ];
+        Ordered = arrayList.Ordered;
+        Count    = arrayList.Count;
+        Items   = new T[ Count ];
 
-        Array.Copy( array.Items, 0, Items, 0, Size );
+        Array.Copy( arrayList.Items, 0, Items, 0, Count );
     }
 
     /// <summary>
-    /// Creates a new SnapshotArray, with <see cref="Array{T}.Ordered" /> and
+    /// Creates a new SnapshotArray, with <see cref="ArrayList{T}.Ordered" /> and
     /// array capacity set to the supplied values.
     /// </summary>
     /// <param name="ordered"> Default value is TRUE. </param>
     /// <param name="capacity"> Default value is 16. </param>
-    public SnapshotArray( bool ordered = true, int capacity = 16 )
+    public SnapshotArrayList( bool ordered = true, int capacity = 16 )
     {
         Ordered = ordered;
         Items   = new T[ capacity ];
@@ -89,16 +89,16 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     /// <summary>
     /// Creates a new SnapshotArray from the supplied <paramref name="array" />,
     /// copying <paramref name="count" /> elements from <paramref name="startIndex" />
-    /// onwards. <see cref="Array{T}.Ordered" /> will be set to the supplied value.
+    /// onwards. <see cref="ArrayList{T}.Ordered" /> will be set to the supplied value.
     /// </summary>
     /// <param name="ordered"> Whether this array is ordered or not. </param>
     /// <param name="array"> The array to copy from. </param>
     /// <param name="startIndex"> The index to start copying data from. </param>
     /// <param name="count"> The number of elements to copy. </param>
-    public SnapshotArray( bool ordered, T[] array, int startIndex, int count )
+    public SnapshotArrayList( bool ordered, T[] array, int startIndex, int count )
     {
         Ordered = ordered;
-        Size    = count;
+        Count    = count;
         Items   = new T[ count ];
 
         Array.Copy( array, startIndex, Items, 0, count );
@@ -180,10 +180,10 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
 
         // Snapshot is in use, copy backing array to recycled
         // array or create new backing array.
-        if ( ( _recycled != null ) && ( _recycled.Length >= Size ) )
+        if ( ( _recycled != null ) && ( _recycled.Length >= Count ) )
         {
             // Copy the contents of items[] to recycled
-            for ( var i = 0; i < Size; i++ )
+            for ( var i = 0; i < Count; i++ )
             {
                 _recycled[ i ] = Items[ i ];
             }
@@ -193,7 +193,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
         }
         else
         {
-            Resize( Size );
+            Resize( Count );
         }
     }
 
@@ -204,33 +204,33 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     {
         Modified();
 
-        if ( Size == Items.Length )
+        if ( Count == Items.Length )
         {
-            Items = Resize( Math.Max( 8, ( int )( Size * 1.75f ) ) );
+            Items = Resize( Math.Max( 8, ( int )( Count * 1.75f ) ) );
         }
 
-        Items[ Size++ ] = value;
+        Items[ Count++ ] = value;
     }
 
     /// <summary>
     /// Copy 'count' items from the supplied array to this array,
     /// starting from position 'start'.
     /// </summary>
-    /// <param name="array">The array of items to add.</param>
+    /// <param name="arrayList">The array of items to add.</param>
     /// <param name="start">The start index.</param>
     /// <param name="count">The number of items to copy.</param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public void AddAll( SnapshotArray< T > array, int start, int count )
+    public void AddAll( SnapshotArrayList< T > arrayList, int start, int count )
     {
-        if ( ( start + count ) > array.Size )
+        if ( ( start + count ) > arrayList.Count )
         {
             throw new ArgumentOutOfRangeException
-                ( $"start + count must be <= size - {start} + {count} <= {array.Size}" );
+                ( $"start + count must be <= size - {start} + {count} <= {arrayList.Count}" );
         }
 
         Modified();
 
-        AddAll( array.Items, start, count );
+        AddAll( arrayList.Items, start, count );
     }
 
     /// <summary>
@@ -244,16 +244,16 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     {
         Modified();
 
-        var sizeNeeded = Size + count;
+        var sizeNeeded = Count + count;
 
         if ( sizeNeeded > Items.Length )
         {
             Items = Resize( Math.Max( 8, ( int )( sizeNeeded * 1.75f ) ) );
         }
 
-        Array.Copy( array, start, Items, Size, count );
+        Array.Copy( array, start, Items, Count, count );
 
-        Size += count;
+        Count += count;
     }
 
     /// <summary>
@@ -264,9 +264,9 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     /// </exception>
     public override T GetAt( int index )
     {
-        if ( index >= Size )
+        if ( index >= Count )
         {
-            throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Size}" );
+            throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Count}" );
         }
 
         return Items[ index ];
@@ -279,9 +279,9 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     /// <param name="value"> The value. </param>
     public override void Set( int index, T value )
     {
-        if ( index >= Size )
+        if ( index >= Count )
         {
-            throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Size}" );
+            throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Count}" );
         }
 
         Modified();
@@ -294,9 +294,9 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     /// </summary>
     public override void Insert( int index, T value )
     {
-        if ( index > Size )
+        if ( index > Count )
         {
-            throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Size}" );
+            throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Count}" );
         }
 
         if ( Items == null )
@@ -306,21 +306,21 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
 
         Modified();
 
-        if ( Size == Items.Length )
+        if ( Count == Items.Length )
         {
-            Items = Resize( Math.Max( 8, ( int )( Size * 1.75f ) ) );
+            Items = Resize( Math.Max( 8, ( int )( Count * 1.75f ) ) );
         }
 
         if ( Ordered )
         {
-            Array.Copy( Items, index, Items, index + 1, Size - index );
+            Array.Copy( Items, index, Items, index + 1, Count - index );
         }
         else
         {
-            Items[ Size ] = Items[ index ];
+            Items[ Count ] = Items[ index ];
         }
 
-        Size++;
+        Count++;
         Items[ index ] = value;
     }
 
@@ -346,7 +346,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     {
         Modified();
 
-        for ( int i = 0, n = Size; i < n; i++ )
+        for ( int i = 0, n = Count; i < n; i++ )
         {
             if ( value!.Equals( Items[ i ] ) )
             {
@@ -371,25 +371,25 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     {
         Modified();
 
-        if ( index >= Size )
+        if ( index >= Count )
         {
-            throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Size}" );
+            throw new ArgumentOutOfRangeException( $"index can't be >= size - {index} >= {Count}" );
         }
 
         var value = Items[ index ];
 
-        Size--;
+        Count--;
 
         if ( Ordered )
         {
-            Array.Copy( Items, index + 1, Items, index, Size - index );
+            Array.Copy( Items, index + 1, Items, index, Count - index );
         }
         else
         {
-            Items[ index ] = Items[ Size ];
+            Items[ index ] = Items[ Count ];
         }
 
-        Items[ Size ] = default( T )!;
+        Items[ Count ] = default( T )!;
 
         return value;
     }
@@ -405,9 +405,9 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     {
         Modified();
 
-        if ( end >= Size )
+        if ( end >= Count )
         {
-            throw new ArgumentOutOfRangeException( $"end can't be >= size - {end} >= {Size}" );
+            throw new ArgumentOutOfRangeException( $"end can't be >= size - {end} >= {Count}" );
         }
 
         if ( start > end )
@@ -419,11 +419,11 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
 
         if ( Ordered )
         {
-            Array.Copy( Items, start + count, Items, start, Size - ( start + count ) );
+            Array.Copy( Items, start + count, Items, start, Count - ( start + count ) );
         }
         else
         {
-            var lastIndex = Size - 1;
+            var lastIndex = Count - 1;
 
             for ( var i = 0; i < count; i++ )
             {
@@ -431,24 +431,24 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
             }
         }
 
-        Size -= count;
+        Count -= count;
     }
 
     /// <summary>
     /// Removes all the elements that match the items in the supplied array.
     /// </summary>
-    /// <param name="array"></param>
+    /// <param name="arrayList"></param>
     /// <returns> TRUE if items have been removed. </returns>
-    public bool RemoveAll( SnapshotArray< T > array )
+    public bool RemoveAll( SnapshotArrayList< T > arrayList )
     {
         Modified();
 
-        var size      = Size;
+        var size      = Count;
         var startSize = size;
 
-        for ( int i = 0, n = array.Size; i < n; i++ )
+        for ( int i = 0, n = arrayList.Count; i < n; i++ )
         {
-            var item = array.GetAt( i );
+            var item = arrayList.GetAt( i );
 
             for ( var ii = 0; ii < size; ii++ )
             {
@@ -475,7 +475,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     /// </returns>
     public override int IndexOf( T? value )
     {
-        for ( int i = 0, n = Size; i < n; i++ )
+        for ( int i = 0, n = Count; i < n; i++ )
         {
             if ( ( value != null ) && value.Equals( Items[ i ] ) )
             {
@@ -489,7 +489,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     /// <inheritdoc />
     public override bool Contains( T? value )
     {
-        var i = Size - 1;
+        var i = Count - 1;
 
         while ( i >= 0 )
         {
@@ -505,12 +505,12 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     /// <inheritdoc />
     public override T Peek()
     {
-        if ( Size == 0 )
+        if ( Count == 0 )
         {
             throw new NullReferenceException( "Array is empty." );
         }
 
-        return Items[ Size - 1 ];
+        return Items[ Count - 1 ];
     }
 
     /// <inheritdoc />
@@ -518,16 +518,16 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     {
         Modified();
 
-        if ( Size == 0 )
+        if ( Count == 0 )
         {
             throw new IndexOutOfRangeException( "Array is empty." );
         }
 
-        --Size;
+        --Count;
 
-        var item = Items[ Size ];
+        var item = Items[ Count ];
 
-        Items[ Size ] = default( T )!;
+        Items[ Count ] = default( T )!;
 
         return item;
     }
@@ -537,7 +537,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     {
         Array.Clear( Items );
 
-        Size = 0;
+        Count = 0;
     }
 
     /// <inheritdoc />
@@ -545,7 +545,7 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
     {
         var newItems = new T[ newSize ];
 
-        Array.Copy( Items, 0, newItems, 0, Math.Min( Size, newItems.Length ) );
+        Array.Copy( Items, 0, newItems, 0, Math.Min( Count, newItems.Length ) );
 
         Items = newItems;
 
@@ -576,16 +576,16 @@ public class SnapshotArray< T > : Array< T >, IEnumerable< T >
             return false;
         }
 
-        var array = ( SnapshotArray< T >? )obj;
+        var array = ( SnapshotArrayList< T >? )obj;
 
         if ( array is not { Ordered: true } )
         {
             return false;
         }
 
-        var n = Size;
+        var n = Count;
 
-        if ( n != array.Size )
+        if ( n != array.Count )
         {
             return false;
         }

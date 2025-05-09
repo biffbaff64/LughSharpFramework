@@ -36,7 +36,6 @@ public class PackingSettingsProcessor : FileProcessor
 
     public PackingSettingsProcessor()
     {
-        Logger.Checkpoint();
     }
 
     /// <inheritdoc/>
@@ -58,7 +57,6 @@ public class DeleteProcessor : FileProcessor
 {
     public DeleteProcessor()
     {
-        Logger.Checkpoint();
     }
 
     /// <inheritdoc />

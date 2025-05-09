@@ -102,6 +102,7 @@ namespace LughSharp.Lugh.Utils;
 /// </para>
 /// </summary>
 [PublicAPI]
+[Obsolete( "This is a legacy class. Use string.Split() instead (see class documentation)." )]
 public class StringTokenizer
 {
     private readonly int    _maxPosition = 0;

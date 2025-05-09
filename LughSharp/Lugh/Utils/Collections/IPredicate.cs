@@ -22,10 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
+namespace LughSharp.Lugh.Utils.Collections;
 
 [PublicAPI]
-[Obsolete( "Obsolete" )]
 public interface IPredicate< in T >
 {
     /// <summary>

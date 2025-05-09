@@ -37,6 +37,14 @@ namespace LughSharp.Lugh.Utils.Collections;
 [PublicAPI]
 public class ByteArray
 {
+    public byte[] Items   { get; set; }
+    public int    Size    { get; set; }
+    public bool   Ordered { get; set; }
+
+    // ========================================================================
+
+    private const int DEFAULT_CAPACITY = 16;
+    
     // ========================================================================
     // ========================================================================
 
@@ -57,7 +65,7 @@ public class ByteArray
     /// <param name="capacity">
     /// Any elements added beyond this will cause the backing array to be grown.
     /// </param>
-    public ByteArray( bool ordered = true, int capacity = 16 )
+    public ByteArray( bool ordered = true, int capacity = DEFAULT_CAPACITY )
     {
         Ordered = ordered;
         Items   = new byte[ capacity ];
@@ -106,10 +114,6 @@ public class ByteArray
         Size = count;
         Array.Copy( array, startIndex, Items, 0, count );
     }
-
-    public byte[] Items   { get; set; }
-    public int    Size    { get; set; }
-    public bool   Ordered { get; set; }
 
     /// <summary>
     /// Adds a value, or values, to this array.
@@ -189,7 +193,7 @@ public class ByteArray
     /// <param name="index"></param>
     /// <param name="value"></param>
     /// <exception cref="IndexOutOfRangeException"></exception>
-    public void Incr( int index, byte value )
+    public void Increment( int index, byte value )
     {
         if ( index < 0 )
         {
@@ -207,7 +211,7 @@ public class ByteArray
     /// <summary>
     /// </summary>
     /// <param name="value"></param>
-    public void Incr( byte value )
+    public void Increment( byte value )
     {
         for ( int i = 0, n = Size; i < n; i++ )
         {
@@ -223,7 +227,7 @@ public class ByteArray
     /// <exception cref="IndexOutOfRangeException">
     /// Thrown if the supplied index is less than zero or greater than the array size.
     /// </exception>
-    public void Mul( int index, byte value )
+    public void Multiply( int index, byte value )
     {
         if ( index < 0 )
         {
@@ -241,7 +245,7 @@ public class ByteArray
     /// <summary>
     /// </summary>
     /// <param name="value"></param>
-    public void Mul( byte value )
+    public void Multiply( byte value )
     {
         for ( int i = 0, n = Size; i < n; i++ )
         {
@@ -805,13 +809,5 @@ public class ByteArray
 
         return buffer.ToString();
     }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="array"></param>
-    /// <returns></returns>
-    public static ByteArray With( params byte[] array )
-    {
-        return new ByteArray( array );
-    }
 }
+

@@ -360,7 +360,7 @@ public class TimSort< T >
     /// start, exclusive are already sorted.
     /// </para>
     /// </summary>
-    /// <param name="a"> the array in which a range is to be sorted </param>
+    /// <param name="array"> the array in which a range is to be sorted </param>
     /// <param name="lo"> the index of the first element in the range to be sorted </param>
     /// <param name="hi"> the index after the last element in the range to be sorted </param>
     /// <param name="start">
@@ -368,7 +368,7 @@ public class TimSort< T >
     /// <code> lo &lt;= start &lt;= hi</code>
     /// </param>
     /// <param name="c"> comparator to used for the sort</param>
-    private static void BinarySort( T[] a, int lo, int hi, int start, IComparer< T > c )
+    private static void BinarySort( T[] array, int lo, int hi, int start, IComparer< T > c )
     {
 #if ALLOW_ASSERTS
         Debug.Assert( ( lo <= start ) && ( start <= hi ) );
@@ -381,7 +381,7 @@ public class TimSort< T >
 
         for ( ; start < hi; start++ )
         {
-            var pivot = a[ start ];
+            var pivot = array[ start ];
 
             // Set left (and right) to the index where a[start] (pivot) belongs
             var left  = lo;
@@ -396,7 +396,7 @@ public class TimSort< T >
             {
                 var mid = ( left + right ) >>> 1;
 
-                if ( c.Compare( pivot, a[ mid ] ) < 0 )
+                if ( c.Compare( pivot, array[ mid ] ) < 0 )
                 {
                     right = mid;
                 }
@@ -422,17 +422,17 @@ public class TimSort< T >
             {
                 if ( numElements == 2 )
                 {
-                    a[ left + 2 ] = a[ left + 1 ];
+                    array[ left + 2 ] = array[ left + 1 ];
                 }
 
-                a[ left + 1 ] = a[ left ];
+                array[ left + 1 ] = array[ left ];
             }
             else
             {
-                Array.Copy( a, left, a, left + 1, numElements );
+                Array.Copy( array, left, array, left + 1, numElements );
             }
 
-            a[ left ] = pivot;
+            array[ left ] = pivot;
         }
     }
 

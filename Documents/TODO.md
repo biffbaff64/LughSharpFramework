@@ -929,20 +929,18 @@ UTILS/COLLECTIONS
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - Array<T>                       Converted, but use List<T> for most cases.
+    - DONE - DONE - ArrayList<T>                   Converted, but use List<T> for most cases.
     - DONE - IP   - ByteArray                      List< byte > should be fine for most cases.
     - DONE - DONE - DelayedRemovalList             Convert / Extend List<>
     - DONE - DONE - DictionaryExtensions
+    - IP   - IP   - IdentityMap< K, V >
+    - IP   - IP   - IPredicate
     - DONE - DONE - ListExtensions
     - DONE - DONE - ObjectMap< K, V >              Converted, but use Dictionary< object, object > in most cases
     - IP   - IP   - OrderedMap<K, V>
-    - DONE - DONE - SnapshotArray<T>
-
-    - Work on removing these
-
-    - **** - IPredicate
-    - **** - PredicateIterable
-    - **** - PredicateIterator
+    - IP   - IP   - PredicateIterable
+    - IP   - IP   - PredicateIterator
+    - DONE - DONE - SnapshotArrayList<T>
 
     - The following do not need converting
 
@@ -953,7 +951,6 @@ UTILS/COLLECTIONS
     - **** - CharArray                      -> Use List< char >
     - **** - CollectionsData                -> ***** Not needed *****
     - **** - FloatArray                     -> Use List< float >
-    - **** - IdentityMap<K, V>              -> Use Dictionary< K, V >
     - **** - IntArray                       -> Use List< int >
     - **** - IntFloatMap                    -> Use Dictionary< int, float >
     - **** - IntIntMap                      -> Use Dictionary< int, int >
@@ -991,6 +988,7 @@ UTILS/JSON
 
     CODE   DOCUMENT
     ----   --------
+    - IP   - IP   - IJsonReader
     - IP   - IP   - Json
     - IP   - IP   - Json.FromJson
     - IP   - IP   - Json.ToJson
@@ -998,8 +996,11 @@ UTILS/JSON
     - IP   - IP   - JsonOutputType
     - IP   - IP   - JsonReader
     - IP   - IP   - JsonReader.Data
+    - IP   - IP   - JsonReader.MainParser
+    - IP   - IP   - JsonReader.NextState
     - IP   - IP   - JsonReader.Parse
     - IP   - IP   - JsonSerializer
+    - IP   - IP   - JsonTextureResamplingConverter
     - IP   - IP   - JsonTextWriter
     - IP   - IP   - JsonValue
     - IP   - IP   - JsonValue.AsType

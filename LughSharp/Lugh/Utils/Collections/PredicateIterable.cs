@@ -24,18 +24,19 @@
 
 using System.Collections;
 
-namespace LughSharp.Lugh.Utils.Collections.DeleteCandidates;
+namespace LughSharp.Lugh.Utils.Collections;
 
 /// <summary>
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [PublicAPI]
-[Obsolete( "Obsolete" )]
 public class PredicateIterable< T > : IEnumerable< T >
 {
     public IEnumerable< T >        Enumerable { get; set; }
     public IPredicate< T >         Predicate  { get; set; }
     public PredicateIterator< T >? Enumerator { get; set; }
+    
+    // ========================================================================
 
     /// <summary>
     /// </summary>
@@ -90,3 +91,4 @@ public class PredicateIterable< T > : IEnumerable< T >
         return Enumerator;
     }
 }
+
