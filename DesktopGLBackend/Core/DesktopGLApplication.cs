@@ -50,9 +50,25 @@ namespace DesktopGLBackend.Core;
 [PublicAPI]
 public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 {
-    // ========================================================================
+    public Dictionary< string, IPreferences > Preferences        { get; set; } = [ ];
+    public List< DesktopGLWindow >            Windows            { get; set; } = [ ];
+    public List< IRunnable.Runnable >         Runnables          { get; set; } = [ ];
+    public List< IRunnable.Runnable >         ExecutedRunnables  { get; set; } = [ ];
+    public List< ILifecycleListener >         LifecycleListeners { get; set; } = [ ];
+    public DesktopGLApplicationConfiguration? Config             { get; set; }
 
-    private const int FR_UNINITIALISED = -2;
+    public IClipboard?      Clipboard     { get; set; }
+    public IGLAudio?        Audio         { get; set; }
+    public INet             Network       { get; set; }
+    public IFiles           Files         { get; set; }
+    public GLVersion?       GLVersion     { get; set; }
+    public OpenGLProfile    OGLProfile    { get; set; }
+    public DesktopGLWindow? CurrentWindow { get; set; }
+
+    // ========================================================================
+    // ========================================================================
+    
+    private const int UNINITIALISED_FRAMERATE = -2;
 
     // ========================================================================
 
@@ -70,9 +86,11 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// </summary>
     /// <param name="listener"> The <see cref="IApplicationListener" /> to use. </param>
     /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration" /> to use.</param>
-    public DesktopGLApplication( IApplicationListener listener,
-                                 DesktopGLApplicationConfiguration config )
+    public DesktopGLApplication( IApplicationListener listener, DesktopGLApplicationConfiguration config )
     {
+        // ====================================================================
+        // Essential first actions. Do not move.
+        //
         // This MUST be the first call, so that the Logger and GdxApi.App global are
         // initialised correctly.
         GdxApi.Initialise( this );
@@ -84,13 +102,15 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // Config.Title becomes the name of the ApplicationListener if it has no value at this point.
         Config       =   DesktopGLApplicationConfiguration.Copy( config );
         Config.Title ??= listener.GetType().Name;
+        //
+        // ====================================================================
 
-        // Initialise the global environment shortcuts. 'GdxApi.Audio', 'GdxApi.Files', and 'GdxApi.Net'
-        // are instances of classes implementing IAudio, IFiles, and INet resprectively, and are used to
-        // access LughSharp members 'Audio', 'Files', and 'Network' are instances of classes which extend
-        // the aforementioned// classes, and are used in backend code only.
-        // Note: GdxApi.Graphics is set later, during window creation as each window that is created will
-        // have its own IGraphics instance.
+        // Initialise the global environment shortcuts. 'GdxApi.Audio', 'GdxApi.Files', and
+        // 'GdxApi.Net' are instances of classes implementing IAudio, IFiles, and INet respectively,
+        // and are used to access LughSharp members 'Audio', 'Files', and 'Network' are instances
+        // of classes which extend the aforementioned classes, and are used in backend code only.
+        // Note: GdxApi.Graphics is set later, during window creation as each window that is created
+        // will have its own IGraphics instance.
         Audio     = CreateAudio( Config );
         Files     = new DesktopGLFiles();
         Network   = new DesktopGLNet( Config );
@@ -107,124 +127,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         Windows.Add( CreateWindow( Config, listener, 0 ) );
     }
 
-    // ========================================================================
-
-    /// <inheritdoc />
-    public IGLAudio CreateAudio( DesktopGLApplicationConfiguration config )
-    {
-        IGLAudio audio;
-
-        if ( !config.DisableAudio )
-        {
-            try
-            {
-                audio = new OpenALAudio( config.AudioDeviceSimultaneousSources,
-                                         config.AudioDeviceBufferCount,
-                                         config.AudioDeviceBufferSize );
-            }
-            catch ( Exception e )
-            {
-                Logger.Debug( $"Couldn't initialize audio, disabling audio: {e}" );
-                audio = new MockAudio();
-            }
-        }
-        else
-        {
-            Logger.Debug( "Audio is disabled in Config, using MockAudio instead." );
-
-            audio = new MockAudio();
-        }
-
-        return audio;
-    }
-
-    /// <inheritdoc />
-    public IPreferences GetPreferences( string name )
-    {
-        if ( Preferences.ContainsKey( name ) )
-        {
-            return Preferences.Get( name )!;
-        }
-
-        IPreferences prefs = new DesktopGLPreferences( name );
-
-        Preferences.Put( name, prefs );
-
-        return prefs;
-    }
-
-    /// <inheritdoc />
-    public Platform.ApplicationType AppType
-    {
-        get => Platform.ApplicationType.WindowsGL;
-        set { }
-    }
-
-    /// <inheritdoc />
-    public void PostRunnable( IRunnable.Runnable runnable )
-    {
-        lock ( Runnables )
-        {
-            Runnables.Add( runnable );
-        }
-    }
-
-    /// <inheritdoc />
-    public virtual IDesktopGLInput CreateInput( DesktopGLWindow window )
-    {
-        return new DefaultDesktopGLInput( window );
-    }
-
-    /// <summary>
-    /// Returns the Android API level on Android, the major OS version on iOS (5, 6, 7, ..),
-    /// or 0 on the desktop.
-    /// </summary>
-    public virtual int GetVersion()
-    {
-        return 0;
-    }
-
-    /// <summary>
-    /// Schedule an exit from the application. On android, this will cause a call to
-    /// Pause() and Dispose() at the next opportunity. It will not immediately finish
-    /// your application. On iOS this should be avoided in production as it breaks
-    /// Apples guidelines
-    /// </summary>
-    public virtual void Exit()
-    {
-        _running = false;
-    }
-
-    /// <inheritdoc />
-    public void AddLifecycleListener( ILifecycleListener listener )
-    {
-        lock ( LifecycleListeners )
-        {
-            LifecycleListeners.Add( listener );
-        }
-    }
-
-    /// <inheritdoc />
-    public void RemoveLifecycleListener( ILifecycleListener listener )
-    {
-        lock ( LifecycleListeners )
-        {
-            LifecycleListeners.Remove( listener );
-        }
-    }
-
-    /// <inheritdoc />
-    /// <remarks> Calls Dispose(bool) with <b>true</b>. </remarks>
-    /// <remarks> GC.SuppressFinalize is called in Dispose(bool). </remarks>
-    [SuppressMessage( "Usage", "CA1816:Dispose methods should call SuppressFinalize" )]
-    public void Dispose()
-    {
-        Dispose( true );
-
-        GC.SuppressFinalize( this );
-    }
-
-    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -255,14 +157,16 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// </summary>
     protected void Loop()
     {
+        Logger.Divider();
         Logger.Debug( "Entering framework loop" );
+        Logger.Divider();
 
         List< DesktopGLWindow > closedWindows = [ ];
 
         while ( _running && ( Windows.Count > 0 ) )
         {
             var haveWindowsRendered = false;
-            var targetFramerate     = FR_UNINITIALISED;
+            var targetFramerate     = UNINITIALISED_FRAMERATE;
 
             closedWindows.Clear();
 
@@ -275,7 +179,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
                     CurrentWindow = window;
 
-                    if ( targetFramerate == FR_UNINITIALISED )
+                    if ( targetFramerate == UNINITIALISED_FRAMERATE )
                     {
                         targetFramerate = window.AppConfig.ForegroundFPS;
                     }
@@ -428,8 +332,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
                     Environment.Exit( 1 );
                 }
 
-//                Logger.Debug( $"Success: Glfw Version: {Glfw.GetVersionString()}", true );
-
                 _glfwInitialised = true;
             }
         }
@@ -472,19 +374,35 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
         Windows.Clear();
     }
-
-    /// <summary>
-    /// Cleanup everything before shutdown.
-    /// </summary>
-    protected void Cleanup()
+    
+    /// <inheritdoc />
+    public IGLAudio CreateAudio( DesktopGLApplicationConfiguration config )
     {
-        DesktopGLCursor.DisposeSystemCursors();
+        IGLAudio audio;
 
-        Audio?.Dispose();
+        if ( !config.DisableAudio )
+        {
+            try
+            {
+                audio = new OpenALAudio( config.AudioDeviceSimultaneousSources,
+                                         config.AudioDeviceBufferCount,
+                                         config.AudioDeviceBufferSize );
+            }
+            catch ( Exception e )
+            {
+                Logger.Debug( $"Couldn't initialize audio, disabling audio: {e}" );
+                
+                audio = new MockAudio();
+            }
+        }
+        else
+        {
+            Logger.Debug( "Audio is disabled in Config, using MockAudio instead." );
 
-        _errorCallback = null;
+            audio = new MockAudio();
+        }
 
-        Glfw.Terminate();
+        return audio;
     }
 
     /// <summary>
@@ -533,12 +451,109 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         }
     }
 
+    /// <inheritdoc />
+    public IPreferences GetPreferences( string name )
+    {
+        if ( Preferences.ContainsKey( name ) )
+        {
+            return Preferences.Get( name )!;
+        }
+
+        IPreferences prefs = new DesktopGLPreferences( name );
+
+        Preferences.Put( name, prefs );
+
+        return prefs;
+    }
+
+    /// <inheritdoc />
+    public Platform.ApplicationType AppType
+    {
+        get => Platform.ApplicationType.WindowsGL;
+        set { }
+    }
+
+    /// <inheritdoc />
+    public void PostRunnable( IRunnable.Runnable runnable )
+    {
+        lock ( Runnables )
+        {
+            Runnables.Add( runnable );
+        }
+    }
+
+    /// <inheritdoc />
+    public virtual IDesktopGLInput CreateInput( DesktopGLWindow window )
+    {
+        return new DefaultDesktopGLInput( window );
+    }
+
+    /// <summary>
+    /// Returns the Android API level on Android, the major OS version on iOS (5, 6, 7, ..),
+    /// or 0 on the desktop.
+    /// </summary>
+    public virtual int GetVersion()
+    {
+        return 0;
+    }
+
+    /// <summary>
+    /// Schedule an exit from the application. On android, this will cause a call to
+    /// Pause() and Dispose() at the next opportunity. It will not immediately finish
+    /// your application. On iOS this should be avoided in production as it breaks
+    /// Apples guidelines
+    /// </summary>
+    public virtual void Exit()
+    {
+        _running = false;
+    }
+
+    /// <inheritdoc />
+    public void AddLifecycleListener( ILifecycleListener listener )
+    {
+        lock ( LifecycleListeners )
+        {
+            LifecycleListeners.Add( listener );
+        }
+    }
+
+    /// <inheritdoc />
+    public void RemoveLifecycleListener( ILifecycleListener listener )
+    {
+        lock ( LifecycleListeners )
+        {
+            LifecycleListeners.Remove( listener );
+        }
+    }
+
     // ========================================================================
     // ========================================================================
 
     ~DesktopGLApplication()
     {
         Dispose( false );
+    }
+
+    /// <summary>
+    /// Cleanup everything before shutdown.
+    /// </summary>
+    protected void Cleanup()
+    {
+        DesktopGLCursor.DisposeSystemCursors();
+
+        Audio?.Dispose();
+
+        _errorCallback = null;
+
+        Glfw.Terminate();
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose( true );
+
+        GC.SuppressFinalize( this );
     }
 
     public static void Dispose( bool disposing )
@@ -548,28 +563,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
             // Release managed resources here
         }
     }
-
-    #region public properties
-
-    public DesktopGLApplicationConfiguration? Config             { get; set; }
-    public Dictionary< string, IPreferences > Preferences        { get; set; } = [ ];
-    public List< DesktopGLWindow >            Windows            { get; set; } = [ ];
-    public List< IRunnable.Runnable >         Runnables          { get; set; } = [ ];
-    public List< IRunnable.Runnable >         ExecutedRunnables  { get; set; } = [ ];
-    public List< ILifecycleListener >         LifecycleListeners { get; set; } = [ ];
-
-    public IClipboard?      Clipboard     { get; set; }
-    public IGLAudio?        Audio         { get; set; }
-    public INet             Network       { get; set; }
-    public IFiles           Files         { get; set; }
-    public GLVersion?       GLVersion     { get; set; }
-    public OpenGLProfile    OGLProfile    { get; set; }
-    public DesktopGLWindow? CurrentWindow { get; set; }
-
-    #endregion public properties
-
-    // ========================================================================
-    // ========================================================================
 
     #region window creation handlers
 

@@ -49,12 +49,13 @@ public interface IFileProcessor
     List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot );
 
     /// <summary>
-    /// Processes the specified input file or directory.
+    /// Processes the specified input file or directory, as specified by the provided
+    /// <see cref="FileInfo"/> objects.
     /// </summary>
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
     /// <returns> the processed files added with <see cref="AddProcessedFile"/>. </returns>
-    List< TexturePackerEntry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot );
+    List< TexturePackerEntry > Process( DirectoryInfo? inputFileOrDir, DirectoryInfo? outputRoot );
 
     /// <summary>
     /// Processes a collection of files for sending to the output folder.

@@ -217,19 +217,19 @@ public partial class TexturePacker
     /// <param name="inputFolder"> Directory containing individual images to be packed. </param>
     /// <param name="outputFolder"> Directory where the pack file and page images will be written. </param>
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
-    /// <param name="progress"> May be null. </param>
+    /// <param name="progressListener"> May be null. </param>
     public static void Process( Settings settings,
                                 string inputFolder,
                                 string outputFolder,
                                 string packFileName,
-                                AbstractProgressListener? progress = null )
+                                AbstractProgressListener? progressListener = null )
     {
         try
         {
-            inputFolder  = $"{IOData.InternalPath}{inputFolder}";
-            outputFolder = $"{IOData.InternalPath}{outputFolder}";
+            inputFolder  = $"{IOData.InternalPath}{inputFolder}".Replace( "\\", "/" );
+            outputFolder = $"{IOData.InternalPath}{outputFolder}".Replace( "\\", "/" );
 
-            var processor = new TexturePackerFileProcessor( settings, packFileName, progress );
+            var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
             _ = processor.Process( new DirectoryInfo( inputFolder ),
                                    new DirectoryInfo( outputFolder ) );
         }
@@ -287,6 +287,8 @@ public partial class TexturePacker
     /// <param name="name"></param>
     public void AddImage( Bitmap image, string name )
     {
+        Logger.Debug( name );
+        
         var inputImage = new InputImage
         {
             Image = image,

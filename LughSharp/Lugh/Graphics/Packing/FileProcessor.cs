@@ -206,7 +206,7 @@ public class FileProcessor
 
             if ( OutputSuffix != null )
             {
-                outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
+                outputName = RegexUtils.FileNameWithoutExtensionRegex().Match( outputName ) + OutputSuffix;
             }
 
             var entry = new TexturePackerEntry
@@ -217,9 +217,9 @@ public class FileProcessor
 
             if ( newOutputDir != null )
             {
-                entry.OutputFile = ( newOutputDir.FullName.Length == 0 )
-                    ? new FileInfo( outputName )
-                    : new FileInfo( Path.Combine( newOutputDir.FullName, outputName ) );
+                entry.OutputFileName = ( newOutputDir.FullName.Length == 0 )
+                    ? outputName
+                    : Path.Combine( newOutputDir.FullName, outputName );
             }
 
             try
@@ -273,7 +273,7 @@ public class FileProcessor
                 if ( !dirToEntries.ContainsKey( dir ) )
                 {
                     // If the directory is not already a key in the dictionary, add it
-                    dirToEntries[ dir ] = [];
+                    dirToEntries[ dir ] = [ ];
                 }
             }
             else
@@ -332,14 +332,14 @@ public class FileProcessor
                     Depth           = depth,
                     InputFile       = file,
                     OutputDirectory = outputDir,
-                    OutputFile = FlattenOutput
-                        ? new FileInfo( Path.Combine( outputRoot.FullName, outputName ) )
-                        : new FileInfo( Path.Combine( outputDir.FullName, outputName ) ),
+                    OutputFileName = FlattenOutput
+                        ? Path.Combine( outputRoot.FullName, outputName )
+                        : Path.Combine( outputDir.FullName, outputName ),
                 };
 
                 var dir = file.Directory!;
 
-                if ( !dirToEntries.TryGetValue( dir, out List<TexturePackerEntry>? value ) )
+                if ( !dirToEntries.TryGetValue( dir, out var value ) )
                 {
                     value?.Add( entry );
                 }
@@ -425,17 +425,17 @@ public class FileProcessor
                     InputFile       = file,
                     OutputDirectory = outputDir,
 
-                    OutputFile = new FileInfo( Path.Combine( FlattenOutput
-                                                                 ? outputRoot.FullName
-                                                                 : outputDir.FullName,
-                                                             outputName ) ),
+                    OutputFileName = Path.Combine( FlattenOutput
+                                                   ? outputRoot.FullName
+                                                   : outputDir.FullName,
+                                               outputName ),
                 };
 
                 var dir = file.Directory!.FullName;
 
-                if ( !stringToEntries.TryGetValue( dir, out List<TexturePackerEntry>? value ) )
+                if ( !stringToEntries.TryGetValue( dir, out List< TexturePackerEntry >? value ) )
                 {
-                    value =  [ ] ;
+                    value = [ ];
                     stringToEntries.Add( dir, value );
                 }
 
@@ -569,4 +569,3 @@ public class FileProcessor
 //        return this;
 //    }
 }
-
