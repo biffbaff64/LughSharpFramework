@@ -102,11 +102,11 @@ public class DesktopGLFileHandle : FileHandle
     {
         return PathType switch
         {
-            PathTypes.External => new FileInfo( IOData.ExternalPath + FileName ),
-            PathTypes.Internal => new FileInfo( IOData.InternalPath + FileName ),
+            PathTypes.External => new FileInfo( IOUtils.ExternalPath + FileName ),
+            PathTypes.Internal => new FileInfo( IOUtils.InternalPath + FileName ),
 
             var _ => PathType == PathTypes.Local
-                ? new FileInfo( IOData.LocalPath + FileName )
+                ? new FileInfo( IOUtils.LocalPath + FileName )
                 : File,
         };
     }

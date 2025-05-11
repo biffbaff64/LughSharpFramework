@@ -58,7 +58,7 @@ public class DesktopGLFiles : IFiles
     /// </summary>
     public FileHandle Internal( string path )
     {
-        return GetFileHandle( $"{IOData.InternalPath}{'/'}{path}", PathTypes.Internal );
+        return GetFileHandle( $"{IOUtils.InternalPath}{'/'}{path}", PathTypes.Internal );
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class DesktopGLFiles : IFiles
     /// </summary>
     public string GetExternalStoragePath()
     {
-        return IOData.ExternalPath;
+        return IOUtils.ExternalPath;
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ public class DesktopGLFiles : IFiles
     /// </summary>
     public string GetLocalStoragePath()
     {
-        return IOData.LocalPath;
+        return IOUtils.LocalPath;
     }
 
     /// <summary>

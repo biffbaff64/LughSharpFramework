@@ -226,9 +226,9 @@ public partial class TexturePacker
     {
         try
         {
-            inputFolder  = $"{IOData.InternalPath}{inputFolder}".Replace( "\\", "/" );
-            outputFolder = $"{IOData.InternalPath}{outputFolder}".Replace( "\\", "/" );
-
+            inputFolder  = IOUtils.NormalizePath( $"{IOUtils.InternalPath}{inputFolder}" );
+            outputFolder = IOUtils.NormalizePath( $"{IOUtils.InternalPath}{outputFolder}" );
+            
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
             _ = processor.Process( new DirectoryInfo( inputFolder ),
                                    new DirectoryInfo( outputFolder ) );

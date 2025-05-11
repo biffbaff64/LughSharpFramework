@@ -119,7 +119,7 @@ public class TexturePackerFileProcessor : IFileProcessor
         this.ProgressListener = progress;
 
         // Strip off the .atlas extension name from the packfile if it has been pre-added.
-        packFileName = IOData.StripExtension( packFileName, _defaultSettings.AtlasExtension );
+        packFileName = IOUtils.StripExtension( packFileName, _defaultSettings.AtlasExtension );
 
         this.PackFileName  = packFileName;
         this.FlattenOutput = true;
@@ -261,9 +261,9 @@ public class TexturePackerFileProcessor : IFileProcessor
 
         if ( outputRoot == null )
         {
-            Logger.Debug( $"Setting outputRoot to InternalPath: {IOData.InternalPath}" );
+            Logger.Debug( $"Setting outputRoot to InternalPath: {IOUtils.InternalPath}" );
 
-            outputRoot = new DirectoryInfo( IOData.InternalPath );
+            outputRoot = new DirectoryInfo( IOUtils.InternalPath );
         }
 
         OutputFilesList.Clear();
@@ -387,7 +387,7 @@ public class TexturePackerFileProcessor : IFileProcessor
 
         foreach ( var file in files )
         {
-            if ( IOData.IsFile( file ) )
+            if ( IOUtils.IsFile( file ) )
             {
                 if ( InputRegex.Count > 0 )
                 {
@@ -454,7 +454,7 @@ public class TexturePackerFileProcessor : IFileProcessor
                 }
             }
 
-            if ( Recursive && IOData.IsDirectory( file ) )
+            if ( Recursive && IOUtils.IsDirectory( file ) )
             {
                 var subdir = outputDir.FullName.Length == 0
                     ? new DirectoryInfo( file.Name )
@@ -503,7 +503,7 @@ public class TexturePackerFileProcessor : IFileProcessor
 
         foreach ( var file in files )
         {
-            if ( IOData.IsFile( file ) )
+            if ( IOUtils.IsFile( file ) )
             {
                 if ( InputRegex.Count > 0 )
                 {
@@ -571,7 +571,7 @@ public class TexturePackerFileProcessor : IFileProcessor
                 }
             }
 
-            if ( Recursive && IOData.IsDirectory( file ) )
+            if ( Recursive && IOUtils.IsDirectory( file ) )
             {
                 var subdir = outputDir.FullName.Length == 0
                     ? new DirectoryInfo( file.Name )
@@ -603,7 +603,7 @@ public class TexturePackerFileProcessor : IFileProcessor
 
         List< TexturePackerEntry > retval;
 
-        if ( IOData.IsFile( inputFileOrDir ) )
+        if ( IOUtils.IsFile( inputFileOrDir ) )
         {
             retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
         }

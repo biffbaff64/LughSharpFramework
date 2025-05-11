@@ -146,7 +146,7 @@ public class FileProcessor
 
         List< TexturePackerEntry > retval;
 
-        if ( IOData.IsFile( inputFileOrDir ) )
+        if ( IOUtils.IsFile( inputFileOrDir ) )
         {
             retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
         }
@@ -172,9 +172,9 @@ public class FileProcessor
     {
         if ( outputRoot == null )
         {
-            Logger.Debug( $"Setting outputRoot to InternalPath: {IOData.InternalPath}" );
+            Logger.Debug( $"Setting outputRoot to InternalPath: {IOUtils.InternalPath}" );
 
-            outputRoot = new DirectoryInfo( IOData.InternalPath );
+            outputRoot = new DirectoryInfo( IOUtils.InternalPath );
         }
 
         OutputFilesList.Clear();
@@ -287,7 +287,7 @@ public class FileProcessor
 
         foreach ( var file in files )
         {
-            if ( !IOData.IsDirectory( file ) )
+            if ( !IOUtils.IsDirectory( file ) )
             {
                 if ( InputRegex.Count > 0 )
                 {
@@ -355,7 +355,7 @@ public class FileProcessor
                 }
             }
 
-            if ( Recursive && IOData.IsDirectory( file ) )
+            if ( Recursive && IOUtils.IsDirectory( file ) )
             {
                 var subdir = outputDir.FullName.Length == 0
                     ? new DirectoryInfo( file.Name )

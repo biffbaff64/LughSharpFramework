@@ -29,7 +29,7 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Files;
 
 [PublicAPI]
-public class IOData
+public class IOUtils
 {
     public static readonly string ExternalPath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile );
     public static readonly string InternalPath = Directory.GetCurrentDirectory();
@@ -42,6 +42,23 @@ public class IOData
     public static readonly string? AssetsPath        = Path.Combine( AssemblyDirectory ?? "", "Assets" );
 
     // ========================================================================
+
+    /// <summary>
+    /// Uses the Replace() method to replace all occurrences of both backslashes (\) and
+    /// forward slashes (/) with the platform-specific <see cref="Path.DirectorySeparatorChar"/>.
+    /// </summary>
+    /// <param name="path"> The path to normalize. </param>
+    /// <returns> The normalized path with consistent separators. </returns>
+    public static string NormalizePath( string? path )
+    {
+        if ( string.IsNullOrEmpty( path ) )
+        {
+            return path ?? "";
+        }
+
+        return path.Replace( '\\', Path.DirectorySeparatorChar )
+                   .Replace( '/', Path.DirectorySeparatorChar );
+    }
 
     public static bool IsDirectory( FileSystemInfo inputFileOrDir )
     {
@@ -69,10 +86,11 @@ public class IOData
 
             return File.Exists( path ) ? PathType.File : PathType.DoesNotExist;
         }
-        catch ( Exception e ) // Handle potential exceptions like PathTooLongException, SecurityException, etc.
+        // Handle potential exceptions like PathTooLongException, SecurityException, etc.
+        catch ( Exception e )
         {
             Logger.Warning( $"Exception ignored: {e.Message}" );
-            
+
             return PathType.Invalid;
         }
     }

@@ -31,6 +31,7 @@ using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
@@ -77,14 +78,18 @@ public class ImageProcessor
     /// </param>
     public TexturePacker.Rect? AddImage( FileInfo? file, string? rootPath )
     {
-        Logger.Debug( $"file.FullName: {file?.FullName ?? "NULL"}" );
+        ArgumentNullException.ThrowIfNull( file );
+
+        rootPath = IOUtils.NormalizePath( rootPath );
+
+        Logger.Debug( $"file.FullName: {file.FullName}" );
         Logger.Debug( $"rootPath     : {rootPath}" );
 
         Bitmap image;
 
         try
         {
-            image = new Bitmap( file!.FullName );
+            image = new Bitmap( file.FullName );
         }
         catch ( Exception ex )
         {
@@ -96,18 +101,15 @@ public class ImageProcessor
             throw new GdxRuntimeException( "Unable to read image: " + file );
         }
 
-        var name = Path.GetFullPath( file.FullName ).Replace( '\\', '/' );
+        var name = IOUtils.NormalizePath( file.FullName );
 
         // Strip root dir from the front of the image path.
-        if ( rootPath != null )
+        if ( !name.StartsWith( rootPath ) )
         {
-            if ( !name.StartsWith( rootPath ) )
-            {
-                throw new GdxRuntimeException( $"Path '{name}' does not start with root: {rootPath}" );
-            }
-
-            name = name.Substring( rootPath.Length );
+            throw new GdxRuntimeException( $"Path '{name}' does not start with root: {rootPath}" );
         }
+
+        name = name.Substring( rootPath.Length );
 
         // Strip extension.
         name = Path.GetFileNameWithoutExtension( name );
@@ -149,15 +151,15 @@ public class ImageProcessor
             var crc = Hash( rect.GetImage( this ) );
 
             TexturePacker.Rect? existing = null;
-            
+
             try
             {
                 existing = _crcs[ crc ];
             }
-            catch ( KeyNotFoundException e )
+            catch ( KeyNotFoundException )
             {
                 // This is expected for new images
-                Logger.Debug($"CRC '{crc}' not found in _crcs (first time?)");
+                Logger.Debug( $"CRC '{crc}' not found in _crcs (first time?)" );
             }
 
             if ( existing != null )
@@ -370,13 +372,20 @@ public class ImageProcessor
     /// </summary>
     protected TexturePacker.Rect? StripWhitespace( string name, Bitmap source )
     {
-        Guard.ThrowIfNull( source );
-
-        Size size;
+        int width;
+        int height;
         
         try
         {
-            size = source.Size; // Accessing Size might throw if disposed
+            Logger.Debug( $"Bitmap source: {source}" );
+            Logger.Debug( $"Name: {name}" );
+            Logger.Debug( $"{source.PixelFormat}" );
+            Logger.Debug( $"Physical Dimensions: {source.PhysicalDimension.ToString()}" );
+            
+            width  = source.Width;
+            height = source.Height;
+            
+            Logger.Debug( $"width: {width}, height: {height}" );
         }
         catch ( ObjectDisposedException )
         {
@@ -386,7 +395,7 @@ public class ImageProcessor
         }
         catch ( ArgumentException ex )
         {
-            Logger.Warning( $"ArgumentException accessing Bitmap '{name}' size: {ex.Message}" );
+            Logger.Warning( $"ArgumentException accessing Bitmap '{name}': {ex.Message}" );
 
             return null; // Or handle the error appropriately
         }
@@ -397,19 +406,19 @@ public class ImageProcessor
         if ( !System.Drawing.Image.IsAlphaPixelFormat( source.PixelFormat )
              || Settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
         {
-            return new TexturePacker.Rect( source, 0, 0, size.Width, size.Height, false );
+            return new TexturePacker.Rect( source, 0, 0, width, height, false );
         }
 
         var top    = 0;
-        var bottom = size.Height;
+        var bottom = height;
 
         if ( Settings.StripWhitespaceY )
         {
         outer1:
 
-            for ( var y = 0; y < size.Height; y++ )
+            for ( var y = 0; y < height; y++ )
             {
-                for ( var x = 0; x < size.Width; x++ )
+                for ( var x = 0; x < width; x++ )
                 {
                     var pixel = source.GetPixel( x, y );
 
@@ -424,9 +433,9 @@ public class ImageProcessor
 
         outer2:
 
-            for ( var y = size.Height - 1; y >= top; y-- )
+            for ( var y = height - 1; y >= top; y-- )
             {
-                for ( var x = 0; x < size.Width; x++ )
+                for ( var x = 0; x < width; x++ )
                 {
                     var pixel = source.GetPixel( x, y );
 
@@ -446,7 +455,7 @@ public class ImageProcessor
                     top--;
                 }
 
-                if ( bottom < size.Height )
+                if ( bottom < height )
                 {
                     bottom++;
                 }
@@ -454,13 +463,13 @@ public class ImageProcessor
         }
 
         var left  = 0;
-        var right = size.Width;
+        var right = width;
 
         if ( Settings.StripWhitespaceX )
         {
         outer3:
 
-            for ( var x = 0; x < size.Width; x++ )
+            for ( var x = 0; x < width; x++ )
             {
                 for ( var y = top; y < bottom; y++ )
                 {
@@ -477,7 +486,7 @@ public class ImageProcessor
 
         outer4:
 
-            for ( var x = size.Width - 1; x >= left; x-- )
+            for ( var x = width - 1; x >= left; x-- )
             {
                 for ( var y = top; y < bottom; y++ )
                 {

@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing.Drawing2D;
 using System.Runtime.Versioning;
 
 namespace LughSharp.Lugh.Graphics.Packing;
@@ -39,7 +38,6 @@ public enum Resampling
 [PublicAPI]
 public static class ResamplingExtensions
 {
-    //TODO:
     [SupportedOSPlatform( "windows" )]
     public static InterpolationMode ToInterpolationMode( this Resampling resampling )
     {
