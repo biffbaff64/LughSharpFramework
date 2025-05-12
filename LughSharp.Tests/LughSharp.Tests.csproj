@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\LughSharp.Extensions\LughSharp.Extensions.csproj" />
       <ProjectReference Include="..\LughSharp\LughSharp.csproj" />
     </ItemGroup>
 

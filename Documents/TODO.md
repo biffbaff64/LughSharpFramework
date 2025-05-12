@@ -458,25 +458,6 @@ GRAPHICS/OPENGL/GLSL
     - IP   - IP   - Default.glsl.vert
 
 
-GRAPHICS/PACKING
-----------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - IP   - ColorBleedEffect
-    - IP   - IP   - FileProcessor
-    - DONE - IP   - GridPacker
-    - DONE - DONE - ImagePacker
-    - DONE - IP   - ImageProcessor
-    - IP   - IP   - MaxRectsPacker
-    - DONE - **** - SamplePackFile.json
-    - DONE - IP   - TexturePacker
-    - DONE - IP   - TexturePacker.Resampling
-    - IP   - IP   - TexturePackerFileProcessor
-    -      -      - TexturePackerTest
-    -      -      - TexturePackerUpscaleTest
-    - IP   - IP   - TextureUnpacker
-
 GRAPHICS/TEXT
 -------------
 
@@ -920,7 +901,7 @@ UTILS/BUFFERS
     - DONE - IP   - Buffer
     - DONE - IP   - BufferTests
     - DONE - IP   - ByteBuffer
-    - DONE - IP   - FLoatBuffer
+    - DONE - IP   - FloatBuffer
     - DONE - IP   - IntBuffer
     - DONE - IP   - ShortBuffer
 
@@ -979,32 +960,6 @@ UTILS/EXCEPTIONS
     - DONE - DONE - ReadOnlyBufferException
     - DONE - DONE - SerializationException
     - DONE - DONE - SpriteBatchException
-
-UTILS/JSON
-----------
-
-  **** This is a work-in-progress, and will eventually replace the current System.Text.Json library ****
-  **** Using LughSharp.Tests.JsonTest testing ****
-
-    CODE   DOCUMENT
-    ----   --------
-    - IP   - IP   - IJsonReader
-    - IP   - IP   - Json
-    - IP   - IP   - Json.FromJson
-    - IP   - IP   - Json.ToJson
-    - IP   - IP   - Json.WriteValue
-    - IP   - IP   - JsonOutputType
-    - IP   - IP   - JsonReader
-    - IP   - IP   - JsonReader.Data
-    - IP   - IP   - JsonReader.MainParser
-    - IP   - IP   - JsonReader.NextState
-    - IP   - IP   - JsonReader.Parse
-    - IP   - IP   - JsonSerializer
-    - IP   - IP   - JsonTextureResamplingConverter
-    - IP   - IP   - JsonTextWriter
-    - IP   - IP   - JsonValue
-    - IP   - IP   - JsonValue.AsType
-    - IP   - IP   - JsonValue.GetType
 
 UTILS/POOLING
 -------------

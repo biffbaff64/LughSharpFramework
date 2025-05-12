@@ -26,34 +26,60 @@ EXTENSIONS/FREETYPE
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-EXTENSIONS/TOOLS
---------------------
+EXTENSIONS/JSON
+---------------
+
+**** This is a work-in-progress, and will eventually replace the current System.Text.Json library ****
+**** Using LughSharp.Tests.JsonTest testing ****
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - FileProcessor
+    - IP   - IP   - IJsonReader
+    - IP   - IP   - Json
+    - IP   - IP   - Json.FromJson
+    - IP   - IP   - Json.ToJson
+    - IP   - IP   - Json.WriteValue
+    - IP   - IP   - JsonOutputType
+    - IP   - IP   - JsonReader
+    - IP   - IP   - JsonReader.Data
+    - IP   - IP   - JsonReader.MainParser
+    - IP   - IP   - JsonReader.NextState
+    - IP   - IP   - JsonReader.Parse
+    - IP   - IP   - JsonSerializer
+    - IP   - IP   - JsonTextureResamplingConverter
+    - IP   - IP   - JsonTextWriter
+    - IP   - IP   - JsonValue
+    - IP   - IP   - JsonValue.AsType
+    - IP   - IP   - JsonValue.GetType
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 EXTENSIONS/TOOLS/IMAGEPACKER
 ----------------------------
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - ImagePacker
-
-EXTENSIONS/TOOLS/TEXTUREPACKER
-------------------------------
-
-    CODE   DOCUMENT
-    ----   --------
     - DONE - IP   - ColorBleedEffect
-    - IP   -      - GridPacker
-    -      -      - ImageProcessor
-    -      -      - MaxRectsPacker
-    - IP   -      - TexturePacker
-    -      -      - TexturePackerFileProcessor
+    - IP   - IP   - FileProcessor
+    - IP   - IP   - FreeRectChoiceHeuristic
+    - DONE - IP   - GridPacker
+    - IP   - IP   - IFileProcessor
+    - DONE - DONE - ImagePacker
+    - DONE - IP   - ImageProcessor
+    - IP   - IP   - MaxRectsPacker
+    - IP   - IP   - MaxRectsPacker.BinarySearch
+    - IP   - IP   - MaxRectsPacket.MaxRects
+    - IP   - IP   - PackingSettingsProcessor
+    - DONE - **** - SamplePackFile.json
+    - DONE - IP   - TexturePacker
+    - DONE - IP   - TexturePacker.Resampling
+    - IP   - IP   - TexturePacker.Settings
+    - IP   - IP   - TexturePackerEntry
+    - IP   - IP   - TexturePackerFileProcessor
     -      -      - TexturePackerTest
     -      -      - TexturePackerUpscaleTest
-    -      -      - TextureUnpacker
+    - IP   - IP   - TextureUnpacker
 
 EXTENSIONS/TOOLS/TILEDMAPPACKER
 -----------------------------------

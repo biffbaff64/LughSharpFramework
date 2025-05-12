@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
-
 using DesktopGLBackend.Audio;
 using DesktopGLBackend.Audio.Mock;
 using DesktopGLBackend.Files;
@@ -33,8 +31,8 @@ using DesktopGLBackend.Window;
 
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Network;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;

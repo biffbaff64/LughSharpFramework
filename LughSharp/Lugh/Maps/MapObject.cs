@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
+using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Maps;
 

@@ -122,7 +122,7 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
-        PNGUtils.AnalysePNG( buffer );
+        Utils.PNGUtils.AnalysePNG( buffer );
 
         ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, offset, len );
 
@@ -238,21 +238,21 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     private static ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
-        PNGUtils.AnalysePNG( buffer );
+        Utils.PNGUtils.AnalysePNG( buffer );
 
         var pixmapDef = new PixmapDataType
         {
-            Width         = ( uint )PNGUtils.IHDRchunk.Width,
-            Height        = ( uint )PNGUtils.IHDRchunk.Height,
-            BitDepth      = ( uint )PNGUtils.IHDRchunk.BitDepth,
-            ColorType     = ( uint )PNGUtils.IHDRchunk.ColorType,
+            Width         = ( uint )Utils.PNGUtils.IHDRchunk.Width,
+            Height        = ( uint )Utils.PNGUtils.IHDRchunk.Height,
+            BitDepth      = ( uint )Utils.PNGUtils.IHDRchunk.BitDepth,
+            ColorType     = ( uint )Utils.PNGUtils.IHDRchunk.ColorType,
             Blend         = 0,
             Scale         = 0,
-            TotalIDATSize = PNGUtils.TotalIDATSize,
-            Pixels        = new byte[ PNGUtils.IDATchunk.ChunkSize ],
+            TotalIDATSize = Utils.PNGUtils.TotalIDATSize,
+            Pixels        = new byte[ Utils.PNGUtils.IDATchunk.ChunkSize ],
         };
 
-        Array.Copy( buffer, PNGUtils.IDAT_DATA_OFFSET, pixmapDef.Pixels, 0, PNGUtils.IDATchunk.ChunkSize );
+        Array.Copy( buffer, Utils.PNGUtils.IDAT_DATA_OFFSET, pixmapDef.Pixels, 0, Utils.PNGUtils.IDATchunk.ChunkSize );
 
         var byteBuffer = new ByteBuffer( pixmapDef.Pixels.Length );
         byteBuffer.PutBytes( pixmapDef.Pixels );

@@ -24,13 +24,15 @@
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.GraphicsUtils;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Pooling;
+
+using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Scenes.Scene2D;
 
@@ -245,8 +247,8 @@ public class Actor : IActor, IComparable< Actor >
     /// Draws the actor. The batch is configured to draw in the parent's coordinate system. This
     /// draw method is convenient to draw a rotated and scaled TextureRegion.
     /// <para>
-    /// <see cref="IBatch.Begin()" /> has already been called on the batch. If <see cref="IBatch.End()" />
-    /// is called to draw without the batch then <see cref="IBatch.Begin()" /> must be called before
+    /// <see cref="IBatch.Begin" /> has already been called on the batch. If <see cref="IBatch.End()" />
+    /// is called to draw without the batch then <see cref="IBatch.Begin" /> must be called before
     /// the method returns.
     /// </para>
     /// <para>

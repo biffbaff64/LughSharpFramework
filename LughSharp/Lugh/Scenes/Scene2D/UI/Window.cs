@@ -30,6 +30,8 @@ using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
 
+using Color = LughSharp.Lugh.Graphics.Color;
+
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>

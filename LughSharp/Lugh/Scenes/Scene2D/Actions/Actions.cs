@@ -28,6 +28,8 @@ using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Pooling;
 
+using Color = LughSharp.Lugh.Graphics.Color;
+
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 
 [PublicAPI]

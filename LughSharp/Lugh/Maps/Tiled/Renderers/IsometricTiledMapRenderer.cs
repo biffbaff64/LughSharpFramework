@@ -26,6 +26,7 @@ using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Utils;
 
+using Color = LughSharp.Lugh.Graphics.Color;
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;

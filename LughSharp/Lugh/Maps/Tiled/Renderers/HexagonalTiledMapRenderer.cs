@@ -26,6 +26,8 @@ using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
 
+using Color = LughSharp.Lugh.Graphics.Color;
+
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
 
 [PublicAPI]

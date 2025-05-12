@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics.GraphicsUtils;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
 
 using File = System.IO.File;

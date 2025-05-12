@@ -27,8 +27,8 @@ using System.Reflection.Metadata;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Cameras;
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Graphics.Viewport;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Maths;
@@ -39,6 +39,7 @@ using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Pooling;
 
+using Color = LughSharp.Lugh.Graphics.Color;
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 using Platform = LughSharp.Lugh.Core.Platform;
 

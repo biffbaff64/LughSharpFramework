@@ -29,6 +29,8 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
+using Color = LughSharp.Lugh.Graphics.Color;
+
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
 
 /// <summary>

@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils;

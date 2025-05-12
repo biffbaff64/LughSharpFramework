@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
 using LughSharp.Lugh.Graphics.OpenGL;

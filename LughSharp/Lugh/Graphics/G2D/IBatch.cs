@@ -22,8 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.GraphicsUtils;
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
@@ -133,7 +133,7 @@ public interface IBatch : IDisposable
     /// </para>
     /// <para>
     /// This method will flush the batch before setting the new shader.
-    /// It can be called inbetween <see cref="Begin()" /> and <see cref="End()" />.
+    /// It can be called inbetween <see cref="Begin" /> and <see cref="End()" />.
     /// </para>
     /// </summary>
     ShaderProgram? Shader { get; set; }
