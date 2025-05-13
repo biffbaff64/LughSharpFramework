@@ -26,6 +26,7 @@ using System.Runtime.InteropServices;
 
 namespace LughSharp.Lugh.Graphics.Images;
 
+[PublicAPI]
 public class PNGFormatStructs
 {
     /// <summary>

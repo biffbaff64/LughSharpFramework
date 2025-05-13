@@ -26,72 +26,66 @@ using System.Runtime.InteropServices;
 
 namespace LughSharp.Lugh.Graphics.Images;
 
+// ========================================================================
+/// <summary>
+/// BMP Header Structure.
+/// </summary>
 [PublicAPI]
-public class BMPFormatStructs
+[StructLayout( LayoutKind.Sequential )]
+public struct BitmapFileHeader
 {
-    // ========================================================================
-    /// <summary>
-    /// BMP Header Structure.
-    /// </summary>
-    [PublicAPI]
-    [StructLayout( LayoutKind.Sequential )]
-    public struct BMPHeader
-    {
-        public ushort FileType           { get; set; }
-        public uint   FileSize           { get; set; }
-        public ushort Reserved1          { get; set; }
-        public ushort Reserved2          { get; set; }
-        public uint   OffsetToPixelArray { get; set; }
-    }
+    public ushort FileType           { get; set; } // 2 bytes, 'BM'
+    public uint   FileSize           { get; set; } // 4 bytes, size of the file in bytes
+    public ushort Reserved1          { get; set; } // 2 bytes, always 0
+    public ushort Reserved2          { get; set; } // 2 bytes, always 0
+    public uint   OffsetToPixelArray { get; set; } // 4 bytes, offset to the pixel array from the beginning of the file
+}
 
-    // ========================================================================
-    /// <summary>
-    /// BMP Info Header Structure. Do not change this layout order.
-    /// </summary>
-    [PublicAPI]
-    [StructLayout( LayoutKind.Sequential )]
-    public struct BMPInfoHeader
-    {
-        public uint   HeaderSize      { get; set; }
-        public int    Width           { get; set; }
-        public int    Height          { get; set; }
-        public ushort Planes          { get; set; }
-        public ushort BitCount        { get; set; }
-        public uint   Compression     { get; set; }
-        public uint   ImageSize       { get; set; }
-        public uint   XPixelsPerMeter { get; set; }
-        public uint   YPixelsPerMeter { get; set; }
-        public uint   ColorsUsed      { get; set; }
-        public uint   ColorsImportant { get; set; }
-    }
+// ========================================================================
+/// <summary>
+/// BMP Info Header Structure. Do not change this layout order.
+/// </summary>
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
+public struct BitmapFileInfoHeader
+{
+    public uint                  HeaderSize      { get; set; } // 4 bytes, size of the header in bytes.
+    public int                   Width           { get; set; } // 4 bytes, width of the image in pixels.
+    public int                   Height          { get; set; } // 4 bytes, height of the image in pixels.
+    public ushort                Planes          { get; set; } // 2 bytes, number of color planes.
+    public ushort                BitCount        { get; set; } // 2 bytes, number of bits per pixel.
+    public BitmapCompressionMode Compression     { get; set; } // 4 bytes, compression method.
+    public uint                  ImageSize       { get; set; } // 4 bytes, image size in bytes.
+    public int                   XPixelsPerMeter { get; set; } // 4 bytes, horizontal resolution in pixels per meter.
+    public int                   YPixelsPerMeter { get; set; } // 4 bytes, vertical resolution in pixels per meter.
+    public uint                  ColorsUsed      { get; set; } // 4 bytes, number of colors used.
+    public uint                  ImportantColors { get; set; } // 4 bytes, number of important colors. 
 
-    // ========================================================================
-    /// <summary>
-    /// BMP Color Header Structure. Do not change this layout order.
-    /// </summary>
-    [PublicAPI]
-    [StructLayout( LayoutKind.Sequential )]
-    public struct BMPColorHeader
+    public void Init()
     {
-        public uint RedMask             { get; set; }
-        public uint GreenMask           { get; set; }
-        public uint BlueMask            { get; set; }
-        public uint AlphaMask           { get; set; }
-        public uint ColorSpaceType      { get; set; }
-        public uint ColorSpaceEndpoints { get; set; }
-        public uint GammaRed            { get; set; }
-        public uint GammaGreen          { get; set; }
-        public uint GammaBlue           { get; set; }
-    }
-
-    // ========================================================================
-    /// <summary>
-    /// BMP Pixel Array Structure.
-    /// </summary>
-    [PublicAPI]
-    [StructLayout( LayoutKind.Sequential )]
-    public struct BMPPixelArray
-    {
-        public byte[] PixelData { get; set; } // Array of color data for each pixel in the image.  
+        HeaderSize = ( uint )Marshal.SizeOf( this );
     }
 }
+
+[PublicAPI]
+public enum BitmapCompressionMode : uint
+{
+    BI_RGB       = 0,
+    BI_RLE8      = 1,
+    BI_RLE4      = 2,
+    BI_BITFIELDS = 3,
+    BI_JPEG      = 4,
+    BI_PNG       = 5
+}
+
+// ========================================================================
+/// <summary>
+/// BMP Pixel Array Structure.
+/// </summary>
+[PublicAPI]
+[StructLayout( LayoutKind.Sequential )]
+public struct BMPPixelArray
+{
+    public byte[] PixelData { get; set; } // Array of color data for each pixel in the image.  
+}
+

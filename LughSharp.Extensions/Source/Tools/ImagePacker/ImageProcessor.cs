@@ -33,6 +33,7 @@ using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -85,12 +86,16 @@ public class ImageProcessor
 
         Logger.Debug( $"file.FullName: {file.FullName}" );
         Logger.Debug( $"rootPath     : {rootPath}" );
-
+        
         Bitmap image;
 
         try
         {
             image = new Bitmap( file.FullName );
+            
+            #if DEBUG
+            BMPUtils.AnalyseBMP( image );
+            #endif
         }
         catch ( Exception ex )
         {
