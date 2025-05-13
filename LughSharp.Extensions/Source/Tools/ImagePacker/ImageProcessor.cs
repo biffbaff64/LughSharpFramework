@@ -84,18 +84,11 @@ public class ImageProcessor
 
         rootPath = IOUtils.NormalizePath( rootPath );
 
-        Logger.Debug( $"file.FullName: {file.FullName}" );
-        Logger.Debug( $"rootPath     : {rootPath}" );
-        
         Bitmap image;
 
         try
         {
             image = new Bitmap( file.FullName );
-            
-            #if DEBUG
-            BMPUtils.AnalyseBMP( image );
-            #endif
         }
         catch ( Exception ex )
         {
@@ -204,16 +197,12 @@ public class ImageProcessor
     /// Returns a rect for the image describing the texture region to be packed,
     /// or null if the image should not be packed.
     /// </summary>
-    public TexturePacker.Rect? ProcessImage( Bitmap? image, string? name )
+    public TexturePacker.Rect? ProcessImage( Bitmap image, string? name )
     {
-        Logger.Debug( $"image?: {image == null}, name?: {name}" );
-
         if ( _scale <= 0 )
         {
             throw new GdxRuntimeException( $"scale cannot be <= 0: {_scale}" );
         }
-
-        Guard.ThrowIfNull( image );
 
         name ??= string.Empty;
 
@@ -222,7 +211,8 @@ public class ImageProcessor
 
         if ( image.PixelFormat != PixelFormat.Format32bppArgb )
         {
-            using ( image = new Bitmap( width, height, PixelFormat.Format32bppArgb ) )
+            image = new Bitmap( width, height, PixelFormat.Format32bppArgb );
+
             using ( var g = System.Drawing.Graphics.FromImage( image ) )
             {
                 g.DrawImage( image, 0, 0, width, height );
@@ -237,7 +227,8 @@ public class ImageProcessor
 
         if ( isPatch )
         {
-            // Strip ".9" from file name, read ninepatch split pixels, and strip ninepatch split pixels.
+            // Strip ".9" from file name, read ninepatch split pixels,
+            // and strip ninepatch split pixels.
             name   = name.Substring( 0, name.Length - 2 );
             splits = GetSplits( image, name );
             pads   = GetPads( image, name, splits );
@@ -246,7 +237,8 @@ public class ImageProcessor
             width  -= 2;
             height -= 2;
 
-            using ( image = new Bitmap( width, height, PixelFormat.Format32bppArgb ) )
+            image = new Bitmap( width, height, PixelFormat.Format32bppArgb );
+            
             using ( var g = System.Drawing.Graphics.FromImage( image ) )
             {
                 g.DrawImage( image,
@@ -321,10 +313,6 @@ public class ImageProcessor
         }
         else
         {
-            Logger.Debug( $"image: {image}, Null?: {image == null}" );
-            Logger.Debug( $"image.Width: {image.Width}" );
-            Logger.Debug( $"image.Height: {image.Height}" );
-
             rect = StripWhitespace( name, image );
 
             if ( rect == null )
@@ -349,15 +337,8 @@ public class ImageProcessor
 
         try
         {
-            Logger.Debug( $"Bitmap source: {source}" );
-            Logger.Debug( $"Name: {name}" );
-            Logger.Debug( $"{source.PixelFormat}" );
-            Logger.Debug( $"Physical Dimensions: {source.PhysicalDimension.ToString()}" );
-
             width  = source.Width;
             height = source.Height;
-
-            Logger.Debug( $"width: {width}, height: {height}" );
         }
         catch ( ObjectDisposedException )
         {
@@ -375,7 +356,7 @@ public class ImageProcessor
         // Check the PixelFormat of the Bitmap. If it doesn't have an alpha channel,
         // or if both StripWhitespaceX and StripWhitespaceY are false, a new Rect
         // encompassing the entire source image is returned.
-        if ( !System.Drawing.Image.IsAlphaPixelFormat( source.PixelFormat )
+        if ( !Image.IsAlphaPixelFormat( source.PixelFormat )
              || Settings is { StripWhitespaceX: false, StripWhitespaceY: false } )
         {
             return new TexturePacker.Rect( source, 0, 0, width, height, false );
@@ -799,19 +780,10 @@ public class ImageProcessor
                 HashTransformBlock( sha1, width );  // Use TransformBlock
                 HashTransformBlock( sha1, height ); // Use TransformBlock
 
-                Logger.Debug( "Calling sha1.TransformFinalBlock" );
-
                 // Finalize the hash
                 sha1.TransformFinalBlock( [ ], 0, 0 ); // Pass an empty byte array
 
                 var hashBytes = sha1.Hash;
-
-                if ( hashBytes == null )
-                {
-                    Logger.Debug( "hashBytes is NULL" );
-                }
-
-                Logger.Debug( $"Hash Bytes: {string.Join( ",", hashBytes! )}" ); // Log the byte array
 
                 return new BigInteger( hashBytes! ).ToString( "x" ).ToLower();
             }

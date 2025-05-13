@@ -269,8 +269,6 @@ public partial class TexturePacker
     /// <param name="file"></param>
     public void AddImage( FileInfo file )
     {
-        Logger.Debug( file.Name );
-
         var inputImage = new InputImage
         {
             FileInfo = file,
@@ -287,8 +285,6 @@ public partial class TexturePacker
     /// <param name="name"></param>
     public void AddImage( Bitmap image, string name )
     {
-        Logger.Debug( name );
-        
         var inputImage = new InputImage
         {
             Image = image,
@@ -341,18 +337,12 @@ public partial class TexturePacker
 
                 if ( inputImage.FileInfo != null )
                 {
-                    Logger.Debug( $"inputImage.FileInfo: {inputImage.FileInfo.FullName}" );
-
                     _imageProcessor.AddImage( inputImage.FileInfo, inputImage.RootPath );
                 }
                 else
                 {
-                    Logger.Debug( $"inputImage.FileInfo is null" );
-
                     if ( inputImage.Image == null )
                     {
-                        Logger.Debug( $"inputImage.Image is null" );
-
                         continue;
                     }
 
@@ -419,6 +409,18 @@ public partial class TexturePacker
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="w"></param>
+    /// <param name="h"></param>
+    /// <param name="dst"></param>
+    /// <param name="dx"></param>
+    /// <param name="dy"></param>
+    /// <param name="rotated"></param>
     private static void Copy( Bitmap src, int x, int y, int w, int h, Bitmap dst, int dx, int dy, bool rotated )
     {
         for ( var i = 0; i < w; i++ )

@@ -146,10 +146,6 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
         _rootDirectory = inputRoot;
 
-        Logger.Debug( $"inputRoot: {inputRoot.FullName}" );
-        Logger.Debug( $"outputRoot: {outputRoot?.FullName}" );
-        Logger.Debug( $"rootDirectory set to: {_rootDirectory.FullName}" );
-
         // -----------------------------------------------------
         // Collect any pack.json setting files present in the folder.
         var settingsProcessor = new PackingSettingsProcessor();
@@ -161,11 +157,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
         var settingsFiles = settingsProcessor.SettingsFiles;
 
-        if ( settingsFiles.Count == 0 )
-        {
-            Logger.Debug( $"No settings files found." );
-        }
-        else
+        if ( settingsFiles.Count > 0 )
         {
             // Sort parent first.
             settingsFiles.Sort( ( file1, file2 ) => file1.ToString().Length - file2.ToString().Length );
@@ -256,12 +248,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
     /// <exception cref="Exception"></exception>
     public virtual List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         if ( outputRoot == null )
         {
-            Logger.Debug( $"Setting outputRoot to InternalPath: {IOUtils.InternalPath}" );
-
             outputRoot = new DirectoryInfo( IOUtils.InternalPath );
         }
 
@@ -271,8 +259,6 @@ public class TexturePackerFileProcessor //: IFileProcessor
         var allEntries      = new List< TexturePackerEntry >();
 
         Process( files, outputRoot, outputRoot, stringToEntries, 0 );
-
-        // NOTE: Debug shows that 'stringToEntries' is populated correctly at this point.
 
         foreach ( var (inputDir, dirEntries) in stringToEntries )
         {
@@ -408,11 +394,6 @@ public class TexturePackerFileProcessor //: IFileProcessor
                     }
                 }
 
-                if ( file.DirectoryName == null )
-                {
-                    Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
-                }
-
                 if ( ( FilenameFilterDelegate != null )
                      && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
                 {
@@ -423,7 +404,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
                 if ( OutputSuffix != null )
                 {
-                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
+                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" )
+                                 + OutputSuffix;
                 }
 
                 var entry = new TexturePackerEntry
@@ -524,11 +506,6 @@ public class TexturePackerFileProcessor //: IFileProcessor
                     }
                 }
 
-                if ( file.DirectoryName == null )
-                {
-                    Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
-                }
-
                 if ( ( FilenameFilterDelegate != null )
                      && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
                 {
@@ -592,8 +569,6 @@ public class TexturePackerFileProcessor //: IFileProcessor
     public virtual List< TexturePackerEntry > ProcessIO( FileSystemInfo? inputFileOrDir,
                                                          DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         if ( inputFileOrDir is not { Exists: true } )
         {
             throw new ArgumentException( $"IFileProcessor#Process: Input file/dir does not " +
@@ -800,8 +775,6 @@ public class TexturePackerFileProcessor //: IFileProcessor
             ProgressListener.Message = inputPath!;
         }
 
-        Logger.Debug( "Creating a new TexturePacker" );
-
         var packer = NewTexturePacker( _rootDirectory, settings );
 
         foreach ( var file in files )
@@ -843,7 +816,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
     /// <summary>
     /// </summary>
     /// <param name="outputRoot"></param>
-    public virtual void DeleteOutput( FileInfo? outputRoot )
+    public virtual void DeleteOutput( FileInfo outputRoot )
     {
         // Load root settings to get scale.
         var settingsFile = new FileInfo( Path.Combine( _rootDirectory.FullName, DEFAULT_PACKFILE_NAME ) );
