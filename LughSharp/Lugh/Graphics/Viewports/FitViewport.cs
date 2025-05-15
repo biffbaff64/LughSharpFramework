@@ -25,23 +25,23 @@
 using LughSharp.Lugh.Graphics.Cameras;
 using LughSharp.Lugh.Utils;
 
-namespace LughSharp.Lugh.Graphics.Viewport;
+namespace LughSharp.Lugh.Graphics.Viewports;
 
 /// <summary>
-/// A ScalingViewport that uses <see cref="Scaling.Fill" /> so it keeps the aspect
-/// ratio by scaling the world up to take the whole screen (some of the world may
-/// be off screen).
+/// A ScalingViewport that uses <see cref="Scaling.Fit" /> so it keeps the aspect
+/// ratio by scaling the world up to fit the screen, adding black bars (letterboxing)
+/// for the remaining space.
 /// </summary>
 [PublicAPI]
-public class FillViewport : ScalingViewport
+public class FitViewport : ScalingViewport
 {
     /// <summary>
     /// Creates a new viewport using a new <see cref="OrthographicCamera" />.
     /// </summary>
     /// <param name="worldWidth"> World width in pixels. </param>
     /// <param name="worldHeight"> World height in pixels. </param>
-    public FillViewport( float worldWidth, float worldHeight )
-        : base( Scaling.Fill, worldWidth, worldHeight )
+    public FitViewport( float worldWidth, float worldHeight )
+        : base( Scaling.Fit, worldWidth, worldHeight )
     {
     }
 
@@ -51,8 +51,8 @@ public class FillViewport : ScalingViewport
     /// <param name="worldWidth"> World width in pixels. </param>
     /// <param name="worldHeight"> World height in pixels. </param>
     /// <param name="camera"> The camera to use. </param>
-    public FillViewport( float worldWidth, float worldHeight, Camera camera )
-        : base( Scaling.Fill, worldWidth, worldHeight, camera )
+    public FitViewport( float worldWidth, float worldHeight, Camera camera )
+        : base( Scaling.Fit, worldWidth, worldHeight, camera )
     {
     }
 }

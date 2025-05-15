@@ -32,7 +32,7 @@ using LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 
-namespace LughSharp.Lugh.Graphics.Viewport;
+namespace LughSharp.Lugh.Graphics.Viewports;
 
 /// <summary>
 /// Manages a <see cref="Camera" /> and determines how world coordinates

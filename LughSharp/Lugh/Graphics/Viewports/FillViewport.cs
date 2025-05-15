@@ -23,36 +23,36 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Cameras;
+using LughSharp.Lugh.Utils;
 
-namespace LughSharp.Lugh.Graphics.Viewport;
+namespace LughSharp.Lugh.Graphics.Viewports;
 
 /// <summary>
-/// A viewport where the world size is based on the size of the screen.
-/// By default 1 world unit == 1 screen pixel, but this ratio can be
-/// changed by modifying <see cref="UnitsPerPixel" />.
+/// A ScalingViewport that uses <see cref="Scaling.Fill" /> so it keeps the aspect
+/// ratio by scaling the world up to take the whole screen (some of the world may
+/// be off screen).
 /// </summary>
 [PublicAPI]
-public class ScreenViewport : Viewport
+public class FillViewport : ScalingViewport
 {
     /// <summary>
     /// Creates a new viewport using a new <see cref="OrthographicCamera" />.
     /// </summary>
-    public ScreenViewport() : base( new OrthographicCamera() )
+    /// <param name="worldWidth"> World width in pixels. </param>
+    /// <param name="worldHeight"> World height in pixels. </param>
+    public FillViewport( float worldWidth, float worldHeight )
+        : base( Scaling.Fill, worldWidth, worldHeight )
     {
     }
 
-    public static float UnitsPerPixel => 1;
-
     /// <summary>
-    /// Configures this viewports screen bounds and applies it to the camera
+    /// Creates a new viewport using the supplied <see cref="OrthographicCamera" />.
     /// </summary>
-    /// <param name="screenWidth"> Screen width in pixels. </param>
-    /// <param name="screenHeight"> Screen height in pixels. </param>
-    /// <param name="centerCamera"> True to center the camera in the middle of the screen. </param>
-    public override void Update( int screenWidth, int screenHeight, bool centerCamera = false )
+    /// <param name="worldWidth"> World width in pixels. </param>
+    /// <param name="worldHeight"> World height in pixels. </param>
+    /// <param name="camera"> The camera to use. </param>
+    public FillViewport( float worldWidth, float worldHeight, Camera camera )
+        : base( Scaling.Fill, worldWidth, worldHeight, camera )
     {
-        SetScreenBounds( 0, 0, screenWidth, screenHeight );
-        SetWorldSize( screenWidth * UnitsPerPixel, screenHeight * UnitsPerPixel );
-        Apply( centerCamera );
     }
 }

@@ -25,7 +25,7 @@
 using LughSharp.Lugh.Graphics.Cameras;
 using LughSharp.Lugh.Utils;
 
-namespace LughSharp.Lugh.Graphics.Viewport;
+namespace LughSharp.Lugh.Graphics.Viewports;
 
 /// <summary>
 /// A ScalingViewport that uses <see cref="Scaling.Stretch" /> so it does not

@@ -25,7 +25,7 @@
 using LughSharp.Lugh.Graphics.Cameras;
 using LughSharp.Lugh.Utils;
 
-namespace LughSharp.Lugh.Graphics.Viewport;
+namespace LughSharp.Lugh.Graphics.Viewports;
 
 /// <summary>
 /// A viewport that scales the world using <see cref="Scaling" />.

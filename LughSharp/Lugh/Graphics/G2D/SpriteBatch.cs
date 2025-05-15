@@ -66,11 +66,6 @@ public class SpriteBatch : IBatch
     protected float[]  Vertices    { get; set; }
     protected int      Idx         { get; set; } = 0;
 
-    /// <summary>
-    /// Convenience property. Returns TRUE if blending is not disabled.
-    /// </summary>
-    public bool IsBlendingEnabled => !BlendingDisabled;
-
     // ========================================================================
 
     private const int VERTICES_PER_SPRITE = 4; // Number of vertices per sprite (quad)
@@ -93,6 +88,9 @@ public class SpriteBatch : IBatch
     private bool           _originalDepthMask;
     private int            _maxVertices;
     private int            _combinedMatrixLocation;
+
+    private uint _vao;
+    private uint _vbo;
 
     // ========================================================================
 
@@ -131,6 +129,8 @@ public class SpriteBatch : IBatch
         Initialise( size, defaultShader );
     }
 
+    // ========================================================================
+
     /// <summary>
     /// Takes away messy vertex attributes initialisation from the constructor.
     /// </summary>
@@ -138,9 +138,27 @@ public class SpriteBatch : IBatch
     /// <param name="defaultShader">
     /// The default shader to use. This is not owned by the SpriteBatch and must be disposed separately.
     /// </param>
-    private void Initialise( int size, ShaderProgram? defaultShader )
+    private unsafe void Initialise( int size, ShaderProgram? defaultShader )
     {
         GLUtils.CheckOpenGLContext();
+
+        _vao = GdxApi.Bindings.GenVertexArray();
+        _vbo = GdxApi.Bindings.GenBuffer();
+
+        // Bind the VAO to start recording vertex attribute setups
+        GdxApi.Bindings.BindVertexArray( _vao );
+
+        // Bind the VBO and allocate initial buffer storage
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+        Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
+
+        fixed ( float* ptr = Vertices )
+        {
+            GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
+                                        Vertices.Length * sizeof( float ),
+                                        ( IntPtr )ptr,
+                                        ( int )BufferUsageHint.DynamicDraw );
+        }
 
         // Determine the vertex data type based on OpenGL version.
         // OpenGL 3.0 and later support Vertex Buffer Objects (VBOs) with Vertex Array Objects (VAOs),
@@ -296,8 +314,8 @@ public class SpriteBatch : IBatch
             _nullTextureCount++;
 
             Logger.Warning( $"Attempt to flush with null texture. This batch will be skipped. " +
-                          $"Null texture count: {_nullTextureCount}. " +
-                          $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
+                            $"Null texture count: {_nullTextureCount}. " +
+                            $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
 
             return;
         }
@@ -305,6 +323,8 @@ public class SpriteBatch : IBatch
         // Bind the texture to the current texture unit.
         GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
         LastTexture.Bind();
+
+        SetupVertexAttributes( _shader );
 
         // Ensure that the _vertices array is large enough.
         if ( ( _vertices == null ) || ( _vertices.Length < _maxVertices ) )
@@ -355,17 +375,6 @@ public class SpriteBatch : IBatch
     // ========================================================================
 
     /// <summary>
-    /// Unbind VAO and VBO
-    /// </summary>
-    private static void UnbindBuffers()
-    {
-        GdxApi.Bindings.BindVertexArray( 0 );
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
-    }
-
-    // ========================================================================
-
-    /// <summary>
     /// Enables blending for textures.
     /// </summary>
     public void EnableBlending()
@@ -377,7 +386,8 @@ public class SpriteBatch : IBatch
 
         if ( Idx > 0 )
         {
-            // Necessary call to Flush() to ensure blending state changes are handled correctly
+            // Necessary call to Flush() to ensure blending state
+            // changes are handled correctly
             Flush();
         }
 
@@ -396,7 +406,8 @@ public class SpriteBatch : IBatch
 
         if ( Idx > 0 )
         {
-            // Necessary call to Flush() to ensure blending state changes are handled correctly
+            // Necessary call to Flush() to ensure blending state
+            // changes are handled correctly
             Flush();
         }
 
@@ -434,7 +445,8 @@ public class SpriteBatch : IBatch
 
         if ( Idx > 0 )
         {
-            // Necessary call to Flush() to ensure blending function changes are handled correctly
+            // Necessary call to Flush() to ensure blending function
+            // changes are handled correctly
             Flush();
         }
 
@@ -452,7 +464,8 @@ public class SpriteBatch : IBatch
     {
         if ( IsDrawing && ( Idx > 0 ) )
         {
-            // Necessary call to Flush() to ensure projection matrix changes are handled correctly
+            // Necessary call to Flush() to ensure projection matrix
+            // changes are handled correctly
             Flush();
         }
 
@@ -465,172 +478,83 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// Sets the transformation matrix to be applied to the SpriteBatch during the rendering process.
-    /// </summary>
-    /// <param name="transform">A Matrix4 representing the new transformation to be applied.</param>
-    public virtual void SetTransformMatrix( Matrix4 transform )
-    {
-        if ( IsDrawing && ( Idx > 0 ) )
-        {
-            // Necessary call to Flush() to ensure transformation matrix changes are handled correctly
-            Flush();
-        }
-
-        TransformMatrix.Set( transform );
-
-        if ( IsDrawing )
-        {
-            SetupMatrices();
-        }
-    }
-
-    /// <summary>
-    /// Gets or sets the custom shader used by the SpriteBatch for rendering.
-    /// When a custom shader is set, it replaces the default shader provided by the SpriteBatch.
-    /// If the custom shader is null, the SpriteBatch falls back to using its default shader.
-    /// Modifying this property while the SpriteBatch is actively drawing will flush the current batch.
-    /// </summary>
-    public ShaderProgram? Shader
-    {
-        get => _shader;
-        set
-        {
-            if ( IsDrawing && ( Idx > 0 ) )
-            {
-                Flush();
-            }
-
-            _shader = value;
-
-            if ( IsDrawing )
-            {
-                _shader?.Bind();
-                SetupMatrices();
-            }
-        }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        _mesh?.Dispose();
-
-        if ( _ownsShader && ( _shader != null ) )
-        {
-            _shader.Dispose();
-        }
-
-        _mesh   = null;
-        _shader = null;
-
-        if ( _vertices != null )
-        {
-            ArrayPool< float >.Shared.Return( _vertices );
-            _vertices = null;
-        }
-
-        GC.SuppressFinalize( this );
-    }
-
-    /// <summary>
-    /// Populates an index buffer with indices required to render a specified number of sprites.
-    /// </summary>
-    /// <param name="size">The number of sprites for which to generate indices.</param>
-    /// <param name="indices">An array to hold the generated indices for the specified number of sprites.</param>
-    private static void PopulateIndexBuffer( int size, out short[] indices )
-    {
-        var len = size * INDICES_PER_SPRITE;
-        indices = new short[ len ];
-
-        for ( short i = 0, j = 0; i < len; i += INDICES_PER_SPRITE, j += 4 )
-        {
-            indices[ i ]     = j;
-            indices[ i + 1 ] = ( short )( j + 1 );
-            indices[ i + 2 ] = ( short )( j + 2 );
-            indices[ i + 3 ] = ( short )( j + 2 );
-            indices[ i + 4 ] = ( short )( j + 3 );
-            indices[ i + 5 ] = j;
-        }
-    }
-
-    /// <summary>
     /// Performs the OpenGL side of Vertex Attribute initialisation.
     /// </summary>
     private void SetupVertexAttributes( ShaderProgram? program )
     {
-//        OpenGL.GLUtils.CheckOpenGLContext();
-//
-//        // --------------------------------------------------------------------
-//
-//        if ( ( program == null ) || ( _mesh == null ) )
-//        {
-//            throw new NullReferenceException( "program and _mesh cannot be null!" );
-//        }
-//
-//        // --------------------------------------------------------------------
-//
-//        var currentProgram = new int[ 1 ];
-//
-//        GdxApi.Bindings.GetIntegerv( IGL.GL_CURRENT_PROGRAM, ref currentProgram );
-//
-//        if ( currentProgram[ 0 ] != _shader?.ShaderProgramHandle )
-//        {
-//            throw new GdxRuntimeException( "***** Shader program is unbound *****" );
-//        }
-//
-//        // --------------------------------------------------------------------
-//
-//        GdxApi.Bindings.BindVertexArray( _vao );
-//        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-//
-//        const int stride         = VertexConstants.VERTEX_SIZE_BYTES;
-//        const int positionOffset = VertexConstants.POSITION_OFFSET;
-//        const int colorOffset    = VertexConstants.COLOR_OFFSET * sizeof( float );
-//        const int texCoordOffset = VertexConstants.TEXCOORD_OFFSET * sizeof( float );
-//
-//        // Position Attribute
-//        var positionLocation = program.GetAttributeLocation( "a_position" );
-//
-//        if ( positionLocation >= 0 )
-//        {
-//            program.EnableVertexAttribute( positionLocation );
-//            program.SetVertexAttribute( positionLocation,
-//                                        VertexConstants.POSITION_COMPONENTS,
-//                                        IGL.GL_FLOAT,
-//                                        false,
-//                                        stride,
-//                                        positionOffset );
-//        }
-//
-//        // Color Attribute
-//        var colorLocation = program.GetAttributeLocation( "a_colorPacked" );
-//
-//        if ( colorLocation >= 0 )
-//        {
-//            program.EnableVertexAttribute( colorLocation );
-//            program.SetVertexAttribute( colorLocation,
-//                                        VertexConstants.COLOR_COMPONENTS,
-//                                        IGL.GL_FLOAT,
-//                                        false,
-//                                        stride,
-//                                        colorOffset );
-//        }
-//
-//        // Texture Coordinates Attribute
-//        var texCoordLocation = program.GetAttributeLocation( "a_texCoord" + "0" );
-//
-//        if ( texCoordLocation >= 0 )
-//        {
-//            program.EnableVertexAttribute( texCoordLocation );
-//            program.SetVertexAttribute( texCoordLocation,
-//                                        VertexConstants.TEXCOORD_COMPONENTS,
-//                                        IGL.GL_FLOAT,
-//                                        false,
-//                                        stride,
-//                                        texCoordOffset );
-//        }
+        Logger.Checkpoint();
+        
+        OpenGL.GLUtils.CheckOpenGLContext();
+
+        // --------------------------------------------------------------------
+
+        if ( ( program == null ) || ( _mesh == null ) )
+        {
+            throw new NullReferenceException( "program and _mesh cannot be null!" );
+        }
+
+        // --------------------------------------------------------------------
+
+        var currentProgram = new int[ 1 ];
+
+        GdxApi.Bindings.GetIntegerv( IGL.GL_CURRENT_PROGRAM, ref currentProgram );
+
+        if ( currentProgram[ 0 ] != _shader?.ShaderProgramHandle )
+        {
+            throw new GdxRuntimeException( "***** Shader program is unbound *****" );
+        }
+
+        // --------------------------------------------------------------------
+
+        GdxApi.Bindings.BindVertexArray( _vao );
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+
+        const int stride         = VertexConstants.VERTEX_SIZE_BYTES;
+        const int positionOffset = VertexConstants.POSITION_OFFSET;
+        const int colorOffset    = VertexConstants.COLOR_OFFSET * sizeof( float );
+        const int texCoordOffset = VertexConstants.TEXCOORD_OFFSET * sizeof( float );
+
+        // Position Attribute
+        var positionLocation = program.GetAttributeLocation( "a_position" );
+
+        if ( positionLocation >= 0 )
+        {
+            program.EnableVertexAttribute( positionLocation );
+            program.SetVertexAttribute( positionLocation,
+                                        VertexConstants.POSITION_COMPONENTS,
+                                        IGL.GL_FLOAT,
+                                        false,
+                                        stride,
+                                        positionOffset );
+        }
+
+        // Color Attribute
+        var colorLocation = program.GetAttributeLocation( "a_colorPacked" );
+
+        if ( colorLocation >= 0 )
+        {
+            program.EnableVertexAttribute( colorLocation );
+            program.SetVertexAttribute( colorLocation,
+                                        VertexConstants.COLOR_COMPONENTS,
+                                        IGL.GL_FLOAT,
+                                        false,
+                                        stride,
+                                        colorOffset );
+        }
+
+        // Texture Coordinates Attribute
+        var texCoordLocation = program.GetAttributeLocation( "a_texCoord" + "0" );
+
+        if ( texCoordLocation >= 0 )
+        {
+            program.EnableVertexAttribute( texCoordLocation );
+            program.SetVertexAttribute( texCoordLocation,
+                                        VertexConstants.TEXCOORD_COMPONENTS,
+                                        IGL.GL_FLOAT,
+                                        false,
+                                        stride,
+                                        texCoordOffset );
+        }
     }
 
     // ========================================================================
@@ -758,26 +682,9 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// </summary>
-    public virtual void SetupMatrices()
-    {
-        CombinedMatrix.Set( ProjectionMatrix ).Mul( TransformMatrix );
-
-        if ( _shader != null )
-        {
-            if ( !_shader.IsCompiled )
-            {
-                return;
-            }
-
-            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix );
-            _shader.SetUniformi( "u_texture", 0 );
-        }
-    }
-
-    /// <summary>
-    /// Switches the current texture to the specified texture and updates internal properties
-    /// related to the texture dimensions. Also flushes any pending batched render operations.
+    /// Switches the current texture to the specified texture and updates internal
+    /// properties related to the texture dimensions. Also flushes any pending
+    /// batched render operations.
     /// </summary>
     /// <param name="texture">The new texture to switch to. If null, no action is taken.</param>
     protected void SwitchTexture( Texture? texture )
@@ -847,6 +754,149 @@ public class SpriteBatch : IBatch
         }
 
         return maxTextureUnits[ 0 ];
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Sets the transformation matrix to be applied to the SpriteBatch during
+    /// the rendering process.
+    /// </summary>
+    /// <param name="transform">
+    /// A Matrix4 representing the new transformation to be applied.
+    /// </param>
+    public virtual void SetTransformMatrix( Matrix4 transform )
+    {
+        if ( IsDrawing && ( Idx > 0 ) )
+        {
+            // Necessary call to Flush() to ensure transformation matrix
+            // #changes are handled correctly
+            Flush();
+        }
+
+        TransformMatrix.Set( transform );
+
+        if ( IsDrawing )
+        {
+            SetupMatrices();
+        }
+    }
+
+    /// <summary>
+    /// Configures the combined transformation matrix by multiplying the projection
+    /// matrix with the transform matrix. Additionally, if a shader is assigned and
+    /// compiled, updates the shader's uniform variables.
+    /// </summary>
+    public virtual void SetupMatrices()
+    {
+        // Note: Do not use the property 'SHADER' here as its getter calls
+        // this method, which would cause an infinite loop.
+        CombinedMatrix.Set( ProjectionMatrix ).Mul( TransformMatrix );
+
+        if ( _shader != null )
+        {
+            if ( !_shader.IsCompiled )
+            {
+                Logger.Warning( $"Shader is not compiled: {Shader}" );
+
+                return;
+            }
+
+            _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix );
+            _shader.SetUniformi( "u_texture", 0 );
+        }
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Populates an index buffer with indices required to render a specified number of sprites.
+    /// </summary>
+    /// <param name="size">The number of sprites for which to generate indices.</param>
+    /// <param name="indices">
+    /// An array to hold the generated indices for the specified number of sprites.
+    /// </param>
+    private static void PopulateIndexBuffer( int size, out short[] indices )
+    {
+        var len = size * INDICES_PER_SPRITE;
+        indices = new short[ len ];
+
+        for ( short i = 0, j = 0; i < len; i += INDICES_PER_SPRITE, j += 4 )
+        {
+            indices[ i ]     = j;
+            indices[ i + 1 ] = ( short )( j + 1 );
+            indices[ i + 2 ] = ( short )( j + 2 );
+            indices[ i + 3 ] = ( short )( j + 2 );
+            indices[ i + 4 ] = ( short )( j + 3 );
+            indices[ i + 5 ] = j;
+        }
+    }
+
+    /// <summary>
+    /// Unbind VAO and VBO
+    /// </summary>
+    private static void UnbindBuffers()
+    {
+        GdxApi.Bindings.BindVertexArray( 0 );
+        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Convenience property. Returns TRUE if blending is not disabled.
+    /// </summary>
+    public bool IsBlendingEnabled => !BlendingDisabled;
+
+    /// <summary>
+    /// Gets or sets the custom shader used by the SpriteBatch for rendering.
+    /// When a custom shader is set, it replaces the default shader provided by
+    /// the SpriteBatch. If the custom shader is null, the SpriteBatch falls back
+    /// to using its default shader. Modifying this property while the SpriteBatch
+    /// is actively drawing will flush the current batch.
+    /// </summary>
+    public ShaderProgram? Shader
+    {
+        get => _shader;
+        set
+        {
+            if ( IsDrawing && ( Idx > 0 ) )
+            {
+                Flush();
+            }
+
+            _shader = value;
+
+            if ( IsDrawing )
+            {
+                _shader?.Bind();
+                SetupMatrices();
+            }
+        }
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _mesh?.Dispose();
+
+        if ( _ownsShader && ( _shader != null ) )
+        {
+            _shader.Dispose();
+        }
+
+        _mesh   = null;
+        _shader = null;
+
+        if ( _vertices != null )
+        {
+            ArrayPool< float >.Shared.Return( _vertices );
+            _vertices = null;
+        }
+
+        GC.SuppressFinalize( this );
     }
 
     // ========================================================================

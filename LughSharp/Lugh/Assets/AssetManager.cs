@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Audio;
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.G2D;
@@ -982,12 +983,13 @@ public partial class AssetManager
     /// </param>
     /// <param name="type">the type of the asset.</param>
     /// <param name="parameters"></param>
-    /// <remarks> Renamed from Load() for clarity during development. </remarks>
     public void Load( string? fileName, Type? type, AssetLoaderParameters? parameters )
     {
         ArgumentNullException.ThrowIfNull( fileName );
         ArgumentNullException.ThrowIfNull( type );
 
+        fileName = IOUtils.NormalizePath( fileName );
+        
         lock ( this )
         {
             // The result of GetLoader is discarded here, but the call is made as the method

@@ -71,6 +71,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <returns></returns>
     public List< TexturePacker.Page > Pack( List< TexturePacker.Rect > inputRects )
     {
+        Logger.Checkpoint();
+
         return Pack( null, inputRects );
     }
 
@@ -83,7 +85,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <exception cref="NullReferenceException"></exception>
     public List< TexturePacker.Page > Pack( TexturePacker.AbstractProgressListener? progress, List< TexturePacker.Rect > inputRects )
     {
-        ArgumentNullException.ThrowIfNull( progress );
+        Logger.Checkpoint();
 
         var n = inputRects.Count;
 
@@ -125,11 +127,14 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
         while ( inputRects.Count > 0 )
         {
-            progress.Count = ( n - inputRects.Count ) + 1;
-
-            if ( progress.Update( progress.Count, n ) )
+            if ( progress != null )
             {
-                break;
+                progress.Count = ( n - inputRects.Count ) + 1;
+
+                if ( ( bool )progress.Update( progress.Count, n ) )
+                {
+                    break;
+                }
             }
 
             var result = PackPage( inputRects );
@@ -199,8 +204,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                         : "";
 
                     throw new GdxRuntimeException( $"Image does not fit within max page size " +
-                                                   $"{_settings.MaxWidth}x{_settings.MaxHeight}{paddingMessage}: " +
-                                                   $"{rect.Name} {width}x{height}" );
+                                                   $"{_settings.MaxWidth}x{_settings.MaxHeight}" +
+                                                   $"{paddingMessage}: {rect.Name} {width}x{height}" );
                 }
             }
             else
@@ -245,11 +250,6 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
         }
 
-        Logger.Debug( $"minWidth: {minWidth}, minHeight: {minHeight}" );
-        Logger.Debug( $"maxWidth: {maxWidth}, maxHeight: {maxHeight}" );
-        Logger.Debug( $"adjustX: {adjustX}, adjustY: {adjustY}" );
-        Logger.Debug( $"inputRects.Count: {inputRects.Count}" );
-        
         if ( !_settings.Silent )
         {
             Logger.Debug( "Packing" );
@@ -273,6 +273,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                                                     int adjustX, int adjustY,
                                                     List< TexturePacker.Rect > inputRects )
     {
+        Logger.Checkpoint();
+        
         // Find the minimal page size that fits all rects.
         TexturePacker.Page? bestResult = null;
 
@@ -302,6 +304,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                     Logger.Dot();
                 }
 
+                Logger.Debug( $"bestResult.Occupancy: {bestResult?.Occupancy}" );
+                Logger.Debug( $"result.Occupancy: {result?.Occupancy}" );
+                
                 bestResult = GetBest( bestResult, result );
                 size       = sizeSearch.Next( result == null );
             }
@@ -319,9 +324,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             SortUtils.Sort( bestResult?.OutputRects, _rectComparator );
 
-            Guard.ThrowIfNull( bestResult );
+            Guard.WarnIfNull( bestResult );
 
-            bestResult.Width  = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingX;
+            bestResult!.Width  = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingX;
             bestResult.Height = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingY;
         }
         else
@@ -344,7 +349,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             while ( true )
             {
-                TexturePacker.Page? bestWidthResult = null;
+                var bestWidthResult = new TexturePacker.Page();
 
                 while ( width != -1 )
                 {
@@ -360,6 +365,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                         Logger.Dot();
                     }
 
+                    Logger.Debug( $"bestWidthResult.Occupancy: {bestWidthResult?.Occupancy}" );
+                    Logger.Debug( $"result.Occupancy: {result?.Occupancy}" );
+                
                     bestWidthResult = GetBest( bestWidthResult, result );
                     width           = widthSearch.Next( result == null );
 
@@ -369,6 +377,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                     }
                 }
 
+                Logger.Debug( $"bestResult.Occupancy: {bestResult?.Occupancy}" );
+                Logger.Debug( $"bestWidthResult.Occupancy: {bestWidthResult?.Occupancy}" );
+                
                 bestResult = GetBest( bestResult, bestWidthResult );
 
                 if ( _settings.Square )
@@ -403,11 +414,6 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                 }
             }
 
-            if ( bestResult == null )
-            {
-                Logger.Warning( "bestResult is NULL" );
-            }
-
             SortUtils.Sort( bestResult!.OutputRects, _rectComparator );
 
             bestResult.Width  -= _settings.PaddingX;
@@ -415,10 +421,10 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         }
 
         Logger.NewLine();
-        
+
         return bestResult;
     }
-    
+
     /// <summary>
     /// </summary>
     /// <param name="fully">
@@ -430,7 +436,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <param name="inputRects"></param>
     private TexturePacker.Page? PackAtSize( bool fully, int width, int height, List< TexturePacker.Rect > inputRects )
     {
-        TexturePacker.Page? bestResult = null;
+        var bestResult = new TexturePacker.Page();
 
         for ( int i = 0, n = _methods.Length; i < n; i++ )
         {
@@ -469,6 +475,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                 continue;
             }
 
+            Logger.Debug( $"bestResult.Occupancy: {bestResult?.Occupancy}" );
+            Logger.Debug( $"result.Occupancy: {result?.Occupancy}" );
+                
             bestResult = GetBest( bestResult, result );
         }
 
@@ -476,23 +485,46 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     }
 
     /// <summary>
-    /// 
+    /// Compares two TexturePacker.Page objects and returns the one with the higher occupancy value.
     /// </summary>
-    /// <param name="result1"></param>
-    /// <param name="result2"></param>
-    /// <returns></returns>
+    /// <param name="result1">The first TexturePacker.Page instance to compare.</param>
+    /// <param name="result2">The second TexturePacker.Page instance to compare.</param>
+    /// <returns>
+    /// Returns the TexturePacker.Page with the higher occupancy value.
+    /// If one of the inputs is null, the other non-null instance is returned.
+    /// If both are null, returns null.
+    /// </returns>
     private static TexturePacker.Page? GetBest( TexturePacker.Page? result1, TexturePacker.Page? result2 )
     {
+        Logger.Debug( $"result1: {result1}" );
+        Logger.Debug( $"result2: {result2}" );
+        Logger.Debug( $"result1.Occupancy: {result1?.Occupancy}" );
+        Logger.Debug( $"result2.Occupancy: {result2?.Occupancy}" );
+
+        // return null if both are null, or returns a non-null result2 if
+        // result1 is null and result2 is not null.
         if ( result1 == null )
         {
+            Logger.Checkpoint();
+
             return result2;
         }
 
+        // return null if both are null, or returns a non-null result1 if
+        // result2 is null and result1 is not null.
         if ( result2 == null )
         {
+            Logger.Checkpoint();
+
             return result1;
         }
 
+        Logger.Checkpoint();
+
+        // return the result with the higher occupancy value.
         return result1.Occupancy > result2.Occupancy ? result1 : result2;
     }
+
+    // ========================================================================
+    // ========================================================================
 }

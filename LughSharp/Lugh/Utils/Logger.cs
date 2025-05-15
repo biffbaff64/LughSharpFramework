@@ -261,12 +261,10 @@ public static class Logger
         }
 
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-
-        var message = $"[CHECKPOINT] : {GetTimeStampInfo()} : {GetCallerInfo( callerID )}";
-
-        Console.WriteLine( message );
-
-        WriteToFile( message );
+        var str      = CreateMessage( CHECKPOINT_TAG, "< CHECKPOINT >", callerID );
+        
+        Console.WriteLine( str );
+        WriteToFile( str );
 
         if ( lineAfter )
         {
@@ -309,6 +307,11 @@ public static class Logger
         }
     }
 
+    /// <summary>
+    /// Outputs a single dot (".") to the console if debug logging is enabled.
+    /// Can be used to indicate progress, or to indicate that a function has
+    /// completed, among other things.
+    /// </summary>
     public static void Dot()
     {
         if ( IsEnabled( LOG_DEBUG ) )

@@ -31,15 +31,34 @@ namespace LughSharp.Lugh.Files;
 [PublicAPI]
 public class IOUtils
 {
-    public static readonly string ExternalPath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile );
-    public static readonly string InternalPath = Directory.GetCurrentDirectory();
-    public static readonly string LocalPath    = $"{Path.PathSeparator}";
+    [PublicAPI]
+    public enum PathType
+    {
+        Unknown,
+        File,
+        Directory,
+        DoesNotExist,
+        Invalid,
+    }
 
     // ========================================================================
 
-    public static readonly string? AssemblyPath      = Assembly.GetExecutingAssembly().Location;
-    public static readonly string? AssemblyDirectory = Path.GetDirectoryName( AssemblyPath );
-    public static readonly string? AssetsPath        = Path.Combine( AssemblyDirectory ?? "", "Assets" );
+    public static string ExternalPath => NormalizePath( Environment.GetFolderPath( Environment.SpecialFolder.UserProfile ) );
+    public static string InternalPath => NormalizePath( Directory.GetCurrentDirectory() );
+    public static string LocalPath    => NormalizePath( $"{Path.PathSeparator}" );
+
+    // ========================================================================
+
+    public static string AssemblyPath      => NormalizePath( Assembly.GetExecutingAssembly().Location );
+    public static string AssemblyDirectory => NormalizePath( Path.GetDirectoryName( AssemblyPath ) );
+    public static string AssetsPath        => NormalizePath( Path.Combine( AssemblyDirectory ?? "", "Assets" ) );
+
+    // ========================================================================
+
+    public static string AssetsObjectsPath    => NormalizePath( $"{AssetsPath}/PackedImages/Objects/" );
+    public static string AssetsAnimationsPath => NormalizePath( $"{AssetsPath}/PackedImages/Animations/" );
+    public static string AssetsInputsPath     => NormalizePath( $"{AssetsPath}/PackedImages/Inputs/" );
+    public static string AssetsUIPath         => NormalizePath( $"{AssetsPath}/PackedImages/UI/" );
 
     // ========================================================================
 
@@ -53,7 +72,7 @@ public class IOUtils
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            return path ?? "";
+            return "";
         }
 
         return path.Replace( '\\', Path.DirectorySeparatorChar )
@@ -86,6 +105,7 @@ public class IOUtils
 
             return File.Exists( path ) ? PathType.File : PathType.DoesNotExist;
         }
+
         // Handle potential exceptions like PathTooLongException, SecurityException, etc.
         catch ( Exception e )
         {
@@ -93,6 +113,16 @@ public class IOUtils
 
             return PathType.Invalid;
         }
+    }
+
+    public static string StripExtension( string fileName, string extension )
+    {
+        if ( fileName.ToLower().EndsWith( extension.ToLower() ) )
+        {
+            fileName = fileName.Substring( 0, fileName.Length - extension.Length );
+        }
+
+        return fileName;
     }
 
     public static void DebugFileList( string directoryPath )
@@ -105,23 +135,21 @@ public class IOUtils
         }
     }
 
-    [PublicAPI]
-    public enum PathType
+    public static void DebugPaths()
     {
-        Unknown,
-        File,
-        Directory,
-        DoesNotExist,
-        Invalid,
-    }
+        Logger.Debug( $"ExternalPath        : {ExternalPath}" );
+        Logger.Debug( $"InternalPath        : {InternalPath}" );
+        Logger.Debug( $"LocalPath           : {LocalPath}" );
 
-    public static string StripExtension( string fileName, string extension )
-    {
-        if ( fileName.ToLower().EndsWith( extension.ToLower() ) )
-        {
-            fileName = fileName.Substring( 0, fileName.Length - extension.Length );
-        }
+        // --------------------------------------------------------------------
+        Logger.Debug( $"AssemblyPath        : {AssemblyPath}" );
+        Logger.Debug( $"AssemblyDirectory   : {AssemblyDirectory}" );
+        Logger.Debug( $"AssetsPath          : {AssetsPath}" );
 
-        return fileName;
+        // --------------------------------------------------------------------
+        Logger.Debug( $"AssetsObjectsPath   : {AssetsObjectsPath}" );
+        Logger.Debug( $"AssetsAnimationsPath: {AssetsAnimationsPath}" );
+        Logger.Debug( $"AssetsInputsPath    : {AssetsInputsPath}" );
+        Logger.Debug( $"AssetsUIPath        : {AssetsUIPath}" );
     }
 }

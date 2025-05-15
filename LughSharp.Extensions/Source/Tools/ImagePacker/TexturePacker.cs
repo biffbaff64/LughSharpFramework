@@ -228,7 +228,7 @@ public partial class TexturePacker
         {
             inputFolder  = IOUtils.NormalizePath( $"{IOUtils.InternalPath}{inputFolder}" );
             outputFolder = IOUtils.NormalizePath( $"{IOUtils.InternalPath}{outputFolder}" );
-            
+
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
             _ = processor.Process( new DirectoryInfo( inputFolder ),
                                    new DirectoryInfo( outputFolder ) );
@@ -1137,16 +1137,16 @@ public partial class TexturePacker
     [PublicAPI]
     public class Page
     {
-        public string?       ImageName      { get; set; }
-        public List< Rect >? OutputRects    { get; set; }
-        public List< Rect >? RemainingRects { get; set; }
-        public float         Occupancy      { get; set; }
-        public int           X              { get; set; }
-        public int           Y              { get; set; }
-        public int           Width          { get; set; }
-        public int           Height         { get; set; }
-        public int           ImageWidth     { get; set; }
-        public int           ImageHeight    { get; set; }
+        public string?       ImageName      { get; set; } = "";
+        public List< Rect >? OutputRects    { get; set; } = [ ];
+        public List< Rect >? RemainingRects { get; set; } = [ ];
+        public float         Occupancy      { get; set; } = 0;
+        public int           X              { get; set; } = 0;
+        public int           Y              { get; set; } = 0;
+        public int           Width          { get; set; } = 0;
+        public int           Height         { get; set; } = 0;
+        public int           ImageWidth     { get; set; } = 0;
+        public int           ImageHeight    { get; set; } = 0;
 
         public void Debug()
         {
@@ -1170,12 +1170,12 @@ public partial class TexturePacker
     [SupportedOSPlatform( "windows" )]
     public class Alias : IComparable< Alias >
     {
-        public int     Index;
+        public int     Index          = 0;
+        public int     OffsetX        = 0;
+        public int     OffsetY        = 0;
+        public int     OriginalHeight = 0;
+        public int     OriginalWidth  = 0;
         public string? Name;
-        public int     OffsetX;
-        public int     OffsetY;
-        public int     OriginalHeight;
-        public int     OriginalWidth;
         public int[]?  Pads;
         public int[]?  Splits;
 
@@ -1216,29 +1216,32 @@ public partial class TexturePacker
     [SupportedOSPlatform( "windows" )]
     public class Rect : IComparable< Rect >
     {
-        public int           Score1;
-        public int           Score2;
-        public bool          CanRotate = true;
-        public int           Height; // Portion of page taken by this region, including padding.
-        public int           Index;
-        public string?       Name = string.Empty;
-        public int           OffsetX;
-        public int           OffsetY;
-        public int           OriginalHeight;
-        public int           OriginalWidth;
-        public int[]?        Pads = null;
-        public int           RegionHeight;
-        public int           RegionWidth;
-        public bool          Rotated;
+        public int  Score1         = 0;
+        public int  Score2         = 0;
+        public bool Rotated        = false;
+        public bool CanRotate      = true;
+        public int  X              = 0;
+        public int  Y              = 0;
+        public int  Width          = 0; // Portion of page taken by this region, including padding.
+        public int  Height         = 0; // Portion of page taken by this region, including padding.
+        public int  Index          = 0;
+        public int  OffsetX        = 0;
+        public int  OffsetY        = 0;
+        public int  OriginalHeight = 0;
+        public int  OriginalWidth  = 0;
+        public int  RegionHeight   = 0;
+        public int  RegionWidth    = 0;
+
+        public string?       Name    = string.Empty;
         public List< Alias > Aliases = [ ];
         public int[]?        Splits  = null;
-        public int           Width; // Portion of page taken by this region, including padding.
-        public int           X;
-        public int           Y;
+        public int[]?        Pads    = null;
 
-        private Bitmap?  _bufferedImage;
-        private FileInfo _file = null!;
-        private bool     _isPatch;
+        // ====================================================================
+
+        private Bitmap?  _bufferedImage = null;
+        private FileInfo _file          = null!;
+        private bool     _isPatch       = false;
 
         // ====================================================================
 
@@ -1259,7 +1262,6 @@ public partial class TexturePacker
             return string.Compare( Name, o?.Name, StringComparison.Ordinal );
         }
 
-        [SupportedOSPlatform( "windows" )]
         public Rect( Bitmap source, int left, int top, int newWidth, int newHeight, bool isPatch )
         {
             _bufferedImage = new Bitmap( newWidth, newHeight, source.PixelFormat );
@@ -1431,10 +1433,10 @@ public partial class TexturePacker
     [PublicAPI]
     public class InputImage
     {
-        public FileInfo? FileInfo { get; set; }
-        public string?   RootPath { get; set; }
-        public string?   Name     { get; set; }
-        public Bitmap?   Image    { get; set; }
+        public FileInfo? FileInfo { get; set; } = null;
+        public string?   RootPath { get; set; } = null;
+        public string?   Name     { get; set; } = null;
+        public Bitmap?   Image    { get; set; } = null;
     }
 
     // ========================================================================

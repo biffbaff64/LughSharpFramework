@@ -105,13 +105,13 @@ public interface IBatch : IDisposable
 
     /// <summary>
     /// Returns the current projection matrix.
-    /// Changing this within <see cref="Begin()" /> / <see cref="End()" /> results in undefined behaviour.
+    /// Changing this within <see cref="Begin" /> / <see cref="End()" /> results in undefined behaviour.
     /// </summary>
     Matrix4 ProjectionMatrix { get; }
 
     /// <summary>
     /// Returns the current transform matrix.
-    /// Changing this within <see cref="Begin()" /> / <see cref="End()" /> results in undefined behaviour.
+    /// Changing this within <see cref="Begin" /> / <see cref="End()" /> results in undefined behaviour.
     /// </summary>
     Matrix4 TransformMatrix { get; }
 
@@ -119,11 +119,6 @@ public interface IBatch : IDisposable
     /// Sets the shader to be used in a GL environment. Vertex position attribute is
     /// called "a_position", the texture coordinates attribute is called "a_texCoord", the
     /// color attribute is called "a_color".
-    /// <para>
-    /// See <see cref="" a_position"" />, <see cref="" a_colorPacked"" />
-    /// and <see cref="" u_texCoord"" /> which gets "0" appended to indicate
-    /// the use of the first texture unit.
-    /// </para>
     /// <para>
     /// The combined transform and projection matrx is uploaded via a mat4 uniform called "u_projTrans".
     /// The texture sampler is passed via a uniform called "u_texture".
@@ -157,7 +152,7 @@ public interface IBatch : IDisposable
 
     /// <summary>
     /// Finishes off rendering. Enables depth writes, disables blending and texturing.
-    /// Must always be called after a call to <see cref="Begin()" />
+    /// Must always be called after a call to <see cref="Begin" />
     /// </summary>
     void End();
 
@@ -298,11 +293,12 @@ public interface IBatch : IDisposable
                float rotation );
 
     /// <summary>
-    /// Draws a rectangle with the texture coordinates rotated 90 degrees. The bottom left corner
-    /// at x,y and stretching the region to cover the given width and height. The rectangle is
-    /// offset by originX, originY relative to the origin. Scale specifies the scaling factor by
-    /// which the rectangle should be scaled around originX, originY. Rotation specifies the angle
-    /// of counter clockwise rotation of the rectangle around originX, originY.
+    /// Draws a rectangle with the texture coordinates rotated 90 degrees. The bottom
+    /// left corner at x,y and stretching the region to cover the given width and height.
+    /// The rectangle is offset by originX, originY relative to the origin. Scale specifies
+    /// the scaling factor by which the rectangle should be scaled around originX, originY.
+    /// Rotation specifies the angle of counter clockwise rotation of the rectangle around
+    /// originX, originY.
     /// </summary>
     /// <param name="textureRegion"></param>
     /// <param name="region">
@@ -333,14 +329,14 @@ public interface IBatch : IDisposable
     void Flush();
 
     /// <summary>
-    /// Disables blending for drawing sprites.
-    /// Calling this within <see cref="Begin()" /> / <see cref="End()" /> will flush the batch.
+    /// Disables blending for drawing sprites. Calling this within <see cref="Begin"/>
+    /// or <see cref="End()" /> will flush the batch.
     /// </summary>
     void DisableBlending();
 
     /// <summary>
     /// Enables blending for drawing sprites.
-    /// Calling this within <see cref="Begin()" /> / <see cref="End()" /> will flush the batch.
+    /// Calling this within <see cref="Begin" /> / <see cref="End()" /> will flush the batch.
     /// </summary>
     void EnableBlending();
 
@@ -358,10 +354,12 @@ public interface IBatch : IDisposable
     /// Sets separate (color/alpha) blending function to be used when rendering sprites.
     /// </summary>
     /// <param name="srcFuncColor">
-    /// the source color function, e.g. GL20.GL_SRC_ALPHA.
-    /// If set to -1, Batch won't change the blending function.
+    /// the source color function, e.g. GL20.GL_SRC_ALPHA. If set to -1, Batch won't
+    /// change the blending function.
     /// </param>
-    /// <param name="dstFuncColor"> the destination color function, e.g. GL20.GL_ONE_MINUS_SRC_ALPHA. </param>
+    /// <param name="dstFuncColor">
+    /// the destination color function, e.g. GL20.GL_ONE_MINUS_SRC_ALPHA.
+    /// </param>
     /// <param name="srcFuncAlpha"> the source alpha function, e.g. GL20.GL_SRC_ALPHA. </param>
     /// <param name="dstFuncAlpha">
     /// the destination alpha function, e.g. GL20.GL_ONE_MINUS_SRC_ALPHA.
@@ -370,8 +368,8 @@ public interface IBatch : IDisposable
 
     /// <summary>
     /// Sets the projection matrix to be used by this Batch.
-    /// If this is called inside a <see cref="Begin()" /> / <see cref="End()" /> block, the
-    /// current batch is flushed to the gpu.
+    /// If this is called inside a <see cref="Begin" /> / <see cref="End()" /> block,
+    /// the current batch is flushed to the gpu.
     /// </summary>
     void SetProjectionMatrix( Matrix4 projection );
 

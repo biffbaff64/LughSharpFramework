@@ -92,12 +92,12 @@ public class ImageProcessor
         }
         catch ( Exception ex )
         {
-            throw new GdxRuntimeException( "Error reading image: " + file, ex );
+            throw new GdxRuntimeException( $"Error reading image: {file}", ex );
         }
 
         if ( image == null )
         {
-            throw new GdxRuntimeException( "Unable to read image: " + file );
+            throw new GdxRuntimeException( $"Unable to read image: {file}" );
         }
 
         var name = IOUtils.NormalizePath( file.FullName );
@@ -127,9 +127,9 @@ public class ImageProcessor
     /// Adds the provided <see cref="Bitmap"/> image to the list.
     /// </summary>
     /// <param name="image"> The Image. </param>
-    /// <param name="name"> The Image namem, without patch or extension! </param>
+    /// <param name="name"> The Image name, without patch or extension! </param>
     /// <returns></returns>
-    public TexturePacker.Rect? AddImage( Bitmap? image, string? name )
+    public TexturePacker.Rect? AddImage( Bitmap image, string? name )
     {
         var rect = ProcessImage( image, name );
 
@@ -139,7 +139,7 @@ public class ImageProcessor
 
             if ( !Settings.Silent )
             {
-                Logger.Debug( "Ignoring blank input image: " + name );
+                Logger.Debug( $"Ignoring blank input image: {name}" );
             }
 
             return null;
@@ -165,10 +165,10 @@ public class ImageProcessor
             {
                 if ( !Settings.Silent )
                 {
-                    var rectName     = rect.Name + ( rect.Index != -1 ? "_" + rect.Index : "" );
-                    var existingName = existing.Name + ( existing.Index != -1 ? "_" + existing.Index : "" );
+                    var rectName     = rect.Name + ( rect.Index != -1 ? $"_{rect.Index}" : "" );
+                    var existingName = existing.Name + ( existing.Index != -1 ? $"_{existing.Index}" : "" );
 
-                    Logger.Debug( $"{rectName} (alias of {existingName})" );
+                    Logger.Debug( $"{rectName} (alias of {existingName}) - WHAT IS THIS?????" );
                 }
 
                 existing.Aliases.Add( new TexturePacker.Alias( rect ) );
@@ -716,9 +716,7 @@ public class ImageProcessor
                                           || ( rgba[ 2 ] != 0 )
                                           || ( rgba[ 3 ] != 255 ) ) )
                     {
-                        throw new GdxRuntimeException( $"Invalid {name} ninepatch split pixel at " +
-                                                       $"{x}, {y}, rgba: {rgba[ 0 ]}, {rgba[ 1 ]}," +
-                                                       $" {rgba[ 2 ]}, {rgba[ 3 ]}" );
+                        throw new GdxRuntimeException( $"Invalid {name} ninepatch split pixel at {x}, {y}, rgba: {rgba[ 0 ]}, {rgba[ 1 ]}, {rgba[ 2 ]}, {rgba[ 3 ]}" );
                     }
 
                     next++;
