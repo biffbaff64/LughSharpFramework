@@ -362,13 +362,16 @@ public class FreeTypeFontGenerator : IDisposable
         return GenerateData( parameter, new FreeTypeBitmapFontData() );
     }
 
-    /**
-     * Generates a new {@link BitmapFontData} instance, expert usage only. Throws a GdxRuntimeException if something went wrong.
-     * @param parameter configures how the font is generated
-     */
+    /// <summary>
+    /// Generates a new <see cref="BitmapFont.BitmapFontData"/> instance, expert usage
+    /// only.Throws a GdxRuntimeException if something went wrong.
+    /// </summary>
+    /// <param name="parameter"> configures how the font is generated </param>
+    /// <param name="data"></param>
     public FreeTypeBitmapFontData GenerateData( FreeTypeFontParameter parameter, FreeTypeBitmapFontData data )
     {
         data.Name = _name + "-" + parameter.Size;
+        
         var characters       = parameter.Characters.ToCharArray();
         var charactersLength = characters.Length;
         var incremental      = parameter.Incremental;
@@ -974,13 +977,14 @@ public class FreeTypeFontGenerator : IDisposable
     [PublicAPI]
     public class FreeTypeBitmapFontData : BitmapFont.BitmapFontData, IDisposable
     {
-        private bool                     _dirty;
-        public  List< TextureRegion >?   Regions    { get; set; }
-        public  FreeTypeFontGenerator?   Generator  { get; set; }
-        public  FreeTypeFontParameter    Parameter  { get; set; } = new();
-        public  FreeType.Stroker?        Stroker    { get; set; }
-        public  PixmapPacker?            Packer     { get; set; }
-        public  List< BitmapFont.Glyph > GlyphsList { get; set; } = [ ];
+        public List< TextureRegion >?   Regions    { get; set; }
+        public FreeTypeFontGenerator?   Generator  { get; set; }
+        public FreeTypeFontParameter    Parameter  { get; set; } = new();
+        public FreeType.Stroker?        Stroker    { get; set; }
+        public PixmapPacker?            Packer     { get; set; }
+        public List< BitmapFont.Glyph > GlyphsList { get; set; } = [ ];
+
+        private bool _dirty;
 
         /// <inheritdoc />
         public void Dispose()

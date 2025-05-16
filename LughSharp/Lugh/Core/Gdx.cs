@@ -35,15 +35,17 @@ using GLBindings = LughSharp.Lugh.Graphics.OpenGL.GLBindings;
 namespace LughSharp.Lugh.Core;
 
 /// <summary>
-/// Environment class holding references to the Application,
-/// Graphics, Audio, Files and Input instances.
+/// The Gdx class serves as the central hub linking multiple interfaces and systems
+/// within the framework, such as application, audio, input, files, graphics, and
+/// network operations.
+/// <para>
+/// It provides global accessibility to these subsystems and offers essential
+/// configurations and tools for managing framework behavior.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class Gdx
 {
-    // ========================================================================
-    // ========================================================================
-
     public IApplication App      { get; set; } = null!;
     public IAudio       Audio    { get; set; } = null!;
     public IInput       Input    { get; set; } = null!;
@@ -52,6 +54,12 @@ public class Gdx
     public INet         Net      { get; set; } = null!;
 
     // ========================================================================
+
+    /// <summary>
+    /// Test mode flag which, when TRUE, means that all developer options are enabled.
+    /// This must, however, mean that software with this enabled cannot be published.
+    /// </summary>
+    public bool DevMode { get; set; } = false;
 
     /// <summary>
     /// From Wiktionary...
@@ -66,16 +74,10 @@ public class Gdx
     /// </para>
     /// <para>
     /// Note: Only the flag is provided by this library. It is intended for use in
-    /// your local game code.
+    /// local game code.
     /// </para>
     /// </summary>
     public bool GodMode { get; set; } = false;
-
-    /// <summary>
-    /// Test mode flag which, when TRUE, means that all developer options are enabled.
-    /// This must, however, mean that software with this enabled cannot be published.
-    /// </summary>
-    public bool DevMode { get; set; } = false;
 
     // ========================================================================
 
@@ -182,6 +184,9 @@ public class Gdx
     }
 
     /// <summary>
+    /// Checks for any OpenGL errors using the current bindings and logs them as warnings
+    /// if errors are detected. This method is for debugging purposes and ensures that
+    /// OpenGL calls are correctly executed without issues.
     /// </summary>
     public void GLErrorCheck()
     {
@@ -192,6 +197,19 @@ public class Gdx
             Logger.Warning( $"GL Error: {error}" );
         }
     }
+
+    /// <summary>
+    /// The time, in seconds, that has elapsed since the last frame was rendered.
+    /// <para>
+    /// This property provides a way to track time progression in your application,
+    /// allowing for operations that depend on frame-to-frame timing, such as animations
+    /// or physics simulations, to properly account for frame delays or variable update rates.
+    /// </para>
+    /// <para>
+    /// The underlying value is retrieved from the associated <see cref="Graphics"/> instance.
+    /// </para>
+    /// </summary>
+    public float DeltaTime => Graphics.DeltaTime;
 
     // ========================================================================
     // ========================================================================
@@ -217,7 +235,7 @@ public class Gdx
         {
         }
     }
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -232,4 +250,3 @@ public class Gdx
         + "Heal what is sick in me. "
         + "Revive whatever peace & love has died in me.";
 }
-

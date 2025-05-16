@@ -29,25 +29,25 @@ namespace LughSharp.Lugh.Graphics.Cameras;
 [PublicAPI]
 public interface IGameCamera
 {
-    Viewport?          Viewport         { get; set; }
-    OrthographicCamera Camera           { get; set; }
-    string?            Name             { get; set; }
-    Vector3?           LerpVector       { get; set; }
-    bool               IsInUse          { get; set; }
-    bool               IsLerpingEnabled { get; set; }
-    Vector3            Position         { get; }
-    float              PPM              { get; set; }
-    float              CameraZoom       { get; set; }
+    Viewport?           Viewport         { get; set; }
+    OrthographicCamera? Camera           { get; set; }
+    string?             Name             { get; set; }
+    Vector3?            LerpVector       { get; set; }
+    bool                IsInUse          { get; set; }
+    bool                IsLerpingEnabled { get; set; }
+    Vector3             Position         { get; }
+    float               PPM              { get; set; }
+    float               CameraZoom       { get; set; }
 
     // ========================================================================
 
     void SetPosition( Vector3 position );
 
-    void SetPosition( Vector3 position, float zoom );
+    void SetPosition( Vector3 position, float? zoom );
 
-    void SetPosition( Vector3 position, float zoom, bool shake );
+    void SetPosition( Vector3 position, float? zoom, bool shake );
 
-    void UpdatePosition();
+    void UpdatePosition( float x, float y );
 
     void LerpTo( Vector3 position, float speed );
 

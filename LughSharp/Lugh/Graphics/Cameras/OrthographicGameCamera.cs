@@ -35,23 +35,27 @@ namespace LughSharp.Lugh.Graphics.Cameras;
 [PublicAPI]
 public class OrthographicGameCamera : IGameCamera, IDisposable
 {
-    private const float DEFAULT_PPM          = 100.0f;
-    private const float DEFAULT_ZOOM         = 0.0f;
-    private const float DEFAULT_SCENE_WIDTH  = 640.0f;
-    private const float DEFAULT_SCENE_HEIGHT = 480.0f;
+    public const float DEFAULT_PPM          = 100.0f;
+    public const float DEFAULT_ZOOM         = 0.0f;
+    public const float DEFAULT_SCENE_WIDTH  = 640.0f;
+    public const float DEFAULT_SCENE_HEIGHT = 480.0f;
 
-    public Viewport?          Viewport         { get; set; }
-    public OrthographicCamera Camera           { get; set; }
-    public string?            Name             { get; set; }
-    public Vector3?           LerpVector       { get; set; }
-    public bool               IsInUse          { get; set; }
-    public bool               IsLerpingEnabled { get; set; }
-    public float              PPM              { get; set; }
+    // ========================================================================
+    
+    public Viewport?           Viewport         { get; set; }
+    public OrthographicCamera? Camera           { get; set; }
+    public string?             Name             { get; set; }
+    public Vector3?            LerpVector       { get; set; }
+    public bool                IsInUse          { get; set; }
+    public bool                IsLerpingEnabled { get; set; }
+    public float               PPM              { get; set; }
+    public Vector3             Position         { get; set; }
 
     // ========================================================================
 
-    private float defaultZoom;
-
+    private float _defaultZoom;
+    private Shake _shake = new();
+    
     // ========================================================================
 
     /// <summary>
@@ -85,16 +89,17 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
                                    float ppm = DEFAULT_PPM,
                                    string name = "" )
     {
-        this.Name             = name;
-        this.IsInUse          = false;
-        this.IsLerpingEnabled = false;
-
-        LerpVector = new Vector3();
-
-        PPM = ppm;
+        Name             = name;
+        IsInUse          = false;
+        IsLerpingEnabled = false;
+        Position         = Vector3.Zero;
+        LerpVector       = Vector3.Zero;
+        PPM              = ppm;
 
         Camera = new OrthographicCamera( sceneWidth, sceneHeight );
-        Camera.Position.Set( sceneWidth / 2, sceneHeight / 2, 0 );
+        Camera.SetToOrtho( sceneWidth, sceneHeight, false );
+        
+//        Camera.Position.Set( sceneWidth / 2, sceneHeight / 2, 0 );
     }
 
     // ========================================================================
@@ -107,14 +112,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </param>
     public void SetPosition( Vector3 position )
     {
-        if ( IsInUse && ( Camera != null ) )
-        {
-            Camera.Position.X = position.X;
-            Camera.Position.Y = position.Y;
-            Camera.Position.Z = position.Z;
-
-            Camera.Update();
-        }
+        SetPosition( position, null, false );
     }
 
     /// <summary>
@@ -129,17 +127,9 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// The zoom adjustment to apply to the camera. Positive values increase zoom, and
     /// negative values decrease zoom.
     /// </param>
-    public void SetPosition( Vector3 position, float zoom )
+    public void SetPosition( Vector3 position, float? zoom )
     {
-        if ( IsInUse && ( Camera != null ) )
-        {
-            Camera.Position.X =  position.X;
-            Camera.Position.Y =  position.Y;
-            Camera.Position.Z =  position.Z;
-            Camera.Zoom       += zoom;
-
-            Camera.Update();
-        }
+        SetPosition( position, zoom, false );
     }
 
     /// <summary>
@@ -154,18 +144,22 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// <param name="shake">
     /// A boolean indicating whether to apply a shake effect to the camera.
     /// </param>
-    public void SetPosition( Vector3 position, float zoom, bool shake )
+    public void SetPosition( Vector3 position, float? zoom, bool shake )
     {
         if ( IsInUse && ( Camera != null ) )
         {
-            Camera.Position.X =  position.X;
-            Camera.Position.Y =  position.Y;
-            Camera.Position.Z =  position.Z;
-            Camera.Zoom       += zoom;
+            Camera.Position.X = position.X;
+            Camera.Position.Y = position.Y;
+            Camera.Position.Z = position.Z;
+
+            if ( zoom != null )
+            {
+                Camera.Zoom += ( float )zoom;
+            }
 
             if ( shake )
             {
-//                Shake.Update( GdxApi.Graphics.DeltaTime, camera );
+                _shake.Update( GdxApi.DeltaTime, Camera );
             }
 
             Camera.Update();
@@ -176,15 +170,23 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// Updates the position of the camera based on the current state.
     /// This method is typically used for internal updates to reposition the camera
     /// when it is active and marked as in use.
-    /// <para>
-    /// The default implementation does nothing, and should be overriden to provide
-    /// custom camera positioning behavior.
-    /// </para>
     /// </summary>
-    public virtual void UpdatePosition()
+    public virtual void UpdatePosition( float x = 0, float y = 0 )
     {
         if ( IsInUse )
         {
+            var temp = Camera?.Position;
+
+            if ( temp == null )
+            {
+                return;
+            }
+
+            temp.X = Camera!.Position.X + ( ( x - Camera.Position.X ) * 0.1f );
+            temp.Y = Camera!.Position.Y + ( ( y - Camera.Position.Y ) * 0.1f );
+
+            Camera.Position.Set( temp );
+            Camera.Update();
         }
     }
 
@@ -245,7 +247,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
 
             if ( shake )
             {
-//                Shake.update( Gdx.graphics.getDeltaTime(), camera, app );
+                _shake.Update( GdxApi.DeltaTime, Camera );
             }
 
             Camera.Update();
@@ -323,7 +325,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     public void SetZoomDefault( float zoom )
     {
         CameraZoom  = zoom;
-        defaultZoom = zoom;
+        _defaultZoom = zoom;
     }
 
     /// <summary>
@@ -340,13 +342,6 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     }
 
     // ========================================================================
-
-    /// <summary>
-    /// Gets the camera's current position in 3D space.
-    /// If the underlying camera is not set, this property will return
-    /// <see cref="Vector3.Zero"/>.
-    /// </summary>
-    public Vector3 Position => Camera?.Position ?? Vector3.Zero;
 
     /// <summary>
     /// Gets or sets the zoom level of the orthographic camera.

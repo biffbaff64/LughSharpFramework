@@ -37,18 +37,9 @@ namespace LughSharp.Lugh.Graphics.Cameras;
 [PublicAPI]
 public abstract class Camera
 {
-    private float _far = 100.0f;
-
-    // ========================================================================
-
-    private float _near = 1.0f;
-
-    // ========================================================================
-
-    public Matrix4 Projection { get; set; } = new();
-    public Matrix4 View       { get; set; } = new();
-    public Matrix4 Combined   { get; set; } = new();
-
+    public Matrix4 Projection     { get; set; } = new();
+    public Matrix4 View           { get; set; } = new();
+    public Matrix4 Combined       { get; set; } = new();
     public Vector3 Position       { get; set; } = new();          // the position of the camera
     public Vector3 Up             { get; set; } = new( 0, 1, 0 ); // the unit length up vector of the camera
     public float   ViewportWidth  { get; set; } = 0;
@@ -59,6 +50,13 @@ public abstract class Camera
     protected Matrix4  InvProjectionView { get; set; } = new();
     protected Vector3  Direction         { get; set; } = new( 0, 0, -1 ); // the unit length direction vector of the camera
     protected Frustrum Frustrum          { get; set; } = new();
+
+    // ========================================================================
+
+    private float _far  = 100.0f;
+    private float _near = 1.0f;
+
+    // ========================================================================
 
     /// <summary>
     /// the far clipping plane distance, has to be positive
@@ -340,11 +338,14 @@ public abstract class Camera
     /// <param name="viewportWidth"> the width of the viewport in pixels.</param>
     /// <param name="viewportHeight"> the height of the viewport in pixels.</param>
     /// <returns> the mutated and projected worldCoords <see cref="Vector3" />.</returns>
-    public Vector3 Project( Vector3 worldCoords, float viewportX, float viewportY, float viewportWidth, float viewportHeight )
+    public Vector3 Project( Vector3 worldCoords,
+                            float viewportX,
+                            float viewportY,
+                            float viewportWidth,
+                            float viewportHeight )
     {
-        ArgumentNullException.ThrowIfNull( worldCoords );
-
         worldCoords.Prj( Combined );
+        
         worldCoords.X = ( ( viewportWidth * ( worldCoords.X + 1 ) ) / 2 ) + viewportX;
         worldCoords.Y = ( ( viewportHeight * ( worldCoords.Y + 1 ) ) / 2 ) + viewportY;
         worldCoords.Z = ( worldCoords.Z + 1 ) / 2;
@@ -398,6 +399,8 @@ public abstract class Camera
         return GetPickRay( screenX, screenY, 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
     }
 
+    // ========================================================================
+    
     public Vector3 GetForward()
     {
         return Direction;

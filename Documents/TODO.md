@@ -293,8 +293,11 @@ GRAPHICS/CAMERAS
     CODE   DOCUMENT
     ----   --------
     - DONE - DONE - Camera
+    - DONE - DONE - IGameCamera
     - DONE - DONE - OrthographicCamera
+    - IP   - IP   - OrthographicGameCamera
     - DONE - DONE - PerspectiveCamera
+    - DONE - DONE - Shake
 
 GRAPHICS/FRAMEBUFFERS
 ---------------------

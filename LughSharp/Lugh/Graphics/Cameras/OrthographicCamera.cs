@@ -41,7 +41,6 @@ public class OrthographicCamera : Camera
     private float _zoom = 1.0f;
 
     // ========================================================================
-    // ========================================================================
 
     /// <summary>
     /// Constructs a default OrthographicCamera.
@@ -145,7 +144,6 @@ public class OrthographicCamera : Camera
     {
         Up.Set( 0, yDown ? -1 : 1, 0 );
         Direction.Set( 0, 0, yDown ? 1 : -1 );
-
         Position.Set( ( Zoom * viewportWidth ) / 2.0f, ( Zoom * viewportHeight ) / 2.0f, 0 );
 
         ViewportWidth  = viewportWidth;
@@ -167,10 +165,8 @@ public class OrthographicCamera : Camera
     /// <summary>
     /// Moves the camera by the given amount on each axis.
     /// </summary>
-    /// <param name="x" />
-    /// the displacement on the x-axis
-    /// <param name="y" />
-    /// the displacement on the y-axis
+    /// <param name="x"> the displacement on the x-axis </param>
+    /// <param name="y"> the displacement on the y-axis </param>
     public void Translate( float x, float y )
     {
         Translate( x, y, 0 );

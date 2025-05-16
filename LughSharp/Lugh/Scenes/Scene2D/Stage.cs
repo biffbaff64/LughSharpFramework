@@ -429,7 +429,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public virtual void Act()
     {
-        Act( Math.Min( GdxApi.Graphics.DeltaTime, 1 / 30f ) );
+        Act( Math.Min( GdxApi.DeltaTime, 1 / 30f ) );
     }
 
     /// <summary>

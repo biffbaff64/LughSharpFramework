@@ -992,8 +992,8 @@ public partial class AssetManager
         
         lock ( this )
         {
-            // The result of GetLoader is discarded here, but the call is made as the method
-            // throws an exception if there is no available loader for the supplied asset.
+            // The result of GetLoader is discarded here, but the call is made
+            // to confirm availability of the loader for the supplied asset.
             _ = GetLoader( type, fileName );
 
             if ( _loadQueue.Count == 0 )
@@ -1030,12 +1030,8 @@ public partial class AssetManager
     /// <param name="type">The type of the asset.</param>
     /// <param name="asset">The asset to add.</param>
     /// <exception cref="GdxRuntimeException">Thrown if the asset is null.</exception>
-    public void AddAsset( string fileName, Type? type, object? asset )
+    public void AddAsset( string fileName, Type type, object? asset )
     {
-        ArgumentNullException.ThrowIfNull( fileName );
-        ArgumentNullException.ThrowIfNull( type );
-        ArgumentNullException.ThrowIfNull( asset );
-
         // Add the asset to the filename lookup
         _assetTypes[ fileName ] = type;
 

@@ -59,6 +59,32 @@ public class BitmapFont
     public bool Flipped     { get; set; }
     public bool OwnsTexture { get; set; }
 
+    /// <summary>
+    /// The BitmapFontCache used by this font, for rendering to a sprite batch.
+    /// This can be used, for example, to manipulate glyph colors within a
+    /// specific index.
+    /// </summary>
+    public BitmapFontCache Cache { get; set; }
+
+    /// <summary>
+    /// The underlying <see cref="BitmapFontData" /> for this BitmapFont.
+    /// </summary>
+    public BitmapFontData Data { get; set; }
+
+    /// <summary>
+    /// Specifies whether to use integer positions.
+    /// Default is to use them so filtering doesn't kick in as badly.
+    /// </summary>
+    public bool UseIntegerPositions
+    {
+        get => _integer;
+        set
+        {
+            _integer                  = value;
+            Cache.UseIntegerPositions = value;
+        }
+    }
+
     // ========================================================================
 
     private const string REGEX_PATTERN      = ".*id=(\\d+)";
@@ -206,7 +232,8 @@ public class BitmapFont
         {
             if ( data.ImagePaths == null )
             {
-                throw new ArgumentException( "If no regions are specified, the font data must have an images path." );
+                throw new ArgumentException( "If no regions are specified, the" +
+                                             "font data must have an images path." );
             }
 
             // Load each path.
@@ -234,36 +261,6 @@ public class BitmapFont
         Cache = new BitmapFontCache( this, UseIntegerPositions );
 
         InitialLoad( data );
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// The BitmapFontCache used by this font, for rendering to a sprite batch.
-    /// This can be used, for example, to manipulate glyph colors within a
-    /// specific index.
-    /// </summary>
-    public BitmapFontCache Cache { get; set; }
-
-    /// <summary>
-    /// The underlying <see cref="BitmapFontData" /> for this BitmapFont.
-    /// </summary>
-    public BitmapFontData Data { get; set; }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Specifies whether to use integer positions.
-    /// Default is to use them so filtering doesn't kick in as badly.
-    /// </summary>
-    public bool UseIntegerPositions
-    {
-        get => _integer;
-        set
-        {
-            _integer                  = value;
-            Cache.UseIntegerPositions = value;
-        }
     }
 
     /// <summary>

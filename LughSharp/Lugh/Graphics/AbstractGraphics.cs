@@ -30,14 +30,14 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public abstract class AbstractGraphics : IGraphics
 {
-    public int                              LogicalWidth          { get; set; } = 0;
-    public int                              LogicalHeight         { get; set; } = 0;
-    public Color                            WindowBackgroundColor { get; set; } = Color.Blue;
-    public IGraphics.BufferFormatDescriptor BufferFormat          { get; set; } = null!;
+    public IGraphics.BufferFormatDescriptor BufferFormat { get; set; } = null!;
 
-    public int    BackBufferWidth  { get; set; } = 0;
-    public int    BackBufferHeight { get; set; } = 0;
-    public Window CurrentContext   { get; set; } = null!;
+    public int    LogicalWidth          { get; set; } = 0;
+    public int    LogicalHeight         { get; set; } = 0;
+    public Color  WindowBackgroundColor { get; set; } = Color.Blue;
+    public int    BackBufferWidth       { get; set; } = 0;
+    public int    BackBufferHeight      { get; set; } = 0;
+    public Window CurrentContext        { get; set; } = null!;
 
     // ========================================================================
 

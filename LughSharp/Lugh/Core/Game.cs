@@ -67,7 +67,7 @@ public abstract class Game : IApplicationListener
     /// </summary>
     public virtual void Update()
     {
-        Screen?.Update( GdxApi.Graphics.DeltaTime );
+        Screen?.Update( GdxApi.DeltaTime );
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public abstract class Game : IApplicationListener
     /// </summary>
     public virtual void Render()
     {
-        Screen?.Render( GdxApi.Graphics.DeltaTime );
+        Screen?.Render( GdxApi.DeltaTime );
     }
 
     /// <summary>
