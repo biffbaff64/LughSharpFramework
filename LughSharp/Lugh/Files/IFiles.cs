@@ -37,22 +37,54 @@ public interface IFiles
     /// <exception cref="GdxRuntimeException">
     /// if the type is classpath or internal and the file does not exist.
     /// </exception>
-    FileHandle GetFileHandle( string path, PathTypes type );
+    FileInfo GetFileHandle( string path, PathTypes type );
 
     /// <inheritdoc cref="PathTypes.Classpath" />
-    FileHandle Classpath( string path );
-
-    /// <inheritdoc cref="PathTypes.Internal" />
-    FileHandle Internal( string path );
-
-    /// <inheritdoc cref="PathTypes.External" />
-    FileHandle External( string path );
+    FileInfo Classpath( string path );
 
     /// <inheritdoc cref="PathTypes.Absolute" />
-    FileHandle Absolute( string path );
+    FileInfo Absolute( string path );
 
-    /// <inheritdoc cref="PathTypes.Local" />
-    FileHandle Local( string path );
+    // ========================================================================
+    
+    /// <inheritdoc cref="PathTypes.Assembly" />
+    FileInfo Assembly( string path );
+
+    /// <summary>
+    /// Returns the internal storage path directory. This is the app asset directory
+    /// on Android and the Applications root directory on the desktop.
+    /// </summary>
+    string GetAssemblyStoragePath();
+
+    /// <summary>
+    /// Returns true if the internal storage is ready for file IO. The return value
+    /// is true by default, but backends may override this to return false if the
+    /// internal storage is not available.
+    /// </summary>
+    bool IsAssemblyStorageAvailable();
+
+    // ========================================================================
+    
+    /// <inheritdoc cref="PathTypes.Internal" />
+    FileInfo Internal( string path );
+
+    /// <summary>
+    /// Returns the internal storage path directory. This is the app asset directory
+    /// on Android and the Applications root directory on the desktop.
+    /// </summary>
+    string GetInternalStoragePath();
+
+    /// <summary>
+    /// Returns true if the internal storage is ready for file IO. The return value
+    /// is true by default, but backends may override this to return false if the
+    /// internal storage is not available.
+    /// </summary>
+    bool IsInternalStorageAvailable();
+
+    // ========================================================================
+    
+    /// <inheritdoc cref="PathTypes.External" />
+    FileInfo External( string path );
 
     /// <summary>
     /// Returns the external storage path directory. This is the app external storage
@@ -62,18 +94,25 @@ public interface IFiles
 
     /// <summary>
     /// Returns true if the external storage is ready for file IO.
+    /// For desktops builds, this would default to true if the folder exists.
     /// </summary>
     bool IsExternalStorageAvailable();
 
+    // ========================================================================
+    
+    /// <inheritdoc cref="PathTypes.Local" />
+    FileInfo Local( string path );
+
     /// <summary>
     /// Returns the local storage path directory. This is the private
-    /// files directory on Android and the directory of the jar on
+    /// files directory on Android and the directory of the exe on
     /// the desktop.
     /// </summary>
     string GetLocalStoragePath();
 
     /// <summary>
     /// Returns true if the local storage is ready for file IO.
+    /// For desktops builds, this would default to true if the folder exists.
     /// </summary>
     bool IsLocalStorageAvailable();
 }
@@ -89,10 +128,23 @@ public enum PathTypes
     Classpath,
 
     /// <summary>
+    /// Path that is a fully qualified, absolute filesystem path. <b>To ensure
+    /// portability across platforms use absolute files only when absolutely
+    /// necessary.</b>
+    /// </summary>
+    Absolute,
+
+    /// <summary>
     /// Path relative to the asset directory on Android and to the application's root
     /// directory on the desktop. On the desktop, if the file is not found, then the
     /// classpath is checked.
+    /// <para>
+    /// This is not the root folder of this framework, it is the root folder of the
+    /// application that is using this framework.
+    /// </para>
+    /// <para>
     /// <b>Internal files are always readonly.</b>
+    /// </para>
     /// </summary>
     Internal,
 
@@ -103,15 +155,52 @@ public enum PathTypes
     External,
 
     /// <summary>
-    /// Path that is a fully qualified, absolute filesystem path. <b>To ensure
-    /// portability across platforms use absolute files only when absolutely
-    /// necessary.</b>
-    /// </summary>
-    Absolute,
-
-    /// <summary>
     /// Path relative to the private files directory on Android and to the
     /// application's root directory on the desktop.
     /// </summary>
     Local,
+
+    /// <summary>
+    /// Path relative to the location of the assembly itself. Primarily used to access files
+    /// that are distributed alongside the application's binaries. These files are typically
+    /// read-only and are intended to be bundled with the application during deployment.
+    /// </summary>
+    Assembly,
+
+    // ========================================================================
+
+    /// <summary>
+    /// Represents an unknown or unspecified path type. This value is used when
+    /// the path type cannot be determined or does not match any known category.
+    /// </summary>
+    Unknown,
+
+    /// <summary>
+    /// Represents a file path that is explicitly designated as a file rather
+    /// than a directory or other path type. This is used to clarify file-specific
+    /// operations and enforce file-related constraints where necessary.
+    /// </summary>
+    File,
+
+    /// <summary>
+    /// Represents a path to a directory. Used to specify or resolve paths that
+    /// refer to directories, enabling organization or manipulation of grouped
+    /// files and subdirectories.
+    /// </summary>
+    Directory,
+
+    /// <summary>
+    /// Represents a path type indicating that the specified file or directory
+    /// does not exist. This can be used as a placeholder or error indicator for
+    /// non-existent paths.
+    /// </summary>
+    DoesNotExist,
+
+    /// <summary>
+    /// Represents an invalid or unsupported path type. This value may be used as
+    /// a fallback or error state, indicating that the provided path cannot be
+    /// resolved within the context of the available path types.
+    /// </summary>
+    Invalid,
 }
+

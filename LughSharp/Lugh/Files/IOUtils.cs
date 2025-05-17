@@ -31,16 +31,6 @@ namespace LughSharp.Lugh.Files;
 [PublicAPI]
 public class IOUtils
 {
-    [PublicAPI]
-    public enum PathType
-    {
-        Unknown,
-        File,
-        Directory,
-        DoesNotExist,
-        Invalid,
-    }
-
     // ========================================================================
 
     public static string ExternalPath => NormalizePath( Environment.GetFolderPath( Environment.SpecialFolder.UserProfile ) );
@@ -72,13 +62,21 @@ public class IOUtils
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            return "";
+            return $"{Path.DirectorySeparatorChar}";
         }
 
         return path.Replace( '\\', Path.DirectorySeparatorChar )
                    .Replace( '/', Path.DirectorySeparatorChar );
     }
 
+    /// <summary>
+    /// Determines whether the specified <see cref="FileSystemInfo"/> represents a directory.
+    /// </summary>
+    /// <param name="inputFileOrDir">The <see cref="FileSystemInfo"/> to evaluate.</param>
+    /// <returns>
+    /// True if the specified <see cref="FileSystemInfo"/> represents a directory;
+    /// otherwise, false.
+    /// </returns>
     public static bool IsDirectory( FileSystemInfo inputFileOrDir )
     {
         return ( inputFileOrDir.Attributes & FileAttributes.Directory ) != 0;
@@ -89,21 +87,21 @@ public class IOUtils
         return ( inputFileOrDir.Attributes & FileAttributes.Directory ) == 0;
     }
 
-    public static PathType GetPathType( string path )
+    public static PathTypes GetPathType( string path )
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            return PathType.Unknown;
+            return PathTypes.Unknown;
         }
 
         try
         {
             if ( Directory.Exists( path ) )
             {
-                return PathType.Directory;
+                return PathTypes.Directory;
             }
 
-            return File.Exists( path ) ? PathType.File : PathType.DoesNotExist;
+            return File.Exists( path ) ? PathTypes.File : PathTypes.DoesNotExist;
         }
 
         // Handle potential exceptions like PathTooLongException, SecurityException, etc.
@@ -111,7 +109,7 @@ public class IOUtils
         {
             Logger.Warning( $"Exception ignored: {e.Message}" );
 
-            return PathType.Invalid;
+            return PathTypes.Invalid;
         }
     }
 
@@ -125,6 +123,9 @@ public class IOUtils
         return fileName;
     }
 
+// ========================================================================
+
+    #if DEBUG
     public static void DebugFileList( string directoryPath )
     {
         var filesList = Directory.GetFiles( directoryPath );
@@ -152,4 +153,5 @@ public class IOUtils
         Logger.Debug( $"AssetsInputsPath    : {AssetsInputsPath}" );
         Logger.Debug( $"AssetsUIPath        : {AssetsUIPath}" );
     }
+    #endif
 }

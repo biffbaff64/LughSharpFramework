@@ -95,7 +95,7 @@ public partial class FreeType
 
         public Dictionary< long, ByteBuffer > FontData { get; private set; } = [ ];
 
-        public Face NewFace( FileHandle fontFile, int faceIndex )
+        public Face NewFace( FileInfo fontFile, int faceIndex )
         {
             throw new NotImplementedException();
 

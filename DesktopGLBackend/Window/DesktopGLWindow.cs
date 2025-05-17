@@ -373,7 +373,7 @@ public partial class DesktopGLWindow : IDisposable
     /// Sets the icon that will be used in the window's title bar. Has no effect in macOS,
     /// which doesn't use window icons.
     /// </summary>
-    public static void SetIcon( GLFW.Window window, string[] imagePaths, PathTypes imageFileType )
+    public static void SetIcon( GLFW.Window window, string[] imagePaths, PathTypes imagePathType )
     {
         if ( Platform.IsMac )
         {
@@ -384,7 +384,7 @@ public partial class DesktopGLWindow : IDisposable
 
         for ( var i = 0; i < imagePaths.Length; i++ )
         {
-            pixmaps[ i ] = new Pixmap( GdxApi.Files.GetFileHandle( imagePaths[ i ], imageFileType ).File );
+            pixmaps[ i ] = new Pixmap( GdxApi.Files.GetFileHandle( imagePaths[ i ], imagePathType ) );
         }
 
         SetIcon( window, pixmaps );

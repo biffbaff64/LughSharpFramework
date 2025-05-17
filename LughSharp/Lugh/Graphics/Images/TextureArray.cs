@@ -93,7 +93,7 @@ public class TextureArray : GLTexture, IManaged
 
         for ( var i = 0; i < internalPaths.Length; i++ )
         {
-            handles[ i ] = GdxApi.Files.Internal( internalPaths[ i ] ).File;
+            handles[ i ] = GdxApi.Files.Internal( internalPaths[ i ] );
         }
 
         return handles;

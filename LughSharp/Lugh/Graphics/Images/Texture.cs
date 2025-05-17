@@ -133,7 +133,7 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     /// <param name="internalPath"></param>
     public Texture( string internalPath )
-        : this( GdxApi.Files.Internal( internalPath ).File, false )
+        : this( GdxApi.Files.Internal( internalPath ), false )
     {
     }
 

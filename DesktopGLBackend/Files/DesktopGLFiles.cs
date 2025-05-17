@@ -1,121 +1,70 @@
-﻿// ///////////////////////////////////////////////////////////////////////////////
-// MIT License
-//
-// Copyright (c) 2024 Richard Ikin.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-// ///////////////////////////////////////////////////////////////////////////////
+﻿// /////////////////////////////////////////////////////////////////////////////
+//  MIT License
+// 
+//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
+// 
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+// 
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+// 
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+// /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Utils.Exceptions;
 
 namespace DesktopGLBackend.Files;
 
 [PublicAPI]
-public class DesktopGLFiles : IFiles
+public class DesktopGLFiles : AbstractFiles
 {
-    // ========================================================================
-
-    /// <summary>
-    /// Returns a <see cref="FileHandle" /> representing a file or directory.
-    /// </summary>
-    /// <param name="path"></param>
-    /// <param name="type"> Determines how the path is resolved. </param>
-    /// <exception cref="GdxRuntimeException">
-    /// if the type is classpath or internal and the file does not exist.
-    /// </exception>
-    public FileHandle GetFileHandle( string path, PathTypes type )
+    /// <inheritdoc/>
+    public override FileInfo Classpath( string path )
     {
-        return new DesktopGLFileHandle( path, type );
+        return new FileInfo( path );
     }
 
-    /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Classpath" /> file handle.
-    /// </summary>
-    public FileHandle Classpath( string path )
+    /// <inheritdoc/>
+    public override FileInfo Absolute( string path )
     {
-        return GetFileHandle( path, PathTypes.Classpath );
+        return new FileInfo( path );
     }
 
-    /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Internal" /> file handle.
-    /// </summary>
-    public FileHandle Internal( string path )
+    /// <inheritdoc/>
+    public override FileInfo Internal( string path )
     {
-        return GetFileHandle( $"{IOUtils.InternalPath}{'/'}{path}", PathTypes.Internal );
+        var prefix = path.Contains( IOUtils.InternalPath ) ? "" : IOUtils.InternalPath;
+        
+        return new FileInfo( $"{prefix}{path}" );
     }
 
-    /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.External" /> file handle.
-    /// </summary>
-    public FileHandle External( string path )
+    /// <inheritdoc/>
+    public override FileInfo External( string path )
     {
-        return GetFileHandle( path, PathTypes.External );
+        var prefix = path.Contains( IOUtils.ExternalPath ) ? "" : IOUtils.ExternalPath;
+        
+        return new FileInfo( $"{prefix}{path}" );
     }
 
-    /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Absolute" /> file handle.
-    /// </summary>
-    public FileHandle Absolute( string path )
+    /// <inheritdoc/>
+    public override FileInfo Local( string path )
     {
-        return GetFileHandle( path, PathTypes.Absolute );
-    }
-
-    /// <summary>
-    /// Convenience method that returns a <see cref="PathTypes.Local" /> file handle.
-    /// </summary>
-    public FileHandle Local( string path )
-    {
-        return GetFileHandle( path, PathTypes.Local );
-    }
-
-    /// <summary>
-    /// Returns the external storage path directory. This is the app external storage
-    /// on Android and the home directory of the current user on the desktop.
-    /// </summary>
-    public string GetExternalStoragePath()
-    {
-        return IOUtils.ExternalPath;
-    }
-
-    /// <summary>
-    /// Returns true if the external storage is ready for file IO.
-    /// </summary>
-    public bool IsExternalStorageAvailable()
-    {
-        return true;
-    }
-
-    /// <summary>
-    /// Returns the local storage path directory. This is the private files directory
-    /// on Android and the directory of the jar on the desktop.
-    /// </summary>
-    public string GetLocalStoragePath()
-    {
-        return IOUtils.LocalPath;
-    }
-
-    /// <summary>
-    /// Returns true if the local storage is ready for file IO.
-    /// </summary>
-    public bool IsLocalStorageAvailable()
-    {
-        return true;
+        var prefix = path.Contains( IOUtils.LocalPath ) ? "" : IOUtils.LocalPath;
+        
+        return new FileInfo( $"{prefix}{path}" );
     }
 }
+
+// ========================================================================
+// ========================================================================

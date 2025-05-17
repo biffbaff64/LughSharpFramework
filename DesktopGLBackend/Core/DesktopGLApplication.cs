@@ -24,7 +24,6 @@
 
 using DesktopGLBackend.Audio;
 using DesktopGLBackend.Audio.Mock;
-using DesktopGLBackend.Files;
 using DesktopGLBackend.Input;
 using DesktopGLBackend.Utils;
 using DesktopGLBackend.Window;
@@ -58,14 +57,16 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     public IClipboard?      Clipboard     { get; set; }
     public IGLAudio?        Audio         { get; set; }
     public INet             Network       { get; set; }
-    public IFiles           Files         { get; set; }
     public GLVersion?       GLVersion     { get; set; }
     public OpenGLProfile    OGLProfile    { get; set; }
     public DesktopGLWindow? CurrentWindow { get; set; }
 
+    [Obsolete( "No Longer Needed." )]
+    public IFiles Files { get; set; }
+
     // ========================================================================
     // ========================================================================
-    
+
     private const int UNINITIALISED_FRAMERATE = -2;
 
     // ========================================================================
@@ -100,6 +101,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // Config.Title becomes the name of the ApplicationListener if it has no value at this point.
         Config       =   DesktopGLApplicationConfiguration.Copy( config );
         Config.Title ??= listener.GetType().Name;
+
         //
         // ====================================================================
 
@@ -110,12 +112,12 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // Note: GdxApi.Graphics is set later, during window creation as each window that is created
         // will have its own IGraphics instance.
         Audio     = CreateAudio( Config );
-        Files     = new DesktopGLFiles();
+//        Files     = new DesktopGLFiles();
         Network   = new DesktopGLNet( Config );
         Clipboard = new DesktopGLClipboard();
 
         GdxApi.Audio = Audio;
-        GdxApi.Files = Files;
+//        GdxApi.Files = Files;
         GdxApi.Net   = Network;
 
         _sync = new Sync();
@@ -372,7 +374,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
         Windows.Clear();
     }
-    
+
     /// <inheritdoc />
     public IGLAudio CreateAudio( DesktopGLApplicationConfiguration config )
     {
@@ -389,7 +391,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
             catch ( Exception e )
             {
                 Logger.Debug( $"Couldn't initialize audio, disabling audio: {e}" );
-                
+
                 audio = new MockAudio();
             }
         }

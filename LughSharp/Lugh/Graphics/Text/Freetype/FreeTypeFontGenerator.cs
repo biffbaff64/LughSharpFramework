@@ -143,9 +143,9 @@ public class FreeTypeFontGenerator : IDisposable
     /// determined (it was 0), an extra copy of the font bytes is performed.
     /// </summary>
     /// <exception cref="GdxRuntimeException"> Thrown if loading failed. </exception>
-    public FreeTypeFontGenerator( FileHandle fontFile, int faceIndex = 0 )
+    public FreeTypeFontGenerator( FileInfo fontFile, int faceIndex = 0 )
     {
-        _name    = fontFile.NameWithoutExtension();
+        _name    = Path.GetFileNameWithoutExtension( fontFile.Name );
         _library = FreeType.InitFreeType();
         _face    = _library.NewFace( fontFile, faceIndex );
 
@@ -371,7 +371,7 @@ public class FreeTypeFontGenerator : IDisposable
     public FreeTypeBitmapFontData GenerateData( FreeTypeFontParameter parameter, FreeTypeBitmapFontData data )
     {
         data.Name = _name + "-" + parameter.Size;
-        
+
         var characters       = parameter.Characters.ToCharArray();
         var charactersLength = characters.Length;
         var incremental      = parameter.Incremental;

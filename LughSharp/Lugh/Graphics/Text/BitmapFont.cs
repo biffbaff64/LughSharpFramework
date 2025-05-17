@@ -88,8 +88,8 @@ public class BitmapFont
     // ========================================================================
 
     private const string REGEX_PATTERN      = ".*id=(\\d+)";
-    private const string DEFAULT_FONT       = "lib/net8.0/lsans-15.fnt";
-    private const string DEFAULT_FONT_IMAGE = "lib/net8.0/lsans-15.png";
+    private const string DEFAULT_FONT       = "Assets/Fonts/arial-15.fnt";
+    private const string DEFAULT_FONT_IMAGE = "Assets/Fonts/arial-15.png";
     private const int    LOG2_PAGE_SIZE     = 9;
     private const int    PAGE_SIZE          = 1 << LOG2_PAGE_SIZE;
     private const int    PAGES              = 0x10000 / PAGE_SIZE;
@@ -108,8 +108,8 @@ public class BitmapFont
     /// This is convenient to easily display text without bothering without generating
     /// a bitmap font yourself.
     /// </summary>
-    public BitmapFont() : this( GdxApi.Files.Internal( DEFAULT_FONT ).File,
-                                GdxApi.Files.Internal( DEFAULT_FONT_IMAGE ).File,
+    public BitmapFont() : this( GdxApi.Files.Internal( DEFAULT_FONT ),
+                                GdxApi.Files.Internal( DEFAULT_FONT_IMAGE ),
                                 false )
     {
         _fileType = PathTypes.Internal;
@@ -123,8 +123,8 @@ public class BitmapFont
     /// <param name="flip">
     /// If true, the glyphs will be flipped for use with a perspective where 0,0 is the upper left corner.
     /// </param>
-    public BitmapFont( bool flip ) : this( GdxApi.Files.Internal( DEFAULT_FONT ).File,
-                                           GdxApi.Files.Internal( DEFAULT_FONT ).File,
+    public BitmapFont( bool flip ) : this( GdxApi.Files.Internal( DEFAULT_FONT ),
+                                           GdxApi.Files.Internal( DEFAULT_FONT ),
                                            flip )
     {
         _fileType = PathTypes.Internal;
@@ -247,7 +247,7 @@ public class BitmapFont
                     ? GdxApi.Files.Internal( data.ImagePaths[ i ] )
                     : GdxApi.Files.GetFileHandle( data.ImagePaths[ i ], _fileType );
 
-                _regions.Add( new TextureRegion( new Texture( file.File, false ) ) );
+                _regions.Add( new TextureRegion( new Texture( file, false ) ) );
             }
 
             OwnsTexture = true;
