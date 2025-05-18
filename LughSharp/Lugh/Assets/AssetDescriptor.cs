@@ -22,6 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+
+using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Utils;
+
 namespace LughSharp.Lugh.Assets;
 
 [PublicAPI]
@@ -57,9 +62,11 @@ public class AssetDescriptor
         ArgumentNullException.ThrowIfNull( filepath );
 
         AssetType  = assetType;
-        AssetName  = filepath.Replace( '\\', '/' );
         Parameters = parameters;
-        File       = new FileInfo( Path.GetFileName( filepath ) );
+        AssetName  = IOUtils.ValidateAssetPath( filepath );
+        File       = new FileInfo( AssetName );
+
+        Debug();
     }
 
     /// <summary>
@@ -70,12 +77,20 @@ public class AssetDescriptor
     /// <param name="parameters"> Optional parameters for the asset loader. </param>
     public AssetDescriptor( FileInfo file, Type? assetType, AssetLoaderParameters? parameters = null )
     {
-        File       = file ?? throw new ArgumentNullException( nameof( file ) );
-        AssetType  = assetType ?? throw new ArgumentNullException( nameof( assetType ) );
-        AssetName  = file.FullName.Replace( '\\', '/' );
         Parameters = parameters;
+        AssetType  = assetType ?? throw new ArgumentNullException( nameof( assetType ) );
+        File       = file ?? throw new ArgumentNullException( nameof( file ) );
+        AssetName  = IOUtils.ValidateAssetPath( file.FullName );
+
+        Debug();
     }
 
+    public void Debug()
+    {
+        Logger.Debug( $"AssetName: {AssetName}" );
+        Logger.Debug( $"Path: {File.FullName}" );
+    }
+    
     /// <summary>
     /// The Type of asset ( Texture, Pixmap, Audio, Atlas etc ).
     /// </summary>

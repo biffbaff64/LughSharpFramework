@@ -29,41 +29,7 @@ namespace DesktopGLBackend.Files;
 [PublicAPI]
 public class DesktopGLFiles : AbstractFiles
 {
-    /// <inheritdoc/>
-    public override FileInfo Classpath( string path )
-    {
-        return new FileInfo( path );
-    }
-
-    /// <inheritdoc/>
-    public override FileInfo Absolute( string path )
-    {
-        return new FileInfo( path );
-    }
-
-    /// <inheritdoc/>
-    public override FileInfo Internal( string path )
-    {
-        var prefix = path.Contains( IOUtils.InternalPath ) ? "" : IOUtils.InternalPath;
-        
-        return new FileInfo( $"{prefix}{path}" );
-    }
-
-    /// <inheritdoc/>
-    public override FileInfo External( string path )
-    {
-        var prefix = path.Contains( IOUtils.ExternalPath ) ? "" : IOUtils.ExternalPath;
-        
-        return new FileInfo( $"{prefix}{path}" );
-    }
-
-    /// <inheritdoc/>
-    public override FileInfo Local( string path )
-    {
-        var prefix = path.Contains( IOUtils.LocalPath ) ? "" : IOUtils.LocalPath;
-        
-        return new FileInfo( $"{prefix}{path}" );
-    }
+    
 }
 
 // ========================================================================

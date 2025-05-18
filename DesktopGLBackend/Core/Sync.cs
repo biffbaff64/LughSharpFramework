@@ -30,11 +30,19 @@ namespace DesktopGLBackend.Core;
 
 public class Sync
 {
-    private const    long      NANOS_IN_SECOND = 1000L * 1000L * 1000L;
-    private readonly Stopwatch _stopwatch      = new();
-    private          bool      _initialised    = false;
-    private          long      _nextFrame      = 0;
+    private const long NANOS_IN_SECOND = 1000L * 1000L * 1000L;
 
+    // ========================================================================
+    
+    private readonly Stopwatch _stopwatch = new();
+
+    // ========================================================================
+    
+    private bool _initialised = false;
+    private long _nextFrame   = 0;
+
+    // ========================================================================
+    
     public void SyncFrameRate( int fps )
     {
         if ( fps <= 0 )
@@ -52,13 +60,19 @@ public class Sync
 
         var sleepTime = targetTime - currentTime;
 
-        if ( sleepTime > 1000000 ) // Sleep for longer periods (1ms)
+        switch ( sleepTime )
         {
-            Thread.Sleep( ( int )( sleepTime / 1000000 ) );
-        }
-        else if ( sleepTime > 0 ) //Yield if sleep time is less than 1ms
-        {
-            Thread.Yield();
+            // Sleep for longer periods (1ms)
+            case > 1000000:
+                Thread.Sleep( ( int )( sleepTime / 1000000 ) );
+
+                break;
+
+            //Yield if sleep time is less than 1ms
+            case > 0:
+                Thread.Yield();
+
+                break;
         }
 
         currentTime = _stopwatch.ElapsedTicks * ( NANOS_IN_SECOND / Stopwatch.Frequency );

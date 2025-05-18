@@ -36,8 +36,8 @@ public abstract class Game : IApplicationListener
     private IScreen? _screen;
 
     /// <summary>
-    /// Sets the current screen. Screen.hide() is called on any old screen, and Screen.show()
-    /// is called on the new screen, if any.
+    /// Sets the current screen. Screen.hide() is called on any old screen, and
+    /// Screen.show() is called on the new screen, if any.
     /// </summary>
     public IScreen? Screen
     {

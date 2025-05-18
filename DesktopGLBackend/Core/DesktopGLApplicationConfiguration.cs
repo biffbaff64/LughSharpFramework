@@ -68,8 +68,8 @@ public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration
     }
 
     /// <summary>
-    /// Sets this DesktopApplicationConfiguration settings, using settings from the supplied
-    /// DesktopApplicationConfiguratrion object.
+    /// Sets this DesktopApplicationConfiguration settings, using settings from
+    /// the supplied DesktopApplicationConfiguratrion object.
     /// </summary>
     private void Set( DesktopGLApplicationConfiguration config )
     {

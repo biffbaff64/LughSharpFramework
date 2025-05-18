@@ -24,15 +24,14 @@
 
 using DesktopGLBackend.Audio;
 using DesktopGLBackend.Audio.Mock;
+using DesktopGLBackend.Files;
 using DesktopGLBackend.Input;
 using DesktopGLBackend.Utils;
 using DesktopGLBackend.Window;
 
 using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Network;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -54,15 +53,12 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     public List< ILifecycleListener >         LifecycleListeners { get; set; } = [ ];
     public DesktopGLApplicationConfiguration? Config             { get; set; }
 
-    public IClipboard?      Clipboard     { get; set; }
-    public IGLAudio?        Audio         { get; set; }
-    public INet             Network       { get; set; }
+    public IClipboard? Clipboard { get; set; }
+    public IGLAudio?   Audio     { get; set; }
+
     public GLVersion?       GLVersion     { get; set; }
     public OpenGLProfile    OGLProfile    { get; set; }
     public DesktopGLWindow? CurrentWindow { get; set; }
-
-    [Obsolete( "No Longer Needed." )]
-    public IFiles Files { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -105,20 +101,18 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         //
         // ====================================================================
 
-        // Initialise the global environment shortcuts. 'GdxApi.Audio', 'GdxApi.Files', and
-        // 'GdxApi.Net' are instances of classes implementing IAudio, IFiles, and INet respectively,
-        // and are used to access LughSharp members 'Audio', 'Files', and 'Network' are instances
-        // of classes which extend the aforementioned classes, and are used in backend code only.
-        // Note: GdxApi.Graphics is set later, during window creation as each window that is created
-        // will have its own IGraphics instance.
+        // Initialise the global environment shortcuts. 'GdxApi.Audio', 'GdxApi.Files',
+        // and 'GdxApi.Net' are instances of classes implementing IAudio, IFiles, and
+        // INet respectively, and are used to access LughSharp members 'Audio', 'Files',
+        // and 'Network' are instances of classes which extend the aforementioned classes,
+        // and are used in backend code only.
+        // Note: GdxApi.Graphics is set later, during window creation as each window that
+        // is created will have its own IGraphics instance.
         Audio     = CreateAudio( Config );
-//        Files     = new DesktopGLFiles();
-        Network   = new DesktopGLNet( Config );
         Clipboard = new DesktopGLClipboard();
 
-        GdxApi.Audio = Audio;
-//        GdxApi.Files = Files;
-        GdxApi.Net   = Network;
+        GdxApi.Files = new DesktopGLFiles();
+        GdxApi.Net   = new DesktopGLNet( Config );
 
         _sync = new Sync();
 
@@ -130,10 +124,11 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// The entry point for running code using this framework. At this point at least one window
-    /// will have been created, Glfw will have been set up, and the framework properly initialised.
-    /// This passes control to <see cref="Loop()" /> and stays there until the app is finished. At
-    /// this point <see cref="CleanupWindows" /> is called, followed by <see cref="Cleanup" />.
+    /// The entry point for running code using this framework. At this point at least one
+    /// window will have been created, Glfw will have been set up, and the framework properly
+    /// initialised. This passes control to <see cref="Loop()" /> and stays there until the
+    /// app is finished. At this point <see cref="CleanupWindows" /> is called, followed by
+    /// <see cref="Cleanup" />.
     /// </summary>
     public void Run()
     {
@@ -220,7 +215,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
             if ( shouldRequestRendering )
             {
-                // This section Must follow Runnables execution so changes made by
+                // This section MUST follow Runnables execution so changes made by
                 // Runnables are reflected in the following render.
                 foreach ( var window in Windows )
                 {

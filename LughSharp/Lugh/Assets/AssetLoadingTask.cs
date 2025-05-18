@@ -168,7 +168,9 @@ public class AssetLoadingTask
     {
         if ( !DependenciesLoaded )
         {
-            Dependencies = loader.GetDependencies( AssetDesc.AssetName, Resolve( loader, AssetDesc )!, AssetDesc.Parameters );
+            Dependencies = loader.GetDependencies( AssetDesc.AssetName,
+                                                   Resolve( loader, AssetDesc )!,
+                                                   AssetDesc.Parameters );
 
             if ( Dependencies != null )
             {

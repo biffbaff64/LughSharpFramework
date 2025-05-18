@@ -105,9 +105,14 @@ public partial class AssetManager
             Logger.Divider();
             Logger.Debug( $"_assetTypes[].Count: {_assetTypes.Count}" );
 
-            for ( var i = 0; i < _assetTypes.Keys.Count; i++ )
+            foreach ( var key in _assetTypes.Keys )
             {
-                Logger.Debug( $"Key: {i}" );
+                Logger.Debug( $"{key}: " );
+                
+                foreach ( var value in _assetTypes.Values )
+                {
+                    Logger.Debug( $"{value}" );
+                }
             }
 
             Logger.Debug( $"_assets Count       : {_assets.Count}" );

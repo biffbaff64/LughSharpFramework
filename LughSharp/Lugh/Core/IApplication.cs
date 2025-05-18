@@ -82,7 +82,8 @@ public interface IApplication
     IClipboard? Clipboard { get; set; }
 
     /// <summary>
-    /// Returns the Android API level on Android, the major OS version on iOS (5, 6, 7, ..), or 0 on the desktop.
+    /// Returns the Android API level on Android, the major OS version on iOS (5, 6, 7, ..),
+    /// or 0 on the desktop.
     /// </summary>
     int GetVersion();
 

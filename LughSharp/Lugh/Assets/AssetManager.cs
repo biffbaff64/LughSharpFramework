@@ -47,19 +47,26 @@ namespace LughSharp.Lugh.Assets;
 [PublicAPI]
 public partial class AssetManager
 {
+    /// <summary>
+    /// Returns the <see cref="IFileHandleResolver" /> which this
+    /// AssetManager was loaded with.
+    /// </summary>
+    /// <returns>the file handle resolver which this AssetManager uses.</returns>
+    public IFileHandleResolver FileHandleResolver { get; set; }
+
     // ========================================================================
     // ========================================================================
 
-    private readonly Dictionary< string, List< string > >                           _assetDependencies = [ ];
-    private readonly Dictionary< Type, Dictionary< string, IRefCountedContainer > > _assets            = [ ];
-    private readonly Dictionary< string, Type >                                     _assetTypes        = [ ];
-    private readonly object                                                         _filenameLock      = new();
+    private readonly Dictionary< Type, Dictionary< string, AssetLoader > >?         _loaders = [ ];
+    private readonly Dictionary< Type, Dictionary< string, IRefCountedContainer > > _assets  = [ ];
 
-    private readonly List< string >                                         _injected    = [ ];
-    private readonly Dictionary< Type, Dictionary< string, AssetLoader > >? _loaders     = [ ];
-    private readonly ReaderWriterLockSlim                                   _loadersLock = new(); // Use ReaderWriterLockSlim
-    private readonly List< AssetDescriptor >                                _loadQueue   = [ ];
-    private readonly Queue< AssetLoadingTask >                              _tasks       = [ ];
+    private readonly Dictionary< string, List< string > > _assetDependencies = [ ];
+    private readonly Dictionary< string, Type >           _assetTypes        = [ ];
+    private readonly object                               _filenameLock      = new();
+    private readonly List< string >                       _injected          = [ ];
+    private readonly ReaderWriterLockSlim                 _loadersLock       = new();
+    private readonly List< AssetDescriptor >              _loadQueue         = [ ];
+    private readonly Queue< AssetLoadingTask >            _tasks             = [ ];
 
     private IAssetErrorListener? _listener;
     private int                  _loaded;
@@ -101,6 +108,7 @@ public partial class AssetManager
             SetLoader( typeof( ShaderProgram ), new ShaderProgramLoader( resolver ) );
             SetLoader( typeof( Cubemap ), new CubemapLoader( resolver ) );
 
+            //TODO:
             // 3D Particle effect loader here...
             // .g3dj loader here...
             // .g3db loader here...
@@ -109,13 +117,6 @@ public partial class AssetManager
 
         FileHandleResolver = resolver;
     }
-
-    /// <summary>
-    /// Returns the <see cref="IFileHandleResolver" /> which this
-    /// AssetManager was loaded with.
-    /// </summary>
-    /// <returns>the file handle resolver which this AssetManager uses.</returns>
-    public IFileHandleResolver FileHandleResolver { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -265,6 +266,8 @@ public partial class AssetManager
 
         lock ( this )
         {
+            fileName = IOUtils.NormalizePath( fileName );
+
             if ( ( _tasks.Count > 0 )
                  && _tasks.First().AssetDesc is { } assetDescriptor
                  && assetDescriptor.AssetName.Equals( fileName ) )
@@ -297,6 +300,8 @@ public partial class AssetManager
 
         lock ( this )
         {
+            fileName = IOUtils.NormalizePath( fileName );
+
             if ( _tasks.Count > 0 )
             {
                 if ( _tasks.First().AssetDesc is { } assetDesc
@@ -507,7 +512,7 @@ public partial class AssetManager
     public object? Get( string name, Type? type, bool required )
     {
         Guard.ThrowIfNull( type );
-        
+
         lock ( this )
         {
             try
@@ -931,6 +936,8 @@ public partial class AssetManager
         }
         else
         {
+            fileName = IOUtils.NormalizePath( fileName );
+
             var len = -1;
 
             foreach ( var entry in _loaders![ type ] )
@@ -988,8 +995,8 @@ public partial class AssetManager
         ArgumentNullException.ThrowIfNull( fileName );
         ArgumentNullException.ThrowIfNull( type );
 
-        fileName = IOUtils.NormalizePath( fileName );
-        
+        Logger.Debug( $"Loading asset: {fileName}" );
+
         lock ( this )
         {
             // The result of GetLoader is discarded here, but the call is made
@@ -1010,12 +1017,7 @@ public partial class AssetManager
 
             _toLoad++;
 
-            var descriptor = new AssetDescriptor
-            {
-                AssetName  = fileName,
-                AssetType  = type,
-                Parameters = parameters,
-            };
+            var descriptor = new AssetDescriptor( fileName, type, parameters );
 
             // Add this asset to the load queue
             _loadQueue.Add( descriptor );
@@ -1089,6 +1091,8 @@ public partial class AssetManager
     {
         ArgumentNullException.ThrowIfNull( fileName );
 
+        fileName = IOUtils.NormalizePath( fileName );
+
         while ( true )
         {
             var type = _assetTypes.Get( fileName );
@@ -1152,8 +1156,7 @@ public partial class AssetManager
     /// <exception cref="GdxRuntimeException">Thrown if the asset is not loaded or cannot be found.</exception>
     public void Unload( string fileName )
     {
-        // Convert all Windows path separators to Unix style
-        fileName = fileName.Replace( '\\', '/' );
+        fileName = IOUtils.NormalizePath( fileName );
 
         // Check if it's currently processed (and the first element in the queue,
         // thus not a dependency) and cancel if necessary
@@ -1185,6 +1188,11 @@ public partial class AssetManager
     {
         lock ( this )
         {
+            if ( fileName != null )
+            {
+                fileName = IOUtils.NormalizePath( fileName );
+            }
+
             return ( fileName != null ) && _assetTypes.ContainsKey( fileName );
         }
     }
@@ -1199,6 +1207,8 @@ public partial class AssetManager
 
         lock ( this )
         {
+            fileName = IOUtils.NormalizePath( fileName );
+
             // Retrieve all assets of the required type
             var assetsByType = _assets.Get( type );
             var isLoaded = ( fileName.Length != 0 ) && ( assetsByType != null )

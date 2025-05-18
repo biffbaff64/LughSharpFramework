@@ -33,22 +33,22 @@ public class IOUtils
 {
     // ========================================================================
 
-    public static string ExternalPath => NormalizePath( Environment.GetFolderPath( Environment.SpecialFolder.UserProfile ) );
-    public static string InternalPath => NormalizePath( Directory.GetCurrentDirectory() );
-    public static string LocalPath    => NormalizePath( $"{Path.PathSeparator}" );
+    public static string ExternalPath => NormalizePath( $"{Environment.GetFolderPath( Environment.SpecialFolder.UserProfile )}/" );
+    public static string InternalPath => NormalizePath( $"{Directory.GetCurrentDirectory()}/" );
+    public static string LocalPath    => NormalizePath( "/" );
 
     // ========================================================================
 
     public static string AssemblyPath      => NormalizePath( Assembly.GetExecutingAssembly().Location );
-    public static string AssemblyDirectory => NormalizePath( Path.GetDirectoryName( AssemblyPath ) );
-    public static string AssetsPath        => NormalizePath( Path.Combine( AssemblyDirectory ?? "", "Assets" ) );
+    public static string AssemblyDirectory => NormalizePath( Path.GetDirectoryName( AssemblyPath ) + "/" );
 
     // ========================================================================
 
-    public static string AssetsObjectsPath    => NormalizePath( $"{AssetsPath}/PackedImages/Objects/" );
-    public static string AssetsAnimationsPath => NormalizePath( $"{AssetsPath}/PackedImages/Animations/" );
-    public static string AssetsInputsPath     => NormalizePath( $"{AssetsPath}/PackedImages/Inputs/" );
-    public static string AssetsUIPath         => NormalizePath( $"{AssetsPath}/PackedImages/UI/" );
+    public static string AssetsRoot           => AssemblyDirectory;
+    public static string AssetsObjectsPath    => NormalizePath( $"{AssetsRoot}/PackedImages/Objects/" );
+    public static string AssetsAnimationsPath => NormalizePath( $"{AssetsRoot}/PackedImages/Animations/" );
+    public static string AssetsInputsPath     => NormalizePath( $"{AssetsRoot}/PackedImages/Inputs/" );
+    public static string AssetsUIPath         => NormalizePath( $"{AssetsRoot}/PackedImages/UI/" );
 
     // ========================================================================
 
@@ -67,6 +67,22 @@ public class IOUtils
 
         return path.Replace( '\\', Path.DirectorySeparatorChar )
                    .Replace( '/', Path.DirectorySeparatorChar );
+    }
+
+    /// <summary>
+    /// Validates the provided asset path by ensuring it is relative to the assembly
+    /// directory and normalizing it to use consistent directory separators.
+    /// </summary>
+    /// <param name="path">The asset path to validate and normalize.</param>
+    /// <returns>The validated and normalized asset path.</returns>
+    public static string ValidateAssetPath( string path )
+    {
+        if ( !path.Contains( AssemblyDirectory ) )
+        {
+            path = AssemblyDirectory + path;
+        }
+
+        return NormalizePath( path );
     }
 
     /// <summary>
@@ -145,7 +161,7 @@ public class IOUtils
         // --------------------------------------------------------------------
         Logger.Debug( $"AssemblyPath        : {AssemblyPath}" );
         Logger.Debug( $"AssemblyDirectory   : {AssemblyDirectory}" );
-        Logger.Debug( $"AssetsPath          : {AssetsPath}" );
+        Logger.Debug( $"AssetsPath          : {AssetsRoot}" );
 
         // --------------------------------------------------------------------
         Logger.Debug( $"AssetsObjectsPath   : {AssetsObjectsPath}" );

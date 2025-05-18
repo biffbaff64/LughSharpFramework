@@ -46,12 +46,12 @@ namespace LughSharp.Lugh.Core;
 [PublicAPI]
 public class Gdx
 {
-    public IApplication App      { get; set; } = null!;
-    public IAudio       Audio    { get; set; } = null!;
-    public IInput       Input    { get; set; } = null!;
-    public IFiles       Files    { get; set; } = null!;
-    public IGraphics    Graphics { get; set; } = null!;
-    public INet         Net      { get; set; } = null!;
+    public IApplication App       { get; set; } = null!;
+    public IAudio       Audio     { get; set; } = null!;
+    public IInput       Input     { get; set; } = null!;
+    public IFiles       Files     { get; set; } = null!;
+    public IGraphics    Graphics  { get; set; } = null!;
+    public INet         Net       { get; set; } = null!;
 
     // ========================================================================
 
@@ -95,11 +95,11 @@ public class Gdx
     }
 
     /// <summary>
-    /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings" /> interface.
-    /// Initially initialised as an instance of <see cref="GLBindings" />, it can be modified to
-    /// reference any class inheriting from IGLBindings.
-    /// The property will check internally for null, and initialise itself to reference GLBindings
-    /// by default if that is the case.
+    /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings" />
+    /// interface. Initially initialised as an instance of <see cref="GLBindings" />, it can be
+    /// modified to reference any class inheriting from IGLBindings.
+    /// The property will check internally for null, and initialise itself to reference
+    /// GLBindings by default if that is the case.
     /// </summary>
     public IGLBindings Bindings
     {
