@@ -139,7 +139,22 @@ public class IOUtils
         return fileName;
     }
 
-// ========================================================================
+    /// <summary>
+    /// Strips the asset root path from the given path, leaving only the relative portion of the path.
+    /// </summary>
+    /// <param name="path">The full path from which the asset root should be removed.</param>
+    /// <returns>The path relative to the asset root.</returns>
+    public static string StripAssetsPath( string path )
+    {
+        var position = path.IndexOf( "Assets", StringComparison.Ordinal );
+        
+        Logger.Debug( $"Path: {path}" );
+        Logger.Debug( $"Index of AssetsRoot: {position}" );
+        
+        return path.Substring( position, path.Length - position );
+    }
+    
+    // ========================================================================
 
     #if DEBUG
     public static void DebugFileList( string directoryPath )

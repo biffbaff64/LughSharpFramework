@@ -63,7 +63,7 @@ public class AssetDescriptor
 
         AssetType  = assetType;
         Parameters = parameters;
-        AssetName  = IOUtils.ValidateAssetPath( filepath );
+        AssetName  = IOUtils.NormalizePath( filepath );
         File       = new FileInfo( AssetName );
 
         Debug();
@@ -80,7 +80,7 @@ public class AssetDescriptor
         Parameters = parameters;
         AssetType  = assetType ?? throw new ArgumentNullException( nameof( assetType ) );
         File       = file ?? throw new ArgumentNullException( nameof( file ) );
-        AssetName  = IOUtils.ValidateAssetPath( file.FullName );
+        AssetName  = IOUtils.NormalizePath( file.FullName );
 
         Debug();
     }
@@ -89,6 +89,7 @@ public class AssetDescriptor
     {
         Logger.Debug( $"AssetName: {AssetName}" );
         Logger.Debug( $"Path: {File.FullName}" );
+        Logger.Debug( $"{IOUtils.StripAssetsPath( File.FullName )}" );
     }
     
     /// <summary>

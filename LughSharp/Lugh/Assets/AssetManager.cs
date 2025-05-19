@@ -60,18 +60,19 @@ public partial class AssetManager
     private readonly Dictionary< Type, Dictionary< string, AssetLoader > >?         _loaders = [ ];
     private readonly Dictionary< Type, Dictionary< string, IRefCountedContainer > > _assets  = [ ];
 
+    private readonly object                               _filenameLock      = new();
+    private readonly ReaderWriterLockSlim                 _loadersLock       = new();
     private readonly Dictionary< string, List< string > > _assetDependencies = [ ];
     private readonly Dictionary< string, Type >           _assetTypes        = [ ];
-    private readonly object                               _filenameLock      = new();
     private readonly List< string >                       _injected          = [ ];
-    private readonly ReaderWriterLockSlim                 _loadersLock       = new();
     private readonly List< AssetDescriptor >              _loadQueue         = [ ];
     private readonly Queue< AssetLoadingTask >            _tasks             = [ ];
 
     private IAssetErrorListener? _listener;
-    private int                  _loaded;
-    private int                  _peakTasks;
-    private int                  _toLoad;
+
+    private int _loaded;
+    private int _peakTasks;
+    private int _toLoad;
 
     // ========================================================================
     // ========================================================================
@@ -418,6 +419,8 @@ public partial class AssetManager
     {
         lock ( this )
         {
+            name = IOUtils.NormalizePath( name );
+
             return _assetDependencies[ name ];
         }
     }
@@ -431,6 +434,8 @@ public partial class AssetManager
     {
         lock ( this )
         {
+            name = IOUtils.NormalizePath( name );
+            
             if ( !_assetTypes.TryGetValue( name, out var _ ) )
             {
                 throw new GdxRuntimeException( $"_assetTypes does not contain {name}" );
@@ -458,12 +463,16 @@ public partial class AssetManager
     /// Retrieves an asset by name, throwing an exception if the asset is not found and required.
     /// </summary>
     /// <param name="name">The name of the asset to retrieve.</param>
-    /// <param name="required">Determines if an exception should be thrown if the asset is not found.</param>
+    /// <param name="required">
+    /// Determines if an exception should be thrown if the asset is not found.
+    /// </param>
     /// <returns>The requested asset if found, otherwise null.</returns>
     public object? Get( string name, bool required )
     {
         lock ( this )
         {
+            name = IOUtils.NormalizePath( name );
+            
             var type           = GetAssetType( name );
             var assetsByType   = _assets[ type ];
             var assetContainer = assetsByType.Get( name );
@@ -515,6 +524,8 @@ public partial class AssetManager
 
         lock ( this )
         {
+            name = IOUtils.NormalizePath( name );
+            
             try
             {
                 var assetsByType   = _assets[ type ];
@@ -995,7 +1006,7 @@ public partial class AssetManager
         ArgumentNullException.ThrowIfNull( fileName );
         ArgumentNullException.ThrowIfNull( type );
 
-        Logger.Debug( $"Loading asset: {fileName}" );
+        Logger.Debug( $"Loading asset: {IOUtils.NormalizePath( fileName )}" );
 
         lock ( this )
         {
