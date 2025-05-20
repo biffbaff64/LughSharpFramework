@@ -126,14 +126,15 @@ public class FreeTypeFontGenerator : IDisposable
     // The maximum texture size allowed by generateData, when storing in a texture atlas.
     // Multiple texture pages will be created if necessary.
     // Default is 1024.
-    private static int           _maxTextureSize = 1024;
-    private        bool          _bitmapped      = false;
-    private        FreeType.Face _face;
+    private static int _maxTextureSize = 1024;
 
+    private FreeType.Face    _face;
     private FreeType.Library _library;
-    private string           _name;
-    private int              _pixelHeight;
-    private int              _pixelWidth;
+
+    private bool   _bitmapped = false;
+    private string _name;
+    private int    _pixelHeight;
+    private int    _pixelWidth;
 
     // ========================================================================
     // ========================================================================
@@ -145,16 +146,24 @@ public class FreeTypeFontGenerator : IDisposable
     /// <exception cref="GdxRuntimeException"> Thrown if loading failed. </exception>
     public FreeTypeFontGenerator( FileInfo fontFile, int faceIndex = 0 )
     {
-        _name    = Path.GetFileNameWithoutExtension( fontFile.Name );
+        Logger.Checkpoint();
+        _name = Path.GetFileNameWithoutExtension( fontFile.Name );
+        Logger.Debug( $"fontFile Name: {fontFile.Name}" );
         _library = FreeType.InitFreeType();
-        _face    = _library.NewFace( fontFile, faceIndex );
+        Logger.Checkpoint();
+        _face = _library.NewFace( fontFile, faceIndex );
+        Logger.Checkpoint();
 
         if ( CheckForBitmapFont() )
         {
             return;
         }
 
+        Logger.Checkpoint();
+
         SetPixelSizes( 0, 15 );
+        
+        Logger.Checkpoint();
     }
 
     /// <summary>

@@ -482,8 +482,6 @@ public class SpriteBatch : IBatch
     /// </summary>
     private void SetupVertexAttributes( ShaderProgram? program )
     {
-        Logger.Checkpoint();
-        
         OpenGL.GLUtils.CheckOpenGLContext();
 
         // --------------------------------------------------------------------

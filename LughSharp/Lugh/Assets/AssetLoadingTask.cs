@@ -81,17 +81,16 @@ public class AssetLoadingTask
 
         try
         {
-            if ( _loader is AsynchronousAssetLoader asyncLoader )
+            switch ( _loader )
             {
-                LoadDependenciesAsync( asyncLoader );
+                case AsynchronousAssetLoader asyncLoader:
+                    LoadDependenciesAsync( asyncLoader );
 
-                // Check for cancellation after dependencies are loaded.
-                return Cancel ? null : LoadAssetAsync( asyncLoader );
-            }
+                    // Check for cancellation after dependencies are loaded.
+                    return Cancel ? null : LoadAssetAsync( asyncLoader );
 
-            if ( _loader is SynchronousAssetLoader< Type, AssetLoaderParameters > syncLoader )
-            {
-                return LoadSynchronously( syncLoader );
+                case SynchronousAssetLoader< Type, AssetLoaderParameters > syncLoader:
+                    return LoadSynchronously( syncLoader );
             }
         }
         catch ( Exception e )

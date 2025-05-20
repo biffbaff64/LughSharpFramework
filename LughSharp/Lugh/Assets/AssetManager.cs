@@ -435,7 +435,7 @@ public partial class AssetManager
         lock ( this )
         {
             name = IOUtils.NormalizePath( name );
-            
+
             if ( !_assetTypes.TryGetValue( name, out var _ ) )
             {
                 throw new GdxRuntimeException( $"_assetTypes does not contain {name}" );
@@ -472,7 +472,7 @@ public partial class AssetManager
         lock ( this )
         {
             name = IOUtils.NormalizePath( name );
-            
+
             var type           = GetAssetType( name );
             var assetsByType   = _assets[ type ];
             var assetContainer = assetsByType.Get( name );
@@ -520,16 +520,22 @@ public partial class AssetManager
     /// <exception cref="GdxRuntimeException">Thrown if the asset is not found and it is required.</exception>
     public object? Get( string name, Type? type, bool required )
     {
+        Logger.Checkpoint();
+
         Guard.ThrowIfNull( type );
 
         lock ( this )
         {
             name = IOUtils.NormalizePath( name );
-            
+
+            Logger.Debug( $"Getting asset: {name}, {type}" );
+
             try
             {
                 var assetsByType   = _assets[ type ];
                 var assetContainer = assetsByType.Get( name );
+
+                Logger.Debug( $"AssetContainer>.Asset: {assetContainer?.Asset}" );
 
                 return assetContainer?.Asset;
             }
@@ -1006,10 +1012,10 @@ public partial class AssetManager
         ArgumentNullException.ThrowIfNull( fileName );
         ArgumentNullException.ThrowIfNull( type );
 
-        Logger.Debug( $"Loading asset: {IOUtils.NormalizePath( fileName )}" );
-
         lock ( this )
         {
+            Logger.Debug( $"Loading asset: {IOUtils.NormalizePath( fileName )}" );
+
             // The result of GetLoader is discarded here, but the call is made
             // to confirm availability of the loader for the supplied asset.
             _ = GetLoader( type, fileName );
@@ -1022,8 +1028,6 @@ public partial class AssetManager
                 _peakTasks = 0;
             }
 
-            // Check ths potential asset against assets currently in the preload queue and
-            // the loaded assets dictionary, to make sure its has not already been loaded.
             ValidatePreloadQueue( fileName, type );
 
             _toLoad++;
@@ -1247,7 +1251,7 @@ public partial class AssetManager
     private void AddTask( AssetDescriptor assetDesc )
     {
         Logger.Checkpoint();
-
+        
         var loader = GetLoader( assetDesc.AssetType, assetDesc.AssetName );
 
         if ( loader == null )
@@ -1255,8 +1259,12 @@ public partial class AssetManager
             throw new GdxRuntimeException( $"No loader for type: {assetDesc.AssetType}" );
         }
 
+        Logger.Checkpoint();
+        
         _tasks.Enqueue( new AssetLoadingTask( this, assetDesc, loader ) );
 
+        Logger.Checkpoint();
+        
         _peakTasks++;
     }
 
@@ -1330,7 +1338,8 @@ public partial class AssetManager
     }
 
     /// <summary>
-    /// Check if an asset with the same name but different type has already been added.
+    /// Check ths potential asset against assets currently in the preload queue and
+    /// the loaded assets dictionary, to make sure its has not already been loaded.
     /// </summary>
     /// <param name="fileName"></param>
     /// <param name="type"></param>

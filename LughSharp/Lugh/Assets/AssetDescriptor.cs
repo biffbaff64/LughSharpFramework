@@ -65,8 +65,6 @@ public class AssetDescriptor
         Parameters = parameters;
         AssetName  = IOUtils.NormalizePath( filepath );
         File       = new FileInfo( AssetName );
-
-        Debug();
     }
 
     /// <summary>
@@ -81,8 +79,6 @@ public class AssetDescriptor
         AssetType  = assetType ?? throw new ArgumentNullException( nameof( assetType ) );
         File       = file ?? throw new ArgumentNullException( nameof( file ) );
         AssetName  = IOUtils.NormalizePath( file.FullName );
-
-        Debug();
     }
 
     public void Debug()

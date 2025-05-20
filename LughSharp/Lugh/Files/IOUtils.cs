@@ -140,16 +140,20 @@ public class IOUtils
     }
 
     /// <summary>
-    /// Strips the asset root path from the given path, leaving only the relative portion of the path.
+    /// Removes the portion of the specified path before the "Assets" directory,
+    /// leaving the path starting from the "Assets" directory.
     /// </summary>
-    /// <param name="path">The full path from which the asset root should be removed.</param>
-    /// <returns>The path relative to the asset root.</returns>
+    /// <param name="path">
+    /// The full path from which the "Assets" directory path will be extracted.
+    /// </param>
+    /// <returns>
+    /// The path stripped to start from the "Assets" directory. For example, If
+    /// the supplied path is <c>"C:\Projects\MyProject\Assets\Animations\"</c>, the
+    /// returned path will be <c>"Assets\Animations\"</c>.
+    /// </returns>
     public static string StripAssetsPath( string path )
     {
         var position = path.IndexOf( "Assets", StringComparison.Ordinal );
-        
-        Logger.Debug( $"Path: {path}" );
-        Logger.Debug( $"Index of AssetsRoot: {position}" );
         
         return path.Substring( position, path.Length - position );
     }

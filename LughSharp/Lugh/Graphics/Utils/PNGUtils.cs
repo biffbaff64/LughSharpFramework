@@ -86,21 +86,37 @@ public class PNGUtils
     public static PNGFormatStructs.IDATChunk    IDATchunk     { get; private set; }
     public static long                          TotalIDATSize { get; private set; } = 0;
 
+    // ========================================================================
+
     /// <summary>
+    /// Analyzes the specified PNG file to extract metadata, including details such
+    /// as dimensions, bit depth, color type, and interlace method, while optionally
+    /// displaying the results.
     /// </summary>
-    /// <param name="filename"></param>
-    public static void AnalysePNG( string filename )
+    /// <param name="filename">The file path of the PNG image to analyze.</param>
+    /// <param name="showResults">Specifies whether to display the analysis results in the output.</param>
+    /// <exception cref="ArgumentNullException">Thrown if the provided filename is null or empty.</exception>
+    /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist.</exception>
+    /// <exception cref="ArgumentException">Thrown if the file format is invalid or not a valid PNG.</exception>
+    public static void AnalysePNG( string filename, bool showResults = false )
     {
         var data = File.ReadAllBytes( filename );
 
-        AnalysePNG( data );
+        AnalysePNG( data, showResults );
     }
 
     /// <summary>
+    /// Analyzes PNG image data to extract metadata such as width, height, bit depth, color type,
+    /// compression method, filter method, interlace method, and other structural components of
+    /// the PNG format.
     /// </summary>
-    /// <param name="pngData"></param>
-    /// <param name="showResults"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="pngData">A byte array containing the PNG file data to be analyzed.</param>
+    /// <param name="showResults">
+    /// Indicates whether to display the analysis results after processing.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the input byte array is null or empty, or if the PNG data is invalid.
+    /// </exception>
     public static void AnalysePNG( byte[] pngData, bool showResults = false )
     {
         if ( ( pngData == null ) || ( pngData.Length == 0 ) )
@@ -186,9 +202,14 @@ public class PNGUtils
     }
 
     /// <summary>
+    /// Calculates the total size of all IDAT chunks in the provided PNG data.
     /// </summary>
-    /// <param name="pngData"></param>
-    /// <returns></returns>
+    /// <param name="pngData">The byte array containing the PNG file data.</param>
+    /// <returns>The total size of all IDAT chunks in bytes.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="pngData"/> is null.</exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown if <paramref name="pngData"/> has an invalid or corrupted format.
+    /// </exception>
     public static long CalculateTotalIDATSize( byte[] pngData )
     {
         var totalIDATSize = 0L;
@@ -214,11 +235,17 @@ public class PNGUtils
     }
 
     /// <summary>
+    /// Searches for the specified PNG chunk type in the provided byte array, starting at the given index.
     /// </summary>
-    /// <param name="bytes"></param>
-    /// <param name="chunkType"></param>
-    /// <param name="startIndex"></param>
-    /// <returns></returns>
+    /// <param name="bytes">The byte array containing the PNG data to search.</param>
+    /// <param name="chunkType">
+    /// The four-character ASCII string representing the chunk type (e.g., "IHDR", "IDAT").
+    /// </param>
+    /// <param name="startIndex">The index in the byte array from which to start the search.</param>
+    /// <returns>
+    /// The index of the located chunk within the byte array, or -1 if the chunk is not found
+    /// or the start index is invalid.
+    /// </returns>
     public static int FindChunk( byte[] bytes, string chunkType, int startIndex = 0 )
     {
         var chunkTypeBytes = Encoding.ASCII.GetBytes( chunkType );
@@ -243,10 +270,19 @@ public class PNGUtils
     }
 
     /// <summary>
+    /// Reads a 32-bit integer from a byte array starting at the specified index.
+    /// The integer is interpreted as big-endian, meaning the most significant
+    /// byte is stored first.
     /// </summary>
-    /// <param name="bytes"></param>
-    /// <param name="startIndex"></param>
-    /// <returns></returns>
+    /// <param name="bytes">The byte array from which to read the integer.</param>
+    /// <param name="startIndex">
+    /// The index in the byte array at which to start reading. Must be within the
+    /// valid range of the array.</param>
+    /// <returns>The 32-bit integer value read from the byte array.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if the start index is out of bounds or if there are not enough bytes
+    /// remaining in the array to read a full integer.
+    /// </exception>
     public static int ReadIntFromBytes( byte[] bytes, int startIndex )
     {
         if ( ( startIndex < 0 ) || ( ( startIndex + 3 ) >= bytes.Length ) )
@@ -262,7 +298,24 @@ public class PNGUtils
                | bytes[ startIndex + 3 ];
     }
 
-    // Helper function to read Big Endian UInt32
+    /// <summary>
+    /// Reads a 32-bit unsigned integer from a byte array in big-endian format.
+    /// </summary>
+    /// <param name="data">
+    /// The byte array containing the data to be interpreted as a 32-bit unsigned integer.
+    /// </param>
+    /// <param name="count">
+    /// The number of bytes to read from the array. This value must not exceed the length
+    /// of the array.
+    /// </param>
+    /// <returns>
+    /// Returns the 32-bit unsigned integer value derived from the specified byte array in
+    /// big-endian format.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">Thrown when the input byte array is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when the specified count exceeds the length of the byte array.
+    /// </exception>
     private static uint ReadBigEndianUInt32( byte[] data, int count )
     {
         var bytes = new byte[ count ];
@@ -277,7 +330,20 @@ public class PNGUtils
         return BitConverter.ToUInt32( bytes, 0 );
     }
 
-    // Helper function to read Big Endian UInt32
+    /// <summary>
+    /// Reads a 32-bit unsigned integer from a binary reader, assuming big-endian
+    /// byte order. Converts the order to suit the local system if necessary.
+    /// </summary>
+    /// <param name="reader">
+    /// The BinaryReader instance from which to read the 32-bit unsigned integer.
+    /// </param>
+    /// <returns>The 32-bit unsigned integer read from the binary stream.</returns>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if the provided BinaryReader instance is null.
+    /// </exception>
+    /// <exception cref="EndOfStreamException">
+    /// Thrown if there are fewer than 4 bytes remaining in the stream.
+    /// </exception>
     private static uint ReadBigEndianUInt32( BinaryReader reader )
     {
         var bytes = reader.ReadBytes( 4 );
@@ -290,7 +356,17 @@ public class PNGUtils
         return BitConverter.ToUInt32( bytes, 0 );
     }
 
-    // Parse the IHDR data to Logger Debug output.
+    /// <summary>
+    /// Parses the provided byte array containing IHDR chunk data to extract information such
+    /// as image dimensions, bit depth, color type, compression method, filter method, and
+    /// interlace method. The extracted details are logged for debugging purposes.
+    /// </summary>
+    /// <param name="data">
+    /// The byte array containing the IHDR chunk data. Expected to be 13 bytes in length.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the provided byte array is not 13 bytes in length.
+    /// </exception>
     private static void ParseIHDR( byte[] data )
     {
         if ( data.Length != 13 )
@@ -316,10 +392,20 @@ public class PNGUtils
     }
 
     /// <summary>
+    /// Calculates the number of bytes per pixel for a given PNG color type and bit depth.
     /// </summary>
-    /// <param name="colorType"></param>
-    /// <param name="bitDepth"></param>
-    /// <returns></returns>
+    /// <param name="colorType">
+    /// The color type of the PNG, representing the format of pixel data (e.g., grayscale,
+    /// RGB, RGBA).
+    /// </param>
+    /// <param name="bitDepth">
+    /// The bit depth of the image, indicating the number of bits used per channel in
+    /// the pixel data.
+    /// </param>
+    /// <returns>
+    /// The number of bytes per pixel. Returns -1 if the color type or bit depth is
+    /// unsupported.
+    /// </returns>
     public static int GetBytesPerPixel( int colorType, int bitDepth )
     {
         return colorType switch
@@ -345,10 +431,14 @@ public class PNGUtils
     }
 
     /// <summary>
+    /// Determines the color format of a PNG image based on the provided color type and bit depth.
     /// </summary>
-    /// <param name="colorType"></param>
-    /// <param name="bitDepth"></param>
-    /// <returns></returns>
+    /// <param name="colorType">The color type value extracted from the PNG image's IHDR chunk.</param>
+    /// <param name="bitDepth">The bit depth value extracted from the PNG image's IHDR chunk.</param>
+    /// <returns>
+    /// A string representing the color format, such as "RGB888" or "Grayscale with Alpha 88".
+    /// If the color format cannot be determined, returns "Unknown Color Format".
+    /// </returns>
     public static string DetermineColorFormat( byte colorType, byte bitDepth )
     {
         return colorType switch

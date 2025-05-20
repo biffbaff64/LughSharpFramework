@@ -122,8 +122,6 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
-        Utils.PNGUtils.AnalysePNG( buffer );
-
         ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, offset, len );
 
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
@@ -136,12 +134,12 @@ public partial class Gdx2DPixmap : IDisposable
             throw new GdxRuntimeException( "Failed to create PixmapDef object." );
         }
 
-        Width     = _pixmapDataType.Width;
-        Height    = _pixmapDataType.Height;
-        ColorType = _pixmapDataType.ColorType;
-        BitDepth  = _pixmapDataType.BitDepth;
-        Blend     = _pixmapDataType.Blend;
-        Scale     = _pixmapDataType.Scale;
+        this.Width     = _pixmapDataType.Width;
+        this.Height    = _pixmapDataType.Height;
+        this.ColorType = _pixmapDataType.ColorType;
+        this.BitDepth  = _pixmapDataType.BitDepth;
+        this.Blend     = _pixmapDataType.Blend;
+        this.Scale     = _pixmapDataType.Scale;
     }
 
     /// <summary>
@@ -203,13 +201,13 @@ public partial class Gdx2DPixmap : IDisposable
 
         _pixmapDataType = new PixmapDataType
         {
-            Width         = Width,
-            Height        = Height,
-            ColorType     = ColorType,
-            BitDepth      = BitDepth,
-            Blend         = Blend,
-            Scale         = Scale,
-            TotalIDATSize = TotalIDATSize,
+            Width         = this.Width,
+            Height        = this.Height,
+            ColorType     = this.ColorType,
+            BitDepth      = this.BitDepth,
+            Blend         = this.Blend,
+            Scale         = this.Scale,
+            TotalIDATSize = this.TotalIDATSize,
             Pixels        = new byte[ length ],
         };
 
@@ -238,7 +236,8 @@ public partial class Gdx2DPixmap : IDisposable
     /// <exception cref="IOException"></exception>
     private static ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
-        Utils.PNGUtils.AnalysePNG( buffer );
+        // Analyse the PNG file the get the properties.
+        Utils.PNGUtils.AnalysePNG( buffer, false );
 
         var pixmapDef = new PixmapDataType
         {
@@ -271,7 +270,7 @@ public partial class Gdx2DPixmap : IDisposable
         {
             var pixmap = new Gdx2DPixmap( ( int )Width, ( int )Height, requestedFormat );
 
-            pixmap.SetBlend( GDX_2D_BLEND_NONE );
+            pixmap.Blend = GDX_2D_BLEND_NONE;
             pixmap.DrawPixmap( this, 0, 0, 0, 0, ( int )Width, ( int )Height );
 
             Dispose();
@@ -285,27 +284,6 @@ public partial class Gdx2DPixmap : IDisposable
             TotalIDATSize = pixmap.TotalIDATSize;
             PixmapBuffer  = pixmap.PixmapBuffer;
         }
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Sets this pixmaps blending value.
-    /// </summary>
-    /// <param name="blend"></param>
-    public void SetBlend( int blend )
-    {
-        Blend = ( uint )blend;
-    }
-
-    /// <summary>
-    /// Sets this pixmaps scaling value.
-    /// </summary>
-    /// <param name="scale"></param>
-    public void SetScale( int scale )
-    {
-        Scale = ( uint )scale;
     }
 
     // ========================================================================

@@ -36,7 +36,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
-/// A Texture wraps a standard OpenGL ES texture.
+/// A Texture wraps a standard OpenGL texture.
 /// <para>
 /// A Texture can be managed. If the OpenGL context is lost all managed textures
 /// get invalidated. This happens when a user switches to another application or
@@ -51,7 +51,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// </para>
 /// <para>
 /// You can draw <see cref="Pixmap" />s to a texture at any time. The changes will
-/// be automatically uploaded to texture memory. This is of course not extremely
+/// be automatically uploaded to texture memory. This is, of course, not extremely
 /// fast so use it with care. It also only works with unmanaged textures.
 /// </para>
 /// <para>
@@ -61,63 +61,35 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public class Texture : GLTexture, IManaged
 {
-    // ========================================================================
+    public AssetManager? AssetManager { get; set; } = null;
+    public ITextureData  TextureData  { get; set; }
+
     // ========================================================================
 
-    [PublicAPI]
-    public enum TextureFilter : int
+    public override int Width              => TextureData.Width;
+    public override int Height             => TextureData.Height;
+    public override int Depth              => 0;
+    public          int NumManagedTextures => _managedTextures.Count;
+
+    /// <summary>
+    /// The Texture name, usually the filename but can be something else.
+    /// Name will be set to 'Name Not Set' if null or empty.
+    /// </summary>
+    public string Name
     {
-        /// <summary>
-        /// Fetch the nearest texel that best maps to the pixel on screen.
-        /// </summary>
-        Nearest = IGL.GL_NEAREST,
+        get
+        {
+            if ( string.IsNullOrEmpty( _name ) )
+            {
+                _name = "Name Not Set";
+            }
 
-        /// <summary>
-        /// Fetch four nearest texels that best map to the pixel on screen.
-        /// </summary>
-        Linear = IGL.GL_LINEAR,
-
-        /// <summary>
-        /// </summary>
-        MipMap = IGL.GL_LINEAR_MIPMAP_LINEAR,
-
-        /// <summary>
-        /// Fetch the best fitting image from the mip map chain based on the pixel/texel ratio and
-        /// then sample the texels with a nearest filter.
-        /// </summary>
-        MipMapNearestNearest = IGL.GL_NEAREST_MIPMAP_NEAREST,
-
-        /// <summary>
-        /// Fetch the best fitting image from the mip map chain based on the pixel/texel ratio and
-        /// then sample the texels with a linear filter.
-        /// </summary>
-        MipMapLinearNearest = IGL.GL_LINEAR_MIPMAP_NEAREST,
-
-        /// <summary>
-        /// Fetch the two best fitting images from the mip map chain and then sample the nearest texel
-        /// from each of the two images, combining them to the final output pixel.
-        /// </summary>
-        MipMapNearestLinear = IGL.GL_NEAREST_MIPMAP_LINEAR,
-
-        /// <summary>
-        /// Fetch the two best fitting images from the mip map chain and then sample the four nearest
-        /// texels from each of the two images, combining them to the final output pixel.
-        /// </summary>
-        MipMapLinearLinear = MipMap,
+            return _name;
+        }
+        private set => _name = value;
     }
 
-    // ========================================================================
-    // ========================================================================
-
-    [PublicAPI]
-    public enum TextureWrap : int
-    {
-        MirroredRepeat = IGL.GL_MIRRORED_REPEAT,
-
-        ClampToEdge = IGL.GL_CLAMP_TO_EDGE,
-
-        Repeat = IGL.GL_REPEAT,
-    }
+    public bool IsManaged => TextureData is { IsManaged: true };
 
     // ========================================================================
 
@@ -224,38 +196,6 @@ public class Texture : GLTexture, IManaged
             AddManagedTexture( GdxApi.App, this );
         }
     }
-
-    // ========================================================================
-
-    public AssetManager? AssetManager { get; set; } = null;
-    public ITextureData  TextureData  { get; set; }
-
-    // ========================================================================
-
-    public override int Width              => TextureData.Width;
-    public override int Height             => TextureData.Height;
-    public override int Depth              => 0;
-    public          int NumManagedTextures => _managedTextures[ GdxApi.App ].Count;
-
-    /// <summary>
-    /// The Texture name, usually the filename but can be something else.
-    /// Name will be set to 'Name Not Set' if null or empty.
-    /// </summary>
-    public string Name
-    {
-        get
-        {
-            if ( string.IsNullOrEmpty( _name ) )
-            {
-                _name = "Name Not Set";
-            }
-
-            return _name;
-        }
-        private set => _name = value;
-    }
-
-    public bool IsManaged => TextureData is { IsManaged: true };
 
     /// <summary>
     /// Load the given <see cref="ITextureData" /> data into this Texture.
@@ -430,6 +370,13 @@ public class Texture : GLTexture, IManaged
         return builder.ToString();
     }
 
+    public byte[]? GetImageData()
+    {
+        TextureData.Prepare();
+
+        return TextureData.ConsumePixmap()?.PixelData;
+    }
+
     /// <summary>
     /// Clears all managed textures.
     /// </summary>
@@ -516,4 +463,98 @@ public class Texture : GLTexture, IManaged
             assetManager.SetReferenceCount( fileName!, refCount );
         }
     }
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// Enumerates different texture filtering methods used to determine how textures
+    /// are sampled when they are displayed at sizes other than their original resolution.
+    /// <para>
+    /// Texture filtering impacts both magnification (enlargement) and minification
+    /// (reduction) of textures. This is especially important in scenarios where a
+    /// texture is applied to a surface that appears either much larger or much smaller
+    /// than the original texture resolution.
+    /// </para>
+    /// <para>
+    /// The available options include various combinations of nearest-neighbor filtering,
+    /// linear filtering, and mipmap-based filtering. Mipmapping involves precomputing and
+    /// storing multiple resolutions of the texture to improve performance and visual
+    /// quality when textures are minified.
+    /// </para>
+    /// </summary>
+    [PublicAPI]
+    public enum TextureFilter : int
+    {
+        /// <summary>
+        /// Fetch the nearest texel that best maps to the pixel on screen.
+        /// </summary>
+        Nearest = IGL.GL_NEAREST,
+
+        /// <summary>
+        /// Fetch four nearest texels that best map to the pixel on screen.
+        /// </summary>
+        Linear = IGL.GL_LINEAR,
+
+        /// <summary>
+        /// Applies a linear texture filtering technique where texels are chosen based
+        /// on the nearest or interpolated mipmap level, providing a smoother appearance
+        /// for textures with varying distances.
+        /// </summary>
+        MipMap = IGL.GL_LINEAR_MIPMAP_LINEAR,
+
+        /// <summary>
+        /// Fetch the best fitting image from the mip map chain based on the pixel/texel
+        /// ratio and then sample the texels with a nearest filter.
+        /// </summary>
+        MipMapNearestNearest = IGL.GL_NEAREST_MIPMAP_NEAREST,
+
+        /// <summary>
+        /// Fetch the best fitting image from the mip map chain based on the pixel/texel
+        /// ratio and then sample the texels with a linear filter.
+        /// </summary>
+        MipMapLinearNearest = IGL.GL_LINEAR_MIPMAP_NEAREST,
+
+        /// <summary>
+        /// Fetch the two best fitting images from the mip map chain and then sample
+        /// the nearest texel from each of the two images, combining them to the final
+        /// output pixel.
+        /// </summary>
+        MipMapNearestLinear = IGL.GL_NEAREST_MIPMAP_LINEAR,
+
+        /// <summary>
+        /// Fetch the two best fitting images from the mip map chain and then sample
+        /// the four nearest texels from each of the two images, combining them to
+        /// the final output pixel.
+        /// </summary>
+        MipMapLinearLinear = MipMap,
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    [PublicAPI]
+    public enum TextureWrap : int
+    {
+        /// <summary>
+        /// Repeats the texture, mirroring it at every integer boundary. This
+        /// creates a seamless mirrored effect at the edges.
+        /// </summary>
+        MirroredRepeat = IGL.GL_MIRRORED_REPEAT,
+
+        /// <summary>
+        /// Clamps texture coordinates to the edges of the texture, ensuring
+        /// that texture sampling outside the bounds of the texture fetches
+        /// the color from the nearest edge texel.
+        /// </summary>
+        ClampToEdge = IGL.GL_CLAMP_TO_EDGE,
+
+        /// <summary>
+        /// Wraps texture coordinates, causing the texture to repeat when
+        /// coordinates exceed the range [0.0, 1.0].
+        /// </summary>
+        Repeat = IGL.GL_REPEAT,
+    }
+
+    // ========================================================================
 }

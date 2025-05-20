@@ -38,59 +38,39 @@ namespace LughSharp.Lugh.Assets;
 
 public partial class AssetManager
 {
-    public Texture? GetTexture( string name )
-    {
-        return Get( name ) as Texture;
-    }
+    private readonly HashSet< Type > _typeList =
+    [
+        typeof( Texture ),
+        typeof( BitmapFont ),
+        typeof( Pixmap ),
+        typeof( TextureAtlas ),
+        typeof( Skin ),
+        typeof( ParticleEffect ),
+        typeof( PolygonRegion ),
+        typeof( ShaderProgram ),
+        typeof( Cubemap ),
+        typeof( ISound ),
+        typeof( IMusic ),
+    ];
 
-    public BitmapFont? GetBitmapFont( string name )
+    /// <summary>
+    /// Retrieves an asset of the specified type by its name, if it exists within
+    /// the loaded assets.
+    /// </summary>
+    /// <typeparam name="T"> The type of the asset to retrieve. </typeparam>
+    /// <param name="name"> The name of the asset to retrieve. </param>
+    /// <returns>
+    /// The asset cast to the specified type, or null if not found or if the type
+    /// does not match.
+    /// </returns>
+    public T? GetAs< T >( string name ) where T : class
     {
-        return Get( name ) as BitmapFont;
-    }
+        if ( _typeList.TryGetValue( typeof( T ), out var getter ) )
+        {
+            return Get( name ) as T;
+        }
 
-    public Pixmap? GetPixmap( string name )
-    {
-        return Get( name ) as Pixmap;
-    }
-
-    public TextureAtlas? GetTextureAtlas( string name )
-    {
-        return Get( name ) as TextureAtlas;
-    }
-
-    public Skin? GetSkin( string name )
-    {
-        return Get( name ) as Skin;
-    }
-
-    public ParticleEffect? GetParticleEffect( string name )
-    {
-        return Get( name ) as ParticleEffect;
-    }
-
-    public PolygonRegion? GetPolygonRegion( string name )
-    {
-        return Get( name ) as PolygonRegion;
-    }
-
-    public ShaderProgram? GetShaderProgram( string name )
-    {
-        return Get( name ) as ShaderProgram;
-    }
-
-    public Cubemap? GetCubemap( string name )
-    {
-        return Get( name ) as Cubemap;
-    }
-
-    public ISound? GetSound( string name )
-    {
-        return Get( name ) as ISound;
-    }
-
-    public IMusic? GetMusic( string name )
-    {
-        return Get( name ) as IMusic;
+        return null;
     }
 
     // ========================================================================
@@ -108,7 +88,7 @@ public partial class AssetManager
             foreach ( var key in _assetTypes.Keys )
             {
                 Logger.Debug( $"{key}: " );
-                
+
                 foreach ( var value in _assetTypes.Values )
                 {
                     Logger.Debug( $"{value}" );
