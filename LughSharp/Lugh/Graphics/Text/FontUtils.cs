@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Text.Freetype;
 using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics.Text;
@@ -62,20 +61,20 @@ public class FontUtils
     /// <param name="fontFile"></param>
     /// <param name="size"></param>
     /// <returns></returns>
-    public BitmapFont CreateFont( string fontFile, int size )
+    public BitmapFont? CreateFont( string fontFile, int size )
     {
-        BitmapFont font;
+        BitmapFont? font = null;
 
         try
         {
-            var generator = new FreeTypeFontGenerator( GdxApi.Files.Internal( fontFile ) );
-            var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
-            {
-                Size = size,
-            };
+//            var generator = new FreeTypeFontGenerator( GdxApi.Files.Internal( fontFile ) );
+//            var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
+//            {
+//                Size = size,
+//            };
 
-            font = generator.GenerateFont( parameter );
-            font.SetColor( Color.White );
+//            font = generator.GenerateFont( parameter );
+//            font.SetColor( Color.White );
         }
         catch ( Exception e )
         {

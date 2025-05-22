@@ -81,14 +81,14 @@ public class JsonTest : LughTestAdapter
 
         Logger.Debug( _json.ToJson( person ) );
 
-//        var arr1 = new[] { 1, 2, 3 };
+        var arr1 = new[] { 1, 2, 3 };
         var arr2 = new[] { "4", "5", "6" };
         var arr3 = new[] { " 1", "2 ", " 3 " };
         var arr4 = new[] { "7", "", "9" };
 
         var sb = new StringBuilder();
 
-//        sb.Append( _json.ToJson( arr1, null, typeof( int ) ) );
+        sb.Append( _json.ToJson( arr1, null, typeof( int ) ) );
         sb.Append( _json.ToJson( arr2, null, typeof( string ) ) );
         sb.Append( _json.ToJson( arr3, null, typeof( string ) ) );
         sb.Append( _json.ToJson( arr4, null, typeof( string ) ) );

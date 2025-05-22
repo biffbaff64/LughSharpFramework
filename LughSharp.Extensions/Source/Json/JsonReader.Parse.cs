@@ -37,18 +37,18 @@ public partial class JsonReader
     private List< string >       _parseNameList = new( 8 );
     private int                  _parsePosition;
     private int                  _parseLength;
-//    private bool                 _needsUnescape;
-//    private bool                 _stringIsName;
-//    private bool                 _stringIsUnquoted;
     private GdxRuntimeException? _parseException;
     private int                  _stringValueStartPos; // Start position for string values
 
     // ========================================================================
 
     /// <summary>
+    /// Parses a JSON string and converts it to a <see cref="JsonValue"/> object.
     /// </summary>
-    /// <param name="json"></param>
-    /// <returns></returns>
+    /// <param name="json">The JSON string to parse.</param>
+    /// <returns>A <see cref="JsonValue"/>
+    /// object representing the JSON data, or null if parsing fails.
+    /// </returns>
     public JsonValue? Parse( string json )
     {
         var data = json.ToCharArray();
@@ -57,10 +57,16 @@ public partial class JsonReader
     }
 
     /// <summary>
+    /// Parses the JSON data from the provided <see cref="TextReader"/> and returns
+    /// a <see cref="JsonValue"/> representation of the data.
     /// </summary>
-    /// <param name="reader"></param>
-    /// <returns></returns>
-    /// <exception cref="SerializationException"></exception>
+    /// <param name="reader">The <see cref="TextReader"/> to read the JSON data from.</param>
+    /// <returns>A <see cref="JsonValue"/>
+    /// representing the parsed JSON data, or null if parsing fails.
+    /// </returns>
+    /// <exception cref="SerializationException">
+    /// Thrown when there is an error reading the input data.
+    /// </exception>
     public JsonValue? Parse( TextReader reader )
     {
         var data   = new char[ 1024 ];

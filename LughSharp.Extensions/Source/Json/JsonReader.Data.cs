@@ -22,14 +22,40 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils;
+
 namespace Extensions.Source.Json;
 
 public partial class JsonReader
 {
+    public void Debug()
+    {
+        Logger.Debug( $"_jsonActions          : {_jsonActions.Length}" );
+        Logger.Debug( $"_jsonKeyOffsets       : {_jsonKeyOffsets.Length}" );
+        Logger.Debug( $"_jsonTransitionKeys   : {_jsonTransitionKeys.Length}" );
+        Logger.Debug( $"_jsonSingleLengths    : {_jsonSingleLengths.Length}" );
+        Logger.Debug( $"_jsonRangeLengths     : {_jsonRangeLengths.Length}" );
+        Logger.Debug( $"_jsonIndexOffsets     : {_jsonIndexOffsets.Length}" );
+        Logger.Debug( $"_jsonIndicies         : {_jsonIndicies.Length}" );
+        Logger.Debug( $"_jsonTransitionTargs  : {_jsonTransitionTargs.Length}" );
+        Logger.Debug( $"_jsonTransitionActions: {_jsonTransitionActions.Length}" );
+        Logger.Debug( $"_jsonEofActions       : {_jsonEofActions.Length}" );
+    }
+    
     // ========================================================================
     //@formatter:off
     // ========================================================================
 
+    // 0 = Set '_stringIsName' to true
+    // 1 = Handle String Value
+    // 2 = Start Object
+    // 3 = End Object
+    // 4 = Start Array
+    // 5 = End Array
+    // 6 = Skip Comment
+    // 7 = Handle Unquoted Chars
+    // 8 = Handle Quoted Chars
+    
     private static byte[] init__json_actions_0()
     {
         return
@@ -48,8 +74,9 @@ public partial class JsonReader
     {
         return
         [
-              0,   0,  11,  13,  14,  16,  25,  31,  37,  39,  50,  57,  64,  73,  74,
-             83,  85,  87,  96,  98, 100, 101, 103, 105, 116, 123, 130, 141, 142, 153,
+              0,   0,  11,  13,  14,  16,  25,  31,  37,  39,
+             50,  57,  64,  73,  74,  83,  85,  87,  96,  98,
+            100, 101, 103, 105, 116, 123, 130, 141, 142, 153,
             155, 157, 168, 170, 172, 174, 179, 184, 184,
         ];
     }
@@ -202,8 +229,9 @@ public partial class JsonReader
     {
         return
         [
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 1, 0, 0, 0,
         ];
     }

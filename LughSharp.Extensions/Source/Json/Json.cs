@@ -1201,6 +1201,8 @@ public partial class Json
         
         var jval = new JsonReader().Parse( json );
 
+        Logger.Checkpoint();
+        
         Logger.Debug( $"jval: {jval}" );
         
         return ( jval != null ) ? jval.PrettyPrint( settings ) : "**ERROR**";

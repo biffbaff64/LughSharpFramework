@@ -26,6 +26,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Lugh.Utils;
 
 using GLBindings = LughSharp.Lugh.Graphics.OpenGL.GLBindings;
 
@@ -103,8 +104,8 @@ public unsafe class OpenGLTest : LughTestAdapter
         _gl.BindVertexArray( _vao );
         _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, _ibo );
 
-        var offsetInBytes = 0; //offset * sizeof( short );
-        _gl.DrawElements( IGL.GL_TRIANGLES, indices.Length, IGL.GL_UNSIGNED_SHORT, offsetInBytes );
+//        var offsetInBytes = 0; //offset * sizeof( short );
+        _gl.DrawElements( IGL.GL_TRIANGLES, indices.Length, IGL.GL_UNSIGNED_SHORT, 0 );
     }
 
     private uint CreateProgram( string vertexShaderSource, string fragmentShaderSource )

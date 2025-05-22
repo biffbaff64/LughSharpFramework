@@ -877,7 +877,6 @@ UTILS
     - DONE - IP   - Selector
     - DONE - IP   - SingletonBase<T>
     - DONE - DONE - SortUtils
-    - DONE - DONE - StringTokenizer
     - IP   - IP   - StringUtils
     - DONE - IP   - Timer
     - DONE - DONE - TimeUtils
@@ -894,6 +893,7 @@ UTILS
     - **** - SortedIntList                  Use SortedList<int>
     - **** - StreamUtils
     - **** - StringBuilder                  Use System.Text.StringBuilder
+    - **** - StringTokenizer
     - **** - TextFormatter
 
 UTILS/BUFFERS

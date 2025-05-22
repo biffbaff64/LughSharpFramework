@@ -56,7 +56,7 @@ public class AbstractFiles : IFiles
     //TODO: Make obsolete?
     public virtual FileInfo Classpath( string path )
     {
-        return new FileInfo( path );
+        return new FileInfo( IOUtils.NormalizePath( path ) );
     }
 
     // ========================================================================
@@ -69,7 +69,7 @@ public class AbstractFiles : IFiles
     //TODO: Make obsolete?
     public virtual FileInfo Absolute( string path )
     {
-        return new FileInfo( path );
+        return new FileInfo( IOUtils.NormalizePath( path ) );
     }
 
     // ========================================================================
@@ -81,6 +81,8 @@ public class AbstractFiles : IFiles
     /// </summary>
     public virtual FileInfo Assembly( string path )
     {
+        path = IOUtils.NormalizePath( path );
+        
         var assemblyPath = GetAssemblyStoragePath();
         var prefix       = path.Contains( assemblyPath ) ? "" : assemblyPath;
 
@@ -115,6 +117,8 @@ public class AbstractFiles : IFiles
     /// </summary>
     public virtual FileInfo Internal( string path )
     {
+        path = IOUtils.NormalizePath( path );
+
         var internalPath = GetInternalStoragePath();
         var prefix       = path.Contains( internalPath ) ? "" : internalPath;
 
@@ -149,6 +153,8 @@ public class AbstractFiles : IFiles
     /// </summary>
     public virtual FileInfo External( string path )
     {
+        path = IOUtils.NormalizePath( path );
+
         var externalPath = GetExternalStoragePath();
         var prefix       = path.Contains( externalPath ) ? "" : externalPath;
 
@@ -183,6 +189,8 @@ public class AbstractFiles : IFiles
     /// </summary>
     public virtual FileInfo Local( string path )
     {
+        path = IOUtils.NormalizePath( path );
+
         var localPath = GetLocalStoragePath();
         var prefix    = path.Contains( localPath ) ? "" : localPath;
 

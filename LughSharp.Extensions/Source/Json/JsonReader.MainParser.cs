@@ -80,12 +80,16 @@ public partial class JsonReader
 
     private int ProcessState( int currentState )
     {
+        Logger.Debug( $"currentState: {currentState}" );
+
         if ( currentState == 0 )
         {
             return 0; // End state
         }
 
         var transition = FindTransition( currentState );
+
+        Logger.Debug( $"transition: {transition}" );
 
         if ( transition != -1 )
         {
@@ -100,6 +104,8 @@ public partial class JsonReader
 
             return _jsonTransitionTargs[ transition ];
         }
+
+        Logger.Checkpoint();
 
         if ( _parsePosition < _parseLength )
         {
@@ -136,6 +142,11 @@ public partial class JsonReader
                 currentChar = ( char )0;
             }
 
+            Logger.Debug( $"currentChar: {currentChar}" );
+            Logger.Debug( $"keys       : {keys}" );
+            Logger.Debug( $"keylength  : {keylength}" );
+            Logger.Debug( $"transition : {transition}" );
+            
             // Single character transitions
             if ( keylength > 0 )
             {
@@ -208,7 +219,7 @@ public partial class JsonReader
 
         transition    = _jsonIndicies[ transition ];
         _currentState = _jsonTransitionTargs[ transition ];
-        
+
         return ( ( _parsePosition == _parseLength )
                  && ( _jsonEofActions[ _currentState ] != 0 ) )
             ? _jsonEofActions[ _currentState ]
@@ -683,4 +694,27 @@ public partial class JsonReader
             _stackPointer--;
         }
     }
+
+    private void DebugParseData()
+    {
+        var index = 0;
+        
+        for ( var i = 0; i < 10; i++ )
+        {
+            for ( var j = 0; ( j < 10 ) || ( index >= _parseData.Length ); j++ )
+            {
+                var i1 = index++;
+
+                if ( ( i1 >= 0 ) && ( i1 < _parseData.Length ) )
+                {
+                    Logger.Data( $"{_parseData[ i1 ]}", false );
+                }
+            }
+
+            Logger.NewLine();
+        }
+
+        Logger.NewLine();
+    }
 }
+

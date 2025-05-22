@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin
+//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,44 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.Text.Freetype;
+namespace LughSharp.Lugh.Utils;
 
-public class FreeTypeFontGeneratorLoader
+/// <summary>
+/// Represents a base class for implementing test adapters, providing a common
+/// interface and functionalities such as lifecycle management for derived test
+/// implementations.
+/// </summary>
+/// <remarks>
+/// The class defines virtual methods for essential operations like creation, rendering,
+/// resizing, pausing, and resuming, and provides support for cleanup through the
+/// <see cref="IDisposable"/> interface. Derived classes can override these methods
+/// to implement specific test functionality.
+/// </remarks>
+[PublicAPI]
+public class LughTestAdapter : IDisposable
 {
+    public virtual void Create()
+    {
+    }
+
+    public virtual void Render()
+    {
+    }
+
+    public virtual void Resize( int width, int height )
+    {
+    }
+
+    public virtual void Pause()
+    {
+    }
+
+    public virtual void Resume()
+    {
+    }
+
+    public virtual void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
 }

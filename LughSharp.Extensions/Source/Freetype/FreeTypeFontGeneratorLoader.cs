@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
+//  Copyright (c) 2024 Richard Ikin
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
+namespace Extensions.Source.Freetype;
 
-namespace LughSharp.Tests.Source;
-
-[PublicAPI]
-public class LughTestAdapter : IDisposable
+public class FreeTypeFontGeneratorLoader
 {
-    public virtual void Create()
-    {
-    }
-
-    public virtual void Render()
-    {
-    }
-
-    public virtual void Resize( int width, int height )
-    {
-    }
-
-    public virtual void Pause()
-    {
-    }
-
-    public virtual void Resume()
-    {
-    }
-
-    public virtual void Dispose()
-    {
-        GC.SuppressFinalize(this);
-    }
 }
