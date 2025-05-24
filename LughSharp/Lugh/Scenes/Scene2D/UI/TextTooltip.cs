@@ -94,7 +94,7 @@ public class TextTooltip : Tooltip< Label >
         {
         }
 
-        public TextTooltipStyle( Label.LabelStyle label, IDrawable background )
+        public TextTooltipStyle( Label.LabelStyle label, ISceneDrawable background )
         {
             Label      = label;
             Background = background;
@@ -108,7 +108,7 @@ public class TextTooltip : Tooltip< Label >
         }
 
         public Label.LabelStyle Label      { get; set; } = null!;
-        public IDrawable        Background { get; set; } = null!;
+        public ISceneDrawable   Background { get; set; } = null!;
         public float            WrapWidth  { get; set; }
     }
 }

@@ -109,7 +109,7 @@ public class ImageTextButton : Button
     /// Returns the appropriate image drawable from the style based on the
     /// current button state.
     /// </summary>
-    public virtual IDrawable? GetImageDrawable()
+    public virtual ISceneDrawable? GetImageDrawable()
     {
         if ( IsDisabled && ( _style?.ImageDisabled != null ) )
         {
@@ -325,7 +325,7 @@ public class ImageTextButton : Button
         {
         }
 
-        public ImageTextButtonStyle( IDrawable up, IDrawable down, IDrawable chcked, BitmapFont font )
+        public ImageTextButtonStyle( ISceneDrawable up, ISceneDrawable down, ISceneDrawable chcked, BitmapFont font )
             : base( up, down, chcked, font )
         {
         }
@@ -348,12 +348,12 @@ public class ImageTextButton : Button
         {
         }
 
-        public IDrawable? ImageUp          { get; set; }
-        public IDrawable? ImageDown        { get; set; }
-        public IDrawable? ImageOver        { get; set; }
-        public IDrawable? ImageDisabled    { get; set; }
-        public IDrawable? ImageChecked     { get; set; }
-        public IDrawable? ImageCheckedDown { get; set; }
-        public IDrawable? ImageCheckedOver { get; set; }
+        public ISceneDrawable? ImageUp          { get; set; }
+        public ISceneDrawable? ImageDown        { get; set; }
+        public ISceneDrawable? ImageOver        { get; set; }
+        public ISceneDrawable? ImageDisabled    { get; set; }
+        public ISceneDrawable? ImageChecked     { get; set; }
+        public ISceneDrawable? ImageCheckedDown { get; set; }
+        public ISceneDrawable? ImageCheckedOver { get; set; }
     }
 }

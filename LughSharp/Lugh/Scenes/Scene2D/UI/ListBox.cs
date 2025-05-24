@@ -233,9 +233,9 @@ public class ListBox< T > : Widget
             if ( ( CullingArea == null )
                  || ( ( ( itemY - ItemHeight ) <= ( CullingArea.Y + CullingArea.Height ) ) && ( itemY >= CullingArea.Y ) ) )
             {
-                var        item     = Items[ i ];
-                var        selected = Selection.Contains( item );
-                IDrawable? drawable = null;
+                var             item     = Items[ i ];
+                var             selected = Selection.Contains( item );
+                ISceneDrawable? drawable = null;
 
                 if ( ( _pressedIndex == i ) && ( Style?.Down != null ) )
                 {
@@ -326,7 +326,7 @@ public class ListBox< T > : Widget
     /// </summary>
     public int GetSelectedIndex()
     {
-        List< T > selected = Selection.ToArray();
+        var selected = Selection.ToArray();
 
         return selected.Count == 0 ? -1 : Items.IndexOf( selected.First() );
     }
@@ -679,7 +679,7 @@ public class ListBox< T > : Widget
             Font = new BitmapFont();
         }
 
-        public ListStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected, IDrawable selection )
+        public ListStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected, ISceneDrawable selection )
         {
             Font = font;
             FontColorSelected.Set( fontColorSelected );
@@ -699,12 +699,12 @@ public class ListBox< T > : Widget
             Background = style.Background;
         }
 
-        public BitmapFont Font                { get; set; }
-        public Color      FontColorSelected   { get; set; } = new( 1, 1, 1, 1 );
-        public Color      FontColorUnselected { get; set; } = new( 1, 1, 1, 1 );
-        public IDrawable? Selection           { get; set; }
-        public IDrawable? Down                { get; set; }
-        public IDrawable? Over                { get; set; }
-        public IDrawable? Background          { get; set; }
+        public BitmapFont      Font                { get; set; }
+        public Color           FontColorSelected   { get; set; } = new( 1, 1, 1, 1 );
+        public Color           FontColorUnselected { get; set; } = new( 1, 1, 1, 1 );
+        public ISceneDrawable? Selection           { get; set; }
+        public ISceneDrawable? Down                { get; set; }
+        public ISceneDrawable? Over                { get; set; }
+        public ISceneDrawable? Background          { get; set; }
     }
 }

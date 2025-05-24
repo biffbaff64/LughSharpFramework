@@ -521,7 +521,7 @@ public class ArrayList< T >
     /// The item at the specified index within the Generic Array List.
     /// </summary>
     /// <param name="index">The index of the item.</param>
-    public T this[ int index ]
+    public virtual T this[ int index ]
     {
         get
         {

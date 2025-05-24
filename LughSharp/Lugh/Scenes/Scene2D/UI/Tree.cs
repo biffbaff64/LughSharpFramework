@@ -434,22 +434,22 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         }
     }
 
-    protected void DrawSelection( TNode node, IDrawable selection, IBatch batch, float x, float y, float width, float height )
+    protected void DrawSelection( TNode node, ISceneDrawable selection, IBatch batch, float x, float y, float width, float height )
     {
         selection.Draw( batch, x, y, width, height );
     }
 
-    protected void DrawOver( TNode node, IDrawable over, IBatch batch, float x, float y, float width, float height )
+    protected void DrawOver( TNode node, ISceneDrawable over, IBatch batch, float x, float y, float width, float height )
     {
         over.Draw( batch, x, y, width, height );
     }
 
-    protected void DrawExpandIcon( TNode node, IDrawable expandIcon, IBatch batch, float x, float y )
+    protected void DrawExpandIcon( TNode node, ISceneDrawable expandIcon, IBatch batch, float x, float y )
     {
         expandIcon.Draw( batch, x, y, expandIcon.MinWidth, expandIcon.MinHeight );
     }
 
-    protected void DrawIcon( TNode node, IDrawable icon, IBatch batch, float x, float y )
+    protected void DrawIcon( TNode node, ISceneDrawable icon, IBatch batch, float x, float y )
     {
         icon.Draw( batch, x, y, icon.MinWidth, icon.MinHeight );
     }
@@ -460,7 +460,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     /// on the desktop if the node is the over node, the mouse is left of iconX, and
     /// clicking would expand the node.
     /// </summary>
-    protected IDrawable GetExpandIcon( TNode node, float iconX )
+    protected ISceneDrawable GetExpandIcon( TNode node, float iconX )
     {
         var over = false;
 
@@ -800,7 +800,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
     [PublicAPI]
     public class TreeStyle
     {
-        public TreeStyle( IDrawable plus, IDrawable minus, IDrawable? selection )
+        public TreeStyle( ISceneDrawable plus, ISceneDrawable minus, ISceneDrawable? selection )
         {
             Plus      = plus;
             Minus     = minus;
@@ -820,13 +820,13 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
             Background = style.Background;
         }
 
-        public IDrawable  Plus       { get; set; }
-        public IDrawable  Minus      { get; set; }
-        public IDrawable? PlusOver   { get; set; } = null;
-        public IDrawable? MinusOver  { get; set; } = null;
-        public IDrawable? Over       { get; set; } = null;
-        public IDrawable? Selection  { get; set; } = null;
-        public IDrawable? Background { get; set; } = null;
+        public ISceneDrawable  Plus       { get; set; }
+        public ISceneDrawable  Minus      { get; set; }
+        public ISceneDrawable? PlusOver   { get; set; } = null;
+        public ISceneDrawable? MinusOver  { get; set; } = null;
+        public ISceneDrawable? Over       { get; set; } = null;
+        public ISceneDrawable? Selection  { get; set; } = null;
+        public ISceneDrawable? Background { get; set; } = null;
     }
 
     // ========================================================================
@@ -859,12 +859,12 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
             _actor = actor;
         }
 
-        public TValue?    Value      { get; set; }
-        public TNode?     Parent     { get; set; }
-        public IDrawable? Icon       { get; set; }
-        public bool       Selectable { get; set; } = true;
-        public float      Height     { get; set; }
-        public bool       IsExpanded { get; private set; }
+        public TValue?         Value      { get; set; }
+        public TNode?          Parent     { get; set; }
+        public ISceneDrawable? Icon       { get; set; }
+        public bool            Selectable { get; set; } = true;
+        public float           Height     { get; set; }
+        public bool            IsExpanded { get; private set; }
 
         /// <summary>
         /// If the children order is changed, <see cref="UpdateChildren()" /> must
@@ -881,7 +881,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
             {
                 if ( _actor != null )
                 {
-                    Tree< TNode, TValue >? tree = GetTree();
+                    var tree = GetTree();
 
                     if ( tree != null )
                     {
@@ -905,7 +905,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
 
             IsExpanded = expanded;
 
-            Tree< TNode, TValue >? tree = GetTree();
+            var tree = GetTree();
 
             if ( ( tree == null ) || ( NodeChildren == null ) || ( _actor == null ) )
             {
@@ -917,8 +917,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                 return;
             }
 
-            TNode[] children   = NodeChildren.ToArray();
-            var     actorIndex = _actor.GetZIndex() + 1;
+            var children   = NodeChildren.ToArray();
+            var actorIndex = _actor.GetZIndex() + 1;
 
             if ( expanded )
             {
@@ -949,8 +949,8 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                 return 1;
             }
 
-            var     childIndex = actorIndex + 1;
-            TNode[] children   = NodeChildren!.ToArray();
+            var childIndex = actorIndex + 1;
+            var children   = NodeChildren!.ToArray();
 
             for ( int i = 0, n = children.Length; i < n; i++ )
             {
@@ -971,7 +971,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                 return;
             }
 
-            TNode[]? children = NodeChildren?.ToArray();
+            var children = NodeChildren?.ToArray();
 
             if ( children == null )
             {
@@ -1022,7 +1022,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                 return;
             }
 
-            Tree< TNode, TValue >? tree = GetTree();
+            var tree = GetTree();
 
             if ( tree != null )
             {
@@ -1074,7 +1074,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         /// </summary>
         public void Remove()
         {
-            Tree< TNode, TValue >? tree = GetTree();
+            var tree = GetTree();
 
             if ( tree != null )
             {
@@ -1100,7 +1100,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                 return;
             }
 
-            Tree< TNode, TValue >? tree = GetTree();
+            var tree = GetTree();
 
             if ( ( tree == null ) || ( node.Actor == null ) )
             {
@@ -1117,7 +1117,7 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         {
             if ( IsExpanded && ( _actor != null ) )
             {
-                Tree< TNode, TValue >? tree = GetTree();
+                var tree = GetTree();
 
                 if ( ( tree != null ) && ( NodeChildren != null ) )
                 {
@@ -1166,16 +1166,16 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
                 return;
             }
 
-            Tree< TNode, TValue >? tree = GetTree();
+            var tree = GetTree();
 
             if ( tree == null )
             {
                 return;
             }
 
-            TNode[]? children   = NodeChildren?.ToArray();
-            var      n          = NodeChildren?.Count;
-            var      actorIndex = _actor!.GetZIndex() + 1;
+            var children   = NodeChildren?.ToArray();
+            var n          = NodeChildren?.Count;
+            var actorIndex = _actor!.GetZIndex() + 1;
 
             for ( var i = 0; i < n; i++ )
             {

@@ -462,7 +462,7 @@ public class Selection< T > : IDisableable, IDisposable
 
     public List< T > ToArray( List< T > array )
     {
-        List< T > list = Selected.ToList();
+        var list = Selected.ToList();
 
         list.AddRange( array );
 

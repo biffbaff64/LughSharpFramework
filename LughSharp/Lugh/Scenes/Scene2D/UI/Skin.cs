@@ -64,10 +64,10 @@ public class Skin : IDisposable
         typeof( BitmapFont ),
         typeof( Color ),
         typeof( TintedDrawable ),
-        typeof( NinePatchDrawable ),
-        typeof( SpriteDrawable ),
-        typeof( TextureRegionDrawable ),
-        typeof( TiledDrawable ),
+        typeof( NinePatchSceneDrawable ),
+        typeof( SpriteSceneDrawable ),
+        typeof( TextureRegionSceneDrawable ),
+        typeof( TiledSceneDrawable ),
         typeof( Button.ButtonStyle ),
         typeof( TextButton.TextButtonStyle ),
         typeof( CheckBox.CheckBoxStyle ),
@@ -236,7 +236,7 @@ public class Skin : IDisposable
         {
             typeResources = new Dictionary< string, object >
                 ( ( type == typeof( TextureRegion ) )
-                  || ( type == typeof( IDrawable ) )
+                  || ( type == typeof( ISceneDrawable ) )
                   || ( type == typeof( Sprite ) )
                       ? 256
                       : 64 );
@@ -280,7 +280,7 @@ public class Skin : IDisposable
     {
         ArgumentNullException.ThrowIfNull( name );
 
-        if ( type == typeof( IDrawable ) )
+        if ( type == typeof( ISceneDrawable ) )
         {
             return GetDrawable( name );
         }
@@ -415,28 +415,28 @@ public class Skin : IDisposable
     /// region exists with the name, a tiled drawable is created from the region
     /// and stored in the skin.
     /// </summary>
-    public TiledDrawable GetTiledDrawable( string name )
+    public TiledSceneDrawable GetTiledDrawable( string name )
     {
-        var tiled = Optional< TiledDrawable? >( name );
+        var tiled = Optional< TiledSceneDrawable? >( name );
 
         if ( tiled != null )
         {
             return tiled;
         }
 
-        tiled = new TiledDrawable( GetRegion( name ) )
+        tiled = new TiledSceneDrawable( GetRegion( name ) )
         {
             Name = name,
         };
 
         if ( Scale is not 1.0f )
         {
-            tiled = ( TiledDrawable )ScaleDrawable( tiled );
+            tiled = ( TiledSceneDrawable )ScaleDrawable( tiled );
 
             tiled.Scale = Scale;
         }
 
-        Add( name, tiled, typeof( TiledDrawable ) );
+        Add( name, tiled, typeof( TiledSceneDrawable ) );
 
         return tiled;
     }
@@ -545,9 +545,9 @@ public class Skin : IDisposable
     /// or sprite exists with the name, then the appropriate drawable is created and
     /// stored in the skin.
     /// </summary>
-    public IDrawable GetDrawable( string name )
+    public ISceneDrawable GetDrawable( string name )
     {
-        var drawable = Optional< IDrawable >( name );
+        var drawable = Optional< ISceneDrawable >( name );
 
         if ( drawable != null )
         {
@@ -564,19 +564,19 @@ public class Skin : IDisposable
             {
                 if ( region.FindValue( "split" ) != null )
                 {
-                    drawable = new NinePatchDrawable( GetPatch( name ) );
+                    drawable = new NinePatchSceneDrawable( GetPatch( name ) );
                 }
                 else if ( region.Rotate
                           || ( region.PackedWidth != region.OriginalWidth )
                           || ( region.PackedHeight != region.OriginalHeight ) )
                 {
-                    drawable = new SpriteDrawable( GetSprite( name ) );
+                    drawable = new SpriteSceneDrawable( GetSprite( name ) );
                 }
             }
 
             if ( drawable == null )
             {
-                drawable = new TextureRegionDrawable( textureRegion );
+                drawable = new TextureRegionSceneDrawable( textureRegion );
 
                 if ( Scale is not 1.0f )
                 {
@@ -596,7 +596,7 @@ public class Skin : IDisposable
 
             if ( patch != null )
             {
-                drawable = new NinePatchDrawable( patch );
+                drawable = new NinePatchSceneDrawable( patch );
             }
             else
             {
@@ -604,22 +604,22 @@ public class Skin : IDisposable
 
                 if ( sprite != null )
                 {
-                    drawable = new SpriteDrawable( sprite );
+                    drawable = new SpriteSceneDrawable( sprite );
                 }
                 else
                 {
-                    throw new GdxRuntimeException( $"No IDrawable, NinePatch, TextureRegion, " +
+                    throw new GdxRuntimeException( $"No ISceneDrawable, NinePatch, TextureRegion, " +
                                                    $"Texture, or Sprite registered with name: {name}" );
                 }
             }
         }
 
-        if ( drawable is BaseDrawable baseDrawable )
+        if ( drawable is BaseSceneDrawable baseDrawable )
         {
             baseDrawable.Name = name;
         }
 
-        Add( name, drawable, typeof( IDrawable ) );
+        Add( name, drawable, typeof( ISceneDrawable ) );
 
         return drawable;
     }
@@ -644,7 +644,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
     /// </summary>
-    public IDrawable NewDrawable( string name )
+    public ISceneDrawable NewDrawable( string name )
     {
         return NewDrawable( GetDrawable( name ) );
     }
@@ -652,7 +652,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
     /// </summary>
-    public IDrawable NewDrawable( string name, float r, float g, float b, float a )
+    public ISceneDrawable NewDrawable( string name, float r, float g, float b, float a )
     {
         return NewDrawable( GetDrawable( name ), new Color( r, g, b, a ) );
     }
@@ -660,7 +660,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
     /// </summary>
-    public IDrawable NewDrawable( string name, Color tint )
+    public ISceneDrawable NewDrawable( string name, Color tint )
     {
         return NewDrawable( GetDrawable( name ), tint );
     }
@@ -668,23 +668,23 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a copy of the specified drawable.
     /// </summary>
-    public static IDrawable NewDrawable( IDrawable drawable )
+    public static ISceneDrawable NewDrawable( ISceneDrawable drawable )
     {
         return drawable switch
         {
-            TiledDrawable tiledDrawable          => new TiledDrawable( tiledDrawable ),
-            TextureRegionDrawable regionDrawable => new TextureRegionDrawable( regionDrawable ),
-            NinePatchDrawable patchDrawable      => new NinePatchDrawable( patchDrawable ),
-            SpriteDrawable spriteDrawable        => new SpriteDrawable( spriteDrawable ),
+            TiledSceneDrawable tiledDrawable          => new TiledSceneDrawable( tiledDrawable ),
+            TextureRegionSceneDrawable regionDrawable => new TextureRegionSceneDrawable( regionDrawable ),
+            NinePatchSceneDrawable patchDrawable      => new NinePatchSceneDrawable( patchDrawable ),
+            SpriteSceneDrawable spriteDrawable        => new SpriteSceneDrawable( spriteDrawable ),
 
-            var _ => throw new GdxRuntimeException( "Unable to copy, unknown drawable type: " + drawable.GetType() )
+            var _ => throw new GdxRuntimeException( "Unable to copy, unknown drawable type: " + drawable.GetType() ),
         };
     }
 
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
     /// </summary>
-    public IDrawable NewDrawable( IDrawable drawable, float r, float g, float b, float a )
+    public ISceneDrawable NewDrawable( ISceneDrawable drawable, float r, float g, float b, float a )
     {
         return NewDrawable( drawable, new Color( r, g, b, a ) );
     }
@@ -692,20 +692,20 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(String)" />.
     /// </summary>
-    public IDrawable NewDrawable( IDrawable drawable, Color tint )
+    public ISceneDrawable NewDrawable( ISceneDrawable drawable, Color tint )
     {
         var newDrawable = drawable switch
         {
-            TextureRegionDrawable regionDrawable => regionDrawable.Tint( tint ),
-            NinePatchDrawable patchDrawable      => patchDrawable.Tint( tint ),
-            SpriteDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
+            TextureRegionSceneDrawable regionDrawable => regionDrawable.Tint( tint ),
+            NinePatchSceneDrawable patchDrawable      => patchDrawable.Tint( tint ),
+            SpriteSceneDrawable spriteDrawable        => spriteDrawable.Tint( tint ),
 
-            var _ => throw new GdxRuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" )
+            var _ => throw new GdxRuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" ),
         };
 
-        if ( newDrawable is BaseDrawable named )
+        if ( newDrawable is BaseSceneDrawable named )
         {
-            if ( drawable is BaseDrawable baseDrawable )
+            if ( drawable is BaseSceneDrawable baseDrawable )
             {
                 named.Name = baseDrawable.Name + " (" + tint + ")";
             }
@@ -720,14 +720,14 @@ public class Skin : IDisposable
 
     /// <summary>
     /// Scales the drawable's :-
-    /// <see cref="IDrawable.LeftWidth" />,
-    /// <see cref="IDrawable.RightWidth" />,
-    /// <see cref="IDrawable.BottomHeight" />,
-    /// <see cref="IDrawable.TopHeight" />,
-    /// <see cref="IDrawable.MinWidth" />,
-    /// <see cref="IDrawable.MinHeight" />.
+    /// <see cref="ISceneDrawable.LeftWidth" />,
+    /// <see cref="ISceneDrawable.RightWidth" />,
+    /// <see cref="ISceneDrawable.BottomHeight" />,
+    /// <see cref="ISceneDrawable.TopHeight" />,
+    /// <see cref="ISceneDrawable.MinWidth" />,
+    /// <see cref="ISceneDrawable.MinHeight" />.
     /// </summary>
-    public IDrawable ScaleDrawable( IDrawable drawable )
+    public ISceneDrawable ScaleDrawable( ISceneDrawable drawable )
     {
         drawable.LeftWidth    *= Scale;
         drawable.RightWidth   *= Scale;

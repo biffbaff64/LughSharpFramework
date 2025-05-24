@@ -34,6 +34,8 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public class TextureRegion
 {
+    public Texture Texture { get; set; } = null!;
+
     // ========================================================================
 
     private int   _regionHeight;
@@ -46,24 +48,29 @@ public class TextureRegion
     // ========================================================================
 
     /// <summary>
-    /// Constructs a region that cannot be used until a texture and texture coordinates are set.
+    /// Constructs a region that cannot be used until a texture and texture
+    /// coordinates are set.
     /// </summary>
     public TextureRegion()
     {
     }
 
     /// <summary>
-    /// Constructs a region the size of the specified texture.
+    /// Represents a portion of a texture, defined by specific coordinates,
+    /// width, and height. Used for rendering only a subsection of the
+    /// original texture.
     /// </summary>
-    /// <param name="texture"></param>
-    public TextureRegion( Texture texture )
+    public TextureRegion( Texture? texture )
     {
-        Texture = texture;
+        Texture = texture ?? throw new GdxRuntimeException( "Cannot create TextureRegion from null texture." );
 
         SetRegion( 0, 0, texture.Width, texture.Height );
     }
 
     /// <summary>
+    /// Represents a rectangular region of a texture, defining texture coordinates
+    /// and dimensions. Can be used to sample a sub-section of a texture image for
+    /// rendering.
     /// </summary>
     /// <param name="texture"> The texture from which to extract the region. </param>
     /// <param name="width">
@@ -72,12 +79,14 @@ public class TextureRegion
     /// <param name="height">
     /// The height of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
-    public TextureRegion( Texture texture, int width, int height )
+    public TextureRegion( Texture? texture, int width, int height )
         : this( texture, 0, 0, width, height )
     {
     }
 
     /// <summary>
+    /// Represents a section of a texture, defined by specific coordinates and dimensions.
+    /// Can be used to render a portion of the texture or to create sprite animations.
     /// </summary>
     /// <param name="texture"> The texture from which to extract the region. </param>
     /// <param name="x"></param>
@@ -88,28 +97,32 @@ public class TextureRegion
     /// <param name="height">
     /// The height of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
-    public TextureRegion( Texture texture, int x, int y, int width, int height )
+    public TextureRegion( Texture? texture, int x, int y, int width, int height )
     {
-        Texture = texture;
+        Texture = texture ?? throw new GdxRuntimeException( "Cannot create TextureRegion from null texture." );
         SetRegion( x, y, width, height );
     }
 
     /// <summary>
+    /// Represents a section of a texture, defined by specific coordinates and dimensions.
+    /// Can be used to render a portion of the texture or to create sprite animations.
     /// </summary>
-    /// <param name="texture"> The texture from which to extract the region. </param>
+    /// <param name="texture"></param>
     /// <param name="u"></param>
     /// <param name="v"></param>
     /// <param name="u2"></param>
     /// <param name="v2"></param>
-    public TextureRegion( Texture texture, float u, float v, float u2, float v2 )
+    /// <exception cref="GdxRuntimeException"></exception>
+    public TextureRegion( Texture? texture, float u, float v, float u2, float v2 )
     {
-        Texture = texture;
-        SetRegionNV( u, v, u2, v2 );
+        Texture = texture ?? throw new GdxRuntimeException( "Cannot create TextureRegion from null texture." );
+        SafeSetRegion( u, v, u2, v2 );
     }
 
     /// <summary>
+    /// Represents a rectangular region within a texture, with properties and methods
+    /// for manipulation such as flipping, scrolling, and splitting.
     /// </summary>
-    /// <param name="region"></param>
     public TextureRegion( TextureRegion region )
     {
         SetRegion( region );
@@ -127,116 +140,16 @@ public class TextureRegion
         SetRegion( region, x, y, width, height );
     }
 
-    public Texture Texture { get; set; } = null!;
-
+    // ========================================================================
+    // ========================================================================
+    
     /// <summary>
+    /// Non-Virtual version of <see cref="SetRegion( float, float, float, float )" />,
+    /// enabling this to be called from constructors.
     /// </summary>
-    public virtual float U
+    private void SafeSetRegion( float u, float v, float u2, float v2 )
     {
-        get => _u;
-        set
-        {
-            _u = value;
-
-            RegionWidth = ( int )Math.Round( Math.Abs( _u2 - _u ) * Texture.Width );
-        }
-    }
-
-    /// <summary>
-    /// </summary>
-    public virtual float U2
-    {
-        get => _u2;
-        set
-        {
-            _u2 = value;
-
-            RegionWidth = ( int )Math.Round( Math.Abs( _u2 - _u ) * Texture.Width );
-        }
-    }
-
-    /// <summary>
-    /// </summary>
-    public virtual float V
-    {
-        get => _v;
-        set
-        {
-            _v = value;
-
-            RegionHeight = ( int )Math.Round( Math.Abs( _v2 - _v ) * Texture.Height );
-        }
-    }
-
-    /// <summary>
-    /// </summary>
-    public virtual float V2
-    {
-        get => _v2;
-        set
-        {
-            _v2 = value;
-
-            RegionHeight = ( int )Math.Round( Math.Abs( _v2 - _v ) * Texture.Height );
-        }
-    }
-
-    /// <summary>
-    /// </summary>
-    public int RegionX
-    {
-        get => ( int )Math.Round( U * Texture.Width );
-        set => U = value / ( float )Texture.Width;
-    }
-
-    /// <summary>
-    /// </summary>
-    public int RegionY
-    {
-        get => ( int )Math.Round( V * Texture.Height );
-        set => V = value / ( float )Texture.Height;
-    }
-
-    /// <summary>
-    /// This TextureRegions Width property.
-    /// </summary>
-    public int RegionWidth
-    {
-        get => _regionWidth;
-        set
-        {
-            if ( IsFlipX() )
-            {
-                U = U2 + ( value / ( float )Texture.Width );
-            }
-            else
-            {
-                U2 = U + ( value / ( float )Texture.Width );
-            }
-
-            _regionWidth = value;
-        }
-    }
-
-    /// <summary>
-    /// This TextureRegions Height property.
-    /// </summary>
-    public int RegionHeight
-    {
-        get => _regionHeight;
-        set
-        {
-            if ( IsFlipY() )
-            {
-                V = V2 + ( value / ( float )Texture.Height );
-            }
-            else
-            {
-                V2 = V + ( value / ( float )Texture.Height );
-            }
-
-            _regionHeight = value;
-        }
+        SetRegion( u, v, u2, v2 );
     }
 
     /// <summary>
@@ -269,15 +182,6 @@ public class TextureRegion
 
         RegionWidth  = Math.Abs( width );
         RegionHeight = Math.Abs( height );
-    }
-
-    /// <summary>
-    /// Non-Virtual version of <see cref="SetRegion( float, float, float, float )" />,
-    /// enabling this to be called from constructors.
-    /// </summary>
-    private void SetRegionNV( float u, float v, float u2, float v2 )
-    {
-        SetRegion( u, v, u2, v2 );
     }
 
     /// <summary>
@@ -458,5 +362,118 @@ public class TextureRegion
         var region = new TextureRegion( texture );
 
         return region.Split( tileWidth, tileHeight );
+    }
+    
+    // ========================================================================
+    // Properties with detailed getters and setters.
+    
+    /// <summary>
+    /// </summary>
+    public virtual float U
+    {
+        get => _u;
+        set
+        {
+            _u = value;
+
+            RegionWidth = ( int )Math.Round( Math.Abs( _u2 - _u ) * Texture.Width );
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    public virtual float U2
+    {
+        get => _u2;
+        set
+        {
+            _u2 = value;
+
+            RegionWidth = ( int )Math.Round( Math.Abs( _u2 - _u ) * Texture.Width );
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    public virtual float V
+    {
+        get => _v;
+        set
+        {
+            _v = value;
+
+            RegionHeight = ( int )Math.Round( Math.Abs( _v2 - _v ) * Texture.Height );
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    public virtual float V2
+    {
+        get => _v2;
+        set
+        {
+            _v2 = value;
+
+            RegionHeight = ( int )Math.Round( Math.Abs( _v2 - _v ) * Texture.Height );
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    public int RegionX
+    {
+        get => ( int )Math.Round( U * Texture.Width );
+        set => U = value / ( float )Texture.Width;
+    }
+
+    /// <summary>
+    /// </summary>
+    public int RegionY
+    {
+        get => ( int )Math.Round( V * Texture.Height );
+        set => V = value / ( float )Texture.Height;
+    }
+
+    /// <summary>
+    /// This TextureRegions Width property.
+    /// </summary>
+    public int RegionWidth
+    {
+        get => _regionWidth;
+        set
+        {
+            if ( IsFlipX() )
+            {
+                U = U2 + ( value / ( float )Texture.Width );
+            }
+            else
+            {
+                U2 = U + ( value / ( float )Texture.Width );
+            }
+
+            _regionWidth = value;
+        }
+    }
+
+    /// <summary>
+    /// This TextureRegions Height property.
+    /// </summary>
+    public int RegionHeight
+    {
+        get => _regionHeight;
+        set
+        {
+            if ( IsFlipY() )
+            {
+                V = V2 + ( value / ( float )Texture.Height );
+            }
+            else
+            {
+                V2 = V + ( value / ( float )Texture.Height );
+            }
+
+            _regionHeight = value;
+        }
     }
 }

@@ -32,9 +32,9 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
-/// Displays a <see cref="IDrawable" />, scaled various way within the widgets
+/// Displays a <see cref="ISceneDrawable" />, scaled various way within the widgets
 /// bounds. The preferred size is the min size of the drawable. Only when using
-/// a <see cref="TextureRegionDrawable" /> will the actor's scale, rotation, and
+/// a <see cref="TextureRegionSceneDrawable" /> will the actor's scale, rotation, and
 /// origin be used when drawing.
 /// </summary>
 [PublicAPI]
@@ -51,22 +51,22 @@ public class Image : Widget
     /// <summary>
     /// Creates a new, unitialised, Image instance.
     /// </summary>
-    public Image() : this( ( IDrawable )null! )
+    public Image() : this( ( ISceneDrawable )null! )
     {
     }
 
     public Image( NinePatch patch )
-        : this( new NinePatchDrawable( patch ), Scaling.Stretch )
+        : this( new NinePatchSceneDrawable( patch ), Scaling.Stretch )
     {
     }
 
     public Image( TextureRegion region )
-        : this( new TextureRegionDrawable( region ), Scaling.Stretch )
+        : this( new TextureRegionSceneDrawable( region ), Scaling.Stretch )
     {
     }
 
     public Image( Texture texture )
-        : this( new TextureRegionDrawable( new TextureRegion( texture ) ) )
+        : this( new TextureRegionSceneDrawable( new TextureRegion( texture ) ) )
     {
     }
 
@@ -75,12 +75,12 @@ public class Image : Widget
     {
     }
 
-    public Image( IDrawable? drawable )
+    public Image( ISceneDrawable? drawable )
         : this( drawable, Scaling.Stretch )
     {
     }
 
-    public Image( IDrawable? drawable, Scaling scaling, int align = Lugh.Utils.Alignment.CENTER )
+    public Image( ISceneDrawable? drawable, Scaling scaling, int align = Lugh.Utils.Alignment.CENTER )
     {
         SetDrawable( drawable );
 
@@ -90,11 +90,11 @@ public class Image : Widget
         NonVirtualConstructorHelper();
     }
 
-    public float      ImageX      { get; set; }
-    public float      ImageY      { get; set; }
-    public float      ImageWidth  { get; set; }
-    public float      ImageHeight { get; set; }
-    public IDrawable? Drawable    { get; private set; }
+    public float           ImageX      { get; set; }
+    public float           ImageY      { get; set; }
+    public float           ImageWidth  { get; set; }
+    public float           ImageHeight { get; set; }
+    public ISceneDrawable? Drawable    { get; private set; }
 
     public int Alignment
     {
@@ -201,7 +201,7 @@ public class Image : Widget
         var scaleX = ScaleX;
         var scaleY = ScaleY;
 
-        if ( Drawable is ITransformDrawable drawable )
+        if ( Drawable is ITransformSceneDrawable drawable )
         {
             var rotation = Rotation;
 
@@ -237,7 +237,7 @@ public class Image : Widget
     }
 
     /// <summary>
-    /// Sets the <see cref="IDrawable" /> for this Image.
+    /// Sets the <see cref="ISceneDrawable" /> for this Image.
     /// </summary>
     /// <param name="skin"></param>
     /// <param name="drawableName"></param>
@@ -252,7 +252,7 @@ public class Image : Widget
     /// can be used to size the image to its pref size.
     /// </summary>
     /// <param name="drawable"> May be null. </param>
-    public void SetDrawable( IDrawable? drawable )
+    public void SetDrawable( ISceneDrawable? drawable )
     {
         if ( Drawable == drawable )
         {

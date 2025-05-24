@@ -413,6 +413,7 @@ public partial interface IGLBindings
     /// <see cref="GL_UNSIGNED_INT_10_10_10_2" />, and <see cref="GL_UNSIGNED_INT_2_10_10_10_REV" />.
     /// </param>
     /// <param name="pixels">Specifies a pointer to the image data in memory.</param>
+    /// <param name="enabled"></param>
     void TexImage2D( int target,
                      int level,
                      int internalFormat,
@@ -421,7 +422,8 @@ public partial interface IGLBindings
                      int border,
                      int format,
                      int type,
-                     IntPtr pixels );
+                     IntPtr pixels,
+                     bool enabled = true );
 
     /// <summary>
     /// Specify a two-dimensional texture image
@@ -481,6 +483,7 @@ public partial interface IGLBindings
     /// Specifies the pixel data as an array of values. Make sure to match the <paramref name="format" />
     /// and <paramref name="type" /> parameters.
     /// </param>
+    /// <param name="enabled"></param>
     void TexImage2D< T >( int target,
                           int level,
                           int internalFormat,
@@ -489,7 +492,8 @@ public partial interface IGLBindings
                           int border,
                           int format,
                           int type,
-                          T[] pixels ) where T : unmanaged;
+                          T[] pixels,
+                          bool enabled = true ) where T : unmanaged;
 
     /// <summary>
     /// </summary>
@@ -497,7 +501,8 @@ public partial interface IGLBindings
     /// <param name="level"></param>
     /// <param name="border"></param>
     /// <param name="pixmap"></param>
-    void TexImage2D( int target, int level, int border, Pixmap pixmap );
+    /// <param name="enabled"></param>
+    void TexImage2D( int target, int level, int border, Pixmap pixmap, bool enabled = true );
 
     /// <summary>
     /// Specify which color buffers are to be drawn into.

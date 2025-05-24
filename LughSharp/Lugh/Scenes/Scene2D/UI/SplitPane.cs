@@ -652,7 +652,7 @@ public class SplitPane : WidgetGroup
             Handle = null!;
         }
 
-        public SplitPaneStyle( IDrawable handle )
+        public SplitPaneStyle( ISceneDrawable handle )
         {
             Handle = handle;
         }
@@ -662,6 +662,6 @@ public class SplitPane : WidgetGroup
             Handle = style.Handle;
         }
 
-        public IDrawable Handle { get; }
+        public ISceneDrawable Handle { get; }
     }
 }

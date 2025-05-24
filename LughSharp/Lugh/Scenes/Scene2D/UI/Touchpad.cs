@@ -315,7 +315,7 @@ public class Touchpad : Widget
         {
         }
 
-        public TouchpadStyle( IDrawable? background, IDrawable? knob )
+        public TouchpadStyle( ISceneDrawable? background, ISceneDrawable? knob )
         {
             Background = background;
             Knob       = knob;
@@ -328,9 +328,9 @@ public class Touchpad : Widget
         }
 
         // Stretched in both directions.
-        public IDrawable? Background { get; set; }
+        public ISceneDrawable? Background { get; set; }
 
-        public IDrawable? Knob { get; set; }
+        public ISceneDrawable? Knob { get; set; }
     }
 
     // ========================================================================

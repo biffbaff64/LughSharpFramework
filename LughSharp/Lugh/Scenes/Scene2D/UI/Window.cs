@@ -603,7 +603,7 @@ public class Window : Table
         {
         }
 
-        public WindowStyle( BitmapFont titleFont, Color titleFontColor, IDrawable? background )
+        public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable? background )
         {
             TitleFont  = titleFont;
             Background = background;
@@ -624,10 +624,10 @@ public class Window : Table
             Background = style.Background;
         }
 
-        public IDrawable?  Background      { get; set; }
-        public BitmapFont? TitleFont       { get; set; }
-        public Color?      TitleFontColor  { get; set; } = new( 1, 1, 1, 1 );
-        public IDrawable?  StageBackground { get; set; }
+        public ISceneDrawable? Background      { get; set; }
+        public BitmapFont?     TitleFont       { get; set; }
+        public Color?          TitleFontColor  { get; set; } = new( 1, 1, 1, 1 );
+        public ISceneDrawable? StageBackground { get; set; }
     }
 }
 

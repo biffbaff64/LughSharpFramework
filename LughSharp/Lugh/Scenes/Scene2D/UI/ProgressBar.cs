@@ -569,7 +569,7 @@ public class ProgressBar : Widget, IDisableable
         return VisualInterpolation.Apply( ( GetVisualValue() - MinValue ) / ( MaxValue - MinValue ) );
     }
 
-    private IDrawable? GetBackgroundDrawable()
+    private ISceneDrawable? GetBackgroundDrawable()
     {
         if ( IsDisabled && ( Style.DisabledBackground != null ) )
         {
@@ -579,7 +579,7 @@ public class ProgressBar : Widget, IDisableable
         return Style.Background;
     }
 
-    private IDrawable? GetKnobDrawable()
+    private ISceneDrawable? GetKnobDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnob != null ) )
         {
@@ -589,7 +589,7 @@ public class ProgressBar : Widget, IDisableable
         return Style.Knob;
     }
 
-    private IDrawable? GetKnobBeforeDrawable()
+    private ISceneDrawable? GetKnobBeforeDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnobBefore != null ) )
         {
@@ -599,7 +599,7 @@ public class ProgressBar : Widget, IDisableable
         return Style.KnobBefore;
     }
 
-    private IDrawable? GetKnobAfterDrawable()
+    private ISceneDrawable? GetKnobAfterDrawable()
     {
         if ( IsDisabled && ( Style.DisabledKnobAfter != null ) )
         {
@@ -622,7 +622,7 @@ public class ProgressBar : Widget, IDisableable
         {
         }
 
-        public ProgressBarStyle( IDrawable background, IDrawable knob )
+        public ProgressBarStyle( ISceneDrawable background, ISceneDrawable knob )
         {
             Background = background;
             Knob       = knob;
@@ -641,13 +641,13 @@ public class ProgressBar : Widget, IDisableable
         }
 
         // The progress bar background, stretched only in one direction.
-        public IDrawable? Background         { get; set; }
-        public IDrawable? DisabledBackground { get; set; }
-        public IDrawable? Knob               { get; set; }
-        public IDrawable? DisabledKnob       { get; set; }
-        public IDrawable? KnobBefore         { get; set; }
-        public IDrawable? DisabledKnobBefore { get; set; }
-        public IDrawable? KnobAfter          { get; set; }
-        public IDrawable? DisabledKnobAfter  { get; set; }
+        public ISceneDrawable? Background         { get; set; }
+        public ISceneDrawable? DisabledBackground { get; set; }
+        public ISceneDrawable? Knob               { get; set; }
+        public ISceneDrawable? DisabledKnob       { get; set; }
+        public ISceneDrawable? KnobBefore         { get; set; }
+        public ISceneDrawable? DisabledKnobBefore { get; set; }
+        public ISceneDrawable? KnobAfter          { get; set; }
+        public ISceneDrawable? DisabledKnobAfter  { get; set; }
     }
 }

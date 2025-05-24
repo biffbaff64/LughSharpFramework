@@ -348,7 +348,7 @@ public class TextArea : TextField
         LinesShowing = ( int )Math.Floor( availableHeight / font!.GetLineHeight() );
     }
 
-    protected override float GetTextY( BitmapFont font, IDrawable? background )
+    protected override float GetTextY( BitmapFont font, ISceneDrawable? background )
     {
         var textY = Height;
 
@@ -365,7 +365,7 @@ public class TextArea : TextField
         return textY;
     }
 
-    protected override void DrawSelection( IDrawable selection, IBatch batch, BitmapFont font, float x, float y )
+    protected override void DrawSelection( ISceneDrawable selection, IBatch batch, BitmapFont font, float x, float y )
     {
         var i          = FirstLineShowing * 2;
         var offsetY    = 0f;
@@ -450,7 +450,7 @@ public class TextArea : TextField
         }
     }
 
-    protected override void DrawCursor( IDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
+    protected override void DrawCursor( ISceneDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
     {
         cursorPatch.Draw( batch, x + GetCursorX(), y + GetCursorY(), cursorPatch.MinWidth, font.GetLineHeight() );
     }
@@ -476,8 +476,8 @@ public class TextArea : TextField
             var lineStart = 0;
             var lastSpace = 0;
 
-            Pool< GlyphLayout > layoutPool = Pools< GlyphLayout >.Get();
-            var                 layout     = layoutPool.Obtain();
+            var layoutPool = Pools< GlyphLayout >.Get();
+            var layout     = layoutPool.Obtain();
 
             for ( var i = 0; i < Text.Length; i++ )
             {

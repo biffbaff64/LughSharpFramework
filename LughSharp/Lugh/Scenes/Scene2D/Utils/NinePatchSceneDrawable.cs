@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 /// Drawable for a <see cref="NinePatch" />.
 /// <para>
 /// The drawable sizes are set when the ninepatch is set, but they are separate
-/// values. Eg, <see cref="IDrawable.LeftWidth" /> could be set to more than
+/// values. Eg, <see cref="ISceneDrawable.LeftWidth" /> could be set to more than
 /// <see cref="NinePatch.LeftWidth" /> in order to provide more space on the left
 /// than actually exists in the ninepatch.
 /// </para>
@@ -43,14 +43,14 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 /// drawable to be sized down as small as possible.
 /// </summary>
 [PublicAPI]
-public class NinePatchDrawable : BaseDrawable, ITransformDrawable
+public class NinePatchSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
 {
     // ========================================================================
 
     /// <summary>
     /// Creates an uninitialized NinePatchDrawable. The ninepatch must be set before use.
     /// </summary>
-    public NinePatchDrawable()
+    public NinePatchSceneDrawable()
     {
     }
 
@@ -58,7 +58,7 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     /// Creates a new NinePatchDrawable, initialised with the supplied <see cref="NinePatch" />.
     /// </summary>
     /// <param name="patch"></param>
-    public NinePatchDrawable( NinePatch patch )
+    public NinePatchSceneDrawable( NinePatch patch )
     {
         SetPatch( patch );
     }
@@ -68,7 +68,7 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     /// from another NinePatchDrawable.
     /// </summary>
     /// <param name="drawable"></param>
-    public NinePatchDrawable( NinePatchDrawable drawable )
+    public NinePatchSceneDrawable( NinePatchSceneDrawable drawable )
         : base( drawable )
     {
         Patch = drawable.Patch;
@@ -127,9 +127,9 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     /// Creates a new drawable that renders the same as this drawable tinted
     /// the specified color.
     /// </summary>
-    public NinePatchDrawable Tint( Color tint )
+    public NinePatchSceneDrawable Tint( Color tint )
     {
-        var drawable = new NinePatchDrawable( this );
+        var drawable = new NinePatchSceneDrawable( this );
 
         drawable.Patch = new NinePatch( drawable.Patch!, tint );
 

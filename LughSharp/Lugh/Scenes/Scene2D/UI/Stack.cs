@@ -139,7 +139,7 @@ public class Stack : WidgetGroup
         _maxWidth    = 0;
         _maxHeight   = 0;
 
-        SnapshotArrayList< Actor > children = Children;
+        var children = Children;
 
         for ( int i = 0, n = children.Count; i < n; i++ )
         {
@@ -194,7 +194,7 @@ public class Stack : WidgetGroup
         var width  = Width;
         var height = Height;
 
-        SnapshotArrayList< Actor > children = Children;
+        var children = Children;
 
         for ( int i = 0, n = children.Count; i < n; i++ )
         {

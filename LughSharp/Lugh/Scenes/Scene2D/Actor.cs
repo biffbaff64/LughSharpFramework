@@ -340,7 +340,7 @@ public class Actor : IActor, IComparable< Actor >
 
         // Collect ascendants so event propagation is unaffected by
         // hierarchy changes.
-        List< Group >? ascendants = Pools< List< Group > >.Obtain();
+        var ascendants = Pools< List< Group > >.Obtain();
 
         if ( ascendants == null )
         {
@@ -359,7 +359,7 @@ public class Actor : IActor, IComparable< Actor >
         {
             // Notify ascendants' capture listeners, starting at the root.
             // Ascendants may stop an event before children receive it.
-            Group[] ascendantsArray = ascendants.ToArray();
+            var ascendantsArray = ascendants.ToArray();
 
             for ( var i = ascendants.Count - 1; i >= 0; i-- )
             {
@@ -441,7 +441,7 @@ public class Actor : IActor, IComparable< Actor >
             throw new ArgumentException( "The event target cannot be null." );
         }
 
-        DelayedRemovalList< IEventListener > listeners = capture ? CaptureListeners : Listeners;
+        var listeners = capture ? CaptureListeners : Listeners;
 
         if ( listeners.Count == 0 )
         {

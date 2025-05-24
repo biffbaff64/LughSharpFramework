@@ -84,7 +84,7 @@ public class ParallelAction : Action
 
         _complete = true;
 
-        Pool< Action >? pool = Pool;
+        var pool = Pool;
 
         // Ensure this action can't be returned to the pool while executing.
         Pool = null;

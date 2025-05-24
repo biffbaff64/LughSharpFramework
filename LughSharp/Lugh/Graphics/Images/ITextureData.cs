@@ -44,7 +44,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public interface ITextureData : IManaged
 {
-    public enum TextureType
+    enum TextureType
     {
         Pixmap,
         Custom,
@@ -53,40 +53,40 @@ public interface ITextureData : IManaged
     /// <summary>
     /// Returns the <see cref="TextureDataType" />.
     /// </summary>
-    public TextureType TextureDataType { get; }
+    TextureType TextureDataType { get; }
 
     /// <summary>
     /// Returns whether the TextureData is prepared or not.
     /// See <see cref="Prepare" />.
     /// </summary>
-    public bool IsPrepared { get; set; }
+    bool IsPrepared { get; set; }
 
     /// <summary>
     /// Returns whether to generate mipmaps or not.
     /// </summary>
-    public bool UseMipMaps { get; set; }
+    bool UseMipMaps { get; set; }
 
     /// <summary>
     /// Returns the width of the pixel data.
     /// </summary>
-    public int Width { get; set; }
+    int Width { get; set; }
 
     /// <summary>
     /// Returns the height of the pixel data.
     /// </summary>
-    public int Height { get; set; }
+    int Height { get; set; }
 
     /// <summary>
     /// Returns the <see cref="PixelType.Format" /> of the pixel data.
     /// </summary>
-    public PixelType.Format? PixelFormat { get; set; }
+    PixelType.Format? PixelFormat { get; set; }
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ConsumePixmap()" /> or
     /// <see cref="ConsumeCustomData" />. This method can be called from a non
     /// OpenGL thread and should not interact with OpenGL.
     /// </summary>
-    public void Prepare();
+    void Prepare();
 
     /// <summary>
     /// Returns the <see cref="Pixmap" /> for upload by Texture.
@@ -97,13 +97,13 @@ public interface ITextureData : IManaged
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    public Pixmap? ConsumePixmap();
+    Pixmap? ConsumePixmap();
 
     /// <summary>
     /// Returns whether the caller of <see cref="ConsumePixmap()" /> should
     /// dispose the Pixmap returned by <see cref="ConsumePixmap()" />.
     /// </summary>
-    public bool ShouldDisposePixmap();
+    bool ShouldDisposePixmap();
 
     /// <summary>
     /// Uploads the pixel data to the OpenGL ES texture. The caller must bind an
@@ -114,5 +114,5 @@ public interface ITextureData : IManaged
     /// disposed of here.
     /// </para>
     /// </summary>
-    public void ConsumeCustomData( int target );
+    void ConsumeCustomData( int target );
 }

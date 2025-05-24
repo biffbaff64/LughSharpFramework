@@ -27,6 +27,11 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
+/// <summary>
+/// Represents a texture data source loaded from a file. It implements the
+/// <see cref="ITextureData"/> interface, allowing it to be used as a source
+/// for texture data in OpenGL-based graphics applications.
+/// </summary>
 [PublicAPI]
 public class FileTextureData : ITextureData
 {
@@ -143,7 +148,8 @@ public class FileTextureData : ITextureData
     /// </summary>
     public PixelType.Format? PixelFormat { get; set; }
 
-    public virtual bool IsManaged => true;
+    /// <inheritdoc />
+    public virtual bool IsManaged  => true;
 
     /// <returns> the <see cref="ITextureData.TextureDataType" /></returns>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;

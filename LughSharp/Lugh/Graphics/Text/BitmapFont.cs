@@ -162,7 +162,8 @@ public partial class BitmapFont
     /// is the upper left corner.
     /// </param>
     public BitmapFont( FileInfo fontFile, bool flip = false )
-        : this( new BitmapFontData( fontFile, flip ), ( TextureRegion? )null, true )
+        : this( new BitmapFontData( fontFile, flip ),
+                ( TextureRegion? )null, true )
     {
         Logger.Checkpoint();
         
@@ -181,7 +182,9 @@ public partial class BitmapFont
     /// </param>
     /// <param name="integer"></param>
     public BitmapFont( FileInfo fontFile, FileInfo imageFile, bool flip, bool integer = true )
-        : this( new BitmapFontData( fontFile, flip ), new TextureRegion( new Texture( imageFile, false ) ), integer )
+        : this( new BitmapFontData( fontFile, flip ),
+                new TextureRegion( new Texture( imageFile, false ) ),
+                integer )
     {
         Logger.Checkpoint();
         

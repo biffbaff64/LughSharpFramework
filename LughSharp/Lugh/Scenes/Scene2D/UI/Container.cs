@@ -38,12 +38,12 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Container< T > : WidgetGroup where T : Actor
 {
-    private T?         _actor;
-    private int        _align;
-    private IDrawable? _background;
-    private bool       _clip;
-    private float      _fillX;
-    private float      _fillY;
+    private T?              _actor;
+    private int             _align;
+    private ISceneDrawable? _background;
+    private bool            _clip;
+    private float           _fillX;
+    private float           _fillY;
 
     private Value _maxHeight  = Value.Zero;
     private Value _maxWidth   = Value.Zero;
@@ -76,12 +76,12 @@ public class Container< T > : WidgetGroup where T : Actor
 
     /// <summary>
     /// Sets the background drawable and, if adjustPadding is true, sets the container's
-    /// padding to <see cref="IDrawable.BottomHeight" /> , <see cref="IDrawable.TopHeight" />,
-    /// <see cref="IDrawable.LeftWidth" />, and <see cref="IDrawable.RightWidth" />.
+    /// padding to <see cref="ISceneDrawable.BottomHeight" /> , <see cref="ISceneDrawable.TopHeight" />,
+    /// <see cref="ISceneDrawable.LeftWidth" />, and <see cref="ISceneDrawable.RightWidth" />.
     /// </summary>
     /// <param name="background"> If null, the background will be cleared and padding removed. </param>
     /// <param name="adjustPadding"></param>
-    public void SetBackground( IDrawable? background, bool adjustPadding = true )
+    public void SetBackground( ISceneDrawable? background, bool adjustPadding = true )
     {
         if ( _background == background )
         {
@@ -105,14 +105,14 @@ public class Container< T > : WidgetGroup where T : Actor
         }
     }
 
-    public Container< T > Background( IDrawable background )
+    public Container< T > Background( ISceneDrawable background )
     {
         SetBackground( background );
 
         return this;
     }
 
-    public IDrawable? GetBackground()
+    public ISceneDrawable? GetBackground()
     {
         return _background;
     }

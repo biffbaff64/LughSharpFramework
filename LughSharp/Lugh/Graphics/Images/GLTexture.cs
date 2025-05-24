@@ -39,36 +39,8 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// create TextureData and upload image data.
 /// </summary>
 [PublicAPI]
-public abstract class GLTexture : IDisposable
+public abstract class GLTexture : IDrawable, IDisposable
 {
-    // ========================================================================
-
-    private static float       _maxAnisotropicFilterLevel = 0;
-    private        TextureUnit _activeTextureUnit         = TextureUnit.None;
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Creates a new GLTexture object using the supplied OpenGL target.
-    /// </summary>
-    /// <param name="glTarget"></param>
-    protected GLTexture( int glTarget ) : this( glTarget, GdxApi.Bindings.GenTexture() )
-    {
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="glTarget"></param>
-    /// <param name="glTextureHandle"></param>
-    protected GLTexture( int glTarget, uint glTextureHandle )
-    {
-        GLTarget        = glTarget;
-        GLTextureHandle = glTextureHandle;
-    }
-
-    // ========================================================================
-
     /// <summary>
     /// The OpenGL target for the texture. A GL target, in the context of OpenGL (and
     /// by extension, OpenGL ES), refers to the type of texture object being manipulated
@@ -184,15 +156,42 @@ public abstract class GLTexture : IDisposable
     /// </summary>
     public Texture.TextureWrap VWrap { get; set; } = Texture.TextureWrap.ClampToEdge;
 
+    /// <inheritdoc />
+    public bool IsDrawable { get; set; }
+
     // ========================================================================
 
-    /// <inheritdoc />
-    public virtual void Dispose()
-    {
-        Dispose( true );
+    private static float       _maxAnisotropicFilterLevel = 0;
+    private        TextureUnit _activeTextureUnit         = TextureUnit.None;
 
-        GC.SuppressFinalize( this );
+    // ========================================================================
+
+    public GLTexture()
+    {
     }
+
+    /// <summary>
+    /// Creates a new GLTexture object using the supplied OpenGL target.
+    /// </summary>
+    /// <param name="glTarget"></param>
+    protected GLTexture( int glTarget ) : this( glTarget, GdxApi.Bindings.GenTexture() )
+    {
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="glTarget"></param>
+    /// <param name="glTextureHandle"></param>
+    protected GLTexture( int glTarget, uint glTextureHandle )
+    {
+        Logger.Checkpoint();
+
+        IsDrawable      = false;
+        GLTarget        = glTarget;
+        GLTextureHandle = glTextureHandle;
+    }
+
+    // ========================================================================
 
     /// <summary>
     /// Used internally to reload after context loss. Creates a new GL handle then
@@ -404,7 +403,7 @@ public abstract class GLTexture : IDisposable
     /// <param name="target"></param>
     /// <param name="data"></param>
     /// <param name="miplevel"></param>
-    public static void UploadImageData( int target, ITextureData? data, int miplevel = 0 )
+    public void UploadImageData( int target, ITextureData? data, int miplevel = 0 )
     {
         if ( data == null )
         {
@@ -416,6 +415,8 @@ public abstract class GLTexture : IDisposable
 
         if ( !data.IsPrepared )
         {
+            Logger.Checkpoint();
+
             data.Prepare();
         }
 
@@ -423,13 +424,19 @@ public abstract class GLTexture : IDisposable
 
         if ( type == ITextureData.TextureType.Custom )
         {
+            Logger.Checkpoint();
+
             data.ConsumeCustomData( target );
 
             return;
         }
 
+        Logger.Checkpoint();
+
         var pixmap        = data.ConsumePixmap();
         var disposePixmap = data.ShouldDisposePixmap();
+
+        Logger.Checkpoint();
 
         if ( pixmap == null )
         {
@@ -438,10 +445,19 @@ public abstract class GLTexture : IDisposable
 
         if ( data.PixelFormat != pixmap.GetColorFormat() )
         {
+            Logger.Checkpoint();
+
             var tmp = new Pixmap( pixmap.Width, pixmap.Height, data.PixelFormat );
 
-            tmp.Blending = Pixmap.BlendTypes.None;
-            tmp.DrawPixmap( pixmap, 0, 0, 0, 0, pixmap.Width, pixmap.Height );
+            Logger.Checkpoint();
+
+            if ( IsDrawable )
+            {
+                tmp.Blending = Pixmap.BlendTypes.None;
+                tmp.DrawPixmap( pixmap, 0, 0, 0, 0, pixmap.Width, pixmap.Height );
+            }
+
+            Logger.Checkpoint();
 
             if ( data.ShouldDisposePixmap() )
             {
@@ -452,6 +468,8 @@ public abstract class GLTexture : IDisposable
             disposePixmap = true;
         }
 
+        Logger.Checkpoint();
+
         var alignment = pixmap.GLPixelFormat switch
         {
             IGL.GL_RGB or IGL.GL_RGBA or IGL.GL_RGBA4 or IGL.GL_RGB565 => 4,
@@ -459,14 +477,31 @@ public abstract class GLTexture : IDisposable
             var _                                                      => 1,
         };
 
+        Logger.Checkpoint();
+
         GdxApi.Bindings.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
+
+        Logger.Checkpoint();
 
         if ( data.UseMipMaps )
         {
             MipMapGenerator.GenerateMipMap( target, pixmap, pixmap.Width, pixmap.Height );
         }
 
-        GdxApi.Bindings.TexImage2D( target, miplevel, 0, pixmap );
+        Logger.Checkpoint();
+
+        GdxApi.Bindings.TexImage2D< byte >( target,
+                                            miplevel,
+                                            pixmap.GLInternalPixelFormat,
+                                            pixmap.Width,
+                                            pixmap.Height,
+                                            0,
+                                            pixmap.GLPixelFormat,
+                                            pixmap.GLDataType,
+                                            pixmap.PixelData,
+                                            false );
+
+        Logger.Checkpoint();
 
         if ( disposePixmap )
         {
@@ -486,6 +521,16 @@ public abstract class GLTexture : IDisposable
             GdxApi.Bindings.DeleteTextures( ( uint )GLTextureHandle );
             GLTextureHandle = 0;
         }
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public virtual void Dispose()
+    {
+        Dispose( true );
+
+        GC.SuppressFinalize( this );
     }
 
     protected virtual void Dispose( bool disposing )

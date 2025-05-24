@@ -50,7 +50,7 @@ public class AfterAction : DelegateAction
 
     protected override bool Delegate( float delta )
     {
-        List< Action >? currentActions = Target?.Actions;
+        var currentActions = Target?.Actions;
 
         if ( currentActions?.Count == 1 )
         {

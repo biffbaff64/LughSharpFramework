@@ -67,7 +67,7 @@ public class Table : WidgetGroup
 
     private int _alignment = Alignment.CENTER;
 
-    private IDrawable?         _background;
+    private ISceneDrawable?    _background;
     private bool               _clip;
     private float[]            _columnMinWidth;
     private float[]            _columnPrefWidth;
@@ -204,7 +204,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// <param name="background"> May be null to clear the background. </param>
     /// </summary>
-    protected void SetBackground( IDrawable? background )
+    protected void SetBackground( ISceneDrawable? background )
     {
         if ( _background == background )
         {
@@ -238,11 +238,11 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Sets the table background to the supplied IDrawable.
+    /// Sets the table background to the supplied ISceneDrawable.
     /// </summary>
     /// <param name="background"></param>
     /// <returns></returns>
-    public Table Background( IDrawable? background )
+    public Table Background( ISceneDrawable? background )
     {
         SetBackground( background );
 
@@ -256,7 +256,7 @@ public class Table : WidgetGroup
         return this;
     }
 
-    public IDrawable? GetBackground()
+    public ISceneDrawable? GetBackground()
     {
         return _background;
     }
@@ -499,7 +499,7 @@ public class Table : WidgetGroup
     /// </summary>
     public override void ClearChildren()
     {
-        Cell[] cells = _cells.ToArray();
+        var cells = _cells.ToArray();
 
         for ( var i = _cells.Count - 1; i >= 0; i-- )
         {
@@ -591,8 +591,8 @@ public class Table : WidgetGroup
 
     private void EndRow()
     {
-        Cell[] cells      = _cells.ToArray();
-        var    rowColumns = 0;
+        var cells      = _cells.ToArray();
+        var rowColumns = 0;
 
         for ( var i = _cells.Count - 1; i >= 0; i-- )
         {
@@ -655,7 +655,7 @@ public class Table : WidgetGroup
             throw new ArgumentException( "actor cannot be null." );
         }
 
-        Cell[] cells = _cells.ToArray();
+        var cells = _cells.ToArray();
 
         for ( int i = 0, n = _cells.Count; i < n; i++ )
         {
@@ -1045,7 +1045,7 @@ public class Table : WidgetGroup
 
         y += GetPadTop();
 
-        Cell[] cells = _cells.ToArray();
+        var cells = _cells.ToArray();
 
         for ( int i = 0, row = 0; i < n; )
         {
@@ -1155,8 +1155,8 @@ public class Table : WidgetGroup
     {
         _sizeInvalid = false;
 
-        Cell[] cells     = _cells.ToArray();
-        var    cellCount = _cells.Count;
+        var cells     = _cells.ToArray();
+        var cellCount = _cells.Count;
 
         // Implicitly end the row for layout purposes.
         if ( ( cellCount > 0 ) && !cells[ cellCount - 1 ].EndRow )
@@ -1504,8 +1504,8 @@ public class Table : WidgetGroup
         }
 
         // Determine actor and cell sizes (before expand or fill).
-        Cell[] cells     = _cells.ToArray();
-        var    cellCount = _cells.Count;
+        var cells     = _cells.ToArray();
+        var cellCount = _cells.Count;
 
         for ( var i = 0; i < cellCount; i++ )
         {

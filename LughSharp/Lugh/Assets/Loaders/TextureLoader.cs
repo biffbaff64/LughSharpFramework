@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -116,13 +117,19 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
         if ( texture != null )
         {
+            Logger.Checkpoint();
+            
             texture.Load( _loaderInfo.Data! );
         }
         else
         {
+            Logger.Checkpoint();
+
             texture = new Texture( _loaderInfo.Data! );
         }
-
+        
+        Logger.Checkpoint();
+        
         if ( parameter != null )
         {
             texture.SetFilter( p!.MinFilter, p.MagFilter );

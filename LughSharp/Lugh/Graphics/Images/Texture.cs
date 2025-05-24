@@ -185,16 +185,24 @@ public class Texture : GLTexture, IManaged
     protected Texture( int glTarget, uint glTextureHandle, ITextureData data )
         : base( glTarget, glTextureHandle )
     {
+        Logger.Checkpoint();
+        
         ArgumentNullException.ThrowIfNull( data );
 
         TextureData = data;
 
         Load( data );
 
+        Logger.Checkpoint();
+
         if ( data.IsManaged )
         {
+            Logger.Checkpoint();
+
             AddManagedTexture( GdxApi.App, this );
         }
+
+        Logger.Checkpoint();
     }
 
     /// <summary>
@@ -203,26 +211,43 @@ public class Texture : GLTexture, IManaged
     /// <param name="data"></param>
     public void Load( ITextureData data )
     {
+        Logger.Checkpoint();
+
         if ( data.IsManaged != TextureData.IsManaged )
         {
             throw new GdxRuntimeException( "New data must have the same managed status as the old data" );
         }
 
+        Logger.Checkpoint();
+
         TextureData = data;
 
         if ( !data.IsPrepared )
         {
+            Logger.Checkpoint();
+
             data.Prepare();
         }
 
+        Logger.Checkpoint();
+
         Bind();
 
+        Logger.Checkpoint();
+
         UploadImageData( IGL.GL_TEXTURE_2D, data );
+
+        Logger.Checkpoint();
+
         UnsafeSetFilter( MinFilter, MagFilter, true );
         UnsafeSetWrap( UWrap, VWrap, true );
         UnsafeSetAnisotropicFilter( AnisotropicFilterLevel, true );
 
+        Logger.Checkpoint();
+
         GdxApi.Bindings.BindTexture( GLTarget, 0 );
+
+        Logger.Checkpoint();
     }
 
     /// <summary>

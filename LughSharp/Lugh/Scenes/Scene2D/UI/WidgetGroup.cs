@@ -182,7 +182,7 @@ public class WidgetGroup : Group, ILayout
 
     private static void SetLayoutEnabled( Group parent, bool enabled )
     {
-        SnapshotArrayList< Actor > children = parent.Children;
+        var children = parent.Children;
 
         for ( int i = 0, n = children.Count; i < n; i++ )
         {

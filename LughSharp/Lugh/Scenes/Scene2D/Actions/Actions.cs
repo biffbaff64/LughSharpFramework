@@ -40,8 +40,8 @@ public class Actions
     /// </summary>
     public static Action Action( Type a )
     {
-        Pool< Action > pool   = Pools< Action >.Get();
-        var            action = pool.Obtain();
+        var pool   = Pools< Action >.Get();
+        var action = pool.Obtain();
 
         action!.Pool = pool;
 

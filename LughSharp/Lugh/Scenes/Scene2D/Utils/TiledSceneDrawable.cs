@@ -36,22 +36,22 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 /// instead of stretching it.
 /// </summary>
 [PublicAPI]
-public class TiledDrawable : TextureRegionDrawable
+public class TiledSceneDrawable : TextureRegionSceneDrawable
 {
     // ========================================================================
 
     /// <summary>
     /// Creates a new TiledDrawable, using the given <see cref="TextureRegion" />
     /// </summary>
-    public TiledDrawable( TextureRegion region )
+    public TiledSceneDrawable( TextureRegion region )
         : base( region )
     {
     }
 
     /// <summary>
-    /// Creates a new TiledDrawable, using the given <see cref="TextureRegionDrawable" />
+    /// Creates a new TiledDrawable, using the given <see cref="TextureRegionSceneDrawable" />
     /// </summary>
-    public TiledDrawable( TextureRegionDrawable drawable )
+    public TiledSceneDrawable( TextureRegionSceneDrawable drawable )
         : base( drawable )
     {
     }
@@ -172,9 +172,9 @@ public class TiledDrawable : TextureRegionDrawable
     }
 
     /// <inheritdoc />
-    public override TiledDrawable Tint( Color tint )
+    public override TiledSceneDrawable Tint( Color tint )
     {
-        var drawable = new TiledDrawable( this );
+        var drawable = new TiledSceneDrawable( this );
 
         drawable.Color.Set( tint );
         drawable.LeftWidth    = LeftWidth;

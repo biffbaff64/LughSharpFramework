@@ -30,25 +30,25 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 /// Drawable that stores the size information but doesn't draw anything.
 /// </summary>
 [PublicAPI]
-public class BaseDrawable : IDrawable
+public class BaseSceneDrawable : ISceneDrawable
 {
     // ========================================================================
 
     /// <summary>
     /// Creates a new, empty, BaseDrawable object.
     /// </summary>
-    protected BaseDrawable()
+    protected BaseSceneDrawable()
     {
     }
 
     /// <summary>
     /// Creates a new empty drawable with the same sizing information as the specified drawable.
     /// </summary>
-    protected BaseDrawable( IDrawable? drawable )
+    protected BaseSceneDrawable( ISceneDrawable? drawable )
     {
         ArgumentNullException.ThrowIfNull( drawable );
 
-        if ( drawable is BaseDrawable baseDrawable )
+        if ( drawable is BaseSceneDrawable baseDrawable )
         {
             Name = baseDrawable.Name;
         }

@@ -81,7 +81,7 @@ public class ImageButton : Button
     /// <summary>
     /// </summary>
     /// <param name="imageUp"></param>
-    public ImageButton( IDrawable? imageUp )
+    public ImageButton( ISceneDrawable? imageUp )
         : this( new ImageButtonStyle( null, null, null, imageUp, null, null ) )
     {
     }
@@ -90,7 +90,7 @@ public class ImageButton : Button
     /// </summary>
     /// <param name="imageUp"></param>
     /// <param name="imageDown"></param>
-    public ImageButton( IDrawable? imageUp, IDrawable? imageDown )
+    public ImageButton( ISceneDrawable? imageUp, ISceneDrawable? imageDown )
         : this( new ImageButtonStyle( null, null, null, imageUp, imageDown, null ) )
     {
     }
@@ -100,7 +100,7 @@ public class ImageButton : Button
     /// <param name="imageUp"></param>
     /// <param name="imageDown"></param>
     /// <param name="imageChecked"></param>
-    public ImageButton( IDrawable? imageUp, IDrawable? imageDown, IDrawable? imageChecked )
+    public ImageButton( ISceneDrawable? imageUp, ISceneDrawable? imageDown, ISceneDrawable? imageChecked )
         : this( new ImageButtonStyle( null, null, null, imageUp, imageDown, imageChecked ) )
     {
     }
@@ -128,7 +128,7 @@ public class ImageButton : Button
     /// <summary>
     /// Returns the appropriate image drawable from the style based on the current button state.
     /// </summary>
-    protected IDrawable? GetImageDrawable()
+    protected ISceneDrawable? GetImageDrawable()
     {
         if ( IsDisabled && ( Style.ImageDisabled != null ) )
         {
@@ -233,13 +233,13 @@ public class ImageButton : Button
     [PublicAPI]
     public class ImageButtonStyle : ButtonStyle
     {
-        public readonly IDrawable? ImageChecked;
-        public readonly IDrawable? ImageCheckedDown;
-        public readonly IDrawable? ImageCheckedOver;
-        public readonly IDrawable? ImageDisabled;
-        public readonly IDrawable? ImageDown;
-        public readonly IDrawable? ImageOver;
-        public readonly IDrawable? ImageUp;
+        public readonly ISceneDrawable? ImageChecked;
+        public readonly ISceneDrawable? ImageCheckedDown;
+        public readonly ISceneDrawable? ImageCheckedOver;
+        public readonly ISceneDrawable? ImageDisabled;
+        public readonly ISceneDrawable? ImageDown;
+        public readonly ISceneDrawable? ImageOver;
+        public readonly ISceneDrawable? ImageUp;
 
         /// <summary>
         /// Creates a new, unitialised, ImageButtonStyle instance.
@@ -249,15 +249,15 @@ public class ImageButton : Button
         }
 
         /// <summary>
-        /// Creates a new ImageButtonStyle instance, using the supplied <see cref="IDrawable" />
+        /// Creates a new ImageButtonStyle instance, using the supplied <see cref="ISceneDrawable" />
         /// images for <see cref="ImageUp" />, <see cref="ImageDown" /> and <see cref="ImageChecked" />.
         /// </summary>
-        public ImageButtonStyle( IDrawable? up,
-                                 IDrawable? down,
-                                 IDrawable? chcked,
-                                 IDrawable? imageUp,
-                                 IDrawable? imageDown,
-                                 IDrawable? imageChecked )
+        public ImageButtonStyle( ISceneDrawable? up,
+                                 ISceneDrawable? down,
+                                 ISceneDrawable? chcked,
+                                 ISceneDrawable? imageUp,
+                                 ISceneDrawable? imageDown,
+                                 ISceneDrawable? imageChecked )
             : base( up, down, chcked )
         {
             ImageUp      = imageUp;

@@ -72,7 +72,7 @@ public abstract class DelegateAction : Action
     /// </returns>
     public override bool Act( float delta )
     {
-        Pool< Action >? pool = Pool;
+        var pool = Pool;
 
         // Ensure this action can't be returned to the pool inside the delegate action.
         Pool = null;

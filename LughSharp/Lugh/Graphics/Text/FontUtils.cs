@@ -38,12 +38,12 @@ public class FontUtils
     /// <returns></returns>
     public BitmapFont CreateFont( string fontFile, int size, Color color )
     {
-        BitmapFont font;
+        BitmapFont? font;
 
         try
         {
             font = CreateFont( fontFile, size );
-            font.SetColor( color );
+            font?.SetColor( color );
         }
         catch ( Exception e )
         {

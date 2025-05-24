@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Files;
@@ -86,7 +87,9 @@ public class AbstractFiles : IFiles
         var assemblyPath = GetAssemblyStoragePath();
         var prefix       = path.Contains( assemblyPath ) ? "" : assemblyPath;
 
-        return new FileInfo( $"{prefix}{path}" );
+        var fileInfo = new FileInfo( $"{prefix}{path}" );
+
+        return fileInfo;
     }
 
     /// <summary>
@@ -122,7 +125,9 @@ public class AbstractFiles : IFiles
         var internalPath = GetInternalStoragePath();
         var prefix       = path.Contains( internalPath ) ? "" : internalPath;
 
-        return new FileInfo( $"{prefix}{path}" );
+        var fileInfo = new FileInfo( $"{prefix}{path}" );
+
+        return fileInfo;
     }
 
     /// <summary>
@@ -158,7 +163,9 @@ public class AbstractFiles : IFiles
         var externalPath = GetExternalStoragePath();
         var prefix       = path.Contains( externalPath ) ? "" : externalPath;
 
-        return new FileInfo( $"{prefix}{path}" );
+        var fileInfo = new FileInfo( $"{prefix}{path}" );
+
+        return fileInfo;
     }
 
     /// <summary>
@@ -194,7 +201,9 @@ public class AbstractFiles : IFiles
         var localPath = GetLocalStoragePath();
         var prefix    = path.Contains( localPath ) ? "" : localPath;
 
-        return new FileInfo( $"{prefix}{path}" );
+        var fileInfo = new FileInfo( $"{prefix}{path}" );
+
+        return fileInfo;
     }
 
     /// <summary>

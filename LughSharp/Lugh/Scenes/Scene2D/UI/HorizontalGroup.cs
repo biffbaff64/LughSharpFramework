@@ -142,7 +142,7 @@ public class HorizontalGroup : WidgetGroup
     private void ComputeSize()
     {
         _sizeInvalid = false;
-        SnapshotArrayList< Actor > children = Children;
+        var children = Children;
 
         var n = children.Count;
 
@@ -322,7 +322,7 @@ public class HorizontalGroup : WidgetGroup
 
         align = _rowAlign;
 
-        SnapshotArrayList< Actor > children = Children;
+        var children = Children;
 
         var i    = 0;
         var n    = children.Count;
@@ -462,8 +462,8 @@ public class HorizontalGroup : WidgetGroup
         groupWidth -= PadRight;
         align      =  _rowAlign;
 
-        var                    rowSizes = _rowSizes;
-        SnapshotArrayList< Actor > children = Children;
+        var rowSizes = _rowSizes;
+        var children = Children;
 
         var i    = 0;
         var n    = children.Count;

@@ -103,7 +103,7 @@ public class Slider : ProgressBar
         return ( SliderStyle )Style;
     }
 
-    protected IDrawable? GetBackgroundDrawable()
+    protected ISceneDrawable? GetBackgroundDrawable()
     {
         var style = ( SliderStyle )Style;
 
@@ -125,7 +125,7 @@ public class Slider : ProgressBar
         return style.Background;
     }
 
-    protected IDrawable? GetKnobDrawable()
+    protected ISceneDrawable? GetKnobDrawable()
     {
         var style = ( SliderStyle )Style;
 
@@ -147,7 +147,7 @@ public class Slider : ProgressBar
         return style.Knob;
     }
 
-    protected IDrawable? GetKnobBeforeDrawable()
+    protected ISceneDrawable? GetKnobBeforeDrawable()
     {
         var style = ( SliderStyle )Style;
 
@@ -169,7 +169,7 @@ public class Slider : ProgressBar
         return style.KnobBefore;
     }
 
-    protected IDrawable? GetKnobAfterDrawable()
+    protected ISceneDrawable? GetKnobAfterDrawable()
     {
         var style = ( SliderStyle )Style;
 
@@ -306,7 +306,7 @@ public class Slider : ProgressBar
         {
         }
 
-        public SliderStyle( IDrawable background, IDrawable knob )
+        public SliderStyle( ISceneDrawable background, ISceneDrawable knob )
             : base( background, knob )
         {
         }
@@ -326,14 +326,14 @@ public class Slider : ProgressBar
             KnobAfterDown = style.KnobAfterDown;
         }
 
-        public IDrawable? BackgroundOver { get; set; }
-        public IDrawable? BackgroundDown { get; set; }
-        public IDrawable? KnobBeforeOver { get; set; }
-        public IDrawable? KnobOver       { get; set; }
-        public IDrawable? KnobAfterOver  { get; set; }
-        public IDrawable? KnobBeforeDown { get; set; }
-        public IDrawable? KnobDown       { get; set; }
-        public IDrawable? KnobAfterDown  { get; set; }
+        public ISceneDrawable? BackgroundOver { get; set; }
+        public ISceneDrawable? BackgroundDown { get; set; }
+        public ISceneDrawable? KnobBeforeOver { get; set; }
+        public ISceneDrawable? KnobOver       { get; set; }
+        public ISceneDrawable? KnobAfterOver  { get; set; }
+        public ISceneDrawable? KnobBeforeDown { get; set; }
+        public ISceneDrawable? KnobDown       { get; set; }
+        public ISceneDrawable? KnobAfterDown  { get; set; }
     }
 
     // ========================================================================

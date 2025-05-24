@@ -266,7 +266,7 @@ public class TextButton : Button
         {
         }
 
-        public TextButtonStyle( IDrawable upImage, IDrawable downImage, IDrawable checkedImage, BitmapFont font )
+        public TextButtonStyle( ISceneDrawable upImage, ISceneDrawable downImage, ISceneDrawable checkedImage, BitmapFont font )
             : base( upImage, downImage, checkedImage )
         {
             Font = font;

@@ -32,7 +32,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 /// A drawable that supports scale and rotation.
 /// </summary>
 [PublicAPI]
-public interface ITransformDrawable : IDrawable
+public interface ITransformSceneDrawable : ISceneDrawable
 {
     void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation );
 }

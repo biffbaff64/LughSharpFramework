@@ -862,6 +862,7 @@ UTILS
     - DONE - IP   - GdxNativesLoader
     - DONE - DONE - IClipboard                      Convert - Interface, clipboard handled in backends.
     - DONE - DONE - ICloseable
+    - DONE - DONE - IDrawable
     - DONE - DONE - IManaged
     - DONE - DONE - IReadable
     - DONE - DONE - IResetable

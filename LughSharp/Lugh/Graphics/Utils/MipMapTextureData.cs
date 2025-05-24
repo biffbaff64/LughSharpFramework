@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -34,6 +35,14 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class MipMapTextureData : ITextureData
 {
+    public bool              IsPrepared  { get; set; }
+    public bool              UseMipMaps  { get; set; }
+    public int               Width       { get; set; }
+    public int               Height      { get; set; }
+    public PixelType.Format? PixelFormat { get; set; } = PixelType.Format.Alpha;
+
+    // ========================================================================
+
     private readonly ITextureData[] _mips;
 
     // ========================================================================
@@ -48,11 +57,9 @@ public class MipMapTextureData : ITextureData
         Array.Copy( mipMapData, 0, _mips, 0, mipMapData.Length );
     }
 
-    public bool              IsPrepared  { get; set; }
-    public bool              UseMipMaps  { get; set; }
-    public int               Width       { get; set; }
-    public int               Height      { get; set; }
-    public PixelType.Format? PixelFormat { get; set; } = PixelType.Format.Alpha;
+    public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
+    public bool IsManaged => false;
+    public bool ShouldDisposePixmap() => false;
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap" /> or
@@ -88,18 +95,20 @@ public class MipMapTextureData : ITextureData
     /// </summary>
     public void ConsumeCustomData( int target )
     {
+        var derivedGLTexture = new DerivedGLTexture();
+        
         for ( var i = 0; i < _mips.Length; ++i )
         {
-            GLTexture.UploadImageData( target, _mips[ i ], i );
+            derivedGLTexture.UploadImageData( target, _mips[ i ], i );
         }
     }
-
-    public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
-
-    public bool IsManaged => false;
-
-    public bool ShouldDisposePixmap()
+    
+    //TODO: This is a hack to get around the fact that GLTexture is not abstract. This should be fixed.
+    private class DerivedGLTexture : GLTexture
     {
-        return false;
+        /// <inheritdoc />
+        public override void Reload()
+        {
+        }
     }
 }

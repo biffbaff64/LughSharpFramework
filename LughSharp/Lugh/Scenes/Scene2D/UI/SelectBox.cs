@@ -244,8 +244,8 @@ public class SelectBox< T > : Widget, IDisableable
             _prefHeight = font.GetCapHeight() - ( font.GetDescent() * 2 );
         }
 
-        Pool< GlyphLayout > layoutPool = Pools< GlyphLayout >.Get();
-        var                 layout     = layoutPool.Obtain();
+        var layoutPool = Pools< GlyphLayout >.Get();
+        var layout     = layoutPool.Obtain();
 
         if ( _selectedPrefWidth )
         {
@@ -309,7 +309,7 @@ public class SelectBox< T > : Widget, IDisableable
     /// Returns appropriate background Drawable from the style
     /// based on the current select box state.
     /// </summary>
-    protected IDrawable? GetBackgroundIDrawable()
+    protected ISceneDrawable? GetBackgroundIDrawable()
     {
         if ( IsDisabled && ( BoxStyle.BackgroundDisabled != null ) )
         {
@@ -450,7 +450,7 @@ public class SelectBox< T > : Widget, IDisableable
     /// </returns>
     public int GetSelectedIndex()
     {
-        SortedSet< T > selected = _selection.Items();
+        var selected = _selection.Items();
 
         return selected.Count == 0 ? -1 : _items.IndexOf( selected.First() );
     }
@@ -477,9 +477,9 @@ public class SelectBox< T > : Widget, IDisableable
     /// </summary>
     public float GetMaxSelectedPrefWidth()
     {
-        Pool< GlyphLayout > layoutPool = Pools< GlyphLayout >.Get();
-        var                 layout     = layoutPool.Obtain();
-        float               width      = 0;
+        var   layoutPool = Pools< GlyphLayout >.Get();
+        var   layout     = layoutPool.Obtain();
+        float width      = 0;
 
         foreach ( var t in _items )
         {
@@ -971,7 +971,7 @@ public class SelectBox< T > : Widget, IDisableable
 
         public SelectBoxStyle( BitmapFont font,
                                Color fontColor,
-                               IDrawable background,
+                               ISceneDrawable background,
                                ScrollPane.ScrollPaneStyle scrollStyle,
                                ListBox< T >.ListStyle listStyle )
         {
@@ -1014,9 +1014,9 @@ public class SelectBox< T > : Widget, IDisableable
         public Color                      FontColor          { get; } = new( 1, 1, 1, 1 );
         public Color?                     OverFontColor      { get; }
         public Color?                     DisabledFontColor  { get; }
-        public IDrawable?                 Background         { get; }
-        public IDrawable?                 BackgroundOver     { get; }
-        public IDrawable?                 BackgroundOpen     { get; }
-        public IDrawable?                 BackgroundDisabled { get; }
+        public ISceneDrawable?            Background         { get; }
+        public ISceneDrawable?            BackgroundOver     { get; }
+        public ISceneDrawable?            BackgroundOpen     { get; }
+        public ISceneDrawable?            BackgroundDisabled { get; }
     }
 }

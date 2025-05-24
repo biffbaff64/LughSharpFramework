@@ -177,7 +177,7 @@ public class TooltipManager< T > where T : Actor
         _time        = InitialTime;
         _showTooltip = null!;
 
-        foreach ( Tooltip< T > tooltip in _activeTooltips )
+        foreach ( var tooltip in _activeTooltips )
         {
             tooltip.Hide();
         }

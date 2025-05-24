@@ -32,7 +32,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 /// and position content.
 /// </summary>
 [PublicAPI]
-public interface IDrawable
+public interface ISceneDrawable
 {
     float LeftWidth    { get; set; }
     float RightWidth   { get; set; }

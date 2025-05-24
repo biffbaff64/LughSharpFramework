@@ -131,10 +131,10 @@ public class Stage : InputAdapter, IDisposable
     }
 
     public SnapshotArrayList< TouchFocus > TouchFocuses { get; }      = new( true, 4 );
-    public Camera?                     Camera       { get; set; } = null!;
-    public Viewport                    Viewport     { get; }
-    public IBatch                      Batch        { get; }
-    public bool                        Debug        { get; set; } // True if any actor has ever had debug enabled.
+    public Camera?                         Camera       { get; set; } = null!;
+    public Viewport                        Viewport     { get; }
+    public IBatch                          Batch        { get; }
+    public bool                            Debug        { get; set; } // True if any actor has ever had debug enabled.
 
     public float Width  => Viewport.WorldWidth;
     public float Height => Viewport.WorldHeight;

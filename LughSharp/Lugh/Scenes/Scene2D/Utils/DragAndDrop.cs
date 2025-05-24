@@ -112,7 +112,7 @@ public class DragAndDrop
     {
         _targets.Clear();
 
-        foreach ( KeyValuePair< DragSource, DragListener > entry in _sourceListeners )
+        foreach ( var entry in _sourceListeners )
         {
             entry.Key.Actor.RemoveCaptureListener( entry.Value );
         }

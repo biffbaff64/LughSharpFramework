@@ -36,7 +36,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 /// Drawable for a <see cref="TextureRegion" />.
 /// </summary>
 [PublicAPI]
-public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
+public class TextureRegionSceneDrawable : BaseSceneDrawable, ITransformSceneDrawable
 {
     private readonly TextureRegion? _region;
 
@@ -46,7 +46,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// Creates an uninitialized TextureRegionDrawable.
     /// The texture region must be set before use.
     /// </summary>
-    public TextureRegionDrawable()
+    public TextureRegionSceneDrawable()
     {
     }
 
@@ -54,7 +54,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// Creates a new TextureRegionDrawable, initialised with a new <see cref="TextureRegion" />
     /// from the supplied <see cref="Texture" />
     /// </summary>
-    public TextureRegionDrawable( Texture texture )
+    public TextureRegionSceneDrawable( Texture texture )
         : this( new TextureRegion( texture ) )
     {
     }
@@ -62,7 +62,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// <summary>
     /// Creates a new TextureRegionDrawable, initialised with the supplied <see cref="TextureRegion" />
     /// </summary>
-    public TextureRegionDrawable( TextureRegion region )
+    public TextureRegionSceneDrawable( TextureRegion region )
     {
         Region = region;
     }
@@ -72,13 +72,13 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// the given TextureRegionDrawable.
     /// </summary>
     /// <param name="drawable"></param>
-    public TextureRegionDrawable( TextureRegionDrawable drawable ) : base( drawable )
+    public TextureRegionSceneDrawable( TextureRegionSceneDrawable drawable ) : base( drawable )
     {
         Region = drawable.Region;
     }
 
     /// <summary>
-    /// The <see cref="TextureRegion" /> component of this <see cref="IDrawable" />
+    /// The <see cref="TextureRegion" /> component of this <see cref="ISceneDrawable" />
     /// </summary>
     protected TextureRegion? Region
     {
@@ -123,7 +123,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// Creates a new drawable that renders the same as this drawable
     /// tinted the specified color.
     /// </summary>
-    public virtual IDrawable Tint( Color tint )
+    public virtual ISceneDrawable Tint( Color tint )
     {
         if ( Region == null )
         {
@@ -137,7 +137,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
         sprite.SetColor( tint );
         sprite.SetSize( MinWidth, MinHeight );
 
-        var drawable = new SpriteDrawable( sprite )
+        var drawable = new SpriteSceneDrawable( sprite )
         {
             LeftWidth    = LeftWidth,
             RightWidth   = RightWidth,

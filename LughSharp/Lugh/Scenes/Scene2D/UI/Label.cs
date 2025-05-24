@@ -546,9 +546,9 @@ public class Label : Widget
             Background = style.Background;
         }
 
-        public BitmapFont Font       { get; set; }
-        public Color?     FontColor  { get; set; }
-        public IDrawable? Background { get; set; }
+        public BitmapFont      Font       { get; set; }
+        public Color?          FontColor  { get; set; }
+        public ISceneDrawable? Background { get; set; }
     }
 
     #endregion labelstyle

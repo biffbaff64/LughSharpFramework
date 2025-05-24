@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Lugh.Utils;
 
 // ============================================================================
 using GLenum = int;
@@ -100,15 +101,19 @@ public partial class GLBindings
                             GLint border,
                             GLenum format,
                             GLenum type,
-                            IntPtr pixels )
+                            IntPtr pixels,
+                            bool enabled = true )
     {
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
-        _glTexImage2D( target, level, internalFormat, width, height, border, format, type, pixels );
+        if ( enabled )
+        {
+            _glTexImage2D( target, level, internalFormat, width, height, border, format, type, pixels );
+        }
     }
 
     /// <inheritdoc />
-    public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap )
+    public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap, bool enabled = true )
     {
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
@@ -116,15 +121,38 @@ public partial class GLBindings
         {
             fixed ( byte* p = &pixmap.PixelData[ 0 ] )
             {
-                _glTexImage2D( target,
-                               level,
-                               pixmap.GLInternalPixelFormat,
-                               pixmap.Width,
-                               pixmap.Height,
-                               border,
-                               pixmap.GLPixelFormat,
-                               pixmap.GLDataType,
-                               ( IntPtr )p );
+//                Logger.Debug( $"target: {target:X}" );
+//                Logger.Debug( $"level: {level}" );
+//                Logger.Debug( $"pixmap.GLInternalPixelFormat: {pixmap.GLInternalPixelFormat:X}" );
+//                Logger.Debug( $"pixmap.Width: {pixmap.Width}" );
+//                Logger.Debug( $"pixmap.Height: {pixmap.Height}" );
+//                Logger.Debug( $"border: {border}" );
+//                Logger.Debug( $"pixmap.GLPixelFormat: {pixmap.GLPixelFormat:X}" );
+//                Logger.Debug( $"pixmap.GLDataType: {pixmap.GLDataType:X}" );
+
+                for ( var i = 0; i < 20; i++ )
+                {
+                    Logger.Debug( $"p[{i}]: {p[ i ]:X}, " +
+                                  $"*(p+i): {*(p+i):X}, " +
+                                  $"pixmap.PixelData[ {i} ]: {pixmap.PixelData[ i ]:X}" );
+                }
+
+                Logger.Checkpoint();
+                
+                if ( enabled )
+                {
+                    _glTexImage2D( target,                       // int
+                                   level,                        // int
+                                   pixmap.GLInternalPixelFormat, // int
+                                   pixmap.Width,                 // int
+                                   pixmap.Height,                // int
+                                   border,                       // int
+                                   pixmap.GLPixelFormat,         // int
+                                   pixmap.GLDataType,            // int
+                                   *p );                         // nint
+                }
+                
+                Logger.Checkpoint();
             }
         }
     }
@@ -138,7 +166,8 @@ public partial class GLBindings
                                  GLint border,
                                  GLenum pixelFormat,
                                  GLenum dataType,
-                                 T[]? pixels ) where T : unmanaged
+                                 T[]? pixels,
+                                 GLboolean enabled = true ) where T : unmanaged
     {
         if ( pixels == null )
         {
@@ -151,7 +180,18 @@ public partial class GLBindings
         {
             fixed ( T* p = &pixels[ 0 ] )
             {
-                _glTexImage2D( target, level, internalpixelformat, width, height, border, pixelFormat, dataType, ( IntPtr )p );
+                if ( enabled )
+                {
+                    _glTexImage2D( target,
+                                   level,
+                                   internalpixelformat,
+                                   width,
+                                   height,
+                                   border,
+                                   pixelFormat,
+                                   dataType,
+                                   ( IntPtr )p );
+                }
             }
         }
     }

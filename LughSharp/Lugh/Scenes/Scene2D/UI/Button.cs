@@ -104,17 +104,17 @@ public class Button : Table, IDisableable
         ConstructorHelper( style );
     }
 
-    public Button( IDrawable? up )
+    public Button( ISceneDrawable? up )
         : this( new ButtonStyle( up, null, null ) )
     {
     }
 
-    public Button( IDrawable? up, IDrawable? down )
+    public Button( ISceneDrawable? up, ISceneDrawable? down )
         : this( new ButtonStyle( up, down, null ) )
     {
     }
 
-    public Button( IDrawable? upImage, IDrawable? downImage, IDrawable? checkedImage )
+    public Button( ISceneDrawable? upImage, ISceneDrawable? downImage, ISceneDrawable? checkedImage )
         : this( new ButtonStyle( upImage, downImage, checkedImage ) )
     {
     }
@@ -207,7 +207,7 @@ public class Button : Table, IDisableable
     /// <summary>
     /// Returns appropriate background drawable from the style based on the current button state.
     /// </summary>
-    public virtual IDrawable? GetBackgroundDrawable()
+    public virtual ISceneDrawable? GetBackgroundDrawable()
     {
         if ( IsDisabled && ( Style?.Disabled != null ) )
         {
@@ -367,7 +367,7 @@ public class Button : Table, IDisableable
         {
         }
 
-        public ButtonStyle( IDrawable? up, IDrawable? down, IDrawable? ischecked )
+        public ButtonStyle( ISceneDrawable? up, ISceneDrawable? down, ISceneDrawable? ischecked )
         {
             Up      = up;
             Down    = down;
@@ -393,21 +393,21 @@ public class Button : Table, IDisableable
             CheckedOffsetY   = style.CheckedOffsetY;
         }
 
-        public IDrawable? Up               { get; set; }
-        public IDrawable? Down             { get; set; }
-        public IDrawable? Over             { get; set; }
-        public IDrawable? Focused          { get; set; }
-        public IDrawable? Disabled         { get; set; }
-        public IDrawable? Checked          { get; set; }
-        public IDrawable? CheckedOver      { get; set; }
-        public IDrawable? CheckedDown      { get; set; }
-        public IDrawable? CheckedFocused   { get; set; }
-        public float      PressedOffsetX   { get; set; }
-        public float      PressedOffsetY   { get; set; }
-        public float      UnpressedOffsetX { get; set; }
-        public float      UnpressedOffsetY { get; set; }
-        public float      CheckedOffsetX   { get; set; }
-        public float      CheckedOffsetY   { get; set; }
+        public ISceneDrawable? Up               { get; set; }
+        public ISceneDrawable? Down             { get; set; }
+        public ISceneDrawable? Over             { get; set; }
+        public ISceneDrawable? Focused          { get; set; }
+        public ISceneDrawable? Disabled         { get; set; }
+        public ISceneDrawable? Checked          { get; set; }
+        public ISceneDrawable? CheckedOver      { get; set; }
+        public ISceneDrawable? CheckedDown      { get; set; }
+        public ISceneDrawable? CheckedFocused   { get; set; }
+        public float           PressedOffsetX   { get; set; }
+        public float           PressedOffsetY   { get; set; }
+        public float           UnpressedOffsetX { get; set; }
+        public float           UnpressedOffsetY { get; set; }
+        public float           CheckedOffsetX   { get; set; }
+        public float           CheckedOffsetY   { get; set; }
     }
 
     // ========================================================================

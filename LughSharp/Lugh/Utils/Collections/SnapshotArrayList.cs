@@ -107,7 +107,7 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     /// <summary>
     /// Sets or Gets the element at the given index.
     /// </summary>
-    public T this[ int index ]
+    public override T this[ int index ]
     {
         get => Items[ index ];
         set => Items[ index ] = value;
