@@ -150,8 +150,6 @@ public partial class BitmapFont
         /// <param name="flip"></param>
         public BitmapFontData( FileInfo fontFile, bool flip )
         {
-            Logger.Checkpoint();
-
             FontFile = fontFile;
             Flipped  = flip;
 
@@ -168,8 +166,6 @@ public partial class BitmapFont
         /// <exception cref="GdxRuntimeException"></exception>
         public void Load( FileInfo file, bool flip )
         {
-            Logger.Checkpoint();
-            
             if ( ImagePaths != null )
             {
                 Logger.Warning( "BitmapFont Already loaded." );
@@ -177,14 +173,10 @@ public partial class BitmapFont
                 return;
             }
 
-            Logger.Checkpoint();
-            
             Name = Path.GetFileNameWithoutExtension( file.Name );
 
             var reader = new StreamReader( file.FullName );
 
-            Logger.Checkpoint();
-            
             try
             {
                 var line = reader.ReadLine(); // info
@@ -194,8 +186,6 @@ public partial class BitmapFont
                     throw new GdxRuntimeException( "File is empty." );
                 }
 
-                Logger.Debug( line );
-                
                 line = line.Substring( line.IndexOf( "padding=", StringComparison.Ordinal ) + 8 );
 
                 var padding = line.Substring( 0, line.IndexOf( ' ' ) ).Split( ",", 4 );
@@ -205,8 +195,6 @@ public partial class BitmapFont
                     throw new GdxRuntimeException( "Invalid padding." );
                 }
 
-                Logger.Checkpoint();
-                
                 PadTop    = int.Parse( padding[ 0 ] );
                 PadRight  = int.Parse( padding[ 1 ] );
                 PadBottom = int.Parse( padding[ 2 ] );
@@ -221,8 +209,6 @@ public partial class BitmapFont
                     throw new GdxRuntimeException( "Missing common header." );
                 }
 
-                Logger.Debug( line );
-                
                 var common = line.Split( " ", 9 ); // At most we want the 6th element; i.e. "page=N"
 
                 // At least lineHeight and base are required.
@@ -247,8 +233,6 @@ public partial class BitmapFont
 
                 var pageCount = 1;
 
-                Logger.Checkpoint();
-                
                 if ( common is [ var _, var _, var _, var _, var _, not null, .. ]
                      && common[ 5 ].StartsWith( "pages=" ) )
                 {
@@ -264,8 +248,6 @@ public partial class BitmapFont
 
                 ImagePaths = new string[ pageCount ];
 
-                Logger.Checkpoint();
-                
                 // Read each page definition.
                 for ( var p = 0; p < pageCount; p++ )
                 {
@@ -315,8 +297,6 @@ public partial class BitmapFont
 
                 Descent = 0;
                 
-                Logger.Checkpoint();
-                
                 while ( true )
                 {
                     line = reader.ReadLine();
@@ -326,8 +306,6 @@ public partial class BitmapFont
                         break; // EOF
                     }
 
-                    Logger.Debug( line );
-                    
                     if ( line.StartsWith( "kernings " ) )
                     {
                         break; // Starting kernings block.
@@ -343,19 +321,13 @@ public partial class BitmapFont
                         continue;
                     }
 
-                    Logger.Checkpoint();
-                    
                     var glyph = new Glyph();
 
-                    Logger.Checkpoint();
-                    
                     // Split the line by spaces and '=' characters.
                     // StringSplitOptions.RemoveEmptyEntries will skip any empty strings
                     // that result from multiple delimiters next to each other (e.g., "id==").
                     var parts = line.Split( [ ' ', '=' ], StringSplitOptions.RemoveEmptyEntries );
 
-                    Logger.Checkpoint();
-                    
                     // Based on the 'char id=N' format, the parts array should look like:
                     // ["char", "id", "N", "x", "X_VAL", "y", "Y_VAL", ...]
                     // So, "char" is parts[0], "id" is parts[1], and the char ID is parts[2].
@@ -367,8 +339,6 @@ public partial class BitmapFont
                         continue;
                     }
 
-                    Logger.Checkpoint();
-                    
                     if ( !int.TryParse( parts[ 2 ], out var ch ) )
                     {
                         Logger.Warning( $"Skipping malformed 'char' line (invalid ID): {line}" );
@@ -376,8 +346,6 @@ public partial class BitmapFont
                         continue;
                     }
 
-                    Logger.Checkpoint();
-                    
                     switch ( ch )
                     {
                         case <= 0:
@@ -394,8 +362,6 @@ public partial class BitmapFont
                             continue;
                     }
 
-                    Logger.Checkpoint();
-                    
                     glyph.ID = ch;
 
                     // Now, map the remaining parts to glyph properties.
@@ -423,8 +389,6 @@ public partial class BitmapFont
 
                     glyph.Xadvance = GetNextInt(); // Gets the value after "xadvance="
 
-                    Logger.Checkpoint();
-                    
                     // We need to check if there are enough 'parts' left and if the next key is "page"
                     if ( currentPartIndex < parts.Length )
                     {
@@ -462,8 +426,6 @@ public partial class BitmapFont
                         }
                     }
 
-                    Logger.Checkpoint();
-                    
                     if ( glyph is { Width: > 0, Height: > 0 } )
                     {
                         Descent = Math.Min( baseLine + glyph.Yoffset, Descent );
@@ -498,8 +460,6 @@ public partial class BitmapFont
 
                 Descent += PadBottom;
 
-                Logger.Checkpoint();
-                
                 while ( true )
                 {
                     line = reader.ReadLine();
@@ -509,8 +469,6 @@ public partial class BitmapFont
                         break;
                     }
 
-                    Logger.Debug( line );
-                    
                     if ( !line.StartsWith( "kerning " ) )
                     {
                         break;
@@ -535,8 +493,6 @@ public partial class BitmapFont
                     glyph?.SetKerning( second, amount );
                 }
 
-                Logger.Checkpoint();
-                
                 var hasMetricsOverride    = false;
                 var overrideAscent        = 0f;
                 var overrideDescent       = 0f;
@@ -562,8 +518,6 @@ public partial class BitmapFont
                     overrideXHeight       = float.Parse( parts[ 14 ] );
                 }
 
-                Logger.Checkpoint();
-                
                 var spaceGlyph = GetGlyph( ' ' );
 
                 if ( spaceGlyph == null )
@@ -577,8 +531,6 @@ public partial class BitmapFont
                     SetGlyph( ' ', spaceGlyph );
                 }
 
-                Logger.Checkpoint();
-                
                 if ( spaceGlyph.Width == 0 )
                 {
                     spaceGlyph.Width   = ( int )( PadLeft + spaceGlyph.Xadvance + PadRight );
@@ -589,8 +541,6 @@ public partial class BitmapFont
 
                 Glyph? xGlyph = null;
 
-                Logger.Checkpoint();
-                
                 foreach ( var xChar in XChars )
                 {
                     xGlyph = GetGlyph( xChar );
@@ -601,16 +551,12 @@ public partial class BitmapFont
                     }
                 }
 
-                Logger.Checkpoint();
-                
                 xGlyph ??= GetFirstGlyph();
 
                 XHeight = xGlyph.Height - padY;
 
                 Glyph? capGlyph = null;
 
-                Logger.Checkpoint();
-                
                 foreach ( var capChar in CapChars )
                 {
                     capGlyph = GetGlyph( capChar );
@@ -621,13 +567,9 @@ public partial class BitmapFont
                     }
                 }
 
-                Logger.Checkpoint();
-                
                 if ( capGlyph == null )
                 {
-                    Logger.Checkpoint();
-
-                    foreach ( Glyph?[]? page in Glyphs )
+                    foreach ( var page in Glyphs )
                     {
                         if ( page == null )
                         {
@@ -652,8 +594,6 @@ public partial class BitmapFont
                     CapHeight = capGlyph.Height;
                 }
 
-                Logger.Checkpoint();
-                
                 CapHeight -= padY;
 
                 Ascent = baseLine - CapHeight;
@@ -684,8 +624,6 @@ public partial class BitmapFont
             {
                 reader.Close();
             }
-            
-            Logger.Checkpoint();
         }
 
         /// <summary>
@@ -694,9 +632,13 @@ public partial class BitmapFont
         /// A reference to the Glyph whose region is to be set.
         /// </param>
         /// <param name="region"> The <see cref="TextureRegion" />. </param>
-        /// <remarks>This method is a candidate for reworking using 'ref'</remarks>
         public Glyph SetGlyphRegion( Glyph glyph, TextureRegion region )
         {
+            if ( region.Texture == null )
+            {
+                throw new GdxRuntimeException( "Texture is null." );
+            }
+            
             var invTexWidth  = 1.0f / region.Texture.Width;
             var invTexHeight = 1.0f / region.Texture.Height;
 
@@ -738,7 +680,7 @@ public partial class BitmapFont
 
                 x2 -= offsetX;
 
-                if ( x2 > region.RegionWidth )
+                if ( x2 > region?.RegionWidth )
                 {
                     glyph.Width -= x2 - region.RegionWidth;
 
@@ -764,7 +706,7 @@ public partial class BitmapFont
 
                 y2 -= offsetY;
 
-                if ( y2 > region.RegionHeight )
+                if ( y2 > region?.RegionHeight )
                 {
                     var amount = y2 - region.RegionHeight;
 
@@ -807,7 +749,7 @@ public partial class BitmapFont
         /// <param name="glyph"></param>
         public void SetGlyph( int ch, Glyph glyph )
         {
-            Glyph?[]? page = Glyphs[ ch / PAGE_SIZE ];
+            var page = Glyphs[ ch / PAGE_SIZE ];
 
             if ( page == null )
             {
@@ -825,7 +767,7 @@ public partial class BitmapFont
         /// <exception cref="GdxRuntimeException"></exception>
         public Glyph GetFirstGlyph()
         {
-            foreach ( Glyph?[]? page in Glyphs )
+            foreach ( var page in Glyphs )
             {
                 if ( page != null )
                 {
@@ -874,7 +816,7 @@ public partial class BitmapFont
         /// Using the specified string, populates the glyphs and positions of the
         /// specified glyph run.
         /// </summary>
-        /// <param name="run"></param>
+        /// <param name="glyphRun"></param>
         /// <param name="str">
         /// Characters to convert to glyphs. Will not contain newline or color tags.
         /// May contain "[[" for an escaped left square bracket.
@@ -885,9 +827,9 @@ public partial class BitmapFont
         /// The glyph immediately before this run, or null if this is run is the
         /// first on a line of text.
         /// </param>
-        public virtual void GetGlyphs( GlyphLayout.GlyphRun? run, string str, int start, int end, Glyph? lastGlyph )
+        public virtual void GetGlyphs( GlyphLayout.GlyphRun? glyphRun, string str, int start, int end, Glyph? lastGlyph )
         {
-            ArgumentNullException.ThrowIfNull( run );
+            ArgumentNullException.ThrowIfNull( glyphRun );
 
             var max = end - start;
 
@@ -899,12 +841,12 @@ public partial class BitmapFont
             var markupEnabled = MarkupEnabled;
             var scaleX        = ScaleX;
 
-            List< Glyph > glyphs    = run.Glyphs;
-            var           xAdvances = run.XAdvances;
+            var glyphs    = glyphRun.Glyphs;
+            var           xAdvances = glyphRun.XAdvances;
 
             // Guess at number of glyphs needed.
             glyphs.EnsureCapacity( max );
-            run.XAdvances.EnsureCapacity( max + 1 );
+            glyphRun.XAdvances.EnsureCapacity( max + 1 );
 
             do
             {

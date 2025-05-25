@@ -1174,9 +1174,12 @@ public class SpriteBatch : IBatch
     /// <param name="texture"> The texture. </param>
     /// <param name="x"> X coordinate in pixels. </param>
     /// <param name="y"> Y coordinate in pixels. </param>
-    public virtual void Draw( Texture texture, float x, float y )
+    public virtual void Draw( Texture? texture, float x, float y )
     {
-        Draw( texture, x, y, texture.Width, texture.Height );
+        if ( texture != null )
+        {
+            Draw( texture, x, y, texture.Width, texture.Height );
+        }
     }
 
     /// <summary>

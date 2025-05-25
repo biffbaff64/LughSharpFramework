@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Concurrent;
+
 using LughSharp.Lugh.Utils.Collections;
 
 namespace LughSharp.Lugh.Utils.Pooling;
@@ -30,83 +32,148 @@ namespace LughSharp.Lugh.Utils.Pooling;
 /// Stores a map of <see cref="Pool{T}" />s by type for convenient static access.
 /// </summary>
 [PublicAPI]
-public static class Pools< T >
+public static class Pools
 {
-    private static readonly Dictionary< Type, Pool< T >? > _typePools = new();
+    // Use a ConcurrentDictionary for thread-safe access to the pools themselves.
+    // Store object as base Pool<object> or dynamic, cast when retrieving.
+    private static readonly ConcurrentDictionary< Type, object > _typePools = new();
 
-    // ========================================================================
+    // --- Public Methods ---
 
     /// <summary>
-    /// Returns a new or existing pool for the specified type, stored in a Class
-    /// to map. Note the max size is ignored if this is not the first time this
-    /// pool has been requested.
+    /// Returns a new or existing pool for the specified type.
+    /// If a pool for the type already exists, its existing instance is returned,
+    /// and 'max' and 'initialCapacity' parameters are ignored.
     /// </summary>
-    public static Pool< T > Get( int max = 100 )
+    /// <typeparam name="T">The type of object to pool.</typeparam>
+    /// <param name="newObjectFactory">A function to create new objects when the pool needs them.</param>
+    /// <param name="initialCapacity">Initial capacity of the pool if a new one is created.</param>
+    /// <param name="max">Maximum number of objects to store in the pool if a new one is created.</param>
+    /// <returns>The Pool instance for the specified type.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if newObjectFactory is null when creating a new pool.</exception>
+    public static Pool< T > Get< T >( Pool< T >.NewObjectHandler newObjectFactory, int initialCapacity = Pool< T >.DefaultInitialCapacity,
+                                      int max = int.MaxValue )
     {
-        var pool = _typePools[ typeof( T ) ];
+        // GetOrAdd is thread-safe for creating or retrieving.
+        return ( Pool< T > )_typePools.GetOrAdd( typeof( T ), type =>
+                                                     new Pool< T >( newObjectFactory, initialCapacity, max ) );
+    }
 
-        if ( pool == null )
+    /// <summary>
+    /// Sets an existing pool for the specified type. Useful for custom pool implementations.
+    /// Overwrites any existing pool for this type.
+    /// </summary>
+    /// <typeparam name="T">The type of object the pool manages.</typeparam>
+    /// <param name="pool">The Pool instance to set.</param>
+    /// <exception cref="ArgumentNullException">Thrown if pool is null.</exception>
+    public static void Set< T >( Pool< T > pool )
+    {
+        ArgumentNullException.ThrowIfNull( pool );
+        _typePools[ typeof( T ) ] = pool; // Overwrites if exists, adds if not
+    }
+
+    /// <summary>
+    /// Obtains an object of the specified type from its corresponding pool.
+    /// The pool must have been registered via Get or Set methods.
+    /// </summary>
+    /// <typeparam name="T">The type of object to obtain.</typeparam>
+    /// <returns>An object from the pool, or default(T) if the pool is exhausted or creation failed.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if no pool is registered for the specified type.</exception>
+    public static T Obtain< T >()
+    {
+        if ( !_typePools.TryGetValue( typeof( T ), out var poolObject ) )
         {
-            pool = new Pool< T >( 4, max );
-
-            _typePools.Put( typeof( T ), pool );
+            throw new
+                InvalidOperationException( $"No pool registered for type {typeof( T ).Name}. Call Pools.Get<{typeof( T ).Name}>() first with a NewObjectHandler." );
         }
 
-        return pool;
+        var pool = ( Pool< T > )poolObject;
+
+        return pool.Obtain();
     }
 
     /// <summary>
-    /// Sets an existing pool for the specified type, stored in a Class
-    /// to <see cref="Pool{T}" /> map.
+    /// Frees an object of the specified type back to its corresponding pool.
+    /// The pool must have been registered.
     /// </summary>
-    public static void Set( Type type, Pool< T > pool )
-    {
-        _typePools[ type ] = pool;
-    }
-
-    /// <inheritdoc cref="Pool{T}.Obtain()" />
-    public static T? Obtain()
-    {
-        return Get().Obtain();
-    }
-
-    /// <inheritdoc cref="Pool{T}.Free(T)" />
-    public static void Free( T? obj )
+    /// <typeparam name="T">The type of the object to free.</typeparam>
+    /// <param name="obj">The object to free.</param>
+    /// <exception cref="InvalidOperationException">Thrown if no pool is registered for the specified type.</exception>
+    public static void Free< T >( T obj )
     {
         ArgumentNullException.ThrowIfNull( obj );
 
-        _typePools[ typeof( T ) ]?.Free( obj );
+        if ( !_typePools.TryGetValue( typeof( T ), out var poolObject ) )
+        {
+            throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}. Cannot free object." );
+        }
+
+        var pool = ( Pool< T > )poolObject;
+        pool.Free( obj );
     }
 
     /// <summary>
-    /// Frees the specified objects from the pool.
-    /// Null objects within the array are silently ignored.
+    /// Frees a collection of objects of the specified type back to their corresponding pool.
+    /// The pool must have been registered. Null objects in the list are ignored.
     /// </summary>
-    /// <param name="objects"> The objects to free. </param>
-    /// <param name="samePool">
-    /// If true, objects don't need to be from the same pool but the
-    /// pool must be looked up for each object.
-    /// </param>
-    public static void FreeAll( List< T > objects, bool samePool = false )
+    /// <typeparam name="T">The type of the objects to free.</typeparam>
+    /// <param name="objects">The collection of objects to free.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if no pool is registered for the specified type.
+    /// </exception>
+    public static void FreeAll< T >( IEnumerable< T > objects )
     {
         ArgumentNullException.ThrowIfNull( objects );
 
-        for ( int i = 0, n = objects.Count; i < n; i++ )
+        if ( !_typePools.TryGetValue( typeof( T ), out var poolObject ) )
         {
-            var obj = objects[ i ];
+            throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}. Cannot free objects." );
+        }
 
-            if ( ( obj == null ) || ( _typePools[ typeof( T ) ] == null ) )
-            {
-                continue;
-            }
+        var pool = ( Pool< T > )poolObject;
+        pool.FreeAll( objects );
+    }
 
-            _typePools[ typeof( T ) ]?.Free( obj );
-
-            if ( !samePool )
-            {
-                _typePools[ typeof( T ) ] = null;
-            }
+    /// <summary>
+    /// Clears the pool for a specific type, discarding all free objects.
+    /// </summary>
+    /// <typeparam name="T">The type of objects in the pool to clear.</typeparam>
+    public static void Clear< T >()
+    {
+        if ( _typePools.TryGetValue( typeof( T ), out var poolObject ) )
+        {
+            ( ( Pool< T > )poolObject ).Clear();
         }
     }
-}
 
+    /// <summary>
+    /// Clears all registered pools.
+    /// </summary>
+    public static void ClearAllPools()
+    {
+        foreach ( var entry in _typePools.Values )
+        {
+            if ( entry is IClearablePool clearablePool ) // You might need a non-generic interface for Clear()
+            {
+                clearablePool.Clear();
+            }
+
+            // Alternatively, cast to dynamic and call Clear() if you're sure it exists.
+            // ((dynamic)entry).Clear();
+        }
+
+        _typePools.Clear(); // Remove all entries from the dictionary
+    }
+
+    // Helper interface for ClearAllPools if pools don't derive from a common non-generic base
+    private interface IClearablePool
+    {
+        void Clear();
+    }
+
+    // Make Pool<T> implement this if you want ClearAllPools to work cleanly
+    // public class Pool<T> : IClearablePool // ... and then in Pool<T>
+    // {
+    //     void IClearablePool.Clear() { Clear(); }
+    // }
+}

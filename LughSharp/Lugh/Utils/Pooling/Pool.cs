@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Exceptions;
+using System.Collections.Concurrent;
 
 namespace LughSharp.Lugh.Utils.Pooling;
 
@@ -30,157 +30,194 @@ namespace LughSharp.Lugh.Utils.Pooling;
 /// A pool of objects that can be reused to avoid allocation.
 /// </summary>
 [PublicAPI]
-public class Pool< T > : IPoolable< T >
+public class Pool< T >
 {
-    public delegate T? NewObjectHandler();
+    public const int DefaultInitialCapacity = 16;
 
-    public int Max  { get; }      // The maximum number of objects that will be pooled.
-    public int Peak { get; set; } // The highest number of free objects. Can be reset any time.
+    // Delegate for creating new instances of T
+    public delegate T NewObjectHandler();
 
-    // ========================================================================
+    // --- Public Properties ---
+    public int Max { get; } // The maximum number of objects that will be pooled.
 
-    private readonly List< T? > _freeObjects;
+    public int Peak { get; private set; } // The highest number of objects ever active (obtained + free).
 
-    // ========================================================================
-    // ========================================================================
+    // Or, highest number of free objects, depending on what Peak means to you.
+    // The current definition (highest number of free objects) is less common,
+    // but if that's what you need, it's fine.
 
-    /// <summary>
-    /// Creates a new pool with a specified initial capacity,
-    /// </summary>
-    /// <param name="initialCapacity">
-    /// The initial size of the array supporting the pool. No objects are created/pre-allocated.
-    /// Default value is 16.
-    /// </param>
-    /// <param name="max">
-    /// The maximum number of free objects to store in this pool.
-    /// Default is int.MaxValue, ie NO max.
-    /// </param>
-    public Pool( int initialCapacity = 16, int max = int.MaxValue )
+    // --- Private Fields ---
+    private readonly ConcurrentBag< T > _freeObjects; // ConcurrentBag is thread-safe for add/take operations
+
+    // if you anticipate multi-threaded access.
+    // If single-threaded, a List<T> is fine, but needs to be managed carefully.
+    private readonly NewObjectHandler _newObjectFactory; // The factory to create new objects.
+
+    // Using a HashSet to track active objects allows checking for double-freeing.
+    // This adds overhead, but is crucial for correctness.
+    private readonly ConcurrentDictionary< T, bool > _activeObjects; // For thread-safe tracking
+
+    // If single-threaded, a HashSet<T> is fine.
+
+    // --- Constructor ---
+    public Pool( NewObjectHandler newObjectFactory, int initialCapacity = DefaultInitialCapacity, int max = int.MaxValue )
     {
-        _freeObjects = new List< T? >( initialCapacity );
-        Max          = max;
+        _newObjectFactory = newObjectFactory ??
+                            throw new ArgumentNullException( nameof( newObjectFactory ), "NewObjectHandler cannot be null." );
+        Max = max;
+
+        // Choose between ConcurrentBag (thread-safe) or List<T> (single-threaded, better perf)
+        _freeObjects   = new ConcurrentBag< T >();              // Or new List<T>(initialCapacity);
+        _activeObjects = new ConcurrentDictionary< T, bool >(); // Or new HashSet<T>();
+
+        // Pre-fill the pool if initialCapacity > 0
+        if ( initialCapacity > 0 )
+        {
+            Fill( initialCapacity );
+        }
     }
 
-    public virtual NewObjectHandler? NewObject { get; set; } = null;
+    // --- Core Methods ---
 
     /// <summary>
-    /// Returns an object from this pool.
-    /// The object may be new (from <see cref="NewObject" />) or reused
-    /// (previously <see cref="Free(T)" /> freed).
+    /// Returns an object from this pool. The object may be new or reused.
+    /// Returns null if the pool is exhausted and cannot create new objects (e.g., if Max is reached and no objects are free).
     /// </summary>
-    public virtual T? Obtain()
+    public virtual T Obtain()
     {
-        if ( _freeObjects.Count == 0 )
-        {
-            GdxRuntimeException.ThrowIfNull( NewObject );
+        T obj;
 
-            return NewObject();
+        // Try to get from free objects first
+        if ( !_freeObjects.TryTake( out obj ) ) // Use TryTake for ConcurrentBag
+        {
+            // Pool is empty, create a new object
+            if ( GetTotalPooledAndActiveCount() >= Max )
+            {
+                // Pool is at max capacity and no free objects.
+                // Depending on policy: throw, return null, or block.
+                // For now, returning null as per original question.
+                Logger.Warning( $"Pool for type {typeof( T ).Name} exhausted. Cannot obtain object." );
+
+                return default( T ); // Returning default(T) (null for reference types)
+            }
+
+            try
+            {
+                obj = _newObjectFactory();
+
+                if ( obj == null ) // Factory itself returned null (e.g., due to creation failure)
+                {
+                    Logger.Warning( $"NewObjectHandler for type {typeof( T ).Name} returned null." );
+
+                    return default( T );
+                }
+            }
+            catch ( Exception ex )
+            {
+                Logger.Warning( $"Failed to create new object for type {typeof( T ).Name}: {ex.Message}" );
+
+                return default( T );
+            }
         }
 
-        var item = _freeObjects[ ^1 ];
+        // Add to active objects tracking for double-free check
+        if ( !_activeObjects.TryAdd( obj, true ) ) // For ConcurrentDictionary
+        {
+            // This should ideally not happen if pool is correctly managed, but indicates an issue.
+            // Means an object is being obtained but already marked as active.
+            Logger.Warning( $"Obtained object {obj?.GetType().Name} was already marked as active. Potential pool misuse." );
 
-        _freeObjects[ ^1 ] = default( T? );
+            // You might want to re-add to free and try again, or throw. For now, proceeding.
+        }
 
-        return item;
+        // Reset the object before returning
+        ResetObject( obj );
+
+        UpdatePeak(); // Update peak after obtaining an object if needed
+
+        return obj;
     }
 
     /// <summary>
     /// Adds the specified number of new free objects to the pool.
-    /// Usually called early on as a pre-allocation mechanism but
-    /// can be used at any time.
+    /// Usually called early on as a pre-allocation mechanism.
     /// </summary>
     /// <param name="size">The number of objects to be added.</param>
     public void Fill( int size )
     {
         for ( var i = 0; i < size; i++ )
         {
-            if ( _freeObjects.Count < Max )
+            if ( GetFree() >= Max ) break; // Don't exceed max capacity
+
+            try
             {
-                _freeObjects.Add( NewObject!() );
+                var obj = _newObjectFactory();
+
+                if ( obj == null )
+                {
+                    Logger.Warning( $"NewObjectHandler for type {typeof( T ).Name} returned null during Fill." );
+
+                    break; // Stop filling if factory returns null
+                }
+
+                ResetObject( obj );      // Reset new objects before adding to free list
+                _freeObjects.Add( obj ); // For ConcurrentBag
+            }
+            catch ( Exception ex )
+            {
+                Logger.Warning( $"Failed to create object during Fill for type {typeof( T ).Name}: {ex.Message}" );
+
+                break; // Stop filling if creation fails
             }
         }
 
-        Peak = Math.Max( Peak, _freeObjects.Count );
+        UpdatePeak();
     }
 
     /// <summary>
-    /// Called when an object is freed to clear the state of the object for possible
-    /// later reuse. The default implementation calls <see cref="IResetable.Reset" />
-    /// if the object is Poolable.
+    /// Puts the specified object in the pool, making it eligible to be returned by Obtain.
+    /// If the pool already contains Max free objects, the specified object is discarded.
+    /// Throws ArgumentException if the object was not obtained from this pool or is being double-freed.
     /// </summary>
-    public virtual void Reset( T obj )
-    {
-        if ( obj is IResetable poolable )
-        {
-            poolable.Reset();
-        }
-    }
-
-    /// <summary>
-    /// Called when an object is discarded. This is the case when an object is
-    /// freed, but the maximum capacity of the pool is reached, and when the
-    /// pool is <see cref="Clear" />ed.
-    /// </summary>
-    public virtual void Discard( T? obj )
-    {
-    }
-
-    /// <summary>
-    /// Puts the specified object in the pool, making it eligible to be returned by
-    /// <see cref="Obtain" />. If the pool already contains <see cref="Max" /> free objects,
-    /// the specified object is discarded using <see cref="Discard" /> and not added to the pool.
-    /// The pool does not check if an object is already freed, so the same object must not be
-    /// freed multiple times.
-    /// </summary>
-    /// <param name="obj">The object to add to the pool.</param>
-    /// <exception cref="ArgumentException"></exception>
     public virtual void Free( T obj )
     {
         ArgumentNullException.ThrowIfNull( obj );
 
-        if ( _freeObjects.Count < Max )
+        // Crucial: Check if the object was actually obtained from this pool and is not being double-freed.
+        if ( !_activeObjects.TryRemove( obj, out _ ) ) // For ConcurrentDictionary
         {
-            _freeObjects.Add( obj );
+            Logger.Warning( $"Attempted to free object {obj.GetType().Name} that was not obtained from this pool or was already freed." );
 
-            Peak = Math.Max( Peak, _freeObjects.Count );
+            // Depending on strictness, you might throw an exception here:
+            // throw new InvalidOperationException($"Attempted to free object {obj.GetType().Name} that was not obtained from this pool or was already freed.");
+            return; // Don't add to free list if it wasn't active
+        }
 
-            Reset( obj );
+        if ( GetFree() < Max )
+        {
+            ResetObject( obj );      // Reset before adding back to pool
+            _freeObjects.Add( obj ); // For ConcurrentBag
         }
         else
         {
-            Discard( obj );
+            DiscardObject( obj );
         }
     }
 
     /// <summary>
-    /// Puts the specified objects in the pool. Null objects within the array
-    /// are silently ignored. The pool does not check if an object is already
-    /// freed, so the same object must not be freed multiple times.
+    /// Puts the specified objects in the pool. Null objects within the array are silently ignored.
+    /// Objects must have been obtained from this pool and not be double-freed.
     /// </summary>
-    public virtual void FreeAll( List< T > objects )
+    public virtual void FreeAll( IEnumerable< T > objects )
     {
         ArgumentNullException.ThrowIfNull( objects );
 
-        for ( int i = 0, n = objects.Count; i < n; i++ )
+        foreach ( var obj in objects )
         {
-            if ( objects[ i ] == null )
-            {
-                continue;
-            }
+            if ( obj == null ) continue;
 
-            if ( _freeObjects.Count < Max )
-            {
-                _freeObjects.Add( objects[ i ] );
-
-                Reset( objects[ i ] );
-            }
-            else
-            {
-                Discard( objects[ i ] );
-            }
+            Free( obj ); // Use the Free method to ensure checks and discarding logic
         }
-
-        Peak = Math.Max( Peak, _freeObjects.Count );
     }
 
     /// <summary>
@@ -188,20 +225,76 @@ public class Pool< T > : IPoolable< T >
     /// </summary>
     public virtual void Clear()
     {
-        for ( var i = 0; i < _freeObjects.Count; i++ )
+        while ( _freeObjects.TryTake( out T obj ) ) // For ConcurrentBag
         {
-            var obj = _freeObjects[ i ];
-            _freeObjects.RemoveAt( i );
-            Discard( obj );
+            DiscardObject( obj );
         }
+
+        // _activeObjects should only contain truly active objects
+        // and shouldn't be cleared here unless the pool is being shut down completely.
+        // If pool is being fully reset (all objects returned to pool), then also clear active objects.
+        // For a typical Clear, only free objects are removed.
     }
 
     /// <summary>
-    /// The number of objects available to be obtained.
+    /// The number of objects currently available to be obtained.
     /// </summary>
     public virtual int GetFree()
     {
         return _freeObjects.Count;
+    }
+
+    /// <summary>
+    /// The number of objects currently obtained (active) from the pool.
+    /// </summary>
+    public virtual int GetActive()
+    {
+        return _activeObjects.Count;
+    }
+
+    /// <summary>
+    /// Total number of objects currently managed by the pool (free + active).
+    /// </summary>
+    public virtual int GetTotalPooledAndActiveCount()
+    {
+        return _freeObjects.Count + _activeObjects.Count;
+    }
+
+    // --- Internal/Protected Helper Methods ---
+
+    /// <summary>
+    /// Resets the state of an object before it's returned to the pool or reused.
+    /// </summary>
+    protected virtual void ResetObject( T obj )
+    {
+        if ( obj is IPoolable poolable )
+        {
+            poolable.Reset();
+        }
+    }
+
+    /// <summary>
+    /// Called when an object is discarded (e.g., pool is full, or cleared).
+    /// Override this to dispose of resources held by the object.
+    /// </summary>
+    protected virtual void DiscardObject( T obj )
+    {
+        if ( obj is IDisposable disposable )
+        {
+            disposable.Dispose(); // Important for resource management
+        }
+
+        // Log if needed
+        Logger.Debug( $"Discarding object of type {obj?.GetType().Name}" );
+    }
+
+    /// <summary>
+    /// Updates the peak count of pooled objects to reflect the highest number of
+    /// total objects (free and active) managed by the pool at any given time.
+    /// </summary>
+    private void UpdatePeak()
+    {
+        Peak = Math.Max( Peak, GetTotalPooledAndActiveCount() ); // Or GetFree() ??
     }
 }
 

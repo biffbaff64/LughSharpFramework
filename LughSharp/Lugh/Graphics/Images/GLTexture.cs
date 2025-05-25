@@ -415,8 +415,6 @@ public abstract class GLTexture : IDrawable, IDisposable
 
         if ( !data.IsPrepared )
         {
-            Logger.Checkpoint();
-
             data.Prepare();
         }
 
@@ -424,19 +422,13 @@ public abstract class GLTexture : IDrawable, IDisposable
 
         if ( type == ITextureData.TextureType.Custom )
         {
-            Logger.Checkpoint();
-
             data.ConsumeCustomData( target );
 
             return;
         }
 
-        Logger.Checkpoint();
-
         var pixmap        = data.ConsumePixmap();
         var disposePixmap = data.ShouldDisposePixmap();
-
-        Logger.Checkpoint();
 
         if ( pixmap == null )
         {

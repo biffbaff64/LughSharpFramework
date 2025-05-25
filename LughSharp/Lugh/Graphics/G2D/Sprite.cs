@@ -80,8 +80,6 @@ public class Sprite : TextureRegion
         _y           = sprite._y;
         Width        = sprite.Width;
         Height       = sprite.Height;
-        RegionWidth  = sprite.RegionWidth;
-        RegionHeight = sprite.RegionHeight;
         OriginX      = sprite.OriginX;
         OriginY      = sprite.OriginY;
         _rotation    = sprite._rotation;
@@ -91,6 +89,9 @@ public class Sprite : TextureRegion
 
         // Copy color
         _color.Set( sprite._color );
+
+        SetRegionWidth( sprite.RegionWidth, IsFlipX() );
+        SetRegionHeight( sprite.RegionHeight, IsFlipY() );
     }
 
     /// <summary>
@@ -337,7 +338,7 @@ public class Sprite : TextureRegion
 
     /// <summary>
     /// Sets the color used to tint this sprite.
-    /// Default is <see cref="Graphics.Color.White" />.
+    /// Default is <see cref="Color.White" />.
     /// </summary>
     public void SetColor( Color tint )
     {
@@ -568,7 +569,10 @@ public class Sprite : TextureRegion
 
     public void Draw( IBatch batch )
     {
-        batch.Draw( Texture, Vertices, 0, SPRITE_SIZE );
+        if ( Texture != null )
+        {
+            batch.Draw( Texture, Vertices, 0, SPRITE_SIZE );
+        }
     }
 
     public void Draw( IBatch batch, float alphaModulation )
@@ -669,6 +673,11 @@ public class Sprite : TextureRegion
     /// <param name="yAmount"></param>
     public override void Scroll( float xAmount, float yAmount )
     {
+        if ( Texture == null )
+        {
+            return;
+        }
+        
         if ( xAmount != 0 )
         {
             var u  = ( Vertices[ IBatch.U1 ] + xAmount ) % 1;

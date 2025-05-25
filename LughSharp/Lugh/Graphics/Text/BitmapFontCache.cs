@@ -25,7 +25,6 @@
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Pooling;
 
 namespace LughSharp.Lugh.Graphics.Text;
@@ -37,11 +36,41 @@ namespace LughSharp.Lugh.Graphics.Text;
 [PublicAPI]
 public class BitmapFontCache
 {
+    /// <summary>
+    /// Returns the x position of the cached string, relative to the
+    /// position when the string was cached.
+    /// </summary>
+    public float X { get; private set; }
+
+    /// <summary>
+    /// Returns the y position of the cached string, relative to the
+    /// position when the string was cached.
+    /// </summary>
+    public float Y { get; private set; }
+
+    public BitmapFont Font { get; }
+
+    /// <summary>
+    /// Specifies whether to use integer positions or not.
+    /// Default is to use them so filtering doesn't kick in as badly.
+    /// </summary>
+    public bool UseIntegerPositions { get; set; }
+
+    /// <summary>
+    /// Represents the collection of <see cref="GlyphLayout"/> instances cached by the font.
+    /// This property holds all the individual text layouts associated with the font cache,
+    /// allowing text to be efficiently rendered or manipulated.
+    /// </summary>
+    public List< GlyphLayout > Layouts { get; set; } = [ ];
+
+    // ========================================================================
+
     private readonly Color                _color         = new( 1, 1, 1, 1 );
-    private readonly List< GlyphLayout? > _pooledLayouts = new();
+    private readonly List< GlyphLayout? > _pooledLayouts = [ ];
     private readonly Color                _tempColor     = new( 1, 1, 1, 1 );
-    private          float                _currentTint;
-    private          int                  _glyphCount;
+
+    private float _currentTint;
+    private int   _glyphCount;
 
     /// <summary>
     /// Number of vertex data entries per page.
@@ -100,37 +129,12 @@ public class BitmapFontCache
 
             for ( int i = 0, n = _pageGlyphIndices.Length; i < n; i++ )
             {
-                _pageGlyphIndices[ i ] = new List< int >();
+                _pageGlyphIndices[ i ] = [ ];
             }
         }
 
         _tempGlyphCount = new int[ pageCount ];
     }
-
-    /// <summary>
-    /// Returns the x position of the cached string, relative to the
-    /// position when the string was cached.
-    /// </summary>
-    public float X { get; private set; }
-
-    /// <summary>
-    /// Returns the y position of the cached string, relative to the
-    /// position when the string was cached.
-    /// </summary>
-    public float Y { get; private set; }
-
-    public BitmapFont Font { get; }
-
-    /// <summary>
-    /// Specifies whether to use integer positions or not.
-    /// Default is to use them so filtering doesn't kick in as badly.
-    /// </summary>
-    public bool UseIntegerPositions { get; set; }
-
-    /// <summary>
-    /// </summary>
-    /// <value></value>
-    public List< GlyphLayout > Layouts { get; set; } = [ ];
 
     /// <summary>
     /// Sets the position of the text, relative to the position when
@@ -243,20 +247,17 @@ public class BitmapFontCache
             {
                 var c = vertices![ i ];
 
-                if ( c.Equals( prev ) && !( ( float )i ).Equals( 2f ) )
-                {
-                    vertices[ i ] = newColor;
-                }
-                else
+                if ( !c.Equals( prev ) || ( ( float )i ).Equals( 2f ) )
                 {
                     prev = c;
 
                     var rgba = NumberUtils.FloatToIntColor( c );
 
-                    rgba          = ( rgba & 0x00FFFFFF ) | alphaBits;
-                    newColor      = NumberUtils.IntToFloatColor( rgba );
-                    vertices[ i ] = newColor;
+                    rgba     = ( rgba & 0x00FFFFFF ) | alphaBits;
+                    newColor = NumberUtils.IntToFloatColor( rgba );
                 }
+
+                vertices[ i ] = newColor;
             }
         }
     }
@@ -288,7 +289,8 @@ public class BitmapFontCache
     }
 
     /// <summary>
-    /// Sets the color of all text currently in the cache. Does not affect subsequently added text.
+    /// Sets the color of all text currently in the cache. Does not affect
+    /// subsequently added text.
     /// </summary>
     /// <param name="r"></param>
     /// <param name="g"></param>
@@ -394,20 +396,24 @@ public class BitmapFontCache
     }
 
     /// <summary>
+    /// Renders the cached text using the provided sprite batch instance.
     /// </summary>
-    /// <param name="spriteBatch"></param>
+    /// <param name="spriteBatch">The sprite batch used to draw the cached text.</param>
     public virtual void Draw( IBatch spriteBatch )
     {
         var regions = Font.GetRegions();
 
         for ( int j = 0, n = _pageVertices.Length; j < n; j++ )
         {
-            if ( _idx[ j ] > 0 )
+            if ( ( _idx[ j ] > 0 ) && ( regions[ j ].Texture != null ) )
             {
                 // ignore if this texture has no glyphs
                 var vertices = _pageVertices[ j ];
 
-                spriteBatch.Draw( regions[ j ].Texture, vertices!, 0, _idx[ j ] );
+                if ( vertices != null )
+                {
+                    spriteBatch.Draw( regions[ j ].Texture!, vertices, 0, _idx[ j ] );
+                }
             }
         }
     }
@@ -419,15 +425,24 @@ public class BitmapFontCache
     /// <param name="end"></param>
     protected virtual void Draw( IBatch spriteBatch, int start, int end )
     {
+        if ( Font.GetRegion().Texture == null )
+        {
+            return;
+        }
+
         if ( _pageVertices.Length == 1 )
         {
             // 1 page.
-            spriteBatch.Draw( Font.GetRegion().Texture, _pageVertices[ 0 ]!, start * 20, ( end - start ) * 20 );
+            spriteBatch.Draw( Font.GetRegion().Texture!,
+                              _pageVertices[ 0 ]!,
+                              start * 20,
+                              ( end - start ) * 20 );
 
             return;
         }
 
-        // Determine vertex offset and count to render for each page. Some pages might not need to be rendered at all.
+        // Determine vertex offset and count to render for each page.
+        // Some pages might not need to be rendered at all.
         var regions = Font.GetRegions();
 
         for ( int i = 0, pageCount = _pageVertices.Length; i < pageCount; i++ )
@@ -467,7 +482,7 @@ public class BitmapFontCache
             }
 
             // Render the page vertex data with the offset and count.
-            spriteBatch.Draw( regions[ i ].Texture, _pageVertices[ i ]!, offset * 20, count * 20 );
+            spriteBatch.Draw( regions[ i ].Texture!, _pageVertices[ i ]!, offset * 20, count * 20 );
         }
     }
 
@@ -509,10 +524,7 @@ public class BitmapFontCache
 
         for ( int i = 0, n = _idx.Length; i < n; i++ )
         {
-            if ( _pageGlyphIndices != null )
-            {
-                _pageGlyphIndices[ i ].Clear();
-            }
+            _pageGlyphIndices?[ i ].Clear();
 
             _idx[ i ] = 0;
         }
@@ -815,7 +827,7 @@ public class BitmapFontCache
                                 bool wrap,
                                 string? truncate = null )
     {
-        var layout = Pools< GlyphLayout >.Obtain() ?? throw new GdxRuntimeException( "Unable to obtain layout!" );
+        var layout = Pools< GlyphLayout >.Obtain();
 
         _pooledLayouts.Add( layout );
 

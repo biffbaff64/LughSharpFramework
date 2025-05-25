@@ -1072,7 +1072,7 @@ public class FreeTypeFontGenerator : IDisposable
             return glyph;
         }
 
-        public override void GetGlyphs( GlyphLayout.GlyphRun? run, string str, int start, int end, BitmapFont.Glyph? lastGlyph )
+        public override void GetGlyphs( GlyphLayout.GlyphRun? glyphRun, string str, int start, int end, BitmapFont.Glyph? lastGlyph )
         {
             if ( Packer != null )
             {
@@ -1080,7 +1080,7 @@ public class FreeTypeFontGenerator : IDisposable
                 Packer.PackToTexture = true;
             }
 
-            base.GetGlyphs( run, str, start, end, lastGlyph );
+            base.GetGlyphs( glyphRun, str, start, end, lastGlyph );
 
             if ( _dirty )
             {

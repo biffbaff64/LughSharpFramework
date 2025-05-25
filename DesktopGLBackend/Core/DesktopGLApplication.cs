@@ -152,9 +152,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// </summary>
     protected void Loop()
     {
-        Logger.Divider();
-        Logger.Debug( "Entering framework loop" );
-        Logger.Divider();
+        Logger.Debug( "Entering framework loop", boxedDebug: true );
 
         List< DesktopGLWindow > closedWindows = [ ];
 
@@ -167,7 +165,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
             lock ( this )
             {
-                // Update active windows. SwapBuffers is called in window.Update().
+                // Update active windows.
+                // SwapBuffers is called in window.Update().
                 foreach ( var window in Windows )
                 {
                     window.MakeCurrent();

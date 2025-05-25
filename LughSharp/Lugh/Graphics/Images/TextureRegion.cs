@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public class TextureRegion
 {
-    public Texture Texture { get; set; } = null!;
+    public Texture? Texture { get; set; } = null!;
 
     // ========================================================================
 
@@ -142,7 +142,7 @@ public class TextureRegion
 
     // ========================================================================
     // ========================================================================
-    
+
     /// <summary>
     /// Non-Virtual version of <see cref="SetRegion( float, float, float, float )" />,
     /// enabling this to be called from constructors.
@@ -180,8 +180,8 @@ public class TextureRegion
 
         SetRegion( x * invTexWidth, y * invTexHeight, ( x + width ) * invTexWidth, ( y + height ) * invTexHeight );
 
-        RegionWidth  = Math.Abs( width );
-        RegionHeight = Math.Abs( height );
+        SetRegionWidth( Math.Abs( width ), IsFlipX() );
+        SetRegionHeight( Math.Abs( height ), IsFlipY() );
     }
 
     /// <summary>
@@ -201,8 +201,8 @@ public class TextureRegion
         var texWidth  = Texture.Width;
         var texHeight = Texture.Height;
 
-        RegionWidth  = ( int )Math.Round( Math.Abs( u2 - u ) * texWidth );
-        RegionHeight = ( int )Math.Round( Math.Abs( v2 - v ) * texHeight );
+        SetRegionWidth  ( ( int )Math.Round( Math.Abs( u2 - u ) * texWidth ), IsFlipX() );
+        SetRegionHeight ( ( int )Math.Round( Math.Abs( v2 - v ) * texHeight ), IsFlipY() );
 
         // For a 1x1 region, adjust UVs toward pixel center to avoid filtering
         // artifacts on AMD GPUs when drawing very stretched.
@@ -293,6 +293,8 @@ public class TextureRegion
     /// </param>
     public virtual void Scroll( float xAmount, float yAmount )
     {
+        Guard.ThrowIfNull( Texture );
+
         if ( xAmount != 0 )
         {
             var width = ( U2 - U ) * Texture.Width;
@@ -363,21 +365,21 @@ public class TextureRegion
 
         return region.Split( tileWidth, tileHeight );
     }
-    
+
+    // ========================================================================
     // ========================================================================
     // Properties with detailed getters and setters.
-    
+
     /// <summary>
     /// </summary>
     public virtual float U
     {
         get => _u;
-        set
-        {
+        set =>
+            // Add validation here if needed
             _u = value;
-
-            RegionWidth = ( int )Math.Round( Math.Abs( _u2 - _u ) * Texture.Width );
-        }
+            // No need to explicitly update RegionWidth, its getter will recalculate.
+            // If using INotifyPropertyChanged, raise for U and RegionWidth here.
     }
 
     /// <summary>
@@ -385,12 +387,11 @@ public class TextureRegion
     public virtual float U2
     {
         get => _u2;
-        set
-        {
+        set =>
+            // Add validation here if needed
             _u2 = value;
-
-            RegionWidth = ( int )Math.Round( Math.Abs( _u2 - _u ) * Texture.Width );
-        }
+            // No need to explicitly update RegionWidth, its getter will recalculate.
+            // If using INotifyPropertyChanged, raise for U2 and RegionWidth here.
     }
 
     /// <summary>
@@ -398,12 +399,11 @@ public class TextureRegion
     public virtual float V
     {
         get => _v;
-        set
-        {
+        set =>
+            // Add validation here if needed
             _v = value;
-
-            RegionHeight = ( int )Math.Round( Math.Abs( _v2 - _v ) * Texture.Height );
-        }
+            // No need to explicitly update RegionHeight, its getter will recalculate.
+            // If using INotifyPropertyChanged, raise for V and RegionHeight here.
     }
 
     /// <summary>
@@ -411,28 +411,47 @@ public class TextureRegion
     public virtual float V2
     {
         get => _v2;
-        set
-        {
+        set =>
+            // Add validation here if needed
             _v2 = value;
-
-            RegionHeight = ( int )Math.Round( Math.Abs( _v2 - _v ) * Texture.Height );
-        }
+            // No need to explicitly update RegionHeight, its getter will recalculate.
+            // If using INotifyPropertyChanged, raise for V2 and RegionHeight here.
     }
 
     /// <summary>
     /// </summary>
     public int RegionX
     {
-        get => ( int )Math.Round( U * Texture.Width );
-        set => U = value / ( float )Texture.Width;
+        get
+        {
+            Guard.ThrowIfNull( Texture );
+
+            if ( ( Texture == null ) || ( Texture.Width == 0 ) )
+            {
+                // Handle cases where Texture or its Width is not valid yet
+                return 0;
+            }
+
+            return ( int )Math.Round( U * Texture.Width );
+        }
     }
 
     /// <summary>
     /// </summary>
     public int RegionY
     {
-        get => ( int )Math.Round( V * Texture.Height );
-        set => V = value / ( float )Texture.Height;
+        get
+        {
+            Guard.ThrowIfNull( Texture );
+            
+            if ( ( Texture == null ) || ( Texture.Height == 0 ) )
+            {
+                // Handle cases where Texture or its Height is not valid yet
+                return 0;
+            }
+
+            return ( int )Math.Round( V * Texture.Height );
+        }
     }
 
     /// <summary>
@@ -440,20 +459,18 @@ public class TextureRegion
     /// </summary>
     public int RegionWidth
     {
-        get => _regionWidth;
-        set
+        get
         {
-            if ( IsFlipX() )
+            if ( ( Texture == null ) || ( Texture.Width == 0 ) )
             {
-                U = U2 + ( value / ( float )Texture.Width );
-            }
-            else
-            {
-                U2 = U + ( value / ( float )Texture.Width );
+                // Handle cases where Texture or its Width is not valid yet
+                return 0;
             }
 
-            _regionWidth = value;
+            return ( int )Math.Round( Math.Abs( _u2 - _u ) * Texture.Width );
         }
+
+        // No setter for RegionHeight as it's derived.
     }
 
     /// <summary>
@@ -461,19 +478,69 @@ public class TextureRegion
     /// </summary>
     public int RegionHeight
     {
-        get => _regionHeight;
-        set
+        get
         {
-            if ( IsFlipY() )
+            if ( ( Texture == null ) || ( Texture.Height == 0 ) )
             {
-                V = V2 + ( value / ( float )Texture.Height );
-            }
-            else
-            {
-                V2 = V + ( value / ( float )Texture.Height );
+                // Handle cases where Texture or its Height is not valid yet
+                return 0;
             }
 
-            _regionHeight = value;
+            return ( int )Math.Round( Math.Abs( _v2 - _v ) * Texture.Height );
         }
+
+        // No setter for RegionHeight as it's derived.
+    }
+
+    public void SetRegionWidth( int desiredRegionWidth, bool isFlipX )
+    {
+        if ( ( Texture == null ) || ( Texture.Width == 0 ) )
+        {
+            // Handle cases where Texture or its Width is not valid yet
+            return;
+        }
+
+        // Calculate the difference in U coordinates needed
+        var uDiff = ( float )desiredRegionWidth / Texture.Width;
+
+        if ( isFlipX ) // TODO: Pass isFlipX as a parameter or determine it internally
+        {
+            // Adjust U based on U2 and desired height
+            U = U2 + uDiff; // Use the property setter for U
+        }
+        else
+        {
+            // Adjust U2 based on U and desired height
+            U2 = U + uDiff; // Use the property setter for U2
+        }
+
+        // The property setters for U/U2 will then implicitly update RegionWidth
+        // when its getter is called.
+    }
+
+    public void SetRegionHeight( int desiredRegionHeight, bool isFlipY )
+    {
+        if ( ( Texture == null ) || ( Texture.Height == 0 ) )
+        {
+            // Handle cases where Texture or its Height is not valid yet
+            return;
+        }
+
+        // Calculate the difference in V coordinates needed
+        var vDiff = ( float )desiredRegionHeight / Texture.Height;
+
+        if ( isFlipY ) // Pass isFlipY as a parameter or determine it internally
+        {
+            // Adjust V based on V2 and desired height
+            V = V2 + vDiff; // Use the property setter for V
+        }
+        else
+        {
+            // Adjust V2 based on V and desired height
+            V2 = V + vDiff; // Use the property setter for V2
+        }
+
+        // The property setters for V/V2 will then implicitly update RegionHeight
+        // when its getter is called.
     }
 }

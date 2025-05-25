@@ -41,6 +41,41 @@ namespace DesktopGLBackend.Core;
 [PublicAPI]
 public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration
 {
+    public bool            DisableAudio                   { get; set; } = false;
+    public int             AudioDeviceSimultaneousSources { get; set; } = 16;
+    public int             AudioDeviceBufferSize          { get; set; } = 512;
+    public int             AudioDeviceBufferCount         { get; set; } = 9;
+    public bool            Debug                          { get; set; } = false;
+    public StreamWriter?   DebugStream                    { get; set; } = new( Console.OpenStandardOutput(), Encoding.UTF8 );
+    public bool            TransparentFramebuffer         { get; set; } = false;
+    public HdpiMode        HdpiMode                       { get; set; } = HdpiMode.Logical;
+    public int             Depth                          { get; set; } = 16;
+    public int             Stencil                        { get; set; } = 0;
+    public int             Samples                        { get; set; } = 0;
+    public int             IdleFPS                        { get; set; } = 60;
+    public int             ForegroundFPS                  { get; set; } = 0;
+    public int             GLContextMajorVersion          { get; set; } = GLUtils.DEFAULT_GL_MAJOR;
+    public int             GLContextMinorVersion          { get; set; } = GLUtils.DEFAULT_GL_MINOR;
+    public int             GLContextRevision              { get; set; } = 0;
+    public GLEmulationType GLEmulation                    { get; set; } = GLEmulationType.GL20;
+    public int             Red                            { get; set; } = 8;
+    public int             Green                          { get; set; } = 8;
+    public int             Blue                           { get; set; } = 8;
+    public int             Alpha                          { get; set; } = 8;
+    public string          PreferencesDirectory           { get; set; } = ".prefs/";
+    public PathTypes       PreferencesFileType            { get; set; } = PathTypes.External;
+    public bool            PauseWhenLostFocus             { get; set; } = true;
+    public bool            PauseWhenMinimized             { get; set; } = true;
+    public bool            GLProfilingEnabled             { get; set; } = true;
+
+    /// <summary>
+    /// The maximum number of threads to use for network requests.
+    /// Default is <see cref="int.MaxValue" />.
+    /// </summary>
+    public int MaxNetThreads { get; set; } = int.MaxValue;
+
+    // ========================================================================
+    
     [PublicAPI]
     public enum GLEmulationType
     {
@@ -258,40 +293,5 @@ public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration
 
         return result;
     }
-
-    #region properties
-
-    public bool            DisableAudio                   { get; set; } = false;
-    public int             AudioDeviceSimultaneousSources { get; set; } = 16;
-    public int             AudioDeviceBufferSize          { get; set; } = 512;
-    public int             AudioDeviceBufferCount         { get; set; } = 9;
-    public bool            Debug                          { get; set; } = false;
-    public StreamWriter?   DebugStream                    { get; set; } = new( Console.OpenStandardOutput(), Encoding.UTF8 );
-    public bool            TransparentFramebuffer         { get; set; } = false;
-    public HdpiMode        HdpiMode                       { get; set; } = HdpiMode.Logical;
-    public int             Depth                          { get; set; } = 16;
-    public int             Stencil                        { get; set; } = 0;
-    public int             Samples                        { get; set; } = 0;
-    public int             IdleFPS                        { get; set; } = 60;
-    public int             ForegroundFPS                  { get; set; } = 0;
-    public int             GLContextMajorVersion          { get; set; } = GLUtils.DEFAULT_GL_MAJOR;
-    public int             GLContextMinorVersion          { get; set; } = GLUtils.DEFAULT_GL_MINOR;
-    public int             GLContextRevision              { get; set; } = 0;
-    public GLEmulationType GLEmulation                    { get; set; } = GLEmulationType.GL20;
-    public int             Red                            { get; set; } = 8;
-    public int             Green                          { get; set; } = 8;
-    public int             Blue                           { get; set; } = 8;
-    public int             Alpha                          { get; set; } = 8;
-    public string          PreferencesDirectory           { get; set; } = ".prefs/";
-    public PathTypes       PreferencesFileType            { get; set; } = PathTypes.External;
-    public bool            PauseWhenLostFocus             { get; set; }
-    public bool            PauseWhenMinimized             { get; set; } = true;
-    public bool            GLProfilingEnabled             { get; set; } = true;
-
-    /// <summary>
-    /// The maximum number of threads to use for network requests. Default is <see cref="int.MaxValue" />.
-    /// </summary>
-    public int MaxNetThreads { get; set; } = int.MaxValue;
-
-    #endregion properties
 }
+
