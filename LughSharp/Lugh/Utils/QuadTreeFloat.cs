@@ -55,7 +55,7 @@ public class QuadTreeFloat : IResetable
     // The number of elements stored in 'values' (3 values per quad tree entry).
     public int Count { get; set; }
 
-    private readonly Pool< QuadTreeFloat > _pool = new( 128, 4096 );
+    private readonly Pool< QuadTreeFloat > _pool = new( GetNewObject, 128, 4096 );
 
     // ========================================================================
 
@@ -84,7 +84,7 @@ public class QuadTreeFloat : IResetable
         MaxDepth  = maxDepth;
         Values    = new List< float >( MaxValues );
 
-        _pool.NewObject = GetNewObject;
+//        _pool.NewObject = GetNewObject;
     }
 
     public void Reset()

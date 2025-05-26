@@ -426,11 +426,11 @@ public class ProgressBar : Widget, IDisableable
 
         if ( _programmaticChangeEvents )
         {
-            var changeEvent = Pools< ChangeListener.ChangeEvent >.Obtain();
+            var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
             var cancelled = Fire( changeEvent );
 
-            Pools< ChangeListener.ChangeEvent >.Free( changeEvent );
+            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
 
             if ( cancelled )
             {

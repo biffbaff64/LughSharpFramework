@@ -40,12 +40,14 @@ public class Actions
     /// </summary>
     public static Action Action( Type a )
     {
-        var pool   = Pools< Action >.Get();
-        var action = pool.Obtain();
-
-        action!.Pool = pool;
-
-        return action;
+        throw new NotImplementedException();
+        
+//        var pool   = Pools.Get< Action >( new Pool< Action >.NewObjectHandler());
+//        var action = pool.Obtain();
+//
+//        action!.Pool = pool;
+//
+//        return action;
     }
 
     public static AddAction AddAction( Action action )

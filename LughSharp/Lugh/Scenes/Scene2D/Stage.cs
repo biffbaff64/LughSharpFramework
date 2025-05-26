@@ -156,7 +156,7 @@ public class Stage : InputAdapter, IDisposable
                 return;
             }
 
-            var focusEvent = Pools< FocusListener.FocusEvent >.Obtain();
+            var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
 
             if ( focusEvent == null )
             {
@@ -197,7 +197,7 @@ public class Stage : InputAdapter, IDisposable
                 }
             }
 
-            Pools< FocusListener.FocusEvent >.Free( focusEvent );
+            Pools.Free< FocusListener.FocusEvent >( focusEvent );
         }
     }
 
@@ -219,7 +219,7 @@ public class Stage : InputAdapter, IDisposable
                 return;
             }
 
-            var focusEvent = Pools< FocusListener.FocusEvent >.Obtain();
+            var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
 
             if ( focusEvent == null )
             {
@@ -259,7 +259,7 @@ public class Stage : InputAdapter, IDisposable
                 }
             }
 
-            Pools< FocusListener.FocusEvent >.Free( focusEvent );
+            Pools.Free< FocusListener.FocusEvent >( focusEvent );
         }
     }
 
@@ -395,6 +395,8 @@ public class Stage : InputAdapter, IDisposable
         }
 
         _debugShapes?.Dispose();
+        
+        GC.SuppressFinalize( this );
     }
 
     /// <summary>
@@ -457,7 +459,7 @@ public class Stage : InputAdapter, IDisposable
                                                                _pointerScreenY[ pointer ] ) );
 
                     // Exit over last.
-                    var inputEvent = Pools< InputEvent >.Obtain();
+                    var inputEvent = Pools.Obtain< InputEvent >();
 
                     if ( inputEvent == null )
                     {
@@ -473,7 +475,7 @@ public class Stage : InputAdapter, IDisposable
 
                     overLast.Fire( inputEvent );
 
-                    Pools< InputEvent >.Free( inputEvent );
+                    Pools.Free< InputEvent >( inputEvent );
                 }
 
                 continue;
@@ -519,7 +521,7 @@ public class Stage : InputAdapter, IDisposable
         // Exit overLast.
         if ( overLast != null )
         {
-            var inputEvent = Pools< InputEvent >.Obtain();
+            var inputEvent = Pools.Obtain< InputEvent >();
 
             if ( inputEvent != null )
             {
@@ -531,14 +533,14 @@ public class Stage : InputAdapter, IDisposable
                 inputEvent.RelatedActor = over;
 
                 overLast.Fire( inputEvent );
-                Pools< InputEvent >.Free( inputEvent );
+                Pools.Free< InputEvent >( inputEvent );
             }
         }
 
         // Enter over.
         if ( over != null )
         {
-            var inputEvent = Pools< InputEvent >.Obtain();
+            var inputEvent = Pools.Obtain< InputEvent >();
 
             if ( inputEvent != null )
             {
@@ -550,7 +552,7 @@ public class Stage : InputAdapter, IDisposable
                 inputEvent.RelatedActor = overLast;
 
                 over.Fire( inputEvent );
-                Pools< InputEvent >.Free( inputEvent );
+                Pools.Free< InputEvent >( inputEvent );
             }
         }
 
@@ -574,7 +576,7 @@ public class Stage : InputAdapter, IDisposable
 
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
-        var inputEvent = Pools< InputEvent >.Obtain();
+        var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -604,7 +606,7 @@ public class Stage : InputAdapter, IDisposable
 
         var handled = inputEvent.IsHandled;
 
-        Pools< InputEvent >.Free( inputEvent );
+        Pools.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -628,7 +630,7 @@ public class Stage : InputAdapter, IDisposable
 
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
-        var inputEvent = Pools< InputEvent >.Obtain();
+        var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -671,7 +673,7 @@ public class Stage : InputAdapter, IDisposable
 
         var handled = inputEvent.IsHandled;
 
-        Pools< InputEvent >.Free( inputEvent );
+        Pools.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -695,7 +697,7 @@ public class Stage : InputAdapter, IDisposable
 
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
-        var inputEvent = Pools< InputEvent >.Obtain();
+        var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -734,13 +736,13 @@ public class Stage : InputAdapter, IDisposable
                 inputEvent.SetHandled();
             }
 
-            Pools< TouchFocus >.Free( focus );
+            Pools.Free< TouchFocus >( focus );
         }
 
         TouchFocuses.End();
 
         var handled = inputEvent.IsHandled;
-        Pools< InputEvent >.Free( inputEvent );
+        Pools.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -762,7 +764,7 @@ public class Stage : InputAdapter, IDisposable
 
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
-        var inputEvent = Pools< InputEvent >.Obtain();
+        var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -784,7 +786,7 @@ public class Stage : InputAdapter, IDisposable
         target.Fire( inputEvent );
         var handled = inputEvent.IsHandled;
 
-        Pools< InputEvent >.Free( inputEvent );
+        Pools.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -800,7 +802,7 @@ public class Stage : InputAdapter, IDisposable
 
         ScreenToStageCoordinates( _tempCoords.Set( _mouseScreenX, _mouseScreenY ) );
 
-        var inputEvent = Pools< InputEvent >.Obtain();
+        var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -816,7 +818,7 @@ public class Stage : InputAdapter, IDisposable
 
         target.Fire( inputEvent );
         var handled = inputEvent.IsHandled;
-        Pools< InputEvent >.Free( inputEvent );
+        Pools.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -829,7 +831,7 @@ public class Stage : InputAdapter, IDisposable
     public override bool KeyDown( int keyCode )
     {
         var target     = _keyboardFocus ?? Root;
-        var inputEvent = Pools< InputEvent >.Obtain();
+        var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -842,7 +844,7 @@ public class Stage : InputAdapter, IDisposable
 
         target.Fire( inputEvent );
         var handled = inputEvent.IsHandled;
-        Pools< InputEvent >.Free( inputEvent );
+        Pools.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -854,7 +856,7 @@ public class Stage : InputAdapter, IDisposable
     public override bool KeyUp( int keyCode )
     {
         var target     = _keyboardFocus ?? Root;
-        var inputEvent = Pools< InputEvent >.Obtain();
+        var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -867,7 +869,7 @@ public class Stage : InputAdapter, IDisposable
 
         target.Fire( inputEvent );
         var handled = inputEvent.IsHandled;
-        Pools< InputEvent >.Free( inputEvent );
+        Pools.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -879,7 +881,7 @@ public class Stage : InputAdapter, IDisposable
     public override bool KeyTyped( char character )
     {
         var target     = _keyboardFocus ?? Root;
-        var inputEvent = Pools< InputEvent >.Obtain();
+        var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -892,7 +894,7 @@ public class Stage : InputAdapter, IDisposable
 
         target.Fire( inputEvent );
         var handled = inputEvent.IsHandled;
-        Pools< InputEvent >.Free( inputEvent );
+        Pools.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -910,7 +912,7 @@ public class Stage : InputAdapter, IDisposable
                                int pointer,
                                int button )
     {
-        var focus = Pools< TouchFocus >.Obtain();
+        var focus = Pools.Obtain< TouchFocus >();
 
         if ( focus == null )
         {
@@ -948,7 +950,7 @@ public class Stage : InputAdapter, IDisposable
                  && ( focus.Button == button ) )
             {
                 TouchFocuses.RemoveAt( i );
-                Pools< TouchFocus >.Free( focus );
+                Pools.Free< TouchFocus >( focus );
             }
         }
     }
@@ -980,7 +982,7 @@ public class Stage : InputAdapter, IDisposable
 
             if ( inputEvent == null )
             {
-                inputEvent = Pools< InputEvent >.Obtain();
+                inputEvent = Pools.Obtain< InputEvent >();
 
                 if ( inputEvent == null )
                 {
@@ -1008,7 +1010,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent != null )
         {
-            Pools< InputEvent >.Free( inputEvent );
+            Pools.Free< InputEvent >( inputEvent );
         }
     }
 
@@ -1029,7 +1031,7 @@ public class Stage : InputAdapter, IDisposable
     /// <see cref="CancelTouchFocus() " />
     public void CancelTouchFocusExcept( IEventListener? exceptListener, Actor? exceptActor )
     {
-        var inputEvent = Pools< InputEvent >.Obtain();
+        var inputEvent = Pools.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -1076,7 +1078,7 @@ public class Stage : InputAdapter, IDisposable
 
         TouchFocuses.End();
 
-        Pools< InputEvent >.Free( inputEvent );
+        Pools.Free< InputEvent >( inputEvent );
     }
 
     /// <summary>

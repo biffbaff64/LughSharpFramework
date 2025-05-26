@@ -30,65 +30,67 @@ namespace LughSharp.Lugh.Utils.Pooling;
 /// <see cref="Flush()" /> method.
 /// </summary>
 [PublicAPI]
-public abstract class FlushablePool< T > : Pool< T >
+public abstract class FlushablePool< T > //: Pool< T > where T : notnull
 {
-    private readonly List< T > _obtained = [ ];
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    protected FlushablePool()
-    {
-    }
-
-    /// <inheritdoc />
-    protected FlushablePool( int initialCapacity )
-        : base( initialCapacity )
-    {
-    }
-
-    /// <inheritdoc />
-    protected FlushablePool( int initialCapacity, int max )
-        : base( initialCapacity, max )
-    {
-    }
-
-    /// <inheritdoc />
-    public override T? Obtain()
-    {
-        var result = base.Obtain();
-
-        _obtained.Add( result! );
-
-        return result;
-    }
-
-    /// <summary>
-    /// Frees all obtained instances.
-    /// </summary>
-    public virtual void Flush()
-    {
-        FreeAll( _obtained );
-
-        _obtained.Clear();
-    }
-
-    /// <inheritdoc />
-    public override void Free( T obj )
-    {
-        _obtained.Remove( obj );
-
-        base.Free( obj );
-    }
-
-    /// <inheritdoc />
-    public override void FreeAll( List< T > objects )
-    {
-        foreach ( var obj in objects )
-        {
-            _obtained.Remove( obj );
-        }
-
-        base.FreeAll( objects );
-    }
+    //TODO:
+    
+//    private readonly List< T > _obtained = [ ];
+//
+//    // ========================================================================
+//
+//    /// <inheritdoc />
+//    protected FlushablePool()
+//    {
+//    }
+//
+//    /// <inheritdoc />
+//    protected FlushablePool( int initialCapacity )
+//        : base( initialCapacity )
+//    {
+//    }
+//
+//    /// <inheritdoc />
+//    protected FlushablePool( int initialCapacity, int max )
+//        : base( initialCapacity, max )
+//    {
+//    }
+//
+//    /// <inheritdoc />
+//    public override T? Obtain()
+//    {
+//        var result = base.Obtain();
+//
+//        _obtained.Add( result! );
+//
+//        return result;
+//    }
+//
+//    /// <summary>
+//    /// Frees all obtained instances.
+//    /// </summary>
+//    public virtual void Flush()
+//    {
+//        FreeAll( _obtained );
+//
+//        _obtained.Clear();
+//    }
+//
+//    /// <inheritdoc />
+//    public override void Free( T obj )
+//    {
+//        _obtained.Remove( obj );
+//
+//        base.Free( obj );
+//    }
+//
+//    /// <inheritdoc />
+//    public override void FreeAll( List< T > objects )
+//    {
+//        foreach ( var obj in objects )
+//        {
+//            _obtained.Remove( obj );
+//        }
+//
+//        base.FreeAll( objects );
+//    }
 }

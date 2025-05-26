@@ -970,7 +970,7 @@ UTILS/POOLING
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - FlushablePool
+    - IP   - IP  - FlushablePool
     - DONE - DONE - IPoolable
     - DONE - DONE - Pool
     - DONE - DONE - PooledLinkedList

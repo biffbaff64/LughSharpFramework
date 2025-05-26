@@ -476,7 +476,7 @@ public class TextArea : TextField
             var lineStart = 0;
             var lastSpace = 0;
 
-            var layoutPool = Pools< GlyphLayout >.Get();
+            var layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
             var layout     = layoutPool.Obtain();
 
             for ( var i = 0; i < Text.Length; i++ )

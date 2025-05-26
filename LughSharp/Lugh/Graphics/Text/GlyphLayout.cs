@@ -55,12 +55,17 @@ namespace LughSharp.Lugh.Graphics.Text;
 [PublicAPI]
 public class GlyphLayout : IResetable
 {
+    public List< GlyphRun > Runs   { get; set; } = new( 1 );
+    public float            Width  { get; set; }
+    public float            Height { get; set; }
+
     // ========================================================================
 
-    private static readonly float            _epsilon      = 0.0001f;
-    private readonly        Pool< Color >    _colorPool    = Pools< Color >.Get();
-    private readonly        List< Color >    _colorStack   = new( 4 );
-    private readonly        Pool< GlyphRun > _glyphRunPool = Pools< GlyphRun >.Get();
+    private static readonly float _epsilon = 0.0001f;
+
+    private readonly Pool< Color >    _colorPool    = Pools.Get< Color >( () => new Color() );
+    private readonly List< Color >    _colorStack   = new( 4 );
+    private readonly Pool< GlyphRun > _glyphRunPool = Pools.Get< GlyphRun >( () => new GlyphRun() );
 
     // ========================================================================
 
@@ -128,19 +133,17 @@ public class GlyphLayout : IResetable
         SetText( font, str, start, end, color, targetWidth, halign, wrap, truncate );
     }
 
-    public List< GlyphRun > Runs   { get; set; } = new( 1 );
-    public float            Width  { get; set; }
-    public float            Height { get; set; }
-
     /// <summary>
     /// Resets the object for reuse. Object references should be nulled and fields
     /// may be set to default values.
     /// </summary>
     public void Reset()
     {
-        Pools< GlyphRun >.Get().FreeAll( Runs );
+        _glyphRunPool.FreeAll( Runs );
+        _colorPool.FreeAll( _colorStack );
+        _colorStack.Clear();
         Runs.Clear();
-
+        
         Width  = 0;
         Height = 0;
     }
@@ -1010,8 +1013,8 @@ public class GlyphLayout : IResetable
     [PublicAPI]
     public class GlyphRun : IResetable
     {
-        public List< BitmapFont.Glyph > Glyphs    { get; set; } = null!;
-        public List< float >            XAdvances { get; set; } = null!;
+        public List< BitmapFont.Glyph > Glyphs    { get; set; } = [ ];
+        public List< float >            XAdvances { get; set; } = [ ];
         public float                    X         { get; set; }
         public float                    Y         { get; set; }
         public float                    Width     { get; set; }

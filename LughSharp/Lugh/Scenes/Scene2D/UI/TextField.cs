@@ -1014,7 +1014,7 @@ public class TextField : Widget
 
         Text = newText;
 
-        var changeEvent = Pools< ChangeListener.ChangeEvent >.Obtain();
+        var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
         var cancelled = Fire( changeEvent );
 
@@ -1023,7 +1023,7 @@ public class TextField : Widget
             Text = oldText;
         }
 
-        Pools< ChangeListener.ChangeEvent >.Free( changeEvent );
+        Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
 
         return !cancelled;
     }

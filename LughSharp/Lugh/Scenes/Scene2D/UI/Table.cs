@@ -51,6 +51,41 @@ public class Table : WidgetGroup
 
     // ========================================================================
 
+    /// <value>
+    /// The skin that was passed to this table in its constructor, or null if none was given.
+    /// </value>
+    public Skin? Skin { get; set; }
+
+    /// <summary>
+    /// Causes the contents to be clipped if they exceed the table's bounds.
+    /// Enabling clipping sets <see cref="Group.Transform" /> to true.
+    /// </summary>
+    public bool Clip
+    {
+        get => _clip;
+        set
+        {
+            _clip     = value;
+            Transform = value;
+            Invalidate();
+        }
+    }
+
+    public DebugType TableDebug { get; set; } = DebugType.None;
+
+    /// <summary>
+    /// If true (the default), positions and sizes of child actors are
+    /// rounded and ceiled to the nearest integer value.
+    /// </summary>
+    public bool Round { get; set; } = true;
+
+    public int          Rows         { get; private set; }
+    public int          Columns      { get; set; }
+    public Pool< Cell > CellPool     { get; } = new( GetNewObject );
+    public Cell         CellDefaults { get; set; }
+
+    // ========================================================================
+
     public static readonly Color DebugTableColor = new( 0, 0, 1, 1 );
     public static readonly Color DebugCellColor  = new( 1, 0, 0, 1 );
     public static readonly Color DebugActorColor = new( 0, 1, 0, 1 );
@@ -101,28 +136,24 @@ public class Table : WidgetGroup
     /// </summary>
     public Table( Skin? skin )
     {
-        _columnWidth     = default( float[]? )!;
-        _columnMinWidth  = default( float[]? )!;
-        _columnPrefWidth = default( float[]? )!;
-        _rowHeight       = default( float[]? )!;
-        _rowMinHeight    = default( float[]? )!;
-        _rowPrefHeight   = default( float[]? )!;
-        _expandWidth     = default( float[]? )!;
-        _expandHeight    = default( float[]? )!;
+        _columnWidth     = null!;
+        _columnMinWidth  = null!;
+        _columnPrefWidth = null!;
+        _rowHeight       = null!;
+        _rowMinHeight    = null!;
+        _rowPrefHeight   = null!;
+        _expandWidth     = null!;
+        _expandHeight    = null!;
 
-        Skin               = skin;
-        CellDefaults       = ObtainCell();
-        Transform          = false;
-        Touchable          = Touchable.ChildrenOnly;
-        CellPool.NewObject = GetNewObject;
+        Skin         = skin;
+        CellDefaults = ObtainCell();
+        Transform    = false;
+        Touchable    = Touchable.ChildrenOnly;
     }
-
-    public Pool< Cell > CellPool     { get; } = new();
-    public Cell         CellDefaults { get; set; }
 
     // ========================================================================
 
-    private Cell ObtainCell()
+    public Cell ObtainCell()
     {
         var cell = CellPool.Obtain();
         cell!.Table = this;
@@ -1829,7 +1860,7 @@ public class Table : WidgetGroup
         }
     }
 
-    public Cell GetNewObject()
+    public static Cell GetNewObject()
     {
         return new Cell();
     }
@@ -1838,8 +1869,18 @@ public class Table : WidgetGroup
 
     internal class DebugRect : RectangleShape
     {
-        internal static Pool< DebugRect > Pool  { get; }      = Pools< DebugRect >.Get();
-        internal        Color             Color { get; set; } = null!;
+        internal Pool< DebugRect > Pool  { get; }
+        internal Color             Color { get; set; } = null!;
+
+        internal DebugRect()
+        {
+            Pool = new Pool< DebugRect >( GetNewDebugRect );
+        }
+
+        internal static DebugRect GetNewDebugRect()
+        {
+            return new DebugRect();
+        }
     }
 
     // ========================================================================
@@ -1941,16 +1982,18 @@ public class Table : WidgetGroup
     {
         _debugRects ??= [ ];
 
-        DebugRect.Pool.FreeAll( _debugRects );
+//TODO:        DebugRect.Pool.FreeAll( _debugRects );
 
         _debugRects.Clear();
     }
 
     private void AddDebugRect( float x, float y, float w, float h, Color color )
     {
-        var rect = DebugRect.Pool.Obtain();
+        var rect = new DebugRect
+        {
+            Color = color,
+        };
 
-        rect!.Color = color;
         rect.Set( x, y, w, h );
 
         _debugRects?.Add( rect );
@@ -1991,13 +2034,11 @@ public class Table : WidgetGroup
 
             if ( TableDebug is DebugType.Cell or DebugType.All )
             {
-                AddDebugRect(
-                             currentX,
-                             currentY + c.ComputedPadTop,
-                             spannedCellWidth,
-                             _rowHeight[ c.Row ] - c.ComputedPadTop - c.ComputedPadBottom,
-                             DebugCellColor
-                            );
+                AddDebugRect( currentX,
+                              currentY + c.ComputedPadTop,
+                              spannedCellWidth,
+                              _rowHeight[ c.Row ] - c.ComputedPadTop - c.ComputedPadBottom,
+                              DebugCellColor );
             }
 
             if ( c.EndRow )
@@ -2091,42 +2132,6 @@ public class Table : WidgetGroup
     #endregion Debugging
 
     // ========================================================================
-
-    #region Properties
-
-    /// <value>
-    /// The skin that was passed to this table in its constructor, or null if none was given.
-    /// </value>
-    public Skin? Skin { get; set; }
-
-    /// <summary>
-    /// Causes the contents to be clipped if they exceed the table's bounds.
-    /// Enabling clipping sets <see cref="Group.Transform" /> to true.
-    /// </summary>
-    public bool Clip
-    {
-        get => _clip;
-        set
-        {
-            _clip     = value;
-            Transform = value;
-            Invalidate();
-        }
-    }
-
-    public DebugType TableDebug { get; set; } = DebugType.None;
-
-    /// <summary>
-    /// If true (the default), positions and sizes of child actors are
-    /// rounded and ceiled to the nearest integer value.
-    /// </summary>
-    public bool Round { get; set; } = true;
-
-    public int Rows { get; private set; }
-
-    public int Columns { get; set; }
-
-    #endregion Properties
 
     #region backgrounds
 

@@ -384,10 +384,10 @@ public class Slider : ProgressBar
             {
                 // Fire an event on touchUp even if the value didn't change, so
                 // listeners can see when a drag ends via isDragging.
-                var changeEvent = Pools< ChangeListener.ChangeEvent >.Obtain();
+                var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
                 _parent.Fire( changeEvent );
-                Pools< ChangeListener.ChangeEvent >.Free( changeEvent );
+                Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
             }
         }
 

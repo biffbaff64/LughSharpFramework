@@ -27,16 +27,25 @@ using LughSharp.Lugh.Utils.Pooling;
 namespace LughSharp.Lugh.Graphics.G2D;
 
 [PublicAPI]
-public class ParticleEffectPool( ParticleEffect effect, int initialCapacity, int max )
-    : Pool< ParticleEffectPool.PooledEffect >( initialCapacity, max )
+public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
 {
-    //TODO: Tests needed for this method, check it's called properly
-    public new PooledEffect NewObject()
-    {
-        var pooledEffect = new PooledEffect( effect, this );
-        pooledEffect.Start();
+    private static ParticleEffect? _effect;
 
-        return pooledEffect;
+    public ParticleEffectPool(ParticleEffect effect, int initialCapacity, int max)
+        : base( NewObject, initialCapacity, max)
+    {
+        _effect = effect;
+    }
+
+    //TODO: Tests needed for this method, check it's called properly
+    public static PooledEffect NewObject()
+    {
+//        var pooledEffect = new PooledEffect( _effect, this );
+//        pooledEffect.Start();
+
+//        return pooledEffect;
+
+        return null!;
     }
 
     public override void Free( PooledEffect effect1 )
@@ -45,12 +54,12 @@ public class ParticleEffectPool( ParticleEffect effect, int initialCapacity, int
 
         effect1.Reset( false ); // copy parameters exactly to avoid introducing error
 
-        if ( !effect1.XSizeScale.Equals( effect.XSizeScale )
-             || !effect1.YSizeScale.Equals( effect.YSizeScale )
-             || !effect1.MotionScale.Equals( effect.MotionScale ) )
+        if ( !effect1.XSizeScale.Equals( _effect.XSizeScale )
+             || !effect1.YSizeScale.Equals( _effect.YSizeScale )
+             || !effect1.MotionScale.Equals( _effect.MotionScale ) )
         {
             List< ParticleEmitter > emitters         = effect1.GetEmitters();
-            List< ParticleEmitter > templateEmitters = effect.GetEmitters();
+            List< ParticleEmitter > templateEmitters = _effect.GetEmitters();
 
             for ( var i = 0; i < emitters.Count; i++ )
             {
@@ -61,9 +70,9 @@ public class ParticleEffectPool( ParticleEffect effect, int initialCapacity, int
                 emitter.MatchMotion( templateEmitter );
             }
 
-            effect1.XSizeScale  = effect.XSizeScale;
-            effect1.YSizeScale  = effect.YSizeScale;
-            effect1.MotionScale = effect.MotionScale;
+            effect1.XSizeScale  = _effect.XSizeScale;
+            effect1.YSizeScale  = _effect.YSizeScale;
+            effect1.MotionScale = _effect.MotionScale;
         }
     }
 
@@ -71,7 +80,7 @@ public class ParticleEffectPool( ParticleEffect effect, int initialCapacity, int
     {
         private readonly ParticleEffectPool _effectPool;
 
-        public PooledEffect( ParticleEffect effect, ParticleEffectPool pep )
+        public PooledEffect( ParticleEffect? effect, ParticleEffectPool pep )
             : base( effect )
         {
             _effectPool = pep;

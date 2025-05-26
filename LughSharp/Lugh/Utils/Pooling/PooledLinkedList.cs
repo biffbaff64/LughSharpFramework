@@ -52,10 +52,7 @@ public class PooledLinkedList< T >
     /// <param name="initialCapacity"></param>
     public PooledLinkedList( int maxPoolSize, int initialCapacity = 16 )
     {
-        _pool = new Pool< Item< T > >( initialCapacity, maxPoolSize )
-        {
-            NewObject = GetNewObject,
-        };
+        _pool = new Pool< Item< T > >( GetNewObject, initialCapacity, maxPoolSize );
     }
 
     /// <summary>

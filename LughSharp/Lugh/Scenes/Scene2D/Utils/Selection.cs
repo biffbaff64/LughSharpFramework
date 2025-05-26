@@ -419,7 +419,7 @@ public class Selection< T > : IDisableable, IDisposable
             return false;
         }
 
-        var changeEvent = Pools< ChangeListener.ChangeEvent >.Obtain();
+        var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
         if ( changeEvent == null )
         {
@@ -432,7 +432,7 @@ public class Selection< T > : IDisableable, IDisposable
         }
         finally
         {
-            Pools< ChangeListener.ChangeEvent >.Free( changeEvent );
+            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
         }
     }
 

@@ -854,6 +854,11 @@ public class SpriteCache
     /// </summary>
     public void Add( TextureRegion region, float x, float y, float width, float height )
     {
+        if ( region.Texture == null )
+        {
+            return;
+        }
+        
         var fx2 = x + width;
         var fy2 = y + height;
         var u   = region.U;
@@ -927,6 +932,11 @@ public class SpriteCache
                      float scaleY,
                      float rotation )
     {
+        if ( region.Texture == null )
+        {
+            return;
+        }
+        
         // bottom left and top right corner points relative to origin
         var worldOriginX = x + originX;
         var worldOriginY = y + originY;
@@ -1067,6 +1077,11 @@ public class SpriteCache
     /// </summary>
     public void Add( Sprite sprite )
     {
+        if ( sprite.Texture == null )
+        {
+            return;
+        }
+        
         if ( _mesh.NumIndices > 0 )
         {
             Add( sprite.Texture, sprite.Vertices, 0, Sprite.SPRITE_SIZE );

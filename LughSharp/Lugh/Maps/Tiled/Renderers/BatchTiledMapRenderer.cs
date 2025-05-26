@@ -231,7 +231,10 @@ public class BatchTileMapRenderer : ITiledMapRenderer
             Vertices[ IBatch.U4 ] = u2;
             Vertices[ IBatch.V4 ] = v1;
 
-            Batch.Draw( region.Texture, Vertices, 0, NUM_VERTICES );
+            if ( region.Texture != null )
+            {
+                Batch.Draw( region.Texture, Vertices, 0, NUM_VERTICES );
+            }
         }
     }
 

@@ -214,7 +214,10 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
                         }
                     }
 
-                    Batch.Draw( region.Texture, Vertices, 0, NUM_VERTICES );
+                    if ( region.Texture != null )
+                    {
+                        Batch.Draw( region.Texture, Vertices, 0, NUM_VERTICES );
+                    }
                 }
 
                 x += layerTileWidth;

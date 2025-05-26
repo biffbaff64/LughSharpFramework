@@ -244,7 +244,7 @@ public class SelectBox< T > : Widget, IDisableable
             _prefHeight = font.GetCapHeight() - ( font.GetDescent() * 2 );
         }
 
-        var layoutPool = Pools< GlyphLayout >.Get();
+        var layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
         var layout     = layoutPool.Obtain();
 
         if ( _selectedPrefWidth )
@@ -271,7 +271,7 @@ public class SelectBox< T > : Widget, IDisableable
             foreach ( var t in _items )
             {
                 layout?.SetText( font, ToString( t ) ?? "" );
-                maxItemWidth = Math.Max( layout!.Width, maxItemWidth );
+                maxItemWidth = Math.Max( ( float )layout!.Width, maxItemWidth );
             }
 
             _prefWidth = maxItemWidth;
@@ -388,7 +388,7 @@ public class SelectBox< T > : Widget, IDisableable
         }
     }
 
-    protected GlyphLayout DrawItem( IBatch batch, BitmapFont font, T item, float x, float y, float width )
+    protected GlyphLayout? DrawItem( IBatch batch, BitmapFont font, T item, float x, float y, float width )
     {
         var str = ToString( item ) ?? "";
 
@@ -477,7 +477,7 @@ public class SelectBox< T > : Widget, IDisableable
     /// </summary>
     public float GetMaxSelectedPrefWidth()
     {
-        var   layoutPool = Pools< GlyphLayout >.Get();
+        var   layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
         var   layout     = layoutPool.Obtain();
         float width      = 0;
 

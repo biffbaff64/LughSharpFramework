@@ -39,13 +39,8 @@ namespace LughSharp.Lugh.Maths;
 [PublicAPI]
 public class Bresenham2
 {
-    private readonly List< GridPoint2 > _points = [ ];
-    private readonly Pool< GridPoint2 > _pool   = new();
-
-    public Bresenham2()
-    {
-        _pool.NewObject = GetNewObject;
-    }
+    private readonly List< GridPoint2 >  _points = [ ];
+    private readonly Pool< GridPoint2 >? _pool   = new( GetNewObject );
 
     /// <summary>
     /// Returns a list of <see cref="GridPoint2" /> instances along the given line,

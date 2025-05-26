@@ -179,7 +179,7 @@ public class Touchpad : Widget
 
         if ( !oldPercentX.Equals( _knobPercent.X ) || !oldPercentY.Equals( _knobPercent.Y ) )
         {
-            var changeEvent = Pools< ChangeListener.ChangeEvent >.Obtain();
+            var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
             if ( Fire( changeEvent ) )
             {
@@ -187,7 +187,7 @@ public class Touchpad : Widget
                 _knobPosition.Set( oldPositionX, oldPositionY );
             }
 
-            Pools< ChangeListener.ChangeEvent >.Free( changeEvent );
+            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
         }
     }
 

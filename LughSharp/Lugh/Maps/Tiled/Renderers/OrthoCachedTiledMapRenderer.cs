@@ -325,6 +325,11 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
                 var region  = tile.TextureRegion;
                 var texture = region.Texture;
 
+                if ( texture == null )
+                {
+                    return;
+                }
+                
                 var x1 = ( col * layerTileWidth ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
                 var y1 = ( row * layerTileHeight ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
                 var x2 = x1 + ( region.RegionWidth * UnitScale );

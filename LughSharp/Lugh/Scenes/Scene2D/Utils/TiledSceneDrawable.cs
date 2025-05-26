@@ -94,6 +94,11 @@ public class TiledSceneDrawable : TextureRegionSceneDrawable
 
             var texture = region.Texture;
 
+            if ( texture == null )
+            {
+                return;
+            }
+            
             var u  = region.U;
             var v2 = region.V2;
 

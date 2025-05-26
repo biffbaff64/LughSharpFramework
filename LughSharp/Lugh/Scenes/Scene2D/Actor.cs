@@ -340,7 +340,7 @@ public class Actor : IActor, IComparable< Actor >
 
         // Collect ascendants so event propagation is unaffected by
         // hierarchy changes.
-        var ascendants = Pools< List< Group > >.Obtain();
+        var ascendants = Pools.Obtain< List< Group > >();
 
         if ( ascendants == null )
         {
@@ -412,7 +412,7 @@ public class Actor : IActor, IComparable< Actor >
         {
             ascendants.Clear();
 
-            Pools< List< Group > >.Free( ascendants );
+            Pools.Free< List< Group > >( ascendants );
         }
     }
 
@@ -1257,7 +1257,7 @@ public class Actor : IActor, IComparable< Actor >
         tableBounds.Width  = width;
         tableBounds.Height = height;
 
-        var scissorBounds = Pools< RectangleShape >.Obtain();
+        var scissorBounds = Pools.Obtain< RectangleShape >();
 
         if ( scissorBounds == null )
         {
@@ -1271,7 +1271,7 @@ public class Actor : IActor, IComparable< Actor >
             return true;
         }
 
-        Pools< RectangleShape >.Free( scissorBounds );
+        Pools.Free< RectangleShape >( scissorBounds );
 
         return false;
     }
@@ -1281,7 +1281,7 @@ public class Actor : IActor, IComparable< Actor >
     /// </summary>
     public void ClipEnd()
     {
-        Pools< object >.Free( ScissorStack.PopScissors() );
+        Pools.Free< object >( ScissorStack.PopScissors() );
     }
 
     /// <summary>

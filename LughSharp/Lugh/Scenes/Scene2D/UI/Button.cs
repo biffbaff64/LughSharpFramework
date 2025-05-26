@@ -180,7 +180,7 @@ public class Button : Table, IDisableable
 
         if ( fireEvent )
         {
-            var changeEvent = Pools< ChangeListener.ChangeEvent >.Obtain();
+            var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
             if ( changeEvent is not null )
             {
@@ -189,7 +189,7 @@ public class Button : Table, IDisableable
                     IsChecked = !isChecked;
                 }
 
-                Pools< ChangeListener.ChangeEvent >.Free( changeEvent );
+                Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
             }
         }
     }

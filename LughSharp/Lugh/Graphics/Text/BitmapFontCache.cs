@@ -517,8 +517,6 @@ public class BitmapFontCache
         X = 0;
         Y = 0;
 
-        Pools< GlyphLayout? >.FreeAll( _pooledLayouts, true );
-
         _pooledLayouts.Clear();
         Layouts.Clear();
 
@@ -827,7 +825,7 @@ public class BitmapFontCache
                                 bool wrap,
                                 string? truncate = null )
     {
-        var layout = Pools< GlyphLayout >.Obtain();
+        var layout = new GlyphLayout();
 
         _pooledLayouts.Add( layout );
 
