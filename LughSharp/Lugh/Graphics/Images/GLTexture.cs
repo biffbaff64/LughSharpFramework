@@ -184,8 +184,6 @@ public abstract class GLTexture : IDrawable, IDisposable
     /// <param name="glTextureHandle"></param>
     protected GLTexture( int glTarget, uint glTextureHandle )
     {
-        Logger.Checkpoint();
-
         IsDrawable      = false;
         GLTarget        = glTarget;
         GLTextureHandle = glTextureHandle;
@@ -437,19 +435,13 @@ public abstract class GLTexture : IDrawable, IDisposable
 
         if ( data.PixelFormat != pixmap.GetColorFormat() )
         {
-            Logger.Checkpoint();
-
             var tmp = new Pixmap( pixmap.Width, pixmap.Height, data.PixelFormat );
-
-            Logger.Checkpoint();
 
             if ( IsDrawable )
             {
                 tmp.Blending = Pixmap.BlendTypes.None;
                 tmp.DrawPixmap( pixmap, 0, 0, 0, 0, pixmap.Width, pixmap.Height );
             }
-
-            Logger.Checkpoint();
 
             if ( data.ShouldDisposePixmap() )
             {
@@ -460,8 +452,6 @@ public abstract class GLTexture : IDrawable, IDisposable
             disposePixmap = true;
         }
 
-        Logger.Checkpoint();
-
         var alignment = pixmap.GLPixelFormat switch
         {
             IGL.GL_RGB or IGL.GL_RGBA or IGL.GL_RGBA4 or IGL.GL_RGB565 => 4,
@@ -469,18 +459,12 @@ public abstract class GLTexture : IDrawable, IDisposable
             var _                                                      => 1,
         };
 
-        Logger.Checkpoint();
-
         GdxApi.Bindings.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
-
-        Logger.Checkpoint();
 
         if ( data.UseMipMaps )
         {
             MipMapGenerator.GenerateMipMap( target, pixmap, pixmap.Width, pixmap.Height );
         }
-
-        Logger.Checkpoint();
 
         GdxApi.Bindings.TexImage2D< byte >( target,
                                             miplevel,
@@ -492,8 +476,6 @@ public abstract class GLTexture : IDrawable, IDisposable
                                             pixmap.GLDataType,
                                             pixmap.PixelData,
                                             false );
-
-        Logger.Checkpoint();
 
         if ( disposePixmap )
         {

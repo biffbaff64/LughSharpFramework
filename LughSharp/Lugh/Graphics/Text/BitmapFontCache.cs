@@ -830,6 +830,7 @@ public class BitmapFontCache
         _pooledLayouts.Add( layout );
 
         layout.SetText( Font, str, start, end, _color, targetWidth, halign, wrap, truncate );
+
         AddText( layout, x, y );
 
         return layout;

@@ -592,21 +592,13 @@ public partial class BitmapFont
     /// <param name="y"> Y coordinate. </param>
     public GlyphLayout? Draw( IBatch batch, string str, float x, float y )
     {
-        Logger.Checkpoint();
-        
         Guard.ThrowIfNull( Cache );
         
         Cache?.Clear();
 
-        Logger.Checkpoint();
-
         var layout = Cache?.AddText( str, x, y );
 
-        Logger.Checkpoint();
-
         Cache?.Draw( batch );
-
-        Logger.Checkpoint();
 
         return layout;
     }

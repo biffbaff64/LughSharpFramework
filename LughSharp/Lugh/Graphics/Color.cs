@@ -435,7 +435,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// Clamps this Colors RGBA components to a valid range [0 - 1]
     /// </summary>
     /// <returns> This Color for chaining. </returns>
-    private Color Clamp()
+    private Color Clamp( bool showDebug = false )
     {
         R = R < 0f ? 0f : R > 1f ? 1f : R;
         G = G < 0f ? 0f : G > 1f ? 1f : G;
@@ -448,7 +448,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
         RGBAFloatPack = ToFloatBitsABGR( R, G, B, A );
         ABGRFloatPack = ToFloatBitsABGR( A, B, G, R );
 
-        if ( GdxApi.DevMode )
+        if ( showDebug )
         {
             Logger.Debug( $"R: {R}, G: {G}, B: {B}, A: {A}" );
             Logger.Debug( $"RGBAPackedColor: {RGBAPackedColor}, {RGBAPackedColor:X8}" );

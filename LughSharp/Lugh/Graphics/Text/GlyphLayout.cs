@@ -143,7 +143,7 @@ public class GlyphLayout : IResetable
         _colorPool.FreeAll( _colorStack );
         _colorStack.Clear();
         Runs.Clear();
-        
+
         Width  = 0;
         Height = 0;
     }
@@ -204,8 +204,8 @@ public class GlyphLayout : IResetable
     /// be used with text that contains multiple lines. Wrap is ignored if truncate is
     /// not null.
     /// </param>
-    public void SetText( BitmapFont font, string str, int start, int end, Color color, float targetWidth, int halign, bool wrap,
-                         string? truncate )
+    public void SetText( BitmapFont font, string str, int start, int end, Color color,
+                         float targetWidth, int halign, bool wrap, string? truncate )
     {
         _glyphRunPool.FreeAll( Runs );
         Runs.Clear();
@@ -222,10 +222,12 @@ public class GlyphLayout : IResetable
         }
 
         PrepareForTextProcessing( fontData, color, targetWidth, ref wrap, truncate );
-
-        float             x         = 0, y = 0;
+        
         BitmapFont.Glyph? lastGlyph = null;
-        var               runStart  = start;
+
+        var x         = 0f;
+        var y         = 0f;
+        var runStart  = start;
 
         while ( true )
         {
@@ -236,7 +238,8 @@ public class GlyphLayout : IResetable
                 break;
             }
 
-            ProcessRun( font, str, fontData, runStart, runEnd, ref x, ref y, ref lastGlyph, newline, wrap, targetWidth, nextColor );
+            ProcessRun( font, str, fontData, runStart, runEnd, ref x, ref y,
+                        ref lastGlyph, newline, wrap, targetWidth, nextColor );
 
             if ( newline )
             {
@@ -260,8 +263,8 @@ public class GlyphLayout : IResetable
     /// <param name="targetWidth">Target width for text wrapping.</param>
     /// <param name="wrap">Boolean indicating if text wrapping is enabled.</param>
     /// <param name="truncate">String for truncation if needed.</param>
-    private void PrepareForTextProcessing( BitmapFont.BitmapFontData fontData, Color color, float targetWidth, ref bool wrap,
-                                           string? truncate )
+    private void PrepareForTextProcessing( BitmapFont.BitmapFontData fontData, Color color,
+                                           float targetWidth, ref bool wrap, string? truncate )
     {
         if ( truncate != null )
         {
@@ -274,7 +277,7 @@ public class GlyphLayout : IResetable
 
         if ( fontData.MarkupEnabled )
         {
-            ClearColorStack( color );
+            ClearColorStack( color, fontData );
         }
     }
 
@@ -282,15 +285,20 @@ public class GlyphLayout : IResetable
     /// Clears the color stack and sets the initial color.
     /// </summary>
     /// <param name="color">Initial color to set.</param>
-    private void ClearColorStack( Color color )
+    private void ClearColorStack( Color color, BitmapFont.BitmapFontData fontData )
     {
-        for ( int i = 1, n = _colorStack.Count; i < n; i++ )
-        {
-            _colorPool.Free( _colorStack[ i ] );
-        }
+        var markupEnabled = fontData.MarkupEnabled;
 
-        _colorStack.Clear();
-        _colorStack.Add( color );
+        if ( markupEnabled )
+        {
+            for ( int i = 1, n = _colorStack.Count; i < n; i++ )
+            {
+                _colorPool.Free( _colorStack[ i ] );
+            }
+
+            _colorStack.Clear();
+            _colorStack.Add( color );
+        }
     }
 
     /// <summary>
@@ -305,7 +313,10 @@ public class GlyphLayout : IResetable
     /// Tuple containing the run end index, a boolean indicating if a newline was encountered,
     /// and the next color.
     /// </returns>
-    private (int runEnd, bool newline, Color nextColor) FindRunEnd( string str, ref int start, int end, BitmapFont.BitmapFontData fontData,
+    private (int runEnd, bool newline, Color nextColor) FindRunEnd( string str,
+                                                                    ref int start,
+                                                                    int end,
+                                                                    BitmapFont.BitmapFontData fontData,
                                                                     Color color )
     {
         var runEnd    = -1;
@@ -342,11 +353,6 @@ public class GlyphLayout : IResetable
                     start++;
                 }
             }
-        }
-
-        if ( runEnd == -1 )
-        {
-            runEnd = end;
         }
 
         return ( runEnd, newline, nextColor );
