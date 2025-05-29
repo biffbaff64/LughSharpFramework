@@ -36,7 +36,7 @@ public class FontUtils
     /// <param name="size"></param>
     /// <param name="color"></param>
     /// <returns></returns>
-    public BitmapFont CreateFont( string fontFile, int size, Color color )
+    public BitmapFont? CreateFont( string fontFile, int size, Color color )
     {
         BitmapFont? font;
 
@@ -47,7 +47,7 @@ public class FontUtils
         }
         catch ( Exception e )
         {
-            Logger.Debug( e.Message );
+            Logger.Warning( e.Message );
 
             font = new BitmapFont();
         }

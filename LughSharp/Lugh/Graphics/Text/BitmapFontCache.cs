@@ -95,6 +95,10 @@ public class BitmapFontCache
 
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="font"></param>
     public BitmapFontCache( BitmapFont font )
         : this( font, font.UseIntegerPositions )
     {

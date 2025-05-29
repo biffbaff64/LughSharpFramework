@@ -42,8 +42,8 @@ public abstract class Camera
     public Matrix4 Combined       { get; set; } = new();
     public Vector3 Position       { get; set; } = new();          // the position of the camera
     public Vector3 Up             { get; set; } = new( 0, 1, 0 ); // the unit length up vector of the camera
-    public float   ViewportWidth  { get; set; } = 0;
-    public float   ViewportHeight { get; set; } = 0;
+    public float   ViewportWidth  { get; set; }
+    public float   ViewportHeight { get; set; }
 
     // ========================================================================
 
@@ -345,7 +345,7 @@ public abstract class Camera
                             float viewportHeight )
     {
         worldCoords.Prj( Combined );
-        
+
         worldCoords.X = ( ( viewportWidth * ( worldCoords.X + 1 ) ) / 2 ) + viewportX;
         worldCoords.Y = ( ( viewportHeight * ( worldCoords.Y + 1 ) ) / 2 ) + viewportY;
         worldCoords.Z = ( worldCoords.Z + 1 ) / 2;
@@ -400,7 +400,7 @@ public abstract class Camera
     }
 
     // ========================================================================
-    
+
     public Vector3 GetForward()
     {
         return Direction;

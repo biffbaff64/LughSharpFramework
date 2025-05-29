@@ -142,11 +142,12 @@ public class SpriteCache
         _mesh = new Mesh( true,
                           size * ( useIndices ? 4 : 6 ),
                           useIndices ? size * 6 : 0,
-                          new VertexAttribute( ( int )VertexConstants.Usage.POSITION, VertexConstants.POSITION_COMPONENTS, "a_position" ),
+                          new VertexAttribute( ( int )VertexConstants.Usage.POSITION, VertexConstants.POSITION_COMPONENTS,
+                                               ShaderProgram.POSITION_ATTRIBUTE ),
                           new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED, VertexConstants.COLOR_COMPONENTS,
-                                               "a_colorPacked" ),
+                                               ShaderProgram.COLOR_ATTRIBUTE ),
                           new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, VertexConstants.TEXCOORD_COMPONENTS,
-                                               "u_texCoord" + "0" ) )
+                                               ShaderProgram.TEXCOORD_ATTRIBUTE + "0" ) )
         {
             AutoBind = false,
         };
@@ -1308,7 +1309,7 @@ public class SpriteCache
                                      + "a_position"
                                      + ";\n" //
                                      + "in vec4 "
-                                     + "a_colorPacked"
+                                     + ShaderProgram.COLOR_ATTRIBUTE
                                      + ";\n" //
                                      + "in vec2 "
                                      + "u_texCoord" + "0;\n"                    //
@@ -1319,7 +1320,7 @@ public class SpriteCache
                                      + "void main()\n"                          //
                                      + "{\n"                                    //
                                      + "   v_color = "
-                                     + "a_colorPacked"
+                                     + ShaderProgram.COLOR_ATTRIBUTE
                                      + ";\n"                                         //
                                      + "   v_color.a = v_color.a * (255.0/254.0);\n" //
                                      + "   v_texCoords = "

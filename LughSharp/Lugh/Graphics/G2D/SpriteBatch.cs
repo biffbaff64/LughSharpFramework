@@ -68,29 +68,29 @@ public class SpriteBatch : IBatch
 
     // ========================================================================
 
-    private const int VERTICES_PER_SPRITE = 4; // Number of vertices per sprite (quad)
-    private const int INDICES_PER_SPRITE  = 6; // Number of indices per sprite (two triangles)
-    private const int MAX_VERTEX_INDEX    = 32767;
-    private const int MAX_SPRITES         = 8191;
+    private const int VERTICES_PER_SPRITE = 4;     // Number of vertices per sprite (quad)
+    private const int INDICES_PER_SPRITE  = 6;     // Number of indices per sprite (two triangles)
+    private const int MAX_VERTEX_INDEX    = 32767; //
+    private const int MAX_SPRITES         = 8191;  //
 
     // ========================================================================
 
     private readonly Color _color = Color.Red;
     private readonly int   _maxTextureUnits;
 
-    private int            _nullTextureCount      = 0;
-    private int            _currentTextureIndex   = 0;
     private Texture?       _lastSuccessfulTexture = null;
     private ShaderProgram? _shader;
     private Mesh?          _mesh;
-    private bool           _ownsShader;
-    private float[]?       _vertices;
-    private bool           _originalDepthMask;
-    private int            _maxVertices;
-    private int            _combinedMatrixLocation;
 
-    private uint _vao;
-    private uint _vbo;
+    private int      _nullTextureCount    = 0;
+    private int      _currentTextureIndex = 0;
+    private bool     _ownsShader;
+    private float[]? _vertices;
+    private bool     _originalDepthMask;
+    private int      _maxVertices;
+    private int      _combinedMatrixLocation;
+    private uint     _vao;
+    private uint     _vbo;
 
     // ========================================================================
 
@@ -172,10 +172,15 @@ public class SpriteBatch : IBatch
         // Usage.POSITION: 2 floats for x and y coordinates.
         // Usage.COLOR_PACKED: 4 floats for RGBA color components.
         // Usage.TEXTURE_COORDINATES: 2 floats for texture u and v coordinates.
-        var va1 = new VertexAttribute( ( int )VertexConstants.Usage.POSITION, VertexConstants.POSITION_COMPONENTS, "a_position" );
-        var va2 = new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED, VertexConstants.COLOR_COMPONENTS, "a_colorPacked" );
-        var va3 = new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, VertexConstants.TEXCOORD_COMPONENTS,
-                                       "a_texCoord" + "0" );
+        var va1 = new VertexAttribute( ( int )VertexConstants.Usage.POSITION,
+                                       VertexConstants.POSITION_COMPONENTS,
+                                       ShaderProgram.POSITION_ATTRIBUTE );
+        var va2 = new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED,
+                                       VertexConstants.COLOR_COMPONENTS,
+                                       ShaderProgram.COLOR_ATTRIBUTE );
+        var va3 = new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES,
+                                       VertexConstants.TEXCOORD_COMPONENTS,
+                                       ShaderProgram.TEXCOORD_ATTRIBUTE + "0" );
 
         // Create the mesh object with the specified vertex attributes and size.
         // The mesh will hold the vertex and index data for rendering.
@@ -513,7 +518,7 @@ public class SpriteBatch : IBatch
         const int texCoordOffset = VertexConstants.TEXCOORD_OFFSET * sizeof( float );
 
         // Position Attribute
-        var positionLocation = program.GetAttributeLocation( "a_position" );
+        var positionLocation = program.GetAttributeLocation( ShaderProgram.POSITION_ATTRIBUTE );
 
         if ( positionLocation >= 0 )
         {
@@ -527,7 +532,7 @@ public class SpriteBatch : IBatch
         }
 
         // Color Attribute
-        var colorLocation = program.GetAttributeLocation( "a_colorPacked" );
+        var colorLocation = program.GetAttributeLocation( ShaderProgram.COLOR_ATTRIBUTE );
 
         if ( colorLocation >= 0 )
         {
@@ -541,7 +546,7 @@ public class SpriteBatch : IBatch
         }
 
         // Texture Coordinates Attribute
-        var texCoordLocation = program.GetAttributeLocation( "a_texCoord" + "0" );
+        var texCoordLocation = program.GetAttributeLocation( ShaderProgram.TEXCOORD_ATTRIBUTE + "0" );
 
         if ( texCoordLocation >= 0 )
         {
@@ -654,26 +659,26 @@ public class SpriteBatch : IBatch
     public static ShaderProgram CreateDefaultShader()
     {
         const string VERTEX_SHADER = "#version 450 core\n" +
-                                     "in vec2 a_position;\n" +
-                                     "in vec4 a_colorPacked;\n" +
-                                     "in vec2 a_texCoord" + "0;\n" +
+                                     "in vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
+                                     "in vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
+                                     "in vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
                                      "uniform mat4 u_combinedMatrix;\n" +
                                      "out vec4 v_colorPacked;\n" +
                                      "out vec2 v_texCoords;\n" +
                                      "void main() {\n" +
-                                     "    gl_Position = u_combinedMatrix * vec4(a_position, 0.0, 1.0);\n" +
-                                     "    v_colorPacked = a_colorPacked;\n" +
+                                     "    v_colorPacked = " + ShaderProgram.POSITION_ATTRIBUTE +";\n" +
                                      "    v_colorPacked.a = v_colorPacked.a * (255.0/254.0);\n" +
-                                     "    v_texCoords = a_texCoord" + "0;\n" +
+                                     "    v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
+                                     "    gl_Position = u_combinedMatrix * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
                                      "}\n";
 
         const string FRAGMENT_SHADER = "#version 450 core\n" +
+                                       "layout(location = 0) out vec4 FragColor;\n" +
                                        "in vec4 v_colorPacked;\n" +
                                        "in vec2 v_texCoords;\n" +
-                                       "out vec4 FragColor;\n" +
                                        "uniform sampler2D u_texture;\n" +
                                        "void main() {\n" +
-                                       "    FragColor = texture(u_texture, v_texCoords) * v_colorPacked;\n" +
+                                       "    FragColor = v_colorPacked * texture(u_texture, v_texCoords);\n" +
                                        "}\n";
 
         return new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );

@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
+using LughSharp.Lugh.Utils.Exceptions;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 
@@ -241,6 +242,8 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
 
             var region = tile.TextureRegion;
 
+            Guard.ThrowIfNull( region.Texture );
+            
             var x1 = x + ( tile.OffsetX * UnitScale );
             var y1 = y + ( tile.OffsetY * UnitScale );
             var x2 = x1 + ( region.RegionWidth * UnitScale );

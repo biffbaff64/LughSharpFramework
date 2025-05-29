@@ -27,6 +27,7 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
@@ -149,9 +150,9 @@ public class PolygonSpriteBatch : IPolygonBatch
                           false,
                           maxVertices,
                           maxTriangles * 3,
-                          new VertexAttribute( ( int )VertexConstants.Usage.POSITION, 2, "a_position" ),
-                          new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED, 4, "a_colorPacked" ),
-                          new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, 2, "u_texCoord" + "0" ) );
+                          new VertexAttribute( ( int )VertexConstants.Usage.POSITION, 4, ShaderProgram.POSITION_ATTRIBUTE ),
+                          new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE ),
+                          new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0" ) );
 
         _vertices  = new float[ maxVertices * Sprite.VERTEX_SIZE ];
         _triangles = new short[ maxTriangles * 3 ];
@@ -276,6 +277,13 @@ public class PolygonSpriteBatch : IPolygonBatch
             throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
+        if ( region.Region.Texture == null )
+        {
+            Logger.Warning( "Cannot draw a null texture!" );
+
+            return;
+        }
+
         if ( region.Region.Texture != _lastTexture )
         {
             SwitchTexture( region.Region.Texture );
@@ -306,6 +314,13 @@ public class PolygonSpriteBatch : IPolygonBatch
         if ( !IsDrawing )
         {
             throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+        }
+
+        if ( region.Region.Texture == null )
+        {
+            Logger.Warning( "Cannot draw a null texture!" );
+
+            return;
         }
 
         if ( region.Region.Texture != _lastTexture )
@@ -352,6 +367,13 @@ public class PolygonSpriteBatch : IPolygonBatch
         if ( !IsDrawing )
         {
             throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+        }
+
+        if ( region.Region.Texture == null )
+        {
+            Logger.Warning( "Cannot draw a null texture!" );
+
+            return;
         }
 
         if ( region.Region.Texture != _lastTexture )
@@ -905,6 +927,13 @@ public class PolygonSpriteBatch : IPolygonBatch
             throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
+        if ( region.Texture == null )
+        {
+            Logger.Warning( "Cannot draw a null texture!" );
+
+            return;
+        }
+
         if ( region.Texture != _lastTexture )
         {
             SwitchTexture( region.Texture );
@@ -965,6 +994,13 @@ public class PolygonSpriteBatch : IPolygonBatch
         if ( !IsDrawing )
         {
             throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+        }
+
+        if ( textureRegion.Texture == null )
+        {
+            Logger.Warning( "Cannot draw a null texture!" );
+
+            return;
         }
 
         if ( textureRegion.Texture != _lastTexture )
@@ -1104,6 +1140,13 @@ public class PolygonSpriteBatch : IPolygonBatch
         if ( !IsDrawing )
         {
             throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+        }
+
+        if ( textureRegion.Texture == null )
+        {
+            Logger.Warning( "Cannot draw a null texture!" );
+
+            return;
         }
 
         if ( textureRegion.Texture != _lastTexture )
@@ -1258,6 +1301,13 @@ public class PolygonSpriteBatch : IPolygonBatch
         if ( !IsDrawing )
         {
             throw new GdxRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+        }
+
+        if ( region.Texture == null )
+        {
+            Logger.Warning( "Cannot draw a null texture!" );
+
+            return;
         }
 
         if ( region.Texture != _lastTexture )

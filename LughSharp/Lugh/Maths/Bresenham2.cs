@@ -65,10 +65,10 @@ public class Bresenham2
     /// <returns> the list of points on the line at integer coordinates  </returns>
     public virtual List< GridPoint2 > Line( int startX, int startY, int endX, int endY )
     {
-        _pool.FreeAll( _points );
+        _pool?.FreeAll( _points );
         _points.Clear();
 
-        return Line( startX, startY, endX, endY, _pool, _points );
+        return Line( startX, startY, endX, endY, _pool!, _points );
     }
 
     /// <summary>

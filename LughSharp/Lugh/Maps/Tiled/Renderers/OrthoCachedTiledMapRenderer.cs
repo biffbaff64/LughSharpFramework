@@ -456,7 +456,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         var region = layer.Region;
 
-        if ( region == null )
+        if ( region?.Texture == null )
         {
             return;
         }

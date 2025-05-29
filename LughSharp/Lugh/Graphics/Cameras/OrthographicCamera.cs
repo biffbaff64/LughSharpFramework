@@ -34,11 +34,13 @@ namespace LughSharp.Lugh.Graphics.Cameras;
 [PublicAPI]
 public class OrthographicCamera : Camera
 {
+    protected const float DEFAULT_ZOOM = 1.0f;
+
     // ========================================================================
 
     private readonly Vector3 _tmp = new();
 
-    private float _zoom = 1.0f;
+    private float _zoom = DEFAULT_ZOOM;
 
     // ========================================================================
 
@@ -50,7 +52,7 @@ public class OrthographicCamera : Camera
     {
         Near = 0;
         Far  = 1;
-        Zoom = 1;
+        Zoom = DEFAULT_ZOOM;
     }
 
     /// <summary>
@@ -67,21 +69,12 @@ public class OrthographicCamera : Camera
         ViewportHeight = viewportHeight;
         Near           = 0;
         Far            = 1;
-        Zoom           = 1;
+        Zoom           = DEFAULT_ZOOM;
 
         SafeUpdate();
     }
 
-    public float Zoom
-    {
-        get
-        {
-            _zoom = Math.Max( 0.0001f, _zoom );
-
-            return _zoom;
-        }
-        set => _zoom = value;
-    }
+    // ========================================================================
 
     /// <summary>
     /// This method is here because <see cref="Update" /> is a <b>virtual method</b> and
@@ -99,7 +92,10 @@ public class OrthographicCamera : Camera
     /// <param name="updateFrustrum"></param>
     public override void Update( bool updateFrustrum = true )
     {
-        GdxRuntimeException.ThrowIfZero< float >( Zoom );
+        if ( Zoom == 0f )
+        {
+            Zoom = DEFAULT_ZOOM;
+        }
 
         Projection.SetToOrtho( ( Zoom * -ViewportWidth ) / 2,
                                Zoom * ( ViewportWidth / 2 ),
@@ -179,5 +175,28 @@ public class OrthographicCamera : Camera
     public void Translate( Vector2 vec )
     {
         Translate( vec.X, vec.Y, 0 );
+    }
+
+    /// <summary>
+    /// Gets or sets the zoom level for the orthographic camera.
+    /// </summary>
+    /// <remarks>
+    /// The zoom scales the dimensions of the orthographic projection. Higher zoom
+    /// values make objects appear larger (closer zoom), while lower values reduce
+    /// the size of objects (zoom out). The value must be greater than 0, as a zoom
+    /// of 0 is not valid and will throw an exception during camera updates.
+    /// Default value is 1.0f. Setting this property to a value less than or equal
+    /// to 0 will internally clamp it to a small positive value to prevent invalid
+    /// behavior.
+    /// </remarks>
+    public float Zoom
+    {
+        get
+        {
+            _zoom = Math.Max( 0.0001f, _zoom );
+
+            return _zoom;
+        }
+        set => _zoom = value;
     }
 }

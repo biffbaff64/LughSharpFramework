@@ -258,7 +258,7 @@ public class RepeatablePolygonSprite
 
     public void Draw( PolygonSpriteBatch batch )
     {
-        GdxRuntimeException.ThrowIfNull( _region );
+        Guard.ThrowIfNull( _region?.Texture );
 
         if ( _dirty )
         {

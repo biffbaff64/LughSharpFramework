@@ -188,7 +188,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Normal()
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.NORMAL, 3, "a_normal" );
+        return new VertexAttribute( ( int )VertexConstants.Usage.NORMAL, 3, ShaderProgram.NORMAL_ATTRIBUTE );
     }
 
     /// <summary>
@@ -204,7 +204,7 @@ public class VertexAttribute
                                     4,
                                     IGL.GL_UNSIGNED_BYTE,
                                     true,
-                                    "a_colorPacked" );
+                                    ShaderProgram.COLOR_ATTRIBUTE );
     }
 
     /// <summary>
@@ -221,7 +221,7 @@ public class VertexAttribute
                                     4,
                                     IGL.GL_FLOAT,
                                     false,
-                                    "a_colorPacked" );
+                                    ShaderProgram.COLOR_ATTRIBUTE );
     }
 
     /// <summary>

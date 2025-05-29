@@ -399,6 +399,7 @@ public class Texture : GLTexture, IManaged
         Logger.Debug( $"Dimensions        : {Width} x {Height}" );
         Logger.Debug( $"Format            : {TextureData.PixelFormat}" );
         Logger.Debug( $"IsManaged         : {IsManaged}" );
+        Logger.Debug( $"NumManagedTextures: {NumManagedTextures}" );
         Logger.Debug( $"Depth             : {Depth}" );
         Logger.Debug( $"GLTarget          : {GLTarget}" );
         Logger.Debug( $"GLTextureHandle   : {GLTextureHandle}" );

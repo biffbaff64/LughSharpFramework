@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Exceptions;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
@@ -167,6 +168,8 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
 
                     var region = tile.TextureRegion;
 
+                    Guard.ThrowIfNull( region.Texture );
+                    
                     var x1 = x + ( tile.OffsetX * UnitScale ) + layerOffsetX;
                     var y1 = y + ( tile.OffsetY * UnitScale ) + layerOffsetY;
                     var x2 = x1 + ( region.RegionWidth * UnitScale );

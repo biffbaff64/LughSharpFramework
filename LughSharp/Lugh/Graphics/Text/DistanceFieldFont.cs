@@ -98,7 +98,7 @@ public class DistanceFieldFont : BitmapFont
                                      + "a_position"
                                      + ";\n" //
                                      + "in vec4 "
-                                     + "a_colorPacked"
+                                     + ShaderProgram.COLOR_ATTRIBUTE
                                      + ";\n" //
                                      + "in vec2 "
                                      + "u_texCoord" + "0;\n"
@@ -108,7 +108,7 @@ public class DistanceFieldFont : BitmapFont
                                      + "\n"
                                      + "void main() {\n"
                                      + "	v_color = "
-                                     + "a_colorPacked"
+                                     + ShaderProgram.COLOR_ATTRIBUTE
                                      + ";\n"
                                      + "	v_color.a = v_color.a * (255.0/254.0);\n"
                                      + "	v_texCoords = "

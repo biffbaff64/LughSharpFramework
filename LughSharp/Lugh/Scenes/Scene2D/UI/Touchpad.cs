@@ -181,6 +181,11 @@ public class Touchpad : Widget
         {
             var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
+            if ( changeEvent == null )
+            {
+                return;
+            }
+            
             if ( Fire( changeEvent ) )
             {
                 _knobPercent.Set( oldPercentX, oldPercentY );

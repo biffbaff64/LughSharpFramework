@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Images;
@@ -37,9 +38,7 @@ public class TextureRegion
     public Texture? Texture { get; set; } = null!;
 
     // ========================================================================
-
-    private int   _regionHeight;
-    private int   _regionWidth;
+    // Backing values for properties U, U2, V, and V2.
     private float _u;
     private float _u2;
     private float _v;
@@ -429,6 +428,8 @@ public class TextureRegion
             if ( ( Texture == null ) || ( Texture.Width == 0 ) )
             {
                 // Handle cases where Texture or its Width is not valid yet
+                Logger.Debug( "Texture, or its Width, is not valid yet" );
+
                 return 0;
             }
 
@@ -447,6 +448,8 @@ public class TextureRegion
             if ( ( Texture == null ) || ( Texture.Height == 0 ) )
             {
                 // Handle cases where Texture or its Height is not valid yet
+                Logger.Debug( "Texture, or its Height, is not valid yet" );
+                
                 return 0;
             }
 
@@ -464,13 +467,15 @@ public class TextureRegion
             if ( ( Texture == null ) || ( Texture.Width == 0 ) )
             {
                 // Handle cases where Texture or its Width is not valid yet
+                Logger.Debug( "Texture, or its Width, is not valid yet" );
+                
                 return 0;
             }
 
             return ( int )Math.Round( Math.Abs( _u2 - _u ) * Texture.Width );
         }
 
-        // No setter for RegionHeight as it's derived.
+        // No setter for RegionHeight as it is derived.
     }
 
     /// <summary>
@@ -489,7 +494,7 @@ public class TextureRegion
             return ( int )Math.Round( Math.Abs( _v2 - _v ) * Texture.Height );
         }
 
-        // No setter for RegionHeight as it's derived.
+        // No setter for RegionHeight as it is derived.
     }
 
     public void SetRegionWidth( int desiredRegionWidth, bool isFlipX )

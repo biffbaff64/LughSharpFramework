@@ -63,6 +63,26 @@ public struct ShaderData
 [PublicAPI]
 public class ShaderProgram : IDisposable
 {
+    /// <summary>
+    /// default name for position attributes
+    /// </summary>
+    public const string POSITION_ATTRIBUTE = "a_position";
+
+    /// <summary>
+    /// default name for normal attributes
+    /// </summary>
+    public const string NORMAL_ATTRIBUTE = "a_normal";
+
+    /// <summary>
+    /// default name for color attributes
+    /// </summary>
+    public const string COLOR_ATTRIBUTE = "a_colorPacked";
+
+    /// <summary>
+    /// default name for texcoords attributes, append texture unit number
+    /// </summary>
+    public const string TEXCOORD_ATTRIBUTE = "a_texCoord";
+
     // ========================================================================
 
     public bool       IsCompiled             { get; set; }

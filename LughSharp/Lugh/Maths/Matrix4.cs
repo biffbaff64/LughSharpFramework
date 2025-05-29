@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Maths;
@@ -217,6 +218,8 @@ public class Matrix4
         Set( position, rotation, scale );
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// </summary>
     /// <returns> the backing float array </returns>
@@ -915,16 +918,22 @@ public class Matrix4
     {
         if ( ( right - left ) == 0 )
         {
+            Logger.Debug( $"left: {left}, right: {right}, bottom: {bottom}, top: {top}, near: {near}, far: {far}" );
+
             throw new ArgumentException( "Right and left cannot be equal." );
         }
 
         if ( ( top - bottom ) == 0 )
         {
+            Logger.Debug( $"left: {left}, right: {right}, bottom: {bottom}, top: {top}, near: {near}, far: {far}" );
+
             throw new ArgumentException( "Top and bottom cannot be equal." );
         }
 
         if ( ( far - near ) == 0 )
         {
+            Logger.Debug( $"left: {left}, right: {right}, bottom: {bottom}, top: {top}, near: {near}, far: {far}" );
+
             throw new ArgumentException( "Far and near cannot be equal." );
         }
 
@@ -940,14 +949,17 @@ public class Matrix4
         Val[ M10 ] = 0;
         Val[ M20 ] = 0;
         Val[ M30 ] = 0;
+        // ------------------
         Val[ M01 ] = 0;
         Val[ M11 ] = yOrth;
         Val[ M21 ] = 0;
         Val[ M31 ] = 0;
+        // ------------------
         Val[ M02 ] = 0;
         Val[ M12 ] = 0;
         Val[ M22 ] = zOrth;
         Val[ M32 ] = 0;
+        // ------------------
         Val[ M03 ] = tx;
         Val[ M13 ] = ty;
         Val[ M23 ] = tz;
