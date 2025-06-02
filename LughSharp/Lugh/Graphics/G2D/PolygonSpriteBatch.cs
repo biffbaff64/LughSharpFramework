@@ -195,8 +195,8 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         RenderCalls = 0;
 
-        _originalDepthMask = GdxApi.Bindings.IsEnabled( ( int )EnableCap.DepthTest );
-        GdxApi.Bindings.DepthMask( depthMaskEnabled );
+        _originalDepthMask = GL.IsEnabled( ( int )EnableCap.DepthTest );
+        GL.DepthMask( depthMaskEnabled );
 
         if ( _customShader != null )
         {
@@ -227,11 +227,11 @@ public class PolygonSpriteBatch : IPolygonBatch
         _lastTexture = null;
         IsDrawing    = false;
 
-        GdxApi.Bindings.DepthMask( true );
+        GL.DepthMask( true );
 
         if ( IsBlendingEnabled() )
         {
-            GdxApi.Bindings.Disable( IGL.GL_BLEND );
+            GL.Disable( IGL.GL_BLEND );
         }
     }
 
@@ -1395,15 +1395,15 @@ public class PolygonSpriteBatch : IPolygonBatch
 
         if ( _blendingDisabled )
         {
-            GdxApi.Bindings.Disable( IGL.GL_BLEND );
+            GL.Disable( IGL.GL_BLEND );
         }
         else
         {
-            GdxApi.Bindings.Enable( IGL.GL_BLEND );
+            GL.Enable( IGL.GL_BLEND );
 
             if ( BlendSrcFunc != -1 )
             {
-                GdxApi.Bindings.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
+                GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
             }
         }
 

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Exceptions;
-
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 
 namespace LughSharp.Lugh.Graphics.Cameras;
@@ -86,38 +84,6 @@ public class OrthographicCamera : Camera
     }
 
     /// <summary>
-    /// Updates the camera.
-    /// Also updates the frustrum if <paramref name="updateFrustrum" /> is true.
-    /// </summary>
-    /// <param name="updateFrustrum"></param>
-    public override void Update( bool updateFrustrum = true )
-    {
-        if ( Zoom == 0f )
-        {
-            Zoom = DEFAULT_ZOOM;
-        }
-
-        Projection.SetToOrtho( ( Zoom * -ViewportWidth ) / 2,
-                               Zoom * ( ViewportWidth / 2 ),
-                               Zoom * -( ViewportHeight / 2 ),
-                               ( Zoom * ViewportHeight ) / 2,
-                               Near,
-                               Far );
-
-        View.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
-
-        Combined.Set( Projection );
-        Matrix4.Mul( Combined.Val, View.Val );
-
-        if ( updateFrustrum )
-        {
-            InvProjectionView.Set( Combined );
-            Matrix4.Invert( InvProjectionView.Val );
-            Frustrum.Update( InvProjectionView );
-        }
-    }
-
-    /// <summary>
     /// Sets this camera to an orthographic projection using a viewport fitting
     /// the screen resolution, centered at:-
     /// <code>(GdxApi.graphics.getWidth()/2, GdxApi.graphics.getHeight()/2)</code>
@@ -146,6 +112,49 @@ public class OrthographicCamera : Camera
         ViewportHeight = viewportHeight;
 
         Update();
+    }
+
+    /// <summary>
+    /// Updates the camera.
+    /// Also updates the frustrum if <paramref name="updateFrustrum" /> is true.
+    /// </summary>
+    /// <param name="updateFrustrum">
+    /// if <c>true</c> the frustrum will be updated. The frustum is a rectangle that
+    /// defines the visible area on the screen. This rectangle is bounded by the near
+    /// and far planes (which are effectively just a distance in 2D) and the camera's
+    /// viewport dimensions.
+    /// </param>
+    public override void Update( bool updateFrustrum = true )
+    {
+        if ( Zoom == 0f )
+        {
+            Zoom = DEFAULT_ZOOM;
+        }
+
+        Projection.SetToOrtho( ( Zoom * -ViewportWidth ) / 2,
+                               Zoom * ( ViewportWidth / 2 ),
+                               Zoom * -( ViewportHeight / 2 ),
+                               ( Zoom * ViewportHeight ) / 2,
+                               Near,
+                               Far );
+
+        View.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
+
+        Combined.Set( Projection );
+        Matrix4.Mul( Combined.Val, View.Val );
+
+        if ( updateFrustrum )
+        {
+            InvProjectionView.Set( Combined );
+            Matrix4.Invert( InvProjectionView.Val );
+            Frustrum.Update( InvProjectionView );
+            
+            GdxApi.Graphics.SetupViewport( ( int )Position.X,
+                                           ( int )Position.Y,
+                                           ( int )ViewportWidth,
+                                           ( int )ViewportHeight,
+                                           2 );
+        }
     }
 
     /// <summary>

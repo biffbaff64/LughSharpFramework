@@ -205,7 +205,7 @@ public class InstanceBufferObjectSubData : IInstanceData
     /// <param name="locations"></param>
     public void Bind( ShaderProgram shader, int[]? locations = null )
     {
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )BufferHandle );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )BufferHandle );
 
         if ( _isDirty )
         {
@@ -214,7 +214,7 @@ public class InstanceBufferObjectSubData : IInstanceData
                 fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
                 {
                     _byteBuffer.Limit = _buffer.Limit * 4;
-                    GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                    GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
                     _isDirty = false;
                 }
             }
@@ -244,7 +244,7 @@ public class InstanceBufferObjectSubData : IInstanceData
                                            Attributes.VertexSize,
                                            attribute.Offset );
 
-                GdxApi.Bindings.VertexAttribDivisor( ( uint )( location + unitOffset ), 1 );
+                GL.VertexAttribDivisor( ( uint )( location + unitOffset ), 1 );
             }
         }
         else
@@ -269,7 +269,7 @@ public class InstanceBufferObjectSubData : IInstanceData
                                            Attributes.VertexSize,
                                            attribute.Offset );
 
-                GdxApi.Bindings.VertexAttribDivisor( ( uint )( location + unitOffset ), 1 );
+                GL.VertexAttribDivisor( ( uint )( location + unitOffset ), 1 );
             }
         }
 
@@ -318,7 +318,7 @@ public class InstanceBufferObjectSubData : IInstanceData
             }
         }
 
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
         _isBound = false;
     }
 
@@ -337,18 +337,18 @@ public class InstanceBufferObjectSubData : IInstanceData
     /// </summary>
     public void Dispose()
     {
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
-        GdxApi.Bindings.DeleteBuffers( ( uint )BufferHandle );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.DeleteBuffers( ( uint )BufferHandle );
         BufferHandle = 0;
     }
 
     private int CreateBufferObject()
     {
-        var result = GdxApi.Bindings.GenBuffer();
+        var result = GL.GenBuffer();
 
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, result );
-        GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Capacity, 0, _usage );
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, result );
+        GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Capacity, 0, _usage );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
 
         return ( int )result;
     }
@@ -359,8 +359,8 @@ public class InstanceBufferObjectSubData : IInstanceData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, 0, _usage );
-                GdxApi.Bindings.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, _byteBuffer.Limit, ( IntPtr )ptr );
+                GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, 0, _usage );
+                GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, _byteBuffer.Limit, ( IntPtr )ptr );
                 _isDirty = false;
             }
         }

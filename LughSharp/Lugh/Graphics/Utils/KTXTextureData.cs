@@ -423,7 +423,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         {
             fixed ( int* ptr = &buffer.ToArray()[ 0 ] )
             {
-                GdxApi.Bindings.GetIntegerv( IGL.GL_UNPACK_ALIGNMENT, ptr );
+                GL.GetIntegerv( IGL.GL_UNPACK_ALIGNMENT, ptr );
             }
         }
 
@@ -431,7 +431,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         if ( previousUnpackAlignment != 4 )
         {
-            GdxApi.Bindings.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, 4 );
+            GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, 4 );
         }
 
         var glInternalFormat = _glInternalFormat;
@@ -493,7 +493,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                                 {
                                     fixed ( void* ptr = &pixmap.ByteBuffer.BackingArray()[ 0 ] )
                                     {
-                                        GdxApi.Bindings.TexImage2D( target + face,
+                                        GL.TexImage2D( target + face,
                                                                     level,
                                                                     pixmap.GLInternalPixelFormat,
                                                                     pixmap.Width,
@@ -513,7 +513,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                                 {
                                     fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                                     {
-                                        GdxApi.Bindings.CompressedTexImage2D( target + face,
+                                        GL.CompressedTexImage2D( target + face,
                                                                               level,
                                                                               glInternalFormat,
                                                                               pixelWidth,
@@ -532,7 +532,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                             {
                                 fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                                 {
-                                    GdxApi.Bindings.CompressedTexImage2D( target + face,
+                                    GL.CompressedTexImage2D( target + face,
                                                                           level,
                                                                           glInternalFormat,
                                                                           pixelWidth,
@@ -550,7 +550,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                         {
                             fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                             {
-                                GdxApi.Bindings.TexImage2D( target + face,
+                                GL.TexImage2D( target + face,
                                                             level,
                                                             glInternalFormat,
                                                             pixelWidth,
@@ -582,12 +582,12 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         if ( previousUnpackAlignment != 4 )
         {
-            GdxApi.Bindings.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, previousUnpackAlignment );
+            GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, previousUnpackAlignment );
         }
 
         if ( UseMipMaps )
         {
-            GdxApi.Bindings.GenerateMipmap( target );
+            GL.GenerateMipmap( target );
         }
 
         // dispose data once transfered to GPU

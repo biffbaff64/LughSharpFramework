@@ -171,7 +171,7 @@ public class Texture : GLTexture, IManaged
     /// Creates a new Texture using the supplied <see cref="ITextureData" />.
     /// </summary>
     public Texture( ITextureData data )
-        : this( IGL.GL_TEXTURE_2D, GdxApi.Bindings.GenTexture(), data )
+        : this( IGL.GL_TEXTURE_2D, GL.GenTexture(), data )
     {
     }
 
@@ -223,7 +223,7 @@ public class Texture : GLTexture, IManaged
         UnsafeSetWrap( UWrap, VWrap, true );
         UnsafeSetAnisotropicFilter( AnisotropicFilterLevel, true );
 
-        GdxApi.Bindings.BindTexture( GLTarget, 0 );
+        GL.BindTexture( GLTarget, 0 );
     }
 
     /// <summary>
@@ -237,7 +237,7 @@ public class Texture : GLTexture, IManaged
             throw new GdxRuntimeException( "Tried to reload unmanaged Texture" );
         }
 
-        GLTextureHandle = GdxApi.Bindings.GenTexture();
+        GLTextureHandle = GL.GenTexture();
 
         Load( TextureData );
     }
@@ -259,7 +259,7 @@ public class Texture : GLTexture, IManaged
 
         Bind();
 
-        GdxApi.Bindings.TexSubImage2D( GLTarget,
+        GL.TexSubImage2D( GLTarget,
                                        0, x, y,
                                        pixmap.Width,
                                        pixmap.Height,
@@ -342,7 +342,7 @@ public class Texture : GLTexture, IManaged
 
                     // unload the texture, create a new gl handle then reload it.
                     AssetManager.Unload( fileName );
-                    texture.GLTextureHandle = GdxApi.Bindings.GenTexture();
+                    texture.GLTextureHandle = GL.GenTexture();
                     AssetManager.Load( fileName, typeof( Texture ), parameters );
                 }
             }

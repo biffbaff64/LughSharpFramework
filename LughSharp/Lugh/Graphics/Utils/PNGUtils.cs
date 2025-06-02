@@ -37,7 +37,8 @@ public class PNGUtils
     public const int IHDR_START             = 8;
     public const int IHDR_SIZE              = 4;
     public const int IHDR_CHUNK_TYPE_OFFSET = IHDR_START + IHDR_SIZE;
-    public const int IHDR_DATA_OFFSET       = 16;
+    public const int IHDR_CHUNK_TYPE_SIZE   = 4;
+    public const int IHDR_DATA_OFFSET       = IHDR_CHUNK_TYPE_OFFSET + IHDR_CHUNK_TYPE_SIZE;
     public const int IHDR_DATA_SIZE         = 13;
     public const int IHDR_CRC_START         = IHDR_DATA_OFFSET + IHDR_DATA_SIZE;
     public const int IHDR_CRC_SIZE          = 4;
@@ -52,8 +53,9 @@ public class PNGUtils
     public const bool NO_OUTPUT   = false;
 
     // ------------------------------------------------------------------------
+    // Offsets into PNG data starting at IHDR_DATA_OFFSET
 
-    private const int WIDTH_OFFSET       = IHDR_DATA_OFFSET;
+    private const int WIDTH_OFFSET       = 0;
     private const int WIDTH_SIZE         = sizeof( uint );
     private const int HEIGHT_OFFSET      = WIDTH_OFFSET + WIDTH_SIZE;
     private const int HEIGHT_SIZE        = sizeof( uint );
@@ -71,7 +73,7 @@ public class PNGUtils
 
     // ( Example... )
     //  0 -  7 => 89 50 4E 47 0D 0A 1A 0A                  - PNG Signature (8 bytes)
-    //  8 - 11 => 00 00 00 0D                              - IHDR Chunk size (13 bytes)
+    //  8 - 11 => 00 00 00 0D                              - IHDR Chunk size (4 bytes)
     // 12 - 15 => 49 48 44 52                              - IHDR Chunk Type (4 bytes - 'I', 'H', 'D', 'R')
     // 16 - 28 => 00 00 00 44 00 00 00 44 08 06 00 00 00   - IHDR Data (Width: 68px, Height: 68px, Bit Depth: 8, Color Type: 6 (RGBA), Compression: 0, Filter: 0, Interlace: 0)
     // 29 - 32 => 38 13 93 B2                              - IHDR CRC (Checksum) (4 bytes)
@@ -100,6 +102,8 @@ public class PNGUtils
     /// <exception cref="ArgumentException">Thrown if the file format is invalid or not a valid PNG.</exception>
     public static void AnalysePNG( string filename, bool showResults = false )
     {
+        Logger.Checkpoint();
+
         var data = File.ReadAllBytes( filename );
 
         AnalysePNG( data, showResults );
@@ -135,33 +139,36 @@ public class PNGUtils
 
         if ( !PngSignature.Signature.SequenceEqual( new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 } ) )
         {
-            Logger.Debug( "Not a valid PNG file, Signature is incorrect" );
+            Logger.Warning( "Not a valid PNG file, Signature is incorrect" );
 
             return;
         }
 
         // --------------------------------------
         // IHDR
-        var ihdr       = new byte[ IHDR_SIZE ];
-        var crc        = new byte[ IHDR_CRC_SIZE ];
-        var widthdata  = new byte[ WIDTH_SIZE ];
-        var heightdata = new byte[ HEIGHT_SIZE ];
+        var ihdr         = new byte[ IHDR_SIZE ];
+        var ihdrTypeData = new byte[ IHDR_CHUNK_TYPE_SIZE ];
+        var crc          = new byte[ IHDR_CRC_SIZE ];
+        var widthData    = new byte[ WIDTH_SIZE ];
+        var heightData   = new byte[ HEIGHT_SIZE ];
 
         Array.Copy( pngData, IHDR_START, ihdr, 0, IHDR_SIZE );
+        Array.Copy( pngData, IHDR_CHUNK_TYPE_OFFSET, ihdrTypeData, 0, IHDR_CHUNK_TYPE_SIZE );
         Array.Copy( pngData, IHDR_CRC_START, crc, 0, IHDR_CRC_SIZE );
-        Array.Copy( pngData, WIDTH_OFFSET, widthdata, 0, WIDTH_SIZE );
-        Array.Copy( pngData, HEIGHT_OFFSET, heightdata, 0, HEIGHT_SIZE );
+        Array.Copy( pngData, IHDR_DATA_OFFSET + WIDTH_OFFSET, widthData, 0, WIDTH_SIZE );
+        Array.Copy( pngData, IHDR_DATA_OFFSET + HEIGHT_OFFSET, heightData, 0, HEIGHT_SIZE );
 
         IHDRchunk = new PNGFormatStructs.IHDRChunk
         {
             Ihdr        = ihdr,
-            Width       = ReadBigEndianUInt32( widthdata, WIDTH_SIZE ),
-            Height      = ReadBigEndianUInt32( heightdata, HEIGHT_SIZE ),
-            BitDepth    = pngData[ BITDEPTH_OFFSET ],
-            ColorType   = pngData[ COLORTYPE_OFFSET ],
-            Compression = pngData[ COMPRESSION_OFFSET ],
-            Filter      = pngData[ FILTER_OFFSET ],
-            Interlace   = pngData[ INTERLACE_OFFSET ],
+            IhdrType    = ihdrTypeData,
+            Width       = ReadBigEndianUInt32( widthData, WIDTH_SIZE ),
+            Height      = ReadBigEndianUInt32( heightData, HEIGHT_SIZE ),
+            BitDepth    = pngData[ IHDR_DATA_OFFSET + BITDEPTH_OFFSET ],
+            ColorType   = pngData[ IHDR_DATA_OFFSET + COLORTYPE_OFFSET ],
+            Compression = pngData[ IHDR_DATA_OFFSET + COMPRESSION_OFFSET ],
+            Filter      = pngData[ IHDR_DATA_OFFSET + FILTER_OFFSET ],
+            Interlace   = pngData[ IHDR_DATA_OFFSET + INTERLACE_OFFSET ],
             Crc         = crc,
         };
 
@@ -185,18 +192,21 @@ public class PNGUtils
         {
             Logger.Debug( $"PNG Signature   : {BitConverter.ToString( PngSignature.Signature ).Replace( "-", " " )}" );
             Logger.Debug( "" );
+            Logger.Debug( $"IHDR            : {BitConverter.ToString( IHDRchunk.Ihdr ).Replace( "-", " " )}" );
+            Logger.Debug( $"IHDR TYPE       : {BitConverter.ToString( IHDRchunk.IhdrType ).Replace( "-", " " )}" );
+            Logger.Debug( "" );
             Logger.Debug( $"- Width         : {IHDRchunk.Width}" );
             Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
             Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
-            Logger.Debug( $"- ColorType     : {IHDRchunk.ColorType}" );
+            Logger.Debug( $"- ColorType     : {ColorTypeName( IHDRchunk.ColorType )}" );
             Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
             Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
             Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );
-            Logger.Debug( $"- Checksum      : {ReadBigEndianUInt32( IHDRchunk.Crc, 4 )}" );
+            Logger.Debug( $"- Checksum      : 0x{ReadBigEndianUInt32( IHDRchunk.Crc, 4 ):X}" );
             Logger.Debug( "" );
 
 //            Logger.Debug( $"- IHDR/IDAT Data: {BitConverter.ToString( pngData ).Replace( "-", " " )}" );
-            Logger.Debug( $"- TotalIDATSize : {TotalIDATSize}" );
+            Logger.Debug( $"- TotalIDATSize : 0x{TotalIDATSize:X}" );
             Logger.Debug( "" );
         }
     }
@@ -222,7 +232,10 @@ public class PNGUtils
 
             if ( ( idatIndex + fullChunkSize ) > pngData.Length )
             {
-                Console.WriteLine( $"Error: Invalid Chunk Size or truncated file. Index: {idatIndex}, Chunksize: {fullChunkSize}, File Length: {pngData.Length}" );
+                Logger.Warning( $"Error: Invalid Chunk Size or truncated file. " +
+                                $"Index: {idatIndex}, " +
+                                $"Chunksize: {fullChunkSize}, " +
+                                $"File Length: {pngData.Length}" );
 
                 break;
             }
@@ -287,7 +300,7 @@ public class PNGUtils
     {
         if ( ( startIndex < 0 ) || ( ( startIndex + 3 ) >= bytes.Length ) )
         {
-            Console.WriteLine( "Error: ReadIntFromBytes out of bounds" );
+            Logger.Warning( "Error: ReadIntFromBytes out of bounds" );
 
             return 0; // Or throw an exception
         }
@@ -365,30 +378,32 @@ public class PNGUtils
     /// The byte array containing the IHDR chunk data. Expected to be 13 bytes in length.
     /// </param>
     /// <exception cref="ArgumentException">
-    /// Thrown if the provided byte array is not 13 bytes in length.
+    /// Thrown if the provided byte array is not the correct length.
     /// </exception>
     private static void ParseIHDR( byte[] data )
     {
-        if ( data.Length != 13 )
+        if ( data.Length != IHDR_DATA_SIZE )
         {
-            Logger.Debug( "IHDR chunk is an unexpected size" );
+            Logger.Warning( "IHDR chunk is an unexpected size" );
 
             return;
         }
 
-        var bitDepth  = data[ 8 ];
-        var colorType = data[ 9 ];
+        var bitDepth  = data[ BITDEPTH_OFFSET ];
+        var colorType = data[ COLORTYPE_OFFSET ];
 
         Logger.Debug( "IHDR Data Breakdown:" );
         Logger.Debug( $"Width: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Take( 4 ).ToArray() ) ) )} pixels" );
         Logger.Debug( $"Height: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Skip( 4 ).Take( 4 ).ToArray() ) ) )} pixels" );
         Logger.Debug( $"Bit Depth: {bitDepth}" );
         Logger.Debug( $"Color Type: {colorType}, {ColorTypeName( colorType )}" );
+
         var colorFormat = DetermineColorFormat( colorType, bitDepth );
+
         Logger.Debug( "Color Format: " + colorFormat );
-        Logger.Debug( $"Compression Method: {data[ 10 ]}" );
-        Logger.Debug( $"Filter Method: {data[ 11 ]}" );
-        Logger.Debug( $"Interlace Method: {data[ 12 ]}" );
+        Logger.Debug( $"Compression Method: {data[ COMPRESSION_OFFSET ]}" );
+        Logger.Debug( $"Filter Method: {data[ FILTER_OFFSET ]}" );
+        Logger.Debug( $"Interlace Method: {data[ INTERLACE_OFFSET ]}" );
     }
 
     /// <summary>
@@ -501,7 +516,7 @@ public class PNGUtils
     /// </summary>
     public static ( int width, int height ) GetPNGDimensions( FileInfo file )
     {
-        if (!file.Extension.Equals(".png", StringComparison.CurrentCultureIgnoreCase))
+        if ( !file.Extension.Equals( ".png", StringComparison.CurrentCultureIgnoreCase ) )
         {
             throw new GdxRuntimeException( $"PNG files ONLY!: ({file.Name})" );
         }
@@ -522,7 +537,8 @@ public class PNGUtils
             heightbytes[ sizeof( int ) - 1 - i ] = br.ReadByte();
         }
 
-        return ( BitConverter.ToInt32( widthbytes, 0 ), BitConverter.ToInt32( heightbytes, 0 ) );
+        return ( BitConverter.ToInt32( widthbytes, 0 ),
+            BitConverter.ToInt32( heightbytes, 0 ) );
     }
 
     // ========================================================================

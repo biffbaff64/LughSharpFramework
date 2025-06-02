@@ -44,22 +44,22 @@ public class PNGFormatStructs
     /// <summary>
     /// PNG File IHDR Structure. The header chunk contains information on the image data
     /// stored in the PNG file. This chunk must be the first chunk in a PNG data stream
-    /// and immediately follows the PNG signature. The header chunk data area is 13 bytes
-    /// in length.
+    /// and immediately follows the PNG signature.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential, Pack = 1 )]
     public struct IHDRChunk
     {
-        public byte[] Ihdr        { get; set; } // 'I', 'H', 'D', 'R'
-        public uint   Width       { get; set; } // Width of image in pixels
-        public uint   Height      { get; set; } // Height of image in pixels
-        public byte   BitDepth    { get; set; } // Bits per pixel or per sample
-        public byte   ColorType   { get; set; } // Color interpretation indicator
-        public byte   Compression { get; set; } // Compression type indicator
-        public byte   Filter      { get; set; } // Filter type indicator
-        public byte   Interlace   { get; set; } // Type of interlacing scheme used
-        public byte[] Crc         { get; set; } // The CRC for IHDR
+        public byte[] Ihdr        { get; set; } // 13 bytes - 0x00, 0x00, 0x00, 0x0D
+        public byte[] IhdrType    { get; set; } //  4 bytes - 'I', 'H', 'D', 'R'
+        public uint   Width       { get; set; } //  4 bytes - Width of image in pixels
+        public uint   Height      { get; set; } //  4 bytes - Height of image in pixels
+        public byte   BitDepth    { get; set; } //  1 byte  - Bits per pixel or per sample
+        public byte   ColorType   { get; set; } //  1 byte  - Color interpretation indicator
+        public byte   Compression { get; set; } //  1 byte  - Compression type indicator
+        public byte   Filter      { get; set; } //  1 byte  - Filter type indicator
+        public byte   Interlace   { get; set; } //  1 byte  - Type of interlacing scheme used
+        public byte[] Crc         { get; set; } //  1 byte  - The CRC for IHDR
     }
 
     /// <summary>

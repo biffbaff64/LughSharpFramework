@@ -89,7 +89,7 @@ public class ScreenUtils
     /// <param name="b"> Blue component. </param>
     public static void Clear( float r, float g, float b, float a, bool clearDepth = false )
     {
-        GdxApi.Bindings.ClearColor( r, g, b, a );
+        GL.ClearColor( r, g, b, a );
 
         var mask = ( uint )IGL.GL_COLOR_BUFFER_BIT;
 
@@ -98,7 +98,7 @@ public class ScreenUtils
             mask |= IGL.GL_DEPTH_BUFFER_BIT;
         }
 
-        GdxApi.Bindings.Clear( mask );
+        GL.Clear( mask );
     }
 
     /// <summary>
@@ -189,13 +189,13 @@ public class ScreenUtils
     {
         var numBytes = w * h * 4;
 
-        GdxApi.Bindings.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
+        GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
         var pixels = new ByteBuffer( numBytes );
 
         fixed ( void* ptr = &pixels.BackingArray()[ 0 ] )
         {
-            GdxApi.Bindings.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
+            GL.ReadPixels( x, y, w, h, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
         }
 
         var lines = new byte[ numBytes ];

@@ -33,14 +33,23 @@ namespace DesktopGLBackend.Window;
 [PublicAPI]
 public class DesktopGLWindowConfiguration
 {
-    public int       WindowX            { get; set; } = -1;
-    public int       WindowY            { get; set; } = -1;
-    public int       WindowWidth        { get; set; } = 640;
-    public int       WindowHeight       { get; set; } = 480;
-    public int       WindowMinWidth     { get; set; } = -1;
-    public int       WindowMinHeight    { get; set; } = -1;
-    public int       WindowMaxWidth     { get; set; } = -1;
-    public int       WindowMaxHeight    { get; set; } = -1;
+    private const int DefaultWindowWidth     = 640;
+    private const int DefaultWindowHeight    = 480;
+    private const int DefaultWindowX         = 80;
+    private const int DefaultWindowY         = 80;
+    private const int DefaultWindowMinWidth  = 320;
+    private const int DefaultWindowMinHeight = 240;
+    private const int DefaultWindowMaxWidth  = 1280;
+    private const int DefaultWindowMaxHeight = 960;
+
+    public int       WindowX            { get; set; } = DefaultWindowX;
+    public int       WindowY            { get; set; } = DefaultWindowY;
+    public int       WindowWidth        { get; set; } = DefaultWindowWidth;
+    public int       WindowHeight       { get; set; } = DefaultWindowHeight;
+    public int       WindowMinWidth     { get; set; } = DefaultWindowMinWidth;
+    public int       WindowMinHeight    { get; set; } = DefaultWindowMinHeight;
+    public int       WindowMaxWidth     { get; set; } = DefaultWindowMaxWidth;
+    public int       WindowMaxHeight    { get; set; } = DefaultWindowMaxHeight;
     public PathTypes WindowIconFileType { get; set; }
     public string[]? WindowIconPaths    { get; set; }
 

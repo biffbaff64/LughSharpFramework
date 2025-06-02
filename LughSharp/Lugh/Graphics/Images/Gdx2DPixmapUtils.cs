@@ -27,10 +27,8 @@ namespace LughSharp.Lugh.Graphics.Images;
 public partial class Gdx2DPixmap
 {
     /// <summary>
-    /// Clear the pd defined in the supplied <see cref="PixmapDataType" />,
-    /// setting it to the supplied Color.
+    /// Clears the pixmap with the specified color
     /// </summary>
-    /// <param name="color"> The Color. </param>
     public void Clear( Color color )
     {
         var size = ( uint )( _pixmapDataType.Width
@@ -40,69 +38,66 @@ public partial class Gdx2DPixmap
         switch ( _pixmapDataType.ColorType )
         {
             case GDX_2D_FORMAT_ALPHA:
-                clear_alpha( _pixmapDataType, color, size );
+                ClearAlpha( _pixmapDataType, color, size );
 
                 break;
 
             case GDX_2D_FORMAT_LUMINANCE_ALPHA:
-                clear_luminance_alpha( _pixmapDataType, color, size );
+                ClearLuminanceAlpha( _pixmapDataType, color, size );
 
                 break;
 
             case GDX_2D_FORMAT_RGB888:
-                clear_RGB888( _pixmapDataType, color, size );
+                ClearRGB888( _pixmapDataType, color, size );
 
                 break;
 
             case GDX_2D_FORMAT_RGBA8888:
-                clear_RGBA8888( _pixmapDataType, color, size );
+                ClearRGBA8888( _pixmapDataType, color, size );
 
                 break;
 
             case GDX_2D_FORMAT_RGB565:
-                clear_RGB565( _pixmapDataType, color, size );
+                ClearRGB565( _pixmapDataType, color, size );
 
                 break;
 
             case GDX_2D_FORMAT_RGBA4444:
-                clear_RGBA4444( _pixmapDataType, color, size );
+                ClearRGBA4444( _pixmapDataType, color, size );
 
-                break;
-
-            default:
                 break;
         }
 
         Array.Copy( _pixmapDataType.Pixels, PixmapBuffer.BackingArray(), _pixmapDataType.Pixels.Length );
     }
 
-    // ========================================================================
-    // ========================================================================
-
-    internal static void clear_alpha( PixmapDataType pd, Color color, uint size )
+    /// <summary>
+    /// Clears the pixmap by setting the alpha channel to the specified color's alpha.
+    /// </summary>
+    /// <param name="pd">The pixmap data to be cleared.</param>
+    /// <param name="color">The color whose alpha channel will be used in the clearing process.</param>
+    /// <param name="size">The total size of the pixmap in bytes.</param>
+    private static void ClearAlpha( PixmapDataType pd, Color color, uint size )
     {
-//        int pixels = pixmap->width * pixmap->height;
-//        memset((void*)pixmap->pixels, col, pixels);
-
-        var numPixels = pd.Width * pd.Height;
-
-//         Array.Fill< byte >( pd.Pixels, color.RGBAPackedColor, 0, numPixels );
+        var alpha = ( byte )( color.A * 255 );
+        Array.Fill( pd.Pixels, alpha, 0, ( int )( pd.Width * pd.Height ) );
     }
 
-    internal static void clear_luminance_alpha( PixmapDataType pd, Color color, uint size )
+    private static void ClearLuminanceAlpha( PixmapDataType pd, Color color, uint size )
     {
-//        int             pixels = pixmap->width * pixmap->height;
-//        unsigned short* ptr    = (unsigned short*)pixmap->pixels;
-//        unsigned short  l      = (col & 0xff) << 8 | (col >> 8);
-//
-//        for (; pixels > 0; pixels--)
-//        {
-//            *ptr = l;
-//            ptr++;
-//        }
+        var luminance = ( byte )( ( ( 0.2126f * color.R )
+                                    + ( 0.7152f * color.G )
+                                    + ( 0.0722f * color.B ) ) * 255 );
+        var alpha = ( byte )( color.A * 255 );
+
+        for ( var i = 0; i < size; i += 2 )
+        {
+            pd.Pixels[ i ]     = luminance;
+            pd.Pixels[ i + 1 ] = alpha;
+        }
     }
 
-    internal static void clear_RGB888( PixmapDataType pd, Color color, uint size )
+    private static void ClearRGB888( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGB888( color );
         var b   = ( byte )( ( col & 0x0000ff00 ) >> 8 );
@@ -117,7 +112,7 @@ public partial class Gdx2DPixmap
         }
     }
 
-    internal static void clear_RGBA8888( PixmapDataType pd, Color color, uint size )
+    private static void ClearRGBA8888( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGBA8888( color );
         var a   = ( byte )( col & 0x000000ff );
@@ -134,53 +129,32 @@ public partial class Gdx2DPixmap
         }
     }
 
-    internal static void clear_RGB565( PixmapDataType pd, Color color, uint size )
+    private static void ClearRGB565( PixmapDataType pd, Color color, uint size )
     {
-//        int             pixels = pixmap->width * pixmap->height;
-//        unsigned short* ptr    = (unsigned short*)pixmap->pixels;
-//        unsigned short  l      = col & 0xffff;
-//
-//        for (; pixels > 0; pixels--)
-//        {
-//            *ptr = l;
-//            ptr++;
-//        }
-
         var col = Color.RGB565( color );
-    }
 
-    internal static void clear_RGBA4444( PixmapDataType pd, Color color, uint size )
-    {
-//        int             pixels = pixmap->width * pixmap->height;
-//        unsigned short* ptr    = (unsigned short*)pixmap->pixels;
-//        unsigned short  l      = col & 0xffff;
-//
-//        for (; pixels > 0; pixels--)
-//        {
-//            *ptr = l;
-//            ptr++;
-//        }
-/*
-        var col    = ( byte ) color.ToIntBits();
-        var offset = 0;
-
-        fixed ( byte* ptr = pd.Pixels )
+        for ( var i = 0; i < size; i += 2 )
         {
-            for ( ; pixels > 0; pixels-- )
-            {
-                *( ptr + offset ) = col;
-                offset++;
-            }
+            pd.Pixels[ i ]     = ( byte )( col & 0xFF );
+            pd.Pixels[ i + 1 ] = ( byte )( ( col >> 8 ) & 0xFF );
         }
-*/
-
-        var col = Color.RGBA4444( color );
     }
 
-    // ========================================================================
-    // ========================================================================
+    private static void ClearRGBA4444( PixmapDataType pd, Color color, uint size )
+    {
+        var col = Color.RGBA4444( color );
 
-    private static uint ToFormat( uint format, uint color )
+        for ( var i = 0; i < size; i += 2 )
+        {
+            pd.Pixels[ i ]     = ( byte )( col & 0xFF );
+            pd.Pixels[ i + 1 ] = ( byte )( ( col >> 8 ) & 0xFF );
+        }
+    }
+
+    /// <summary>
+    /// Converts a color to the specified pixel format
+    /// </summary>
+    public static uint ToFormat( uint format, uint color )
     {
         uint r, g, b, a;
 

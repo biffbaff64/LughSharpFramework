@@ -159,9 +159,9 @@ public class FacedCubemapData : ICubemapData
                     var _                                                      => 1,
                 };
 
-                GdxApi.Bindings.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
+                GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
 
-                GdxApi.Bindings.TexImage2D( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, 0, pixmap );
+                GL.TexImage2D( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, 0, pixmap );
 
                 if ( disposePixmap )
                 {

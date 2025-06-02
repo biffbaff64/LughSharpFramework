@@ -804,12 +804,12 @@ public class Mesh : IDisposable
 
                 fixed ( short* ptr = &buffer.ToArray()[ 0 ] )
                 {
-                    GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, new IntPtr( ptr + offset ) );
+                    GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, new IntPtr( ptr + offset ) );
                 }
             }
             else
             {
-                GdxApi.Bindings.DrawArrays( primitiveType, offset, count );
+                GL.DrawArrays( primitiveType, offset, count );
             }
         }
         else
@@ -827,7 +827,7 @@ public class Mesh : IDisposable
 
                 var offsetInBytes = offset * sizeof( short ); // Calculate byte offset
 
-                GdxApi.Bindings.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offsetInBytes );
+                GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offsetInBytes );
 
                 IndexData.Unbind();
             }
@@ -835,11 +835,11 @@ public class Mesh : IDisposable
             {
                 if ( IsInstanced )
                 {
-                    GdxApi.Bindings.DrawArraysInstanced( primitiveType, offset, count, _instances!.NumInstances );
+                    GL.DrawArraysInstanced( primitiveType, offset, count, _instances!.NumInstances );
                 }
                 else
                 {
-                    GdxApi.Bindings.DrawArrays( primitiveType, offset, count );
+                    GL.DrawArrays( primitiveType, offset, count );
                 }
             }
         }

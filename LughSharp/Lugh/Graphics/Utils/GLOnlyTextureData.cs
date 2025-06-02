@@ -98,15 +98,15 @@ public class GLOnlyTextureData : ITextureData
 
     public void ConsumeCustomData( int target )
     {
-        GdxApi.Bindings.TexImage2D( target,
-                                    MipLevel,
-                                    InternalFormat,
-                                    Width,
-                                    Height,
-                                    0,
-                                    PixmapFormat.ToGdx2DPixelFormat( PixelFormat ),
-                                    Type,
-                                    0 );
+        GL.TexImage2D( target,
+                       MipLevel,
+                       InternalFormat,
+                       Width,
+                       Height,
+                       0,
+                       PixmapFormat.ToGdx2DPixelFormat( PixelFormat ),
+                       Type,
+                       0 );
     }
 
     /// <summary>

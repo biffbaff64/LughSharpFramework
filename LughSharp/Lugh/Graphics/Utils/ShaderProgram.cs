@@ -109,6 +109,8 @@ public class ShaderProgram : IDisposable
     internal const int CACHED_NOT_FOUND = -1;
     internal const int NOT_CACHED       = -2;
 
+    internal const int INVALID = -1;
+
     // ========================================================================
 
     /// <summary>
@@ -147,21 +149,21 @@ public class ShaderProgram : IDisposable
     public void CompileShaders( string vertexShaderSource, string fragmentShaderSource )
     {
         // Vertex Shader
-        _vertexShaderHandle = ( int )GdxApi.Bindings.CreateShader( ( int )ShaderType.VertexShader );
-        GdxApi.Bindings.ShaderSource( _vertexShaderHandle, vertexShaderSource );
-        GdxApi.Bindings.CompileShader( _vertexShaderHandle );
+        _vertexShaderHandle = ( int )GL.CreateShader( ( int )ShaderType.VertexShader );
+        GL.ShaderSource( _vertexShaderHandle, vertexShaderSource );
+        GL.CompileShader( _vertexShaderHandle );
         CheckShaderLoadError( _vertexShaderHandle, ( int )ShaderType.VertexShader );
 
         // Fragment Shader
-        _fragmentShaderHandle = ( int )GdxApi.Bindings.CreateShader( ( int )ShaderType.FragmentShader );
-        GdxApi.Bindings.ShaderSource( _fragmentShaderHandle, fragmentShaderSource );
-        GdxApi.Bindings.CompileShader( _fragmentShaderHandle );
+        _fragmentShaderHandle = ( int )GL.CreateShader( ( int )ShaderType.FragmentShader );
+        GL.ShaderSource( _fragmentShaderHandle, fragmentShaderSource );
+        GL.CompileShader( _fragmentShaderHandle );
         CheckShaderLoadError( _fragmentShaderHandle, ( int )ShaderType.FragmentShader );
 
-        ShaderProgramHandle = ( int )GdxApi.Bindings.CreateProgram();
-        GdxApi.Bindings.AttachShader( ShaderProgramHandle, _vertexShaderHandle );
-        GdxApi.Bindings.AttachShader( ShaderProgramHandle, _fragmentShaderHandle );
-        GdxApi.Bindings.LinkProgram( ShaderProgramHandle );
+        ShaderProgramHandle = ( int )GL.CreateProgram();
+        GL.AttachShader( ShaderProgramHandle, _vertexShaderHandle );
+        GL.AttachShader( ShaderProgramHandle, _fragmentShaderHandle );
+        GL.LinkProgram( ShaderProgramHandle );
 
         // preserve handles for reference
         ShaderData = new ShaderData
@@ -171,8 +173,8 @@ public class ShaderProgram : IDisposable
             FragmentShader = _fragmentShaderHandle,
         };
 
-        GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
-        GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
+        GL.DeleteShader( _vertexShaderHandle );
+        GL.DeleteShader( _fragmentShaderHandle );
 
         IsCompiled = ShaderProgramHandle != -1;
     }
@@ -186,17 +188,17 @@ public class ShaderProgram : IDisposable
     {
         var status = stackalloc int[ 1 ];
 
-        GdxApi.Bindings.GetShaderiv( shader, IGL.GL_COMPILE_STATUS, status );
+        GL.GetShaderiv( shader, IGL.GL_COMPILE_STATUS, status );
 
         if ( *status == IGL.GL_FALSE )
         {
             var length = stackalloc int[ 1 ];
 
-            GdxApi.Bindings.GetShaderiv( shader, IGL.GL_INFO_LOG_LENGTH, length );
+            GL.GetShaderiv( shader, IGL.GL_INFO_LOG_LENGTH, length );
 
-            var infoLog = GdxApi.Bindings.GetShaderInfoLog( shader, *length );
+            var infoLog = GL.GetShaderInfoLog( shader, *length );
 
-            GdxApi.Bindings.DeleteShader( shader );
+            GL.DeleteShader( shader );
 
             _shaderLog += shaderType == IGL.GL_VERTEX_SHADER ? "Vertex shader\n" : "Fragment shader:\n";
             _shaderLog += infoLog;
@@ -216,11 +218,11 @@ public class ShaderProgram : IDisposable
     public virtual void SetUniformMatrix< T >( string name, ref T matrix, bool transpose = false )
         where T : unmanaged
     {
-        var location = GdxApi.Bindings.GetUniformLocation( ShaderProgramHandle, name );
+        var location = GL.GetUniformLocation( ShaderProgramHandle, name );
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Cannot perform action, Location is -1 *****" );
+            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
 
             return;
         }
@@ -229,12 +231,14 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
+    /// Sets the values of a matrix uniform variable in a shader program.
     /// </summary>
-    /// <param name="location"></param>
-    /// <param name="matrix"></param>
-    /// <param name="transpose"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="name">The name of the uniform variable in the shader program.</param>
+    /// <param name="matrix">A reference to the matrix data to set.</param>
+    /// <param name="transpose">
+    /// Indicates whether the matrix should be transposed before being sent to the shader.
+    /// </param>
+    /// <typeparam name="T">The type of the matrix, which must be an unmanaged type.</typeparam>
     public virtual unsafe void SetUniformMatrix< T >( int location, ref T matrix, bool transpose = false )
         where T : unmanaged
     {
@@ -242,9 +246,9 @@ public class ShaderProgram : IDisposable
         const int MAT3X3 = 9;
         const int MAT2X2 = 4;
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Cannot perform action, Location is -1 *****" );
+            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
 
             return;
         }
@@ -256,17 +260,17 @@ public class ShaderProgram : IDisposable
             switch ( matrixSize )
             {
                 case MAT4X4:
-                    GdxApi.Bindings.UniformMatrix4fv( location, 1, transpose, ( float* )ptr );
+                    GL.UniformMatrix4fv( location, 1, transpose, ( float* )ptr );
 
                     break;
 
                 case MAT3X3:
-                    GdxApi.Bindings.UniformMatrix3fv( location, 1, transpose, ( float* )ptr );
+                    GL.UniformMatrix3fv( location, 1, transpose, ( float* )ptr );
 
                     break;
 
                 case MAT2X2:
-                    GdxApi.Bindings.UniformMatrix2fv( location, 1, transpose, ( float* )ptr );
+                    GL.UniformMatrix2fv( location, 1, transpose, ( float* )ptr );
 
                     break;
 
@@ -283,11 +287,11 @@ public class ShaderProgram : IDisposable
     /// <returns></returns>
     public virtual int GetAttributeLocation( string name )
     {
-        var location = GdxApi.Bindings.GetAttribLocation( ShaderProgramHandle, name );
+        var location = GL.GetAttribLocation( ShaderProgramHandle, name );
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** WARNING, Location is -1 for {name} *****" );
+            Logger.Debug( $"***** WARNING, Location is INVALID ( -1 ) for {name} *****" );
         }
 
         return location;
@@ -302,14 +306,14 @@ public class ShaderProgram : IDisposable
     {
         var location = FetchUniformLocation( name );
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is -1 for {name} *****" );
+            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) for {name} *****" );
 
             return;
         }
 
-        GdxApi.Bindings.Uniform1i( location, value );
+        GL.Uniform1i( location, value );
     }
 
     /// <summary>
@@ -321,14 +325,14 @@ public class ShaderProgram : IDisposable
     {
         var location = FetchUniformLocation( name );
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is -1 for {name} *****" );
+            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) for {name} *****" );
 
             return;
         }
 
-        GdxApi.Bindings.Uniform1f( location, value );
+        GL.Uniform1f( location, value );
     }
 
     /// <summary>
@@ -351,11 +355,13 @@ public class ShaderProgram : IDisposable
     /// <param name="transpose"> whether the matrix should be transposed  </param>
     public virtual void SetUniformMatrix( string name, Matrix4 matrix, bool transpose )
     {
+        LogInvalidMatrix( matrix.Values );
+
         var location = FetchUniformLocation( name );
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is -1 for {name} *****" );
+            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) for {name} *****" );
 
             return;
         }
@@ -370,9 +376,11 @@ public class ShaderProgram : IDisposable
     /// <param name="matrix"></param>
     public virtual void SetUniformMatrix( int location, Matrix4 matrix )
     {
-        if ( location == -1 )
+        LogInvalidMatrix( matrix.Values );
+
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Cannot perform action, Location is -1 *****" );
+            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
 
             return;
         }
@@ -388,74 +396,16 @@ public class ShaderProgram : IDisposable
     /// <param name="transpose"></param>
     public virtual void SetUniformMatrix( int location, Matrix4 matrix, bool transpose )
     {
-        if ( location == -1 )
+        LogInvalidMatrix( matrix.Values );
+
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Cannot perform action, Location is -1 *****" );
+            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
 
             return;
         }
 
-        GdxApi.Bindings.UniformMatrix4fv( location, transpose, matrix.Val );
-    }
-
-    public static void LogInvalidMatrix( float[]? matrix )
-    {
-        Logger.Checkpoint();
-
-        var isValid = IsMatrixValid( matrix );
-
-        if ( !isValid )
-        {
-            Logger.Debug( "Invalid Matrix Detected:" );
-
-            if ( matrix == null )
-            {
-                Logger.Debug( "Matrix is null." );
-
-                return;
-            }
-
-            if ( matrix.Length != 16 )
-            {
-                Logger.Debug( $"Matrix length is {matrix.Length}, expected 16." );
-
-                return;
-            }
-        }
-
-        for ( var i = 0; i < matrix?.Length; i++ )
-        {
-            Logger.Debug( $"{i}: [{matrix[ i ]}]" );
-
-            if ( float.IsNaN( matrix[ i ] ) )
-            {
-                Logger.Debug( $"Element [{i}] is NaN." );
-            }
-            else if ( float.IsInfinity( matrix[ i ] ) )
-            {
-                Logger.Debug( $"Element [{i}] is Infinity." );
-            }
-        }
-    }
-
-    private static bool IsMatrixValid( float[]? matrix )
-    {
-        if ( matrix is not { Length: 16 } )
-        {
-            return false; // Invalid matrix
-        }
-
-        foreach ( var t in matrix )
-        {
-            if ( float.IsNaN( t ) || float.IsInfinity( t ) )
-            {
-                return false; // Found NaN or Infinity
-            }
-        }
-
-        Logger.Debug( "Matrix is valid." );
-
-        return true; // Matrix is valid
+        GL.UniformMatrix4fv( location, transpose, matrix.Val );
     }
 
     /// <summary>
@@ -465,11 +415,11 @@ public class ShaderProgram : IDisposable
     /// <returns></returns>
     public virtual int FetchUniformLocation( string name )
     {
-        var location = GdxApi.Bindings.GetUniformLocation( ShaderProgramHandle, name );
+        var location = GL.GetUniformLocation( ShaderProgramHandle, name );
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Location is -1 for {name} *****" );
+            Logger.Debug( $"***** Location is INVALID ( -1 ) for {name} *****" );
         }
 
         return location;
@@ -482,11 +432,11 @@ public class ShaderProgram : IDisposable
     /// <returns></returns>
     public virtual int FetchAttributeLocation( string name )
     {
-        var location = GdxApi.Bindings.GetAttribLocation( ShaderProgramHandle, name );
+        var location = GL.GetAttribLocation( ShaderProgramHandle, name );
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Location is -1 for {name} *****" );
+            Logger.Debug( $"***** Location is INVALID ( -1 ) for {name} *****" );
         }
 
         return location;
@@ -498,14 +448,14 @@ public class ShaderProgram : IDisposable
     /// <param name="location"></param>
     public virtual void EnableVertexAttribute( int location )
     {
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Cannot perform action, Location is -1 *****" );
+            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
 
             return;
         }
 
-        GdxApi.Bindings.EnableVertexAttribArray( ( GLuint )location );
+        GL.EnableVertexAttribArray( ( GLuint )location );
     }
 
     /// <summary>
@@ -521,9 +471,9 @@ public class ShaderProgram : IDisposable
     {
 //        Logger.Debug( $"location: {location}, size: {size}, type: {type}, normalize: {normalize}, stride: {stride}, offset: {offset}" );
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is -1 *****" );
+            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) *****" );
 
             return;
         }
@@ -533,7 +483,7 @@ public class ShaderProgram : IDisposable
             throw new GdxRuntimeException( "Size cannot be 0." );
         }
 
-        GdxApi.Bindings.VertexAttribPointer( ( GLuint )location, size, type, normalize, stride, offset );
+        GL.VertexAttribPointer( ( GLuint )location, size, type, normalize, stride, offset );
     }
 
     /// <summary>
@@ -545,9 +495,9 @@ public class ShaderProgram : IDisposable
     {
         var location = FetchUniformLocation( name );
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is -1 for {name} *****" );
+            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) for {name} *****" );
 
             return;
         }
@@ -562,14 +512,14 @@ public class ShaderProgram : IDisposable
     /// <param name="values"></param>
     public virtual void SetUniformMatrix4Fv( int location, params float[] values )
     {
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is -1 *****" );
+            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) *****" );
 
             return;
         }
 
-        GdxApi.Bindings.UniformMatrix4fv( location, false, values );
+        GL.UniformMatrix4fv( location, false, values );
     }
 
     /// <summary>
@@ -578,14 +528,14 @@ public class ShaderProgram : IDisposable
     /// <param name="location"></param>
     public virtual void DisableVertexAttribute( int location )
     {
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is -1 *****" );
+            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) *****" );
 
             return;
         }
-
-        GdxApi.Bindings.DisableVertexAttribArray( ( GLuint )location );
+        
+        GL.DisableVertexAttribArray( ( GLuint )location );
     }
 
     /// <summary>
@@ -596,14 +546,14 @@ public class ShaderProgram : IDisposable
     {
         var location = FetchAttributeLocation( name );
 
-        if ( location == -1 )
+        if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is -1 for {name} *****" );
+            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) for {name} *****" );
 
             return;
         }
 
-        GdxApi.Bindings.DisableVertexAttribArray( ( GLuint )location );
+        GL.DisableVertexAttribArray( ( GLuint )location );
     }
 
     /// <summary>
@@ -611,9 +561,9 @@ public class ShaderProgram : IDisposable
     /// </summary>
     public virtual void Bind()
     {
-        if ( GdxApi.Bindings.IsProgram( ShaderProgramHandle ) )
+        if ( GL.IsProgram( ShaderProgramHandle ) )
         {
-            GdxApi.Bindings.UseProgram( ShaderProgramHandle );
+            GL.UseProgram( ShaderProgramHandle );
         }
     }
 
@@ -622,7 +572,72 @@ public class ShaderProgram : IDisposable
     /// </summary>
     public virtual void Unbind()
     {
-        GdxApi.Bindings.UseProgram( 0 );
+        GL.UseProgram( 0 );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Logs details of an invalid matrix, including checks for null values, improper
+    /// lengths, and invalid elements such as NaN or Infinity.
+    /// </summary>
+    /// <param name="matrix">The matrix to validate and log. Can be null.</param>
+    public static void LogInvalidMatrix( float[]? matrix )
+    {
+        if ( !IsMatrixValid( matrix ) )
+        {
+            Logger.Debug( "Invalid Matrix Detected:" );
+
+            if ( matrix == null )
+            {
+                Logger.Debug( "Matrix is null." );
+            }
+
+            if ( matrix?.Length != 16 )
+            {
+                Logger.Debug( $"Matrix length is {matrix?.Length}, expected 16." );
+            }
+
+            for ( var i = 0; i < matrix?.Length; i++ )
+            {
+                Logger.Debug( $"{i}: [{matrix[ i ]}]" );
+
+                if ( float.IsNaN( matrix[ i ] ) )
+                {
+                    Logger.Debug( $"Element [{i}] is NaN." );
+                }
+                else if ( float.IsInfinity( matrix[ i ] ) )
+                {
+                    Logger.Debug( $"Element [{i}] is Infinity." );
+                }
+            }
+
+            throw new GdxRuntimeException( "LogInvalidMatrix found Invalid Matrix." );
+        }
+    }
+
+    /// <summary>
+    /// Validates a 4x4 matrix, ensuring it has the correct length and no invalid
+    /// values such as NaN or Infinity.
+    /// </summary>
+    /// <param name="matrix">The matrix to validate, represented as a float array.</param>
+    /// <returns>True if the matrix is valid; otherwise, false.</returns>
+    private static bool IsMatrixValid( float[]? matrix )
+    {
+        if ( matrix is not { Length: 16 } )
+        {
+            return false;
+        }
+
+        foreach ( var t in matrix )
+        {
+            if ( float.IsNaN( t ) || float.IsInfinity( t ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // ========================================================================
@@ -638,9 +653,9 @@ public class ShaderProgram : IDisposable
             {
                 var length = stackalloc int[ 1 ];
 
-                GdxApi.Bindings.GetProgramiv( ShaderProgramHandle, IGL.GL_INFO_LOG_LENGTH, length );
+                GL.GetProgramiv( ShaderProgramHandle, IGL.GL_INFO_LOG_LENGTH, length );
 
-                _shaderLog = GdxApi.Bindings.GetProgramInfoLog( ShaderProgramHandle, *length );
+                _shaderLog = GL.GetProgramInfoLog( ShaderProgramHandle, *length );
             }
 
             return _shaderLog;
@@ -668,9 +683,9 @@ public class ShaderProgram : IDisposable
     public void Dispose()
     {
         Unbind();
-        GdxApi.Bindings.DeleteShader( _vertexShaderHandle );
-        GdxApi.Bindings.DeleteShader( _fragmentShaderHandle );
-        GdxApi.Bindings.DeleteProgram( ShaderProgramHandle );
+        GL.DeleteShader( _vertexShaderHandle );
+        GL.DeleteShader( _fragmentShaderHandle );
+        GL.DeleteProgram( ShaderProgramHandle );
 
         GC.SuppressFinalize( this );
     }

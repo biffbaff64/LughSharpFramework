@@ -29,6 +29,7 @@ using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
+using LughSharp.Lugh.Utils;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 
@@ -43,9 +44,18 @@ namespace LughSharp.Lugh.Graphics.Viewports;
 [PublicAPI]
 public abstract class Viewport
 {
-    private Vector3 _tmp = Vector3.Zero;
+    public Camera? Camera       { get; set; }
+    public int     ScreenX      { get; set; }
+    public int     ScreenY      { get; set; }
+    public int     ScreenWidth  { get; set; }
+    public int     ScreenHeight { get; set; }
+    public float   WorldWidth   { get; set; }
+    public float   WorldHeight  { get; set; }
 
     // ========================================================================
+    
+    private Vector3 _tmp = Vector3.Zero;
+
     // ========================================================================
 
     /// <summary>
@@ -57,35 +67,24 @@ public abstract class Viewport
         Camera = camera;
     }
 
-    /// <summary>
-    /// Returns the left gutter (black bar) width in screen coordinates.
-    /// </summary>
-    public virtual int LeftGutterWidth => ScreenX;
+    // ========================================================================
 
     /// <summary>
-    /// Returns the right gutter (black bar) x in screen coordinates.
+    /// Configures this viewport's screen bounds using the specified screen
+    /// size and calls <see cref="Apply(bool)" />. Typically called
+    /// from <see cref="IApplicationListener.Resize" /> or
+    /// <see cref="IScreen.Resize(int, int)" />.
     /// </summary>
-    public virtual int RightGutterX => ScreenX + ScreenWidth;
-
-    /// <summary>
-    /// Returns the right gutter (black bar) width in screen coordinates.
-    /// </summary>
-    public virtual int RightGutterWidth => GdxApi.Graphics.Width - ( ScreenX + ScreenWidth );
-
-    /// <summary>
-    /// Returns the bottom gutter (black bar) height in screen coordinates.
-    /// </summary>
-    public virtual int BottomGutterHeight => ScreenY;
-
-    /// <summary>
-    /// Returns the top gutter (black bar) y in screen coordinates.
-    /// </summary>
-    public virtual int TopGutterY => ScreenY + ScreenHeight;
-
-    /// <summary>
-    /// Returns the top gutter (black bar) height in screen coordinates.
-    /// </summary>
-    public virtual int TopGutterHeight => GdxApi.Graphics.Height - ( ScreenY + ScreenHeight );
+    /// <param name="screenWidth"></param>
+    /// <param name="screenHeight"></param>
+    /// <param name="centerCamera"></param>
+    /// <remarks>
+    /// The default implementation only calls <see cref="Apply(bool)" />.
+    /// </remarks>
+    public virtual void Update( int screenWidth, int screenHeight, bool centerCamera = false )
+    {
+        Apply( centerCamera );
+    }
 
     /// <summary>
     /// Applies the viewport to the camera and sets the glViewport.
@@ -111,23 +110,6 @@ public abstract class Viewport
         }
 
         Camera.Update();
-    }
-
-    /// <summary>
-    /// Configures this viewport's screen bounds using the specified screen
-    /// size and calls <see cref="Apply(bool)" />. Typically called
-    /// from <see cref="IApplicationListener.Resize" /> or
-    /// <see cref="IScreen.Resize(int, int)" />.
-    /// </summary>
-    /// <param name="screenWidth"></param>
-    /// <param name="screenHeight"></param>
-    /// <param name="centerCamera"></param>
-    /// <remarks>
-    /// The default implementation only calls <see cref="Apply(bool)" />.
-    /// </remarks>
-    public virtual void Update( int screenWidth, int screenHeight, bool centerCamera = false )
-    {
-        Apply( centerCamera );
     }
 
     /// <summary>
@@ -302,21 +284,47 @@ public abstract class Viewport
     /// </summary>
     public virtual void SetScreenBounds( int screenX, int screenY, int screenWidth, int screenHeight )
     {
+        if ( ( screenWidth <= 0 ) || ( screenHeight <= 0 ) )
+        {
+            Logger.Warning( "Screen bounds size must be positive and > zero!" );
+        }
+
         ScreenX      = screenX;
         ScreenY      = screenY;
         ScreenWidth  = screenWidth;
         ScreenHeight = screenHeight;
     }
+    
+    // ========================================================================
+    
+    /// <summary>
+    /// Returns the left gutter (black bar) width in screen coordinates.
+    /// </summary>
+    public virtual int LeftGutterWidth => ScreenX;
 
-    #region properties
+    /// <summary>
+    /// Returns the right gutter (black bar) x in screen coordinates.
+    /// </summary>
+    public virtual int RightGutterX => ScreenX + ScreenWidth;
 
-    public Camera? Camera       { get; set; }
-    public float   WorldWidth   { get; set; }
-    public float   WorldHeight  { get; set; }
-    public int     ScreenX      { get; set; }
-    public int     ScreenY      { get; set; }
-    public int     ScreenWidth  { get; set; }
-    public int     ScreenHeight { get; set; }
+    /// <summary>
+    /// Returns the right gutter (black bar) width in screen coordinates.
+    /// </summary>
+    public virtual int RightGutterWidth => GdxApi.Graphics.Width - ( ScreenX + ScreenWidth );
 
-    #endregion properties
+    /// <summary>
+    /// Returns the bottom gutter (black bar) height in screen coordinates.
+    /// </summary>
+    public virtual int BottomGutterHeight => ScreenY;
+
+    /// <summary>
+    /// Returns the top gutter (black bar) y in screen coordinates.
+    /// </summary>
+    public virtual int TopGutterY => ScreenY + ScreenHeight;
+
+    /// <summary>
+    /// Returns the top gutter (black bar) height in screen coordinates.
+    /// </summary>
+    public virtual int TopGutterHeight => GdxApi.Graphics.Height - ( ScreenY + ScreenHeight );
 }
+

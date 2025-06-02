@@ -986,6 +986,40 @@ public class ByteBuffer : Buffer, IDisposable
 
     // ========================================================================
 
+    /// <summary>
+    /// Copies a range of elements from this buffer to a destination array.
+    /// </summary>
+    /// <param name="srcOffset">The offset within this buffer to start copying from</param>
+    /// <param name="dst">The destination array</param>
+    /// <param name="dstOffset">The offset within the destination array to start copying to</param>
+    /// <param name="count">The number of elements to copy</param>
+    public void BlockCopy( int srcOffset, byte[] dst, int dstOffset, int count )
+    {
+        ArgumentNullException.ThrowIfNull( dst );
+
+        if ( ( srcOffset < 0 ) || ( srcOffset >= Capacity ) )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ) );
+        }
+
+        if ( ( dstOffset < 0 ) || ( dstOffset >= dst.Length ) )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ) );
+        }
+
+        ArgumentOutOfRangeException.ThrowIfNegative( count );
+
+        if ( ( ( srcOffset + count ) > Capacity ) || ( ( dstOffset + count ) > dst.Length ) )
+        {
+            throw new ArgumentException( "Copying would overflow buffer" );
+        }
+
+        // Get backing array and copy
+        var src = BackingArray();
+
+        System.Buffer.BlockCopy( src, srcOffset, dst, dstOffset, count );
+    }
+
     /// <inheritdoc />
     public override void Resize( int extraCapacityInBytes )
     {

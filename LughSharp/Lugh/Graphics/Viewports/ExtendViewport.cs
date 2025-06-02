@@ -36,6 +36,11 @@ namespace LughSharp.Lugh.Graphics.Viewports;
 [PublicAPI]
 public class ExtendViewport : Viewport
 {
+    public float MinWorldWidth  { get; }
+    public float MinWorldHeight { get; }
+    public float MaxWorldWidth  { get; }
+    public float MaxWorldHeight { get; }
+
     // ========================================================================
 
     /// <summary>
@@ -139,22 +144,11 @@ public class ExtendViewport : Viewport
         SetWorldSize( worldWidth, worldHeight );
 
         // Center.
-        SetScreenBounds(
-                        ( screenWidth - viewportWidth ) / 2,
-                        ( screenHeight - viewportHeight ) / 2,
-                        viewportWidth,
-                        viewportHeight
-                       );
+        SetScreenBounds( ( screenWidth - viewportWidth ) / 2,
+                         ( screenHeight - viewportHeight ) / 2,
+                         viewportWidth,
+                         viewportHeight );
 
         Apply( centerCamera );
     }
-
-    #region Properties
-
-    public float MinWorldWidth  { get; }
-    public float MinWorldHeight { get; }
-    public float MaxWorldWidth  { get; }
-    public float MaxWorldHeight { get; }
-
-    #endregion
 }

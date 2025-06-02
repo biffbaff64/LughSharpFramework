@@ -98,7 +98,7 @@ public class IndexBufferObject : IIndexData
         _byteBuffer.Flip();
 
         // Generate a new OpenGL buffer handle.
-        BufferID = ( int )GdxApi.Bindings.GenBuffer();
+        BufferID = ( int )GL.GenBuffer();
 
         // Set the usage flag for the buffer based on whether it is static or dynamic.
         _usage = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
@@ -128,7 +128,7 @@ public class IndexBufferObject : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                GL.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -155,7 +155,7 @@ public class IndexBufferObject : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                GL.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -180,7 +180,7 @@ public class IndexBufferObject : IIndexData
         {
             fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                GL.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -203,7 +203,7 @@ public class IndexBufferObject : IIndexData
             throw new GdxRuntimeException( "No buffer allocated!" );
         }
 
-        GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, ( uint )BufferID );
+        GL.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, ( uint )BufferID );
 
         if ( _isDirty )
         {
@@ -213,7 +213,7 @@ public class IndexBufferObject : IIndexData
             {
                 fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
                 {
-                    GdxApi.Bindings.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
+                    GL.BufferData( IGL.GL_ELEMENT_ARRAY_BUFFER, _byteBuffer.Limit, ( IntPtr )ptr, _usage );
                 }
             }
 
@@ -226,22 +226,22 @@ public class IndexBufferObject : IIndexData
     /// <inheritdoc />
     public void Unbind()
     {
-        GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
+        GL.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
         _isBound = false;
     }
 
     /// <inheritdoc />
     public void Invalidate()
     {
-        BufferID = ( int )GdxApi.Bindings.GenBuffer(); //TODO: ???
+        BufferID = ( int )GL.GenBuffer(); //TODO: ???
         _isDirty = true;
     }
 
     /// <inheritdoc />
     public void Dispose()
     {
-        GdxApi.Bindings.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
-        GdxApi.Bindings.DeleteBuffers( ( uint )BufferID );
+        GL.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
+        GL.DeleteBuffers( ( uint )BufferID );
 
         BufferID = 0;
 

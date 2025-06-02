@@ -58,7 +58,7 @@ public class HdpiUtils
     }
 
     /// <summary>
-    /// Calls <see cref="OpenGL.GLBindings.glScissor(int, int, int, int)" />, expecting the
+    /// Calls <see cref="OpenGL.GLBindings.Scissor(int, int, int, int)" />, expecting the
     /// coordinates and sizes given in logical coordinates and automatically
     /// converts them to backbuffer coordinates, which may be bigger on HDPI screens.
     /// </summary>
@@ -68,19 +68,19 @@ public class HdpiUtils
              && ( ( GdxApi.Graphics.Width != GdxApi.Graphics.BackBufferWidth )
                   || ( GdxApi.Graphics.Height != GdxApi.Graphics.BackBufferHeight ) ) )
         {
-            GdxApi.Bindings.Scissor( ToBackBufferX( x ),
-                                     ToBackBufferY( y ),
-                                     ToBackBufferX( width ),
-                                     ToBackBufferY( height ) );
+            GL.Scissor( ToBackBufferX( x ),
+                        ToBackBufferY( y ),
+                        ToBackBufferX( width ),
+                        ToBackBufferY( height ) );
         }
         else
         {
-            GdxApi.Bindings.Scissor( x, y, width, height );
+            GL.Scissor( x, y, width, height );
         }
     }
 
     /// <summary>
-    /// Calls <see cref="OpenGL.GLBindings.glViewport(int, int, int, int)" />, expecting
+    /// Calls <see cref="OpenGL.GLBindings.Viewport(int, int, int, int)" />, expecting
     /// the coordinates and sizes given in logical coordinates and automatically
     /// converts them to backbuffer coordinates, which may be bigger on HDPI screens.
     /// </summary>
@@ -90,14 +90,15 @@ public class HdpiUtils
              && ( ( GdxApi.Graphics.Width != GdxApi.Graphics.BackBufferWidth )
                   || ( GdxApi.Graphics.Height != GdxApi.Graphics.BackBufferHeight ) ) )
         {
-            GdxApi.Bindings.Viewport( ToBackBufferX( x ),
-                                      ToBackBufferY( y ),
-                                      ToBackBufferX( width ),
-                                      ToBackBufferY( height ) );
+            GdxApi.Graphics.SetupViewport( ToBackBufferX( x ),
+                                           ToBackBufferY( y ),
+                                           ToBackBufferX( width ),
+                                           ToBackBufferY( height ),
+                                          3 );
         }
         else
         {
-            GdxApi.Bindings.Viewport( x, y, width, height );
+            GdxApi.Graphics.SetupViewport( x, y, width, height, 4 );
         }
     }
 

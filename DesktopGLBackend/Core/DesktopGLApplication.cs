@@ -97,8 +97,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // Config.Title becomes the name of the ApplicationListener if it has no value at this point.
         Config       =   DesktopGLApplicationConfiguration.Copy( config );
         Config.Title ??= listener.GetType().Name;
-
-        //
+        
         // ====================================================================
 
         // Initialise the global environment shortcuts. 'GdxApi.Audio', 'GdxApi.Files',
@@ -607,7 +606,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
                 Windows.Add( dglWindow );
             } );
         }
-
+        
         return dglWindow;
     }
 
@@ -629,12 +628,12 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
         for ( var i = 0; i < 2; i++ )
         {
-            GdxApi.Bindings.ClearColor( config.InitialBackgroundColor.R,
+            GL.ClearColor( config.InitialBackgroundColor.R,
                                         config.InitialBackgroundColor.G,
                                         config.InitialBackgroundColor.B,
                                         config.InitialBackgroundColor.A );
 
-            GdxApi.Bindings.Clear( IGL.GL_COLOR_BUFFER_BIT );
+            GL.Clear( IGL.GL_COLOR_BUFFER_BIT );
             Glfw.SwapBuffers( windowHandle );
         }
 

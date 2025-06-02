@@ -49,7 +49,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLint GetUniformLocation( GLint program, GLchar* name )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == -1 ) )
+        if ( !GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -63,7 +63,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLint GetUniformLocation( GLint program, string name )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == -1 ) )
+        if ( !GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -82,7 +82,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetUniformfv( GLint program, GLint location, GLfloat* parameters )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == -1 ) )
+        if ( !GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -96,7 +96,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetUniformfv( GLint program, GLint location, ref GLfloat[] parameters )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == -1 ) )
+        if ( !GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -115,7 +115,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetUniformiv( int program, int location, int* parameters )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == -1 ) )
+        if ( !GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -129,7 +129,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetUniformiv( int program, int location, ref int[] parameters )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == -1 ) )
+        if ( !GL.IsProgram( program ) || ( program == -1 ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }

@@ -317,6 +317,11 @@ public partial class GLBindings
         _glBindTexture( target, texture );
     }
 
+    public void BindTexture( TextureTarget target, GLuint texture )
+    {
+        BindTexture( ( int )target, texture );
+    }
+    
     // ========================================================================
 
     /// <inheritdoc />

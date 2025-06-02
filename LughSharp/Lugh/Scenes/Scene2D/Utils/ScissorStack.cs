@@ -71,7 +71,7 @@ public class ScissorStack
                 return false;
             }
 
-            GdxApi.Bindings.Enable( IGL.GL_SCISSOR_TEST );
+            GL.Enable( IGL.GL_SCISSOR_TEST );
         }
         else
         {
@@ -124,7 +124,7 @@ public class ScissorStack
 
         if ( _scissors.Count == 0 )
         {
-            GdxApi.Bindings.Disable( IGL.GL_SCISSOR_TEST );
+            GL.Disable( IGL.GL_SCISSOR_TEST );
         }
         else
         {

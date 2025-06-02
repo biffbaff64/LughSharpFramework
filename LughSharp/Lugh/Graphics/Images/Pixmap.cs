@@ -149,6 +149,8 @@ public class Pixmap : IDisposable
     {
         ArgumentNullException.ThrowIfNull( file );
 
+        Logger.Debug( $"Creating Pixmap from file: {file.Name}" );
+        
         try
         {
             var data = File.ReadAllBytes( file.FullName );
@@ -359,7 +361,7 @@ public class Pixmap : IDisposable
     /// <param name="y2"> The y-coordinate of the second point  </param>
     public void DrawLine( int x, int y, int x2, int y2 )
     {
-        Gdx2DPixmap.DrawLine( x, y, x2, y2, Color );
+        Gdx2DPixmap.DrawLineNative( x, y, x2, y2, Color );
     }
 
     /// <summary>
@@ -372,7 +374,7 @@ public class Pixmap : IDisposable
     /// <param name="height"> The height in pixels  </param>
     public void DrawRectangle( int x, int y, uint width, uint height )
     {
-        Gdx2DPixmap.DrawRect( x, y, width, height, Color );
+        Gdx2DPixmap.DrawRectNative( x, y, width, height, Color );
     }
 
     /// <summary>
@@ -434,7 +436,7 @@ public class Pixmap : IDisposable
 
         try
         {
-            Gdx2DPixmap.DrawPixmap( pixmap.Gdx2DPixmap, srcx, srcy, srcWidth, srcHeight, dstx, dsty, dstWidth, dstHeight );
+            Gdx2DPixmap.DrawPixmapNative( pixmap.Gdx2DPixmap, srcx, srcy, srcWidth, srcHeight, dstx, dsty, dstWidth, dstHeight );
         }
         catch ( Exception ex )
         {
@@ -452,7 +454,7 @@ public class Pixmap : IDisposable
     /// <param name="height"> The height in pixels  </param>
     public void FillRectangle( int x, int y, uint width, uint height )
     {
-        Gdx2DPixmap.FillRect( x, y, width, height, Color );
+        Gdx2DPixmap.FillRectNative( x, y, width, height, Color );
     }
 
     /// <summary>
@@ -464,7 +466,7 @@ public class Pixmap : IDisposable
     /// <param name="radius"> The radius in pixels  </param>
     public void DrawCircle( int x, int y, uint radius )
     {
-        Gdx2DPixmap.DrawCircle( x, y, radius, Color );
+        Gdx2DPixmap.DrawCircleNative( x, y, radius, Color );
     }
 
     /// <summary>
@@ -475,7 +477,7 @@ public class Pixmap : IDisposable
     /// <param name="radius"> The radius in pixels </param>
     public void FillCircle( int x, int y, uint radius )
     {
-        Gdx2DPixmap.FillCircle( x, y, radius, Color );
+        Gdx2DPixmap.FillCircleNative( x, y, radius, Color );
     }
 
     /// <summary>
@@ -489,7 +491,7 @@ public class Pixmap : IDisposable
     /// <param name="y3"> The y-coordinate of vertex 3  </param>
     public void FillTriangle( int x1, int y1, int x2, int y2, int x3, int y3 )
     {
-        Gdx2DPixmap.FillTriangle( x1, y1, x2, y2, x3, y3, Color );
+        Gdx2DPixmap.FillTriangleNative( x1, y1, x2, y2, x3, y3, Color );
     }
 
     /// <summary>
@@ -522,7 +524,7 @@ public class Pixmap : IDisposable
     /// <param name="color"> The color in RGBA8888 format. </param>
     public void DrawPixel( int x, int y, Color color )
     {
-        Gdx2DPixmap.SetPixel( x, y, color );
+        Gdx2DPixmap.SetPixel( x, y, ( int )color.PackedColorRGBA() );
     }
 
     /// <summary>
@@ -535,13 +537,13 @@ public class Pixmap : IDisposable
     /// <returns> The new Pixmap. </returns>
     public static unsafe Pixmap CreateFromFrameBuffer( int x, int y, int width, int height )
     {
-        GdxApi.Bindings.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
+        GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
         Pixmap pixmap = new( width, height, PixelType.Format.RGBA8888 );
 
         fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
         {
-            GdxApi.Bindings.ReadPixels( x, y, width, height, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
+            GL.ReadPixels( x, y, width, height, IGL.GL_RGBA, IGL.GL_UNSIGNED_BYTE, ( IntPtr )ptr );
         }
 
         return pixmap;

@@ -171,19 +171,19 @@ public class ManagedShaderProgram : ShaderProgram
     {
         var numUniforms = stackalloc int[ 1 ];
 
-        GdxApi.Bindings.GetProgramiv( ShaderProgramHandle, IGL.GL_ACTIVE_UNIFORMS, numUniforms );
+        GL.GetProgramiv( ShaderProgramHandle, IGL.GL_ACTIVE_UNIFORMS, numUniforms );
 
         Uniforms = new string[ *numUniforms ];
 
         for ( uint i = 0; i < *numUniforms; i++ )
         {
-            var name = GdxApi.Bindings.GetActiveUniform( ShaderProgramHandle,
+            var name = GL.GetActiveUniform( ShaderProgramHandle,
                                                          i,
                                                          IGL.GL_ACTIVE_UNIFORM_MAX_LENGTH,
                                                          out var size,
                                                          out var type );
 
-            var location = GdxApi.Bindings.GetUniformLocation( ShaderProgramHandle, name );
+            var location = GL.GetUniformLocation( ShaderProgramHandle, name );
 
             _uniforms[ name ]     = location;
             _uniformSizes[ name ] = size;
@@ -198,19 +198,19 @@ public class ManagedShaderProgram : ShaderProgram
     {
         var numAttributes = stackalloc int[ 1 ];
 
-        GdxApi.Bindings.GetProgramiv( ShaderProgramHandle, IGL.GL_ACTIVE_ATTRIBUTES, numAttributes );
+        GL.GetProgramiv( ShaderProgramHandle, IGL.GL_ACTIVE_ATTRIBUTES, numAttributes );
 
         Attributes = new string[ *numAttributes ];
 
         for ( var index = 0; index < *numAttributes; index++ )
         {
-            var name = GdxApi.Bindings.GetActiveAttrib( ShaderProgramHandle,
+            var name = GL.GetActiveAttrib( ShaderProgramHandle,
                                                         ( uint )index,
                                                         IGL.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
                                                         out var size,
                                                         out var type );
 
-            var location = GdxApi.Bindings.GetAttribLocation( ShaderProgramHandle, name );
+            var location = GL.GetAttribLocation( ShaderProgramHandle, name );
 
             _attributes[ name ]     = location;
             _attributeSizes[ name ] = size;
@@ -285,7 +285,7 @@ public class ManagedShaderProgram : ShaderProgram
 
         if ( ( location = _attributes.Get( name, NOT_CACHED ) ) == NOT_CACHED )
         {
-            location            = GdxApi.Bindings.GetAttribLocation( ShaderProgramHandle, name );
+            location            = GL.GetAttribLocation( ShaderProgramHandle, name );
             _attributes[ name ] = location;
         }
 
@@ -298,7 +298,7 @@ public class ManagedShaderProgram : ShaderProgram
     public override void DisableVertexAttribute( int location )
     {
         CheckManaged();
-        GdxApi.Bindings.DisableVertexAttribArray( ( uint )location );
+        GL.DisableVertexAttribArray( ( uint )location );
     }
 
     /// <summary>
@@ -316,7 +316,7 @@ public class ManagedShaderProgram : ShaderProgram
             return;
         }
 
-        GdxApi.Bindings.DisableVertexAttribArray( ( uint )location );
+        GL.DisableVertexAttribArray( ( uint )location );
     }
 
     /// <summary>
@@ -334,7 +334,7 @@ public class ManagedShaderProgram : ShaderProgram
             return;
         }
 
-        GdxApi.Bindings.EnableVertexAttribArray( ( uint )location );
+        GL.EnableVertexAttribArray( ( uint )location );
     }
 
     /// <summary>
@@ -343,7 +343,7 @@ public class ManagedShaderProgram : ShaderProgram
     public override void EnableVertexAttribute( int location )
     {
         CheckManaged();
-        GdxApi.Bindings.EnableVertexAttribArray( ( uint )location );
+        GL.EnableVertexAttribArray( ( uint )location );
     }
 
     /// <summary>
@@ -494,7 +494,7 @@ public class ManagedShaderProgram : ShaderProgram
 
         if ( ( location = _uniforms.Get( name, NOT_CACHED ) ) == NOT_CACHED )
         {
-            location = GdxApi.Bindings.GetUniformLocation( ShaderProgramHandle, name );
+            location = GL.GetUniformLocation( ShaderProgramHandle, name );
 
             if ( ( location == CACHED_NOT_FOUND ) && pedant )
             {
@@ -538,7 +538,7 @@ public class ManagedShaderProgram : ShaderProgram
 
         fixed ( void* ptr = &buffer.ToArray()[ 0 ] )
         {
-            GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( IntPtr )ptr );
+            GL.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( IntPtr )ptr );
         }
     }
 
@@ -556,7 +556,7 @@ public class ManagedShaderProgram : ShaderProgram
 
         fixed ( void* ptr = &buffer.ToArray()[ 0 ] )
         {
-            GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( IntPtr )ptr );
+            GL.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( IntPtr )ptr );
         }
     }
 
@@ -585,7 +585,7 @@ public class ManagedShaderProgram : ShaderProgram
             return;
         }
 
-        GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( uint )offset );
+        GL.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( uint )offset );
     }
 
     /// <summary>
@@ -599,7 +599,7 @@ public class ManagedShaderProgram : ShaderProgram
     public override void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, int offset )
     {
         CheckManaged();
-        GdxApi.Bindings.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( uint )offset );
+        GL.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( uint )offset );
     }
 
     /// <summary>
@@ -632,7 +632,7 @@ public class ManagedShaderProgram : ShaderProgram
     {
         CheckManaged();
 
-        GdxApi.Bindings.Uniform1i( FetchUniformLocation( name ), value );
+        GL.Uniform1i( FetchUniformLocation( name ), value );
     }
 
     /// <summary>
@@ -642,7 +642,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformi( int location, int value )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform1i( location, value );
+        GL.Uniform1i( location, value );
     }
 
     /// <summary>
@@ -656,7 +656,7 @@ public class ManagedShaderProgram : ShaderProgram
     {
         CheckManaged();
 
-        GdxApi.Bindings.Uniform2i( FetchUniformLocation( name ), count, value );
+        GL.Uniform2i( FetchUniformLocation( name ), count, value );
     }
 
     /// <summary>
@@ -667,7 +667,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformi( int location, int count, int value )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform2i( location, count, value );
+        GL.Uniform2i( location, count, value );
     }
 
     /// <summary>
@@ -682,7 +682,7 @@ public class ManagedShaderProgram : ShaderProgram
     {
         CheckManaged();
 
-        GdxApi.Bindings.Uniform3i( FetchUniformLocation( name ), value1, value2, value3 );
+        GL.Uniform3i( FetchUniformLocation( name ), value1, value2, value3 );
     }
 
     /// <summary>
@@ -694,7 +694,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformi( int location, int x, int y, int z )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform3i( location, x, y, z );
+        GL.Uniform3i( location, x, y, z );
     }
 
     /// <summary>
@@ -706,7 +706,7 @@ public class ManagedShaderProgram : ShaderProgram
     public override void SetUniformf( string name, float value )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform1f( FetchUniformLocation( name ), value );
+        GL.Uniform1f( FetchUniformLocation( name ), value );
     }
 
     /// <summary>
@@ -716,7 +716,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformf( int location, float value )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform1f( location, value );
+        GL.Uniform1f( location, value );
     }
 
     /// <summary>
@@ -730,7 +730,7 @@ public class ManagedShaderProgram : ShaderProgram
     {
         CheckManaged();
 
-        GdxApi.Bindings.Uniform2f( FetchUniformLocation( name ), value1, value2 );
+        GL.Uniform2f( FetchUniformLocation( name ), value1, value2 );
     }
 
     /// <summary>
@@ -741,7 +741,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformf( int location, int value1, int value2 )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform2f( location, value1, value2 );
+        GL.Uniform2f( location, value1, value2 );
     }
 
     /// <summary>
@@ -755,7 +755,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformf( string name, float value1, float value2, float value3 )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform3f( FetchUniformLocation( name ), value1, value2, value3 );
+        GL.Uniform3f( FetchUniformLocation( name ), value1, value2, value3 );
     }
 
     /// <summary>
@@ -767,7 +767,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformf( int location, float value1, float value2, float value3 )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform3f( location, value1, value2, value3 );
+        GL.Uniform3f( location, value1, value2, value3 );
     }
 
     /// <summary>
@@ -782,7 +782,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformf( string name, float x, float y, float z, float w )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform4f( FetchUniformLocation( name ), x, y, z, w );
+        GL.Uniform4f( FetchUniformLocation( name ), x, y, z, w );
     }
 
     /// <summary>
@@ -795,7 +795,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformf( int location, float x, float y, float z, float w )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform4f( location, x, y, z, w );
+        GL.Uniform4f( location, x, y, z, w );
     }
 
     /// <summary>
@@ -806,7 +806,7 @@ public class ManagedShaderProgram : ShaderProgram
     public override void SetUniformMatrix( int location, Matrix4 matrix, bool transpose )
     {
         CheckManaged();
-        GdxApi.Bindings.UniformMatrix4fv( location, transpose, matrix.Val );
+        GL.UniformMatrix4fv( location, transpose, matrix.Val );
     }
 
     /// <summary>
@@ -817,7 +817,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformMatrix( int location, Matrix3 matrix, bool transpose )
     {
         CheckManaged();
-        GdxApi.Bindings.UniformMatrix3fv( location, transpose, matrix.Val );
+        GL.UniformMatrix3fv( location, transpose, matrix.Val );
     }
 
     /// <summary>
@@ -835,7 +835,7 @@ public class ManagedShaderProgram : ShaderProgram
 
         fixed ( float* ptr = &buffer.ToArray()[ 0 ] )
         {
-            GdxApi.Bindings.UniformMatrix3fv( FetchUniformLocation( name ), count, transpose, ptr );
+            GL.UniformMatrix3fv( FetchUniformLocation( name ), count, transpose, ptr );
         }
     }
 
@@ -856,7 +856,7 @@ public class ManagedShaderProgram : ShaderProgram
 
         fixed ( float* ptr = &buffer.ToArray()[ 0 ] )
         {
-            GdxApi.Bindings.UniformMatrix4fv( FetchUniformLocation( name ), count, transpose, ptr );
+            GL.UniformMatrix4fv( FetchUniformLocation( name ), count, transpose, ptr );
         }
     }
 
@@ -870,7 +870,7 @@ public class ManagedShaderProgram : ShaderProgram
         Logger.Debug( $"values: {string.Join( ", ", values )}" );
 
         CheckManaged();
-        GdxApi.Bindings.UniformMatrix4fv( location, false, values );
+        GL.UniformMatrix4fv( location, false, values );
     }
 
     /// <summary>
@@ -881,7 +881,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformf( string name, Vector2 values )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform2f( FetchUniformLocation( name ), values.X, values.Y );
+        GL.Uniform2f( FetchUniformLocation( name ), values.X, values.Y );
     }
 
     /// <summary>
@@ -891,7 +891,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformf( int location, Vector2 values )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform2f( location, values.X, values.Y );
+        GL.Uniform2f( location, values.X, values.Y );
     }
 
     /// <summary>
@@ -902,7 +902,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformf( string name, Vector3 values )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform3f( FetchUniformLocation( name ), values.X, values.Y, values.Z );
+        GL.Uniform3f( FetchUniformLocation( name ), values.X, values.Y, values.Z );
     }
 
     /// <summary>
@@ -912,7 +912,7 @@ public class ManagedShaderProgram : ShaderProgram
     public void SetUniformf( int location, Vector3 values )
     {
         CheckManaged();
-        GdxApi.Bindings.Uniform3f( location, values.X, values.Y, values.Z );
+        GL.Uniform3f( location, values.X, values.Y, values.Z );
     }
 
     /// <summary>
@@ -922,7 +922,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// <param name="values"> r, g, b and a as the first through fourth values respectively  </param>
     public void SetUniformf( string name, Color values )
     {
-        GdxApi.Bindings.Uniform4f( FetchUniformLocation( name ), values.R, values.G, values.B, values.A );
+        GL.Uniform4f( FetchUniformLocation( name ), values.R, values.G, values.B, values.A );
     }
 
     /// <summary>
@@ -931,7 +931,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// <param name="values"></param>
     public void SetUniformf( int location, Color values )
     {
-        GdxApi.Bindings.Uniform4f( location, values.R, values.G, values.B, values.A );
+        GL.Uniform4f( location, values.R, values.G, values.B, values.A );
     }
 
     // ========================================================================
@@ -942,7 +942,7 @@ public class ManagedShaderProgram : ShaderProgram
     public override void Bind()
     {
         CheckManaged();
-        GdxApi.Bindings.UseProgram( ShaderProgramHandle );
+        GL.UseProgram( ShaderProgramHandle );
     }
 
     /// <summary>
@@ -951,7 +951,7 @@ public class ManagedShaderProgram : ShaderProgram
     public override void Unbind()
     {
         CheckManaged();
-        GdxApi.Bindings.UseProgram( 0 );
+        GL.UseProgram( 0 );
     }
 
     private void CheckManaged()

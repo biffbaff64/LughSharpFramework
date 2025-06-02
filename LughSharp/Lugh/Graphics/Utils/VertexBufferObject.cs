@@ -78,7 +78,7 @@ public class VertexBufferObject : IVertexData
     /// <param name="attributes"> the <see cref="VertexAttributes" />.  </param>
     public VertexBufferObject( bool isStatic, int numVertices, VertexAttributes attributes )
     {
-        _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
+        _bufferHandle = ( int )GL.GenBuffer();
         _byteBuffer   = new ByteBuffer( attributes.VertexSize * numVertices );
         Attributes    = attributes;
 
@@ -101,7 +101,7 @@ public class VertexBufferObject : IVertexData
     public VertexBufferObject( int usage, ByteBuffer data, bool ownsBuffer, VertexAttributes attributes )
     {
         // Generate a new buffer handle using OpenGL and assign it to _bufferHandle.
-        _bufferHandle = ( int )GdxApi.Bindings.GenBuffer();
+        _bufferHandle = ( int )GL.GenBuffer();
         Attributes    = attributes;
 
         // Set the buffer data, ownership flag, and attributes using the provided parameters.
@@ -232,7 +232,7 @@ public class VertexBufferObject : IVertexData
     /// <param name="locations"> array containing the attribute locations.  </param>
     public void Bind( ShaderProgram shader, int[]? locations = null )
     {
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, ( uint )_bufferHandle );
 
         if ( _isDirty )
         {
@@ -247,7 +247,7 @@ public class VertexBufferObject : IVertexData
 
                 fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
                 {
-                    GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
+                    GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer.Limit, ( IntPtr )ptr, Usage );
                 }
 
                 _isDirty = false;
@@ -320,7 +320,7 @@ public class VertexBufferObject : IVertexData
         }
 
         // Unbind the buffer from the GL_ARRAY_BUFFER target.
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
 
         // Mark the buffer as unbound.
         _isBound = false;
@@ -331,7 +331,7 @@ public class VertexBufferObject : IVertexData
     /// </summary>
     public void Invalidate()
     {
-        _bufferHandle = ( int )GdxApi.Bindings.GenBuffer(); //TODO: ???
+        _bufferHandle = ( int )GL.GenBuffer(); //TODO: ???
         _isDirty      = true;
     }
 
@@ -341,8 +341,8 @@ public class VertexBufferObject : IVertexData
     /// </summary>
     public void Dispose()
     {
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
-        GdxApi.Bindings.DeleteBuffers( ( uint )_bufferHandle );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.DeleteBuffers( ( uint )_bufferHandle );
 
         _bufferHandle = 0;
 
@@ -397,7 +397,7 @@ public class VertexBufferObject : IVertexData
         {
             fixed ( void* ptr = &_byteBuffer!.BackingArray()[ 0 ] )
             {
-                GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer!.Limit, ( IntPtr )ptr, Usage );
+                GL.BufferData( ( int )BufferTarget.ArrayBuffer, _byteBuffer!.Limit, ( IntPtr )ptr, Usage );
             }
 
             _isDirty = false;

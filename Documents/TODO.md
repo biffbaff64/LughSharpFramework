@@ -247,11 +247,11 @@ FILES
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - FileHandle
+    - IP   - IP   - AbstractFiles
     - IP   - IP   - IFilenameFilter
     - DONE - DONE - IFiles
     - IP   - IP   - InputStream
-    - IP   - IP   - IOData
+    - IP   - IP   - IOUtils
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -344,42 +344,6 @@ GRAPHICS/G3D
 
     See Documents/TODO_G3D.MD
 
-GRAPHICS/GLUTILS
-----------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - IP   - IP   - ETC1
-    - DONE - IP   - ETC1TextureData
-    - DONE - IP   - FacedCubemapData              Width / Height are incorrect
-    - DONE - IP   - FileTextureArrayData
-    - DONE - IP   - FileTextureData
-    - DONE - IP   - FloatTextureData
-    - DONE - IP   - GLOnlyTextureData
-    - DONE - IP   - GLVersion
-    - DONE - DONE - HdpiMode
-    - DONE - DONE - HdpiUtils
-    - DONE - DONE - IIndexData
-    - DONE - IP   - IInstanceData
-    - DONE - IP   - IndexArray
-    - DONE - DONE - IndexBufferObject
-    - IP   - IP   - IndexBufferObjectSubData
-    - IP   - IP   - InstanceBufferObject
-    - IP   - IP   - InstanceBufferObjectSubData
-    - DONE - DONE - IVertexData
-    - DONE - IP   - KTXTTextureData
-    - DONE - IP   - ManagedShaderProgram
-    - DONE - IP   - MipMapGenerator
-    - DONE - IP   - MipMapTextureData
-    - DONE - IP   - PixmapTextureData
-    - DONE - IP   - ShaderProgram
-    - DONE - IP   - ShapeRenderer
-    - DONE - DONE - Vertex
-    - DONE - DONE - VertexArray
-    - DONE - DONE - VertexBufferObject
-    - DONE - IP   - VertexBufferObjectSubData
-    - DONE - IP   - VertexBufferObjectWithVAO
-
 GRAPHICS/IMAGES
 ---------------
 
@@ -392,6 +356,7 @@ GRAPHICS/IMAGES
     - DONE - IP   - GLTexture
     - DONE - DONE - ITextureArrayData
     - DONE - DONE - ITextureData
+    - IP   - IP   - ManagedTextureHandle
     - DONE - IP   - PixelType
     - DONE - DONE - Pixmap
     - DONE - IP   - PixmapFormat
@@ -486,6 +451,46 @@ GRAPHICS/TEXT/FREETYPE
     - IP   - IP   - FreeTypeFontGenerator
     - IP   - IP   - FreeTypeFontGeneratorLoader
     - IP   - IP   - FreeTypeFontLoader
+
+GRAPHICS/UTILS
+--------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - IP   - IP   - BMPUtils
+    - IP   - IP   - ETC1
+    - DONE - IP   - ETC1TextureData
+    - DONE - IP   - FacedCubemapData              Width / Height are incorrect
+    - DONE - IP   - FileTextureArrayData
+    - DONE - IP   - FileTextureData
+    - DONE - IP   - FloatTextureData
+    - DONE - IP   - GLOnlyTextureData
+    - DONE - IP   - GLVersion
+    - DONE - DONE - HdpiMode
+    - DONE - DONE - HdpiUtils
+    - DONE - DONE - IIndexData
+    - DONE - IP   - IInstanceData
+    - DONE - IP   - IndexArray
+    - DONE - DONE - IndexBufferObject
+    - IP   - IP   - IndexBufferObjectSubData
+    - IP   - IP   - InstanceBufferObject
+    - IP   - IP   - InstanceBufferObjectSubData
+    - DONE - DONE - IVertexData
+    - DONE - IP   - KTXTTextureData
+    - DONE - IP   - ManagedShaderProgram
+    - DONE - IP   - MipMapGenerator
+    - DONE - IP   - MipMapTextureData
+    - DONE - IP   - PixmapTextureData
+    - IP   - IP   - PNGUtils
+    - DONE - IP   - ShaderProgram
+    - DONE - IP   - ShapeRenderer
+    - IP   - IP   - TextureUtils
+    - DONE - DONE - Vertex
+    - DONE - DONE - VertexArray
+    - DONE - DONE - VertexBufferObject
+    - DONE - IP   - VertexBufferObjectSubData
+    - DONE - IP   - VertexBufferObjectWithVAO
+    - IP   - IP   - VertexConstants
 
 GRAPHICS/VIEWPORT
 -----------------

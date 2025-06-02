@@ -198,11 +198,11 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         {
             if ( enable )
             {
-                GdxApi.Bindings.Enable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
+                GL.Enable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
             }
             else
             {
-                GdxApi.Bindings.Disable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
+                GL.Disable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
             }
         }
     }
@@ -426,6 +426,48 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <inheritdoc />
+    public override void SetupViewport( int x, int y, int width, int height, int source = 0 )
+    {
+        #if DEBUG
+        if ( source > 0 )
+        {
+            Logger.Debug( $"Setting viewport from source: {source}" );
+        }
+        #endif
+        
+        if ( ( width == 0 ) || ( height == 0 ) )
+        {
+            Logger.Warning( "Viewport dimensions must be greater than zero!" );
+            
+            return;
+        }
+
+        // Set the viewport
+        GL.Viewport( x, y, width, height );
+
+        // Check if viewport was set correctly
+        var viewport = new int[ 4 ];
+
+        GL.GetIntegerv( IGL.GL_VIEWPORT, ref viewport );
+
+        #if DEBUG
+        Logger.Debug( $"\nRequested: [{x}, {y}, {width}, {height}]"
+                      + $"\nActual   : [{viewport[ 0 ]}, {viewport[ 1 ]}, "
+                      + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
+        #endif
+        
+        // Verify viewport dimensions match what we set
+        if ( ( viewport[ 0 ] != x ) || ( viewport[ 1 ] != y ) ||
+             ( viewport[ 2 ] != width ) || ( viewport[ 3 ] != height ) )
+        {
+            Logger.Warning( "Viewport dimensions mismatch!"
+                            + $"\nRequested: [{x}, {y}, {width}, {height}]"
+                            + $"\nActual: [{viewport[ 0 ]}, {viewport[ 1 ]}, "
+                            + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
+        }
+    }
+
+    /// <inheritdoc />
     public override (float X, float Y) GetPpiXY()
     {
         return ( GetPpcXY().X * 2.54f, GetPpcXY().Y * 2.54f );
@@ -454,7 +496,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
 
         GLWindow.MakeCurrent();
 
-        GdxApi.Bindings.Viewport( 0, 0, BackBufferWidth, BackBufferHeight );
+        SetupViewport( 0, 0, BackBufferWidth, BackBufferHeight, 1);
 
         GLWindow.ApplicationListener.Resize( Width, Height );
         GLWindow.ApplicationListener.Update();

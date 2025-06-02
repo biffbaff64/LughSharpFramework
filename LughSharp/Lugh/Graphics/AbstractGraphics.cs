@@ -83,6 +83,9 @@ public abstract class AbstractGraphics : IGraphics
     // 
 
     /// <inheritdoc />
+    public abstract void SetupViewport( int x, int y, int width, int height, int source = 0 );
+
+    /// <inheritdoc />
     public abstract IGraphics.DisplayMode GetDisplayMode();
 
     /// <inheritdoc />

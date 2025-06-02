@@ -160,7 +160,7 @@ public class VertexArray : IVertexData
                 continue;
             }
 
-            GdxApi.Bindings.EnableVertexAttribArray( ( uint )location );
+            GL.EnableVertexAttribArray( ( uint )location );
 
             var byteOffset    = attribute.Offset;
             var type          = attribute.Type;
@@ -168,7 +168,7 @@ public class VertexArray : IVertexData
             var normalized    = attribute.Normalized;
             var stride        = Attributes.VertexSize;
 
-            GdxApi.Bindings.VertexAttribPointer( ( uint )location,
+            GL.VertexAttribPointer( ( uint )location,
                                                  numComponents,
                                                  type,
                                                  normalized,
@@ -192,7 +192,7 @@ public class VertexArray : IVertexData
 
             if ( location >= 0 )
             {
-                GdxApi.Bindings.DisableVertexAttribArray( ( uint )location );
+                GL.DisableVertexAttribArray( ( uint )location );
             }
         }
     }

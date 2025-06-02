@@ -106,7 +106,7 @@ public static class GLUtils
         fixed ( int* ptr = &currentBuffer[ 0 ] )
         {
             // Fetch the currently bound buffer
-            GdxApi.Bindings.GetIntegerv( ( int )BufferBindings.ArrayBufferBinding, ptr );
+            GL.GetIntegerv( ( int )BufferBindings.ArrayBufferBinding, ptr );
         }
 
         if ( currentBuffer[ 0 ] != expectedBuffer )
@@ -123,7 +123,7 @@ public static class GLUtils
     /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>
     public static void CheckGLError( string stage )
     {
-        var error = GdxApi.Bindings.GetError();
+        var error = GL.GetError();
 
         if ( error != ( int )ErrorCode.NoError )
         {
@@ -161,9 +161,9 @@ public static class GLUtils
                 }
             } );
 
-            GdxApi.Bindings.DebugMessageCallback( debugProc, null );
-            GdxApi.Bindings.Enable( IGL.GL_DEBUG_OUTPUT );
-            GdxApi.Bindings.Enable( IGL.GL_DEBUG_OUTPUT_SYNCHRONOUS );
+            GL.DebugMessageCallback( debugProc, null );
+            GL.Enable( IGL.GL_DEBUG_OUTPUT );
+            GL.Enable( IGL.GL_DEBUG_OUTPUT_SYNCHRONOUS );
         }
     }
 
@@ -176,9 +176,9 @@ public static class GLUtils
     /// <returns></returns>
     public static float[]? GetVboData( uint vbo, int sizeInBytes, int vertexSizeInFloats )
     {
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, vbo );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, vbo );
 
-        var dataPtr = GdxApi.Bindings.MapBuffer( ( int )BufferTarget.ArrayBuffer, ( int )BufferAccess.ReadOnly );
+        var dataPtr = GL.MapBuffer( ( int )BufferTarget.ArrayBuffer, ( int )BufferAccess.ReadOnly );
 
         if ( dataPtr == IntPtr.Zero )
         {
@@ -190,8 +190,8 @@ public static class GLUtils
         var data = new float[ sizeInBytes / sizeof( float ) ];
         Marshal.Copy( dataPtr, data, 0, data.Length );
 
-        GdxApi.Bindings.UnmapBuffer( ( int )BufferTarget.ArrayBuffer );
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.UnmapBuffer( ( int )BufferTarget.ArrayBuffer );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
 
         return data;
     }

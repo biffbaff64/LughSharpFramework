@@ -49,6 +49,10 @@ namespace LughSharp.Lugh.Graphics.Viewports;
 [PublicAPI]
 public class ScalingViewport : Viewport
 {
+    protected Scaling Scaling { get; }
+
+    // ========================================================================
+    
     /// <summary>
     /// Creates a new viewport using a new <see cref="OrthographicCamera" />.
     /// </summary>
@@ -75,8 +79,6 @@ public class ScalingViewport : Viewport
         WorldWidth  = worldWidth;
         WorldHeight = worldHeight;
     }
-
-    protected Scaling Scaling { get; }
 
     /// <summary>
     /// Configures this viewports screen bounds and applies it to the camera

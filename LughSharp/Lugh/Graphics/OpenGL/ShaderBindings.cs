@@ -50,12 +50,12 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void AttachShader( GLint program, GLint shader )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
 
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -71,7 +71,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BindAttribLocation( GLint program, uint index, byte* name )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -85,7 +85,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BindAttribLocation( int program, uint index, string name )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -106,7 +106,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void CompileShader( GLint shader )
     {
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -134,13 +134,13 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DeleteProgram( GLint program )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
 
         // Error checking is done internal to GetDelegateForFunction.
-        if ( GdxApi.Bindings.IsProgram( program ) && ( program != INVALID_SHADER_PROGRAM ) )
+        if ( GL.IsProgram( program ) && ( program != INVALID_SHADER_PROGRAM ) )
         {
             GetDelegateForFunction< PFNGLDELETEPROGRAMPROC >( "glDeleteProgram", out _glDeleteProgram );
 
@@ -153,7 +153,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DeleteShader( GLint shader )
     {
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -169,12 +169,12 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DetachShader( GLint program, GLint shader )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
 
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -210,7 +210,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetActiveAttrib( GLint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -224,7 +224,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public string GetActiveAttrib( GLint program, GLuint index, GLsizei bufSize, out GLint size, out GLenum type )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -251,7 +251,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetActiveUniform( GLint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLchar* name )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -265,7 +265,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public string GetActiveUniform( GLint program, GLuint index, GLsizei bufSize, out GLint size, out GLenum type )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -292,7 +292,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetAttachedShaders( int program, int maxCount, int* count, uint* shaders )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -306,7 +306,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public uint[] GetAttachedShaders( int program, int maxCount )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -332,7 +332,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLint GetAttribLocation( GLint program, GLchar* name )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -346,7 +346,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLint GetAttribLocation( GLint program, string name )
     {
-        if ( !GdxApi.Bindings.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
+        if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
             Logger.Debug( $"***** Provided Program {program} is not a valid GLprogram *****" );
         }
@@ -365,7 +365,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetShaderiv( GLint shader, GLenum pname, GLint* parameters )
     {
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -379,7 +379,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetShaderiv( GLint shader, GLenum pname, ref GLint[] parameters )
     {
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -398,7 +398,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetShaderInfoLog( GLint shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog )
     {
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -412,7 +412,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public string GetShaderInfoLog( GLint shader, GLsizei bufSize )
     {
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -433,7 +433,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetShaderSource( GLint shader, GLsizei bufSize, GLsizei* length, GLchar* source )
     {
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -447,7 +447,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public string GetShaderSource( GLint shader, GLsizei bufSize = 4096 )
     {
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -570,7 +570,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void ShaderSource( GLint shader, GLsizei count, GLchar** str, GLint* length )
     {
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }
@@ -584,7 +584,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void ShaderSource( GLint shader, params string[] stringParam )
     {
-        if ( !GdxApi.Bindings.IsShader( shader ) || ( shader == INVALID_SHADER ) )
+        if ( !GL.IsShader( shader ) || ( shader == INVALID_SHADER ) )
         {
             Logger.Debug( $"***** Provided Shader {shader} is not a valid GLshader *****" );
         }

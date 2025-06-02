@@ -26,200 +26,183 @@ using System.Runtime.InteropServices;
 
 namespace LughSharp.Lugh.Graphics.Images;
 
+/// <summary>
+/// Contains native method extensions for Gdx2DPixmap
+/// </summary>
 public partial class Gdx2DPixmap
+{
+    /// <summary>
+    /// Gets the pixel color at the specified coordinates
+    /// </summary>
+    /// <param name="x">The x coordinate</param>
+    /// <param name="y">The y coordinate</param>
+    /// <returns>The pixel color in the format of the pixmap</returns>
+    public int GetPixelNative( int x, int y )
+    {
+        return NativeMethods.gdx2d_get_pixel( _pixmapDataType, x, y );
+    }
+
+    /// <summary>
+    /// Sets the pixel color at the specified coordinates
+    /// </summary>
+    /// <param name="x">The x coordinate</param>
+    /// <param name="y">The y coordinate</param>
+    /// <param name="color">The color to set</param>
+    public void SetPixelNative( int x, int y, Color color )
+    {
+        NativeMethods.gdx2d_set_pixel( _pixmapDataType, x, y, color.PackedColorABGR() );
+    }
+
+    /// <summary>
+    /// Draws a line between two points
+    /// </summary>
+    /// <param name="x">Starting x coordinate</param>
+    /// <param name="y">Starting y coordinate</param>
+    /// <param name="x2">Ending x coordinate</param>
+    /// <param name="y2">Ending y coordinate</param>
+    /// <param name="color">Line color</param>
+    public void DrawLineNative( int x, int y, int x2, int y2, Color color )
+    {
+        NativeMethods.gdx2d_draw_line( _pixmapDataType, x, y, x2, y2, color.PackedColorABGR() );
+    }
+
+    /// <summary>
+    /// Draws a rectangle outline
+    /// </summary>
+    /// <param name="x">The x coordinate of the top-left corner</param>
+    /// <param name="y">The y coordinate of the top-left corner</param>
+    /// <param name="width">The width of the rectangle</param>
+    /// <param name="height">The height of the rectangle</param>
+    /// <param name="color">The outline color</param>
+    public void DrawRectNative( int x, int y, uint width, uint height, Color color )
+    {
+        NativeMethods.gdx2d_draw_rect( _pixmapDataType, x, y, width, height, color.PackedColorABGR() );
+    }
+
+    /// <summary>
+    /// Draws a circle outline
+    /// </summary>
+    /// <param name="x">The x coordinate of the center</param>
+    /// <param name="y">The y coordinate of the center</param>
+    /// <param name="radius">The radius of the circle</param>
+    /// <param name="color">The outline color</param>
+    public void DrawCircleNative( int x, int y, uint radius, Color color )
+    {
+        NativeMethods.gdx2d_draw_circle( _pixmapDataType, x, y, radius, color.PackedColorABGR() );
+    }
+
+    /// <summary>
+    /// Fills a rectangle with a solid color
+    /// </summary>
+    /// <param name="x">The x coordinate of the top-left corner</param>
+    /// <param name="y">The y coordinate of the top-left corner</param>
+    /// <param name="width">The width of the rectangle</param>
+    /// <param name="height">The height of the rectangle</param>
+    /// <param name="color">The fill color</param>
+    public void FillRectNative( int x, int y, uint width, uint height, Color color )
+    {
+        NativeMethods.gdx2d_fill_rect( _pixmapDataType, x, y, width, height, color.PackedColorABGR() );
+    }
+
+    /// <summary>
+    /// Fills a circle with a solid color
+    /// </summary>
+    /// <param name="x">The x coordinate of the center</param>
+    /// <param name="y">The y coordinate of the center</param>
+    /// <param name="radius">The radius of the circle</param>
+    /// <param name="color">The fill color</param>
+    public void FillCircleNative( int x, int y, uint radius, Color color )
+    {
+        NativeMethods.gdx2d_fill_circle( _pixmapDataType, x, y, radius, color.PackedColorABGR() );
+    }
+
+    /// <summary>
+    /// Fills a triangle with a solid color
+    /// </summary>
+    /// <param name="x1">The x coordinate of the first vertex</param>
+    /// <param name="y1">The y coordinate of the first vertex</param>
+    /// <param name="x2">The x coordinate of the second vertex</param>
+    /// <param name="y2">The y coordinate of the second vertex</param>
+    /// <param name="x3">The x coordinate of the third vertex</param>
+    /// <param name="y3">The y coordinate of the third vertex</param>
+    /// <param name="color">The fill color</param>
+    public void FillTriangleNative( int x1, int y1, int x2, int y2, int x3, int y3, Color color )
+    {
+        NativeMethods.gdx2d_fill_triangle( _pixmapDataType, x1, y1, x2, y2, x3, y3, color.PackedColorABGR() );
+    }
+
+    /// <summary>
+    /// Draws a pixmap at the specified location
+    /// </summary>
+    public void DrawPixmapNative( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
+    {
+        NativeMethods.gdx2d_draw_pixmap(
+                                        src._pixmapDataType, _pixmapDataType,
+                                        srcX, srcY, width, height,
+                                        dstX, dstY, width, height );
+    }
+
+    /// <summary>
+    /// Draws a pixmap with scaling
+    /// </summary>
+    public void DrawPixmapNative( Gdx2DPixmap src,
+                                  int srcX, int srcY,
+                                  int dstX, int srcWidth, int srcHeight,
+                                  int dstY, int dstWidth, int dstHeight )
+    {
+        NativeMethods.gdx2d_draw_pixmap(
+                                        src._pixmapDataType, _pixmapDataType,
+                                        srcX, srcY, srcWidth, srcHeight,
+                                        dstX, dstY, dstWidth, dstHeight );
+    }
+}
+
+/// <summary>
+/// Native method imports for Gdx2DPixmap
+/// </summary>
+internal static class NativeMethods
 {
     private const string DLL_PATH = "lib/net8.0/gdx2d.dll";
 
-    /// <summary>
-    /// Gets the pixel at the specified X and Y coordinates.
-    /// </summary>
-    /// <param name="x"> X co-ordinate. </param>
-    /// <param name="y"> Y co-ordinate. </param>
-    /// <returns></returns>
-    public int GetPixel( int x, int y )
-    {
-        return gdx2d_get_pixel( _pixmapDataType, x, y );
+    [DllImport( DLL_PATH )]
+    internal static extern int gdx2d_get_pixel( PixmapDataType pd, int x, int y );
 
-        [DllImport( DLL_PATH )]
-        static extern int gdx2d_get_pixel( PixmapDataType pd, int x, int y );
-    }
+    [DllImport( DLL_PATH )]
+    internal static extern void gdx2d_set_pixel( PixmapDataType pd, int x, int y, uint color );
 
-    /// <summary>
-    /// Set the pixel at the given coordinates.
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="color"></param>
-    public void SetPixel( int x, int y, Color color )
-    {
-        gdx2d_set_pixel( _pixmapDataType, x, y, color.PackedColorABGR() );
+    [DllImport( DLL_PATH )]
+    internal static extern void gdx2d_draw_line( PixmapDataType pd, int x1, int y1, int x2, int y2, uint color );
 
-        return;
+    [DllImport( DLL_PATH )]
+    internal static extern void gdx2d_draw_rect( PixmapDataType pd, int x, int y, uint width, uint height, uint color );
 
-        [DllImport( DLL_PATH )]
-        static extern void gdx2d_set_pixel( PixmapDataType pd, int x, int y, uint color );
-    }
+    [DllImport( DLL_PATH )]
+    internal static extern void gdx2d_draw_circle( PixmapDataType pd, int x, int y, uint radius, uint color );
 
-    /// <summary>
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="x2"></param>
-    /// <param name="y2"></param>
-    /// <param name="color"></param>
-    public void DrawLine( int x, int y, int x2, int y2, Color color )
-    {
-        gdx2d_draw_line( _pixmapDataType, x, y, x2, y2, color.PackedColorABGR() );
+    [DllImport( DLL_PATH )]
+    internal static extern void gdx2d_fill_rect( PixmapDataType pd, int x, int y, uint width, uint height, uint color );
 
-        return;
+    [DllImport( DLL_PATH )]
+    internal static extern void gdx2d_fill_circle( PixmapDataType pd, int x, int y, uint radius, uint color );
 
-        [DllImport( DLL_PATH )]
-        static extern void gdx2d_draw_line( PixmapDataType pd, int x1, int y1, int x2, int y2, uint color );
-    }
+    [DllImport( DLL_PATH )]
+    internal static extern void gdx2d_fill_triangle( PixmapDataType pd,
+                                                     int x1, int y1,
+                                                     int x2, int y2,
+                                                     int x3, int y3,
+                                                     uint color );
 
-    /// <summary>
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="color"></param>
-    public void DrawRect( int x, int y, uint width, uint height, Color color )
-    {
-        gdx2d_draw_rect( _pixmapDataType, x, y, width, height, color.PackedColorABGR() );
-
-        return;
-
-        [DllImport( DLL_PATH )]
-        static extern void gdx2d_draw_rect( PixmapDataType pd, int x, int y, uint width, uint height, uint color );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="radius"></param>
-    /// <param name="color"></param>
-    public void DrawCircle( int x, int y, uint radius, Color color )
-    {
-        gdx2d_draw_circle( _pixmapDataType, x, y, radius, color.PackedColorABGR() );
-
-        return;
-
-        [DllImport( DLL_PATH )]
-        static extern void gdx2d_draw_circle( PixmapDataType pd, int x, int y, uint radius, uint color );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="color"></param>
-    public void FillRect( int x, int y, uint width, uint height, Color color )
-    {
-        gdx2d_fill_rect( _pixmapDataType, x, y, width, height, color.PackedColorABGR() );
-
-        return;
-
-        [DllImport( DLL_PATH )]
-        static extern void gdx2d_fill_rect( PixmapDataType pd, int x, int y, uint width, uint height, uint color );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="radius"></param>
-    /// <param name="color"></param>
-    public void FillCircle( int x, int y, uint radius, Color color )
-    {
-        gdx2d_fill_circle( _pixmapDataType, x, y, radius, color.PackedColorABGR() );
-
-        return;
-
-        [DllImport( DLL_PATH )]
-        static extern void gdx2d_fill_circle( PixmapDataType pd, int x, int y, uint radius, uint color );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="x1"></param>
-    /// <param name="y1"></param>
-    /// <param name="x2"></param>
-    /// <param name="y2"></param>
-    /// <param name="x3"></param>
-    /// <param name="y3"></param>
-    /// <param name="color"></param>
-    public void FillTriangle( int x1, int y1, int x2, int y2, int x3, int y3, Color color )
-    {
-        gdx2d_fill_triangle( _pixmapDataType, x1, y1, x2, y2, x3, y3, color.PackedColorABGR() );
-
-        return;
-
-        [DllImport( DLL_PATH )]
-        static extern void gdx2d_fill_triangle( PixmapDataType pd, int x1, int y1, int x2, int y2, int x3, int y3, uint color );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="src"></param>
-    /// <param name="srcX"></param>
-    /// <param name="srcY"></param>
-    /// <param name="dstX"></param>
-    /// <param name="dstY"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    public void DrawPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
-    {
-        gdx2d_draw_pixmap( src._pixmapDataType, _pixmapDataType, srcX, srcY, width, height, dstX, dstY, width, height );
-
-        return;
-
-        [DllImport( DLL_PATH )]
-        static extern void gdx2d_draw_pixmap( PixmapDataType pd,
-                                              PixmapDataType dpd,
-                                              int srcX,
-                                              int srcY,
-                                              int srcWidth,
-                                              int srcHeight,
-                                              int dstX,
-                                              int dstY,
-                                              int dstWidth,
-                                              int dstHeight );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="src"></param>
-    /// <param name="srcX"></param>
-    /// <param name="srcY"></param>
-    /// <param name="dstX"></param>
-    /// <param name="srcWidth"></param>
-    /// <param name="srcHeight"></param>
-    /// <param name="dstY"></param>
-    /// <param name="dstWidth"></param>
-    /// <param name="dstHeight"></param>
-    public void DrawPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int srcWidth, int srcHeight, int dstY, int dstWidth,
-                            int dstHeight )
-    {
-        gdx2d_draw_pixmap( src._pixmapDataType, _pixmapDataType, srcX, srcY, srcWidth, srcHeight, dstX, dstY, dstWidth, dstHeight );
-
-        return;
-
-        [DllImport( DLL_PATH )]
-        static extern void gdx2d_draw_pixmap( PixmapDataType pd,
-                                              PixmapDataType dpd,
-                                              int srcX,
-                                              int srcY,
-                                              int srcWidth,
-                                              int srcHeight,
-                                              int dstX,
-                                              int dstY,
-                                              int dstWidth,
-                                              int dstHeight );
-    }
+    [DllImport( DLL_PATH )]
+    internal static extern void gdx2d_draw_pixmap( PixmapDataType pd,
+                                                   PixmapDataType dpd,
+                                                   int srcX,
+                                                   int srcY,
+                                                   int srcWidth,
+                                                   int srcHeight,
+                                                   int dstX,
+                                                   int dstY,
+                                                   int dstWidth,
+                                                   int dstHeight );
 
     // ========================================================================
     // ========================================================================
@@ -288,3 +271,6 @@ public partial class Gdx2DPixmap
     // ========================================================================
     // ========================================================================
 }
+
+// ========================================================================
+// ========================================================================

@@ -51,8 +51,8 @@ public class ScreenViewport : Viewport
     /// <param name="centerCamera"> True to center the camera in the middle of the screen. </param>
     public override void Update( int screenWidth, int screenHeight, bool centerCamera = false )
     {
-        SetScreenBounds( 0, 0, screenWidth, screenHeight );
         SetWorldSize( screenWidth * UnitsPerPixel, screenHeight * UnitsPerPixel );
+        SetScreenBounds( 0, 0, screenWidth, screenHeight );
         Apply( centerCamera );
     }
 }

@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Viewports;
+using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics.Cameras;
 
@@ -90,7 +91,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
                                    string name = "" )
     {
         Name             = name;
-        IsInUse          = false;
+        IsInUse          = true;
         IsLerpingEnabled = false;
         Position         = Vector3.Zero;
         LerpVector       = Vector3.Zero;
@@ -136,6 +137,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// Sets the position and configuration of the camera in the scene.
     /// Updates the camera's position and zoom settings. Optionally applies a
     /// shake effect to simulate camera movement or vibration, if specified.
+    /// This does not call <see cref="Camera.Update"/>, which should be called
+    /// after setting the position to ensure the camera is updated.
     /// </summary>
     /// <param name="position">The new position of the camera in 3D space.</param>
     /// <param name="zoom">
@@ -161,11 +164,22 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
             {
                 _shake.Update( GdxApi.DeltaTime, Camera );
             }
-
-            Camera.Update();
         }
     }
 
+    /// <summary>
+    /// Updates the state of the orthographic game camera. If the camera is currently in use
+    /// and a valid <see cref="OrthographicCamera"/> instance is associated, this method
+    /// triggers the camera's update logic to refresh its internal state.
+    /// </summary>
+    public void Update()
+    {
+        if ( IsInUse && ( Camera != null ) )
+        {
+            Camera.Update();
+        }
+    }
+    
     /// <summary>
     /// Updates the position of the camera based on the current state.
     /// This method is typically used for internal updates to reposition the camera

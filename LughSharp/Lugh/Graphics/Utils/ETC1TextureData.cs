@@ -128,7 +128,7 @@ public class ETC1TextureData : ITextureData
 
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
-                GdxApi.Bindings.TexImage2D( target,
+                GL.TexImage2D( target,
                                             0,
                                             pixmap.GLInternalPixelFormat,
                                             pixmap.Width,
@@ -151,7 +151,7 @@ public class ETC1TextureData : ITextureData
         {
             fixed ( void* ptr = &_data.CompressedData.BackingArray()[ 0 ] )
             {
-                GdxApi.Bindings.CompressedTexImage2D( target,
+                GL.CompressedTexImage2D( target,
                                                       0,
                                                       ETC1.ETC1_RGB8_OES,
                                                       Width,
@@ -163,7 +163,7 @@ public class ETC1TextureData : ITextureData
 
             if ( UseMipMaps )
             {
-                GdxApi.Bindings.GenerateMipmap( IGL.GL_TEXTURE_2D );
+                GL.GenerateMipmap( IGL.GL_TEXTURE_2D );
             }
         }
 

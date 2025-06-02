@@ -1359,7 +1359,7 @@ public class Stage : InputAdapter, IDisposable
             }
         }
 
-        GdxApi.Bindings.Enable( IGL.GL_BLEND );
+        GL.Enable( IGL.GL_BLEND );
 
         _debugShapes.ProjectionMatrix = Camera!.Combined;
         _debugShapes.Begin();
@@ -1368,7 +1368,7 @@ public class Stage : InputAdapter, IDisposable
 
         _debugShapes.End();
 
-        GdxApi.Bindings.Disable( IGL.GL_BLEND );
+        GL.Disable( IGL.GL_BLEND );
     }
 
     /// <summary>

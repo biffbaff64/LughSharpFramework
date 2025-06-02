@@ -43,6 +43,15 @@ namespace DesktopGLBackend.Window;
 [PublicAPI]
 public partial class DesktopGLWindow : IDisposable
 {
+    public GLFW.Window?                      GlfwWindow          { get; set; }
+    public IDesktopGLWindowListener?         WindowListener      { get; set; }
+    public IApplicationListener              ApplicationListener { get; set; }
+    public IDesktopGLInput                   Input               { get; set; } = null!;
+    public DesktopGLApplicationConfiguration AppConfig           { get; set; }
+    public DesktopGLGraphics                 Graphics            { get; set; } = null!;
+    public IDesktopGLApplicationBase         Application         { get; set; }
+    public bool                              ListenerInitialised { get; set; } = false;
+
     // ========================================================================
 
     private List< IRunnable.Runnable > _executedRunnables = [ ];
@@ -69,29 +78,6 @@ public partial class DesktopGLWindow : IDisposable
         AppConfig           = DesktopGLApplicationConfiguration.Copy( config );
         Application         = application;
     }
-
-    public GLFW.Window?                      GlfwWindow          { get; set; }
-    public IDesktopGLWindowListener?         WindowListener      { get; set; }
-    public IApplicationListener              ApplicationListener { get; set; }
-    public IDesktopGLInput                   Input               { get; set; } = null!;
-    public DesktopGLApplicationConfiguration AppConfig           { get; set; }
-    public DesktopGLGraphics                 Graphics            { get; set; } = null!;
-    public IDesktopGLApplicationBase         Application         { get; set; }
-    public bool                              ListenerInitialised { get; set; } = false;
-
-    /// <summary>
-    /// Return the window X position in logical coordinates. All monitors span a virtual
-    /// surface together. The coordinates are relative to the first monitor in the
-    /// virtual surface.
-    /// </summary>
-    public int PositionX => ( int )GetPosition().X;
-
-    /// <summary>
-    /// Return the window Y position in logical coordinates. All monitors span a virtual
-    /// surface together. The coordinates are relative to the first monitor in the
-    /// virtual surface.
-    /// </summary>
-    public int PositionY => ( int )GetPosition().Y;
 
     /// <summary>
     /// </summary>
@@ -222,6 +208,20 @@ public partial class DesktopGLWindow : IDisposable
         return Glfw.WindowShouldClose( GlfwWindow );
     }
 
+    /// <summary>
+    /// Return the window X position in logical coordinates. All monitors span a virtual
+    /// surface together. The coordinates are relative to the first monitor in the
+    /// virtual surface.
+    /// </summary>
+    public int PositionX => ( int )GetPosition().X;
+
+    /// <summary>
+    /// Return the window Y position in logical coordinates. All monitors span a virtual
+    /// surface together. The coordinates are relative to the first monitor in the
+    /// virtual surface.
+    /// </summary>
+    public int PositionY => ( int )GetPosition().Y;
+
     /// <inheritdoc cref="Glfw.SetWindowPos(GLFW.Window,int,int)" />
     public void SetPosition( int x, int y )
     {
@@ -276,6 +276,27 @@ public partial class DesktopGLWindow : IDisposable
     public void IconifyWindow()
     {
         Glfw.IconifyWindow( GlfwWindow );
+    }
+
+    /// <summary>
+    /// Sets the icon that will be used in the window's title bar. Has no effect in macOS,
+    /// which doesn't use window icons.
+    /// </summary>
+    /// <param name="images">
+    /// One or more images. The one closest to the system's desired size will be scaled.
+    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="PixelType.Format.RGBA8888" />
+    /// is preferred so the images will not have to be copied and converted.
+    /// <b>
+    /// The chosen image
+    /// is copied, and the provided Pixmaps are not disposed.
+    /// </b>
+    /// </param>
+    public void SetIcon( params Pixmap[] images )
+    {
+        if ( GlfwWindow != null )
+        {
+            SetIcon( GlfwWindow, images );
+        }
     }
 
     /// <summary>
@@ -346,27 +367,6 @@ public partial class DesktopGLWindow : IDisposable
                                   minHeight > -1 ? minHeight : -1,
                                   maxWidth > -1 ? maxWidth : -1,
                                   maxHeight > -1 ? maxHeight : -1 );
-    }
-
-    /// <summary>
-    /// Sets the icon that will be used in the window's title bar. Has no effect in macOS,
-    /// which doesn't use window icons.
-    /// </summary>
-    /// <param name="images">
-    /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="PixelType.Format.RGBA8888" />
-    /// is preferred so the images will not have to be copied and converted.
-    /// <b>
-    /// The chosen image
-    /// is copied, and the provided Pixmaps are not disposed.
-    /// </b>
-    /// </param>
-    public void SetIcon( params Pixmap[] images )
-    {
-        if ( GlfwWindow != null )
-        {
-            SetIcon( GlfwWindow, images );
-        }
     }
 
     /// <summary>

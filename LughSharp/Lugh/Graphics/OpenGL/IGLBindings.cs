@@ -1590,7 +1590,8 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="texture">Specifies the name of a texture.</param>
     void BindTexture( int target, uint texture );
-
+    void BindTexture( TextureTarget target, uint texture );
+    
     /// <summary>
     /// Delete named textures.
     /// </summary>

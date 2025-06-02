@@ -203,7 +203,7 @@ public class FileTextureArrayData : ITextureArrayData
                 {
                     fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
                     {
-                        GdxApi.Bindings.TexSubImage3D( IGL.GL_TEXTURE_2D_ARRAY,
+                        GL.TexSubImage3D( IGL.GL_TEXTURE_2D_ARRAY,
                                                        0,
                                                        0,
                                                        0,
@@ -219,7 +219,7 @@ public class FileTextureArrayData : ITextureArrayData
 
                 if ( _useMipMaps )
                 {
-                    GdxApi.Bindings.GenerateMipmap( IGL.GL_TEXTURE_2D_ARRAY );
+                    GL.GenerateMipmap( IGL.GL_TEXTURE_2D_ARRAY );
                 }
 
                 if ( disposePixmap )

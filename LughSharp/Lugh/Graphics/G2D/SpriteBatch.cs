@@ -142,19 +142,19 @@ public class SpriteBatch : IBatch
     {
         GLUtils.CheckOpenGLContext();
 
-        _vao = GdxApi.Bindings.GenVertexArray();
-        _vbo = GdxApi.Bindings.GenBuffer();
+        _vao = GL.GenVertexArray();
+        _vbo = GL.GenBuffer();
 
         // Bind the VAO to start recording vertex attribute setups
-        GdxApi.Bindings.BindVertexArray( _vao );
+        GL.BindVertexArray( _vao );
 
         // Bind the VBO and allocate initial buffer storage
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
         Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
 
         fixed ( float* ptr = Vertices )
         {
-            GdxApi.Bindings.BufferData( ( int )BufferTarget.ArrayBuffer,
+            GL.BufferData( ( int )BufferTarget.ArrayBuffer,
                                         Vertices.Length * sizeof( float ),
                                         ( IntPtr )ptr,
                                         ( int )BufferUsageHint.DynamicDraw );
@@ -163,7 +163,7 @@ public class SpriteBatch : IBatch
         // Determine the vertex data type based on OpenGL version.
         // OpenGL 3.0 and later support Vertex Buffer Objects (VBOs) with Vertex Array Objects (VAOs),
         // which are more efficient. Earlier versions use Vertex Arrays.
-        var vertexDataType = GdxApi.Bindings.GetOpenGLVersion().major >= 3
+        var vertexDataType = GL.GetOpenGLVersion().major >= 3
             ? VertexDataType.VertexBufferObjectWithVAO
             : VertexDataType.VertexArray;
 
@@ -231,8 +231,8 @@ public class SpriteBatch : IBatch
             throw new NullReferenceException( "Shader is null" );
         }
 
-        _originalDepthMask = GdxApi.Bindings.IsEnabled( ( int )EnableCap.DepthTest );
-        GdxApi.Bindings.DepthMask( depthMaskEnabled );
+        _originalDepthMask = GL.IsEnabled( ( int )EnableCap.DepthTest );
+        GL.DepthMask( depthMaskEnabled );
 
         _shader.Bind();
         SetupMatrices();
@@ -264,11 +264,11 @@ public class SpriteBatch : IBatch
         LastTexture = null;
         IsDrawing   = false;
 
-        GdxApi.Bindings.DepthMask( _originalDepthMask );
+        GL.DepthMask( _originalDepthMask );
 
         if ( IsBlendingEnabled )
         {
-            GdxApi.Bindings.Disable( IGL.GL_BLEND );
+            GL.Disable( IGL.GL_BLEND );
         }
 
         Array.Clear( Vertices, 0, Idx );
@@ -326,7 +326,7 @@ public class SpriteBatch : IBatch
         }
 
         // Bind the texture to the current texture unit.
-        GdxApi.Bindings.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
+        GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
         LastTexture.Bind();
 
         SetupVertexAttributes( _shader );
@@ -357,16 +357,16 @@ public class SpriteBatch : IBatch
         // Set up blending.
         if ( BlendingDisabled )
         {
-            GdxApi.Bindings.Disable( IGL.GL_BLEND );
+            GL.Disable( IGL.GL_BLEND );
         }
         else
         {
-            GdxApi.Bindings.Enable( IGL.GL_BLEND );
+            GL.Enable( IGL.GL_BLEND );
 
             // Set the blend function if specified.
             if ( BlendSrcFunc != -1 )
             {
-                GdxApi.Bindings.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
+                GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
             }
         }
 
@@ -500,7 +500,7 @@ public class SpriteBatch : IBatch
 
         var currentProgram = new int[ 1 ];
 
-        GdxApi.Bindings.GetIntegerv( IGL.GL_CURRENT_PROGRAM, ref currentProgram );
+        GL.GetIntegerv( IGL.GL_CURRENT_PROGRAM, ref currentProgram );
 
         if ( currentProgram[ 0 ] != _shader?.ShaderProgramHandle )
         {
@@ -509,8 +509,8 @@ public class SpriteBatch : IBatch
 
         // --------------------------------------------------------------------
 
-        GdxApi.Bindings.BindVertexArray( _vao );
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+        GL.BindVertexArray( _vao );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
 
         const int stride         = VertexConstants.VERTEX_SIZE_BYTES;
         const int positionOffset = VertexConstants.POSITION_OFFSET;
@@ -649,7 +649,7 @@ public class SpriteBatch : IBatch
     {
         GdxRuntimeException.ThrowIfNull( _shader );
 
-        _combinedMatrixLocation = GdxApi.Bindings.GetUniformLocation( _shader.ShaderProgramHandle,
+        _combinedMatrixLocation = GL.GetUniformLocation( _shader.ShaderProgramHandle,
                                                                       "u_combinedMatrix" );
     }
 
@@ -666,7 +666,7 @@ public class SpriteBatch : IBatch
                                      "out vec4 v_colorPacked;\n" +
                                      "out vec2 v_texCoords;\n" +
                                      "void main() {\n" +
-                                     "    v_colorPacked = " + ShaderProgram.POSITION_ATTRIBUTE +";\n" +
+                                     "    v_colorPacked = " + ShaderProgram.COLOR_ATTRIBUTE +";\n" +
                                      "    v_colorPacked.a = v_colorPacked.a * (255.0/254.0);\n" +
                                      "    v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
                                      "    gl_Position = u_combinedMatrix * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
@@ -746,7 +746,7 @@ public class SpriteBatch : IBatch
 
         fixed ( int* ptr = &maxTextureUnits[ 0 ] )
         {
-            GdxApi.Bindings.GetIntegerv( ( int )TextureLimits.MaxTextureImageUnits, ptr );
+            GL.GetIntegerv( ( int )TextureLimits.MaxTextureImageUnits, ptr );
         }
 
         if ( maxTextureUnits[ 0 ] < 32 )
@@ -840,8 +840,8 @@ public class SpriteBatch : IBatch
     /// </summary>
     private static void UnbindBuffers()
     {
-        GdxApi.Bindings.BindVertexArray( 0 );
-        GdxApi.Bindings.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+        GL.BindVertexArray( 0 );
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
     }
 
     // ========================================================================
