@@ -22,7 +22,28 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils;
+
 namespace LughSharp.Lugh.Graphics.Utils;
+
+[PublicAPI]
+public enum HdpiMode
+{
+    /// <summary>
+    /// Mouse coordinates, <see cref="IGraphics.Width" /> and <see cref="IGraphics.Height" />
+    /// will return logical coordinates according to the system defined HDPI scaling.
+    /// Rendering will be performed to a backbuffer at raw resolution. Use <see cref="HdpiUtils" />
+    /// when calling <see cref="OpenGL.GLBindings.glScissor" /> or <see cref="OpenGL.GLBindings.glViewport" />
+    /// which expect raw coordinates.
+    /// </summary>
+    Logical,
+    /// <summary>
+    /// Mouse coordinates, <see cref="IGraphics.Width" /> and <see cref="IGraphics.Height" />
+    /// will return raw pixel coordinates irrespective of the system defined HDPI scaling.
+    /// </summary>
+
+    Pixels,
+}
 
 /// <summary>
 /// To deal with HDPI monitors properly, use the glViewport and glScissor functions
@@ -42,11 +63,11 @@ public class HdpiUtils
     /// glScissor calls. This function can be used to ignore the default behavior, for
     /// example when rendering a UI stage to an off-screen framebuffer:
     /// <code>
-    /// HdpiUtils.setMode(HdpiMode.Pixels);
-    /// fb.begin();
-    /// stage.draw();
-    /// fb.end();
-    /// HdpiUtils.setMode(HdpiMode.Logical);
+    ///     HdpiUtils.SetMode(HdpiMode.Pixels);
+    ///     fb.Begin();
+    ///     stage.Draw();
+    ///     fb.End();
+    ///     HdpiUtils.SetMode(HdpiMode.Logical);
     /// </code>
     /// </summary>
     /// <param name="mode">
@@ -90,15 +111,15 @@ public class HdpiUtils
              && ( ( GdxApi.Graphics.Width != GdxApi.Graphics.BackBufferWidth )
                   || ( GdxApi.Graphics.Height != GdxApi.Graphics.BackBufferHeight ) ) )
         {
-            GdxApi.Graphics.SetupViewport( ToBackBufferX( x ),
+            GdxApi.Graphics.UpdateViewport( ToBackBufferX( x ),
                                            ToBackBufferY( y ),
                                            ToBackBufferX( width ),
                                            ToBackBufferY( height ),
-                                          3 );
+                                           3 );
         }
         else
         {
-            GdxApi.Graphics.SetupViewport( x, y, width, height, 4 );
+            GdxApi.Graphics.UpdateViewport( x, y, width, height, 4 );
         }
     }
 

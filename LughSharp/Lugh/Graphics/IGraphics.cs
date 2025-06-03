@@ -417,14 +417,14 @@ public interface IGraphics
     void SetResizable( bool resizable );
 
     /// <summary>
-    /// Sets up the viewport with the specified dimensions and coordinates.
+    /// Updates the viewport with the specified dimensions and coordinates.
     /// </summary>
     /// <param name="x">The x-coordinate of the viewport.</param>
     /// <param name="y">The y-coordinate of the viewport.</param>
     /// <param name="width">The width of the viewport.</param>
     /// <param name="height">The height of the viewport.</param>
     /// <param name="source"></param>
-    void SetupViewport( int x, int y, int width, int height, int source );
+    void UpdateViewport( int x, int y, int width, int height, int source = 0 );
 
     /// <summary>
     /// Sets whether VSync (vertical synchronization) should be enabled.

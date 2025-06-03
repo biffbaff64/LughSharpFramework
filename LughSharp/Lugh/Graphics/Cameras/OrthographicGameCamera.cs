@@ -306,7 +306,15 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
             return;
         }
 
-        Viewport = new StretchViewport( Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
+        Viewport = new StretchViewport( ( Camera.ViewportWidth * PPM ),
+                                        ( Camera.ViewportHeight * PPM ),
+                                        Camera );
+
+        Viewport.SetScreenBounds( ( int )Camera.Position.X,
+                                  ( int )Camera.Position.Y,
+                                  ( int )( Camera.ViewportWidth * PPM ),
+                                  ( int )( Camera.ViewportHeight * PPM ) );
+        
         Viewport.Apply();
     }
 
@@ -329,6 +337,12 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         }
 
         Viewport = new FitViewport( Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
+
+        Viewport.SetScreenBounds( ( int )Camera.Position.X,
+                                  ( int )Camera.Position.Y,
+                                  ( int )( Camera.ViewportWidth * PPM ),
+                                  ( int )( Camera.ViewportHeight * PPM ) );
+        
         Viewport.Apply();
     }
 

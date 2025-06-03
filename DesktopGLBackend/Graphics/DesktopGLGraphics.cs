@@ -125,7 +125,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     {
         if ( ( GLWindow == null ) || ( GLWindow.GlfwWindow == null ) )
         {
-            return;
+            throw new GdxRuntimeException( "GLWindow ( or GlfwWindow ) is null!" );
         }
 
         Glfw.GetFramebufferSize( GLWindow.GlfwWindow, out var tmpWidth, out var tmpHeight );
@@ -134,7 +134,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         BackBufferHeight = tmpHeight;
 
         Glfw.GetWindowSize( GLWindow.GlfwWindow, out tmpWidth, out tmpHeight );
-
+        
         LogicalWidth  = tmpWidth;
         LogicalHeight = tmpHeight;
 
@@ -426,9 +426,9 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     }
 
     /// <inheritdoc />
-    public override void SetupViewport( int x, int y, int width, int height, int source = 0 )
+    public override void UpdateViewport( int x, int y, int width, int height, int source = 0 )
     {
-        #if DEBUG
+        #if DEBUG_VIEWPORT
         if ( source > 0 )
         {
             Logger.Debug( $"Setting viewport from source: {source}" );
@@ -437,9 +437,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         
         if ( ( width == 0 ) || ( height == 0 ) )
         {
-            Logger.Warning( "Viewport dimensions must be greater than zero!" );
-            
-            return;
+            throw new GdxRuntimeException( "Viewport dimensions must be greater than zero!" );
         }
 
         // Set the viewport
@@ -450,7 +448,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
 
         GL.GetIntegerv( IGL.GL_VIEWPORT, ref viewport );
 
-        #if DEBUG
+        #if DEBUG_VIEWPORT
         Logger.Debug( $"\nRequested: [{x}, {y}, {width}, {height}]"
                       + $"\nActual   : [{viewport[ 0 ]}, {viewport[ 1 ]}, "
                       + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
@@ -496,7 +494,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
 
         GLWindow.MakeCurrent();
 
-        SetupViewport( 0, 0, BackBufferWidth, BackBufferHeight, 1);
+        UpdateViewport( 0, 0, BackBufferWidth, BackBufferHeight, 1);
 
         GLWindow.ApplicationListener.Resize( Width, Height );
         GLWindow.ApplicationListener.Update();

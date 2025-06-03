@@ -80,7 +80,13 @@ public partial class DesktopGLWindow : IDisposable
     }
 
     /// <summary>
+    /// Creates a DesktopGLWindow by initializing the specified GLFW window, setting
+    /// up the input and graphics components, and configuring GLVersion and callback
+    /// behaviors.
     /// </summary>
+    /// <param name="window">
+    /// The GLFW window instance to initialize and associate with this DesktopGLWindow.
+    /// </param>
     public void Create( GLFW.Window window )
     {
         GlfwWindow         = window;
@@ -257,8 +263,6 @@ public partial class DesktopGLWindow : IDisposable
         }
     }
 
-    // ========================================================================
-
     /// <summary>
     /// Closes this window and pauses and disposes the associated <see cref="IApplicationListener" />.
     /// This function sets the value of the close flag of the specified window. This can be used to
@@ -328,8 +332,6 @@ public partial class DesktopGLWindow : IDisposable
     {
         Glfw.FocusWindow( GlfwWindow );
     }
-
-    // ========================================================================
 
     /// <summary>
     /// Sets the windows title.

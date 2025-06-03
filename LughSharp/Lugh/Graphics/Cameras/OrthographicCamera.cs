@@ -149,7 +149,7 @@ public class OrthographicCamera : Camera
             Matrix4.Invert( InvProjectionView.Val );
             Frustrum.Update( InvProjectionView );
             
-            GdxApi.Graphics.SetupViewport( ( int )Position.X,
+            GdxApi.Graphics.UpdateViewport( ( int )Position.X,
                                            ( int )Position.Y,
                                            ( int )ViewportWidth,
                                            ( int )ViewportHeight,
