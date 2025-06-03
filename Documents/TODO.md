@@ -409,11 +409,16 @@ GRAPHICS/OPENGL/ENUMS
     - DONE - DONE - BlendingFactor
     - DONE - DONE - BufferEnums
     - DONE - DONE - EnableCap
+    - DONE - DONE - GetPName
     - DONE - DONE - LogicOp
+    - DONE - DONE - PixelEnums
+    - DONE - DONE - PrimitiveType
     - DONE - DONE - ProgramProperty
     - DONE - DONE - ShaderEnums
     - DONE - DONE - StringName
     - DONE - DONE - TextureLimits
+    - DONE - DONE - TextureParameterName
+    - DONE - DONE - TextureTarget
     - DONE - DONE - TextureUnit
     - DONE - DONE - TextureWrapMode
     - DONE - DONE - VertexAttribPointerType

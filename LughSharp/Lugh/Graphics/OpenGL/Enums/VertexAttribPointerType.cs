@@ -24,6 +24,7 @@
 
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
+[PublicAPI]
 public enum VertexAttribPointerType
 {
     Byte          = IGL.GL_BYTE,

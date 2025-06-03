@@ -25,6 +25,7 @@
 using System.Numerics;
 using System.Text;
 
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -172,11 +173,11 @@ public unsafe partial class GLBindings : IGLBindings
                                  IntPtr userParam )
     {
         Logger.Warning( $"GL CALLBACK: " +
-                      $"{( type == IGL.GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" )} " +
-                      $"source = {source:X}, " +
-                      $"type = {type:X}, " +
-                      $"severity = {severity:X}, " +
-                      $"message = {BytePointerToString.Convert( message )}\n" );
+                        $"{( type == IGL.GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" )} " +
+                        $"source = {source:X}, " +
+                        $"type = {type:X}, " +
+                        $"severity = {severity:X}, " +
+                        $"message = {BytePointerToString.Convert( message )}\n" );
     }
 
     // ========================================================================

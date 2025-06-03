@@ -63,7 +63,7 @@ public class SpriteBatch : IBatch
     // ========================================================================
 
     protected Texture? LastTexture { get; set; } = null;
-    protected float[]  Vertices    { get; set; }
+    protected float[]? Vertices    { get; set; }
     protected int      Idx         { get; set; } = 0;
 
     // ========================================================================
@@ -72,25 +72,30 @@ public class SpriteBatch : IBatch
     private const int INDICES_PER_SPRITE  = 6;     // Number of indices per sprite (two triangles)
     private const int MAX_VERTEX_INDEX    = 32767; //
     private const int MAX_SPRITES         = 8191;  //
+    private const int MAX_QUADS           = 100;   //
 
     // ========================================================================
 
     private readonly Color _color = Color.Red;
-    private readonly int   _maxTextureUnits;
 
     private Texture?       _lastSuccessfulTexture = null;
     private ShaderProgram? _shader;
     private Mesh?          _mesh;
 
-    private int      _nullTextureCount    = 0;
-    private int      _currentTextureIndex = 0;
-    private bool     _ownsShader;
+    private int  _maxTextureUnits;
+    private int  _nullTextureCount    = 0;
+    private int  _currentTextureIndex = 0;
+    private bool _ownsShader;
+    private bool _originalDepthMask;
+    private int  _maxVertices;
+    private int  _combinedMatrixLocation;
+
+    private uint _vao;
+    private uint _vbo;
+    private uint _ebo;
+
     private float[]? _vertices;
-    private bool     _originalDepthMask;
-    private int      _maxVertices;
-    private int      _combinedMatrixLocation;
-    private uint     _vao;
-    private uint     _vbo;
+    private uint[]?  _indices;
 
     // ========================================================================
 
@@ -113,7 +118,7 @@ public class SpriteBatch : IBatch
     /// <param name="defaultShader">
     /// The default shader to use. This is not owned by the SpriteBatch and must be disposed separately.
     /// </param>
-    protected SpriteBatch( int size, ShaderProgram? defaultShader = null )
+    protected SpriteBatch( int size = MAX_QUADS, ShaderProgram? defaultShader = null )
     {
         // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
         if ( size > MAX_SPRITES )
@@ -121,10 +126,7 @@ public class SpriteBatch : IBatch
             throw new ArgumentException( $"Can't have more than {MAX_SPRITES} sprites per batch: {size}" );
         }
 
-        IsDrawing        = false;
-        Vertices         = new float[ size * VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ];
-        _maxVertices     = size * VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
-        _maxTextureUnits = QueryMaxSupportedTextureUnits();
+        IsDrawing = false;
 
         Initialise( size, defaultShader );
     }
@@ -142,22 +144,47 @@ public class SpriteBatch : IBatch
     {
         GLUtils.CheckOpenGLContext();
 
-        _vao = GL.GenVertexArray();
-        _vbo = GL.GenBuffer();
+        _maxVertices     = size * VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
+        _maxTextureUnits = QueryMaxSupportedTextureUnits();
 
-        // Bind the VAO to start recording vertex attribute setups
+        // Create and bind a Vertex Array Object (VAO) first
+        _vao = GL.GenVertexArray();
         GL.BindVertexArray( _vao );
 
-        // Bind the VBO and allocate initial buffer storage
+        // Create and bind the VBO and allocate initial buffer storage
+        _vbo = GL.GenBuffer();
         GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
         Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
 
         fixed ( float* ptr = Vertices )
         {
             GL.BufferData( ( int )BufferTarget.ArrayBuffer,
-                                        Vertices.Length * sizeof( float ),
-                                        ( IntPtr )ptr,
-                                        ( int )BufferUsageHint.DynamicDraw );
+                           Vertices.Length * sizeof( float ),
+                           ( IntPtr )ptr,
+                           ( int )BufferUsageHint.DynamicDraw );
+        }
+
+        _indices = new uint[ size * INDICES_PER_SPRITE ];
+
+        for ( uint i = 0, vertex = 0; i < _indices.Length; i += INDICES_PER_SPRITE, vertex += 4 )
+        {
+            _indices[ i + 0 ] = vertex + 0;
+            _indices[ i + 1 ] = vertex + 1;
+            _indices[ i + 2 ] = vertex + 2;
+            _indices[ i + 3 ] = vertex + 2;
+            _indices[ i + 4 ] = vertex + 1;
+            _indices[ i + 5 ] = vertex + 3;
+        }
+
+        _ebo = GL.GenBuffer();
+        GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo );
+
+        fixed ( uint* ptr = _indices )
+        {
+            GL.BufferData( ( int )BufferTarget.ElementArrayBuffer,
+                           _indices.Length * sizeof( uint ),
+                           ( IntPtr )ptr,
+                           ( int )BufferUsageHint.StaticDraw );
         }
 
         // Determine the vertex data type based on OpenGL version.
@@ -650,7 +677,7 @@ public class SpriteBatch : IBatch
         GdxRuntimeException.ThrowIfNull( _shader );
 
         _combinedMatrixLocation = GL.GetUniformLocation( _shader.ShaderProgramHandle,
-                                                                      "u_combinedMatrix" );
+                                                         "u_combinedMatrix" );
     }
 
     /// <summary>
@@ -666,7 +693,7 @@ public class SpriteBatch : IBatch
                                      "out vec4 v_colorPacked;\n" +
                                      "out vec2 v_texCoords;\n" +
                                      "void main() {\n" +
-                                     "    v_colorPacked = " + ShaderProgram.COLOR_ATTRIBUTE +";\n" +
+                                     "    v_colorPacked = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
                                      "    v_colorPacked.a = v_colorPacked.a * (255.0/254.0);\n" +
                                      "    v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
                                      "    gl_Position = u_combinedMatrix * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
@@ -1550,6 +1577,65 @@ public class SpriteBatch : IBatch
                      x2, y2, Color.A, Color.B, Color.G, Color.R, region.U, region.V,
                      x3, y3, Color.A, Color.B, Color.G, Color.R, region.U2, region.V,
                      x4, y4, Color.A, Color.B, Color.G, Color.R, region.U2, region.V2 );
+    }
+
+    public void Draw( uint? textureId, Rectangle destRect, Color color )
+    {
+        if ( textureId.HasValue )
+        {
+            GL.BindTexture( TextureTarget.Texture2D, textureId.Value );
+        }
+
+        // Set up vertex data for a quad
+        float x      = destRect.X;
+        float y      = destRect.Y;
+        float width  = destRect.Width;
+        float height = destRect.Height;
+
+        // Convert color to normalized float values (0.0 to 1.0)
+        var r = color.R / 255f;
+        var g = color.G / 255f;
+        var b = color.B / 255f;
+        var a = color.A / 255f;
+
+        // Define quad vertices with positions and colors
+        float[] quadVertices =
+        [
+            // Position     // Color
+            x, y, r, g, b, a,                  // Top-left
+            x + width, y, r, g, b, a,          // Top-right
+            x, y + height, r, g, b, a,         // Bottom-left
+            x + width, y + height, r, g, b, a, // Bottom-right
+        ];
+
+        // Update VBO with new vertex data
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+        GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, /*quadVertices.Length * sizeof( float ),*/ quadVertices );
+
+        // Set up vertex attributes
+        // Update vertex attribute pointers to use VertexConstants
+        Gdx.GL.VertexAttribPointer( 0, VertexConstants.POSITION_COMPONENTS,
+                                    ( int )VertexAttribPointerType.Float, false,
+                                    VertexConstants.VERTEX_SIZE_BYTES,
+                                    ( uint )VertexConstants.POSITION_OFFSET * sizeof( float ) );
+
+        Gdx.GL.VertexAttribPointer( 1, VertexConstants.COLOR_COMPONENTS,
+                                    ( int )VertexAttribPointerType.Float, false,
+                                    VertexConstants.VERTEX_SIZE_BYTES,
+                                    ( uint )VertexConstants.COLOR_OFFSET * sizeof( float ) );
+
+        Gdx.GL.VertexAttribPointer( 2, VertexConstants.TEXCOORD_COMPONENTS,
+                                    ( int )VertexAttribPointerType.Float, false,
+                                    VertexConstants.VERTEX_SIZE_BYTES,
+                                    ( uint )VertexConstants.TEXCOORD_OFFSET * sizeof( float ) );
+
+        // Draw the quad
+        GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo );
+        GL.DrawElements( ( int )PrimitiveType.Triangles, 6, ( int )DrawElementsType.UnsignedInt, 0 );
+
+        // Cleanup
+        GL.DisableVertexAttribArray( 0 );
+        GL.DisableVertexAttribArray( 1 );
     }
 
     #endregion Drawing methods

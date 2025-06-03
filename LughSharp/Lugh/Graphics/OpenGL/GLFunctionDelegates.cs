@@ -710,6 +710,9 @@ public partial class GLBindings
     private PFNGLVIEWPORTINDEXEDFVPROC                           _glViewportIndexedfv;
     private PFNGLWAITSYNCPROC                                    _glWaitSync;
 
+    // ========================================================================
+    // ========================================================================
+
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     public unsafe delegate void GLDEBUGPROC( GLenum source,
                                              GLenum type,

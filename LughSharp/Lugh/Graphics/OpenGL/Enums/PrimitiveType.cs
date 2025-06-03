@@ -22,43 +22,20 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.Utils;
+namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public class VertexConstants
+public enum PrimitiveType
 {
-    /// <summary>
-    /// Enumerates the various types of vertex attribute usage
-    /// in a graphics application.
-    /// </summary>
-    [PublicAPI]
-    [Flags]
-    public enum Usage
-    {
-        POSITION            = 1,
-        COLOR_UNPACKED      = 2,
-        COLOR_PACKED        = 4,
-        NORMAL              = 8,
-        TEXTURE_COORDINATES = 16,
-        GENERIC             = 32,
-        BONE_WEIGHT         = 64,
-        TANGENT             = 128,
-        BI_NORMAL           = 256,
-    }
-
-    public const int POSITION_COMPONENTS = 2;
-    public const int COLOR_COMPONENTS    = 4;
-    public const int TEXCOORD_COMPONENTS = 2;
-    public const int NORMAL_COMPONENTS   = 3;
-
-    // Number of floats per vertex (x, y, color, u, v)
-    public const int VERTEX_SIZE = POSITION_COMPONENTS + COLOR_COMPONENTS + TEXCOORD_COMPONENTS;
-
-    // Vertex Size (in bytes)
-    public const int VERTEX_SIZE_BYTES = VERTEX_SIZE * sizeof( float );
-
-    // Vertex Offsets (in floats)
-    public const int POSITION_OFFSET = 0;
-    public const int COLOR_OFFSET    = POSITION_OFFSET + POSITION_COMPONENTS;
-    public const int TEXCOORD_OFFSET = COLOR_OFFSET + COLOR_COMPONENTS;
+    Points        = 0x0000,
+    Lines         = 0x0001,
+    LineLoop      = 0x0002,
+    LineStrip     = 0x0003,
+    Triangles     = 0x0004,
+    TriangleStrip = 0x0005,
+    TriangleFan   = 0x0006,
+    Quads         = 0x0007,
 }
+
+// ========================================================================
+// ========================================================================
