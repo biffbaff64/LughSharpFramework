@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// A Batch is used to draw 2D rectangles that reference a texture (region). The class will
 /// batch the drawing commands and optimize them for processing by the GPU.
 /// <para>
-/// To draw something with a Batch one has to first call the <see cref="IBatch.Begin()" />
+/// To draw something with a Batch one has to first call the <see cref="IBatch.Begin" />
 /// method which will setup appropriate render states. When you are done with drawing you
 /// have to call <see cref="IBatch.End()" /> which will actually draw the things you specified.
 /// </para>
@@ -62,7 +62,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// </para>
 /// </summary>
 [PublicAPI]
-public interface IBatch : IDisposable
+public interface IBatch
 {
     const int X1 = 0;
     const int Y1 = 1;

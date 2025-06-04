@@ -26,6 +26,8 @@
 global using System.Drawing;
 global using System.Drawing.Imaging;
 
+global using System.Numerics;
+
 // ============================================================================
 
 global using System.Text.Json;

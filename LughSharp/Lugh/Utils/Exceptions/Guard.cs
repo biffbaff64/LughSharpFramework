@@ -172,7 +172,7 @@ public class Guard
     /// <summary>
     /// Throws ArgumentOutOfRangeException if argumentValue is less than or equal to minimum.
     /// </summary>
-    public static void GreaterThan( int argumentValue, int minimum,
+    public static void NotLessThan( int argumentValue, int minimum,
                                     [CallerArgumentExpression( nameof( argumentValue ) )]
                                     string argumentName = "" )
     {
@@ -185,13 +185,26 @@ public class Guard
     /// <summary>
     /// Throws ArgumentOutOfRangeException if argumentValue is greater than or equal to maximum.
     /// </summary>
-    public static void LessThan( int argumentValue, int maximum,
+    public static void NotGreaterThan( int argumentValue, int maximum,
                                  [CallerArgumentExpression( nameof( argumentValue ) )]
                                  string argumentName = "" )
     {
         if ( argumentValue >= maximum )
         {
             throw new ArgumentOutOfRangeException( argumentName, $"Value {argumentValue} must be less than maximum {maximum}" );
+        }
+    }
+
+    /// <summary>
+    /// Throws ArgumentOutOfRangeException if argumentValue is negative.
+    /// </summary>
+    public static void ThrowIfNegative( int argumentValue,
+                                        [CallerArgumentExpression( nameof( argumentValue ) )]
+                                        string argumentName = "" )
+    {
+        if ( argumentValue < 0 )
+        {
+            throw new ArgumentOutOfRangeException( argumentName, $"Value {argumentValue} must be greater than minimum {0}" );
         }
     }
 

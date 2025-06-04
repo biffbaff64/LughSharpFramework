@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.CompilerServices;
+
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Exception = System.Exception;
@@ -45,6 +47,14 @@ public class Vector3 : IVector< Vector3 >
     /// Sets X, Y, and Z to zero.
     /// </summary>
     public Vector3() : this( 0, 0, 0 )
+    {
+    }
+
+    /// <summary>
+    /// Constructs a new vector using the supplied value for all components.
+    /// </summary>
+    /// <param name="value"> The value to use for X, Y, and Z. </param>
+    public Vector3( float value ) : this( value, value, value )
     {
     }
 
@@ -826,21 +836,129 @@ public class Vector3 : IVector< Vector3 >
 
     // ========================================================================
 
+    /// <summary>Adds two vectors together.</summary>
+    /// <param name="left">The first vector to add.</param>
+    /// <param name="right">The second vector to add.</param>
+    /// <returns>The summed vector.</returns>
+    /// <remarks>The <see cref="op_Addition" /> method defines the addition operation for <see cref="Vector3" /> objects.</remarks>
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector3 operator +( Vector3 left, Vector3 right )
     {
-        left.X += right.X;
-        left.Y += right.Y;
-        left.Z += right.Z;
-
-        return left;
+        return new Vector3(
+                           left.X + right.X,
+                           left.Y + right.Y,
+                           left.Z + right.Z
+                          );
     }
 
+    /// <summary>Divides the first vector by the second.</summary>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>The vector that results from dividing <paramref name="left" /> by <paramref name="right" />.</returns>
+    /// <remarks>The <see cref="Vector3.op_Division" /> method defines the division operation for <see cref="Vector3" /> objects.</remarks>
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
+    public static Vector3 operator /( Vector3 left, Vector3 right )
+    {
+        return new Vector3(
+                           left.X / right.X,
+                           left.Y / right.Y,
+                           left.Z / right.Z
+                          );
+    }
+
+    /// <summary>Divides the specified vector by a specified scalar value.</summary>
+    /// <param name="value1">The vector.</param>
+    /// <param name="value2">The scalar value.</param>
+    /// <returns>The result of the division.</returns>
+    /// <remarks>The <see cref="Vector3.op_Division" /> method defines the division operation for <see cref="Vector3" /> objects.</remarks>
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
+    public static Vector3 operator /( Vector3 value1, float value2 )
+    {
+        return value1 / new Vector3( value2 );
+    }
+
+    /// <summary>Returns a value that indicates whether each pair of elements in two specified vectors is equal.</summary>
+    /// <param name="left">The first vector to compare.</param>
+    /// <param name="right">The second vector to compare.</param>
+    /// <returns><see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are equal; otherwise, <see langword="false" />.</returns>
+    /// <remarks>Two <see cref="Vector3" /> objects are equal if each element in <paramref name="left" /> is equal to the corresponding element in <paramref name="right" />.</remarks>
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
+    public static bool operator ==( Vector3 left, Vector3 right )
+    {
+        return ( left.X == right.X )
+               && ( left.Y == right.Y )
+               && ( left.Z == right.Z );
+    }
+
+    /// <summary>Returns a value that indicates whether two specified vectors are not equal.</summary>
+    /// <param name="left">The first vector to compare.</param>
+    /// <param name="right">The second vector to compare.</param>
+    /// <returns><see langword="true" /> if <paramref name="left" /> and <paramref name="right" /> are not equal; otherwise, <see langword="false" />.</returns>
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
+    public static bool operator !=( Vector3 left, Vector3 right )
+    {
+        return !( left == right );
+    }
+
+    /// <summary>Returns a new vector whose values are the product of each pair of elements in two specified vectors.</summary>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>The element-wise product vector.</returns>
+    /// <remarks>The <see cref="Vector3.op_Multiply" /> method defines the multiplication operation for <see cref="Vector3" /> objects.</remarks>
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
+    public static Vector3 operator *( Vector3 left, Vector3 right )
+    {
+        return new Vector3(
+                           left.X * right.X,
+                           left.Y * right.Y,
+                           left.Z * right.Z
+                          );
+    }
+
+    /// <summary>Multiplies the specified vector by the specified scalar value.</summary>
+    /// <param name="left">The vector.</param>
+    /// <param name="right">The scalar value.</param>
+    /// <returns>The scaled vector.</returns>
+    /// <remarks>The <see cref="Vector3.op_Multiply" /> method defines the multiplication operation for <see cref="Vector3" /> objects.</remarks>
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
+    public static Vector3 operator *( Vector3 left, float right )
+    {
+        return left * new Vector3( right );
+    }
+
+    /// <summary>Multiplies the scalar value by the specified vector.</summary>
+    /// <param name="left">The vector.</param>
+    /// <param name="right">The scalar value.</param>
+    /// <returns>The scaled vector.</returns>
+    /// <remarks>The <see cref="Vector3.op_Multiply" /> method defines the multiplication operation for <see cref="Vector3" /> objects.</remarks>
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
+    public static Vector3 operator *( float left, Vector3 right )
+    {
+        return right * left;
+    }
+
+    /// <summary>Subtracts the second vector from the first.</summary>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>The vector that results from subtracting <paramref name="right" /> from <paramref name="left" />.</returns>
+    /// <remarks>The <see cref="op_Subtraction" /> method defines the subtraction operation for <see cref="Vector3" /> objects.</remarks>
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector3 operator -( Vector3 left, Vector3 right )
     {
-        left.X -= right.X;
-        left.Y -= right.Y;
-        left.Z -= right.Z;
+        return new Vector3(
+                           left.X - right.X,
+                           left.Y - right.Y,
+                           left.Z - right.Z
+                          );
+    }
 
-        return left;
+    /// <summary>Negates the specified vector.</summary>
+    /// <param name="value">The vector to negate.</param>
+    /// <returns>The negated vector.</returns>
+    /// <remarks>The <see cref="op_UnaryNegation" /> method defines the unary negation operation for <see cref="Vector3" /> objects.</remarks>
+    [MethodImpl( MethodImplOptions.AggressiveInlining )]
+    public static Vector3 operator -( Vector3 value )
+    {
+        return Zero - value;
     }
 }

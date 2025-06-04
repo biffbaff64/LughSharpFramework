@@ -24,7 +24,15 @@
 
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
-public enum BlendingFactor
+[PublicAPI]
+public enum BlendingFactorSrc : int
+{
+    Zero = IGL.GL_ZERO,
+    One  = IGL.GL_ONE,
+}
+
+[PublicAPI]
+public enum BlendingFactor : int
 {
     SrcColor         = IGL.GL_SRC_COLOR,
     OneMinusSrcColor = IGL.GL_ONE_MINUS_SRC_COLOR,

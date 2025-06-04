@@ -43,7 +43,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// It minimizes the number of draw calls by buffering sprite data and rendering all at once.
 /// </summary>
 [PublicAPI]
-public class SpriteBatch : IBatch
+public class SpriteBatch : IBatch, IDisposable
 {
     public bool    BlendingDisabled  { get; set; }         = false;
     public float   InvTexHeight      { get; set; }         = 0;
@@ -58,13 +58,17 @@ public class SpriteBatch : IBatch
     public int     BlendDstFunc      { get; private set; } = ( int )BlendingFactor.DstColor;
     public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusSrcAlpha;
     public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusDstAlpha;
-    public bool    IsDrawing         { get; set; }         = false;
+
+    //TODO: Remove this from here, PolygonSpriteBatch, and CpuSpriteBatch.
+    public bool IsDrawing { get; set; } = false;
 
     // ========================================================================
 
-    protected Texture? LastTexture { get; set; } = null;
-    protected float[]? Vertices    { get; set; }
-    protected int      Idx         { get; set; } = 0;
+    protected float[]                Vertices           { get; set; } = [ ];
+    protected Texture?               LastTexture        { get; set; } = null;
+    protected int                    Idx                { get; set; } = 0;
+    protected BatchState?            CurrentBatchState  { get; set; }
+    protected RenderState?           CurrentRenderState { get; set; }
 
     // ========================================================================
 
@@ -76,7 +80,12 @@ public class SpriteBatch : IBatch
 
     // ========================================================================
 
-    private readonly Color _color = Color.Red;
+    private readonly Color  _color      = Color.Red;
+    private readonly object _lockObject = new();
+
+    // Prevent reallocation of common vectors
+    private static readonly Vector2 DefaultOrigin = Vector2.Zero;
+    private static readonly Vector2 DefaultScale  = Vector2.One;
 
     private Texture?       _lastSuccessfulTexture = null;
     private ShaderProgram? _shader;
@@ -87,15 +96,13 @@ public class SpriteBatch : IBatch
     private int  _currentTextureIndex = 0;
     private bool _ownsShader;
     private bool _originalDepthMask;
+    private bool _disposed = false;
     private int  _maxVertices;
     private int  _combinedMatrixLocation;
 
     private uint _vao;
     private uint _vbo;
     private uint _ebo;
-
-    private float[]? _vertices;
-    private uint[]?  _indices;
 
     // ========================================================================
 
@@ -121,12 +128,10 @@ public class SpriteBatch : IBatch
     protected SpriteBatch( int size = MAX_QUADS, ShaderProgram? defaultShader = null )
     {
         // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
-        if ( size > MAX_SPRITES )
-        {
-            throw new ArgumentException( $"Can't have more than {MAX_SPRITES} sprites per batch: {size}" );
-        }
+        Guard.NotGreaterThan( size, MAX_SPRITES, nameof( size ) );
+        Guard.ThrowIfNegative( size, nameof( size ) );
 
-        IsDrawing = false;
+        CurrentBatchState = BatchState.Ready;
 
         Initialise( size, defaultShader );
     }
@@ -156,15 +161,12 @@ public class SpriteBatch : IBatch
         GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
         Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
 
-        fixed ( float* ptr = Vertices )
-        {
-            GL.BufferData( ( int )BufferTarget.ArrayBuffer,
-                           Vertices.Length * sizeof( float ),
-                           ( IntPtr )ptr,
-                           ( int )BufferUsageHint.DynamicDraw );
-        }
+        GL.BufferData( ( int )BufferTarget.ArrayBuffer,
+                       Vertices.Length * sizeof( float ),
+                       0,
+                       ( int )BufferUsageHint.DynamicDraw );
 
-        _indices = new uint[ size * INDICES_PER_SPRITE ];
+        var _indices = new uint[ size * INDICES_PER_SPRITE ];
 
         for ( uint i = 0, vertex = 0; i < _indices.Length; i += INDICES_PER_SPRITE, vertex += 4 )
         {
@@ -245,10 +247,15 @@ public class SpriteBatch : IBatch
     /// <summary>
     /// Begins a new sprite batch.
     /// </summary>
-    /// <param name="depthMaskEnabled"> Enable or Disable DepthMask. Defaults to false. </param>
+    /// <param name="depthMaskEnabled">
+    /// Enable or Disable DepthMask. This parameter has a default value of <c>false</c>
+    /// so this can be omitted from method calls for values of false.
+    /// </param>
     public void Begin( bool depthMaskEnabled = false )
     {
-        if ( IsDrawing )
+        ThrowIfDisposed();
+
+        if ( CurrentBatchState == BatchState.Drawing )
         {
             throw new InvalidOperationException( "End() must be called before Begin()" );
         }
@@ -258,6 +265,8 @@ public class SpriteBatch : IBatch
             throw new NullReferenceException( "Shader is null" );
         }
 
+        CurrentBatchState = BatchState.Drawing;
+
         _originalDepthMask = GL.IsEnabled( ( int )EnableCap.DepthTest );
         GL.DepthMask( depthMaskEnabled );
 
@@ -265,7 +274,6 @@ public class SpriteBatch : IBatch
         SetupMatrices();
 
         RenderCalls = 0;
-        IsDrawing   = true;
     }
 
     /// <summary>
@@ -276,7 +284,7 @@ public class SpriteBatch : IBatch
     /// </exception>
     public void End()
     {
-        if ( !IsDrawing )
+        if ( CurrentBatchState != BatchState.Drawing )
         {
             throw new InvalidOperationException( "SpriteBatch.begin must be called before end." );
         }
@@ -289,8 +297,8 @@ public class SpriteBatch : IBatch
         }
 
         LastTexture = null;
-        IsDrawing   = false;
-
+        CurrentBatchState = BatchState.Ready;
+    
         GL.DepthMask( _originalDepthMask );
 
         if ( IsBlendingEnabled )
@@ -358,26 +366,26 @@ public class SpriteBatch : IBatch
 
         SetupVertexAttributes( _shader );
 
-        // Ensure that the _vertices array is large enough.
-        if ( ( _vertices == null ) || ( _vertices.Length < _maxVertices ) )
-        {
-            if ( _vertices != null )
-            {
-                ArrayPool< float >.Shared.Return( _vertices ); // Return the old array
-            }
-
-            _vertices = ArrayPool< float >.Shared.Rent( _maxVertices ); // Rent a new array
-        }
-
-        // Copy the data from the Vertices array to the pooled _vertices array.
-        Array.Copy( Vertices, _vertices, Idx );
+//        // Ensure that the Vertices array is large enough.
+//        if ( ( Vertices == null ) || ( Vertices.Length < _maxVertices ) )
+//        {
+//            if ( Vertices != null )
+//            {
+//                ArrayPool< float >.Shared.Return( Vertices ); // Return the old array
+//            }
+//
+//            Vertices = ArrayPool< float >.Shared.Rent( _maxVertices ); // Rent a new array
+//        }
+//
+//        // Copy the data from the Vertices array to the pooled Vertices array.
+//        Array.Copy( Vertices, Vertices, Idx );
 
         if ( _mesh == null )
         {
             throw new NullReferenceException( "Mesh is null" );
         }
 
-        _mesh.SetVertices( _vertices, 0, Idx );
+        _mesh.SetVertices( Vertices, 0, Idx );
         _mesh.IndicesBuffer.Position = 0;
         _mesh.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
 
@@ -494,7 +502,7 @@ public class SpriteBatch : IBatch
     /// <param name="projection">The new projection matrix to be applied.</param>
     public void SetProjectionMatrix( Matrix4 projection )
     {
-        if ( IsDrawing && ( Idx > 0 ) )
+        if ( ( CurrentBatchState == BatchState.Drawing ) && ( Idx > 0 ) )
         {
             // Necessary call to Flush() to ensure projection matrix
             // changes are handled correctly
@@ -503,7 +511,7 @@ public class SpriteBatch : IBatch
 
         ProjectionMatrix.Set( projection );
 
-        if ( IsDrawing )
+        if ( CurrentBatchState == BatchState.Drawing )
         {
             SetupMatrices();
         }
@@ -757,7 +765,7 @@ public class SpriteBatch : IBatch
             throw new ArgumentException( $"Texture is null: {texture}" );
         }
 
-        if ( !IsDrawing )
+        if ( CurrentBatchState != BatchState.Drawing )
         {
             throw new InvalidOperationException( "Begin() must be called before Draw()." );
         }
@@ -797,7 +805,7 @@ public class SpriteBatch : IBatch
     /// </param>
     public virtual void SetTransformMatrix( Matrix4 transform )
     {
-        if ( IsDrawing && ( Idx > 0 ) )
+        if ( ( CurrentBatchState == BatchState.Drawing ) && ( Idx > 0 ) )
         {
             // Necessary call to Flush() to ensure transformation matrix
             // #changes are handled correctly
@@ -806,7 +814,7 @@ public class SpriteBatch : IBatch
 
         TransformMatrix.Set( transform );
 
-        if ( IsDrawing )
+        if ( CurrentBatchState == BatchState.Drawing )
         {
             SetupMatrices();
         }
@@ -890,14 +898,14 @@ public class SpriteBatch : IBatch
         get => _shader;
         set
         {
-            if ( IsDrawing && ( Idx > 0 ) )
+            if ( ( CurrentBatchState == BatchState.Drawing ) && ( Idx > 0 ) )
             {
                 Flush();
             }
 
             _shader = value;
 
-            if ( IsDrawing )
+            if ( CurrentBatchState == BatchState.Drawing )
             {
                 _shader?.Bind();
                 SetupMatrices();
@@ -910,23 +918,44 @@ public class SpriteBatch : IBatch
     /// <inheritdoc />
     public void Dispose()
     {
-        _mesh?.Dispose();
-
-        if ( _ownsShader && ( _shader != null ) )
-        {
-            _shader.Dispose();
-        }
-
-        _mesh   = null;
-        _shader = null;
-
-        if ( _vertices != null )
-        {
-            ArrayPool< float >.Shared.Return( _vertices );
-            _vertices = null;
-        }
-
+        Dispose( true );
         GC.SuppressFinalize( this );
+    }
+
+    protected void Dispose( bool disposing )
+    {
+        if ( !_disposed )
+        {
+            if ( disposing )
+            {
+                UnbindBuffers();
+
+                _mesh?.Dispose();
+
+                if ( _ownsShader && ( _shader != null ) )
+                {
+                    _shader.Dispose();
+                }
+
+                _mesh   = null;
+                _shader = null;
+            }
+
+            _disposed = true;
+        }
+    }
+
+    private void ThrowIfDisposed()
+    {
+        if ( _disposed )
+        {
+            throw new ObjectDisposedException( nameof( SpriteBatch ) );
+        }
+    }
+
+    ~SpriteBatch()
+    {
+        Dispose( false );
     }
 
     // ========================================================================
@@ -1715,4 +1744,53 @@ public class SpriteBatch : IBatch
     }
 
     #endregion Color handling
+
+    // ========================================================================
+
+    /// <summary>
+    ///
+    /// </summary>
+    [PublicAPI]
+    public enum BatchState
+    {
+        Ready,
+        Drawing,
+        Disposed,
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// </summary>
+    /// <param name="CurrentTexture"></param>
+    /// <param name="VertexCount"></param>
+    /// <param name="TransformMatrix"></param>
+    [PublicAPI]
+    public record struct RenderState(
+        Texture? CurrentTexture,
+        int VertexCount,
+        Matrix4 TransformMatrix );
+
+    // ========================================================================
+    /// <summary>
+    /// The Vertex struct represents a vertex in 2D space, containing position, texture
+    /// coordinate, and color information.It is commonly used in graphical rendering contexts
+    /// to define attributes of points in a rendered shape or mesh.
+    /// </summary>
+    [PublicAPI]
+    public readonly record struct Vertex
+    {
+        public Vector2 Position          { get; init; }
+        public Vector2 TextureCoordinate { get; init; }
+        public Color   Color             { get; init; }
+
+        public Vertex( Vector2 position, Vector2 textureCoordinate, Color color )
+        {
+            Position          = position;
+            TextureCoordinate = textureCoordinate;
+            Color             = color;
+        }
+    }
 }
+
+

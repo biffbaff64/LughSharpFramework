@@ -389,9 +389,9 @@ public class Stage : InputAdapter, IDisposable
     {
         Clear();
 
-        if ( _ownsBatch )
+        if ( _ownsBatch && Batch is IDisposable disposableBatch )
         {
-            Batch.Dispose();
+            disposableBatch.Dispose();
         }
 
         _debugShapes?.Dispose();
