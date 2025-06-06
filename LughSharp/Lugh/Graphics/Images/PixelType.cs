@@ -124,4 +124,11 @@ public class PixelType
     {
         return PixmapFormat.ToGLDataType( ToGdx2DPixmapPixelFormat( format ) );
     }
+    
+    // ========================================================================
+
+    public static Format FromRgba( int r, int g, int b, int a )
+    {
+        return Format.RGBA8888;
+    }
 }

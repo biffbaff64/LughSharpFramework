@@ -33,6 +33,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 using Matrix3 = LughSharp.Lugh.Maths.Matrix3;
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Number = LughSharp.Lugh.Maths.Number;
 
 namespace LughSharp.Lugh.Graphics;
 

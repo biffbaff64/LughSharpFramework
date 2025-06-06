@@ -288,9 +288,9 @@ public class Stage : InputAdapter, IDisposable
 
     /// <summary>
     /// If true, any actions executed during a call to <see cref="Act()" />)
-    /// will result in a call to <see cref="IGraphics.RequestRendering()" />.
+    /// will result in a call to <see cref="IGraphicsDevice.RequestRendering()" />.
     /// Widgets that animate or otherwise require additional rendering may check
-    /// this setting before calling <see cref="IGraphics.RequestRendering()" />.
+    /// this setting before calling <see cref="IGraphicsDevice.RequestRendering()" />.
     /// Default is true.
     /// </summary>
     public bool ActionsRequestRendering { get; set; } = true;

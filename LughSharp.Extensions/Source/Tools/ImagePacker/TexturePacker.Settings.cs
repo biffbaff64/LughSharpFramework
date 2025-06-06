@@ -23,7 +23,6 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Reflection;
-using System.Runtime.Versioning;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -34,7 +33,6 @@ namespace Extensions.Source.Tools.ImagePacker;
 public partial class TexturePacker
 {
     [PublicAPI]
-    [SupportedOSPlatform( "windows" )]
     public class Settings
     {
         /// <summary>
@@ -137,7 +135,7 @@ public partial class TexturePacker
         public Texture.TextureWrap WrapY { get; set; } = Texture.TextureWrap.ClampToEdge;
 
         /// <summary>
-        /// The <see cref="PixelFormat"/> the texture will use in-memory.
+        /// The <see cref="PixelType.Format"/> the texture will use in-memory.
         /// </summary>
         public PixelType.Format Format { get; set; } = PixelType.Format.RGBA8888;
 

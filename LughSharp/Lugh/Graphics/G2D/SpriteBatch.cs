@@ -33,6 +33,7 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Rectangle = System.Drawing.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.G2D;
 

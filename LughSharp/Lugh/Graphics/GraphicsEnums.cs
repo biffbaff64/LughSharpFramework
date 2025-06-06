@@ -32,4 +32,45 @@ public enum VertexDataType
     VertexBufferObjectWithVAO,
 }
 
+
+/// <summary>
+/// Represents various OpenGL capabilities that can be enabled or disabled.
+/// </summary>
+public enum GraphicsCapability
+{
+    Blend,
+    DepthTest,
+    ScissorTest,
+    CullFace,
+
+    // Add more as needed
+}
+
+/// <summary>
+/// Represents common texture internal formats.
+/// </summary>
+public enum TextureFormat
+{
+    Rgb,
+    Rgba,
+    Alpha,
+
+    // Add more as needed (e.g., grayscale, compressed formats)
+}
+
+/// <summary>
+/// Represents common OpenGL blending factors.
+/// </summary>
+public enum BlendFactor
+{
+    Zero,
+    One,
+    SourceAlpha,
+    OneMinusSourceAlpha,
+    DestinationAlpha,
+    OneMinusDestinationAlpha,
+
+    // Add more as needed
+}
+
 // ========================================================================

@@ -42,7 +42,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
 
     // ========================================================================
 
-    private IGraphics.DisplayMode? _displayModeBeforeFullscreen;
+    private DisplayMode? _displayModeBeforeFullscreen;
 
     private int  _fps;
     private long _frameCounterStart = 0;
@@ -138,7 +138,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         LogicalWidth  = tmpWidth;
         LogicalHeight = tmpHeight;
 
-        BufferFormat = new IGraphics.BufferFormatDescriptor
+        BufferConfig = new FramebufferConfig
         {
             R                = GLWindow.AppConfig.Red,
             G                = GLWindow.AppConfig.Green,
@@ -156,7 +156,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     /// updating frames per second (FPS), and incrementing the frame identifier.
     /// This method is typically called on each render loop iteration.
     /// </summary>
-    public void Update()
+    public override void Update()
     {
         var time = TimeUtils.NanoTime();
 
@@ -182,7 +182,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     /// <summary>
     /// Returns whether cubemap seamless feature is supported.
     /// </summary>
-    public bool SupportsCubeMapSeamless()
+    public override bool SupportsCubeMapSeamless()
     {
         return SupportsExtension( "GL_ARB_seamless_cube_map" );
     }
@@ -192,7 +192,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     /// Should only be called if this feature is supported.
     /// </summary>
     /// <param name="enable"></param>
-    public void EnableCubeMapSeamless( bool enable )
+    public override void EnableCubeMapSeamless( bool enable )
     {
         if ( SupportsCubeMapSeamless() )
         {
@@ -348,31 +348,31 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     // ========================================================================
 
     /// <inheritdoc />
-    public override IGraphics.DisplayMode[] GetDisplayModes()
+    public override DisplayMode[] GetDisplayModes()
     {
         return DesktopGLApplicationConfiguration.GetDisplayModes( Glfw.GetPrimaryMonitor() );
     }
 
     /// <inheritdoc />
-    public override IGraphics.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
+    public override DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
     {
         return DesktopGLApplicationConfiguration.GetDisplayModes( monitor );
     }
 
     /// <inheritdoc />
-    public override IGraphics.DisplayMode GetDisplayMode()
+    public override DisplayMode GetDisplayMode()
     {
         return DesktopGLApplicationConfiguration.GetDisplayMode( Glfw.GetPrimaryMonitor() );
     }
 
     /// <inheritdoc />
-    public override IGraphics.DisplayMode GetDisplayMode( GLFW.Monitor monitor )
+    public override DisplayMode GetDisplayMode( GLFW.Monitor monitor )
     {
         return DesktopGLApplicationConfiguration.GetDisplayMode( monitor );
     }
 
     /// <inheritdoc />
-    public override bool SetFullscreenMode( IGraphics.DisplayMode displayMode )
+    public override bool SetFullscreenMode( DisplayMode displayMode )
     {
         GdxRuntimeException.ThrowIfNull( GLWindow );
 
@@ -570,7 +570,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
     /// Describes a Display Mode for a <see cref="GLFW.Monitor" />
     /// </summary>
     [PublicAPI]
-    public class DesktopGLDisplayMode : IGraphics.DisplayMode
+    public class DesktopGLDisplayMode : DisplayMode
     {
         /// <summary>
         /// Creates a new Display Mode and its properties.
@@ -587,7 +587,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         }
 
         /// <summary>
-        /// The <see cref="GLFW.Monitor" /> this <see cref="IGraphics.DisplayMode" /> applies to.
+        /// The <see cref="GLFW.Monitor" /> this <see cref="DisplayMode" /> applies to.
         /// </summary>
         public GLFW.Monitor MonitorHandle { get; set; }
     }

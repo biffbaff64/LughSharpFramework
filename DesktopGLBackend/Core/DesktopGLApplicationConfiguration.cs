@@ -215,8 +215,8 @@ public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration
     }
 
     /// <summary>
-    /// Enables use of OpenGL debug message callbacks. If not supported by the core GL driver
-    /// (since GL 4.3), this uses the KHR_debug, ARB_debug_output or AMD_debug_output extension
+    /// Enables use of OpenGL debug message callbacks. If not supported by the core
+    /// GL driver (since GL 4.3), this uses the KHR_debug, ARB_debug_output or AMD_debug_output extension
     /// if available. By default, debug messages with NOTIFICATION severity are disabled to
     /// avoid log spam.
     /// </summary>
@@ -229,7 +229,7 @@ public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration
     /// <summary>
     /// Gets the currently active display mode for the primary monitor.
     /// </summary>
-    public static IGraphics.DisplayMode GetDisplayMode()
+    public static DisplayMode GetDisplayMode()
     {
         return GetDisplayMode( Glfw.GetPrimaryMonitor() );
     }
@@ -237,7 +237,7 @@ public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration
     /// <summary>
     /// Gets the currterntly active display mode for the given monitor.
     /// </summary>
-    public static IGraphics.DisplayMode GetDisplayMode( GLFW.Monitor monitor )
+    public static DisplayMode GetDisplayMode( GLFW.Monitor monitor )
     {
         var videoMode = Glfw.GetVideoMode( monitor );
 
@@ -249,13 +249,13 @@ public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration
     }
 
     /// <summary>
-    /// Return the available <see cref="IGraphics.DisplayMode" />s of the primary monitor
+    /// Return the available <see cref="DisplayMode" />s of the primary monitor
     /// </summary>
-    public static IGraphics.DisplayMode[] GetDisplayModes()
+    public static DisplayMode[] GetDisplayModes()
     {
         var videoModes = Glfw.GetVideoModes( Glfw.GetPrimaryMonitor() );
 
-        var result = new IGraphics.DisplayMode[ videoModes.Length ];
+        var result = new DisplayMode[ videoModes.Length ];
 
         for ( var i = 0; i < result.Length; i++ )
         {
@@ -272,13 +272,13 @@ public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration
     }
 
     /// <summary>
-    /// Returns a list of the available <see cref="IGraphics.DisplayMode" />s of the given monitor.
+    /// Returns a list of the available <see cref="DisplayMode" />s of the given monitor.
     /// </summary>
-    public static IGraphics.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
+    public static DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
     {
         var videoModes = Glfw.GetVideoModes( monitor );
 
-        var result = new IGraphics.DisplayMode[ videoModes.Length ];
+        var result = new DisplayMode[ videoModes.Length ];
 
         for ( var i = 0; i < result.Length; i++ )
         {

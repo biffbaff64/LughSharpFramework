@@ -412,7 +412,7 @@ GRAPHICS/OPENGL/ENUMS
     - DONE - DONE - GetPName
     - DONE - DONE - LogicOp
     - DONE - DONE - PixelEnums
-    - DONE - DONE - PrimitiveType
+    - DONE - DONE - PrimitiveTypeop
     - DONE - DONE - ProgramProperty
     - DONE - DONE - ShaderEnums
     - DONE - DONE - StringName

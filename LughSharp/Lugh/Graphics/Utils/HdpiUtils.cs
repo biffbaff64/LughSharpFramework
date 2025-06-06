@@ -30,7 +30,7 @@ namespace LughSharp.Lugh.Graphics.Utils;
 public enum HdpiMode
 {
     /// <summary>
-    /// Mouse coordinates, <see cref="IGraphics.Width" /> and <see cref="IGraphics.Height" />
+    /// Mouse coordinates, <see cref="IGraphicsDevice.Width" /> and <see cref="IGraphicsDevice.Height" />
     /// will return logical coordinates according to the system defined HDPI scaling.
     /// Rendering will be performed to a backbuffer at raw resolution. Use <see cref="HdpiUtils" />
     /// when calling <see cref="OpenGL.GLBindings.glScissor" /> or <see cref="OpenGL.GLBindings.glViewport" />
@@ -38,7 +38,7 @@ public enum HdpiMode
     /// </summary>
     Logical,
     /// <summary>
-    /// Mouse coordinates, <see cref="IGraphics.Width" /> and <see cref="IGraphics.Height" />
+    /// Mouse coordinates, <see cref="IGraphicsDevice.Width" /> and <see cref="IGraphicsDevice.Height" />
     /// will return raw pixel coordinates irrespective of the system defined HDPI scaling.
     /// </summary>
 

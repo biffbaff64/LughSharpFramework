@@ -27,7 +27,6 @@ using System.Runtime.Versioning;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class PackingSettingsProcessor : FileProcessor
 {
     public List< FileInfo > SettingsFiles { get; private set; } = [ ];
@@ -50,7 +49,6 @@ public class PackingSettingsProcessor : FileProcessor
 // ============================================================================
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class DeleteProcessor : FileProcessor
 {
     public DeleteProcessor()
@@ -68,7 +66,6 @@ public class DeleteProcessor : FileProcessor
 // ============================================================================
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class SettingsCombiningProcessor : TexturePackerFileProcessor
 {
     public TexturePackerEntry? EntryDir { get; set; }

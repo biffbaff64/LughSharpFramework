@@ -25,7 +25,12 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 
+using LughSharp.Lugh.Files;
+using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
+
+using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace Extensions.Source.Tools.ImagePacker;
 
@@ -38,7 +43,7 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// <li>load and optionally sort the images you want to add by size (e.g. area),</li>
 /// <li>then insert each image via a call to <see cref="InsertImage(String, Bitmap)"/>.</li>
 /// <para>
-/// When you are done with inserting images you can reference the property <see cref="Image" />
+/// When you are done with inserting images you can reference the property <see cref="MainImage" />
 /// for the actual Image that holds the packed images. Additionally you can get a Dictionary
 /// where a) the keys are the names you specified when inserting and b) the values are the
 /// rectangles within the packed image where that specific image is located. All things are
@@ -80,10 +85,10 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class ImagePacker
+public class ImagePackerRevised
 {
-    public Bitmap                          Image { get; }
-    public Dictionary< string, Rectangle > Rects { get; } = new();
+    public BufferedImage                   MainImage { get; set; }
+    public Dictionary< string, Rectangle > Rects     { get; } = new();
 
     // ========================================================================
 
@@ -104,9 +109,9 @@ public class ImagePacker
     /// <param name="height"> the height of the output image </param>
     /// <param name="padding"> the number of padding pixels </param>
     /// <param name="duplicateBorder"> whether to duplicate the border </param>
-    public ImagePacker( int width, int height, int padding, bool duplicateBorder )
+    public ImagePackerRevised( int width, int height, int padding, bool duplicateBorder )
     {
-        Image            = new Bitmap( width, height );
+        MainImage        = new BufferedImage( width, height, PixelType.Format.RGBA8888 );
         _padding         = padding;
         _duplicateBorder = duplicateBorder;
         _root            = new Node( 0, 0, width, height );
@@ -120,7 +125,7 @@ public class ImagePacker
     /// <exception cref="GdxRuntimeException">
     /// Thrown when the image does not fit or when an image with the same name already exists.
     /// </exception>
-    public void InsertImage( string name, Bitmap image )
+    public void InsertImage( string name, BufferedImage image )
     {
         if ( this.Rects.ContainsKey( name ) )
         {
@@ -128,9 +133,9 @@ public class ImagePacker
         }
 
         var borderPixels = this._padding + ( this._duplicateBorder ? 1 : 0 );
-            
+
         borderPixels <<= 1;
-            
+
         var rect = new Rectangle( 0, 0, image.Width + borderPixels, image.Height + borderPixels );
         var node = this.Insert( rect );
 
@@ -149,65 +154,55 @@ public class ImagePacker
 
         this.Rects.Add( name, rect );
 
-        using ( var g = System.Drawing.Graphics.FromImage( this.Image ) )
+        MainImage.Draw( image, rect.X, rect.Y );
+
+        if ( this._duplicateBorder )
         {
-            g.DrawImage( image, rect.X, rect.Y );
+            // Duplicate top border
+            MainImage.DrawPixmap( image,
 
-            if ( this._duplicateBorder )
-            {
-                // Duplicate top border
-                g.DrawImage( image,
-                             // Note to self:
-                             // the 'with' expression here essentially creates a new Rectangle
-                             // using the dimensions of 'rect', with Y being set to rect.Y-1,
-                             // and Height being set to 1.
-                             // ie. new Rectangle( rect.X, rect.Y - 1, rect.Width, 1 ),
-                             rect with { Y = rect.Y - 1, Height = 1 },
-                             new Rectangle( 0, 0, image.Width, 1 ),
-                             GraphicsUnit.Pixel );
+                                  // Note to self:
+                                  // the 'with' expression here essentially creates a new Rectangle
+                                  // using the dimensions of 'rect', with Y being set to rect.Y-1,
+                                  // and Height being set to 1.
+                                  // ie. new Rectangle( rect.X, rect.Y - 1, rect.Width, 1 ),
+                                  rect.X, rect.Y - 1, rect.Width, 1,
+                                  0, 0, image.Width, 1 );
 
-                // Duplicate bottom border
-                g.DrawImage( image,
-                             rect with { Y = rect.Y + rect.Height, Height = 1 },
-                             new Rectangle( 0, image.Height - 1, image.Width, 1 ),
-                             GraphicsUnit.Pixel );
+            // Duplicate bottom border
+            MainImage.Draw( image,
+                                  rect.X, rect.Y + rect.Height, rect.Width, 1,
+                                  0, image.Height - 1, image.Width, 1 );
 
-                // Duplicate left border
-                g.DrawImage( image,
-                             rect with { X = rect.X - 1, Width = 1 },
-                             new Rectangle( 0, 0, 1, image.Height ),
-                             GraphicsUnit.Pixel );
+            // Duplicate left border
+            MainImage.Draw( image,
+                                  rect.X - 1, rect.Y, 1, rect.Height,
+                                  0, 0, 1, image.Height );
 
-                // Duplicate right border
-                g.DrawImage( image,
-                             rect with { X = rect.X + rect.Width, Width = 1 },
-                             new Rectangle( image.Width - 1, 0, 1, image.Height ),
-                             GraphicsUnit.Pixel );
+            // Duplicate right border
+            MainImage.Draw( image,
+                                  rect.X + rect.Width, rect.Y, 1, rect.Height,
+                                  image.Width - 1, 0, 1, image.Height );
 
-                // Duplicate top-left corner
-                g.DrawImage( image,
-                             new Rectangle( rect.X - 1, rect.Y - 1, 1, 1 ),
-                             new Rectangle( 0, 0, 1, 1 ),
-                             GraphicsUnit.Pixel );
+            // Duplicate top-left corner
+            MainImage.Draw( image,
+                                  rect.X - 1, rect.Y - 1, 1, 1,
+                                  0, 0, 1, 1 );
 
-                // Duplicate top-right corner
-                g.DrawImage( image,
-                             new Rectangle( rect.X + rect.Width, rect.Y - 1, 1, 1 ),
-                             new Rectangle( image.Width - 1, 0, 1, 1 ),
-                             GraphicsUnit.Pixel );
+            // Duplicate top-right corner
+            MainImage.Draw( image,
+                                  rect.X + rect.Width, rect.Y - 1, 1, 1,
+                                  image.Width - 1, 0, 1, 1 );
 
-                // Duplicate bottom-left corner
-                g.DrawImage( image,
-                             new Rectangle( rect.X - 1, rect.Y + rect.Height, 1, 1 ),
-                             new Rectangle( 0, image.Height - 1, 1, 1 ),
-                             GraphicsUnit.Pixel );
+            // Duplicate bottom-left corner
+            MainImage.Draw( image,
+                                  rect.X - 1, rect.Y + rect.Height, 1, 1,
+                                  0, image.Height - 1, 1, 1 );
 
-                // Duplicate bottom-right corner
-                g.DrawImage( image,
-                             new Rectangle( rect.X + rect.Width, rect.Y + rect.Height, 1, 1 ),
-                             new Rectangle( image.Width - 1, image.Height - 1, 1, 1 ),
-                             GraphicsUnit.Pixel );
-            }
+            // Duplicate bottom-right corner
+            MainImage.Draw( image,
+                                  rect.X + rect.Width, rect.Y + rect.Height, 1, 1,
+                                  image.Width - 1, image.Height - 1, 1, 1 );
         }
     }
 
@@ -230,7 +225,8 @@ public class ImagePacker
         {
             var node = stack.Pop();
 
-            if ( ( node.LeaveName == null ) && node is { LeftChild: not null, RightChild: not null } )
+            if ( ( node.LeaveName == null )
+                 && node is { LeftChild: not null, RightChild: not null } )
             {
                 stack.Push( node.RightChild );
                 stack.Push( node.LeftChild );
@@ -238,12 +234,15 @@ public class ImagePacker
                 continue;
             }
 
-            if ( ( node.LeaveName != null ) || ( node.Rect.Width < rect.Width ) || ( node.Rect.Height < rect.Height ) )
+            if ( ( node.LeaveName != null )
+                 || ( node.Rect.Width < rect.Width )
+                 || ( node.Rect.Height < rect.Height ) )
             {
                 continue;
             }
 
-            if ( ( node.Rect.Width == rect.Width ) && ( node.Rect.Height == rect.Height ) )
+            if ( ( node.Rect.Width == rect.Width )
+                 && ( node.Rect.Height == rect.Height ) )
             {
                 return node;
             }
@@ -263,9 +262,48 @@ public class ImagePacker
     /// <param name="height">The height of the image to create.</param>
     /// <param name="pixelFormat"></param>
     /// <returns>A new image with the specified dimensions and background color.</returns>
-    private static Bitmap CreateImage( int width, int height, PixelFormat pixelFormat )
+    private static BufferedImage CreateImage( int width, int height, PixelType.Format pixelFormat )
     {
-        return new Bitmap( width, height, pixelFormat );
+        return new BufferedImage( width, height, pixelFormat );
+    }
+
+    // ========================================================================
+
+    public void Test()
+    {
+        Logger.Checkpoint();
+
+        if ( MainImage == null )
+        {
+            return;
+        }
+
+        var rand   = new Random( 0 );
+        var images = new BufferedImage[ 100 ];
+
+        for ( var i = 0; i < images.Length; i++ )
+        {
+            var color = PixelType.FromRgba
+                (
+                 ( byte )rand.Next( 256 ),
+                 ( byte )rand.Next( 256 ),
+                 ( byte )rand.Next( 256 ),
+                 255
+                );
+
+            images[ i ] = CreateImage( rand.Next( 10, 61 ),
+                                       rand.Next( 10, 61 ),
+                                       color );
+        }
+
+        Array.Sort( images, ( a, b ) => ( b.Width * b.Height ) - ( a.Width * a.Height ) );
+
+        for ( var i = 0; i < images.Length; i++ )
+        {
+            InsertImage( $"image_{i}", images[ i ] );
+        }
+
+        BufferedImage.SaveToFile( new FileInfo( $"{IOUtils.AssetsRoot}packed.png" ), MainImage );
     }
 
     // ========================================================================
@@ -306,4 +344,3 @@ public class ImagePacker
         }
     }
 }
-

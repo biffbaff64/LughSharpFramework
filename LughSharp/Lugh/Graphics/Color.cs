@@ -27,6 +27,8 @@ using System.Diagnostics;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 
+using Number = LughSharp.Lugh.Maths.Number;
+
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>

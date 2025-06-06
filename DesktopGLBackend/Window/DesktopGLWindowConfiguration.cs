@@ -83,7 +83,7 @@ public class DesktopGLWindowConfiguration
     /// <summary>
     /// Sets whether to use vsync.
     /// <para>
-    /// This setting can be changed anytime at runtime via <see cref="IGraphics.SetVSync(bool)" />.
+    /// This setting can be changed anytime at runtime via <see cref="IGraphicsDevice.SetVSync(bool)" />.
     /// </para>
     /// <para>
     /// For multi-window applications, only one (the main) window should enable vsync. Otherwise,

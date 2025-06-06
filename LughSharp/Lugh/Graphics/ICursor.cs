@@ -26,9 +26,9 @@ namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
 /// Represents a mouse cursor.
-/// Create a cursor via <see cref="IGraphics.NewCursor" />.
-/// To set the cursor use <see cref="IGraphics.SetCursor(ICursor)" />.
-/// To use one of the system cursors, call <see cref="IGraphics.SetSystemCursor" />.
+/// Create a cursor via <see cref="IGraphicsDevice.NewCursor" />.
+/// To set the cursor use <see cref="IGraphicsDevice.SetCursor(ICursor)" />.
+/// To use one of the system cursors, call <see cref="IGraphicsDevice.SetSystemCursor" />.
 /// </summary>
 [PublicAPI]
 public interface ICursor

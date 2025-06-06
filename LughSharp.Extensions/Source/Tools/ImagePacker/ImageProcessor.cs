@@ -44,7 +44,6 @@ using Image = System.Drawing.Image;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class ImageProcessor
 {
     public float                      Scale      { get; set; }
@@ -666,7 +665,6 @@ public class ImageProcessor
     /// 0 is considered an invalid split point being in the outer border which will
     /// be stripped.
     /// </summary>
-    [SupportedOSPlatform( "windows" )]
     public static int GetSplitPoint( Bitmap bitmap, string name, int startX, int startY, bool startPoint, bool xAxis )
     {
         var rgba = new int[ 4 ];
@@ -731,7 +729,6 @@ public class ImageProcessor
         return 0;
     }
 
-    [SupportedOSPlatform( "windows" )]
     public static string Hash( Bitmap image )
     {
         try

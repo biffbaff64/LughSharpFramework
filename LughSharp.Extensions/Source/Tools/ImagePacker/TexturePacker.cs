@@ -129,7 +129,6 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// </para>
 /// </summary>
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public partial class TexturePacker
 {
     public string?                   RootPath         { get; set; }
@@ -226,9 +225,17 @@ public partial class TexturePacker
     {
         try
         {
+            Logger.Debug( "BEFORE Normalize" );
+            Logger.Debug( $"Processing: {inputFolder} -> {outputFolder}" );
+            Logger.Debug( $"packFileName: {packFileName}" );
+
             inputFolder  = IOUtils.NormalizePath( $"{IOUtils.InternalPath}{inputFolder}" );
             outputFolder = IOUtils.NormalizePath( $"{IOUtils.InternalPath}{outputFolder}" );
 
+            Logger.Debug( "AFTER Normalize" );
+            Logger.Debug( $"Processing: {inputFolder} -> {outputFolder}" );
+            Logger.Debug( $"packFileName: {packFileName}" );
+            
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
             _ = processor.Process( new DirectoryInfo( inputFolder ),
                                    new DirectoryInfo( outputFolder ) );
@@ -1167,7 +1174,6 @@ public partial class TexturePacker
     // ========================================================================
 
     [PublicAPI]
-    [SupportedOSPlatform( "windows" )]
     public class Alias : IComparable< Alias >
     {
         public int     Index          = 0;
@@ -1213,7 +1219,6 @@ public partial class TexturePacker
     // ========================================================================
 
     [PublicAPI]
-    [SupportedOSPlatform( "windows" )]
     public class Rect : IComparable< Rect >
     {
         public int  Score1         = 0;

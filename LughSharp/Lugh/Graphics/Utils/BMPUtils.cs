@@ -31,7 +31,6 @@ using LughSharp.Lugh.Utils;
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public static class BMPUtils
 {
     public static BitmapFileHeader     BitmapFileHeader     { get; private set; }

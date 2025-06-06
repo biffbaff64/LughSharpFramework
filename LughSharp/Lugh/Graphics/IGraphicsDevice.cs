@@ -39,7 +39,7 @@ namespace LughSharp.Lugh.Graphics;
 /// </para>
 /// </summary>
 [PublicAPI]
-public interface IGraphics
+public interface IGraphicsDevice
 {
     /// <summary>
     /// Gets or sets the OpenGL version information.
@@ -52,9 +52,9 @@ public interface IGraphics
     GraphicsBackend.BackendType GraphicsType { get; }
 
     /// <summary>
-    /// Gets or sets the descriptor for the buffer format (bits per pixel, depth, stencil, samples).
+    /// Gets or sets the buffer config data (bits per pixel, depth, stencil, samples).
     /// </summary>
-    BufferFormatDescriptor BufferFormat { get; set; }
+    FramebufferConfig BufferConfig { get; set; }
 
     /// <summary>
     /// Gets or sets the time span between the current frame and the last frame in seconds,
@@ -120,143 +120,12 @@ public interface IGraphics
     // ========================================================================
 
     /// <summary>
-    /// Class describing the bits per pixel, depth buffer precision,
-    /// stencil precision and number of MSAA samples.
-    /// <para>
-    /// This descriptor is used to configure the framebuffer format when creating
-    /// the graphics context. It allows you to specify the desired precision
-    /// for color channels, depth buffer, stencil buffer, and multisample anti-aliasing.
-    /// </para>
+    /// Updates the current graphics state by calculating the frame delta time,
+    /// updating frames per second (FPS), and incrementing the frame identifier.
+    /// This method is typically called on each render loop iteration.
     /// </summary>
-    [PublicAPI]
-    public class BufferFormatDescriptor
-    {
-        /// <summary>
-        /// Number of bits per red color channel.
-        /// </summary>
-        public int R { get; set; }
-
-        /// <summary>
-        /// Number of bits per green color channel.
-        /// </summary>
-        public int G { get; set; }
-
-        /// <summary>
-        /// Number of bits per blue color channel.
-        /// </summary>
-        public int B { get; set; }
-
-        /// <summary>
-        /// Number of bits per alpha channel (transparency).
-        /// </summary>
-        public int A { get; set; }
-
-        /// <summary>
-        /// Number of bits for the depth buffer, used for depth testing in 3D rendering.
-        /// Higher values provide more precision for depth comparisons.
-        /// </summary>
-        public int Depth { get; set; }
-
-        /// <summary>
-        /// Number of bits for the stencil buffer, used for advanced rendering effects like masking and outlining.
-        /// </summary>
-        public int Stencil { get; set; }
-
-        /// <summary>
-        /// Number of samples for multi-sample anti-aliasing (MSAA).
-        /// MSAA reduces aliasing artifacts (jagged edges) by rendering each pixel multiple times
-        /// and averaging the results. Higher sample counts improve anti-aliasing quality but
-        /// increase rendering cost.
-        /// </summary>
-        public int Samples { get; set; }
-
-        /// <summary>
-        /// Whether coverage sampling anti-aliasing is used.
-        /// Coverage sampling is an alternative anti-aliasing technique that can be more
-        /// efficient than MSAA in some cases.
-        /// <para>
-        /// If coverage sampling is enabled, you might need to clear the coverage
-        /// buffer as well during rendering setup.
-        /// </para>
-        /// </summary>
-        public bool CoverageSampling { get; set; }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"r - {R}, g - {G}, b - {B}, a - {A}, depth - {Depth}, stencil - "
-                   + $"{Stencil}, num samples - {Samples}, coverage sampling - {CoverageSampling}";
-        }
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Describes a fullscreen display mode, having the properties <see cref="Width" />,
-    /// <see cref="Height" />, <see cref="RefreshRate" />, and <see cref="BitsPerPixel" />.
-    /// <para>
-    /// Display modes represent different configurations for fullscreen rendering,
-    /// allowing you to choose between resolutions, refresh rates, and color depths
-    /// supported by the monitor.
-    /// </para>
-    /// </summary>
-    [PublicAPI]
-    public class DisplayMode
-    {
-        /// <summary>
-        /// Creates a new DisplayMode object, using the specified width, height, refresh rate and
-        /// bits per pixel values.
-        /// </summary>
-        /// <param name="width"> Width of this display mode in pixels. </param>
-        /// <param name="height"> Height of this display mode in pixels. </param>
-        /// <param name="refreshRate"> The refresh rate. </param>
-        /// <param name="bitsPerPixel"> Bits per Pixel. </param>
-        public DisplayMode( int width, int height, int refreshRate, int bitsPerPixel )
-        {
-            Width        = width;
-            Height       = height;
-            RefreshRate  = refreshRate;
-            BitsPerPixel = bitsPerPixel;
-        }
-
-        /// <summary>
-        /// Width of this display mode in pixels.
-        /// </summary>
-        public int Width { get; set; }
-
-        /// <summary>
-        /// Height of this display mode in pixels.
-        /// </summary>
-        public int Height { get; set; }
-
-        /// <summary>
-        /// The refresh rate of this display mode in Hertz (Hz).
-        /// Refresh rate indicates how many times per second the monitor redraws the image.
-        /// Common values are 60Hz, 75Hz, 144Hz, etc. Higher refresh rates can result in
-        /// smoother visuals.
-        /// </summary>
-        public int RefreshRate { get; set; }
-
-        /// <summary>
-        /// Bits per Pixel for this display mode, indicating the color depth.
-        /// Common values are 16-bit, 24-bit, and 32-bit. Higher bit depths allow for
-        /// more colors to be displayed.
-        /// </summary>
-        public int BitsPerPixel { get; set; }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"{Width}x{Height}, bpp: {BitsPerPixel}, hz: {RefreshRate}";
-        }
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    #region methods
-
+    void Update();
+    
     /// <summary>
     /// Returns the amount of pixels per logical pixel (point).
     /// This is used for scaling UI elements and text to maintain visual consistency
@@ -360,6 +229,18 @@ public interface IGraphics
     /// <param name="extension">The name of the OpenGL extension to check (e.g., "GL_ARB_texture_non_power_of_two").</param>
     /// <returns><c>true</c> if the extension is supported, <c>false</c> otherwise.</returns>
     bool SupportsExtension( string extension );
+
+    /// <summary>
+    /// Returns whether cubemap seamless feature is supported.
+    /// </summary>
+    bool SupportsCubeMapSeamless();
+
+    /// <summary>
+    /// Enable or disable cubemap seamless feature. Default is true if supported.
+    /// Should only be called if this feature is supported.
+    /// </summary>
+    /// <param name="enable"></param>
+    void EnableCubeMapSeamless( bool enable );
 
     /// <summary>
     /// Returns an array of all supported display modes for the current monitor.
@@ -496,6 +377,7 @@ public interface IGraphics
     /// </summary>
     /// <param name="systemCursor"> The system cursor to use. </param>
     void SetSystemCursor( ICursor.SystemCursor systemCursor );
-
-    #endregion methods
 }
+
+// ============================================================================
+// ============================================================================

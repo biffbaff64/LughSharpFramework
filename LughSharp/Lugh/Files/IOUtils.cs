@@ -65,7 +65,8 @@ public class IOUtils
             return $"{Path.DirectorySeparatorChar}";
         }
 
-        return path.Replace( '\\', Path.DirectorySeparatorChar )
+        return path.Replace( @"\\", Path.DirectorySeparatorChar.ToString() )
+                   .Replace( '\\', Path.DirectorySeparatorChar )
                    .Replace( '/', Path.DirectorySeparatorChar );
     }
 

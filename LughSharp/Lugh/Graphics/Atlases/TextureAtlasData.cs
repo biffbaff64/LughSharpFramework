@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Exception = System.Exception;
@@ -84,8 +85,10 @@ public partial class TextureAtlasData
         };
         //@formatter:on
 
-        var reader = new StreamReader( packFile.Name, false );
+        var reader = new StreamReader( packFile.FullName, false );
 
+        Logger.Checkpoint();
+        
         try
         {
             var line = reader.ReadLine();

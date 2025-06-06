@@ -50,7 +50,7 @@ public class Gdx
     public IAudio       Audio     { get; set; } = null!;
     public IInput       Input     { get; set; } = null!;
     public IFiles       Files     { get; set; } = null!;
-    public IGraphics    Graphics  { get; set; } = null!;
+    public IGraphicsDevice    Graphics  { get; set; } = null!;
     public INet         Net       { get; set; } = null!;
 
     // ========================================================================

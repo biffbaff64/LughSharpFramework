@@ -252,7 +252,6 @@ public class PixmapFormat
         };
     }
 
-    [SupportedOSPlatform( "windows" )]
     public static System.Drawing.Imaging.PixelFormat ToPixelFormat( PixelType.Format format )
     {
         var cformat = ToGdx2DPixelFormat( format );

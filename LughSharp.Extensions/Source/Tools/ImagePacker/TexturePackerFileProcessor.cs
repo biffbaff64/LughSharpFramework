@@ -33,7 +33,6 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class TexturePackerFileProcessor //: IFileProcessor
 {
     public const string DEFAULT_PACKFILE_NAME = "pack.atlas";
@@ -91,10 +90,11 @@ public class TexturePackerFileProcessor //: IFileProcessor
     // ========================================================================
 
     /// <summary>
-    /// Default constructor. Processes Texture packing using default settings.
+    /// Default constructor. Processes Texture packing using default settings
+    /// and the default packfile name ( "pack.atlas" ).
     /// </summary>
     public TexturePackerFileProcessor()
-        : this( new TexturePacker.Settings(), DEFAULT_PACKFILE_NAME, null )
+        : this( new TexturePacker.Settings(), DEFAULT_PACKFILE_NAME )
     {
     }
 
@@ -124,7 +124,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
         this.FlattenOutput = true;
 
         // Set the default file extensions for processable images.
-        AddInputSuffix( ".png", ".jpg", ".jpeg" );
+        AddInputSuffix( ".png", ".jpg", ".jpeg", ".bmp" );;
 
         // Sort input files by name to avoid platform-dependent atlas output changes.
         Comparator = ( ( file1, file2 ) => string.Compare( file1.Name,
@@ -150,8 +150,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
         // Collect any pack.json setting files present in the folder.
         var settingsProcessor = new PackingSettingsProcessor();
 
-        _ = settingsProcessor.AddInputRegex( "pack\\.json" );
-        _ = settingsProcessor.Process( inputRoot, outputRoot );
+        _ = settingsProcessor.AddInputRegex( "pack\\.json" )
+                             .Process( inputRoot, outputRoot );
 
         // -----------------------------------------------------
 
