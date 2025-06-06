@@ -44,6 +44,17 @@ namespace LughSharp.Lugh.Graphics.Viewports;
 [PublicAPI]
 public abstract class Viewport
 {
+    public enum ViewportType
+    {
+        Extended,
+        Fill,
+        Fit,
+        Stretch,
+        Screen,
+        Scaling,
+        Manual,
+    }
+    
     public Camera? Camera       { get; set; }
     public int     ScreenX      { get; set; }
     public int     ScreenY      { get; set; }

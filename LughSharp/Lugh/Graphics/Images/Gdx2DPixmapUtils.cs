@@ -24,12 +24,12 @@
 
 namespace LughSharp.Lugh.Graphics.Images;
 
-public partial class Gdx2DPixmap
+public partial class PixmapData
 {
     /// <summary>
     /// Clears the pixmap with the specified color
     /// </summary>
-    public void Clear( Color color )
+    public override void Clear( Color color )
     {
         var size = ( uint )( _pixmapDataType.Width
                              * _pixmapDataType.Height
@@ -154,7 +154,7 @@ public partial class Gdx2DPixmap
     /// <summary>
     /// Converts a color to the specified pixel format
     /// </summary>
-    public static uint ToFormat( uint format, uint color )
+    public static uint ToPixelFormat( uint format, uint color )
     {
         uint r, g, b, a;
 

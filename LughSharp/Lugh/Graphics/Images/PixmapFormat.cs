@@ -179,13 +179,13 @@ public class PixmapFormat
     {
         return format switch
         {
-            PixelType.Format.Alpha          => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
-            PixelType.Format.Intensity      => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
-            PixelType.Format.LuminanceAlpha => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
-            PixelType.Format.RGB565         => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
-            PixelType.Format.RGBA4444       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
-            PixelType.Format.RGB888         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
-            PixelType.Format.RGBA8888       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+            PixelType.Format.Alpha          => PixmapData.GDX_2D_FORMAT_ALPHA,
+            PixelType.Format.Intensity      => PixmapData.GDX_2D_FORMAT_ALPHA,
+            PixelType.Format.LuminanceAlpha => PixmapData.GDX_2D_FORMAT_LUMINANCE_ALPHA,
+            PixelType.Format.RGB565         => PixmapData.GDX_2D_FORMAT_RGB565,
+            PixelType.Format.RGBA4444       => PixmapData.GDX_2D_FORMAT_RGBA4444,
+            PixelType.Format.RGB888         => PixmapData.GDX_2D_FORMAT_RGB888,
+            PixelType.Format.RGBA8888       => PixmapData.GDX_2D_FORMAT_RGBA8888,
 
             var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
         };
@@ -200,12 +200,12 @@ public class PixmapFormat
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => PixelType.Format.Alpha,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => PixelType.Format.LuminanceAlpha,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => PixelType.Format.RGB888,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => PixelType.Format.RGBA8888,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => PixelType.Format.RGB565,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => PixelType.Format.RGBA4444,
+            PixmapData.GDX_2D_FORMAT_ALPHA           => PixelType.Format.Alpha,
+            PixmapData.GDX_2D_FORMAT_LUMINANCE_ALPHA => PixelType.Format.LuminanceAlpha,
+            PixmapData.GDX_2D_FORMAT_RGB888          => PixelType.Format.RGB888,
+            PixmapData.GDX_2D_FORMAT_RGBA8888        => PixelType.Format.RGBA8888,
+            PixmapData.GDX_2D_FORMAT_RGB565          => PixelType.Format.RGB565,
+            PixmapData.GDX_2D_FORMAT_RGBA4444        => PixelType.Format.RGBA4444,
 
             var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
         };
@@ -221,12 +221,12 @@ public class PixmapFormat
 
         return cformat switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
+            PixmapData.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
+            PixmapData.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
+            PixmapData.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB,
+            PixmapData.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
+            PixmapData.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
+            PixmapData.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
 
             var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
         };
@@ -241,12 +241,12 @@ public class PixmapFormat
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
+            PixmapData.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
+            PixmapData.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
+            PixmapData.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB,
+            PixmapData.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
+            PixmapData.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
+            PixmapData.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
 
             var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
         };
@@ -258,12 +258,12 @@ public class PixmapFormat
 
         return cformat switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => PixelFormat.Alpha,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            PixmapData.GDX_2D_FORMAT_ALPHA           => PixelFormat.Alpha,
+            PixmapData.GDX_2D_FORMAT_LUMINANCE_ALPHA => PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
+            PixmapData.GDX_2D_FORMAT_RGB888          => PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
+            PixmapData.GDX_2D_FORMAT_RGB565          => PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
+            PixmapData.GDX_2D_FORMAT_RGBA8888        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            PixmapData.GDX_2D_FORMAT_RGBA4444        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
 
             var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
         };
@@ -279,12 +279,12 @@ public class PixmapFormat
 
         return cformat switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+            PixmapData.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
+            PixmapData.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
+            PixmapData.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
+            PixmapData.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
+            PixmapData.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
+            PixmapData.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
 
             var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
         };
@@ -299,12 +299,12 @@ public class PixmapFormat
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+            PixmapData.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
+            PixmapData.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
+            PixmapData.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
+            PixmapData.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
+            PixmapData.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
+            PixmapData.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
 
             var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
         };
@@ -318,12 +318,12 @@ public class PixmapFormat
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => "GDX_2D_FORMAT_ALPHA",
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => "GDX_2D_FORMAT_LUMINANCE_ALPHA",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => "GDX_2D_FORMAT_RGB888",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => "GDX_2D_FORMAT_RGBA8888",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => "GDX_2D_FORMAT_RGB565",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => "GDX_2D_FORMAT_RGBA4444",
+            PixmapData.GDX_2D_FORMAT_ALPHA           => "GDX_2D_FORMAT_ALPHA",
+            PixmapData.GDX_2D_FORMAT_LUMINANCE_ALPHA => "GDX_2D_FORMAT_LUMINANCE_ALPHA",
+            PixmapData.GDX_2D_FORMAT_RGB888          => "GDX_2D_FORMAT_RGB888",
+            PixmapData.GDX_2D_FORMAT_RGBA8888        => "GDX_2D_FORMAT_RGBA8888",
+            PixmapData.GDX_2D_FORMAT_RGB565          => "GDX_2D_FORMAT_RGB565",
+            PixmapData.GDX_2D_FORMAT_RGBA4444        => "GDX_2D_FORMAT_RGBA4444",
 
             var _ => $"Unknown format: {format}",
         };

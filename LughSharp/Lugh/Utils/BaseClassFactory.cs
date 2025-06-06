@@ -22,43 +22,25 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Viewports;
-
-namespace LughSharp.Lugh.Graphics.Cameras;
+namespace LughSharp.Lugh.Utils;
 
 [PublicAPI]
-public interface IGameCamera
+public abstract class BaseClassFactory
 {
-    Viewport              Viewport         { get; set; }
-    OrthographicCamera    Camera           { get; set; }
-    string                Name             { get; set; }
-    Vector3               LerpVector       { get; set; }
-    bool                  IsInUse          { get; set; }
-    bool                  IsLerpingEnabled { get; set; }
-    Vector3               Position         { get; }
-    float                 PPM              { get; set; }
-    float                 CameraZoom       { get; set; }
-    Viewport.ViewportType ViewportType     { get; set; }
+    protected BaseClassFactory()
+    {
+    }
 
-    // ========================================================================
+    // Abstract method to be implemented by derived classes
+    protected abstract void InitializeInternal();
 
-    void SetPosition( Vector3 position );
+    public static T Create< T >() where T : BaseClassFactory, new()
+    {
+        T instance = new T();          // Creates the most derived instance
+        instance.InitializeInternal(); // Calls the derived implementation *after* construction
 
-    void SetPosition( Vector3 position, float? zoom );
-
-    void SetPosition( Vector3 position, float? zoom, bool shake );
-
-    void UpdatePosition( float x, float y );
-
-    void LerpTo( Vector3 position, float speed );
-
-    void LerpTo( Vector3 position, float speed, float zoom, bool shake );
-
-    void ResizeViewport( int width, int height, bool centerCamera );
-
-    void SetZoomDefault( float zoom );
-
-    void Reset();
+        return instance;
+    }
 }
 
 // ========================================================================

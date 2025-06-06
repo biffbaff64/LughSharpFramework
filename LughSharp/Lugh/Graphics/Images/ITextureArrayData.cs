@@ -27,7 +27,7 @@ using LughSharp.Lugh.Graphics.Utils;
 namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
-/// Used by a <see cref="TextureArray" /> to load the pixel data. The TextureArray will
+/// Used by a <see cref="GLTextureArray" /> to load the pixel data. The TextureArray will
 /// request the TextureArrayData to prepare itself through <see cref="Prepare()" /> and
 /// upload its data using <see cref="ConsumeTextureArrayData()" />. These are the first
 /// methods to be called by TextureArray.

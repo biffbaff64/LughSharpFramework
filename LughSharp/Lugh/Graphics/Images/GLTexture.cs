@@ -39,7 +39,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// create TextureData and upload image data.
 /// </summary>
 [PublicAPI]
-public abstract class GLTexture : IDrawable, IDisposable
+public abstract class GLTexture : ImageBase, IDrawable, IDisposable
 {
     /// <summary>
     /// The OpenGL target for the texture. A GL target, in the context of OpenGL (and
@@ -124,15 +124,15 @@ public abstract class GLTexture : IDrawable, IDisposable
     /// </summary>
     public virtual int Depth { get; }
 
-    /// <summary>
-    /// The width, in pixels, of this texture.
-    /// </summary>
-    public virtual int Width { get; }
-
-    /// <summary>
-    /// The height, in pixels, of this texture.
-    /// </summary>
-    public virtual int Height { get; }
+//    /// <summary>
+//    /// The width, in pixels, of this texture.
+//    /// </summary>
+//    public virtual int Width { get; }
+//
+//    /// <summary>
+//    /// The height, in pixels, of this texture.
+//    /// </summary>
+//    public virtual int Height { get; }
 
     // ========================================================================
 
@@ -500,7 +500,7 @@ public abstract class GLTexture : IDrawable, IDisposable
     // ========================================================================
 
     /// <inheritdoc />
-    public virtual void Dispose()
+    public void Dispose()
     {
         Dispose( true );
 
@@ -529,9 +529,9 @@ public abstract class GLTexture : IDrawable, IDisposable
             Logger.Debug( $"pixmap.Width           : {pixmap.Width}" );
             Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
             Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
-            Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap.ColorType}" );
+            Logger.Debug( $"Pixmap ColorType       : {pixmap.PixmapData.ColorType}" );
 
-            var format = PixmapFormat.PNGColorTypeToPixmapPixelFormat( ( int )pixmap.Gdx2DPixmap.ColorType );
+            var format = PixmapFormat.PNGColorTypeToPixmapPixelFormat( ( int )pixmap.PixmapData.ColorType );
             Logger.Debug( $"Pixmap Pixel Format    : {PixmapFormat.GetFormatString( ( int )format )}" );
 
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );

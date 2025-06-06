@@ -110,5 +110,26 @@ public class MipMapTextureData : ITextureData
         public override void Reload()
         {
         }
+
+        /// <inheritdoc />
+        public override void Clear( Color color )
+        {
+        }
+
+        /// <inheritdoc />
+        public override int GetPixel( int x, int y )
+        {
+            return 0;
+        }
+
+        /// <inheritdoc />
+        public override void SetPixel( int x, int y, Color color )
+        {
+        }
+
+        /// <inheritdoc />
+        public override void SetPixel( int x, int y, int color )
+        {
+        }
     }
 }

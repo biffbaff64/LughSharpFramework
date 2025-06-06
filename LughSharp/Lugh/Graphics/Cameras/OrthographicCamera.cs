@@ -38,7 +38,7 @@ public class OrthographicCamera : Camera
 
     private readonly Vector3 _tmp = new();
 
-    private float _zoom = DEFAULT_ZOOM;
+    private float _zoom;
 
     // ========================================================================
 
@@ -58,6 +58,8 @@ public class OrthographicCamera : Camera
     /// For pixel perfect 2D rendering just supply the screen size, for other unit scales
     /// (e.g. meters for box2d) proceed accordingly. The camera will show the region
     /// [-viewportWidth/2, -(viewportHeight/2-1)] - [(viewportWidth/2-1), viewportHeight/2].
+    /// The constructor does not call <see cref="Update"/> so this will need to be done
+    /// after object construction.
     /// </summary>
     /// <param name="viewportWidth"> Width, in pixels, of this cameras viewport. </param>
     /// <param name="viewportHeight"> Height, in pixels, of this cameras viewport. </param>
@@ -68,20 +70,9 @@ public class OrthographicCamera : Camera
         Near           = 0;
         Far            = 1;
         Zoom           = DEFAULT_ZOOM;
-
-        SafeUpdate();
     }
 
     // ========================================================================
-
-    /// <summary>
-    /// This method is here because <see cref="Update" /> is a <b>virtual method</b> and
-    /// should not be called from a constructor.
-    /// </summary>
-    private void SafeUpdate()
-    {
-        Update();
-    }
 
     /// <summary>
     /// Sets this camera to an orthographic projection using a viewport fitting
@@ -126,11 +117,6 @@ public class OrthographicCamera : Camera
     /// </param>
     public override void Update( bool updateFrustrum = true )
     {
-        if ( Zoom == 0f )
-        {
-            Zoom = DEFAULT_ZOOM;
-        }
-
         Projection.SetToOrtho( ( Zoom * -ViewportWidth ) / 2,
                                Zoom * ( ViewportWidth / 2 ),
                                Zoom * -( ViewportHeight / 2 ),

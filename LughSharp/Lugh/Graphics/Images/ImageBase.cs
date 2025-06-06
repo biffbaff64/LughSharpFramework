@@ -22,43 +22,38 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Viewports;
+namespace LughSharp.Lugh.Graphics.Images;
 
-namespace LughSharp.Lugh.Graphics.Cameras;
-
+/// <summary>
+/// Base class for all Image types:-
+/// <li>Common interface for all image types.</li>
+/// <li>Shared basic functionality.</li>
+/// <li>Clear separation between system memory and GPU memory implementations.</li>
+/// <li>Easier to add new image types later.</li>
+/// <li>Potential for shared utility methods.</li>
+/// </summary>
 [PublicAPI]
-public interface IGameCamera
+public abstract class ImageBase
 {
-    Viewport              Viewport         { get; set; }
-    OrthographicCamera    Camera           { get; set; }
-    string                Name             { get; set; }
-    Vector3               LerpVector       { get; set; }
-    bool                  IsInUse          { get; set; }
-    bool                  IsLerpingEnabled { get; set; }
-    Vector3               Position         { get; }
-    float                 PPM              { get; set; }
-    float                 CameraZoom       { get; set; }
-    Viewport.ViewportType ViewportType     { get; set; }
+    // Common properties
+    public virtual int         Width    { get; protected set; }
+    public virtual int         Height   { get; protected set; }
+    public virtual int         BitDepth { get; protected set; }
+    public virtual PixelFormat Format   { get; protected set; }
 
     // ========================================================================
 
-    void SetPosition( Vector3 position );
+    // Common methods for basic image operations
+    public abstract void Clear( Color color );
+    public abstract int GetPixel( int x, int y );
+    public abstract void SetPixel( int x, int y, Color color );
+    public abstract void SetPixel( int x, int y, int color );
 
-    void SetPosition( Vector3 position, float? zoom );
+    // ========================================================================
 
-    void SetPosition( Vector3 position, float? zoom, bool shake );
-
-    void UpdatePosition( float x, float y );
-
-    void LerpTo( Vector3 position, float speed );
-
-    void LerpTo( Vector3 position, float speed, float zoom, bool shake );
-
-    void ResizeViewport( int width, int height, bool centerCamera );
-
-    void SetZoomDefault( float zoom );
-
-    void Reset();
+    // Common utility methods
+    public bool IsInBounds( int x, int y )
+        => ( x >= 0 ) && ( x < Width ) && ( y >= 0 ) && ( y < Height );
 }
 
 // ========================================================================

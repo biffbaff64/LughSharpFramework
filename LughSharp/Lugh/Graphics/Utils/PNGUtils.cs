@@ -96,17 +96,17 @@ public class PNGUtils
     /// displaying the results.
     /// </summary>
     /// <param name="filename">The file path of the PNG image to analyze.</param>
-    /// <param name="showResults">Specifies whether to display the analysis results in the output.</param>
+    /// <param name="verbose">Specifies whether to display the analysis results in the output.</param>
     /// <exception cref="ArgumentNullException">Thrown if the provided filename is null or empty.</exception>
     /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist.</exception>
     /// <exception cref="ArgumentException">Thrown if the file format is invalid or not a valid PNG.</exception>
-    public static void AnalysePNG( string filename, bool showResults = false )
+    public static void AnalysePNG( string filename, bool verbose = false )
     {
         Logger.Checkpoint();
 
         var data = File.ReadAllBytes( filename );
 
-        AnalysePNG( data, showResults );
+        AnalysePNG( data, verbose );
     }
 
     /// <summary>
@@ -115,13 +115,13 @@ public class PNGUtils
     /// the PNG format.
     /// </summary>
     /// <param name="pngData">A byte array containing the PNG file data to be analyzed.</param>
-    /// <param name="showResults">
+    /// <param name="verbose">
     /// Indicates whether to display the analysis results after processing.
     /// </param>
     /// <exception cref="ArgumentException">
     /// Thrown if the input byte array is null or empty, or if the PNG data is invalid.
     /// </exception>
-    public static void AnalysePNG( byte[] pngData, bool showResults = false )
+    public static void AnalysePNG( byte[] pngData, bool verbose = false )
     {
         if ( ( pngData == null ) || ( pngData.Length == 0 ) )
         {
@@ -188,7 +188,7 @@ public class PNGUtils
 
         TotalIDATSize = CalculateTotalIDATSize( pngData );
 
-        if ( showResults )
+        if ( verbose )
         {
             Logger.Debug( $"PNG Signature   : {BitConverter.ToString( PngSignature.Signature ).Replace( "-", " " )}" );
             Logger.Debug( "" );

@@ -386,6 +386,31 @@ public class Texture : GLTexture, IManaged
         _managedTextures.Remove( app );
     }
 
+    // ========================================================================
+    // Implementations of abstract methods from the base Image class.
+    
+    public override void Clear( Color color )
+    {
+        throw new NotImplementedException();
+    }
+    
+    public override int GetPixel( int x, int y )
+    {
+        throw new NotImplementedException();
+    }
+    
+    public override void SetPixel( int x, int y, Color color )
+    {
+        throw new NotImplementedException();
+    }
+    
+    public override void SetPixel( int x, int y, int color )
+    {
+        throw new NotImplementedException();
+    }
+    
+    // ========================================================================
+    
     /// <inheritdoc />
     public override string? ToString()
     {
@@ -405,16 +430,6 @@ public class Texture : GLTexture, IManaged
         Logger.Debug( $"GLTextureHandle   : {GLTextureHandle}" );
         TextureData.Prepare();
         Logger.Debug( $"TextureData Length: {TextureData.ConsumePixmap()!.PixelData.Length}" );
-    }
-
-    /// <summary>
-    /// Disposes all resources associated with the texture.
-    /// </summary>
-    public override void Dispose()
-    {
-        Dispose( true );
-
-        GC.SuppressFinalize( this );
     }
 
     /// <inheritdoc />

@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.Viewports;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Cameras;
 
@@ -42,21 +43,22 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     public const float DEFAULT_SCENE_HEIGHT = 480.0f;
 
     // ========================================================================
-    
-    public Viewport?           Viewport         { get; set; }
-    public OrthographicCamera? Camera           { get; set; }
-    public string?             Name             { get; set; }
-    public Vector3?            LerpVector       { get; set; }
-    public bool                IsInUse          { get; set; }
-    public bool                IsLerpingEnabled { get; set; }
-    public float               PPM              { get; set; }
-    public Vector3             Position         { get; set; }
+
+    public Viewport              Viewport         { get; set; }
+    public OrthographicCamera    Camera           { get; set; }
+    public string                Name             { get; set; }
+    public Vector3               LerpVector       { get; set; }
+    public bool                  IsInUse          { get; set; }
+    public bool                  IsLerpingEnabled { get; set; }
+    public float                 PPM              { get; set; }
+    public Vector3               Position         { get; set; }
+    public Viewport.ViewportType ViewportType     { get; set; } = Viewport.ViewportType.Stretch;
 
     // ========================================================================
 
     private float _defaultZoom;
     private Shake _shake = new();
-    
+
     // ========================================================================
 
     /// <summary>
@@ -87,6 +89,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </summary>
     public OrthographicGameCamera( float sceneWidth,
                                    float sceneHeight,
+                                   Viewport.ViewportType viewportType = Viewport.ViewportType.Stretch,
                                    float ppm = DEFAULT_PPM,
                                    string name = "" )
     {
@@ -98,9 +101,46 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         PPM              = ppm;
 
         Camera = new OrthographicCamera( sceneWidth, sceneHeight );
+
         Camera.SetToOrtho( sceneWidth, sceneHeight, false );
-        
-//        Camera.Position.Set( sceneWidth / 2, sceneHeight / 2, 0 );
+        Camera.Position.Set( sceneWidth / 2, sceneHeight / 2, 0 );
+        Camera.Update();
+
+        switch ( viewportType )
+        {
+            case Viewport.ViewportType.Fit:
+                SetFitViewport();
+
+                break;
+
+            case Viewport.ViewportType.Stretch:
+                SetStretchViewport();
+
+                break;
+
+            case Viewport.ViewportType.Extended:
+                SetExtendedViewport();
+
+                break;
+
+            case Viewport.ViewportType.Fill:
+                SetFillViewport();
+
+                break;
+
+            case Viewport.ViewportType.Screen:
+                SetScreenViewport();
+
+                break;
+
+            case Viewport.ViewportType.Scaling:
+                SetScalingViewport( Scaling.None ); //TODO: Add Scaling
+
+                break;
+
+            default:
+                throw new GdxRuntimeException( $"Unknown Viewport Type: {viewportType}" );
+        }
     }
 
     // ========================================================================
@@ -149,7 +189,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </param>
     public void SetPosition( Vector3 position, float? zoom, bool shake )
     {
-        if ( IsInUse && ( Camera != null ) )
+        if ( IsInUse )
         {
             Camera.Position.X = position.X;
             Camera.Position.Y = position.Y;
@@ -174,12 +214,12 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </summary>
     public void Update()
     {
-        if ( IsInUse && ( Camera != null ) )
+        if ( IsInUse )
         {
             Camera.Update();
         }
     }
-    
+
     /// <summary>
     /// Updates the position of the camera based on the current state.
     /// This method is typically used for internal updates to reposition the camera
@@ -189,12 +229,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     {
         if ( IsInUse )
         {
-            var temp = Camera?.Position;
-
-            if ( temp == null )
-            {
-                return;
-            }
+            var temp = Camera.Position;
 
             temp.X = Camera!.Position.X + ( ( x - Camera.Position.X ) * 0.1f );
             temp.Y = Camera!.Position.Y + ( ( y - Camera.Position.Y ) * 0.1f );
@@ -220,9 +255,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </param>
     public void LerpTo( Vector3 position, float speed )
     {
-        if ( IsInUse && IsLerpingEnabled
-                     && ( LerpVector != null )
-                     && ( Camera != null ) )
+        if ( IsInUse && IsLerpingEnabled )
         {
             LerpVector.Set( position.X, position.Y, position.Z );
 
@@ -250,9 +283,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </param>
     public void LerpTo( Vector3 position, float speed, float zoom, bool shake )
     {
-        if ( IsInUse && IsLerpingEnabled
-                     && ( LerpVector != null )
-                     && ( Camera != null ) )
+        if ( IsInUse && IsLerpingEnabled )
         {
             LerpVector.Set( position.X, position.Y, position.Z );
 
@@ -280,11 +311,6 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </param>
     public void ResizeViewport( int width, int height, bool centerCamera )
     {
-        if ( ( Viewport == null ) || ( Camera == null ) )
-        {
-            return;
-        }
-
         Viewport.Update( width, height, centerCamera );
         Camera.Update();
     }
@@ -301,11 +327,6 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </summary>
     public void SetStretchViewport()
     {
-        if ( Camera == null )
-        {
-            return;
-        }
-
         Viewport = new StretchViewport( ( Camera.ViewportWidth * PPM ),
                                         ( Camera.ViewportHeight * PPM ),
                                         Camera );
@@ -314,7 +335,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
                                   ( int )Camera.Position.Y,
                                   ( int )( Camera.ViewportWidth * PPM ),
                                   ( int )( Camera.ViewportHeight * PPM ) );
-        
+
         Viewport.Apply();
     }
 
@@ -331,18 +352,61 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </summary>
     public void SetFitViewport()
     {
-        if ( Camera == null )
-        {
-            return;
-        }
-
         Viewport = new FitViewport( Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
 
         Viewport.SetScreenBounds( ( int )Camera.Position.X,
                                   ( int )Camera.Position.Y,
                                   ( int )( Camera.ViewportWidth * PPM ),
                                   ( int )( Camera.ViewportHeight * PPM ) );
-        
+
+        Viewport.Apply();
+    }
+
+    public void SetExtendedViewport()
+    {
+        Viewport = new ExtendViewport( Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
+
+        Viewport.SetScreenBounds( ( int )Camera.Position.X,
+                                  ( int )Camera.Position.Y,
+                                  ( int )( Camera.ViewportWidth * PPM ),
+                                  ( int )( Camera.ViewportHeight * PPM ) );
+
+        Viewport.Apply();
+    }
+
+    public void SetFillViewport()
+    {
+        Viewport = new FillViewport( Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
+
+        Viewport.SetScreenBounds( ( int )Camera.Position.X,
+                                  ( int )Camera.Position.Y,
+                                  ( int )( Camera.ViewportWidth * PPM ),
+                                  ( int )( Camera.ViewportHeight * PPM ) );
+
+        Viewport.Apply();
+    }
+
+    public void SetScreenViewport()
+    {
+        Viewport = new ScreenViewport();
+
+        Viewport.SetScreenBounds( ( int )Camera.Position.X,
+                                  ( int )Camera.Position.Y,
+                                  ( int )( Camera.ViewportWidth * PPM ),
+                                  ( int )( Camera.ViewportHeight * PPM ) );
+
+        Viewport.Apply();
+    }
+
+    public void SetScalingViewport( Scaling scaling )
+    {
+        Viewport = new ScalingViewport( scaling, Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
+
+        Viewport.SetScreenBounds( ( int )Camera.Position.X,
+                                  ( int )Camera.Position.Y,
+                                  ( int )( Camera.ViewportWidth * PPM ),
+                                  ( int )( Camera.ViewportHeight * PPM ) );
+
         Viewport.Apply();
     }
 
@@ -352,7 +416,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// <param name="zoom">The zoom level to set as default and apply to the camera.</param>
     public void SetZoomDefault( float zoom )
     {
-        CameraZoom  = zoom;
+        CameraZoom   = zoom;
         _defaultZoom = zoom;
     }
 
