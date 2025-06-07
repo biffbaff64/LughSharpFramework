@@ -1640,7 +1640,7 @@ public class SpriteBatch : IBatch, IDisposable
 
         // Update VBO with new vertex data
         GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-        GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, /*quadVertices.Length * sizeof( float ),*/ quadVertices );
+        GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, quadVertices.Length * sizeof( float ), quadVertices );
 
         // Set up vertex attributes
         // Update vertex attribute pointers to use VertexConstants

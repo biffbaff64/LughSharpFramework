@@ -22,43 +22,15 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Viewports;
-
 namespace LughSharp.Lugh.Graphics.Cameras;
 
 [PublicAPI]
-public interface IGameCamera
+public class CameraData
 {
-    Viewport?              Viewport         { get; set; }
-    OrthographicCamera    Camera           { get; set; }
-    string                Name             { get; set; }
-    Vector3               LerpVector       { get; set; }
-    bool                  IsInUse          { get; set; }
-    bool                  IsLerpingEnabled { get; set; }
-    Vector3               Position         { get; }
-    float                 PPM              { get; set; }
-    float                 CameraZoom       { get; set; }
-    Viewport.ViewportType ViewportType     { get; set; }
-
-    // ========================================================================
-
-    void SetPosition( Vector3 position );
-
-    void SetPosition( Vector3 position, float? zoom );
-
-    void SetPosition( Vector3 position, float? zoom, bool shake );
-
-    void UpdatePosition( float x, float y );
-
-    void LerpTo( Vector3 position, float speed );
-
-    void LerpTo( Vector3 position, float speed, float zoom, bool shake );
-
-    void ResizeViewport( int width, int height, bool centerCamera );
-
-    void SetZoomDefault( float zoom );
-
-    void Reset();
+    public const float DEFAULT_PPM          = 1.0f;
+    public const float DEFAULT_ZOOM         = 1.0f;
+    public const float DEFAULT_SCENE_WIDTH  = 640.0f;
+    public const float DEFAULT_SCENE_HEIGHT = 480.0f;
 }
 
 // ========================================================================

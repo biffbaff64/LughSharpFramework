@@ -52,7 +52,6 @@ public abstract class Viewport
         Stretch,
         Screen,
         Scaling,
-        Manual,
     }
     
     public Camera? Camera       { get; set; }
@@ -248,8 +247,6 @@ public abstract class Viewport
 
         Camera.Project( _tmp, ScreenX, ScreenY, ScreenWidth, ScreenHeight );
 
-        Debug.Assert( GdxApi.Graphics != null );
-
         _tmp.Y = GdxApi.Graphics.Height - _tmp.Y;
 
         worldCoords.X = _tmp.X;
@@ -265,6 +262,8 @@ public abstract class Viewport
     /// <param name="worldHeight"> New World height in pixels. </param>
     public virtual void SetWorldSize( float worldWidth, float worldHeight )
     {
+        Logger.Debug( $"SetWorldSize: {worldWidth}, {worldHeight}" );
+        
         WorldWidth  = worldWidth;
         WorldHeight = worldHeight;
     }
@@ -275,6 +274,8 @@ public abstract class Viewport
     /// </summary>
     public virtual void SetScreenPosition( int screenX, int screenY )
     {
+        Logger.Debug( $"SetScreenPosition: {screenX}, {screenY}" );
+        
         ScreenX = screenX;
         ScreenY = screenY;
     }
@@ -285,6 +286,8 @@ public abstract class Viewport
     /// </summary>
     public virtual void SetScreenSize( int screenWidth, int screenHeight )
     {
+        Logger.Debug( $"SetScreenSize: {screenWidth}, {screenHeight}" );
+        
         ScreenWidth  = screenWidth;
         ScreenHeight = screenHeight;
     }
@@ -295,6 +298,8 @@ public abstract class Viewport
     /// </summary>
     public virtual void SetScreenBounds( int screenX, int screenY, int screenWidth, int screenHeight )
     {
+        Logger.Debug( $"SetScreenBounds: {screenX}, {screenY}, {screenWidth}, {screenHeight}" );
+        
         if ( ( screenWidth <= 0 ) || ( screenHeight <= 0 ) )
         {
             Logger.Warning( "Screen bounds size must be positive and > zero!" );
@@ -337,5 +342,18 @@ public abstract class Viewport
     /// Returns the top gutter (black bar) height in screen coordinates.
     /// </summary>
     public virtual int TopGutterHeight => GdxApi.Graphics.Height - ( ScreenY + ScreenHeight );
+    
+    // ========================================================================
+
+    public void Debug()
+    {
+        Logger.Checkpoint();
+        Logger.Debug( $"ScreenX: {ScreenX}" );
+        Logger.Debug( $"ScreenY: {ScreenY}" );
+        Logger.Debug( $"ScreenWidth: {ScreenWidth}" );
+        Logger.Debug( $"ScreenHeight: {ScreenHeight}" );
+        Logger.Debug( $"WorldWidth: {WorldWidth}" );
+        Logger.Debug( $"WorldHeight: {WorldHeight}" );
+    }
 }
 

@@ -452,7 +452,6 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         Logger.Debug( $"\nRequested: [{x}, {y}, {width}, {height}]"
                       + $"\nActual   : [{viewport[ 0 ]}, {viewport[ 1 ]}, "
                       + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
-        #endif
         
         // Verify viewport dimensions match what we set
         if ( ( viewport[ 0 ] != x ) || ( viewport[ 1 ] != y ) ||
@@ -463,6 +462,7 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
                             + $"\nActual: [{viewport[ 0 ]}, {viewport[ 1 ]}, "
                             + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
         }
+        #endif
     }
 
     /// <inheritdoc />

@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Maths.Collision;
+using LughSharp.Lugh.Utils;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 using Quaternion = LughSharp.Lugh.Maths.Quaternion;
@@ -37,24 +38,24 @@ namespace LughSharp.Lugh.Graphics.Cameras;
 [PublicAPI]
 public abstract class Camera
 {
-    public Matrix4 Projection     { get; set; } = new();
-    public Matrix4 View           { get; set; } = new();
-    public Matrix4 Combined       { get; set; } = new();
-    public Vector3 Position       { get; set; } = new();          // the position of the camera
-    public Vector3 Up             { get; set; } = new( 0, 1, 0 ); // the unit length up vector of the camera
-    public float   ViewportWidth  { get; set; }
-    public float   ViewportHeight { get; set; }
+    public Vector3 Position  { get; set; } = new();           // the position of the camera
+    public Vector3 Direction { get; set; } = new( 0, 0, -1 ); // the unit length direction vector of the camera
+    public Vector3 Up        { get; set; } = new( 0, 1, 0 );  // the unit length up vector of the camera
+
+    public Matrix4 Projection        { get; set; } = new();
+    public Matrix4 View              { get; set; } = new();
+    public Matrix4 Combined          { get; set; } = new();
+    public Matrix4 InvProjectionView { get; set; } = new();
+
+    public float ViewportWidth  { get; set; }
+    public float ViewportHeight { get; set; }
+
+    public Frustrum Frustrum { get; init; } = new();
 
     // ========================================================================
 
-    protected Matrix4  InvProjectionView { get; set; } = new();
-    protected Vector3  Direction         { get; set; } = new( 0, 0, -1 ); // the unit length direction vector of the camera
-    protected Frustrum Frustrum          { get; set; } = new();
-
-    // ========================================================================
-
-    private float _far  = 100.0f;
     private float _near = 1.0f;
+    private float _far  = 100.0f;
 
     // ========================================================================
 
@@ -84,17 +85,7 @@ public abstract class Camera
     /// planes. Use this after you've manipulated any of the attributes of the camera.
     /// The default implementation does nothing.
     /// </summary>
-    public virtual void Update( bool updateFrustrum = true )
-    {
-        View.SetToLookAt( Position, Position + Direction, Up );
-
-        Combined.Set( Projection ).Mul( View );
-
-        if ( updateFrustrum )
-        {
-            Frustrum.Update( Combined );
-        }
-    }
+    public abstract void Update( bool updateFrustrum = true );
 
     /// <summary>
     /// Recalculates the direction of the camera to look at the point (x, y, z).
@@ -399,20 +390,31 @@ public abstract class Camera
         return GetPickRay( screenX, screenY, 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
     }
 
-    // ========================================================================
-
-    public Vector3 GetForward()
-    {
-        return Direction;
-    }
-
+    /// <summary>
+    /// Calculates and returns the right vector of the camera. The right vector
+    /// is derived as the cross product of the Direction and Up vectors, normalized.
+    /// </summary>
+    /// <returns>
+    /// A normalized vector representing the right direction of the camera.
+    /// </returns>
     public Vector3 GetRight()
     {
         return Direction.Crs( Up ).Nor();
     }
 
-    public Vector3 GetUp()
+    // ========================================================================
+
+    #if DEBUG
+    public void Debug()
     {
-        return Up;
+        Logger.Divider();
+        Logger.Debug( $"Position: X:{Position.X}, Y:{Position.Y}, Z:{Position.Z}" );
+        Logger.Debug( $"Viewport: {ViewportWidth}x{ViewportHeight}" );
+        Logger.Debug( $"Direction: X:{Direction.X}, Y:{Direction.Y}, Z:{Direction.Z}" );
+        Logger.Debug( $"Up: X:{Up.X}, Y:{Up.Y}, Z:{Up.Z}" );
+        Logger.Debug( $"Projection: {Projection.ToString()}" );
+        Logger.Debug( $"View: {View.ToString()}" );
+        Logger.Debug( $"Combined: {Combined.ToString()}" );
     }
+    #endif
 }

@@ -33,22 +33,35 @@ namespace LughSharp.Lugh.Maths;
 [PublicAPI]
 public class Frustrum
 {
+    [PublicAPI]
+    public enum ClippingPlane
+    {
+        Near,
+        Far,
+        Left,
+        Right,
+        Top,
+        Bottom,
+    }
+    
     protected static readonly Vector3[] ClipSpacePlanePoints =
     [
+        //@formatter:off
         new( -1, -1, -1 ),
-        new( 1, -1, -1 ),
-        new( 1, 1, -1 ),
-        new( -1, 1, -1 ),
-        new( -1, -1, 1 ),
-        new( 1, -1, 1 ),
-        new( 1, 1, 1 ),
-        new( -1, 1, 1 ),
+        new(  1, -1, -1 ),
+        new(  1,  1, -1 ),
+        new( -1,  1, -1 ),
+        new( -1, -1,  1 ),
+        new(  1, -1,  1 ),
+        new(  1,  1,  1 ),
+        new( -1,  1,  1 ),
+        //@formatter:on
     ];
 
     protected static readonly float[] ClipSpacePlanePointsArray = new float[ 8 * 3 ];
 
     /// <system>
-    /// eight points making up the near and far clipping "rectangles".
+    /// Eight points making up the near and far clipping "rectangles".
     /// Order is counter clockwise, starting at bottom left.
     /// </system>
     public readonly Vector3[] PlanePoints =
@@ -58,6 +71,8 @@ public class Frustrum
     ];
 
     protected readonly float[] PlanePointsArray = new float[ 8 * 3 ];
+
+    // ========================================================================
 
     static Frustrum()
     {
@@ -70,7 +85,7 @@ public class Frustrum
             ClipSpacePlanePointsArray[ j++ ] = v.Z;
         }
     }
-
+    
     public Frustrum()
     {
         for ( var i = 0; i < 6; i++ )

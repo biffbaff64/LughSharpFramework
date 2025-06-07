@@ -27,7 +27,7 @@ using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 namespace LughSharp.Lugh.Graphics.Cameras;
 
 /// <summary>
-/// A Camera with Orthographic Projection.
+/// A 2D Camera with Orthographic Projection.
 /// </summary>
 [PublicAPI]
 public class OrthographicCamera : Camera
@@ -57,12 +57,13 @@ public class OrthographicCamera : Camera
     /// Constructs a new OrthographicCamera, using the given viewport width and height.
     /// For pixel perfect 2D rendering just supply the screen size, for other unit scales
     /// (e.g. meters for box2d) proceed accordingly. The camera will show the region
-    /// [-viewportWidth/2, -(viewportHeight/2-1)] - [(viewportWidth/2-1), viewportHeight/2].
+    /// <c>[-viewportWidth/2, -(viewportHeight/2-1)] - [(viewportWidth/2-1), viewportHeight/2].</c>
     /// The constructor does not call <see cref="Update"/> so this will need to be done
-    /// after object construction.
+    /// after object construction. This is because <c>Update</c> is a <c>virtual</c> method
+    /// and thus should not be called in the constructor.
     /// </summary>
-    /// <param name="viewportWidth"> Width, in pixels, of this cameras viewport. </param>
-    /// <param name="viewportHeight"> Height, in pixels, of this cameras viewport. </param>
+    /// <param name="viewportWidth"> Width of this cameras viewport. </param>
+    /// <param name="viewportHeight"> Height of this cameras viewport. </param>
     public OrthographicCamera( float viewportWidth, float viewportHeight )
     {
         ViewportWidth  = viewportWidth;
