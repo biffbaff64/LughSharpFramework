@@ -116,7 +116,7 @@ public class TextField : Widget
 
     public TextField( string? text, TextFieldStyle style )
     {
-        _clipboard = GdxApi.App.Clipboard!;
+        _clipboard = Api.App.Clipboard!;
         _blink     = new BlinkTaskManager( this );
         _keyRepeat = new KeyRepeatTaskManager( this );
 
@@ -919,7 +919,7 @@ public class TextField : Widget
 
             if ( textField == null )
             {
-                GdxApi.Input.SetOnscreenKeyboardVisible( false );
+                Api.Input.SetOnscreenKeyboardVisible( false );
 
                 break;
             }
@@ -1139,7 +1139,7 @@ public class TextField : Widget
             _tf._blinkTask = new Task( () =>
                {
                    _tf._cursorOn = !_tf._cursorOn;
-                   GdxApi.Graphics.RequestRendering();
+                   Api.Graphics.RequestRendering();
                },
                _tf._blinkCancellationToken );
             //@formatter:on
@@ -1615,7 +1615,7 @@ public class TextField : Widget
                 return false;
             }
 
-            if ( Platform.IsMac && GdxApi.Input.IsKeyPressed( IInput.Keys.SYM ) )
+            if ( Platform.IsMac && Api.Input.IsKeyPressed( IInput.Keys.SYM ) )
             {
                 return true;
             }
@@ -1795,7 +1795,7 @@ public class TextField : Widget
     {
         public void Show( bool visible )
         {
-            GdxApi.Input.SetOnscreenKeyboardVisible( visible );
+            Api.Input.SetOnscreenKeyboardVisible( visible );
         }
     }
 }

@@ -60,8 +60,7 @@ public class SpriteBatch : IBatch, IDisposable
     public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusSrcAlpha;
     public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusDstAlpha;
 
-    //TODO: Remove this from here, PolygonSpriteBatch, and CpuSpriteBatch.
-    public bool IsDrawing { get; set; } = false;
+    public bool IsDrawing => ( CurrentBatchState == BatchState.Drawing );
 
     // ========================================================================
 
@@ -219,7 +218,7 @@ public class SpriteBatch : IBatch, IDisposable
         // Set up an orthographic projection matrix for 2D rendering.
         // This matrix transforms 2D coordinates into normalized device coordinates (NDC).
         // The origin (0, 0) is at the bottom-left corner of the screen.
-        ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
+        ProjectionMatrix.SetToOrtho2D( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
 
         // Generate the index buffer data for the mesh.
         // This buffer specifies the order in which vertices are used to form triangles.
@@ -1644,17 +1643,17 @@ public class SpriteBatch : IBatch, IDisposable
 
         // Set up vertex attributes
         // Update vertex attribute pointers to use VertexConstants
-        Gdx.GL.VertexAttribPointer( 0, VertexConstants.POSITION_COMPONENTS,
+        Engine.GL.VertexAttribPointer( 0, VertexConstants.POSITION_COMPONENTS,
                                     ( int )VertexAttribPointerType.Float, false,
                                     VertexConstants.VERTEX_SIZE_BYTES,
                                     ( uint )VertexConstants.POSITION_OFFSET * sizeof( float ) );
 
-        Gdx.GL.VertexAttribPointer( 1, VertexConstants.COLOR_COMPONENTS,
+        Engine.GL.VertexAttribPointer( 1, VertexConstants.COLOR_COMPONENTS,
                                     ( int )VertexAttribPointerType.Float, false,
                                     VertexConstants.VERTEX_SIZE_BYTES,
                                     ( uint )VertexConstants.COLOR_OFFSET * sizeof( float ) );
 
-        Gdx.GL.VertexAttribPointer( 2, VertexConstants.TEXCOORD_COMPONENTS,
+        Engine.GL.VertexAttribPointer( 2, VertexConstants.TEXCOORD_COMPONENTS,
                                     ( int )VertexAttribPointerType.Float, false,
                                     VertexConstants.VERTEX_SIZE_BYTES,
                                     ( uint )VertexConstants.TEXCOORD_OFFSET * sizeof( float ) );

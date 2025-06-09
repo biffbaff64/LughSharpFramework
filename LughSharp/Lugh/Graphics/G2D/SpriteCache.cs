@@ -171,7 +171,7 @@ public class SpriteCache
             _mesh.SetIndices( indices );
         }
 
-        ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
+        ProjectionMatrix.SetToOrtho2D( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
     }
 
     public int     RenderCallsSinceBegin { get; set; } = 0;

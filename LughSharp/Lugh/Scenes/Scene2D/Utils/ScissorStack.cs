@@ -173,7 +173,7 @@ public class ScissorStack
                                           RectangleShape area,
                                           RectangleShape scissor )
     {
-        CalculateScissors( camera, 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height, batchTransform, area, scissor );
+        CalculateScissors( camera, 0, 0, Api.Graphics.Width, Api.Graphics.Height, batchTransform, area, scissor );
     }
 
     /// <summary>
@@ -225,7 +225,7 @@ public class ScissorStack
     {
         if ( _scissors.Count == 0 )
         {
-            _viewport.Set( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
+            _viewport.Set( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
 
             return _viewport;
         }

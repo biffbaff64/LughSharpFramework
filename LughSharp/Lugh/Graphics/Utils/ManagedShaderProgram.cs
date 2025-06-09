@@ -80,7 +80,7 @@ public class ManagedShaderProgram : ShaderProgram
         FetchAttributes();
         FetchUniforms();
 
-        AddManagedShader( GdxApi.App, this );
+        AddManagedShader( Api.App, this );
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// <summary>
     /// Returns the number of Managed Shaders in the managed array.
     /// </summary>
-    public static int NumManagedShaderPrograms => _availableShaders[ GdxApi.App ]!.Count;
+    public static int NumManagedShaderPrograms => _availableShaders[ Api.App ]!.Count;
 
     // ========================================================================
 
@@ -973,6 +973,6 @@ public class ManagedShaderProgram : ShaderProgram
     {
         base.Dispose();
 
-        _availableShaders[ GdxApi.App ]?.Remove( this );
+        _availableShaders[ Api.App ]?.Remove( this );
     }
 }

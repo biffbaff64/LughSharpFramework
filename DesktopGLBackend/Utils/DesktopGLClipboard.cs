@@ -48,7 +48,7 @@ public class DesktopGLClipboard : IClipboard
     /// </summary>
     public string? Contents
     {
-        get => Glfw.GetClipboardString( ( ( DesktopGLGraphics )GdxApi.Graphics ).GLWindow!.GlfwWindow );
-        set => Glfw.SetClipboardString( ( ( DesktopGLGraphics )GdxApi.Graphics ).GLWindow!.GlfwWindow, value );
+        get => Glfw.GetClipboardString( ( ( DesktopGLGraphics )Api.Graphics ).GLWindow!.GlfwWindow );
+        set => Glfw.SetClipboardString( ( ( DesktopGLGraphics )Api.Graphics ).GLWindow!.GlfwWindow, value );
     }
 }

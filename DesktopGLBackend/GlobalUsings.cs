@@ -35,4 +35,4 @@ global using DotGLFW;
 global using GLFW = DotGLFW;
 
 // ============================================================================
-global using static LughSharp.Lugh.Core.Gdx;
+global using static LughSharp.Lugh.Core.Engine;

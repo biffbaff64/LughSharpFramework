@@ -324,7 +324,7 @@ public class Button : Table, IDisableable
         if ( Stage is { ActionsRequestRendering: true }
              && ( IsPressed() != ClickListener?.Pressed ) )
         {
-            GdxApi.Graphics.RequestRendering();
+            Api.Graphics.RequestRendering();
         }
     }
 

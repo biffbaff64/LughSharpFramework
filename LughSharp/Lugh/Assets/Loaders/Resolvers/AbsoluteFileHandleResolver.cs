@@ -30,6 +30,6 @@ public class AbsoluteFileHandleResolver : IFileHandleResolver
     /// <inheritdoc />
     public FileInfo Resolve( string fileName )
     {
-        return GdxApi.Files.Absolute( fileName );
+        return Api.Files.Absolute( fileName );
     }
 }

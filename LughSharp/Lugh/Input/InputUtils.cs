@@ -34,7 +34,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseLeft()
     {
-        return GdxApi.Input.IsButtonPressed( IInput.Buttons.LEFT );
+        return Api.Input.IsButtonPressed( IInput.Buttons.LEFT );
     }
 
     /// <summary>
@@ -50,7 +50,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseRight()
     {
-        return GdxApi.Input.IsButtonPressed( IInput.Buttons.RIGHT );
+        return Api.Input.IsButtonPressed( IInput.Buttons.RIGHT );
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ public static class InputUtils
     /// </summary>
     public static bool MouseMiddle()
     {
-        return GdxApi.Input.IsButtonPressed( IInput.Buttons.MIDDLE );
+        return Api.Input.IsButtonPressed( IInput.Buttons.MIDDLE );
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public static class InputUtils
     /// </summary>
     public static bool ShiftKey()
     {
-        return GdxApi.Input.IsKeyPressed( Keys.SHIFT_LEFT ) || GdxApi.Input.IsKeyPressed( Keys.SHIFT_RIGHT );
+        return Api.Input.IsKeyPressed( Keys.SHIFT_LEFT ) || Api.Input.IsKeyPressed( Keys.SHIFT_RIGHT );
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public static class InputUtils
 #if MACOS
         return GdxApi.Input.isKeyPressed( Keys.SYM );
 #else
-        return GdxApi.Input.IsKeyPressed( Keys.CONTROL_LEFT ) || GdxApi.Input.IsKeyPressed( Keys.CONTROL_RIGHT );
+        return Api.Input.IsKeyPressed( Keys.CONTROL_LEFT ) || Api.Input.IsKeyPressed( Keys.CONTROL_RIGHT );
 #endif
     }
 
@@ -122,7 +122,7 @@ public static class InputUtils
     /// </summary>
     public static bool AltKey()
     {
-        return GdxApi.Input.IsKeyPressed( Keys.ALT_LEFT ) || GdxApi.Input.IsKeyPressed( Keys.ALT_RIGHT );
+        return Api.Input.IsKeyPressed( Keys.ALT_LEFT ) || Api.Input.IsKeyPressed( Keys.ALT_RIGHT );
     }
 
     /// <summary>

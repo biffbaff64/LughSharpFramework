@@ -53,9 +53,31 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public class Pixmap : IDisposable
 {
-    private Filter _filter = Filter.BiLinear;
+    public bool       IsDisposed { get; set; } = false;       // 
+    public int        Scale      { get; set; } = 1;           // 
+    public Color      Color      { get; set; } = Color.Clear; // 
+    public PixmapData PixmapData { get; set; }                // 
+
+    /// <summary>
+    /// Returns the width of the Pixmap in pixels.
+    /// </summary>
+    public int Width => ( int )PixmapData.Width;
+
+    /// <summary>
+    /// Returns the height of the Pixmap in pixels.
+    /// </summary>
+    public int Height => ( int )PixmapData.Height;
+
+    /// <summary>
+    /// Sets the type of <see cref="BlendTypes" /> to be used for all operations.
+    /// Default is <see cref="BlendTypes.SourceOver" />.
+    /// </summary>
+    public BlendTypes Blending { get; set; } = BlendTypes.SourceOver;
 
     // ========================================================================
+
+    private Filter _filter = Filter.BiLinear;
+
     // ========================================================================
 
     /// <summary>
@@ -179,7 +201,7 @@ public class Pixmap : IDisposable
     public int GLPixelFormat => PixmapFormat.ToGLPixelFormat( ( int )PixmapData.ColorType );
 
     /// <summary>
-    /// Returns the OpenGL ES internal pixel format of this Pixmap.
+    /// Returns the OpenGL internal pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_RG, GL_RGB, GL_RGBA, GL_RED, GL_DEPTH_COMPONENT, or GL_DEPTH_STENCIL.</returns>
     public int GLInternalPixelFormat
@@ -217,23 +239,25 @@ public class Pixmap : IDisposable
                     {
                         8  => IGL.GL_UNSIGNED_BYTE,
                         16 => IGL.GL_UNSIGNED_SHORT,
-
-                        var _ => throw new Exception( "Unsupported bit depth for grayscale." ),
+                        32 => IGL.GL_UNSIGNED_INT,
+                        
+                        var _ => throw new Exception( $"Unsupported bit depth for grayscale: {PixmapData.BitDepth}" ),
                     },
                 { ColorType: 2 } or { ColorType: 6 } =>
                     PixmapData.BitDepth switch
                     {
                         8  => IGL.GL_UNSIGNED_BYTE,
                         16 => IGL.GL_UNSIGNED_SHORT,
+                        32 => IGL.GL_UNSIGNED_INT,
 
-                        var _ => throw new Exception( "Unsupported bit depth for truecolor." ),
+                        var _ => throw new Exception( $"Unsupported bit depth for truecolor: {PixmapData.BitDepth}" ),
                     },
                 { ColorType: 3 } =>
                     PixmapData.BitDepth switch
                     {
                         1 or 2 or 4 or 8 => IGL.GL_UNSIGNED_BYTE,
 
-                        var _ => throw new Exception( "Unsupported bit depth for indexed colour." ),
+                        var _ => throw new Exception( $"Unsupported bit depth for indexed colour: {PixmapData.BitDepth}" ),
                     },
                 var _ => throw new Exception( "Unknown color type." ),
             };
@@ -334,6 +358,14 @@ public class Pixmap : IDisposable
         PixmapData.Clear( Color );
     }
 
+    /// <summary>
+    /// Fills the complete bitmap with the currently set color.
+    /// </summary>
+    public void FillWithColor( Color color )
+    {
+        PixmapData.Clear( color );
+    }
+    
     /// <summary>
     /// Returns the <see cref="PixelType.Format" /> of this Pixmap.
     /// </summary>
@@ -601,12 +633,12 @@ public class Pixmap : IDisposable
     /// </summary>
     public void Debug()
     {
-        if ( GdxApi.DevMode )
+        if ( Api.DevMode )
         {
             Logger.Debug( $"Width : {Width}, Height: {Height}" );
-            Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height}" +
-                          $"{PixmapFormat.ToPixmapPixelFormat( ( int )PixmapData.ColorType )}:" +
-                          $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DPixelFormat( GetColorFormat() ) )}" );
+            Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height} "
+                          + $"{PixmapFormat.ToPixmapPixelFormat( ( int )PixmapData.ColorType )}: "
+                          + $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DPixelFormat( GetColorFormat() ) )}" );
             Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
             var a = PixmapData.PixmapBuffer.BackingArray();
@@ -640,34 +672,6 @@ public class Pixmap : IDisposable
         /// </summary>
         void DownloadFailed( Exception e );
     }
-
-    #region properties
-
-    public bool        IsDisposed  { get; set; } = false;       // 
-    public int         Scale       { get; set; } = 1;           // 
-    public Color       Color       { get; set; } = Color.Clear; // 
-    public PixmapData PixmapData { get; set; }                // 
-
-    /// <summary>
-    /// Returns the width of the Pixmap in pixels.
-    /// </summary>
-    public int Width => ( int )PixmapData.Width;
-
-    /// <summary>
-    /// Returns the height of the Pixmap in pixels.
-    /// </summary>
-    public int Height => ( int )PixmapData.Height;
-
-    /// <summary>
-    /// Sets the type of <see cref="BlendTypes" /> to be used for all operations.
-    /// Default is <see cref="BlendTypes.SourceOver" />.
-    /// </summary>
-    public BlendTypes Blending { get; set; } = BlendTypes.SourceOver;
-
-    #endregion properties
-
-    // ========================================================================
-    // ========================================================================
 
     #region dispose pattern
 

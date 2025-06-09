@@ -84,7 +84,7 @@ public class OrthographicCamera : Camera
     /// <param name="yDown">whether y should be pointing down.</param>
     public void SetToOrtho( bool yDown )
     {
-        SetToOrtho( GdxApi.Graphics.Width, GdxApi.Graphics.Height, yDown );
+        SetToOrtho( Api.Graphics.Width, Api.Graphics.Height, yDown );
     }
 
     /// <summary>
@@ -136,11 +136,11 @@ public class OrthographicCamera : Camera
             Matrix4.Invert( InvProjectionView.Val );
             Frustrum.Update( InvProjectionView );
             
-            GdxApi.Graphics.UpdateViewport( ( int )Position.X,
-                                           ( int )Position.Y,
-                                           ( int )ViewportWidth,
-                                           ( int )ViewportHeight,
-                                           2 );
+//            Api.Graphics.UpdateViewport( ( int )Position.X,
+//                                           ( int )Position.Y,
+//                                           ( int )ViewportWidth,
+//                                           ( int )ViewportHeight,
+//                                           2 );
         }
     }
 

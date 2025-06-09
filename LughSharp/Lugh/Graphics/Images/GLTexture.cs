@@ -384,7 +384,7 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
             return _maxAnisotropicFilterLevel;
         }
 
-        if ( GdxApi.Graphics.SupportsExtension( "GL_EXT_texture_filter_anisotropic" ) )
+        if ( Api.Graphics.SupportsExtension( "GL_EXT_texture_filter_anisotropic" ) )
         {
             var buffer = new float[ 16 ];
 
@@ -521,7 +521,7 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
     #if DEBUG
     private static void DebugUploadImageData( int target, int miplevel, Pixmap pixmap )
     {
-        if ( GdxApi.DevMode )
+        if ( Api.DevMode )
         {
             Logger.Divider();
             Logger.Debug( $"GL Target              : {target}" );

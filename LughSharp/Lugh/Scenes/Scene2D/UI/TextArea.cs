@@ -660,8 +660,8 @@ public class TextArea : TextField
             {
                 var repeat = false;
 
-                var shift = GdxApi.Input.IsKeyPressed( IInput.Keys.SHIFT_LEFT )
-                            || GdxApi.Input.IsKeyPressed( IInput.Keys.SHIFT_RIGHT );
+                var shift = Api.Input.IsKeyPressed( IInput.Keys.SHIFT_LEFT )
+                            || Api.Input.IsKeyPressed( IInput.Keys.SHIFT_RIGHT );
 
                 if ( keycode == IInput.Keys.DOWN )
                 {

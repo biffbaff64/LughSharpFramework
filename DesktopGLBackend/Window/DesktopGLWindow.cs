@@ -94,8 +94,8 @@ public partial class DesktopGLWindow : IDisposable
         Graphics           = new DesktopGLGraphics( this );
         Graphics.GLVersion = Application.GLVersion;
 
-        GdxApi.Input    = Input;
-        GdxApi.Graphics = Graphics;
+        Api.Input    = Input;
+        Api.Graphics = Graphics;
 
         //@formatter:off
         Glfw.SetWindowFocusCallback     ( window, GdxFocusCallback );
@@ -169,7 +169,7 @@ public partial class DesktopGLWindow : IDisposable
 
     /// <summary>
     /// Post a <see cref="IRunnable.Runnable" /> to this window's event queue. Use this if
-    /// you access statics like <see cref="Gdx.Graphics" /> in your runnable instead
+    /// you access statics like <see cref="Engine.Graphics" /> in your runnable instead
     /// of <see cref="DesktopGLApplication.PostRunnable(IRunnable.Runnable)" />".
     /// </summary>
     public void PostRunnable( IRunnable.Runnable runnable )
@@ -185,8 +185,8 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     public void MakeCurrent()
     {
-        GdxApi.Graphics = Graphics;
-        GdxApi.Input    = Input;
+        Api.Graphics = Graphics;
+        Api.Input    = Input;
 
         Glfw.MakeContextCurrent( GlfwWindow );
 
@@ -386,7 +386,7 @@ public partial class DesktopGLWindow : IDisposable
 
         for ( var i = 0; i < imagePaths.Length; i++ )
         {
-            pixmaps[ i ] = new Pixmap( GdxApi.Files.GetFileHandle( imagePaths[ i ], imagePathType ) );
+            pixmaps[ i ] = new Pixmap( Api.Files.GetFileHandle( imagePaths[ i ], imagePathType ) );
         }
 
         SetIcon( window, pixmaps );

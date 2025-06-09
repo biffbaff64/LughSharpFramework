@@ -176,7 +176,19 @@ public partial class PixmapData : ImageBase, IDisposable
                                            + $"{width} x {height}: {PixmapFormat.GetFormatString( format )}" );
         }
 
-        SafeConstructorInit( width, height, 0 );
+        // Calculate proper bit depth based on format
+        var bitDepth = format switch
+        {
+            GDX_2D_FORMAT_ALPHA           => 8,
+            GDX_2D_FORMAT_LUMINANCE_ALPHA => 16,
+            GDX_2D_FORMAT_RGB888          => 24,
+            GDX_2D_FORMAT_RGBA8888        => 32,
+            GDX_2D_FORMAT_RGB565          => 16,
+            GDX_2D_FORMAT_RGBA4444        => 16,
+            _                             => throw new ArgumentException($"Unknown format: {format}")
+        };
+
+        SafeConstructorInit( width, height, bitDepth );
         SafeInitPixmapDataType( width, height, format );
 
         PixmapBuffer.PutBytes( _pixmapDataType.Pixels );

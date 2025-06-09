@@ -35,7 +35,7 @@ using GLBindings = LughSharp.Lugh.Graphics.OpenGL.GLBindings;
 namespace LughSharp.Lugh.Core;
 
 /// <summary>
-/// The Gdx class serves as the central hub linking multiple interfaces and systems
+/// The Engine class serves as the central hub linking multiple interfaces and systems
 /// within the framework, such as application, audio, input, files, graphics, and
 /// network operations.
 /// <para>
@@ -44,14 +44,14 @@ namespace LughSharp.Lugh.Core;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Gdx
+public class Engine
 {
-    public IApplication App       { get; set; } = null!;
-    public IAudio       Audio     { get; set; } = null!;
-    public IInput       Input     { get; set; } = null!;
-    public IFiles       Files     { get; set; } = null!;
-    public IGraphicsDevice    Graphics  { get; set; } = null!;
-    public INet         Net       { get; set; } = null!;
+    public IApplication    App      { get; set; } = null!;
+    public IAudio          Audio    { get; set; } = null!;
+    public IInput          Input    { get; set; } = null!;
+    public IFiles          Files    { get; set; } = null!;
+    public IGraphicsDevice Graphics { get; set; } = null!;
+    public INet            Net      { get; set; } = null!;
 
     // ========================================================================
 
@@ -81,8 +81,8 @@ public class Gdx
 
     // ========================================================================
 
-    public static Gdx         GdxApi => Nested.Instance;
-    public static IGLBindings GL     => Nested.Instance.Bindings;
+    public static Engine      Api => Nested.Instance;
+    public static IGLBindings GL  => Nested.Instance.Bindings;
 
     // ========================================================================
 
@@ -90,7 +90,7 @@ public class Gdx
 
     // ========================================================================
 
-    private Gdx()
+    private Engine()
     {
     }
 
@@ -109,7 +109,7 @@ public class Gdx
             {
                 _glBindings = new GLBindings();
 
-                Logger.Debug( "********** Gdx.Bindings is null, initialised " +
+                Logger.Debug( "********** Engine.Bindings is null, initialised " +
                               "to reference GLBindings. **********" );
             }
 
@@ -119,7 +119,7 @@ public class Gdx
         {
             _glBindings = value;
 
-            Logger.Debug( $"********** Gdx.Bindings set to reference " +
+            Logger.Debug( $"********** Engine.Bindings set to reference " +
                           $"{value.GetType().Name} **********" );
         }
     }
@@ -147,7 +147,7 @@ public class Gdx
     /// available and is set to "TRUE" or "true".
     /// </summary>
     /// <returns> This class for chaining. </returns>
-    public Gdx CheckEnableDevMode()
+    public Engine CheckEnableDevMode()
     {
         DevMode = CheckEnvironmentVar( "DEV_MODE", "TRUE" );
 
@@ -166,7 +166,7 @@ public class Gdx
     /// available and is set to "TRUE" or "true".
     /// </summary>
     /// <returns> This class for chaining. </returns>
-    public Gdx CheckEnableGodMode()
+    public Engine CheckEnableGodMode()
     {
         if ( DevMode )
         {
@@ -216,18 +216,18 @@ public class Gdx
 
     private static bool CheckEnvironmentVar( string envVar, string value )
     {
-        if ( Environment.GetEnvironmentVariables().Contains( envVar ) )
-        {
-            return Environment.GetEnvironmentVariable( envVar )!.ToUpper() == value;
-        }
-
-        return false;
+        return Environment.GetEnvironmentVariables().Contains( envVar )
+               && Environment.GetEnvironmentVariable( envVar )!
+                             .Equals(value, StringComparison.CurrentCultureIgnoreCase);
     }
+
+    // ========================================================================
+    // ========================================================================
 
     // Fully Lazy instantiation.
     private class Nested
     {
-        internal static readonly Gdx Instance = new();
+        internal static readonly Engine Instance = new();
 
         // Explicit static constructor to tell C# compiler
         // not to mark type as beforefieldinit

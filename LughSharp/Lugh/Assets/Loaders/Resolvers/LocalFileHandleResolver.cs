@@ -30,6 +30,6 @@ public class LocalFileHandleResolver : IFileHandleResolver
     /// <inheritdoc />
     public FileInfo Resolve( string fileName )
     {
-        return GdxApi.Files.Local( fileName );
+        return Api.Files.Local( fileName );
     }
 }

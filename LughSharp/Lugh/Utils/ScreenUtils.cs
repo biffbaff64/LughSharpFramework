@@ -57,13 +57,13 @@ public class ScreenUtils
     {
         get
         {
-            if ( GdxApi.Graphics == null )
+            if ( Api.Graphics == null )
             {
                 throw new NullReferenceException();
             }
 
-            var w = GdxApi.Graphics.BackBufferWidth;
-            var h = GdxApi.Graphics.BackBufferHeight;
+            var w = Api.Graphics.BackBufferWidth;
+            var h = Api.Graphics.BackBufferHeight;
 
             return GetFrameBufferTexture( 0, 0, w, h );
         }
@@ -157,13 +157,13 @@ public class ScreenUtils
     /// <param name="flipY"> whether to flip pixels along Y axis</param>
     public static byte[] GetFrameBufferPixels( bool flipY )
     {
-        if ( GdxApi.Graphics == null )
+        if ( Api.Graphics == null )
         {
             throw new NullReferenceException();
         }
 
-        var w = GdxApi.Graphics.BackBufferWidth;
-        var h = GdxApi.Graphics.BackBufferHeight;
+        var w = Api.Graphics.BackBufferWidth;
+        var h = Api.Graphics.BackBufferHeight;
 
         return GetFrameBufferPixels( 0, 0, w, h, flipY );
     }

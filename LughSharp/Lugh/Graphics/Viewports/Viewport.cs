@@ -55,12 +55,12 @@ public abstract class Viewport
     }
     
     public Camera? Camera       { get; set; }
-    public int     ScreenX      { get; set; }
-    public int     ScreenY      { get; set; }
-    public int     ScreenWidth  { get; set; }
-    public int     ScreenHeight { get; set; }
-    public float   WorldWidth   { get; set; }
-    public float   WorldHeight  { get; set; }
+    public int     ScreenX      { get; private set; }
+    public int     ScreenY      { get; private set; }
+    public int     ScreenWidth  { get; private set; }
+    public int     ScreenHeight { get; private set; }
+    public float   WorldWidth   { get; private set; }
+    public float   WorldHeight  { get; private set; }
 
     // ========================================================================
     
@@ -247,7 +247,7 @@ public abstract class Viewport
 
         Camera.Project( _tmp, ScreenX, ScreenY, ScreenWidth, ScreenHeight );
 
-        _tmp.Y = GdxApi.Graphics.Height - _tmp.Y;
+        _tmp.Y = Api.Graphics.Height - _tmp.Y;
 
         worldCoords.X = _tmp.X;
         worldCoords.Y = _tmp.Y;
@@ -260,7 +260,7 @@ public abstract class Viewport
     /// </summary>
     /// <param name="worldWidth"> New World width in pixels. </param>
     /// <param name="worldHeight"> New World height in pixels. </param>
-    public virtual void SetWorldSize( float worldWidth, float worldHeight )
+    public void SetWorldSize( float worldWidth, float worldHeight )
     {
         Logger.Debug( $"SetWorldSize: {worldWidth}, {worldHeight}" );
         
@@ -272,7 +272,7 @@ public abstract class Viewport
     /// Sets the viewport's position in screen coordinates.
     /// This is typically set by <see cref="Update(int, int, bool)" />.
     /// </summary>
-    public virtual void SetScreenPosition( int screenX, int screenY )
+    public void SetScreenPosition( int screenX, int screenY )
     {
         Logger.Debug( $"SetScreenPosition: {screenX}, {screenY}" );
         
@@ -284,7 +284,7 @@ public abstract class Viewport
     /// Sets the viewport's size in screen coordinates.
     /// This is typically set by <see cref="Update(int, int, bool)" />.
     /// </summary>
-    public virtual void SetScreenSize( int screenWidth, int screenHeight )
+    public void SetScreenSize( int screenWidth, int screenHeight )
     {
         Logger.Debug( $"SetScreenSize: {screenWidth}, {screenHeight}" );
         
@@ -296,7 +296,7 @@ public abstract class Viewport
     /// Sets the viewport's bounds in screen coordinates.
     /// This is typically set by <see cref="Update(int, int, bool)" />.
     /// </summary>
-    public virtual void SetScreenBounds( int screenX, int screenY, int screenWidth, int screenHeight )
+    public void SetScreenBounds( int screenX, int screenY, int screenWidth, int screenHeight )
     {
         Logger.Debug( $"SetScreenBounds: {screenX}, {screenY}, {screenWidth}, {screenHeight}" );
         
@@ -326,7 +326,7 @@ public abstract class Viewport
     /// <summary>
     /// Returns the right gutter (black bar) width in screen coordinates.
     /// </summary>
-    public virtual int RightGutterWidth => GdxApi.Graphics.Width - ( ScreenX + ScreenWidth );
+    public virtual int RightGutterWidth => Api.Graphics.Width - ( ScreenX + ScreenWidth );
 
     /// <summary>
     /// Returns the bottom gutter (black bar) height in screen coordinates.
@@ -341,7 +341,7 @@ public abstract class Viewport
     /// <summary>
     /// Returns the top gutter (black bar) height in screen coordinates.
     /// </summary>
-    public virtual int TopGutterHeight => GdxApi.Graphics.Height - ( ScreenY + ScreenHeight );
+    public virtual int TopGutterHeight => Api.Graphics.Height - ( ScreenY + ScreenHeight );
     
     // ========================================================================
 

@@ -34,8 +34,8 @@ public class DesktopGLApplicationTest : IApplication
 {
     public DesktopGLApplicationTest()
     {
-        GdxApi.Initialise( this );
-        GdxApi.Bindings = new GLBindings();
+        Api.Initialise( this );
+        Api.Bindings = new GLBindings();
 
         Glfw.SetErrorCallback( ErrorCallback );
         Glfw.InitHint( InitHint.JoystickHatButtons, false );

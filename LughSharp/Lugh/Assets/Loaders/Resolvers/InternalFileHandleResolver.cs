@@ -30,6 +30,6 @@ public class InternalFileHandleResolver : IFileHandleResolver
     /// <inheritdoc />
     public FileInfo Resolve( string fileName )
     {
-        return GdxApi.Files.Internal( fileName );
+        return Api.Files.Internal( fileName );
     }
 }

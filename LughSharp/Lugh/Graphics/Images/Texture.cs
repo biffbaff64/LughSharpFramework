@@ -105,7 +105,7 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     /// <param name="internalPath"></param>
     public Texture( string internalPath )
-        : this( GdxApi.Files.Internal( internalPath ), false )
+        : this( Api.Files.Internal( internalPath ), false )
     {
     }
 
@@ -193,7 +193,7 @@ public class Texture : GLTexture, IManaged
 
         if ( data.IsManaged )
         {
-            AddManagedTexture( GdxApi.App, this );
+            AddManagedTexture( Api.App, this );
         }
     }
 
@@ -451,7 +451,7 @@ public class Texture : GLTexture, IManaged
 
             if ( TextureData is { IsManaged: true } )
             {
-                _managedTextures[ GdxApi.App ].Remove( this );
+                _managedTextures[ Api.App ].Remove( this );
             }
         }
     }

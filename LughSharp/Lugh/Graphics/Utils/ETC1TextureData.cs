@@ -122,7 +122,7 @@ public class ETC1TextureData : ITextureData
             throw new GdxRuntimeException( "No data to consume!" );
         }
 
-        if ( !GdxApi.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
+        if ( !Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
         {
             var pixmap = _etc1.DecodeImage( _data, PixelType.Format.RGB565 );
 

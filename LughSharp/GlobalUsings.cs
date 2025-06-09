@@ -51,7 +51,7 @@ global using LughSharp.Lugh.Core;
 
 // ============================================================================
 
-global using static LughSharp.Lugh.Core.Gdx;
+global using static LughSharp.Lugh.Core.Engine;
 
 // ============================================================================
 

@@ -139,5 +139,9 @@
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Lugh\Graphics\Windowing\" />
+    </ItemGroup>
+
 </Project>
 

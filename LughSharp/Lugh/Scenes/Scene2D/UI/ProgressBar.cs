@@ -172,7 +172,7 @@ public class ProgressBar : Widget, IDisableable
 
             if ( Stage is { ActionsRequestRendering: true } )
             {
-                GdxApi.Graphics.RequestRendering();
+                Api.Graphics.RequestRendering();
             }
         }
     }

@@ -76,7 +76,7 @@ public class Mesh : IDisposable
         IndexData      = indices;
         _isVertexArray = isVertexArray;
 
-        AddManagedMesh( GdxApi.App, this );
+        AddManagedMesh( Api.App, this );
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public class Mesh : IDisposable
         IndexData      = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
 
-        AddManagedMesh( GdxApi.App, this );
+        AddManagedMesh( Api.App, this );
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ public class Mesh : IDisposable
         IndexData      = new IndexBufferObject( isStatic, maxIndices );
         _isVertexArray = false;
 
-        AddManagedMesh( GdxApi.App, this );
+        AddManagedMesh( Api.App, this );
     }
 
     /// <summary>
@@ -143,7 +143,7 @@ public class Mesh : IDisposable
         IndexData      = new IndexBufferObject( staticIndices, maxIndices );
         _isVertexArray = false;
 
-        AddManagedMesh( GdxApi.App, this );
+        AddManagedMesh( Api.App, this );
     }
 
     /// <summary>
@@ -210,7 +210,7 @@ public class Mesh : IDisposable
                 break;
         }
 
-        AddManagedMesh( GdxApi.App, this );
+        AddManagedMesh( Api.App, this );
     }
 
     // ========================================================================
@@ -1824,9 +1824,9 @@ public class Mesh : IDisposable
     /// </summary>
     public void Dispose()
     {
-        if ( _meshes[ GdxApi.App ] != null )
+        if ( _meshes[ Api.App ] != null )
         {
-            _meshes[ GdxApi.App ]?.Remove( this );
+            _meshes[ Api.App ]?.Remove( this );
         }
 
         _vertices.Dispose();

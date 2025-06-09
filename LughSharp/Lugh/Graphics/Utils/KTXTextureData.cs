@@ -483,7 +483,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                     {
                         if ( glInternalFormat == ETC1.ETC1_RGB8_OES )
                         {
-                            if ( !GdxApi.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
+                            if ( !Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
                             {
                                 ETC1 etc1    = new();
                                 var  etcData = new ETC1.ETC1Data( pixelWidth, pixelHeight, data, 0, etc1 );

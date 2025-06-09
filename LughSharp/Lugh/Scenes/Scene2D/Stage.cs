@@ -93,8 +93,8 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public Stage()
         : this( new ScalingViewport( Scaling.Stretch,
-                                     GdxApi.Graphics.Width,
-                                     GdxApi.Graphics.Height,
+                                     Api.Graphics.Width,
+                                     Api.Graphics.Height,
                                      new OrthographicCamera() ), new SpriteBatch() )
     {
         _ownsBatch = true;
@@ -127,7 +127,7 @@ public class Stage : InputAdapter, IDisposable
         Root = new Group();
         Root.SetStage( this );
 
-        viewport.Update( GdxApi.Graphics.Width, GdxApi.Graphics.Height, true );
+        viewport.Update( Api.Graphics.Width, Api.Graphics.Height, true );
     }
 
     public SnapshotArrayList< TouchFocus > TouchFocuses { get; }      = new( true, 4 );
@@ -431,7 +431,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public virtual void Act()
     {
-        Act( Math.Min( GdxApi.DeltaTime, 1 / 30f ) );
+        Act( Math.Min( Api.DeltaTime, 1 / 30f ) );
     }
 
     /// <summary>
@@ -489,7 +489,7 @@ public class Stage : InputAdapter, IDisposable
         }
 
         // Update over actor for the mouse on the desktop.
-        var type = GdxApi.App.AppType;
+        var type = Api.App.AppType;
 
         if ( type is Platform.ApplicationType.WindowsGL or Platform.ApplicationType.WebGL )
         {
@@ -1214,7 +1214,7 @@ public class Stage : InputAdapter, IDisposable
     public virtual Vector2 StageToScreenCoordinates( Vector2 stageCoords )
     {
         Viewport.Project( stageCoords );
-        stageCoords.Y = GdxApi.Graphics.Height - stageCoords.Y;
+        stageCoords.Y = Api.Graphics.Height - stageCoords.Y;
 
         return stageCoords;
     }
@@ -1305,7 +1305,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( _debugUnderMouse || _debugParentUnderMouse || ( _debugTableUnderMouse != Table.DebugType.None ) )
         {
-            ScreenToStageCoordinates( _tempCoords.Set( GdxApi.Input.GetX(), GdxApi.Input.GetY() ) );
+            ScreenToStageCoordinates( _tempCoords.Set( Api.Input.GetX(), Api.Input.GetY() ) );
 
             var actor = Hit( _tempCoords.X, _tempCoords.Y, true );
 
@@ -1409,7 +1409,7 @@ public class Stage : InputAdapter, IDisposable
         var y0 = Viewport.ScreenY;
         var y1 = y0 + Viewport.ScreenHeight;
 
-        screenY = GdxApi.Graphics.Height - 1 - screenY;
+        screenY = Api.Graphics.Height - 1 - screenY;
 
         return ( screenX >= x0 ) && ( screenX < x1 )
                                  && ( screenY >= y0 ) && ( screenY < y1 );

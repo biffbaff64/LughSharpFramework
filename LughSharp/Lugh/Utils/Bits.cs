@@ -476,8 +476,8 @@ public class Bits
     {
         const int PRIME = 73;
 
-        var hash = PRIME + GdxApi.App.GetVersion().GetHashCode();
-        hash = ( PRIME * hash ) + GdxApi.App.GetHashCode();
+        var hash = PRIME + Api.App.GetVersion().GetHashCode();
+        hash = ( PRIME * hash ) + Api.App.GetHashCode();
 
         return hash;
     }

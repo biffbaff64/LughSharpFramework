@@ -133,9 +133,9 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
 
         GL.DeleteFramebuffers( ( uint )FramebufferHandle );
 
-        if ( Buffers?[ GdxApi.App ] != null )
+        if ( Buffers?[ Api.App ] != null )
         {
-            Buffers[ GdxApi.App ]?.Remove( this );
+            Buffers[ Api.App ]?.Remove( this );
         }
     }
 
@@ -239,7 +239,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
 
         HandleIncompleteFrameBuffer( result );
 
-        AddManagedFrameBuffer( GdxApi.App, this );
+        AddManagedFrameBuffer( Api.App, this );
     }
 
     /// <summary>
@@ -389,8 +389,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     {
         if ( ( result == IGL.GL_FRAMEBUFFER_UNSUPPORTED )
              && BufferBuilder is { HasDepthRenderBuffer: true, HasStencilRenderBuffer: true }
-             && ( GdxApi.Graphics.SupportsExtension( "GL_OES_packed_depth_stencil" )
-                  || GdxApi.Graphics.SupportsExtension( "GL_EXT_packed_depth_stencil" ) ) )
+             && ( Api.Graphics.SupportsExtension( "GL_OES_packed_depth_stencil" )
+                  || Api.Graphics.SupportsExtension( "GL_EXT_packed_depth_stencil" ) ) )
         {
             // Delete existing render buffers
             if ( BufferBuilder.HasDepthRenderBuffer )
@@ -500,7 +500,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
         {
             DefaultFramebufferHandleInitialized = true;
 
-            if ( GdxApi.App.AppType == Platform.ApplicationType.IOS )
+            if ( Api.App.AppType == Platform.ApplicationType.IOS )
             {
                 var intbuf = ByteBuffer.Allocate
                     ( ( 16 * sizeof( int ) ) / 8 ).Order( ByteOrder.NativeOrder ).AsIntBuffer();
@@ -565,7 +565,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     /// </summary>
     public virtual void End()
     {
-        End( 0, 0, GdxApi.Graphics.BackBufferWidth, GdxApi.Graphics.BackBufferHeight );
+        End( 0, 0, Api.Graphics.BackBufferWidth, Api.Graphics.BackBufferHeight );
     }
 
     /// <summary>

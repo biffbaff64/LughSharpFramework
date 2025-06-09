@@ -74,7 +74,7 @@ public class FloatTextureData : ITextureData
         {
             var amountOfFloats = 4;
 
-            if ( GdxApi.Graphics.GLVersion!.BackendType.Equals( GraphicsBackend.BackendType.OpenGL ) )
+            if ( Api.Graphics.GLVersion!.BackendType.Equals( GraphicsBackend.BackendType.OpenGL ) )
             {
                 if ( _internalFormat is IGL.GL_RGBA16_F or IGL.GL_RGBA32_F )
                 {
@@ -105,11 +105,11 @@ public class FloatTextureData : ITextureData
 
     public void ConsumeCustomData( int target )
     {
-        if ( ( GdxApi.App.AppType == Platform.ApplicationType.Android )
-             || ( GdxApi.App.AppType == Platform.ApplicationType.IOS )
-             || ( GdxApi.App.AppType == Platform.ApplicationType.WebGL ) )
+        if ( ( Api.App.AppType == Platform.ApplicationType.Android )
+             || ( Api.App.AppType == Platform.ApplicationType.IOS )
+             || ( Api.App.AppType == Platform.ApplicationType.WebGL ) )
         {
-            if ( !GdxApi.Graphics.SupportsExtension( "OES_texture_float" ) )
+            if ( !Api.Graphics.SupportsExtension( "OES_texture_float" ) )
             {
                 throw new GdxRuntimeException( "Extension OES_texture_float not supported!" );
             }
@@ -134,7 +134,7 @@ public class FloatTextureData : ITextureData
         }
         else
         {
-            if ( !GdxApi.Graphics.SupportsExtension( "GL_ARB_texture_float" ) )
+            if ( !Api.Graphics.SupportsExtension( "GL_ARB_texture_float" ) )
             {
                 throw new GdxRuntimeException( "Extension GL_ARB_texture_float not supported!" );
             }

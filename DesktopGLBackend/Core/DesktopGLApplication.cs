@@ -88,7 +88,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         //
         // This MUST be the first call, so that the Logger and GdxApi.App global are
         // initialised correctly.
-        GdxApi.Initialise( this );
+        Api.Initialise( this );
 
         _prefs = GetPreferences( "desktopgl.lugh.engine.preferences" );
         _prefs.PutBool( "profiling", config.GLProfilingEnabled );
@@ -110,8 +110,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         Audio     = CreateAudio( Config );
         Clipboard = new DesktopGLClipboard();
 
-        GdxApi.Files = new DesktopGLFiles();
-        GdxApi.Net   = new DesktopGLNet( Config );
+        Api.Files = new DesktopGLFiles();
+        Api.Net   = new DesktopGLNet( Config );
 
         _sync = new Sync();
 

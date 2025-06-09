@@ -277,20 +277,20 @@ public class RemoteSender : IInputProcessor
         try
         {
             _out.Write( ACCEL );
-            _out.Write( GdxApi.Input.GetAccelerometerX() );
-            _out.Write( GdxApi.Input.GetAccelerometerY() );
-            _out.Write( GdxApi.Input.GetAccelerometerZ() );
+            _out.Write( Api.Input.GetAccelerometerX() );
+            _out.Write( Api.Input.GetAccelerometerY() );
+            _out.Write( Api.Input.GetAccelerometerZ() );
             _out.Write( COMPASS );
-            _out.Write( GdxApi.Input.GetAzimuth() );
-            _out.Write( GdxApi.Input.GetPitch() );
-            _out.Write( GdxApi.Input.GetRoll() );
+            _out.Write( Api.Input.GetAzimuth() );
+            _out.Write( Api.Input.GetPitch() );
+            _out.Write( Api.Input.GetRoll() );
             _out.Write( SIZE );
-            _out.Write( GdxApi.Graphics.Width );
-            _out.Write( GdxApi.Graphics.Height );
+            _out.Write( Api.Graphics.Width );
+            _out.Write( Api.Graphics.Height );
             _out.Write( GYRO );
-            _out.Write( GdxApi.Input.GetGyroscopeX() );
-            _out.Write( GdxApi.Input.GetGyroscopeY() );
-            _out.Write( GdxApi.Input.GetGyroscopeZ() );
+            _out.Write( Api.Input.GetGyroscopeX() );
+            _out.Write( Api.Input.GetGyroscopeY() );
+            _out.Write( Api.Input.GetGyroscopeZ() );
         }
         catch ( Exception )
         {

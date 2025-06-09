@@ -363,7 +363,7 @@ public partial class ScrollPane : WidgetGroup
 //            if ( ( Stage != null ) && Stage.ActionsRequestRendering )
             if ( Stage is { ActionsRequestRendering: true } )
             {
-                GdxApi.Graphics.RequestRendering();
+                Api.Graphics.RequestRendering();
             }
         }
     }

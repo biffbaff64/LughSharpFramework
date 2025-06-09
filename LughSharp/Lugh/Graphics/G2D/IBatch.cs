@@ -136,7 +136,7 @@ public interface IBatch
     /// <summary>
     /// Returns true if currently between begin and end.
     /// </summary>
-    bool IsDrawing { get; set; }
+    bool IsDrawing { get; }
 
     // ========================================================================
 

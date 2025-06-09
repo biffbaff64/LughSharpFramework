@@ -107,8 +107,8 @@ public partial class BitmapFont
     /// This is convenient to easily display text without bothering without generating
     /// a bitmap font yourself.
     /// </summary>
-    public BitmapFont() : this( GdxApi.Files.Internal( DEFAULT_FONT ),
-                                GdxApi.Files.Internal( DEFAULT_FONT_IMAGE ),
+    public BitmapFont() : this( Api.Files.Internal( DEFAULT_FONT ),
+                                Api.Files.Internal( DEFAULT_FONT_IMAGE ),
                                 false )
     {
         _fileType = PathTypes.Internal;
@@ -122,8 +122,8 @@ public partial class BitmapFont
     /// <param name="flip">
     /// If true, the glyphs will be flipped for use with a perspective where 0,0 is the upper left corner.
     /// </param>
-    public BitmapFont( bool flip ) : this( GdxApi.Files.Internal( DEFAULT_FONT ),
-                                           GdxApi.Files.Internal( DEFAULT_FONT ),
+    public BitmapFont( bool flip ) : this( Api.Files.Internal( DEFAULT_FONT ),
+                                           Api.Files.Internal( DEFAULT_FONT ),
                                            flip )
     {
         _fileType = PathTypes.Internal;
@@ -248,8 +248,8 @@ public partial class BitmapFont
             for ( var i = 0; i < n; i++ )
             {
                 var file = data.FontFile == null
-                    ? GdxApi.Files.Internal( data.ImagePaths[ i ] )
-                    : GdxApi.Files.GetFileHandle( data.ImagePaths[ i ], _fileType );
+                    ? Api.Files.Internal( data.ImagePaths[ i ] )
+                    : Api.Files.GetFileHandle( data.ImagePaths[ i ], _fileType );
 
                 _regions.Add( new TextureRegion( new Texture( file, false ) ) );
             }

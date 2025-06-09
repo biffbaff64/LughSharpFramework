@@ -76,8 +76,7 @@ public class ScalingViewport : Viewport
     {
         Scaling = scaling;
 
-        WorldWidth  = worldWidth;
-        WorldHeight = worldHeight;
+        SetWorldSize( worldWidth, worldHeight );
     }
 
     /// <summary>

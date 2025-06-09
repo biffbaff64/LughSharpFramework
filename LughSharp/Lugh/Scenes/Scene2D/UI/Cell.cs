@@ -34,42 +34,6 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 [PublicAPI]
 public class Cell : IResetable
 {
-    private const float ZEROF   = 0f;
-    private const float ONEF    = 1f;
-    private const int   ZEROI   = 0;
-    private const int   ONEI    = 1;
-    private const int   CENTERI = ONEI;
-    private const int   TOPI    = Lugh.Utils.Alignment.TOP;
-    private const int   BOTTOMI = Lugh.Utils.Alignment.BOTTOM;
-    private const int   LEFTI   = Lugh.Utils.Alignment.LEFT;
-    private const int   RIGHTI  = Lugh.Utils.Alignment.RIGHT;
-
-    // ========================================================================
-
-    private Cell?   _defaults;
-    private IFiles? _files;
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Default constructor. Creates a new Cell with properties set to
-    /// Cell defaults.
-    /// </summary>
-    public Cell()
-    {
-        CellAboveIndex = -1;
-
-        var defaults = GetCellDefaults();
-
-        if ( defaults != null )
-        {
-            Set( defaults );
-        }
-    }
-
-    // ========================================================================
-
     public Value? MinWidth    { get; set; }
     public Value? MinHeight   { get; set; }
     public Value? PrefWidth   { get; set; }
@@ -112,6 +76,44 @@ public class Cell : IResetable
     public float  ComputedPadLeft   { get; set; }
     public float  ComputedPadBottom { get; set; }
     public float  ComputedPadRight  { get; set; }
+
+    // ========================================================================
+    
+    private const float ZEROF   = 0f;
+    private const float ONEF    = 1f;
+    private const int   ZEROI   = 0;
+    private const int   ONEI    = 1;
+    private const int   CENTERI = ONEI;
+    private const int   TOPI    = Lugh.Utils.Alignment.TOP;
+    private const int   BOTTOMI = Lugh.Utils.Alignment.BOTTOM;
+    private const int   LEFTI   = Lugh.Utils.Alignment.LEFT;
+    private const int   RIGHTI  = Lugh.Utils.Alignment.RIGHT;
+
+    // ========================================================================
+
+    private Cell?   _defaults;
+    private IFiles? _files;
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// Default constructor. Creates a new Cell with properties set to
+    /// Cell defaults.
+    /// </summary>
+    public Cell()
+    {
+        CellAboveIndex = -1;
+
+        var defaults = GetCellDefaults();
+
+        if ( defaults != null )
+        {
+            Set( defaults );
+        }
+    }
+
+    // ========================================================================
 
     /// <summary>
     /// Reset state so the cell can be reused, setting all constraints to
@@ -1450,9 +1452,9 @@ public class Cell : IResetable
     /// </summary>
     public Cell? GetCellDefaults()
     {
-        if ( ( _files == null ) || ( _files != GdxApi.Files ) )
+        if ( ( _files == null ) || ( _files != Api.Files ) )
         {
-            _files = GdxApi.Files;
+            _files = Api.Files;
 
             _defaults = new Cell
             {

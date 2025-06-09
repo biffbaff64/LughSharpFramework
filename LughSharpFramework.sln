@@ -5,8 +5,6 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LughSharp.Extensions", "LughSharp.Extensions\LughSharp.Extensions.csproj", "{557C259E-7144-40A3-82E7-3F75E0A5E588}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndroidBackend", "AndroidBackend\AndroidBackend.csproj", "{D5095DEB-8FB4-48C0-B39D-B7BC63CBC772}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopGLBackend", "DesktopGLBackend\DesktopGLBackend.csproj", "{802DE37C-7431-476E-90E5-CE225500406F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LughSharp", "LughSharp\LughSharp.csproj", "{2FDBE40C-2703-4C72-B383-FA716D4F5459}"
@@ -30,10 +28,6 @@ Global
 		{557C259E-7144-40A3-82E7-3F75E0A5E588}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{557C259E-7144-40A3-82E7-3F75E0A5E588}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{557C259E-7144-40A3-82E7-3F75E0A5E588}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5095DEB-8FB4-48C0-B39D-B7BC63CBC772}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5095DEB-8FB4-48C0-B39D-B7BC63CBC772}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5095DEB-8FB4-48C0-B39D-B7BC63CBC772}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5095DEB-8FB4-48C0-B39D-B7BC63CBC772}.Release|Any CPU.Build.0 = Release|Any CPU
 		{802DE37C-7431-476E-90E5-CE225500406F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{802DE37C-7431-476E-90E5-CE225500406F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{802DE37C-7431-476E-90E5-CE225500406F}.Release|Any CPU.ActiveCfg = Release|Any CPU

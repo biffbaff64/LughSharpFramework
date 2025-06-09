@@ -53,7 +53,7 @@ global using LughSharp.Lugh;
 global using LughSharp.Lugh.Core;
 
 // ============================================================================
-global using static LughSharp.Lugh.Core.Gdx;
+global using static LughSharp.Lugh.Core.Engine;
 
 // ============================================================================
 global using Vector2 = LughSharp.Lugh.Maths.Vector2;

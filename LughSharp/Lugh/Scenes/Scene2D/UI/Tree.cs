@@ -465,10 +465,10 @@ public class Tree< TNode, TValue > : WidgetGroup where TNode : Tree< TNode, TVal
         var over = false;
 
         if ( ( node == OverNode )
-             && ( GdxApi.App.AppType == Platform.ApplicationType.WindowsGL )
+             && ( Api.App.AppType == Platform.ApplicationType.WindowsGL )
              && ( !_selection.Multiple || ( !InputUtils.CtrlKey() && !InputUtils.ShiftKey() ) ) )
         {
-            var mouseX = ScreenToLocalCoordinates( _tmp.Set( GdxApi.Input.GetX(), 0 ) ).X;
+            var mouseX = ScreenToLocalCoordinates( _tmp.Set( Api.Input.GetX(), 0 ) ).X;
 
             if ( ( mouseX >= 0 ) && ( mouseX < iconX ) )
             {

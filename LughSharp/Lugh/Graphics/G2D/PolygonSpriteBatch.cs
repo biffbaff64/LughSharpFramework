@@ -167,7 +167,7 @@ public class PolygonSpriteBatch : IPolygonBatch
             _shader = defaultShader;
         }
 
-        ProjectionMatrix.SetToOrtho2D( 0, 0, GdxApi.Graphics.Width, GdxApi.Graphics.Height );
+        ProjectionMatrix.SetToOrtho2D( 0, 0, Api.Graphics.Width, Api.Graphics.Height );
     }
 
     // The maximum number of triangles rendered in one batch so far.

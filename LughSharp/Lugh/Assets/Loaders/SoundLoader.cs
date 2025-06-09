@@ -73,7 +73,7 @@ public class SoundLoader : AsynchronousAssetLoader, IDisposable
     /// <param name="parameter"> <see cref="SoundLoaderParameters" /> to use. </param>
     public override void LoadAsync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
-        LoadedSound = GdxApi.Audio.NewSound( file );
+        LoadedSound = Api.Audio.NewSound( file );
     }
 
     /// <summary>

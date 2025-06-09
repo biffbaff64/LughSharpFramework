@@ -72,7 +72,7 @@ public class MusicLoader : AsynchronousAssetLoader, IDisposable
     /// <inheritdeoc />
     public override object LoadSync< TP >( AssetManager manager, FileInfo file, TP? parameter ) where TP : class
     {
-        LoadedMusic = GdxApi.Audio.NewMusic( file );
+        LoadedMusic = Api.Audio.NewMusic( file );
 
         return LoadedMusic;
     }

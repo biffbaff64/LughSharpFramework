@@ -68,7 +68,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <summary>
     /// Gets the number of managed TextureArrays currently loaded.
     /// </summary>
-    public int NumManagedTextureArrays => _managedTextureArrays[ GdxApi.App ].Count;
+    public int NumManagedTextureArrays => _managedTextureArrays[ Api.App ].Count;
 
     // ========================================================================
 
@@ -131,7 +131,7 @@ public class GLTextureArray : GLTexture, IManaged
 
         if ( data.Managed )
         {
-            AddManagedTexture( GdxApi.App, this );
+            AddManagedTexture( Api.App, this );
         }
     }
 
@@ -147,7 +147,7 @@ public class GLTextureArray : GLTexture, IManaged
 
         for ( var i = 0; i < internalPaths.Length; i++ )
         {
-            handles[ i ] = GdxApi.Files.Internal( internalPaths[ i ] );
+            handles[ i ] = Api.Files.Internal( internalPaths[ i ] );
         }
 
         return handles;
