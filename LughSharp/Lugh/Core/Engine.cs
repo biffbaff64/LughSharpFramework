@@ -142,6 +142,10 @@ public class Engine
         Bindings = new GLBindings();
     }
 
+    public void Shutdown()
+    {
+    }
+    
     /// <summary>
     /// Enables <see cref="DevMode" /> if the environment variable "DEV_MODE" is
     /// available and is set to "TRUE" or "true".

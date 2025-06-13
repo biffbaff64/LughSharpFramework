@@ -38,6 +38,14 @@ public class Vector3 : IVector< Vector3 >
     public static readonly Vector3 ZDefault = new( 0, 0, 1 );
     public static readonly Vector3 Zero     = new( 0, 0, 0 );
 
+    // ========================================================================
+    
+    public float X { get; set; }
+    public float Y { get; set; }
+    public float Z { get; set; }
+
+    // ========================================================================
+    
     private static readonly Matrix4 _tmpMat = new();
 
     // ========================================================================
@@ -91,10 +99,6 @@ public class Vector3 : IVector< Vector3 >
     {
         Set( vector.X, vector.Y, z );
     }
-
-    public float X { get; set; }
-    public float Y { get; set; }
-    public float Z { get; set; }
 
     /// <summary>
     /// Sets this Vector3's X, Y and Z values from the supplied Vector3.

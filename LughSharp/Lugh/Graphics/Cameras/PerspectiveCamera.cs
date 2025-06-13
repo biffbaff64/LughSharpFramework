@@ -69,13 +69,13 @@ public class PerspectiveCamera : Camera
     {
         var aspect = ViewportWidth / ViewportHeight;
 
-        Projection.SetToProjection( Math.Abs( Near ), Math.Abs( Far ), FieldOfView, aspect );
+        ProjectionMatrix.SetToProjection( Math.Abs( Near ), Math.Abs( Far ), FieldOfView, aspect );
 
-        View.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
+        ViewMatrix.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
 
-        Combined.Set( Projection );
+        Combined.Set( ProjectionMatrix );
 
-        Matrix4.Mul( Combined.Val, View.Val );
+        Matrix4.Mul( Combined.Val, ViewMatrix.Val );
 
         if ( updateFrustrum )
         {

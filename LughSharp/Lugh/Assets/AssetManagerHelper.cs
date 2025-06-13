@@ -65,7 +65,7 @@ public partial class AssetManager
     /// </returns>
     public T? GetAs< T >( string name ) where T : class
     {
-        if ( _typeList.TryGetValue( typeof( T ), out var getter ) )
+        if ( _typeList.TryGetValue( typeof( T ), out var _ ) )
         {
             return Get( name ) as T;
         }

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Buffers;
-
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
@@ -64,11 +62,11 @@ public class SpriteBatch : IBatch, IDisposable
 
     // ========================================================================
 
-    protected float[]                Vertices           { get; set; } = [ ];
-    protected Texture?               LastTexture        { get; set; } = null;
-    protected int                    Idx                { get; set; } = 0;
-    protected BatchState?            CurrentBatchState  { get; set; }
-    protected RenderState?           CurrentRenderState { get; set; }
+    protected float[]      Vertices           { get; set; } = [ ];
+    protected Texture?     LastTexture        { get; set; } = null;
+    protected int          Idx                { get; set; } = 0;
+    protected BatchState?  CurrentBatchState  { get; set; }
+    protected RenderState? CurrentRenderState { get; set; }
 
     // ========================================================================
 
@@ -296,9 +294,9 @@ public class SpriteBatch : IBatch, IDisposable
             Flush();
         }
 
-        LastTexture = null;
+        LastTexture       = null;
         CurrentBatchState = BatchState.Ready;
-    
+
         GL.DepthMask( _originalDepthMask );
 
         if ( IsBlendingEnabled )
@@ -502,6 +500,11 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="projection">The new projection matrix to be applied.</param>
     public void SetProjectionMatrix( Matrix4 projection )
     {
+        if ( !projection.IsValidViewMatrix() )
+        {
+            throw new ArgumentException( "Invalid projection matrix provided to SpriteBatch" );
+        }
+
         if ( ( CurrentBatchState == BatchState.Drawing ) && ( Idx > 0 ) )
         {
             // Necessary call to Flush() to ensure projection matrix
@@ -1237,10 +1240,19 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="y"> Y coordinate in pixels. </param>
     public virtual void Draw( Texture? texture, float x, float y )
     {
-        if ( texture != null )
+        if ( texture == null )
         {
-            Draw( texture, x, y, texture.Width, texture.Height );
+            Logger.Debug( "Draw called with null texture" );
+
+            return;
         }
+
+//        Logger.Debug( $"Drawing texture: {texture.Name}" );
+//        Logger.Debug( $"Texture handle: {texture.GLTextureHandle}" );
+//        Logger.Debug($"IsDrawing: {IsDrawing}");
+//        Logger.Debug($"Current Shader: {Shader?.ShaderProgramHandle ?? 0}");
+
+        Draw( texture, x, y, texture.Width, texture.Height );
     }
 
     /// <summary>
@@ -1644,19 +1656,19 @@ public class SpriteBatch : IBatch, IDisposable
         // Set up vertex attributes
         // Update vertex attribute pointers to use VertexConstants
         Engine.GL.VertexAttribPointer( 0, VertexConstants.POSITION_COMPONENTS,
-                                    ( int )VertexAttribPointerType.Float, false,
-                                    VertexConstants.VERTEX_SIZE_BYTES,
-                                    ( uint )VertexConstants.POSITION_OFFSET * sizeof( float ) );
+                                       ( int )VertexAttribPointerType.Float, false,
+                                       VertexConstants.VERTEX_SIZE_BYTES,
+                                       ( uint )VertexConstants.POSITION_OFFSET * sizeof( float ) );
 
         Engine.GL.VertexAttribPointer( 1, VertexConstants.COLOR_COMPONENTS,
-                                    ( int )VertexAttribPointerType.Float, false,
-                                    VertexConstants.VERTEX_SIZE_BYTES,
-                                    ( uint )VertexConstants.COLOR_OFFSET * sizeof( float ) );
+                                       ( int )VertexAttribPointerType.Float, false,
+                                       VertexConstants.VERTEX_SIZE_BYTES,
+                                       ( uint )VertexConstants.COLOR_OFFSET * sizeof( float ) );
 
         Engine.GL.VertexAttribPointer( 2, VertexConstants.TEXCOORD_COMPONENTS,
-                                    ( int )VertexAttribPointerType.Float, false,
-                                    VertexConstants.VERTEX_SIZE_BYTES,
-                                    ( uint )VertexConstants.TEXCOORD_OFFSET * sizeof( float ) );
+                                       ( int )VertexAttribPointerType.Float, false,
+                                       VertexConstants.VERTEX_SIZE_BYTES,
+                                       ( uint )VertexConstants.TEXCOORD_OFFSET * sizeof( float ) );
 
         // Draw the quad
         GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo );
@@ -1792,5 +1804,3 @@ public class SpriteBatch : IBatch, IDisposable
         }
     }
 }
-
-

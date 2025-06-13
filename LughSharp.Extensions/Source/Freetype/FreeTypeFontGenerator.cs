@@ -848,7 +848,7 @@ public class FreeTypeFontGenerator : IDisposable
                 for ( var w = 0; w < ( glyph.Width + glyph.Xoffset ); w++ )
                 {
                     var bit = ( buf.GetInt( idx + ( w / 8 ) ) >>> ( 7 - ( w % 8 ) ) ) & 1;
-                    mainPixmap.DrawPixel( w, h, bit == 1 ? Color.White : Color.Clear );
+                    mainPixmap.SetPixel( w, h, bit == 1 ? Color.White : Color.Clear );
                 }
             }
         }

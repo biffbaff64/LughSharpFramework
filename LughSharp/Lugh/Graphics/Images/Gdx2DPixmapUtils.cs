@@ -24,7 +24,7 @@
 
 namespace LughSharp.Lugh.Graphics.Images;
 
-public partial class PixmapData
+public partial class Gdx2DPixmap
 {
     /// <summary>
     /// Clears the pixmap with the specified color

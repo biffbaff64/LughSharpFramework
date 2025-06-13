@@ -29,7 +29,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// <summary>
 /// Contains native method extensions for Gdx2DPixmap
 /// </summary>
-public partial class PixmapData
+public partial class Gdx2DPixmap
 {
     /// <summary>
     /// Gets the pixel color at the specified coordinates
@@ -134,7 +134,7 @@ public partial class PixmapData
     /// <summary>
     /// Draws a pixmap at the specified location
     /// </summary>
-    public void DrawPixmapNative( PixmapData src, int srcX, int srcY, int dstX, int dstY, int width, int height )
+    public void DrawPixmapNative( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
         NativeMethods.gdx2d_draw_pixmap(
                                         src._pixmapDataType, _pixmapDataType,
@@ -145,7 +145,7 @@ public partial class PixmapData
     /// <summary>
     /// Draws a pixmap with scaling
     /// </summary>
-    public void DrawPixmapNative( PixmapData src,
+    public void DrawPixmapNative( Gdx2DPixmap src,
                                   int srcX, int srcY,
                                   int dstX, int srcWidth, int srcHeight,
                                   int dstY, int dstWidth, int dstHeight )

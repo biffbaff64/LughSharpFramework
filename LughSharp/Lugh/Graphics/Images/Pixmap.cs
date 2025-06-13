@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -53,20 +54,50 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public class Pixmap : IDisposable
 {
-    public bool       IsDisposed { get; set; } = false;       // 
-    public int        Scale      { get; set; } = 1;           // 
-    public Color      Color      { get; set; } = Color.Clear; // 
-    public PixmapData PixmapData { get; set; }                // 
+    public bool         IsDisposed  { get; set; } = false;       // 
+    public int          Scale       { get; set; } = 1;           // 
+    public Color        Color       { get; set; } = Color.Clear; // 
+    public Gdx2DPixmap? Gdx2DPixmap { get; set; }                // 
 
     /// <summary>
     /// Returns the width of the Pixmap in pixels.
     /// </summary>
-    public int Width => ( int )PixmapData.Width;
+
+//    public int Width => ( int )Gdx2DPixmap.Width;
+    public int Width
+    {
+        get
+        {
+            if ( Gdx2DPixmap == null )
+            {
+                Logger.Warning( $"Gdx2DPixmap instance is null!" );
+
+                return 0;
+            }
+
+            return ( ( int )Gdx2DPixmap!.Width );
+        }
+    }
 
     /// <summary>
     /// Returns the height of the Pixmap in pixels.
     /// </summary>
-    public int Height => ( int )PixmapData.Height;
+
+//    public int Height => ( int )Gdx2DPixmap.Height;
+    public int Height
+    {
+        get
+        {
+            if ( Gdx2DPixmap == null )
+            {
+                Logger.Warning( $"Gdx2DPixmap instance is null!" );
+
+                return 0;
+            }
+
+            return ( ( int )Gdx2DPixmap!.Height );
+        }
+    }
 
     /// <summary>
     /// Sets the type of <see cref="BlendTypes" /> to be used for all operations.
@@ -95,12 +126,10 @@ public class Pixmap : IDisposable
             Logger.Warning( "Supplied Pixel Format is null. Default format applied." );
         }
 
-        PixmapData = new PixmapData( width, height, PixmapFormat.ToGdx2DPixelFormat( format ) );
+        Gdx2DPixmap = new Gdx2DPixmap( width, height, PixmapFormat.ToGdx2DPixelFormat( format ) );
 
         SetColor( Color.Red );
         FillWithCurrentColor();
-
-        Debug();
     }
 
     /// <summary>
@@ -113,7 +142,7 @@ public class Pixmap : IDisposable
 
         try
         {
-            PixmapData = new PixmapData( encodedData, offset, len, 0 );
+            Gdx2DPixmap = new Gdx2DPixmap( encodedData, offset, len, 0 );
         }
         catch ( IOException e )
         {
@@ -140,7 +169,7 @@ public class Pixmap : IDisposable
 
         try
         {
-            PixmapData = new PixmapData( buffer, offset, len, 0 );
+            Gdx2DPixmap = new Gdx2DPixmap( buffer, offset, len, 0 );
         }
         catch ( IOException e )
         {
@@ -170,11 +199,11 @@ public class Pixmap : IDisposable
         ArgumentNullException.ThrowIfNull( file );
 
         Logger.Debug( $"Creating Pixmap from file: {file.Name}" );
-        
+
         try
         {
             var data = File.ReadAllBytes( file.FullName );
-            PixmapData = new PixmapData( data, 0, data.Length, 0 );
+            Gdx2DPixmap = new Gdx2DPixmap( data, 0, data.Length, 0 );
         }
         catch ( Exception e )
         {
@@ -183,13 +212,13 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Creates a new Pixmap object from the supplied <see cref="PixmapData" />.
+    /// Creates a new Pixmap object from the supplied <see cref="Gdx2DPixmap" />.
     /// </summary>
-    public Pixmap( PixmapData pixmapData )
+    public Pixmap( Gdx2DPixmap gdx2DPixmap )
     {
-        ArgumentNullException.ThrowIfNull( pixmapData );
+        ArgumentNullException.ThrowIfNull( gdx2DPixmap );
 
-        PixmapData = pixmapData;
+        Gdx2DPixmap = gdx2DPixmap;
     }
 
     // ========================================================================
@@ -198,7 +227,15 @@ public class Pixmap : IDisposable
     /// Returns the OpenGL pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, or GL_LUMINANCE_ALPHA.</returns>
-    public int GLPixelFormat => PixmapFormat.ToGLPixelFormat( ( int )PixmapData.ColorType );
+    public int GLPixelFormat
+    {
+        get
+        {
+            Guard.ThrowIfNull( Gdx2DPixmap );
+
+            return PixmapFormat.ToGLPixelFormat( ( int )Gdx2DPixmap.ColorType );
+        }
+    }
 
     /// <summary>
     /// Returns the OpenGL internal pixel format of this Pixmap.
@@ -208,7 +245,9 @@ public class Pixmap : IDisposable
     {
         get
         {
-            var format = PixmapFormat.ToGLPixelFormat( ( int )PixmapData.ColorType );
+            Guard.ThrowIfNull( Gdx2DPixmap );
+
+            var format = PixmapFormat.ToGLPixelFormat( ( int )Gdx2DPixmap.ColorType );
 
             if ( ( format != IGL.GL_RG )
                  && ( format != IGL.GL_RGB )
@@ -231,36 +270,47 @@ public class Pixmap : IDisposable
     {
         get
         {
-            // Determine OpenGL data type based on bit depth and color type
-            return PixmapData switch
+            return Gdx2DPixmap?.ColorType switch
             {
-                { ColorType: 0 } or { ColorType: 4 } =>
-                    PixmapData.BitDepth switch
-                    {
-                        8  => IGL.GL_UNSIGNED_BYTE,
-                        16 => IGL.GL_UNSIGNED_SHORT,
-                        32 => IGL.GL_UNSIGNED_INT,
-                        
-                        var _ => throw new Exception( $"Unsupported bit depth for grayscale: {PixmapData.BitDepth}" ),
-                    },
-                { ColorType: 2 } or { ColorType: 6 } =>
-                    PixmapData.BitDepth switch
-                    {
-                        8  => IGL.GL_UNSIGNED_BYTE,
-                        16 => IGL.GL_UNSIGNED_SHORT,
-                        32 => IGL.GL_UNSIGNED_INT,
+                Images.Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
+                Images.Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
+                Images.Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
+                Images.Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
+                Images.Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
+                Images.Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
 
-                        var _ => throw new Exception( $"Unsupported bit depth for truecolor: {PixmapData.BitDepth}" ),
-                    },
-                { ColorType: 3 } =>
-                    PixmapData.BitDepth switch
-                    {
-                        1 or 2 or 4 or 8 => IGL.GL_UNSIGNED_BYTE,
-
-                        var _ => throw new Exception( $"Unsupported bit depth for indexed colour: {PixmapData.BitDepth}" ),
-                    },
-                var _ => throw new Exception( "Unknown color type." ),
+                var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap?.ColorType}" ),
             };
+
+//            // Determine OpenGL data type based on bit depth and color type
+//            return Gdx2DPixmap switch
+//            {
+//                { ColorType: 0 } or { ColorType: 4 } =>
+//                    Gdx2DPixmap.BitDepth switch
+//                    {
+//                        8  => IGL.GL_UNSIGNED_BYTE,
+//                        16 => IGL.GL_UNSIGNED_SHORT,
+//
+//                        var _ => throw new Exception( $"Unsupported bit depth for grayscale: {Gdx2DPixmap.BitDepth}" ),
+//                    },
+//                { ColorType: 2 } or { ColorType: 6 } =>
+//                    Gdx2DPixmap.BitDepth switch
+//                    {
+//                        8        => IGL.GL_UNSIGNED_BYTE,
+//                        16 or 24 => IGL.GL_UNSIGNED_SHORT,
+//                        32       => IGL.GL_UNSIGNED_INT,
+//
+//                        var _ => throw new Exception( $"Unsupported bit depth for truecolor: {Gdx2DPixmap.BitDepth}" ),
+//                    },
+//                { ColorType: 3 } =>
+//                    Gdx2DPixmap.BitDepth switch
+//                    {
+//                        1 or 2 or 4 or 8 => IGL.GL_UNSIGNED_BYTE,
+//
+//                        var _ => throw new Exception( $"Unsupported bit depth for indexed colour: {Gdx2DPixmap.BitDepth}" ),
+//                    },
+//                var _ => throw new Exception( "Unknown color type." ),
+//            };
         }
     }
 
@@ -284,20 +334,35 @@ public class Pixmap : IDisposable
     {
         get
         {
+            Guard.ThrowIfNull( Gdx2DPixmap );
+
             if ( IsDisposed )
             {
                 throw new GdxRuntimeException( "Pixmap already disposed" );
             }
 
-            return PixmapData.PixmapBuffer ?? throw new GdxRuntimeException( "Pixmap buffer is null" );
+            return Gdx2DPixmap.PixmapBuffer ?? throw new GdxRuntimeException( "Pixmap buffer is null" );
         }
 
-        set => PixmapData.PixmapBuffer = value;
+        set
+        {
+            Guard.ThrowIfNull( Gdx2DPixmap );
+
+            Gdx2DPixmap.PixmapBuffer = value;
+        }
     }
 
     /// <summary>
     /// </summary>
-    public byte[] PixelData => PixmapData.PixmapBuffer.BackingArray();
+    public byte[] PixelData
+    {
+        get
+        {
+            Guard.ThrowIfNull( Gdx2DPixmap );
+
+            return Gdx2DPixmap.PixmapBuffer.BackingArray();
+        }
+    }
 
     /// <summary>
     /// Sets the type of interpolation <see cref="BlendTypes" /> to be used in
@@ -306,13 +371,14 @@ public class Pixmap : IDisposable
     public Filter FilterValue
     {
         get => _filter;
+
         set
         {
             _filter = value;
 
             Scale = _filter == Filter.NearestNeighbour
-                ? PixmapData.GDX_2D_SCALE_NEAREST
-                : PixmapData.GDX_2D_SCALE_LINEAR;
+                ? Gdx2DPixmap.GDX_2D_SCALE_NEAREST
+                : Gdx2DPixmap.GDX_2D_SCALE_LINEAR;
         }
     }
 
@@ -355,7 +421,7 @@ public class Pixmap : IDisposable
     /// </summary>
     public void FillWithCurrentColor()
     {
-        PixmapData.Clear( Color );
+        Gdx2DPixmap?.Clear( Color );
     }
 
     /// <summary>
@@ -363,15 +429,17 @@ public class Pixmap : IDisposable
     /// </summary>
     public void FillWithColor( Color color )
     {
-        PixmapData.Clear( color );
+        Gdx2DPixmap?.Clear( color );
     }
-    
+
     /// <summary>
     /// Returns the <see cref="PixelType.Format" /> of this Pixmap.
     /// </summary>
     public PixelType.Format GetColorFormat()
     {
-        return PixmapFormat.ToPixmapPixelFormat( ( int )PixmapData.ColorType );
+        Guard.ThrowIfNull( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
+
+        return PixmapFormat.ToPixmapPixelFormat( ( int )Gdx2DPixmap.ColorType );
     }
 
     /// <summary>
@@ -379,7 +447,9 @@ public class Pixmap : IDisposable
     /// </summary>
     public int GetBitDepth()
     {
-        return ( int )PixmapData.BitDepth;
+        Guard.ThrowIfNull( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
+
+        return ( int )Gdx2DPixmap.BitDepth;
     }
 
     /// <summary>
@@ -391,7 +461,7 @@ public class Pixmap : IDisposable
     /// <param name="y2"> The y-coordinate of the second point  </param>
     public void DrawLine( int x, int y, int x2, int y2 )
     {
-        PixmapData.DrawLineNative( x, y, x2, y2, Color );
+        Gdx2DPixmap?.DrawLineNative( x, y, x2, y2, Color );
     }
 
     /// <summary>
@@ -404,7 +474,7 @@ public class Pixmap : IDisposable
     /// <param name="height"> The height in pixels  </param>
     public void DrawRectangle( int x, int y, uint width, uint height )
     {
-        PixmapData.DrawRectNative( x, y, width, height, Color );
+        Gdx2DPixmap?.DrawRectNative( x, y, width, height, Color );
     }
 
     /// <summary>
@@ -430,11 +500,12 @@ public class Pixmap : IDisposable
     /// <param name="srcHeight"> The height of the area from the other Pixmap in pixels  </param>
     public void DrawPixmap( Pixmap pixmap, int x, int y, int srcx, int srcy, int srcWidth, int srcHeight )
     {
-        ArgumentNullException.ThrowIfNull( nameof( pixmap ), "Source Pixmap cannot be null." );
+        Guard.ThrowIfNull( pixmap, nameof( pixmap ) );
+        Guard.ThrowIfNull( pixmap.Gdx2DPixmap, nameof( pixmap.Gdx2DPixmap ) );
 
         try
         {
-            PixmapData.DrawPixmap( pixmap.PixmapData, srcx, srcy, x, y, srcWidth, srcHeight );
+            Gdx2DPixmap?.DrawPixmap( pixmap.Gdx2DPixmap, srcx, srcy, x, y, srcWidth, srcHeight );
         }
         catch ( Exception ex )
         {
@@ -459,14 +530,19 @@ public class Pixmap : IDisposable
     /// <param name="dsty"> The target y-coordinate (top left corner) </param>
     /// <param name="dstWidth"> The target width </param>
     /// <param name="dstHeight"> The target height  </param>
-    public void DrawPixmap( Pixmap pixmap, int srcx, int srcy, int srcWidth, int srcHeight, int dstx, int dsty, int dstWidth,
-                            int dstHeight )
+    public void DrawPixmap( Pixmap pixmap, int srcx, int srcy, int srcWidth, int srcHeight,
+                            int dstx, int dsty, int dstWidth, int dstHeight )
     {
-        ArgumentNullException.ThrowIfNull( nameof( pixmap ), "Source Pixmap cannot be null." );
+        Guard.ThrowIfNull( pixmap, nameof( pixmap ) );
+        Guard.ThrowIfNull( pixmap.Gdx2DPixmap, nameof( pixmap.Gdx2DPixmap ) );
 
         try
         {
-            PixmapData.DrawPixmapNative( pixmap.PixmapData, srcx, srcy, srcWidth, srcHeight, dstx, dsty, dstWidth, dstHeight );
+            Gdx2DPixmap?.DrawPixmapNative( pixmap.Gdx2DPixmap,
+                                           srcx, srcy,
+                                           srcWidth, srcHeight,
+                                           dstx, dsty,
+                                           dstWidth, dstHeight );
         }
         catch ( Exception ex )
         {
@@ -484,7 +560,7 @@ public class Pixmap : IDisposable
     /// <param name="height"> The height in pixels  </param>
     public void FillRectangle( int x, int y, uint width, uint height )
     {
-        PixmapData.FillRectNative( x, y, width, height, Color );
+        Gdx2DPixmap?.FillRectNative( x, y, width, height, Color );
     }
 
     /// <summary>
@@ -496,7 +572,7 @@ public class Pixmap : IDisposable
     /// <param name="radius"> The radius in pixels  </param>
     public void DrawCircle( int x, int y, uint radius )
     {
-        PixmapData.DrawCircleNative( x, y, radius, Color );
+        Gdx2DPixmap?.DrawCircleNative( x, y, radius, Color );
     }
 
     /// <summary>
@@ -507,7 +583,7 @@ public class Pixmap : IDisposable
     /// <param name="radius"> The radius in pixels </param>
     public void FillCircle( int x, int y, uint radius )
     {
-        PixmapData.FillCircleNative( x, y, radius, Color );
+        Gdx2DPixmap?.FillCircleNative( x, y, radius, Color );
     }
 
     /// <summary>
@@ -521,7 +597,7 @@ public class Pixmap : IDisposable
     /// <param name="y3"> The y-coordinate of vertex 3  </param>
     public void FillTriangle( int x1, int y1, int x2, int y2, int x3, int y3 )
     {
-        PixmapData.FillTriangleNative( x1, y1, x2, y2, x3, y3, Color );
+        Gdx2DPixmap?.FillTriangleNative( x1, y1, x2, y2, x3, y3, Color );
     }
 
     /// <summary>
@@ -533,28 +609,41 @@ public class Pixmap : IDisposable
     /// <returns> The pixel color in RGBA8888 format.  </returns>
     public int GetPixel( int x, int y )
     {
-        return PixmapData.GetPixel( x, y );
+        Guard.ThrowIfNull( Gdx2DPixmap );
+
+        return Gdx2DPixmap.GetPixel( x, y );
     }
 
     /// <summary>
-    /// Draws a pixel at the given location with the current color.
+    /// Sets a pixel at the given location with the current color.
     /// </summary>
     /// <param name="x"> the x-coordinate </param>
     /// <param name="y"> the y-coordinate </param>
-    public void DrawPixel( int x, int y )
+    public void SetPixel( int x, int y )
     {
-        DrawPixel( x, y, Color );
+        SetPixel( x, y, Color );
     }
 
     /// <summary>
-    /// Draws a pixel at the given location with the given color.
+    /// Sets a pixel at the given location with the given color.
     /// </summary>
     /// <param name="x"> The x-coordinate </param>
     /// <param name="y"> The y-coordinate </param>
     /// <param name="color"> The color in RGBA8888 format. </param>
-    public void DrawPixel( int x, int y, Color color )
+    public void SetPixel( int x, int y, Color color )
     {
-        PixmapData.SetPixel( x, y, ( int )color.PackedColorRGBA() );
+        Gdx2DPixmap?.SetPixel( x, y, ( int )color.PackedColorRGBA() );
+    }
+
+    /// <summary>
+    /// Sets a pixel at the given location with the given color.
+    /// </summary>
+    /// <param name="x"> The x-coordinate </param>
+    /// <param name="y"> The y-coordinate </param>
+    /// <param name="color"> The color in RGBA8888 format. </param>
+    public void SetPixel( int x, int y, int color )
+    {
+        Gdx2DPixmap?.SetPixel( x, y, color );
     }
 
     /// <summary>
@@ -611,7 +700,7 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Returns the pixel format from a valid named string.
     /// </summary>
-    public static PixelType.Format FormatFromString( string str )
+    public static PixelType.Format GetFormatFromString( string str )
     {
         str = str.ToLower();
 
@@ -630,18 +719,26 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
+    /// Dump Pixmap debug info to console.
     /// </summary>
     public void Debug()
     {
         if ( Api.DevMode )
         {
+            if ( Gdx2DPixmap == null )
+            {
+                Logger.Warning( $"Gdx2DPixmap is NULL, cannot print debug" );
+
+                return;
+            }
+
             Logger.Debug( $"Width : {Width}, Height: {Height}" );
             Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height} "
-                          + $"{PixmapFormat.ToPixmapPixelFormat( ( int )PixmapData.ColorType )}: "
+                          + $"{PixmapFormat.ToPixmapPixelFormat( ( int )Gdx2DPixmap.ColorType )}: "
                           + $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DPixelFormat( GetColorFormat() ) )}" );
             Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
-            var a = PixmapData.PixmapBuffer.BackingArray();
+            var a = Gdx2DPixmap.PixmapBuffer.BackingArray();
 
             for ( var i = 0; i < 100; i += 10 )
             {
@@ -653,8 +750,8 @@ public class Pixmap : IDisposable
         }
     }
 
-    // ========================================================================
-    // ========================================================================
+// ========================================================================
+// ========================================================================
 
     /// <summary>
     /// Response listener for <see cref="Pixmap.DownloadFromUrl(String, IDownloadPixmapResponseListener)" />
@@ -690,18 +787,23 @@ public class Pixmap : IDisposable
         if ( disposing )
         {
             //TODO:
-            PixmapData.Dispose();
+            Gdx2DPixmap?.Dispose();
 
-            Color       = null!;
-            PixmapData = null!;
-
+            // Do not set Gdx2DPixmap to null because Texture may reference
+            // PixmapTextureData.Width/Height which references Pixmap.Width/Height
+            // which then references Gdx2DPixmap.Width.
+            // THIS NEEDS SORTING OUT!!!!
+            // Only ImageBase.Width/Height are really needed, work out a way for
+            // this to happen.
+//            Gdx2DPixmap = null!;
+            Color      = null!;
             IsDisposed = true;
         }
     }
 
     #endregion dispose pattern
 
-    // ========================================================================
+// ========================================================================
 
     #region PixmapEnums
 
@@ -741,8 +843,8 @@ public class Pixmap : IDisposable
 
     #endregion
 
-    // ========================================================================
-    // ========================================================================
+// ========================================================================
+// ========================================================================
 }
 
 // ========================================================================

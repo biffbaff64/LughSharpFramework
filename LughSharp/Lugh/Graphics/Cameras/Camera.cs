@@ -42,8 +42,8 @@ public abstract class Camera
     public Vector3 Direction { get; set; } = new( 0, 0, -1 ); // the unit length direction vector of the camera
     public Vector3 Up        { get; set; } = new( 0, 1, 0 );  // the unit length up vector of the camera
 
-    public Matrix4 Projection        { get; set; } = new();
-    public Matrix4 View              { get; set; } = new();
+    public Matrix4 ProjectionMatrix  { get; set; } = new();
+    public Matrix4 ViewMatrix        { get; set; } = new();
     public Matrix4 Combined          { get; set; } = new();
     public Matrix4 InvProjectionView { get; set; } = new();
 
@@ -412,8 +412,8 @@ public abstract class Camera
         Logger.Debug( $"Viewport: {ViewportWidth}x{ViewportHeight}" );
         Logger.Debug( $"Direction: X:{Direction.X}, Y:{Direction.Y}, Z:{Direction.Z}" );
         Logger.Debug( $"Up: X:{Up.X}, Y:{Up.Y}, Z:{Up.Z}" );
-        Logger.Debug( $"Projection: {Projection.ToString()}" );
-        Logger.Debug( $"View: {View.ToString()}" );
+        Logger.Debug( $"Projection: {ProjectionMatrix.ToString()}" );
+        Logger.Debug( $"View: {ViewMatrix.ToString()}" );
         Logger.Debug( $"Combined: {Combined.ToString()}" );
     }
     #endif

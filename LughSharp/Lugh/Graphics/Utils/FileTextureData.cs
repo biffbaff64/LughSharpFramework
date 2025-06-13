@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -35,24 +36,6 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class FileTextureData : ITextureData
 {
-    // ========================================================================
-
-    private Pixmap? _pixmap;
-
-    // ========================================================================
-    // ========================================================================
-
-    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, PixelType.Format format, bool useMipMaps )
-    {
-        File        = file;
-        _pixmap     = preloadedPixmap;
-        PixelFormat = format;
-        UseMipMaps  = useMipMaps;
-        Width       = _pixmap.Width;
-        Height      = _pixmap.Height;
-        PixelFormat = _pixmap.GetColorFormat();
-    }
-
     public FileInfo File { get; set; }
 
     /// <returns> the width of the pixel data </returns>
@@ -68,6 +51,37 @@ public class FileTextureData : ITextureData
     public bool UseMipMaps { get; set; }
 
     /// <summary>
+    /// Returns the <see cref="PixelType.Format" /> of the pixel data.
+    /// </summary>
+    public PixelType.Format? PixelFormat { get; set; }
+
+    // ========================================================================
+
+    private Pixmap? _pixmap;
+
+    // ========================================================================
+    // ========================================================================
+
+    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, PixelType.Format format, bool useMipMaps )
+    {
+        File        = file;
+        _pixmap     = preloadedPixmap;
+        PixelFormat = format;
+        UseMipMaps  = useMipMaps;
+        Width       = _pixmap.Width;
+        Height      = _pixmap.Height;
+
+        // If the pixmap format doesn't match our desired format, convert it
+        if ( _pixmap.GetColorFormat() != format )
+        {
+            var newPixmap = new Pixmap( _pixmap.Width, _pixmap.Height, format );
+            newPixmap.DrawPixmap( _pixmap, 0, 0 );
+            _pixmap.Dispose();
+            _pixmap = newPixmap;
+        }
+    }
+
+    /// <summary>
     /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap" /> or
     /// <see cref="ITextureData.ConsumeCustomData" />. This method can be called from a non
     /// OpenGL thread and should thus not interact with OpenGL.
@@ -76,16 +90,18 @@ public class FileTextureData : ITextureData
     {
         if ( IsPrepared )
         {
-            throw new GdxRuntimeException( "Already prepared" );
+            Logger.Warning( "prepare() must not be called on a PixmapTextureData" +
+                            " instance as it is already prepared." );
+            
+            return;
         }
 
         if ( _pixmap == null )
         {
             _pixmap = File.Extension.Equals( "cim" ) ? PixmapIO.ReadCIM( File ) : new Pixmap( File );
 
-            Width       = _pixmap.Width;
-            Height      = _pixmap.Height;
-            PixelFormat = _pixmap.GetColorFormat();
+            Width  = _pixmap.Width;
+            Height = _pixmap.Height;
         }
 
         IsPrepared = true;
@@ -143,13 +159,8 @@ public class FileTextureData : ITextureData
         throw new GdxRuntimeException( "This TextureData implementation does not upload data itself" );
     }
 
-    /// <summary>
-    /// Returns the <see cref="PixelType.Format" /> of the pixel data.
-    /// </summary>
-    public PixelType.Format? PixelFormat { get; set; }
-
     /// <inheritdoc />
-    public virtual bool IsManaged  => true;
+    public virtual bool IsManaged => true;
 
     /// <returns> the <see cref="ITextureData.TextureDataType" /></returns>
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;

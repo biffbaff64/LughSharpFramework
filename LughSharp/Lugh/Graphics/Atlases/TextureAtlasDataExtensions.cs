@@ -49,7 +49,7 @@ public partial class TextureAtlasData
     {
         public void Parse( Page page, params string[] entry )
         {
-            page.Format = Pixmap.FormatFromString( entry[ 1 ] );
+            page.Format = Pixmap.GetFormatFromString( entry[ 1 ] );
         }
     }
 

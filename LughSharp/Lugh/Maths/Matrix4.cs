@@ -141,6 +141,8 @@ public class Matrix4
     /// </summary>
     public const int M33 = 15;
 
+    // ========================================================================
+
     public static readonly Quaternion Quat       = new();
     public static readonly Quaternion Quat2      = new();
     public static readonly Vector3    LVez       = new();
@@ -219,7 +221,7 @@ public class Matrix4
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// </summary>
     /// <returns> the backing float array </returns>
@@ -949,16 +951,19 @@ public class Matrix4
         Val[ M10 ] = 0;
         Val[ M20 ] = 0;
         Val[ M30 ] = 0;
+
         // ------------------
         Val[ M01 ] = 0;
         Val[ M11 ] = yOrth;
         Val[ M21 ] = 0;
         Val[ M31 ] = 0;
+
         // ------------------
         Val[ M02 ] = 0;
         Val[ M12 ] = 0;
         Val[ M22 ] = zOrth;
         Val[ M32 ] = 0;
+
         // ------------------
         Val[ M03 ] = tx;
         Val[ M13 ] = ty;
@@ -2461,6 +2466,65 @@ public class Matrix4
             M31 = Val[ M20 ], M32 = Val[ M21 ], M33 = Val[ M22 ], M34 = Val[ M23 ],
             M41 = Val[ M30 ], M42 = Val[ M31 ], M43 = Val[ M32 ], M44 = Val[ M33 ],
         };
+    }
+
+    /// <summary>
+    /// Validates that the matrix is properly constructed and contains valid values.
+    /// </summary>
+    /// <returns>True if the matrix is valid, false otherwise</returns>
+    public bool IsValid()
+    {
+        // Check for NaN or Infinity
+        for ( var i = 0; i < 16; i++ )
+        {
+            if ( float.IsNaN( Val[ i ] ) || float.IsInfinity( Val[ i ] ) )
+            {
+                return false;
+            }
+        }
+
+        // For a valid transformation matrix, the bottom row should be [0,0,0,1]
+        if ( ( Math.Abs( Val[ M30 ] ) > float.Epsilon ) ||
+             ( Math.Abs( Val[ M31 ] ) > float.Epsilon ) ||
+             ( Math.Abs( Val[ M32 ] ) > float.Epsilon ) ||
+             ( Math.Abs( Val[ M33 ] - 1f ) > float.Epsilon ) )
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Validates that the matrix can be used as a view or projection matrix
+    /// </summary>
+    public bool IsValidViewMatrix()
+    {
+        if ( !IsValid() ) return false;
+
+        // For a view matrix, the upper 3x3 should be orthogonal
+        // This is a simple check - you might want more thorough validation
+        var dotXY = ( Val[ M00 ] * Val[ M10 ] ) + ( Val[ M01 ] * Val[ M11 ] ) + ( Val[ M02 ] * Val[ M12 ] );
+        var dotXZ = ( Val[ M00 ] * Val[ M20 ] ) + ( Val[ M01 ] * Val[ M21 ] ) + ( Val[ M02 ] * Val[ M22 ] );
+        var dotYZ = ( Val[ M10 ] * Val[ M20 ] ) + ( Val[ M11 ] * Val[ M21 ] ) + ( Val[ M12 ] * Val[ M22 ] );
+
+        const float ORTHOGONAL_TOLERANCE = 0.01f;
+
+        return ( Math.Abs( dotXY ) < ORTHOGONAL_TOLERANCE ) &&
+               ( Math.Abs( dotXZ ) < ORTHOGONAL_TOLERANCE ) &&
+               ( Math.Abs( dotYZ ) < ORTHOGONAL_TOLERANCE );
+    }
+
+    /// <summary>
+    /// Debug method to print the matrix in a readable format
+    /// </summary>
+    public string ToDebugString()
+    {
+        return $"Matrix4:\n"
+               + $"[{Val[ M00 ]:F6}|{Val[ M10 ]:F6}|{Val[ M20 ]:F6}|{Val[ M30 ]:F6}]\n"
+               + $"[{Val[ M01 ]:F6}|{Val[ M11 ]:F6}|{Val[ M21 ]:F6}|{Val[ M31 ]:F6}]\n"
+               + $"[{Val[ M02 ]:F6}|{Val[ M12 ]:F6}|{Val[ M22 ]:F6}|{Val[ M32 ]:F6}]\n"
+               + $"[{Val[ M03 ]:F6}|{Val[ M13 ]:F6}|{Val[ M23 ]:F6}|{Val[ M33 ]:F6}]";
     }
 
     // ========================================================================

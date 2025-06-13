@@ -75,13 +75,13 @@ public class PixelType
     {
         return format switch
         {
-            Format.Alpha          => PixmapData.GDX_2D_FORMAT_ALPHA,
-            Format.Intensity      => PixmapData.GDX_2D_FORMAT_ALPHA,
-            Format.LuminanceAlpha => PixmapData.GDX_2D_FORMAT_LUMINANCE_ALPHA,
-            Format.RGB565         => PixmapData.GDX_2D_FORMAT_RGB565,
-            Format.RGBA4444       => PixmapData.GDX_2D_FORMAT_RGBA4444,
-            Format.RGB888         => PixmapData.GDX_2D_FORMAT_RGB888,
-            Format.RGBA8888       => PixmapData.GDX_2D_FORMAT_RGBA8888,
+            Format.Alpha          => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+            Format.Intensity      => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+            Format.LuminanceAlpha => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
+            Format.RGB565         => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
+            Format.RGBA4444       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
+            Format.RGB888         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+            Format.RGBA8888       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
 
             var _ => throw new GdxRuntimeException( "Unknown Format: " + format ),
         };
@@ -98,12 +98,12 @@ public class PixelType
     {
         return format switch
         {
-            PixmapData.GDX_2D_FORMAT_ALPHA           => Format.Alpha,
-            PixmapData.GDX_2D_FORMAT_LUMINANCE_ALPHA => Format.LuminanceAlpha,
-            PixmapData.GDX_2D_FORMAT_RGB565          => Format.RGB565,
-            PixmapData.GDX_2D_FORMAT_RGBA4444        => Format.RGBA4444,
-            PixmapData.GDX_2D_FORMAT_RGB888          => Format.RGB888,
-            PixmapData.GDX_2D_FORMAT_RGBA8888        => Format.RGBA8888,
+            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => Format.Alpha,
+            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => Format.LuminanceAlpha,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => Format.RGB565,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => Format.RGBA4444,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => Format.RGB888,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => Format.RGBA8888,
 
             var _ => throw new GdxRuntimeException( "Unknown Gdx2DPixmap Format: " + format ),
         };

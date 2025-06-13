@@ -31,7 +31,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// <summary>
 /// </summary>
 [PublicAPI]
-public partial class PixmapData : ImageBase, IDisposable
+public partial class Gdx2DPixmap : ImageBase, IDisposable
 {
     public const int GDX_2D_FORMAT_ALPHA           = 1;
     public const int GDX_2D_FORMAT_LUMINANCE_ALPHA = 2;
@@ -67,15 +67,13 @@ public partial class PixmapData : ImageBase, IDisposable
     // ========================================================================
     // ========================================================================
 
-    #region constructors
-
     /// <summary>
     /// </summary>
     /// <param name="buffer"></param>
     /// <param name="offset"></param>
     /// <param name="len"></param>
     /// <param name="requestedFormat"></param>
-    public PixmapData( ByteBuffer buffer, int offset, int len, int requestedFormat )
+    public Gdx2DPixmap( ByteBuffer buffer, int offset, int len, int requestedFormat )
         : this( buffer.BackingArray(), offset, len, requestedFormat )
     {
     }
@@ -90,7 +88,7 @@ public partial class PixmapData : ImageBase, IDisposable
     /// <param name="len"> The number of bytes to copy from buffer. </param>
     /// <param name="requestedFormat"> The desired color format. </param>
     /// <exception cref="IOException"></exception>
-    public PixmapData( byte[] buffer, int offset, int len, int requestedFormat )
+    public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
         ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, offset, len );
 
@@ -118,7 +116,7 @@ public partial class PixmapData : ImageBase, IDisposable
     /// <param name="inStream"></param>
     /// <param name="requestedFormat"></param>
     /// <exception cref="IOException"></exception>
-    public PixmapData( StreamReader inStream, int requestedFormat )
+    public Gdx2DPixmap( StreamReader inStream, int requestedFormat )
     {
         MemoryStream memoryStream = new( 1024 );
         StreamWriter writer       = new( memoryStream );
@@ -160,7 +158,7 @@ public partial class PixmapData : ImageBase, IDisposable
     /// <param name="height"> Height in pixels. </param>
     /// <param name="format"> The requested GDX_2D_FORMAT_xxx color format. </param>
     /// <exception cref="GdxRuntimeException"></exception>
-    public PixmapData( int width, int height, int format )
+    public Gdx2DPixmap( int width, int height, int format )
     {
         ColorType = ( uint )format;
         Blend     = ( uint )Pixmap.BlendTypes.Default;
@@ -217,8 +215,6 @@ public partial class PixmapData : ImageBase, IDisposable
             Pixels        = new byte[ length ],
         };
     }
-    
-    #endregion constructors
 
     // ========================================================================
     // ========================================================================
@@ -267,7 +263,7 @@ public partial class PixmapData : ImageBase, IDisposable
         // Double-check conditions
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
         {
-            var pixmap = new PixmapData( ( int )Width, ( int )Height, requestedFormat );
+            var pixmap = new Gdx2DPixmap( ( int )Width, ( int )Height, requestedFormat );
 
             pixmap.Blend = GDX_2D_BLEND_NONE;
             pixmap.DrawPixmap( this, 0, 0, 0, 0, ( int )Width, ( int )Height );
@@ -300,7 +296,7 @@ public partial class PixmapData : ImageBase, IDisposable
     /// <param name="dstY">The y-coordinate of the destination location on this pixmap.</param>
     /// <param name="width">The width of the region to be drawn from the source pixmap.</param>
     /// <param name="height">The height of the region to be drawn from the source pixmap.</param>
-    public void DrawPixmap( PixmapData src, int srcX, int srcY, int dstX, int dstY, int width, int height )
+    public void DrawPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
         if ( Blend == GDX_2D_BLEND_NONE )
         {
@@ -324,7 +320,7 @@ public partial class PixmapData : ImageBase, IDisposable
     /// <param name="dstY">The y-coordinate where the region will be placed in the destination pixmap.</param>
     /// <param name="width">The width of the region to copy, in pixels.</param>
     /// <param name="height">The height of the region to copy, in pixels.</param>
-    private void BlitPixmap( PixmapData src, int srcX, int srcY, int dstX, int dstY, int width, int height )
+    private void BlitPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
         var bytesPerPixel = PixmapFormat.Gdx2dBytesPerPixel( ( int )ColorType );
 
@@ -339,7 +335,7 @@ public partial class PixmapData : ImageBase, IDisposable
         }
     }
 
-    private void BlendPixmap( PixmapData src, int srcX, int srcY, int dstX, int dstY, int width, int height )
+    private void BlendPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
         for ( var y = 0; y < height; y++ )
         {

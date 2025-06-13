@@ -86,7 +86,7 @@ public class Texture : GLTexture, IManaged
 
             return _name;
         }
-        private set => _name = value;
+        set => _name = value;
     }
 
     public bool IsManaged => TextureData is { IsManaged: true };
@@ -107,6 +107,7 @@ public class Texture : GLTexture, IManaged
     public Texture( string internalPath )
         : this( Api.Files.Internal( internalPath ), false )
     {
+        Name = Path.GetFileNameWithoutExtension( internalPath );
     }
 
     /// <summary>
@@ -117,6 +118,7 @@ public class Texture : GLTexture, IManaged
     public Texture( FileInfo file, bool useMipMaps )
         : this( file, PixelType.Format.Default, useMipMaps )
     {
+        Name = Path.GetFileNameWithoutExtension( file.Name );
     }
 
     /// <summary>
@@ -132,7 +134,7 @@ public class Texture : GLTexture, IManaged
                     bool useMipMaps = false )
         : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
     {
-        Name = file.Name;
+        Name = Path.GetFileNameWithoutExtension( file.Name );
     }
 
     /// <summary>
@@ -373,7 +375,10 @@ public class Texture : GLTexture, IManaged
 
     public byte[]? GetImageData()
     {
-        TextureData.Prepare();
+        if ( !TextureData.IsPrepared )
+        {
+            TextureData.Prepare();
+        }
 
         return TextureData.ConsumePixmap()?.PixelData;
     }
@@ -428,7 +433,12 @@ public class Texture : GLTexture, IManaged
         Logger.Debug( $"Depth             : {Depth}" );
         Logger.Debug( $"GLTarget          : {GLTarget}" );
         Logger.Debug( $"GLTextureHandle   : {GLTextureHandle}" );
-        TextureData.Prepare();
+
+        if ( !TextureData.IsPrepared )
+        {
+            TextureData.Prepare();
+        }
+        
         Logger.Debug( $"TextureData Length: {TextureData.ConsumePixmap()!.PixelData.Length}" );
     }
 

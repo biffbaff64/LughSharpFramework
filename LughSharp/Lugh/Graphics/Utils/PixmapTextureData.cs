@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -85,7 +86,7 @@ public class PixmapTextureData : ITextureData
 
     public void Prepare()
     {
-        throw new GdxRuntimeException
-            ( "prepare() must not be called on a PixmapTextureData instance as it is already prepared." );
+        Logger.Warning( "prepare() must not be called on a PixmapTextureData" +
+                        " instance as it is already prepared." );
     }
 }
