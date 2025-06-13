@@ -88,7 +88,7 @@ public class CpuSpriteBatch : SpriteBatch
             // vertices flushed, safe now to replace matrix
             _haveIdentityRealMatrix = CheckIdt( _virtualMatrix );
 
-            if ( !_haveIdentityRealMatrix && ( _virtualMatrix.Det() == 0 ) )
+            if ( !_haveIdentityRealMatrix && ( _virtualMatrix.Determinant() == 0 ) )
             {
                 throw new GdxRuntimeException( "Transform matrix is singular, can't sync" );
             }

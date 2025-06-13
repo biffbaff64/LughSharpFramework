@@ -746,7 +746,7 @@ public class Matrix4
         return this;
     }
 
-    public float Det()
+    public float Determinant()
     {
         //@formatter:off
         return ( ( ( ( ( ( ( ( ( ( (
@@ -778,7 +778,7 @@ public class Matrix4
     }
 
     /// <returns> The determinant of the 3x3 upper left matrix </returns>
-    public float Det3X3()
+    public float Determinant3X3()
     {
         //@formatter:off
         return ( ( Val[ M00 ] * Val[ M11 ] * Val[ M22 ] )
@@ -1861,7 +1861,7 @@ public class Matrix4
     /// <returns> false in case the inverse could not be calculated, true otherwise.  </returns>
     public static bool Invert( float[] values )
     {
-        var lDet = Det( values );
+        var lDet = Determinant( values );
 
         if ( lDet == 0 )
         {
@@ -2009,7 +2009,7 @@ public class Matrix4
     /// </summary>
     /// <param name="values"> the matrix values. </param>
     /// <returns> the determinante.  </returns>
-    public static float Det( float[] values )
+    public static float Determinant( float[] values )
     {
         //@formatter:off
         // BE VERY CAREFUL WITH EDITING THIS!!!!

@@ -70,6 +70,7 @@ public class Texture : GLTexture, IManaged
     public override int Height             => TextureData.Height;
     public override int Depth              => 0;
     public          int NumManagedTextures => _managedTextures.Count;
+    public          uint TextureID         => base.GLTextureHandle;
 
     /// <summary>
     /// The Texture name, usually the filename but can be something else.
@@ -262,12 +263,12 @@ public class Texture : GLTexture, IManaged
         Bind();
 
         GL.TexSubImage2D( GLTarget,
-                                       0, x, y,
-                                       pixmap.Width,
-                                       pixmap.Height,
-                                       pixmap.GLPixelFormat,
-                                       pixmap.GLDataType,
-                                       pixmap.PixelData );
+                          0, x, y,
+                          pixmap.Width,
+                          pixmap.Height,
+                          pixmap.GLPixelFormat,
+                          pixmap.GLDataType,
+                          pixmap.PixelData );
     }
 
     /// <summary>
@@ -393,29 +394,29 @@ public class Texture : GLTexture, IManaged
 
     // ========================================================================
     // Implementations of abstract methods from the base Image class.
-    
+
     public override void Clear( Color color )
     {
         throw new NotImplementedException();
     }
-    
+
     public override int GetPixel( int x, int y )
     {
         throw new NotImplementedException();
     }
-    
+
     public override void SetPixel( int x, int y, Color color )
     {
         throw new NotImplementedException();
     }
-    
+
     public override void SetPixel( int x, int y, int color )
     {
         throw new NotImplementedException();
     }
-    
+
     // ========================================================================
-    
+
     /// <inheritdoc />
     public override string? ToString()
     {
@@ -438,7 +439,7 @@ public class Texture : GLTexture, IManaged
         {
             TextureData.Prepare();
         }
-        
+
         Logger.Debug( $"TextureData Length: {TextureData.ConsumePixmap()!.PixelData.Length}" );
     }
 
