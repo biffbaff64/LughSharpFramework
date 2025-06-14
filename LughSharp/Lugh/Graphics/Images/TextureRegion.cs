@@ -497,6 +497,14 @@ public class TextureRegion
         // No setter for RegionHeight as it is derived.
     }
 
+    // ========================================================================
+    // ========================================================================
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="desiredRegionWidth"></param>
+    /// <param name="isFlipX"></param>
     public void SetRegionWidth( int desiredRegionWidth, bool isFlipX )
     {
         if ( ( Texture == null ) || ( Texture.Width == 0 ) )
@@ -508,7 +516,7 @@ public class TextureRegion
         // Calculate the difference in U coordinates needed
         var uDiff = ( float )desiredRegionWidth / Texture.Width;
 
-        if ( isFlipX ) // TODO: Pass isFlipX as a parameter or determine it internally
+        if ( isFlipX )
         {
             // Adjust U based on U2 and desired height
             U = U2 + uDiff; // Use the property setter for U
@@ -523,6 +531,11 @@ public class TextureRegion
         // when its getter is called.
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="desiredRegionHeight"></param>
+    /// <param name="isFlipY"></param>
     public void SetRegionHeight( int desiredRegionHeight, bool isFlipY )
     {
         if ( ( Texture == null ) || ( Texture.Height == 0 ) )
@@ -534,7 +547,7 @@ public class TextureRegion
         // Calculate the difference in V coordinates needed
         var vDiff = ( float )desiredRegionHeight / Texture.Height;
 
-        if ( isFlipY ) // Pass isFlipY as a parameter or determine it internally
+        if ( isFlipY )
         {
             // Adjust V based on V2 and desired height
             V = V2 + vDiff; // Use the property setter for V
@@ -549,3 +562,6 @@ public class TextureRegion
         // when its getter is called.
     }
 }
+
+// ========================================================================
+// ========================================================================

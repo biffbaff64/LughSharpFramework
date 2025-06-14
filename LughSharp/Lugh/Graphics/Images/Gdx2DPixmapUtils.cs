@@ -83,6 +83,12 @@ public partial class Gdx2DPixmap
         Array.Fill( pd.Pixels, alpha, 0, ( int )( pd.Width * pd.Height ) );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pd"></param>
+    /// <param name="color"></param>
+    /// <param name="size"></param>
     private static void ClearLuminanceAlpha( PixmapDataType pd, Color color, uint size )
     {
         var luminance = ( byte )( ( ( 0.2126f * color.R )
@@ -97,6 +103,12 @@ public partial class Gdx2DPixmap
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pd"></param>
+    /// <param name="color"></param>
+    /// <param name="size"></param>
     private static void ClearRGB888( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGB888( color );
@@ -112,6 +124,12 @@ public partial class Gdx2DPixmap
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pd"></param>
+    /// <param name="color"></param>
+    /// <param name="size"></param>
     private static void ClearRGBA8888( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGBA8888( color );
@@ -129,6 +147,12 @@ public partial class Gdx2DPixmap
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pd"></param>
+    /// <param name="color"></param>
+    /// <param name="size"></param>
     private static void ClearRGB565( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGB565( color );
@@ -140,6 +164,12 @@ public partial class Gdx2DPixmap
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pd"></param>
+    /// <param name="color"></param>
+    /// <param name="size"></param>
     private static void ClearRGBA4444( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGBA4444( color );

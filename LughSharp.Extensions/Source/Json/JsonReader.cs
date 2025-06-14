@@ -63,8 +63,13 @@ public partial class JsonReader : IJsonReader
     private const int UNQUOTED_CHARS = 7;
     private const int QUOTED_CHARS   = 8;
 
-    private int            _position;
-    private int[]?         _stack;
+    // ------------------------------------------
+    private int     _position;
+    private int[]?  _stack;
+    private string? _name;
+    private int     _gotoTarg = START_PARSE;
+    // ------------------------------------------
+
     private int            _s                = 0;
     private List< string > _nameList         = new( 8 );
     private bool           _needsUnescape    = false;
@@ -72,8 +77,6 @@ public partial class JsonReader : IJsonReader
     private bool           _stringIsUnquoted = false;
     private int            _currentState     = JSON_START;
     private int            _top              = 0;
-    private int            _gotoTarg         = START_PARSE;
-    private string?        _name;
 
     // ========================================================================
 

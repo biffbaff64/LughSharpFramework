@@ -759,8 +759,6 @@ SCENES/SCENE2D/ACTIONS
 SCENES/SCENE2D/LISTENERS
 ------------------------
 
-    - Base classes to be used and extended as required
-
     CODE   DOCUMENT
     ----   --------
     - DONE - IP   - ActorGestureListener
@@ -864,10 +862,12 @@ UTILS
     CODE   DOCUMENT
     ----   --------
     - DONE - DONE - Alignment
+    - IP   - IP   - BaseClassFactory
     - DONE - DONE - BinaryHeap
     - DONE - DONE - Bits
     - DONE - DONE - ByteOrder
     - DONE - DONE - BytePointerToString
+    - IP   - IP   - CaseInsensitiveEnumArrayConverterFactory
     - DONE - IP   - ComparableTimSort
     - DONE - DONE - Constants
     - DONE - IP   - DataInput                       Check
@@ -876,6 +876,7 @@ UTILS
     - DONE - DONE - FPSLogger
     - DONE - IP   - GCSuppressor
     - DONE - IP   - GdxNativesLoader
+    - IP   - IP   - IClearablePool
     - DONE - DONE - IClipboard                      Convert - Interface, clipboard handled in backends.
     - DONE - DONE - ICloseable
     - DONE - DONE - IDrawable
@@ -884,8 +885,10 @@ UTILS
     - DONE - DONE - IResetable
     - DONE - DONE - IRunnable                       Done, but is it needed?
     - DONE - DONE - Logger                          Make the actual message writing virtual
+    - IP   - IP   - LughTestAdapter
     - DONE - DONE - PerformanceCounter              Check
     - DONE - IP   - PerformanceCounters             Check
+    - IP   - IP   - PhysicsUtils
     - DONE - DONE - PropertiesUtils                 Convert, but check if necessary
     - DONE - IP   - QuadTreeFloat
     - DONE - IP   - QuickSelect
@@ -895,6 +898,7 @@ UTILS
     - DONE - IP   - SingletonBase<T>
     - DONE - DONE - SortUtils
     - IP   - IP   - StringUtils
+    - IP   - IP   - SystemArrayUtils
     - DONE - IP   - Timer
     - DONE - DONE - TimeUtils
     - DONE - IP   - TimSort

@@ -27,9 +27,10 @@ namespace LughSharp.Lugh.Graphics.Images;
 [PublicAPI]
 public class ManagedTextureHandle : IDisposable
 {
-    private          uint   _handle;
-    private          bool   _isDisposed;
-    private readonly object _lock = new object();
+    private readonly object _lock = new();
+
+    private uint _handle;
+    private bool _isDisposed;
 
     // ========================================================================
 
@@ -48,6 +49,13 @@ public class ManagedTextureHandle : IDisposable
         }
     }
 
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
     protected virtual void Dispose( bool disposing )
     {
         lock ( _lock )
@@ -64,15 +72,9 @@ public class ManagedTextureHandle : IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        Dispose( true );
-        GC.SuppressFinalize( this );
-    }
-
     private void ThrowIfDisposed()
     {
-        ObjectDisposedException.ThrowIf( _isDisposed, nameof( ManagedTextureHandle) );
+        ObjectDisposedException.ThrowIf( _isDisposed, nameof( ManagedTextureHandle ) );
     }
 }
 

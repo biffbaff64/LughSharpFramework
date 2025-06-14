@@ -58,7 +58,6 @@
         <PackageReference Include="RestSharp" Version="112.1.0" />
         <PackageReference Include="SharpZipLib" Version="1.4.2" />
         <PackageReference Include="StbiSharp" Version="1.2.1" />
-        <PackageReference Include="System.Drawing.Common" Version="9.0.5" />
         <PackageReference Include="System.IO.Abstractions" Version="22.0.14" />
         <PackageReference Include="System.IO.Hashing" Version="9.0.4" />
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
@@ -74,62 +73,6 @@
             <Pack>true</Pack>
             <PackagePath>contentFiles\any\any</PackagePath>
         </Content>
-        <None Remove="lib\net8.0\freetype.dll" />
-        <Content Include="lib\net8.0\freetype.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\arial-15.fnt" />
-        <Content Include="lib\net8.0\arial-15.fnt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\arial-15.png" />
-        <Content Include="lib\net8.0\arial-15.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\gdx2d.dll" />
-        <Content Include="lib\net8.0\gdx2d.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\jb_beam_small.png" />
-        <Content Include="lib\net8.0\jb_beam_small.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\lsans-15.fnt" />
-        <Content Include="lib\net8.0\lsans-15.fnt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\lsans-15.png" />
-        <Content Include="lib\net8.0\lsans-15.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\lughlogo.png" />
-        <Content Include="lib\net8.0\lughlogo.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\OSI_Standard_Logo_100X130.png" />
-        <Content Include="lib\net8.0\OSI_Standard_Logo_100X130.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\red7logo_small.png" />
-        <Content Include="lib\net8.0\red7logo_small.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\rover_wheel.png" />
-        <Content Include="lib\net8.0\rover_wheel.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\uiskin.atlas" />
-        <Content Include="lib\net8.0\uiskin.atlas">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\uiskin.json" />
-        <Content Include="lib\net8.0\uiskin.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\uiskin.png" />
-        <Content Include="lib\net8.0\uiskin.png">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -141,6 +84,15 @@
 
     <ItemGroup>
       <Folder Include="Lugh\Graphics\Windowing\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="lib\net8.0\freetype.dll">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+      <None Update="lib\net8.0\gdx2d.dll">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

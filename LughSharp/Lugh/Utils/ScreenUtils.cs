@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths;
@@ -38,7 +37,7 @@ namespace LughSharp.Lugh.Utils;
 /// get the entire screen content or a portion thereof.
 /// </summary>
 [PublicAPI]
-public class ScreenUtils
+public static class ScreenUtils
 {
     /// <summary>
     /// Returns the current framebuffer contents as a <see cref="TextureRegion" /> with
