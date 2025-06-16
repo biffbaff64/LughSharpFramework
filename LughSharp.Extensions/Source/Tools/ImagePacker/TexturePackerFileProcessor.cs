@@ -32,6 +32,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace Extensions.Source.Tools.ImagePacker;
 
+[SupportedOSPlatform( "windows" )]
 [PublicAPI]
 public class TexturePackerFileProcessor //: IFileProcessor
 {
@@ -124,7 +125,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
         this.FlattenOutput = true;
 
         // Set the default file extensions for processable images.
-        AddInputSuffix( ".png", ".jpg", ".jpeg", ".bmp" );;
+        AddInputSuffix( ".png", ".jpg", ".jpeg", ".bmp" );
 
         // Sort input files by name to avoid platform-dependent atlas output changes.
         Comparator = ( ( file1, file2 ) => string.Compare( file1.Name,
@@ -149,14 +150,14 @@ public class TexturePackerFileProcessor //: IFileProcessor
         // -----------------------------------------------------
         // Collect any pack.json setting files present in the folder.
         var settingsProcessor = new PackingSettingsProcessor();
-
-        _ = settingsProcessor.AddInputRegex( "pack\\.json" )
-                             .Process( inputRoot, outputRoot );
+        _ = settingsProcessor.AddInputRegex( "pack\\.json" ).Process( inputRoot, outputRoot );
 
         // -----------------------------------------------------
 
         var settingsFiles = settingsProcessor.SettingsFiles;
 
+        Logger.Debug( $"Settings files: {settingsFiles.Count}" );
+        
         if ( settingsFiles.Count > 0 )
         {
             // Sort parent first.
@@ -168,8 +169,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
                 // Find first parent with settings, or use defaults.
                 TexturePacker.Settings? settings = null;
 
-                var parent = settingsFile.Directory;
-
+                var parent  = settingsFile.Directory;
                 var current = parent;
 
                 while ( ( current != null ) && !current.Equals( _rootDirectory ) )
@@ -869,6 +869,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
     /// <param name="inputDir"></param>
     public virtual void Pack( TexturePacker packer, TexturePackerEntry inputDir )
     {
+        Logger.Checkpoint();
+
         if ( inputDir.OutputDirectory == null )
         {
             throw new GdxRuntimeException( "Cannot perform Pack, output directory is null" );

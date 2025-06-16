@@ -22,9 +22,43 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace Extensions.Source.Tools.ImagePacker;
+using LughSharp.Lugh.Assets;
+using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Utils;
 
-[PublicAPI]
-public class TexturePackerUpscaleTest
+using NUnit.Framework;
+
+namespace LughSharp.Tests.Source;
+
+[TestFixture]
+public class AssetManagerTest
 {
+    private AssetManager? _assetManager;
+
+    [SetUp]
+    public void Setup()
+    {
+        _assetManager = new AssetManager();
+    }
+
+    [Test]
+    public void Run()
+    {
+        Logger.Divider();
+        Logger.Debug( "Loading assets...", true );
+        Logger.Divider();
+
+        _assetManager?.Load( "libgdx.png", typeof( Texture ) );
+        _assetManager?.Load( "biffbaff.png", typeof( Texture ) );
+        _assetManager?.Load( "red7logo_small.png", typeof( Texture ) );
+
+        Logger.Debug( "All assets queued for loading.", true );
+
+        _assetManager?.GetDiagnostics();
+
+        Task.Run( () => { _assetManager?.FinishLoading(); } );
+
+        Logger.Debug( "Finished!", true );
+    }
 }
+

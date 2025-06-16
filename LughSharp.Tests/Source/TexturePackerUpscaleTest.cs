@@ -22,9 +22,14 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace Extensions.Source.Tools.ImagePacker;
+using System.Runtime.Versioning;
+
+using JetBrains.Annotations;
+
+namespace LughSharp.Tests.Source;
 
 [PublicAPI]
-public class TexturePackerTest
+[SupportedOSPlatform( "windows" )]
+public class TexturePackerUpscaleTest
 {
 }

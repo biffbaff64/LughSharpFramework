@@ -49,7 +49,8 @@ public class IOUtils
     public static string AssetsAnimationsPath => NormalizePath( $"{AssetsRoot}/PackedImages/Animations/" );
     public static string AssetsInputsPath     => NormalizePath( $"{AssetsRoot}/PackedImages/Inputs/" );
     public static string AssetsUIPath         => NormalizePath( $"{AssetsRoot}/PackedImages/UI/" );
-
+    public static string AssetsOutputPath     => NormalizePath( $"{AssetsRoot}/PackedImages/Output/" );
+    
     // ========================================================================
 
     /// <summary>
@@ -78,14 +79,33 @@ public class IOUtils
     /// <returns>The validated and normalized asset path.</returns>
     public static string ValidateAssetPath( string path )
     {
+        Logger.Checkpoint();
+        
         if ( !path.Contains( AssemblyDirectory ) )
         {
             path = AssemblyDirectory + path;
         }
+        
+        Logger.Debug( $"Normalized asset path: '{NormalizePath( path )}'" );
 
         return NormalizePath( path );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public static string ValidateAssetsOutputPath( string path )
+    {
+        if ( !path.Contains( "/PackedImages/Output" ) )
+        {
+            path = AssetsOutputPath + path;
+        }
+        
+        return NormalizePath( path );
+    }
+    
     /// <summary>
     /// Determines whether the specified <see cref="FileSystemInfo"/> represents a directory.
     /// </summary>

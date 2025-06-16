@@ -34,6 +34,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class TextureUnpacker
 {
     public bool Quiet { get; set; }

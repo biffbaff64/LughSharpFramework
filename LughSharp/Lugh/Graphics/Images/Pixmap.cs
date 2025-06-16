@@ -133,6 +133,17 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="format"></param>
+    public Pixmap( int width, int height, PixelFormat format )
+        : this( width, height, PixmapFormat.PixelFormatToPixelTypeFormat( format ) )
+    {
+    }
+
+    /// <summary>
     /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded
     /// as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
     /// </summary>

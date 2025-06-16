@@ -33,7 +33,6 @@ using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
-using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -44,6 +43,7 @@ using Image = System.Drawing.Image;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class ImageProcessor
 {
     public float                      Scale      { get; set; }
@@ -83,10 +83,15 @@ public class ImageProcessor
 
         rootPath = IOUtils.NormalizePath( rootPath );
 
-        Bitmap image;
+        Bitmap? image;
 
+        Logger.Debug( $"file: {file.FullName}" );
+        Logger.Debug( $"rootPath: {rootPath}" );
+        
         try
         {
+            Logger.Debug( $"Loading Bitmap: {file.FullName}" );
+
             image = new Bitmap( file.FullName );
         }
         catch ( Exception ex )

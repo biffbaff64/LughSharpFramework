@@ -26,7 +26,11 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.SysDraw;
 using LughSharp.Lugh.Utils;
+
+using Bitmap = System.Drawing.Bitmap;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -109,7 +113,7 @@ public static class BMPUtils
             Logger.Debug( $"Vertical Resolution  : {bmp.VerticalResolution} DPI" );
             Logger.Debug( $"Flags                : {bmp.Flags} (hex: 0x{bmp.Flags:X})" );
 
-            // You can get more detailed info from PixelFormat
+            // Get more detailed info from PixelFormat
             var bitsPerPixel = System.Drawing.Image.GetPixelFormatSize( bmp.PixelFormat );
             Logger.Debug( $"Bits per Pixel: {bitsPerPixel}" );
 

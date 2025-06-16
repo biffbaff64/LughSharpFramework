@@ -30,6 +30,7 @@ using System.Runtime.Versioning;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class ColorBleedEffect
 {
     private static readonly int[] _offsets = [ -1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1 ];

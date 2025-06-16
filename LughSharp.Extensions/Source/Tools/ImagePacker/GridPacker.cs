@@ -30,6 +30,7 @@ using LughSharp.Lugh.Utils.Collections;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class GridPacker : TexturePacker.IPacker
 {
     private readonly TexturePacker.Settings _settings;

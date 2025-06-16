@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -107,13 +108,21 @@ public partial class TextureAtlasData
                     break;
                 }
 
+                Logger.Debug( "Call #1" );
+                
                 if ( ReadEntry( line ) == 0 )
                 {
+                    Logger.Checkpoint();
+                    
                     // Silently ignore all header fields.
                     break;
                 }
 
+                Logger.Checkpoint();
+                
                 line = reader.ReadLine();
+                
+                Logger.Checkpoint();
             }
 
             // Page and region entries.
@@ -135,11 +144,16 @@ public partial class TextureAtlasData
                 }
                 else if ( page == null )
                 {
+                    Logger.Debug( $"line.Trim(): {IOUtils.NormalizePath( line.Trim() )}" );
+                    
                     page = new Page
                     {
-                        TextureFile = new FileInfo( line.Trim() ),
+                        TextureFile = new FileInfo( IOUtils.NormalizePath( line.Trim() ) ),
                     };
 
+                    Logger.Debug( $"page.TextureFile: {page.TextureFile.FullName}" );
+                    Logger.Debug( "Call #2" );
+                    
                     while ( true )
                     {
                         if ( ReadEntry( line = reader.ReadLine() ) == 0 )
@@ -150,7 +164,11 @@ public partial class TextureAtlasData
                         pageFields?[ Entry[ 0 ] ].Parse( page );
                     }
 
+                    Logger.Checkpoint();
+                    
                     Pages.Add( page );
+                    
+                    Logger.Checkpoint();
                 }
                 else
                 {
@@ -165,6 +183,8 @@ public partial class TextureAtlasData
                         region.Flip = true;
                     }
 
+                    Logger.Debug( "Call #3" );
+                    
                     while ( true )
                     {
                         var count = ReadEntry( line = reader.ReadLine() );
@@ -216,6 +236,7 @@ public partial class TextureAtlasData
                     {
                         region.Names  = names.ToArray();
                         region.Values = values?.ToArray();
+                        
                         names.Clear();
                         values?.Clear();
                     }
@@ -250,7 +271,11 @@ public partial class TextureAtlasData
             return 0;
         }
 
+        Logger.Debug( line );
+        
         line = line.Trim();
+
+        Logger.Debug( line );
 
         if ( line.Length == 0 )
         {
@@ -259,12 +284,16 @@ public partial class TextureAtlasData
 
         var colon = line.IndexOf( ':' );
 
+        Logger.Debug( $"colon: {colon}" );
+        
         if ( colon == -1 )
         {
             return 0;
         }
 
         Entry[ 0 ] = line.Substring( 0, colon ).Trim();
+
+        Logger.Debug( $"Entry[ 0 ]: {Entry[ 0 ]}" );
 
         for ( int i = 1, lastMatch = colon + 1;; i++ )
         {

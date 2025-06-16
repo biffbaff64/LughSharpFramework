@@ -30,8 +30,11 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.Atlases;
 
 [PublicAPI]
-public class TextureAtlas
+public class TextureAtlas : IDisposable
 {
+    public List< AtlasRegion? > Regions  { get; set; } = [ ];
+    public List< Texture >      Textures { get; set; } = new( 4 );
+
     // ========================================================================
 
     /// <summary>
@@ -98,9 +101,6 @@ public class TextureAtlas
         Load( data );
     }
 
-    public List< AtlasRegion? > Regions  { get; set; } = new();
-    public List< Texture >      Textures { get; set; } = new( 4 );
-
     /// <summary>
     /// Adds the textures and regions from the specified <see cref="TextureAtlasData" />
     /// </summary>
@@ -122,13 +122,11 @@ public class TextureAtlas
 
         foreach ( var region in data.Regions )
         {
-            var atlasRegion = new AtlasRegion(
-                                              region.Page?.Texture,
-                                              region.Left,
-                                              region.Top,
-                                              region.Rotate ? region.Height : region.Width,
-                                              region.Rotate ? region.Width : region.Height
-                                             )
+            var atlasRegion = new AtlasRegion( region.Page?.Texture,
+                                               region.Left,
+                                               region.Top,
+                                               region.Rotate ? region.Height : region.Width,
+                                               region.Rotate ? region.Width : region.Height )
             {
                 Index          = region.Index,
                 Name           = region.Name,
@@ -348,10 +346,7 @@ public class TextureAtlas
     /// <returns></returns>
     private static Sprite NewSprite( AtlasRegion? region )
     {
-        if ( region == null )
-        {
-            throw new GdxRuntimeException( "atlas region cannot be null!" );
-        }
+        Guard.ThrowIfNull( region );
 
         if ( ( region.PackedWidth == region.OriginalWidth )
              && ( region.PackedHeight == region.OriginalHeight ) )
@@ -379,7 +374,7 @@ public class TextureAtlas
     /// and constructs a new ninepatch, so the result should
     /// be cached rather than calling this method multiple times.
     /// </summary>
-    public NinePatch? CreatePatch( string name )
+    public NinePatch? CreateNinePatch( string name )
     {
         for ( int i = 0, n = Regions.Count; i < n; i++ )
         {
@@ -410,6 +405,8 @@ public class TextureAtlas
         return null;
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// Releases all resources associated with this TextureAtlas instance.
     /// This releases all the textures backing all TextureRegions and Sprites,
@@ -417,11 +414,24 @@ public class TextureAtlas
     /// </summary>
     public void Dispose()
     {
-        foreach ( var texture in Textures )
-        {
-            texture.Dispose();
-        }
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
 
-        Textures.Clear();
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="disposing"></param>
+    protected void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            foreach ( var texture in Textures )
+            {
+                texture.Dispose();
+            }
+
+            Textures.Clear();
+        }
     }
 }

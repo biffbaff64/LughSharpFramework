@@ -24,7 +24,6 @@
     </metadata>
     <files>
         <file src="bin\Release\net8.0\LughSharp.dll" target="lib\net8.0" />
-        <file src="bin\Release\net8.0\AndroidBackend.dll" target="lib\net8.0" />
         <file src="bin\Release\net8.0\DesktopGLBackend.dll" target="lib\net8.0" />
         <file src="bin\Release\net8.0\Extensions.dll" target="lib\net8.0" />
 

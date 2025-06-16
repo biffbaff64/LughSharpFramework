@@ -22,18 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.Versioning;
-
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
 public class PackingSettingsProcessor : FileProcessor
 {
     public List< FileInfo > SettingsFiles { get; private set; } = [ ];
-
-    public PackingSettingsProcessor()
-    {
-    }
 
     /// <inheritdoc/>
     public override void ProcessFile( TexturePackerEntry entry )
@@ -51,10 +45,6 @@ public class PackingSettingsProcessor : FileProcessor
 [PublicAPI]
 public class DeleteProcessor : FileProcessor
 {
-    public DeleteProcessor()
-    {
-    }
-
     /// <inheritdoc />
     public override void ProcessFile( TexturePackerEntry inputFile )
     {

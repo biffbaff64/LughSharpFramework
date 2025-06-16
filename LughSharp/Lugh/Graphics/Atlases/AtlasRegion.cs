@@ -30,56 +30,6 @@ namespace LughSharp.Lugh.Graphics.Atlases;
 public class AtlasRegion : TextureRegion
 {
     /// <summary>
-    /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    public AtlasRegion( Texture? texture, int x, int y, int width, int height )
-        : base( texture!, x, y, width, height )
-    {
-        OriginalWidth  = width;
-        OriginalHeight = height;
-        PackedWidth    = width;
-        PackedHeight   = height;
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="region"></param>
-    public AtlasRegion( AtlasRegion region )
-    {
-        SetRegion( region );
-
-        Index          = region.Index;
-        Name           = region.Name;
-        OffsetX        = region.OffsetX;
-        OffsetY        = region.OffsetY;
-        PackedWidth    = region.PackedWidth;
-        PackedHeight   = region.PackedHeight;
-        OriginalWidth  = region.OriginalWidth;
-        OriginalHeight = region.OriginalHeight;
-        Rotate         = region.Rotate;
-        Degrees        = region.Degrees;
-        Names          = region.Names;
-        Values         = region.Values;
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="region"></param>
-    public AtlasRegion( TextureRegion region )
-    {
-        SetRegion( region );
-
-        PackedWidth    = region.RegionWidth;
-        PackedHeight   = region.RegionHeight;
-        OriginalWidth  = PackedWidth;
-        OriginalHeight = PackedHeight;
-    }
-
-    /// <summary>
     /// Values for name/value pairs other than the fields provided on this class,
     /// each entry corresponding to <see cref="Names" />.
     /// </summary>
@@ -151,6 +101,58 @@ public class AtlasRegion : TextureRegion
     /// each entry corresponding to <see cref="Values" />.
     /// </summary>
     public string?[]? Names { get; set; }
+
+    // ========================================================================
+    
+    /// <summary>
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    public AtlasRegion( Texture? texture, int x, int y, int width, int height )
+        : base( texture!, x, y, width, height )
+    {
+        OriginalWidth  = width;
+        OriginalHeight = height;
+        PackedWidth    = width;
+        PackedHeight   = height;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="region"></param>
+    public AtlasRegion( AtlasRegion region )
+    {
+        SetRegion( region );
+
+        Index          = region.Index;
+        Name           = region.Name;
+        OffsetX        = region.OffsetX;
+        OffsetY        = region.OffsetY;
+        PackedWidth    = region.PackedWidth;
+        PackedHeight   = region.PackedHeight;
+        OriginalWidth  = region.OriginalWidth;
+        OriginalHeight = region.OriginalHeight;
+        Rotate         = region.Rotate;
+        Degrees        = region.Degrees;
+        Names          = region.Names;
+        Values         = region.Values;
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="region"></param>
+    public AtlasRegion( TextureRegion region )
+    {
+        SetRegion( region );
+
+        PackedWidth    = region.RegionWidth;
+        PackedHeight   = region.RegionHeight;
+        OriginalWidth  = PackedWidth;
+        OriginalHeight = PackedHeight;
+    }
 
     /// <summary>
     /// Returns the packed width considering the <see cref="Rotate" /> value,

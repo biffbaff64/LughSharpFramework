@@ -213,6 +213,25 @@ public class PixmapFormat
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    public static PixelType.Format PixelFormatToPixelTypeFormat( PixelFormat format )
+    {
+        return format switch
+        {
+            PixelFormat.Alpha                => PixelType.Format.Alpha,
+            PixelFormat.Format24bppRgb       => PixelType.Format.RGB888,
+            PixelFormat.Format32bppArgb      => PixelType.Format.RGBA8888,
+            PixelFormat.Format16bppRgb565    => PixelType.Format.RGB565,
+            PixelFormat.Format16bppGrayScale => PixelType.Format.RGBA4444,
+
+            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+        };
+    }
+
+    /// <summary>
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
@@ -329,22 +348,10 @@ public class PixmapFormat
             var _ => $"Invalid format: {format}",
         };
     }
-    
+
     public static Pixmap ConvertToFormat( Pixmap pixmap, PixelType.Format targetFormat )
     {
         var convertedPixmap = new Pixmap( pixmap.Width, pixmap.Height, targetFormat );
-
-//        Logger.Debug( "Original pixmap - 'pixmap'" );
-//        Logger.Debug( $"Width: {pixmap.Width}, Height: {pixmap.Height}" );
-//        Logger.Debug( $"GLDataType: {pixmap.GLDataType}" );
-//        Logger.Debug( $"GLFormat: {PixmapFormat.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
-//        Logger.Debug( $"Backing array length: {pixmap.PixelData.Length}" );
-
-//        Logger.Debug( $"New pixmap - '{nameof( convertedPixmap )}'" );
-//        Logger.Debug( $"Width: {convertedPixmap.Width}, Height: {convertedPixmap.Height}" );
-//        Logger.Debug( $"GLDataType: {convertedPixmap.GLDataType}" );
-//        Logger.Debug( $"GLFormat: {PixmapFormat.GetGLPixelFormatName( convertedPixmap.GLPixelFormat )}" );
-//        Logger.Debug( $"Backing array length: {convertedPixmap.PixelData.Length}" );
 
         // Convert RGBA4444 to RGBA8888
         var srcData = pixmap.PixelData;

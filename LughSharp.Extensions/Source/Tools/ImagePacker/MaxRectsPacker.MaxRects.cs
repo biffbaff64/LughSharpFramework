@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Versioning;
+
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -34,6 +36,7 @@ public partial class MaxRectsPacker
     /// domain source:
     /// http://clb.demon.fi/projects/even-more-rectangle-bin-packing
     /// </summary>
+    [SupportedOSPlatform( "windows" )]
     private class MaxRects
     {
         private readonly List< TexturePacker.Rect > _usedRectangles = [ ];
