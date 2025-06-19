@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
@@ -53,10 +54,9 @@ public partial class TextureAtlasData
     {
         if ( packFile != null )
         {
-            Logger.Debug( $"packFile Name: {packFile.Name}" );
             Logger.Debug( $"packFile FullName: {packFile.FullName}" );
             Logger.Debug( $"imagesDir FullName: {imagesDir?.FullName}" );
-            
+
             Load( packFile, imagesDir, flip );
         }
     }
@@ -74,37 +74,37 @@ public partial class TextureAtlasData
     {
         Guard.ThrowIfNull( packFile );
 
-        ObjectMap< string, IField< Page > > pageFields = new( 15, 0.99f)
+        ObjectMap< string, IField< Page > > pageFields = new( 15, 0.99f )
         {
-            { "size",       new PageFieldSize()     },
-            { "format",     new PageFieldFormat()   },
-            { "filter",     new PageFieldFilter()   },
-            { "repeat",     new PageFieldRepeat()   },
-            { "pma",        new PageFieldPma()      },
+            { "size", new PageFieldSize() },
+            { "format", new PageFieldFormat() },
+            { "filter", new PageFieldFilter() },
+            { "repeat", new PageFieldRepeat() },
+            { "pma", new PageFieldPma() },
         };
 
         ObjectMap< string, IField< Region > > regionFields = new( 127, 0.99f )
         {
-            { "xy",         new RegionFieldXY()         },
-            { "size",       new RegionFieldSize()       },
-            { "bounds",     new RegionFieldBounds()     },
-            { "offset",     new RegionFieldOffset()     },
-            { "orig",       new RegionFieldOrig()       },
-            { "offsets",    new RegionFieldOffsets()    },
-            { "rotate",     new RegionFieldRotate()     },
-            { "index",      new RegionFieldIndex()      },
+            { "xy", new RegionFieldXY() },
+            { "size", new RegionFieldSize() },
+            { "bounds", new RegionFieldBounds() },
+            { "offset", new RegionFieldOffset() },
+            { "orig", new RegionFieldOrig() },
+            { "offsets", new RegionFieldOffsets() },
+            { "rotate", new RegionFieldRotate() },
+            { "index", new RegionFieldIndex() },
         };
 
         var reader = new StreamReader( packFile.FullName, false );
 
         try
         {
-            var line = reader.ReadLine();
+            var line = ReadLine();
 
             // Ignore empty lines before first entry.
             while ( ( line != null ) && ( line.Trim().Length == 0 ) )
             {
-                line = reader.ReadLine();
+                line = ReadLine();
             }
 
             // Header entries.
@@ -120,13 +120,16 @@ public partial class TextureAtlasData
                     break; // Silently ignore all header fields.
                 }
 
-                line = reader.ReadLine();
+                line = ReadLine();
             }
 
             // Page and region entries.
             Page?           page   = null;
             List< string >? names  = null;
             List< int[] >?  values = null;
+
+            Logger.Debug( $"Packfile: {packFile.FullName}" );
+            Logger.Debug( $"Packfile Dir: {packFile.Directory?.FullName}" );
 
             while ( true )
             {
@@ -138,10 +141,14 @@ public partial class TextureAtlasData
                 if ( line.Trim().Length == 0 )
                 {
                     page = null;
-                    line = reader.ReadLine();
+                    line = ReadLine();
                 }
                 else if ( page == null )
                 {
+                    line = IOUtils.NormalizePath( $"{packFile.Directory?.FullName}/{line}" );
+
+                    Logger.Debug( $"line: {line}" );
+                    
                     page = new Page
                     {
                         TextureFile = new FileInfo( line ),
@@ -149,7 +156,7 @@ public partial class TextureAtlasData
 
                     while ( true )
                     {
-                        if ( ReadEntry( line = reader.ReadLine() ) == 0 )
+                        if ( ReadEntry( line = ReadLine() ) == 0 )
                         {
                             break;
                         }
@@ -176,7 +183,7 @@ public partial class TextureAtlasData
 
                     while ( true )
                     {
-                        var count = ReadEntry( line = reader.ReadLine() );
+                        var count = ReadEntry( line = ReadLine() );
 
                         if ( count == 0 )
                         {
@@ -227,7 +234,7 @@ public partial class TextureAtlasData
                     {
                         region.Names  = names.ToArray();
                         region.Values = values?.ToArray();
-                        
+
                         names.Clear();
                         values?.Clear();
                     }
@@ -248,6 +255,21 @@ public partial class TextureAtlasData
         if ( HasIndexes[ 0 ] )
         {
             Regions.Sort( new ComparatorAnonymousInnerClass( this ) );
+        }
+
+        return;
+
+        // --------------------------------------------------------------------
+        //TODO: When testing is complete, remove this and replace calls
+        // with reader.ReadLine()
+        //
+        string? ReadLine()
+        {
+            var line = reader.ReadLine();
+
+//            Logger.Debug( $"line: {line}" );
+
+            return line;
         }
     }
 

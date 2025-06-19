@@ -74,7 +74,7 @@ public class TextureAtlas : IDisposable
     /// If true, all regions loaded will be flipped for use with a perspective
     /// where 0,0 is the upper left corner.
     /// </param>
-    public TextureAtlas( FileInfo packFile, bool flip )
+    public TextureAtlas( FileInfo packFile, bool flip = false )
         : this( packFile, packFile.Directory, flip )
     {
     }
@@ -89,8 +89,25 @@ public class TextureAtlas : IDisposable
     /// where 0,0 is the upper left corner.
     /// </param>
     public TextureAtlas( FileInfo packFile, DirectoryInfo? imagesDir, bool flip = false )
-        : this( new TextureAtlasData( packFile, imagesDir, flip ) )
+//        : this( new TextureAtlasData( packFile, imagesDir, flip ) )
     {
+        Logger.Debug( $"packFile Name: {packFile.FullName}" );
+        Logger.Debug( $"imagesDir Name: {imagesDir?.FullName}" );
+        
+        var atlasData = new TextureAtlasData( packFile, imagesDir, flip );
+    
+        Logger.Debug( $"packFile Name: {packFile.FullName}" );
+        Logger.Debug( $"imagesDir Name: {imagesDir?.FullName}" );
+
+        foreach ( var page in atlasData.Pages )
+        {
+            Logger.Debug( $"page.TextureFile: {page.TextureFile?.FullName}" );
+        }
+        
+        Load( atlasData );
+        
+        Logger.Debug( $"packFile Name: {packFile.FullName}" );
+        Logger.Debug( $"imagesDir Name: {imagesDir?.FullName}" );
     }
 
     /// <summary>
@@ -107,6 +124,8 @@ public class TextureAtlas : IDisposable
     /// </summary>
     public void Load( TextureAtlasData data )
     {
+        Logger.Checkpoint();
+
         Textures.EnsureCapacity( data.Pages.Count );
 
         foreach ( var page in data.Pages )

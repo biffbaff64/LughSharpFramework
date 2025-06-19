@@ -73,7 +73,7 @@ public class IOUtils
     }
 
     /// <summary>
-    /// Validates the provided asset path by ensuring it is relative to the assembly
+    /// Validates the provided asset path by ensuring it is relative to the assets
     /// directory and normalizing it to use consistent directory separators.
     /// </summary>
     /// <param name="path">The asset path to validate and normalize.</param>

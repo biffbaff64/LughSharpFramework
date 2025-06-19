@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Atlases;
@@ -64,8 +63,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Page page, params string[] entry )
         {
-            Logger.Checkpoint();
-
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
 
             page.MinFilter  = Enum.Parse< Texture.TextureFilter >( entry[ 1 ] );
@@ -80,8 +77,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Page page, params string[] entry )
         {
-            Logger.Checkpoint();
-
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
             
             if ( entry[ 1 ].Contains( 'x' ) )
@@ -102,8 +97,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Page page, params string[] entry )
         {
-            Logger.Checkpoint();
-
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
 
             page.PreMultipliedAlpha = entry[ 1 ].Equals( "true" );
@@ -116,8 +109,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Region region, params string[] entry )
         {
-            Logger.Checkpoint();
-            
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
 
             region.Left = int.Parse( entry[ 1 ] );
@@ -131,8 +122,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Region region, params string[] entry )
         {
-            Logger.Checkpoint();
-            
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
 
             region.Width  = int.Parse( entry[ 1 ] );
@@ -146,8 +135,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Region region, params string[] entry )
         {
-            Logger.Checkpoint();
-            
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
 
             region.Left   = int.Parse( entry[ 1 ] );
@@ -163,8 +150,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Region region, params string[] entry )
         {
-            Logger.Checkpoint();
-            
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
 
             region.OffsetX = int.Parse( entry[ 1 ] );
@@ -178,8 +163,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Region region, params string[] entry )
         {
-            Logger.Checkpoint();
-            
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
             
             region.OriginalWidth  = int.Parse( entry[ 1 ] );
@@ -193,8 +176,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Region region, params string[] entry )
         {
-            Logger.Checkpoint();
-            
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
             
             region.OffsetX        = int.Parse( entry[ 1 ] );
@@ -210,8 +191,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Region region, params string[] entry )
         {
-            Logger.Checkpoint();
-            
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
             
             var value = entry[ 1 ];
@@ -235,8 +214,6 @@ public partial class TextureAtlasData
     {
         public void Parse( Region region, params string[] entry )
         {
-            Logger.Checkpoint();
-            
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry) );
             
             region.Index = int.Parse( entry[ 1 ] );
