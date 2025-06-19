@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Atlases;
@@ -50,7 +51,7 @@ public class TextureAtlas : IDisposable
     /// using the parent directory of the pack file to find the page images.
     /// </summary>
     public TextureAtlas( string internalPackFile )
-        : this( Api.Files.Internal( internalPackFile ) )
+        : this( new FileInfo( internalPackFile ) )
     {
     }
 
@@ -406,7 +407,7 @@ public class TextureAtlas : IDisposable
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Releases all resources associated with this TextureAtlas instance.
     /// This releases all the textures backing all TextureRegions and Sprites,

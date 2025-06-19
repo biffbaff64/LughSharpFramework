@@ -186,8 +186,8 @@ public class Guard
     /// Throws ArgumentOutOfRangeException if argumentValue is greater than or equal to maximum.
     /// </summary>
     public static void NotGreaterThan( int argumentValue, int maximum,
-                                 [CallerArgumentExpression( nameof( argumentValue ) )]
-                                 string argumentName = "" )
+                                       [CallerArgumentExpression( nameof( argumentValue ) )]
+                                       string argumentName = "" )
     {
         if ( argumentValue >= maximum )
         {
@@ -296,14 +296,30 @@ public class Guard
     // ========================================================================
 
     /// <summary>
+    /// Throws ArgumentException if array is null or empty.
+    /// Provides a clear error message with the argumentName.
+    /// </summary>
+    /// <param name="argument"></param>
+    /// <param name="argumentName"></param>
+    public static void ThrowIfNullOrEmpty( string[]? argument,
+                                           [CallerArgumentExpression( nameof( argument ) )]
+                                           string argumentName = "" )
+    {
+        if ( ( argument == null ) || ( argument.Length == 0 ) )
+        {
+            throw new ArgumentNullException( argumentName );
+        }
+    }
+
+    /// <summary>
     /// Throws ArgumentException if collection is null or empty.
     /// Provides a clear error message with the argumentName.
     /// </summary>
     /// <param name="collection"></param>
     /// <param name="argumentName"></param>
-    public static void NotEmpty( ICollection collection,
-                                 [CallerArgumentExpression( nameof( collection ) )]
-                                 string argumentName = "" )
+    public static void ThrowIfNullOrEmpty( ICollection collection,
+                                           [CallerArgumentExpression( nameof( collection ) )]
+                                           string argumentName = "" )
     {
         if ( ( collection == null ) || ( collection.Count == 0 ) )
         {
@@ -315,9 +331,9 @@ public class Guard
     /// Throws ArgumentNullException if argumentValue is null.
     /// Throws ArgumentException if argumentValue is empty.
     /// </summary>
-    public static void NotNullOrEmpty< T >( IEnumerable< T >? enumerable,
-                                            [CallerArgumentExpression( nameof( enumerable ) )]
-                                            string argumentName = "" )
+    public static void ThrowIfNullOrEmpty< T >( IEnumerable< T >? enumerable,
+                                                [CallerArgumentExpression( nameof( enumerable ) )]
+                                                string argumentName = "" )
     {
         if ( enumerable == null )
         {

@@ -22,9 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Exception = System.Exception;
@@ -53,43 +53,50 @@ public partial class TextureAtlasData
     {
         if ( packFile != null )
         {
+            Logger.Debug( $"packFile Name: {packFile.Name}" );
+            Logger.Debug( $"packFile FullName: {packFile.FullName}" );
+            Logger.Debug( $"imagesDir FullName: {imagesDir?.FullName}" );
+            
             Load( packFile, imagesDir, flip );
         }
     }
 
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="packFile"></param>
+    /// <param name="imagesDir"></param>
+    /// <param name="flip"></param>
+    /// <exception cref="GdxRuntimeException"></exception>
     private void Load( FileInfo? packFile, DirectoryInfo? imagesDir, bool flip )
     {
-        ArgumentNullException.ThrowIfNull( packFile );
-        
-        //@formatter:off
-        Dictionary< string, IField< Page > > pageFields = new( 15 )
+        Guard.ThrowIfNull( packFile );
+
+        ObjectMap< string, IField< Page > > pageFields = new( 15, 0.99f)
         {
-            { "size",       new PageFieldSize()   },
-            { "format",     new PageFieldFormat() },
-            { "filter",     new PageFieldFilter() },
-            { "repeat",     new PageFieldRepeat() },
-            { "pma",        new PageFieldPma()    },
+            { "size",       new PageFieldSize()     },
+            { "format",     new PageFieldFormat()   },
+            { "filter",     new PageFieldFilter()   },
+            { "repeat",     new PageFieldRepeat()   },
+            { "pma",        new PageFieldPma()      },
         };
 
-        Dictionary< string, IField< Region > > regionFields = new( 127 )
+        ObjectMap< string, IField< Region > > regionFields = new( 127, 0.99f )
         {
-            { "rotate",     new RegionFieldRotate()  },
-            { "xy",         new RegionFieldXY()      },
-            { "size",       new RegionFieldSize()    },
-            { "bounds",     new RegionFieldBounds()  },
-            { "orig",       new RegionFieldOrig()    },
-            { "offset",     new RegionFieldOffset()  },
-            { "offsets",    new RegionFieldOffsets() },
-            { "index",      new RegionFieldIndex()   },
+            { "xy",         new RegionFieldXY()         },
+            { "size",       new RegionFieldSize()       },
+            { "bounds",     new RegionFieldBounds()     },
+            { "offset",     new RegionFieldOffset()     },
+            { "orig",       new RegionFieldOrig()       },
+            { "offsets",    new RegionFieldOffsets()    },
+            { "rotate",     new RegionFieldRotate()     },
+            { "index",      new RegionFieldIndex()      },
         };
-        //@formatter:on
 
         var reader = new StreamReader( packFile.FullName, false );
 
-        Logger.Checkpoint();
-        
         try
         {
             var line = reader.ReadLine();
@@ -108,21 +115,12 @@ public partial class TextureAtlasData
                     break;
                 }
 
-                Logger.Debug( "Call #1" );
-                
                 if ( ReadEntry( line ) == 0 )
                 {
-                    Logger.Checkpoint();
-                    
-                    // Silently ignore all header fields.
-                    break;
+                    break; // Silently ignore all header fields.
                 }
 
-                Logger.Checkpoint();
-                
                 line = reader.ReadLine();
-                
-                Logger.Checkpoint();
             }
 
             // Page and region entries.
@@ -144,16 +142,11 @@ public partial class TextureAtlasData
                 }
                 else if ( page == null )
                 {
-                    Logger.Debug( $"line.Trim(): {IOUtils.NormalizePath( line.Trim() )}" );
-                    
                     page = new Page
                     {
-                        TextureFile = new FileInfo( IOUtils.NormalizePath( line.Trim() ) ),
+                        TextureFile = new FileInfo( line ),
                     };
 
-                    Logger.Debug( $"page.TextureFile: {page.TextureFile.FullName}" );
-                    Logger.Debug( "Call #2" );
-                    
                     while ( true )
                     {
                         if ( ReadEntry( line = reader.ReadLine() ) == 0 )
@@ -161,14 +154,12 @@ public partial class TextureAtlasData
                             break;
                         }
 
-                        pageFields?[ Entry[ 0 ] ].Parse( page );
+                        var field = pageFields.Get( Entry[ 0 ] );
+
+                        field?.Parse( page, Entry ); // Silently ignore unknown page fields.
                     }
 
-                    Logger.Checkpoint();
-                    
                     Pages.Add( page );
-                    
-                    Logger.Checkpoint();
                 }
                 else
                 {
@@ -183,8 +174,6 @@ public partial class TextureAtlasData
                         region.Flip = true;
                     }
 
-                    Logger.Debug( "Call #3" );
-                    
                     while ( true )
                     {
                         var count = ReadEntry( line = reader.ReadLine() );
@@ -194,9 +183,11 @@ public partial class TextureAtlasData
                             break;
                         }
 
-                        if ( regionFields?[ Entry[ 0 ] ] != null )
+                        var field = regionFields.Get( Entry[ 0 ] );
+
+                        if ( field != null )
                         {
-                            regionFields[ Entry[ 0 ] ].Parse( region );
+                            field.Parse( region, Entry );
                         }
                         else
                         {
@@ -216,7 +207,7 @@ public partial class TextureAtlasData
                                 {
                                     entryValues[ i ] = int.Parse( Entry[ i + 1 ] );
                                 }
-                                catch ( FormatException )
+                                catch ( NumberFormatException )
                                 {
                                     // Silently ignore non-integer values.
                                 }
@@ -226,7 +217,7 @@ public partial class TextureAtlasData
                         }
                     }
 
-                    if ( region is { OriginalWidth: 0, OriginalHeight: 0 } )
+                    if ( region is { OriginalWidth : 0, OriginalHeight: 0, } )
                     {
                         region.OriginalWidth  = region.Width;
                         region.OriginalHeight = region.Height;
@@ -271,11 +262,7 @@ public partial class TextureAtlasData
             return 0;
         }
 
-        Logger.Debug( line );
-        
         line = line.Trim();
-
-        Logger.Debug( line );
 
         if ( line.Length == 0 )
         {
@@ -284,16 +271,12 @@ public partial class TextureAtlasData
 
         var colon = line.IndexOf( ':' );
 
-        Logger.Debug( $"colon: {colon}" );
-        
         if ( colon == -1 )
         {
             return 0;
         }
 
         Entry[ 0 ] = line.Substring( 0, colon ).Trim();
-
-        Logger.Debug( $"Entry[ 0 ]: {Entry[ 0 ]}" );
 
         for ( int i = 1, lastMatch = colon + 1;; i++ )
         {
@@ -306,7 +289,7 @@ public partial class TextureAtlasData
                 return i;
             }
 
-            Entry[ i ] = line.Substring( lastMatch, comma ).Trim();
+            Entry[ i ] = line.Substring( lastMatch, comma - lastMatch ).Trim();
 
             lastMatch = comma + 1;
 
@@ -327,7 +310,7 @@ public partial class TextureAtlasData
 
     // ========================================================================
     // ========================================================================
-    
+
     [PublicAPI]
     public record Page
     {
@@ -390,4 +373,3 @@ public partial class TextureAtlasData
         }
     }
 }
-

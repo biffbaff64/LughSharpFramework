@@ -876,6 +876,7 @@ UTILS
     - DONE - DONE - FPSLogger
     - DONE - IP   - GCSuppressor
     - DONE - IP   - GdxNativesLoader
+    - IP   - IP   - HashHelpers
     - IP   - IP   - IClearablePool
     - DONE - DONE - IClipboard                      Convert - Interface, clipboard handled in backends.
     - DONE - DONE - ICloseable

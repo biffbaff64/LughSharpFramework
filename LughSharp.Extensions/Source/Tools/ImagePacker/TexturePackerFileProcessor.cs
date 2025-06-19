@@ -196,12 +196,14 @@ public class TexturePackerFileProcessor //: IFileProcessor
             }
         }
 
+        Logger.Debug( $"Calling ProcessIO: CountOnly=TRUE" );
         // Count the number of texture packer invocations for the
         // ProgressListener to use.
         CountOnly = true;
         _         = ProcessIO( inputRoot, outputRoot );
         CountOnly = false;
 
+        Logger.Debug( $"Calling ProcessIO: CountOnly=FALSE" );
         // Do actual processing.
         ProgressListener?.Start( 1 );
         var result = ProcessIO( inputRoot, outputRoot );

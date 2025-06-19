@@ -143,6 +143,8 @@ public class FileProcessor
     /// <exception cref="Exception"></exception>
     public virtual List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
+        Logger.Checkpoint();
+        
         if ( outputRoot == null )
         {
             Logger.Debug( $"Setting outputRoot to InternalPath: {IOUtils.InternalPath}" );
@@ -323,8 +325,8 @@ public class FileProcessor
 
                     Logger.Warning( $"Directory '{dir.FullName}' not found in dirToEntries during file processing." );
 
-                    // Potentially create a new list here if you have a specific fallback behavior:
-                    // dirToEntries[dir] = new List<T> { entry };
+                    // Create a new list here as fallback
+                    dirToEntries[dir] = [ entry ];
                 }
             }
 

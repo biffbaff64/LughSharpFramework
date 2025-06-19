@@ -19,6 +19,7 @@ EXTENSIONS/FREETYPE
     CODE   DOCUMENT
     ----   --------
     - IP   - IP   - FreeType
+    - IP   - IP   - FreeTypeConstants
     - IP   - IP   - FreeTypeFontGenerator
     - IP   - IP   - FreeTypeFontGeneratorLoader
     - IP   - IP   - FreeTypeFontLoader
@@ -77,8 +78,6 @@ EXTENSIONS/TOOLS/IMAGEPACKER
     - IP   - IP   - TexturePacker.Settings
     - IP   - IP   - TexturePackerEntry
     - IP   - IP   - TexturePackerFileProcessor
-    -      -      - TexturePackerTest
-    -      -      - TexturePackerUpscaleTest
     - IP   - IP   - TextureUnpacker
 
 EXTENSIONS/TOOLS/TILEDMAPPACKER

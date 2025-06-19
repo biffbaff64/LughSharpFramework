@@ -131,7 +131,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         {
             Logger.Checkpoint();
         }
-        
+
         if ( loadFactor is <= 0f or >= 1f )
         {
             throw new ArgumentException( "loadFactor must be > 0 and < 1: " + loadFactor );
@@ -187,38 +187,35 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
     /// <summary>
     /// Returns an index between 0 and <see cref="Mask" /> for the specified <c>item</c>.
-    /// <para>
-    /// The default implementation uses Fibonacci hashing based on the <c>item.GetHashCode()</c>.
-    /// The hash code is multiplied by a constant (2 to the 64th, divided by the golden ratio),
-    /// and the uppermost bits are shifted to obtain an index within the desired range.
-    /// This method can handle even poor hash codes, preventing high collision rates.
-    /// However, it may have increased collision rates when most hash codes are multiples
-    /// of larger Fibonacci numbers.
-    /// </para>
-    /// <para>
-    /// For more details, see
-    /// <a
-    /// href="https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/">
-    /// Malte Skarupke's blog post
-    /// </a>
-    /// </para>
-    /// <para>
-    /// You can override this method to customize hashing. This might be useful, for instance,
-    /// in cases where most hash codes are Fibonacci numbers, when keys have poor or incorrect
-    /// hash codes, or when high-quality hash codes negate the need for Fibonacci hashing.
-    /// Example: <c>return item.GetHashCode() &amp; Mask;</c>
-    /// </para>
+    /// Uses Fibonacci hashing to distribute hash codes, then selects the appropriate bits.
     /// </summary>
     /// <param name="item">The item to calculate the index for.</param>
-    protected virtual int Place( TK item )
+    protected virtual int Place(TK item)
     {
-        ArgumentNullException.ThrowIfNull( item );
+        ArgumentNullException.ThrowIfNull(item);
 
-        return ( int )( ( ( ulong )item.GetHashCode() * 0x9E3779B97F4A7C15L ) >>> Shift );
+        // Get the 32-bit hash code
+        int hashCode = item.GetHashCode();
+
+        // Convert to ulong and multiply by the 64-bit golden ratio constant
+        // This is where Fibonacci hashing happens, spreading out the bits.
+        ulong fibonacciHashed = (ulong)hashCode * HashHelpers.GOLDEN_RATIO_MULTIPLIER_64_BIT;
+
+        // Shift the uppermost bits into the low-order positions to get the final index.
+        // The Shift value determines how many of the *most significant* bits of the 64-bit hash
+        // become the *least significant* bits of the resulting index.
+        int index = (int)(fibonacciHashed >> Shift);
+
+        // Finally, apply the mask to ensure the index is within the table bounds.
+        // This is crucial if Shift doesn't perfectly align with the table size,
+        // or if you want to be robust against slight inaccuracies in Shift calculation.
+        return index & Mask;
     }
 
     /// <summary>
-    /// Locates the specified key in the map.
+    /// Returns the index of the key if already present, else -(index + 1) for the next empty
+    /// index. This can be overridden in this package to compare for equality differently than
+    /// <see cref="object.Equals(object)"/>.
     /// </summary>
     /// <param name="key">The key to locate in the map.</param>
     /// <returns>
@@ -228,35 +225,41 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <exception cref="NullReferenceException">Thrown when the KeyTable is null.</exception>
     public virtual int LocateKey( TK key )
     {
-        Logger.Checkpoint();
-        
-        if ( KeyTable == null )
-        {
-            throw new NullReferenceException( "_keyTable is null" );
-        }
+        Guard.ThrowIfNull( key );
 
-        int retVal;
-        
-        for ( var i = Place( key ); /*..*/; i = ( i + 1 ) & Mask )
+        var keyTable = this.KeyTable;
+
+        for ( var i = Place( key );; i = ( i + 1 ) & Mask )
         {
-            var other = KeyTable[ i ];
+            var other = keyTable[ i ];
 
             if ( other == null )
             {
-                retVal = -( i + 1 ); // Empty space is available.
-
-                break;
+                return -( i + 1 ); // Empty space is available.
             }
 
             if ( other.Equals( key ) )
             {
-                retVal = i; // Same key was found.
-
-                break;
+                return i; // Same key was found.
             }
         }
-        
-        return retVal;
+    }
+
+    /// <summary>
+    /// Adds a new key-value pair to the map.
+    /// Throws an exception if the key already exists.
+    /// </summary>
+    /// <param name="key">The key to add.</param>
+    /// <param name="value">The value to add.</param>
+    /// <exception cref="ArgumentException">Thrown if the key already exists in the map.</exception>
+    public void Add( TK key, TV? value )
+    {
+        if ( ContainsKey( key ) )
+        {
+            throw new ArgumentException( $"An element with the same key already exists: {key}" );
+        }
+
+        Put( key, value );
     }
 
     /// <summary>
@@ -268,12 +271,8 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <returns></returns>
     public virtual TV? Put( TK key, TV? value )
     {
-        Logger.Checkpoint();
-        
         var i = LocateKey( key );
 
-        Logger.Debug( $"LocateKey: {i}" );
-        
         if ( i >= 0 )
         {
             // Existing key was found.
@@ -285,8 +284,6 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         i = -( i + 1 ); // Empty space was found.
 
-        Logger.Debug( $"Empty space at: {i}" );
-        
         KeyTable[ i ]   = key;
         ValueTable[ i ] = value;
 

@@ -319,13 +319,14 @@ public partial class TexturePacker
     {
         Logger.Debug( "Packing..." );
         Logger.Debug( $"outputDir: {outputDir.FullName}" );
-        Logger.Debug( $"packFileName: {packFileName}" );
 
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
             packFileName = packFileName.Substring( 0, packFileName.Length - _settings.AtlasExtension.Length );
         }
 
+        Logger.Debug( $"packFileName: {packFileName}" );
+        
         Directory.CreateDirectory( outputDir.FullName );
 
         ProgressListener ??= new AbstractProgressListenerImpl();
@@ -645,8 +646,7 @@ public partial class TexturePacker
                                     Plot( canvas, rectX - i, rectY - j, image.GetPixel( 0, 0 ) );
                                     Plot( canvas, rectX - i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( 0, ih - 1 ) );
                                     Plot( canvas, ( ( rectX + iw ) - 1 ) + i, rectY - j, image.GetPixel( iw - 1, 0 ) );
-                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j,
-                                          image.GetPixel( iw - 1, ih - 1 ) );
+                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( iw - 1, ih - 1 ) );
                                 }
                             }
 

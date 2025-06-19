@@ -79,6 +79,8 @@ public class ImageProcessor
     /// </param>
     public TexturePacker.Rect? AddImage( FileInfo? file, string? rootPath )
     {
+        Logger.Checkpoint();
+        
         ArgumentNullException.ThrowIfNull( file );
 
         rootPath = IOUtils.NormalizePath( rootPath );
@@ -90,8 +92,6 @@ public class ImageProcessor
         
         try
         {
-            Logger.Debug( $"Loading Bitmap: {file.FullName}" );
-
             image = new Bitmap( file.FullName );
         }
         catch ( Exception ex )
@@ -139,10 +139,9 @@ public class ImageProcessor
 
         if ( rect == null )
         {
-            Logger.Debug( "Returning early: Rect is null" );
-
             if ( !Settings.Silent )
             {
+                Logger.Debug( "Returning early: Rect is null" );
                 Logger.Debug( $"Ignoring blank input image: {name}" );
             }
 
@@ -167,14 +166,6 @@ public class ImageProcessor
 
             if ( existing != null )
             {
-                if ( !Settings.Silent )
-                {
-                    var rectName     = rect.Name + ( rect.Index != -1 ? $"_{rect.Index}" : "" );
-                    var existingName = existing.Name + ( existing.Index != -1 ? $"_{existing.Index}" : "" );
-
-                    Logger.Debug( $"{rectName} (alias of {existingName}) - WHAT IS THIS?????" );
-                }
-
                 existing.Aliases.Add( new TexturePacker.Alias( rect ) );
 
                 return null;

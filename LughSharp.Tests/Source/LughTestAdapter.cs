@@ -22,44 +22,31 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Utils;
+using JetBrains.Annotations;
+
+using NUnit.Framework;
+
+namespace LughSharp.Tests.Source;
 
 /// <summary>
 /// Represents a base class for implementing test adapters, providing a common
 /// interface and functionalities such as lifecycle management for derived test
 /// implementations.
 /// </summary>
-/// <remarks>
-/// The class defines virtual methods for essential operations like creation, rendering,
-/// resizing, pausing, and resuming, and provides support for cleanup through the
-/// <see cref="IDisposable"/> interface. Derived classes can override these methods
-/// to implement specific test functionality.
-/// </remarks>
 [PublicAPI]
-public class LughTestAdapter : IDisposable
+[TestFixture]
+public class LughTestAdapter
 {
-    public virtual void Create()
+    [SetUp]
+    public virtual void Setup()
     {
     }
-
-    public virtual void Render()
+    
+    [TearDown]
+    public void TearDown()
     {
-    }
-
-    public virtual void Resize( int width, int height )
-    {
-    }
-
-    public virtual void Pause()
-    {
-    }
-
-    public virtual void Resume()
-    {
-    }
-
-    public virtual void Dispose()
-    {
-        GC.SuppressFinalize(this);
     }
 }
+
+// ============================================================================
+// ============================================================================

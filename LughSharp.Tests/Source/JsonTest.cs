@@ -33,6 +33,8 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
+using NUnit.Framework;
+
 namespace LughSharp.Tests.Source;
 
 public class Person
@@ -55,11 +57,11 @@ public class PhoneNumber
 }
 
 [PublicAPI]
-public class JsonTest : LughTestAdapter
+public class JsonTest
 {
     private Json? _json;
 
-    public override void Create()
+    public void Setup()
     {
         Logger.Checkpoint();
 
@@ -106,7 +108,7 @@ public class JsonTest : LughTestAdapter
         Logger.Debug( "Finished" );
     }
 
-    private string? PerformTests( object? obj )
+    public string? PerformTests( object? obj )
     {
         Logger.Checkpoint();
 
@@ -122,7 +124,7 @@ public class JsonTest : LughTestAdapter
         return text;
     }
 
-    private static void TestObjectGraph( TestMapGraph obj, string typeName )
+    public void TestObjectGraph( TestMapGraph obj, string typeName )
     {
         Logger.Checkpoint();
 
@@ -135,7 +137,7 @@ public class JsonTest : LughTestAdapter
         };
 
         var text    = json.PrettyPrint( obj );
-        var object2 = json.FromJson< TestMapGraph >( typeof( TestMapGraph ), text ?? "ERROR" );
+        var object2 = json.FromJson< TestMapGraph >( typeof( TestMapGraph ), text );
 
         if ( object2?.Map.Count != obj.Map.Count )
         {
@@ -400,7 +402,7 @@ public class JsonTest : LughTestAdapter
 
             if ( obj != other.Obj )
             {
-                if ( ( obj == null ) || ( other.Obj == null ) )
+                if ( ( obj == null! ) || ( other.Obj == null ) )
                 {
                     return false;
                 }

@@ -44,13 +44,14 @@ public class IOUtils
 
     // ========================================================================
 
-    public static string AssetsRoot           => AssemblyDirectory;
-    public static string AssetsObjectsPath    => NormalizePath( $"{AssetsRoot}/PackedImages/Objects/" );
-    public static string AssetsAnimationsPath => NormalizePath( $"{AssetsRoot}/PackedImages/Animations/" );
-    public static string AssetsInputsPath     => NormalizePath( $"{AssetsRoot}/PackedImages/Inputs/" );
-    public static string AssetsUIPath         => NormalizePath( $"{AssetsRoot}/PackedImages/UI/" );
-    public static string AssetsOutputPath     => NormalizePath( $"{AssetsRoot}/PackedImages/Output/" );
-    
+    public static string AssetsRoot           => NormalizePath( $"{AssemblyDirectory}Assets/");
+    public static string AssetsObjectsPath    => NormalizePath( $"{AssetsRoot}PackedImages/Objects/" );
+    public static string AssetsAnimationsPath => NormalizePath( $"{AssetsRoot}PackedImages/Animations/" );
+    public static string AssetsInputsPath     => NormalizePath( $"{AssetsRoot}PackedImages/Inputs/" );
+    public static string AssetsUIPath         => NormalizePath( $"{AssetsRoot}PackedImages/UI/" );
+    public static string AssetsOutputPath     => NormalizePath( $"{AssetsRoot}PackedImages/Output/" );
+    public static string AssetsTestPath       => NormalizePath( $"{AssetsRoot}PackedImages/Test/" );
+
     // ========================================================================
 
     /// <summary>
@@ -77,16 +78,12 @@ public class IOUtils
     /// </summary>
     /// <param name="path">The asset path to validate and normalize.</param>
     /// <returns>The validated and normalized asset path.</returns>
-    public static string ValidateAssetPath( string path )
+    public static string NormalizeAssetPath( string path )
     {
-        Logger.Checkpoint();
-        
         if ( !path.Contains( AssemblyDirectory ) )
         {
             path = AssemblyDirectory + path;
         }
-        
-        Logger.Debug( $"Normalized asset path: '{NormalizePath( path )}'" );
 
         return NormalizePath( path );
     }
@@ -96,16 +93,16 @@ public class IOUtils
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
-    public static string ValidateAssetsOutputPath( string path )
+    public static string NormalizeAssetsOutputPath( string path )
     {
         if ( !path.Contains( "/PackedImages/Output" ) )
         {
             path = AssetsOutputPath + path;
         }
-        
+
         return NormalizePath( path );
     }
-    
+
     /// <summary>
     /// Determines whether the specified <see cref="FileSystemInfo"/> represents a directory.
     /// </summary>
@@ -175,13 +172,16 @@ public class IOUtils
     public static string StripAssetsPath( string path )
     {
         var position = path.IndexOf( "Assets", StringComparison.Ordinal );
-        
+
         return path.Substring( position, path.Length - position );
     }
-    
+
     // ========================================================================
 
     #if DEBUG
+    /// <summary>
+    /// Writes a list of all files in the supplied directory path to console.
+    /// </summary>
     public static void DebugFileList( string directoryPath )
     {
         var filesList = Directory.GetFiles( directoryPath );
@@ -192,6 +192,9 @@ public class IOUtils
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static void DebugPaths()
     {
         Logger.Debug( $"ExternalPath        : {ExternalPath}" );
@@ -208,6 +211,7 @@ public class IOUtils
         Logger.Debug( $"AssetsAnimationsPath: {AssetsAnimationsPath}" );
         Logger.Debug( $"AssetsInputsPath    : {AssetsInputsPath}" );
         Logger.Debug( $"AssetsUIPath        : {AssetsUIPath}" );
+        Logger.Debug( $"AssetsTestPath      : {AssetsTestPath}" );
     }
     #endif
 }

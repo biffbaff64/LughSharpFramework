@@ -26,14 +26,13 @@ using JetBrains.Annotations;
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
-using LughSharp.Lugh.Utils;
 
 using GLBindings = LughSharp.Lugh.Graphics.OpenGL.GLBindings;
 
 namespace LughSharp.Tests.Source;
 
 [PublicAPI]
-public unsafe class OpenGLTest : LughTestAdapter
+public unsafe class OpenGLTest
 {
     private static readonly GLBindings _gl = new();
 
@@ -67,7 +66,7 @@ public unsafe class OpenGLTest : LughTestAdapter
     // ========================================================================
     // ========================================================================
 
-    public override void Create()
+    public void Create()
     {
         _shaderProgram = CreateProgram( _vertexShaderSource, _fragmentShaderSource );
 
@@ -98,7 +97,7 @@ public unsafe class OpenGLTest : LughTestAdapter
         _gl.BindBuffer( IGL.GL_ELEMENT_ARRAY_BUFFER, 0 );
     }
 
-    public override void Render()
+    public void Render()
     {
         _gl.UseProgram( ( int )_shaderProgram );
         _gl.BindVertexArray( _vao );
