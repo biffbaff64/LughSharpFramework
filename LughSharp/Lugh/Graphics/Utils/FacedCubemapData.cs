@@ -26,6 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -160,7 +161,6 @@ public class FacedCubemapData : ICubemapData
                 };
 
                 GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
-
                 GL.TexImage2D( IGL.GL_TEXTURE_CUBE_MAP_POSITIVE_X + 1, 0, 0, pixmap );
 
                 if ( disposePixmap )

@@ -28,6 +28,7 @@ using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
@@ -303,7 +304,7 @@ public class Cubemap : GLTexture, IManaged
     // ========================================================================
     
     /// <inheritdoc />
-    public override void Clear( Color color )
+    public override void ClearWithColor( Color color )
     {
     }
 

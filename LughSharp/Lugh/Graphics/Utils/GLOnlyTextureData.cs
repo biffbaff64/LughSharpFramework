@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Graphics.FrameBuffers;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -38,6 +39,15 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class GLOnlyTextureData : ITextureData
 {
+    public int               MipLevel       { get; set; } = 0;
+    public int               InternalFormat { get; set; }
+    public int               Type           { get; set; }
+    public PixelType.Format? PixelFormat    { get; set; }
+    public int               Width          { get; set; } = 0;
+    public int               Height         { get; set; } = 0;
+    public bool              IsPrepared     { get; set; } = false;
+    public bool              UseMipMaps     { get; set; }
+
     // ========================================================================
 
     /// <summary>
@@ -73,19 +83,12 @@ public class GLOnlyTextureData : ITextureData
         Height         = height;
         MipLevel       = mipMapLevel;
         InternalFormat = internalFormat;
-        PixelFormat    = PixmapFormat.ToPixmapPixelFormat( format );
+        PixelFormat    = PixmapFormat.GdxFormatToPixelTypeFormat( format );
         Type           = type;
     }
 
-    public int               MipLevel       { get; set; } = 0;
-    public int               InternalFormat { get; set; }
-    public int               Type           { get; set; }
-    public PixelType.Format? PixelFormat    { get; set; }
-    public int               Width          { get; set; } = 0;
-    public int               Height         { get; set; } = 0;
-    public bool              IsPrepared     { get; set; } = false;
-    public bool              UseMipMaps     { get; set; }
-
+    // ========================================================================
+    
     public void Prepare()
     {
         if ( IsPrepared )
@@ -104,7 +107,7 @@ public class GLOnlyTextureData : ITextureData
                        Width,
                        Height,
                        0,
-                       PixmapFormat.ToGdx2DPixelFormat( PixelFormat ),
+                       ( int )PixmapFormat.ToGdx2DPixelFormat( PixelFormat ),
                        Type,
                        0 );
     }
@@ -130,13 +133,5 @@ public class GLOnlyTextureData : ITextureData
     public bool ShouldDisposePixmap()
     {
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
-    }
-
-    /// <summary>
-    /// Returns the <see cref="PixelType.Format" /> for this GLOnlyTextureData object.
-    /// </summary>
-    public PixelType.Format GetFormat()
-    {
-        return PixelType.Format.RGBA8888;
     }
 }

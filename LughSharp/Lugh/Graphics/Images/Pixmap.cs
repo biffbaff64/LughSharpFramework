@@ -22,8 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Versioning;
+
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Utils;
+using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -62,8 +64,6 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Returns the width of the Pixmap in pixels.
     /// </summary>
-
-//    public int Width => ( int )Gdx2DPixmap.Width;
     public int Width
     {
         get
@@ -82,8 +82,6 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Returns the height of the Pixmap in pixels.
     /// </summary>
-
-//    public int Height => ( int )Gdx2DPixmap.Height;
     public int Height
     {
         get
@@ -133,11 +131,23 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Represents an image composed of pixels that can be manipulated and drawn upon.
     /// </summary>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="format"></param>
+    /// <remarks>
+    /// The Pixmap class supports a variety of pixel formats and provides methods
+    /// to perform operations such as drawing shapes, filling areas with color, and copying pixels.
+    /// </remarks>
+    /// <example>
+    /// To create a new Pixmap, provide width, height, and a pixel format. The class
+    /// also offers constructors for creating Pixmaps from encoded data, byte buffers,
+    /// or files.
+    /// </example>
+    /// <remarks>
+    /// This class must be disposed of when no longer needed to free up unmanaged resources.
+    /// </remarks>
+    /// <seealso cref="PixelType.Format"/>
+    /// <seealso cref="Gdx2DPixmap"/>
+    [SupportedOSPlatform( "windows" )]
     public Pixmap( int width, int height, PixelFormat format )
         : this( width, height, PixmapFormat.PixelFormatToPixelTypeFormat( format ) )
     {
@@ -244,7 +254,7 @@ public class Pixmap : IDisposable
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            return PixmapFormat.ToGLPixelFormat( ( int )Gdx2DPixmap.ColorType );
+            return PixmapFormat.ToGLPixelFormat( Gdx2DPixmap.ColorType );
         }
     }
 
@@ -258,7 +268,7 @@ public class Pixmap : IDisposable
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            var format = PixmapFormat.ToGLPixelFormat( ( int )Gdx2DPixmap.ColorType );
+            var format = PixmapFormat.ToGLPixelFormat( Gdx2DPixmap.ColorType );
 
             if ( ( format != IGL.GL_RG )
                  && ( format != IGL.GL_RGB )
@@ -283,45 +293,15 @@ public class Pixmap : IDisposable
         {
             return Gdx2DPixmap?.ColorType switch
             {
-                Images.Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
-                Images.Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
-                Images.Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
-                Images.Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
-                Images.Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
-                Images.Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+                Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => IGL.GL_UNSIGNED_BYTE,
+                Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => IGL.GL_UNSIGNED_BYTE,
+                Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => IGL.GL_UNSIGNED_BYTE,
+                Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => IGL.GL_UNSIGNED_BYTE,
+                Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => IGL.GL_UNSIGNED_SHORT_5_6_5,
+                Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
 
                 var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap?.ColorType}" ),
             };
-
-//            // Determine OpenGL data type based on bit depth and color type
-//            return Gdx2DPixmap switch
-//            {
-//                { ColorType: 0 } or { ColorType: 4 } =>
-//                    Gdx2DPixmap.BitDepth switch
-//                    {
-//                        8  => IGL.GL_UNSIGNED_BYTE,
-//                        16 => IGL.GL_UNSIGNED_SHORT,
-//
-//                        var _ => throw new Exception( $"Unsupported bit depth for grayscale: {Gdx2DPixmap.BitDepth}" ),
-//                    },
-//                { ColorType: 2 } or { ColorType: 6 } =>
-//                    Gdx2DPixmap.BitDepth switch
-//                    {
-//                        8        => IGL.GL_UNSIGNED_BYTE,
-//                        16 or 24 => IGL.GL_UNSIGNED_SHORT,
-//                        32       => IGL.GL_UNSIGNED_INT,
-//
-//                        var _ => throw new Exception( $"Unsupported bit depth for truecolor: {Gdx2DPixmap.BitDepth}" ),
-//                    },
-//                { ColorType: 3 } =>
-//                    Gdx2DPixmap.BitDepth switch
-//                    {
-//                        1 or 2 or 4 or 8 => IGL.GL_UNSIGNED_BYTE,
-//
-//                        var _ => throw new Exception( $"Unsupported bit depth for indexed colour: {Gdx2DPixmap.BitDepth}" ),
-//                    },
-//                var _ => throw new Exception( "Unknown color type." ),
-//            };
         }
     }
 
@@ -364,6 +344,7 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
+    /// Provides access to the raw pixel data of the Pixmap as a byte array.
     /// </summary>
     public byte[] PixelData
     {
@@ -432,7 +413,7 @@ public class Pixmap : IDisposable
     /// </summary>
     public void FillWithCurrentColor()
     {
-        Gdx2DPixmap?.Clear( Color );
+        Gdx2DPixmap?.ClearWithColor( Color );
     }
 
     /// <summary>
@@ -440,7 +421,7 @@ public class Pixmap : IDisposable
     /// </summary>
     public void FillWithColor( Color color )
     {
-        Gdx2DPixmap?.Clear( color );
+        Gdx2DPixmap?.ClearWithColor( color );
     }
 
     /// <summary>
@@ -450,7 +431,7 @@ public class Pixmap : IDisposable
     {
         Guard.ThrowIfNull( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
 
-        return PixmapFormat.ToPixmapPixelFormat( ( int )Gdx2DPixmap.ColorType );
+        return PixmapFormat.GdxFormatToPixelTypeFormat( Gdx2DPixmap.ColorType );
     }
 
     /// <summary>
@@ -680,10 +661,12 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
+    /// Saves the specified pixmap to a file in PNG format.
     /// </summary>
-    /// <param name="file"></param>
-    /// <param name="pixmap"></param>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <param name="file">The target file where the pixmap will be saved.</param>
+    /// <param name="pixmap">The pixmap to be saved.</param>
+    /// <exception cref="ArgumentNullException">Thrown when the <paramref name="file" /> or <paramref name="pixmap" /> is null.</exception>
+    /// <exception cref="GdxRuntimeException">Thrown if an error occurs while saving the pixmap.</exception>
     public static void SaveToFile( FileInfo file, Pixmap pixmap )
     {
         ArgumentNullException.ThrowIfNull( file );
@@ -745,7 +728,7 @@ public class Pixmap : IDisposable
 
             Logger.Debug( $"Width : {Width}, Height: {Height}" );
             Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height} "
-                          + $"{PixmapFormat.ToPixmapPixelFormat( ( int )Gdx2DPixmap.ColorType )}: "
+                          + $"{PixmapFormat.GdxFormatToPixelTypeFormat( Gdx2DPixmap.ColorType )}: "
                           + $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DPixelFormat( GetColorFormat() ) )}" );
             Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 

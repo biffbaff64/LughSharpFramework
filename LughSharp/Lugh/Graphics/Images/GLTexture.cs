@@ -26,6 +26,7 @@ using System.Text;
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
@@ -475,7 +476,7 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
                                0,
                                pixmap.GLPixelFormat,
                                pixmap.GLDataType,
-                               pixmap.PixelData!,
+                               pixmap.PixelData,
                                false );
 
         CheckGLError( "TexImage2D" );
@@ -486,9 +487,10 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
         }
     }
 
-    private void CheckGLError(string operation)
+    private static void CheckGLError(string operation)
     {
         var error = GL.GetError();
+        
         if (error != ( int )ErrorCode.NoError)
         {
             throw new GdxRuntimeException($"OpenGL error during {operation}: {error}");
@@ -541,18 +543,13 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
             Logger.Debug( $"pixmap.Width           : {pixmap.Width}" );
             Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
             Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
-            Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap.ColorType}" );
-
-            var format = PixmapFormat.PNGColorTypeToPixmapPixelFormat( ( int )pixmap.Gdx2DPixmap.ColorType );
-            Logger.Debug( $"Pixmap Pixel Format    : {PixmapFormat.GetFormatString( ( int )format )}" );
-
+            Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap?.ColorType}" );
+            Logger.Debug( $"Pixmap Pixel Format    : {PixmapFormat.GetFormatString( pixmap.Gdx2DPixmap!.ColorType)}" );
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );
             Logger.Debug( $"pixmap.GLFormat Name   : {PixmapFormat.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalPixelFormat}" );
-
             Logger.Debug( $"pixmap.GLType          : {pixmap.GLDataType}" );
             Logger.Debug( $"pixmap.GLType Name     : {PixmapFormat.GetGLTypeName( pixmap.GLDataType )}" );
-
             Logger.Debug( $"Number of Pixels       : {pixmap.Width * pixmap.Height}" );
             Logger.Debug( $"pixmap.PixelData.Length: {pixmap.PixelData.Length}" );
 

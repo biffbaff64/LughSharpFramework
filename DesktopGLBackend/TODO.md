@@ -58,6 +58,8 @@ BACKENDS/DESKTOPGL/GRAPHICS
     CODE   DOCUMENT
     ----   --------
     - DONE - IP   - DesktopGLGraphics
+    - DONE - IP   - DesktopGLGraphics.DesktopGLDisplayMode
+    - DONE - IP   - DesktopGLGraphics.DesktopGLMonitor
 
 BACKENDS/DESKTOPGL/INPUT
 ------------------------

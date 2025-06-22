@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics.Images;

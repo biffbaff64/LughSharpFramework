@@ -44,6 +44,8 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
     private static Color _color = new();
 
+    System.Drawing.Color _colorSystem;
+    
     // ========================================================================
     // ========================================================================
 
@@ -54,16 +56,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
     // ========================================================================
     // ========================================================================
-
-    #region From ICloneable Interface
-
-    /// <inheritdoc />
-    public object Clone()
-    {
-        return new Color( this );
-    }
-
-    #endregion From ICloneable Interface
 
     #region colour values
 
@@ -1181,6 +1173,19 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     #endregion HSV Methods
+
+    // ========================================================================
+    // ========================================================================
+    
+    #region From ICloneable Interface
+
+    /// <inheritdoc />
+    public object Clone()
+    {
+        return new Color( this );
+    }
+
+    #endregion From ICloneable Interface
 
     // ========================================================================
     // ========================================================================

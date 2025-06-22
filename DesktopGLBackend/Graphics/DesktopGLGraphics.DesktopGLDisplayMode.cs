@@ -22,25 +22,35 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
+using LughSharp.Lugh.Graphics;
 
-namespace LughSharp.Lugh.Graphics.Images;
+namespace DesktopGLBackend.Graphics;
 
-/// <summary>
-/// Simple pixmap struct holding the pixel data, the dimensions and the
-/// format of the pixmap.
-/// The <see cref="ColorType" /> is one of the GDX_2D_FORMAT_XXX constants.
-/// </summary>
-[PublicAPI]
-[StructLayout( LayoutKind.Sequential )]
-public struct PixmapDataType()
+public partial class DesktopGLGraphics
 {
-    public int                           Width         { get; set; } = 0;
-    public int                           Height        { get; set; } = 0;
-    public int                           BitDepth      { get; set; } = 0;
-    public Gdx2DPixmap.Gdx2DPixmapFormat ColorType     { get; set; } = 0;
-    public uint                          Blend         { get; set; } = 0;
-    public uint                          Scale         { get; set; } = 0;
-    public byte[]                        Pixels        { get; set; } = [ ];
-    public long                          TotalIDATSize { get; set; } = 0;
+    /// <summary>
+    /// Describes a Display Mode for a <see cref="GLFW.Monitor" />
+    /// </summary>
+    [PublicAPI]
+    public class DesktopGLDisplayMode : DisplayMode
+    {
+        /// <summary>
+        /// Creates a new Display Mode and its properties.
+        /// </summary>
+        /// <param name="monitor"> The target monitor. </param>
+        /// <param name="width"> Monitor display width. </param>
+        /// <param name="height"> Monior display height. </param>
+        /// <param name="refreshRate"> The refresh rate. </param>
+        /// <param name="bitsPerPixel"> The bits per pixel. </param>
+        public DesktopGLDisplayMode( GLFW.Monitor monitor, int width, int height, int refreshRate, int bitsPerPixel )
+            : base( width, height, refreshRate, bitsPerPixel )
+        {
+            MonitorHandle = monitor;
+        }
+
+        /// <summary>
+        /// The <see cref="GLFW.Monitor" /> this <see cref="DisplayMode" /> applies to.
+        /// </summary>
+        public GLFW.Monitor MonitorHandle { get; set; }
+    }
 }

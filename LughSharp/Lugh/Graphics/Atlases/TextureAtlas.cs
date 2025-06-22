@@ -130,8 +130,11 @@ public class TextureAtlas : IDisposable
 
         foreach ( var page in data.Pages )
         {
+            Logger.Debug( $"page.Format: {page.Format}" );
+            Logger.Debug( $"page.TextureFile.FullName: {page.TextureFile?.FullName}" );
+            Logger.Debug( $"page.UseMipMaps: {page.UseMipMaps}" );
+            
             page.Texture ??= new Texture( page.TextureFile!, page.Format, page.UseMipMaps );
-
             page.Texture.SetFilter( page.MinFilter, page.MagFilter );
             page.Texture.SetWrap( page.UWrap, page.VWrap );
 

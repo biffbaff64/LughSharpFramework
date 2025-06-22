@@ -27,6 +27,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.Pixels;
 
 namespace Extensions.Source.Tools.ImagePacker;
 

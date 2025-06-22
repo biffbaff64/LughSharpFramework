@@ -44,7 +44,7 @@ public abstract class ImageBase
     // ========================================================================
 
     // Common methods for basic image operations
-    public abstract void Clear( Color color );
+    public abstract void ClearWithColor( Color color );
     public abstract int GetPixel( int x, int y );
     public abstract void SetPixel( int x, int y, Color color );
     public abstract void SetPixel( int x, int y, int color );

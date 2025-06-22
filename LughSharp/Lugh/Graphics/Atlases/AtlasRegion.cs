@@ -153,6 +153,8 @@ public class AtlasRegion : TextureRegion
         OriginalWidth  = PackedWidth;
         OriginalHeight = PackedHeight;
     }
+    
+    // ========================================================================
 
     /// <summary>
     /// Returns the packed width considering the <see cref="Rotate" /> value,

@@ -24,9 +24,10 @@
 
 using System.Runtime.Serialization;
 
+using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Graphics.Images;
+namespace LughSharp.Lugh.Graphics.Pixels;
 
 [PublicAPI]
 public class PixelType
@@ -34,33 +35,19 @@ public class PixelType
     [PublicAPI]
     public enum Format : int
     {
-        [EnumMember( Value = "Dummy" )]
         Dummy = 0,
 
         // ----------
-        [EnumMember( Value = "Alpha" )]
-        Alpha = 1,
-
-        [EnumMember( Value = "LuminanceAlpha" )]
+        Alpha          = 1,
         LuminanceAlpha = 2,
+        RGB888         = 3,
+        RGBA8888       = 4,
+        RGB565         = 5,
+        RGBA4444       = 6,
+        Intensity      = 7,
 
-        [EnumMember( Value = "RGB888" )]
-        RGB888 = 3,
+        // ----------------------------------
 
-        [EnumMember( Value = "RGBA8888" )]
-        RGBA8888 = 4,
-
-        [EnumMember( Value = "RGB565" )]
-        RGB565 = 5,
-
-        [EnumMember( Value = "RBGA4444" )]
-        RGBA4444 = 6,
-
-        [EnumMember( Value = "Intensity" )]
-        Intensity = 7,
-
-        // ----------=
-        [EnumMember( Value = "Default" )]
         Default = RGBA8888,
     }
 
@@ -71,18 +58,20 @@ public class PixelType
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    public static int ToGdx2DPixmapPixelFormat( Format format )
+    public static Gdx2DPixmap.Gdx2DPixmapFormat ToGdx2DPixmapPixelFormat( Format format )
     {
         return format switch
         {
-            Format.Alpha          => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
-            Format.Intensity      => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
-            Format.LuminanceAlpha => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
-            Format.RGB565         => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
-            Format.RGBA4444       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
-            Format.RGB888         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
-            Format.RGBA8888       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+            Format.Alpha          => Gdx2DPixmap.Gdx2DPixmapFormat.Alpha,
+            Format.Intensity      => Gdx2DPixmap.Gdx2DPixmapFormat.Alpha,
+            Format.LuminanceAlpha => Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha,
+            Format.RGB565         => Gdx2DPixmap.Gdx2DPixmapFormat.RGB565,
+            Format.RGBA4444       => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444,
+            Format.RGB888         => Gdx2DPixmap.Gdx2DPixmapFormat.RGB888,
+            Format.RGBA8888       => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888,
 
+            // ----------------------------------
+            
             var _ => throw new GdxRuntimeException( "Unknown Format: " + format ),
         };
     }
@@ -94,24 +83,54 @@ public class PixelType
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    public static Format FromGdx2DPixmapPixelFormat( int format )
+    public static Format FromGdx2DPixmapPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => Format.Alpha,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => Format.LuminanceAlpha,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => Format.RGB565,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => Format.RGBA4444,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => Format.RGB888,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => Format.RGBA8888,
+            Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => Format.Alpha,
+            Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => Format.LuminanceAlpha,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => Format.RGB565,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => Format.RGBA4444,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => Format.RGB888,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => Format.RGBA8888,
 
+            // ----------------------------------
+            
             var _ => throw new GdxRuntimeException( "Unknown Gdx2DPixmap Format: " + format ),
         };
     }
 
     // ========================================================================
 
-    /// <inheritdoc cref="PixmapFormat.ToGLPixelFormat(LughSharp.Lugh.Graphics.Images.PixelType.Format)" />
+    /// <summary>
+    /// Calculates and returns the number of bytes per pixel for the given pixel format.
+    /// </summary>
+    /// <param name="format">The pixel format for which to calculate the bytes per pixel.</param>
+    /// <returns>The number of bytes per pixel corresponding to the specified format.</returns>
+    /// <exception cref="GdxRuntimeException">
+    /// Thrown when the pixel format is unknown or invalid.
+    /// </exception>
+    public static int BytesPerPixel( Format format )
+    {
+        return format switch
+        {
+            Format.Alpha          => 1,
+            Format.Intensity      => 1,
+            Format.LuminanceAlpha => 2,
+            Format.RGB565         => 2,
+            Format.RGBA4444       => 2,
+            Format.RGB888         => 3,
+            Format.RGBA8888       => 4,
+
+            // ----------------------------------
+
+            var _ => throw new GdxRuntimeException( "Unknown Format: " + format ),
+        };
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc cref="PixmapFormat.ToGLPixelFormat(PixelType.Format)" />
     public static int ToGLPixelFormat( Format format )
     {
         return PixmapFormat.ToGLPixelFormat( ToGdx2DPixmapPixelFormat( format ) );
@@ -124,11 +143,11 @@ public class PixelType
     {
         return PixmapFormat.ToGLDataType( ToGdx2DPixmapPixelFormat( format ) );
     }
-    
+
     // ========================================================================
 
     public static Format FromRgba( int r, int g, int b, int a )
     {
-        return Format.RGBA8888;
+        return Format.RGBA8888; //TODO:
     }
 }

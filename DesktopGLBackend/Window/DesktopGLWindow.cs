@@ -30,6 +30,7 @@ using DesktopGLBackend.Utils;
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 

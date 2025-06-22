@@ -26,6 +26,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -245,7 +246,7 @@ public class GLTextureArray : GLTexture, IManaged
     // ========================================================================
     // Implementations of abstract methods from the base Image class.
     
-    public override void Clear( Color color )
+    public override void ClearWithColor( Color color )
     {
         throw new NotImplementedException();
     }

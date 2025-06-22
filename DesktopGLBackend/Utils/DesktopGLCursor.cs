@@ -26,6 +26,7 @@ using DesktopGLBackend.Window;
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace DesktopGLBackend.Utils;

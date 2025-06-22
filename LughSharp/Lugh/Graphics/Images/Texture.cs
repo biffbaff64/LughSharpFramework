@@ -33,6 +33,8 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
+using PixelType = LughSharp.Lugh.Graphics.Pixels.PixelType;
+
 namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
@@ -395,7 +397,7 @@ public class Texture : GLTexture, IManaged
     // ========================================================================
     // Implementations of abstract methods from the base Image class.
 
-    public override void Clear( Color color )
+    public override void ClearWithColor( Color color )
     {
         throw new NotImplementedException();
     }

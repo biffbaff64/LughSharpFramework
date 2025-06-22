@@ -541,6 +541,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         Glfw.Terminate();
     }
 
+    // ========================================================================
+    
     /// <inheritdoc />
     public void Dispose()
     {
@@ -557,6 +559,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         }
     }
 
+    // ========================================================================
+    
     #region window creation handlers
 
     /// <summary>

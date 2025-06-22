@@ -36,7 +36,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace DesktopGLBackend.Graphics;
 
 [PublicAPI]
-public class DesktopGLGraphics : AbstractGraphics, IDisposable
+public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
 {
     public DesktopGLWindow? GLWindow { get; set; }
 
@@ -564,55 +564,6 @@ public class DesktopGLGraphics : AbstractGraphics, IDisposable
         return _fps;
     }
 
-    // ========================================================================
-
-    /// <summary>
-    /// Describes a Display Mode for a <see cref="GLFW.Monitor" />
-    /// </summary>
-    [PublicAPI]
-    public class DesktopGLDisplayMode : DisplayMode
-    {
-        /// <summary>
-        /// Creates a new Display Mode and its properties.
-        /// </summary>
-        /// <param name="monitor"> The target monitor. </param>
-        /// <param name="width"> Monitor display width. </param>
-        /// <param name="height"> Monior display height. </param>
-        /// <param name="refreshRate"> The refresh rate. </param>
-        /// <param name="bitsPerPixel"> The bits per pixel. </param>
-        public DesktopGLDisplayMode( GLFW.Monitor monitor, int width, int height, int refreshRate, int bitsPerPixel )
-            : base( width, height, refreshRate, bitsPerPixel )
-        {
-            MonitorHandle = monitor;
-        }
-
-        /// <summary>
-        /// The <see cref="GLFW.Monitor" /> this <see cref="DisplayMode" /> applies to.
-        /// </summary>
-        public GLFW.Monitor MonitorHandle { get; set; }
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Wrapper for a <see cref="GLFW.Monitor" /> which adds virtual X & Y, plus a name.
-    /// Virtual positions are for multiple monitors.
-    /// </summary>
-    [PublicAPI]
-    public class DesktopGLMonitor( GLFW.Monitor monitor, int virtualX, int virtualY, string name )
-    {
-        /// <summary>
-        /// The <see cref="GLFW.Monitor" />.
-        /// </summary>
-        public GLFW.Monitor MonitorHandle { get; private set; } = monitor;
-
-        public int    VirtualX { get; set; } = virtualX;
-        public int    VirtualY { get; set; } = virtualY;
-        public string Name     { get; set; } = name;
-    }
-
-    // ========================================================================
     // ========================================================================
 
     #region IDisposable implementation

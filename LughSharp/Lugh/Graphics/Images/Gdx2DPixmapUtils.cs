@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.Pixels;
+
 namespace LughSharp.Lugh.Graphics.Images;
 
 public partial class Gdx2DPixmap
@@ -29,7 +31,7 @@ public partial class Gdx2DPixmap
     /// <summary>
     /// Clears the pixmap with the specified color
     /// </summary>
-    public override void Clear( Color color )
+    public override void ClearWithColor( Color color )
     {
         var size = ( uint )( _pixmapDataType.Width
                              * _pixmapDataType.Height
@@ -37,32 +39,32 @@ public partial class Gdx2DPixmap
 
         switch ( _pixmapDataType.ColorType )
         {
-            case GDX_2D_FORMAT_ALPHA:
+            case Gdx2DPixmapFormat.Alpha:
                 ClearAlpha( _pixmapDataType, color, size );
 
                 break;
 
-            case GDX_2D_FORMAT_LUMINANCE_ALPHA:
+            case Gdx2DPixmapFormat.LuminanceAlpha:
                 ClearLuminanceAlpha( _pixmapDataType, color, size );
 
                 break;
 
-            case GDX_2D_FORMAT_RGB888:
+            case Gdx2DPixmapFormat.RGB888:
                 ClearRGB888( _pixmapDataType, color, size );
 
                 break;
 
-            case GDX_2D_FORMAT_RGBA8888:
+            case Gdx2DPixmapFormat.RGBA8888:
                 ClearRGBA8888( _pixmapDataType, color, size );
 
                 break;
 
-            case GDX_2D_FORMAT_RGB565:
+            case Gdx2DPixmapFormat.RGB565:
                 ClearRGB565( _pixmapDataType, color, size );
 
                 break;
 
-            case GDX_2D_FORMAT_RGBA4444:
+            case Gdx2DPixmapFormat.RGBA4444:
                 ClearRGBA4444( _pixmapDataType, color, size );
 
                 break;
@@ -84,11 +86,11 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
+    /// Clears the pixmap using a luminance and alpha combination derived from the specified color.
     /// </summary>
-    /// <param name="pd"></param>
-    /// <param name="color"></param>
-    /// <param name="size"></param>
+    /// <param name="pd">The pixmap data containing pixel information and dimensions to be modified.</param>
+    /// <param name="color">The color used to calculate luminance and alpha values.</param>
+    /// <param name="size">The total number of bytes to be processed in the pixel data.</param>
     private static void ClearLuminanceAlpha( PixmapDataType pd, Color color, uint size )
     {
         var luminance = ( byte )( ( ( 0.2126f * color.R )
@@ -104,11 +106,11 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
+    /// Clears the pixmap data in the RGB888 format with the specified color.
     /// </summary>
-    /// <param name="pd"></param>
-    /// <param name="color"></param>
-    /// <param name="size"></param>
+    /// <param name="pd">The pixmap data type containing the pixel data and metadata.</param>
+    /// <param name="color">The color used to clear the pixmap, specified in the ARGB color format.</param>
+    /// <param name="size">The size of the pixmap data in bytes.</param>
     private static void ClearRGB888( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGB888( color );
@@ -125,11 +127,11 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
+    /// Clears the pixmap data using the RGBA8888 format with the specified color.
     /// </summary>
-    /// <param name="pd"></param>
-    /// <param name="color"></param>
-    /// <param name="size"></param>
+    /// <param name="pd">The pixmap data type containing the pixel data and metadata for the pixmap.</param>
+    /// <param name="color">The color to clear the pixmap with as an instance of the <see cref="Color"/> class.</param>
+    /// <param name="size">The size of the pixmap data in bytes, representing the total pixel data.</param>
     private static void ClearRGBA8888( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGBA8888( color );
@@ -165,11 +167,11 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// 
+    /// Clears the pixmap with a specified color in RGBA4444 format.
     /// </summary>
-    /// <param name="pd"></param>
-    /// <param name="color"></param>
-    /// <param name="size"></param>
+    /// <param name="pd">The pixmap data type containing pixel data and format information.</param>
+    /// <param name="color">The color to fill the pixmap with, in RGBA4444 format.</param>
+    /// <param name="size">The size of the pixmap data in bytes.</param>
     private static void ClearRGBA4444( PixmapDataType pd, Color color, uint size )
     {
         var col = Color.RGBA4444( color );
@@ -184,16 +186,16 @@ public partial class Gdx2DPixmap
     /// <summary>
     /// Converts a color to the specified pixel format
     /// </summary>
-    public static uint ToPixelFormat( uint format, uint color )
+    public static uint ToPixelFormat( Gdx2DPixmapFormat format, uint color )
     {
         uint r, g, b, a;
 
         switch ( format )
         {
-            case GDX_2D_FORMAT_ALPHA:
+            case Gdx2DPixmapFormat.Alpha:
                 return color & 0xff;
 
-            case GDX_2D_FORMAT_LUMINANCE_ALPHA:
+            case Gdx2DPixmapFormat.LuminanceAlpha:
                 r = ( color & 0xff000000 ) >> 24;
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
@@ -202,20 +204,20 @@ public partial class Gdx2DPixmap
 
                 return ( l & 0xffffff00 ) | a;
 
-            case GDX_2D_FORMAT_RGB888:
+            case Gdx2DPixmapFormat.RGB888:
                 return color >> 8;
 
-            case GDX_2D_FORMAT_RGBA8888:
+            case Gdx2DPixmapFormat.RGBA8888:
                 return color;
 
-            case GDX_2D_FORMAT_RGB565:
+            case Gdx2DPixmapFormat.RGB565:
                 r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
                 g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
                 b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
 
                 return r | g | b;
 
-            case GDX_2D_FORMAT_RGBA4444:
+            case Gdx2DPixmapFormat.RGBA4444:
                 r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
                 g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
                 b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;

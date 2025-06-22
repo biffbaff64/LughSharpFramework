@@ -27,6 +27,7 @@ using System.Runtime.InteropServices;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.Pixels;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 

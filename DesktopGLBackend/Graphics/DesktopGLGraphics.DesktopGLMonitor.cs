@@ -22,25 +22,24 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
+namespace DesktopGLBackend.Graphics;
 
-namespace LughSharp.Lugh.Graphics.Images;
-
-/// <summary>
-/// Simple pixmap struct holding the pixel data, the dimensions and the
-/// format of the pixmap.
-/// The <see cref="ColorType" /> is one of the GDX_2D_FORMAT_XXX constants.
-/// </summary>
-[PublicAPI]
-[StructLayout( LayoutKind.Sequential )]
-public struct PixmapDataType()
+public partial class DesktopGLGraphics
 {
-    public int                           Width         { get; set; } = 0;
-    public int                           Height        { get; set; } = 0;
-    public int                           BitDepth      { get; set; } = 0;
-    public Gdx2DPixmap.Gdx2DPixmapFormat ColorType     { get; set; } = 0;
-    public uint                          Blend         { get; set; } = 0;
-    public uint                          Scale         { get; set; } = 0;
-    public byte[]                        Pixels        { get; set; } = [ ];
-    public long                          TotalIDATSize { get; set; } = 0;
+    /// <summary>
+    /// Wrapper for a <see cref="GLFW.Monitor" /> which adds virtual X & Y, plus a name.
+    /// Virtual positions are for multiple monitors.
+    /// </summary>
+    [PublicAPI]
+    public class DesktopGLMonitor( GLFW.Monitor monitor, int virtualX, int virtualY, string name )
+    {
+        /// <summary>
+        /// The <see cref="GLFW.Monitor" />.
+        /// </summary>
+        public GLFW.Monitor MonitorHandle { get; private set; } = monitor;
+
+        public int    VirtualX { get; set; } = virtualX;
+        public int    VirtualY { get; set; } = virtualY;
+        public string Name     { get; set; } = name;
+    }
 }
