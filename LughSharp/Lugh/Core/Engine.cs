@@ -94,6 +94,21 @@ public class Engine
     {
     }
 
+    // ========================================================================
+    
+    /// <summary>
+    /// The time, in seconds, that has elapsed since the last frame was rendered.
+    /// <para>
+    /// This property provides a way to track time progression in your application,
+    /// allowing for operations that depend on frame-to-frame timing, such as animations
+    /// or physics simulations, to properly account for frame delays or variable update rates.
+    /// </para>
+    /// <para>
+    /// The underlying value is retrieved from the associated <see cref="Graphics"/> instance.
+    /// </para>
+    /// </summary>
+    public float DeltaTime => Graphics.DeltaTime;
+
     /// <summary>
     /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings" />
     /// interface. Initially initialised as an instance of <see cref="GLBindings" />, it can be
@@ -141,10 +156,6 @@ public class Engine
 
         Bindings = new GLBindings();
     }
-
-    public void Shutdown()
-    {
-    }
     
     /// <summary>
     /// Enables <see cref="DevMode" /> if the environment variable "DEV_MODE" is
@@ -160,7 +171,7 @@ public class Engine
             DevMode = CheckEnvironmentVar( "DEVMODE", "TRUE" );
         }
 
-        Logger.Debug( $"DevMode: {DevMode}" );
+        Logger.Debug( $"DevMode: {( DevMode ? "Enabled" : "Disabled" )}" );
 
         return this;
     }
@@ -172,6 +183,8 @@ public class Engine
     /// <returns> This class for chaining. </returns>
     public Engine CheckEnableGodMode()
     {
+        GodMode = false;
+        
         if ( DevMode )
         {
             GodMode = CheckEnvironmentVar( "GOD_MODE", "TRUE" );
@@ -182,7 +195,7 @@ public class Engine
             }
         }
 
-        Logger.Debug( $"GodMode: {GodMode}" );
+        Logger.Debug( $"GodMode: {( GodMode ? "Enabled" : "Disabled" )}" );
 
         return this;
     }
@@ -202,19 +215,6 @@ public class Engine
         }
     }
 
-    /// <summary>
-    /// The time, in seconds, that has elapsed since the last frame was rendered.
-    /// <para>
-    /// This property provides a way to track time progression in your application,
-    /// allowing for operations that depend on frame-to-frame timing, such as animations
-    /// or physics simulations, to properly account for frame delays or variable update rates.
-    /// </para>
-    /// <para>
-    /// The underlying value is retrieved from the associated <see cref="Graphics"/> instance.
-    /// </para>
-    /// </summary>
-    public float DeltaTime => Graphics.DeltaTime;
-
     // ========================================================================
     // ========================================================================
 
@@ -223,6 +223,13 @@ public class Engine
         return Environment.GetEnvironmentVariables().Contains( envVar )
                && Environment.GetEnvironmentVariable( envVar )!
                              .Equals(value, StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    // ========================================================================
+    // ========================================================================
+    
+    public void Shutdown()
+    {
     }
 
     // ========================================================================

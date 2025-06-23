@@ -42,7 +42,7 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
 
     // ========================================================================
 
-    private DisplayMode? _displayModeBeforeFullscreen;
+    private IGraphicsDevice.DisplayMode? _displayModeBeforeFullscreen;
 
     private int  _fps;
     private long _frameCounterStart = 0;
@@ -348,31 +348,31 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
     // ========================================================================
 
     /// <inheritdoc />
-    public override DisplayMode[] GetDisplayModes()
+    public override IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
         return DesktopGLApplicationConfiguration.GetDisplayModes( Glfw.GetPrimaryMonitor() );
     }
 
     /// <inheritdoc />
-    public override DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
+    public override IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
     {
         return DesktopGLApplicationConfiguration.GetDisplayModes( monitor );
     }
 
     /// <inheritdoc />
-    public override DisplayMode GetDisplayMode()
+    public override IGraphicsDevice.DisplayMode GetDisplayMode()
     {
         return DesktopGLApplicationConfiguration.GetDisplayMode( Glfw.GetPrimaryMonitor() );
     }
 
     /// <inheritdoc />
-    public override DisplayMode GetDisplayMode( GLFW.Monitor monitor )
+    public override IGraphicsDevice.DisplayMode GetDisplayMode( GLFW.Monitor monitor )
     {
         return DesktopGLApplicationConfiguration.GetDisplayMode( monitor );
     }
 
     /// <inheritdoc />
-    public override bool SetFullscreenMode( DisplayMode displayMode )
+    public override bool SetFullscreenMode( IGraphicsDevice.DisplayMode displayMode )
     {
         GdxRuntimeException.ThrowIfNull( GLWindow );
 

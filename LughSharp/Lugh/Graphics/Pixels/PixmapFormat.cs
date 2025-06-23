@@ -49,16 +49,16 @@ public class PixmapFormat
             2 => PixelType.Format.RGB888,
 
             // ----------------------------------
-            
+
             3 => throw new GdxRuntimeException( "Indexed color not supported yet." ),
 
             // ----------------------------------
-            
+
             4 => PixelType.Format.RGBA8888,
             6 => PixelType.Format.RGBA8888,
 
             // ----------------------------------
-            
+
             var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
         };
     }
@@ -140,7 +140,7 @@ public class PixmapFormat
             IGL.GL_RGBA            => "IGL.GL_RGBA",
 
             // ----------------------------------
-            
+
             var _ => $"Invalid format: {format}",
         };
     }
@@ -162,8 +162,36 @@ public class PixmapFormat
             IGL.GL_UNSIGNED_SHORT_4_4_4_4 => "IGL.GL_UNSIGNED_SHORT_4_4_4_4",
 
             // ----------------------------------
-            
+
             var _ => $"Invalid format: {format}",
+        };
+    }
+
+    /// <summary>
+    /// Retrieves the OpenGL target name corresponding to the given target integer value.
+    /// </summary>
+    /// <param name="target">The integer value representing the OpenGL target.</param>
+    /// <returns>
+    /// A string representing the name of the OpenGL target, or "UNKNOWN TARGET: {target}" if not recognized.
+    /// </returns>
+    public static string GetGLTargetName( int target )
+    {
+        return target switch
+        {
+            IGL.GL_TEXTURE_1D                   => "IGL.GL_TEXTURE_1D",
+            IGL.GL_TEXTURE_2D                   => "IGL.GL_TEXTURE_2D",
+            IGL.GL_TEXTURE_3D                   => "IGL.GL_TEXTURE_3D",
+            IGL.GL_TEXTURE_CUBE_MAP             => "IGL.GL_TEXTURE_CUBE_MAP",
+            IGL.GL_TEXTURE_RECTANGLE            => "IGL.GL_TEXTURE_RECTANGLE",
+            IGL.GL_TEXTURE_BUFFER               => "IGL.GL_TEXTURE_BUFFER",
+            IGL.GL_TEXTURE_2D_ARRAY             => "IGL.GL_TEXTURE_2D_ARRAY",
+            IGL.GL_TEXTURE_CUBE_MAP_ARRAY       => "IGL.GL_TEXTURE_CUBE_MAP_ARRAY",
+            IGL.GL_TEXTURE_2D_MULTISAMPLE       => "IGL.GL_TEXTURE_2D_MULTISAMPLE",
+            IGL.GL_TEXTURE_2D_MULTISAMPLE_ARRAY => "IGL.GL_TEXTURE_2D_MULTISAMPLE_ARRAY",
+
+            // ----------------------------------
+
+            var _ => $"UNKNOWN TARGET: {target}",
         };
     }
 

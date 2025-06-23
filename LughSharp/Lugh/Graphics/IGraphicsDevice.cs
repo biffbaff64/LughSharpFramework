@@ -39,7 +39,7 @@ namespace LughSharp.Lugh.Graphics;
 /// </para>
 /// </summary>
 [PublicAPI]
-public interface IGraphicsDevice
+public partial interface IGraphicsDevice
 {
     /// <summary>
     /// Gets or sets the OpenGL version information.

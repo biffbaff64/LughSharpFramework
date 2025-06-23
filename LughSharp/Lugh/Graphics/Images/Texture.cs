@@ -28,6 +28,7 @@ using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
+using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
@@ -322,8 +323,8 @@ public class Texture : GLTexture, IManaged
                 }
                 else
                 {
-                    // get the ref count of the texture, then set it to 0 so we
-                    // can actually remove it from the assetmanager. Also set the
+                    // get the reference count of the texture, then set it to 0 so
+                    // we can actually remove it from the assetmanager. Also set the
                     // handle to zero, otherwise we might accidentially dispose
                     // already reloaded textures.
                     var refCount = AssetManager.GetReferenceCount( fileName );
@@ -434,8 +435,8 @@ public class Texture : GLTexture, IManaged
         Logger.Debug( $"IsManaged         : {IsManaged}" );
         Logger.Debug( $"NumManagedTextures: {NumManagedTextures}" );
         Logger.Debug( $"Depth             : {Depth}" );
-        Logger.Debug( $"GLTarget          : {GLTarget}" );
-        Logger.Debug( $"GLTextureHandle   : {GLTextureHandle}" );
+        Logger.Debug( $"GLTarget          : {PixmapFormat.GetGLTargetName(GLTarget)}" );
+        Logger.Debug( $"GLTextureHandle   : {GLTextureHandle:X}" );
 
         if ( !TextureData.IsPrepared )
         {

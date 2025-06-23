@@ -92,16 +92,16 @@ public abstract class GraphicsDevice : IGraphicsDevice
     public abstract void UpdateViewport( int x, int y, int width, int height, int source = 0 );
 
     /// <inheritdoc />
-    public abstract DisplayMode GetDisplayMode();
+    public abstract IGraphicsDevice.DisplayMode GetDisplayMode();
 
     /// <inheritdoc />
-    public abstract DisplayMode GetDisplayMode( GLFW.Monitor monitor );
+    public abstract IGraphicsDevice.DisplayMode GetDisplayMode( GLFW.Monitor monitor );
 
     /// <inheritdoc />
-    public abstract DisplayMode[] GetDisplayModes();
+    public abstract IGraphicsDevice.DisplayMode[] GetDisplayModes();
 
     /// <inheritdoc />
-    public abstract DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
+    public abstract IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
 
     // ========================================================================
     // Window properties
@@ -122,7 +122,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     public abstract void SetForegroundFps( int fps );
 
     /// <inheritdoc />
-    public abstract bool SetFullscreenMode( DisplayMode displayMode );
+    public abstract bool SetFullscreenMode( IGraphicsDevice.DisplayMode displayMode );
 
     // ========================================================================
     // 

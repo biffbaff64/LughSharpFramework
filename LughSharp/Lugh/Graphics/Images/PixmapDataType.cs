@@ -29,7 +29,6 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// <summary>
 /// Simple pixmap struct holding the pixel data, the dimensions and the
 /// format of the pixmap.
-/// The <see cref="ColorType" /> is one of the GDX_2D_FORMAT_XXX constants.
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]

@@ -272,12 +272,16 @@ GRAPHICS
     - DONE - DONE - Color
     - DONE - DONE - Colors
     - DONE - DONE - Cubemap
+    - DONE - DONE - FrameBufferConfig
     - DONE - DONE - GraphicsBackend
+    - DONE - DONE - GraphicsDevice
     - DONE - DONE - GraphicsEnums
     - DONE - DONE - GStructs
     - DONE - DONE - ICubemapData
     - DONE - DONE - ICursor
-    - DONE - DONE - IGraphics
+    - DONE - DONE - IGraphicsDevice
+    - DONE - DONE - IGraphicsDevice.DisplayMode
+    - DONE - DONE - IGraphicsDevice.Monitor
     - DONE - DONE - Mesh
     - DONE - DONE - VertexAttribute
     - DONE - DONE - VertexAttributes

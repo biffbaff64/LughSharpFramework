@@ -23,6 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Pixels;
+using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Images;
 
@@ -35,7 +36,7 @@ public partial class Gdx2DPixmap
     {
         var size = ( uint )( _pixmapDataType.Width
                              * _pixmapDataType.Height
-                             * PixmapFormat.Gdx2dBytesPerPixel( ( int )_pixmapDataType.ColorType ) );
+                             * PixmapFormat.Gdx2dBytesPerPixel( _pixmapDataType.ColorType ) );
 
         switch ( _pixmapDataType.ColorType )
         {
@@ -68,6 +69,9 @@ public partial class Gdx2DPixmap
                 ClearRGBA4444( _pixmapDataType, color, size );
 
                 break;
+            
+            default:
+                throw new GdxRuntimeException( "Unknown color type" );
         }
 
         Array.Copy( _pixmapDataType.Pixels, PixmapBuffer.BackingArray(), _pixmapDataType.Pixels.Length );

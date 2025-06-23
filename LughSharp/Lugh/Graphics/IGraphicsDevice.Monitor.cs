@@ -22,35 +22,27 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
+namespace LughSharp.Lugh.Graphics;
 
-namespace DesktopGLBackend.Graphics;
-
-public partial class DesktopGLGraphics
+public partial interface IGraphicsDevice
 {
     /// <summary>
-    /// Describes a Display Mode for a <see cref="GLFW.Monitor" />
+    /// Describes a monitor.
     /// </summary>
-    [PublicAPI]
-    public class DesktopGLDisplayMode : IGraphicsDevice.DisplayMode
+    public class Monitor
     {
-        /// <summary>
-        /// Creates a new Display Mode and its properties.
-        /// </summary>
-        /// <param name="monitor"> The target monitor. </param>
-        /// <param name="width"> Monitor display width. </param>
-        /// <param name="height"> Monior display height. </param>
-        /// <param name="refreshRate"> The refresh rate. </param>
-        /// <param name="bitsPerPixel"> The bits per pixel. </param>
-        public DesktopGLDisplayMode( GLFW.Monitor monitor, int width, int height, int refreshRate, int bitsPerPixel )
-            : base( width, height, refreshRate, bitsPerPixel )
-        {
-            MonitorHandle = monitor;
-        }
+        public readonly string Name;
+        public readonly int    VirtualX;
+        public readonly int    VirtualY;
 
-        /// <summary>
-        /// The <see cref="GLFW.Monitor" /> this <see cref="IGraphicsDevice.DisplayMode" /> applies to.
-        /// </summary>
-        public GLFW.Monitor MonitorHandle { get; set; }
+        protected Monitor( int virtualX, int virtualY, string name )
+        {
+            VirtualX = virtualX;
+            VirtualY = virtualY;
+            Name     = name;
+        }
     }
 }
+
+// ========================================================================
+// ========================================================================
