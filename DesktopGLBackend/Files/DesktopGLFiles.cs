@@ -29,7 +29,6 @@ namespace DesktopGLBackend.Files;
 [PublicAPI]
 public class DesktopGLFiles : AbstractFiles
 {
-    
 }
 
 // ========================================================================

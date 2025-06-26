@@ -93,7 +93,7 @@ public class FileTextureData : ITextureData
         {
             Logger.Warning( "prepare() must not be called on a PixmapTextureData" +
                             " instance as it is already prepared." );
-            
+
             return;
         }
 

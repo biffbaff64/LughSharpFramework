@@ -43,7 +43,6 @@ using Image = System.Drawing.Image;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class ImageProcessor
 {
     public float                      Scale      { get; set; }
@@ -80,7 +79,7 @@ public class ImageProcessor
     public TexturePacker.Rect? AddImage( FileInfo? file, string? rootPath )
     {
         Logger.Checkpoint();
-        
+
         ArgumentNullException.ThrowIfNull( file );
 
         rootPath = IOUtils.NormalizePath( rootPath );
@@ -89,7 +88,7 @@ public class ImageProcessor
 
         Logger.Debug( $"file: {file.FullName}" );
         Logger.Debug( $"rootPath: {rootPath}" );
-        
+
         try
         {
             image = new Bitmap( file.FullName );
@@ -208,7 +207,7 @@ public class ImageProcessor
         {
             image = new Bitmap( width, height, PixelFormat.Format32bppArgb );
 
-            using ( var g = System.Drawing.Graphics.FromImage( image ) )
+            using ( var g = Graphics.FromImage( image ) )
             {
                 g.DrawImage( image, 0, 0, width, height );
             }
@@ -233,8 +232,8 @@ public class ImageProcessor
             height -= 2;
 
             image = new Bitmap( width, height, PixelFormat.Format32bppArgb );
-            
-            using ( var g = System.Drawing.Graphics.FromImage( image ) )
+
+            using ( var g = Graphics.FromImage( image ) )
             {
                 g.DrawImage( image,
                              new Rectangle( 1, 1, width + 1, height + 1 ),
@@ -257,7 +256,7 @@ public class ImageProcessor
             if ( _scale < 1 )
             {
                 // Scaling down: Use HighQualityBicubic for good quality downscaling
-                using ( var g = System.Drawing.Graphics.FromImage( newImage ) )
+                using ( var g = Graphics.FromImage( newImage ) )
                 {
                     g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     g.DrawImage( image, 0, 0, width, height );
@@ -266,7 +265,7 @@ public class ImageProcessor
             else
             {
                 // Scaling up or no scaling: Apply rendering hints
-                using ( var g = System.Drawing.Graphics.FromImage( newImage ) )
+                using ( var g = Graphics.FromImage( newImage ) )
                 {
                     g.CompositingQuality = CompositingQuality.HighQuality;   // VALUE_RENDER_QUALITY
                     g.InterpolationMode  = Resampling.ToInterpolationMode(); // Map resampling value
@@ -476,7 +475,7 @@ public class ImageProcessor
         // Create a new Bitmap representing the stripped area
         var strippedImage = new Bitmap( newWidth, newHeight, source.PixelFormat );
 
-        using ( var g = System.Drawing.Graphics.FromImage( strippedImage ) )
+        using ( var g = Graphics.FromImage( strippedImage ) )
         {
             g.DrawImage( source,
                          new Rectangle( 0, 0, newWidth, newHeight ),
@@ -595,7 +594,7 @@ public class ImageProcessor
             case 0 when ( endX == 0 ) && ( startY == 0 ) && ( endY == 0 ):
                 return null;
 
-            case 0 when ( endX == 0 ):
+            case 0 when endX == 0:
                 startX = -1;
                 endX   = -1;
 
@@ -616,7 +615,7 @@ public class ImageProcessor
 
         switch ( startY )
         {
-            case 0 when ( endY == 0 ):
+            case 0 when endY == 0:
                 startY = -1;
                 endY   = -1;
 
@@ -710,7 +709,8 @@ public class ImageProcessor
                                           || ( rgba[ 2 ] != 0 )
                                           || ( rgba[ 3 ] != 255 ) ) )
                     {
-                        throw new GdxRuntimeException( $"Invalid {name} ninepatch split pixel at {x}, {y}, rgba: {rgba[ 0 ]}, {rgba[ 1 ]}, {rgba[ 2 ]}, {rgba[ 3 ]}" );
+                        throw new
+                            GdxRuntimeException( $"Invalid {name} ninepatch split pixel at {x}, {y}, rgba: {rgba[ 0 ]}, {rgba[ 1 ]}, {rgba[ 2 ]}, {rgba[ 3 ]}" );
                     }
 
                     next++;
@@ -739,7 +739,7 @@ public class ImageProcessor
             {
                 var convertedImage = new Bitmap( width, height, PixelFormat.Format32bppArgb );
 
-                using ( var g = System.Drawing.Graphics.FromImage( convertedImage ) )
+                using ( var g = Graphics.FromImage( convertedImage ) )
                 {
                     g.DrawImage( image, 0, 0 );
                 }

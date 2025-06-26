@@ -1192,20 +1192,20 @@ public partial class Json
     {
         var jval = new JsonReader().Parse( json );
 
-        return ( jval != null ) ? jval.PrettyPrint( OutputType, singleLineColumns ) : "**ERROR**";
+        return jval != null ? jval.PrettyPrint( OutputType, singleLineColumns ) : "**ERROR**";
     }
 
     public static string PrettyPrint( string json, JsonValue.PrettyPrintSettings settings )
     {
         Logger.Checkpoint();
-        
+
         var jval = new JsonReader().Parse( json );
 
         Logger.Checkpoint();
-        
+
         Logger.Debug( $"jval: {jval}" );
-        
-        return ( jval != null ) ? jval.PrettyPrint( settings ) : "**ERROR**";
+
+        return jval != null ? jval.PrettyPrint( settings ) : "**ERROR**";
     }
 
     // ========================================================================

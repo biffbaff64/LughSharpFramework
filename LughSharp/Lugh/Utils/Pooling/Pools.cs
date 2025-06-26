@@ -56,7 +56,7 @@ public static class Pools
                                       int max = int.MaxValue ) where T : notnull
     {
         // GetOrAdd is thread-safe for creating or retrieving.
-        return ( Pool< T > )_typePools.GetOrAdd( typeof( T ),type => 
+        return ( Pool< T > )_typePools.GetOrAdd( typeof( T ), type =>
                                                      new Pool< T >( newObjectFactory, initialCapacity, max ) );
     }
 
@@ -89,7 +89,7 @@ public static class Pools
         if ( !_typePools.TryGetValue( typeof( T ), out var poolObject ) )
         {
             Logger.Checkpoint();
-            
+
             throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}. " +
                                                  $"Call Pools.Get<{typeof( T ).Name}>() first " +
                                                  $"with a NewObjectHandler." );

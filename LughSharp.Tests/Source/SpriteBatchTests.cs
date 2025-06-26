@@ -53,13 +53,13 @@ public class SpriteBatchTests
     public void Setup()
     {
         Logger.Checkpoint();
-        
+
         _spriteBatch = new SpriteBatch();
 
         // Create and verify the pixmap
         var pixmap = new Pixmap( TEST_WIDTH, TEST_HEIGHT, PixelType.Format.RGBA8888 );
         Assert.That( pixmap, Is.Not.Null, "Pixmap creation failed" );
-        Assert.That( pixmap.Gdx2DPixmap, Is.Not.Null, "pixmap.Gdx2DPixmap is null"  );
+        Assert.That( pixmap.Gdx2DPixmap, Is.Not.Null, "pixmap.Gdx2DPixmap is null" );
         Assert.That( pixmap.Width, Is.EqualTo( TEST_WIDTH ), "Pixmap width incorrect" );
         Assert.That( pixmap.Height, Is.EqualTo( TEST_HEIGHT ), "Pixmap height incorrect" );
 
@@ -73,7 +73,7 @@ public class SpriteBatchTests
         Assert.That( _testTexture, Is.Not.Null, "Texture creation failed" );
 
         pixmap.Dispose(); // Clean up the pixmap after creating texture
-        
+
         Logger.Debug( "Done." );
     }
 
@@ -93,7 +93,7 @@ public class SpriteBatchTests
         {
             _spriteBatch.End();
         }
-        
+
         Logger.Debug( "Done." );
     }
 
@@ -118,7 +118,7 @@ public class SpriteBatchTests
             Assert.DoesNotThrow( () => _spriteBatch?.Draw( _testTexture!, 0, 0, TEST_WIDTH, TEST_HEIGHT ) );
             _spriteBatch?.End();
         } );
-        
+
         Logger.Debug( "Done." );
     }
 
@@ -134,7 +134,7 @@ public class SpriteBatchTests
 
             Assert.Throws< GdxRuntimeException >( () => _spriteBatch?.Draw( _testTexture, 0, 0 ) );
         } );
-        
+
         Logger.Debug( "Done." );
     }
 
@@ -151,7 +151,7 @@ public class SpriteBatchTests
             Assert.That( _spriteBatch, Is.Not.Null );
             Assert.DoesNotThrow( () => _spriteBatch!.SetProjectionMatrix( projection ) );
         } );
-        
+
         Logger.Debug( "Done." );
     }
 
@@ -180,7 +180,7 @@ public class SpriteBatchTests
             Assert.That( !_spriteBatch.IsBlendingEnabled );
             _spriteBatch.End();
         } );
-        
+
         Logger.Debug( "Done." );
     }
 
@@ -201,7 +201,7 @@ public class SpriteBatchTests
             Assert.That( _spriteBatch?.Color.B, Is.EqualTo( testColor.B ) );
             Assert.That( _spriteBatch?.Color.A, Is.EqualTo( testColor.A ) );
         } );
-        
+
         Logger.Debug( "Done." );
     }
 

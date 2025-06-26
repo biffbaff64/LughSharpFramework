@@ -42,7 +42,7 @@ public partial class MaxRectsPacker
         private int _current;
 
         // ====================================================================
-        
+
         public BinarySearch( int min, int max, int fuzziness, bool pot, bool mod4 )
         {
             if ( pot )

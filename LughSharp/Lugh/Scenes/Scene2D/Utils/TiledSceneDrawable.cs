@@ -98,7 +98,7 @@ public class TiledSceneDrawable : TextureRegionSceneDrawable
             {
                 return;
             }
-            
+
             var u  = region.U;
             var v2 = region.V2;
 

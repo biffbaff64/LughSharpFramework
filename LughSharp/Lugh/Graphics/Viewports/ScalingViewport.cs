@@ -52,7 +52,7 @@ public class ScalingViewport : Viewport
     protected Scaling Scaling { get; }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Creates a new viewport using a new <see cref="OrthographicCamera" />.
     /// </summary>

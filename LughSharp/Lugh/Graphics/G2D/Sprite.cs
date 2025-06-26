@@ -71,21 +71,21 @@ public class Sprite : TextureRegion
         }
 
         // Assign properties
-        Texture      = sprite.Texture;
-        U            = sprite.U;
-        V            = sprite.V;
-        U2           = sprite.U2;
-        V2           = sprite.V2;
-        _x           = sprite._x;
-        _y           = sprite._y;
-        Width        = sprite.Width;
-        Height       = sprite.Height;
-        OriginX      = sprite.OriginX;
-        OriginY      = sprite.OriginY;
-        _rotation    = sprite._rotation;
-        ScaleX       = sprite.ScaleX;
-        ScaleY       = sprite.ScaleY;
-        _dirty       = sprite._dirty;
+        Texture   = sprite.Texture;
+        U         = sprite.U;
+        V         = sprite.V;
+        U2        = sprite.U2;
+        V2        = sprite.V2;
+        _x        = sprite._x;
+        _y        = sprite._y;
+        Width     = sprite.Width;
+        Height    = sprite.Height;
+        OriginX   = sprite.OriginX;
+        OriginY   = sprite.OriginY;
+        _rotation = sprite._rotation;
+        ScaleX    = sprite.ScaleX;
+        ScaleY    = sprite.ScaleY;
+        _dirty    = sprite._dirty;
 
         // Copy color
         _color.Set( sprite._color );
@@ -677,7 +677,7 @@ public class Sprite : TextureRegion
         {
             return;
         }
-        
+
         if ( xAmount != 0 )
         {
             var u  = ( Vertices[ IBatch.U1 ] + xAmount ) % 1;

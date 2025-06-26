@@ -54,7 +54,7 @@ public class DistanceFieldFont : BitmapFont
         base.Load( data );
 
         // Distance field font rendering requires font texture to be filtered linear.
-        List< TextureRegion > regions = GetRegions();
+        var regions = GetRegions();
 
         foreach ( var region in regions )
         {

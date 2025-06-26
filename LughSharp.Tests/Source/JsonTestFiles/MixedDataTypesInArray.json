@@ -3,5 +3,7 @@
   123,
   true,
   null,
-  { "nested": "value" }
+  {
+    "nested": "value"
+  }
 ]

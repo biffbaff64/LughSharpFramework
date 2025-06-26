@@ -130,14 +130,14 @@ public class ETC1TextureData : ITextureData
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
                 GL.TexImage2D( target,
-                                            0,
-                                            pixmap.GLInternalPixelFormat,
-                                            pixmap.Width,
-                                            pixmap.Height,
-                                            0,
-                                            pixmap.GLPixelFormat,
-                                            pixmap.GLDataType,
-                                            ( IntPtr )ptr );
+                               0,
+                               pixmap.GLInternalPixelFormat,
+                               pixmap.Width,
+                               pixmap.Height,
+                               0,
+                               pixmap.GLPixelFormat,
+                               pixmap.GLDataType,
+                               ( IntPtr )ptr );
             }
 
             if ( UseMipMaps )
@@ -153,13 +153,13 @@ public class ETC1TextureData : ITextureData
             fixed ( void* ptr = &_data.CompressedData.BackingArray()[ 0 ] )
             {
                 GL.CompressedTexImage2D( target,
-                                                      0,
-                                                      ETC1.ETC1_RGB8_OES,
-                                                      Width,
-                                                      Height,
-                                                      0,
-                                                      _data.CompressedData.Capacity - _data.DataOffset,
-                                                      ( IntPtr )ptr );
+                                         0,
+                                         ETC1.ETC1_RGB8_OES,
+                                         Width,
+                                         Height,
+                                         0,
+                                         _data.CompressedData.Capacity - _data.DataOffset,
+                                         ( IntPtr )ptr );
             }
 
             if ( UseMipMaps )

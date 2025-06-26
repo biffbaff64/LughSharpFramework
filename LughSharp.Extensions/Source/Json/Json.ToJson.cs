@@ -33,21 +33,21 @@ public partial class Json
     public string ToJson( object? obj )
     {
         Logger.Checkpoint();
-        
+
         return ToJson( obj, obj?.GetType(), elementType: null );
     }
 
     public string ToJson( object? obj, Type knownType )
     {
         Logger.Checkpoint();
-        
+
         return ToJson( obj, knownType, elementType: null );
     }
 
     public string ToJson( object? obj, Type? knownType, Type? elementType )
     {
         Logger.Checkpoint();
-        
+
         using ( var buffer = new StringWriter() )
         {
             ToJson( obj, knownType, elementType, buffer );
@@ -59,21 +59,21 @@ public partial class Json
     public void ToJson( object? obj, FileInfo file )
     {
         Logger.Checkpoint();
-        
+
         ToJson( obj, obj?.GetType(), null, file );
     }
 
     public void ToJson( object? obj, Type knownType, FileInfo file )
     {
         Logger.Checkpoint();
-        
+
         ToJson( obj, knownType, null, file );
     }
 
     public void ToJson( object? obj, Type? knownType, Type? elementType, FileInfo file )
     {
         Logger.Checkpoint();
-        
+
         try
         {
             using ( var writer = new StreamWriter( file.FullName, false, Encoding.UTF8 ) )
@@ -90,14 +90,14 @@ public partial class Json
     public void ToJson( object? obj, TextWriter writer )
     {
         Logger.Checkpoint();
-        
+
         ToJson( obj, obj?.GetType(), null, writer );
     }
 
     public void ToJson( object? obj, Type knownType, TextWriter writer )
     {
         Logger.Checkpoint();
-        
+
         ToJson( obj, knownType, null, writer );
     }
 
@@ -110,7 +110,7 @@ public partial class Json
         SetWriter( writer );
 
         Logger.Debug( $"writer: {writer.GetType().Name}" );
-        
+
         try
         {
             WriteValue( obj, knownType, elementType );
@@ -121,5 +121,3 @@ public partial class Json
         }
     }
 }
-
-

@@ -37,11 +37,11 @@ public enum HdpiMode
     /// which expect raw coordinates.
     /// </summary>
     Logical,
+
     /// <summary>
     /// Mouse coordinates, <see cref="IGraphicsDevice.Width" /> and <see cref="IGraphicsDevice.Height" />
     /// will return raw pixel coordinates irrespective of the system defined HDPI scaling.
     /// </summary>
-
     Pixels,
 }
 
@@ -112,10 +112,10 @@ public class HdpiUtils
                   || ( Api.Graphics.Height != Api.Graphics.BackBufferHeight ) ) )
         {
             Api.Graphics.UpdateViewport( ToBackBufferX( x ),
-                                           ToBackBufferY( y ),
-                                           ToBackBufferX( width ),
-                                           ToBackBufferY( height ),
-                                           3 );
+                                         ToBackBufferY( y ),
+                                         ToBackBufferX( width ),
+                                         ToBackBufferY( height ),
+                                         3 );
         }
         else
         {

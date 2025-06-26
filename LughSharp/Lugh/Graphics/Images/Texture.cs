@@ -69,11 +69,11 @@ public class Texture : GLTexture, IManaged
 
     // ========================================================================
 
-    public override int Width              => TextureData.Width;
-    public override int Height             => TextureData.Height;
-    public override int Depth              => 0;
-    public          int NumManagedTextures => _managedTextures.Count;
-    public          uint TextureID         => base.GLTextureHandle;
+    public override int  Width              => TextureData.Width;
+    public override int  Height             => TextureData.Height;
+    public override int  Depth              => 0;
+    public          int  NumManagedTextures => _managedTextures.Count;
+    public          uint TextureID          => GLTextureHandle;
 
     /// <summary>
     /// The Texture name, usually the filename but can be something else.
@@ -435,7 +435,7 @@ public class Texture : GLTexture, IManaged
         Logger.Debug( $"IsManaged         : {IsManaged}" );
         Logger.Debug( $"NumManagedTextures: {NumManagedTextures}" );
         Logger.Debug( $"Depth             : {Depth}" );
-        Logger.Debug( $"GLTarget          : {PixmapFormat.GetGLTargetName(GLTarget)}" );
+        Logger.Debug( $"GLTarget          : {PixmapFormat.GetGLTargetName( GLTarget )}" );
         Logger.Debug( $"GLTextureHandle   : {GLTextureHandle:X}" );
 
         if ( !TextureData.IsPrepared )

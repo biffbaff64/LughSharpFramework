@@ -37,7 +37,6 @@ public enum Resampling
 }
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public static class ResamplingExtensions
 {
     public static InterpolationMode ToInterpolationMode( this Resampling resampling )
@@ -51,4 +50,3 @@ public static class ResamplingExtensions
         };
     }
 }
-

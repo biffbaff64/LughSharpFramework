@@ -27,5 +27,4 @@ namespace LughSharp.Lugh.Graphics.SysDraw;
 [PublicAPI]
 public class Pen
 {
-    
 }

@@ -119,7 +119,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         if ( texture != null )
         {
             Logger.Checkpoint();
-            
+
             texture.Load( _loaderInfo.Data! );
         }
         else
@@ -128,9 +128,9 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
             texture = new Texture( _loaderInfo.Data! );
         }
-        
+
         Logger.Checkpoint();
-        
+
         if ( parameter != null )
         {
             texture.SetFilter( p!.MinFilter, p.MagFilter );

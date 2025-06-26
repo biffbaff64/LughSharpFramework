@@ -495,14 +495,14 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                                     fixed ( void* ptr = &pixmap.ByteBuffer.BackingArray()[ 0 ] )
                                     {
                                         GL.TexImage2D( target + face,
-                                                                    level,
-                                                                    pixmap.GLInternalPixelFormat,
-                                                                    pixmap.Width,
-                                                                    pixmap.Height,
-                                                                    0,
-                                                                    pixmap.GLPixelFormat,
-                                                                    pixmap.GLDataType,
-                                                                    ( IntPtr )ptr );
+                                                       level,
+                                                       pixmap.GLInternalPixelFormat,
+                                                       pixmap.Width,
+                                                       pixmap.Height,
+                                                       0,
+                                                       pixmap.GLPixelFormat,
+                                                       pixmap.GLDataType,
+                                                       ( IntPtr )ptr );
                                     }
                                 }
 
@@ -515,13 +515,13 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                                     fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                                     {
                                         GL.CompressedTexImage2D( target + face,
-                                                                              level,
-                                                                              glInternalFormat,
-                                                                              pixelWidth,
-                                                                              pixelHeight,
-                                                                              0,
-                                                                              faceLodSize,
-                                                                              ( IntPtr )dataptr );
+                                                                 level,
+                                                                 glInternalFormat,
+                                                                 pixelWidth,
+                                                                 pixelHeight,
+                                                                 0,
+                                                                 faceLodSize,
+                                                                 ( IntPtr )dataptr );
                                     }
                                 }
                             }
@@ -534,13 +534,13 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                                 fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                                 {
                                     GL.CompressedTexImage2D( target + face,
-                                                                          level,
-                                                                          glInternalFormat,
-                                                                          pixelWidth,
-                                                                          pixelHeight,
-                                                                          0,
-                                                                          faceLodSize,
-                                                                          ( IntPtr )dataptr );
+                                                             level,
+                                                             glInternalFormat,
+                                                             pixelWidth,
+                                                             pixelHeight,
+                                                             0,
+                                                             faceLodSize,
+                                                             ( IntPtr )dataptr );
                                 }
                             }
                         }
@@ -552,14 +552,14 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                             fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                             {
                                 GL.TexImage2D( target + face,
-                                                            level,
-                                                            glInternalFormat,
-                                                            pixelWidth,
-                                                            pixelHeight,
-                                                            0,
-                                                            glFormat,
-                                                            _glType,
-                                                            ( IntPtr )dataptr );
+                                               level,
+                                               glInternalFormat,
+                                               pixelWidth,
+                                               pixelHeight,
+                                               0,
+                                               glFormat,
+                                               _glType,
+                                               ( IntPtr )dataptr );
                             }
                         }
                     }

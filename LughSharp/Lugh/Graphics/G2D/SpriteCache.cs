@@ -859,7 +859,7 @@ public class SpriteCache
         {
             return;
         }
-        
+
         var fx2 = x + width;
         var fy2 = y + height;
         var u   = region.U;
@@ -937,7 +937,7 @@ public class SpriteCache
         {
             return;
         }
-        
+
         // bottom left and top right corner points relative to origin
         var worldOriginX = x + originX;
         var worldOriginY = y + originY;
@@ -1082,7 +1082,7 @@ public class SpriteCache
         {
             return;
         }
-        
+
         if ( _mesh.NumIndices > 0 )
         {
             Add( sprite.Texture, sprite.Vertices, 0, Sprite.SPRITE_SIZE );
@@ -1187,7 +1187,7 @@ public class SpriteCache
         var counts           = cache.Counts;
         var textureCount     = cache.TextureCount;
 
-        Texture[]? textures = cache.Textures;
+        var textures = cache.Textures;
 
         for ( var i = 0; i < textureCount; i++ )
         {
@@ -1222,7 +1222,7 @@ public class SpriteCache
         offset =  ( ( cache.Offset / ( verticesPerImage * Sprite.VERTEX_SIZE ) ) * 6 ) + ( offset * 6 );
         length *= 6;
 
-        Texture[]? textures = cache.Textures;
+        var textures = cache.Textures;
 
         var counts       = cache.Counts;
         var textureCount = cache.TextureCount;

@@ -48,7 +48,7 @@ namespace LughSharp.Lugh.Graphics.SysDraw;
  */
 [PublicAPI]
 public class BufferedImage //: Image
-                           //implements WritableRenderedImage, Transparency
+    //implements WritableRenderedImage, Transparency
 {
 //    private int imageType = TYPE_CUSTOM;
 //    private ColorModel colorModel;
@@ -589,7 +589,7 @@ public class BufferedImage //: Image
 //     */
 //
 //
-///*
+    ///*
 // *
 // *  FOR NOW THE CODE WHICH DEFINES THE RASTER TYPE IS DUPLICATED BY DVF
 // *  SEE THE METHOD DEFINERASTERTYPE @ RASTEROUTPUTMANAGER

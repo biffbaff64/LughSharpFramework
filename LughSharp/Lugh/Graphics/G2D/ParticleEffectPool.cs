@@ -31,8 +31,8 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
 {
     private static ParticleEffect? _effect;
 
-    public ParticleEffectPool(ParticleEffect effect, int initialCapacity, int max)
-        : base( NewObject, initialCapacity, max)
+    public ParticleEffectPool( ParticleEffect effect, int initialCapacity, int max )
+        : base( NewObject, initialCapacity, max )
     {
         _effect = effect;
     }
@@ -58,8 +58,8 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
              || !effect1.YSizeScale.Equals( _effect.YSizeScale )
              || !effect1.MotionScale.Equals( _effect.MotionScale ) )
         {
-            List< ParticleEmitter > emitters         = effect1.GetEmitters();
-            List< ParticleEmitter > templateEmitters = _effect.GetEmitters();
+            var emitters         = effect1.GetEmitters();
+            var templateEmitters = _effect.GetEmitters();
 
             for ( var i = 0; i < emitters.Count; i++ )
             {

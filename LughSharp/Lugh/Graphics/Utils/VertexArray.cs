@@ -169,11 +169,11 @@ public class VertexArray : IVertexData
             var stride        = Attributes.VertexSize;
 
             GL.VertexAttribPointer( ( uint )location,
-                                                 numComponents,
-                                                 type,
-                                                 normalized,
-                                                 stride,
-                                                 ( uint )byteOffset );
+                                    numComponents,
+                                    type,
+                                    normalized,
+                                    stride,
+                                    ( uint )byteOffset );
         }
     }
 

@@ -137,7 +137,7 @@ public class GLTextureArray : GLTexture, IManaged
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// </summary>
     /// <param name="internalPaths"></param>
@@ -171,15 +171,15 @@ public class GLTextureArray : GLTexture, IManaged
         Bind();
 
         GL.TexImage3D( IGL.GL_TEXTURE_2D_ARRAY,
-                                    0,
-                                    data.InternalFormat,
-                                    data.Width,
-                                    data.Height,
-                                    data.Depth,
-                                    0,
-                                    data.InternalFormat,
-                                    data.GLDataType,
-                                    0 );
+                       0,
+                       data.InternalFormat,
+                       data.Width,
+                       data.Height,
+                       data.Depth,
+                       0,
+                       data.InternalFormat,
+                       data.GLDataType,
+                       0 );
 
         if ( !data.Prepared )
         {
@@ -216,7 +216,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <param name="texture"></param>
     private static void AddManagedTexture( IApplication app, GLTextureArray texture )
     {
-        List< GLTextureArray > managedTextureArray = _managedTextureArrays[ app ];
+        var managedTextureArray = _managedTextureArrays[ app ];
 
         _managedTextureArrays[ app ].Add( texture );
         _managedTextureArrays[ app ] = managedTextureArray;
@@ -245,22 +245,22 @@ public class GLTextureArray : GLTexture, IManaged
 
     // ========================================================================
     // Implementations of abstract methods from the base Image class.
-    
+
     public override void ClearWithColor( Color color )
     {
         throw new NotImplementedException();
     }
-    
+
     public override int GetPixel( int x, int y )
     {
         throw new NotImplementedException();
     }
-    
+
     public override void SetPixel( int x, int y, Color color )
     {
         throw new NotImplementedException();
     }
-    
+
     public override void SetPixel( int x, int y, int color )
     {
         throw new NotImplementedException();

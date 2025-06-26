@@ -53,7 +53,7 @@ public abstract class Viewport
         Screen,
         Scaling,
     }
-    
+
     public Camera? Camera       { get; set; }
     public int     ScreenX      { get; private set; }
     public int     ScreenY      { get; private set; }
@@ -63,7 +63,7 @@ public abstract class Viewport
     public float   WorldHeight  { get; private set; }
 
     // ========================================================================
-    
+
     private Vector3 _tmp = Vector3.Zero;
 
     // ========================================================================
@@ -263,7 +263,7 @@ public abstract class Viewport
     public void SetWorldSize( float worldWidth, float worldHeight )
     {
         Logger.Debug( $"SetWorldSize: {worldWidth}, {worldHeight}" );
-        
+
         WorldWidth  = worldWidth;
         WorldHeight = worldHeight;
     }
@@ -275,7 +275,7 @@ public abstract class Viewport
     public void SetScreenPosition( int screenX, int screenY )
     {
         Logger.Debug( $"SetScreenPosition: {screenX}, {screenY}" );
-        
+
         ScreenX = screenX;
         ScreenY = screenY;
     }
@@ -287,7 +287,7 @@ public abstract class Viewport
     public void SetScreenSize( int screenWidth, int screenHeight )
     {
         Logger.Debug( $"SetScreenSize: {screenWidth}, {screenHeight}" );
-        
+
         ScreenWidth  = screenWidth;
         ScreenHeight = screenHeight;
     }
@@ -299,7 +299,7 @@ public abstract class Viewport
     public void SetScreenBounds( int screenX, int screenY, int screenWidth, int screenHeight )
     {
         Logger.Debug( $"SetScreenBounds: {screenX}, {screenY}, {screenWidth}, {screenHeight}" );
-        
+
         if ( ( screenWidth <= 0 ) || ( screenHeight <= 0 ) )
         {
             Logger.Warning( "Screen bounds size must be positive and > zero!" );
@@ -310,9 +310,9 @@ public abstract class Viewport
         ScreenWidth  = screenWidth;
         ScreenHeight = screenHeight;
     }
-    
+
     // ========================================================================
-    
+
     /// <summary>
     /// Returns the left gutter (black bar) width in screen coordinates.
     /// </summary>
@@ -342,7 +342,7 @@ public abstract class Viewport
     /// Returns the top gutter (black bar) height in screen coordinates.
     /// </summary>
     public virtual int TopGutterHeight => Api.Graphics.Height - ( ScreenY + ScreenHeight );
-    
+
     // ========================================================================
 
     public void Debug()
@@ -356,4 +356,3 @@ public abstract class Viewport
         Logger.Debug( $"WorldHeight: {WorldHeight}" );
     }
 }
-

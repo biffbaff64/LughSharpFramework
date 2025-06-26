@@ -33,7 +33,7 @@ namespace LughSharp.Lugh.Utils.Pooling;
 public abstract class FlushablePool< T > //: Pool< T > where T : notnull
 {
     //TODO:
-    
+
 //    private readonly List< T > _obtained = [ ];
 //
 //    // ========================================================================

@@ -426,12 +426,12 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
         // Add debug logging for pixmap state
         Logger.Debug( $"Pixmap Format: {pixmap.GetColorFormat()}" );
         Logger.Debug( $"Pixmap Dimensions: {pixmap.Width}x{pixmap.Height}" );
-        Logger.Debug( $"Pixmap GL Format: {PixmapFormat.GetGLPixelFormatName(pixmap.GLPixelFormat)}" );
-        Logger.Debug( $"Pixmap GL Internal Format: {PixmapFormat.GetGLPixelFormatName(pixmap.GLInternalPixelFormat)}" );
-        Logger.Debug( $"Pixmap GL Data Type: {PixmapFormat.GetGLTypeName(pixmap.GLDataType)}" );
+        Logger.Debug( $"Pixmap GL Format: {PixmapFormat.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
+        Logger.Debug( $"Pixmap GL Internal Format: {PixmapFormat.GetGLPixelFormatName( pixmap.GLInternalPixelFormat )}" );
+        Logger.Debug( $"Pixmap GL Data Type: {PixmapFormat.GetGLTypeName( pixmap.GLDataType )}" );
         Logger.Debug( $"Pixmap Data Length: {pixmap.PixelData.Length}" );
-        Logger.Debug( $"Gdx2dPixmap created successfully?: {pixmap.Gdx2DPixmap != null}"  );
-        
+        Logger.Debug( $"Gdx2dPixmap created successfully?: {pixmap.Gdx2DPixmap != null}" );
+
         if ( data.PixelFormat != pixmap.GetColorFormat() )
         {
             Logger.Debug( $"Converting pixmap from {pixmap.GetColorFormat()} to {data.PixelFormat}" );
@@ -487,13 +487,13 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
         }
     }
 
-    private static void CheckGLError(string operation)
+    private static void CheckGLError( string operation )
     {
         var error = GL.GetError();
-        
-        if (error != ( int )ErrorCode.NoError)
+
+        if ( error != ( int )ErrorCode.NoError )
         {
-            throw new GdxRuntimeException($"OpenGL error during {operation}: {error}");
+            throw new GdxRuntimeException( $"OpenGL error during {operation}: {error}" );
         }
     }
 
@@ -544,7 +544,7 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
             Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
             Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
             Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap?.ColorType}" );
-            Logger.Debug( $"Pixmap Pixel Format    : {PixmapFormat.GetFormatString( pixmap.Gdx2DPixmap!.ColorType)}" );
+            Logger.Debug( $"Pixmap Pixel Format    : {PixmapFormat.GetFormatString( pixmap.Gdx2DPixmap!.ColorType )}" );
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );
             Logger.Debug( $"pixmap.GLFormat Name   : {PixmapFormat.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalPixelFormat}" );

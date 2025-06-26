@@ -144,7 +144,7 @@ public class FileProcessor
     public virtual List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
         Logger.Checkpoint();
-        
+
         if ( outputRoot == null )
         {
             Logger.Debug( $"Setting outputRoot to InternalPath: {IOUtils.InternalPath}" );
@@ -192,7 +192,7 @@ public class FileProcessor
 
             if ( newOutputDir != null )
             {
-                entry.OutputFileName = ( newOutputDir.FullName.Length == 0 )
+                entry.OutputFileName = newOutputDir.FullName.Length == 0
                     ? outputName
                     : Path.Combine( newOutputDir.FullName, outputName );
             }
@@ -326,7 +326,7 @@ public class FileProcessor
                     Logger.Warning( $"Directory '{dir.FullName}' not found in dirToEntries during file processing." );
 
                     // Create a new list here as fallback
-                    dirToEntries[dir] = [ entry ];
+                    dirToEntries[ dir ] = [ entry ];
                 }
             }
 
@@ -408,7 +408,7 @@ public class FileProcessor
 
                 var dir = file.Directory!.FullName;
 
-                if ( !stringToEntries.TryGetValue( dir, out List< TexturePackerEntry >? value ) )
+                if ( !stringToEntries.TryGetValue( dir, out var value ) )
                 {
                     value = [ ];
                     stringToEntries.Add( dir, value );

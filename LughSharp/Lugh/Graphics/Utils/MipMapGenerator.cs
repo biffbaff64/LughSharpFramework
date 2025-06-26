@@ -87,14 +87,14 @@ public class MipMapGenerator
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
                 GL.TexImage2D( target,
-                                            0,
-                                            pixmap.GLInternalPixelFormat,
-                                            pixmap.Width,
-                                            pixmap.Height,
-                                            0,
-                                            pixmap.GLPixelFormat,
-                                            pixmap.GLDataType,
-                                            ( IntPtr )ptr );
+                               0,
+                               pixmap.GLInternalPixelFormat,
+                               pixmap.Width,
+                               pixmap.Height,
+                               0,
+                               pixmap.GLPixelFormat,
+                               pixmap.GLDataType,
+                               ( IntPtr )ptr );
             }
         }
 
@@ -109,14 +109,14 @@ public class MipMapGenerator
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
                 GL.TexImage2D( target,
-                                            0,
-                                            pixmap.GLInternalPixelFormat,
-                                            pixmap.Width,
-                                            pixmap.Height,
-                                            0,
-                                            pixmap.GLPixelFormat,
-                                            pixmap.GLDataType,
-                                            ( IntPtr )ptr );
+                               0,
+                               pixmap.GLInternalPixelFormat,
+                               pixmap.Width,
+                               pixmap.Height,
+                               0,
+                               pixmap.GLPixelFormat,
+                               pixmap.GLDataType,
+                               ( IntPtr )ptr );
             }
 
             GL.GenerateMipmap( target );
@@ -132,14 +132,14 @@ public class MipMapGenerator
         fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
         {
             GL.TexImage2D( target,
-                                        0,
-                                        pixmap.GLInternalPixelFormat,
-                                        pixmap.Width,
-                                        pixmap.Height,
-                                        0,
-                                        pixmap.GLPixelFormat,
-                                        pixmap.GLDataType,
-                                        ( IntPtr )ptr );
+                           0,
+                           pixmap.GLInternalPixelFormat,
+                           pixmap.Width,
+                           pixmap.Height,
+                           0,
+                           pixmap.GLPixelFormat,
+                           pixmap.GLDataType,
+                           ( IntPtr )ptr );
         }
 
         if ( textureWidth != textureHeight )
@@ -168,14 +168,14 @@ public class MipMapGenerator
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
                 GL.TexImage2D( target,
-                                            level,
-                                            pixmap.GLInternalPixelFormat,
-                                            pixmap.Width,
-                                            pixmap.Height,
-                                            0,
-                                            pixmap.GLPixelFormat,
-                                            pixmap.GLDataType,
-                                            ( IntPtr )ptr );
+                               level,
+                               pixmap.GLInternalPixelFormat,
+                               pixmap.Width,
+                               pixmap.Height,
+                               0,
+                               pixmap.GLPixelFormat,
+                               pixmap.GLDataType,
+                               ( IntPtr )ptr );
             }
 
             width  = pixmap.Width / 2;

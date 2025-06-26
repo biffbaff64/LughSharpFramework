@@ -34,7 +34,7 @@ public class ArrayListEnumerator< T > : IEnumerator< T >
     private readonly ArrayList< T > _list;
 
     // ========================================================================
-    
+
     /// <summary>
     /// 
     /// </summary>
@@ -52,7 +52,7 @@ public class ArrayListEnumerator< T > : IEnumerator< T >
     {
         _position++;
 
-        return ( _position < _list.Count );
+        return _position < _list.Count;
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public class ArrayListEnumerator< T > : IEnumerator< T >
     public void Dispose()
     {
         _list.Clear();
-        
+
         GC.SuppressFinalize( this );
     }
 }

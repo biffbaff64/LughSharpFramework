@@ -119,11 +119,11 @@ public class OrthographicCamera : Camera
     public override void Update( bool updateFrustrum = true )
     {
         ProjectionMatrix.SetToOrtho( ( Zoom * -ViewportWidth ) / 2,
-                               Zoom * ( ViewportWidth / 2 ),
-                               Zoom * -( ViewportHeight / 2 ),
-                               ( Zoom * ViewportHeight ) / 2,
-                               Near,
-                               Far );
+                                     Zoom * ( ViewportWidth / 2 ),
+                                     Zoom * -( ViewportHeight / 2 ),
+                                     ( Zoom * ViewportHeight ) / 2,
+                                     Near,
+                                     Far );
 
         ViewMatrix.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
 
@@ -135,7 +135,7 @@ public class OrthographicCamera : Camera
             InvProjectionView.Set( Combined );
             Matrix4.Invert( InvProjectionView.Val );
             Frustrum.Update( InvProjectionView );
-            
+
 //            Api.Graphics.UpdateViewport( ( int )Position.X,
 //                                           ( int )Position.Y,
 //                                           ( int )ViewportWidth,

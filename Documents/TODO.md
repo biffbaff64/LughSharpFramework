@@ -149,13 +149,13 @@ AUDIO/MAPONUS/DECODING
     - DONE - DONE - DecoderParameters
     - DONE - DONE - DecoderErrors
     - DONE - DONE - DecoderException
-    - DONE - IP   - Equalizer
-    - DONE - IP   - Header
-    - DONE - IP   - Huffman
+    - DONE - DONE - Equalizer
+    - DONE - DONE - Header
+    - DONE - DONE - Huffman
     - DONE - DONE - OutputChannels
     - DONE - DONE - PushbackStream
     - DONE - DONE - SampleBuffer
-    - DONE - IP   - SynthesisFilter
+    - DONE - DONE - SynthesisFilter
 
 AUDIO/MAPONUS/DECODING/DECODERS
 -----------------------

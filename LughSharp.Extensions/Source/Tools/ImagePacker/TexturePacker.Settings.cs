@@ -369,7 +369,7 @@ public partial class TexturePacker
         /// <summary>
         /// Merges the supplied Settings instance with this one.
         /// </summary>
-        public void Merge( TexturePacker.Settings? source )
+        public void Merge( Settings? source )
         {
             if ( source == null )
             {
@@ -383,7 +383,7 @@ public partial class TexturePacker
             {
                 switch ( property )
                 {
-                    case { CanRead: true, CanWrite: true } when ( property.PropertyType == typeof( bool ) ):
+                    case { CanRead: true, CanWrite: true } when property.PropertyType == typeof( bool ):
                     {
                         var sourceValue = ( bool? )property.GetValue( source ); // Treat as nullable to check if set
                         var targetValue = ( bool? )property.GetValue( this );
@@ -398,7 +398,7 @@ public partial class TexturePacker
                     }
 
                     // Handle other property types as needed
-                    case { CanRead: true, CanWrite: true } when ( property.PropertyType != typeof( bool ) ):
+                    case { CanRead: true, CanWrite: true } when property.PropertyType != typeof( bool ):
                     {
                         var sourceValue = property.GetValue( source );
 
@@ -421,7 +421,7 @@ public partial class TexturePacker
         {
             var jsonString = File.ReadAllText( settingsFile.FullName );
 
-            return JsonSerializer.Deserialize< TexturePacker.Settings >( jsonString, _defaultJsonSerializerOptions );
+            return JsonSerializer.Deserialize< Settings >( jsonString, _defaultJsonSerializerOptions );
         }
 
         /// <summary>
@@ -436,7 +436,7 @@ public partial class TexturePacker
 
             if ( writeableString.Length > 0 )
             {
-                using var fs = System.IO.File.Create( fileName );
+                using var fs = File.Create( fileName );
 
                 fs.Write( writeableString );
                 fs.Close();

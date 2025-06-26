@@ -368,7 +368,6 @@ public class PixmapFormat
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided Pixmap pixel format is invalid or not supported.
     /// </exception>
-    [SupportedOSPlatform( "windows" )]
     public static PixelType.Format PixelFormatToPixelTypeFormat( PixelFormat format )
     {
         return format switch
@@ -393,8 +392,7 @@ public class PixmapFormat
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
-    [SupportedOSPlatform( "windows" )]
-    public static System.Drawing.Imaging.PixelFormat ToPixelFormat( PixelType.Format format )
+    public static PixelFormat ToPixelFormat( PixelType.Format format )
     {
         var cformat = ToGdx2DPixelFormat( format );
 

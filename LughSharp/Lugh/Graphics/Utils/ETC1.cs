@@ -41,7 +41,7 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class ETC1
 {
-    public const int PKM_HEADER_SIZE   = 16;            // In bytes
+    public const int PKM_HEADER_SIZE   = 16; // In bytes
     public const int ETC1_RGB8_OES     = 0x00008d64;
     public const int RGB565_PIXEL_SIZE = 2;
     public const int RGB888_PIXEL_SIZE = 3;

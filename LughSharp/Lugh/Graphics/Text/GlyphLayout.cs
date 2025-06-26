@@ -222,12 +222,12 @@ public class GlyphLayout : IResetable
         }
 
         PrepareForTextProcessing( fontData, color, targetWidth, ref wrap, truncate );
-        
+
         BitmapFont.Glyph? lastGlyph = null;
 
-        var x         = 0f;
-        var y         = 0f;
-        var runStart  = start;
+        var x        = 0f;
+        var y        = 0f;
+        var runStart = start;
 
         while ( true )
         {
@@ -784,9 +784,9 @@ public class GlyphLayout : IResetable
         ArgumentNullException.ThrowIfNull( fontData );
         ArgumentNullException.ThrowIfNull( first );
 
-        List< BitmapFont.Glyph > glyphs2    = first.Glyphs; // Starts with all the glyphs.
-        var                      glyphCount = first.Glyphs.Count;
-        var                      xAdvances2 = first.XAdvances; // Starts with all the xAdvances.
+        var glyphs2    = first.Glyphs; // Starts with all the glyphs.
+        var glyphCount = first.Glyphs.Count;
+        var xAdvances2 = first.XAdvances; // Starts with all the xAdvances.
 
         // Skip whitespace before the wrap index.
         var firstEnd = wrapIndex;
@@ -819,7 +819,7 @@ public class GlyphLayout : IResetable
             second = _glyphRunPool.Obtain();
             second?.Color.Set( first.Color );
 
-            List< BitmapFont.Glyph >? glyphs1 = second?.Glyphs; // Starts empty.
+            var glyphs1 = second?.Glyphs; // Starts empty.
 
             glyphs1?.AddAll( glyphs2, 0, firstEnd );
             glyphs2.RemoveRange( 0, secondStart - 1 );

@@ -103,7 +103,7 @@ public class AtlasRegion : TextureRegion
     public string?[]? Names { get; set; }
 
     // ========================================================================
-    
+
     /// <summary>
     /// </summary>
     /// <param name="texture"></param>
@@ -153,7 +153,7 @@ public class AtlasRegion : TextureRegion
         OriginalWidth  = PackedWidth;
         OriginalHeight = PackedHeight;
     }
-    
+
     // ========================================================================
 
     /// <summary>

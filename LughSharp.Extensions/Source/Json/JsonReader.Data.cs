@@ -41,7 +41,7 @@ public partial class JsonReader
         Logger.Debug( $"_jsonTransitionActions: {_jsonTransitionActions.Length}" );
         Logger.Debug( $"_jsonEofActions       : {_jsonEofActions.Length}" );
     }
-    
+
     // ========================================================================
     //@formatter:off
     // ========================================================================

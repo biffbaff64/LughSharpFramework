@@ -395,7 +395,7 @@ public class Stage : InputAdapter, IDisposable
         }
 
         _debugShapes?.Dispose();
-        
+
         GC.SuppressFinalize( this );
     }
 

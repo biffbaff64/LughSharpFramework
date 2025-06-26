@@ -34,13 +34,12 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class TextureUnpacker
 {
     public bool Quiet { get; set; }
 
     // ========================================================================
-    
+
     private const string DEFAULT_OUTPUT_PATH  = "output";
     private const string OUTPUT_TYPE          = "png";
     private const string HELP                 = "Usage: atlasFile [imageDir] [outputDir]";
@@ -112,7 +111,7 @@ public class TextureUnpacker
                         {
                             var originalImg = new Bitmap( region.OriginalWidth, region.OriginalHeight, img.PixelFormat );
 
-                            using ( var g = System.Drawing.Graphics.FromImage( originalImg ) )
+                            using ( var g = Graphics.FromImage( originalImg ) )
                             {
                                 g.InterpolationMode = InterpolationMode.Bilinear;
                                 g.DrawImage( splitImage,
@@ -252,7 +251,7 @@ public class TextureUnpacker
 
             splitImage = new Bitmap( region.Width, region.Height, page.PixelFormat );
 
-            using ( var g = System.Drawing.Graphics.FromImage( splitImage ) )
+            using ( var g = Graphics.FromImage( splitImage ) )
             {
                 g.InterpolationMode = InterpolationMode.Bilinear;
                 g.TranslateTransform( 0, -region.Width );
@@ -274,7 +273,7 @@ public class TextureUnpacker
                                           splitImage.Height + ( padding * 2 ),
                                           page.PixelFormat );
 
-            using ( var g = System.Drawing.Graphics.FromImage( paddedImage ) )
+            using ( var g = Graphics.FromImage( paddedImage ) )
             {
                 g.DrawImage( splitImage, padding, padding );
             }
@@ -295,8 +294,8 @@ public class TextureUnpacker
     {
         var splitImage = ExtractImage( page, region, outputDir, NINEPATCH_PADDING );
 
-        using ( var g = System.Drawing.Graphics.FromImage( splitImage ) )
-        using ( var blackPen = new Pen( System.Drawing.Color.Black ) )
+        using ( var g = Graphics.FromImage( splitImage ) )
+        using ( var blackPen = new Pen( Color.Black ) )
         {
             // Draw the four lines to save the ninepatch's padding and splits
             var splits = region.FindValue( "split" );
@@ -336,7 +335,6 @@ public class TextureUnpacker
         return splitImage;
     }
 
-    
     /** Checks the command line arguments for correctness.
      * @return 0 If arguments are invalid, Number of arguments otherwise. */
     private int ParseArguments( string[] args )

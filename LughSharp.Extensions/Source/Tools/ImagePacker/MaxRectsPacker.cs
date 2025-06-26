@@ -30,7 +30,6 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public partial class MaxRectsPacker : TexturePacker.IPacker
 {
     private static   TexturePacker.Settings    _settings = null!;
@@ -160,7 +159,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
 //        Logger.Debug( $"maxWidth: {maxWidth}" );
 //        Logger.Debug( $"maxHeight: {maxHeight}" );
-        
+
         if ( _settings.EdgePadding )
         {
             if ( _settings.DuplicatePadding )
@@ -193,7 +192,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
 //            Logger.Debug( $"minWidth: {minWidth}" );
 //            Logger.Debug( $"minHeight: {minHeight}" );
-            
+
             if ( _settings.Rotation )
             {
                 if ( ( ( width > maxWidth ) || ( height > maxHeight ) ) && ( ( width > maxHeight ) || ( height > maxWidth ) ) )
@@ -267,7 +266,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 //        Logger.Debug( $"bestResult.Occupancy: {bestResult.Occupancy}" );
 //        Logger.Debug( $"bestResult.OutputRects.Count: {bestResult.OutputRects?.Count}" );
 //        Logger.Debug( $"bestResult.RemainingRects.Count: {bestResult.RemainingRects?.Count}" );
-        
+
         return bestResult;
     }
 
@@ -281,8 +280,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <param name="inputRects"></param>
     /// <returns></returns>
     private TexturePacker.Page GetMinimalPageSize( int minWidth, int minHeight,
-                                                    int adjustX, int adjustY,
-                                                    List< TexturePacker.Rect > inputRects )
+                                                   int adjustX, int adjustY,
+                                                   List< TexturePacker.Rect > inputRects )
     {
         // Find the minimal page size that fits all rects.
         TexturePacker.Page? bestResult = null;
@@ -305,7 +304,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
 //                Logger.Debug( $"bestResult.Occupancy: {bestResult?.Occupancy}" );
 //                Logger.Debug( $"result.Occupancy: {result?.Occupancy}" );
-                
+
                 bestResult = GetBest( bestResult, result );
                 size       = sizeSearch.Next( result == null );
             }
@@ -325,7 +324,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             Guard.WarnIfNull( bestResult );
 
-            bestResult!.Width  = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingX;
+            bestResult!.Width = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingX;
             bestResult.Height = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingY;
         }
         else
@@ -356,7 +355,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
 //                    Logger.Debug( $"bestWidthResult.Occupancy: {bestWidthResult?.Occupancy}" );
 //                    Logger.Debug( $"result.Occupancy: {result?.Occupancy}" );
-                
+
                     bestWidthResult = GetBest( bestWidthResult, result );
                     width           = widthSearch.Next( result == null );
 
@@ -368,7 +367,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
 //                Logger.Debug( $"bestResult.Occupancy: {bestResult?.Occupancy}" );
 //                Logger.Debug( $"bestWidthResult.Occupancy: {bestWidthResult?.Occupancy}" );
-                
+
                 bestResult = GetBest( bestResult, bestWidthResult );
 
                 if ( _settings.Square )
@@ -466,7 +465,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
 //            Logger.Debug( $"bestResult.Occupancy: {bestResult?.Occupancy}" );
 //            Logger.Debug( $"result.Occupancy: {result.Occupancy}" );
-                
+
             bestResult = GetBest( bestResult, result );
         }
 
@@ -498,7 +497,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 //        Logger.Debug( $"result1.Occupancy: {result1?.Occupancy}" );
 //        Logger.Debug( $"result2.Occupancy: {result2?.Occupancy}" );
 //        Logger.Divider();
-        
+
         // return null if both are null, or returns a non-null result2 if
         // result1 is null and result2 is not null.
         if ( result1 == null )

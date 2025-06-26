@@ -78,7 +78,7 @@ public class Cell : IResetable
     public float  ComputedPadRight  { get; set; }
 
     // ========================================================================
-    
+
     private const float ZEROF   = 0f;
     private const float ONEF    = 1f;
     private const int   ZEROI   = 0;

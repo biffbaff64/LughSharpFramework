@@ -344,8 +344,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
                       + $" {Camera.ViewportWidth * PPM}x{Camera.ViewportHeight * PPM}"
                       + $" ( {Camera.ViewportWidth}x{Camera.ViewportHeight} Units )" );
 
-        Viewport = new StretchViewport( ( Camera.ViewportWidth * PPM ),
-                                        ( Camera.ViewportHeight * PPM ),
+        Viewport = new StretchViewport( Camera.ViewportWidth * PPM,
+                                        Camera.ViewportHeight * PPM,
                                         Camera );
 
         Viewport.SetScreenBounds( 0, 0,

@@ -329,7 +329,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
                 {
                     return;
                 }
-                
+
                 var x1 = ( col * layerTileWidth ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
                 var y1 = ( row * layerTileHeight ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
                 var x2 = x1 + ( region.RegionWidth * UnitScale );

@@ -2500,7 +2500,10 @@ public class Matrix4
     /// </summary>
     public bool IsValidViewMatrix()
     {
-        if ( !IsValid() ) return false;
+        if ( !IsValid() )
+        {
+            return false;
+        }
 
         // For a view matrix, the upper 3x3 should be orthogonal
         // This is a simple check - you might want more thorough validation

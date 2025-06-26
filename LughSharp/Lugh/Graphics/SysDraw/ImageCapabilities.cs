@@ -64,7 +64,7 @@ public class ImageCapabilities : ICloneable
     /// <param name="accelerated"> whether or not an accelerated image is desired </param>
     public ImageCapabilities( bool accelerated )
     {
-        this.IsAccelerated = accelerated;
+        IsAccelerated = accelerated;
     }
 
     /// <summary>

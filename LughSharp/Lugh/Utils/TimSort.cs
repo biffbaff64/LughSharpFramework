@@ -957,8 +957,8 @@ public class TimSort< T >
 #endif
 
         // Copy first run into temp array
-        T[] a   = _sortingArray; // For performance
-        T[] tmp = EnsureCapacity( len1 );
+        var a   = _sortingArray; // For performance
+        var tmp = EnsureCapacity( len1 );
 
         if ( a == null )
         {
@@ -990,8 +990,8 @@ public class TimSort< T >
             return;
         }
 
-        IComparer< T > c         = _sortComparator; // Use local variable for performance
-        var            minGallop = _minGallop;      // "    " "     " "
+        var c         = _sortComparator; // Use local variable for performance
+        var minGallop = _minGallop;      // "    " "     " "
 
         while ( true )
         {
@@ -1146,8 +1146,8 @@ public class TimSort< T >
 #endif
 
         // Copy second run into temp array
-        T[] a   = _sortingArray;
-        T[] tmp = EnsureCapacity( len2 );
+        var a   = _sortingArray;
+        var tmp = EnsureCapacity( len2 );
 
         if ( a == null )
         {
@@ -1182,7 +1182,7 @@ public class TimSort< T >
             return;
         }
 
-        IComparer< T > c = _sortComparator; // Use local variable for performance
+        var c = _sortComparator; // Use local variable for performance
 
         var minGallop = _minGallop; // "    " "     " "
 

@@ -164,7 +164,7 @@ public class FreeTypeFontGenerator : IDisposable
         Logger.Checkpoint();
 
         SetPixelSizes( 0, 15 );
-        
+
         Logger.Checkpoint();
     }
 

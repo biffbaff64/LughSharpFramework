@@ -46,7 +46,7 @@ public class JsonSerializer
     {
         SerializeToFile( obj, filePath, Encoding.UTF8 );
     }
-    
+
     public void SerializeToFile( object obj, string filePath, Encoding encoding )
     {
         using ( var fileStream = new FileStream( filePath, FileMode.Create, FileAccess.Write ) )

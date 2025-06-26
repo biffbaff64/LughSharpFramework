@@ -68,6 +68,7 @@ public partial class JsonReader : IJsonReader
     private int[]?  _stack;
     private string? _name;
     private int     _gotoTarg = START_PARSE;
+
     // ------------------------------------------
 
     private int            _s                = 0;

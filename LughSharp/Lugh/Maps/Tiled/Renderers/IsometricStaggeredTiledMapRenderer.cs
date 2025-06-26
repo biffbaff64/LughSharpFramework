@@ -102,7 +102,7 @@ public class IsometricStaggeredTiledMapRenderer : BatchTileMapRenderer
                     var region    = tile.TextureRegion;
 
                     Guard.ThrowIfNull( region.Texture );
-                    
+
                     var x1 = ( ( x * layerTileWidth ) - offsetX ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
                     var y1 = ( y * layerTileHeight50 ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
                     var x2 = x1 + ( region.RegionWidth * UnitScale );

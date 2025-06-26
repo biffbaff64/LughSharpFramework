@@ -75,7 +75,7 @@ public class Pixmap : IDisposable
                 return 0;
             }
 
-            return ( ( int )Gdx2DPixmap!.Width );
+            return ( int )Gdx2DPixmap!.Width;
         }
     }
 
@@ -93,7 +93,7 @@ public class Pixmap : IDisposable
                 return 0;
             }
 
-            return ( ( int )Gdx2DPixmap!.Height );
+            return ( int )Gdx2DPixmap!.Height;
         }
     }
 
@@ -147,7 +147,6 @@ public class Pixmap : IDisposable
     /// </remarks>
     /// <seealso cref="PixelType.Format"/>
     /// <seealso cref="Gdx2DPixmap"/>
-    [SupportedOSPlatform( "windows" )]
     public Pixmap( int width, int height, PixelFormat format )
         : this( width, height, PixmapFormat.PixelFormatToPixelTypeFormat( format ) )
     {

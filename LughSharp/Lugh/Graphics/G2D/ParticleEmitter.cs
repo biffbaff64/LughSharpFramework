@@ -1300,8 +1300,8 @@ public class ParticleEmitter
      */
     public void MatchXSize( ParticleEmitter template )
     {
-        RangedNumericValue[] values         = GetXSizeValues();
-        RangedNumericValue[] templateValues = template.GetXSizeValues();
+        var values         = GetXSizeValues();
+        var templateValues = template.GetXSizeValues();
 
         for ( var i = 0; i < values.Length; i++ )
         {
@@ -1314,8 +1314,8 @@ public class ParticleEmitter
      */
     public void MatchYSize( ParticleEmitter template )
     {
-        RangedNumericValue[] values         = GetYSizeValues();
-        RangedNumericValue[] templateValues = template.GetYSizeValues();
+        var values         = GetYSizeValues();
+        var templateValues = template.GetYSizeValues();
 
         for ( var i = 0; i < values.Length; i++ )
         {
@@ -1328,8 +1328,8 @@ public class ParticleEmitter
      */
     public void MatchMotion( ParticleEmitter template )
     {
-        RangedNumericValue[] values         = GetMotionValues();
-        RangedNumericValue[] templateValues = template.GetMotionValues();
+        var values         = GetMotionValues();
+        var templateValues = template.GetMotionValues();
 
         for ( var i = 0; i < values.Length; i++ )
         {

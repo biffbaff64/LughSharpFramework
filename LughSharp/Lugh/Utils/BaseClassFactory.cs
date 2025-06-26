@@ -36,7 +36,7 @@ public abstract class BaseClassFactory
 
     public static T Create< T >() where T : BaseClassFactory, new()
     {
-        T instance = new T();          // Creates the most derived instance
+        var instance = new T();        // Creates the most derived instance
         instance.InitializeInternal(); // Calls the derived implementation *after* construction
 
         return instance;

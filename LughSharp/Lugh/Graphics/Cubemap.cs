@@ -302,7 +302,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     public override void ClearWithColor( Color color )
     {
@@ -325,7 +325,7 @@ public class Cubemap : GLTexture, IManaged
     }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     protected override void Dispose( bool disposing )
     {

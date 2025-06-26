@@ -5,7 +5,8 @@
 
 C# 2D Game Framework heavily inspired by the Java LibGDX Game Framework.
 
-THis project was intended to be released into the world for people to use, and you can - when it's finished - if you like. 
+THis project was intended to be released into the world for people to use, and you can - when it's finished - if you
+like.
 Be Aware, though, that there is another, more complete, LibGDX C# conversion named
 SharpGDX available.
 SharpGDX has rendered this project largely redundant now, so I'm debating either:-

@@ -106,6 +106,10 @@ public class Equalizer
     }
 
     /// <summary>
+    /// Property to enable setting the equalizer bands based on a specified <see cref="EQFunction" />.
+    /// The provided <see cref="EQFunction" /> determines the configuration of all equalizer bands,
+    /// with values being computed for each band using the `GetBand(int band)` method of the supplied function.
+    /// When set, all bands of the equalizer are reset and re-initialized in accordance with this function.
     /// </summary>
     public EQFunction FromEQFunction
     {
@@ -224,6 +228,11 @@ public class Equalizer
 
     // ========================================================================
 
+    /// <summary>
+    /// The EQFunction class serves as an abstract base for defining custom equalizer configurations.
+    /// It provides a mechanism to compute the setting for a specific band in an equalizer based on
+    /// custom logic implemented in derived classes.
+    /// </summary>
     [PublicAPI]
     public abstract class EQFunction
     {

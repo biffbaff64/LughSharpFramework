@@ -32,6 +32,7 @@ using LughSharp.Lugh.Utils.Buffers;
 namespace Extensions.Source.Freetype;
 
 [PublicAPI]
+
 //public partial class FreeType
 //{
 //    // Name of your native FreeType library.
@@ -906,7 +907,6 @@ namespace Extensions.Source.Freetype;
 // ============================================================================
 // ============================================================================
 // ============================================================================
-
 public partial class FreeType
 {
     private const string DLL_PATH = "lib/net8.0/freetype.dll";
@@ -974,7 +974,7 @@ public partial class FreeType
         public Face NewFace( FileInfo fontFile, int faceIndex )
         {
             throw new NotImplementedException();
-            
+
 //            ByteBuffer? buffer = null;
 //
 //            try
@@ -1033,7 +1033,7 @@ public partial class FreeType
         public Face NewMemoryFace( ByteBuffer buffer, int faceIndex )
         {
             throw new NotImplementedException();
-            
+
 //            var face = _newMemoryFace( Address, buffer, buffer.Remaining(), faceIndex );
 //
 //            if ( face == 0 )
@@ -1435,4 +1435,3 @@ public partial class FreeType
 //        private static extern void _done( long stroker );
     }
 }
-

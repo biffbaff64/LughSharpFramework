@@ -41,7 +41,7 @@ public class PixmapTextureData : ITextureData
 
     // ========================================================================
 
-    public PixmapTextureData(Pixmap pixmap, PixelType.Format? format, bool useMipMaps, bool disposePixmap, bool managed = false)
+    public PixmapTextureData( Pixmap pixmap, PixelType.Format? format, bool useMipMaps, bool disposePixmap, bool managed = false )
     {
         Pixmap        = pixmap;
         DisposePixmap = disposePixmap;

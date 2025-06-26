@@ -69,7 +69,7 @@ public partial class Gdx2DPixmap
                 ClearRGBA4444( _pixmapDataType, color, size );
 
                 break;
-            
+
             default:
                 throw new GdxRuntimeException( "Unknown color type" );
         }

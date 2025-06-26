@@ -39,13 +39,13 @@ public class Vector3 : IVector< Vector3 >
     public static readonly Vector3 Zero     = new( 0, 0, 0 );
 
     // ========================================================================
-    
+
     public float X { get; set; }
     public float Y { get; set; }
     public float Z { get; set; }
 
     // ========================================================================
-    
+
     private static readonly Matrix4 _tmpMat = new();
 
     // ========================================================================

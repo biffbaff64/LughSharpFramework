@@ -95,7 +95,7 @@ public class Engine
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// The time, in seconds, that has elapsed since the last frame was rendered.
     /// <para>
@@ -156,7 +156,7 @@ public class Engine
 
         Bindings = new GLBindings();
     }
-    
+
     /// <summary>
     /// Enables <see cref="DevMode" /> if the environment variable "DEV_MODE" is
     /// available and is set to "TRUE" or "true".
@@ -184,7 +184,7 @@ public class Engine
     public Engine CheckEnableGodMode()
     {
         GodMode = false;
-        
+
         if ( DevMode )
         {
             GodMode = CheckEnvironmentVar( "GOD_MODE", "TRUE" );
@@ -222,12 +222,12 @@ public class Engine
     {
         return Environment.GetEnvironmentVariables().Contains( envVar )
                && Environment.GetEnvironmentVariable( envVar )!
-                             .Equals(value, StringComparison.CurrentCultureIgnoreCase);
+                             .Equals( value, StringComparison.CurrentCultureIgnoreCase );
     }
 
     // ========================================================================
     // ========================================================================
-    
+
     public void Shutdown()
     {
     }

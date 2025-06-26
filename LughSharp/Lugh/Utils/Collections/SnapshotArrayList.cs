@@ -68,7 +68,7 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
         ArgumentNullException.ThrowIfNull( arrayList.Items );
 
         Ordered = arrayList.Ordered;
-        Count    = arrayList.Count;
+        Count   = arrayList.Count;
         Items   = new T[ Count ];
 
         Array.Copy( arrayList.Items, 0, Items, 0, Count );
@@ -98,7 +98,7 @@ public class SnapshotArrayList< T > : ArrayList< T >, IEnumerable< T >
     public SnapshotArrayList( bool ordered, T[] array, int startIndex, int count )
     {
         Ordered = ordered;
-        Count    = count;
+        Count   = count;
         Items   = new T[ count ];
 
         Array.Copy( array, startIndex, Items, 0, count );

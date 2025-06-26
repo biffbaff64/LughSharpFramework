@@ -146,7 +146,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     {
         var descriptors = new List< AssetDescriptor >();
 
-        List< FileInfo > fileHandles = GetDependencyFileHandles( tmxFile );
+        var fileHandles = GetDependencyFileHandles( tmxFile );
 
         foreach ( var handle in fileHandles )
         {

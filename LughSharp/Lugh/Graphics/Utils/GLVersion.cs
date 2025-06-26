@@ -75,7 +75,7 @@ public class GLVersion
         _minorVersion    = ( int )char.GetNumericValue( version[ 2 ] );
         _revisionVersion = ( int )char.GetNumericValue( version[ 4 ] );
 
-        Logger.Debug( DebugVersionString(), boxedDebug: true );
+        Logger.Debug( DebugVersionString(), true );
     }
 
     public GraphicsBackend.BackendType BackendType { get; set; }

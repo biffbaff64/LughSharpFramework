@@ -75,7 +75,7 @@ public enum BitmapCompressionMode : uint
     BI_RLE4      = 2,
     BI_BITFIELDS = 3,
     BI_JPEG      = 4,
-    BI_PNG       = 5
+    BI_PNG       = 5,
 }
 
 // ========================================================================
@@ -88,4 +88,3 @@ public struct BMPPixelArray
 {
     public byte[] PixelData { get; set; } // Array of color data for each pixel in the image.  
 }
-

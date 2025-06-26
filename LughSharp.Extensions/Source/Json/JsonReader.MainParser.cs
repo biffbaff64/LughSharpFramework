@@ -146,7 +146,7 @@ public partial class JsonReader
             Logger.Debug( $"keys       : {keys}" );
             Logger.Debug( $"keylength  : {keylength}" );
             Logger.Debug( $"transition : {transition}" );
-            
+
             // Single character transitions
             if ( keylength > 0 )
             {
@@ -167,7 +167,7 @@ public partial class JsonReader
                     }
                     else
                     {
-                        transition += ( middle - keys );
+                        transition += middle - keys;
                         exit       =  true;
                     }
                 }
@@ -203,7 +203,7 @@ public partial class JsonReader
                         }
                         else
                         {
-                            transition += ( ( mid - keys ) >> 1 );
+                            transition += ( mid - keys ) >> 1;
                             exit       =  true;
                         }
                     }
@@ -220,8 +220,8 @@ public partial class JsonReader
         transition    = _jsonIndicies[ transition ];
         _currentState = _jsonTransitionTargs[ transition ];
 
-        return ( ( _parsePosition == _parseLength )
-                 && ( _jsonEofActions[ _currentState ] != 0 ) )
+        return ( _parsePosition == _parseLength )
+               && ( _jsonEofActions[ _currentState ] != 0 )
             ? _jsonEofActions[ _currentState ]
             : -1; // No transition
     }
@@ -698,7 +698,7 @@ public partial class JsonReader
     private void DebugParseData()
     {
         var index = 0;
-        
+
         for ( var i = 0; i < 10; i++ )
         {
             for ( var j = 0; ( j < 10 ) || ( index >= _parseData.Length ); j++ )
@@ -717,4 +717,3 @@ public partial class JsonReader
         Logger.NewLine();
     }
 }
-

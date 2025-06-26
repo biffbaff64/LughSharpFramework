@@ -26,11 +26,11 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Extensions.Source.Json;
 
-
 [PublicAPI]
 public enum JsonParseState : int
 {
     Start,
+
     // ----------
     String,
     ObjectStart,
@@ -40,6 +40,7 @@ public enum JsonParseState : int
     SkipComment,
     UnquotedChars,
     QuotedChars,
+
     // ----------
     ObjectKeyStart,
     ObjectKey,
@@ -48,6 +49,7 @@ public enum JsonParseState : int
     ValueStart,
     ArrayElement,
     Eof,
+
     // ----------
     End,
 }

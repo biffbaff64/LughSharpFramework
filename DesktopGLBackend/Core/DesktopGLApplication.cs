@@ -97,7 +97,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // Config.Title becomes the name of the ApplicationListener if it has no value at this point.
         Config       =   DesktopGLApplicationConfiguration.Copy( config );
         Config.Title ??= listener.GetType().Name;
-        
+
         // ====================================================================
 
         // Initialise the global environment shortcuts. 'GdxApi.Audio', 'GdxApi.Files',
@@ -151,7 +151,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     /// </summary>
     protected void Loop()
     {
-        Logger.Debug( "Entering framework loop", boxedDebug: true );
+        Logger.Debug( "Entering framework loop", true );
 
         List< DesktopGLWindow > closedWindows = [ ];
 
@@ -542,7 +542,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     public void Dispose()
     {
@@ -560,7 +560,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     // ========================================================================
-    
+
     #region window creation handlers
 
     /// <summary>
@@ -610,7 +610,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
                 Windows.Add( dglWindow );
             } );
         }
-        
+
         return dglWindow;
     }
 
@@ -633,9 +633,9 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         for ( var i = 0; i < 2; i++ )
         {
             GL.ClearColor( config.InitialBackgroundColor.R,
-                                        config.InitialBackgroundColor.G,
-                                        config.InitialBackgroundColor.B,
-                                        config.InitialBackgroundColor.A );
+                           config.InitialBackgroundColor.G,
+                           config.InitialBackgroundColor.B,
+                           config.InitialBackgroundColor.A );
 
             GL.Clear( IGL.GL_COLOR_BUFFER_BIT );
             Glfw.SwapBuffers( windowHandle );

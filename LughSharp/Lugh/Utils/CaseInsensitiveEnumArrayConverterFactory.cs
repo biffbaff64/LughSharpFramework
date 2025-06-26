@@ -60,7 +60,7 @@ public class CaseInsensitiveEnumArrayConverter< TEnum > : JsonConverter< TEnum[]
             throw new JsonException( "Expected start of array." );
         }
 
-        var list = new System.Collections.Generic.List< TEnum >();
+        var list = new List< TEnum >();
 
         while ( reader.Read() )
         {

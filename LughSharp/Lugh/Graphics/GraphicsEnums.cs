@@ -32,7 +32,6 @@ public enum VertexDataType
     VertexBufferObjectWithVAO,
 }
 
-
 /// <summary>
 /// Represents various OpenGL capabilities that can be enabled or disabled.
 /// </summary>

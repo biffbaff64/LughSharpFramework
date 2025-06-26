@@ -72,7 +72,7 @@ public class Vector2 : IVector< Vector2 >
     public Vector2( float value ) : this( value, value )
     {
     }
-    
+
     /// <summary>
     /// Constructs a vector with the given components
     /// </summary>
@@ -684,7 +684,7 @@ public class Vector2 : IVector< Vector2 >
     }
 
     // ========================================================================
-    
+
     /// <summary>Adds two vectors together.</summary>
     /// <param name="left">The first vector to add.</param>
     /// <param name="right">The second vector to add.</param>

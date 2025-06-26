@@ -988,7 +988,7 @@ public class ShapeRenderer : IDisposable
     public void Ellipse( float x, float y, float width, float height, float rotation )
     {
         Ellipse( x, y, width, height, rotation, Math.Max( 1, ( int )( 12 * ( float )Math.Cbrt(
-                                                           Math.Max( width * 0.5f, height * 0.5f ) ) ) ) );
+                                                               Math.Max( width * 0.5f, height * 0.5f ) ) ) ) );
     }
 
     public void Ellipse( float x, float y, float width, float height, float rotation, int segments )

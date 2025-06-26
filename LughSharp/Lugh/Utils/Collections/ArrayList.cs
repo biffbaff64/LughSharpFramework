@@ -45,7 +45,7 @@ public class ArrayList< T >
     // ========================================================================
 
     private const int DEFAULT_INITIAL_CAPACITY = 16;
-    
+
     private PredicateIterable< T >? _predicateIEnumerable;
 
     // ========================================================================

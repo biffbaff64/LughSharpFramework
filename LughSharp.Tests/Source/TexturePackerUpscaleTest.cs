@@ -29,7 +29,6 @@ using JetBrains.Annotations;
 namespace LughSharp.Tests.Source;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class TexturePackerUpscaleTest
 {
 }

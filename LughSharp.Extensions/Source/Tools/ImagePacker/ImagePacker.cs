@@ -81,7 +81,6 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// </para>
 /// </summary>
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class ImagePacker
 {
     public Bitmap                          Image { get; }
@@ -124,17 +123,17 @@ public class ImagePacker
     /// </exception>
     public void InsertImage( string name, Bitmap image )
     {
-        if ( this.Rects.ContainsKey( name ) )
+        if ( Rects.ContainsKey( name ) )
         {
             throw new Exception( $"Key with name '{name}' is already in map" );
         }
 
-        var borderPixels = this._padding + ( this._duplicateBorder ? 1 : 0 );
-            
+        var borderPixels = _padding + ( _duplicateBorder ? 1 : 0 );
+
         borderPixels <<= 1;
-            
+
         var rect = new Rectangle( 0, 0, image.Width + borderPixels, image.Height + borderPixels );
-        var node = this.Insert( rect );
+        var node = Insert( rect );
 
         if ( node == null )
         {
@@ -149,16 +148,17 @@ public class ImagePacker
         rect.X         +=  borderPixels;
         rect.Y         +=  borderPixels;
 
-        this.Rects.Add( name, rect );
+        Rects.Add( name, rect );
 
-        using ( var g = System.Drawing.Graphics.FromImage( this.Image ) )
+        using ( var g = Graphics.FromImage( Image ) )
         {
             g.DrawImage( image, rect.X, rect.Y );
 
-            if ( this._duplicateBorder )
+            if ( _duplicateBorder )
             {
                 // Duplicate top border
                 g.DrawImage( image,
+
                              // Note to self:
                              // the 'with' expression here essentially creates a new Rectangle
                              // using the dimensions of 'rect', with Y being set to rect.Y-1,
@@ -308,4 +308,3 @@ public class ImagePacker
         }
     }
 }
-

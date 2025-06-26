@@ -61,7 +61,7 @@ public class HashHelpers
             throw new ArgumentException( "Table size must be a power of two.", nameof( tableSize ) );
         }
 
-        this.Mask = tableSize - 1;
+        Mask = tableSize - 1;
 
         // Calculate shift based on table size
         // This calculates log2(tableSize)

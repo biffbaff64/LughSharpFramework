@@ -296,7 +296,7 @@ public partial class BitmapFont
                 }
 
                 Descent = 0;
-                
+
                 while ( true )
                 {
                     line = reader.ReadLine();
@@ -638,7 +638,7 @@ public partial class BitmapFont
             {
                 throw new GdxRuntimeException( "Texture is null." );
             }
-            
+
             var invTexWidth  = 1.0f / region.Texture.Width;
             var invTexHeight = 1.0f / region.Texture.Height;
 
@@ -842,7 +842,7 @@ public partial class BitmapFont
             var scaleX        = ScaleX;
 
             var glyphs    = glyphRun.Glyphs;
-            var           xAdvances = glyphRun.XAdvances;
+            var xAdvances = glyphRun.XAdvances;
 
             // Guess at number of glyphs needed.
             glyphs.EnsureCapacity( max );

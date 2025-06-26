@@ -129,7 +129,6 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// </para>
 /// </summary>
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public partial class TexturePacker
 {
     public string?                   RootPath         { get; set; }
@@ -226,7 +225,10 @@ public partial class TexturePacker
     /// essential to provide the correct paths, optherwise processing will fail.
     /// </summary>
     /// <param name="inputFolder"> Directory containing individual images to be packed. </param>
-    /// <param name="outputFolder"> Directory where the pack file and page images will be written. </param>
+    /// <param name="outputFolder">
+    /// Directory where the pack file and page images will be written. This folder will
+    /// be cleared before processing.
+    /// </param>
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
     /// <param name="settings"> The <see cref="TexturePacker.Settings"/> to use. </param>
     /// <param name="progressListener"> Could be null. </param>
@@ -239,7 +241,7 @@ public partial class TexturePacker
         Logger.Debug( $"inputFolder: {inputFolder}" );
         Logger.Debug( $"outputFolder: {outputFolder}" );
         Logger.Debug( $"packFileName: {packFileName}" );
-        
+
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
@@ -259,10 +261,7 @@ public partial class TexturePacker
     /// <param name="packFileName"></param>
     /// <param name="settings"></param>
     /// <returns></returns>
-    public bool ProcessIfModified( string input,
-                                   string output,
-                                   string packFileName,
-                                   Settings? settings = null )
+    public bool ProcessIfModified( string input, string output, string packFileName, Settings? settings = null )
     {
         if ( settings == null )
         {
@@ -285,10 +284,12 @@ public partial class TexturePacker
     /// <param name="file"></param>
     public void AddImage( FileInfo file )
     {
+        Logger.Debug( $"Adding Image: {file.FullName}" );
+
         var inputImage = new InputImage
         {
             FileInfo = file,
-            RootPath = this.RootPath,
+            RootPath = RootPath,
         };
 
         _inputImages.Add( inputImage );
@@ -301,6 +302,8 @@ public partial class TexturePacker
     /// <param name="name"></param>
     public void AddImage( Bitmap image, string name )
     {
+        Logger.Debug( $"Adding Image: {name}" );
+
         var inputImage = new InputImage
         {
             Image = image,
@@ -327,6 +330,11 @@ public partial class TexturePacker
         }
 
         Logger.Debug( $"packFileName: {packFileName}" );
+
+        if ( Directory.Exists( outputDir.FullName ) )
+        {
+            Directory.Delete( outputDir.FullName, true );
+        }
         
         Directory.CreateDirectory( outputDir.FullName );
 
@@ -647,7 +655,8 @@ public partial class TexturePacker
                                     Plot( canvas, rectX - i, rectY - j, image.GetPixel( 0, 0 ) );
                                     Plot( canvas, rectX - i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( 0, ih - 1 ) );
                                     Plot( canvas, ( ( rectX + iw ) - 1 ) + i, rectY - j, image.GetPixel( iw - 1, 0 ) );
-                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j, image.GetPixel( iw - 1, ih - 1 ) );
+                                    Plot( canvas, ( ( rectX + iw ) - 1 ) + i, ( ( rectY + ih ) - 1 ) + j,
+                                          image.GetPixel( iw - 1, ih - 1 ) );
                                 }
                             }
 

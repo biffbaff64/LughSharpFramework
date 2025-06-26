@@ -58,7 +58,7 @@ public class SpriteBatch : IBatch, IDisposable
     public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusSrcAlpha;
     public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusDstAlpha;
 
-    public bool IsDrawing => ( CurrentBatchState == BatchState.Drawing );
+    public bool IsDrawing => CurrentBatchState == BatchState.Drawing;
 
     // ========================================================================
 
@@ -525,7 +525,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// </summary>
     private void SetupVertexAttributes( ShaderProgram? program )
     {
-        OpenGL.GLUtils.CheckOpenGLContext();
+        GLUtils.CheckOpenGLContext();
 
         // --------------------------------------------------------------------
 
@@ -1655,20 +1655,20 @@ public class SpriteBatch : IBatch, IDisposable
 
         // Set up vertex attributes
         // Update vertex attribute pointers to use VertexConstants
-        Engine.GL.VertexAttribPointer( 0, VertexConstants.POSITION_COMPONENTS,
-                                       ( int )VertexAttribPointerType.Float, false,
-                                       VertexConstants.VERTEX_SIZE_BYTES,
-                                       ( uint )VertexConstants.POSITION_OFFSET * sizeof( float ) );
+        GL.VertexAttribPointer( 0, VertexConstants.POSITION_COMPONENTS,
+                                ( int )VertexAttribPointerType.Float, false,
+                                VertexConstants.VERTEX_SIZE_BYTES,
+                                ( uint )VertexConstants.POSITION_OFFSET * sizeof( float ) );
 
-        Engine.GL.VertexAttribPointer( 1, VertexConstants.COLOR_COMPONENTS,
-                                       ( int )VertexAttribPointerType.Float, false,
-                                       VertexConstants.VERTEX_SIZE_BYTES,
-                                       ( uint )VertexConstants.COLOR_OFFSET * sizeof( float ) );
+        GL.VertexAttribPointer( 1, VertexConstants.COLOR_COMPONENTS,
+                                ( int )VertexAttribPointerType.Float, false,
+                                VertexConstants.VERTEX_SIZE_BYTES,
+                                ( uint )VertexConstants.COLOR_OFFSET * sizeof( float ) );
 
-        Engine.GL.VertexAttribPointer( 2, VertexConstants.TEXCOORD_COMPONENTS,
-                                       ( int )VertexAttribPointerType.Float, false,
-                                       VertexConstants.VERTEX_SIZE_BYTES,
-                                       ( uint )VertexConstants.TEXCOORD_OFFSET * sizeof( float ) );
+        GL.VertexAttribPointer( 2, VertexConstants.TEXCOORD_COMPONENTS,
+                                ( int )VertexAttribPointerType.Float, false,
+                                VertexConstants.VERTEX_SIZE_BYTES,
+                                ( uint )VertexConstants.TEXCOORD_OFFSET * sizeof( float ) );
 
         // Draw the quad
         GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo );

@@ -200,8 +200,8 @@ public class TextureRegion
         var texWidth  = Texture.Width;
         var texHeight = Texture.Height;
 
-        SetRegionWidth  ( ( int )Math.Round( Math.Abs( u2 - u ) * texWidth ), IsFlipX() );
-        SetRegionHeight ( ( int )Math.Round( Math.Abs( v2 - v ) * texHeight ), IsFlipY() );
+        SetRegionWidth( ( int )Math.Round( Math.Abs( u2 - u ) * texWidth ), IsFlipX() );
+        SetRegionHeight( ( int )Math.Round( Math.Abs( v2 - v ) * texHeight ), IsFlipY() );
 
         // For a 1x1 region, adjust UVs toward pixel center to avoid filtering
         // artifacts on AMD GPUs when drawing very stretched.
@@ -375,10 +375,12 @@ public class TextureRegion
     {
         get => _u;
         set =>
+
             // Add validation here if needed
             _u = value;
-            // No need to explicitly update RegionWidth, its getter will recalculate.
-            // If using INotifyPropertyChanged, raise for U and RegionWidth here.
+
+        // No need to explicitly update RegionWidth, its getter will recalculate.
+        // If using INotifyPropertyChanged, raise for U and RegionWidth here.
     }
 
     /// <summary>
@@ -387,10 +389,12 @@ public class TextureRegion
     {
         get => _u2;
         set =>
+
             // Add validation here if needed
             _u2 = value;
-            // No need to explicitly update RegionWidth, its getter will recalculate.
-            // If using INotifyPropertyChanged, raise for U2 and RegionWidth here.
+
+        // No need to explicitly update RegionWidth, its getter will recalculate.
+        // If using INotifyPropertyChanged, raise for U2 and RegionWidth here.
     }
 
     /// <summary>
@@ -399,10 +403,12 @@ public class TextureRegion
     {
         get => _v;
         set =>
+
             // Add validation here if needed
             _v = value;
-            // No need to explicitly update RegionHeight, its getter will recalculate.
-            // If using INotifyPropertyChanged, raise for V and RegionHeight here.
+
+        // No need to explicitly update RegionHeight, its getter will recalculate.
+        // If using INotifyPropertyChanged, raise for V and RegionHeight here.
     }
 
     /// <summary>
@@ -411,10 +417,12 @@ public class TextureRegion
     {
         get => _v2;
         set =>
+
             // Add validation here if needed
             _v2 = value;
-            // No need to explicitly update RegionHeight, its getter will recalculate.
-            // If using INotifyPropertyChanged, raise for V2 and RegionHeight here.
+
+        // No need to explicitly update RegionHeight, its getter will recalculate.
+        // If using INotifyPropertyChanged, raise for V2 and RegionHeight here.
     }
 
     /// <summary>
@@ -444,12 +452,12 @@ public class TextureRegion
         get
         {
             Guard.ThrowIfNull( Texture );
-            
+
             if ( ( Texture == null ) || ( Texture.Height == 0 ) )
             {
                 // Handle cases where Texture or its Height is not valid yet
                 Logger.Debug( "Texture, or its Height, is not valid yet" );
-                
+
                 return 0;
             }
 
@@ -468,7 +476,7 @@ public class TextureRegion
             {
                 // Handle cases where Texture or its Width is not valid yet
                 Logger.Debug( "Texture, or its Width, is not valid yet" );
-                
+
                 return 0;
             }
 
@@ -499,7 +507,7 @@ public class TextureRegion
 
     // ========================================================================
     // ========================================================================
-    
+
     /// <summary>
     /// 
     /// </summary>

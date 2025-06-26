@@ -58,7 +58,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool KeyDown( int keycode )
     {
-        IInputProcessor[] items = Processors.Begin();
+        var items = Processors.Begin();
 
         try
         {
@@ -81,7 +81,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool KeyUp( int keycode )
     {
-        IInputProcessor[] items = Processors.Begin();
+        var items = Processors.Begin();
 
         try
         {
@@ -104,7 +104,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool KeyTyped( char character )
     {
-        IInputProcessor[] items = Processors.Begin();
+        var items = Processors.Begin();
 
         try
         {
@@ -127,7 +127,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool TouchDown( int screenX, int screenY, int pointer, int button )
     {
-        IInputProcessor[] items = Processors.Begin();
+        var items = Processors.Begin();
 
         try
         {
@@ -150,7 +150,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool TouchUp( int screenX, int screenY, int pointer, int button )
     {
-        IInputProcessor[] items = Processors.Begin();
+        var items = Processors.Begin();
 
         try
         {
@@ -173,7 +173,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool TouchDragged( int screenX, int screenY, int pointer )
     {
-        IInputProcessor[] items = Processors.Begin();
+        var items = Processors.Begin();
 
         try
         {
@@ -196,7 +196,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool MouseMoved( int screenX, int screenY )
     {
-        IInputProcessor[] items = Processors.Begin();
+        var items = Processors.Begin();
 
         try
         {
@@ -219,7 +219,7 @@ public class InputMultiplexer : IInputProcessor
     /// <inheritdoc />
     public bool Scrolled( float amountX, float amountY )
     {
-        IInputProcessor[] items = Processors.Begin();
+        var items = Processors.Begin();
 
         try
         {

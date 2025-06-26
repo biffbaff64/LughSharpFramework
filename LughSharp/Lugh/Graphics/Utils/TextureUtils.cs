@@ -51,7 +51,7 @@ public class TextureUtils
                            height,
                            0,
                            ( int )OpenGL.Enums.PixelFormat.Rgba,
-                           ( int )OpenGL.Enums.PixelType.UnsignedByte,
+                           ( int )PixelType.UnsignedByte,
                            0 );
         }
 

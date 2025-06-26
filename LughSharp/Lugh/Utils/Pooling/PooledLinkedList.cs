@@ -33,7 +33,7 @@ public class PooledLinkedList< T >
     public int Size { get; set; } = 0;
 
     // ========================================================================
-    
+
     private readonly Pool< Item< T > > _pool;
 
     private Item< T >? _current;
@@ -152,7 +152,7 @@ public class PooledLinkedList< T >
 
         var payload = _iterator.Payload;
 
-        _current = _iterator;
+        _current  = _iterator;
         _iterator = _iterator.Next;
 
         return payload;
@@ -171,7 +171,7 @@ public class PooledLinkedList< T >
 
         var payload = _iterator.Payload;
 
-        _current = _iterator;
+        _current  = _iterator;
         _iterator = _iterator.Prev;
 
         return payload;

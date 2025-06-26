@@ -9,13 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\LughSharp\LughSharp.csproj" />
-        <ProjectReference Include="..\LughSharp.Extensions\LughSharp.Extensions.csproj" />
+        <ProjectReference Include="..\LughSharp\LughSharp.csproj"/>
+        <ProjectReference Include="..\LughSharp.Extensions\LughSharp.Extensions.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotGLFW" Version="1.2.0" />
-        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
+        <PackageReference Include="DotGLFW" Version="1.2.0"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0"/>
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Release|AnyCPU'">

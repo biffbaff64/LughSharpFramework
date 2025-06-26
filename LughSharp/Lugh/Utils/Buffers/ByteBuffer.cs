@@ -308,7 +308,7 @@ public class ByteBuffer : Buffer, IDisposable
     public short GetShort()
     {
         var source = _memory.Span.Slice( Position, sizeof( short ) );
-        
+
         return IsBigEndian
             ? BinaryPrimitives.ReadInt16BigEndian( source )
             : BinaryPrimitives.ReadInt16LittleEndian( source );
@@ -320,14 +320,14 @@ public class ByteBuffer : Buffer, IDisposable
     public short GetShort( int index )
     {
         var source = _memory.Span.Slice( index, sizeof( short ) );
-        
+
         Logger.Debug( $"source length: {source.Length}, index: {index}" );
 
         if ( index >= source.Length )
         {
             throw new IndexOutOfRangeException( $"Index {index} is out of range for source length {source.Length}" );
         }
-        
+
         return IsBigEndian
             ? BinaryPrimitives.ReadInt16BigEndian( source )
             : BinaryPrimitives.ReadInt16LittleEndian( source );

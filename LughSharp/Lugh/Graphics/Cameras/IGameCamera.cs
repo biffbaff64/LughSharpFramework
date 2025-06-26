@@ -29,7 +29,7 @@ namespace LughSharp.Lugh.Graphics.Cameras;
 [PublicAPI]
 public interface IGameCamera
 {
-    Viewport?              Viewport         { get; set; }
+    Viewport?             Viewport         { get; set; }
     OrthographicCamera    Camera           { get; set; }
     string                Name             { get; set; }
     Vector3               LerpVector       { get; set; }

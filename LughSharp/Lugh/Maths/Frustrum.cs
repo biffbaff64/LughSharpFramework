@@ -43,7 +43,7 @@ public class Frustrum
         Top,
         Bottom,
     }
-    
+
     protected static readonly Vector3[] ClipSpacePlanePoints =
     [
         //@formatter:off
@@ -85,7 +85,7 @@ public class Frustrum
             ClipSpacePlanePointsArray[ j++ ] = v.Z;
         }
     }
-    
+
     public Frustrum()
     {
         for ( var i = 0; i < 6; i++ )

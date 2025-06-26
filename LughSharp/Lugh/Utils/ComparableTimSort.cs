@@ -879,7 +879,7 @@ public class ComparableTimSort< T >
 #endif
 
         // Copy first run into temp array
-        T[]  a   = _a!; // For performance
+        var  a   = _a!; // For performance
         T?[] tmp = EnsureCapacity( len1 );
 
         Array.Copy( a, base1, tmp, 0, len1 );
@@ -1065,8 +1065,8 @@ public class ComparableTimSort< T >
 #endif
 
         // Copy second run into temp array
-        T[]? a   = _a; // For performance
-        T[]  tmp = EnsureCapacity( len2 );
+        var a   = _a; // For performance
+        var tmp = EnsureCapacity( len2 );
 
         Array.Copy( a!, base2, tmp, 0, len2 );
 

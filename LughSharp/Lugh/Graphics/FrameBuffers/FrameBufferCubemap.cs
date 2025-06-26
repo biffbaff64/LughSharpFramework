@@ -124,15 +124,15 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     {
         var glHandle = ( uint )texture.GLTextureHandle;
 
-        Cubemap.CubemapSide[] sides = Cubemap.CubemapSide.Values();
+        var sides = Cubemap.CubemapSide.Values();
 
         foreach ( var side in sides )
         {
             GL.FramebufferTexture2D( IGL.GL_FRAMEBUFFER,
-                                                  IGL.GL_COLOR_ATTACHMENT0,
-                                                  side.GLTarget,
-                                                  glHandle,
-                                                  0 );
+                                     IGL.GL_COLOR_ATTACHMENT0,
+                                     side.GLTarget,
+                                     glHandle,
+                                     0 );
         }
     }
 
@@ -186,10 +186,10 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
         ArgumentNullException.ThrowIfNull( side );
 
         GL.FramebufferTexture2D( IGL.GL_FRAMEBUFFER,
-                                              IGL.GL_COLOR_ATTACHMENT0,
-                                              side.GLTarget,
-                                              ( uint )GetColorBufferTexture().GLTextureHandle,
-                                              0 );
+                                 IGL.GL_COLOR_ATTACHMENT0,
+                                 side.GLTarget,
+                                 ( uint )GetColorBufferTexture().GLTextureHandle,
+                                 0 );
     }
 
     /// <summary>

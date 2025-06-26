@@ -59,8 +59,12 @@ public class MipMapTextureData : ITextureData
     }
 
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
-    public bool IsManaged => false;
-    public bool ShouldDisposePixmap() => false;
+    public bool                     IsManaged       => false;
+
+    public bool ShouldDisposePixmap()
+    {
+        return false;
+    }
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap" /> or
@@ -97,13 +101,13 @@ public class MipMapTextureData : ITextureData
     public void ConsumeCustomData( int target )
     {
         var derivedGLTexture = new DerivedGLTexture();
-        
+
         for ( var i = 0; i < _mips.Length; ++i )
         {
             derivedGLTexture.UploadImageData( target, _mips[ i ], i );
         }
     }
-    
+
     //TODO: This is a hack to get around the fact that GLTexture is not abstract. This should be fixed.
     private class DerivedGLTexture : GLTexture
     {

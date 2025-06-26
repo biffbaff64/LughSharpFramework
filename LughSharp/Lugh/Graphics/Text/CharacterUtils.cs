@@ -446,9 +446,9 @@ public class CharacterUtils
     /// </summary>
     /// <param name="ch">The character to be tested.</param>
     /// <returns><c>true</c> if the character is a space character; <c>false</c> otherwise.</returns>
-    public static bool IsSpaceChar(char ch)
+    public static bool IsSpaceChar( char ch )
     {
-        return IsSpaceChar((int)ch);
+        return IsSpaceChar( ( int )ch );
     }
 
     /// <summary>
@@ -465,14 +465,15 @@ public class CharacterUtils
     /// </summary>
     /// <param name="codePoint">The character (Unicode code point) to be tested.</param>
     /// <returns><c>true</c> if the character is a space character; <c>false</c> otherwise.</returns>
-    public static bool IsSpaceChar(int codePoint)
+    public static bool IsSpaceChar( int codePoint )
     {
-        var category = CharUnicodeInfo.GetUnicodeCategory(codePoint);
+        var category = CharUnicodeInfo.GetUnicodeCategory( codePoint );
+
         return ( category == UnicodeCategory.SpaceSeparator ) ||
                ( category == UnicodeCategory.LineSeparator ) ||
                ( category == UnicodeCategory.ParagraphSeparator );
     }
-    
+
 //    /// <summary>
 //    /// Returns the Unicode name of the specified character <c>codePoint</c>, or null if the
 //    /// code point is <see cref="UNASSIGNED"/>.
@@ -546,7 +547,7 @@ public class CharacterUtils
         //     codePoint >= MIN_CODE_POINT && codePoint <= MAX_CODE_POINT
         var plane = codePoint >> 16;
 
-        return plane < ( ( CharacterUtils.MAX_CODE_POINT + 1 ) >> 16 );
+        return plane < ( ( MAX_CODE_POINT + 1 ) >> 16 );
     }
 
     /// <summary>
@@ -590,4 +591,3 @@ public class CharacterUtils
         }
     }
 }
-

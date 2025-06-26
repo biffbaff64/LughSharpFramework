@@ -34,8 +34,23 @@ namespace LughSharp.Lugh.Audio.Maponus.Decoding;
 [PublicAPI]
 public class Header
 {
+    public const int MPEG2_LSF  = 0;
+    public const int MPEG25_LSF = 2;
+    public const int MPEG1      = 1;
+
+    public const int STEREO               = 0;
+    public const int JOINT_STEREO         = 1;
+    public const int DUAL_CHANNEL         = 2;
+    public const int SINGLE_CHANNEL       = 3;
+    public const int FOURTYFOUR_POINT_ONE = 0;
+    public const int FOURTYEIGHT          = 1;
+    public const int THIRTYTWO            = 2;
+
     // ========================================================================
 
+    /// <summary>
+    /// Defines frequency values for different audio sample rates and versions.
+    /// </summary>
     public static readonly int[][] Frequencies =
     [
         [ 22050, 24000, 16000, 1 ],
@@ -43,6 +58,11 @@ public class Header
         [ 11025, 12000, 8000, 1 ],
     ];
 
+    /// <summary>
+    /// Contains predefined bitrate values for different MPEG audio versions and layers.
+    /// These values are utilized during MPEG audio decoding to calculate frame sizes
+    /// and ensure accurate audio encoding and decoding processes.
+    /// </summary>
     public static readonly int[][][] Bitrates =
     [
         [
@@ -89,6 +109,10 @@ public class Header
         ],
     ];
 
+    /// <summary>
+    /// Represents a multidimensional array containing string representations of
+    /// various bitrates for different audio encoding layers and versions.
+    /// </summary>
     public static readonly string[][][] BitrateStr =
     [
         [
@@ -698,20 +722,4 @@ public class Header
 
         return buffer.ToString();
     }
-
-    #region constants
-
-    public const int MPEG2_LSF  = 0;
-    public const int MPEG25_LSF = 2;
-    public const int MPEG1      = 1;
-
-    public const int STEREO               = 0;
-    public const int JOINT_STEREO         = 1;
-    public const int DUAL_CHANNEL         = 2;
-    public const int SINGLE_CHANNEL       = 3;
-    public const int FOURTYFOUR_POINT_ONE = 0;
-    public const int FOURTYEIGHT          = 1;
-    public const int THIRTYTWO            = 2;
-
-    #endregion constants
 }

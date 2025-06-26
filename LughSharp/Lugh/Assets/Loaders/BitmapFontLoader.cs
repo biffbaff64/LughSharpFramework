@@ -148,14 +148,14 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
     }
 
     // ========================================================================
-    
+
     #region dispose pattern
 
     /// <inheritdoc />
     public void Dispose()
     {
         Dispose( true );
-        
+
         GC.SuppressFinalize( this );
     }
 

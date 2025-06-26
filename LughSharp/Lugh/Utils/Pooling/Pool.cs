@@ -44,7 +44,7 @@ public class Pool< T > where T : notnull
     public int Peak { get; private set; }
 
     // ========================================================================
-    
+
     // ConcurrentBag is thread-safe for add/take operations
     private readonly ConcurrentBag< T > _freeObjects;
 
@@ -57,7 +57,7 @@ public class Pool< T > where T : notnull
     private readonly ConcurrentDictionary< T, bool > _activeObjects;
 
     // ========================================================================
-    
+
     public Pool( NewObjectHandler newObjectFactory,
                  int initialCapacity = DefaultInitialCapacity,
                  int max = int.MaxValue )
@@ -310,4 +310,3 @@ public class Pool< T > where T : notnull
         Peak = Math.Max( Peak, GetTotalPooledAndActiveCount() ); // Or GetFree() ??
     }
 }
-

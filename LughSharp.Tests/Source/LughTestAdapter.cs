@@ -41,7 +41,7 @@ public class LughTestAdapter
     public virtual void Setup()
     {
     }
-    
+
     [TearDown]
     public void TearDown()
     {

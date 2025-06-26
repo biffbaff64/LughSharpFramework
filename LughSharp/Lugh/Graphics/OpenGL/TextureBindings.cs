@@ -133,12 +133,12 @@ public partial class GLBindings
                 for ( var i = 0; i < 20; i++ )
                 {
                     Logger.Debug( $"p[{i}]: {p[ i ]:X}, " +
-                                  $"*(p+i): {*(p+i):X}, " +
+                                  $"*(p+i): {*( p + i ):X}, " +
                                   $"pixmap.PixelData[ {i} ]: {pixmap.PixelData[ i ]:X}" );
                 }
 
                 Logger.Checkpoint();
-                
+
                 if ( enabled )
                 {
                     _glTexImage2D( target,                       // int
@@ -151,7 +151,7 @@ public partial class GLBindings
                                    pixmap.GLDataType,            // int
                                    *p );                         // nint
                 }
-                
+
                 Logger.Checkpoint();
             }
         }
@@ -321,7 +321,7 @@ public partial class GLBindings
     {
         BindTexture( ( int )target, texture );
     }
-    
+
     // ========================================================================
 
     /// <inheritdoc />
@@ -383,7 +383,7 @@ public partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public GLboolean IsTexture( GLuint texture )
+    public GLboolean IsGLTexture( GLuint texture )
     {
         GetDelegateForFunction< PFNGLISTEXTUREPROC >( "glIsTexture", out _glIsTexture );
 

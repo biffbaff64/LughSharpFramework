@@ -127,7 +127,7 @@ public static class SortUtils
     /// <param name="comparison">The comparison delegate to use.</param>
     public static void Sort< T >( List< T >? list, Comparison< T >? comparison )
     {
-        if (( list == null ) || ( comparison == null ))
+        if ( ( list == null ) || ( comparison == null ) )
         {
             return; // Or throw an ArgumentNullException if you prefer
         }
@@ -136,17 +136,16 @@ public static class SortUtils
         var arrayToSort = list.ToArray();
 
         // Create a TimSort instance
-        var timSort = new TimSort<T>();
+        var timSort = new TimSort< T >();
 
         // Create an IComparer<T> from the Comparison<T> delegate
-        var comparer = Comparer<T>.Create(comparison);
+        var comparer = Comparer< T >.Create( comparison );
 
         // Perform the sort on the array
-        timSort.DoSort(arrayToSort, comparer, 0, arrayToSort.Length);
+        timSort.DoSort( arrayToSort, comparer, 0, arrayToSort.Length );
 
         // Copy the sorted array back to the List
         list.Clear();
-        list.AddRange(arrayToSort);
+        list.AddRange( arrayToSort );
     }
 }
-

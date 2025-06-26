@@ -43,7 +43,7 @@ public static class PropertiesUtils
     private const string LINE_SEPARATOR = "\n";
 
     // ========================================================================
-    
+
     /// <summary>
     /// Loads properties from the specified <see cref="StreamReader" /> into the provided dictionary.
     /// </summary>

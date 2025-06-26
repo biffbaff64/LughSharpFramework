@@ -149,7 +149,7 @@ public partial class TextureAtlasData
                     line = IOUtils.NormalizePath( $"{packFile.Directory?.FullName}/{line}" );
 
                     Logger.Debug( $"line: {line}" );
-                    
+
                     page = new Page
                     {
                         TextureFile = new FileInfo( line ),
@@ -225,7 +225,7 @@ public partial class TextureAtlasData
                         }
                     }
 
-                    if ( region is { OriginalWidth : 0, OriginalHeight: 0, } )
+                    if ( region is { OriginalWidth : 0, OriginalHeight: 0 } )
                     {
                         region.OriginalWidth  = region.Width;
                         region.OriginalHeight = region.Height;

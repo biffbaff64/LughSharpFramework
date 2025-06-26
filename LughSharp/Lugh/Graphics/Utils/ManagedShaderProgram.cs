@@ -178,10 +178,10 @@ public class ManagedShaderProgram : ShaderProgram
         for ( uint i = 0; i < *numUniforms; i++ )
         {
             var name = GL.GetActiveUniform( ShaderProgramHandle,
-                                                         i,
-                                                         IGL.GL_ACTIVE_UNIFORM_MAX_LENGTH,
-                                                         out var size,
-                                                         out var type );
+                                            i,
+                                            IGL.GL_ACTIVE_UNIFORM_MAX_LENGTH,
+                                            out var size,
+                                            out var type );
 
             var location = GL.GetUniformLocation( ShaderProgramHandle, name );
 
@@ -205,10 +205,10 @@ public class ManagedShaderProgram : ShaderProgram
         for ( var index = 0; index < *numAttributes; index++ )
         {
             var name = GL.GetActiveAttrib( ShaderProgramHandle,
-                                                        ( uint )index,
-                                                        IGL.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
-                                                        out var size,
-                                                        out var type );
+                                           ( uint )index,
+                                           IGL.GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
+                                           out var size,
+                                           out var type );
 
             var location = GL.GetAttribLocation( ShaderProgramHandle, name );
 

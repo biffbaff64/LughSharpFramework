@@ -27,7 +27,6 @@ namespace LughSharp.Lugh.Utils.Pooling;
 [PublicAPI]
 public class ReflectionPool
 {
-    
 }
 
 // ========================================================================

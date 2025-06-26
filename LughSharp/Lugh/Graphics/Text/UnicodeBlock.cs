@@ -879,7 +879,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "CJK Unified Ideographs Extension B" Unicode
     /// character block.
     /// </summary>
-    public static UnicodeBlock CjkUnifiedIdeographsExtensionB{ get; } =
+    public static UnicodeBlock CjkUnifiedIdeographsExtensionB { get; } =
         new( "CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B",
              "CJK UNIFIED IDEOGRAPHS EXTENSION B",
              "CJKUNIFIEDIDEOGRAPHSEXTENSIONB" );
@@ -887,7 +887,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "CJK Compatibility Ideographs Supplement" Unicode character block.
     /// </summary>
-    public static UnicodeBlock CjkCompatibilityIdeographsSupplement{ get; } =
+    public static UnicodeBlock CjkCompatibilityIdeographsSupplement { get; } =
         new( "CJK_COMPATIBILITY_IDEOGRAPHS_Supplement",
              "CJK COMPATIBILITY IDEOGRAPHS Supplement",
              "CJKCOMPATIBILITYIDEOGRAPHSSupplement" );
@@ -901,7 +901,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Variation Selectors Supplement" Unicode character
     /// block.
     /// </summary>
-    public static UnicodeBlock VariationSelectorsSupplement{ get; } =
+    public static UnicodeBlock VariationSelectorsSupplement { get; } =
         new( "VARIATION_SELECTORS_Supplement",
              "VARIATION SELECTORS Supplement",
              "VARIATIONSELECTORSSupplement" );
@@ -910,7 +910,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Supplementary Private Use Area-A" Unicode character
     /// block.
     /// </summary>
-    public static UnicodeBlock SupplementaryPrivateUseAreaA{ get; } =
+    public static UnicodeBlock SupplementaryPrivateUseAreaA { get; } =
         new( "SupplementARY_PRIVATE_USE_AREA_A",
              "SupplementARY PRIVATE USE AREA-A",
              "SupplementARYPRIVATEUSEAREA-A" );
@@ -919,7 +919,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Supplementary Private Use Area-B" Unicode character
     /// block.
     /// </summary>
-    public static UnicodeBlock SupplementaryPrivateUseAreaB{ get; } =
+    public static UnicodeBlock SupplementaryPrivateUseAreaB { get; } =
         new( "SupplementARY_PRIVATE_USE_AREA_B",
              "SupplementARY PRIVATE USE AREA-B",
              "SupplementARYPRIVATEUSEAREA-B" );
@@ -929,7 +929,7 @@ public class UnicodeBlock : Subset
     /// This block represents codepoint values in the high surrogate
     /// range: U+D800 through U+DB7F
     /// </summary>
-    public static UnicodeBlock HighSurrogates{ get; } =
+    public static UnicodeBlock HighSurrogates { get; } =
         new( "HIGH_SURROGATES",
              "HIGH SURROGATES",
              "HIGHSURROGATES" );
@@ -940,7 +940,7 @@ public class UnicodeBlock : Subset
     /// This block represents codepoint values in the private use high
     /// surrogate range: U+DB80 through U+DBFF
     /// </summary>
-    public static UnicodeBlock HighPrivateUseSurrogates{ get; } =
+    public static UnicodeBlock HighPrivateUseSurrogates { get; } =
         new( "HIGH_PRIVATE_USE_SURROGATES",
              "HIGH PRIVATE USE SURROGATES",
              "HIGHPRIVATEUSESURROGATES" );
@@ -950,7 +950,7 @@ public class UnicodeBlock : Subset
     /// This block represents codepoint values in the low surrogate
     /// range: U+DC00 through U+DFFF
     /// </summary>
-    public static UnicodeBlock LowSurrogates{ get; } =
+    public static UnicodeBlock LowSurrogates { get; } =
         new( "LOW_SURROGATES",
              "LOW SURROGATES",
              "LOWSURROGATES" );
@@ -958,7 +958,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Arabic Supplement" Unicode character block.
     /// </summary>
-    public static UnicodeBlock ArabicSupplement{ get; } =
+    public static UnicodeBlock ArabicSupplement { get; } =
         new( "ARABIC_Supplement",
              "ARABIC Supplement",
              "ARABICSupplement" );
@@ -981,7 +981,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Ethiopic Supplement" Unicode character block.
     /// </summary>
-    public static UnicodeBlock EthiopicSupplement{ get; } =
+    public static UnicodeBlock EthiopicSupplement { get; } =
         new( "ETHIOPIC_Supplement",
              "ETHIOPIC Supplement",
              "ETHIOPICSupplement" );
@@ -990,7 +990,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Unified Canadian Aboriginal Syllabics Extended"
     /// Unicode character block.
     /// </summary>
-    public static UnicodeBlock UnifiedCanadianAboriginalSyllabicsExtended{ get; } =
+    public static UnicodeBlock UnifiedCanadianAboriginalSyllabicsExtended { get; } =
         new( "UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_Extended",
              "UNIFIED CANADIAN ABORIGINAL SYLLABICS Extended",
              "UNIFIEDCANADIANABORIGINALSYLLABICSExtended" );
@@ -998,7 +998,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "New Tai Lue" Unicode character block.
     /// </summary>
-    public static UnicodeBlock NewTaiLue{ get; } =
+    public static UnicodeBlock NewTaiLue { get; } =
         new( "NEW_TAI_LUE",
              "NEW TAI LUE",
              "NEWTAILUE" );
@@ -1011,7 +1011,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Tai Tham" Unicode character block.
     /// </summary>
-    public static UnicodeBlock TaiTham{ get; } =
+    public static UnicodeBlock TaiTham { get; } =
         new( "TAI_THAM",
              "TAI THAM",
              "TAITHAM" );
@@ -1039,7 +1039,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Ol Chiki" Unicode character block.
     /// </summary>
-    public static UnicodeBlock OlChiki{ get; } =
+    public static UnicodeBlock OlChiki { get; } =
         new( "OL_CHIKI",
              "OL CHIKI",
              "OLCHIKI" );
@@ -1047,7 +1047,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Vedic Extensions" Unicode character block.
     /// </summary>
-    public static UnicodeBlock VedicExtensions{ get; } =
+    public static UnicodeBlock VedicExtensions { get; } =
         new( "VEDIC_EXTENSIONS",
              "VEDIC EXTENSIONS",
              "VEDICEXTENSIONS" );
@@ -1056,7 +1056,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Phonetic Extensions Supplement" Unicode character
     /// block.
     /// </summary>
-    public static UnicodeBlock PhoneticExtensionsSupplement{ get; } =
+    public static UnicodeBlock PhoneticExtensionsSupplement { get; } =
         new( "PHONETIC_EXTENSIONS_Supplement",
              "PHONETIC EXTENSIONS Supplement",
              "PHONETICEXTENSIONSSupplement" );
@@ -1065,7 +1065,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Combining Diacritical Marks Supplement" Unicode
     /// character block.
     /// </summary>
-    public static UnicodeBlock CombiningDiacriticalMarksSupplement{ get; } =
+    public static UnicodeBlock CombiningDiacriticalMarksSupplement { get; } =
         new( "COMBINING_DIACRITICAL_MARKS_Supplement",
              "COMBINING DIACRITICAL MARKS Supplement",
              "COMBININGDIACRITICALMARKSSupplement" );
@@ -1078,7 +1078,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Latin Extended-C" Unicode character block.
     /// </summary>
-    public static UnicodeBlock LatinExtendedC{ get; } =
+    public static UnicodeBlock LatinExtendedC { get; } =
         new( "Latin_Extended_C",
              "Latin Extended-C",
              "LatinExtended-C" );
@@ -1091,7 +1091,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Georgian Supplement" Unicode character block.
     /// </summary>
-    public static UnicodeBlock GeorgianSupplement{ get; } =
+    public static UnicodeBlock GeorgianSupplement { get; } =
         new( "GEORGIAN_Supplement",
              "GEORGIAN Supplement",
              "GEORGIANSupplement" );
@@ -1104,7 +1104,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Ethiopic Extended" Unicode character block.
     /// </summary>
-    public static UnicodeBlock EthiopicExtended{ get; } =
+    public static UnicodeBlock EthiopicExtended { get; } =
         new( "ETHIOPIC_Extended",
              "ETHIOPIC Extended",
              "ETHIOPICExtended" );
@@ -1112,7 +1112,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Cyrillic Extended-A" Unicode character block.
     /// </summary>
-    public static UnicodeBlock CyrillicExtendedA{ get; } =
+    public static UnicodeBlock CyrillicExtendedA { get; } =
         new( "Cyrillic_Extended_A",
              "Cyrillic Extended-A",
              "CyrillicExtended-A" );
@@ -1120,7 +1120,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Supplemental Punctuation" Unicode character block.
     /// </summary>
-    public static UnicodeBlock SupplementalPunctuation{ get; } =
+    public static UnicodeBlock SupplementalPunctuation { get; } =
         new( "SupplementAL_PUNCTUATION",
              "SupplementAL PUNCTUATION",
              "SupplementALPUNCTUATION" );
@@ -1128,7 +1128,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "CJK Strokes" Unicode character block.
     /// </summary>
-    public static UnicodeBlock CjkStrokes{ get; } =
+    public static UnicodeBlock CjkStrokes { get; } =
         new( "CJK_STROKES",
              "CJK STROKES",
              "CJKSTROKES" );
@@ -1146,7 +1146,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Cyrillic Extended-B" Unicode character block.
     /// </summary>
-    public static UnicodeBlock CyrillicExtendedB{ get; } =
+    public static UnicodeBlock CyrillicExtendedB { get; } =
         new( "Cyrillic_Extended_B",
              "Cyrillic Extended-B",
              "CyrillicExtended-B" );
@@ -1159,7 +1159,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Modifier Tone Letters" Unicode character block.
     /// </summary>
-    public static UnicodeBlock ModifierToneLetters{ get; } =
+    public static UnicodeBlock ModifierToneLetters { get; } =
         new( "MODIFIER_TONE_LETTERS",
              "MODIFIER TONE LETTERS",
              "MODIFIERTONELETTERS" );
@@ -1167,7 +1167,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Latin Extended-D" Unicode character block.
     /// </summary>
-    public static UnicodeBlock LatinExtendedD{ get; } =
+    public static UnicodeBlock LatinExtendedD { get; } =
         new( "Latin_Extended_D",
              "Latin Extended-D",
              "LatinExtended-D" );
@@ -1175,7 +1175,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Syloti Nagri" Unicode character block.
     /// </summary>
-    public static UnicodeBlock SylotiNagri{ get; } =
+    public static UnicodeBlock SylotiNagri { get; } =
         new( "SYLOTI_NAGRI",
              "SYLOTI NAGRI",
              "SYLOTINAGRI" );
@@ -1183,7 +1183,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Common Indic Number Forms" Unicode character block.
     /// </summary>
-    public static UnicodeBlock CommonIndicNumberForms{ get; } =
+    public static UnicodeBlock CommonIndicNumberForms { get; } =
         new( "COMMON_INDIC_NUMBER_FORMS",
              "COMMON INDIC NUMBER FORMS",
              "COMMONINDICNUMBERFORMS" );
@@ -1191,7 +1191,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Phags-pa" Unicode character block.
     /// </summary>
-    public static UnicodeBlock PhagsPa{ get; } =
+    public static UnicodeBlock PhagsPa { get; } =
         new( "PHAGS_PA",
              "PHAGS-PA" );
 
@@ -1203,7 +1203,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Devanagari Extended" Unicode character block.
     /// </summary>
-    public static UnicodeBlock DevanagariExtended{ get; } =
+    public static UnicodeBlock DevanagariExtended { get; } =
         new( "DEVANAGARI_Extended",
              "DEVANAGARI Extended",
              "DEVANAGARIExtended" );
@@ -1211,7 +1211,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Kayah Li" Unicode character block.
     /// </summary>
-    public static UnicodeBlock KayahLi{ get; } =
+    public static UnicodeBlock KayahLi { get; } =
         new( "KAYAH_LI",
              "KAYAH LI",
              "KAYAHLI" );
@@ -1224,7 +1224,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Hangul Jamo Extended-A" Unicode character block.
     /// </summary>
-    public static UnicodeBlock HangulJamoExtendedA{ get; } =
+    public static UnicodeBlock HangulJamoExtendedA { get; } =
         new( "HANGUL_JAMO_Extended_A",
              "HANGUL JAMO Extended-A",
              "HANGULJAMOExtended-A" );
@@ -1242,7 +1242,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Myanmar Extended-A" Unicode character block.
     /// </summary>
-    public static UnicodeBlock MyanmarExtendedA{ get; } =
+    public static UnicodeBlock MyanmarExtendedA { get; } =
         new( "MYANMAR_Extended_A",
              "MYANMAR Extended-A",
              "MYANMARExtended-A" );
@@ -1250,7 +1250,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Tai Viet" Unicode character block.
     /// </summary>
-    public static UnicodeBlock TaiViet{ get; } =
+    public static UnicodeBlock TaiViet { get; } =
         new( "TAI_VIET",
              "TAI VIET",
              "TAIVIET" );
@@ -1258,7 +1258,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Ethiopic Extended-A" Unicode character block.
     /// </summary>
-    public static UnicodeBlock EthiopicExtendedA{ get; } =
+    public static UnicodeBlock EthiopicExtendedA { get; } =
         new( "ETHIOPIC_Extended_A",
              "ETHIOPIC Extended-A",
              "ETHIOPICExtended-A" );
@@ -1266,7 +1266,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Meetei Mayek" Unicode character block.
     /// </summary>
-    public static UnicodeBlock MeeteiMayek{ get; } =
+    public static UnicodeBlock MeeteiMayek { get; } =
         new( "MEETEI_MAYEK",
              "MEETEI MAYEK",
              "MEETEIMAYEK" );
@@ -1274,7 +1274,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Hangul Jamo Extended-B" Unicode character block.
     /// </summary>
-    public static UnicodeBlock HangulJamoExtendedB{ get; } =
+    public static UnicodeBlock HangulJamoExtendedB { get; } =
         new( "HANGUL_JAMO_Extended_B",
              "HANGUL JAMO Extended-B",
              "HANGULJAMOExtended-B" );
@@ -1282,7 +1282,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Vertical Forms" Unicode character block.
     /// </summary>
-    public static UnicodeBlock VerticalForms{ get; } =
+    public static UnicodeBlock VerticalForms { get; } =
         new( "VERTICAL_FORMS",
              "VERTICAL FORMS",
              "VERTICALFORMS" );
@@ -1290,7 +1290,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Ancient Greek Numbers" Unicode character block.
     /// </summary>
-    public static UnicodeBlock AncientGreekNumbers{ get; } =
+    public static UnicodeBlock AncientGreekNumbers { get; } =
         new( "ANCIENT_GREEK_NUMBERS",
              "ANCIENT GREEK NUMBERS",
              "ANCIENTGREEKNUMBERS" );
@@ -1298,7 +1298,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Ancient Symbols" Unicode character block.
     /// </summary>
-    public static UnicodeBlock AncientSymbols{ get; } =
+    public static UnicodeBlock AncientSymbols { get; } =
         new( "ANCIENT_SYMBOLS",
              "ANCIENT SYMBOLS",
              "ANCIENTSYMBOLS" );
@@ -1306,7 +1306,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Phaistos Disc" Unicode character block.
     /// </summary>
-    public static UnicodeBlock PhaistosDisc{ get; } =
+    public static UnicodeBlock PhaistosDisc { get; } =
         new( "PHAISTOS_DISC",
              "PHAISTOS DISC",
              "PHAISTOSDISC" );
@@ -1324,7 +1324,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Old Persian" Unicode character block.
     /// </summary>
-    public static UnicodeBlock OldPersian{ get; } =
+    public static UnicodeBlock OldPersian { get; } =
         new( "OLD_PERSIAN",
              "OLD PERSIAN",
              "OLDPERSIAN" );
@@ -1332,7 +1332,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Imperial Aramaic" Unicode character block.
     /// </summary>
-    public static UnicodeBlock ImperialAramaic{ get; } =
+    public static UnicodeBlock ImperialAramaic { get; } =
         new( "IMPERIAL_ARAMAIC",
              "IMPERIAL ARAMAIC",
              "IMPERIALARAMAIC" );
@@ -1355,7 +1355,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Old South Arabian" Unicode character block.
     /// </summary>
-    public static UnicodeBlock OldSouthArabian{ get; } =
+    public static UnicodeBlock OldSouthArabian { get; } =
         new( "OLD_SOUTH_ARABIAN",
              "OLD SOUTH ARABIAN",
              "OLDSOUTHARABIAN" );
@@ -1368,7 +1368,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Inscriptional Parthian" Unicode character block.
     /// </summary>
-    public static UnicodeBlock InscriptionalParthian{ get; } =
+    public static UnicodeBlock InscriptionalParthian { get; } =
         new( "INSCRIPTIONAL_PARTHIAN",
              "INSCRIPTIONAL PARTHIAN",
              "INSCRIPTIONALPARTHIAN" );
@@ -1376,7 +1376,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Inscriptional Pahlavi" Unicode character block.
     /// </summary>
-    public static UnicodeBlock InscriptionalPahlavi{ get; } =
+    public static UnicodeBlock InscriptionalPahlavi { get; } =
         new( "INSCRIPTIONAL_PAHLAVI",
              "INSCRIPTIONAL PAHLAVI",
              "INSCRIPTIONALPAHLAVI" );
@@ -1384,7 +1384,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Old Turkic" Unicode character block.
     /// </summary>
-    public static UnicodeBlock OldTurkic{ get; } =
+    public static UnicodeBlock OldTurkic { get; } =
         new( "OLD_TURKIC",
              "OLD TURKIC",
              "OLDTURKIC" );
@@ -1392,7 +1392,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Rumi Numeral Symbols" Unicode character block.
     /// </summary>
-    public static UnicodeBlock RumiNumeralSymbols{ get; } =
+    public static UnicodeBlock RumiNumeralSymbols { get; } =
         new( "RUMI_NUMERAL_SYMBOLS",
              "RUMI NUMERAL SYMBOLS",
              "RUMINUMERALSYMBOLS" );
@@ -1416,7 +1416,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Cuneiform Numbers and Punctuation" Unicode
     /// character block.
     /// </summary>
-    public static UnicodeBlock CuneiformNumbersAndPunctuation{ get; } =
+    public static UnicodeBlock CuneiformNumbersAndPunctuation { get; } =
         new( "CUNEIFORM_NUMBERS_AND_PUNCTUATION",
              "CUNEIFORM NUMBERS AND PUNCTUATION",
              "CUNEIFORMNUMBERSANDPUNCTUATION" );
@@ -1424,7 +1424,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Egyptian Hieroglyphs" Unicode character block.
     /// </summary>
-    public static UnicodeBlock EgyptianHieroglyphs{ get; } =
+    public static UnicodeBlock EgyptianHieroglyphs { get; } =
         new( "EGYPTIAN_HIEROGLYPHS",
              "EGYPTIAN HIEROGLYPHS",
              "EGYPTIANHIEROGLYPHS" );
@@ -1432,7 +1432,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Bamum Supplement" Unicode character block.
     /// </summary>
-    public static UnicodeBlock BamumSupplement{ get; } =
+    public static UnicodeBlock BamumSupplement { get; } =
         new( "BAMUM_Supplement",
              "BAMUM Supplement",
              "BAMUMSupplement" );
@@ -1440,7 +1440,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Kana Supplement" Unicode character block.
     /// </summary>
-    public static UnicodeBlock KanaSupplement{ get; } =
+    public static UnicodeBlock KanaSupplement { get; } =
         new( "KANA_Supplement",
              "KANA Supplement",
              "KANASupplement" );
@@ -1449,7 +1449,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Ancient Greek Musical Notation" Unicode character
     /// block.
     /// </summary>
-    public static UnicodeBlock AncientGreekMusicalNotation{ get; } =
+    public static UnicodeBlock AncientGreekMusicalNotation { get; } =
         new( "ANCIENT_GREEK_MUSICAL_NOTATION",
              "ANCIENT GREEK MUSICAL NOTATION",
              "ANCIENTGREEKMUSICALNOTATION" );
@@ -1457,7 +1457,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Counting Rod Numerals" Unicode character block.
     /// </summary>
-    public static UnicodeBlock CountingRodNumerals{ get; } =
+    public static UnicodeBlock CountingRodNumerals { get; } =
         new( "COUNTING_ROD_NUMERALS",
              "COUNTING ROD NUMERALS",
              "COUNTINGRODNUMERALS" );
@@ -1465,7 +1465,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Mahjong Tiles" Unicode character block.
     /// </summary>
-    public static UnicodeBlock MahjongTiles{ get; } =
+    public static UnicodeBlock MahjongTiles { get; } =
         new( "MAHJONG_TILES",
              "MAHJONG TILES",
              "MAHJONGTILES" );
@@ -1473,7 +1473,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Domino Tiles" Unicode character block.
     /// </summary>
-    public static UnicodeBlock DominoTiles{ get; } =
+    public static UnicodeBlock DominoTiles { get; } =
         new( "DOMINO_TILES",
              "DOMINO TILES",
              "DOMINOTILES" );
@@ -1481,7 +1481,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Playing Cards" Unicode character block.
     /// </summary>
-    public static UnicodeBlock PlayingCards{ get; } =
+    public static UnicodeBlock PlayingCards { get; } =
         new( "PLAYING_CARDS",
              "PLAYING CARDS",
              "PLAYINGCARDS" );
@@ -1490,7 +1490,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Enclosed Alphanumeric Supplement" Unicode character
     /// block.
     /// </summary>
-    public static UnicodeBlock EnclosedAlphanumericSupplement{ get; } =
+    public static UnicodeBlock EnclosedAlphanumericSupplement { get; } =
         new( "ENCLOSED_ALPHANUMERIC_Supplement",
              "ENCLOSED ALPHANUMERIC Supplement",
              "ENCLOSEDALPHANUMERICSupplement" );
@@ -1499,7 +1499,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Enclosed Ideographic Supplement" Unicode character
     /// block.
     /// </summary>
-    public static UnicodeBlock EnclosedIdeographicSupplement{ get; } =
+    public static UnicodeBlock EnclosedIdeographicSupplement { get; } =
         new( "ENCLOSED_IDEOGRAPHIC_Supplement",
              "ENCLOSED IDEOGRAPHIC Supplement",
              "ENCLOSEDIDEOGRAPHICSupplement" );
@@ -1508,7 +1508,7 @@ public class UnicodeBlock : Subset
     /// Constant for the "Miscellaneous Symbols And Pictographs" Unicode
     /// character block.
     /// </summary>
-    public static UnicodeBlock MiscellaneousSymbolsAndPictographs{ get; } =
+    public static UnicodeBlock MiscellaneousSymbolsAndPictographs { get; } =
         new( "MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS",
              "MISCELLANEOUS SYMBOLS AND PICTOGRAPHS",
              "MISCELLANEOUSSYMBOLSANDPICTOGRAPHS" );
@@ -1521,7 +1521,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Transport And Map Symbols" Unicode character block.
     /// </summary>
-    public static UnicodeBlock TransportAndMapSymbols{ get; } =
+    public static UnicodeBlock TransportAndMapSymbols { get; } =
         new( "TRANSPORT_AND_MAP_SYMBOLS",
              "TRANSPORT AND MAP SYMBOLS",
              "TRANSPORTANDMAPSYMBOLS" );
@@ -1529,7 +1529,7 @@ public class UnicodeBlock : Subset
     /// <summary>
     /// Constant for the "Alchemical Symbols" Unicode character block.
     /// </summary>
-    public static UnicodeBlock AlchemicalSymbols{ get; } =
+    public static UnicodeBlock AlchemicalSymbols { get; } =
         new( "ALCHEMICAL_SYMBOLS",
              "ALCHEMICAL SYMBOLS",
              "ALCHEMICALSYMBOLS" );
@@ -1615,13 +1615,13 @@ public class UnicodeBlock : Subset
     /// Constant for the "Arabic Mathematical Alphabetic Symbols" Unicode
     /// character block.
     /// </summary>
-    public static UnicodeBlock ArabicMathematicalAlphabeticSymbols{ get; } =
+    public static UnicodeBlock ArabicMathematicalAlphabeticSymbols { get; } =
         new( "ARABIC_MATHEMATICAL_ALPHABETIC_SYMBOLS",
              "ARABIC MATHEMATICAL ALPHABETIC SYMBOLS",
              "ARABICMATHEMATICALALPHABETICSYMBOLS" );
 
     // ========================================================================
-    
+
     private static int[] _blockStarts =
     [
         0x0000,   // 0000..007F; Basic Latin
@@ -1883,7 +1883,7 @@ public class UnicodeBlock : Subset
     ];
 
     // ========================================================================
-    
+
     private static UnicodeBlock?[] _blocks =
     [
         BasicLatin,

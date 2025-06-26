@@ -61,4 +61,3 @@ public class AssetManagerTest
         Logger.Debug( "Finished!", true );
     }
 }
-

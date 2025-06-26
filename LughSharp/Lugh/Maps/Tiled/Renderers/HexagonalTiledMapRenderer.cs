@@ -243,7 +243,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
             var region = tile.TextureRegion;
 
             Guard.ThrowIfNull( region.Texture );
-            
+
             var x1 = x + ( tile.OffsetX * UnitScale );
             var y1 = y + ( tile.OffsetY * UnitScale );
             var x2 = x1 + ( region.RegionWidth * UnitScale );

@@ -53,7 +53,9 @@ public abstract class ImageBase
 
     // Common utility methods
     public bool IsInBounds( int x, int y )
-        => ( x >= 0 ) && ( x < Width ) && ( y >= 0 ) && ( y < Height );
+    {
+        return ( x >= 0 ) && ( x < Width ) && ( y >= 0 ) && ( y < Height );
+    }
 }
 
 // ========================================================================

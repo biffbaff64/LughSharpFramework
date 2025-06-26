@@ -54,6 +54,7 @@ public class AbstractFiles : IFiles
     /// <summary>
     /// Convenience method that returns a <see cref="PathTypes.Classpath" /> file handle.
     /// </summary>
+
     //TODO: Make obsolete?
     public virtual FileInfo Classpath( string path )
     {
@@ -67,6 +68,7 @@ public class AbstractFiles : IFiles
     /// <summary>
     /// Convenience method that returns a <see cref="PathTypes.Absolute" /> file handle.
     /// </summary>
+
     //TODO: Make obsolete?
     public virtual FileInfo Absolute( string path )
     {
@@ -83,7 +85,7 @@ public class AbstractFiles : IFiles
     public virtual FileInfo Assembly( string path )
     {
         path = IOUtils.NormalizePath( path );
-        
+
         var assemblyPath = GetAssemblyStoragePath();
         var prefix       = path.Contains( assemblyPath ) ? "" : assemblyPath;
 

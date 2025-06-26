@@ -73,4 +73,3 @@ public class PNGFormatStructs
         public byte[] ChunkType { get; set; } // 4 bytes 'I', 'D', 'A', 'T'
     }
 }
-

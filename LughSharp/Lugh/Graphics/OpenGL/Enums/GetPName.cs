@@ -27,39 +27,39 @@ namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum GetPName
 {
-    AliasedLineWidthRange    = IGL.GL_ALIASED_LINE_WIDTH_RANGE,
-    AliasedPointSizeRange    = IGL.GL_ALIASED_POINT_SIZE_RANGE,
+    AliasedLineWidthRange = IGL.GL_ALIASED_LINE_WIDTH_RANGE,
+    AliasedPointSizeRange = IGL.GL_ALIASED_POINT_SIZE_RANGE,
 
     // ------------------------------------------------------------------------
 
-    AlphaBits                = IGL.GL_ALPHA_BITS,
-    BlueBits                 = IGL.GL_BLUE_BITS,
-    GreenBits                = IGL.GL_GREEN_BITS,
-    RedBits                  = IGL.GL_RED_BITS,
+    AlphaBits = IGL.GL_ALPHA_BITS,
+    BlueBits  = IGL.GL_BLUE_BITS,
+    GreenBits = IGL.GL_GREEN_BITS,
+    RedBits   = IGL.GL_RED_BITS,
 
     // ------------------------------------------------------------------------
-    
-    ColorClearValue          = IGL.GL_COLOR_CLEAR_VALUE,
-    ColorWriteMask           = IGL.GL_COLOR_WRITEMASK,
-    CullFaceMode             = IGL.GL_CULL_FACE_MODE,
-    DepthBits                = IGL.GL_DEPTH_BITS,
-    DepthClearValue          = IGL.GL_DEPTH_CLEAR_VALUE,
-    DepthFunc                = IGL.GL_DEPTH_FUNC,
-    DepthRange               = IGL.GL_DEPTH_RANGE,
-    DepthWriteMask           = IGL.GL_DEPTH_WRITEMASK,
-    FrontFace                = IGL.GL_FRONT_FACE,
-    LineWidth                = IGL.GL_LINE_WIDTH,
-    MaxTextureSize           = IGL.GL_MAX_TEXTURE_SIZE,
-    MaxViewportDims          = IGL.GL_MAX_VIEWPORT_DIMS,
-    PackAlignment            = IGL.GL_PACK_ALIGNMENT,
-    PolygonOffsetFactor      = IGL.GL_POLYGON_OFFSET_FACTOR,
-    PolygonOffsetUnits       = IGL.GL_POLYGON_OFFSET_UNITS,
-    SampleBuffers            = IGL.GL_SAMPLE_BUFFERS,
-    SampleCoverageInvert     = IGL.GL_SAMPLE_COVERAGE_INVERT,
-    SampleCoverageValue      = IGL.GL_SAMPLE_COVERAGE_VALUE,
-    Samples                  = IGL.GL_SAMPLES,
-    ScissorBox               = IGL.GL_SCISSOR_BOX,
-    
+
+    ColorClearValue      = IGL.GL_COLOR_CLEAR_VALUE,
+    ColorWriteMask       = IGL.GL_COLOR_WRITEMASK,
+    CullFaceMode         = IGL.GL_CULL_FACE_MODE,
+    DepthBits            = IGL.GL_DEPTH_BITS,
+    DepthClearValue      = IGL.GL_DEPTH_CLEAR_VALUE,
+    DepthFunc            = IGL.GL_DEPTH_FUNC,
+    DepthRange           = IGL.GL_DEPTH_RANGE,
+    DepthWriteMask       = IGL.GL_DEPTH_WRITEMASK,
+    FrontFace            = IGL.GL_FRONT_FACE,
+    LineWidth            = IGL.GL_LINE_WIDTH,
+    MaxTextureSize       = IGL.GL_MAX_TEXTURE_SIZE,
+    MaxViewportDims      = IGL.GL_MAX_VIEWPORT_DIMS,
+    PackAlignment        = IGL.GL_PACK_ALIGNMENT,
+    PolygonOffsetFactor  = IGL.GL_POLYGON_OFFSET_FACTOR,
+    PolygonOffsetUnits   = IGL.GL_POLYGON_OFFSET_UNITS,
+    SampleBuffers        = IGL.GL_SAMPLE_BUFFERS,
+    SampleCoverageInvert = IGL.GL_SAMPLE_COVERAGE_INVERT,
+    SampleCoverageValue  = IGL.GL_SAMPLE_COVERAGE_VALUE,
+    Samples              = IGL.GL_SAMPLES,
+    ScissorBox           = IGL.GL_SCISSOR_BOX,
+
     // ------------------------------------------------------------------------
 
     StencilBackFail          = IGL.GL_STENCIL_BACK_FAIL,
@@ -78,13 +78,13 @@ public enum GetPName
     StencilRef               = IGL.GL_STENCIL_REF,
     StencilValueMask         = IGL.GL_STENCIL_VALUE_MASK,
     StencilWriteMask         = IGL.GL_STENCIL_WRITEMASK,
-    
+
     // ------------------------------------------------------------------------
 
-    SubpixelBits             = IGL.GL_SUBPIXEL_BITS,
-    TextureBinding2D         = IGL.GL_TEXTURE_BINDING_2D,
-    UnpackAlignment          = IGL.GL_UNPACK_ALIGNMENT,
-    Viewport                 = IGL.GL_VIEWPORT,
+    SubpixelBits     = IGL.GL_SUBPIXEL_BITS,
+    TextureBinding2D = IGL.GL_TEXTURE_BINDING_2D,
+    UnpackAlignment  = IGL.GL_UNPACK_ALIGNMENT,
+    Viewport         = IGL.GL_VIEWPORT,
 }
 
 // ========================================================================

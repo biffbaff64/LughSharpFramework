@@ -152,7 +152,8 @@ public class PolygonSpriteBatch : IPolygonBatch
                           maxTriangles * 3,
                           new VertexAttribute( ( int )VertexConstants.Usage.POSITION, 4, ShaderProgram.POSITION_ATTRIBUTE ),
                           new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE ),
-                          new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0" ) );
+                          new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, 2,
+                                               ShaderProgram.TEXCOORD_ATTRIBUTE + "0" ) );
 
         _vertices  = new float[ maxVertices * Sprite.VERTEX_SIZE ];
         _triangles = new short[ maxTriangles * 3 ];

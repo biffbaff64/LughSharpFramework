@@ -1590,8 +1590,9 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="texture">Specifies the name of a texture.</param>
     void BindTexture( int target, uint texture );
+
     void BindTexture( TextureTarget target, uint texture );
-    
+
     /// <summary>
     /// Delete named textures.
     /// </summary>
@@ -1633,7 +1634,7 @@ public partial interface IGLBindings
     /// <see langword="true" /> if <paramref name="texture" /> is currently the name of a texture. Otherwise,
     /// <see langword="false" /> is returned.
     /// </returns>
-    bool IsTexture( uint texture );
+    bool IsGLTexture( uint texture );
 
     /// <summary>
     /// Render primitives from array data.

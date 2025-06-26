@@ -9,13 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="NUnit" Version="4.3.2" />
+        <PackageReference Include="NUnit" Version="4.3.2"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DesktopGLBackend\DesktopGLBackend.csproj" />
-      <ProjectReference Include="..\LughSharp.Extensions\LughSharp.Extensions.csproj" />
-      <ProjectReference Include="..\LughSharp\LughSharp.csproj" />
+        <ProjectReference Include="..\DesktopGLBackend\DesktopGLBackend.csproj"/>
+        <ProjectReference Include="..\LughSharp.Extensions\LughSharp.Extensions.csproj"/>
+        <ProjectReference Include="..\LughSharp\LughSharp.csproj"/>
     </ItemGroup>
 
 </Project>

@@ -32,7 +32,6 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace Extensions.Source.Tools.ImagePacker;
 
-[SupportedOSPlatform( "windows" )]
 [PublicAPI]
 public class TexturePackerFileProcessor //: IFileProcessor
 {
@@ -76,6 +75,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
                 return string.Compare( o1.InputFile?.Name, o2.InputFile?.Name, StringComparison.Ordinal );
             };
+
         set => throw new NotImplementedException();
     }
 
@@ -110,27 +110,27 @@ public class TexturePackerFileProcessor //: IFileProcessor
                                        string packFileName,
                                        TexturePacker.AbstractProgressListener? progress = null )
     {
-        this.InputRegex       = [ ];
-        this.OutputFilesList  = [ ];
-        this.OutputSuffix     = string.Empty;
-        this.FlattenOutput    = false;
-        this.Recursive        = true;
-        this._defaultSettings = packerSettings ?? new TexturePacker.Settings();
-        this.ProgressListener = progress;
+        InputRegex       = [ ];
+        OutputFilesList  = [ ];
+        OutputSuffix     = string.Empty;
+        FlattenOutput    = false;
+        Recursive        = true;
+        _defaultSettings = packerSettings ?? new TexturePacker.Settings();
+        ProgressListener = progress;
 
         // Strip off the .atlas extension name from the packfile if it has been pre-added.
         packFileName = IOUtils.StripExtension( packFileName, _defaultSettings.AtlasExtension );
 
-        this.PackFileName  = packFileName;
-        this.FlattenOutput = true;
+        PackFileName  = packFileName;
+        FlattenOutput = true;
 
         // Set the default file extensions for processable images.
         AddInputSuffix( ".png", ".jpg", ".jpeg", ".bmp" );
 
         // Sort input files by name to avoid platform-dependent atlas output changes.
-        Comparator = ( ( file1, file2 ) => string.Compare( file1.Name,
-                                                           file2.Name,
-                                                           StringComparison.Ordinal ) );
+        Comparator = ( file1, file2 ) => string.Compare( file1.Name,
+                                                         file2.Name,
+                                                         StringComparison.Ordinal );
     }
 
     // ========================================================================
@@ -141,7 +141,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
     /// <param name="inputRoot"> Directory containing individual images to be packed. </param>
     /// <param name="outputRoot"> Directory where the pack file and page images will be written. </param>
     /// <returns></returns>
-    public virtual List< TexturePackerEntry > Process( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
+    public virtual List< TexturePackerEntry > Process( DirectoryInfo? inputRoot,
+                                                       DirectoryInfo? outputRoot )
     {
         Guard.ThrowIfNull( inputRoot );
 
@@ -157,7 +158,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
         var settingsFiles = settingsProcessor.SettingsFiles;
 
         Logger.Debug( $"Settings files: {settingsFiles.Count}" );
-        
+
         if ( settingsFiles.Count > 0 )
         {
             // Sort parent first.
@@ -197,6 +198,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
         }
 
         Logger.Debug( $"Calling ProcessIO: CountOnly=TRUE" );
+
         // Count the number of texture packer invocations for the
         // ProgressListener to use.
         CountOnly = true;
@@ -204,6 +206,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
         CountOnly = false;
 
         Logger.Debug( $"Calling ProcessIO: CountOnly=FALSE" );
+
         // Do actual processing.
         ProgressListener?.Start( 1 );
         var result = ProcessIO( inputRoot, outputRoot );
@@ -300,7 +303,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
             if ( newOutputDir != null )
             {
-                entry.OutputFileName = ( newOutputDir.FullName.Length == 0 )
+                entry.OutputFileName = newOutputDir.FullName.Length == 0
                     ? outputName
                     : Path.Combine( newOutputDir.FullName, outputName );
             }
@@ -571,6 +574,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
     public virtual List< TexturePackerEntry > ProcessIO( FileSystemInfo? inputFileOrDir,
                                                          DirectoryInfo? outputRoot )
     {
+        Logger.Checkpoint();
+
         if ( inputFileOrDir is not { Exists: true } )
         {
             throw new ArgumentException( $"IFileProcessor#Process: Input file/dir does not " +
@@ -581,14 +586,22 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
         if ( IOUtils.IsFile( inputFileOrDir ) )
         {
+            Logger.Checkpoint();
+
             retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
+            
+            Logger.Checkpoint();
         }
         else
         {
+            Logger.Checkpoint();
+
             var files = new DirectoryInfo( inputFileOrDir.FullName )
                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
 
             retval = Process( files, outputRoot );
+            
+            Logger.Checkpoint();
         }
 
         return retval;
@@ -645,12 +658,19 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
         if ( settings.CombineSubdirectories )
         {
+            Logger.Debug( "Combining subdirectories..." );
+
             // Collect all files under subdirectories except those with a pack.json file.
             // A directory with its own settings can't be combined since combined directories
             // must use the settings of the parent directory.
-            var combiningProcessor = new SettingsCombiningProcessor( inputDir );
+            var combiningProcessor = new SettingsCombiningProcessor( inputDir, this );
 
             files = combiningProcessor.Process( ( DirectoryInfo? )inputDir.InputFile, null ).ToList();
+
+            Logger.Debug( $"files.Count: {files.Count}" );
+            Logger.Debug( $"files[0]: {files[ 0 ].InputFile?.Name}" );
+
+            Logger.Debug( "Combining subdirectories... done" );
         }
 
         if ( files.Count == 0 )
@@ -668,6 +688,10 @@ public class TexturePackerFileProcessor //: IFileProcessor
         // Sort by name using numeric suffix, then alpha.
         files.Sort( ( entry1, entry2 ) =>
         {
+            Logger.Debug( "Sorting files" );
+            Logger.Debug( $"entry1: {entry1.InputFile?.Name}" );
+            Logger.Debug( $"entry2: {entry2.InputFile?.Name}" );
+
             var full1    = entry1.InputFile?.Name;
             var dotIndex = full1?.LastIndexOf( '.' );
 
@@ -777,6 +801,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
             ProgressListener.Message = inputPath!;
         }
 
+        Logger.Debug( $"_rootDirectory: {_rootDirectory.FullName}" );
+
         var packer = NewTexturePacker( _rootDirectory, settings );
 
         foreach ( var file in files )
@@ -868,17 +894,17 @@ public class TexturePackerFileProcessor //: IFileProcessor
     /// <summary>
     /// </summary>
     /// <param name="packer"></param>
-    /// <param name="inputDir"></param>
-    public virtual void Pack( TexturePacker packer, TexturePackerEntry inputDir )
+    /// <param name="texturePackerEntry"></param>
+    public virtual void Pack( TexturePacker packer, TexturePackerEntry texturePackerEntry )
     {
         Logger.Checkpoint();
 
-        if ( inputDir.OutputDirectory == null )
+        if ( texturePackerEntry.OutputDirectory == null )
         {
             throw new GdxRuntimeException( "Cannot perform Pack, output directory is null" );
         }
 
-        packer.Pack( inputDir.OutputDirectory, PackFileName );
+        packer.Pack( texturePackerEntry.OutputDirectory, PackFileName );
     }
 
     /// <summary>

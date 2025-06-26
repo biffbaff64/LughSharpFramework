@@ -406,8 +406,8 @@ public class BinaryHeap< T > where T : BinaryHeapNode
             return "[]";
         }
 
-        BinaryHeapNode[] nodes  = _nodes;
-        var              buffer = new StringBuilder( 32 );
+        var nodes  = _nodes;
+        var buffer = new StringBuilder( 32 );
 
         buffer.Append( '[' );
         buffer.Append( nodes[ 0 ].Value );

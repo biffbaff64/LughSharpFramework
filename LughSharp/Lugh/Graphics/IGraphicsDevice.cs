@@ -125,7 +125,7 @@ public partial interface IGraphicsDevice
     /// This method is typically called on each render loop iteration.
     /// </summary>
     void Update();
-    
+
     /// <summary>
     /// Returns the amount of pixels per logical pixel (point).
     /// This is used for scaling UI elements and text to maintain visual consistency

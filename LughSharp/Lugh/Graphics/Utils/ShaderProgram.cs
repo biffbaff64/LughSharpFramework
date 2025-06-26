@@ -534,7 +534,7 @@ public class ShaderProgram : IDisposable
 
             return;
         }
-        
+
         GL.DisableVertexAttribArray( ( GLuint )location );
     }
 

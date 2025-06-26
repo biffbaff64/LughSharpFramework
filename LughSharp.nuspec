@@ -23,10 +23,10 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="bin\Release\net8.0\LughSharp.dll" target="lib\net8.0" />
-        <file src="bin\Release\net8.0\DesktopGLBackend.dll" target="lib\net8.0" />
-        <file src="bin\Release\net8.0\Extensions.dll" target="lib\net8.0" />
+        <file src="bin\Release\net8.0\LughSharp.dll" target="lib\net8.0"/>
+        <file src="bin\Release\net8.0\DesktopGLBackend.dll" target="lib\net8.0"/>
+        <file src="bin\Release\net8.0\Extensions.dll" target="lib\net8.0"/>
 
-        <file src="runtimes\win-x64\native\gdx2d.dll" target="runtimes\win-x64\native" />
+        <file src="runtimes\win-x64\native\gdx2d.dll" target="runtimes\win-x64\native"/>
     </files>
 </package>

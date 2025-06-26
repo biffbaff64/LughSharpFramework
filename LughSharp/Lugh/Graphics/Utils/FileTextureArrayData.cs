@@ -205,16 +205,16 @@ public class FileTextureArrayData : ITextureArrayData
                     fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
                     {
                         GL.TexSubImage3D( IGL.GL_TEXTURE_2D_ARRAY,
-                                                       0,
-                                                       0,
-                                                       0,
-                                                       i,
-                                                       pixmap.Width,
-                                                       pixmap.Height,
-                                                       1,
-                                                       pixmap.GLInternalPixelFormat,
-                                                       pixmap.GLDataType,
-                                                       ( IntPtr )ptr );
+                                          0,
+                                          0,
+                                          0,
+                                          i,
+                                          pixmap.Width,
+                                          pixmap.Height,
+                                          1,
+                                          pixmap.GLInternalPixelFormat,
+                                          pixmap.GLDataType,
+                                          ( IntPtr )ptr );
                     }
                 }
 

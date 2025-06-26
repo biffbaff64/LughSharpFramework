@@ -705,7 +705,7 @@ public partial class JsonValue : IEnumerable< JsonValue >
     public string PrettyPrint( PrettyPrintSettings settings )
     {
         Logger.Checkpoint();
-        
+
         var buffer = new StringBuilder( 512 );
 
         PrettyPrint( this, buffer, 0, settings );

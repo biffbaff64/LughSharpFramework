@@ -134,7 +134,7 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
         BackBufferHeight = tmpHeight;
 
         Glfw.GetWindowSize( GLWindow.GlfwWindow, out tmpWidth, out tmpHeight );
-        
+
         LogicalWidth  = tmpWidth;
         LogicalHeight = tmpHeight;
 
@@ -434,7 +434,7 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
             Logger.Debug( $"Setting viewport from source: {source}" );
         }
         #endif
-        
+
         if ( ( width == 0 ) || ( height == 0 ) )
         {
             throw new GdxRuntimeException( "Viewport dimensions must be greater than zero!" );
@@ -494,7 +494,7 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
 
         GLWindow.MakeCurrent();
 
-        UpdateViewport( 0, 0, BackBufferWidth, BackBufferHeight, 1);
+        UpdateViewport( 0, 0, BackBufferWidth, BackBufferHeight, 1 );
 
         GLWindow.ApplicationListener.Resize( Width, Height );
         GLWindow.ApplicationListener.Update();

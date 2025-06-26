@@ -416,14 +416,14 @@ public class PixmapPacker : IDisposable
 //            var pixels = image.ByteBuffer;
 
             GL.TexSubImage2D( page.Texture!.GLTarget,
-                                           0,
-                                           rectX,
-                                           rectY,
-                                           rectWidth,
-                                           rectHeight,
-                                           image.GLPixelFormat,
-                                           image.GLDataType,
-                                           image.PixelData );
+                              0,
+                              rectX,
+                              rectY,
+                              rectWidth,
+                              rectHeight,
+                              image.GLPixelFormat,
+                              image.GLDataType,
+                              image.PixelData );
 
 //            image.ByteBuffer = pixels;
         }

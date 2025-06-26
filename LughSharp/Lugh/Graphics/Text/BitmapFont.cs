@@ -73,8 +73,8 @@ public partial class BitmapFont
         set
         {
             _integer = value;
-            
-            if ( Cache != null)
+
+            if ( Cache != null )
             {
                 Cache.UseIntegerPositions = value;
             }
@@ -231,7 +231,7 @@ public partial class BitmapFont
         Flipped             = data.Flipped;
         Data                = data;
         _fileType           = PathTypes.Local;
-        
+
         if ( ( pageRegions == null ) || ( pageRegions.Count == 0 ) )
         {
             if ( data.ImagePaths == null )
@@ -363,53 +363,80 @@ public partial class BitmapFont
     /// </para>
     /// </summary>
     /// <returns>the first texture region</returns>
-    public TextureRegion GetRegion() => _regions.First();
+    public TextureRegion GetRegion()
+    {
+        return _regions.First();
+    }
 
     /// <summary>
     /// Returns the array of TextureRegions that represents each texture page of glyphs.
     /// </summary>
     /// <returns> The array of texture regions; modifying it may produce undesirable results </returns>
-    public List< TextureRegion > GetRegions() => _regions;
+    public List< TextureRegion > GetRegions()
+    {
+        return _regions;
+    }
 
     /// <summary>
     /// Returns the texture page at the given index.
     /// </summary>
-    public TextureRegion GetRegion( int index ) => _regions[ index ];
+    public TextureRegion GetRegion( int index )
+    {
+        return _regions[ index ];
+    }
 
     /// <summary>
     /// Returns the line height, which is the distance from one line of text to the next.
     /// </summary>
-    public float GetLineHeight() => Data.LineHeight;
+    public float GetLineHeight()
+    {
+        return Data.LineHeight;
+    }
 
     /// <summary>
     /// Returns the x-advance of the space character.
     /// </summary>
-    public virtual float GetSpaceXadvance() => Data.SpaceXadvance;
+    public virtual float GetSpaceXadvance()
+    {
+        return Data.SpaceXadvance;
+    }
 
     /// <summary>
     /// Returns the x-height, which is the distance from the top of most lowercase
     /// characters to the baseline.
     /// </summary>
-    public float GetXHeight() => Data.XHeight;
+    public float GetXHeight()
+    {
+        return Data.XHeight;
+    }
 
     /// <summary>
     /// Returns the cap height, which is the distance from the top of most uppercase
     /// characters to the baseline. Since the drawing position is the cap height of
     /// the first line, the cap height can be used to get the location of the baseline.
     /// </summary>
-    public float GetCapHeight() => Data.CapHeight;
+    public float GetCapHeight()
+    {
+        return Data.CapHeight;
+    }
 
     /// <summary>
     /// Returns the ascent, which is the distance from the cap height to the top of
     /// the tallest glyph.
     /// </summary>
-    public float GetAscent() => Data.Ascent;
+    public float GetAscent()
+    {
+        return Data.Ascent;
+    }
 
     /// <summary>
     /// Returns the descent, which is the distance from the bottom of the glyph that
     /// extends the lowest to the baseline. This number is negative.
     /// </summary>
-    public float GetDescent() => Data.Descent;
+    public float GetDescent()
+    {
+        return Data.Descent;
+    }
 
     /// <summary>
     /// Makes the specified glyphs fixed width. This can be useful to make the numbers
@@ -593,7 +620,7 @@ public partial class BitmapFont
     public GlyphLayout? Draw( IBatch batch, string str, float x, float y )
     {
         Guard.ThrowIfNull( Cache );
-        
+
         Cache?.Clear();
 
         var layout = Cache?.AddText( str, x, y );

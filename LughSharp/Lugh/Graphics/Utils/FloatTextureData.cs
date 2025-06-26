@@ -122,14 +122,14 @@ public class FloatTextureData : ITextureData
                 fixed ( void* ptr = &Buffer.ToArray()[ 0 ] )
                 {
                     GL.TexImage2D( target,
-                                                0,
-                                                IGL.GL_RGBA,
-                                                Width,
-                                                Height,
-                                                0,
-                                                IGL.GL_RGBA,
-                                                IGL.GL_FLOAT,
-                                                ( IntPtr )ptr );
+                                   0,
+                                   IGL.GL_RGBA,
+                                   Width,
+                                   Height,
+                                   0,
+                                   IGL.GL_RGBA,
+                                   IGL.GL_FLOAT,
+                                   ( IntPtr )ptr );
                 }
             }
         }
@@ -147,14 +147,14 @@ public class FloatTextureData : ITextureData
                 fixed ( void* ptr = &Buffer.ToArray()[ 0 ] )
                 {
                     GL.TexImage2D( target,
-                                                0,
-                                                _internalFormat,
-                                                Width,
-                                                Height,
-                                                0,
-                                                _format,
-                                                IGL.GL_FLOAT,
-                                                ( IntPtr )ptr );
+                                   0,
+                                   _internalFormat,
+                                   Width,
+                                   Height,
+                                   0,
+                                   _format,
+                                   IGL.GL_FLOAT,
+                                   ( IntPtr )ptr );
                 }
             }
         }

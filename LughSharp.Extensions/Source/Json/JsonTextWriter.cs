@@ -45,7 +45,7 @@ public class JsonTextWriter : TextWriter
     public JsonTextWriter() : this( new StringWriter() )
     {
     }
-    
+
     public JsonTextWriter( TextWriter writer )
     {
         _writer = writer;

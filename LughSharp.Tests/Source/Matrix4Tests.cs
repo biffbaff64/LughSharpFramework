@@ -28,7 +28,6 @@ using NUnit.Framework;
 
 namespace LughSharp.Tests.Source;
 
-
 [TestFixture]
 public class Matrix4Tests
 {
@@ -229,9 +228,9 @@ public class Matrix4Tests
             Assert.That( matrix.Val[ Matrix4.M23 ], Is.EqualTo( 30f ).Within( EPSILON ) );
 
             // Verify scale wasn't affected (length of basis vectors)
-            Assert.That( Math.Sqrt( matrix.Val[ Matrix4.M00 ] * matrix.Val[ Matrix4.M00 ] +
-                                    matrix.Val[ Matrix4.M01 ] * matrix.Val[ Matrix4.M01 ] +
-                                    matrix.Val[ Matrix4.M02 ] * matrix.Val[ Matrix4.M02 ] ),
+            Assert.That( Math.Sqrt( ( matrix.Val[ Matrix4.M00 ] * matrix.Val[ Matrix4.M00 ] ) +
+                                    ( matrix.Val[ Matrix4.M01 ] * matrix.Val[ Matrix4.M01 ] ) +
+                                    ( matrix.Val[ Matrix4.M02 ] * matrix.Val[ Matrix4.M02 ] ) ),
                          Is.EqualTo( 2f ).Within( EPSILON ) );
         } );
     }

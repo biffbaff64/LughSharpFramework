@@ -36,7 +36,6 @@ public partial class MaxRectsPacker
     /// domain source:
     /// http://clb.demon.fi/projects/even-more-rectangle-bin-packing
     /// </summary>
-    [SupportedOSPlatform( "windows" )]
     private class MaxRects
     {
         private readonly List< TexturePacker.Rect > _usedRectangles = [ ];
@@ -44,7 +43,7 @@ public partial class MaxRectsPacker
 
         private int _binWidth;
         private int _binHeight;
-        
+
         // ====================================================================
 
         /// <summary>

@@ -185,7 +185,7 @@ public class Touchpad : Widget
             {
                 return;
             }
-            
+
             if ( Fire( changeEvent ) )
             {
                 _knobPercent.Set( oldPercentX, oldPercentY );

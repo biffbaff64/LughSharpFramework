@@ -88,7 +88,7 @@ public class GLOnlyTextureData : ITextureData
     }
 
     // ========================================================================
-    
+
     public void Prepare()
     {
         if ( IsPrepared )

@@ -127,9 +127,9 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     protected override void AttachFrameBufferColorTexture( Texture texture )
     {
         GL.FramebufferTexture2D( IGL.GL_FRAMEBUFFER,
-                                              IGL.GL_COLOR_ATTACHMENT0,
-                                              IGL.GL_TEXTURE_2D,
-                                              ( uint )texture.GLTextureHandle,
-                                              0 );
+                                 IGL.GL_COLOR_ATTACHMENT0,
+                                 IGL.GL_TEXTURE_2D,
+                                 ( uint )texture.GLTextureHandle,
+                                 0 );
     }
 }

@@ -89,13 +89,14 @@ public class TextureAtlas : IDisposable
     /// where 0,0 is the upper left corner.
     /// </param>
     public TextureAtlas( FileInfo packFile, DirectoryInfo? imagesDir, bool flip = false )
+
 //        : this( new TextureAtlasData( packFile, imagesDir, flip ) )
     {
         Logger.Debug( $"packFile Name: {packFile.FullName}" );
         Logger.Debug( $"imagesDir Name: {imagesDir?.FullName}" );
-        
+
         var atlasData = new TextureAtlasData( packFile, imagesDir, flip );
-    
+
         Logger.Debug( $"packFile Name: {packFile.FullName}" );
         Logger.Debug( $"imagesDir Name: {imagesDir?.FullName}" );
 
@@ -103,9 +104,9 @@ public class TextureAtlas : IDisposable
         {
             Logger.Debug( $"page.TextureFile: {page.TextureFile?.FullName}" );
         }
-        
+
         Load( atlasData );
-        
+
         Logger.Debug( $"packFile Name: {packFile.FullName}" );
         Logger.Debug( $"imagesDir Name: {imagesDir?.FullName}" );
     }
@@ -133,7 +134,7 @@ public class TextureAtlas : IDisposable
             Logger.Debug( $"page.Format: {page.Format}" );
             Logger.Debug( $"page.TextureFile.FullName: {page.TextureFile?.FullName}" );
             Logger.Debug( $"page.UseMipMaps: {page.UseMipMaps}" );
-            
+
             page.Texture ??= new Texture( page.TextureFile!, page.Format, page.UseMipMaps );
             page.Texture.SetFilter( page.MinFilter, page.MagFilter );
             page.Texture.SetWrap( page.UWrap, page.VWrap );

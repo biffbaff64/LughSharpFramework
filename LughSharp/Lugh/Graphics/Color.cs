@@ -44,8 +44,8 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
     private static Color _color = new();
 
-    System.Drawing.Color _colorSystem;
-    
+    private System.Drawing.Color _colorSystem;
+
     // ========================================================================
     // ========================================================================
 
@@ -1176,7 +1176,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
     // ========================================================================
     // ========================================================================
-    
+
     #region From ICloneable Interface
 
     /// <inheritdoc />

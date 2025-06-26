@@ -163,35 +163,35 @@ internal static class NativeMethods
 {
     private const string DLL_PATH = "lib/net8.0/gdx2d.dll";
 
-    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
     internal static extern int gdx2d_get_pixel( PixmapDataType pd, int x, int y );
 
-    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
     internal static extern void gdx2d_set_pixel( PixmapDataType pd, int x, int y, uint color );
 
-    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
     internal static extern void gdx2d_draw_line( PixmapDataType pd, int x1, int y1, int x2, int y2, uint color );
 
-    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
     internal static extern void gdx2d_draw_rect( PixmapDataType pd, int x, int y, uint width, uint height, uint color );
 
-    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
     internal static extern void gdx2d_draw_circle( PixmapDataType pd, int x, int y, uint radius, uint color );
 
-    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
     internal static extern void gdx2d_fill_rect( PixmapDataType pd, int x, int y, uint width, uint height, uint color );
 
-    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
     internal static extern void gdx2d_fill_circle( PixmapDataType pd, int x, int y, uint radius, uint color );
 
-    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
     internal static extern void gdx2d_fill_triangle( PixmapDataType pd,
                                                      int x1, int y1,
                                                      int x2, int y2,
                                                      int x3, int y3,
                                                      uint color );
 
-    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl)]
+    [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
     internal static extern void gdx2d_draw_pixmap( PixmapDataType pd,
                                                    PixmapDataType dpd,
                                                    int srcX,

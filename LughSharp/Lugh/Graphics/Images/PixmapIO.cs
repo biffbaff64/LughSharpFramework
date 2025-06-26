@@ -225,19 +225,19 @@ public static class PixmapIO
     [PublicAPI]
     public class PNG : IDisposable
     {
-        private const    int         IHDR                = 0x49484452;
-        private const    int         IDAT                = 0x49444154;
-        private const    int         IEND                = 0x49454E44;
-        private const    byte        COLOR_ARGB          = 6;
-        private const    byte        COMPRESSION_DEFLATE = 0;
-        private const    byte        FILTER_NONE         = 0;
-        private const    byte        INTERLACE_NONE      = 0;
-        private const    byte        PAETH_FILTER        = 4;
-        
+        private const int  IHDR                = 0x49484452;
+        private const int  IDAT                = 0x49444154;
+        private const int  IEND                = 0x49454E44;
+        private const byte COLOR_ARGB          = 6;
+        private const byte COMPRESSION_DEFLATE = 0;
+        private const byte FILTER_NONE         = 0;
+        private const byte INTERLACE_NONE      = 0;
+        private const byte PAETH_FILTER        = 4;
+
         private readonly ChunkBuffer _buffer;
         private readonly Deflater    _deflater;
-        private readonly byte[]     _signature = [ 137, 80, 78, 71, 13, 10, 26, 10 ];
-        private          ByteArray? _curLineBytes;
+        private readonly byte[]      _signature = [ 137, 80, 78, 71, 13, 10, 26, 10 ];
+        private          ByteArray?  _curLineBytes;
 
         private int        _lastLineLen;
         private ByteArray? _lineOutBytes;

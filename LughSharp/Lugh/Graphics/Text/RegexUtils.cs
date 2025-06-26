@@ -41,7 +41,7 @@ public partial class RegexUtils
     public const string MINIMAL_VALUE_PATTER               = "^[^\":,{\\[\\]/ ][^}\\],]*$";
     public const string ITEM_WITH_UNDERSCORE_PATTERN       = "(.+)_(\\d+)$";
     public const string JAVASCRIPT_PATTERN                 = "^[a-zA-Z_$][a-zA-Z_$0-9]*$";
-    
+
     // ========================================================================
 
     [GeneratedRegex( FILENAME_WITHOUT_EXTENSION_PATTERN, RegexOptions.Compiled )]
@@ -61,7 +61,7 @@ public partial class RegexUtils
 
     [GeneratedRegex( UNQUOTED_VALUE_PATTERN, RegexOptions.Compiled )]
     public static partial Regex UnquotedValueRegex();
-    
+
     [GeneratedRegex( UNQUOTED_KEYORVALUE_PATTERN, RegexOptions.Compiled )]
     public static partial Regex UnquotedKeyOrValueRegex();
 

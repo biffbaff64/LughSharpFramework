@@ -87,7 +87,7 @@ public class AssetDescriptor
         Logger.Debug( $"Path: {File.FullName}" );
         Logger.Debug( $"{IOUtils.StripAssetsPath( File.FullName )}" );
     }
-    
+
     /// <summary>
     /// The Type of asset ( Texture, Pixmap, Audio, Atlas etc ).
     /// </summary>

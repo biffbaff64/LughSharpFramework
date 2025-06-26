@@ -114,7 +114,7 @@ public partial class AssetManager
             // .g3dj loader here...
             // .g3db loader here...
             // .obj loader here...
-            
+
             Logger.Debug( "Default loaders set." );
         }
 
@@ -1253,7 +1253,7 @@ public partial class AssetManager
     private void AddTask( AssetDescriptor assetDesc )
     {
         Logger.Checkpoint();
-        
+
         var loader = GetLoader( assetDesc.AssetType, assetDesc.AssetName );
 
         if ( loader == null )
@@ -1262,11 +1262,11 @@ public partial class AssetManager
         }
 
         Logger.Checkpoint();
-        
+
         _tasks.Enqueue( new AssetLoadingTask( this, assetDesc, loader ) );
 
         Logger.Checkpoint();
-        
+
         _peakTasks++;
     }
 

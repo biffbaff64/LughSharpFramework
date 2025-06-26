@@ -138,7 +138,7 @@ public partial class Json
             Logger.Debug( $"knownType: {knownType}" );
             Logger.Debug( $"elementType: {elementType}" );
             Logger.Debug( $"knownType is Primitive: {knownType?.IsPrimitive ?? false}" );
-            
+
             if ( knownType is { IsPrimitive: true }
                  || ( knownType == typeof( string ) )
                  || ( knownType == typeof( int ) )
@@ -349,11 +349,11 @@ public partial class Json
                  && ( actualType != typeof( DateTime ) ) ) // Basic check to identify complex objects
             {
                 AddClassTag( actualType.Name, actualType );
-                
+
                 WriteObjectStart( actualType, knownType );
 
                 Logger.Checkpoint();
-                
+
                 var properties    = actualType.GetProperties( BindingFlags.Public | BindingFlags.Instance );
                 var firstProperty = true;
 
@@ -463,14 +463,14 @@ public partial class Json
             }
             catch ( SerializationException ex )
             {
-                var newEx = new LughSharp.Lugh.Utils.Exceptions.SerializationException( ex.Message );
+                var newEx = new SerializationException( ex.Message );
                 newEx.AddTrace( $"{field} ({type.Name})" );
 
                 throw newEx;
             }
             catch ( Exception runtimeEx )
             {
-                var ex = new LughSharp.Lugh.Utils.Exceptions.SerializationException( runtimeEx );
+                var ex = new SerializationException( runtimeEx );
                 ex.AddTrace( $"{field} ({type.Name})" );
 
                 throw ex;
@@ -526,14 +526,14 @@ public partial class Json
         }
         catch ( SerializationException ex )
         {
-            var newEx = new LughSharp.Lugh.Utils.Exceptions.SerializationException( ex.Message );
+            var newEx = new SerializationException( ex.Message );
             newEx.AddTrace( $"{field} ({type?.Name})" );
 
             throw newEx;
         }
         catch ( Exception runtimeEx )
         {
-            var ex = new LughSharp.Lugh.Utils.Exceptions.SerializationException( runtimeEx );
+            var ex = new SerializationException( runtimeEx );
             ex.AddTrace( $"{field} ({type?.Name})" );
 
             throw ex;

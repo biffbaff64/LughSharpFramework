@@ -190,21 +190,21 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// Uses Fibonacci hashing to distribute hash codes, then selects the appropriate bits.
     /// </summary>
     /// <param name="item">The item to calculate the index for.</param>
-    protected virtual int Place(TK item)
+    protected virtual int Place( TK item )
     {
-        ArgumentNullException.ThrowIfNull(item);
+        ArgumentNullException.ThrowIfNull( item );
 
         // Get the 32-bit hash code
-        int hashCode = item.GetHashCode();
+        var hashCode = item.GetHashCode();
 
         // Convert to ulong and multiply by the 64-bit golden ratio constant
         // This is where Fibonacci hashing happens, spreading out the bits.
-        ulong fibonacciHashed = (ulong)hashCode * HashHelpers.GOLDEN_RATIO_MULTIPLIER_64_BIT;
+        var fibonacciHashed = ( ulong )hashCode * HashHelpers.GOLDEN_RATIO_MULTIPLIER_64_BIT;
 
         // Shift the uppermost bits into the low-order positions to get the final index.
         // The Shift value determines how many of the *most significant* bits of the 64-bit hash
         // become the *least significant* bits of the resulting index.
-        int index = (int)(fibonacciHashed >> Shift);
+        var index = ( int )( fibonacciHashed >> Shift );
 
         // Finally, apply the mask to ensure the index is within the table bounds.
         // This is crucial if Shift doesn't perfectly align with the table size,
@@ -227,7 +227,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     {
         Guard.ThrowIfNull( key );
 
-        var keyTable = this.KeyTable;
+        var keyTable = KeyTable;
 
         for ( var i = Place( key );; i = ( i + 1 ) & Mask )
         {
@@ -640,8 +640,8 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         Shift     = int.LeadingZeroCount( Mask );
 
         // Store the old tables
-        TK?[] oldKeyTable   = KeyTable;
-        TV?[] oldValueTable = ValueTable;
+        var oldKeyTable   = KeyTable;
+        var oldValueTable = ValueTable;
 
         // Initialize the new tables with the new size
         KeyTable   = new TK[ newSize ];

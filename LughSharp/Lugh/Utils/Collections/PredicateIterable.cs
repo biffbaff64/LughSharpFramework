@@ -35,7 +35,7 @@ public class PredicateIterable< T > : IEnumerable< T >
     public IEnumerable< T >        Enumerable { get; set; }
     public IPredicate< T >         Predicate  { get; set; }
     public PredicateIterator< T >? Enumerator { get; set; }
-    
+
     // ========================================================================
 
     /// <summary>
@@ -91,4 +91,3 @@ public class PredicateIterable< T > : IEnumerable< T >
         return Enumerator;
     }
 }
-

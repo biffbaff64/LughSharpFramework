@@ -262,7 +262,7 @@ public static class Logger
 
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
         var str      = CreateMessage( CHECKPOINT_TAG, "< CHECKPOINT >", callerID );
-        
+
         Console.WriteLine( str );
         WriteToFile( str );
 
@@ -319,7 +319,7 @@ public static class Logger
             Console.Write( "." );
         }
     }
-    
+
     /// <summary>
     /// Writes an <see cref="Environment.NewLine"/> to console.
     /// Does NOT create a string holding caller data or timestamp. This is purely for use
@@ -355,9 +355,9 @@ public static class Logger
                 fileName = DEFAULT_TRACE_FILENAME;
             }
 
-            if ( System.IO.File.Exists( fileName ) && deleteExisting )
+            if ( File.Exists( fileName ) && deleteExisting )
             {
-                System.IO.File.Delete( fileName );
+                File.Delete( fileName );
             }
 
             // Get the base directory
@@ -367,7 +367,7 @@ public static class Logger
             _debugFilePath = $"{baseDirectory}logs{Path.DirectorySeparatorChar}";
             _debugFileName = fileName;
 
-            using var fs = System.IO.File.Create( _debugFilePath + _debugFileName );
+            using var fs = File.Create( _debugFilePath + _debugFileName );
 
             var dateTime = DateTime.Now;
             var divider  = new UTF8Encoding( true ).GetBytes( "-----------------------------------------------------" );
@@ -503,12 +503,12 @@ public static class Logger
     /// <param name="text">String holding the text to write.</param>
     private static void WriteToFile( string text )
     {
-        if ( !System.IO.File.Exists( _debugFilePath + _debugFileName ) )
+        if ( !File.Exists( _debugFilePath + _debugFileName ) )
         {
             return;
         }
 
-        using var fs = System.IO.File.Open( _debugFilePath + _debugFileName, FileMode.Append );
+        using var fs = File.Open( _debugFilePath + _debugFileName, FileMode.Append );
 
         var debugLine = new UTF8Encoding( true ).GetBytes( text );
 

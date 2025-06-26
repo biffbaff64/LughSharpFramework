@@ -56,15 +56,21 @@ public class DeleteProcessor : FileProcessor
 // ============================================================================
 
 [PublicAPI]
-public class SettingsCombiningProcessor : TexturePackerFileProcessor
+public class SettingsCombiningProcessor : FileProcessor
 {
     public TexturePackerEntry? EntryDir { get; set; }
 
-    private readonly TexturePackerEntry _entryDir;
+    // ========================================================================
 
-    public SettingsCombiningProcessor( TexturePackerEntry entryDir )
+    private readonly TexturePackerEntry            _entryDir;
+    private readonly TexturePackerFileProcessor _fileProcessor;
+
+    // ========================================================================
+
+    public SettingsCombiningProcessor( TexturePackerEntry entryDir, TexturePackerFileProcessor fileProcessor )
     {
-        _entryDir = entryDir;
+        _entryDir      = entryDir;
+        _fileProcessor = fileProcessor;
     }
 
     /// <inheritdoc />
@@ -82,10 +88,9 @@ public class SettingsCombiningProcessor : TexturePackerFileProcessor
             }
         }
 
-        if ( !this.CountOnly )
+        if ( !_fileProcessor.CountOnly )
         {
-            this.DirsToIgnore.Add( ( DirectoryInfo )_entryDir.InputFile! );
+            _fileProcessor.DirsToIgnore.Add( ( DirectoryInfo )_entryDir.InputFile! );
         }
     }
 }
-

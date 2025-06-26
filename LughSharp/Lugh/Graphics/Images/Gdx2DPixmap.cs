@@ -108,9 +108,9 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
             throw new GdxRuntimeException( "Failed to create PixmapDef object." );
         }
 
-        this.ColorType = _pixmapDataType.ColorType;
-        this.Blend     = _pixmapDataType.Blend;
-        this.Scale     = _pixmapDataType.Scale;
+        ColorType = _pixmapDataType.ColorType;
+        Blend     = _pixmapDataType.Blend;
+        Scale     = _pixmapDataType.Scale;
 
         SafeConstructorInit( _pixmapDataType.Width,
                              _pixmapDataType.Height,
@@ -169,7 +169,7 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
         ColorType = format;
         Blend     = ( uint )Pixmap.BlendTypes.Default;
         Scale     = ( uint )Pixmap.ScaleType.Default;
-        
+
         var length = width * height * PixmapFormat.Gdx2dBytesPerPixel( format );
 
         PixmapBuffer = new ByteBuffer( length );
@@ -204,9 +204,9 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
 
     private void SafeConstructorInit( int width, int height, int bitDepth )
     {
-        this.Width    = width;
-        this.Height   = height;
-        this.BitDepth = bitDepth;
+        Width    = width;
+        Height   = height;
+        BitDepth = bitDepth;
     }
 
     private void SafeInitPixmapDataType( int width, int height, Gdx2DPixmapFormat format )
@@ -215,13 +215,13 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
 
         _pixmapDataType = new PixmapDataType
         {
-            Width         = this.Width,
-            Height        = this.Height,
-            ColorType     = this.ColorType,
-            BitDepth      = this.BitDepth,
-            Blend         = this.Blend,
-            Scale         = this.Scale,
-            TotalIDATSize = this.TotalIDATSize,
+            Width         = Width,
+            Height        = Height,
+            ColorType     = ColorType,
+            BitDepth      = BitDepth,
+            Blend         = Blend,
+            Scale         = Scale,
+            TotalIDATSize = TotalIDATSize,
             Pixels        = new byte[ length ],
         };
     }
@@ -242,7 +242,7 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
         Logger.Checkpoint();
 
         // Analyse the PNG file the get the properties.
-        Utils.PNGUtils.AnalysePNG( buffer, verbose: false );
+        Utils.PNGUtils.AnalysePNG( buffer, false );
 
         var pixmapDef = new PixmapDataType
         {
@@ -532,14 +532,14 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     private void ScaleNearest( int srcX, int srcY, int srcWidth, int srcHeight,
                                int dstX, int dstY, int dstWidth, int dstHeight )
     {
-        var xRatio = ( ( float )srcWidth / dstWidth );
-        var yRatio = ( ( float )srcHeight / dstHeight );
+        var xRatio = ( float )srcWidth / dstWidth;
+        var yRatio = ( float )srcHeight / dstHeight;
 
-        for ( int y = 0; y < dstHeight; y++ )
+        for ( var y = 0; y < dstHeight; y++ )
         {
             var sy = ( int )( y * yRatio );
 
-            for ( int x = 0; x < dstWidth; x++ )
+            for ( var x = 0; x < dstWidth; x++ )
             {
                 var sx    = ( int )( x * xRatio );
                 var pixel = GetPixel( srcX + sx, srcY + sy );
@@ -551,17 +551,17 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     private void ScaleBilinear( int srcX, int srcY, int srcWidth, int srcHeight,
                                 int dstX, int dstY, int dstWidth, int dstHeight )
     {
-        var xRatio = ( ( float )( srcWidth - 1 ) ) / dstWidth;
-        var yRatio = ( ( float )( srcHeight - 1 ) ) / dstHeight;
+        var xRatio = ( float )( srcWidth - 1 ) / dstWidth;
+        var yRatio = ( float )( srcHeight - 1 ) / dstHeight;
 
-        for ( int y = 0; y < dstHeight; y++ )
+        for ( var y = 0; y < dstHeight; y++ )
         {
             var sy  = y * yRatio;
             var sy1 = ( int )sy;
             var sy2 = Math.Min( sy1 + 1, srcHeight - 1 );
             var yw  = sy - sy1;
 
-            for ( int x = 0; x < dstWidth; x++ )
+            for ( var x = 0; x < dstWidth; x++ )
             {
                 var sx  = x * xRatio;
                 var sx1 = ( int )sx;

@@ -71,7 +71,7 @@ public class PixelType
             Format.RGBA8888       => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888,
 
             // ----------------------------------
-            
+
             var _ => throw new GdxRuntimeException( "Unknown Format: " + format ),
         };
     }
@@ -95,7 +95,7 @@ public class PixelType
             Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => Format.RGBA8888,
 
             // ----------------------------------
-            
+
             var _ => throw new GdxRuntimeException( "Unknown Gdx2DPixmap Format: " + format ),
         };
     }

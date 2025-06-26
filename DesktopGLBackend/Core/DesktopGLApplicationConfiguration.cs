@@ -75,7 +75,7 @@ public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration
     public int MaxNetThreads { get; set; } = int.MaxValue;
 
     // ========================================================================
-    
+
     [PublicAPI]
     public enum GLEmulationType
     {
@@ -294,4 +294,3 @@ public class DesktopGLApplicationConfiguration : DesktopGLWindowConfiguration
         return result;
     }
 }
-

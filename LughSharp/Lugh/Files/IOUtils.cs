@@ -44,7 +44,7 @@ public class IOUtils
 
     // ========================================================================
 
-    public static string AssetsRoot           => NormalizePath( $"{AssemblyDirectory}Assets/");
+    public static string AssetsRoot           => NormalizePath( $"{AssemblyDirectory}Assets/" );
     public static string AssetsObjectsPath    => NormalizePath( $"{AssetsRoot}PackedImages/Objects/" );
     public static string AssetsAnimationsPath => NormalizePath( $"{AssetsRoot}PackedImages/Animations/" );
     public static string AssetsInputsPath     => NormalizePath( $"{AssetsRoot}PackedImages/Inputs/" );

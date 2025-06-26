@@ -33,9 +33,9 @@ public static class StringUtils
     {
         return value == null ? "null" : ( ( int )value ).ToString( "X" ).ToUpper();
     }
-    
+
     // ========================================================================
-    
+
     public static string? ValueOf( object? obj )
     {
         return obj == null ? "null" : obj.ToString();

@@ -894,6 +894,9 @@ public class Huffman
         return error;
     }
 
+    /// <summary>
+    /// Initializes the Huffman tables for decoding operations.
+    /// </summary>
     public static void Initialize()
     {
         if ( _huffmanTable != null! )
@@ -938,6 +941,10 @@ public class Huffman
         _huffmanTable[ 33 ] = new Huffman( "33 ", 1, 16, 0, 0, -1, null!, null!, _valTab33, 31 );
     }
 
+    /// <summary>
+    /// Retrieves the collection of Huffman tables used for decoding processes.
+    /// </summary>
+    /// <returns>An array of Huffman tables.</returns
     public static Huffman[] GetHuffmanTable()
     {
         return _huffmanTable;

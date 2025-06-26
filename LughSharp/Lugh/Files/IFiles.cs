@@ -46,7 +46,7 @@ public interface IFiles
     FileInfo Absolute( string path );
 
     // ========================================================================
-    
+
     /// <inheritdoc cref="PathTypes.Assembly" />
     FileInfo Assembly( string path );
 
@@ -64,7 +64,7 @@ public interface IFiles
     bool IsAssemblyStorageAvailable();
 
     // ========================================================================
-    
+
     /// <inheritdoc cref="PathTypes.Internal" />
     FileInfo Internal( string path );
 
@@ -82,7 +82,7 @@ public interface IFiles
     bool IsInternalStorageAvailable();
 
     // ========================================================================
-    
+
     /// <inheritdoc cref="PathTypes.External" />
     FileInfo External( string path );
 
@@ -99,7 +99,7 @@ public interface IFiles
     bool IsExternalStorageAvailable();
 
     // ========================================================================
-    
+
     /// <inheritdoc cref="PathTypes.Local" />
     FileInfo Local( string path );
 
@@ -203,4 +203,3 @@ public enum PathTypes
     /// </summary>
     Invalid,
 }
-
