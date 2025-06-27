@@ -124,6 +124,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
         PackFileName  = packFileName;
         FlattenOutput = true;
 
+        Logger.Debug( $"PackFileName: {PackFileName}" );
+
         // Set the default file extensions for processable images.
         AddInputSuffix( ".png", ".jpg", ".jpeg", ".bmp" );
 
@@ -147,6 +149,10 @@ public class TexturePackerFileProcessor //: IFileProcessor
         Guard.ThrowIfNull( inputRoot );
 
         _rootDirectory = inputRoot;
+
+        Logger.Debug( $"inputRoot: {inputRoot.FullName}" );
+        Logger.Debug( $"outputRoot: {outputRoot?.FullName}" );
+        Logger.Debug( $"_rootDirectory: {_rootDirectory.FullName}" );
 
         // -----------------------------------------------------
         // Collect any pack.json setting files present in the folder.
@@ -589,7 +595,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
             Logger.Checkpoint();
 
             retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
-            
+
             Logger.Checkpoint();
         }
         else
@@ -600,7 +606,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
 
             retval = Process( files, outputRoot );
-            
+
             Logger.Checkpoint();
         }
 

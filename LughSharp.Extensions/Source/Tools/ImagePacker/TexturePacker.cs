@@ -255,30 +255,6 @@ public partial class TexturePacker
     }
 
     /// <summary>
-    /// </summary>
-    /// <param name="input"></param>
-    /// <param name="output"></param>
-    /// <param name="packFileName"></param>
-    /// <param name="settings"></param>
-    /// <returns></returns>
-    public bool ProcessIfModified( string input, string output, string packFileName, Settings? settings = null )
-    {
-        if ( settings == null )
-        {
-            settings = new Settings();
-        }
-
-        if ( IsModified( input, output, packFileName, settings ) )
-        {
-            Process( input, output, packFileName, settings );
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
     /// Adds an image to the list of Input Images.
     /// </summary>
     /// <param name="file"></param>

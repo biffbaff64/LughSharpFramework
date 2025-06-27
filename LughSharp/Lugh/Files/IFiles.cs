@@ -123,7 +123,7 @@ public enum PathTypes
     /// <summary>
     /// Path relative to the root of the classpath. Classpath files are always readonly.
     /// Note that classpath files are not compatible with some functionality on Android,
-    /// such as Audio#newSound(FileInfo) and Audio#newMusic(FileInfo).
+    /// such as Audio#NewSound(FileInfo) and Audio#NewMusic(FileInfo).
     /// </summary>
     Classpath,
 
@@ -140,7 +140,10 @@ public enum PathTypes
     /// classpath is checked.
     /// <para>
     /// This is not the root folder of this framework, it is the root folder of the
-    /// application that is using this framework.
+    /// application that is using this framework. An example Internal path would be:-
+    /// <code>
+    /// C:\Development\Projects\CSharp\ConsoleApp1\bin\Debug\net8.0\
+    /// </code>
     /// </para>
     /// <para>
     /// <b>Internal files are always readonly.</b>
@@ -151,6 +154,12 @@ public enum PathTypes
     /// <summary>
     /// Path relative to the root of the app external storage on Android and
     /// to the home directory of the current user on the desktop.
+    /// <para>
+    /// An example External path would be:-
+    /// <code>
+    /// C:\Users\joe_blogs\
+    /// </code>
+    /// </para>
     /// </summary>
     External,
 

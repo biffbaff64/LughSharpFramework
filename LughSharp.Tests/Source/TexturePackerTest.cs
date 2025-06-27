@@ -62,8 +62,6 @@ public class TexturePackerTest
             Silent     = false,
         };
 
-        settings.WriteToJsonFile( "TexturePackerTestSettings.json" );
-
         // Build the Atlases from the specified parameters :-
         // - configuration settings
         // - source folder
@@ -72,6 +70,10 @@ public class TexturePackerTest
         var inputFolder  = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\objects" );
         var outputFolder = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
 
+        var settingsFilePath = Path.Combine( outputFolder, "TexturePackerTestSettings.json" );
+        
+        settings.WriteToJsonFile( settingsFilePath );
+        
         var packer = new TexturePacker();
         packer.Process( inputFolder, outputFolder, "objects", settings );
     }

@@ -1,7 +1,7 @@
-// /////////////////////////////////////////////////////////////////////////////
+﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin
+//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,43 +22,40 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Assets;
-using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Utils;
+using JetBrains.Annotations;
 
 using NUnit.Framework;
+
+using LughSharp.Lugh.Core;
+using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Tests.Source;
 
 [TestFixture]
-public class AssetManagerTest
+[PublicAPI]
+public class FilepathTest
 {
-    private AssetManager? _assetManager;
-
     [SetUp]
     public void Setup()
     {
-        _assetManager = new AssetManager();
     }
 
     [Test]
     public void Run()
     {
-        Logger.Divider();
-        Logger.Debug( "Loading assets...", true );
-        Logger.Divider();
-
-        _assetManager?.Load( "libgdx.png", typeof( Texture ) );
-        _assetManager?.Load( "biffbaff.png", typeof( Texture ) );
-        _assetManager?.Load( "red7logo_small.png", typeof( Texture ) );
-
-        Logger.Debug( "All assets queued for loading.", true );
-
-        _assetManager?.GetDiagnostics();
-
-        Task.Run( () => { _assetManager?.FinishLoading(); } );
-
-        Logger.Debug( "Finished!", true );
+        try
+        {
+            Logger.Debug( $"Absolute : {Engine.Api.Files.Absolute( "C:/Development/Projects/CSharp/ConsoleApp1/bin/Debug/net8.0/PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"Assembly : {Engine.Api.Files.Assembly( "PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"Classpath: {Engine.Api.Files.Classpath( "PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"External : {Engine.Api.Files.External( "PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"Internal : {Engine.Api.Files.Internal( "PackedImages/objects/rover_wheel.png" ).FullName}" );
+            Logger.Debug( $"Local    : {Engine.Api.Files.Local( "PackedImages/objects/rover_wheel.png" ).FullName}" );
+        }
+        catch ( Exception )
+        {
+            // Ignore
+        }
     }
 
     [TearDown]
@@ -66,3 +63,6 @@ public class AssetManagerTest
     {
     }
 }
+
+// ========================================================================
+// ========================================================================
