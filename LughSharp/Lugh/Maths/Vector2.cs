@@ -270,7 +270,7 @@ public class Vector2 : IVector< Vector2 >
         return Set( MathUtils.Cos( theta ), MathUtils.Sin( theta ) );
     }
 
-    public bool EpsilonEquals( Vector2? other, float epsilon = Number.FLOAT_TOLERANCE )
+    public bool EpsilonEquals( Vector2? other, float epsilon = NumberUtils.FLOAT_TOLERANCE )
     {
         if ( other == null )
         {
@@ -285,7 +285,7 @@ public class Vector2 : IVector< Vector2 >
         return !( Math.Abs( other.Y - Y ) > epsilon );
     }
 
-    public bool IsUnit( float margin = Number.FLOAT_TOLERANCE )
+    public bool IsUnit( float margin = NumberUtils.FLOAT_TOLERANCE )
     {
         return Math.Abs( Len2() - 1f ) < margin;
     }
@@ -680,7 +680,7 @@ public class Vector2 : IVector< Vector2 >
 
     public bool EpsilonEquals( float x, float y )
     {
-        return EpsilonEquals( x, y, Number.FLOAT_TOLERANCE );
+        return EpsilonEquals( x, y, NumberUtils.FLOAT_TOLERANCE );
     }
 
     // ========================================================================

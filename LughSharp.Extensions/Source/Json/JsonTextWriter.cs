@@ -153,12 +153,12 @@ public class JsonTextWriter : TextWriter
         }
         else if ( value is int or long or float or double or decimal )
         {
-            if ( value is float floatValue && ( Math.Abs( floatValue - ( long )floatValue ) < Number.FLOAT_TOLERANCE ) )
+            if ( value is float floatValue && ( Math.Abs( floatValue - ( long )floatValue ) < NumberUtils.FLOAT_TOLERANCE ) )
             {
                 value = ( long )floatValue;
             }
 
-            if ( value is double doubleValue && ( Math.Abs( doubleValue - ( long )doubleValue ) < Number.FLOAT_TOLERANCE ) )
+            if ( value is double doubleValue && ( Math.Abs( doubleValue - ( long )doubleValue ) < NumberUtils.FLOAT_TOLERANCE ) )
             {
                 value = ( long )doubleValue;
             }

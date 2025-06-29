@@ -472,7 +472,6 @@ GRAPHICS/UTILS
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - BMPUtils
     - IP   - IP   - ETC1
     - DONE - IP   - ETC1TextureData
     - DONE - IP   - FacedCubemapData              Width / Height are incorrect
@@ -496,7 +495,7 @@ GRAPHICS/UTILS
     - DONE - IP   - MipMapGenerator
     - DONE - IP   - MipMapTextureData
     - DONE - IP   - PixmapTextureData
-    - IP   - IP   - PNGUtils
+    - IP   - IP   - PNGDecoder
     - DONE - IP   - ShaderProgram
     - DONE - IP   - ShapeRenderer
     - IP   - IP   - TextureUtils

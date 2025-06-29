@@ -25,8 +25,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
-
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]

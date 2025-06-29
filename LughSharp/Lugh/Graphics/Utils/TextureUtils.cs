@@ -24,8 +24,6 @@
 
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
-
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]

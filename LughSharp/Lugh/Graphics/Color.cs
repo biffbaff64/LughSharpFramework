@@ -27,8 +27,6 @@ using System.Diagnostics;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 
-using Number = LughSharp.Lugh.Maths.Number;
-
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
@@ -43,8 +41,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
     // ========================================================================
 
     private static Color _color = new();
-
-    private System.Drawing.Color _colorSystem;
 
     // ========================================================================
     // ========================================================================
@@ -1146,15 +1142,15 @@ public sealed class Color : ICloneable, IEquatable< Color >
         var range = max - min;
 
         // Hue calculation
-        if ( Math.Abs( range ) < Number.FLOAT_TOLERANCE )
+        if ( Math.Abs( range ) < NumberUtils.FLOAT_TOLERANCE )
         {
             hsv[ 0 ] = 0; // Undefined hue, achromatic case
         }
-        else if ( Math.Abs( max - R ) < Number.FLOAT_TOLERANCE )
+        else if ( Math.Abs( max - R ) < NumberUtils.FLOAT_TOLERANCE )
         {
             hsv[ 0 ] = ( ( ( 60 * ( G - B ) ) / range ) + 360 ) % 360;
         }
-        else if ( Math.Abs( max - G ) < Number.FLOAT_TOLERANCE )
+        else if ( Math.Abs( max - G ) < NumberUtils.FLOAT_TOLERANCE )
         {
             hsv[ 0 ] = ( ( ( 60 * ( B - R ) ) / range ) + 120 ) % 360;
         }

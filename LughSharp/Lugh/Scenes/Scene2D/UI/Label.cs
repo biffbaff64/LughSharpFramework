@@ -25,7 +25,6 @@
 using System.Diagnostics;
 using System.Text;
 
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;

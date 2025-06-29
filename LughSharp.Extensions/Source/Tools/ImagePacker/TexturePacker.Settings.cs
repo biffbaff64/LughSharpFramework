@@ -231,7 +231,7 @@ public partial class TexturePacker
         /// <summary>
         /// For each scale, the images are scaled and an entire atlas is output.
         /// </summary>
-        public float[] Scale { get; set; } = [ 1 ];
+        public float[] Scale { get; set; } = [ 1.0f ];
 
         /// <summary>
         /// For each scale, the suffix to use for the output files. If omitted, files for multiple

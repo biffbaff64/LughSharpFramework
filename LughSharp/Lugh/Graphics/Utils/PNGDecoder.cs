@@ -31,7 +31,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
-public class PNGUtils
+public class PNGDecoder
 {
     public const int SIGNATURE_LENGTH       = 8;
     public const int IHDR_START             = 8;
@@ -67,7 +67,7 @@ public class PNGUtils
 
     // ========================================================================
 
-    private PNGUtils()
+    private PNGDecoder()
     {
     }
 

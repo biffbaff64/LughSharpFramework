@@ -22,8 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing.Imaging;
-using System.Runtime.Versioning;
+using Extensions.Source.Drawing;
 
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.Images;
@@ -34,8 +33,8 @@ using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Bitmap = System.Drawing.Bitmap;
-using Pen = System.Drawing.Pen;
 using Image = System.Drawing.Image;
+using Pen = System.Drawing.Pen;
 
 namespace Extensions.Source.Tools.ImagePacker;
 
@@ -129,6 +128,7 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// </para>
 /// </summary>
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public partial class TexturePacker
 {
     public string?                   RootPath         { get; set; }
@@ -168,14 +168,14 @@ public partial class TexturePacker
         {
             if ( settings.MaxWidth != MathUtils.NextPowerOfTwo( settings.MaxWidth ) )
             {
-                throw new GdxRuntimeException( $"If pot is true, maxWidth must be a power " +
-                                               $"of two: {settings.MaxWidth}" );
+                throw new GdxRuntimeException( $"If pot is true, maxWidth must be a power "
+                                               + $"of two: {settings.MaxWidth}" );
             }
 
             if ( settings.MaxHeight != MathUtils.NextPowerOfTwo( settings.MaxHeight ) )
             {
-                throw new GdxRuntimeException( $"If pot is true, maxHeight must be a power " +
-                                               $"of two: {settings.MaxHeight}" );
+                throw new GdxRuntimeException( $"If pot is true, maxHeight must be a power "
+                                               + $"of two: {settings.MaxHeight}" );
             }
         }
 
@@ -183,14 +183,14 @@ public partial class TexturePacker
         {
             if ( ( settings.MaxWidth % 4 ) != 0 )
             {
-                throw new GdxRuntimeException( $"If mod4 is true, maxWidth must be evenly " +
-                                               $"divisible by 4: {settings.MaxWidth}" );
+                throw new GdxRuntimeException( $"If mod4 is true, maxWidth must be evenly "
+                                               + $"divisible by 4: {settings.MaxWidth}" );
             }
 
             if ( ( settings.MaxHeight % 4 ) != 0 )
             {
-                throw new GdxRuntimeException( $"If mod4 is true, maxHeight must be evenly " +
-                                               $"divisible by 4: {settings.MaxHeight}" );
+                throw new GdxRuntimeException( $"If mod4 is true, maxHeight must be evenly "
+                                               + $"divisible by 4: {settings.MaxHeight}" );
             }
         }
 
@@ -245,8 +245,7 @@ public partial class TexturePacker
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
-            _ = processor.Process( new DirectoryInfo( inputFolder ),
-                                   new DirectoryInfo( outputFolder ) );
+            _ = processor.Process( new DirectoryInfo( inputFolder ), new DirectoryInfo( outputFolder ) );
         }
         catch ( Exception ex )
         {
@@ -266,6 +265,7 @@ public partial class TexturePacker
         {
             FileInfo = file,
             RootPath = RootPath,
+            Name     = file.Name,
         };
 
         _inputImages.Add( inputImage );
@@ -290,14 +290,14 @@ public partial class TexturePacker
     }
 
     /// <summary>
-    /// Packs processed images into the a <see cref="TextureAtlas"/> with the
-    /// specified filename. The atlas will be stored in the specified directory.
+    /// Packs processed images into a <see cref="TextureAtlas"/> with the
+    /// provided filename. The atlas will be stored in the destination directory.
     /// </summary>
     /// <param name="outputDir"> The destination directory. </param>
     /// <param name="packFileName"> The name for the resulting TextureAtlas. </param>
     public void Pack( DirectoryInfo outputDir, string packFileName )
     {
-        Logger.Debug( "Packing..." );
+        Logger.Checkpoint();
         Logger.Debug( $"outputDir: {outputDir.FullName}" );
 
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
@@ -307,11 +307,13 @@ public partial class TexturePacker
 
         Logger.Debug( $"packFileName: {packFileName}" );
 
+        // Remove the output directory, if it exists, and create
+        // a new fresh output folder.
         if ( Directory.Exists( outputDir.FullName ) )
         {
             Directory.Delete( outputDir.FullName, true );
         }
-        
+
         Directory.CreateDirectory( outputDir.FullName );
 
         ProgressListener ??= new AbstractProgressListenerImpl();
@@ -319,11 +321,15 @@ public partial class TexturePacker
 
         var n = _settings.Scale.Length;
 
+        Logger.Debug( $"_settings.Scale.Length: {_settings.Scale.Length}" );
+        
         for ( var i = 0; i < n; i++ )
         {
             ProgressListener.Start( 1f / n );
 
             _imageProcessor.Scale = _settings.Scale[ i ];
+
+            Logger.Debug( $"_imageProcessor.Scale: {_imageProcessor.Scale}" );
 
             if ( ( _settings.ScaleResampling != null )
                  && ( _settings.ScaleResampling.Count > i )
@@ -332,14 +338,23 @@ public partial class TexturePacker
                 _imageProcessor.Resampling = _settings.ScaleResampling[ i ];
             }
 
+            Logger.Debug( $"_imageProcessor.Resampling: {_imageProcessor.Resampling}" );
+
             ProgressListener.Start( 0.35f );
             ProgressListener.Count = 0;
             ProgressListener.Total = _inputImages.Count;
 
+            Logger.Debug( $"_inputImages.Count: {_inputImages.Count}" );
+            Logger.Debug( $"_imageProcessor.ImageRects.Count: {_imageProcessor.ImageRects.Count}" );
+
             for ( int ii = 0, nn = _inputImages.Count; ii < nn; ii++, ProgressListener.Count++ )
             {
+                Logger.Debug( $"ii: {ii}, nn: {nn}, ProgressListener.Count: {ProgressListener.Count}" );
+
                 var inputImage = _inputImages[ ii ];
 
+                Logger.Debug( $"inputImage.Name: {inputImage.Name}" );
+                
                 if ( inputImage.FileInfo != null )
                 {
                     _imageProcessor.AddImage( inputImage.FileInfo, inputImage.RootPath );
@@ -365,6 +380,8 @@ public partial class TexturePacker
             ProgressListener.Count = 0;
             ProgressListener.Total = _imageProcessor.ImageRects.Count;
 
+            Logger.Debug( $"_imageProcessor.ImageRects.Count: {_imageProcessor.ImageRects.Count}" );
+
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
             ProgressListener.End();
@@ -373,6 +390,8 @@ public partial class TexturePacker
             ProgressListener.Total = pages.Count;
 
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
+            
+            Logger.Debug( $"scaledPackFileName: {scaledPackFileName}" );
 
             WriteImages( outputDir.FullName, scaledPackFileName, pages );
 
@@ -557,7 +576,7 @@ public partial class TexturePacker
 
             page.ImageName = Path.GetFileName( outputFile );
 
-            var canvas = new Bitmap( width, height, PixmapFormat.ToPixelFormat( _settings.Format ) );
+            var canvas = new Bitmap( width, height, PixmapFormatExtensions.ToPixelFormat( _settings.Format ) );
             var g      = System.Drawing.Graphics.FromImage( canvas );
 
             if ( !_settings.Silent )
@@ -879,7 +898,7 @@ public partial class TexturePacker
         writer.WriteLine( page.ImageName );
         writer.WriteLine( $"{tab}size{colon}{page.ImageWidth}{comma}{page.ImageHeight}" );
 
-        if ( PixmapFormat.ToPixelFormat( _settings.Format ) != PixelFormat.Format32bppArgb )
+        if ( PixmapFormatExtensions.ToPixelFormat( _settings.Format ) != PixelFormat.Format32bppArgb )
         {
             writer.WriteLine( $"{tab}format{colon}{_settings.Format}" );
         }
@@ -1442,6 +1461,13 @@ public partial class TexturePacker
         public string?   RootPath { get; set; } = null;
         public string?   Name     { get; set; } = null;
         public Bitmap?   Image    { get; set; } = null;
+
+        public void Debug()
+        {
+            Logger.Debug( $"FileInfo: {FileInfo?.FullName}" );
+            Logger.Debug( $"RootPath: {RootPath}" );
+            Logger.Debug( $"Name: {Name}" );
+        }
     }
 
     // ========================================================================
@@ -1468,10 +1494,11 @@ public partial class TexturePacker
 
         // ====================================================================
 
-        private          float         _scale = 1;
-        private          float         _lastUpdate;
         private readonly List< float > _portions = new( 8 );
-        private          string        _message  = "";
+
+        private float  _scale = 1;
+        private float  _lastUpdate;
+        private string _message = "";
 
         // ====================================================================
 

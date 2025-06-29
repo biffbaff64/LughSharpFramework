@@ -24,7 +24,7 @@
 
 global using System.Drawing;
 global using System.Drawing.Imaging;
-global using System.Numerics;
+//global using System.Drawing.Primitives;
 
 // ============================================================================
 global using System.Text.Json;
@@ -34,12 +34,7 @@ global using JetBrains.Annotations;
 
 // ============================================================================
 global using DotGLFW;
-
 global using GLFW = DotGLFW;
-
-// ============================================================================
-
-//global using SixLabors.ImageSharp;
 
 // ============================================================================
 global using LughSharp.Lugh.Core;

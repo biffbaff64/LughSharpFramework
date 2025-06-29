@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
@@ -33,6 +32,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class TexturePackerFileProcessor //: IFileProcessor
 {
     public const string DEFAULT_PACKFILE_NAME = "pack.atlas";
@@ -161,6 +161,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
         // -----------------------------------------------------
 
+        ProgressListener ??= new TexturePacker.AbstractProgressListenerImpl();
+        
         var settingsFiles = settingsProcessor.SettingsFiles;
 
         Logger.Debug( $"Settings files: {settingsFiles.Count}" );
@@ -627,6 +629,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
     /// <param name="files"></param>
     public virtual void ProcessDir( TexturePackerEntry inputDir, List< TexturePackerEntry > files )
     {
+        Logger.Checkpoint();
+        
         // Do not proceed if this dir is one of those to ignore
         if ( DirsToIgnore.Contains( inputDir.InputFile ) )
         {
@@ -774,6 +778,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
         if ( ProgressListener != null )
         {
+            Logger.Checkpoint();
+
             ProgressListener.Start( 1f / _packCount );
 
             string? inputPath = null;
@@ -783,11 +789,16 @@ public class TexturePackerFileProcessor //: IFileProcessor
                 var rootPath = _rootDirectory.FullName;
                 inputPath = inputDir.InputFile!.FullName;
 
+                Logger.Debug( $"rootPath: {rootPath}" );
+                Logger.Debug( $"inputPath: {inputPath}" );
+                
                 if ( inputPath.StartsWith( rootPath ) )
                 {
-                    rootPath  = rootPath.Replace( '\\', '/' );
-                    inputPath = inputPath.Substring( rootPath.Length ).Replace( '\\', '/' );
-
+                    rootPath  = IOUtils.NormalizePath( rootPath );
+                    
+                    inputPath = inputPath.Substring( rootPath.Length );
+                    inputPath = IOUtils.NormalizePath( inputPath );
+                    
                     if ( inputPath.StartsWith( '/' ) )
                     {
                         inputPath = inputPath.Substring( 1 );
@@ -813,6 +824,8 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
         foreach ( var file in files )
         {
+            file.Debug();
+            
             if ( file.InputFile == null )
             {
                 continue;
@@ -966,7 +979,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
     {
         var packer = new TexturePacker( root, settings )
         {
-            ProgressListener = ProgressListener,
+            ProgressListener = this.ProgressListener,
         };
 
         return packer;

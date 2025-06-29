@@ -600,7 +600,7 @@ public partial class JsonValue : IEnumerable< JsonValue >
             var doubleValue = jsonval.AsDouble();
             var longValue   = jsonval.AsLong();
 
-            buffer.Append( Math.Abs( doubleValue - longValue ) < Number.FLOAT_TOLERANCE ? longValue : doubleValue );
+            buffer.Append( Math.Abs( doubleValue - longValue ) < NumberUtils.FLOAT_TOLERANCE ? longValue : doubleValue );
         }
         else if ( jsonval.IsLong() )
         {
@@ -842,7 +842,7 @@ public partial class JsonValue : IEnumerable< JsonValue >
             var doubleValue = jsonval.AsDouble();
             var longValue   = jsonval.AsLong();
 
-            buffer.Append( Math.Abs( doubleValue - longValue ) < Number.FLOAT_TOLERANCE
+            buffer.Append( Math.Abs( doubleValue - longValue ) < NumberUtils.FLOAT_TOLERANCE
                                ? longValue
                                : doubleValue );
         }
@@ -981,7 +981,7 @@ public partial class JsonValue : IEnumerable< JsonValue >
             var doubleValue = jsonval.AsDouble();
             var longValue   = jsonval.AsLong();
 
-            writer.Write( Math.Abs( doubleValue - longValue ) < Number.FLOAT_TOLERANCE
+            writer.Write( Math.Abs( doubleValue - longValue ) < NumberUtils.FLOAT_TOLERANCE
                               ? longValue.ToString( CultureInfo.InvariantCulture )
                               : doubleValue.ToString( CultureInfo.InvariantCulture ) );
         }

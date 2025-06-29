@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Runtime.Versioning;
-
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace Extensions.Source.Tools.ImagePacker;
@@ -81,6 +77,7 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// </para>
 /// </summary>
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class ImagePacker
 {
     public Bitmap                          Image { get; }

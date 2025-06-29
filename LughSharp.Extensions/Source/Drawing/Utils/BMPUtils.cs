@@ -23,18 +23,17 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.SysDraw;
 using LughSharp.Lugh.Utils;
 
 using Bitmap = System.Drawing.Bitmap;
 using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace LughSharp.Lugh.Graphics.Utils;
+namespace Extensions.Source.Drawing.Utils;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public static class BMPUtils
 {
     public static BitmapFileHeader     BitmapFileHeader     { get; private set; }

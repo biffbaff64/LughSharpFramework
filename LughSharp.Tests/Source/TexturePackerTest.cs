@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Versioning;
+
 using Extensions.Source.Tools.ImagePacker;
 
 using JetBrains.Annotations;
@@ -35,6 +37,7 @@ namespace LughSharp.Tests.Source;
 
 [TestFixture]
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class TexturePackerTest
 {
     private const bool REMOVE_DUPLICATE_IMAGES = true;
@@ -73,7 +76,7 @@ public class TexturePackerTest
         var settingsFilePath = Path.Combine( outputFolder, "TexturePackerTestSettings.json" );
         
         settings.WriteToJsonFile( settingsFilePath );
-        
+
         var packer = new TexturePacker();
         packer.Process( inputFolder, outputFolder, "objects", settings );
     }

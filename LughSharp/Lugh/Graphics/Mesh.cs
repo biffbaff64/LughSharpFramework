@@ -33,7 +33,6 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 using Matrix3 = LughSharp.Lugh.Maths.Matrix3;
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
-using Number = LughSharp.Lugh.Maths.Number;
 
 namespace LughSharp.Lugh.Graphics;
 
@@ -493,7 +492,7 @@ public class Mesh : IDisposable
     /// <param name="vertices"> the array to copy the vertices to  </param>
     public float[] GetVertices( float[] vertices )
     {
-        return GetVertices( 0, Number.NOT_SET, vertices );
+        return GetVertices( 0, NumberUtils.NOT_SET, vertices );
     }
 
     /// <summary>
@@ -506,7 +505,7 @@ public class Mesh : IDisposable
     /// <param name="vertices"> the array to copy the vertices to  </param>
     public float[] GetVertices( int srcOffset, float[] vertices )
     {
-        return GetVertices( srcOffset, Number.NOT_SET, vertices );
+        return GetVertices( srcOffset, NumberUtils.NOT_SET, vertices );
     }
 
     /// <summary>
@@ -521,7 +520,7 @@ public class Mesh : IDisposable
     {
         var max = NumVertices * VertexSize;
 
-        if ( count == Number.NOT_SET )
+        if ( count == NumberUtils.NOT_SET )
         {
             count = Math.Min( max - srcOffset, vertices.Length - destOffset );
         }

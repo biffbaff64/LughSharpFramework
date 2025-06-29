@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils.Pooling;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;
 

@@ -33,8 +33,6 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using NUnit.Framework;
-
 namespace LughSharp.Tests.Source;
 
 public class Person

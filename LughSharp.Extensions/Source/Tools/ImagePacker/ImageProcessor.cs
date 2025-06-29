@@ -24,10 +24,8 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
@@ -43,6 +41,7 @@ using Image = System.Drawing.Image;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class ImageProcessor
 {
     public float                      Scale      { get; set; }
@@ -246,7 +245,7 @@ public class ImageProcessor
         }
 
         // Scale image.
-        if ( Math.Abs( _scale - 1f ) > Number.FLOAT_TOLERANCE )
+        if ( Math.Abs( _scale - 1f ) > NumberUtils.FLOAT_TOLERANCE )
         {
             width  = ( int )Math.Max( 1, Math.Round( width * _scale ) );
             height = ( int )Math.Max( 1, Math.Round( height * _scale ) );
@@ -547,7 +546,7 @@ public class ImageProcessor
             endY = image.Height - 2;
         }
 
-        if ( Math.Abs( _scale - 1.0f ) > Number.FLOAT_TOLERANCE )
+        if ( Math.Abs( _scale - 1.0f ) > NumberUtils.FLOAT_TOLERANCE )
         {
             startX = ( int )Math.Round( startX * _scale );
             endX   = ( int )Math.Round( endX * _scale );
@@ -634,7 +633,7 @@ public class ImageProcessor
                 break;
         }
 
-        if ( Math.Abs( _scale - 1.0f ) > Number.FLOAT_TOLERANCE )
+        if ( Math.Abs( _scale - 1.0f ) > NumberUtils.FLOAT_TOLERANCE )
         {
             startX = ( int )Math.Round( startX * _scale );
             endX   = ( int )Math.Round( endX * _scale );

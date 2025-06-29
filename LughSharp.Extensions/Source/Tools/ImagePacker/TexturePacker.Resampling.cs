@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing.Drawing2D;
-using System.Runtime.Versioning;
 
 namespace Extensions.Source.Tools.ImagePacker;
 
@@ -37,6 +35,7 @@ public enum Resampling
 }
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public static class ResamplingExtensions
 {
     public static InterpolationMode ToInterpolationMode( this Resampling resampling )

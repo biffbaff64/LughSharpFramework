@@ -26,11 +26,11 @@ using System.Text;
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
+using ByteOrder = LughSharp.Lugh.Utils.ByteOrder;
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace LughSharp.Lugh.Graphics.FrameBuffers;

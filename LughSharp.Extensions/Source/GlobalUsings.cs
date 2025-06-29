@@ -23,31 +23,26 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 // ====================================================================--------
-// General System
+global using System.Drawing;
+global using System.Drawing.Drawing2D;
+global using System.Drawing.Imaging;
 
 // ============================================================================
-// Json
-
 global using System.Text.Json;
 
 // ============================================================================
-// XML
+global using System.Runtime.Versioning;
 
 // ============================================================================
-// Jetbrains
 global using JetBrains.Annotations;
 
 // ============================================================================
-// OpenAL support
 
 // ============================================================================
-// OpenGL support
 global using DotGLFW;
-
 global using GLFW = DotGLFW;
 
 // ============================================================================
-// LughSharp
 global using LughSharp.Lugh;
 global using LughSharp.Lugh.Core;
 

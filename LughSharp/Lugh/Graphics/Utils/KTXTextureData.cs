@@ -27,10 +27,10 @@ using System.IO.Compression;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Pixels;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
+using ByteOrder = LughSharp.Lugh.Utils.ByteOrder;
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Graphics.Utils;

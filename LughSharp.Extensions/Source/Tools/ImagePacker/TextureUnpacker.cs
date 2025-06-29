@@ -22,11 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Runtime.Versioning;
-
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -34,6 +29,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace Extensions.Source.Tools.ImagePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class TextureUnpacker
 {
     public bool Quiet { get; set; }

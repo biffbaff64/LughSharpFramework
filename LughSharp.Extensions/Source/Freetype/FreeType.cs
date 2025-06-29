@@ -24,10 +24,11 @@
 
 using System.Runtime.InteropServices;
 
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Buffers;
+
+using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace Extensions.Source.Freetype;
 

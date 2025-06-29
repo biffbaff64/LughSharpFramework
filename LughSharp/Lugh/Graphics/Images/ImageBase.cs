@@ -39,7 +39,6 @@ public abstract class ImageBase
     public virtual int         Width    { get; protected set; }
     public virtual int         Height   { get; protected set; }
     public virtual int         BitDepth { get; protected set; }
-    public virtual PixelFormat Format   { get; protected set; }
 
     // ========================================================================
 

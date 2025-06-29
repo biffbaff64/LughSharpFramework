@@ -25,8 +25,23 @@
 namespace LughSharp.Lugh.Maths;
 
 [PublicAPI]
-public class NumberUtils
+public abstract class NumberUtils
 {
+    public const int   NOT_SET           = -1;
+    public const float PI                = 3.14159265358979323846f;
+    public const float MIN_NORMAL        = 1.17549435E-38f;
+    public const int   SIGNIFICAND_WIDTH = 24;
+    public const int   MAX_EXPONENT      = 127;
+    public const int   MIN_EXPONENT      = -126;
+    public const int   MIN_SUB_EXPONENT  = -149;
+    public const int   EXP_BIAS          = 127;
+    public const int   SIGN_BIT_MASK     = int.MinValue;
+    public const int   EXP_BIT_MASK      = 2139095040;
+    public const int   SIGNIF_BIT_MASK   = 8388607;
+    public const float FLOAT_TOLERANCE   = 0.000000000000001f; // 32 bits
+
+    // ========================================================================
+    
     /// <summary>
     /// Converts the given floating-point value to its integer bit representation.
     /// </summary>
@@ -38,8 +53,8 @@ public class NumberUtils
 
         // Check for NaN based on values of bit fields, maximum
         // exponent and nonzero significand.
-        if ( ( ( result & Number.EXP_BIT_MASK ) == Number.EXP_BIT_MASK )
-             && ( ( result & Number.SIGNIF_BIT_MASK ) != 0 ) )
+        if ( ( ( result & EXP_BIT_MASK ) == EXP_BIT_MASK )
+             && ( ( result & SIGNIF_BIT_MASK ) != 0 ) )
         {
             result = 0x7fc00000;
         }
@@ -259,4 +274,83 @@ public class NumberUtils
     {
         return x - y;
     }
+    
+    // ========================================================================
+
+    /// <summary>
+    /// Returns the value of the specified number as an <tt>int</tt>
+    /// which may involve rounding or truncation.
+    /// </summary>
+    /// <returns>
+    /// the numeric value represented by this object after conversion
+    /// to type <tt>int</tt>.
+    /// </returns>
+    public abstract int IntValue();
+
+    /// <summary>
+    /// Returns the value of the specified number as a <tt>long</tt>
+    /// which may involve rounding or truncation.
+    /// </summary>
+    /// <returns>
+    /// the numeric value represented by this object after conversion
+    /// to type <tt>long</tt>.
+    /// </returns>
+    public abstract long LongValue();
+
+    /// <summary>
+    /// Returns the value of the specified number as a <tt>float</tt>
+    /// which may involve rounding.
+    /// </summary>
+    /// <returns>
+    /// the numeric value represented by this object after conversion
+    /// to type <tt>float</tt>.
+    /// </returns>
+    public abstract float FloatValue();
+
+    /// <summary>
+    /// Returns the value of the specified number as a <tt>double</tt>
+    /// which may involve rounding.
+    /// </summary>
+    /// <returns>
+    /// the numeric value represented by this object after conversion
+    /// to type <tt>double</tt>.
+    /// </returns>
+    public abstract double DoubleValue();
+
+    /// <summary>
+    /// Returns the value of the specified number as a <tt>byte</tt>
+    /// which may involve rounding or truncation.
+    /// <para>
+    /// This implementation returns the result of <see cref="IntValue" /> cast
+    /// to a <tt>byte</tt>.
+    /// </para>
+    /// </summary>
+    /// <returns>
+    /// the numeric value represented by this object after conversion
+    /// to type <tt>byte</tt>.
+    /// </returns>
+    public sbyte ByteValue()
+    {
+        return ( sbyte )IntValue();
+    }
+
+    /// <summary>
+    /// Returns the value of the specified number as a <tt>short</tt>
+    /// which may involve rounding or truncation.
+    /// <para>
+    /// This implementation returns the result of <see cref="IntValue" />
+    /// cast to a <tt>short</tt>.
+    /// </para>
+    /// </summary>
+    /// <returns>
+    /// the numeric value represented by this object after conversion
+    /// to type <tt>short</tt>.
+    /// </returns>
+    public short ShortValue()
+    {
+        return ( short )IntValue();
+    }
 }
+
+// ========================================================================
+// ========================================================================

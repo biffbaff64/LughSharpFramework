@@ -98,6 +98,16 @@ namespace LughSharp.Lugh.Graphics.G2D;
 [PublicAPI]
 public class PixmapPacker : IDisposable
 {
+    public int                           PageWidth        { get; set; }
+    public int                           PageHeight       { get; set; }
+    public PixelType.Format              PageFormat       { get; set; }
+    public LughSharp.Lugh.Graphics.Color TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
+    public bool                          PackToTexture    { get; set; }
+    public bool                          DuplicateBorder  { get; set; }
+    public int                           Padding          { get; set; }
+    public List< Page >                  Pages            { get; set; } = [ ];
+    public int                           AlphaThreshold   { get; set; }
+
     // ========================================================================
 
     private readonly IPackStrategy _packStrategy;
@@ -191,16 +201,6 @@ public class PixmapPacker : IDisposable
         _stripWhitespaceY = stripWhitespaceY;
         _packStrategy     = packStrategy;
     }
-
-    public int              PageWidth        { get; set; }
-    public int              PageHeight       { get; set; }
-    public PixelType.Format PageFormat       { get; set; }
-    public Color            TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
-    public bool             PackToTexture    { get; set; }
-    public bool             DuplicateBorder  { get; set; }
-    public int              Padding          { get; set; }
-    public List< Page >     Pages            { get; set; } = [ ];
-    public int              AlphaThreshold   { get; set; }
 
     /// <summary>
     /// Performs application-defined tasks associated with freeing,
@@ -956,8 +956,8 @@ public class PixmapPacker : IDisposable
                 return null;
             }
 
-            if ( ( Math.Abs( node.Rect.Width - rect.Width ) < Number.FLOAT_TOLERANCE )
-                 && ( Math.Abs( node.Rect.Height - rect.Height ) < Number.FLOAT_TOLERANCE ) )
+            if ( ( Math.Abs( node.Rect.Width - rect.Width ) < NumberUtils.FLOAT_TOLERANCE )
+                 && ( Math.Abs( node.Rect.Height - rect.Height ) < NumberUtils.FLOAT_TOLERANCE ) )
             {
                 return node;
             }

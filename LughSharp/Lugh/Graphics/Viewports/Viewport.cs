@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-
 using LughSharp.Lugh.Graphics.Cameras;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;

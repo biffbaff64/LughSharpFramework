@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.Versioning;
-
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
@@ -130,27 +128,27 @@ public class Pixmap : IDisposable
         FillWithCurrentColor();
     }
 
-    /// <summary>
-    /// Represents an image composed of pixels that can be manipulated and drawn upon.
-    /// </summary>
-    /// <remarks>
-    /// The Pixmap class supports a variety of pixel formats and provides methods
-    /// to perform operations such as drawing shapes, filling areas with color, and copying pixels.
-    /// </remarks>
-    /// <example>
-    /// To create a new Pixmap, provide width, height, and a pixel format. The class
-    /// also offers constructors for creating Pixmaps from encoded data, byte buffers,
-    /// or files.
-    /// </example>
-    /// <remarks>
-    /// This class must be disposed of when no longer needed to free up unmanaged resources.
-    /// </remarks>
-    /// <seealso cref="PixelType.Format"/>
-    /// <seealso cref="Gdx2DPixmap"/>
-    public Pixmap( int width, int height, PixelFormat format )
-        : this( width, height, PixmapFormat.PixelFormatToPixelTypeFormat( format ) )
-    {
-    }
+//    /// <summary>
+//    /// Represents an image composed of pixels that can be manipulated and drawn upon.
+//    /// </summary>
+//    /// <remarks>
+//    /// The Pixmap class supports a variety of pixel formats and provides methods
+//    /// to perform operations such as drawing shapes, filling areas with color, and copying pixels.
+//    /// </remarks>
+//    /// <example>
+//    /// To create a new Pixmap, provide width, height, and a pixel format. The class
+//    /// also offers constructors for creating Pixmaps from encoded data, byte buffers,
+//    /// or files.
+//    /// </example>
+//    /// <remarks>
+//    /// This class must be disposed of when no longer needed to free up unmanaged resources.
+//    /// </remarks>
+//    /// <seealso cref="PixelType.Format"/>
+//    /// <seealso cref="Gdx2DPixmap"/>
+//    public Pixmap( int width, int height, PixelFormat format )
+//        : this( width, height, PixmapFormat.PixelFormatToPixelTypeFormat( format ) )
+//    {
+//    }
 
     /// <summary>
     /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded

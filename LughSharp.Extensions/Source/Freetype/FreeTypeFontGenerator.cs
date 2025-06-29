@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.Pixels;
@@ -30,6 +29,8 @@ using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
+
+using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace Extensions.Source.Freetype;
 
@@ -454,7 +455,7 @@ public class FreeTypeFontGenerator : IDisposable
             break;
         }
 
-        if ( !_bitmapped && ( Math.Abs( data.CapHeight - 1.0f ) < Number.FLOAT_TOLERANCE ) )
+        if ( !_bitmapped && ( Math.Abs( data.CapHeight - 1.0f ) < NumberUtils.FLOAT_TOLERANCE ) )
         {
             throw new GdxRuntimeException( "No cap character found in font" );
         }

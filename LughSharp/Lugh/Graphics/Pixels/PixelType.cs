@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.Serialization;
-
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils.Exceptions;
 
