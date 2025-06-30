@@ -307,14 +307,14 @@ public partial class TexturePacker
 
         Logger.Debug( $"packFileName: {packFileName}" );
 
-        // Remove the output directory, if it exists, and create
-        // a new fresh output folder.
-        if ( Directory.Exists( outputDir.FullName ) )
-        {
-            Directory.Delete( outputDir.FullName, true );
-        }
-
-        Directory.CreateDirectory( outputDir.FullName );
+//        // Remove the output directory, if it exists, and create
+//        // a new fresh output folder.
+//        if ( Directory.Exists( outputDir.FullName ) )
+//        {
+//            Directory.Delete( outputDir.FullName, true );
+//        }
+//
+//        Directory.CreateDirectory( outputDir.FullName );
 
         ProgressListener ??= new AbstractProgressListenerImpl();
         ProgressListener.Start( 1 );
@@ -536,9 +536,6 @@ public partial class TexturePacker
 
             string outputFile;
 
-            Logger.Debug( $"width: {width}" );
-            Logger.Debug( $"height: {height}" );
-
             while ( true )
             {
                 var name = imageName;
@@ -562,8 +559,6 @@ public partial class TexturePacker
 
                 outputFile = Path.Combine( packDir, name + "." + _settings.OutputFormat );
 
-                Logger.Debug( $"outputFile: {outputFile}" );
-
                 if ( !File.Exists( outputFile ) )
                 {
                     break;
@@ -576,6 +571,9 @@ public partial class TexturePacker
 
             page.ImageName = Path.GetFileName( outputFile );
 
+            Logger.Debug( $"page.ImageName: {page.ImageName}" );
+            Logger.Debug( $"outputFile: {outputFile}" );
+            
             var canvas = new Bitmap( width, height, PixmapFormatExtensions.ToPixelFormat( _settings.Format ) );
             var g      = System.Drawing.Graphics.FromImage( canvas );
 
