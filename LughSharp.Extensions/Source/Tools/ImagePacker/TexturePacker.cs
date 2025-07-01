@@ -307,14 +307,14 @@ public partial class TexturePacker
 
         Logger.Debug( $"packFileName: {packFileName}" );
 
-//        // Remove the output directory, if it exists, and create
-//        // a new fresh output folder.
-//        if ( Directory.Exists( outputDir.FullName ) )
-//        {
-//            Directory.Delete( outputDir.FullName, true );
-//        }
-//
-//        Directory.CreateDirectory( outputDir.FullName );
+        // Remove the output directory, if it exists, and create
+        // a new fresh output folder.
+        if ( Directory.Exists( outputDir.FullName ) )
+        {
+            Directory.Delete( outputDir.FullName, true );
+        }
+
+        Directory.CreateDirectory( outputDir.FullName );
 
         ProgressListener ??= new AbstractProgressListenerImpl();
         ProgressListener.Start( 1 );
@@ -322,7 +322,7 @@ public partial class TexturePacker
         var n = _settings.Scale.Length;
 
         Logger.Debug( $"_settings.Scale.Length: {_settings.Scale.Length}" );
-        
+
         for ( var i = 0; i < n; i++ )
         {
             ProgressListener.Start( 1f / n );
@@ -354,7 +354,7 @@ public partial class TexturePacker
                 var inputImage = _inputImages[ ii ];
 
                 Logger.Debug( $"inputImage.Name: {inputImage.Name}" );
-                
+
                 if ( inputImage.FileInfo != null )
                 {
                     _imageProcessor.AddImage( inputImage.FileInfo, inputImage.RootPath );
@@ -382,6 +382,11 @@ public partial class TexturePacker
 
             Logger.Debug( $"_imageProcessor.ImageRects.Count: {_imageProcessor.ImageRects.Count}" );
 
+            foreach ( var rect in _imageProcessor.ImageRects )
+            {
+                Logger.Debug( rect.ToString() );
+            }
+            
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
             ProgressListener.End();
@@ -390,7 +395,7 @@ public partial class TexturePacker
             ProgressListener.Total = pages.Count;
 
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
-            
+
             Logger.Debug( $"scaledPackFileName: {scaledPackFileName}" );
 
             WriteImages( outputDir.FullName, scaledPackFileName, pages );
@@ -571,9 +576,9 @@ public partial class TexturePacker
 
             page.ImageName = Path.GetFileName( outputFile );
 
-            Logger.Debug( $"page.ImageName: {page.ImageName}" );
+            page.Debug();
             Logger.Debug( $"outputFile: {outputFile}" );
-            
+
             var canvas = new Bitmap( width, height, PixmapFormatExtensions.ToPixelFormat( _settings.Format ) );
             var g      = System.Drawing.Graphics.FromImage( canvas );
 
@@ -600,6 +605,10 @@ public partial class TexturePacker
                     var rectX = page.X + rect.X;
                     var rectY = ( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY );
 
+                    Logger.Debug( $"iw: {iw}, ih: {ih}" );
+                    Logger.Debug( $"rectX: {rectX}, rectY: {rectY}" );
+                    Logger.Debug( $"_settings.DuplicatePadding: {_settings.DuplicatePadding}" );
+                    
                     if ( _settings.DuplicatePadding )
                     {
                         var amountX = _settings.PaddingX / 2;
@@ -674,7 +683,8 @@ public partial class TexturePacker
                     {
                         using ( var pen = new Pen( System.Drawing.Color.Magenta ) )
                         {
-                            g.DrawRectangle( pen, rectX, rectY, rect.Width - _settings.PaddingX - 1,
+                            g.DrawRectangle( pen, rectX, rectY,
+                                             rect.Width - _settings.PaddingX - 1,
                                              rect.Height - _settings.PaddingY - 1 );
                         }
                     }
@@ -700,10 +710,8 @@ public partial class TexturePacker
 
             if ( _settings.Debug )
             {
-                using ( var pen = new Pen( System.Drawing.Color.Magenta ) )
-                {
-                    g.DrawRectangle( pen, 0, 0, width - 1, height - 1 );
-                }
+                var pen = new Pen( System.Drawing.Color.Magenta );
+                g.DrawRectangle( pen, 0, 0, width - 1, height - 1 );
             }
 
             try
@@ -762,6 +770,14 @@ public partial class TexturePacker
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="outputDir"></param>
+    /// <param name="scaledPackFileName"></param>
+    /// <param name="pages"></param>
+    /// <exception cref="GdxRuntimeException"></exception>
+    /// <exception cref="NullReferenceException"></exception>
     private void WritePackFile( DirectoryInfo outputDir, string scaledPackFileName, List< Page > pages )
     {
         var packFile = new FileInfo( Path.Combine( outputDir.FullName, scaledPackFileName + _settings.AtlasExtension ) );

@@ -41,6 +41,7 @@ namespace LughSharp.Tests.Source;
 public class TexturePackerTest
 {
     private const bool REMOVE_DUPLICATE_IMAGES = true;
+    private const bool KEEP_DUPLICATE_IMAGES   = false;
     private const bool DRAW_DEBUG_LINES        = false;
 
     // ========================================================================
@@ -61,7 +62,7 @@ public class TexturePackerTest
             MaxHeight  = 2048, // Maximum Height of final atlas image
             PowerOfTwo = true,
             Debug      = DRAW_DEBUG_LINES,
-            IsAlias    = REMOVE_DUPLICATE_IMAGES,
+            IsAlias    = KEEP_DUPLICATE_IMAGES,
             Silent     = false,
         };
 
@@ -74,7 +75,7 @@ public class TexturePackerTest
         var outputFolder = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
 
         var settingsFilePath = Path.Combine( outputFolder, "TexturePackerTestSettings.json" );
-        
+
         settings.WriteToJsonFile( settingsFilePath );
 
         var packer = new TexturePacker();
@@ -89,4 +90,3 @@ public class TexturePackerTest
 
 // ========================================================================
 // ========================================================================
-
