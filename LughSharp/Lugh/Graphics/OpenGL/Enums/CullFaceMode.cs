@@ -25,9 +25,26 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum ProgramProperty : int
+public enum CullFaceMode
 {
-    LinkStatus      = IGL.GL_LINK_STATUS,
-    InfoLogLength   = IGL.GL_INFO_LOG_LENGTH,
-    AttachedShaders = IGL.GL_ATTACHED_SHADERS,
+    FrontLeft    = IGL.GL_FRONT_LEFT,
+    FrontRight   = IGL.GL_FRONT_RIGHT,
+    BackLeft     = IGL.GL_BACK_LEFT,
+    BackRight    = IGL.GL_BACK_RIGHT,
+    Front        = IGL.GL_FRONT,
+    Back         = IGL.GL_BACK,
+    Left         = IGL.GL_LEFT,
+    Right        = IGL.GL_RIGHT,
+    FrontAndBack = IGL.GL_FRONT_AND_BACK,
 }
+
+[PublicAPI]
+public enum FrontFaceDirection
+{
+    Clockwise        = IGL.GL_CW,
+    CounterClockwise = IGL.GL_CCW
+}
+
+
+// ========================================================================
+// ========================================================================

@@ -277,6 +277,8 @@ public interface IGL
     const int GL_SET           = 0x150F;
 
     // ========================================================================
+    const int GL_MODELVIEW = 0x1700;
+    const int GL_PROJECTION = 0x1701;
     const int GL_TEXTURE = 0x1702;
 
     // ========================================================================

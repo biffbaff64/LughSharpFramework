@@ -59,7 +59,7 @@ public class AbstractFiles : IFiles
 
             var _ => throw new GdxRuntimeException( $"Invalid path type: {type}\nValid types are: " +
                                                     $"Classpath, Internal, Absolute, " +
-                                                    $"Assembly, External, Local" )
+                                                    $"Assembly, External, Local" ),
         };
     }
 

@@ -85,10 +85,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Lugh\Graphics\Windowing\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="lib\net8.0\freetype.dll">
         <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       </None>

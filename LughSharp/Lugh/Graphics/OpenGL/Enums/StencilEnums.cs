@@ -25,21 +25,29 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum ShaderType : int
+public enum StencilFunction
 {
-    VertexShader         = IGL.GL_VERTEX_SHADER,
-    FragmentShader       = IGL.GL_FRAGMENT_SHADER,
-    GeometryShader       = IGL.GL_GEOMETRY_SHADER,
-    TessControlShader    = IGL.GL_TESS_CONTROL_SHADER,
-    TessEvaluationShader = IGL.GL_TESS_EVALUATION_SHADER,
-    ComputeShader        = IGL.GL_COMPUTE_SHADER,
+    Never    = IGL.GL_NEVER,
+    Less     = IGL.GL_LESS,
+    LEqual   = IGL.GL_LEQUAL,
+    Greater  = IGL.GL_GREATER,
+    GEqual   = IGL.GL_GEQUAL,
+    Equal    = IGL.GL_EQUAL,
+    NotEqual = IGL.GL_NOTEQUAL,
+    Always   = IGL.GL_ALWAYS
 }
 
-[PublicAPI]
-public enum ShaderParameterName : int
+public enum StencilOp
 {
-    CompileStatus = IGL.GL_COMPILE_STATUS,
-    InfoLogLength = IGL.GL_INFO_LOG_LENGTH,
-    ShaderType    = IGL.GL_SHADER_TYPE,
-    DeleteStatus  = IGL.GL_DELETE_STATUS,
+    Keep          = IGL.GL_KEEP,
+    Zero          = IGL.GL_ZERO,
+    Replace       = IGL.GL_REPLACE,
+    Increment     = IGL.GL_INCR,
+    IncrementWrap = IGL.GL_INCR_WRAP,
+    Decrement     = IGL.GL_DECR,
+    DecrementWrap = IGL.GL_DECR_WRAP,
+    Invert        = IGL.GL_INVERT
 }
+
+// ========================================================================
+// ========================================================================

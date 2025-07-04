@@ -25,21 +25,17 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum ShaderType : int
+public enum CompareFunction
 {
-    VertexShader         = IGL.GL_VERTEX_SHADER,
-    FragmentShader       = IGL.GL_FRAGMENT_SHADER,
-    GeometryShader       = IGL.GL_GEOMETRY_SHADER,
-    TessControlShader    = IGL.GL_TESS_CONTROL_SHADER,
-    TessEvaluationShader = IGL.GL_TESS_EVALUATION_SHADER,
-    ComputeShader        = IGL.GL_COMPUTE_SHADER,
+    Never        = IGL.GL_NEVER,
+    Less         = IGL.GL_LESS,
+    Equal        = IGL.GL_EQUAL,
+    LessEqual    = IGL.GL_LEQUAL,
+    Greater      = IGL.GL_GREATER,
+    NotEqual     = IGL.GL_NOTEQUAL,
+    GreaterEqual = IGL.GL_GEQUAL,
+    Always       = IGL.GL_ALWAYS,
 }
 
-[PublicAPI]
-public enum ShaderParameterName : int
-{
-    CompileStatus = IGL.GL_COMPILE_STATUS,
-    InfoLogLength = IGL.GL_INFO_LOG_LENGTH,
-    ShaderType    = IGL.GL_SHADER_TYPE,
-    DeleteStatus  = IGL.GL_DELETE_STATUS,
-}
+// ========================================================================
+// ========================================================================

@@ -25,21 +25,14 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum ShaderType : int
+public enum VertexAttribParameter
 {
-    VertexShader         = IGL.GL_VERTEX_SHADER,
-    FragmentShader       = IGL.GL_FRAGMENT_SHADER,
-    GeometryShader       = IGL.GL_GEOMETRY_SHADER,
-    TessControlShader    = IGL.GL_TESS_CONTROL_SHADER,
-    TessEvaluationShader = IGL.GL_TESS_EVALUATION_SHADER,
-    ComputeShader        = IGL.GL_COMPUTE_SHADER,
+    ArrayEnabled    = IGL.GL_VERTEX_ATTRIB_ARRAY_ENABLED,
+    ArraySize       = IGL.GL_VERTEX_ATTRIB_ARRAY_SIZE,
+    ArrayStride     = IGL.GL_VERTEX_ATTRIB_ARRAY_STRIDE,
+    ArrayType       = IGL.GL_VERTEX_ATTRIB_ARRAY_TYPE,
+    ArrayNormalized = IGL.GL_VERTEX_ATTRIB_ARRAY_NORMALIZED
 }
 
-[PublicAPI]
-public enum ShaderParameterName : int
-{
-    CompileStatus = IGL.GL_COMPILE_STATUS,
-    InfoLogLength = IGL.GL_INFO_LOG_LENGTH,
-    ShaderType    = IGL.GL_SHADER_TYPE,
-    DeleteStatus  = IGL.GL_DELETE_STATUS,
-}
+// ========================================================================
+// ========================================================================

@@ -27,20 +27,25 @@ namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum TextureParameterName : int
 {
-    TextureMinFilter   = IGL.GL_TEXTURE_MIN_FILTER,
-    TextureMagFilter   = IGL.GL_TEXTURE_MAG_FILTER,
-    TextureWrapS       = IGL.GL_TEXTURE_WRAP_S,
-    TextureWrapT       = IGL.GL_TEXTURE_WRAP_T,
-    TextureBaseLevel   = IGL.GL_TEXTURE_BASE_LEVEL,
-    TextureMaxLevel    = IGL.GL_TEXTURE_MAX_LEVEL,
-    TextureCompareMode = IGL.GL_TEXTURE_COMPARE_MODE,
-    TextureCompareFunc = IGL.GL_TEXTURE_COMPARE_FUNC,
-    TextureMinLod      = IGL.GL_TEXTURE_MIN_LOD,
-    TextureMaxLod      = IGL.GL_TEXTURE_MAX_LOD,
+    MinFilter       = IGL.GL_TEXTURE_MIN_FILTER,
+    MagFilter       = IGL.GL_TEXTURE_MAG_FILTER,
+    WrapS           = IGL.GL_TEXTURE_WRAP_S,
+    WrapT           = IGL.GL_TEXTURE_WRAP_T,
+    BaseLevel       = IGL.GL_TEXTURE_BASE_LEVEL,
+    MaxLevel        = IGL.GL_TEXTURE_MAX_LEVEL,
+    CompareMode     = IGL.GL_TEXTURE_COMPARE_MODE,
+    CompareFunc     = IGL.GL_TEXTURE_COMPARE_FUNC,
+    MinLod          = IGL.GL_TEXTURE_MIN_LOD,
+    MaxLod          = IGL.GL_TEXTURE_MAX_LOD,
+    BorderColor     = IGL.GL_TEXTURE_BORDER_COLOR,
+    TextureSwizzleR = IGL.GL_TEXTURE_SWIZZLE_R,
+    TextureSwizzleG = IGL.GL_TEXTURE_SWIZZLE_G,
+    TextureSwizzleB = IGL.GL_TEXTURE_SWIZZLE_B,
+    TextureSwizzleA = IGL.GL_TEXTURE_SWIZZLE_A,
 }
 
 [PublicAPI]
-public enum TextureMinFilter : int
+public enum TextureFilterMode : int
 {
     NearestMipmapNearest = IGL.GL_NEAREST_MIPMAP_NEAREST,
     LinearMipmapNearest  = IGL.GL_LINEAR_MIPMAP_NEAREST,
@@ -48,13 +53,6 @@ public enum TextureMinFilter : int
     LinearMipmapLinear   = IGL.GL_LINEAR_MIPMAP_LINEAR,
     Nearest              = IGL.GL_NEAREST,
     Linear               = IGL.GL_LINEAR,
-}
-
-[PublicAPI]
-public enum TextureMagFilter : int
-{
-    Nearest = IGL.GL_NEAREST,
-    Linear  = IGL.GL_LINEAR,
 }
 
 // ========================================================================

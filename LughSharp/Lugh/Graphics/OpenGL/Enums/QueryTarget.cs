@@ -25,21 +25,21 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum ShaderType : int
+public enum QueryTarget
 {
-    VertexShader         = IGL.GL_VERTEX_SHADER,
-    FragmentShader       = IGL.GL_FRAGMENT_SHADER,
-    GeometryShader       = IGL.GL_GEOMETRY_SHADER,
-    TessControlShader    = IGL.GL_TESS_CONTROL_SHADER,
-    TessEvaluationShader = IGL.GL_TESS_EVALUATION_SHADER,
-    ComputeShader        = IGL.GL_COMPUTE_SHADER,
+    SamplesPassed                      = IGL.GL_SAMPLES_PASSED,
+    AnySamplesPassed                   = IGL.GL_ANY_SAMPLES_PASSED,
+    PrimitivesGenerated                = IGL.GL_PRIMITIVES_GENERATED,
+    TimeElapsed                        = IGL.GL_TIME_ELAPSED,
+    TransformFeedbackPrimitivesWritten = IGL.GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN
 }
 
 [PublicAPI]
-public enum ShaderParameterName : int
+public enum QueryParameter
 {
-    CompileStatus = IGL.GL_COMPILE_STATUS,
-    InfoLogLength = IGL.GL_INFO_LOG_LENGTH,
-    ShaderType    = IGL.GL_SHADER_TYPE,
-    DeleteStatus  = IGL.GL_DELETE_STATUS,
+    QueryResult          = IGL.GL_QUERY_RESULT,
+    QueryResultAvailable = IGL.GL_QUERY_RESULT_AVAILABLE
 }
+
+// ========================================================================
+// ========================================================================

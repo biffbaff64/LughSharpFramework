@@ -416,22 +416,35 @@ GRAPHICS/OPENGL/ENUMS
 ---------------------
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - BlendingFactor
-    - DONE - DONE - BufferEnums
-    - DONE - DONE - EnableCap
-    - DONE - DONE - GetPName
-    - DONE - DONE - LogicOp
-    - DONE - DONE - PixelEnums
-    - DONE - DONE - PrimitiveTypeop
-    - DONE - DONE - ProgramProperty
-    - DONE - DONE - ShaderEnums
-    - DONE - DONE - StringName
-    - DONE - DONE - TextureLimits
-    - DONE - DONE - TextureParameterName
-    - DONE - DONE - TextureTarget
-    - DONE - DONE - TextureUnit
-    - DONE - DONE - TextureWrapMode
-    - DONE - DONE - VertexAttribPointerType
+    - IP   - IP   - BlendingFactor
+    - IP   - IP   - BufferEnums
+    - IP   - IP   - ClearBufferMask
+    - IP   - IP   - CompareFunction
+    - IP   - IP   - CullFaceMode
+    - IP   - IP   - DataType
+    - IP   - IP   - DebugEnums
+    - IP   - IP   - DrawElementsType
+    - IP   - IP   - EnableCap
+    - IP   - IP   - FrameBufferEnums
+    - IP   - IP   - GetPName
+    - IP   - IP   - LogicOp
+    - IP   - IP   - MatrixMode
+    - IP   - IP   - PixelEnums
+    - IP   - IP   - PolygonMode
+    - IP   - IP   - PrimitiveType
+    - IP   - IP   - ProgramParameter
+    - IP   - IP   - QueryTarget
+    - IP   - IP   - ShaderEnums
+    - IP   - IP   - StencilEnums
+    - IP   - IP   - StringName
+    - IP   - IP   - TextureFormat
+    - IP   - IP   - TextureLimits
+    - IP   - IP   - TextureParameterName
+    - IP   - IP   - TextureTarget
+    - IP   - IP   - TextureUnit
+    - IP   - IP   - TextureWrapMode
+    - IP   - IP   - VertexAttribParameter
+    - IP   - IP   - VertexAttribType
 
 GRAPHICS/OPENGL/GLSL
 --------------------

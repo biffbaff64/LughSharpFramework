@@ -25,43 +25,42 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum PixelType : int
+public enum FramebufferTarget
 {
-    UnsignedShort4444 = IGL.GL_UNSIGNED_SHORT_4_4_4_4,
-    UnsignedShort5551 = IGL.GL_UNSIGNED_SHORT_5_5_5_1,
-    UnsignedShort565  = IGL.GL_UNSIGNED_SHORT_5_6_5,
-    UnsignedByte      = IGL.GL_UNSIGNED_BYTE,
+    Framebuffer     = IGL.GL_FRAMEBUFFER,
+    ReadFramebuffer = IGL.GL_READ_FRAMEBUFFER,
+    DrawFramebuffer = IGL.GL_DRAW_FRAMEBUFFER,
 }
 
 [PublicAPI]
-public enum PixelFormat : int
+public enum FramebufferAttachment
 {
-    Alpha          = IGL.GL_ALPHA,
-    Rgb            = IGL.GL_RGB,
-    Rgba           = IGL.GL_RGBA,
-    Luminance      = IGL.GL_LUMINANCE,
-    LuminanceAlpha = IGL.GL_LUMINANCE_ALPHA,
+    ColorAttachment0       = IGL.GL_COLOR_ATTACHMENT0,
+    DepthAttachment        = IGL.GL_DEPTH_ATTACHMENT,
+    StencilAttachment      = IGL.GL_STENCIL_ATTACHMENT,
+    DepthStencilAttachment = IGL.GL_DEPTH_STENCIL_ATTACHMENT,
 }
 
 [PublicAPI]
-public enum PixelInternalFormat : int
+public enum FramebufferStatus
 {
-    Alpha          = IGL.GL_ALPHA,
-    Rgb            = IGL.GL_RGB,
-    Rgba           = IGL.GL_RGBA,
-    Luminance      = IGL.GL_LUMINANCE,
-    LuminanceAlpha = IGL.GL_LUMINANCE_ALPHA,
+    Complete                    = IGL.GL_FRAMEBUFFER_COMPLETE,
+    Undefined                   = IGL.GL_FRAMEBUFFER_UNDEFINED,
+    IncompleteAttachment        = IGL.GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
+    IncompleteMissingAttachment = IGL.GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT,
+    IncompleteDrawBuffer        = IGL.GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER,
+    IncompleteReadBuffer        = IGL.GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER,
+    Unsupported                 = IGL.GL_FRAMEBUFFER_UNSUPPORTED
 }
 
 [PublicAPI]
-public enum PixelStoreParameter : int
+public enum FramebufferAttachmentPoint
 {
-    UnpackAlignment = IGL.GL_UNPACK_ALIGNMENT,
-    PackAlignment   = IGL.GL_PACK_ALIGNMENT,
-    UnpackRowLength  = IGL.GL_UNPACK_ROW_LENGTH,
-    PackRowLength    = IGL.GL_PACK_ROW_LENGTH,
-    UnpackSkipPixels = IGL.GL_UNPACK_SKIP_PIXELS,
-    PackSkipPixels   = IGL.GL_PACK_SKIP_PIXELS,
+    ColorAttachment0  = IGL.GL_COLOR_ATTACHMENT0,
+    ColorAttachment1  = IGL.GL_COLOR_ATTACHMENT1,
+    ColorAttachment2  = IGL.GL_COLOR_ATTACHMENT2,
+    DepthAttachment   = IGL.GL_DEPTH_ATTACHMENT,
+    StencilAttachment = IGL.GL_STENCIL_ATTACHMENT
 }
 
 // ========================================================================

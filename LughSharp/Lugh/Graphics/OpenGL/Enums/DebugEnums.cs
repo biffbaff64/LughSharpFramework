@@ -25,16 +25,36 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum VertexAttribPointerType
+public enum DebugSeverity
 {
-    Byte          = IGL.GL_BYTE,
-    UnsignedByte  = IGL.GL_UNSIGNED_BYTE,
-    Short         = IGL.GL_SHORT,
-    UnsignedShort = IGL.GL_UNSIGNED_SHORT,
-    Int           = IGL.GL_INT,
-    UnsignedInt   = IGL.GL_UNSIGNED_INT,
-    Float         = IGL.GL_FLOAT,
-    Double        = IGL.GL_DOUBLE,
-    HalfFloat     = IGL.GL_HALF_FLOAT,
-    Fixed         = IGL.GL_FIXED,
+    High         = IGL.GL_DEBUG_SEVERITY_HIGH,
+    Medium       = IGL.GL_DEBUG_SEVERITY_MEDIUM,
+    Low          = IGL.GL_DEBUG_SEVERITY_LOW,
+    Notification = IGL.GL_DEBUG_SEVERITY_NOTIFICATION
 }
+
+[PublicAPI]
+public enum DebugSource
+{
+    Api            = IGL.GL_DEBUG_SOURCE_API,
+    WindowSystem   = IGL.GL_DEBUG_SOURCE_WINDOW_SYSTEM,
+    ShaderCompiler = IGL.GL_DEBUG_SOURCE_SHADER_COMPILER,
+    ThirdParty     = IGL.GL_DEBUG_SOURCE_THIRD_PARTY,
+    Application    = IGL.GL_DEBUG_SOURCE_APPLICATION,
+    Other          = IGL.GL_DEBUG_SOURCE_OTHER
+}
+
+[PublicAPI]
+public enum DebugType
+{
+    Error              = IGL.GL_DEBUG_TYPE_ERROR,
+    DeprecatedBehavior = IGL.GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR,
+    UndefinedBehavior  = IGL.GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR,
+    Portability        = IGL.GL_DEBUG_TYPE_PORTABILITY,
+    Performance        = IGL.GL_DEBUG_TYPE_PERFORMANCE,
+    Marker             = IGL.GL_DEBUG_TYPE_MARKER,
+    Other              = IGL.GL_DEBUG_TYPE_OTHER
+}
+
+// ========================================================================
+// ========================================================================

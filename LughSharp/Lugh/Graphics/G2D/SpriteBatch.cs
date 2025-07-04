@@ -1656,17 +1656,17 @@ public class SpriteBatch : IBatch, IDisposable
         // Set up vertex attributes
         // Update vertex attribute pointers to use VertexConstants
         GL.VertexAttribPointer( 0, VertexConstants.POSITION_COMPONENTS,
-                                ( int )VertexAttribPointerType.Float, false,
+                                ( int )VertexAttribType.Float, false,
                                 VertexConstants.VERTEX_SIZE_BYTES,
                                 ( uint )VertexConstants.POSITION_OFFSET * sizeof( float ) );
 
         GL.VertexAttribPointer( 1, VertexConstants.COLOR_COMPONENTS,
-                                ( int )VertexAttribPointerType.Float, false,
+                                ( int )VertexAttribType.Float, false,
                                 VertexConstants.VERTEX_SIZE_BYTES,
                                 ( uint )VertexConstants.COLOR_OFFSET * sizeof( float ) );
 
         GL.VertexAttribPointer( 2, VertexConstants.TEXCOORD_COMPONENTS,
-                                ( int )VertexAttribPointerType.Float, false,
+                                ( int )VertexAttribType.Float, false,
                                 VertexConstants.VERTEX_SIZE_BYTES,
                                 ( uint )VertexConstants.TEXCOORD_OFFSET * sizeof( float ) );
 

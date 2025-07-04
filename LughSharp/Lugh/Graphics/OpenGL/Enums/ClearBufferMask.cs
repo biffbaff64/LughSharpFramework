@@ -25,21 +25,12 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum ShaderType : int
+public enum ClearBufferMask
 {
-    VertexShader         = IGL.GL_VERTEX_SHADER,
-    FragmentShader       = IGL.GL_FRAGMENT_SHADER,
-    GeometryShader       = IGL.GL_GEOMETRY_SHADER,
-    TessControlShader    = IGL.GL_TESS_CONTROL_SHADER,
-    TessEvaluationShader = IGL.GL_TESS_EVALUATION_SHADER,
-    ComputeShader        = IGL.GL_COMPUTE_SHADER,
+    ColorBufferBit   = IGL.GL_COLOR_BUFFER_BIT,
+    DepthBufferBit   = IGL.GL_DEPTH_BUFFER_BIT,
+    StencilBufferBit = IGL.GL_STENCIL_BUFFER_BIT,
 }
 
-[PublicAPI]
-public enum ShaderParameterName : int
-{
-    CompileStatus = IGL.GL_COMPILE_STATUS,
-    InfoLogLength = IGL.GL_INFO_LOG_LENGTH,
-    ShaderType    = IGL.GL_SHADER_TYPE,
-    DeleteStatus  = IGL.GL_DELETE_STATUS,
-}
+// ========================================================================
+// ========================================================================
