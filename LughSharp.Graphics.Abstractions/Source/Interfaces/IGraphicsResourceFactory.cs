@@ -25,6 +25,7 @@
 using JetBrains.Annotations;
 
 using LughSharp.Graphics.Abstractions.Source.Enums;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Graphics.Abstractions.Source.Interfaces;
 

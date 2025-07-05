@@ -35,7 +35,7 @@ public class GraphicsConfiguration
 
     public bool EnableDebugOutput { get; set; }
 
-    public MSAASamples MultiSampling { get; set; }
+//    public MSAASamples MultiSampling { get; set; }
 
     public bool VSync { get; set; }
 }
