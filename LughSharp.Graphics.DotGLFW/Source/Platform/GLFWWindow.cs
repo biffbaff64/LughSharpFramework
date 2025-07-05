@@ -22,24 +22,78 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using DotGLFW;
+
 using JetBrains.Annotations;
 
-using LughSharp.Lugh.Maths;
+using LughSharp.Graphics.Abstractions.Source;
+using LughSharp.Graphics.Abstractions.Source.Interfaces;
 
-namespace LughSharp.Graphics.Abstractions.Source.Interfaces;
+namespace LughSharp.Graphics.DotGLFW.Source.Platform;
 
 [PublicAPI]
-public interface IShaderProgram
+public class GLFWWindow : IWindow
 {
-    void Use();
-    
-    void SetUniform( string name, int value );
-    
-    void SetUniform( string name, float value );
-    
-    void SetUniform( string name, Vector3 value );
-    
-    void SetUniform( string name, Matrix4 value );
+    /// <inheritdoc />
+    public int Width { get; }
+
+    /// <inheritdoc />
+    public int Height { get; }
+
+    /// <inheritdoc />
+    public bool IsVisible { get; }
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public event Action< int, int >? Resized;
+
+    /// <inheritdoc />
+    public event Action? Closed;
+
+    /// <inheritdoc />
+    public event Action? Focused;
+
+    // ========================================================================
+
+    private readonly Window _handle;
+
+    // ========================================================================
+
+    public GLFWWindow( GraphicsConfiguration config )
+    {
+    }
+
+    /// <inheritdoc />
+    public void Show()
+    {
+    }
+
+    /// <inheritdoc />
+    public void Hide()
+    {
+    }
+
+    /// <inheritdoc />
+    public void SetTitle( string title )
+    {
+    }
+
+    /// <inheritdoc />
+    public bool ShouldClose()
+    {
+        return false;
+    }
+
+    public void SwapBuffers()
+    {
+        Glfw.SwapBuffers( _handle );
+    }
+
+    public void PollEvents()
+    {
+        Glfw.PollEvents();
+    }
 }
 
 // ========================================================================

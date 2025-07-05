@@ -22,25 +22,15 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
+using JetBrains.Annotations;
+
+namespace LughSharp.Graphics.Abstractions.Source.Interfaces;
 
 [PublicAPI]
-public enum BlendingFactorSrc : int
+public interface IVertexLayout
 {
-    Zero = IGL.GL_ZERO,
-    One  = IGL.GL_ONE,
+    
 }
 
-[PublicAPI]
-public enum BlendingFactor : int
-{
-    SrcColor         = IGL.GL_SRC_COLOR,
-    OneMinusSrcColor = IGL.GL_ONE_MINUS_SRC_COLOR,
-    SrcAlpha         = IGL.GL_SRC_ALPHA,
-    OneMinusSrcAlpha = IGL.GL_ONE_MINUS_SRC_ALPHA,
-    DstAlpha         = IGL.GL_DST_ALPHA,
-    OneMinusDstAlpha = IGL.GL_ONE_MINUS_DST_ALPHA,
-    DstColor         = IGL.GL_DST_COLOR,
-    OneMinusDstColor = IGL.GL_ONE_MINUS_DST_COLOR,
-    SrcAlphaSaturate = IGL.GL_SRC_ALPHA_SATURATE,
-}
+// ========================================================================
+// ========================================================================

@@ -29,13 +29,29 @@ namespace LughSharp.Graphics.Abstractions.Source.Interfaces;
 [PublicAPI]
 public interface IInputHandler
 {
-    bool IsKeyPressed( int key );       // Uses IInput.Keys values
-    bool IsButtonPressed( int button ); // Uses IInput.Buttons values
+    /// <summary>
+    /// Resets polling states and updates callbacks if the window
+    /// handle has changed.
+    /// </summary>
+    /// <param name="windowHandle"> The new handle. </param>
+    void WindowHandleChanged( DotGLFW.Window windowHandle );
+
+    void Update();
+    void PrepareNext();
+
+    /// <summary>
+    /// Resets all polling states, clears touched and pressed flags,
+    /// and clears the event queue.
+    /// </summary>
+    void ResetPollingStates();
+
+    bool IsKeyPressed( int key );               // Uses IInput.Keys values
+    bool IsButtonPressed( int button );         // Uses IInput.Buttons values
     (float x, float y) GetMousePosition();
 
     // Event handlers using the existing key codes
-    event Action< int >          KeyPressed;  // Key parameter is IInput.Keys value
-    event Action< int >          KeyReleased; // Key parameter is IInput.Keys value
+    event Action< int >          KeyPressed;    // Key parameter is IInput.Keys value
+    event Action< int >          KeyReleased;   // Key parameter is IInput.Keys value
     event Action< float, float > MouseMoved;
 }
 

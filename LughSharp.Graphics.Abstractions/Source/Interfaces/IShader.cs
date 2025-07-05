@@ -24,42 +24,12 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Graphics.Abstractions.Source.Interfaces;
-using LughSharp.Lugh.Input;
-
-namespace LughSharp.Graphics.OpenGL.Source.Platform;
+namespace LughSharp.Graphics.Abstractions.Source.Interfaces;
 
 [PublicAPI]
-public class GLFWInput : IInputHandler
+public interface IShader
 {
-    private readonly GLFWWindow _window;
     
-    public GLFWInput(GLFWWindow window)
-    {
-        _window = window;
-    }
-
-    public bool IsKeyPressed( int key )
-    {
-        var glfwKey = ConvertToGLFWKey( key );
-
-        return _window.GetKey( glfwKey ) == GLFW.KeyState.Press;
-    }
-    
-    // ========================================================================
-    
-    private static GLFW.Keys ConvertToGLFWKey(int inputKey)
-    {
-        // Map from IInput.Keys to GLFW.Keys
-        return inputKey switch
-        {
-            IInput.Keys.A => GLFW.Keys.A,
-            IInput.Keys.B => GLFW.Keys.B,
-            
-            // ... other mappings
-            _ => GLFW.Keys.Unknown
-        };
-    }
 }
 
 // ========================================================================

@@ -24,10 +24,10 @@
 
 using JetBrains.Annotations;
 
-namespace LughSharp.Graphics.OpenGL.Source;
+namespace LughSharp.Graphics.DotGLFW.Source.Resources;
 
 [PublicAPI]
-public class OpenGLResourceFactory
+public class OpenGLShaderProgram
 {
     
 }

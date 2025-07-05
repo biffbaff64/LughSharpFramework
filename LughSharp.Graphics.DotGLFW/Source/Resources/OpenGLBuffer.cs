@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-namespace LughSharp.Graphics.OpenGL.Source.Resources;
+namespace LughSharp.Graphics.DotGLFW.Source.Resources;
 
 [PublicAPI]
 public class OpenGLBuffer

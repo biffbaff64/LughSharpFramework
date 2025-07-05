@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LughSharp.Tests", "LughShar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LughSharp.Graphics.Abstractions", "LughSharp.Graphics.Abstractions\LughSharp.Graphics.Abstractions.csproj", "{8F7E0128-1722-4167-9CE6-30E93F7DBD6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LughSharp.Graphics.OpenGL", "LughSharp.Graphics.OpenGL\LughSharp.Graphics.OpenGL.csproj", "{526CC7B6-9194-4CC4-82ED-C7A7F2759E77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LughSharp.Graphics.DotGLFW", "LughSharp.Graphics.DotGLFW\LughSharp.Graphics.DotGLFW.csproj", "{526CC7B6-9194-4CC4-82ED-C7A7F2759E77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

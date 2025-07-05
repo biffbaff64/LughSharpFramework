@@ -22,76 +22,26 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Graphics.Abstractions.Source;
-using LughSharp.Graphics.Abstractions.Source.Interfaces;
-
-namespace LughSharp.Graphics.OpenGL.Source.Platform;
+namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public class GLFWWindow : IWindow
+public enum BlendMode
 {
-    /// <inheritdoc />
-    public int Width { get; }
-
-    /// <inheritdoc />
-    public int Height { get; }
-
-    /// <inheritdoc />
-    public bool IsVisible { get; }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public event Action< int, int >? Resized;
-
-    /// <inheritdoc />
-    public event Action? Closed;
-
-    /// <inheritdoc />
-    public event Action? Focused;
-
-    // ========================================================================
-
-    private readonly DotGLFW.Window _handle;
-
-    // ========================================================================
-
-    public GLFWWindow( GraphicsConfiguration config )
-    {
-    }
-
-    /// <inheritdoc />
-    public void Show()
-    {
-    }
-
-    /// <inheritdoc />
-    public void Hide()
-    {
-    }
-
-    /// <inheritdoc />
-    public void SetTitle( string title )
-    {
-    }
-
-    /// <inheritdoc />
-    public bool ShouldClose()
-    {
-        return false;
-    }
-
-    public void SwapBuffers()
-    {
-        DotGLFW.Glfw.SwapBuffers( _handle );
-    }
-
-    public void PollEvents()
-    {
-        DotGLFW.Glfw.PollEvents();
-    }
+    Zero                  = IGL.GL_ZERO,
+    One                   = IGL.GL_ONE,
+    SrcColor              = IGL.GL_SRC_COLOR,
+    OneMinusSrcColor      = IGL.GL_ONE_MINUS_SRC_COLOR,
+    DstColor              = IGL.GL_DST_COLOR,
+    OneMinusDstColor      = IGL.GL_ONE_MINUS_DST_COLOR,
+    SrcAlpha              = IGL.GL_SRC_ALPHA,
+    OneMinusSrcAlpha      = IGL.GL_ONE_MINUS_SRC_ALPHA,
+    DstAlpha              = IGL.GL_DST_ALPHA,
+    OneMinusDstAlpha      = IGL.GL_ONE_MINUS_DST_ALPHA,
+    ConstantColor         = IGL.GL_CONSTANT_COLOR,
+    OneMinusConstantColor = IGL.GL_ONE_MINUS_CONSTANT_COLOR,
+    ConstantAlpha         = IGL.GL_CONSTANT_ALPHA,
+    OneMinusConstantAlpha = IGL.GL_ONE_MINUS_CONSTANT_ALPHA,
+    SrcAlphaSaturate      = IGL.GL_SRC_ALPHA_SATURATE
 }
 
 // ========================================================================

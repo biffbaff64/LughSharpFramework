@@ -37,10 +37,10 @@ public interface IGraphicsAPI
 
     // Shader Management
     IShaderProgram? CreateShaderProgram();
-    IShader CreateShader( ShaderType type );
+    IShader? CreateShader( ShaderType type );
 
     // Vertex Layout
-    IVertexLayout CreateVertexLayout();
+    IVertexLayout? CreateVertexLayout();
 
     // State Management
     void SetBlendMode( BlendMode mode );

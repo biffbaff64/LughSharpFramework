@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <LangVersion>latestmajor</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DotGLFW" Version="1.2.0" />
+      <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
+      <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LughSharp.Extensions\LughSharp.Extensions.csproj" />
+      <ProjectReference Include="..\LughSharp.Graphics.Abstractions\LughSharp.Graphics.Abstractions.csproj" />
+      <ProjectReference Include="..\LughSharp.Tests\LughSharp.Tests.csproj" />
+      <ProjectReference Include="..\LughSharp\LughSharp.csproj" />
+    </ItemGroup>
+
+</Project>

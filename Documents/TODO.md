@@ -416,7 +416,7 @@ GRAPHICS/OPENGL/ENUMS
 ---------------------
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - BlendingFactor
+    - IP   - IP   - BlendMode
     - IP   - IP   - BufferEnums
     - IP   - IP   - ClearBufferMask
     - IP   - IP   - CompareFunction

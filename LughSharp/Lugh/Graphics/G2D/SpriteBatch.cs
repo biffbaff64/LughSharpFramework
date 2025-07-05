@@ -53,10 +53,10 @@ public class SpriteBatch : IBatch, IDisposable
     public int     RenderCalls       { get; set; }         = 0; // Number of render calls since the last call to Begin()
     public long    TotalRenderCalls  { get; set; }         = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
     public int     MaxSpritesInBatch { get; set; }         = 0; // The maximum number of sprites rendered in one batch so far.
-    public int     BlendSrcFunc      { get; private set; } = ( int )BlendingFactor.SrcColor;
-    public int     BlendDstFunc      { get; private set; } = ( int )BlendingFactor.DstColor;
-    public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusSrcAlpha;
-    public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendingFactor.OneMinusDstAlpha;
+    public int     BlendSrcFunc      { get; private set; } = ( int )BlendMode.SrcColor;
+    public int     BlendDstFunc      { get; private set; } = ( int )BlendMode.DstColor;
+    public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusSrcAlpha;
+    public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusDstAlpha;
 
     public bool IsDrawing => CurrentBatchState == BatchState.Drawing;
 

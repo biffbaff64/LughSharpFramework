@@ -24,12 +24,66 @@
 
 using JetBrains.Annotations;
 
-namespace LughSharp.Graphics.OpenGL.Source.Resources;
+using LughSharp.Graphics.Abstractions.Source.Enums;
+using LughSharp.Graphics.Abstractions.Source.Interfaces;
+using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
+
+namespace LughSharp.Graphics.DotGLFW.Source;
 
 [PublicAPI]
-public class OpenGLShaderProgram
+public class OpenGLGraphicsAPI : IGraphicsAPI
 {
-    
+    private readonly GLBindings _gl;
+
+    public OpenGLGraphicsAPI( GLBindings gl )
+    {
+        _gl = gl;
+    }
+
+    /// <inheritdoc />
+    public IBuffer? CreateBuffer( BufferType type, BufferUsage usage )
+    {
+        return null;
+    }
+
+    /// <inheritdoc />
+    public IShaderProgram? CreateShaderProgram()
+    {
+        return null;
+    }
+
+    /// <inheritdoc />
+    public IShader? CreateShader( ShaderType type )
+    {
+        return null;
+    }
+
+    /// <inheritdoc />
+    public IVertexLayout? CreateVertexLayout()
+    {
+        return null;
+    }
+
+    /// <inheritdoc />
+    public void SetBlendMode( BlendMode mode )
+    {
+    }
+
+    /// <inheritdoc />
+    public void SetDepthTest( bool enabled )
+    {
+    }
+
+    /// <inheritdoc />
+    public void Draw( PrimitiveType primitive, int first, int count )
+    {
+    }
+
+    /// <inheritdoc />
+    public void DrawIndexed( PrimitiveType primitive, int count, IndexType type )
+    {
+    }
 }
 
 // ========================================================================
