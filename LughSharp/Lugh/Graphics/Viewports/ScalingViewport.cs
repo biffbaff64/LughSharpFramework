@@ -30,19 +30,19 @@ namespace LughSharp.Lugh.Graphics.Viewports;
 /// <summary>
 /// A viewport that scales the world using <see cref="Scaling" />.
 /// <para>
-/// <see cref="Utils.Scaling.Fit" /> keeps the aspect ratio by scaling the world up to
+/// <see cref="Lugh.Utils.Scaling.Fit" /> keeps the aspect ratio by scaling the world up to
 /// fit the screen, adding black bars (letterboxing) for the remaining space.
 /// </para>
 /// <para>
-/// <see cref="Utils.Scaling.Fill" /> keeps the aspect ratio by scaling the world up to
+/// <see cref="Lugh.Utils.Scaling.Fill" /> keeps the aspect ratio by scaling the world up to
 /// take the whole screen (some of the world may be off screen).
 /// </para>
 /// <para>
-/// <see cref="Utils.Scaling.Stretch" /> does not keep the aspect ratio, the world is
+/// <see cref="Lugh.Utils.Scaling.Stretch" /> does not keep the aspect ratio, the world is
 /// scaled to take the whole screen.
 /// </para>
 /// <para>
-/// <see cref="Utils.Scaling.None" /> keeps the aspect ratio by using a fixed size world
+/// <see cref="Lugh.Utils.Scaling.None" /> keeps the aspect ratio by using a fixed size world
 /// (the world may not fill the screen or some of the world may be off screen).
 /// </para>
 /// </summary>
