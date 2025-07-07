@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Assets.Loaders;
@@ -84,7 +83,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
         if ( p?.TextureData == null )
         {
-            var format     = PixelType.Format.Default;
+            var format     = Gdx2DPixmap.Gdx2DPixmapFormat.Default;
             var genMipMaps = false;
 
             _loaderInfo.Texture = null;
@@ -212,7 +211,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         /// <summary>
         /// Gets or sets the format of the final texture. Uses the source image's format if null.
         /// </summary>
-        public PixelType.Format Format { get; set; }
+        public Gdx2DPixmap.Gdx2DPixmapFormat Format { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to generate mipmaps for the texture.

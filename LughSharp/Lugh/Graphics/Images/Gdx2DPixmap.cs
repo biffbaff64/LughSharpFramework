@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -43,6 +42,10 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
         RGBA8888       = 4,
         RGB565         = 5,
         RGBA4444       = 6,
+        
+        // ----------------------------
+        
+        Default = RGBA8888,
     };
 
     public const int GDX_2D_SCALE_NEAREST  = 0;
@@ -52,7 +55,7 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     public const int GDX_2D_BLEND_NONE     = 0;
     public const int GDX_2D_BLEND_SRC_OVER = 1;
 
-    public const int DEFAULT_FORMAT = ( int )Gdx2DPixmapFormat.RGBA8888; //GDX_2D_FORMAT_RGBA8888;
+    public const int DEFAULT_FORMAT = ( int )Gdx2DPixmapFormat.RGBA8888;
     public const int DEFAULT_BLEND  = GDX_2D_BLEND_SRC_OVER;
     public const int DEFAULT_SCALE  = GDX_2D_SCALE_BILINEAR;
 
@@ -73,12 +76,14 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Represents a 2D pixmap, providing functionality for creating, manipulating,
+    /// and drawing pixel data using various formats and blending modes.
     /// </summary>
-    /// <param name="buffer"></param>
-    /// <param name="offset"></param>
-    /// <param name="len"></param>
-    /// <param name="requestedFormat"></param>
+    /// <remarks>
+    /// Gdx2DPixmap supports multiple formats and provides methods to handle
+    /// pixel operations and transformations. It is designed for efficient
+    /// image processing and rendering in 2D graphics.
+    /// </remarks>
     public Gdx2DPixmap( ByteBuffer buffer, int offset, int len, Gdx2DPixmapFormat requestedFormat )
         : this( buffer.BackingArray(), offset, len, requestedFormat )
     {
@@ -170,7 +175,7 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
         Blend     = ( uint )Pixmap.BlendTypes.Default;
         Scale     = ( uint )Pixmap.ScaleType.Default;
 
-        var length = width * height * PixmapFormat.Gdx2dBytesPerPixel( format );
+        var length = width * height * Gdx2dBytesPerPixel( format );
 
         PixmapBuffer = new ByteBuffer( length );
 
@@ -178,23 +183,10 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
         {
             throw new GdxRuntimeException( $"Unable to allocate memory for pixmap: "
                                            + $"{width} x {height}: " +
-                                           $"{PixmapFormat.GetFormatString( format )}" );
+                                           $"{GetFormatString( format )}" );
         }
 
-        // Get proper bit depth based on format
-        var bitDepth = format switch
-        {
-            Gdx2DPixmapFormat.Alpha          => 8,
-            Gdx2DPixmapFormat.LuminanceAlpha => 16,
-            Gdx2DPixmapFormat.RGB888         => 24,
-            Gdx2DPixmapFormat.RGBA8888       => 32,
-            Gdx2DPixmapFormat.RGB565         => 16,
-            Gdx2DPixmapFormat.RGBA4444       => 16,
-
-            // ----------------------------------
-
-            var _ => throw new ArgumentException( $"Unknown format: {format}" ),
-        };
+        var bitDepth = GetBitDepth( format );
 
         SafeConstructorInit( width, height, bitDepth );
         SafeInitPixmapDataType( width, height, format );
@@ -279,6 +271,30 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
             // ----------------------------------
 
             var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+        };
+    }
+
+    /// <summary>
+    /// Gets the bit depth corresponding to the provided Gdx2DPixmapFormat.
+    /// </summary>
+    /// <param name="format">The Gdx2DPixmapFormat whose bit depth is to be retrieved.</param>
+    /// <returns>The bit depth associated with the specified format.</returns>
+    /// <exception cref="ArgumentException">Thrown if the provided format is unknown or unsupported.</exception>
+    public static int GetBitDepth( Gdx2DPixmapFormat format )
+    {
+        // Get proper bit depth based on format
+        return format switch
+        {
+            Gdx2DPixmapFormat.Alpha          => 8,
+            Gdx2DPixmapFormat.LuminanceAlpha => 16,
+            Gdx2DPixmapFormat.RGB888         => 24,
+            Gdx2DPixmapFormat.RGBA8888       => 32,
+            Gdx2DPixmapFormat.RGB565         => 16,
+            Gdx2DPixmapFormat.RGBA4444       => 16,
+
+            // ----------------------------------
+
+            var _ => throw new ArgumentException( $"Unknown format: {format}" ),
         };
     }
 

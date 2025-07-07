@@ -90,6 +90,26 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
+    /// Gets the number of bytes required for 1 pixel of the specified format.
+    /// </summary>
+    public static int Gdx2dBytesPerPixel( Gdx2DPixmap.Gdx2DPixmapFormat format )
+    {
+        return format switch
+        {
+            Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => 1,
+            Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => 2,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => 2,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => 2,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => 3,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => 4,
+
+            // ----------------------------------
+
+            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+        };
+    }
+
+    /// <summary>
     /// Clears the pixmap using a luminance and alpha combination derived from the specified color.
     /// </summary>
     /// <param name="pd">The pixmap data containing pixel information and dimensions to be modified.</param>

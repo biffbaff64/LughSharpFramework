@@ -68,6 +68,7 @@ public interface IGL
     const int GL_PIXEL_BUFFER_BARRIER_BIT          = 0x00000080;
     const int GL_TEXTURE_UPDATE_BARRIER_BIT        = 0x00000100;
     const int GL_DEPTH_BUFFER_BIT                  = 0x00000100;
+    const int GL_ACCUM_BUFFER_BIT                  = 0x00000200;
     const int GL_BUFFER_UPDATE_BARRIER_BIT         = 0x00000200;
     const int GL_FRAMEBUFFER_BARRIER_BIT           = 0x00000400;
     const int GL_STENCIL_BUFFER_BIT                = 0x00000400;

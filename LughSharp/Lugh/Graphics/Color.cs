@@ -37,14 +37,6 @@ namespace LughSharp.Lugh.Graphics;
 [DebuggerDisplay( "RGBADebugString" )]
 public sealed class Color : ICloneable, IEquatable< Color >
 {
-    // ========================================================================
-    // ========================================================================
-
-    private static Color _color = new();
-
-    // ========================================================================
-    // ========================================================================
-
     /// <summary>
     /// Debug string for DebuggerDisplay attribute.
     /// </summary>
@@ -53,7 +45,10 @@ public sealed class Color : ICloneable, IEquatable< Color >
     // ========================================================================
     // ========================================================================
 
-    #region colour values
+    private static Color _color = new();
+
+    // ========================================================================
+    // ========================================================================
 
     public static readonly Color Red        = new( 0xff0000ff );
     public static readonly Color Green      = new( 0x00ff00ff );
@@ -95,12 +90,8 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// </summary>
     public static float WhiteFloatBits => White.ToFloatBitsABGR();
 
-    #endregion colour values
-
     // ========================================================================
     // ========================================================================
-
-    #region Colour Components
 
     /// <summary>
     /// Red Color Component
@@ -142,12 +133,8 @@ public sealed class Color : ICloneable, IEquatable< Color >
     /// </summary>
     public double ABGRFloatPack { get; private set; }
 
-    #endregion Colour Components
-
     // ========================================================================
     // ========================================================================
-
-    #region constructors
 
     /// <summary>
     /// Constructor, sets all the components to 0.
@@ -196,12 +183,7 @@ public sealed class Color : ICloneable, IEquatable< Color >
     {
     }
 
-    #endregion constructors
-
     // ========================================================================
-    // ========================================================================
-
-    #region general methods
 
     /// <summary>
     /// Sets this colors components using the components from the supplied color.
@@ -592,8 +574,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
         return ( ( uint )( luminance * 255.0f ) << 8 ) | ( uint )( alpha * 255 );
     }
 
-    #endregion general methods
-
     // ========================================================================
     // ========================================================================
 
@@ -602,8 +582,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
     // RGBA and RGB ( Methods only )
     // ========================================================================
     // ========================================================================
-
-    #region RGBA Methods
 
     /// <summary>
     /// Packs the color components into a 32-bit integer with the format ABGR and then converts it
@@ -870,15 +848,11 @@ public sealed class Color : ICloneable, IEquatable< Color >
         return $"R:{R},G:{G},B:{B},A:{A}";
     }
 
-    #endregion RGBA Methods
-
     // ========================================================================
     // ========================================================================
     // ABGR ( Methods only )
     // ========================================================================
     // ========================================================================
-
-    #region ABGR Methods
 
     /// <summary>
     /// Packs the color components into a 32-bit integer with the format ABGR and then
@@ -1003,15 +977,11 @@ public sealed class Color : ICloneable, IEquatable< Color >
         return $"A:{A},B:{B},G:{G},R:{R}";
     }
 
-    #endregion ABGR Methods
-
     // ========================================================================
     // ========================================================================
     // ARGB ( Methods only )
     // ========================================================================
     // ========================================================================
-
-    #region ARGB Methods
 
     /// <summary>
     /// Converts a 32-bit ARGB8888 integer value to a Color object.
@@ -1063,15 +1033,11 @@ public sealed class Color : ICloneable, IEquatable< Color >
                | ( uint )( color.B * 255 );
     }
 
-    #endregion ARGB Methods
-
     // ========================================================================
     // ========================================================================
     // HSV ( Methods only )
     // ========================================================================
     // ========================================================================
-
-    #region HSV Methods
 
     /// <summary>
     /// Sets the RGB Color components using the specified Hue-Saturation-Value.
@@ -1168,8 +1134,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
         return hsv;
     }
 
-    #endregion HSV Methods
-
     // ========================================================================
     // ========================================================================
 
@@ -1229,8 +1193,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
     // ========================================================================
     // ========================================================================
 
-    #region operators
-
     /// <summary>
     /// Determines whether two <see cref="Color" /> objects are equal.
     /// </summary>
@@ -1276,8 +1238,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
 
         return c1;
     }
-
-    #endregion operators
 
     // ========================================================================
     // ========================================================================

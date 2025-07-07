@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 
 /// <summary>
 /// A Pixmap represents an image in memory. It has a width and height expressed
-/// in pixels as well as a <see cref="PixelType.Format" /> specifying the number and order
+/// in pixels as well as a <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> specifying the number and order
 /// of color components per pixel.
 /// <para>
 /// Coordinates of pixels are specified with respect to the top left corner of
@@ -112,12 +112,12 @@ public class Pixmap : IDisposable
     /// </summary>
     /// <param name="width">The width in pixels.</param>
     /// <param name="height">The height in pixels.</param>
-    /// <param name="format">The <see cref="PixelType.Format" /></param>
-    public Pixmap( int width, int height, PixelType.Format? format )
+    /// <param name="format">The <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /></param>
+    public Pixmap( int width, int height, Gdx2DPixmap.Gdx2DPixmapFormat? format )
     {
         if ( format == null )
         {
-            format = PixelType.Format.Default;
+            format = Gdx2DPixmap.Gdx2DPixmapFormat.Default;
 
             Logger.Warning( "Supplied Pixel Format is null. Default format applied." );
         }
@@ -143,7 +143,7 @@ public class Pixmap : IDisposable
 //    /// <remarks>
 //    /// This class must be disposed of when no longer needed to free up unmanaged resources.
 //    /// </remarks>
-//    /// <seealso cref="PixelType.Format"/>
+//    /// <seealso cref="Gdx2DPixmap.Gdx2DPixmapFormat"/>
 //    /// <seealso cref="Gdx2DPixmap"/>
 //    public Pixmap( int width, int height, PixelFormat format )
 //        : this( width, height, PixmapFormat.PixelFormatToPixelTypeFormat( format ) )
@@ -422,9 +422,9 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Returns the <see cref="PixelType.Format" /> of this Pixmap.
+    /// Returns the <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> of this Pixmap.
     /// </summary>
-    public PixelType.Format GetColorFormat()
+    public Gdx2DPixmap.Gdx2DPixmapFormat GetColorFormat()
     {
         Guard.ThrowIfNull( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
 
@@ -647,7 +647,7 @@ public class Pixmap : IDisposable
     {
         GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
-        Pixmap pixmap = new( width, height, PixelType.Format.RGBA8888 );
+        Pixmap pixmap = new( width, height, Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888 );
 
         fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
         {
@@ -691,19 +691,19 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Returns the pixel format from a valid named string.
     /// </summary>
-    public static PixelType.Format GetFormatFromString( string str )
+    public static Gdx2DPixmap.Gdx2DPixmapFormat GetFormatFromString( string str )
     {
         str = str.ToLower();
 
         return str switch
         {
-            "alpha"          => PixelType.Format.Alpha,
-            "intensity"      => PixelType.Format.Intensity,
-            "luminancealpha" => PixelType.Format.LuminanceAlpha,
-            "rgb565"         => PixelType.Format.RGB565,
-            "rgba4444"       => PixelType.Format.RGBA4444,
-            "rgb888"         => PixelType.Format.RGB888,
-            "rgba8888"       => PixelType.Format.RGBA8888,
+            "alpha"          => Gdx2DPixmap.Gdx2DPixmapFormat.Alpha,
+            "intensity"      => Gdx2DPixmap.Gdx2DPixmapFormat.Intensity,
+            "luminancealpha" => Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha,
+            "rgb565"         => Gdx2DPixmap.Gdx2DPixmapFormat.RGB565,
+            "rgba4444"       => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444,
+            "rgb888"         => Gdx2DPixmap.Gdx2DPixmapFormat.RGB888,
+            "rgba8888"       => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888,
 
             var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
         };

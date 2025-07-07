@@ -84,6 +84,14 @@ public class ApplicationAdapter : IApplicationListener
     /// </summary>
     public virtual void Dispose()
     {
+        Dispose( true );
         GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+        }
     }
 }

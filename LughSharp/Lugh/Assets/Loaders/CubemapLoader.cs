@@ -27,7 +27,6 @@ using System.Runtime.InteropServices;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -140,7 +139,7 @@ public class CubemapLoader : AsynchronousAssetLoader
         /// <summary>
         /// the format of the final Texture. Uses the source images format if null
         /// </summary>
-        public PixelType.Format? Format = null;
+        public Gdx2DPixmap.Gdx2DPixmapFormat? Format = null;
 
         public Texture.TextureFilter MagFilter = Texture.TextureFilter.Nearest;
         public Texture.TextureFilter MinFilter = Texture.TextureFilter.Nearest;

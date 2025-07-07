@@ -37,13 +37,16 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
-/// Wraps a standard OpenGL ES Cubemap. Must be disposed when it is no longer used.
+/// Wraps a standard OpenGL Cubemap. Must be disposed when it is no longer used.
 /// </summary>
 [PublicAPI]
 public class Cubemap : GLTexture, IManaged
 {
-    // ========================================================================
+    public static AssetManager? AssetManager { get; set; }
+    public        ICubemapData  Data         { get; set; }
 
+    // ========================================================================
+    
     private static readonly Dictionary< IApplication, List< Cubemap >? > _managedCubemaps = new();
 
     // ========================================================================
@@ -130,9 +133,6 @@ public class Cubemap : GLTexture, IManaged
         : this( new FacedCubemapData( positiveX, negativeX, positiveY, negativeY, positiveZ, negativeZ ) )
     {
     }
-
-    public static AssetManager? AssetManager { get; set; }
-    public        ICubemapData  Data         { get; set; }
 
     // ========================================================================
 
@@ -354,8 +354,6 @@ public class Cubemap : GLTexture, IManaged
 
     // ========================================================================
 
-    #region cubemapside
-
     /// <summary>
     /// Enum to identify each side of a Cubemap
     /// </summary>
@@ -524,6 +522,4 @@ public class Cubemap : GLTexture, IManaged
             return _nameValue;
         }
     }
-
-    #endregion cubemapside
 }

@@ -37,10 +37,15 @@ public enum PixelType : int
 public enum PixelFormat : int
 {
     Alpha          = IGL.GL_ALPHA,
-    Rgb            = IGL.GL_RGB,
-    Rgba           = IGL.GL_RGBA,
     Luminance      = IGL.GL_LUMINANCE,
     LuminanceAlpha = IGL.GL_LUMINANCE_ALPHA,
+    Rgb565         = IGL.GL_RGB565,
+    Rgba4444       = IGL.GL_RGBA4,
+    Rgb            = IGL.GL_RGB,
+    Rgba           = IGL.GL_RGBA,
+    Red            = IGL.GL_RED,
+    Green          = IGL.GL_GREEN,
+    Blue           = IGL.GL_BLUE,
 }
 
 [PublicAPI]
@@ -56,8 +61,8 @@ public enum PixelInternalFormat : int
 [PublicAPI]
 public enum PixelStoreParameter : int
 {
-    UnpackAlignment = IGL.GL_UNPACK_ALIGNMENT,
-    PackAlignment   = IGL.GL_PACK_ALIGNMENT,
+    UnpackAlignment  = IGL.GL_UNPACK_ALIGNMENT,
+    PackAlignment    = IGL.GL_PACK_ALIGNMENT,
     UnpackRowLength  = IGL.GL_UNPACK_ROW_LENGTH,
     PackRowLength    = IGL.GL_PACK_ROW_LENGTH,
     UnpackSkipPixels = IGL.GL_UNPACK_SKIP_PIXELS,

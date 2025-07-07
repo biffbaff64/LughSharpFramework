@@ -63,7 +63,7 @@ public class FileTextureData : ITextureData
     // ========================================================================
     // ========================================================================
 
-    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, PixelType.Format format, bool useMipMaps )
+    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, Gdx2DPixmap.Gdx2DPixmapFormat format, bool useMipMaps )
     {
         File        = file;
         _pixmap     = preloadedPixmap;

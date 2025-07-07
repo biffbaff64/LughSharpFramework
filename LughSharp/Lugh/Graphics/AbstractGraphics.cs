@@ -30,14 +30,16 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public abstract class AbstractGraphics : IGraphicsDevice
 {
-    public FramebufferConfig BufferConfig { get; set; } = null!;
+    public const float DEFAULT_SCREEN_DPI = 160f;
 
-    public int    LogicalWidth          { get; set; } = 0;
-    public int    LogicalHeight         { get; set; } = 0;
-    public Color  WindowBackgroundColor { get; set; } = Color.Blue;
-    public int    BackBufferWidth       { get; set; } = 0;
-    public int    BackBufferHeight      { get; set; } = 0;
-    public Window CurrentContext        { get; set; } = null!;
+    public FramebufferConfig BufferConfig          { get; set; } = null!;
+    public Window            CurrentContext        { get; set; } = null!;
+    public Color             WindowBackgroundColor { get; set; } = Color.Blue;
+
+    public int LogicalWidth     { get; set; } = 0;
+    public int LogicalHeight    { get; set; } = 0;
+    public int BackBufferWidth  { get; set; } = 0;
+    public int BackBufferHeight { get; set; } = 0;
 
     // ========================================================================
 
@@ -68,7 +70,7 @@ public abstract class AbstractGraphics : IGraphicsDevice
     /// <returns>the Density Independent Pixel factor of the display.</returns>
     public virtual float GetDensity()
     {
-        return GetPpiXY().X / 160f;
+        return GetPpiXY().X / DEFAULT_SCREEN_DPI;
     }
 
     /// <summary>
@@ -80,7 +82,7 @@ public abstract class AbstractGraphics : IGraphicsDevice
     }
 
     // ========================================================================
-    // 
+    // ========================================================================
 
     /// <inheritdoc />
     public abstract void Update();
@@ -101,7 +103,7 @@ public abstract class AbstractGraphics : IGraphicsDevice
     public abstract IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
 
     // ========================================================================
-    // Window properties
+    // ========================================================================
 
     /// <inheritdoc />
     public abstract bool SetWindowedMode( int width, int height );
@@ -122,7 +124,7 @@ public abstract class AbstractGraphics : IGraphicsDevice
     public abstract bool SetFullscreenMode( IGraphicsDevice.DisplayMode displayMode );
 
     // ========================================================================
-    // 
+    // ========================================================================
 
     /// <inheritdoc />
     public abstract bool SupportsExtension( string extension );
@@ -164,7 +166,7 @@ public abstract class AbstractGraphics : IGraphicsDevice
     public abstract (float X, float Y) GetPpiXY();
 
     // ========================================================================
-    // Cursor / SystemCursor
+    // ========================================================================
 
     /// <inheritdoc />
     public abstract ICursor NewCursor( Pixmap pixmap, int xHotspot, int yHotspot );

@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Buffers;
 
@@ -45,9 +44,9 @@ public static class ScreenUtils
     /// a width and height equal to the current screen size.
     /// <para>
     /// The base <see cref="Texture" /> always has <see cref="MathUtils.NextPowerOfTwo" />
-    /// dimensions and RGBA8888 <see cref="PixelType.Format" />. It can be accessed via
-    /// <see cref="TextureRegion.Texture" />. The texture is not managed and has to be
-    /// reloaded manually on a context loss.
+    /// dimensions and RGBA8888 <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" />. It can be
+    /// accessed via <see cref="TextureRegion.Texture" />. The texture is not managed and
+    /// has to be reloaded manually on a context loss.
     /// </para>
     /// <para>
     /// The returned TextureRegion is flipped along the Y axis by default.
@@ -106,8 +105,8 @@ public static class ScreenUtils
     /// width and height as a <see cref="TextureRegion" /> with the same dimensions.
     /// <para>
     /// The base <see cref="Texture" /> always has <see cref="MathUtils.NextPowerOfTwo" />
-    /// dimensions and RGBA8888 <see cref="PixelType.Format" />. It can be accessed via
-    /// <see cref="TextureRegion.Texture" />.
+    /// dimensions and RGBA8888 <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" />. It can be
+    /// accessed via <see cref="TextureRegion.Texture" />.
     /// </para>
     /// <para>
     /// This texture is not managed and has to be reloaded manually on a context loss.
@@ -127,7 +126,7 @@ public static class ScreenUtils
         var potW      = MathUtils.NextPowerOfTwo( w );
         var potH      = MathUtils.NextPowerOfTwo( h );
         var pixmap    = Pixmap.CreateFromFrameBuffer( x, y, w, h );
-        var potPixmap = new Pixmap( potW, potH, PixelType.Format.RGBA8888 );
+        var potPixmap = new Pixmap( potW, potH, Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888 );
 
         potPixmap.Blending = Pixmap.BlendTypes.None;
         potPixmap.DrawPixmap( pixmap, 0, 0 );

@@ -18,10 +18,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "..\ConsoleAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LughSharp.Tests", "LughSharp.Tests\LughSharp.Tests.csproj", "{48E9BFA9-1562-4A0B-BAFB-BA0B659C9182}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LughSharp.Graphics.Abstractions", "LughSharp.Graphics.Abstractions\LughSharp.Graphics.Abstractions.csproj", "{8F7E0128-1722-4167-9CE6-30E93F7DBD6F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LughSharp.Graphics.DotGLFW", "LughSharp.Graphics.DotGLFW\LughSharp.Graphics.DotGLFW.csproj", "{526CC7B6-9194-4CC4-82ED-C7A7F2759E77}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,14 +44,6 @@ Global
 		{48E9BFA9-1562-4A0B-BAFB-BA0B659C9182}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48E9BFA9-1562-4A0B-BAFB-BA0B659C9182}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48E9BFA9-1562-4A0B-BAFB-BA0B659C9182}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F7E0128-1722-4167-9CE6-30E93F7DBD6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F7E0128-1722-4167-9CE6-30E93F7DBD6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F7E0128-1722-4167-9CE6-30E93F7DBD6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F7E0128-1722-4167-9CE6-30E93F7DBD6F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{526CC7B6-9194-4CC4-82ED-C7A7F2759E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{526CC7B6-9194-4CC4-82ED-C7A7F2759E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{526CC7B6-9194-4CC4-82ED-C7A7F2759E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{526CC7B6-9194-4CC4-82ED-C7A7F2759E77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
