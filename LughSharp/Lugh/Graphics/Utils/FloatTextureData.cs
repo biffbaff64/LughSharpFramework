@@ -26,7 +26,7 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
+
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -41,6 +41,14 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class FloatTextureData : ITextureData
 {
+    public FloatBuffer Buffer     { get; private set; } = null!;
+    public int         Width      { get; set; }         = 0;
+    public int         Height     { get; set; }         = 0;
+    public bool        IsPrepared { get; set; }         = false;
+    public bool        UseMipMaps { get; set; }
+
+    // ========================================================================
+    
     private readonly int  _format;
     private readonly int  _internalFormat;
     private readonly bool _isGpuOnly;
@@ -57,12 +65,6 @@ public class FloatTextureData : ITextureData
         _type           = type;
         _isGpuOnly      = isGpuOnly;
     }
-
-    public FloatBuffer Buffer     { get; private set; } = null!;
-    public int         Width      { get; set; }         = 0;
-    public int         Height     { get; set; }         = 0;
-    public bool        IsPrepared { get; set; }         = false;
-    public bool        UseMipMaps { get; set; }
 
     public void Prepare()
     {
@@ -170,7 +172,7 @@ public class FloatTextureData : ITextureData
     // ========================================================================
     // ========================================================================
 
-    public PixelType.Format? PixelFormat
+    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat
     {
         get => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
         set => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );

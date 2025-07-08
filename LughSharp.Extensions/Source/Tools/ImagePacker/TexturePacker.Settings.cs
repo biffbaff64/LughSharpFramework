@@ -27,7 +27,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
+
 
 namespace Extensions.Source.Tools.ImagePacker;
 
@@ -136,9 +136,9 @@ public partial class TexturePacker
         public Texture.TextureWrap WrapY { get; set; } = Texture.TextureWrap.ClampToEdge;
 
         /// <summary>
-        /// The <see cref="PixelType.Format"/> the texture will use in-memory.
+        /// The <see cref="Gdx2DPixmap.Gdx2DPixmapFormat"/> the texture will use in-memory.
         /// </summary>
-        public PixelType.Format Format { get; set; } = PixelType.Format.RGBA8888;
+        public Gdx2DPixmap.Gdx2DPixmapFormat Format { get; set; } = Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888;
 
         /// <summary>
         /// If true, two images that are pixel for pixel the same will only be packed once.

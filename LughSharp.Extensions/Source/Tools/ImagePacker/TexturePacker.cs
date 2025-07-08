@@ -26,7 +26,6 @@ using Extensions.Source.Drawing;
 
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
@@ -386,7 +385,7 @@ public partial class TexturePacker
             {
                 Logger.Debug( rect.ToString() );
             }
-            
+
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
             ProgressListener.End();
@@ -608,7 +607,7 @@ public partial class TexturePacker
                     Logger.Debug( $"iw: {iw}, ih: {ih}" );
                     Logger.Debug( $"rectX: {rectX}, rectY: {rectY}" );
                     Logger.Debug( $"_settings.DuplicatePadding: {_settings.DuplicatePadding}" );
-                    
+
                     if ( _settings.DuplicatePadding )
                     {
                         var amountX = _settings.PaddingX / 2;
@@ -1037,17 +1036,17 @@ public partial class TexturePacker
         };
     }
 
-    private PixelFormat GetPixelFormat( PixelType.Format format )
+    private PixelFormat GetPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
     {
         return format switch
         {
-            PixelType.Format.RGBA8888
-                or PixelType.Format.RGBA4444 => PixelFormat.Format32bppArgb,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888
+                or Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444 => PixelFormat.Format32bppArgb,
 
-            PixelType.Format.RGB565
-                or PixelType.Format.RGB888 => PixelFormat.Format32bppRgb,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565
+                or Gdx2DPixmap.Gdx2DPixmapFormat.RGB888 => PixelFormat.Format32bppRgb,
 
-            PixelType.Format.Alpha => PixelFormat.Alpha,
+            Gdx2DPixmap.Gdx2DPixmapFormat.Alpha => PixelFormat.Alpha,
 
             var _ => throw new GdxRuntimeException( $"Unsupported format: {_settings.Format}" ),
         };

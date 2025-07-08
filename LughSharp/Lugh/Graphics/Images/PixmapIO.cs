@@ -27,7 +27,6 @@ using System.IO.Hashing;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -176,7 +175,7 @@ public static class PixmapIO
                 var input    = new BinaryReader( new InflaterInputStream( file.OpenRead() ) );
                 var width    = input.Read();
                 var height   = input.Read();
-                var format   = PixmapFormat.PNGColorTypeToPixmapPixelFormat( input.Read() );
+                var format   = Gdx2DPixmap.PNGColorTypeToPixmapFormat( input.Read() );
                 var pixmap   = new Pixmap( width, height, format );
                 var pixelBuf = pixmap.ByteBuffer;
 
@@ -350,7 +349,7 @@ public static class PixmapIO
             _lastLineLen = lineLen;
 
             var oldPosition = pixmap.ByteBuffer.Position;
-            var isRgba8888  = pixmap.GetColorFormat() == PixelType.Format.RGBA8888;
+            var isRgba8888  = pixmap.GetColorFormat() == Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888;
 
             for ( int y = 0, h = pixmap.Height; y < h; y++ )
             {

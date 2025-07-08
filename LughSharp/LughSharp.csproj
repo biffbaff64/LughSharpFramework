@@ -53,21 +53,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotGLFW" Version="1.2.0" />
-        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-        <PackageReference Include="RestSharp" Version="112.1.0" />
-        <PackageReference Include="SharpZipLib" Version="1.4.2" />
-        <PackageReference Include="StbiSharp" Version="1.2.1" />
-        <PackageReference Include="System.Drawing.Common" Version="9.0.6" />
-        <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-        <PackageReference Include="System.IO.Abstractions" Version="22.0.14" />
-        <PackageReference Include="System.IO.Hashing" Version="9.0.4" />
-        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
-        <PackageReference Include="System.Text.Json" Version="9.0.4" />
+        <PackageReference Include="DotGLFW" Version="1.2.0"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0"/>
+        <PackageReference Include="RestSharp" Version="112.1.0"/>
+        <PackageReference Include="SharpZipLib" Version="1.4.2"/>
+        <PackageReference Include="StbiSharp" Version="1.2.1"/>
+        <PackageReference Include="System.Drawing.Common" Version="9.0.6"/>
+        <PackageReference Include="System.Drawing.Primitives" Version="4.3.0"/>
+        <PackageReference Include="System.IO.Abstractions" Version="22.0.14"/>
+        <PackageReference Include="System.IO.Hashing" Version="9.0.4"/>
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2"/>
+        <PackageReference Include="System.Text.Json" Version="9.0.4"/>
     </ItemGroup>
-    
+
     <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -85,12 +85,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="lib\net8.0\freetype.dll">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </None>
-      <None Update="lib\net8.0\gdx2d.dll">
-        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-      </None>
+        <None Update="lib\net8.0\freetype.dll">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </None>
+        <None Update="lib\net8.0\gdx2d.dll">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

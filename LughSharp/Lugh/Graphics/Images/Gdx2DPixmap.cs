@@ -42,11 +42,13 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
         RGBA8888       = 4,
         RGB565         = 5,
         RGBA4444       = 6,
-        
+
         // ----------------------------
-        
+
         Default = RGBA8888,
     };
+
+    // ========================================================================
 
     public const int GDX_2D_SCALE_NEAREST  = 0;
     public const int GDX_2D_SCALE_LINEAR   = 1;
@@ -55,15 +57,6 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     public const int GDX_2D_BLEND_NONE     = 0;
     public const int GDX_2D_BLEND_SRC_OVER = 1;
 
-    public const int DEFAULT_FORMAT = ( int )Gdx2DPixmapFormat.RGBA8888;
-    public const int DEFAULT_BLEND  = GDX_2D_BLEND_SRC_OVER;
-    public const int DEFAULT_SCALE  = GDX_2D_SCALE_BILINEAR;
-
-    // ========================================================================
-
-    private PixmapDataType _pixmapDataType;
-
-    // ========================================================================
     // ========================================================================
 
     public ByteBuffer        PixmapBuffer  { get; set; }
@@ -71,6 +64,10 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     public uint              Blend         { get; set; }
     public uint              Scale         { get; set; }
     public long              TotalIDATSize { get; set; }
+
+    // ========================================================================
+
+    private PixmapDataType _pixmapDataType;
 
     // ========================================================================
     // ========================================================================
@@ -123,10 +120,16 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     }
 
     /// <summary>
+    /// Provides functionality for managing and manipulating 2D pixel maps
+    /// with various color formats, blending modes, and scaling options.
     /// </summary>
-    /// <param name="inStream"></param>
-    /// <param name="requestedFormat"></param>
-    /// <exception cref="IOException"></exception>
+    /// <remarks>
+    /// Gdx2DPixmap is designed to handle image processing and manipulation at the
+    /// pixel level. It supports multiple color formats, allows drawing operations,
+    /// and facilitates scaling and format conversion for efficient rendering in 2D
+    /// graphics. The class also allows management of associated buffer data and
+    /// provides constructors for different initialization scenarios.
+    /// </remarks>
     public Gdx2DPixmap( StreamReader inStream, Gdx2DPixmapFormat requestedFormat )
     {
         MemoryStream memoryStream = new( 1024 );
@@ -203,7 +206,7 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
 
     private void SafeInitPixmapDataType( int width, int height, Gdx2DPixmapFormat format )
     {
-        var length = width * height * PixmapFormat.Gdx2dBytesPerPixel( format );
+        var length = width * height * Gdx2dBytesPerPixel( format );
 
         _pixmapDataType = new PixmapDataType
         {
@@ -299,6 +302,38 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     }
 
     /// <summary>
+    /// Converts a PNG color type to the corresponding Pixmap pixel format.
+    /// </summary>
+    /// <param name="format">The PNG color type represented as an integer.</param>
+    /// <returns>
+    /// The corresponding Pixmap pixel format as a <see cref="Gdx2DPixmapFormat"/>.
+    /// </returns>
+    /// <exception cref="GdxRuntimeException">
+    /// Thrown if the format is unknown or if the format is an unsupported indexed color.
+    /// </exception>
+    public static Gdx2DPixmapFormat PNGColorTypeToPixmapFormat( int format )
+    {
+        return format switch
+        {
+            0 => Gdx2DPixmapFormat.RGB888,
+            2 => Gdx2DPixmapFormat.RGB888,
+
+            // ----------------------------------
+
+            3 => throw new GdxRuntimeException( "Indexed color not supported yet." ),
+
+            // ----------------------------------
+
+            4 => Gdx2DPixmapFormat.RGBA8888,
+            6 => Gdx2DPixmapFormat.RGBA8888,
+
+            // ----------------------------------
+
+            var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
+        };
+    }
+
+    /// <summary>
     /// Converts this Pixmaps <see cref="ColorType" /> to the requested format.
     /// </summary>
     /// <param name="requestedFormat"> The new Format. </param>
@@ -366,7 +401,7 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     /// <param name="height">The height of the region to copy, in pixels.</param>
     private void BlitPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
-        var bytesPerPixel = PixmapFormat.Gdx2dBytesPerPixel( ( int )ColorType );
+        var bytesPerPixel = Gdx2dBytesPerPixel( ColorType );
 
         for ( var y = 0; y < height; y++ )
         {
@@ -405,7 +440,7 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
             return;
         }
 
-        var bytesPerPixel = PixmapFormat.Gdx2dBytesPerPixel( ( int )ColorType );
+        var bytesPerPixel = Gdx2dBytesPerPixel( ColorType );
         var offset        = ( int )( ( ( y * Width ) + x ) * bytesPerPixel );
 
         WritePixel( offset, color );

@@ -62,7 +62,7 @@ public class SettingsCombiningProcessor : FileProcessor
 
     // ========================================================================
 
-    private readonly TexturePackerEntry            _entryDir;
+    private readonly TexturePackerEntry         _entryDir;
     private readonly TexturePackerFileProcessor _fileProcessor;
 
     // ========================================================================

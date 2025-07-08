@@ -24,14 +24,13 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
-public class ETC1TextureData : ITextureData
+public class Etc1TextureData : ITextureData
 {
     // ========================================================================
 
@@ -41,14 +40,14 @@ public class ETC1TextureData : ITextureData
 
     // ========================================================================
 
-    public ETC1TextureData( FileInfo file, bool useMipMaps = false )
+    public Etc1TextureData( FileInfo file, bool useMipMaps = false )
     {
         _file      = file;
         _etc1      = new ETC1();
         UseMipMaps = useMipMaps;
     }
 
-    public ETC1TextureData( ETC1.ETC1Data encodedImage, bool useMipMaps )
+    public Etc1TextureData( ETC1.ETC1Data encodedImage, bool useMipMaps )
     {
         _data      = encodedImage;
         _etc1      = new ETC1();
@@ -125,7 +124,7 @@ public class ETC1TextureData : ITextureData
 
         if ( !Api.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
         {
-            var pixmap = _etc1.DecodeImage( _data, PixelType.Format.RGB565 );
+            var pixmap = _etc1.DecodeImage( _data, Gdx2DPixmap.Gdx2DPixmapFormat.RGB565 );
 
             fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
             {
@@ -175,7 +174,7 @@ public class ETC1TextureData : ITextureData
     }
 
     /// <inheritdoc />
-    public PixelType.Format? PixelFormat { get; set; } = PixelType.Format.Alpha;
+    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; } = Gdx2DPixmap.Gdx2DPixmapFormat.Alpha;
 
     /// <inheritdoc />
     bool IManaged.IsManaged => false;

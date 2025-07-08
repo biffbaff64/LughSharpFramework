@@ -26,7 +26,6 @@ using System.IO.Compression;
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -49,6 +48,20 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, ICubemapData
 {
+    /// <returns> the width of the pixel data </returns>
+    public int Width { get; set; }
+
+    /// <returns> the height of the pixel data </returns>
+    public int Height { get; set; }
+
+    /// <returns> the <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> of the pixel data </returns>
+    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; } = Gdx2DPixmap.Gdx2DPixmapFormat.Alpha;
+
+    /// <returns> whether to generate mipmaps or not. </returns>
+    public bool UseMipMaps { get; set; } = useMipMaps;
+
+    // ========================================================================
+    
     private const int GL_TEXTURE_1D           = 0x1234;
     private const int GL_TEXTURE_3D           = 0x1234;
     private const int GL_TEXTURE_1D_ARRAY_EXT = 0x1234;
@@ -158,62 +171,18 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
             _compressedData = ByteBuffer.Wrap( File.ReadAllBytes( file.Name ) );
         }
 
-        if ( _compressedData.GetByte() != 0x0AB )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x04B )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x054 )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x058 )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x020 )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x031 )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x031 )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x0BB )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x00D )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x00A )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x01A )
-        {
-            throw new GdxRuntimeException( "Invalid KTX Header" );
-        }
-
-        if ( _compressedData.GetByte() != 0x00A )
+        if ( ( _compressedData.GetByte() != 0x0AB )
+             || ( _compressedData.GetByte() != 0x04B )
+             || ( _compressedData.GetByte() != 0x054 )
+             || ( _compressedData.GetByte() != 0x058 )
+             || ( _compressedData.GetByte() != 0x020 )
+             || ( _compressedData.GetByte() != 0x031 )
+             || ( _compressedData.GetByte() != 0x031 )
+             || ( _compressedData.GetByte() != 0x0BB )
+             || ( _compressedData.GetByte() != 0x00D )
+             || ( _compressedData.GetByte() != 0x00A )
+             || ( _compressedData.GetByte() != 0x01A )
+             || ( _compressedData.GetByte() != 0x00A ) )
         {
             throw new GdxRuntimeException( "Invalid KTX Header" );
         }
@@ -488,7 +457,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                             {
                                 ETC1 etc1    = new();
                                 var  etcData = new ETC1.ETC1Data( pixelWidth, pixelHeight, data, 0, etc1 );
-                                var  pixmap  = etc1.DecodeImage( etcData, PixelType.Format.RGB888 );
+                                var  pixmap  = etc1.DecodeImage( etcData, Gdx2DPixmap.Gdx2DPixmapFormat.RGB888 );
 
                                 unsafe
                                 {
@@ -594,18 +563,6 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         // dispose data once transfered to GPU
         DisposePreparedData();
     }
-
-    /// <returns> the width of the pixel data </returns>
-    public int Width { get; set; }
-
-    /// <returns> the height of the pixel data </returns>
-    public int Height { get; set; }
-
-    /// <returns> the <see cref="PixelType.Format" /> of the pixel data </returns>
-    public PixelType.Format? PixelFormat { get; set; } = PixelType.Format.Alpha;
-
-    /// <returns> whether to generate mipmaps or not. </returns>
-    public bool UseMipMaps { get; set; } = useMipMaps;
 
     public void DisposePreparedData()
     {

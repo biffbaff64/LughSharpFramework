@@ -26,7 +26,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -105,7 +104,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <param name="useMipMaps"></param>
     /// <param name="files"></param>
     public GLTextureArray( bool useMipMaps, params FileInfo[] files )
-        : this( useMipMaps, PixelType.Format.RGBA8888, files )
+        : this( useMipMaps, Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888, files )
     {
     }
 
@@ -114,7 +113,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <param name="useMipMaps"></param>
     /// <param name="format"></param>
     /// <param name="files"></param>
-    public GLTextureArray( bool useMipMaps, PixelType.Format format, params FileInfo[] files )
+    public GLTextureArray( bool useMipMaps, Gdx2DPixmap.Gdx2DPixmapFormat format, params FileInfo[] files )
         : this( TextureArrayDataFactory.LoadFromFiles( format, useMipMaps, files ) )
     {
     }

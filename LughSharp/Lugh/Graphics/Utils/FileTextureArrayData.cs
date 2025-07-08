@@ -27,7 +27,6 @@ using System.Diagnostics.CodeAnalysis;
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -46,7 +45,7 @@ public class FileTextureArrayData : ITextureArrayData
     /// <param name="pixelFormat"></param>
     /// <param name="useMipMaps"></param>
     /// <param name="files"></param>
-    public FileTextureArrayData( PixelType.Format pixelFormat, bool useMipMaps, FileInfo[] files )
+    public FileTextureArrayData( Gdx2DPixmap.Gdx2DPixmapFormat pixelFormat, bool useMipMaps, FileInfo[] files )
     {
         PixelFormat  = pixelFormat;
         _useMipMaps  = useMipMaps;
@@ -59,7 +58,7 @@ public class FileTextureArrayData : ITextureArrayData
         }
     }
 
-    public PixelType.Format PixelFormat { get; set; }
+    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; }
 
     [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
     public bool IsManaged
@@ -109,12 +108,12 @@ public class FileTextureArrayData : ITextureArrayData
     /// <summary>
     /// the internal format of this TextureArray
     /// </summary>
-    public int InternalFormat => PixmapFormat.ToGLPixelFormat( PixelFormat );
+    public int InternalFormat => ( int )PixelFormat;
 
     /// <summary>
     /// the GL Data type of this TextureArray
     /// </summary>
-    public int GLDataType => PixmapFormat.ToGLDataType( PixelFormat );
+    public int GLDataType => GLTexture.ToGLDataType( PixelFormat );
 
     // ========================================================================
 

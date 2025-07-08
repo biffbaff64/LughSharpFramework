@@ -10,15 +10,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotGLFW" Version="1.2.0" />
-        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-        <PackageReference Include="System.Drawing.Common" Version="9.0.6" />
-        <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
+        <PackageReference Include="DotGLFW" Version="1.2.0"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0"/>
+        <PackageReference Include="System.Drawing.Common" Version="9.0.6"/>
+        <PackageReference Include="System.Drawing.Primitives" Version="4.3.0"/>
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\LughSharp\LughSharp.csproj" />
+        <ProjectReference Include="..\LughSharp\LughSharp.csproj"/>
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Release|AnyCPU'">

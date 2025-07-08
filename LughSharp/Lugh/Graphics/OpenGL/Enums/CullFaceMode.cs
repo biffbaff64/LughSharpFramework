@@ -42,9 +42,8 @@ public enum CullFaceMode
 public enum FrontFaceDirection
 {
     Clockwise        = IGL.GL_CW,
-    CounterClockwise = IGL.GL_CCW
+    CounterClockwise = IGL.GL_CCW,
 }
-
 
 // ========================================================================
 // ========================================================================

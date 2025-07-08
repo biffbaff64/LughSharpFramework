@@ -151,7 +151,7 @@ public class ColorBleedEffect
     }
 
     // ========================================================================
-    
+
     private class Mask
     {
         public int PendingSize { get; private set; }

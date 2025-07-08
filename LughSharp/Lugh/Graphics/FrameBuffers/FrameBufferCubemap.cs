@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -71,7 +70,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the FrameBuffer could not be created
     /// </exception>
-    public FrameBufferCubemap( PixelType.Format format,
+    public FrameBufferCubemap( Gdx2DPixmap.Gdx2DPixmapFormat format,
                                int width,
                                int height,
                                bool hasDepth,

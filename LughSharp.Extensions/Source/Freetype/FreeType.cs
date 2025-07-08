@@ -25,7 +25,6 @@
 using System.Runtime.InteropServices;
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Buffers;
 
 using Color = LughSharp.Lugh.Graphics.Color;
@@ -1331,7 +1330,7 @@ public partial class FreeType
             throw new NotImplementedException();
         }
 
-        public Pixmap GetPixmap( PixelType.Format rgba8888, Color parameterColor, float parameterGamma )
+        public Pixmap GetPixmap( Gdx2DPixmap.Gdx2DPixmapFormat rgba8888, Color parameterColor, float parameterGamma )
         {
             throw new NotImplementedException();
         }

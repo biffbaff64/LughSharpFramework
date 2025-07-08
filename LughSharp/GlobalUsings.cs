@@ -24,6 +24,7 @@
 
 global using System.Drawing;
 global using System.Drawing.Imaging;
+
 //global using System.Drawing.Primitives;
 
 // ============================================================================
@@ -34,6 +35,7 @@ global using JetBrains.Annotations;
 
 // ============================================================================
 global using DotGLFW;
+
 global using GLFW = DotGLFW;
 
 // ============================================================================

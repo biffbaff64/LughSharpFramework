@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -35,11 +34,12 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class MipMapTextureData : ITextureData
 {
-    public bool              IsPrepared  { get; set; }
-    public bool              UseMipMaps  { get; set; }
-    public int               Width       { get; set; }
-    public int               Height      { get; set; }
-    public PixelType.Format? PixelFormat { get; set; } = PixelType.Format.Alpha;
+    public bool IsPrepared { get; set; }
+    public bool UseMipMaps { get; set; }
+    public int  Width      { get; set; }
+    public int  Height     { get; set; }
+
+    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; } = Gdx2DPixmap.Gdx2DPixmapFormat.Alpha;
 
     // ========================================================================
 

@@ -25,7 +25,6 @@
 using LughSharp.Lugh.Graphics.FrameBuffers;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -39,14 +38,14 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class GLOnlyTextureData : ITextureData
 {
-    public int               MipLevel       { get; set; } = 0;
-    public int               InternalFormat { get; set; }
-    public int               Type           { get; set; }
-    public PixelType.Format? PixelFormat    { get; set; }
-    public int               Width          { get; set; } = 0;
-    public int               Height         { get; set; } = 0;
-    public bool              IsPrepared     { get; set; } = false;
-    public bool              UseMipMaps     { get; set; }
+    public int                            MipLevel       { get; set; } = 0;
+    public int                            InternalFormat { get; set; }
+    public int                            Type           { get; set; }
+    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat    { get; set; }
+    public int                            Width          { get; set; } = 0;
+    public int                            Height         { get; set; } = 0;
+    public bool                           IsPrepared     { get; set; } = false;
+    public bool                           UseMipMaps     { get; set; }
 
     // ========================================================================
 
@@ -83,7 +82,7 @@ public class GLOnlyTextureData : ITextureData
         Height         = height;
         MipLevel       = mipMapLevel;
         InternalFormat = internalFormat;
-        PixelFormat    = PixmapFormat.GdxFormatToPixelTypeFormat( format );
+        PixelFormat    = GLTexture.GdxFormatToPixelTypeFormat( format );
         Type           = type;
     }
 

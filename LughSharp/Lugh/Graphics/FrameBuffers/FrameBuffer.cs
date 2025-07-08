@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -73,7 +72,7 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     /// <param name="hasDepth"> whether to attach a depth buffer </param>
     /// <param name="hasStencil"></param>
     /// <exception cref="GdxRuntimeException"> in case the FrameBuffer could not be created  </exception>
-    public FrameBuffer( PixelType.Format format, int width, int height, bool hasDepth, bool hasStencil = false )
+    public FrameBuffer( Gdx2DPixmap.Gdx2DPixmapFormat format, int width, int height, bool hasDepth, bool hasStencil = false )
     {
         var frameBufferBuilder = new FrameBufferBuilder( width, height );
 

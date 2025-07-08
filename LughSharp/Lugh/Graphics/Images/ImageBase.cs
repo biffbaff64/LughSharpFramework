@@ -36,9 +36,9 @@ namespace LughSharp.Lugh.Graphics.Images;
 public abstract class ImageBase
 {
     // Common properties
-    public virtual int         Width    { get; protected set; }
-    public virtual int         Height   { get; protected set; }
-    public virtual int         BitDepth { get; protected set; }
+    public virtual int Width    { get; protected set; }
+    public virtual int Height   { get; protected set; }
+    public virtual int BitDepth { get; protected set; }
 
     // ========================================================================
 

@@ -26,7 +26,6 @@ using DesktopGLBackend.Window;
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace DesktopGLBackend.Utils;
@@ -44,7 +43,7 @@ public class DesktopGLCursor : ICursor, IDisposable
     {
         Window = window;
 
-        if ( pixmap.GetColorFormat() != PixelType.Format.RGBA8888 )
+        if ( pixmap.GetColorFormat() != Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888 )
         {
             throw new GdxRuntimeException( "Cursor image pixmap should be in RGBA8888 format." );
         }
@@ -73,7 +72,7 @@ public class DesktopGLCursor : ICursor, IDisposable
                                            + $"image height bounds: [0, {pixmap.Height})." );
         }
 
-        PixmapCopy          = new Pixmap( pixmap.Width, pixmap.Height, PixelType.Format.RGBA8888 );
+        PixmapCopy          = new Pixmap( pixmap.Width, pixmap.Height, Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888 );
         PixmapCopy.Blending = Pixmap.BlendTypes.None;
         PixmapCopy.DrawPixmap( pixmap, 0, 0 );
 

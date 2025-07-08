@@ -41,7 +41,7 @@ public enum BlendMode
     OneMinusConstantColor = IGL.GL_ONE_MINUS_CONSTANT_COLOR,
     ConstantAlpha         = IGL.GL_CONSTANT_ALPHA,
     OneMinusConstantAlpha = IGL.GL_ONE_MINUS_CONSTANT_ALPHA,
-    SrcAlphaSaturate      = IGL.GL_SRC_ALPHA_SATURATE
+    SrcAlphaSaturate      = IGL.GL_SRC_ALPHA_SATURATE,
 }
 
 // ========================================================================

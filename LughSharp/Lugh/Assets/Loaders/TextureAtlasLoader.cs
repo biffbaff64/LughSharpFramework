@@ -30,9 +30,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Assets.Loaders;
 
 /// <summary>
-/// AssetLoader to load TextureAtlas instances. Passing a <see cref="TextureAtlasParameter" /> to
-/// <see cref="AssetManager.AddToLoadQueue" /> allows to specify whether the atlas regions should
-/// be flipped on the y-axis or not.
+/// AssetLoader to load TextureAtlas instances.
 /// </summary>
 [PublicAPI]
 public class TextureAtlasLoader
@@ -46,15 +44,6 @@ public class TextureAtlasLoader
     public TextureAtlasLoader( IFileHandleResolver resolver )
         : base( resolver )
     {
-    }
-
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing,
-    /// releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose( true );
     }
 
     /// <summary>
@@ -124,6 +113,16 @@ public class TextureAtlasLoader
         }
 
         return dependencies;
+    }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing,
+    /// releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
     }
 
     /// <summary>

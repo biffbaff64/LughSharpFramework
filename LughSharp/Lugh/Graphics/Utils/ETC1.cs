@@ -25,7 +25,6 @@
 using System.IO.Compression;
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -50,7 +49,7 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="PixelType.Format.RGB565" /> and <see cref="PixelType.Format.RGB888" />
+    /// Only <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> and <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" />
     /// are supported.
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap" /> </param>
@@ -67,7 +66,7 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="PixelType.Format.RGB565" /> and <see cref="PixelType.Format.RGB888" /> are supported.
+    /// Only <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> and <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" /> are supported.
     /// Adds a PKM header in front of the compressed image data.
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap" /> </param>
@@ -83,14 +82,14 @@ public class ETC1
     }
 
     /// <summary>
-    /// Takes ETC1 compressed image data and converts it to a <see cref="PixelType.Format.RGB565" /> or
-    /// <see cref="PixelType.Format.RGB888" /> <see cref="Pixmap" />.
+    /// Takes ETC1 compressed image data and converts it to a <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> or
+    /// <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" /> <see cref="Pixmap" />.
     /// Does not modify the ByteBuffer's position or limit.
     /// </summary>
     /// <param name="etc1Data"> the <see cref="ETC1Data" /> instance </param>
-    /// <param name="format"> either <see cref="PixelType.Format.RGB565" /> or <see cref="PixelType.Format.RGB888" /> </param>
+    /// <param name="format"> either <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> or <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" /> </param>
     /// <returns> the Pixmap </returns>
-    public Pixmap DecodeImage( ETC1Data? etc1Data, PixelType.Format format )
+    public Pixmap DecodeImage( ETC1Data? etc1Data, Gdx2DPixmap.Gdx2DPixmapFormat format )
     {
         ArgumentNullException.ThrowIfNull( etc1Data );
 
@@ -120,17 +119,17 @@ public class ETC1
     }
 
     /// <summary>
-    /// Gets the pixel size for the given <see cref="PixelType.Format" />, which must be
-    /// one of <see cref="PixelType.Format.RGB565" /> or <see cref="PixelType.Format.RGB888" />.
+    /// Gets the pixel size for the given <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" />, which must be
+    /// one of <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> or <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" />.
     /// </summary>
-    private int GetPixelSize( PixelType.Format? format )
+    private int GetPixelSize( Gdx2DPixmap.Gdx2DPixmapFormat? format )
     {
-        if ( format == PixelType.Format.RGB565 )
+        if ( format == Gdx2DPixmap.Gdx2DPixmapFormat.RGB565 )
         {
             return RGB565_PIXEL_SIZE;
         }
 
-        if ( format == PixelType.Format.RGB888 )
+        if ( format == Gdx2DPixmap.Gdx2DPixmapFormat.RGB888 )
         {
             return RGB888_PIXEL_SIZE;
         }

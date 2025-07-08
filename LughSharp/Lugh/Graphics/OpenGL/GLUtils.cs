@@ -225,7 +225,7 @@ public static class GLUtils
             }
         }
     }
-    
+
     /// <summary>
     /// Gets the number of bytes required for 1 pixel of the specified format.
     /// </summary>
@@ -317,4 +317,3 @@ public static class GLUtils
         };
     }
 }
-

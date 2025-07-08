@@ -26,7 +26,6 @@ using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Collections;
@@ -100,8 +99,8 @@ public class PixmapPacker : IDisposable
 {
     public int                           PageWidth        { get; set; }
     public int                           PageHeight       { get; set; }
-    public PixelType.Format              PageFormat       { get; set; }
-    public LughSharp.Lugh.Graphics.Color TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
+    public Gdx2DPixmap.Gdx2DPixmapFormat PageFormat       { get; set; }
+    public Color                         TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
     public bool                          PackToTexture    { get; set; }
     public bool                          DuplicateBorder  { get; set; }
     public int                           Padding          { get; set; }
@@ -127,14 +126,14 @@ public class PixmapPacker : IDisposable
     /// <param name="pageWidth"> Page Width in pixels. </param>
     /// <param name="pageHeight"> Page Height in pixels. </param>
     /// <param name="pageFormat">
-    /// The graphics format of pages. See <see cref="PixelType.Format" />
+    /// The graphics format of pages. See <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" />
     /// </param>
     /// <param name="padding"> the number of blank pixels to insert between pixmaps. </param>
     /// <param name="duplicateBorder">
     /// If TRUE, duplicate the border pixels of the inserted images to avoid
     /// seams when rendering with bi-linear filtering on.
     /// </param>
-    public PixmapPacker( int pageWidth, int pageHeight, PixelType.Format pageFormat, int padding, bool duplicateBorder )
+    public PixmapPacker( int pageWidth, int pageHeight, Gdx2DPixmap.Gdx2DPixmapFormat pageFormat, int padding, bool duplicateBorder )
         : this( pageWidth, pageHeight, pageFormat, padding, duplicateBorder, false, false, new GuillotineStrategy() )
     {
     }
@@ -147,7 +146,7 @@ public class PixmapPacker : IDisposable
     /// <param name="pageWidth"> Page Width in pixels. </param>
     /// <param name="pageHeight"> Page Height in pixels. </param>
     /// <param name="pageFormat">
-    /// The graphics format of pages. See <see cref="PixelType.Format" />
+    /// The graphics format of pages. See <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" />
     /// </param>
     /// <param name="padding"> the number of blank pixels to insert between pixmaps. </param>
     /// <param name="duplicateBorder">
@@ -157,7 +156,7 @@ public class PixmapPacker : IDisposable
     /// <param name="packStrategy"> The <see cref="IPackStrategy" /> to use. </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
-                         PixelType.Format pageFormat,
+                         Gdx2DPixmap.Gdx2DPixmapFormat pageFormat,
                          int padding,
                          bool duplicateBorder,
                          IPackStrategy packStrategy )
@@ -173,7 +172,7 @@ public class PixmapPacker : IDisposable
     /// <param name="pageWidth"> Page Width in pixels. </param>
     /// <param name="pageHeight"> Page Height in pixels. </param>
     /// <param name="pageFormat">
-    /// The graphics format of pages. See <see cref="PixelType.Format" />
+    /// The graphics format of pages. See <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" />
     /// </param>
     /// <param name="padding"> the number of blank pixels to insert between pixmaps. </param>
     /// <param name="duplicateBorder">
@@ -185,7 +184,7 @@ public class PixmapPacker : IDisposable
     /// <param name="packStrategy"> The <see cref="IPackStrategy" /> to use. </param>
     public PixmapPacker( int pageWidth,
                          int pageHeight,
-                         PixelType.Format pageFormat,
+                         Gdx2DPixmap.Gdx2DPixmapFormat pageFormat,
                          int padding,
                          bool duplicateBorder,
                          bool stripWhitespaceX,

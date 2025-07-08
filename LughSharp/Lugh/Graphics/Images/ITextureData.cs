@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics.Images;
@@ -39,7 +38,7 @@ namespace LughSharp.Lugh.Graphics.Images;
 /// if necessary. See MipMapGenerator. Before a call to either consumePixmap() or
 /// consumeCustomData(int), Texture will bind the OpenGL ES texture.
 /// <para>
-/// Look at FileTextureData and ETC1TextureData for example implementations of this interface.
+/// Look at FileTextureData and Etc1TextureData for example implementations of this interface.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -78,9 +77,9 @@ public interface ITextureData : IManaged
     int Height { get; set; }
 
     /// <summary>
-    /// Returns the <see cref="PixelType.Format" /> of the pixel data.
+    /// Returns the <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> of the pixel data.
     /// </summary>
-    PixelType.Format? PixelFormat { get; set; }
+    Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; }
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ConsumePixmap()" /> or

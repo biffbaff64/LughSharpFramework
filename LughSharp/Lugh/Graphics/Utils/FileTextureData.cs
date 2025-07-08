@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -52,9 +51,9 @@ public class FileTextureData : ITextureData
     public bool UseMipMaps { get; set; }
 
     /// <summary>
-    /// Returns the <see cref="PixelType.Format" /> of the pixel data.
+    /// Returns the <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> of the pixel data.
     /// </summary>
-    public PixelType.Format? PixelFormat { get; set; }
+    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; }
 
     // ========================================================================
 

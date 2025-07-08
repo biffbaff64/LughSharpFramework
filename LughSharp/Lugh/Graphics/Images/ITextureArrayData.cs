@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Graphics.Utils;
 
 namespace LughSharp.Lugh.Graphics.Images;
@@ -105,7 +104,7 @@ public interface ITextureArrayData
 [PublicAPI]
 public class TextureArrayDataFactory
 {
-    public static ITextureArrayData LoadFromFiles( PixelType.Format format,
+    public static ITextureArrayData LoadFromFiles( Gdx2DPixmap.Gdx2DPixmapFormat format,
                                                    bool useMipMaps,
                                                    params FileInfo[] files )
     {

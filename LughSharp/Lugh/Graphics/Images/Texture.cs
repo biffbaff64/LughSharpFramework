@@ -28,13 +28,10 @@ using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
-
-using PixelType = LughSharp.Lugh.Graphics.Pixels.PixelType;
 
 namespace LughSharp.Lugh.Graphics.Images;
 
@@ -120,7 +117,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="file"></param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file, bool useMipMaps )
-        : this( file, PixelType.Format.Default, useMipMaps )
+        : this( file, Gdx2DPixmap.Gdx2DPixmapFormat.Default, useMipMaps )
     {
         Name = Path.GetFileNameWithoutExtension( file.Name );
     }
@@ -128,13 +125,13 @@ public class Texture : GLTexture, IManaged
     /// <summary>
     /// Create a new Texture from the file specified in the given <see cref="FileInfo" />.
     /// The Texture pixmap format will be set to the given format, which defaults to
-    /// <see cref="PixelType.Format.RGBA8888" />.
+    /// <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888" />.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file,
-                    PixelType.Format format = PixelType.Format.Default,
+                    Gdx2DPixmap.Gdx2DPixmapFormat format = Gdx2DPixmap.Gdx2DPixmapFormat.Default,
                     bool useMipMaps = false )
         : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
     {
@@ -152,12 +149,12 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
-    /// Creates a new Texture from the supplied <see cref="Pixmap" /> and <see cref="PixelType.Format" />
+    /// Creates a new Texture from the supplied <see cref="Pixmap" /> and <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" />
     /// </summary>
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
-    public Texture( Pixmap pixmap, PixelType.Format format, bool useMipMaps = false )
+    public Texture( Pixmap pixmap, Gdx2DPixmap.Gdx2DPixmapFormat format, bool useMipMaps = false )
         : this( new PixmapTextureData( pixmap, format, useMipMaps, false ) )
     {
     }
@@ -167,8 +164,8 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     /// <param name="width"> The width in pixels. </param>
     /// <param name="height"> The Height in pixels. </param>
-    /// <param name="format"> The pixmap <see cref="PixelType.Format" /> </param>
-    public Texture( int width, int height, PixelType.Format format )
+    /// <param name="format"> The pixmap <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> </param>
+    public Texture( int width, int height, Gdx2DPixmap.Gdx2DPixmapFormat format )
         : this( new PixmapTextureData( new Pixmap( width, height, format ), null, false, true ) )
     {
     }
@@ -435,7 +432,7 @@ public class Texture : GLTexture, IManaged
         Logger.Debug( $"IsManaged         : {IsManaged}" );
         Logger.Debug( $"NumManagedTextures: {NumManagedTextures}" );
         Logger.Debug( $"Depth             : {Depth}" );
-        Logger.Debug( $"GLTarget          : {PixmapFormat.GetGLTargetName( GLTarget )}" );
+        Logger.Debug( $"GLTarget          : {GetGLTargetName( GLTarget )}" );
         Logger.Debug( $"GLTextureHandle   : {GLTextureHandle:X}" );
 
         if ( !TextureData.IsPrepared )

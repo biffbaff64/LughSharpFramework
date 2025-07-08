@@ -162,7 +162,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
         // -----------------------------------------------------
 
         ProgressListener ??= new TexturePacker.AbstractProgressListenerImpl();
-        
+
         var settingsFiles = settingsProcessor.SettingsFiles;
 
         Logger.Debug( $"Settings files: {settingsFiles.Count}" );
@@ -630,7 +630,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
     public virtual void ProcessDir( TexturePackerEntry inputDir, List< TexturePackerEntry > files )
     {
         Logger.Checkpoint();
-        
+
         // Do not proceed if this dir is one of those to ignore
         if ( DirsToIgnore.Contains( inputDir.InputFile ) )
         {
@@ -791,14 +791,14 @@ public class TexturePackerFileProcessor //: IFileProcessor
 
                 Logger.Debug( $"rootPath: {rootPath}" );
                 Logger.Debug( $"inputPath: {inputPath}" );
-                
+
                 if ( inputPath.StartsWith( rootPath ) )
                 {
-                    rootPath  = IOUtils.NormalizePath( rootPath );
-                    
+                    rootPath = IOUtils.NormalizePath( rootPath );
+
                     inputPath = inputPath.Substring( rootPath.Length );
                     inputPath = IOUtils.NormalizePath( inputPath );
-                    
+
                     if ( inputPath.StartsWith( '/' ) )
                     {
                         inputPath = inputPath.Substring( 1 );
@@ -825,7 +825,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
         foreach ( var file in files )
         {
             file.Debug();
-            
+
             if ( file.InputFile == null )
             {
                 continue;
@@ -979,7 +979,7 @@ public class TexturePackerFileProcessor //: IFileProcessor
     {
         var packer = new TexturePacker( root, settings )
         {
-            ProgressListener = this.ProgressListener,
+            ProgressListener = ProgressListener,
         };
 
         return packer;

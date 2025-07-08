@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -150,8 +149,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <exception cref="GdxRuntimeException"></exception>
     private TexturePacker.Page PackPage( List< TexturePacker.Rect > inputRects )
     {
-        var paddingX = _settings.PaddingX;
-        var paddingY = _settings.PaddingY;
+        var paddingX  = _settings.PaddingX;
+        var paddingY  = _settings.PaddingY;
         var maxWidth  = ( float )_settings.MaxWidth;
         var maxHeight = ( float )_settings.MaxHeight;
         var edgePadX  = false;
@@ -253,7 +252,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         Logger.Debug( $"Best result: {bestResult.ImageName}" );
         Logger.Debug( $"Best result: {bestResult.Width}x{bestResult.Height}" );
         Logger.Debug( $"Best result: {bestResult.OutputRects?.Count} rects" );
-        
+
         return bestResult;
     }
 
@@ -285,7 +284,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         {
             Logger.Debug( $"rect: {rect.Name} {rect.Width}x{rect.Height}" );
         }
-        
+
         // Find the minimal page size that fits all rects.
         TexturePacker.Page? bestResult = null;
 
@@ -304,7 +303,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             Logger.Debug( $"minSize: {minSize}, maxSize: {maxSize}" );
             Logger.Debug( $"size: {size}" );
-            
+
             while ( size != -1 )
             {
                 var result = PackAtSize( true, size + adjustX, size + adjustY, inputRects );
@@ -349,7 +348,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             var height = _settings.Square ? width : heightSearch.Reset();
 
             Logger.Debug( $"width: {width}x{height}" );
-            
+
             while ( true )
             {
                 var bestWidthResult = new TexturePacker.Page();
@@ -357,9 +356,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                 while ( width != -1 )
                 {
                     var result = PackAtSize( true, width + adjustX, height + adjustY, inputRects );
-                    
+
 //                    result?.Debug();
-                    
+
                     bestWidthResult = GetBest( bestWidthResult, result );
                     width           = widthSearch.Next( result == null );
 

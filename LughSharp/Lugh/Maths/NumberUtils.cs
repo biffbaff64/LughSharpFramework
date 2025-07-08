@@ -41,7 +41,7 @@ public abstract class NumberUtils
     public const float FLOAT_TOLERANCE   = 0.000000000000001f; // 32 bits
 
     // ========================================================================
-    
+
     /// <summary>
     /// Converts the given floating-point value to its integer bit representation.
     /// </summary>
@@ -274,7 +274,7 @@ public abstract class NumberUtils
     {
         return x - y;
     }
-    
+
     // ========================================================================
 
     /// <summary>

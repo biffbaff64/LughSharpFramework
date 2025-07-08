@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -348,15 +347,15 @@ public partial class TextureAtlasData
         /// </summary>
         public FileInfo? TextureFile { get; set; }
 
-        public bool                  UseMipMaps         { get; set; }
-        public PixelType.Format      Format             { get; set; } = PixelType.Format.RGBA8888;
-        public Texture.TextureFilter MinFilter          { get; set; } = Texture.TextureFilter.Nearest;
-        public Texture.TextureFilter MagFilter          { get; set; } = Texture.TextureFilter.Nearest;
-        public Texture.TextureWrap   UWrap              { get; set; } = Texture.TextureWrap.ClampToEdge;
-        public Texture.TextureWrap   VWrap              { get; set; } = Texture.TextureWrap.ClampToEdge;
-        public float                 Width              { get; set; }
-        public float                 Height             { get; set; }
-        public bool                  PreMultipliedAlpha { get; set; }
+        public bool                          UseMipMaps         { get; set; }
+        public Gdx2DPixmap.Gdx2DPixmapFormat Format             { get; set; } = Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888;
+        public Texture.TextureFilter         MinFilter          { get; set; } = Texture.TextureFilter.Nearest;
+        public Texture.TextureFilter         MagFilter          { get; set; } = Texture.TextureFilter.Nearest;
+        public Texture.TextureWrap           UWrap              { get; set; } = Texture.TextureWrap.ClampToEdge;
+        public Texture.TextureWrap           VWrap              { get; set; } = Texture.TextureWrap.ClampToEdge;
+        public float                         Width              { get; set; }
+        public float                         Height             { get; set; }
+        public bool                          PreMultipliedAlpha { get; set; }
     }
 
     [PublicAPI]

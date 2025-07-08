@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.FrameBuffers;
@@ -65,7 +64,7 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// </summary>
     /// <param name="format"></param>
     /// <returns></returns>
-    public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( PixelType.Format format )
+    public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( Gdx2DPixmap.Gdx2DPixmapFormat format )
     {
         var glFormat = PixmapFormat.ToGLPixelFormat( format );
         var glType   = PixmapFormat.ToGLDataType( format );

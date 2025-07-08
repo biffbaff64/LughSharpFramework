@@ -30,7 +30,7 @@ public enum DebugSeverity
     High         = IGL.GL_DEBUG_SEVERITY_HIGH,
     Medium       = IGL.GL_DEBUG_SEVERITY_MEDIUM,
     Low          = IGL.GL_DEBUG_SEVERITY_LOW,
-    Notification = IGL.GL_DEBUG_SEVERITY_NOTIFICATION
+    Notification = IGL.GL_DEBUG_SEVERITY_NOTIFICATION,
 }
 
 [PublicAPI]
@@ -41,7 +41,7 @@ public enum DebugSource
     ShaderCompiler = IGL.GL_DEBUG_SOURCE_SHADER_COMPILER,
     ThirdParty     = IGL.GL_DEBUG_SOURCE_THIRD_PARTY,
     Application    = IGL.GL_DEBUG_SOURCE_APPLICATION,
-    Other          = IGL.GL_DEBUG_SOURCE_OTHER
+    Other          = IGL.GL_DEBUG_SOURCE_OTHER,
 }
 
 [PublicAPI]
@@ -53,7 +53,7 @@ public enum DebugType
     Portability        = IGL.GL_DEBUG_TYPE_PORTABILITY,
     Performance        = IGL.GL_DEBUG_TYPE_PERFORMANCE,
     Marker             = IGL.GL_DEBUG_TYPE_MARKER,
-    Other              = IGL.GL_DEBUG_TYPE_OTHER
+    Other              = IGL.GL_DEBUG_TYPE_OTHER,
 }
 
 // ========================================================================

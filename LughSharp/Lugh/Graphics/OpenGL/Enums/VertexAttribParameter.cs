@@ -31,7 +31,7 @@ public enum VertexAttribParameter
     ArraySize       = IGL.GL_VERTEX_ATTRIB_ARRAY_SIZE,
     ArrayStride     = IGL.GL_VERTEX_ATTRIB_ARRAY_STRIDE,
     ArrayType       = IGL.GL_VERTEX_ATTRIB_ARRAY_TYPE,
-    ArrayNormalized = IGL.GL_VERTEX_ATTRIB_ARRAY_NORMALIZED
+    ArrayNormalized = IGL.GL_VERTEX_ATTRIB_ARRAY_NORMALIZED,
 }
 
 // ========================================================================

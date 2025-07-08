@@ -122,13 +122,13 @@ public class FileProcessor
         if ( IOUtils.IsFile( inputFileOrDir ) )
         {
             Logger.Debug( $"Processing file: {inputFileOrDir.FullName}" );
-            
+
             retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
         }
         else
         {
             Logger.Debug( $"Processing directory: {inputFileOrDir.FullName}" );
-            
+
             var files = new DirectoryInfo( inputFileOrDir.FullName )
                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
 

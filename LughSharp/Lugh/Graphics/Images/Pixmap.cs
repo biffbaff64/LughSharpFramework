@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -113,42 +112,13 @@ public class Pixmap : IDisposable
     /// <param name="width">The width in pixels.</param>
     /// <param name="height">The height in pixels.</param>
     /// <param name="format">The <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /></param>
-    public Pixmap( int width, int height, Gdx2DPixmap.Gdx2DPixmapFormat? format )
+    public Pixmap( int width, int height, Gdx2DPixmap.Gdx2DPixmapFormat format )
     {
-        if ( format == null )
-        {
-            format = Gdx2DPixmap.Gdx2DPixmapFormat.Default;
-
-            Logger.Warning( "Supplied Pixel Format is null. Default format applied." );
-        }
-
-        Gdx2DPixmap = new Gdx2DPixmap( width, height, PixmapFormat.ToGdx2DPixelFormat( format ) );
+        Gdx2DPixmap = new Gdx2DPixmap( width, height, format );
 
         SetColor( Color.Red );
         FillWithCurrentColor();
     }
-
-//    /// <summary>
-//    /// Represents an image composed of pixels that can be manipulated and drawn upon.
-//    /// </summary>
-//    /// <remarks>
-//    /// The Pixmap class supports a variety of pixel formats and provides methods
-//    /// to perform operations such as drawing shapes, filling areas with color, and copying pixels.
-//    /// </remarks>
-//    /// <example>
-//    /// To create a new Pixmap, provide width, height, and a pixel format. The class
-//    /// also offers constructors for creating Pixmaps from encoded data, byte buffers,
-//    /// or files.
-//    /// </example>
-//    /// <remarks>
-//    /// This class must be disposed of when no longer needed to free up unmanaged resources.
-//    /// </remarks>
-//    /// <seealso cref="Gdx2DPixmap.Gdx2DPixmapFormat"/>
-//    /// <seealso cref="Gdx2DPixmap"/>
-//    public Pixmap( int width, int height, PixelFormat format )
-//        : this( width, height, PixmapFormat.PixelFormatToPixelTypeFormat( format ) )
-//    {
-//    }
 
     /// <summary>
     /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded
@@ -251,7 +221,7 @@ public class Pixmap : IDisposable
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            return PixmapFormat.ToGLPixelFormat( Gdx2DPixmap.ColorType );
+            return GLTexture.ToGLPixelFormat( Gdx2DPixmap.ColorType );
         }
     }
 
@@ -265,7 +235,7 @@ public class Pixmap : IDisposable
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            var format = PixmapFormat.ToGLPixelFormat( Gdx2DPixmap.ColorType );
+            var format = GLTexture.ToGLPixelFormat( Gdx2DPixmap.ColorType );
 
             if ( ( format != IGL.GL_RG )
                  && ( format != IGL.GL_RGB )
@@ -428,7 +398,7 @@ public class Pixmap : IDisposable
     {
         Guard.ThrowIfNull( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
 
-        return PixmapFormat.GdxFormatToPixelTypeFormat( Gdx2DPixmap.ColorType );
+        return Gdx2DPixmap.ColorType;
     }
 
     /// <summary>
@@ -698,7 +668,6 @@ public class Pixmap : IDisposable
         return str switch
         {
             "alpha"          => Gdx2DPixmap.Gdx2DPixmapFormat.Alpha,
-            "intensity"      => Gdx2DPixmap.Gdx2DPixmapFormat.Intensity,
             "luminancealpha" => Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha,
             "rgb565"         => Gdx2DPixmap.Gdx2DPixmapFormat.RGB565,
             "rgba4444"       => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444,
@@ -724,9 +693,8 @@ public class Pixmap : IDisposable
             }
 
             Logger.Debug( $"Width : {Width}, Height: {Height}" );
-            Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height} "
-                          + $"{PixmapFormat.GdxFormatToPixelTypeFormat( Gdx2DPixmap.ColorType )}: "
-                          + $"{PixmapFormat.GetFormatString( PixmapFormat.ToGdx2DPixelFormat( GetColorFormat() ) )}" );
+            Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height}: {Gdx2DPixmap.ColorType}: "
+                          + $"{Gdx2DPixmap.GetFormatString( GetColorFormat() )}" );
             Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
             var a = Gdx2DPixmap.PixmapBuffer.BackingArray();

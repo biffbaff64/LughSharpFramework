@@ -28,7 +28,6 @@ using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Pixels;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
@@ -46,7 +45,7 @@ public class Cubemap : GLTexture, IManaged
     public        ICubemapData  Data         { get; set; }
 
     // ========================================================================
-    
+
     private static readonly Dictionary< IApplication, List< Cubemap >? > _managedCubemaps = new();
 
     // ========================================================================
@@ -111,7 +110,7 @@ public class Cubemap : GLTexture, IManaged
     /// <summary>
     /// Construct a Cubemap with <see cref="Pixmap" />s for each side of the specified size.
     /// </summary>
-    public Cubemap( int width, int height, int depth, PixelType.Format format )
+    public Cubemap( int width, int height, int depth, Gdx2DPixmap.Gdx2DPixmapFormat format )
         : this( new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
                 new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
                 new PixmapTextureData( new Pixmap( width, depth, format ), null, false, true ),

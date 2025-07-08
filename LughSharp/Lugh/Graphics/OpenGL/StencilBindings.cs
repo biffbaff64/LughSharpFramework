@@ -27,7 +27,6 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 [PublicAPI]
 public class StencilBindings
 {
-    
 }
 
 // ========================================================================

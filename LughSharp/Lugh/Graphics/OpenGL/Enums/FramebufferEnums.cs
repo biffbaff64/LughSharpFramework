@@ -50,7 +50,7 @@ public enum FramebufferStatus
     IncompleteMissingAttachment = IGL.GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT,
     IncompleteDrawBuffer        = IGL.GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER,
     IncompleteReadBuffer        = IGL.GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER,
-    Unsupported                 = IGL.GL_FRAMEBUFFER_UNSUPPORTED
+    Unsupported                 = IGL.GL_FRAMEBUFFER_UNSUPPORTED,
 }
 
 [PublicAPI]
@@ -60,7 +60,7 @@ public enum FramebufferAttachmentPoint
     ColorAttachment1  = IGL.GL_COLOR_ATTACHMENT1,
     ColorAttachment2  = IGL.GL_COLOR_ATTACHMENT2,
     DepthAttachment   = IGL.GL_DEPTH_ATTACHMENT,
-    StencilAttachment = IGL.GL_STENCIL_ATTACHMENT
+    StencilAttachment = IGL.GL_STENCIL_ATTACHMENT,
 }
 
 // ========================================================================

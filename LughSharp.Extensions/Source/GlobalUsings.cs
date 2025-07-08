@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 // ====================================================================--------
+
 global using System.Drawing;
 global using System.Drawing.Drawing2D;
 global using System.Drawing.Imaging;
@@ -40,6 +41,7 @@ global using JetBrains.Annotations;
 
 // ============================================================================
 global using DotGLFW;
+
 global using GLFW = DotGLFW;
 
 // ============================================================================

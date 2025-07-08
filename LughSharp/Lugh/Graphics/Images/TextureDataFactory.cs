@@ -63,7 +63,7 @@ public static class TextureDataFactory
             ".cim" => new FileTextureData( file, PixmapIO.ReadCIM( file ), format, useMipMaps ),
 
             // Compressed Texture format for WebGL and OpenGL ES.
-            ".etc1" => new ETC1TextureData( file, useMipMaps ),
+            ".etc1" => new Etc1TextureData( file, useMipMaps ),
 
             // Kronos TeXture image file format for OpenGL and OpenGL ES.
             ".ktx" or ".zktx" => new KtxTextureData( file, useMipMaps ),
