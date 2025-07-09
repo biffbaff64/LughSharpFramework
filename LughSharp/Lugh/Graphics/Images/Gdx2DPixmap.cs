@@ -337,6 +337,7 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     /// Converts this Pixmaps <see cref="ColorType" /> to the requested format.
     /// </summary>
     /// <param name="requestedFormat"> The new Format. </param>
+    //TODO: Get rid...
     private void ConvertPixelFormatTo( Gdx2DPixmapFormat requestedFormat )
     {
         // Double-check conditions

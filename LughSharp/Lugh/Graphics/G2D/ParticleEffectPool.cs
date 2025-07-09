@@ -54,23 +54,26 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
 
         effect1.Reset( false ); // copy parameters exactly to avoid introducing error
 
-        if ( !effect1.XSizeScale.Equals( _effect.XSizeScale )
+        if ( !effect1.XSizeScale.Equals( _effect?.XSizeScale )
              || !effect1.YSizeScale.Equals( _effect.YSizeScale )
              || !effect1.MotionScale.Equals( _effect.MotionScale ) )
         {
             var emitters         = effect1.GetEmitters();
-            var templateEmitters = _effect.GetEmitters();
+            var templateEmitters = _effect?.GetEmitters();
 
             for ( var i = 0; i < emitters.Count; i++ )
             {
                 var emitter         = emitters[ i ];
-                var templateEmitter = templateEmitters[ i ];
+                var templateEmitter = templateEmitters?[ i ];
 
-                emitter.MatchSize( templateEmitter );
-                emitter.MatchMotion( templateEmitter );
+                if ( templateEmitter != null )
+                {
+                    emitter.MatchSize( templateEmitter );
+                    emitter.MatchMotion( templateEmitter );
+                }
             }
 
-            effect1.XSizeScale  = _effect.XSizeScale;
+            effect1.XSizeScale  = _effect!.XSizeScale;
             effect1.YSizeScale  = _effect.YSizeScale;
             effect1.MotionScale = _effect.MotionScale;
         }
@@ -81,7 +84,7 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
         private readonly ParticleEffectPool _effectPool;
 
         public PooledEffect( ParticleEffect? effect, ParticleEffectPool pep )
-            : base( effect )
+            : base( effect! )
         {
             _effectPool = pep;
         }
@@ -92,3 +95,6 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

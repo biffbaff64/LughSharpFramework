@@ -56,6 +56,7 @@ public class DeleteProcessor : FileProcessor
 // ============================================================================
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class SettingsCombiningProcessor : FileProcessor
 {
     public TexturePackerEntry? EntryDir { get; set; }

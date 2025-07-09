@@ -1240,17 +1240,17 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="y"> Y coordinate in pixels. </param>
     public virtual void Draw( Texture? texture, float x, float y )
     {
-        if ( texture == null )
+        if ( texture is null )
         {
             Logger.Debug( "Draw called with null texture" );
 
             return;
         }
 
-//        Logger.Debug( $"Drawing texture: {texture.Name}" );
-//        Logger.Debug( $"Texture handle: {texture.GLTextureHandle}" );
-//        Logger.Debug($"IsDrawing: {IsDrawing}");
-//        Logger.Debug($"Current Shader: {Shader?.ShaderProgramHandle ?? 0}");
+        Logger.Debug( $"Drawing texture: {texture.Name}" );
+        Logger.Debug( $"Texture handle: {texture.GLTextureHandle}" );
+        Logger.Debug($"IsDrawing: {IsDrawing}");
+        Logger.Debug($"Current Shader: {Shader?.ShaderProgramHandle ?? 0}");
 
         Draw( texture, x, y, texture.Width, texture.Height );
     }

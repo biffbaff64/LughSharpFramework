@@ -32,7 +32,7 @@ public interface IGameCamera
     Viewport?             Viewport         { get; set; }
     OrthographicCamera    Camera           { get; set; }
     string                Name             { get; set; }
-    Vector3               LerpVector       { get; set; }
+    Vector3?              LerpVector       { get; set; }
     bool                  IsInUse          { get; set; }
     bool                  IsLerpingEnabled { get; set; }
     Vector3               Position         { get; }

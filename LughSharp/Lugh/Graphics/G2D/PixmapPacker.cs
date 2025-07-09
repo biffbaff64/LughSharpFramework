@@ -1160,12 +1160,12 @@ public class PixmapPacker : IDisposable
                     return 0;
                 }
 
-                if ( ReferenceEquals( null, y ) )
+                if ( y is null )
                 {
                     return 1;
                 }
 
-                if ( ReferenceEquals( null, x ) )
+                if ( x is null )
                 {
                     return -1;
                 }

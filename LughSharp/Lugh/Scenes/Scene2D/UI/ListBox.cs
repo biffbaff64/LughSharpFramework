@@ -285,7 +285,7 @@ public class ListBox< T > : Widget
         }
     }
 
-    protected GlyphLayout DrawItem( IBatch batch, BitmapFont font, int index, T item, float x, float y, float width )
+    protected GlyphLayout? DrawItem( IBatch batch, BitmapFont font, int index, T item, float x, float y, float width )
     {
         var str = ToString( item );
 

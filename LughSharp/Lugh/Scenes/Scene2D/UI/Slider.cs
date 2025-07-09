@@ -28,6 +28,7 @@ using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
+using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Pooling;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
@@ -385,6 +386,8 @@ public class Slider : ProgressBar
                 // Fire an event on touchUp even if the value didn't change, so
                 // listeners can see when a drag ends via isDragging.
                 var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
+
+                Guard.ThrowIfNull( changeEvent );
 
                 _parent.Fire( changeEvent );
                 Pools.Free< ChangeListener.ChangeEvent >( changeEvent );

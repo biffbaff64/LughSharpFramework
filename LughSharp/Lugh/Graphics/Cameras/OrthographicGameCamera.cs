@@ -40,7 +40,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     public Viewport?             Viewport         { get; set; }
     public OrthographicCamera    Camera           { get; set; }
     public string                Name             { get; set; }
-    public Vector3               LerpVector       { get; set; }
+    public Vector3?              LerpVector       { get; set; }
     public bool                  IsInUse          { get; set; }
     public bool                  IsLerpingEnabled { get; set; }
     public float                 PPM              { get; set; }
@@ -264,9 +264,9 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     {
         if ( IsInUse && IsLerpingEnabled )
         {
-            LerpVector.Set( position.X, position.Y, position.Z );
+            LerpVector?.Set( position.X, position.Y, position.Z );
 
-            Camera.Position.Lerp( LerpVector, speed );
+            Camera.Position.Lerp( LerpVector!, speed );
             Camera.Update();
         }
     }
@@ -292,9 +292,9 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     {
         if ( IsInUse && IsLerpingEnabled )
         {
-            LerpVector.Set( position.X, position.Y, position.Z );
+            LerpVector?.Set( position.X, position.Y, position.Z );
 
-            Camera.Position.Lerp( LerpVector, speed );
+            Camera.Position.Lerp( LerpVector!, speed );
             Camera.Zoom += zoom;
 
             if ( shake )

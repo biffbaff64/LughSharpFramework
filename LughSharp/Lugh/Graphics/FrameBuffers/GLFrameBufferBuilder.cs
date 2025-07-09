@@ -66,8 +66,8 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// <returns></returns>
     public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( Gdx2DPixmap.Gdx2DPixmapFormat format )
     {
-        var glFormat = PixmapFormat.ToGLPixelFormat( format );
-        var glType   = PixmapFormat.ToGLDataType( format );
+        var glFormat = GLTexture.ToGLPixelFormat( format );
+        var glType   = GLTexture.ToGLDataType( format );
 
         return AddColorTextureAttachment( glFormat, glFormat, glType );
     }

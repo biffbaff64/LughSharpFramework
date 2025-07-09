@@ -272,7 +272,7 @@ public class Vector2 : IVector< Vector2 >
 
     public bool EpsilonEquals( Vector2? other, float epsilon = NumberUtils.FLOAT_TOLERANCE )
     {
-        if ( other == null )
+        if ( other is null )
         {
             return false;
         }

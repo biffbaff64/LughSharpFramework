@@ -29,14 +29,23 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.G2D;
 
+[PublicAPI]
 public class ParticleEffect : IDisposable
 {
+    public float XSizeScale  { get; set; } = 1f;
+    public float YSizeScale  { get; set; } = 1f;
+    public float MotionScale { get; set; } = 1f;
+
+    // ========================================================================
+    
     private const int DEFAULT_EMITTERS_SIZE = 8;
 
     private readonly List< ParticleEmitter > _emitters;
     private          BoundingBox?            _bounds;
     private          bool                    _ownsTexture;
 
+    // ========================================================================
+    
     public ParticleEffect()
     {
         _emitters = new List< ParticleEmitter >( DEFAULT_EMITTERS_SIZE );
@@ -51,16 +60,7 @@ public class ParticleEffect : IDisposable
             _emitters.Add( NewEmitter( effect._emitters[ i ] ) );
         }
     }
-
-    public float XSizeScale  { get; set; } = 1f;
-    public float YSizeScale  { get; set; } = 1f;
-    public float MotionScale { get; set; } = 1f;
-
-    public void Dispose()
-    {
-        Dispose( true );
-    }
-
+    
     public void Start()
     {
         for ( int i = 0, n = _emitters.Count; i < n; i++ )
@@ -419,32 +419,6 @@ public class ParticleEffect : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Disposes the texture for each sprite for each ParticleEmitter.
-    /// </summary>
-    protected void Dispose( bool disposing )
-    {
-        if ( disposing )
-        {
-            if ( !_ownsTexture )
-            {
-                return;
-            }
-
-            for ( int i = 0, n = _emitters.Count; i < n; i++ )
-            {
-                var emitter = _emitters[ i ];
-
-                foreach ( var sprite in emitter.Sprites )
-                {
-                    sprite.Texture.Dispose();
-                }
-            }
-        }
-    }
-
-    // ========================================================================
-
-    /// <summary>
     /// Returns the bounding box for all active particles. z axis will always be zero.
     /// </summary>
     public BoundingBox GetBoundingBox()
@@ -523,4 +497,39 @@ public class ParticleEffect : IDisposable
             _emitters[ i ].CleansUpBlendFunction = cleanUpBlendFunction;
         }
     }
+
+    // ========================================================================
+
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    /// <summary>
+    /// Disposes the texture for each sprite for each ParticleEmitter.
+    /// </summary>
+    protected void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            if ( !_ownsTexture )
+            {
+                return;
+            }
+
+            for ( int i = 0, n = _emitters.Count; i < n; i++ )
+            {
+                var emitter = _emitters[ i ];
+
+                foreach ( var sprite in emitter.Sprites )
+                {
+                    sprite.Texture?.Dispose();
+                }
+            }
+        }
+    }
 }
+
+// ============================================================================
+// ============================================================================

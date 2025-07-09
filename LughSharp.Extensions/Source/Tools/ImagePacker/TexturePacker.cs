@@ -578,7 +578,7 @@ public partial class TexturePacker
             page.Debug();
             Logger.Debug( $"outputFile: {outputFile}" );
 
-            var canvas = new Bitmap( width, height, PixmapFormatExtensions.ToPixelFormat( _settings.Format ) );
+            var canvas = new Bitmap( width, height, PixmapFormatExtensions.ToSystemPixelFormat( _settings.Format ) );
             var g      = System.Drawing.Graphics.FromImage( canvas );
 
             if ( !_settings.Silent )
@@ -911,7 +911,7 @@ public partial class TexturePacker
         writer.WriteLine( page.ImageName );
         writer.WriteLine( $"{tab}size{colon}{page.ImageWidth}{comma}{page.ImageHeight}" );
 
-        if ( PixmapFormatExtensions.ToPixelFormat( _settings.Format ) != PixelFormat.Format32bppArgb )
+        if ( PixmapFormatExtensions.ToSystemPixelFormat( _settings.Format ) != PixelFormat.Format32bppArgb )
         {
             writer.WriteLine( $"{tab}format{colon}{_settings.Format}" );
         }

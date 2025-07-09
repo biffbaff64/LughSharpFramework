@@ -960,7 +960,7 @@ public class TextField : Widget
 
                 var actorCoords = textField.Parent?.LocalToStageCoordinates( _tmp3.Set( textField.X, textField.Y ) );
 
-                if ( actorCoords == null )
+                if ( actorCoords is null )
                 {
                     continue;
                 }
@@ -1015,6 +1015,11 @@ public class TextField : Widget
         Text = newText;
 
         var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
+        
+        if ( changeEvent == null )
+        {
+            return false;
+        }
 
         var cancelled = Fire( changeEvent );
 

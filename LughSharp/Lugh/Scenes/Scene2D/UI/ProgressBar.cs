@@ -430,7 +430,9 @@ public class ProgressBar : Widget, IDisableable
 
             var cancelled = Fire( changeEvent );
 
-            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
+            // It is safe to suppress nullability warnings for 'changeEvent'
+            // here because Fire() will throw an exception is it is null.
+            Pools.Free< ChangeListener.ChangeEvent >( changeEvent! );
 
             if ( cancelled )
             {

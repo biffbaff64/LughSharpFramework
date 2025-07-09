@@ -40,7 +40,7 @@ public static class PixmapFormatExtensions
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided Pixmap pixel format is invalid or not supported.
     /// </exception>
-    public static Gdx2DPixmap.Gdx2DPixmapFormat PixelFormatToPixelTypeFormat( PixelFormat format )
+    public static Gdx2DPixmap.Gdx2DPixmapFormat SystemPixelFormatToGdx2DFormat( PixelFormat format )
     {
         return format switch
         {
@@ -64,11 +64,9 @@ public static class PixmapFormatExtensions
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
-    public static PixelFormat ToPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
+    public static PixelFormat ToSystemPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
     {
-        var cformat = PixmapFormat.ToGdx2DPixelFormat( format );
-
-        return cformat switch
+        return format switch
         {
             Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => PixelFormat.Alpha,
             Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
@@ -83,3 +81,6 @@ public static class PixmapFormatExtensions
         };
     }
 }
+
+// ============================================================================
+// ============================================================================

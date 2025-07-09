@@ -373,20 +373,18 @@ public class PolygonSprite
 
     public void Draw( PolygonSpriteBatch spriteBatch )
     {
-        if ( Region == null )
+        if ( Region?.Region.Texture == null )
         {
             return;
         }
-
-        spriteBatch.Draw(
-                         Region.Region.Texture,
-                         GetVertices()!,
-                         0,
-                         _vertices!.Length,
-                         Region.Triangles,
-                         0,
-                         Region.Triangles.Length
-                        );
+        
+        spriteBatch.Draw( Region.Region.Texture,
+                          GetVertices()!,
+                          0,
+                          _vertices!.Length,
+                          Region.Triangles,
+                          0,
+                          Region.Triangles.Length );
     }
 
     public void Draw( PolygonSpriteBatch spriteBatch, float alphaModulation )

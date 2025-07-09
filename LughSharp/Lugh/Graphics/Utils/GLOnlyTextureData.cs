@@ -106,7 +106,7 @@ public class GLOnlyTextureData : ITextureData
                        Width,
                        Height,
                        0,
-                       ( int )PixmapFormat.ToGdx2DPixelFormat( PixelFormat ),
+                       ( int )PixelFormat,
                        Type,
                        0 );
     }
@@ -134,3 +134,6 @@ public class GLOnlyTextureData : ITextureData
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 }
+
+// ========================================================================
+// ========================================================================
