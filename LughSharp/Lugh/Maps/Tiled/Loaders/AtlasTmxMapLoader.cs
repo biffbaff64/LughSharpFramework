@@ -271,7 +271,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         throw new GdxRuntimeException( $"The 'atlas' file could not be found: '{atlasFilePath}'" );
     }
 
-    protected void SetTextureFilters( Texture.TextureFilter min, Texture.TextureFilter mag )
+    protected void SetTextureFilters( TextureFilterMode min, TextureFilterMode mag )
     {
         foreach ( var texture in TrackedTextures )
         {

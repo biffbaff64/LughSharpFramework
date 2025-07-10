@@ -118,25 +118,8 @@ public class Engine
     /// </summary>
     public IGLBindings Bindings
     {
-        get
-        {
-            if ( _glBindings == null )
-            {
-                _glBindings = new GLBindings();
-
-                Logger.Debug( "********** Engine.Bindings is null, initialised " +
-                              "to reference GLBindings. **********" );
-            }
-
-            return _glBindings;
-        }
-        set
-        {
-            _glBindings = value;
-
-            Logger.Debug( $"********** Engine.Bindings set to reference " +
-                          $"{value.GetType().Name} **********" );
-        }
+        get => _glBindings ??= new GLBindings();
+        set => _glBindings = value;
     }
 
     /// <summary>

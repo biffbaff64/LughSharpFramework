@@ -141,10 +141,10 @@ public class CubemapLoader : AsynchronousAssetLoader
         /// </summary>
         public Gdx2DPixmap.Gdx2DPixmapFormat? Format = null;
 
-        public Texture.TextureFilter MagFilter = Texture.TextureFilter.Nearest;
-        public Texture.TextureFilter MinFilter = Texture.TextureFilter.Nearest;
-        public Texture.TextureWrap   WrapU     = Texture.TextureWrap.ClampToEdge;
-        public Texture.TextureWrap   WrapV     = Texture.TextureWrap.ClampToEdge;
+        public TextureFilterMode MagFilter = TextureFilterMode.Nearest;
+        public TextureFilterMode MinFilter = TextureFilterMode.Nearest;
+        public TextureWrapMode   WrapU     = TextureWrapMode.ClampToEdge;
+        public TextureWrapMode   WrapV     = TextureWrapMode.ClampToEdge;
 
         /// <summary>
         /// The texture to put the TextureData in, optional.

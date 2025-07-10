@@ -117,6 +117,8 @@ public interface IFiles
     bool IsLocalStorageAvailable();
 }
 
+// ============================================================================
+
 [PublicAPI]
 public enum PathTypes
 {
@@ -170,9 +172,10 @@ public enum PathTypes
     Local,
 
     /// <summary>
-    /// Path relative to the location of the assembly itself. Primarily used to access files
-    /// that are distributed alongside the application's binaries. These files are typically
-    /// read-only and are intended to be bundled with the application during deployment.
+    /// Path relative to the location of the assembly itself. Primarily used to
+    /// access files that are distributed alongside the application's binaries.
+    /// These files are typically read-only and are intended to be bundled with
+    /// the application during deployment.
     /// </summary>
     Assembly,
 
@@ -212,3 +215,6 @@ public enum PathTypes
     /// </summary>
     Invalid,
 }
+
+// ============================================================================
+// ============================================================================

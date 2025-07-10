@@ -220,7 +220,7 @@ public class VertexBufferObjectSubData : IVertexData
 
                 shader.SetVertexAttribute( location,
                                            attribute.NumComponents,
-                                           attribute.Type,
+                                           attribute.ComponentType,
                                            attribute.Normalized,
                                            Attributes.VertexSize,
                                            attribute.Offset );
@@ -242,7 +242,7 @@ public class VertexBufferObjectSubData : IVertexData
 
                 shader.SetVertexAttribute( location,
                                            attribute.NumComponents,
-                                           attribute.Type,
+                                           attribute.ComponentType,
                                            attribute.Normalized,
                                            Attributes.VertexSize,
                                            attribute.Offset );

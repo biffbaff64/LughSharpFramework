@@ -127,24 +127,24 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Returns the <see cref="Texture.TextureFilter"/> used for minification.
+    /// Returns the <see cref="TextureFilterMode"/> used for minification.
     /// </summary>
-    public Texture.TextureFilter MinFilter { get; private set; } = Texture.TextureFilter.Nearest;
+    public TextureFilterMode MinFilter { get; private set; } = TextureFilterMode.Nearest;
 
     /// <summary>
-    /// Returns the <see cref="Texture.TextureFilter"/> used for magnification.
+    /// Returns the <see cref="TextureFilterMode"/> used for magnification.
     /// </summary>
-    public Texture.TextureFilter MagFilter { get; private set; } = Texture.TextureFilter.Nearest;
+    public TextureFilterMode MagFilter { get; private set; } = TextureFilterMode.Nearest;
 
     /// <summary>
-    /// Returns the <see cref="Texture.TextureWrap"/> used for horizontal (U) texture coordinates.
+    /// Returns the <see cref="TextureWrapMode"/> used for horizontal (U) texture coordinates.
     /// </summary>
-    public Texture.TextureWrap UWrap { get; set; } = Texture.TextureWrap.ClampToEdge;
+    public TextureWrapMode UWrap { get; set; } = TextureWrapMode.ClampToEdge;
 
     /// <summary>
-    /// Returns the <see cref="Texture.TextureWrap"/> used for vertical (V) texture coordinates.
+    /// Returns the <see cref="TextureWrapMode"/> used for vertical (V) texture coordinates.
     /// </summary>
-    public Texture.TextureWrap VWrap { get; set; } = Texture.TextureWrap.ClampToEdge;
+    public TextureWrapMode VWrap { get; set; } = TextureWrapMode.ClampToEdge;
 
     /// <inheritdoc />
     public bool IsDrawable { get; set; }
@@ -219,7 +219,7 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
     }
 
     /// <summary>
-    /// Sets the <see cref="Texture.TextureWrap" /> for this texture on the u and v axis.
+    /// Sets the <see cref="TextureWrapMode" /> for this texture on the u and v axis.
     /// Assumes the texture is bound and active!
     /// </summary>
     /// <param name="u"> The u wrap. </param>
@@ -227,7 +227,7 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
     /// <param name="force">
     /// True to always set the values, even if they are the same as the current values.
     /// </param>
-    public void UnsafeSetWrap( Texture.TextureWrap u, Texture.TextureWrap v, bool force = false )
+    public void UnsafeSetWrap( TextureWrapMode u, TextureWrapMode v, bool force = false )
     {
         if ( force || ( UWrap != u ) )
         {
@@ -243,12 +243,12 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
     }
 
     /// <summary>
-    /// Sets the <see cref="Texture.TextureWrap" /> for this texture on the u and v axis.
+    /// Sets the <see cref="TextureWrapMode" /> for this texture on the u and v axis.
     /// This will bind this texture!
     /// </summary>
     /// <param name="u">the u wrap</param>
     /// <param name="v">the v wrap</param>
-    public void SetWrap( Texture.TextureWrap u, Texture.TextureWrap v )
+    public void SetWrap( TextureWrapMode u, TextureWrapMode v )
     {
         UWrap = u;
         VWrap = v;
@@ -260,7 +260,7 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
     }
 
     /// <summary>
-    /// Sets the <see cref="Texture.TextureFilter" /> for this texture for minification and
+    /// Sets the <see cref="TextureFilterMode" /> for this texture for minification and
     /// magnification. Assumes the texture is bound and active!
     /// </summary>
     /// <param name="minFilter"> the minification filter </param>
@@ -269,7 +269,7 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
     /// True to always set the values, even if they are the same as the current values.
     /// Default is false.
     /// </param>
-    public void UnsafeSetFilter( Texture.TextureFilter minFilter, Texture.TextureFilter magFilter, bool force = false )
+    public void UnsafeSetFilter( TextureFilterMode minFilter, TextureFilterMode magFilter, bool force = false )
     {
         if ( force || ( MinFilter != minFilter ) )
         {
@@ -285,12 +285,12 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
     }
 
     /// <summary>
-    /// Sets the <see cref="Texture.TextureFilter" /> for this texture for minification and
+    /// Sets the <see cref="TextureFilterMode" /> for this texture for minification and
     /// magnification. This will bind this texture.
     /// </summary>
     /// <param name="minFilter"> The minification filter. </param>
     /// <param name="magFilter"> The magnification filter. </param>
-    public void SetFilter( Texture.TextureFilter minFilter, Texture.TextureFilter magFilter )
+    public void SetFilter( TextureFilterMode minFilter, TextureFilterMode magFilter )
     {
         MinFilter = minFilter;
         MagFilter = magFilter;

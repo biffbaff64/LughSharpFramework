@@ -184,16 +184,16 @@ public class BitmapFontParameter : AssetLoaderParameters
     public bool GenMipMaps { get; set; } = false;
 
     /// <summary>
-    /// The <see cref="Texture.TextureFilter" /> to use when scaling down the <see cref="BitmapFont" />.
-    /// Defaults to <see cref="Texture.TextureFilter.Nearest" />.
+    /// The <see cref="TextureFilterMode" /> to use when scaling down the <see cref="BitmapFont" />.
+    /// Defaults to <see cref="TextureFilterMode.Nearest" />.
     /// </summary>
-    public Texture.TextureFilter MinFilter { get; set; } = Texture.TextureFilter.Nearest;
+    public TextureFilterMode MinFilter { get; set; } = TextureFilterMode.Nearest;
 
     /// <summary>
-    /// The <see cref="Texture.TextureFilter" /> to use when scaling up the <see cref="BitmapFont" />.
-    /// Defaults to <see cref="Texture.TextureFilter.Nearest" />.
+    /// The <see cref="TextureFilterMode" /> to use when scaling up the <see cref="BitmapFont" />.
+    /// Defaults to <see cref="TextureFilterMode.Nearest" />.
     /// </summary>
-    public Texture.TextureFilter MagFilter { get; set; } = Texture.TextureFilter.Nearest;
+    public TextureFilterMode MagFilter { get; set; } = TextureFilterMode.Nearest;
 
     /// <summary>
     /// optional <see cref="BitmapFont.BitmapFontData" /> to be used instead of

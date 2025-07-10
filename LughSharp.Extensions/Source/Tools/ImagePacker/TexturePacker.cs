@@ -916,7 +916,7 @@ public partial class TexturePacker
             writer.WriteLine( $"{tab}format{colon}{_settings.Format}" );
         }
 
-        if ( ( _settings.FilterMin != Texture.TextureFilter.Nearest ) || ( _settings.FilterMag != Texture.TextureFilter.Nearest ) )
+        if ( ( _settings.FilterMin != TextureFilterMode.Nearest ) || ( _settings.FilterMag != TextureFilterMode.Nearest ) )
         {
             writer.WriteLine( $"{tab}filter{colon}{_settings.FilterMin}{comma}{_settings.FilterMag}" );
         }
@@ -1028,9 +1028,9 @@ public partial class TexturePacker
     {
         return _settings switch
         {
-            { WrapX: Texture.TextureWrap.Repeat, WrapY     : Texture.TextureWrap.Repeat }      => "xy",
-            { WrapX: Texture.TextureWrap.Repeat, WrapY     : Texture.TextureWrap.ClampToEdge } => "x",
-            { WrapX: Texture.TextureWrap.ClampToEdge, WrapY: Texture.TextureWrap.Repeat }      => "y",
+            { WrapX: TextureWrapMode.Repeat, WrapY     : TextureWrapMode.Repeat }      => "xy",
+            { WrapX: TextureWrapMode.Repeat, WrapY     : TextureWrapMode.ClampToEdge } => "x",
+            { WrapX: TextureWrapMode.ClampToEdge, WrapY: TextureWrapMode.Repeat }      => "y",
 
             var _ => null,
         };

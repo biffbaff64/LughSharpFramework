@@ -28,14 +28,27 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-/// Rectangle class that is independent of any backends.
+/// RectangleShape class that is independent of any backends.
 /// This has no drawing methods, just those that handle the shape.
 /// </summary>
 [PublicAPI]
-public class RectangleShape : IShape2D
+public class RectangleShape : IShape2D, IEquatable< RectangleShape >
 {
-    public static readonly RectangleShape Tmp = new();
+    public static readonly RectangleShape  Tmp = new();
 
+    // ========================================================================
+
+    public float X      { get; set; }
+    public float Y      { get; set; }
+    public float Width  { get; set; }
+    public float Height { get; set; }
+
+    // ========================================================================
+
+    private static readonly RectangleShape _empty = new();    // Do Not Modifiy contents
+
+    // ========================================================================
+    
     /// <summary>
     /// Constructs a new rectangle with all values set to zero
     /// </summary>
@@ -70,10 +83,7 @@ public class RectangleShape : IShape2D
         Height = rect.Height;
     }
 
-    public float X      { get; set; }
-    public float Y      { get; set; }
-    public float Width  { get; set; }
-    public float Height { get; set; }
+    // ========================================================================
 
     /// <summary>
     /// </summary>
@@ -93,6 +103,8 @@ public class RectangleShape : IShape2D
     {
         return Contains( point.X, point.Y );
     }
+
+    // ========================================================================
 
     /// <summary>
     /// </summary>
@@ -145,6 +157,8 @@ public class RectangleShape : IShape2D
         return this;
     }
 
+    // ========================================================================
+
     /// <summary>
     /// Sets the size of this rectangle from the values provided.
     /// </summary>
@@ -179,6 +193,8 @@ public class RectangleShape : IShape2D
     {
         return new Vector2( Width, Height );
     }
+
+    // ========================================================================
 
     /// <summary>
     /// </summary>
@@ -215,6 +231,52 @@ public class RectangleShape : IShape2D
     }
 
     /// <summary>
+    /// Determines if the specified point is contained within the rectangular region defined by this
+    /// <see cref='RectangleShape'/> .
+    /// </summary>
+    public bool Contains( int x, int y ) => ( X <= x ) && ( x < ( X + Width ) ) && ( Y <= y ) && ( y < ( Y + Height ) );
+
+    /// <summary>
+    /// Determines if the specified point is contained within the rectangular region defined by this
+    /// <see cref='RectangleShape'/> .
+    /// </summary>
+    public bool Contains( Point pt ) => Contains( pt.X, pt.Y );
+
+    // ========================================================================
+
+    /// <summary>
+    /// Inflates this <see cref='RectangleShape'/> by the specified amount.
+    /// </summary>
+    public void Inflate( int width, int height )
+    {
+        unchecked
+        {
+            X -= width;
+            Y -= height;
+
+            Width  += 2 * width;
+            Height += 2 * height;
+        }
+    }
+
+    /// <summary>
+    /// Inflates this <see cref='RectangleShape'/> by the specified amount.
+    /// </summary>
+    public void Inflate( Size size ) => Inflate( size.Width, size.Height );
+
+    /// <summary>
+    /// Creates a <see cref='RectangleShape'/> that is inflated by the specified amount.
+    /// </summary>
+    public static RectangleShape Inflate( RectangleShape rect, int x, int y )
+    {
+        rect.Inflate( x, y );
+
+        return rect;
+    }
+
+    // ========================================================================
+
+    /// <summary>
     /// Checks for overlap between this rectangle and the specified rectangle.
     /// </summary>
     /// <param name="r"> the other <see cref="RectangleShape" /> </param>
@@ -223,6 +285,84 @@ public class RectangleShape : IShape2D
     {
         return ( X < ( r.X + r.Width ) ) && ( ( X + Width ) > r.X ) && ( Y < ( r.Y + r.Height ) ) && ( ( Y + Height ) > r.Y );
     }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Creates a RectangleShape that represents the intersection between this RectangleShape and rect.
+    /// </summary>
+    public void Intersect( RectangleShape rect )
+    {
+        var result = Intersect( rect, this );
+
+        X      = result.X;
+        Y      = result.Y;
+        Width  = result.Width;
+        Height = result.Height;
+    }
+
+    /// <summary>
+    /// Creates a rectangle that represents the intersection between a and b. If there is no intersection, an
+    /// empty rectangle is returned.
+    /// </summary>
+    public static RectangleShape Intersect( RectangleShape a, RectangleShape b )
+    {
+        var x1 = Math.Max( a.X, b.X );
+        var x2 = Math.Min( a.X + a.Width, b.X + b.Width );
+        var y1 = Math.Max( a.Y, b.Y );
+        var y2 = Math.Min( a.Y + a.Height, b.Y + b.Height );
+
+        if ( ( x2 >= x1 ) && ( y2 >= y1 ) )
+        {
+            return new RectangleShape( x1, y1, x2 - x1, y2 - y1 );
+        }
+
+        return _empty;
+    }
+
+    /// <summary>
+    /// Determines if this rectangle intersects with rect.
+    /// </summary>
+    public bool IntersectsWith( RectangleShape rect )
+    {
+        return ( rect.X < ( X + Width ) )
+               && ( X < ( rect.X + rect.Width ) )
+               && ( rect.Y < ( Y + Height ) )
+               && ( Y < ( rect.Y + rect.Height ) );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Creates a rectangle that represents the union between a and b.
+    /// </summary>
+    public static RectangleShape Union( RectangleShape a, RectangleShape b )
+    {
+        var x1 = Math.Min( a.X, b.X );
+        var x2 = Math.Max( a.X + a.Width, b.X + b.Width );
+        var y1 = Math.Min( a.Y, b.Y );
+        var y2 = Math.Max( a.Y + a.Height, b.Y + b.Height );
+
+        return new RectangleShape( x1, y1, x2 - x1, y2 - y1 );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Adjusts the location of this rectangle by the specified amount.
+    /// </summary>
+    public void AdjustLocation( Point pos ) => AdjustLocation( pos.X, pos.Y );
+
+    /// <summary>
+    /// Adjusts the location of this rectangle by the specified amount.
+    /// </summary>
+    public void AdjustLocation( int x, int y )
+    {
+        X += x;
+        Y += y;
+    }
+
+    // ========================================================================
 
     /// <summary>
     /// Sets the values of the given rectangle to this rectangle.
@@ -238,6 +378,8 @@ public class RectangleShape : IShape2D
 
         return this;
     }
+
+    // ========================================================================
 
     /// <summary>
     /// Merges this rectangle with the other rectangle.
@@ -326,6 +468,8 @@ public class RectangleShape : IShape2D
         return this;
     }
 
+    // ========================================================================
+
     /// <summary>
     /// Calculates the aspect ratio ( width / height ) of this rectangle
     /// </summary>
@@ -337,6 +481,8 @@ public class RectangleShape : IShape2D
     {
         return Height == 0 ? float.NaN : Width / Height;
     }
+
+    // ========================================================================
 
     /// <summary>
     /// Calculates the center of the rectangle. Results are located in the given Vector2
@@ -375,6 +521,8 @@ public class RectangleShape : IShape2D
 
         return this;
     }
+
+    // ========================================================================
 
     /// <summary>
     /// Fits this rectangle around another rectangle while maintaining aspect
@@ -432,8 +580,10 @@ public class RectangleShape : IShape2D
         return this;
     }
 
+    // ========================================================================
+
     /// <summary>
-    /// Converts this <code>Rectangle</code> to a string in the
+    /// Converts this <code>RectangleShape</code> to a string in the
     /// format <code>[x,y,width,height]</code>.
     /// </summary>
     /// <returns> a string representation of this object.</returns>
@@ -443,7 +593,7 @@ public class RectangleShape : IShape2D
     }
 
     /// <summary>
-    /// Sets this {@code Rectangle} to the value represented by the
+    /// Sets this {@code RectangleShape} to the value represented by the
     /// specified string according to the format of <see cref="ToString()" />.
     /// </summary>
     /// <param name="v"> the string. </param>
@@ -469,11 +619,11 @@ public class RectangleShape : IShape2D
             }
             catch ( FormatException )
             {
-                throw new GdxRuntimeException( "Malformed Rectangle: " + v );
+                throw new GdxRuntimeException( "Malformed RectangleShape: " + v );
             }
         }
 
-        throw new GdxRuntimeException( "Malformed Rectangle: " + v );
+        throw new GdxRuntimeException( "Malformed RectangleShape: " + v );
     }
 
     /// <summary>
@@ -508,10 +658,16 @@ public class RectangleShape : IShape2D
         return result;
     }
 
+    /// <inheritdoc />
+    public bool Equals( RectangleShape? other )
+    {
+        return ReferenceEquals( this, other );
+    }
+
     /// <summary>
+    /// Tests whether <paramref name="obj"/> is a <see cref='RectangleShape'/> with the same location
+    /// and size of this RectangleShape.
     /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
     public override bool Equals( object? obj )
     {
         if ( this == obj )

@@ -62,7 +62,7 @@ public class VertexAttribute
     /// the OpenGL type of each component, e.g. <see cref="IGL.GL_FLOAT" />
     /// or <see cref="IGL.GL_UNSIGNED_BYTE" />
     /// </summary>
-    public readonly int Type;
+    public readonly int ComponentType;
 
     /// <summary>
     /// optional unit/index specifier, used for texture coordinates and bone weights.
@@ -125,7 +125,7 @@ public class VertexAttribute
     {
         Usage         = usage;
         NumComponents = numComponents;
-        Type          = type;
+        ComponentType = type;
         Normalized    = normalized;
         Alias         = alias;
         Unit          = unit;
@@ -145,7 +145,7 @@ public class VertexAttribute
     /// </returns>
     public VertexAttribute Copy()
     {
-        return new VertexAttribute( Usage, NumComponents, Type, Normalized, Alias, Unit );
+        return new VertexAttribute( Usage, NumComponents, ComponentType, Normalized, Alias, Unit );
     }
 
     /// <summary>
@@ -284,7 +284,7 @@ public class VertexAttribute
     /// <returns>The size in bytes required by the vertex attribute.</returns>
     public int GetSizeInBytes()
     {
-        return Type switch
+        return ComponentType switch
         {
             IGL.GL_FLOAT          => 4 * NumComponents,
             IGL.GL_FIXED          => 4 * NumComponents,
@@ -326,7 +326,7 @@ public class VertexAttribute
         return ( other != null )
                && ( Usage == other.Usage )
                && ( NumComponents == other.NumComponents )
-               && ( Type == other.Type )
+               && ( ComponentType == other.ComponentType )
                && ( Normalized == other.Normalized )
                && Alias.Equals( other.Alias )
                && ( Unit == other.Unit );

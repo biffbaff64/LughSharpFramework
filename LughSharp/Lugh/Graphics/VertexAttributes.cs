@@ -301,9 +301,9 @@ public class VertexAttributes
                 return va0.Normalized ? 1 : -1;
             }
 
-            if ( va0.Type != va1.Type )
+            if ( va0.ComponentType != va1.ComponentType )
             {
-                return va0.Type - va1.Type;
+                return va0.ComponentType - va1.ComponentType;
             }
         }
 

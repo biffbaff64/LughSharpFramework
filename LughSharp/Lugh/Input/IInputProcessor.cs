@@ -69,17 +69,19 @@ public interface IInputProcessor
     bool TouchUp( int screenX, int screenY, int pointer, int button );
 
     /// <summary>
+    /// Called when a touch input is dragged across the screen.
     /// </summary>
-    /// <param name="screenX"></param>
-    /// <param name="screenY"></param>
-    /// <param name="pointer"></param>
+    /// <param name="screenX">The current x-coordinate of the touch input on the screen.</param>
+    /// <param name="screenY">The current y-coordinate of the touch input on the screen.</param>
+    /// <param name="pointer">The index of the touch pointer associated with this event.</param>
     /// <returns>TRUE if the input was processed.</returns>
     bool TouchDragged( int screenX, int screenY, int pointer );
 
     /// <summary>
+    /// Called when the mouse pointer is moved.
     /// </summary>
-    /// <param name="screenX"></param>
-    /// <param name="screenY"></param>
+    /// <param name="screenX">The X-coordinate of the mouse pointer on the screen.</param>
+    /// <param name="screenY">The Y-coordinate of the mouse pointer on the screen.</param>
     /// <returns>TRUE if the input was processed.</returns>
     bool MouseMoved( int screenX, int screenY );
 

@@ -99,7 +99,7 @@ public static class InputUtils
     public static bool CtrlKey()
     {
 #if MACOS
-        return GdxApi.Input.isKeyPressed( Keys.SYM );
+        return Api.Input.isKeyPressed( Keys.SYM );
 #else
         return Api.Input.IsKeyPressed( Keys.CONTROL_LEFT ) || Api.Input.IsKeyPressed( Keys.CONTROL_RIGHT );
 #endif

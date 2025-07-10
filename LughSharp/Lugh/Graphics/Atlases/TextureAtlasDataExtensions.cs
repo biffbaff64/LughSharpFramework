@@ -65,9 +65,9 @@ public partial class TextureAtlasData
         {
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry ) );
 
-            page.MinFilter  = Enum.Parse< Texture.TextureFilter >( entry[ 1 ] );
-            page.MagFilter  = Enum.Parse< Texture.TextureFilter >( entry[ 2 ] );
-            page.UseMipMaps = Texture.Utils.IsMipMap( page.MinFilter );
+            page.MinFilter  = Enum.Parse< TextureFilterMode >( entry[ 1 ] );
+            page.MagFilter  = Enum.Parse< TextureFilterMode >( entry[ 2 ] );
+            page.UseMipMaps = Texture.IsMipMap( page.MinFilter );
         }
     }
 
@@ -81,12 +81,12 @@ public partial class TextureAtlasData
 
             if ( entry[ 1 ].Contains( 'x' ) )
             {
-                page.UWrap = Texture.TextureWrap.Repeat;
+                page.UWrap = TextureWrapMode.Repeat;
             }
 
             if ( entry[ 1 ].Contains( 'y' ) )
             {
-                page.VWrap = Texture.TextureWrap.Repeat;
+                page.VWrap = TextureWrapMode.Repeat;
             }
         }
     }

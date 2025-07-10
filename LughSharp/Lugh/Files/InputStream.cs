@@ -30,6 +30,8 @@ public class InputStream : Stream
     private const int MAX_SKIP_BUFFER_SIZE = 2048;
     private const int DEFAULT_BUFFER_SIZE  = 8192;
 
+    // ========================================================================
+    
     /// <inheritdoc />
     public override bool CanRead { get; }
 
@@ -74,3 +76,6 @@ public class InputStream : Stream
     {
     }
 }
+
+// ============================================================================
+// ============================================================================

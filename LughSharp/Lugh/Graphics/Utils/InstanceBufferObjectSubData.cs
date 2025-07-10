@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -239,7 +238,7 @@ public class InstanceBufferObjectSubData : IInstanceData
 
                 shader.SetVertexAttribute( location + unitOffset,
                                            attribute.NumComponents,
-                                           attribute.Type,
+                                           attribute.ComponentType,
                                            attribute.Normalized,
                                            Attributes.VertexSize,
                                            attribute.Offset );
@@ -264,7 +263,7 @@ public class InstanceBufferObjectSubData : IInstanceData
 
                 shader.SetVertexAttribute( location + unitOffset,
                                            attribute.NumComponents,
-                                           attribute.Type,
+                                           attribute.ComponentType,
                                            attribute.Normalized,
                                            Attributes.VertexSize,
                                            attribute.Offset );

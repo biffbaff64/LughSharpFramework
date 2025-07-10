@@ -64,7 +64,7 @@ public static class PixmapFormatExtensions
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
-    public static PixelFormat ToSystemPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
+    public static System.Drawing.Imaging.PixelFormat ToSystemPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
     {
         return format switch
         {

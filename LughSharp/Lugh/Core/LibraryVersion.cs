@@ -28,27 +28,29 @@ using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Exception = System.Exception;
-
 namespace LughSharp.Lugh.Core;
 
 /// <summary>
-/// The current LughSharp Library version.
+/// The current Library version.
 /// </summary>
-/// <remarks> Class name changed from GDXVersion 07/10/2024. </remarks>
 [PublicAPI]
-public class LughVersion
+public class LibraryVersion
 {
-    private readonly Version? _version;
+    public int LibMajorVersion    { get; private set; }
+    public int LibMinorVersion    { get; private set; }
+    public int LibRevisionVersion { get; private set; }
 
     // ========================================================================
+
+    private readonly Version? _version;
+
     // ========================================================================
 
     /// <summary>
     /// Gets the Library Version from the Assembly.
     /// </summary>
     /// <exception cref="GdxRuntimeException"></exception>
-    public LughVersion()
+    public LibraryVersion()
     {
         _version = Assembly.GetEntryAssembly()?.GetName().Version;
 
@@ -67,21 +69,17 @@ public class LughVersion
                 v += match;
             }
 
-            LughMajorVersion    = v.Length < 1 ? 0 : int.Parse( v[ ..1 ] );
-            LughMinorVersion    = v.Length < 2 ? 0 : int.Parse( v[ 1.. ] );
-            LughRevisionVersion = v.Length < 3 ? 0 : int.Parse( v[ 2.. ] );
+            LibMajorVersion    = v.Length < 1 ? 0 : int.Parse( v[ ..1 ] );
+            LibMinorVersion    = v.Length < 2 ? 0 : int.Parse( v[ 1.. ] );
+            LibRevisionVersion = v.Length < 3 ? 0 : int.Parse( v[ 2.. ] );
 
-            Logger.Debug( $"Current LughSharp Version : {LughMajorVersion}.{LughMinorVersion}.{LughRevisionVersion}" );
+            Logger.Debug( $"Current Library Version : {LibMajorVersion}.{LibMinorVersion}.{LibRevisionVersion}" );
         }
         catch ( Exception e )
         {
             throw new GdxRuntimeException( $"Invalid version {_version.ToString().Split( "\\." )}", e );
         }
     }
-
-    public int LughMajorVersion    { get; private set; }
-    public int LughMinorVersion    { get; private set; }
-    public int LughRevisionVersion { get; private set; }
 
     /// <summary>
     /// Checks the provided version components against the current and reports
@@ -104,17 +102,17 @@ public class LughVersion
     /// <param name="revision">The Revision version component.</param>
     public bool IsHigherEqual( int major, int minor, int revision )
     {
-        if ( LughMajorVersion != major )
+        if ( LibMajorVersion != major )
         {
-            return LughMajorVersion > major;
+            return LibMajorVersion > major;
         }
 
-        if ( LughMinorVersion != minor )
+        if ( LibMinorVersion != minor )
         {
-            return LughMinorVersion > minor;
+            return LibMinorVersion > minor;
         }
 
-        return LughRevisionVersion >= revision;
+        return LibRevisionVersion >= revision;
     }
 
     /// <summary>
@@ -138,16 +136,16 @@ public class LughVersion
     /// <param name="revision">The Revision version component.</param>
     public bool IsLowerEqual( int major, int minor, int revision )
     {
-        if ( LughMajorVersion != major )
+        if ( LibMajorVersion != major )
         {
-            return LughMajorVersion < major;
+            return LibMajorVersion < major;
         }
 
-        if ( LughMinorVersion != minor )
+        if ( LibMinorVersion != minor )
         {
-            return LughMinorVersion < minor;
+            return LibMinorVersion < minor;
         }
 
-        return LughRevisionVersion <= revision;
+        return LibRevisionVersion <= revision;
     }
 }

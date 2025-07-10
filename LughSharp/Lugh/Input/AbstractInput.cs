@@ -147,8 +147,6 @@ public abstract class AbstractInput : IInput
 
     #region abstract methods
 
-    #region mobile device methods
-
     public abstract float GetAccelerometerX();
     public abstract float GetAccelerometerY();
     public abstract float GetAccelerometerZ();
@@ -168,9 +166,6 @@ public abstract class AbstractInput : IInput
     public abstract float GetPressure( int pointer = 0 );
     public abstract int GetRotation();
     public abstract IInput.Orientation GetNativeOrientation();
-
-    #endregion mobile device methods
-
     public abstract int GetMaxPointers();
     public abstract int GetX( int pointer = 0 );
     public abstract int GetY( int pointer = 0 );

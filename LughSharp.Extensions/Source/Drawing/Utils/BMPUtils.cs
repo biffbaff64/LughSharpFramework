@@ -28,7 +28,6 @@ using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils;
 
 using Bitmap = System.Drawing.Bitmap;
-using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Extensions.Source.Drawing.Utils;
 

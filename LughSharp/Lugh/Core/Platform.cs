@@ -137,7 +137,7 @@ public static class Platform
     public static bool Is64Bit   { get; private set; } = Environment.Is64BitOperatingSystem;
     public static bool IsLinux   { get; private set; } = RuntimeInformation.IsOSPlatform( OSPlatform.Linux );
     public static bool IsMac     { get; private set; } = RuntimeInformation.IsOSPlatform( OSPlatform.OSX );
-    public static bool IsARM     { get; private set; } = IsArmArchitecture();
+    public static bool IsArm     { get; private set; } = IsArmArchitecture();
 
     // ========================================================================
 
@@ -159,6 +159,7 @@ public static class Platform
             => _targetPlatform = value switch
             {
                 // ----------------------------------------
+
                 ApplicationType.Windows
                     or ApplicationType.WindowsGL
                     or ApplicationType.WindowsGles
@@ -175,6 +176,7 @@ public static class Platform
                     or ApplicationType.MacOS => value,
 
                 // ----------------------------------------
+
                 var _ => throw new GdxRuntimeException( $"Unsupported Target Platform: {value.ToString()}" ),
             };
     }
@@ -191,13 +193,14 @@ public static class Platform
             => _familyGroup = value switch
             {
                 // ----------------------------------------
+
                 Family.Console
                     or Family.Desktop
                     or Family.Mobile => value,
 
                 // ----------------------------------------
-                Family.Unknown => throw new GdxRuntimeException( $"Unsupported Family Group: {value.ToString()}" ),
-                var _          => throw new GdxRuntimeException( $"Unsupported Family Group: {value.ToString()}" ),
+
+                var _ => throw new GdxRuntimeException( $"Unsupported Family Group: {value.ToString()}" ),
             };
     }
 
@@ -210,7 +213,10 @@ public static class Platform
         {
             Architecture.Arm   => true,
             Architecture.Arm64 => true,
-            var _              => false,
+            
+            // ----------------------------------
+            
+            var _ => false,
         };
     }
 

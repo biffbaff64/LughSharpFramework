@@ -349,10 +349,10 @@ public partial class TextureAtlasData
 
         public bool                          UseMipMaps         { get; set; }
         public Gdx2DPixmap.Gdx2DPixmapFormat Format             { get; set; } = Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888;
-        public Texture.TextureFilter         MinFilter          { get; set; } = Texture.TextureFilter.Nearest;
-        public Texture.TextureFilter         MagFilter          { get; set; } = Texture.TextureFilter.Nearest;
-        public Texture.TextureWrap           UWrap              { get; set; } = Texture.TextureWrap.ClampToEdge;
-        public Texture.TextureWrap           VWrap              { get; set; } = Texture.TextureWrap.ClampToEdge;
+        public TextureFilterMode             MinFilter          { get; set; } = TextureFilterMode.Nearest;
+        public TextureFilterMode             MagFilter          { get; set; } = TextureFilterMode.Nearest;
+        public TextureWrapMode               UWrap              { get; set; } = TextureWrapMode.ClampToEdge;
+        public TextureWrapMode               VWrap              { get; set; } = TextureWrapMode.ClampToEdge;
         public float                         Width              { get; set; }
         public float                         Height             { get; set; }
         public bool                          PreMultipliedAlpha { get; set; }

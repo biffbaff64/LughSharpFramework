@@ -28,6 +28,8 @@ global using System.Drawing;
 global using System.Drawing.Drawing2D;
 global using System.Drawing.Imaging;
 
+global using PixelFormat = System.Drawing.Imaging.PixelFormat;
+
 // ============================================================================
 global using System.Text.Json;
 
@@ -47,6 +49,7 @@ global using GLFW = DotGLFW;
 // ============================================================================
 global using LughSharp.Lugh;
 global using LughSharp.Lugh.Core;
+global using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 // ============================================================================
 global using static LughSharp.Lugh.Core.Engine;

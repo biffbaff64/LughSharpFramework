@@ -36,9 +36,6 @@ namespace Extensions.Source.Freetype;
 [PublicAPI]
 public class FreeTypeFontGenerator : IDisposable
 {
-    // ========================================================================
-    // ========================================================================
-
     /// <summary>
     /// Font smoothing algorithm.
     /// </summary>
@@ -166,17 +163,6 @@ public class FreeTypeFontGenerator : IDisposable
         SetPixelSizes( 0, 15 );
 
         Logger.Checkpoint();
-    }
-
-    /// <summary>
-    /// Cleans up all resources of the generator. Call this if you no longer use the generator.
-    /// </summary>
-    public void Dispose()
-    {
-        _face.Dispose();
-        _library.Dispose();
-
-        GC.SuppressFinalize( this );
     }
 
     /// <summary>
@@ -967,6 +953,24 @@ public class FreeTypeFontGenerator : IDisposable
         return _bitmapped;
     }
 
+    /// <summary>
+    /// Cleans up all resources of the generator. Call this if you no longer use the generator.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            _face.Dispose();
+            _library.Dispose();
+        }
+    }
+
     // ========================================================================
     // ========================================================================
 
@@ -997,24 +1001,6 @@ public class FreeTypeFontGenerator : IDisposable
         public List< BitmapFont.Glyph > GlyphsList { get; set; } = [ ];
 
         private bool _dirty;
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            if ( Stroker != null )
-            {
-                Stroker.Dispose();
-                Stroker = null;
-            }
-
-            if ( Packer != null )
-            {
-                Packer.Dispose();
-                Packer = null;
-            }
-
-            GC.SuppressFinalize( this );
-        }
 
         // ====================================================================
 
@@ -1093,6 +1079,24 @@ public class FreeTypeFontGenerator : IDisposable
                                               Parameter.MagFilter,
                                               Parameter.GenMipMaps );
             }
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            if ( Stroker != null )
+            {
+                Stroker.Dispose();
+                Stroker = null;
+            }
+
+            if ( Packer != null )
+            {
+                Packer.Dispose();
+                Packer = null;
+            }
+
+            GC.SuppressFinalize( this );
         }
     }
 
@@ -1230,12 +1234,12 @@ public class FreeTypeFontGenerator : IDisposable
         /// <summary>
         /// Minification filter
         /// </summary>
-        public Texture.TextureFilter MinFilter { get; set; } = Texture.TextureFilter.Nearest;
+        public TextureFilterMode MinFilter { get; set; } = TextureFilterMode.Nearest;
 
         /// <summary>
         /// Magnification filter
         /// </summary>
-        public Texture.TextureFilter MagFilter { get; set; } = Texture.TextureFilter.Nearest;
+        public TextureFilterMode MagFilter { get; set; } = TextureFilterMode.Nearest;
 
         /// <summary>
         /// When true, glyphs are rendered on the fly to the font's glyph page textures as

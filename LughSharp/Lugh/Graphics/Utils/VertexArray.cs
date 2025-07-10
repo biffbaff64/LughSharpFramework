@@ -162,7 +162,7 @@ public class VertexArray : IVertexData
             GL.EnableVertexAttribArray( ( uint )location );
 
             var byteOffset    = attribute.Offset;
-            var type          = attribute.Type;
+            var type          = attribute.ComponentType;
             var numComponents = attribute.NumComponents;
             var normalized    = attribute.Normalized;
             var stride        = Attributes.VertexSize;

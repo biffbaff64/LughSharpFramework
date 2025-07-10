@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -56,6 +57,58 @@ public class NinePatch
     public const int BOTTOM_CENTER = 7;
     public const int BOTTOM_RIGHT  = 8;
 
+    // ========================================================================
+    
+    public float[]  Vertices     { get; set; } = new float[ 9 * 4 * 5 ];
+    public Color    Color        { get; set; } = new( Color.White );
+    public Texture? Texture      { get; set; }
+    public int      Idx          { get; set; }
+    public int      BottomLeft   { get; set; }
+    public int      BottomCenter { get; set; }
+    public int      BottomRight  { get; set; }
+    public int      MiddleLeft   { get; set; }
+    public int      MiddleCenter { get; set; }
+    public int      MiddleRight  { get; set; }
+    public int      TopLeft      { get; set; }
+    public int      TopCenter    { get; set; }
+    public int      TopRight     { get; set; }
+    public float    LeftWidth    { get; set; }
+    public float    RightWidth   { get; set; }
+    public float    MiddleWidth  { get; set; }
+    public float    MiddleHeight { get; set; }
+    public float    TopHeight    { get; set; }
+    public float    BottomHeight { get; set; }
+
+    public float TotalWidth => LeftWidth + MiddleWidth + RightWidth;
+
+    public float TotalHeight => TopHeight + MiddleHeight + BottomHeight;
+
+    public float PadLeft
+    {
+        get => _padLeft <= 0.0001f ? LeftWidth : _padLeft;
+        set => _padLeft = value;
+    }
+
+    public float PadRight
+    {
+        get => _padRight <= 0.0001f ? RightWidth : _padRight;
+        set => _padRight = value;
+    }
+
+    public float PadTop
+    {
+        get => _padTop <= 0.0001f ? TopHeight : _padTop;
+        set => _padTop = value;
+    }
+
+    public float PadBottom
+    {
+        get => _padBottom <= 0.0001f ? BottomHeight : _padBottom;
+        set => _padBottom = value;
+    }
+
+    // ========================================================================
+    
     private const float TOLERANCE = 0.1f;
 
     private static readonly Color _tmpDrawColor = new();
@@ -484,8 +537,8 @@ public class NinePatch
         var u2 = region.U2;
         var v2 = region.V;
 
-        if ( ( Texture?.MagFilter == Texture.TextureFilter.Linear )
-             || ( Texture?.MinFilter == Texture.TextureFilter.Linear ) )
+        if ( ( Texture?.MagFilter == TextureFilterMode.Linear )
+             || ( Texture?.MinFilter == TextureFilterMode.Linear ) )
         {
             if ( isStretchW )
             {
@@ -704,56 +757,4 @@ public class NinePatch
     }
 
     // ========================================================================
-
-    #region properties
-
-    public float[]  Vertices     { get; set; } = new float[ 9 * 4 * 5 ];
-    public Color    Color        { get; set; } = new( Color.White );
-    public Texture? Texture      { get; set; }
-    public int      Idx          { get; set; }
-    public int      BottomLeft   { get; set; }
-    public int      BottomCenter { get; set; }
-    public int      BottomRight  { get; set; }
-    public int      MiddleLeft   { get; set; }
-    public int      MiddleCenter { get; set; }
-    public int      MiddleRight  { get; set; }
-    public int      TopLeft      { get; set; }
-    public int      TopCenter    { get; set; }
-    public int      TopRight     { get; set; }
-    public float    LeftWidth    { get; set; }
-    public float    RightWidth   { get; set; }
-    public float    MiddleWidth  { get; set; }
-    public float    MiddleHeight { get; set; }
-    public float    TopHeight    { get; set; }
-    public float    BottomHeight { get; set; }
-
-    public float TotalWidth => LeftWidth + MiddleWidth + RightWidth;
-
-    public float TotalHeight => TopHeight + MiddleHeight + BottomHeight;
-
-    public float PadLeft
-    {
-        get => _padLeft <= 0.0001f ? LeftWidth : _padLeft;
-        set => _padLeft = value;
-    }
-
-    public float PadRight
-    {
-        get => _padRight <= 0.0001f ? RightWidth : _padRight;
-        set => _padRight = value;
-    }
-
-    public float PadTop
-    {
-        get => _padTop <= 0.0001f ? TopHeight : _padTop;
-        set => _padTop = value;
-    }
-
-    public float PadBottom
-    {
-        get => _padBottom <= 0.0001f ? BottomHeight : _padBottom;
-        set => _padBottom = value;
-    }
-
-    #endregion properties
 }

@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Graphics.G3D.Models.Data;
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Lugh.Graphics.G3D.Utils;
 
@@ -39,23 +40,23 @@ public interface ITextureProvider
     [PublicAPI]
     public class FileTextureProvider : ITextureProvider
     {
-        private readonly Texture.TextureFilter _magFilter;
-        private readonly Texture.TextureFilter _minFilter;
-        private readonly bool                  _useMipMaps;
-        private readonly Texture.TextureWrap   _uWrap;
-        private readonly Texture.TextureWrap   _vWrap;
+        private readonly TextureFilterMode _magFilter;
+        private readonly TextureFilterMode _minFilter;
+        private readonly bool              _useMipMaps;
+        private readonly TextureWrapMode   _uWrap;
+        private readonly TextureWrapMode   _vWrap;
 
         public FileTextureProvider()
         {
-            _minFilter  = _magFilter = Texture.TextureFilter.Linear;
-            _uWrap      = _vWrap     = Texture.TextureWrap.Repeat;
+            _minFilter  = _magFilter = TextureFilterMode.Linear;
+            _uWrap      = _vWrap     = TextureWrapMode.Repeat;
             _useMipMaps = false;
         }
 
-        public FileTextureProvider( Texture.TextureFilter minFilter,
-                                    Texture.TextureFilter magFilter,
-                                    Texture.TextureWrap uWrap,
-                                    Texture.TextureWrap vWrap,
+        public FileTextureProvider( TextureFilterMode minFilter,
+                                    TextureFilterMode magFilter,
+                                    TextureWrapMode uWrap,
+                                    TextureWrapMode vWrap,
                                     bool useMipMaps )
         {
             _minFilter  = minFilter;

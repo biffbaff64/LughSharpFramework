@@ -44,16 +44,5 @@ public enum TextureParameterName : int
     TextureSwizzleA = IGL.GL_TEXTURE_SWIZZLE_A,
 }
 
-[PublicAPI]
-public enum TextureFilterMode : int
-{
-    NearestMipmapNearest = IGL.GL_NEAREST_MIPMAP_NEAREST,
-    LinearMipmapNearest  = IGL.GL_LINEAR_MIPMAP_NEAREST,
-    NearestMipmapLinear  = IGL.GL_NEAREST_MIPMAP_LINEAR,
-    LinearMipmapLinear   = IGL.GL_LINEAR_MIPMAP_LINEAR,
-    Nearest              = IGL.GL_NEAREST,
-    Linear               = IGL.GL_LINEAR,
-}
-
 // ========================================================================
 // ========================================================================

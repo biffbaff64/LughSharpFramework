@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Graphics.Utils;
 
 namespace LughSharp.Lugh.Graphics.Text;
@@ -58,7 +59,7 @@ public class DistanceFieldFont : BitmapFont
 
         foreach ( var region in regions )
         {
-            region.Texture?.SetFilter( Texture.TextureFilter.Linear, Texture.TextureFilter.Linear );
+            region.Texture?.SetFilter( TextureFilterMode.Linear, TextureFilterMode.Linear );
         }
     }
 

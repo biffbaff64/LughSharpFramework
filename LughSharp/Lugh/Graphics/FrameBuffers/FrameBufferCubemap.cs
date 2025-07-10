@@ -42,6 +42,8 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// </summary>
     private int _currentSide;
 
+    // ========================================================================
+    
     public FrameBufferCubemap()
     {
     }
@@ -108,8 +110,8 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
 
         Cubemap result = new( data, data, data, data, data, data );
 
-        result.SetFilter( Texture.TextureFilter.Linear, Texture.TextureFilter.Linear );
-        result.SetWrap( Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge );
+        result.SetFilter( TextureFilterMode.Linear, TextureFilterMode.Linear );
+        result.SetWrap( TextureWrapMode.ClampToEdge, TextureWrapMode.ClampToEdge );
 
         return result;
     }

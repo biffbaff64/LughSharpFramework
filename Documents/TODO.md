@@ -1,5 +1,5 @@
-﻿LIBGDX CSHARP CONVERSION - ROUND 1
-----------------------------------
+﻿LUGHSHARP 2D GAME FRAMEWORK - ROUND 1
+-------------------------------------
 
 ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
@@ -51,7 +51,7 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-Integrate DesktopBackend into LughSharp
+Integrate DesktopBackend into LughSharp?
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -233,14 +233,15 @@ CORE
     CODE   DOCUMENT
     ----   --------
     - DONE - DONE - ApplicationAdapter
+    - DONE - DONE - Engine
     - DONE - DONE - Game
-    - DONE - DONE - Gdx
+    - DONE - DONE - GameTime
     - DONE - DONE - IApplication
     - DONE - DONE - IApplicationListener
     - DONE - DONE - ILifecycleListener
     - DONE - DONE - IPreferences
     - DONE - DONE - IScreen
-    - DONE - DONE - LughVersion
+    - DONE - DONE - LibraryVersion
     - DONE - DONE - Platform
     - DONE - DONE - ScreenAdapter
 
@@ -253,11 +254,11 @@ FILES
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - AbstractFiles
-    - IP   - IP   - IFilenameFilter
+    - DONE - DONE - AbstractFiles
+    - DONE - DONE - IFilenameFilter
     - DONE - DONE - IFiles
     - IP   - IP   - InputStream
-    - IP   - IP   - IOUtils
+    - DONE - DONE - IOUtils
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -437,6 +438,7 @@ GRAPHICS/OPENGL/ENUMS
     - IP   - IP   - ShaderEnums
     - IP   - IP   - StencilEnums
     - IP   - IP   - StringName
+    - IP   - IP   - TextureFilterMode
     - IP   - IP   - TextureFormat
     - IP   - IP   - TextureLimits
     - IP   - IP   - TextureParameterName
@@ -453,6 +455,17 @@ GRAPHICS/OPENGL/GLSL
     - IP   - IP   - Default.glsl.frag
     - IP   - IP   - Default.glsl.vert
 
+GRAPHICS/SYSDRAW
+----------------
+    CODE   DOCUMENT
+    ----   --------
+    -      -      - Bitmap 
+    -      -      - BufferedImage
+    -      -      - Graphics
+    -      -      - Image
+    -      -      - ImageCapabilities
+    -      -      - Pen
+    -      -      - Rectangle
 
 GRAPHICS/TEXT
 -------------
@@ -540,7 +553,7 @@ INPUT
 -----
 
     - DONE - DONE - AbstractInput
-    -      -      - GestureDetector
+    - IP   - IP   - GestureDetector
     - DONE - DONE - IInput
     - DONE - DONE - IInputProcessor
     - DONE - DONE - InputAdapter
@@ -548,7 +561,7 @@ INPUT
     - DONE - DONE - InputMultiplexer
     - DONE - DONE - InputUtils
     -      -      - RemoteInput
-    -      -      - RemoteSender
+    - IP   - IP   - RemoteSender
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

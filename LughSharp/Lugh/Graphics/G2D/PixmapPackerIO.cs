@@ -192,22 +192,22 @@ public class PixmapPackerIO
     [StructLayout( LayoutKind.Sequential )]
     public struct SaveParameters
     {
-        public ImageFormat           Format     { get; set; }
-        public Texture.TextureFilter MinFilter  { get; set; }
-        public Texture.TextureFilter MagFilter  { get; set; }
-        public bool                  UseIndexes { get; set; }
+        public ImageFormat       Format     { get; set; }
+        public TextureFilterMode MinFilter  { get; set; }
+        public TextureFilterMode MagFilter  { get; set; }
+        public bool              UseIndexes { get; set; }
 
         public SaveParameters()
         {
             Format     = ImageFormat.PNG;
-            MinFilter  = Texture.TextureFilter.Nearest;
-            MagFilter  = Texture.TextureFilter.Nearest;
+            MinFilter  = TextureFilterMode.Nearest;
+            MagFilter  = TextureFilterMode.Nearest;
             UseIndexes = false;
         }
 
         public SaveParameters( ImageFormat format,
-                               Texture.TextureFilter minFilter,
-                               Texture.TextureFilter magFilter,
+                               TextureFilterMode minFilter,
+                               TextureFilterMode magFilter,
                                bool useIndexes )
         {
             Format     = format;

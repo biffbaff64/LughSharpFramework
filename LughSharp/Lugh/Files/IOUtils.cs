@@ -89,10 +89,17 @@ public class IOUtils
     }
 
     /// <summary>
-    /// 
+    /// Normalizes and ensures that the given path is correctly prefixed with the Assets
+    /// Output Path if it does not already include it.
     /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
+    /// <param name="path">
+    /// The relative or absolute path to normalize and process as part of the Assets
+    /// Output Path.
+    /// </param>
+    /// <returns>
+    /// The fully normalized path with consistent separators, including the Assets Output
+    /// Path prefix if required.
+    /// </returns>
     public static string NormalizeAssetsOutputPath( string path )
     {
         if ( !path.Contains( "/PackedImages/Output" ) )
@@ -116,11 +123,31 @@ public class IOUtils
         return ( inputFileOrDir.Attributes & FileAttributes.Directory ) != 0;
     }
 
+    /// <summary>
+    /// Determines if the specified file system entry is a file.
+    /// </summary>
+    /// <param name="inputFileOrDir">The file system entry to check.</param>
+    /// <returns>True if the entry is a file; otherwise, false.</returns>
     public static bool IsFile( FileSystemInfo inputFileOrDir )
     {
         return ( inputFileOrDir.Attributes & FileAttributes.Directory ) == 0;
     }
 
+    /// <summary>
+    /// Determines the type of a given path, identifying whether it is a file, a directory,
+    /// does not exist, or is invalid.
+    /// </summary>
+    /// <param name="path">The path to evaluate.</param>
+    /// <returns>
+    /// A value from the <see cref="PathTypes"/> enumeration indicating the type of the path:
+    /// <list type="bullet">
+    /// <item><term>PathTypes.Directory</term> - The path is a directory.</item>
+    /// <item><term>PathTypes.File</term> - The path is a file.</item>
+    /// <item><term>PathTypes.DoesNotExist</term> - The path does not exist.</item>
+    /// <item><term>PathTypes.Invalid</term> - The path is invalid due to exceptions or other errors.</item>
+    /// <item><term>PathTypes.Unknown</term> - The path is null or empty.</item>
+    /// </list>
+    /// </returns>
     public static PathTypes GetPathType( string path )
     {
         if ( string.IsNullOrEmpty( path ) )
@@ -147,6 +174,19 @@ public class IOUtils
         }
     }
 
+    /// <summary>
+    /// Removes the specified file extension from the given file name, if it exists.
+    /// </summary>
+    /// <param name="fileName">
+    /// The file name or path from which the extension should be removed.
+    /// </param>
+    /// <param name="extension">
+    /// The extension to be removed, including the leading dot (e.g., ".txt").
+    /// </param>
+    /// <returns>
+    /// The file name without the specified extension, or the original file name if the
+    /// extension does not match.
+    /// </returns>
     public static string StripExtension( string fileName, string extension )
     {
         if ( fileName.ToLower().EndsWith( extension.ToLower() ) )
@@ -193,7 +233,9 @@ public class IOUtils
     }
 
     /// <summary>
-    /// 
+    /// Logs debug information for various application paths, including external paths,
+    /// internal paths, assembly paths, and asset paths. This method is primarily used
+    /// for troubleshooting and verifying path configurations during development.
     /// </summary>
     public static void DebugPaths()
     {

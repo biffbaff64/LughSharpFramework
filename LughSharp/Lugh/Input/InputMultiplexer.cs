@@ -240,9 +240,8 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <summary>
-    /// Inserts an <see cref="IInputProcessor" /> into the list of processors.
-    /// This processor will be inserted at the position specified by
-    /// <paramref name="index" />
+    /// Inserts an <see cref="IInputProcessor" /> into the list of processors. This
+    /// processor will be inserted at the position specified by <paramref name="index" />
     /// </summary>
     public void AddProcessor( int index, IInputProcessor processor )
     {

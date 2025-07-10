@@ -35,8 +35,14 @@ public class AbstractFiles : IFiles
     /// Retrieves a file handle based on the specified path and path type.
     /// </summary>
     /// <param name="path">The file path to be used for creating the file handle.</param>
-    /// <param name="type">The type of the path, indicating how the file should be resolved (e.g., Classpath, Internal, Absolute, External, or Local).</param>
-    /// <returns>A <see cref="FileInfo"/> object that represents the file handle for the specified path and path type.</returns>
+    /// <param name="type">
+    /// The type of the path, indicating how the file should be resolved (e.g.,
+    /// Classpath, Internal, Absolute, External, or Local).
+    /// </param>
+    /// <returns>
+    /// A <see cref="FileInfo"/> object that represents the file handle for the
+    /// specified path and path type.
+    /// </returns>
     public virtual FileInfo GetFileHandle( string path, PathTypes type )
     {
         if ( string.IsNullOrEmpty( path ) )

@@ -40,6 +40,8 @@ global using GLFW = DotGLFW;
 
 // ============================================================================
 global using LughSharp.Lugh.Core;
+global using LughSharp.Lugh.Graphics.OpenGL.Bindings;
+global using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 // ============================================================================
 global using static LughSharp.Lugh.Core.Engine;

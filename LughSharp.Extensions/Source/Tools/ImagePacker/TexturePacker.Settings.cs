@@ -118,22 +118,22 @@ public partial class TexturePacker
         /// <summary>
         /// The minification filter for the texture.
         /// </summary>
-        public Texture.TextureFilter FilterMin { get; set; } = Texture.TextureFilter.Nearest;
+        public TextureFilterMode FilterMin { get; set; } = TextureFilterMode.Nearest;
 
         /// <summary>
         /// The magnification filter for the texture.
         /// </summary>
-        public Texture.TextureFilter FilterMag { get; set; } = Texture.TextureFilter.Nearest;
+        public TextureFilterMode FilterMag { get; set; } = TextureFilterMode.Nearest;
 
         /// <summary>
         /// The wrap setting in the x direction for the texture.
         /// </summary>
-        public Texture.TextureWrap WrapX { get; set; } = Texture.TextureWrap.ClampToEdge;
+        public TextureWrapMode WrapX { get; set; } = TextureWrapMode.ClampToEdge;
 
         /// <summary>
         /// The wrap setting in the y direction for the texture.
         /// </summary>
-        public Texture.TextureWrap WrapY { get; set; } = Texture.TextureWrap.ClampToEdge;
+        public TextureWrapMode WrapY { get; set; } = TextureWrapMode.ClampToEdge;
 
         /// <summary>
         /// The <see cref="Gdx2DPixmap.Gdx2DPixmapFormat"/> the texture will use in-memory.
