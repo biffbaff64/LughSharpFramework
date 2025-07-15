@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin
+//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,38 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Utils;
+namespace LughSharp.Lugh.Core;
 
 [PublicAPI]
-public class GdxNativesLoader
+public class WindowConfiguration
 {
-    public static bool DisableNativesLoading { get; set; } = false;
-
-    private static readonly object _lock = new();
-    private static          bool   _nativesLoaded;
-
-    // ========================================================================
-
-    /// <summary>
-    /// Loads the native libraries if they have not already been loaded.
-    /// </summary>
-    public static void Load()
-    {
-        lock ( _lock )
-        {
-            if ( _nativesLoaded )
-            {
-                return;
-            }
-
-            if ( DisableNativesLoading )
-            {
-                return;
-            }
-
-// e.g.     NativeLibrary.Load( "lib/net8.0/gdx2d" );
-
-            _nativesLoaded = true;
-        }
-    }
+    
 }
+
+// ========================================================================
+// ========================================================================

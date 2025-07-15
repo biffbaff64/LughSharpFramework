@@ -31,6 +31,8 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
@@ -230,7 +232,7 @@ public class PixmapPacker : IDisposable
     /// <summary>
     /// Inserts the pixmap without a name. It cannot be looked up by name.
     /// </summary>
-    public RectangleShape? Pack( Pixmap image )
+    public Rectangle? Pack( Pixmap image )
     {
         return Pack( null, image );
     }
@@ -241,12 +243,12 @@ public class PixmapPacker : IDisposable
     /// </summary>
     /// <param name="name"> If null, the image cannot be looked up by name. </param>
     /// <param name="image"></param>
-    /// <returns> RectangleShape describing the area the pixmap was rendered to. </returns>
+    /// <returns> Rectangle describing the area the pixmap was rendered to. </returns>
     /// <exception cref="GdxRuntimeException">
     /// in case the image did not fit due to the page size being too small
     /// or providing a duplicate name.
     /// </exception>
-    public RectangleShape? Pack( string? name, Pixmap image )
+    public Rectangle? Pack( string? name, Pixmap image )
     {
         if ( _disposed )
         {
@@ -460,11 +462,11 @@ public class PixmapPacker : IDisposable
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public RectangleShape? GetRect( string name )
+    public Rectangle? GetRect( string name )
     {
         foreach ( var page in Pages )
         {
-            RectangleShape? rect = page.Rects[ name ];
+            Rectangle? rect = page.Rects[ name ];
 
             if ( rect != null )
             {
@@ -900,7 +902,7 @@ public class PixmapPacker : IDisposable
             pixmaps.Sort( _comparer );
         }
 
-        public Page Pack( PixmapPacker packer, string? name, RectangleShape rect )
+        public Page Pack( PixmapPacker packer, string? name, Rectangle rect )
         {
             GuillotinePage page;
 
@@ -938,7 +940,7 @@ public class PixmapPacker : IDisposable
             return page;
         }
 
-        private Node? Insert( Node node, RectangleShape rect )
+        private Node? Insert( Node node, Rectangle rect )
         {
             if ( node is { Full: false, LeftChild: not null, RightChild: not null } )
             {
@@ -1014,7 +1016,7 @@ public class PixmapPacker : IDisposable
         {
             public Node?          LeftChild  { get; set; } = null;
             public Node?          RightChild { get; set; } = null;
-            public RectangleShape Rect       { get; set; } = new();
+            public Rectangle Rect       { get; set; } = new();
             public bool           Full       { get; set; } = false;
         }
 
@@ -1053,7 +1055,7 @@ public class PixmapPacker : IDisposable
             images.Sort( _comparer );
         }
 
-        public Page Pack( PixmapPacker packer, string? name, RectangleShape rect )
+        public Page Pack( PixmapPacker packer, string? name, Rectangle rect )
         {
             var padding    = packer.Padding;
             var pageWidth  = packer.PageWidth - ( padding * 2 );
@@ -1196,7 +1198,7 @@ public class PixmapPacker : IDisposable
     // ========================================================================
 
     [PublicAPI]
-    public class PixmapPackerRectangle : RectangleShape
+    public class PixmapPackerRectangle : Rectangle
     {
         public PixmapPackerRectangle( int x, int y, int width, int height )
             : base( x, y, width, height )
@@ -1246,6 +1248,6 @@ public class PixmapPacker : IDisposable
         /// Returns the page the rectangle should be placed in and
         /// modifies the specified rectangle position.
         /// </summary>
-        Page Pack( PixmapPacker packer, string? name, RectangleShape rect );
+        Page Pack( PixmapPacker packer, string? name, Rectangle rect );
     }
 }

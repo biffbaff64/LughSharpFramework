@@ -42,6 +42,7 @@ using LughSharp.Lugh.Utils.Pooling;
 using Color = LughSharp.Lugh.Graphics.Color;
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
 using Platform = LughSharp.Lugh.Core.Platform;
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D;
 
@@ -1236,7 +1237,7 @@ public class Stage : InputAdapter, IDisposable
     /// Calculates window scissor coordinates from local coordinates using the
     /// batch's current transformation matrix.
     /// </summary>
-    public virtual void CalculateScissors( RectangleShape localRect, RectangleShape scissorRect )
+    public virtual void CalculateScissors( Rectangle localRect, Rectangle scissorRect )
     {
         Matrix4 transformMatrix;
 

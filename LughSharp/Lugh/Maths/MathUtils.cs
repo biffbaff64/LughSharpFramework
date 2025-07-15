@@ -57,6 +57,8 @@ public class MathUtils
 
     private static readonly Random _rand = new();
 
+    // ========================================================================
+    
     /// <summary>
     /// Returns the sine in radians from a lookup table.
     /// </summary>

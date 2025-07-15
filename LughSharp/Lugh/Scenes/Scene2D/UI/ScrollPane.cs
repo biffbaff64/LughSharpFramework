@@ -28,19 +28,21 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 [PublicAPI]
 public partial class ScrollPane : WidgetGroup
 {
     private readonly ActorGestureListener _flickScrollListener;
-    private readonly RectangleShape       _hKnobBounds       = new();
-    private readonly RectangleShape       _hScrollBounds     = new();
+    private readonly Rectangle       _hKnobBounds       = new();
+    private readonly Rectangle       _hScrollBounds     = new();
     private readonly Vector2              _lastPoint         = new();
-    private readonly RectangleShape       _vKnobBounds       = new();
-    private readonly RectangleShape       _vScrollBounds     = new();
-    private readonly RectangleShape       _widgetArea        = new();
-    private readonly RectangleShape       _widgetCullingArea = new();
+    private readonly Rectangle       _vKnobBounds       = new();
+    private readonly Rectangle       _vScrollBounds     = new();
+    private readonly Rectangle       _widgetArea        = new();
+    private readonly Rectangle       _widgetCullingArea = new();
 
     private int    _draggingPointer = -1;
     private float  _fadeAlpha;

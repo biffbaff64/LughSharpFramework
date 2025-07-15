@@ -28,13 +28,13 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Maths;
 
 /// <summary>
-/// RectangleShape class that is independent of any backends.
+/// Rectangle class that is independent of any backends.
 /// This has no drawing methods, just those that handle the shape.
 /// </summary>
 [PublicAPI]
-public class RectangleShape : IShape2D, IEquatable< RectangleShape >
+public class Rectangle : IShape2D, IEquatable< Rectangle >
 {
-    public static readonly RectangleShape  Tmp = new();
+    public static readonly Rectangle  Tmp = new();
 
     // ========================================================================
 
@@ -45,14 +45,14 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
 
     // ========================================================================
 
-    private static readonly RectangleShape _empty = new();    // Do Not Modifiy contents
+    private static readonly Rectangle _empty = new();    // Do Not Modifiy contents
 
     // ========================================================================
     
     /// <summary>
     /// Constructs a new rectangle with all values set to zero
     /// </summary>
-    public RectangleShape() : this( 0, 0, 0, 0 )
+    public Rectangle() : this( 0, 0, 0, 0 )
     {
     }
 
@@ -63,7 +63,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// <param name="y"> The corner point y-coordinate </param>
     /// <param name="width"> The width </param>
     /// <param name="height"> The height  </param>
-    public RectangleShape( float x, float y, float width, float height )
+    public Rectangle( float x, float y, float width, float height )
     {
         X      = x;
         Y      = y;
@@ -75,7 +75,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// Constructs a rectangle based on the given rectangle
     /// </summary>
     /// <param name="rect"> The rectangle  </param>
-    public RectangleShape( RectangleShape rect )
+    public Rectangle( Rectangle rect )
     {
         X      = rect.X;
         Y      = rect.Y;
@@ -113,7 +113,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// <param name="width"> width </param>
     /// <param name="height"> height </param>
     /// <returns> this rectangle for chaining  </returns>
-    public RectangleShape Set( float x, float y, float width, float height )
+    public Rectangle Set( float x, float y, float width, float height )
     {
         X      = x;
         Y      = y;
@@ -136,7 +136,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// from the supplied vector.
     /// </summary>
     /// <returns>This rectangle for chaining.</returns>
-    public RectangleShape SetPosition( Vector2 position )
+    public Rectangle SetPosition( Vector2 position )
     {
         X = position.X;
         Y = position.Y;
@@ -149,7 +149,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// from the supplied x and y values.
     /// </summary>
     /// <returns>This rectangle for chaining.</returns>
-    public RectangleShape SetPosition( float x, float y )
+    public Rectangle SetPosition( float x, float y )
     {
         X = x;
         Y = y;
@@ -165,7 +165,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// <param name="width">The new width.</param>
     /// <param name="height">The new height.</param>
     /// <returns>This rectangle for chaining.</returns>
-    public RectangleShape SetSize( float width, float height )
+    public Rectangle SetSize( float width, float height )
     {
         Width  = width;
         Height = height;
@@ -178,7 +178,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// </summary>
     /// <param name="sizeXY">The new width and height value.</param>
     /// <returns>This rectangle for chaining.</returns>
-    public RectangleShape SetSize( float sizeXY )
+    public Rectangle SetSize( float sizeXY )
     {
         Width  = sizeXY;
         Height = sizeXY;
@@ -210,9 +210,9 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
 
     /// <summary>
     /// </summary>
-    /// <param name="rectangle"> the other <see cref="RectangleShape" />.</param>
+    /// <param name="rectangle"> the other <see cref="Rectangle" />.</param>
     /// <returns> whether the other rectangle is contained in this rectangle.</returns>
-    public bool Contains( RectangleShape rectangle )
+    public bool Contains( Rectangle rectangle )
     {
         var xmin = rectangle.X;
         var xmax = xmin + rectangle.Width;
@@ -232,20 +232,20 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
 
     /// <summary>
     /// Determines if the specified point is contained within the rectangular region defined by this
-    /// <see cref='RectangleShape'/> .
+    /// <see cref='Rectangle'/> .
     /// </summary>
     public bool Contains( int x, int y ) => ( X <= x ) && ( x < ( X + Width ) ) && ( Y <= y ) && ( y < ( Y + Height ) );
 
     /// <summary>
     /// Determines if the specified point is contained within the rectangular region defined by this
-    /// <see cref='RectangleShape'/> .
+    /// <see cref='Rectangle'/> .
     /// </summary>
     public bool Contains( Point pt ) => Contains( pt.X, pt.Y );
 
     // ========================================================================
 
     /// <summary>
-    /// Inflates this <see cref='RectangleShape'/> by the specified amount.
+    /// Inflates this <see cref='Rectangle'/> by the specified amount.
     /// </summary>
     public void Inflate( int width, int height )
     {
@@ -260,14 +260,14 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     }
 
     /// <summary>
-    /// Inflates this <see cref='RectangleShape'/> by the specified amount.
+    /// Inflates this <see cref='Rectangle'/> by the specified amount.
     /// </summary>
     public void Inflate( Size size ) => Inflate( size.Width, size.Height );
 
     /// <summary>
-    /// Creates a <see cref='RectangleShape'/> that is inflated by the specified amount.
+    /// Creates a <see cref='Rectangle'/> that is inflated by the specified amount.
     /// </summary>
-    public static RectangleShape Inflate( RectangleShape rect, int x, int y )
+    public static Rectangle Inflate( Rectangle rect, int x, int y )
     {
         rect.Inflate( x, y );
 
@@ -279,9 +279,9 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// <summary>
     /// Checks for overlap between this rectangle and the specified rectangle.
     /// </summary>
-    /// <param name="r"> the other <see cref="RectangleShape" /> </param>
+    /// <param name="r"> the other <see cref="Rectangle" /> </param>
     /// <returns> whether this rectangle overlaps the other rectangle.  </returns>
-    public bool Overlaps( RectangleShape r )
+    public bool Overlaps( Rectangle r )
     {
         return ( X < ( r.X + r.Width ) ) && ( ( X + Width ) > r.X ) && ( Y < ( r.Y + r.Height ) ) && ( ( Y + Height ) > r.Y );
     }
@@ -289,9 +289,9 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     // ========================================================================
 
     /// <summary>
-    /// Creates a RectangleShape that represents the intersection between this RectangleShape and rect.
+    /// Creates a Rectangle that represents the intersection between this Rectangle and rect.
     /// </summary>
-    public void Intersect( RectangleShape rect )
+    public void Intersect( Rectangle rect )
     {
         var result = Intersect( rect, this );
 
@@ -305,7 +305,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// Creates a rectangle that represents the intersection between a and b. If there is no intersection, an
     /// empty rectangle is returned.
     /// </summary>
-    public static RectangleShape Intersect( RectangleShape a, RectangleShape b )
+    public static Rectangle Intersect( Rectangle a, Rectangle b )
     {
         var x1 = Math.Max( a.X, b.X );
         var x2 = Math.Min( a.X + a.Width, b.X + b.Width );
@@ -314,7 +314,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
 
         if ( ( x2 >= x1 ) && ( y2 >= y1 ) )
         {
-            return new RectangleShape( x1, y1, x2 - x1, y2 - y1 );
+            return new Rectangle( x1, y1, x2 - x1, y2 - y1 );
         }
 
         return _empty;
@@ -323,7 +323,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// <summary>
     /// Determines if this rectangle intersects with rect.
     /// </summary>
-    public bool IntersectsWith( RectangleShape rect )
+    public bool IntersectsWith( Rectangle rect )
     {
         return ( rect.X < ( X + Width ) )
                && ( X < ( rect.X + rect.Width ) )
@@ -336,14 +336,14 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// <summary>
     /// Creates a rectangle that represents the union between a and b.
     /// </summary>
-    public static RectangleShape Union( RectangleShape a, RectangleShape b )
+    public static Rectangle Union( Rectangle a, Rectangle b )
     {
         var x1 = Math.Min( a.X, b.X );
         var x2 = Math.Max( a.X + a.Width, b.X + b.Width );
         var y1 = Math.Min( a.Y, b.Y );
         var y2 = Math.Max( a.Y + a.Height, b.Y + b.Height );
 
-        return new RectangleShape( x1, y1, x2 - x1, y2 - y1 );
+        return new Rectangle( x1, y1, x2 - x1, y2 - y1 );
     }
 
     // ========================================================================
@@ -369,7 +369,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// </summary>
     /// <param name="rect"> the other rectangle </param>
     /// <returns> this rectangle for chaining  </returns>
-    public RectangleShape Set( RectangleShape rect )
+    public Rectangle Set( Rectangle rect )
     {
         X      = rect.X;
         Y      = rect.Y;
@@ -387,7 +387,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// </summary>
     /// <param name="rect"> the other rectangle </param>
     /// <returns> this rectangle for chaining  </returns>
-    public RectangleShape Merge( RectangleShape rect )
+    public Rectangle Merge( Rectangle rect )
     {
         var minX = Math.Min( X, rect.X );
         var maxX = Math.Max( X + Width, rect.X + rect.Width );
@@ -411,7 +411,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// <param name="x"> the x coordinate of the point </param>
     /// <param name="y"> the y coordinate of the point </param>
     /// <returns> this rectangle for chaining  </returns>
-    public RectangleShape Merge( float x, float y )
+    public Rectangle Merge( float x, float y )
     {
         var minX = Math.Min( X, x );
         var maxX = Math.Max( X + Width, x );
@@ -434,7 +434,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// </summary>
     /// <param name="vec"> the vector describing the point </param>
     /// <returns> this rectangle for chaining  </returns>
-    public RectangleShape Merge( Vector2 vec )
+    public Rectangle Merge( Vector2 vec )
     {
         return Merge( vec.X, vec.Y );
     }
@@ -445,7 +445,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// </summary>
     /// <param name="vecs"> the vectors describing the points </param>
     /// <returns> this rectangle for chaining  </returns>
-    public RectangleShape Merge( IEnumerable< Vector2 > vecs )
+    public Rectangle Merge( IEnumerable< Vector2 > vecs )
     {
         var minX = X;
         var maxX = X + Width;
@@ -503,7 +503,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// <param name="x"> the position's x </param>
     /// <param name="y"> the position's y </param>
     /// <returns> this for chaining  </returns>
-    public RectangleShape SetCenter( float x, float y )
+    public Rectangle SetCenter( float x, float y )
     {
         SetPosition( x - ( Width / 2 ), y - ( Height / 2 ) );
 
@@ -515,7 +515,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// </summary>
     /// <param name="position"> the position </param>
     /// <returns> this for chaining  </returns>
-    public RectangleShape SetCenter( Vector2 position )
+    public Rectangle SetCenter( Vector2 position )
     {
         SetPosition( position.X - ( Width / 2 ), position.Y - ( Height / 2 ) );
 
@@ -532,7 +532,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// <param name="rect"> the other rectangle to fit this rectangle around </param>
     /// <returns> this rectangle for chaining </returns>
     /// <see cref="Scaling " />
-    public RectangleShape FitOutside( RectangleShape rect )
+    public Rectangle FitOutside( Rectangle rect )
     {
         var ratio = GetAspectRatio();
 
@@ -560,7 +560,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     /// <param name="rect"> the other rectangle to fit this rectangle inside </param>
     /// <returns> this rectangle for chaining </returns>
     /// <see cref="Scaling " />
-    public RectangleShape FitInside( RectangleShape rect )
+    public Rectangle FitInside( Rectangle rect )
     {
         var ratio = GetAspectRatio();
 
@@ -583,7 +583,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     // ========================================================================
 
     /// <summary>
-    /// Converts this <code>RectangleShape</code> to a string in the
+    /// Converts this <code>Rectangle</code> to a string in the
     /// format <code>[x,y,width,height]</code>.
     /// </summary>
     /// <returns> a string representation of this object.</returns>
@@ -593,12 +593,12 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     }
 
     /// <summary>
-    /// Sets this {@code RectangleShape} to the value represented by the
+    /// Sets this {@code Rectangle} to the value represented by the
     /// specified string according to the format of <see cref="ToString()" />.
     /// </summary>
     /// <param name="v"> the string. </param>
     /// <returns> this rectangle for chaining  </returns>
-    public RectangleShape FromString( string v )
+    public Rectangle FromString( string v )
     {
         var s0 = v.IndexOf( ',', 1 );
         var s1 = v.IndexOf( ',', s0 + 1 );
@@ -619,11 +619,11 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
             }
             catch ( FormatException )
             {
-                throw new GdxRuntimeException( "Malformed RectangleShape: " + v );
+                throw new GdxRuntimeException( "Malformed Rectangle: " + v );
             }
         }
 
-        throw new GdxRuntimeException( "Malformed RectangleShape: " + v );
+        throw new GdxRuntimeException( "Malformed Rectangle: " + v );
     }
 
     /// <summary>
@@ -659,14 +659,14 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
     }
 
     /// <inheritdoc />
-    public bool Equals( RectangleShape? other )
+    public bool Equals( Rectangle? other )
     {
         return ReferenceEquals( this, other );
     }
 
     /// <summary>
-    /// Tests whether <paramref name="obj"/> is a <see cref='RectangleShape'/> with the same location
-    /// and size of this RectangleShape.
+    /// Tests whether <paramref name="obj"/> is a <see cref='Rectangle'/> with the same location
+    /// and size of this Rectangle.
     /// </summary>
     public override bool Equals( object? obj )
     {
@@ -685,7 +685,7 @@ public class RectangleShape : IShape2D, IEquatable< RectangleShape >
             return false;
         }
 
-        var other = ( RectangleShape )obj;
+        var other = ( Rectangle )obj;
 
         if ( NumberUtils.FloatToRawIntBits( Height ) != NumberUtils.FloatToRawIntBits( other.Height ) )
         {

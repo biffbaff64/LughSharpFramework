@@ -27,6 +27,20 @@ namespace LughSharp.Lugh.Maths;
 [PublicAPI]
 public class Polyline : IShape2D
 {
+    /// <summary>
+    /// Returns vertices without scaling or rotation and without
+    /// being offset by the polyline position.
+    /// </summary>
+    public float[] LocalVertices { get; private set; }
+
+    public float X        { get; private set; }
+    public float Y        { get; private set; }
+    public float OriginX  { get; private set; }
+    public float OriginY  { get; private set; }
+    public float Rotation { get; private set; }
+    public float ScaleX   { get; private set; } = 1;
+    public float ScaleY   { get; private set; } = 1;
+
     // ========================================================================
 
     private bool     _calculateLength       = true;
@@ -52,20 +66,6 @@ public class Polyline : IShape2D
 
         LocalVertices = vertices;
     }
-
-    /// <summary>
-    /// Returns vertices without scaling or rotation and without
-    /// being offset by the polyline position.
-    /// </summary>
-    public float[] LocalVertices { get; private set; }
-
-    public float X        { get; private set; }
-    public float Y        { get; private set; }
-    public float OriginX  { get; private set; }
-    public float OriginY  { get; private set; }
-    public float Rotation { get; private set; }
-    public float ScaleX   { get; private set; } = 1;
-    public float ScaleY   { get; private set; } = 1;
 
     public bool Contains( Vector2 point )
     {

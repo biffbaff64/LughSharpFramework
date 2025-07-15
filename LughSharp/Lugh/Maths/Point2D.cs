@@ -28,7 +28,7 @@ namespace LughSharp.Lugh.Maths;
 
 /// <summary>
 /// Simple struct with X and Y members of a generic type, and absolutely nothing else.
-/// For use when no 'padding' is needed, such as methods or constructors.
+/// For use when no 'padding' is needed.
 /// </summary>
 /// <typeparam name="T">The type of the X and Y members.</typeparam>
 /// <example>
@@ -38,8 +38,8 @@ namespace LughSharp.Lugh.Maths;
 /// 
 /// internal void SetPosition(Point2D&lt;int&gt; pos)
 /// {
-/// X = pos.X;
-/// Y = pos.Y;
+///     X = pos.X;
+///     Y = pos.Y;
 /// }
 /// </code>
 /// </example>
@@ -60,7 +60,7 @@ public struct Point2D< T >( T x, T y )
 
 /// <summary>
 /// Simple struct with X and Y members of type int, and absolutely nothing else.
-/// For use when no 'padding' is needed, such as methods or constructors.
+/// For use when no 'padding' is needed.
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
@@ -79,7 +79,7 @@ public struct Point2D( int x, int y )
 
 /// <summary>
 /// Simple struct with X and Y members of type float, and absolutely nothing else.
-/// For use when no 'padding' is needed, such as methods or constructors.
+/// For use when no 'padding' is needed.
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]

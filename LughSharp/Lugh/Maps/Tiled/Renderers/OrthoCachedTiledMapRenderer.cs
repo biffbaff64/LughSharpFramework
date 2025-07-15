@@ -29,6 +29,7 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Color = LughSharp.Lugh.Graphics.Color;
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
 
@@ -45,7 +46,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     private static   float          _tolerance         = 0.00001f;
     protected static int            NumVertices        = 20;
     protected        bool           Blending;
-    protected        RectangleShape CacheBounds = new();
+    protected        Rectangle CacheBounds = new();
     protected        bool           Cached;
     protected        bool           CanCacheMoreE;
     protected        bool           CanCacheMoreN;
@@ -59,7 +60,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     protected SpriteCache?   SpriteCache;
     protected float          UnitScale;
     protected float[]        Vertices   = new float[ 20 ];
-    protected RectangleShape ViewBounds = new();
+    protected Rectangle ViewBounds = new();
 
     // ========================================================================
 

@@ -22,13 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Files;
-
-namespace DesktopGLBackend.Files;
+namespace LughSharp.Lugh.Core;
 
 [PublicAPI]
-public class DesktopGLFiles : AbstractFiles
+public class ApplicationConfiguration
 {
+    
 }
 
 // ========================================================================

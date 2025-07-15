@@ -25,6 +25,8 @@
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maths;
 
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+
 namespace LughSharp.Lugh.Graphics.G2D;
 
 [PublicAPI]
@@ -714,7 +716,7 @@ public class Sprite : TextureRegion
 
     private readonly Color _color = new( 1, 1, 1, 1 );
 
-    private RectangleShape? _bounds;
+    private Rectangle? _bounds;
     private float           _x;
     private float           _y;
     private float           _rotation;
@@ -909,12 +911,12 @@ public class Sprite : TextureRegion
     }
 
     /// <summary>
-    /// Returns the bounding axis aligned <see cref="RectangleShape" /> that
+    /// Returns the bounding axis aligned <see cref="Rectangle" /> that
     /// bounds this sprite. The rectangles x and y coordinates describe its
     /// bottom left corner. If you change the position or size of the sprite,
     /// you must fetch the triangle again for it to be recomputed.
     /// </summary>
-    public RectangleShape BoundingRectangle
+    public Rectangle BoundingRectangle
     {
         get
         {
@@ -939,7 +941,7 @@ public class Sprite : TextureRegion
             maxy = maxy < Vertices[ IBatch.Y3 ] ? Vertices[ IBatch.Y3 ] : maxy;
             maxy = maxy < Vertices[ IBatch.Y4 ] ? Vertices[ IBatch.Y4 ] : maxy;
 
-            _bounds ??= new RectangleShape();
+            _bounds ??= new Rectangle();
 
             _bounds.X      = minx;
             _bounds.Y      = miny;

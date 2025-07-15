@@ -27,7 +27,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Files;
 
 [PublicAPI]
-public class AbstractFiles : IFiles
+public class Files : IFiles
 {
     // ========================================================================
 

@@ -28,6 +28,8 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
 
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 /// <summary>
@@ -215,7 +217,7 @@ public class Container< T > : WidgetGroup where T : Actor
         }
     }
 
-    public void SetCullingArea( RectangleShape cullingArea )
+    public void SetCullingArea( Rectangle cullingArea )
     {
         CullingArea = cullingArea;
 

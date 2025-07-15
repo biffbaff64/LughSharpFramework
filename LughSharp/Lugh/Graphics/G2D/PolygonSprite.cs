@@ -24,6 +24,8 @@
 
 using LughSharp.Lugh.Maths;
 
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+
 namespace LughSharp.Lugh.Graphics.G2D;
 
 [PublicAPI]
@@ -32,7 +34,7 @@ public class PolygonSprite
     // ========================================================================
     // ========================================================================
 
-    private readonly RectangleShape _bounds = new();
+    private readonly Rectangle _bounds = new();
 
     private bool     _dirty;
     private float[]? _vertices;
@@ -332,13 +334,13 @@ public class PolygonSprite
     }
 
     /// <summary>
-    /// Returns the bounding axis aligned <see cref="RectangleShape" /> that bounds
+    /// Returns the bounding axis aligned <see cref="Rectangle" /> that bounds
     /// this sprite. The rectangles x and y coordinates describe its bottom left
     /// corner. If you change the position or size of the sprite, you have to fetch
     /// the triangle again for it to be recomputed.
     /// </summary>
     /// <returns> the bounding Rectangle </returns>
-    public RectangleShape GetBoundingRectangle()
+    public Rectangle GetBoundingRectangle()
     {
         var vertices = GetVertices();
 

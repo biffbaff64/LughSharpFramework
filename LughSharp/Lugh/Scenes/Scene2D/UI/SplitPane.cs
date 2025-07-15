@@ -28,17 +28,19 @@ using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
 [PublicAPI]
 public class SplitPane : WidgetGroup
 {
-    private readonly RectangleShape _firstWidgetBounds  = new();
-    private readonly RectangleShape _handleBounds       = new();
+    private readonly Rectangle _firstWidgetBounds  = new();
+    private readonly Rectangle _handleBounds       = new();
     private readonly Vector2        _handlePosition     = new();
     private readonly Vector2        _lastPoint          = new();
-    private readonly RectangleShape _secondWidgetBounds = new();
-    private readonly RectangleShape _tempScissors       = new();
+    private readonly Rectangle _secondWidgetBounds = new();
+    private readonly Rectangle _tempScissors       = new();
 
     private bool           _cursorOverHandle;
     private Actor?         _firstWidget;

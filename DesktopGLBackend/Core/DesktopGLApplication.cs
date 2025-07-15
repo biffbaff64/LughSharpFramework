@@ -24,7 +24,6 @@
 
 using DesktopGLBackend.Audio;
 using DesktopGLBackend.Audio.Mock;
-using DesktopGLBackend.Files;
 using DesktopGLBackend.Input;
 using DesktopGLBackend.Utils;
 using DesktopGLBackend.Window;
@@ -110,7 +109,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         Audio     = CreateAudio( Config );
         Clipboard = new DesktopGLClipboard();
 
-        Api.Files = new DesktopGLFiles();
+        Api.Files = new LughSharp.Lugh.Files.Files();
         Api.Net   = new DesktopGLNet( Config );
 
         _sync = new Sync();
@@ -309,7 +308,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         {
             if ( !_glfwInitialised )
             {
-                DesktopGLNativesLoader.Load();
+                DesktopGLNativesLoader.Load(); //TODO: Is this still necessary?
 
                 ErrorCallback();
 
@@ -399,10 +398,9 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     /// <summary>
-    /// Initialise the main Window <see cref="WindowHint" />s. Some Hints may be set
-    /// elsewhere, but this is where most are initialised.
+    /// Initialise the main Window <see cref="WindowHint" />s.
     /// </summary>
-    /// <param name="config"> The current <see cref="DesktopGLApplicationConfiguration" />. </param>
+    /// <param name="config"> The <see cref="DesktopGLApplicationConfiguration"/> to use. </param>
     private void SetWindowHints( DesktopGLApplicationConfiguration config )
     {
         ArgumentNullException.ThrowIfNull( config );
@@ -475,7 +473,9 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Creates the input device for this application window.
+    /// </summary>
     public virtual IDesktopGLInput CreateInput( DesktopGLWindow window )
     {
         return new DefaultDesktopGLInput( window );
@@ -520,12 +520,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     }
 
     // ========================================================================
-    // ========================================================================
-
-    ~DesktopGLApplication()
-    {
-        Dispose( false );
-    }
 
     /// <summary>
     /// Cleanup everything before shutdown.
@@ -557,6 +551,11 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         {
             // Release managed resources here
         }
+    }
+
+    ~DesktopGLApplication()
+    {
+        Dispose( false );
     }
 
     // ========================================================================

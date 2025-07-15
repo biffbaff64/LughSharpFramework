@@ -33,6 +33,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Pooling;
 
 using Color = LughSharp.Lugh.Graphics.Color;
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
@@ -1866,7 +1867,7 @@ public class Table : WidgetGroup
 
     // ========================================================================
 
-    internal class DebugRect : RectangleShape
+    internal class DebugRect : Rectangle
     {
         internal Pool< DebugRect > Pool  { get; }
         internal Color             Color { get; set; } = null!;

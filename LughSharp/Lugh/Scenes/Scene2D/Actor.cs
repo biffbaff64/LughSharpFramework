@@ -32,6 +32,7 @@ using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Pooling;
 
 using Color = LughSharp.Lugh.Graphics.Color;
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D;
 
@@ -1249,14 +1250,14 @@ public class Actor : IActor, IComparable< Actor >
             return false;
         }
 
-        var tableBounds = RectangleShape.Tmp;
+        var tableBounds = Rectangle.Tmp;
 
         tableBounds.X      = x;
         tableBounds.Y      = y;
         tableBounds.Width  = width;
         tableBounds.Height = height;
 
-        var scissorBounds = Pools.Obtain< RectangleShape >();
+        var scissorBounds = Pools.Obtain< Rectangle >();
 
         if ( scissorBounds == null )
         {
@@ -1270,7 +1271,7 @@ public class Actor : IActor, IComparable< Actor >
             return true;
         }
 
-        Pools.Free< RectangleShape >( scissorBounds );
+        Pools.Free< Rectangle >( scissorBounds );
 
         return false;
     }

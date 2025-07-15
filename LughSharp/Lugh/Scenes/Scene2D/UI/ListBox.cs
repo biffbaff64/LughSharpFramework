@@ -34,6 +34,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Pooling;
 
 using Color = LughSharp.Lugh.Graphics.Color;
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 
@@ -90,7 +91,7 @@ public class ListBox< T > : Widget
         Create( style );
     }
 
-    public RectangleShape?     CullingArea  { get; set; }
+    public Rectangle?     CullingArea  { get; set; }
     public InputListener?      KeyListener  { get; set; }
     public ArraySelection< T > Selection    { get; set; } = null!;
     public List< T >           Items        { get; set; } = new();

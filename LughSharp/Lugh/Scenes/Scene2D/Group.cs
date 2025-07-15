@@ -31,6 +31,7 @@ using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils.Collections;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D;
 
@@ -64,7 +65,7 @@ public class Group : Actor, ICullable
     /// </summary>
     public bool Transform { get; set; } = true;
 
-    public RectangleShape? CullingArea { get; set; }
+    public Rectangle? CullingArea { get; set; }
 
     // ========================================================================
 

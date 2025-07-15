@@ -1564,7 +1564,7 @@ public class Intersector
     /// supplied <tt>intersection</tt> rectangle to the area of overlap.
     /// </summary>
     /// <returns> Whether the rectangles intersect </returns>
-    public static bool IntersectRectangles( RectangleShape rectangle1, RectangleShape rectangle2, RectangleShape intersection )
+    public static bool IntersectRectangles( Rectangle rectangle1, Rectangle rectangle2, Rectangle intersection )
     {
         if ( rectangle1.Overlaps( rectangle2 ) )
         {
@@ -1588,7 +1588,7 @@ public class Intersector
     /// <param name="endY"> y-coordinate end of line segment </param>
     /// <param name="rectangle"> rectangle that is being tested for collision </param>
     /// <returns> whether the rectangle intersects with the line segment </returns>
-    public static bool IntersectSegmentRectangle( float startX, float startY, float endX, float endY, RectangleShape rectangle )
+    public static bool IntersectSegmentRectangle( float startX, float startY, float endX, float endY, Rectangle rectangle )
     {
         var rectangleEndX = rectangle.X + rectangle.Width;
         var rectangleEndY = rectangle.Y + rectangle.Height;
@@ -1612,7 +1612,7 @@ public class Intersector
                || rectangle.Contains( startX, startY );
     }
 
-    public static bool IntersectSegmentRectangle( Vector2 startvec, Vector2 endvec, RectangleShape rectangle )
+    public static bool IntersectSegmentRectangle( Vector2 startvec, Vector2 endvec, Rectangle rectangle )
     {
         return IntersectSegmentRectangle( startvec.X, startvec.Y, endvec.X, endvec.Y, rectangle );
     }
@@ -1764,12 +1764,12 @@ public class Intersector
         return c1.Overlaps( c2 );
     }
 
-    public static bool Overlaps( RectangleShape r1, RectangleShape r2 )
+    public static bool Overlaps( Rectangle r1, Rectangle r2 )
     {
         return r1.Overlaps( r2 );
     }
 
-    public static bool Overlaps( Circle c, RectangleShape r )
+    public static bool Overlaps( Circle c, Rectangle r )
     {
         var closestX = c.X;
         var closestY = c.Y;

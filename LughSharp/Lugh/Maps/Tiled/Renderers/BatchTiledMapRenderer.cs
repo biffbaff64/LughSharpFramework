@@ -29,6 +29,7 @@ using LughSharp.Lugh.Maths;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
 
@@ -72,17 +73,17 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     {
         TiledMap   = map;
         UnitScale  = unitScale;
-        ViewBounds = new RectangleShape();
+        ViewBounds = new Rectangle();
         Batch      = batch;
         OwnsBatch  = ownsBatch;
     }
 
     public TiledMap       TiledMap    { get; set; }
     public bool           OwnsBatch   { get; set; }
-    public RectangleShape ImageBounds { get; set; } = new();
+    public Rectangle ImageBounds { get; set; } = new();
 
     protected IBatch         Batch      { get; set; }
-    protected RectangleShape ViewBounds { get; set; }
+    protected Rectangle ViewBounds { get; set; }
     protected float          UnitScale  { get; set; }
     protected float[]        Vertices   { get; set; } = new float[ NUM_VERTICES ];
 

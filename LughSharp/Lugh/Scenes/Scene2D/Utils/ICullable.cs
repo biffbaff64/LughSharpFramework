@@ -24,6 +24,8 @@
 
 using LughSharp.Lugh.Maths;
 
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
@@ -37,5 +39,5 @@ public interface ICullable
     /// <summary>
     /// <param name="value"> The culling area in the child actor's coordinates. </param>
     /// </summary>
-    RectangleShape CullingArea { set; }
+    Rectangle CullingArea { set; }
 }

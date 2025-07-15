@@ -254,7 +254,7 @@ FILES
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - AbstractFiles
+    - DONE - DONE - Files
     - DONE - DONE - IFilenameFilter
     - DONE - DONE - IFiles
     - IP   - IP   - InputStream
@@ -685,10 +685,10 @@ MATHS
     - DONE - IP   - Plane
     - DONE - DONE - Point2D
     - DONE - IP   - Polygon
-    - DONE - IP   - Polyline
+    - IP   - IP   - Polyline
     - DONE - IP   - Quaternion
     - DONE - IP   - RandomXS128
-    - DONE - IP   - RectangleShape
+    - DONE - IP   - Rectangle
     - DONE - DONE - SimpleVectors
     - DONE - IP   - Vector2
     - DONE - IP   - Vector3

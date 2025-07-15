@@ -55,11 +55,11 @@ public partial class DesktopGLWindow : IDisposable
     // ========================================================================
 
     private List< IRunnable.Runnable > _executedRunnables = [ ];
+    private List< IRunnable.Runnable > _runnables         = [ ];
+    private Vector2                    _tmpV2             = new();
     private bool                       _focused           = false;
     private bool                       _iconified         = false;
     private bool                       _requestRendering  = false;
-    private List< IRunnable.Runnable > _runnables         = [ ];
-    private Vector2                    _tmpV2             = new();
 
     // ========================================================================
     // ========================================================================
@@ -97,14 +97,12 @@ public partial class DesktopGLWindow : IDisposable
         Api.Input    = Input;
         Api.Graphics = Graphics;
 
-        //@formatter:off
-        Glfw.SetWindowFocusCallback     ( window, GdxFocusCallback );
-        Glfw.SetWindowIconifyCallback   ( window, GdxIconifyCallback );
-        Glfw.SetWindowMaximizeCallback  ( window, GdxMaximizeCallback );
-        Glfw.SetWindowCloseCallback     ( window, GdxWindowCloseCallback );
-        Glfw.SetDropCallback            ( window, GdxDropCallback );
-        Glfw.SetWindowRefreshCallback   ( window, GdxRefreshCallback );
-        //@formatter:on
+        Glfw.SetWindowFocusCallback( window, GdxFocusCallback );
+        Glfw.SetWindowIconifyCallback( window, GdxIconifyCallback );
+        Glfw.SetWindowMaximizeCallback( window, GdxMaximizeCallback );
+        Glfw.SetWindowCloseCallback( window, GdxWindowCloseCallback );
+        Glfw.SetDropCallback( window, GdxDropCallback );
+        Glfw.SetWindowRefreshCallback( window, GdxRefreshCallback );
 
         WindowListener?.Created( this );
     }

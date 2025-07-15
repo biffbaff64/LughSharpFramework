@@ -29,6 +29,7 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Collections;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
@@ -41,12 +42,12 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 [PublicAPI]
 public class ScissorStack
 {
-    private static readonly List< RectangleShape > _scissors = [ ];
+    private static readonly List< Rectangle > _scissors = [ ];
     private static readonly Vector3                _tmp      = new();
-    private static readonly RectangleShape         _viewport = new();
+    private static readonly Rectangle         _viewport = new();
 
     /// <summary>
-    /// Pushes a new scissor <see cref="Rectangle" /> onto the stack, merging it with
+    /// Pushes a new scissor <see cref="System.Drawing.Rectangle" /> onto the stack, merging it with
     /// the current top of the stack. The minimal area of overlap between the top of
     /// stack rectangle and the provided rectangle is pushed onto the stack. This will
     /// invoke <see cref="Lugh.Graphics.OpenGL.GLBindings.glScissor(int, int, int, int)" /> with the final top of
@@ -60,7 +61,7 @@ public class ScissorStack
     /// true if the scissors were pushed. false if the scissor area was zero, in this
     /// case the scissors were not pushed and no drawing should occur.
     /// </returns>
-    public static bool PushScissors( RectangleShape scissor )
+    public static bool PushScissors( Rectangle scissor )
     {
         Fix( scissor );
 
@@ -118,7 +119,7 @@ public class ScissorStack
     /// Any drawing should be flushed before popping scissors.
     /// </para>
     /// </summary>
-    public static RectangleShape PopScissors()
+    public static Rectangle PopScissors()
     {
         var old = _scissors.Pop();
 
@@ -139,12 +140,12 @@ public class ScissorStack
         return old;
     }
 
-    public static RectangleShape? PeekScissors()
+    public static Rectangle? PeekScissors()
     {
         return _scissors.Count == 0 ? null : _scissors.Peek();
     }
 
-    private static void Fix( RectangleShape rect )
+    private static void Fix( Rectangle rect )
     {
         rect.X      = ( float )Math.Round( rect.X );
         rect.Y      = ( float )Math.Round( rect.Y );
@@ -170,15 +171,15 @@ public class ScissorStack
     /// </summary>
     public static void CalculateScissors( Camera camera,
                                           Matrix4 batchTransform,
-                                          RectangleShape area,
-                                          RectangleShape scissor )
+                                          Rectangle area,
+                                          Rectangle scissor )
     {
         CalculateScissors( camera, 0, 0, Api.Graphics.Width, Api.Graphics.Height, batchTransform, area, scissor );
     }
 
     /// <summary>
     /// Calculates a scissor rectangle in OpenGL ES window coordinates from a <see cref="Camera" />,
-    /// a transformation <see cref="Matrix4" /> and an axis aligned <see cref="RectangleShape" />.
+    /// a transformation <see cref="Matrix4" /> and an axis aligned <see cref="Rectangle" />.
     /// The rectangle will get transformed by the camera and transform matrices and is then
     /// projected to screen coordinates. Note that only axis aligned rectangles will work with
     /// this method. If either the Camera or the Matrix4 have rotational components, the output
@@ -190,7 +191,7 @@ public class ScissorStack
     /// <param name="viewportHeight"></param>
     /// <param name="camera"> the <see cref="Camera" /> </param>
     /// <param name="batchTransform"> the transformation <see cref="Matrix4" /> </param>
-    /// <param name="area"> the <see cref="RectangleShape" /> to transform to window coordinates </param>
+    /// <param name="area"> the <see cref="Rectangle" /> to transform to window coordinates </param>
     /// <param name="scissor"> the Rectangle to store the result in  </param>
     public static void CalculateScissors( Camera camera,
                                           float viewportX,
@@ -198,8 +199,8 @@ public class ScissorStack
                                           float viewportWidth,
                                           float viewportHeight,
                                           Matrix4 batchTransform,
-                                          RectangleShape area,
-                                          RectangleShape scissor )
+                                          Rectangle area,
+                                          Rectangle scissor )
     {
         _tmp.Set( area.X, area.Y, 0 );
         _tmp.Mul( batchTransform );
@@ -221,7 +222,7 @@ public class ScissorStack
     /// Return the current viewport in OpenGL ES window coordinates based
     /// on the currently applied scissor.
     /// </summary>
-    public static RectangleShape GetViewport()
+    public static Rectangle GetViewport()
     {
         if ( _scissors.Count == 0 )
         {

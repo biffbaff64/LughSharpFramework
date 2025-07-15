@@ -30,6 +30,7 @@ using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
 
 using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.Viewports;
 
@@ -52,6 +53,8 @@ public abstract class Viewport
         Scaling,
     }
 
+    // ========================================================================
+    
     public Camera? Camera       { get; set; }
     public int     ScreenX      { get; private set; }
     public int     ScreenY      { get; private set; }
@@ -218,7 +221,7 @@ public abstract class Viewport
     /// Calculates a scissor rectangle in OpenGL window coordinates.
     /// <see cref="ScissorStack" />.CalculateScissors methods for more details.
     /// </summary>
-    public virtual void CalculateScissors( Matrix4 batchTransform, RectangleShape area, RectangleShape scissor )
+    public virtual void CalculateScissors( Matrix4 batchTransform, Rectangle area, Rectangle scissor )
     {
         if ( Camera == null )
         {
@@ -317,24 +320,24 @@ public abstract class Viewport
     public virtual int LeftGutterWidth => ScreenX;
 
     /// <summary>
-    /// Returns the right gutter (black bar) x in screen coordinates.
-    /// </summary>
-    public virtual int RightGutterX => ScreenX + ScreenWidth;
-
-    /// <summary>
     /// Returns the right gutter (black bar) width in screen coordinates.
     /// </summary>
     public virtual int RightGutterWidth => Api.Graphics.Width - ( ScreenX + ScreenWidth );
 
     /// <summary>
-    /// Returns the bottom gutter (black bar) height in screen coordinates.
+    /// Returns the right gutter (black bar) x in screen coordinates.
     /// </summary>
-    public virtual int BottomGutterHeight => ScreenY;
+    public virtual int RightGutterX => ScreenX + ScreenWidth;
 
     /// <summary>
     /// Returns the top gutter (black bar) y in screen coordinates.
     /// </summary>
     public virtual int TopGutterY => ScreenY + ScreenHeight;
+
+    /// <summary>
+    /// Returns the bottom gutter (black bar) height in screen coordinates.
+    /// </summary>
+    public virtual int BottomGutterHeight => ScreenY;
 
     /// <summary>
     /// Returns the top gutter (black bar) height in screen coordinates.
@@ -352,5 +355,11 @@ public abstract class Viewport
         Logger.Debug( $"ScreenHeight: {ScreenHeight}" );
         Logger.Debug( $"WorldWidth: {WorldWidth}" );
         Logger.Debug( $"WorldHeight: {WorldHeight}" );
+        Logger.Debug( $"LeftGutterWidth: {LeftGutterWidth}" );
+        Logger.Debug( $"RightGutterWidth: {RightGutterWidth}" );
+        Logger.Debug( $"TopGutterHeight: {TopGutterHeight}" );
+        Logger.Debug( $"BottomGutterHeight: {BottomGutterHeight}" );
+        Logger.Debug( $"RightGutterX: {RightGutterX}" );
+        Logger.Debug( $"TopGutterY: {TopGutterY}" );
     }
 }

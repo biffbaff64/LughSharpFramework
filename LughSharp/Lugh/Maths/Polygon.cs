@@ -30,9 +30,17 @@ namespace LughSharp.Lugh.Maths;
 [PublicAPI]
 public class Polygon : IShape2D
 {
+    public float X        { get; set; }
+    public float Y        { get; set; }
+    public float OriginX  { get; set; }
+    public float OriginY  { get; set; }
+    public float Rotation { get; set; }
+    public float ScaleX   { get; set; } = 1;
+    public float ScaleY   { get; set; } = 1;
+
     // ========================================================================
 
-    private RectangleShape? _bounds;
+    private Rectangle? _bounds;
     private bool            _dirty = true;
     private float[]?        _localVertices;
     private float[]?        _worldVertices;
@@ -66,14 +74,6 @@ public class Polygon : IShape2D
 
         _localVertices = vertices;
     }
-
-    public float X        { get; set; }
-    public float Y        { get; set; }
-    public float OriginX  { get; set; }
-    public float OriginY  { get; set; }
-    public float Rotation { get; set; }
-    public float ScaleX   { get; set; } = 1;
-    public float ScaleY   { get; set; } = 1;
 
     /// <summary>
     /// Calculates and returns the vertices of the polygon after scaling, rotation,
@@ -186,11 +186,11 @@ public class Polygon : IShape2D
 
     /// <summary>
     /// Returns an axis-aligned bounding box of this polygon.
-    /// Note the returned RectangleShape is cached in this polygon, and will
+    /// Note the returned Rectangle is cached in this polygon, and will
     /// be reused if this Polygon is changed.
     /// </summary>
-    /// <returns> this polygon's bounding box <see cref="RectangleShape" />  </returns>
-    public RectangleShape BoundingRectangle
+    /// <returns> this polygon's bounding box <see cref="Rectangle" />  </returns>
+    public Rectangle BoundingRectangle
     {
         get
         {
@@ -211,7 +211,7 @@ public class Polygon : IShape2D
                 maxY = maxY < vertices[ i + 1 ] ? vertices[ i + 1 ] : maxY;
             }
 
-            _bounds ??= new RectangleShape();
+            _bounds ??= new Rectangle();
 
             _bounds.X      = minX;
             _bounds.Y      = minY;

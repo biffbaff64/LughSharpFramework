@@ -131,7 +131,7 @@ public class HdpiUtils
     }
 
     /// <summary>
-    /// Convers an y-coordinate given in backbuffer coordinates to
+    /// Converts a y-coordinate given in backbuffer coordinates to
     /// logical screen coordinates
     /// </summary>
     public static int ToLogicalY( int backBufferY )
@@ -149,7 +149,7 @@ public class HdpiUtils
     }
 
     /// <summary>
-    /// Convers an y-coordinate given in backbuffer coordinates to
+    /// Convers a y-coordinate given in backbuffer coordinates to
     /// logical screen coordinates
     /// </summary>
     public static int ToBackBufferY( int logicalY )

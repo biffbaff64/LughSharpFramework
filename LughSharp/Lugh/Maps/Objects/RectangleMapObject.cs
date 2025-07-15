@@ -24,6 +24,8 @@
 
 using LughSharp.Lugh.Maths;
 
+using Rectangle = LughSharp.Lugh.Maths.Rectangle;
+
 namespace LughSharp.Lugh.Maps.Objects;
 
 [PublicAPI]
@@ -39,7 +41,7 @@ public class RectangleMapObject : MapObject
     }
 
     /// <summary>
-    /// Creates a <see cref="RectangleShape" /> object with the given X and Y
+    /// Creates a <see cref="Maths.Rectangle" /> object with the given X and Y
     /// coordinates along with a given width and height.
     /// </summary>
     /// <param name="x"> X coordinate</param>
@@ -48,8 +50,8 @@ public class RectangleMapObject : MapObject
     /// <param name="height"> Height of the <see cref="Rectangle" /> to be created.</param>
     public RectangleMapObject( float x, float y, float width, float height )
     {
-        Rectangle = new RectangleShape( x, y, width, height );
+        Rectangle = new Rectangle( x, y, width, height );
     }
 
-    public RectangleShape Rectangle { get; set; }
+    public Rectangle Rectangle { get; set; }
 }

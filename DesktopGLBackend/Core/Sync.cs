@@ -32,11 +32,7 @@ public class Sync
 {
     private const long NANOS_IN_SECOND = 1000L * 1000L * 1000L;
 
-    // ========================================================================
-
     private readonly Stopwatch _stopwatch = new();
-
-    // ========================================================================
 
     private bool _initialised = false;
     private long _nextFrame   = 0;
