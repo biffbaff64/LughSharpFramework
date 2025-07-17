@@ -482,7 +482,7 @@ public partial class DesktopGLWindow : IDisposable
         {
             ApplicationListener.Pause();
             ApplicationListener.Dispose();
-            DesktopGLCursor.Dispose( this );
+            DesktopGLCursor.DisposeGLCursor( this );
             Graphics.Dispose();
             Input.Dispose();
 

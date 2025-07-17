@@ -26,6 +26,14 @@ namespace DesktopGLBackend.Window;
 
 public partial class DesktopGLWindow
 {
+    /// <summary>
+    /// Callback method invoked when the focus state of the associated window changes.
+    /// </summary>
+    /// <param name="windowHandle">The handle to the GLFW window whose focus state has changed.</param>
+    /// <param name="focused">
+    /// A boolean indicating the new focus state; true if the window gained focus,
+    /// otherwise false.
+    /// </param>
     public void GdxFocusCallback( GLFW.Window windowHandle, bool focused )
     {
         if ( WindowListener != null )
@@ -43,12 +51,17 @@ public partial class DesktopGLWindow
         }
     }
 
+    /// <summary>
+    /// Callback method invoked when the iconification state of the associated window changes.
+    /// </summary>
+    /// <param name="windowHandle">The handle to the GLFW window whose iconification state has changed.</param>
+    /// <param name="iconified">
+    /// A boolean indicating the new iconification state; true if the window was minimized,
+    /// otherwise false.
+    /// </param>
     public void GdxIconifyCallback( GLFW.Window windowHandle, bool iconified )
     {
-        if ( WindowListener != null )
-        {
-            WindowListener.Iconified( iconified );
-        }
+        WindowListener?.Iconified( iconified );
 
         _iconified = iconified;
 
@@ -62,14 +75,25 @@ public partial class DesktopGLWindow
         }
     }
 
+    /// <summary>
+    /// Callback method invoked when the maximization state of the associated window changes.
+    /// </summary>
+    /// <param name="windowHandle">The handle to the GLFW window whose maximization state has changed.</param>
+    /// <param name="maximized">
+    /// A boolean indicating the new maximization state; true if the window is maximized,
+    /// otherwise false.
+    /// </param>
     public void GdxMaximizeCallback( GLFW.Window windowHandle, bool maximized )
     {
-        if ( WindowListener != null )
-        {
-            WindowListener.Maximized( maximized );
-        }
+        WindowListener?.Maximized( maximized );
     }
 
+    /// <summary>
+    /// Callback method invoked when a close request is made for the associated GLFW window.
+    /// </summary>
+    /// <param name="windowHandle">
+    /// The handle to the GLFW window for which the close request is received.
+    /// </param>
     public void GdxWindowCloseCallback( GLFW.Window windowHandle )
     {
         if ( WindowListener != null )
@@ -81,23 +105,27 @@ public partial class DesktopGLWindow
         }
     }
 
+    /// <summary>
+    /// Callback method invoked when files are dropped onto the associated window.
+    /// </summary>
+    /// <param name="window">The handle to the GLFW window on which files were dropped.</param>
+    /// <param name="paths">An array of file paths representing the dropped files.</param>
     public void GdxDropCallback( GLFW.Window window, string[] paths )
     {
         var files = new string[ paths.Length ];
 
         Array.Copy( paths, 0, files, 0, paths.Length );
 
-        if ( WindowListener != null )
-        {
-            WindowListener.FilesDropped( files );
-        }
+        WindowListener?.FilesDropped( files );
     }
 
+    /// <summary>
+    /// Callback method invoked when the associated window requires a refresh,
+    /// typically used to redraw or re-render the window's content.
+    /// </summary>
+    /// <param name="window">The handle to the GLFW window that requires a refresh.</param>
     public void GdxRefreshCallback( GLFW.Window window )
     {
-        if ( WindowListener != null )
-        {
-            WindowListener.RefreshRequested();
-        }
+        WindowListener?.RefreshRequested();
     }
 }

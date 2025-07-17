@@ -33,6 +33,7 @@ using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Collections;
 
 using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -410,7 +411,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix  </param>
-    public override void SetUniformMatrix( string name, Matrix4 matrix )
+    public override void SetUniformMatrix( string name, Matrix4x4 matrix )
     {
         SetUniformMatrix( name, matrix, false );
     }
@@ -422,7 +423,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix </param>
     /// <param name="transpose"> whether the matrix should be transposed  </param>
-    public override void SetUniformMatrix( string name, Matrix4 matrix, bool transpose )
+    public override void SetUniformMatrix( string name, Matrix4x4 matrix, bool transpose )
     {
         SetUniformMatrix( FetchUniformLocation( name ), matrix, transpose );
     }
@@ -431,7 +432,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="location"></param>
     /// <param name="matrix"></param>
-    public override void SetUniformMatrix( int location, Matrix4 matrix )
+    public override void SetUniformMatrix( int location, Matrix4x4 matrix )
     {
         SetUniformMatrix( location, matrix, false );
     }
@@ -442,7 +443,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix  </param>
-    public void SetUniformMatrix( string name, Matrix3 matrix )
+    public void SetUniformMatrix( string name, Matrix3x3 matrix )
     {
         SetUniformMatrix( name, matrix, false );
     }
@@ -454,7 +455,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix </param>
     /// <param name="transpose"> whether the uniform matrix should be transposed  </param>
-    public void SetUniformMatrix( string name, Matrix3 matrix, bool transpose )
+    public void SetUniformMatrix( string name, Matrix3x3 matrix, bool transpose )
     {
         SetUniformMatrix( FetchUniformLocation( name ), matrix, transpose );
     }
@@ -463,7 +464,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="location"></param>
     /// <param name="matrix"></param>
-    public void SetUniformMatrix( int location, Matrix3 matrix )
+    public void SetUniformMatrix( int location, Matrix3x3 matrix )
     {
         SetUniformMatrix( location, matrix, false );
     }
@@ -803,7 +804,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// <param name="location"></param>
     /// <param name="matrix"></param>
     /// <param name="transpose"></param>
-    public override void SetUniformMatrix( int location, Matrix4 matrix, bool transpose )
+    public override void SetUniformMatrix( int location, Matrix4x4 matrix, bool transpose )
     {
         CheckManaged();
         GL.UniformMatrix4fv( location, transpose, matrix.Val );
@@ -814,7 +815,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// <param name="location"></param>
     /// <param name="matrix"></param>
     /// <param name="transpose"></param>
-    public void SetUniformMatrix( int location, Matrix3 matrix, bool transpose )
+    public void SetUniformMatrix( int location, Matrix3x3 matrix, bool transpose )
     {
         CheckManaged();
         GL.UniformMatrix3fv( location, transpose, matrix.Val );

@@ -234,7 +234,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="pixmap"> The Pixmap </param>
     /// <param name="x"> The x coordinate in pixels </param>
     /// <param name="y"> The y coordinate in pixels  </param>
-    public void Draw( Pixmap pixmap, int x, int y )
+    public void InsertPixmap( Pixmap pixmap, int x, int y )
     {
         if ( TextureData is { IsManaged: true } )
         {

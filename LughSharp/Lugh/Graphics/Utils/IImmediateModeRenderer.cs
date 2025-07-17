@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -33,7 +33,7 @@ public interface IImmediateModeRenderer : IDisposable
 
     int MaxVertices { get; set; }
 
-    void Begin( Matrix4 projModelView, int primitiveType );
+    void Begin( Matrix4x4 projModelView, int primitiveType );
 
     void End();
 

@@ -29,7 +29,7 @@ using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
 
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.Viewports;
@@ -221,7 +221,7 @@ public abstract class Viewport
     /// Calculates a scissor rectangle in OpenGL window coordinates.
     /// <see cref="ScissorStack" />.CalculateScissors methods for more details.
     /// </summary>
-    public virtual void CalculateScissors( Matrix4 batchTransform, Rectangle area, Rectangle scissor )
+    public virtual void CalculateScissors( Matrix4x4 batchTransform, Rectangle area, Rectangle scissor )
     {
         if ( Camera == null )
         {
@@ -236,7 +236,7 @@ public abstract class Viewport
     /// window coordinates), where the origin is in the top left and the
     /// the y-axis is pointing downwards.
     /// </summary>
-    public virtual Vector2 ToScreenCoordinates( Vector2 worldCoords, Matrix4 transformMatrix )
+    public virtual Vector2 ToScreenCoordinates( Vector2 worldCoords, Matrix4x4 transformMatrix )
     {
         if ( Camera == null )
         {

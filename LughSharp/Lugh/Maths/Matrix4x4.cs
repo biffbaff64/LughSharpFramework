@@ -37,7 +37,7 @@ namespace LughSharp.Lugh.Maths;
 /// </code>
 /// </summary>
 [PublicAPI]
-public class Matrix4
+public class Matrix4x4
 {
     /// <summary>
     /// XX: Typically the unrotated X component for scaling, also the cosine
@@ -149,7 +149,7 @@ public class Matrix4
     public static readonly Vector3    LVex       = new();
     public static readonly Vector3    LVey       = new();
     public static readonly Vector3    TmpVec     = new();
-    public static readonly Matrix4    TmpMat     = new();
+    public static readonly Matrix4x4    TmpMat     = new();
     public static readonly Vector3    Right      = new();
     public static readonly Vector3    TmpForward = new();
     public static readonly Vector3    TmpUp      = new();
@@ -162,7 +162,7 @@ public class Matrix4
     /// <summary>
     /// Constructs an identity matrix
     /// </summary>
-    public Matrix4()
+    public Matrix4x4()
     {
         Array.Fill( Val, 0 );
 
@@ -178,7 +178,7 @@ public class Matrix4
     /// <param name="matrix">
     /// The matrix to copy. (This matrix is not modified)
     /// </param>
-    public Matrix4( Matrix4 matrix )
+    public Matrix4x4( Matrix4x4 matrix )
     {
         Set( matrix );
     }
@@ -195,7 +195,7 @@ public class Matrix4
     /// <a href="http://en.wikipedia.org/wiki/Row-major_order">wikipedia.org/wiki/Row-major_order</a>
     /// </para>
     /// </param>
-    public Matrix4( float[] values )
+    public Matrix4x4( float[] values )
     {
         Set( values );
     }
@@ -204,7 +204,7 @@ public class Matrix4
     /// Constructs a rotation matrix from the given <see cref="Quaternion" />.
     /// </summary>
     /// <param name="quaternion">The quaternion to be copied. (The quaternion is not modified)</param>
-    public Matrix4( Quaternion quaternion )
+    public Matrix4x4( Quaternion quaternion )
     {
         Set( quaternion );
     }
@@ -215,7 +215,7 @@ public class Matrix4
     /// <param name="position"> The translation </param>
     /// <param name="rotation"> The rotation, must be normalized </param>
     /// <param name="scale"> The scale</param>
-    public Matrix4( Vector3 position, Quaternion rotation, Vector3 scale )
+    public Matrix4x4( Vector3 position, Quaternion rotation, Vector3 scale )
     {
         Set( position, rotation, scale );
     }
@@ -232,7 +232,7 @@ public class Matrix4
     /// </summary>
     /// <param name="matrix"> The matrix that is to be copied.(The given matrix is not modified)</param>
     /// <returns> This matrix for the purpose of chaining methods together.</returns>
-    public Matrix4 Set( Matrix4 matrix )
+    public Matrix4x4 Set( Matrix4x4 matrix )
     {
         return Set( matrix.Val );
     }
@@ -250,7 +250,7 @@ public class Matrix4
     /// </para>
     /// </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Set( float[] values )
+    public Matrix4x4 Set( float[] values )
     {
         Array.Copy( values, 0, Val, 0, Val.Length );
 
@@ -262,7 +262,7 @@ public class Matrix4
     /// </summary>
     /// <param name="quaternion"> The quaternion that is to be used to Set this matrix. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Set( Quaternion quaternion )
+    public Matrix4x4 Set( Quaternion quaternion )
     {
         return Set( quaternion.X, quaternion.Y, quaternion.Z, quaternion.W );
     }
@@ -275,7 +275,7 @@ public class Matrix4
     /// <param name="quaternionZ"> The Z component of the quaternion that is to be used to Set this matrix. </param>
     /// <param name="quaternionW"> The W component of the quaternion that is to be used to Set this matrix. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Set( float quaternionX, float quaternionY, float quaternionZ, float quaternionW )
+    public Matrix4x4 Set( float quaternionX, float quaternionY, float quaternionZ, float quaternionW )
     {
         return Set( 0f, 0f, 0f, quaternionX, quaternionY, quaternionZ, quaternionW );
     }
@@ -286,7 +286,7 @@ public class Matrix4
     /// <param name="position"> The translation </param>
     /// <param name="orientation"> The rotation, must be normalized </param>
     /// <returns> This matrix for chaining  </returns>
-    public Matrix4 Set( Vector3 position, Quaternion orientation )
+    public Matrix4x4 Set( Vector3 position, Quaternion orientation )
     {
         return Set( position.X, position.Y, position.Z, orientation.X, orientation.Y, orientation.Z, orientation.W );
     }
@@ -302,7 +302,7 @@ public class Matrix4
     /// <param name="quaternionZ"> The Z component of the quaternion that is to be used to Set this matrix. </param>
     /// <param name="quaternionW"> The W component of the quaternion that is to be used to Set this matrix. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Set( float translationX,
+    public Matrix4x4 Set( float translationX,
                         float translationY,
                         float translationZ,
                         float quaternionX,
@@ -345,7 +345,7 @@ public class Matrix4
     /// <param name="orientation"> The rotation, must be normalized </param>
     /// <param name="scale"> The scale </param>
     /// <returns> This matrix for chaining  </returns>
-    public Matrix4 Set( Vector3 position, Quaternion orientation, Vector3 scale )
+    public Matrix4x4 Set( Vector3 position, Quaternion orientation, Vector3 scale )
     {
         return Set( position.X,
                     position.Y,
@@ -373,7 +373,7 @@ public class Matrix4
     /// <param name="scaleY"> The Y component of the scaling that is to be used to Set this matrix. </param>
     /// <param name="scaleZ"> The Z component of the scaling that is to be used to Set this matrix. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Set( float translationX,
+    public Matrix4x4 Set( float translationX,
                         float translationY,
                         float translationZ,
                         float quaternionX,
@@ -421,7 +421,7 @@ public class Matrix4
     /// <param name="yAxis"> The y-axis. </param>
     /// <param name="zAxis"> The z-axis. </param>
     /// <param name="pos"> The translation vector.  </param>
-    public Matrix4 Set( Vector3 xAxis, Vector3 yAxis, Vector3 zAxis, Vector3 pos )
+    public Matrix4x4 Set( Vector3 xAxis, Vector3 yAxis, Vector3 zAxis, Vector3 pos )
     {
         Val[ M00 ] = xAxis.X;
         Val[ M01 ] = xAxis.Y;
@@ -444,9 +444,9 @@ public class Matrix4
     }
 
     /// <returns> a copy of this matrix </returns>
-    public Matrix4 Cpy()
+    public Matrix4x4 Cpy()
     {
-        return new Matrix4( this );
+        return new Matrix4x4( this );
     }
 
     /// <summary>
@@ -457,7 +457,7 @@ public class Matrix4
     /// The translation vector to add to the current matrix. (This vector is not modified)
     /// </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Trn( Vector3 vector )
+    public Matrix4x4 Trn( Vector3 vector )
     {
         Val[ M03 ] += vector.X;
         Val[ M13 ] += vector.Y;
@@ -474,7 +474,7 @@ public class Matrix4
     /// <param name="y"> The y-component of the translation vector. </param>
     /// <param name="z"> The z-component of the translation vector. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Trn( float x, float y, float z )
+    public Matrix4x4 Trn( float x, float y, float z )
     {
         Val[ M03 ] += x;
         Val[ M13 ] += y;
@@ -491,7 +491,7 @@ public class Matrix4
     /// </summary>
     /// <param name="matrix"> The other matrix to multiply by. </param>
     /// <returns> This matrix for the purpose of chaining operations together.  </returns>
-    public Matrix4 Mul( Matrix4 matrix )
+    public Matrix4x4 Mul( Matrix4x4 matrix )
     {
         Mul( Val, matrix.Val );
 
@@ -506,7 +506,7 @@ public class Matrix4
     /// </summary>
     /// <param name="matrix"> The other matrix to multiply by. </param>
     /// <returns> This matrix for the purpose of chaining operations together.  </returns>
-    public Matrix4 MulLeft( Matrix4 matrix )
+    public Matrix4x4 MulLeft( Matrix4x4 matrix )
     {
         TmpMat.Set( matrix );
 
@@ -519,7 +519,7 @@ public class Matrix4
     /// Transposes the matrix.
     /// </summary>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Transpose()
+    public Matrix4x4 Transpose()
     {
         var m01 = Val[ M01 ];
         var m02 = Val[ M02 ];
@@ -548,7 +548,7 @@ public class Matrix4
     /// Sets the matrix to an identity matrix.
     /// </summary>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 ToIdentity()
+    public Matrix4x4 ToIdentity()
     {
         Val[ M00 ] = 1f;
         Val[ M01 ] = 0f;
@@ -575,7 +575,7 @@ public class Matrix4
     /// </summary>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>
     /// <exception cref="GdxRuntimeException"> if the matrix is singular (not invertible)  </exception>
-    public Matrix4 Invert()
+    public Matrix4x4 Invert()
     {
         //@formatter:off
         var lDet = ( ( ( ( ( ( ( ( ( ( (
@@ -801,7 +801,7 @@ public class Matrix4
     /// <param name="fovy"> The field of view of the height in degrees </param>
     /// <param name="aspectRatio"> The "width over height" aspect ratio </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToProjection( float near, float far, float fovy, float aspectRatio )
+    public Matrix4x4 SetToProjection( float near, float far, float fovy, float aspectRatio )
     {
         ToIdentity();
 
@@ -842,7 +842,7 @@ public class Matrix4
     /// <param name="near"> The near plane </param>
     /// <param name="far"> The far plane </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToProjection( float left, float right, float bottom, float top, float near, float far )
+    public Matrix4x4 SetToProjection( float left, float right, float bottom, float top, float near, float far )
     {
         var x   = ( 2.0f * near ) / ( right - left );
         var y   = ( 2.0f * near ) / ( top - bottom );
@@ -880,7 +880,7 @@ public class Matrix4
     /// <param name="width"> The width </param>
     /// <param name="height"> The height </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToOrtho2D( float x, float y, float width, float height )
+    public Matrix4x4 SetToOrtho2D( float x, float y, float width, float height )
     {
         SetToOrtho( x, x + width, y, y + height, 0f, 1f );
 
@@ -898,7 +898,7 @@ public class Matrix4
     /// <param name="near"> The near plane </param>
     /// <param name="far"> The far plane </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToOrtho2D( float x, float y, float width, float height, float near, float far )
+    public Matrix4x4 SetToOrtho2D( float x, float y, float width, float height, float near, float far )
     {
         SetToOrtho( x, x + width, y, y + height, near, far );
 
@@ -916,7 +916,7 @@ public class Matrix4
     /// <param name="near"> The near clipping plane </param>
     /// <param name="far"> The far clipping plane </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToOrtho( float left, float right, float bottom, float top, float near, float far )
+    public Matrix4x4 SetToOrtho( float left, float right, float bottom, float top, float near, float far )
     {
         if ( ( right - left ) == 0 )
         {
@@ -978,7 +978,7 @@ public class Matrix4
     /// </summary>
     /// <param name="vector"> The translation vector </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetTranslation( Vector3 vector )
+    public Matrix4x4 SetTranslation( Vector3 vector )
     {
         Val[ M03 ] = vector.X;
         Val[ M13 ] = vector.Y;
@@ -994,7 +994,7 @@ public class Matrix4
     /// <param name="y"> The Y coordinate of the translation vector </param>
     /// <param name="z"> The Z coordinate of the translation vector </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetTranslation( float x, float y, float z )
+    public Matrix4x4 SetTranslation( float x, float y, float z )
     {
         Val[ M03 ] = x;
         Val[ M13 ] = y;
@@ -1010,7 +1010,7 @@ public class Matrix4
     /// </summary>
     /// <param name="vector"> The translation vector </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToTranslation( Vector3 vector )
+    public Matrix4x4 SetToTranslation( Vector3 vector )
     {
         ToIdentity();
 
@@ -1030,7 +1030,7 @@ public class Matrix4
     /// <param name="y"> The y-component of the translation vector. </param>
     /// <param name="z"> The z-component of the translation vector. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToTranslation( float x, float y, float z )
+    public Matrix4x4 SetToTranslation( float x, float y, float z )
     {
         ToIdentity();
 
@@ -1048,7 +1048,7 @@ public class Matrix4
     /// <param name="translation"> The translation vector </param>
     /// <param name="scaling"> The scaling vector </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToTranslationAndScaling( Vector3 translation, Vector3 scaling )
+    public Matrix4x4 SetToTranslationAndScaling( Vector3 translation, Vector3 scaling )
     {
         ToIdentity();
 
@@ -1073,7 +1073,7 @@ public class Matrix4
     /// <param name="scalingY"> The x-component of the scaling vector </param>
     /// <param name="scalingZ"> The x-component of the scaling vector </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToTranslationAndScaling( float translationX,
+    public Matrix4x4 SetToTranslationAndScaling( float translationX,
                                                float translationY,
                                                float translationZ,
                                                float scalingX,
@@ -1098,7 +1098,7 @@ public class Matrix4
     /// <param name="axis"> The axis </param>
     /// <param name="degrees"> The angle in degrees </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToRotation( Vector3 axis, float degrees )
+    public Matrix4x4 SetToRotation( Vector3 axis, float degrees )
     {
         if ( degrees == 0 )
         {
@@ -1116,7 +1116,7 @@ public class Matrix4
     /// <param name="axis"> The axis </param>
     /// <param name="radians"> The angle in radians </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToRotationRad( Vector3 axis, float radians )
+    public Matrix4x4 SetToRotationRad( Vector3 axis, float radians )
     {
         if ( radians == 0 )
         {
@@ -1136,7 +1136,7 @@ public class Matrix4
     /// <param name="axisZ"> The z-component of the axis </param>
     /// <param name="degrees"> The angle in degrees </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToRotation( float axisX, float axisY, float axisZ, float degrees )
+    public Matrix4x4 SetToRotation( float axisX, float axisY, float axisZ, float degrees )
     {
         if ( degrees == 0 )
         {
@@ -1156,7 +1156,7 @@ public class Matrix4
     /// <param name="axisZ"> The z-component of the axis </param>
     /// <param name="radians"> The angle in radians </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToRotationRad( float axisX, float axisY, float axisZ, float radians )
+    public Matrix4x4 SetToRotationRad( float axisX, float axisY, float axisZ, float radians )
     {
         if ( radians == 0 )
         {
@@ -1174,7 +1174,7 @@ public class Matrix4
     /// <param name="v1"> The base vector </param>
     /// <param name="v2"> The target vector </param>
     /// <returns> This matrix for the purpose of chaining methods together  </returns>
-    public Matrix4 SetToRotation( Vector3 v1, Vector3 v2 )
+    public Matrix4x4 SetToRotation( Vector3 v1, Vector3 v2 )
     {
         return Set( Quat.SetFromCross( v1, v2 ) );
     }
@@ -1189,7 +1189,7 @@ public class Matrix4
     /// <param name="y2"> The target vector y value </param>
     /// <param name="z2"> The target vector z value </param>
     /// <returns> This matrix for the purpose of chaining methods together  </returns>
-    public Matrix4 SetToRotation( float x1, float y1, float z1, float x2, float y2, float z2 )
+    public Matrix4x4 SetToRotation( float x1, float y1, float z1, float x2, float y2, float z2 )
     {
         return Set( Quat.SetFromCross( x1, y1, z1, x2, y2, z2 ) );
     }
@@ -1201,7 +1201,7 @@ public class Matrix4
     /// <param name="pitch"> the pitch in degrees </param>
     /// <param name="roll"> the roll in degrees </param>
     /// <returns> This matrix  </returns>
-    public Matrix4 SetFromEulerAngles( float yaw, float pitch, float roll )
+    public Matrix4x4 SetFromEulerAngles( float yaw, float pitch, float roll )
     {
         Quat.SetEulerAngles( yaw, pitch, roll );
 
@@ -1215,7 +1215,7 @@ public class Matrix4
     /// <param name="pitch"> the pitch in radians </param>
     /// <param name="roll"> the roll in radians </param>
     /// <returns> This matrix  </returns>
-    public Matrix4 SetFromEulerAnglesRad( float yaw, float pitch, float roll )
+    public Matrix4x4 SetFromEulerAnglesRad( float yaw, float pitch, float roll )
     {
         Quat.SetEulerAnglesRad( yaw, pitch, roll );
 
@@ -1227,7 +1227,7 @@ public class Matrix4
     /// </summary>
     /// <param name="vector"> The scaling vector </param>
     /// <returns> This matrix for chaining.  </returns>
-    public Matrix4 SetToScaling( Vector3 vector )
+    public Matrix4x4 SetToScaling( Vector3 vector )
     {
         ToIdentity();
 
@@ -1245,7 +1245,7 @@ public class Matrix4
     /// <param name="y"> The y-component of the scaling vector </param>
     /// <param name="z"> The z-component of the scaling vector </param>
     /// <returns> This matrix for chaining.  </returns>
-    public Matrix4 SetToScaling( float x, float y, float z )
+    public Matrix4x4 SetToScaling( float x, float y, float z )
     {
         ToIdentity();
 
@@ -1263,7 +1263,7 @@ public class Matrix4
     /// <param name="direction"> The direction vector </param>
     /// <param name="up"> The up vector </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 SetToLookAt( Vector3 direction, Vector3 up )
+    public Matrix4x4 SetToLookAt( Vector3 direction, Vector3 up )
     {
         LVez.Set( direction ).Nor();
         LVex.Set( direction ).Crs( up ).Nor();
@@ -1291,7 +1291,7 @@ public class Matrix4
     /// <param name="target"> the target </param>
     /// <param name="up"> the up vector </param>
     /// <returns> This matrix  </returns>
-    public Matrix4 SetToLookAt( Vector3 position, Vector3 target, Vector3 up )
+    public Matrix4x4 SetToLookAt( Vector3 position, Vector3 target, Vector3 up )
     {
         TmpVec.Set( target ).Sub( position );
         SetToLookAt( TmpVec, up );
@@ -1300,7 +1300,7 @@ public class Matrix4
         return this;
     }
 
-    public Matrix4 SetToWorld( Vector3 position, Vector3 forward, Vector3 up )
+    public Matrix4x4 SetToWorld( Vector3 position, Vector3 forward, Vector3 up )
     {
         TmpForward.Set( forward ).Nor();
         Right.Set( TmpForward ).Crs( up ).Nor();
@@ -1316,7 +1316,7 @@ public class Matrix4
     /// <param name="matrix"> the matrix </param>
     /// <param name="alpha"> the alpha value in the range [0,1] </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Lerp( Matrix4 matrix, float alpha )
+    public Matrix4x4 Lerp( Matrix4x4 matrix, float alpha )
     {
         for ( var i = 0; i < 16; i++ )
         {
@@ -1334,7 +1334,7 @@ public class Matrix4
     /// <param name="other"> The other transform </param>
     /// <param name="w"> Weight of this transform; weight of the other transform is (1 - w) </param>
     /// <returns> This matrix for chaining  </returns>
-    public Matrix4 Average( Matrix4 other, float w )
+    public Matrix4x4 Average( Matrix4x4 other, float w )
     {
         GetScale( TmpVec );
         other.GetScale( TmpForward );
@@ -1359,7 +1359,7 @@ public class Matrix4
     /// </summary>
     /// <param name="t"> List of transforms </param>
     /// <returns> This matrix for chaining  </returns>
-    public Matrix4 Average( Matrix4[] t )
+    public Matrix4x4 Average( Matrix4x4[] t )
     {
         var w = 1.0f / t.Length;
 
@@ -1392,7 +1392,7 @@ public class Matrix4
     /// <param name="t"> List of transforms </param>
     /// <param name="w"> List of weights </param>
     /// <returns> This matrix for chaining  </returns>
-    public Matrix4 Average( Matrix4[] t, float[] w )
+    public Matrix4x4 Average( Matrix4x4[] t, float[] w )
     {
         TmpVec.Set( t[ 0 ].GetScale( TmpUp ).Scale( w[ 0 ] ) );
         Quat.Set( t[ 0 ].GetRotation( Quat2 ).Exp( w[ 0 ] ) );
@@ -1419,7 +1419,7 @@ public class Matrix4
     /// The third column of this matrix is Set to ( 0, 0, 1, 0 ).
     /// </summary>
     /// <param name="mat"> the matrix </param>
-    public Matrix4 Set( Matrix3 mat )
+    public Matrix4x4 Set( Matrix3x3 mat )
     {
         Val[ 0 ]  = mat.Val[ 0 ];
         Val[ 1 ]  = mat.Val[ 1 ];
@@ -1452,7 +1452,7 @@ public class Matrix4
     /// </summary>
     /// <param name="affine"> the source matrix </param>
     /// <returns> This matrix for chaining </returns>
-    public Matrix4 Set( Affine2 affine )
+    public Matrix4x4 Set( Affine2 affine )
     {
         Val[ M00 ] = affine.M00;
         Val[ M10 ] = affine.M10;
@@ -1486,7 +1486,7 @@ public class Matrix4
     /// </summary>
     /// <param name="affine"> the source matrix </param>
     /// <returns> This matrix for chaining </returns>
-    public Matrix4 SetAsAffine( Affine2 affine )
+    public Matrix4x4 SetAsAffine( Affine2 affine )
     {
         Val[ M00 ] = affine.M00;
         Val[ M10 ] = affine.M10;
@@ -1510,7 +1510,7 @@ public class Matrix4
     /// </summary>
     /// <param name="mat"> the source matrix </param>
     /// <returns> This matrix for chaining </returns>
-    public Matrix4 SetAsAffine( Matrix4 mat )
+    public Matrix4x4 SetAsAffine( Matrix4x4 mat )
     {
         Val[ M00 ] = mat.Val[ M00 ];
         Val[ M10 ] = mat.Val[ M10 ];
@@ -1522,7 +1522,7 @@ public class Matrix4
         return this;
     }
 
-    public Matrix4 Scl( Vector3 scale )
+    public Matrix4x4 Scl( Vector3 scale )
     {
         Val[ M00 ] *= scale.X;
         Val[ M11 ] *= scale.Y;
@@ -1531,7 +1531,7 @@ public class Matrix4
         return this;
     }
 
-    public Matrix4 Scl( float x, float y, float z )
+    public Matrix4x4 Scl( float x, float y, float z )
     {
         Val[ M00 ] *= x;
         Val[ M11 ] *= y;
@@ -1540,7 +1540,7 @@ public class Matrix4
         return this;
     }
 
-    public Matrix4 Scl( float scale )
+    public Matrix4x4 Scl( float scale )
     {
         Val[ M00 ] *= scale;
         Val[ M11 ] *= scale;
@@ -1645,7 +1645,7 @@ public class Matrix4
     /// <summary>
     /// removes the translational part and transposes the matrix.
     /// </summary>
-    public Matrix4 ToNormalMatrix()
+    public Matrix4x4 ToNormalMatrix()
     {
         Val[ M03 ] = 0;
         Val[ M13 ] = 0;
@@ -1666,7 +1666,7 @@ public class Matrix4
     /// Multiplies the matrix mata with matrix matb, storing the result in mata.
     /// The arrays are assumed to hold 4x4 column major matrices as you can get
     /// from <see cref="Val" />.
-    /// This is the same as <see cref="Matrix4.Mul(Matrix4)" />.
+    /// This is the same as <see cref="Matrix4x4.Mul(Matrix4x4)" />.
     /// </summary>
     /// <param name="mata"> the first matrix. </param>
     /// <param name="matb"> the second matrix.  </param>
@@ -1781,7 +1781,7 @@ public class Matrix4
     /// to hold a 4x4 column major matrix as you can get from <see cref="Val" />.
     /// The vector array is assumed to hold a 3-component vector, with x being the
     /// first element, y being the second and z being the last component. The result
-    /// is stored in the vector array. This is the same as <see cref="Vector3.Mul(Matrix4)" />.
+    /// is stored in the vector array. This is the same as <see cref="Vector3.Mul(Matrix4x4)" />.
     /// </summary>
     /// <param name="mat"> the matrix </param>
     /// <param name="vec"> the vector.  </param>
@@ -1802,7 +1802,7 @@ public class Matrix4
     /// <see cref="Val" />. The vector array is assumed to hold a 3-component
     /// vector, with x being the first element, y being the second and z being the last
     /// component. The result is stored in the vector array. This is the same as
-    /// <see cref="Vector3.Prj(Matrix4)" />.
+    /// <see cref="Vector3.Prj(Matrix4x4)" />.
     /// </summary>
     /// <param name="mat"> the matrix </param>
     /// <param name="vec"> the vector.  </param>
@@ -1839,7 +1839,7 @@ public class Matrix4
     /// from <see cref="Val" />. The vector array is assumed to hold a
     /// 3-component vector, with x being the first element, y being the second and z
     /// being the last component. The result is stored in the vector array. This is the
-    /// same as <see cref="Vector3.Rot(Matrix4)" />.
+    /// same as <see cref="Vector3.Rot(Matrix4x4)" />.
     /// </summary>
     /// <param name="mat"> the matrix </param>
     /// <param name="vec"> the vector.  </param>
@@ -2059,7 +2059,7 @@ public class Matrix4
     /// </summary>
     /// <param name="translation"> </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Translate( Vector3 translation )
+    public Matrix4x4 Translate( Vector3 translation )
     {
         return Translate( translation.X, translation.Y, translation.Z );
     }
@@ -2072,7 +2072,7 @@ public class Matrix4
     /// <param name="y"> Translation in the y-axis. </param>
     /// <param name="z"> Translation in the z-axis. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Translate( float x, float y, float z )
+    public Matrix4x4 Translate( float x, float y, float z )
     {
         Val[ M03 ] += ( Val[ M00 ] * x ) + ( Val[ M01 ] * y ) + ( Val[ M02 ] * z );
         Val[ M13 ] += ( Val[ M10 ] * x ) + ( Val[ M11 ] * y ) + ( Val[ M12 ] * z );
@@ -2089,7 +2089,7 @@ public class Matrix4
     /// <param name="axis"> The vector axis to rotate around. </param>
     /// <param name="degrees"> The angle in degrees. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Rotate( Vector3 axis, float degrees )
+    public Matrix4x4 Rotate( Vector3 axis, float degrees )
     {
         if ( degrees == 0 )
         {
@@ -2108,7 +2108,7 @@ public class Matrix4
     /// <param name="axis"> The vector axis to rotate around. </param>
     /// <param name="radians"> The angle in radians. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 RotateRad( Vector3 axis, float radians )
+    public Matrix4x4 RotateRad( Vector3 axis, float radians )
     {
         if ( radians == 0 )
         {
@@ -2129,7 +2129,7 @@ public class Matrix4
     /// <param name="axisZ"> The z-axis component of the vector to rotate around. </param>
     /// <param name="degrees"> The angle in degrees </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Rotate( float axisX, float axisY, float axisZ, float degrees )
+    public Matrix4x4 Rotate( float axisX, float axisY, float axisZ, float degrees )
     {
         if ( degrees == 0 )
         {
@@ -2150,7 +2150,7 @@ public class Matrix4
     /// <param name="axisZ"> The z-axis component of the vector to rotate around. </param>
     /// <param name="radians"> The angle in radians </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 RotateRad( float axisX, float axisY, float axisZ, float radians )
+    public Matrix4x4 RotateRad( float axisX, float axisY, float axisZ, float radians )
     {
         if ( radians == 0 )
         {
@@ -2168,7 +2168,7 @@ public class Matrix4
     /// </summary>
     /// <param name="rotation"> </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Rotate( Quaternion rotation )
+    public Matrix4x4 Rotate( Quaternion rotation )
     {
         float x = rotation.X, y = rotation.Y, z = rotation.Z, w = rotation.W;
 
@@ -2228,7 +2228,7 @@ public class Matrix4
     /// <param name="v1"> The base vector </param>
     /// <param name="v2"> The target vector </param>
     /// <returns> This matrix for the purpose of chaining methods together  </returns>
-    public Matrix4 Rotate( Vector3 v1, Vector3 v2 )
+    public Matrix4x4 Rotate( Vector3 v1, Vector3 v2 )
     {
         return Rotate( Quat.SetFromCross( v1, v2 ) );
     }
@@ -2239,7 +2239,7 @@ public class Matrix4
     /// <param name="direction"> direction to rotate toward </param>
     /// <param name="up"> up vector </param>
     /// <returns> This matrix for chaining  </returns>
-    public Matrix4 RotateTowardDirection( Vector3 direction, Vector3 up )
+    public Matrix4x4 RotateTowardDirection( Vector3 direction, Vector3 up )
     {
         LVez.Set( direction ).Nor();
         LVex.Set( direction ).Crs( up ).Nor();
@@ -2280,7 +2280,7 @@ public class Matrix4
     /// <param name="target"> the target to rotate to </param>
     /// <param name="up"> the up vector </param>
     /// <returns> This matrix for chaining  </returns>
-    public Matrix4 RotateTowardTarget( Vector3 target, Vector3 up )
+    public Matrix4x4 RotateTowardTarget( Vector3 target, Vector3 up )
     {
         TmpVec.Set( target.X - Val[ M03 ], target.Y - Val[ M13 ], target.Z - Val[ M23 ] );
 
@@ -2295,7 +2295,7 @@ public class Matrix4
     /// <param name="scaleY"> The scale in the y-axis. </param>
     /// <param name="scaleZ"> The scale in the z-axis. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix4 Scale( float scaleX, float scaleY, float scaleZ )
+    public Matrix4x4 Scale( float scaleX, float scaleY, float scaleZ )
     {
         Val[ M00 ] *= scaleX;
         Val[ M01 ] *= scaleY;
@@ -2359,7 +2359,7 @@ public class Matrix4
     /// to hold 3-component vectors. Offset specifies the offset into the array where the x-component
     /// of the first vector is located. The numVecs parameter specifies the number of vectors stored
     /// in the vectors array. The stride parameter specifies the number of floats between subsequent
-    /// vectors and must be >= 3. This is the same as <see cref="Vector3.Mul(Matrix4)" /> applied to
+    /// vectors and must be >= 3. This is the same as <see cref="Vector3.Mul(Matrix4x4)" /> applied to
     /// multiple vectors.
     /// </summary>
     /// <param name="mat"> the matrix </param>
@@ -2390,7 +2390,7 @@ public class Matrix4
     /// x-component of the first vector is located. The numVecs parameter specifies
     /// the number of vectors stored in the vectors array. The stride parameter
     /// specifies the number of floats between subsequent vectors and must be >= 3.
-    /// This is the same as <see cref="Vector3.Prj(Matrix4)" /> applied to multiple
+    /// This is the same as <see cref="Vector3.Prj(Matrix4x4)" /> applied to multiple
     /// vectors.
     /// </summary>
     /// <param name="mat"> the matrix </param>
@@ -2435,7 +2435,7 @@ public class Matrix4
     /// x-component of the first vector is located. The numVecs parameter specifies
     /// the number of vectors stored in the vectors array. The stride parameter
     /// specifies the number of floats between subsequent vectors and must be >= 3.
-    /// This is the same as <see cref="Vector3.Rot(Matrix4)" /> applied to multiple vectors.
+    /// This is the same as <see cref="Vector3.Rot(Matrix4x4)" /> applied to multiple vectors.
     /// </summary>
     /// <param name="mat"> the matrix </param>
     /// <param name="vecs"> the vectors </param>
@@ -2457,17 +2457,6 @@ public class Matrix4
         }
     }
 
-    public Matrix4f ToMatrix4f()
-    {
-        return new Matrix4f
-        {
-            M11 = Val[ M00 ], M12 = Val[ M01 ], M13 = Val[ M02 ], M14 = Val[ M03 ],
-            M21 = Val[ M10 ], M22 = Val[ M11 ], M23 = Val[ M12 ], M24 = Val[ M13 ],
-            M31 = Val[ M20 ], M32 = Val[ M21 ], M33 = Val[ M22 ], M34 = Val[ M23 ],
-            M41 = Val[ M30 ], M42 = Val[ M31 ], M43 = Val[ M32 ], M44 = Val[ M33 ],
-        };
-    }
-
     /// <summary>
     /// Validates that the matrix is properly constructed and contains valid values.
     /// </summary>
@@ -2484,10 +2473,10 @@ public class Matrix4
         }
 
         // For a valid transformation matrix, the bottom row should be [0,0,0,1]
-        if ( ( Math.Abs( Val[ M30 ] ) > float.Epsilon ) ||
-             ( Math.Abs( Val[ M31 ] ) > float.Epsilon ) ||
-             ( Math.Abs( Val[ M32 ] ) > float.Epsilon ) ||
-             ( Math.Abs( Val[ M33 ] - 1f ) > float.Epsilon ) )
+        if ( ( Math.Abs( Val[ M30 ] ) > float.Epsilon )
+             || ( Math.Abs( Val[ M31 ] ) > float.Epsilon )
+             || ( Math.Abs( Val[ M32 ] ) > float.Epsilon )
+             || ( Math.Abs( Val[ M33 ] - 1f ) > float.Epsilon ) )
         {
             return false;
         }
@@ -2500,24 +2489,38 @@ public class Matrix4
     /// </summary>
     public bool IsValidViewMatrix()
     {
-        if ( !IsValid() )
+        if (!IsValid())
         {
             return false;
         }
 
-        // For a view matrix, the upper 3x3 should be orthogonal
-        // This is a simple check - you might want more thorough validation
-        var dotXY = ( Val[ M00 ] * Val[ M10 ] ) + ( Val[ M01 ] * Val[ M11 ] ) + ( Val[ M02 ] * Val[ M12 ] );
-        var dotXZ = ( Val[ M00 ] * Val[ M20 ] ) + ( Val[ M01 ] * Val[ M21 ] ) + ( Val[ M02 ] * Val[ M22 ] );
-        var dotYZ = ( Val[ M10 ] * Val[ M20 ] ) + ( Val[ M11 ] * Val[ M21 ] ) + ( Val[ M12 ] * Val[ M22 ] );
+        const float TOLERANCE = 0.01f;
+    
+        // Check orthogonality (your existing code)
+        var dotXY = (Val[M00] * Val[M10]) + (Val[M01] * Val[M11]) + (Val[M02] * Val[M12]);
+        var dotXZ = (Val[M00] * Val[M20]) + (Val[M01] * Val[M21]) + (Val[M02] * Val[M22]);
+        var dotYZ = (Val[M10] * Val[M20]) + (Val[M11] * Val[M21]) + (Val[M12] * Val[M22]);
 
-        const float ORTHOGONAL_TOLERANCE = 0.01f;
+        // Check unit length of basis vectors
+        var lenX = (Val[M00] * Val[M00]) + (Val[M01] * Val[M01]) + (Val[M02] * Val[M02]);
+        var lenY = (Val[M10] * Val[M10]) + (Val[M11] * Val[M11]) + (Val[M12] * Val[M12]);
+        var lenZ = (Val[M20] * Val[M20]) + (Val[M21] * Val[M21]) + (Val[M22] * Val[M22]);
 
-        return ( Math.Abs( dotXY ) < ORTHOGONAL_TOLERANCE ) &&
-               ( Math.Abs( dotXZ ) < ORTHOGONAL_TOLERANCE ) &&
-               ( Math.Abs( dotYZ ) < ORTHOGONAL_TOLERANCE );
+        // Check bottom row is [0,0,0,1]
+        var validW = ( Math.Abs(Val[M30]) < TOLERANCE ) 
+                     && ( Math.Abs(Val[M31]) < TOLERANCE ) 
+                     && ( Math.Abs(Val[M32]) < TOLERANCE ) 
+                     && ( Math.Abs(Val[M33] - 1f) < TOLERANCE );
+
+        return ( Math.Abs(dotXY) < TOLERANCE )
+               && ( Math.Abs(dotXZ) < TOLERANCE )
+               && ( Math.Abs(dotYZ) < TOLERANCE )
+               && ( Math.Abs(lenX - 1f) < TOLERANCE )
+               && ( Math.Abs(lenY - 1f) < TOLERANCE )
+               && ( Math.Abs(lenZ - 1f) < TOLERANCE )
+               && validW;
     }
-
+    
     /// <summary>
     /// Debug method to print the matrix in a readable format
     /// </summary>

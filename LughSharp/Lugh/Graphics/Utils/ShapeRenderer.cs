@@ -26,7 +26,7 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -41,12 +41,12 @@ public class ShapeRenderer : IDisposable
     }
 
     private readonly Color   _color                = new( 1, 1, 1, 1 );
-    private readonly Matrix4 _combinedMatrix       = new();
+    private readonly Matrix4x4 _combinedMatrix       = new();
     private readonly float   _defaultRectLineWidth = 0.75f;
     private readonly Vector2 _tmp                  = new();
     private          bool    _matrixDirty          = false;
-    private          Matrix4 _projectionMatrix     = new();
-    private          Matrix4 _transformMatrix      = new();
+    private          Matrix4x4 _projectionMatrix     = new();
+    private          Matrix4x4 _transformMatrix      = new();
 
     public ShapeRenderer( int maxVertices = 5000, ShaderProgram? defaultShader = null )
     {
@@ -68,7 +68,7 @@ public class ShapeRenderer : IDisposable
         set => _color.Set( value );
     }
 
-    public Matrix4 ProjectionMatrix
+    public Matrix4x4 ProjectionMatrix
     {
         get => _projectionMatrix;
         set
@@ -78,7 +78,7 @@ public class ShapeRenderer : IDisposable
         }
     }
 
-    public Matrix4 TransformMatrix
+    public Matrix4x4 TransformMatrix
     {
         get => _transformMatrix;
         set
@@ -160,7 +160,7 @@ public class ShapeRenderer : IDisposable
         if ( _matrixDirty )
         {
             _combinedMatrix.Set( _projectionMatrix );
-            Matrix4.Mul( _combinedMatrix.Val, _transformMatrix.Val );
+            Matrix4x4.Mul( _combinedMatrix.Val, _transformMatrix.Val );
             _matrixDirty = false;
         }
 

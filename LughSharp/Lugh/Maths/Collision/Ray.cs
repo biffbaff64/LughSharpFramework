@@ -71,7 +71,7 @@ public class Ray
     /// </summary>
     /// <param name="matrix"> The matrix </param>
     /// <returns> This ray for chaining.  </returns>
-    public virtual Ray Multiply( Matrix4 matrix )
+    public virtual Ray Multiply( Matrix4x4 matrix )
     {
         _tmp.Set( Origin ).Add( Direction );
         _tmp.Mul( matrix );

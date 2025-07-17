@@ -35,6 +35,11 @@ public partial class DesktopGLGraphics
     public class DesktopGLDisplayMode : IGraphicsDevice.DisplayMode
     {
         /// <summary>
+        /// The <see cref="GLFW.Monitor" /> this <see cref="IGraphicsDevice.DisplayMode" /> applies to.
+        /// </summary>
+        public GLFW.Monitor MonitorHandle { get; set; }
+
+        /// <summary>
         /// Creates a new Display Mode and its properties.
         /// </summary>
         /// <param name="monitor"> The target monitor. </param>
@@ -47,10 +52,5 @@ public partial class DesktopGLGraphics
         {
             MonitorHandle = monitor;
         }
-
-        /// <summary>
-        /// The <see cref="GLFW.Monitor" /> this <see cref="IGraphicsDevice.DisplayMode" /> applies to.
-        /// </summary>
-        public GLFW.Monitor MonitorHandle { get; set; }
     }
 }

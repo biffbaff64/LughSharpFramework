@@ -35,6 +35,13 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace DesktopGLBackend.Graphics;
 
+/// <summary>
+/// Represents the graphics system for the DesktopGL backend, handling rendering,
+/// window management,  display modes, and various graphical operations.
+/// <para>
+/// Inherits from <see cref="AbstractGraphics" /> and implements <see cref="IDisposable" />.
+/// </para>
+/// </summary>
 [PublicAPI]
 public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
 {
@@ -371,6 +378,12 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
         return DesktopGLApplicationConfiguration.GetDisplayMode( monitor );
     }
 
+    /// <inheritdoc />
+    public override HdpiMode? GetHdpiMode()
+    {
+        return GLWindow?.AppConfig.HdpiMode;
+    }
+    
     /// <inheritdoc />
     public override bool SetFullscreenMode( IGraphicsDevice.DisplayMode displayMode )
     {

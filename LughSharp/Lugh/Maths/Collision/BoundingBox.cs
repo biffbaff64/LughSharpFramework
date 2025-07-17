@@ -352,7 +352,7 @@ public class BoundingBox
     /// to extend this bounding box.
     /// </param>
     /// <returns>This bounding box for chaining.</returns>
-    public BoundingBox Extend( BoundingBox bounds, Matrix4 transform )
+    public BoundingBox Extend( BoundingBox bounds, Matrix4x4 transform )
     {
         Extend( _tmpVector.Set( bounds.Min.X, bounds.Min.Y, bounds.Min.Z ).Mul( transform ) );
         Extend( _tmpVector.Set( bounds.Min.X, bounds.Min.Y, bounds.Max.Z ).Mul( transform ) );
@@ -373,7 +373,7 @@ public class BoundingBox
     /// </summary>
     /// <param name="transform">The matrix</param>
     /// <returns>This bounding box for chaining.</returns>
-    public BoundingBox Multiply( Matrix4 transform )
+    public BoundingBox Multiply( Matrix4x4 transform )
     {
         var x0 = Min.X;
         var y0 = Min.Y;

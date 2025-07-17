@@ -68,6 +68,12 @@
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
+        <None Update="lib\net9.0\freetype.dll">
+          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </None>
+        <None Update="lib\net9.0\gdx2d.dll">
+          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

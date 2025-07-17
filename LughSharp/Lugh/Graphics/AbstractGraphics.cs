@@ -102,6 +102,9 @@ public abstract class AbstractGraphics : IGraphicsDevice
     /// <inheritdoc />
     public abstract IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor );
 
+    /// <inheritdoc />
+    public abstract HdpiMode? GetHdpiMode();
+    
     // ========================================================================
     // ========================================================================
 

@@ -23,10 +23,13 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 global using System.Drawing;
-
-// ============================================================================
-
 global using System.Text.Json;
+global using System.Numerics;
+global using System.Runtime.CompilerServices;
+global using System.Runtime.InteropServices;
+global using System.Runtime.Serialization;
+global using System.Threading;
+global using System.Threading.Tasks;
 
 // ============================================================================
 
@@ -50,6 +53,7 @@ global using static LughSharp.Lugh.Core.Engine;
 
 global using Vector2 = LughSharp.Lugh.Maths.Vector2;
 global using Vector3 = LughSharp.Lugh.Maths.Vector3;
+global using Vector4 = LughSharp.Lugh.Maths.Vector4;
 
 // ============================================================================
 

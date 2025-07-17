@@ -33,8 +33,15 @@ namespace DesktopGLBackend.Utils;
 [PublicAPI]
 public class DesktopGLCursor : ICursor, IDisposable
 {
-    public static readonly List< DesktopGLCursor >                    Cursors       = new();
-    public static readonly Dictionary< ICursor.SystemCursor, Cursor > SystemCursors = new();
+    public DesktopGLWindow Window     { get; set; }
+    public Pixmap          PixmapCopy { get; set; }
+    public Image           GlfwImage  { get; set; }
+    public Cursor          GlfwCursor { get; set; }
+
+    // ========================================================================
+    
+    public static readonly List< DesktopGLCursor >                    Cursors       = [ ];
+    public static readonly Dictionary< ICursor.SystemCursor, Cursor > SystemCursors = [ ];
 
     // ========================================================================
     // ========================================================================
@@ -88,11 +95,6 @@ public class DesktopGLCursor : ICursor, IDisposable
         Cursors.Add( this );
     }
 
-    public DesktopGLWindow Window     { get; set; }
-    public Pixmap          PixmapCopy { get; set; }
-    public Image           GlfwImage  { get; set; }
-    public Cursor          GlfwCursor { get; set; }
-
     /// <summary>
     /// Sets the system cursor for the given <see cref="GLFW.Window" /> to the
     /// cursor specified by the parameter <paramref name="systemCursor" />.
@@ -122,23 +124,31 @@ public class DesktopGLCursor : ICursor, IDisposable
 
     #region Dispose methods
 
+    /// <inheritdoc />
     public void Dispose()
     {
-        if ( PixmapCopy == null )
-        {
-            throw new GdxRuntimeException( "Cursor already disposed" );
-        }
-
-        Cursors.Remove( this );
-        PixmapCopy.Dispose();
-        PixmapCopy = null!;
-        GlfwImage  = null!;
-        Glfw.DestroyCursor( GlfwCursor );
-
+        Dispose( true );
         GC.SuppressFinalize( this );
     }
 
-    public static void Dispose( DesktopGLWindow glWindow )
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            if ( PixmapCopy == null )
+            {
+                throw new GdxRuntimeException( "Cursor already disposed" );
+            }
+
+            Cursors.Remove( this );
+            PixmapCopy.Dispose();
+            PixmapCopy = null!;
+            GlfwImage  = null!;
+            Glfw.DestroyCursor( GlfwCursor );
+        }
+    }
+    
+    public static void DisposeGLCursor( DesktopGLWindow glWindow )
     {
         for ( var i = Cursors.Count - 1; i >= 0; i-- )
         {

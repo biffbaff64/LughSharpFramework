@@ -28,7 +28,7 @@ using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Collections;
 
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
@@ -170,7 +170,7 @@ public class ScissorStack
     /// and GdxApi.graphics.getHeight() as the viewport.
     /// </summary>
     public static void CalculateScissors( Camera camera,
-                                          Matrix4 batchTransform,
+                                          Matrix4x4 batchTransform,
                                           Rectangle area,
                                           Rectangle scissor )
     {
@@ -179,7 +179,7 @@ public class ScissorStack
 
     /// <summary>
     /// Calculates a scissor rectangle in OpenGL ES window coordinates from a <see cref="Camera" />,
-    /// a transformation <see cref="Matrix4" /> and an axis aligned <see cref="Rectangle" />.
+    /// a transformation <see cref="Matrix4x4" /> and an axis aligned <see cref="Rectangle" />.
     /// The rectangle will get transformed by the camera and transform matrices and is then
     /// projected to screen coordinates. Note that only axis aligned rectangles will work with
     /// this method. If either the Camera or the Matrix4 have rotational components, the output
@@ -190,7 +190,7 @@ public class ScissorStack
     /// <param name="viewportWidth"></param>
     /// <param name="viewportHeight"></param>
     /// <param name="camera"> the <see cref="Camera" /> </param>
-    /// <param name="batchTransform"> the transformation <see cref="Matrix4" /> </param>
+    /// <param name="batchTransform"> the transformation <see cref="Matrix4x4" /> </param>
     /// <param name="area"> the <see cref="Rectangle" /> to transform to window coordinates </param>
     /// <param name="scissor"> the Rectangle to store the result in  </param>
     public static void CalculateScissors( Camera camera,
@@ -198,7 +198,7 @@ public class ScissorStack
                                           float viewportY,
                                           float viewportWidth,
                                           float viewportHeight,
-                                          Matrix4 batchTransform,
+                                          Matrix4x4 batchTransform,
                                           Rectangle area,
                                           Rectangle scissor )
     {

@@ -28,7 +28,7 @@ using LughSharp.Lugh.Maps.Tiled.Tiles;
 using LughSharp.Lugh.Maths;
 
 using Color = LughSharp.Lugh.Graphics.Color;
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
@@ -143,7 +143,7 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// <param name="y"></param>
     /// <param name="width"></param>
     /// <param name="height"></param>
-    public void SetView( Matrix4 projection, float x, float y, float width, float height )
+    public void SetView( Matrix4x4 projection, float x, float y, float width, float height )
     {
         Batch.SetProjectionMatrix( projection );
         ViewBounds.Set( x, y, width, height );

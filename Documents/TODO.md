@@ -678,8 +678,8 @@ MATHS
     - DONE - DONE - IShape2D
     - DONE - IP   - IVector
     - DONE - IP   - MathUtils
-    - DONE - IP   - Matrix3
-    - DONE - IP   - Matrix4
+    - DONE - IP   - Matrix3x3
+    - DONE - IP   - Matrix4x4
     - DONE - IP   - Number
     - DONE - IP   - NumberUtils
     - DONE - IP   - Plane
@@ -692,6 +692,7 @@ MATHS
     - DONE - DONE - SimpleVectors
     - DONE - IP   - Vector2
     - DONE - IP   - Vector3
+    - IP   - IP   - Vector4
     - DONE - IP   - WindowedMean
 
 MATH/COLLISION

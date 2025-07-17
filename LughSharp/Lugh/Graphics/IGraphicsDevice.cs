@@ -271,6 +271,15 @@ public partial interface IGraphicsDevice
     DisplayMode GetDisplayMode( GLFW.Monitor monitor );
 
     /// <summary>
+    /// Retrieves the current High-DPI mode, which determines whether rendering coordinates
+    /// are defined in logical units or in physical pixels.
+    /// </summary>
+    /// <returns>
+    /// An <see cref="HdpiMode"/> value that specifies the High-DPI mode: either logical units or pixels.
+    /// </returns>
+    HdpiMode? GetHdpiMode();
+
+    /// <summary>
     /// Sets the application to fullscreen mode using the specified display mode.
     /// </summary>
     /// <param name="displayMode">The <see cref="DisplayMode" /> to use for fullscreen mode.</param>

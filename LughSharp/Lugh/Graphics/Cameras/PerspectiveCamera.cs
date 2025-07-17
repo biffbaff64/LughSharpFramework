@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 
 namespace LughSharp.Lugh.Graphics.Cameras;
 
@@ -75,12 +75,12 @@ public class PerspectiveCamera : Camera
 
         Combined.Set( ProjectionMatrix );
 
-        Matrix4.Mul( Combined.Val, ViewMatrix.Val );
+        Matrix4x4.Mul( Combined.Val, ViewMatrix.Val );
 
         if ( updateFrustrum )
         {
             InvProjectionView.Set( Combined );
-            Matrix4.Invert( InvProjectionView.Val );
+            Matrix4x4.Invert( InvProjectionView.Val );
             Frustrum.Update( InvProjectionView );
         }
     }

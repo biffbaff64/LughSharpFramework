@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -59,7 +59,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     private readonly Mesh     _mesh;
     private readonly int      _normalOffset;
     private readonly int      _numTexCoords;
-    private readonly Matrix4  _projModelView = new();
+    private readonly Matrix4x4  _projModelView = new();
     private readonly string[] _shaderUniformNames;
     private readonly int      _texCoordOffset;
     private readonly int      _vertexSize;
@@ -139,7 +139,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// </summary>
     /// <param name="projModelView"></param>
     /// <param name="primitiveType"></param>
-    public void Begin( Matrix4 projModelView, int primitiveType )
+    public void Begin( Matrix4x4 projModelView, int primitiveType )
     {
         _projModelView.Set( projModelView );
         _primitiveType = primitiveType;

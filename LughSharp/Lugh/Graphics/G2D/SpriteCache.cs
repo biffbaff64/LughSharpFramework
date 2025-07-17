@@ -29,7 +29,7 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 
 namespace LughSharp.Lugh.Graphics.G2D;
 
@@ -89,7 +89,7 @@ public class SpriteCache
     private static readonly float[] _tempVertices = new float[ Sprite.VERTEX_SIZE * 6 ];
 
     private readonly List< Cache >   _caches         = new();
-    private readonly Matrix4         _combinedMatrix = new();
+    private readonly Matrix4x4         _combinedMatrix = new();
     private readonly List< int >     _counts         = new( 8 );
     private readonly Mesh            _mesh;
     private readonly ShaderProgram?  _shader;
@@ -177,8 +177,8 @@ public class SpriteCache
     public int     RenderCallsSinceBegin { get; set; } = 0;
     public int     TotalRenderCalls      { get; set; } = 0;
     public Color   Color                 { get; set; } = new( 1, 1, 1, 1 );
-    public Matrix4 ProjectionMatrix      { get; set; } = new();
-    public Matrix4 TransformMatrix       { get; set; } = new();
+    public Matrix4x4 ProjectionMatrix      { get; set; } = new();
+    public Matrix4x4 TransformMatrix       { get; set; } = new();
     public bool    IsDrawing             { get; private set; }
 
     // ========================================================================

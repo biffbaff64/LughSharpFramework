@@ -26,6 +26,8 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Maths;
 
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
+
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
@@ -41,10 +43,10 @@ public class NewShapeRenderer : IDisposable
     // ========================================================================
 
     private readonly Color   _color            = new( 1, 1, 1, 1 );
-    private readonly Matrix4 _combinedMatrix   = new();
+    private readonly Matrix4x4 _combinedMatrix   = new();
     private readonly Vector2 _tmp              = new();
-    private          Matrix4 _projectionMatrix = new();
-    private          Matrix4 _transformMatrix  = new();
+    private          Matrix4x4 _projectionMatrix = new();
+    private          Matrix4x4 _transformMatrix  = new();
 
 //TODO:    private readonly float _defaultRectLineWidth = 0.75f;
 //TODO:    private          bool  _matrixDirty          = false;

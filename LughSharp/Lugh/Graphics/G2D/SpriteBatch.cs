@@ -22,6 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Numerics;
+
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.OpenGL.Enums;
@@ -30,7 +33,7 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.G2D;
@@ -42,14 +45,14 @@ namespace LughSharp.Lugh.Graphics.G2D;
 /// It minimizes the number of draw calls by buffering sprite data and rendering all at once.
 /// </summary>
 [PublicAPI]
-public class SpriteBatch : IBatch, IDisposable
+public partial class SpriteBatch : IBatch, IDisposable
 {
     public bool    BlendingDisabled  { get; set; }         = false;
     public float   InvTexHeight      { get; set; }         = 0;
     public float   InvTexWidth       { get; set; }         = 0;
-    public Matrix4 CombinedMatrix    { get; set; }         = new();
-    public Matrix4 ProjectionMatrix  { get; set; }         = new();
-    public Matrix4 TransformMatrix   { get; set; }         = new();
+    public Matrix4x4 CombinedMatrix    { get; set; }         = new();
+    public Matrix4x4 ProjectionMatrix  { get; set; }         = new();
+    public Matrix4x4 TransformMatrix   { get; set; }         = new();
     public int     RenderCalls       { get; set; }         = 0; // Number of render calls since the last call to Begin()
     public long    TotalRenderCalls  { get; set; }         = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
     public int     MaxSpritesInBatch { get; set; }         = 0; // The maximum number of sprites rendered in one batch so far.
@@ -500,7 +503,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// Sets the projection matrix used for drawing.
     /// </summary>
     /// <param name="projection">The new projection matrix to be applied.</param>
-    public void SetProjectionMatrix( Matrix4 projection )
+    public void SetProjectionMatrix( Matrix4x4 projection )
     {
         if ( !projection.IsValidViewMatrix() )
         {
@@ -699,29 +702,8 @@ public class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-        const string VERTEX_SHADER = "#version 450 core\n" +
-                                     "in vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
-                                     "in vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
-                                     "in vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
-                                     "uniform mat4 u_combinedMatrix;\n" +
-                                     "out mediump vec4 v_colorPacked;\n" +
-                                     "out mediump vec2 v_texCoords;\n" +
-                                     "void main() {\n" +
-                                     "    v_colorPacked = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
-                                     "    v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
-                                     "    gl_Position = u_combinedMatrix * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
-                                     "}\n";
-
-        const string FRAGMENT_SHADER = "#version 450 core\n" +
-                                       "layout(location = 0) out vec4 FragColor;\n" +
-                                       "in vec4 v_colorPacked;\n" +
-                                       "in vec2 v_texCoords;\n" +
-                                       "uniform sampler2D u_texture;\n" +
-                                       "void main() {\n" +
-                                       "    FragColor = v_colorPacked * texture(u_texture, v_texCoords);\n" +
-                                       "}\n";
-
-        return new ShaderProgram( VERTEX_SHADER, FRAGMENT_SHADER );
+        return new ShaderProgram( QUADS_VERTEX_SHADER, QUADS_FRAGMENT_SHADER );
+//        return new ShaderProgram( DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER );
     }
 
     /// <summary>
@@ -808,7 +790,7 @@ public class SpriteBatch : IBatch, IDisposable
     /// <param name="transform">
     /// A Matrix4 representing the new transformation to be applied.
     /// </param>
-    public virtual void SetTransformMatrix( Matrix4 transform )
+    public virtual void SetTransformMatrix( Matrix4x4 transform )
     {
         if ( ( CurrentBatchState == BatchState.Drawing ) && ( Idx > 0 ) )
         {
@@ -1783,7 +1765,7 @@ public class SpriteBatch : IBatch, IDisposable
     public record struct RenderState(
         Texture? CurrentTexture,
         int VertexCount,
-        Matrix4 TransformMatrix );
+        Matrix4x4 TransformMatrix );
 
     // ========================================================================
     /// <summary>
@@ -1806,3 +1788,6 @@ public class SpriteBatch : IBatch, IDisposable
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

@@ -27,7 +27,7 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils;
 
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 using Quaternion = LughSharp.Lugh.Maths.Quaternion;
 
 namespace LughSharp.Lugh.Graphics.Cameras;
@@ -42,10 +42,10 @@ public abstract class Camera
     public Vector3 Direction { get; set; } = new( 0, 0, -1 ); // the unit length direction vector of the camera
     public Vector3 Up        { get; set; } = new( 0, 1, 0 );  // the unit length up vector of the camera
 
-    public Matrix4 ProjectionMatrix  { get; set; } = new();
-    public Matrix4 ViewMatrix        { get; set; } = new();
-    public Matrix4 Combined          { get; set; } = new();
-    public Matrix4 InvProjectionView { get; set; } = new();
+    public Matrix4x4 ProjectionMatrix  { get; set; } = new();
+    public Matrix4x4 ViewMatrix        { get; set; } = new();
+    public Matrix4x4 Combined          { get; set; } = new();
+    public Matrix4x4 InvProjectionView { get; set; } = new();
 
     public float ViewportWidth  { get; set; }
     public float ViewportHeight { get; set; }
@@ -105,12 +105,12 @@ public abstract class Camera
     /// <param name="z"> the z-coordinate of the point to look at.</param>
     protected void LookAt( float x, float y, float z )
     {
-        var _tmpVec = new Vector3().Set( x, y, z ).Sub( Position ).Nor();
+        var tmpVec = new Vector3().Set( x, y, z ).Sub( Position ).Nor();
 
-        if ( !_tmpVec.IsZero() )
+        if ( !tmpVec.IsZero() )
         {
             // up and direction must ALWAYS be orthonormal vectors
-            var dot = _tmpVec.Dot( Up );
+            var dot = tmpVec.Dot( Up );
 
             if ( Math.Abs( dot - 1 ) < NumberUtils.FLOAT_TOLERANCE )
             {
@@ -123,7 +123,7 @@ public abstract class Camera
                 Up.Set( Direction );
             }
 
-            Direction.Set( _tmpVec );
+            Direction.Set( tmpVec );
             NormalizeUp();
         }
     }
@@ -135,8 +135,8 @@ public abstract class Camera
     /// </summary>
     protected void NormalizeUp()
     {
-        var _tmpVec = new Vector3().Set( Direction ).Crs( Up );
-        Up.Set( _tmpVec ).Crs( Direction ).Nor();
+        var tmpVec = new Vector3().Set( Direction ).Crs( Up );
+        Up.Set( tmpVec ).Crs( Direction ).Nor();
     }
 
     /// <summary>
@@ -171,7 +171,7 @@ public abstract class Camera
     /// matrix. The direction and up vector will not be orthogonalized.
     /// </summary>
     /// <param name="transform"> The rotation matrix  </param>
-    protected void Rotate( Matrix4 transform )
+    protected void Rotate( Matrix4x4 transform )
     {
         Direction.Rot( transform );
         Up.Rot( transform );
@@ -199,21 +199,21 @@ public abstract class Camera
     /// <param name="angle"> the angle, in degrees  </param>
     public void RotateAround( Vector3 point, Vector3 axis, float angle )
     {
-        var _tmpVec = new Vector3().Set( point ).Sub( Position );
+        var tmpVec = new Vector3().Set( point ).Sub( Position );
 
-        Translate( _tmpVec );
+        Translate( tmpVec );
         Rotate( axis, angle );
 
-        _tmpVec.Rotate( axis, angle );
+        tmpVec.Rotate( axis, angle );
 
-        Translate( -_tmpVec.X, -_tmpVec.Y, -_tmpVec.Z );
+        Translate( -tmpVec.X, -tmpVec.Y, -tmpVec.Z );
     }
 
     /// <summary>
     /// Transform the position, direction and up vector by the given matrix
     /// </summary>
     /// <param name="transform"> The transform matrix</param>
-    public void Transform( Matrix4 transform )
+    public void Transform( Matrix4x4 transform )
     {
         Position.Mul( transform );
         Rotate( transform );

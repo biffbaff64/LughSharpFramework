@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Graphics.Cameras;
 
-using Matrix4 = LughSharp.Lugh.Maths.Matrix4;
+using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 
 namespace LughSharp.Lugh.Maps;
 
@@ -46,7 +46,7 @@ public interface IMapRenderer
     /// the map which should be rendered. Make sure that the frustum spanned
     /// by the projection matrix coincides with the viewbounds.
     /// </summary>
-    public void SetView( Matrix4 projectionMatrix,
+    public void SetView( Matrix4x4 projectionMatrix,
                          float viewboundsX,
                          float viewboundsY,
                          float viewboundsWidth,
