@@ -94,8 +94,8 @@ public partial class DesktopGLWindow : IDisposable
         Graphics           = new DesktopGLGraphics( this );
         Graphics.GLVersion = Application.GLVersion;
 
-        Api.Input    = Input;
-        Api.Graphics = Graphics;
+        Engine.Api.Input    = Input;
+        Engine.Api.Graphics = Graphics;
 
         Glfw.SetWindowFocusCallback( window, GdxFocusCallback );
         Glfw.SetWindowIconifyCallback( window, GdxIconifyCallback );
@@ -183,8 +183,8 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     public void MakeCurrent()
     {
-        Api.Graphics = Graphics;
-        Api.Input    = Input;
+        Engine.Api.Graphics = Graphics;
+        Engine.Api.Input    = Input;
 
         Glfw.MakeContextCurrent( GlfwWindow );
 
@@ -384,7 +384,7 @@ public partial class DesktopGLWindow : IDisposable
 
         for ( var i = 0; i < imagePaths.Length; i++ )
         {
-            pixmaps[ i ] = new Pixmap( Api.Files.GetFileHandle( imagePaths[ i ], imagePathType ) );
+            pixmaps[ i ] = new Pixmap( Engine.Api.Files.GetFileHandle( imagePaths[ i ], imagePathType ) );
         }
 
         SetIcon( window, pixmaps );

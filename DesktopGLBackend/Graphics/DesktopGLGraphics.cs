@@ -26,6 +26,7 @@ using DesktopGLBackend.Core;
 using DesktopGLBackend.Utils;
 using DesktopGLBackend.Window;
 
+using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
@@ -205,11 +206,11 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
         {
             if ( enable )
             {
-                GL.Enable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
+                Engine.GL.Enable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
             }
             else
             {
-                GL.Disable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
+                Engine.GL.Disable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
             }
         }
     }
@@ -454,14 +455,14 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
         }
 
         // Set the viewport
-        GL.Viewport( x, y, width, height );
+        Engine.GL.Viewport( x, y, width, height );
 
         // Check if viewport was set correctly
         var viewport = new int[ 4 ];
 
-        GL.GetIntegerv( IGL.GL_VIEWPORT, ref viewport );
+        Engine.GL.GetIntegerv( IGL.GL_VIEWPORT, ref viewport );
 
-        #if DEBUG_VIEWPORT
+        // --------------------------------------------------------------------
         Logger.Debug( $"\nRequested: [{x}, {y}, {width}, {height}]"
                       + $"\nActual   : [{viewport[ 0 ]}, {viewport[ 1 ]}, "
                       + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
@@ -475,7 +476,7 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
                             + $"\nActual: [{viewport[ 0 ]}, {viewport[ 1 ]}, "
                             + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
         }
-        #endif
+        // --------------------------------------------------------------------
     }
 
     /// <inheritdoc />
