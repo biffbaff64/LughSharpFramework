@@ -52,7 +52,7 @@ namespace LughSharp.Lugh.Utils.Collections;
 public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 {
     /// <summary>
-    /// Used by <see cref="Place" /> to bit shift the upper bits of a <b>long</b>
+    /// Used by <see cref="GetHashIndex" /> to bit shift the upper bits of a <b>long</b>
     /// into a usable range (&gt;= 0 and &lt;= <see cref="Mask" />).
     /// <para>
     /// The shift can be negative, which is convenient to match the number of bits in
@@ -62,7 +62,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// </para>
     /// <para>
     /// <see cref="Mask" /> can also be used to mask the low bits of a number, which may
-    /// be faster for some hashcodes if <see cref="Place" /> is overridden.
+    /// be faster for some hashcodes if <see cref="GetHashIndex" /> is overridden.
     /// </para>
     /// </summary>
     protected int Shift { get; set; }
@@ -70,7 +70,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <summary>
     /// A bitmask used to confine hashcodes to the size of the table. Must be all
     /// 1 bits in its low positions, ie a power of two minus 1.
-    /// If <see cref="Place" /> is overriden, this can be used instead of <see cref="Shift" />
+    /// If <see cref="GetHashIndex" /> is overriden, this can be used instead of <see cref="Shift" />
     /// to isolate usable bits of a hash.
     /// </summary>
     protected int Mask { get; set; }
@@ -190,7 +190,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// Uses Fibonacci hashing to distribute hash codes, then selects the appropriate bits.
     /// </summary>
     /// <param name="item">The item to calculate the index for.</param>
-    protected virtual int Place( TK item )
+    protected virtual int GetHashIndex( TK item )
     {
         ArgumentNullException.ThrowIfNull( item );
 
@@ -229,7 +229,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         var keyTable = KeyTable;
 
-        for ( var i = Place( key );; i = ( i + 1 ) & Mask )
+        for ( var i = GetHashIndex( key );; i = ( i + 1 ) & Mask )
         {
             var other = keyTable[ i ];
 
@@ -669,7 +669,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
     /// <param name="value">The value to be associated with the key.</param>
     private void PutResize( TK key, TV? value )
     {
-        for ( var i = Place( key );; i = ( i + 1 ) & Mask )
+        for ( var i = GetHashIndex( key );; i = ( i + 1 ) & Mask )
         {
             if ( KeyTable[ i ] == null )
             {
@@ -713,7 +713,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
         while ( KeyTable[ next ] is { } lkey )
         {
-            var placement = Place( lkey );
+            var placement = GetHashIndex( lkey );
 
             if ( ( ( next - placement ) & Mask ) > ( ( i - placement ) & Mask ) )
             {
@@ -1137,7 +1137,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
 
             while ( Map.KeyTable[ next ] is { } key )
             {
-                var placement = Map.Place( key );
+                var placement = Map.GetHashIndex( key );
 
                 if ( ( ( next - placement ) & mask ) > ( ( i - placement ) & mask ) )
                 {
@@ -1373,3 +1373,6 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > >
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

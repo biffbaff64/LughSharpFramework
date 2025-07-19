@@ -91,6 +91,15 @@ public class ShortBuffer : Buffer, IDisposable
 
     // ========================================================================
 
+    /// <summary>
+    /// Reads a 16-bit integer (short) from the current position of the buffer and advances
+    /// the position by the size of a short.
+    /// </summary>
+    /// <returns>The 16-bit integer value read from the buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown if the current position of the buffer is out of range or if there is not enough
+    /// remaining capacity to read a short.
+    /// </exception>
     public short GetShort()
     {
         var byteOffset = Position;
@@ -107,6 +116,15 @@ public class ShortBuffer : Buffer, IDisposable
         return value;
     }
 
+    /// <summary>
+    /// Retrieves a short value from the buffer at the specified index.
+    /// </summary>
+    /// <param name="index">
+    /// The index position within the buffer from which to retrieve the short value.
+    /// </param>
+    /// <returns>
+    /// The short value at the specified index in the buffer.
+    /// </returns>
     public short GetShort( int index )
     {
         var byteOffset = index * sizeof( short );
@@ -114,6 +132,15 @@ public class ShortBuffer : Buffer, IDisposable
         return _byteBufferDelegate.GetShort( byteOffset );
     }
 
+    /// <summary>
+    /// Inserts a short value into the buffer at the current position, advancing the position
+    /// by the size of a short.
+    /// </summary>
+    /// <param name="value">The short value to be inserted into the buffer.</param>
+    /// <exception cref="GdxRuntimeException">Thrown if the buffer is read-only.</exception>
+    /// <exception cref="BufferOverflowException">
+    /// Thrown if there is not enough space remaining in the buffer to accommodate the short value.
+    /// </exception>
     public void PutShort( short value )
     {
         if ( IsReadOnly )
@@ -142,6 +169,22 @@ public class ShortBuffer : Buffer, IDisposable
         }
     }
 
+    /// <summary>
+    /// Inserts a short value at the specified index in the buffer.
+    /// </summary>
+    /// <param name="index">
+    /// The index at which the short value should be inserted. The index must be in the range
+    /// of the buffer's capacity.
+    /// </param>
+    /// <param name="value">
+    /// The short value to insert into the buffer at the specified index.
+    /// </param>
+    /// <exception cref="GdxRuntimeException">
+    /// Thrown if the buffer is read-only.
+    /// </exception>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown if the specified index is outside the valid range of the buffer's capacity.
+    /// </exception>
     public void PutShort( int index, short value )
     {
         if ( IsReadOnly )
@@ -171,17 +214,30 @@ public class ShortBuffer : Buffer, IDisposable
     // ----- Bulk Get/Put operations -----
 
     /// <summary>
+    /// Reads a sequence of shorts from the buffer into the specified array.
     /// </summary>
+    /// <param name="shortArray">
+    /// The array into which the shorts will be written. The number of shorts read
+    /// will be equal to the length of the array.
+    /// </param>
     public void GetShorts( short[] shortArray )
     {
         _byteBufferDelegate.GetShorts( shortArray );
     }
 
     /// <summary>
+    /// Reads a sequence of short values from this buffer and transfers them into the specified
+    /// array starting at the given offset.
     /// </summary>
-    /// <param name="dst"></param>
-    /// <param name="dstOffset"></param>
-    /// <param name="length"></param>
+    /// <param name="dst">
+    /// The destination array into which the short values from the buffer are copied.
+    /// </param>
+    /// <param name="dstOffset">
+    /// The starting offset in the destination array where short values will be written.
+    /// </param>
+    /// <param name="length">
+    /// The number of short values to transfer from the buffer to the destination array.
+    /// </param>
     public void GetShorts( short[] dst, int dstOffset, int length )
     {
         _byteBufferDelegate.GetShorts( dst, dstOffset, length );
@@ -197,10 +253,18 @@ public class ShortBuffer : Buffer, IDisposable
     }
 
     /// <summary>
+    /// Writes an array of short values into the buffer starting at the specified offset
+    /// and for the given length.
     /// </summary>
-    /// <param name="src"></param>
-    /// <param name="srcOffset"></param>
-    /// <param name="length"></param>
+    /// <param name="src">
+    /// The source array containing the short values to be written into the buffer.
+    /// </param>
+    /// <param name="srcOffset">
+    /// The offset in the source array at which to begin reading short values.
+    /// </param>
+    /// <param name="length">
+    /// The number of short values to be written into the buffer.
+    /// </param>
     public void PutShorts( short[] src, int srcOffset, int length )
     {
         _byteBufferDelegate.PutShorts( src, srcOffset, length );
@@ -226,7 +290,8 @@ public class ShortBuffer : Buffer, IDisposable
     /// <inheritdoc cref="ByteBuffer.Resize(int)" />
     public override void Resize( int extraCapacityInBytes )
     {
-        _byteBufferDelegate.Resize( extraCapacityInBytes ); // **1. Delegate Resize to ByteBuffer**
+        // **1. Delegate Resize to ByteBuffer**
+        _byteBufferDelegate.Resize( extraCapacityInBytes );
 
         // **2. Recalculate ShortBuffer Capacity in *shorts* based on the resized ByteBuffer's byte capacity**
         Capacity = ( int )Math.Ceiling( ( double )_byteBufferDelegate.Capacity / sizeof( short ) );
@@ -254,6 +319,7 @@ public class ShortBuffer : Buffer, IDisposable
         return ( Limit - Position ) / sizeof( short );
     }
 
+    /// <inheritdoc />
     public override void Compact()
     {
         _byteBufferDelegate.Compact();

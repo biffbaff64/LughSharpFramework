@@ -88,6 +88,17 @@ public class IntBuffer : Buffer, IDisposable
 
     // ========================================================================
 
+    /// <summary>
+    /// Retrieves the next Int32 value from the current position of the buffer and
+    /// advances the position by the size of an Int32.
+    /// </summary>
+    /// <returns>
+    /// The Int32 value read from the buffer at the current position.
+    /// </returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when the current position, adjusted by the size of an Int32, exceeds the buffer's limit
+    /// or is less than zero.
+    /// </exception>
     public int GetInt()
     {
         var byteOffset = Position;
@@ -104,6 +115,16 @@ public class IntBuffer : Buffer, IDisposable
         return value;
     }
 
+    /// <summary>
+    /// Retrieves the integer value at the specified index within the buffer.
+    /// </summary>
+    /// <param name="index">
+    /// The zero-based index of the integer to retrieve. The index is translated into the
+    /// corresponding byte offset within the backing ByteBuffer.
+    /// </param>
+    /// <returns>
+    /// The integer value located at the specified index in the buffer.
+    /// </returns>
     public int GetInt( int index )
     {
         var byteOffset = index * sizeof( int );
@@ -111,6 +132,19 @@ public class IntBuffer : Buffer, IDisposable
         return _byteBufferDelegate.GetInt( byteOffset );
     }
 
+    /// <summary>
+    /// Inserts an integer value into the buffer at the current position and advances the
+    /// position by the size of an integer.
+    /// </summary>
+    /// <param name="value">
+    /// The integer value to be inserted into the buffer.
+    /// </param>
+    /// <exception cref="GdxRuntimeException">
+    /// Thrown if the buffer is in a read-only mode and modification is attempted.
+    /// </exception>
+    /// <exception cref="BufferOverflowException">
+    /// Thrown if the buffer does not have enough capacity to accommodate the integer value.
+    /// </exception>
     public void PutInt( int value )
     {
         if ( IsReadOnly )
@@ -138,6 +172,22 @@ public class IntBuffer : Buffer, IDisposable
         }
     }
 
+    /// <summary>
+    /// Inserts the specified 32-bit integer value into the buffer at the specified index.
+    /// </summary>
+    /// <param name="index">
+    /// The zero-based index at which the integer value will be placed. Must be within
+    /// the current buffer capacity.
+    /// </param>
+    /// <param name="value">
+    /// The 32-bit integer value to insert into the buffer.
+    /// </param>
+    /// <exception cref="GdxRuntimeException">
+    /// Thrown if the buffer is read-only and a write operation is attempted.
+    /// </exception>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown if the specified index is outside the bounds of the buffer's current capacity.
+    /// </exception>
     public void PutInt( int index, int value )
     {
         if ( IsReadOnly )
@@ -165,18 +215,33 @@ public class IntBuffer : Buffer, IDisposable
     // ----- Bulk Get/Put operations -----
 
     /// <summary>
+    /// Populates the provided array with integers from the buffer.
     /// </summary>
-    /// <param name="intArray"></param>
+    /// <param name="intArray">
+    /// Array that will be filled with integer values read from the buffer. The size of the array
+    /// determines the number of integers retrieved.
+    /// </param>
     public void GetInts( int[] intArray )
     {
         _byteBufferDelegate.GetInts( intArray );
     }
 
     /// <summary>
+    /// Reads a sequence of integers from the buffer into the specified array starting at the given offset.
     /// </summary>
-    /// <param name="dst"></param>
-    /// <param name="dstOffset"></param>
-    /// <param name="length"></param>
+    /// <param name="dst">
+    /// The destination array where the integers will be stored. This array must have sufficient
+    /// capacity to accommodate the number of integers specified by the length parameter, starting from the
+    /// specified offset.
+    /// </param>
+    /// <param name="dstOffset">
+    /// The starting offset in the destination array where the integers will begin to be written.
+    /// This value must be equal to or greater than zero.
+    /// </param>
+    /// <param name="length">
+    /// The number of integers to read from the buffer. This value must be equal to or greater than zero
+    /// and must not exceed the remaining capacity of the buffer.
+    /// </param>
     public void GetInts( int[] dst, int dstOffset, int length )
     {
         _byteBufferDelegate.GetInts( dst, dstOffset, length );
@@ -193,10 +258,18 @@ public class IntBuffer : Buffer, IDisposable
     }
 
     /// <summary>
+    /// Writes a sequence of integers from the specified source array into the buffer,
+    /// starting at the given source offset and spanning the specified number of integers.
     /// </summary>
-    /// <param name="src"></param>
-    /// <param name="srcOffset"></param>
-    /// <param name="length"></param>
+    /// <param name="src">
+    /// The source array containing the integers to be written to the buffer.
+    /// </param>
+    /// <param name="srcOffset">
+    /// The starting position in the source array from which integers will be read.
+    /// </param>
+    /// <param name="length">
+    /// The number of integers to transfer from the source array to the buffer.
+    /// </param>
     public void PutInts( int[] src, int srcOffset, int length )
     {
         _byteBufferDelegate.PutInts( src, srcOffset, length );
@@ -251,6 +324,7 @@ public class IntBuffer : Buffer, IDisposable
         return ( Limit - Position ) / sizeof( int );
     }
 
+    /// <inheritdoc />
     public override void Compact()
     {
         _byteBufferDelegate.Compact();

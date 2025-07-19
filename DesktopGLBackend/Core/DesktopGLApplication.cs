@@ -52,9 +52,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     public List< ILifecycleListener >         LifecycleListeners { get; set; } = [ ];
     public DesktopGLApplicationConfiguration? Config             { get; set; }
 
-    public IClipboard? Clipboard { get; set; }
-    public IGLAudio?   Audio     { get; set; }
-
+    public IClipboard?      Clipboard     { get; set; }
+    public IGLAudio?        Audio         { get; set; }
     public GLVersion?       GLVersion     { get; set; }
     public OpenGLProfile    OGLProfile    { get; set; }
     public DesktopGLWindow? CurrentWindow { get; set; }
@@ -83,34 +82,38 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     public DesktopGLApplication( IApplicationListener listener, DesktopGLApplicationConfiguration config )
     {
         // ====================================================================
+        // ====================================================================
         // Essential first actions. Do not move.
         //
-        // This MUST be the first call, so that the Logger and GdxApi.App global are
+        // This MUST be the first call, so that the Logger and Engine.App global are
         // initialised correctly.
-        Api.Initialise( this );
+        Engine.Api.Initialise( this );
+        // ====================================================================
+        // ====================================================================
 
         _prefs = GetPreferences( "desktopgl.lugh.engine.preferences" );
         _prefs.PutBool( "profiling", config.GLProfilingEnabled );
         _prefs.Flush();
 
-        // Config.Title becomes the name of the ApplicationListener if it has no value at this point.
+        // Config.Title becomes the name of the ApplicationListener
+        // if it has no value at this point.
         Config       =   DesktopGLApplicationConfiguration.Copy( config );
         Config.Title ??= listener.GetType().Name;
 
         // ====================================================================
 
-        // Initialise the global environment shortcuts. 'GdxApi.Audio', 'GdxApi.Files',
-        // and 'GdxApi.Net' are instances of classes implementing IAudio, IFiles, and
+        // Initialise the global environment shortcuts. 'Engine.Audio', 'Engine.Files',
+        // and 'Engine.Net' are instances of classes implementing IAudio, IFiles, and
         // INet respectively, and are used to access LughSharp members 'Audio', 'Files',
         // and 'Network' are instances of classes which extend the aforementioned classes,
         // and are used in backend code only.
-        // Note: GdxApi.Graphics is set later, during window creation as each window that
+        // Note: Engine.Graphics is set later, during window creation as each window that
         // is created will have its own IGraphics instance.
         Audio     = CreateAudio( Config );
         Clipboard = new DesktopGLClipboard();
 
-        Api.Files = new LughSharp.Lugh.Files.Files();
-        Api.Net   = new DesktopGLNet( Config );
+        Engine.Api.Files = new LughSharp.Lugh.Files.Files();
+        Engine.Api.Net   = new DesktopGLNet( Config );
 
         _sync = new Sync();
 
@@ -631,12 +634,12 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
         for ( var i = 0; i < 2; i++ )
         {
-            GL.ClearColor( config.InitialBackgroundColor.R,
-                           config.InitialBackgroundColor.G,
-                           config.InitialBackgroundColor.B,
-                           config.InitialBackgroundColor.A );
+            Engine.GL.ClearColor( config.InitialBackgroundColor.R,
+                                  config.InitialBackgroundColor.G,
+                                  config.InitialBackgroundColor.B,
+                                  config.InitialBackgroundColor.A );
 
-            GL.Clear( IGL.GL_COLOR_BUFFER_BIT );
+            Engine.GL.Clear( IGL.GL_COLOR_BUFFER_BIT );
             Glfw.SwapBuffers( windowHandle );
         }
 

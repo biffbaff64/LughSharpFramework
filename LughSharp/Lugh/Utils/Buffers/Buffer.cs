@@ -27,10 +27,10 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Utils.Buffers;
 
 /// <summary>
-/// The base class for buffers. This holds all the essential shared data for IntBuffers, ShortBuffers,
-/// ByteBuffers, FloatBuffers, and any other buffer types.
-/// This class DOES NOT contain any buffer arrays, merely propereties for defining capacity,
-/// length, limit, etc. Thiose buffer arrays must be defined in extending classes.
+/// The base class for buffers. This holds all the essential shared data for IntBuffers,
+/// ShortBuffers, ByteBuffers, FloatBuffers, and any other buffer types.
+/// This class DOES NOT contain any buffer arrays, merely properties for defining capacity,
+/// length, limit, etc. Those buffer arrays must be defined in extending classes.
 /// </summary>
 [PublicAPI]
 public abstract class Buffer : IDisposable
@@ -40,12 +40,13 @@ public abstract class Buffer : IDisposable
     public const bool DIRECT     = true;
     public const bool NOT_DIRECT = false;
 
-    // ========================================================================
-
+    // ( MAC = Max Allowed Capacity )
     public const int DEFAULT_MAC_100_MB = 100 * 1024 * 1024;
     public const int DEFAULT_MAC_500_MB = 500 * 1024 * 1024;
     public const int DEFAULT_MAC_1_GB   = 1000 * 1024 * 1024;
     public const int DEFAULT_MAC_2_GB   = 2000 * 1024 * 1024;
+
+    // ========================================================================
 
     public bool IsReadOnly        { get; protected set; }
     public bool IsDirect          { get; protected set; }
@@ -61,6 +62,8 @@ public abstract class Buffer : IDisposable
     protected const bool IS_READ_ONLY_DEFAULT = false;
     protected const bool IS_DIRECT_DEFAULT    = false;
 
+    // ========================================================================
+
     private int _markPosition       = -1;
     private int _maxAllowedCapacity = DEFAULT_MAC_1_GB;
 
@@ -71,9 +74,9 @@ public abstract class Buffer : IDisposable
     }
 
     /// <summary>
-    /// Creates a new Buffer object
+    /// Represents a dynamic buffer that can grow as needed to accommodate data.
+    /// Provides methods to manipulate and access the underlying data storage.
     /// </summary>
-    /// <param name="capacityInBytes"></param>
     protected Buffer( int capacityInBytes )
     {
         IsBigEndian = !BitConverter.IsLittleEndian;
@@ -101,19 +104,20 @@ public abstract class Buffer : IDisposable
     /// <para>
     /// <b>1. Typical Use Cases and Data Sizes:</b>
     /// <li>
-    /// Small Buffers (Kilobytes to a few Megabytes): If your library is primarily intended
-    /// for handling relatively small data structures, network packets, or configuration data,
-    /// a smaller MaxAllowedCapacity might be appropriate.
+    /// Small Buffers (Kilobytes to a few Megabytes): For handling relatively small data
+    /// structures, network packets, or configuration data, a smaller MaxAllowedCapacity
+    /// might be appropriate.
     /// </li>
     /// <li>
-    /// Medium Buffers (Megabytes to hundreds of Megabytes): For applications dealing with moderate-
-    /// sized files, images, or intermediate data processing, a medium-sized limit might be suitable.
+    /// Medium Buffers (Megabytes to hundreds of Megabytes): For applications dealing with
+    /// moderate-sized files, images, or intermediate data processing, a medium-sized limit
+    /// might be suitable.
     /// </li>
     /// <li>
-    /// Large Buffers (Gigabytes or more): If your project is designed for high-performance scenarios,
-    /// large data sets, or memory-intensive operations (e.g., large file processing, in-memory databases,
-    /// scientific computing), a larger MaxAllowedCapacity or even no default limit (relying on system
-    /// memory limits) might be considered (with caution).
+    /// Large Buffers (Gigabytes or more): If the usage case is designed for high-performance
+    /// scenarios, large data sets, or memory-intensive operations (e.g., large file processing,
+    /// in-memory databases, scientific computing), a larger MaxAllowedCapacity or even no
+    /// default limit (relying on system memory limits) might be considered (with caution).
     /// </li>
     /// <br></br>
     /// <b>2. Memory Constraints of Target Environments:</b>
@@ -167,27 +171,6 @@ public abstract class Buffer : IDisposable
             }
         }
     }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        Dispose( true );
-        GC.SuppressFinalize( this );
-    }
-
-    // ========================================================================
-    // Byte type abstract methods - to be implemented in derived classes for type-specific operations
-    //
-    public abstract byte GetByte();
-    public abstract byte GetByte( int index );
-    public abstract void PutByte( byte value );
-    public abstract void PutByte( int index, byte value );
-    public abstract void GetBytes( byte[] result, int offset, int length );
-    public abstract void PutBytes( byte[] src, int srcOffset, int dstOffset, int length );
-    public abstract void GetBytes( byte[] byteArray );
-    public abstract void PutBytes( byte[] byteArray );
 
     // ========================================================================
 
@@ -298,14 +281,16 @@ public abstract class Buffer : IDisposable
     public abstract int Remaining();
 
     /// <summary>
-    /// Prepares a buffer for subsequent writing after some data has been read from it. Primarily
-    /// used in scenarios where you are processing data in chunks or cycles, and you need to retain
-    /// any unprocessed data while making space for new data at the end of the buffer.
+    /// Prepares a buffer for subsequent writing after some data has been read from it.
+    /// Primarily used in scenarios where you are processing data in chunks or cycles,
+    /// and you need to retain any unprocessed data while making space for new data at
+    /// the end of the buffer.
     /// </summary>
     public abstract void Compact();
 
     /// <summary>
-    /// Returns <c>true</c> if, and only if, there is at least one element remaining in this buffer.
+    /// Returns <c>true</c> if, and only if, there is at least one element remaining
+    /// in this buffer.
     /// </summary>
     public virtual bool HasRemaining()
     {
@@ -321,9 +306,10 @@ public abstract class Buffer : IDisposable
     }
 
     /// <summary>
+    /// Sets the byte order of the buffer.
     /// </summary>
-    /// <param name="order"></param>
-    /// <returns></returns>
+    /// <param name="order">The byte order to apply to the buffer.</param>
+    /// <returns>The buffer instance with the updated byte order.</returns>
     public virtual Buffer Order( ByteOrder order )
     {
         IsBigEndian = order == ByteOrder.BigEndian;
@@ -332,19 +318,20 @@ public abstract class Buffer : IDisposable
     }
 
     /// <summary>
-    /// Concept: Shrink() (or sometimes called Compact() in other buffer APIs) is about reducing the
-    /// buffer's Capacity to be closer to the amount of data it actually holds (up to the Limit). It's
-    /// often used to reclaim memory if a buffer was allocated with a large capacity but is now holding
-    /// a smaller amount of data.
-    /// The data currently between position 0 and Limit should be preserved. The Position and Limit might
-    /// need to be adjusted after shrinking to remain valid within the new, smaller capacity.
+    /// Concept: Shrink() (or sometimes called Compact() in other buffer APIs) is about
+    /// reducing the buffer's Capacity to be closer to the amount of data it actually holds
+    /// (up to the Limit). It's often used to reclaim memory if a buffer was allocated with
+    /// a large capacity but is now holding a smaller amount of data.
+    /// The data currently between position 0 and Limit should be preserved. The Position
+    /// and Limit might need to be adjusted after shrinking to remain valid within the new,
+    /// smaller capacity.
     /// <br />
     /// <para>
     /// <b>Usefulness:</b>
     /// <li>
-    /// Memory Optimization: Important in memory-constrained environments or when dealing with long-lived
-    /// buffers that might hold varying amounts of data over time. Reduces memory footprint by releasing
-    /// unused capacity.
+    /// Memory Optimization: Important in memory-constrained environments or when dealing
+    /// with long-lived buffers that might hold varying amounts of data over time. Reduces
+    /// memory footprint by releasing unused capacity.
     /// </li>
     /// </para>
     /// </summary>
@@ -368,7 +355,7 @@ public abstract class Buffer : IDisposable
     /// <summary>
     /// Saves the current <see cref="Position" /> of the buffer as a "mark."
     /// </summary>
-    public virtual void Mark()
+    public virtual void SetMark()
     {
         _markPosition = Position;
     }
@@ -383,7 +370,7 @@ public abstract class Buffer : IDisposable
 
     /// <summary>
     /// Sets the Position back to the last saved "mark." The mark is typically discarded after
-    /// Reset() is called. If Mark() has not been called, Reset() might have undefined behavior.
+    /// Reset() is called. If SetMark() has not been called, Reset() might have undefined behavior.
     /// <br />
     /// <para>
     /// <b>Usefulness:</b>
@@ -402,7 +389,7 @@ public abstract class Buffer : IDisposable
     {
         if ( _markPosition == -1 )
         {
-            throw new InvalidOperationException( "Mark not set." ); // Or decide on different behavior if no mark
+            throw new InvalidOperationException( "SetMark not set." ); //TODO: Or decide on different behavior if no mark
         }
 
         Position      = _markPosition; // Restore Position to the marked position
@@ -410,12 +397,13 @@ public abstract class Buffer : IDisposable
     }
 
     /// <summary>
-    /// In extendiong classes, this method returns the backing array.
+    /// In extendiong classes, this method returns the backing array. This base
+    /// class implementation should not be called.
     /// </summary>
     /// <returns></returns>
     public virtual object[] ToArray()
     {
-        throw new NotImplementedException();
+        throw new GdxRuntimeException( "ToArray() is abstract in base class, use extending class!" );
     }
 
     // ========================================================================
@@ -432,14 +420,34 @@ public abstract class Buffer : IDisposable
         IsDirect   = direct;
     }
 
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing, releasing, or
-    /// resetting unmanaged resources.
-    /// </summary>
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
     protected virtual void Dispose( bool disposing )
     {
         if ( disposing )
         {
         }
     }
+
+    // ========================================================================
+    // Byte type abstract methods - to be implemented in derived classes for type-specific operations
+    //
+    public abstract byte GetByte();
+    public abstract byte GetByte( int index );
+    public abstract void PutByte( byte value );
+    public abstract void PutByte( int index, byte value );
+    public abstract void GetBytes( byte[] result, int offset, int length );
+    public abstract void PutBytes( byte[] src, int srcOffset, int dstOffset, int length );
+    public abstract void GetBytes( byte[] byteArray );
+    public abstract void PutBytes( byte[] byteArray );
 }
+
+// ============================================================================
+// ============================================================================

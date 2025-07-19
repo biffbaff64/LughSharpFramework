@@ -26,8 +26,6 @@ using System.Buffers.Binary;
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-using IndexOutOfRangeException = System.IndexOutOfRangeException;
-
 namespace LughSharp.Lugh.Utils.Buffers;
 
 [PublicAPI]
@@ -66,7 +64,7 @@ public class ByteBuffer : Buffer, IDisposable
     /// <param name="isBigEndian">Indicates whether the buffer should use big-endian byte order.</param>
     internal ByteBuffer( Memory< byte > memory, bool isBigEndian )
     {
-        if ( memory.IsEmpty ) // Check if Memory<byte> is valid (not empty) - you can add more checks if needed
+        if ( memory.IsEmpty ) // Check if Memory<byte> is valid (not empty)
         {
             throw new ArgumentException( "Memory<byte> cannot be empty.",
                                          nameof( memory ) ); // Or ArgumentNullException if null Memory<byte> is possible
@@ -391,20 +389,25 @@ public class ByteBuffer : Buffer, IDisposable
     // ----- Bulk Get/Put operations -----
 
     /// <summary>
+    /// Reads a sequence of short values from the buffer into the specified destination array.
     /// </summary>
-    /// <param name="dst"></param>
+    /// <param name="dst">The array into which the short values will be written.</param>
     public void GetShorts( short[] dst )
     {
         GetShorts( dst, 0, dst.Length );
     }
 
     /// <summary>
+    /// Reads multiple short values from the buffer into the specified destination array.
     /// </summary>
-    /// <param name="dst"></param>
-    /// <param name="dstOffset"></param>
-    /// <param name="length"></param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="dst">The destination array to hold the short values read from the buffer.</param>
+    /// <param name="dstOffset">The starting index in the destination array where the short values should be written.</param>
+    /// <param name="length">The number of short values to read from the buffer.</param>
+    /// <exception cref="ArgumentNullException">Thrown when the destination array is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when the destination offset or length is negative, or when the specified range exceeds the bounds of the destination array.
+    /// </exception>
+    /// <exception cref="IndexOutOfRangeException">Thrown when the buffer does not contain enough remaining bytes to satisfy the request.</exception>
     public void GetShorts( short[] dst, int dstOffset, int length )
     {
         ArgumentNullException.ThrowIfNull( dst, nameof( dst ) );
@@ -443,20 +446,27 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
+    /// Writes an array of short values into the buffer.
     /// </summary>
-    /// <param name="src"></param>
+    /// <param name="src">An array of short values to be written to the buffer.</param>
     public void PutShorts( short[] src )
     {
         PutShorts( src, 0, src.Length );
     }
 
     /// <summary>
+    /// Writes a subset of shorts from the specified source array into the buffer.
     /// </summary>
-    /// <param name="src"></param>
-    /// <param name="srcOffset"></param>
-    /// <param name="length"></param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    /// <exception cref="BufferOverflowException"></exception>
+    /// <param name="src">The source array containing the short values to be written.</param>
+    /// <param name="srcOffset">The zero-based offset in the source array to start reading shorts from.</param>
+    /// <param name="length">The number of shorts to write from the source array into the buffer.</param>
+    /// <exception cref="ArgumentNullException">Thrown when the source array is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when the source offset or length is negative or when their sum exceeds the bounds of the source array.
+    /// </exception>
+    /// <exception cref="BufferOverflowException">
+    /// Thrown when there is not enough remaining space in the buffer to accommodate the specified number of shorts.
+    /// </exception>
     public void PutShorts( short[] src, int srcOffset, int length )
     {
         ArgumentNullException.ThrowIfNull( src, nameof( src ) );
@@ -550,10 +560,8 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    /// Puts the provided Int32 into the backing array at the specified index.
+    /// Represents a signed 32-bit integer value.
     /// </summary>
-    /// <param name="index"> The index. </param>
-    /// <param name="value"> The value to put. </param>
     public void PutInt( int index, int value )
     {
         if ( IsReadOnly )
@@ -581,20 +589,31 @@ public class ByteBuffer : Buffer, IDisposable
     // ----- Bulk Get/Put operations -----
 
     /// <summary>
+    /// Retrieves a sequence of integers from the buffer and stores them into the specified array.
     /// </summary>
-    /// <param name="dst"></param>
+    /// <param name="dst">
+    /// The array into which integers will be transferred. The length of the array determines
+    /// the number of integers to retrieve starting from the current buffer position.
+    /// </param>
     public void GetInts( int[] dst )
     {
         GetInts( dst, 0, dst.Length );
     }
 
     /// <summary>
+    /// Reads a sequence of integers from the buffer into the specified destination array.
     /// </summary>
-    /// <param name="dst"></param>
-    /// <param name="dstOffset"></param>
-    /// <param name="length"></param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="dst">The destination array where the integers will be copied.</param>
+    /// <param name="dstOffset">The starting index in the destination array at which integers will begin to be written.</param>
+    /// <param name="length">The number of integers to read and copy into the destination array.</param>
+    /// <exception cref="ArgumentNullException">Thrown if the destination array is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if the destination offset is negative, if the length is negative, or
+    /// if the sum of the destination offset and length exceeds the bounds of the destination array.
+    /// </exception>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown if there are not enough remaining bytes in the buffer to read the requested number of integers.
+    /// </exception>
     public void GetInts( int[] dst, int dstOffset, int length )
     {
         ArgumentNullException.ThrowIfNull( dst, nameof( dst ) );
@@ -633,19 +652,36 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
+    /// Writes an array of integers into the buffer starting at the current position.
     /// </summary>
+    /// <param name="src">
+    /// The integer array containing the data to be written into the buffer.
+    /// </param>
     public void PutInts( int[] src )
     {
         PutInts( src, 0, src.Length );
     }
 
     /// <summary>
+    /// Writes the specified values from the integer array into the buffer.
     /// </summary>
-    /// <param name="src"></param>
-    /// <param name="srcOffset"></param>
-    /// <param name="length"></param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    /// <exception cref="BufferOverflowException"></exception>
+    /// <param name="src">The source array of integers to write into the buffer.</param>
+    /// <param name="srcOffset">
+    /// The zero-based index in the source array at which to begin reading integers.
+    /// Must be non-negative and within the bounds of the array.
+    /// </param>
+    /// <param name="length">
+    /// The number of integers to write from the source array into the buffer.
+    /// Must be non-negative and must not exceed the remaining capacity of the buffer.
+    /// </param>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if <paramref name="srcOffset"/> is negative, <paramref name="length"/> is negative,
+    /// or if the combined values of <paramref name="srcOffset"/> and <paramref name="length"/> exceed
+    /// the bounds of the source array.
+    /// </exception>
+    /// <exception cref="BufferOverflowException">
+    /// Thrown if the buffer does not have sufficient capacity to accommodate the number of integers being written.
+    /// </exception>
     public void PutInts( int[] src, int srcOffset, int length )
     {
         ArgumentNullException.ThrowIfNull( src, nameof( src ) );
@@ -770,20 +806,30 @@ public class ByteBuffer : Buffer, IDisposable
     // ----- Bulk Get/Put operations -----
 
     /// <summary>
+    /// Copies a sequence of float values from the buffer into the specified array.
     /// </summary>
-    /// <param name="dst"></param>
+    /// <param name="dst">
+    /// The array into which the float values are copied. The size of the array must be sufficient to
+    /// accommodate the values being copied, starting from the first element.
+    /// </param>
     public void GetFloats( float[] dst )
     {
         GetFloats( dst, 0, dst.Length );
     }
 
     /// <summary>
+    /// Reads a specified number of float values from the buffer into the destination array.
     /// </summary>
-    /// <param name="dst"></param>
-    /// <param name="dstOffset"></param>
-    /// <param name="length"></param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="dst">The destination array where the float values will be stored.</param>
+    /// <param name="dstOffset">The starting offset in the destination array at which the float values will be written.</param>
+    /// <param name="length">The number of float values to read from the buffer.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="dst"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if <paramref name="dstOffset"/> is negative,
+    /// or if <paramref name="length"/> is negative,
+    /// or if the combination of <paramref name="dstOffset"/> and <paramref name="length"/> exceeds the bounds of the destination array.
+    /// </exception>
+    /// <exception cref="IndexOutOfRangeException">Thrown if there are not enough remaining bytes in the buffer to read the specified number of floats.</exception>
     public void GetFloats( float[] dst, int dstOffset, int length )
     {
         ArgumentNullException.ThrowIfNull( dst, nameof( dst ) );
@@ -822,20 +868,25 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
+    /// Writes an array of floats into the buffer starting from the current position.
     /// </summary>
-    /// <param name="src"></param>
+    /// <param name="src">The array of floats to be written into the buffer.</param>
     public void PutFloats( float[] src )
     {
         PutFloats( src, 0, src.Length );
     }
 
     /// <summary>
+    /// Writes a subset of the specified float array into the buffer starting at the current position.
     /// </summary>
-    /// <param name="src"></param>
-    /// <param name="srcOffset"></param>
-    /// <param name="length"></param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    /// <exception cref="BufferOverflowException"></exception>
+    /// <param name="src">The source array of floats to be written to the buffer.</param>
+    /// <param name="srcOffset">The starting index in the source array from which data will be read.</param>
+    /// <param name="length">The number of floats to write to the buffer.</param>
+    /// <exception cref="ArgumentNullException">Thrown if the source array is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if the source offset or length is negative, or if the sum of the source offset and length exceeds the bounds of the source array.
+    /// </exception>
+    /// <exception cref="BufferOverflowException">Thrown if writing the data would exceed the buffer's capacity and auto-resizing is not allowed.</exception>
     public void PutFloats( float[] src, int srcOffset, int length )
     {
         ArgumentNullException.ThrowIfNull( src, nameof( src ) );
@@ -892,9 +943,9 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    /// Returns the backing array as a byte[].
+    /// Retrieves the underlying array that backs this byte buffer.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The internal byte array used to store the data for this buffer.</returns>
     public byte[] BackingArray()
     {
         return _backingArray;
@@ -1068,8 +1119,11 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
+    /// Creates a new sliced buffer from the current buffer.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// A new <see cref="ByteBuffer"/> that represents a slice of the current buffer.
+    /// </returns>
     public ByteBuffer Slice()
     {
         //TODO:

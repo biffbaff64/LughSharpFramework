@@ -27,12 +27,8 @@
 global using JetBrains.Annotations;
 
 // ============================================================================
-global using LughSharp;
 
-// ============================================================================
 global using DotGLFW;
-
 global using GLFW = DotGLFW;
 
 // ============================================================================
-global using static LughSharp.Lugh.Core.Engine;

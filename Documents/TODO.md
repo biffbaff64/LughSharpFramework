@@ -953,12 +953,12 @@ UTILS/BUFFERS
 
      CODE   DOCUMENT
     ----   --------
-    - DONE - IP   - Buffer
-    - DONE - IP   - BufferTests
-    - DONE - IP   - ByteBuffer
-    - DONE - IP   - FloatBuffer
-    - DONE - IP   - IntBuffer
-    - DONE - IP   - ShortBuffer
+    - DONE - DONE - Buffer
+    - DONE - IP   - BufferUtils
+    - DONE - DONE - ByteBuffer
+    - DONE - DONE - FloatBuffer
+    - DONE - DONE - IntBuffer
+    - DONE - DONE - ShortBuffer
 
 UTILS/COLLECTIONS
 -----------------

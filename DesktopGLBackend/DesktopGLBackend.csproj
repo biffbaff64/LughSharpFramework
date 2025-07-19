@@ -19,10 +19,6 @@
         <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2"/>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Files\" />
-    </ItemGroup>
-
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Release|AnyCPU'">
         <OutputPath>$(SolutionDir)bin\$(Configuration)\$(TargetFramework)\</OutputPath>
     </PropertyGroup>

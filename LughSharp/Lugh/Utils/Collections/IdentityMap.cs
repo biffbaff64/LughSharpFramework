@@ -69,7 +69,7 @@ public class IdentityMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     /// <summary>
     /// Creates a new map with an initial capacity of 51 and a load factor of 0.8.
     /// </summary>
-    public IdentityMap()
+    public IdentityMap() : this( DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR )
     {
     }
 
@@ -107,25 +107,32 @@ public class IdentityMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     // ========================================================================
 
     /// <summary>
+    /// Calculates the hash index for the given key using its internal unique identifier.
     /// </summary>
-    /// <param name="item"></param>
-    /// <returns></returns>
-
-    //TODO: I have a feeling this method is badly named. Once I've worked out what it does I'll rename it.
-    protected override int Place( TK item )
+    /// <param name="item">The key for which the hash index is to be calculated.</param>
+    /// <returns>The computed hash index as an integer.</returns>
+    protected override int GetHashIndex( TK item )
     {
         var id = ( ulong )_objectIDGenerator.GetId( item, out _firstPlaceGen );
 
         return ( int )( ( id * 0x9E3779B97F4A7C15L ) >>> Shift );
     }
 
+    /// <summary>
+    /// Locates the specified key within the identity map and returns its corresponding index.
+    /// </summary>
+    /// <param name="key">The key to locate within the map. Must not be null.</param>
+    /// <returns>
+    /// The index of the specified key in the map if found; otherwise, a relevant status
+    /// indicating the result.
+    /// </returns>
     public override int LocateKey( TK key )
     {
         Guard.ThrowIfNull( key );
 
         var keytab = KeyTable;
 
-        for ( var i = Place( key );; i = ( i + 1 ) & Mask )
+        for ( var i = GetHashIndex( key );; i = ( i + 1 ) & Mask )
         {
             var other = keytab[ i ];
 
@@ -143,9 +150,7 @@ public class IdentityMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         }
     }
 
-    /// <summary>
-    /// </summary>
-    /// <returns></returns>
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         const int PRIME = 53;
@@ -156,3 +161,6 @@ public class IdentityMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         return result;
     }
 }
+
+// ============================================================================
+// ============================================================================

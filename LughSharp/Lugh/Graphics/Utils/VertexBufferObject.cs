@@ -203,7 +203,7 @@ public class VertexBufferObject : IVertexData
             return;
         }
 
-        // Mark the buffer as dirty, indicating it has been modified.
+        // SetMark the buffer as dirty, indicating it has been modified.
         _isDirty = true;
 
         // Save the current position of the byte buffer.
@@ -322,7 +322,7 @@ public class VertexBufferObject : IVertexData
         // Unbind the buffer from the GL_ARRAY_BUFFER target.
         GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
 
-        // Mark the buffer as unbound.
+        // SetMark the buffer as unbound.
         _isBound = false;
     }
 

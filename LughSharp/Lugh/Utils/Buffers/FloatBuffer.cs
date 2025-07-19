@@ -169,17 +169,30 @@ public class FloatBuffer : Buffer, IDisposable
     // ----- Bulk Get/Put operations -----
 
     /// <summary>
+    /// Fills the provided array with float values from the buffer.
     /// </summary>
+    /// <param name="floatArray">
+    /// The float array to be filled with values from the buffer. The array length should be
+    /// less than or equal to the remaining number of floats in the buffer to avoid buffer
+    /// underflow.
+    /// </param>
     public void GetFloats( float[] floatArray )
     {
         _byteBufferDelegate.GetFloats( floatArray );
     }
 
     /// <summary>
+    /// Retrieves a sequence of float values from the buffer and stores them into the specified array.
     /// </summary>
-    /// <param name="dst"></param>
-    /// <param name="dstOffset"></param>
-    /// <param name="length"></param>
+    /// <param name="dst">
+    /// The destination array where the float values will be stored.
+    /// </param>
+    /// <param name="dstOffset">
+    /// The offset within the destination array at which to begin storing the float values.
+    /// </param>
+    /// <param name="length">
+    /// The number of float values to retrieve and store in the destination array.
+    /// </param>
     public void GetFloats( float[] dst, int dstOffset, int length )
     {
         _byteBufferDelegate.GetFloats( dst, dstOffset, length );
@@ -195,10 +208,18 @@ public class FloatBuffer : Buffer, IDisposable
     }
 
     /// <summary>
+    /// Copies a sequence of floats from the specified source array into the buffer at
+    /// the current position.
     /// </summary>
-    /// <param name="src"></param>
-    /// <param name="srcOffset"></param>
-    /// <param name="length"></param>
+    /// <param name="src">
+    /// The source array containing the floats to be copied.
+    /// </param>
+    /// <param name="srcOffset">
+    /// The starting position in the source array from which floats will be copied.
+    /// </param>
+    /// <param name="length">
+    /// The number of floats to copy from the source array.
+    /// </param>
     public void PutFloats( float[] src, int srcOffset, int length )
     {
         _byteBufferDelegate.PutFloats( src, srcOffset, length );
@@ -243,6 +264,7 @@ public class FloatBuffer : Buffer, IDisposable
         return ( Limit - Position ) / sizeof( float );
     }
 
+    /// <inheritdoc />
     public override void Compact()
     {
         _byteBufferDelegate.Compact();

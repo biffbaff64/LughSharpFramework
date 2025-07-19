@@ -93,7 +93,7 @@ namespace Extensions.Source.Freetype;
 //                if ( Address != IntPtr.Zero )
 //                {
 //                    DoneFreeTypeNative( Address );
-//                    Address = IntPtr.Zero; // Mark as disposed
+//                    Address = IntPtr.Zero; // SetMark as disposed
 //
 //                    // Dispose of any pinned byte buffers
 //                    foreach ( var buffer in FontData.Values )
@@ -272,10 +272,10 @@ namespace Extensions.Source.Freetype;
 //                    {
 //                        Library.FontData.Remove( Address );
 //                        BufferUtils.DisposeUnsafeByteBuffer( _associatedBufferAddress );
-//                        _associatedBufferAddress = IntPtr.Zero; // Mark as disposed
+//                        _associatedBufferAddress = IntPtr.Zero; // SetMark as disposed
 //                    }
 //
-//                    Address = IntPtr.Zero; // Mark as disposed
+//                    Address = IntPtr.Zero; // SetMark as disposed
 //                }
 //            }
 //        }
@@ -547,7 +547,7 @@ namespace Extensions.Source.Freetype;
 //                if ( Address != IntPtr.Zero )
 //                {
 //                    DoneNative( Address );
-//                    Address = IntPtr.Zero; // Mark as disposed
+//                    Address = IntPtr.Zero; // SetMark as disposed
 //                }
 //            }
 //        }
@@ -861,7 +861,7 @@ namespace Extensions.Source.Freetype;
 //                if ( Address != IntPtr.Zero )
 //                {
 //                    DoneStrokerNative( Address );
-//                    Address = IntPtr.Zero; // Mark as disposed
+//                    Address = IntPtr.Zero; // SetMark as disposed
 //                }
 //            }
 //        }
