@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
+
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -37,9 +39,11 @@ namespace LughSharp.Lugh.Maths;
 /// </code>
 /// </summary>
 [PublicAPI]
+[SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public class Matrix4x4
 {
     /// <summary>
+    /// Column 0, Row 0.
     /// XX: Typically the unrotated X component for scaling, also the cosine
     /// of the angle when rotated on the Y and/or Z axis. On Vector3 multiplication
     /// this value is multiplied with the source X component and added to the
@@ -48,6 +52,7 @@ public class Matrix4x4
     public const int M00 = 0;
 
     /// <summary>
+    /// Column 0, Row 1.
     /// XY: Typically the negative sine of the angle when rotated on the Z axis.
     /// On Vector3 multiplication this value is multiplied with the source Y
     /// component and added to the target X component.
@@ -55,6 +60,7 @@ public class Matrix4x4
     public const int M01 = 4;
 
     /// <summary>
+    /// Column 0, Row 2.
     /// XZ: Typically the sine of the angle when rotated on the Y axis.
     /// On Vector3 multiplication this value is multiplied with the
     /// source Z component and added to the target X component.
@@ -62,12 +68,14 @@ public class Matrix4x4
     public const int M02 = 8;
 
     /// <summary>
+    /// Column 0, Row 3.
     /// XW: Typically the translation of the X component. On Vector3 multiplication
     /// this value is added to the target X component.
     /// </summary>
     public const int M03 = 12;
 
     /// <summary>
+    /// Column 1, Row 0.
     /// YX: Typically the sine of the angle when rotated on the Z axis. On Vector3
     /// multiplication this value is multiplied with the source X component and
     /// added to the target Y component.
@@ -75,6 +83,7 @@ public class Matrix4x4
     public const int M10 = 1;
 
     /// <summary>
+    /// Column 1, Row 1.
     /// YY: Typically the unrotated Y component for scaling, also the cosine of the
     /// angle when rotated on the X and/or Z axis. On Vector3 multiplication this value
     /// is multiplied with the source Y component and added to the target Y component.
@@ -82,6 +91,7 @@ public class Matrix4x4
     public const int M11 = 5;
 
     /// <summary>
+    /// Column 1, Row 2.
     /// YZ: Typically the negative sine of the angle when rotated on the X axis.
     /// On Vector3 multiplication this value is multiplied with the source Z component
     /// and added to the target Y component.
@@ -89,12 +99,14 @@ public class Matrix4x4
     public const int M12 = 9;
 
     /// <summary>
+    /// Column 1, Row 3.
     /// YW: Typically the translation of the Y component.
     /// On Vector3 multiplication this value is added to the target Y component.
     /// </summary>
     public const int M13 = 13;
 
     /// <summary>
+    /// Column 2, Row 0.
     /// ZX: Typically the negative sine of the angle when rotated on the Y axis.
     /// On Vector3 multiplication this value is multiplied with the source X component
     /// and added to the target Z component.
@@ -102,6 +114,7 @@ public class Matrix4x4
     public const int M20 = 2;
 
     /// <summary>
+    /// Column 2, Row 1.
     /// ZY: Typically the sine of the angle when rotated on the X axis.
     /// On Vector3 multiplication this value is multiplied with the source Y component
     /// and added to the target Z component.
@@ -109,6 +122,7 @@ public class Matrix4x4
     public const int M21 = 6;
 
     /// <summary>
+    /// Column 2, Row 2.
     /// ZZ: Typically the unrotated Z component for scaling, also the cosine of the angle
     /// when rotated on the X and/or Y axis. On Vector3 multiplication this value is
     /// multiplied with the source Z component and added to the target Z component.
@@ -116,27 +130,32 @@ public class Matrix4x4
     public const int M22 = 10;
 
     /// <summary>
+    /// Column 2, Row 3.
     /// ZW: Typically the translation of the Z component. On Vector3 multiplication
     /// this value is added to the target Z component.
     /// </summary>
     public const int M23 = 14;
 
     /// <summary>
+    /// Column 3, Row 0.
     /// WX: Typically the value zero. On Vector3 multiplication this value is ignored.
     /// </summary>
     public const int M30 = 3;
 
     /// <summary>
+    /// Column 3, Row 1.
     /// WY: Typically the value zero. On Vector3 multiplication this value is ignored.
     /// </summary>
     public const int M31 = 7;
 
     /// <summary>
+    /// Column 3, Row 2.
     /// WZ: Typically the value zero. On Vector3 multiplication this value is ignored.
     /// </summary>
     public const int M32 = 11;
 
     /// <summary>
+    /// Column 3, Row 3.
     /// WW: Typically the value one. On Vector3 multiplication this value is ignored.
     /// </summary>
     public const int M33 = 15;
@@ -149,7 +168,7 @@ public class Matrix4x4
     public static readonly Vector3    LVex       = new();
     public static readonly Vector3    LVey       = new();
     public static readonly Vector3    TmpVec     = new();
-    public static readonly Matrix4x4    TmpMat     = new();
+    public static readonly Matrix4x4  TmpMat     = new();
     public static readonly Vector3    Right      = new();
     public static readonly Vector3    TmpForward = new();
     public static readonly Vector3    TmpUp      = new();
@@ -303,37 +322,37 @@ public class Matrix4x4
     /// <param name="quaternionW"> The W component of the quaternion that is to be used to Set this matrix. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
     public Matrix4x4 Set( float translationX,
-                        float translationY,
-                        float translationZ,
-                        float quaternionX,
-                        float quaternionY,
-                        float quaternionZ,
-                        float quaternionW )
+                          float translationY,
+                          float translationZ,
+                          float quaternionX,
+                          float quaternionY,
+                          float quaternionZ,
+                          float quaternionW )
     {
         float xs = quaternionX * 2f, ys = quaternionY * 2f, zs = quaternionZ * 2f;
         float wx = quaternionW * xs, wy = quaternionW * ys, wz = quaternionW * zs;
         float xx = quaternionX * xs, xy = quaternionX * ys, xz = quaternionX * zs;
         float yy = quaternionY * ys, yz = quaternionY * zs, zz = quaternionZ * zs;
 
-        Val[ M00 ] = 1f - ( yy + zz );
+        Val[ M00 ] = 1.0f - ( yy + zz );
         Val[ M01 ] = xy - wz;
         Val[ M02 ] = xz + wy;
         Val[ M03 ] = translationX;
 
         Val[ M10 ] = xy + wz;
-        Val[ M11 ] = 1f - ( xx + zz );
+        Val[ M11 ] = 1.0f - ( xx + zz );
         Val[ M12 ] = yz - wx;
         Val[ M13 ] = translationY;
 
         Val[ M20 ] = xz - wy;
         Val[ M21 ] = yz + wx;
-        Val[ M22 ] = 1f - ( xx + yy );
+        Val[ M22 ] = 1.0f - ( xx + yy );
         Val[ M23 ] = translationZ;
 
-        Val[ M30 ] = 0f;
-        Val[ M31 ] = 0f;
-        Val[ M32 ] = 0f;
-        Val[ M33 ] = 1f;
+        Val[ M30 ] = 0.0f;
+        Val[ M31 ] = 0.0f;
+        Val[ M32 ] = 0.0f;
+        Val[ M33 ] = 1.0f;
 
         return this;
     }
@@ -374,15 +393,15 @@ public class Matrix4x4
     /// <param name="scaleZ"> The Z component of the scaling that is to be used to Set this matrix. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
     public Matrix4x4 Set( float translationX,
-                        float translationY,
-                        float translationZ,
-                        float quaternionX,
-                        float quaternionY,
-                        float quaternionZ,
-                        float quaternionW,
-                        float scaleX,
-                        float scaleY,
-                        float scaleZ )
+                          float translationY,
+                          float translationZ,
+                          float quaternionX,
+                          float quaternionY,
+                          float quaternionZ,
+                          float quaternionW,
+                          float scaleX,
+                          float scaleY,
+                          float scaleZ )
     {
         float xs = quaternionX * 2f, ys = quaternionY * 2f, zs = quaternionZ * 2f;
         float wx = quaternionW * xs, wy = quaternionW * ys, wz = quaternionW * zs;
@@ -404,10 +423,10 @@ public class Matrix4x4
         Val[ M22 ] = scaleZ * ( 1.0f - ( xx + yy ) );
         Val[ M23 ] = translationZ;
 
-        Val[ M30 ] = 0f;
-        Val[ M31 ] = 0f;
-        Val[ M32 ] = 0f;
-        Val[ M33 ] = 1f;
+        Val[ M30 ] = 0.0f;
+        Val[ M31 ] = 0.0f;
+        Val[ M32 ] = 0.0f;
+        Val[ M33 ] = 1.0f;
 
         return this;
     }
@@ -426,19 +445,22 @@ public class Matrix4x4
         Val[ M00 ] = xAxis.X;
         Val[ M01 ] = xAxis.Y;
         Val[ M02 ] = xAxis.Z;
+        Val[ M03 ] = pos.X;
+
         Val[ M10 ] = yAxis.X;
         Val[ M11 ] = yAxis.Y;
         Val[ M12 ] = yAxis.Z;
+        Val[ M13 ] = pos.Y;
+
         Val[ M20 ] = zAxis.X;
         Val[ M21 ] = zAxis.Y;
         Val[ M22 ] = zAxis.Z;
-        Val[ M03 ] = pos.X;
-        Val[ M13 ] = pos.Y;
         Val[ M23 ] = pos.Z;
-        Val[ M30 ] = 0f;
-        Val[ M31 ] = 0f;
-        Val[ M32 ] = 0f;
-        Val[ M33 ] = 1f;
+
+        Val[ M30 ] = 0.0f;
+        Val[ M31 ] = 0.0f;
+        Val[ M32 ] = 0.0f;
+        Val[ M33 ] = 1.0f;
 
         return this;
     }
@@ -939,9 +961,9 @@ public class Matrix4x4
             throw new ArgumentException( "Far and near cannot be equal." );
         }
 
-        var xOrth = 2 / ( right - left );
-        var yOrth = 2 / ( top - bottom );
-        var zOrth = -2 / ( far - near );
+        var xOrth = 2f / ( right - left );
+        var yOrth = 2f / ( top - bottom );
+        var zOrth = 2f / ( far - near );
 
         var tx = -( right + left ) / ( right - left );
         var ty = -( top + bottom ) / ( top - bottom );
@@ -1004,9 +1026,8 @@ public class Matrix4x4
     }
 
     /// <summary>
-    /// Sets this matrix to a translation matrix, overwriting it first by an identity matrix and then setting the 4th
-    /// column to the
-    /// translation vector.
+    /// Sets this matrix to a translation matrix, overwriting it first by an identity matrix
+    /// and then setting the 4th column to the translation vector.
     /// </summary>
     /// <param name="vector"> The translation vector </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
@@ -1074,11 +1095,11 @@ public class Matrix4x4
     /// <param name="scalingZ"> The x-component of the scaling vector </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
     public Matrix4x4 SetToTranslationAndScaling( float translationX,
-                                               float translationY,
-                                               float translationZ,
-                                               float scalingX,
-                                               float scalingY,
-                                               float scalingZ )
+                                                 float translationY,
+                                                 float translationZ,
+                                                 float scalingX,
+                                                 float scalingY,
+                                                 float scalingZ )
     {
         ToIdentity();
 
@@ -2210,10 +2231,14 @@ public class Matrix4x4
         Val[ M10 ] = m10;
         Val[ M20 ] = m20;
         Val[ M30 ] = m30;
+
+        // ----------------------------
         Val[ M01 ] = m01;
         Val[ M11 ] = m11;
         Val[ M21 ] = m21;
         Val[ M31 ] = m31;
+
+        // ----------------------------
         Val[ M02 ] = m02;
         Val[ M12 ] = m12;
         Val[ M22 ] = m22;
@@ -2262,10 +2287,14 @@ public class Matrix4x4
         Val[ M10 ] = m10;
         Val[ M20 ] = m20;
         Val[ M30 ] = m30;
+
+        // ----------------------------
         Val[ M01 ] = m01;
         Val[ M11 ] = m11;
         Val[ M21 ] = m21;
         Val[ M31 ] = m31;
+
+        // ----------------------------
         Val[ M02 ] = m02;
         Val[ M12 ] = m12;
         Val[ M22 ] = m22;
@@ -2300,12 +2329,18 @@ public class Matrix4x4
         Val[ M00 ] *= scaleX;
         Val[ M01 ] *= scaleY;
         Val[ M02 ] *= scaleZ;
+
+        // ----------------------------
         Val[ M10 ] *= scaleX;
         Val[ M11 ] *= scaleY;
         Val[ M12 ] *= scaleZ;
+
+        // ----------------------------
         Val[ M20 ] *= scaleX;
         Val[ M21 ] *= scaleY;
         Val[ M22 ] *= scaleZ;
+
+        // ----------------------------
         Val[ M30 ] *= scaleX;
         Val[ M31 ] *= scaleY;
         Val[ M32 ] *= scaleZ;
@@ -2463,24 +2498,34 @@ public class Matrix4x4
     /// <returns>True if the matrix is valid, false otherwise</returns>
     public bool IsValid()
     {
+        Logger.Checkpoint();
+
         // Check for NaN or Infinity
         for ( var i = 0; i < 16; i++ )
         {
             if ( float.IsNaN( Val[ i ] ) || float.IsInfinity( Val[ i ] ) )
             {
+                Logger.Checkpoint();
+
                 return false;
             }
         }
 
+        Logger.Debug( $"[{Val[M03]}]:[{Val[M13]}]:[{Val[M23]}]:[{Val[M33]}]" );
+        
         // For a valid transformation matrix, the bottom row should be [0,0,0,1]
-        if ( ( Math.Abs( Val[ M30 ] ) > float.Epsilon )
-             || ( Math.Abs( Val[ M31 ] ) > float.Epsilon )
-             || ( Math.Abs( Val[ M32 ] ) > float.Epsilon )
+        if ( ( Math.Abs( Val[ M03 ] ) > float.Epsilon )
+             || ( Math.Abs( Val[ M13 ] ) > float.Epsilon )
+             || ( Math.Abs( Val[ M23 ] ) > float.Epsilon )
              || ( Math.Abs( Val[ M33 ] - 1f ) > float.Epsilon ) )
         {
+            Logger.Checkpoint();
+
             return false;
         }
 
+        Logger.Checkpoint();
+        
         return true;
     }
 
@@ -2489,48 +2534,106 @@ public class Matrix4x4
     /// </summary>
     public bool IsValidViewMatrix()
     {
-        if (!IsValid())
+        if ( !IsValid() )
+        {
+            Logger.Checkpoint();
+
+            return false;
+        }
+
+        Logger.Checkpoint();
+
+        const float TOLERANCE = 0.01f;
+
+        // Check orthogonality
+        var dotXY = ( Val[ M00 ] * Val[ M10 ] ) + ( Val[ M01 ] * Val[ M11 ] ) + ( Val[ M02 ] * Val[ M12 ] );
+        var dotXZ = ( Val[ M00 ] * Val[ M20 ] ) + ( Val[ M01 ] * Val[ M21 ] ) + ( Val[ M02 ] * Val[ M22 ] );
+        var dotYZ = ( Val[ M10 ] * Val[ M20 ] ) + ( Val[ M11 ] * Val[ M21 ] ) + ( Val[ M12 ] * Val[ M22 ] );
+
+        // Check unit length of basis vectors
+        var lenX = ( Val[ M00 ] * Val[ M00 ] ) + ( Val[ M01 ] * Val[ M01 ] ) + ( Val[ M02 ] * Val[ M02 ] );
+        var lenY = ( Val[ M10 ] * Val[ M10 ] ) + ( Val[ M11 ] * Val[ M11 ] ) + ( Val[ M12 ] * Val[ M12 ] );
+        var lenZ = ( Val[ M20 ] * Val[ M20 ] ) + ( Val[ M21 ] * Val[ M21 ] ) + ( Val[ M22 ] * Val[ M22 ] );
+
+        // Check bottom row is [0,0,0,1]
+        var validW = ( Math.Abs( Val[ M03 ] ) < TOLERANCE )
+                     && ( Math.Abs( Val[ M13 ] ) < TOLERANCE )
+                     && ( Math.Abs( Val[ M23 ] ) < TOLERANCE )
+                     && ( Math.Abs( Val[ M33 ] - 1f ) < TOLERANCE );
+
+        return ( Math.Abs( dotXY ) < TOLERANCE )
+               && ( Math.Abs( dotXZ ) < TOLERANCE )
+               && ( Math.Abs( dotYZ ) < TOLERANCE )
+               && ( Math.Abs( lenX - 1f ) < TOLERANCE )
+               && ( Math.Abs( lenY - 1f ) < TOLERANCE )
+               && ( Math.Abs( lenZ - 1f ) < TOLERANCE )
+               && validW;
+    }
+
+    /// <summary>
+    /// Method to check if matrix is identity
+    /// </summary>
+    public bool IsIdentity()
+    {
+        const float epsilon = NumberUtils.FLOAT_EPSILON;
+
+        // Check diagonal elements are close to 1
+        if ( ( Math.Abs( Values[ 0 ] - 1f ) > epsilon )
+             || ( Math.Abs( Values[ 5 ] - 1f ) > epsilon )
+             || ( Math.Abs( Values[ 10 ] - 1f ) > epsilon )
+             || ( Math.Abs( Values[ 15 ] - 1f ) > epsilon ) )
         {
             return false;
         }
 
-        const float TOLERANCE = 0.01f;
-    
-        // Check orthogonality (your existing code)
-        var dotXY = (Val[M00] * Val[M10]) + (Val[M01] * Val[M11]) + (Val[M02] * Val[M12]);
-        var dotXZ = (Val[M00] * Val[M20]) + (Val[M01] * Val[M21]) + (Val[M02] * Val[M22]);
-        var dotYZ = (Val[M10] * Val[M20]) + (Val[M11] * Val[M21]) + (Val[M12] * Val[M22]);
-
-        // Check unit length of basis vectors
-        var lenX = (Val[M00] * Val[M00]) + (Val[M01] * Val[M01]) + (Val[M02] * Val[M02]);
-        var lenY = (Val[M10] * Val[M10]) + (Val[M11] * Val[M11]) + (Val[M12] * Val[M12]);
-        var lenZ = (Val[M20] * Val[M20]) + (Val[M21] * Val[M21]) + (Val[M22] * Val[M22]);
-
-        // Check bottom row is [0,0,0,1]
-        var validW = ( Math.Abs(Val[M30]) < TOLERANCE ) 
-                     && ( Math.Abs(Val[M31]) < TOLERANCE ) 
-                     && ( Math.Abs(Val[M32]) < TOLERANCE ) 
-                     && ( Math.Abs(Val[M33] - 1f) < TOLERANCE );
-
-        return ( Math.Abs(dotXY) < TOLERANCE )
-               && ( Math.Abs(dotXZ) < TOLERANCE )
-               && ( Math.Abs(dotYZ) < TOLERANCE )
-               && ( Math.Abs(lenX - 1f) < TOLERANCE )
-               && ( Math.Abs(lenY - 1f) < TOLERANCE )
-               && ( Math.Abs(lenZ - 1f) < TOLERANCE )
-               && validW;
+        // Check non-diagonal elements are close to 0
+        return ( Math.Abs( Values[ 1 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 2 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 3 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 4 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 6 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 7 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 8 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 9 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 11 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 12 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 13 ] ) <= epsilon )
+               && ( Math.Abs( Values[ 14 ] ) <= epsilon );
     }
-    
+
+    /// <summary>
+    /// </summary>
+    /// Method to get specific row/column as Vector4
+    public Vector4 GetRow( int row )
+    {
+        return new Vector4( Val[ ( row * 4 ) + 0 ],
+                            Val[ ( row * 4 ) + 1 ],
+                            Val[ ( row * 4 ) + 2 ],
+                            Val[ ( row * 4 ) + 3 ] );
+    }
+
+    /// <summary>
+    /// </summary>
+    public Vector4 GetColumn( int column )
+    {
+        return new Vector4( Val[ column ],
+                            Val[ column + 4 ],
+                            Val[ column + 8 ],
+                            Val[ column + 12 ] );
+    }
+
+    // ========================================================================
+
     /// <summary>
     /// Debug method to print the matrix in a readable format
     /// </summary>
-    public string ToDebugString()
+    public void Debug()
     {
-        return $"Matrix4:\n"
-               + $"[{Val[ M00 ]:F6}|{Val[ M10 ]:F6}|{Val[ M20 ]:F6}|{Val[ M30 ]:F6}]\n"
-               + $"[{Val[ M01 ]:F6}|{Val[ M11 ]:F6}|{Val[ M21 ]:F6}|{Val[ M31 ]:F6}]\n"
-               + $"[{Val[ M02 ]:F6}|{Val[ M12 ]:F6}|{Val[ M22 ]:F6}|{Val[ M32 ]:F6}]\n"
-               + $"[{Val[ M03 ]:F6}|{Val[ M13 ]:F6}|{Val[ M23 ]:F6}|{Val[ M33 ]:F6}]";
+        Logger.Debug( "\n"
+                      + $"[{Val[ M00 ]:F6}|{Val[ M01 ]:F6}|{Val[ M02 ]:F6}|{Val[ M03 ]:F6}]\n"
+                      + $"[{Val[ M10 ]:F6}|{Val[ M11 ]:F6}|{Val[ M12 ]:F6}|{Val[ M13 ]:F6}]\n"
+                      + $"[{Val[ M20 ]:F6}|{Val[ M21 ]:F6}|{Val[ M22 ]:F6}|{Val[ M23 ]:F6}]\n"
+                      + $"[{Val[ M30 ]:F6}|{Val[ M31 ]:F6}|{Val[ M32 ]:F6}|{Val[ M33 ]:F6}]" );
     }
 
     // ========================================================================

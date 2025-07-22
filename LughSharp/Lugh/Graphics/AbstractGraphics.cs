@@ -104,7 +104,7 @@ public abstract class AbstractGraphics : IGraphicsDevice
 
     /// <inheritdoc />
     public abstract HdpiMode? GetHdpiMode();
-    
+
     // ========================================================================
     // ========================================================================
 

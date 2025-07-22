@@ -47,19 +47,19 @@ namespace LughSharp.Lugh.Graphics.G2D;
 [PublicAPI]
 public partial class SpriteBatch : IBatch, IDisposable
 {
-    public bool    BlendingDisabled  { get; set; }         = false;
-    public float   InvTexHeight      { get; set; }         = 0;
-    public float   InvTexWidth       { get; set; }         = 0;
+    public bool      BlendingDisabled  { get; set; }         = false;
+    public float     InvTexHeight      { get; set; }         = 0;
+    public float     InvTexWidth       { get; set; }         = 0;
     public Matrix4x4 CombinedMatrix    { get; set; }         = new();
     public Matrix4x4 ProjectionMatrix  { get; set; }         = new();
     public Matrix4x4 TransformMatrix   { get; set; }         = new();
-    public int     RenderCalls       { get; set; }         = 0; // Number of render calls since the last call to Begin()
-    public long    TotalRenderCalls  { get; set; }         = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
-    public int     MaxSpritesInBatch { get; set; }         = 0; // The maximum number of sprites rendered in one batch so far.
-    public int     BlendSrcFunc      { get; private set; } = ( int )BlendMode.SrcColor;
-    public int     BlendDstFunc      { get; private set; } = ( int )BlendMode.DstColor;
-    public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusSrcAlpha;
-    public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusDstAlpha;
+    public int       RenderCalls       { get; set; }         = 0; // Number of render calls since the last call to Begin()
+    public long      TotalRenderCalls  { get; set; }         = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
+    public int       MaxSpritesInBatch { get; set; }         = 0; // The maximum number of sprites rendered in one batch so far.
+    public int       BlendSrcFunc      { get; private set; } = ( int )BlendMode.SrcColor;
+    public int       BlendDstFunc      { get; private set; } = ( int )BlendMode.DstColor;
+    public int       BlendSrcFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusSrcAlpha;
+    public int       BlendDstFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusDstAlpha;
 
     public bool IsDrawing => CurrentBatchState == BatchState.Drawing;
 
@@ -205,11 +205,11 @@ public partial class SpriteBatch : IBatch, IDisposable
         var va1 = new VertexAttribute( ( int )VertexConstants.Usage.POSITION,
                                        VertexConstants.POSITION_COMPONENTS,
                                        ShaderProgram.POSITION_ATTRIBUTE );
-        
+
         var va2 = new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED,
                                        VertexConstants.COLOR_COMPONENTS,
                                        ShaderProgram.COLOR_ATTRIBUTE );
-        
+
         var va3 = new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES,
                                        VertexConstants.TEXCOORD_COMPONENTS,
                                        ShaderProgram.TEXCOORD_ATTRIBUTE + "0" );
@@ -518,7 +518,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         }
 
         ProjectionMatrix.Set( projection );
-
+        
         if ( CurrentBatchState == BatchState.Drawing )
         {
             SetupMatrices();
@@ -702,8 +702,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-        return new ShaderProgram( QUADS_VERTEX_SHADER, QUADS_FRAGMENT_SHADER );
-//        return new ShaderProgram( DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER );
+        return new ShaderProgram( DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER );
     }
 
     /// <summary>
@@ -980,9 +979,9 @@ public partial class SpriteBatch : IBatch, IDisposable
         const float V2 = 0;
 
         SetVertices( posX, posY, Color.R, Color.G, Color.B, Color.A, U, V,
-                     posX, fy2,  Color.R, Color.G, Color.B, Color.A, U, V2,
-                     fx2, fy2,   Color.R, Color.G, Color.B, Color.A, U2, V2,
-                     fx2, posY,  Color.R, Color.G, Color.B, Color.A, U2, V );
+                     posX, fy2, Color.R, Color.G, Color.B, Color.A, U, V2,
+                     fx2, fy2, Color.R, Color.G, Color.B, Color.A, U2, V2,
+                     fx2, posY, Color.R, Color.G, Color.B, Color.A, U2, V );
     }
 
     /// <summary>
@@ -1147,9 +1146,9 @@ public partial class SpriteBatch : IBatch, IDisposable
         }
 
         SetVertices( region.X, region.Y, Color.R, Color.G, Color.B, Color.A, u, v,
-                     region.X, fy2,      Color.R, Color.G, Color.B, Color.A, u, v2,
-                     fx2,      fy2,      Color.R, Color.G, Color.B, Color.A, u2, v2,
-                     fx2,      region.Y, Color.R, Color.G, Color.B, Color.A, u2, v );
+                     region.X, fy2, Color.R, Color.G, Color.B, Color.A, u, v2,
+                     fx2, fy2, Color.R, Color.G, Color.B, Color.A, u2, v2,
+                     fx2, region.Y, Color.R, Color.G, Color.B, Color.A, u2, v );
     }
 
     /// <summary>
@@ -1179,10 +1178,10 @@ public partial class SpriteBatch : IBatch, IDisposable
         var fx2 = x + src.Width;
         var fy2 = y + src.Height;
 
-        SetVertices( x, y,     Color.R, Color.G, Color.B, Color.A, u, v,
-                     x, fy2,   Color.R, Color.G, Color.B, Color.A, u, v2,
+        SetVertices( x, y, Color.R, Color.G, Color.B, Color.A, u, v,
+                     x, fy2, Color.R, Color.G, Color.B, Color.A, u, v2,
                      fx2, fy2, Color.R, Color.G, Color.B, Color.A, u2, v2,
-                     fx2, y,   Color.R, Color.G, Color.B, Color.A, u2, v );
+                     fx2, y, Color.R, Color.G, Color.B, Color.A, u2, v );
     }
 
     /// <summary>
@@ -1211,9 +1210,9 @@ public partial class SpriteBatch : IBatch, IDisposable
         var fy2 = region.Y + region.Height;
 
         SetVertices( region.X, region.Y, Color.R, Color.G, Color.B, Color.A, u, v,
-                     region.X, fy2,      Color.R, Color.G, Color.B, Color.A, u, v2,
-                     fx2, fy2,           Color.R, Color.G, Color.B, Color.A, u2, v2,
-                     fx2, region.Y,      Color.R, Color.G, Color.B, Color.A, u2, v );
+                     region.X, fy2, Color.R, Color.G, Color.B, Color.A, u, v2,
+                     fx2, fy2, Color.R, Color.G, Color.B, Color.A, u2, v2,
+                     fx2, region.Y, Color.R, Color.G, Color.B, Color.A, u2, v );
     }
 
     /// <summary>
@@ -1323,10 +1322,10 @@ public partial class SpriteBatch : IBatch, IDisposable
         var u2  = region.U2;
         var v2  = region.V;
 
-        SetVertices( x, y,     Color.R, Color.G, Color.B, Color.A, u, v,
-                     x, fy2,   Color.R, Color.G, Color.B, Color.A, u, v2,
+        SetVertices( x, y, Color.R, Color.G, Color.B, Color.A, u, v,
+                     x, fy2, Color.R, Color.G, Color.B, Color.A, u, v2,
                      fx2, fy2, Color.R, Color.G, Color.B, Color.A, u2, v2,
-                     fx2, y,   Color.R, Color.G, Color.B, Color.A, u2, v );
+                     fx2, y, Color.R, Color.G, Color.B, Color.A, u2, v );
     }
 
     /// <summary>
@@ -1757,15 +1756,35 @@ public partial class SpriteBatch : IBatch, IDisposable
     // ========================================================================
 
     /// <summary>
+    /// The RenderState record struct encapsulates rendering-related details within a sprite
+    /// batch operation. It includes active texture information, the number of vertices to be
+    /// rendered, and the transformation matrix applied during the rendering phase.
     /// </summary>
-    /// <param name="CurrentTexture"></param>
-    /// <param name="VertexCount"></param>
-    /// <param name="TransformMatrix"></param>
     [PublicAPI]
-    public record struct RenderState(
-        Texture? CurrentTexture,
-        int VertexCount,
-        Matrix4x4 TransformMatrix );
+    public record struct RenderState
+    {
+        public Texture?  CurrentTexture  { get; set; }
+        public int       VertexCount     { get; set; }
+        public Matrix4x4 TransformMatrix { get; set; }
+
+        /// <summary>
+        /// Represents the rendering state within a sprite batch, including texture information,
+        /// vertex data, and transformation details.
+        /// </summary>
+        public RenderState( Texture? currentTexture, int vertexCount, Matrix4x4 transformMatrix )
+        {
+            this.CurrentTexture  = currentTexture;
+            this.VertexCount     = vertexCount;
+            this.TransformMatrix = transformMatrix;
+        }
+
+        void Deconstruct( out Texture? texture, out int vertexCount, out Matrix4x4 transformMatrix )
+        {
+            texture         = CurrentTexture;
+            vertexCount     = VertexCount;
+            transformMatrix = TransformMatrix;
+        }
+    }
 
     // ========================================================================
     /// <summary>

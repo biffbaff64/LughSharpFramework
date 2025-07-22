@@ -377,6 +377,9 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         Viewport.Apply();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void SetExtendedViewport()
     {
         Viewport = new ExtendViewport( Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
@@ -388,6 +391,9 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         Viewport.Apply();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void SetFillViewport()
     {
         Viewport = new FillViewport( Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
@@ -399,6 +405,9 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         Viewport.Apply();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void SetScreenViewport()
     {
         Viewport = new ScreenViewport();
@@ -410,6 +419,9 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         Viewport.Apply();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void SetScalingViewport( Scaling scaling )
     {
         Viewport = new ScalingViewport( scaling, Camera.ViewportWidth * PPM, Camera.ViewportHeight * PPM, Camera );
@@ -421,16 +433,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         Viewport.Apply();
     }
 
-    /// <summary>
-    /// Sets the default zoom level for the camera and updates its current zoom value.
-    /// </summary>
-    /// <param name="zoom">The zoom level to set as default and apply to the camera.</param>
-    public void SetZoomDefault( float zoom )
-    {
-        CameraZoom   = zoom;
-        _defaultZoom = zoom;
-    }
-
+    // ========================================================================
+    
     /// <summary>
     /// Resets the camera's position and zoom to their default values, ensuring the
     /// camera is centered and updated to reflect these changes. This operation sets
@@ -463,6 +467,16 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         }
     }
 
+    /// <summary>
+    /// Sets the default zoom level for the camera and updates its current zoom value.
+    /// </summary>
+    /// <param name="zoom">The zoom level to set as default and apply to the camera.</param>
+    public void SetZoomDefault( float zoom )
+    {
+        CameraZoom   = zoom;
+        _defaultZoom = zoom;
+    }
+    
     // ========================================================================
 
     /// <inheritdoc />

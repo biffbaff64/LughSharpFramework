@@ -220,8 +220,8 @@ AUDIO/OPENAL
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - **** - AL
-    - DONE - **** - ALC
+    - DONE - N/A  - AL
+    - DONE - N/A  - ALC
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -387,13 +387,7 @@ GRAPHICS/OPENGL
 
     CODE   DOCUMENT
     ----   --------
-    - IP   -      - BufferObjectBindings
-    -      -      - ContextBindings
-    - IP   -      - DebugBindings
     - DONE - DONE - DebugSeverity
-    -      -      - DrawBindings
-    - IP   -      - ErrorBindings
-    -      -      - FrameBufferBindings
     - DONE - DONE - GLBindings
     - DONE - DONE - GLBindingsStructs
     - DONE - DONE - GLFunctionDelegates
@@ -402,19 +396,10 @@ GRAPHICS/OPENGL
     - DONE - DONE - IGL
     - DONE - DONE - IGLBindings
     - DONE - DONE - IGLBindingsExtra
-    - IP   -      - ProgramBindings
-    - IP   -      - QueryBindings
-    -      -      - RenderBufferBindings
-    - IP   -      - ShaderBindings
-    -      -      - StateBindings
-    - IP   -      - TextureBindings
-    - IP   -      - TextureSamplerBindings
-    -      -      - TransformFeedbackBindings
-    - IP   -      - UniformBindings
-    - IP   -      - VertexArrayBindings
 
 GRAPHICS/OPENGL/ENUMS
 ---------------------
+
     CODE   DOCUMENT
     ----   --------
     - IP   - IP   - BlendMode
@@ -450,13 +435,42 @@ GRAPHICS/OPENGL/ENUMS
 
 GRAPHICS/OPENGL/GLSL
 --------------------
+
     CODE   DOCUMENT
     ----   --------
+    - IP   - IP   - ColorTest.glsl.frag
+    - IP   - IP   - ColorTest.glsl.vert
     - IP   - IP   - Default.glsl.frag
     - IP   - IP   - Default.glsl.vert
+    - IP   - IP   - Quad.glsl.frag
+    - IP   - IP   - Quad.glsl.vert
+
+GRAPHICS/OPENGL/NEWBINDINGS
+---------------------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - IP   -      - BufferObjectBindings
+    -      -      - ContextBindings
+    - IP   -      - DebugBindings
+    -      -      - DrawBindings
+    - IP   -      - ErrorBindings
+    -      -      - FrameBufferBindings
+    - IP   -      - ProgramBindings
+    - IP   -      - QueryBindings
+    -      -      - RenderBufferBindings
+    - IP   -      - ShaderBindings
+    -      -      - StateBindings
+    -      -      - StencilBindings
+    - IP   -      - TextureBindings
+    - IP   -      - TextureSamplerBindings
+    -      -      - TransformFeedbackBindings
+    - IP   -      - UniformBindings
+    - IP   -      - VertexArrayBindings
 
 GRAPHICS/SYSDRAW
 ----------------
+
     CODE   DOCUMENT
     ----   --------
     -      -      - Bitmap 
@@ -472,9 +486,9 @@ GRAPHICS/TEXT
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP   - BitmapFont                      Much work needed!
-    - IP   - IP   - BitmapFontCache                 Relies on BitmapFont
-    - DONE - DONE - CharacterUtils                  May be added to
+    - IP   - IP   - BitmapFont
+    - IP   - IP   - BitmapFontCache
+    - DONE - DONE - CharacterUtils
     - DONE - IP   - DistanceFieldFont
     - IP   - IP   - FontUtils
     - DONE - IP   - GlyphLayout
@@ -500,7 +514,7 @@ GRAPHICS/UTILS
     ----   --------
     - IP   - IP   - ETC1
     - DONE - IP   - ETC1TextureData
-    - DONE - IP   - FacedCubemapData              Width / Height are incorrect
+    - DONE - IP   - FacedCubemapData
     - DONE - IP   - FileTextureArrayData
     - DONE - IP   - FileTextureData
     - DONE - IP   - FloatTextureData
@@ -625,17 +639,15 @@ MAPS/TILED/OBJECTS
 MAPS/TILED/RENDERERS
 --------------------
 
-    All Classes in this section could be made more efficient.
-
     CODE   DOCUMENT
     ----   --------
-    - DONE - IP   - BatchTiledMapRenderer
-    - DONE - IP   - HexagonalTiledMapRenderer
-    - DONE - IP   - IsometricStaggeredTiledMapRenderer
-    - DONE - IP   - IsometricTiledMapRenderer
-    - DONE - IP   - ITiledMapRenderer
-    - DONE - IP   - OrthoCachedTiledMapRenderer
-    - DONE - IP   - OrthogonalTiledMapRenderer
+    - IP   - IP   - BatchTiledMapRenderer
+    - IP   - IP   - HexagonalTiledMapRenderer
+    - IP   - IP   - IsometricStaggeredTiledMapRenderer
+    - IP   - IP   - IsometricTiledMapRenderer
+    - IP   - IP   - ITiledMapRenderer
+    - IP   - IP   - OrthoCachedTiledMapRenderer
+    - IP   - IP   - OrthogonalTiledMapRenderer
 
 MAPS/TILED/TILES
 ----------------
@@ -900,27 +912,27 @@ UTILS
     - IP   - IP   - CaseInsensitiveEnumArrayConverterFactory
     - DONE - IP   - ComparableTimSort
     - DONE - DONE - Constants
-    - DONE - IP   - DataInput                       Check
-    - DONE - IP   - DataOutput                      Check
-    - DONE - DONE - DataUtils                       Added Class
+    - DONE - IP   - DataInput
+    - DONE - IP   - DataOutput
+    - DONE - DONE - DataUtils
     - DONE - DONE - FPSLogger
     - DONE - IP   - GCSuppressor
     - DONE - IP   - GdxNativesLoader
     - IP   - IP   - HashHelpers
     - IP   - IP   - IClearablePool
-    - DONE - DONE - IClipboard                      Convert - Interface, clipboard handled in backends.
+    - DONE - DONE - IClipboard
     - DONE - DONE - ICloseable
     - DONE - DONE - IDrawable
     - DONE - DONE - IManaged
     - DONE - DONE - IReadable
     - DONE - DONE - IResetable
-    - DONE - DONE - IRunnable                       Done, but is it needed?
-    - DONE - DONE - Logger                          Make the actual message writing virtual
+    - DONE - DONE - IRunnable
+    - DONE - DONE - Logger
     - IP   - IP   - LughTestAdapter
-    - DONE - DONE - PerformanceCounter              Check
-    - DONE - IP   - PerformanceCounters             Check
+    - DONE - DONE - PerformanceCounter
+    - DONE - IP   - PerformanceCounters
     - IP   - IP   - PhysicsUtils
-    - DONE - DONE - PropertiesUtils                 Convert, but check if necessary
+    - DONE - DONE - PropertiesUtils
     - DONE - IP   - QuadTreeFloat
     - DONE - IP   - QuickSelect
     - DONE - IP   - Scaling
@@ -933,20 +945,6 @@ UTILS
     - DONE - IP   - Timer
     - DONE - DONE - TimeUtils
     - DONE - IP   - TimSort
-
-    - The following do not need converting ( tbc )
-
-    - **** - Base64Coder                    Use System.Convert classes
-    - **** - I18NBundle
-    - **** - LittleEndianInputStream
-    - **** - PauseableThread
-    - **** - Queue                          Use system.collection.generics.Queue<T>?
-    - **** - SharedLibraryLoader
-    - **** - SortedIntList                  Use SortedList<int>
-    - **** - StreamUtils
-    - **** - StringBuilder                  Use System.Text.StringBuilder
-    - **** - StringTokenizer
-    - **** - TextFormatter
 
 UTILS/BUFFERS
 -------------
@@ -965,41 +963,18 @@ UTILS/COLLECTIONS
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - ArrayList<T>                   Converted, but use List<T> for most cases.
-    - DONE - IP   - ByteArray                      List< byte > should be fine for most cases.
-    - DONE - DONE - DelayedRemovalList             Convert / Extend List<>
+    - DONE - DONE - ArrayList<T>
+    - DONE - IP   - ByteArray
+    - DONE - DONE - DelayedRemovalList
     - DONE - DONE - DictionaryExtensions
     - IP   - IP   - IdentityMap< K, V >
     - IP   - IP   - IPredicate
     - DONE - DONE - ListExtensions
-    - DONE - DONE - ObjectMap< K, V >              Converted, but use Dictionary< object, object > in most cases
+    - DONE - DONE - ObjectMap< K, V >
     - IP   - IP   - OrderedMap<K, V>
     - IP   - IP   - PredicateIterable
     - IP   - IP   - PredicateIterator
     - DONE - DONE - SnapshotArrayList<T>
-
-    - The following do not need converting
-
-    - **** - ArrayMap                       -> Use Dictionary<K, V>
-    - **** - ArrayIterable                  -> Use IEnumerable?
-    - **** - ArrayIterator                  -> Use IEnumerator?
-    - **** - BoolArray                      -> Use List< bool >
-    - **** - CharArray                      -> Use List< char >
-    - **** - CollectionsData                -> ***** Not needed *****
-    - **** - FloatArray                     -> Use List< float >
-    - **** - IntArray                       -> Use List< int >
-    - **** - IntFloatMap                    -> Use Dictionary< int, float >
-    - **** - IntIntMap                      -> Use Dictionary< int, int >
-    - **** - IntMap                         -> Use Dictionary< int, V >
-    - **** - IntSet                         -> Use List<int>
-    - **** - LongArray                      -> Use List< long >
-    - **** - LongMap                        -> Use Dictionary< long, V >
-    - **** - ObjectFloatMap                 -> Use Dictionary< object, float >
-    - **** - ObjectIntMap                   -> Use Dictionary< object, int >
-    - **** - ObjectLongMap                  -> Use Dictionary< object, long >
-    - **** - ObjectSet<T>                   -> Use List<T>
-    - **** - OrderedSet<T>                  -> Use SortedSet<T>
-    - **** - ShortArray                     -> Use List< short >
 
 UTILS/EXCEPTIONS
 ----------------
@@ -1021,7 +996,7 @@ UTILS/POOLING
 
     CODE   DOCUMENT
     ----   --------
-    - IP   - IP  - FlushablePool
+    - IP   - IP   - FlushablePool
     - DONE - DONE - IPoolable
     - DONE - DONE - Pool
     - DONE - DONE - PooledLinkedList

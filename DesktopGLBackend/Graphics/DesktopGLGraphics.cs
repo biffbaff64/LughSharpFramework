@@ -442,13 +442,6 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
     /// <inheritdoc />
     public override void UpdateViewport( int x, int y, int width, int height, int source = 0 )
     {
-        #if DEBUG_VIEWPORT
-        if ( source > 0 )
-        {
-            Logger.Debug( $"Setting viewport from source: {source}" );
-        }
-        #endif
-
         if ( ( width == 0 ) || ( height == 0 ) )
         {
             throw new GdxRuntimeException( "Viewport dimensions must be greater than zero!" );
@@ -462,11 +455,6 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
 
         Engine.GL.GetIntegerv( IGL.GL_VIEWPORT, ref viewport );
 
-        // --------------------------------------------------------------------
-        Logger.Debug( $"\nRequested: [{x}, {y}, {width}, {height}]"
-                      + $"\nActual   : [{viewport[ 0 ]}, {viewport[ 1 ]}, "
-                      + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
-        
         // Verify viewport dimensions match what we set
         if ( ( viewport[ 0 ] != x ) || ( viewport[ 1 ] != y ) ||
              ( viewport[ 2 ] != width ) || ( viewport[ 3 ] != height ) )

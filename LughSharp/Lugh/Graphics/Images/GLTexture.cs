@@ -422,14 +422,13 @@ public abstract class GLTexture : ImageBase, IDrawable, IDisposable
             throw new GdxRuntimeException( "ConsumePixmap() resulted in a null Pixmap!" );
         }
 
-        // Add debug logging for pixmap state
-        Logger.Debug( $"Pixmap Format: {pixmap.GetColorFormat()}" );
-        Logger.Debug( $"Pixmap Dimensions: {pixmap.Width}x{pixmap.Height}" );
-        Logger.Debug( $"Pixmap GL Format: {GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
-        Logger.Debug( $"Pixmap GL Internal Format: {GetGLPixelFormatName( pixmap.GLInternalPixelFormat )}" );
-        Logger.Debug( $"Pixmap GL Data Type: {GetGLTypeName( pixmap.GLDataType )}" );
-        Logger.Debug( $"Pixmap Data Length: {pixmap.PixelData.Length}" );
-        Logger.Debug( $"Gdx2dPixmap created successfully?: {pixmap.Gdx2DPixmap != null}" );
+//        Logger.Debug( $"Pixmap Format: {pixmap.GetColorFormat()}" );
+//        Logger.Debug( $"Pixmap Dimensions: {pixmap.Width}x{pixmap.Height}" );
+//        Logger.Debug( $"Pixmap GL Format: {GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
+//        Logger.Debug( $"Pixmap GL Internal Format: {GetGLPixelFormatName( pixmap.GLInternalPixelFormat )}" );
+//        Logger.Debug( $"Pixmap GL Data Type: {GetGLTypeName( pixmap.GLDataType )}" );
+//        Logger.Debug( $"Pixmap Data Length: {pixmap.PixelData.Length}" );
+//        Logger.Debug( $"Gdx2dPixmap created successfully?: {pixmap.Gdx2DPixmap != null}" );
 
         if ( data.PixelFormat != pixmap.GetColorFormat() )
         {

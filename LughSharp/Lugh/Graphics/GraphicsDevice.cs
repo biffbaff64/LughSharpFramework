@@ -105,7 +105,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
 
     /// <inheritdoc />
     public abstract HdpiMode? GetHdpiMode();
-    
+
     // ========================================================================
     // Window properties
 

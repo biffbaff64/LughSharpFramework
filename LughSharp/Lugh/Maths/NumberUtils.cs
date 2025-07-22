@@ -39,6 +39,7 @@ public abstract class NumberUtils
     public const int   EXP_BIT_MASK      = 2139095040;
     public const int   SIGNIF_BIT_MASK   = 8388607;
     public const float FLOAT_TOLERANCE   = 0.000000000000001f; // 32 bits
+    public const float FLOAT_EPSILON     = 1e-6f;              // 32 bits
 
     // ========================================================================
 

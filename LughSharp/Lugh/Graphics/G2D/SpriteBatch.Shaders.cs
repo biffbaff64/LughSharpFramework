@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
 using LughSharp.Lugh.Graphics.Utils;
 
 namespace LughSharp.Lugh.Graphics.G2D;
@@ -204,7 +202,7 @@ public partial class SpriteBatch
                                                   "layout(location = 0) out vec4 FragColor;\n" +
                                                   "in vec4 v_colorPacked;\n" +
                                                   "in vec2 v_texCoords;\n" +
-                                                  "layout(binding = 0) uniform sampler2D u_texture;\n" +
+                                                  "uniform sampler2D u_texture;\n" +
                                                   "void main() {\n" +
                                                   "    FragColor = v_colorPacked * texture(u_texture, v_texCoords);\n" +
                                                   "}\n";

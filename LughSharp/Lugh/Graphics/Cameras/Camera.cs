@@ -42,10 +42,10 @@ public abstract class Camera
     public Vector3 Direction { get; set; } = new( 0, 0, -1 ); // the unit length direction vector of the camera
     public Vector3 Up        { get; set; } = new( 0, 1, 0 );  // the unit length up vector of the camera
 
-    public Matrix4x4 ProjectionMatrix  { get; set; } = new();
-    public Matrix4x4 ViewMatrix        { get; set; } = new();
-    public Matrix4x4 Combined          { get; set; } = new();
-    public Matrix4x4 InvProjectionView { get; set; } = new();
+    public Matrix4x4 ProjectionMatrix  { get; set; }
+    public Matrix4x4 ViewMatrix        { get; set; }
+    public Matrix4x4 Combined          { get; set; }
+    public Matrix4x4 InvProjectionView { get; set; }
 
     public float ViewportWidth  { get; set; }
     public float ViewportHeight { get; set; }
@@ -79,6 +79,23 @@ public abstract class Camera
 
     // ========================================================================
     // ========================================================================
+
+    /// <summary>
+    /// Represents an abstract camera used in rendering 3D graphics. This class provides
+    /// methods and properties for managing the camera's position, orientation, and matrices
+    /// related to projection and view transformations.
+    /// </summary>
+    protected Camera()
+    {
+        Logger.Checkpoint();
+        
+        ProjectionMatrix  = new Matrix4x4();
+        ViewMatrix        = new Matrix4x4();
+        Combined          = new Matrix4x4();
+        InvProjectionView = new Matrix4x4();
+
+//        Debug();
+    }
 
     /// <summary>
     /// Recalculates the projection and view matrix of this camera and the Frustum

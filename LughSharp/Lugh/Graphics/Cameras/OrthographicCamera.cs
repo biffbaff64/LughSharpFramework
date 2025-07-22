@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils;
+
 using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 
 namespace LughSharp.Lugh.Graphics.Cameras;
@@ -46,7 +48,7 @@ public class OrthographicCamera : Camera
     /// Constructs a default OrthographicCamera.
     /// All properties, such as viewport size etc, will need setting up before use.
     /// </summary>
-    public OrthographicCamera()
+    public OrthographicCamera() : base()
     {
         Near = 0;
         Far  = 1;
@@ -64,7 +66,7 @@ public class OrthographicCamera : Camera
     /// </summary>
     /// <param name="viewportWidth"> Width of this cameras viewport. </param>
     /// <param name="viewportHeight"> Height of this cameras viewport. </param>
-    public OrthographicCamera( float viewportWidth, float viewportHeight )
+    public OrthographicCamera( float viewportWidth, float viewportHeight ) : base()
     {
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
@@ -126,7 +128,6 @@ public class OrthographicCamera : Camera
                                      Far );
 
         ViewMatrix.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
-
         Combined.Set( ProjectionMatrix );
         Matrix4x4.Mul( Combined.Val, ViewMatrix.Val );
 
@@ -194,5 +195,20 @@ public class OrthographicCamera : Camera
             return _zoom;
         }
         set => _zoom = value;
+    }
+
+    public void DebugMatrices()
+    {
+        Logger.Divider();
+        Logger.Divider();
+        Logger.Debug( "First" );
+        Logger.Debug( "ProjectionMatrix" );
+        ProjectionMatrix.Debug();
+        Logger.Debug( "ViewMatrix" );
+        ViewMatrix.Debug();
+        Logger.Debug( "Combined" );
+        Combined.Debug();
+        Logger.Divider();
+        Logger.Divider();
     }
 }
