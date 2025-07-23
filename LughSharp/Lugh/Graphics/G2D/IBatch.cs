@@ -26,8 +26,6 @@ using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths;
 
-using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
-
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
@@ -107,13 +105,13 @@ public interface IBatch
     /// Returns the current projection matrix.
     /// Changing this within <see cref="Begin" /> / <see cref="End()" /> results in undefined behaviour.
     /// </summary>
-    Matrix4x4 ProjectionMatrix { get; }
+    Matrix4 ProjectionMatrix { get; }
 
     /// <summary>
     /// Returns the current transform matrix.
     /// Changing this within <see cref="Begin" /> / <see cref="End()" /> results in undefined behaviour.
     /// </summary>
-    Matrix4x4 TransformMatrix { get; }
+    Matrix4 TransformMatrix { get; }
 
     /// <summary>
     /// Sets the shader to be used in a GL environment. Vertex position attribute is
@@ -145,7 +143,7 @@ public interface IBatch
     /// and texturing. If you have more texture units enabled than the first one you have to disable
     /// them before calling this. Uses a screen coordinate system by default where everything is
     /// given in pixels. You can specify your own projection and modelview matrices via
-    /// <see cref="SetProjectionMatrix(Matrix4x4)" /> and <see cref="SetTransformMatrix(Matrix4x4)" />.
+    /// <see cref="SetProjectionMatrix(Matrix4)" /> and <see cref="SetTransformMatrix(Matrix4)" />.
     /// </summary>
     /// <param name="depthMaskEnabled"> Enable or Disable DepthMask. Defaults to false. </param>
     void Begin( bool depthMaskEnabled = false );
@@ -371,10 +369,10 @@ public interface IBatch
     /// If this is called inside a <see cref="Begin" /> / <see cref="End()" /> block,
     /// the current batch is flushed to the gpu.
     /// </summary>
-    void SetProjectionMatrix( Matrix4x4 projection );
+    void SetProjectionMatrix( Matrix4 projection );
 
     /// <summary>
     /// Sets the transform matrix to be used by this Batch.
     /// </summary>
-    void SetTransformMatrix( Matrix4x4 transform );
+    void SetTransformMatrix( Matrix4 transform );
 }

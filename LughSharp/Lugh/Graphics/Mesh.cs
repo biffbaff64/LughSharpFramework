@@ -31,7 +31,7 @@ using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
+
 
 namespace LughSharp.Lugh.Graphics;
 
@@ -979,7 +979,7 @@ public class Mesh : IDisposable
     /// <param name="count"> the amount of indices the part contains. </param>
     /// <param name="transform"></param>
     /// <returns> the value specified by out.  </returns>
-    public BoundingBox CalculateBoundingBox( in BoundingBox box, int offset, int count, in Matrix4x4 transform )
+    public BoundingBox CalculateBoundingBox( in BoundingBox box, int offset, int count, in Matrix4 transform )
     {
         return ExtendBoundingBox( box.ToInfinity(), offset, count, transform );
     }
@@ -1004,7 +1004,7 @@ public class Mesh : IDisposable
     /// <param name="count"> the size of the part. </param>
     /// <param name="transform"></param>
     /// <returns> the value specified by out.  </returns>
-    public BoundingBox ExtendBoundingBox( in BoundingBox box, int offset, int count, in Matrix4x4? transform )
+    public BoundingBox ExtendBoundingBox( in BoundingBox box, int offset, int count, in Matrix4? transform )
     {
         var numIndices  = NumIndices;
         var numVertices = NumVertices;
@@ -1154,7 +1154,7 @@ public class Mesh : IDisposable
                                          in float centerZ,
                                          int offset,
                                          int count,
-                                         in Matrix4x4? transform )
+                                         in Matrix4? transform )
     {
         var numIndices = NumIndices;
 
@@ -1258,7 +1258,7 @@ public class Mesh : IDisposable
                                   in float centerZ,
                                   int offset,
                                   int count,
-                                  in Matrix4x4? transform )
+                                  in Matrix4? transform )
     {
         return ( float )Math.Sqrt( CalculateRadiusSquared( centerX, centerY, centerZ, offset, count, transform ) );
     }
@@ -1271,7 +1271,7 @@ public class Mesh : IDisposable
     /// <param name="count"> the amount of indices the part contains. </param>
     /// <param name="transform"></param>
     /// <returns> the squared radius of the bounding sphere.  </returns>
-    public float CalculateRadius( in Vector3 center, int offset, int count, in Matrix4x4 transform )
+    public float CalculateRadius( in Vector3 center, int offset, int count, in Matrix4 transform )
     {
         return CalculateRadius( center.X, center.Y, center.Z, offset, count, transform );
     }
@@ -1434,7 +1434,7 @@ public class Mesh : IDisposable
     /// temporary float[] which will be garbage collected.
     /// </summary>
     /// <param name="matrix"> the transformation matrix  </param>
-    public void Transform( in Matrix4x4 matrix )
+    public void Transform( in Matrix4 matrix )
     {
         Transform( matrix, 0, NumVertices );
     }
@@ -1445,7 +1445,7 @@ public class Mesh : IDisposable
     /// <param name="matrix">The transformation matrix to be applied.</param>
     /// <param name="start">The starting index of the vertices to be transformed.</param>
     /// <param name="count">The number of vertices to be transformed.</param>
-    protected void Transform( in Matrix4x4 matrix, in int start, in int count )
+    protected void Transform( in Matrix4 matrix, in int start, in int count )
     {
         var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
 
@@ -1474,7 +1474,7 @@ public class Mesh : IDisposable
     /// <param name="dimensions"> the size of the position </param>
     /// <param name="start"> the vertex to start with </param>
     /// <param name="count"> the amount of vertices to transform  </param>
-    public static void Transform( in Matrix4x4 matrix,
+    public static void Transform( in Matrix4 matrix,
                                   in float[] vertices,
                                   float vertexSize,
                                   float offset,

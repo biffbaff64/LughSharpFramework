@@ -490,22 +490,22 @@ public class Quaternion
         var zw = Z * W;
 
         // Set matrix from quaternion
-        matrix[ Matrix4x4.M00 ] = 1 - ( 2 * ( yy + zz ) );
-        matrix[ Matrix4x4.M01 ] = 2 * ( xy - zw );
-        matrix[ Matrix4x4.M02 ] = 2 * ( xz + yw );
-        matrix[ Matrix4x4.M03 ] = 0;
-        matrix[ Matrix4x4.M10 ] = 2 * ( xy + zw );
-        matrix[ Matrix4x4.M11 ] = 1 - ( 2 * ( xx + zz ) );
-        matrix[ Matrix4x4.M12 ] = 2 * ( yz - xw );
-        matrix[ Matrix4x4.M13 ] = 0;
-        matrix[ Matrix4x4.M20 ] = 2 * ( xz - yw );
-        matrix[ Matrix4x4.M21 ] = 2 * ( yz + xw );
-        matrix[ Matrix4x4.M22 ] = 1 - ( 2 * ( xx + yy ) );
-        matrix[ Matrix4x4.M23 ] = 0;
-        matrix[ Matrix4x4.M30 ] = 0;
-        matrix[ Matrix4x4.M31 ] = 0;
-        matrix[ Matrix4x4.M32 ] = 0;
-        matrix[ Matrix4x4.M33 ] = 1;
+        matrix[ Matrix4.M00 ] = 1 - ( 2 * ( yy + zz ) );
+        matrix[ Matrix4.M01 ] = 2 * ( xy - zw );
+        matrix[ Matrix4.M02 ] = 2 * ( xz + yw );
+        matrix[ Matrix4.M03 ] = 0;
+        matrix[ Matrix4.M10 ] = 2 * ( xy + zw );
+        matrix[ Matrix4.M11 ] = 1 - ( 2 * ( xx + zz ) );
+        matrix[ Matrix4.M12 ] = 2 * ( yz - xw );
+        matrix[ Matrix4.M13 ] = 0;
+        matrix[ Matrix4.M20 ] = 2 * ( xz - yw );
+        matrix[ Matrix4.M21 ] = 2 * ( yz + xw );
+        matrix[ Matrix4.M22 ] = 1 - ( 2 * ( xx + yy ) );
+        matrix[ Matrix4.M23 ] = 0;
+        matrix[ Matrix4.M30 ] = 0;
+        matrix[ Matrix4.M31 ] = 0;
+        matrix[ Matrix4.M32 ] = 0;
+        matrix[ Matrix4.M33 ] = 1;
     }
 
     /// <summary>
@@ -604,26 +604,26 @@ public class Quaternion
     /// <summary>
     /// Sets the Quaternion from the given matrix, optionally removing any scaling.
     /// </summary>
-    public Quaternion SetFromMatrix( bool normalizeAxes, Matrix4x4 matrix )
+    public Quaternion SetFromMatrix( bool normalizeAxes, Matrix4 matrix )
     {
         return SetFromAxes(
                            normalizeAxes,
-                           matrix.Val[ Matrix4x4.M00 ],
-                           matrix.Val[ Matrix4x4.M01 ],
-                           matrix.Val[ Matrix4x4.M02 ],
-                           matrix.Val[ Matrix4x4.M10 ],
-                           matrix.Val[ Matrix4x4.M11 ],
-                           matrix.Val[ Matrix4x4.M12 ],
-                           matrix.Val[ Matrix4x4.M20 ],
-                           matrix.Val[ Matrix4x4.M21 ],
-                           matrix.Val[ Matrix4x4.M22 ]
+                           matrix.Val[ Matrix4.M00 ],
+                           matrix.Val[ Matrix4.M01 ],
+                           matrix.Val[ Matrix4.M02 ],
+                           matrix.Val[ Matrix4.M10 ],
+                           matrix.Val[ Matrix4.M11 ],
+                           matrix.Val[ Matrix4.M12 ],
+                           matrix.Val[ Matrix4.M20 ],
+                           matrix.Val[ Matrix4.M21 ],
+                           matrix.Val[ Matrix4.M22 ]
                           );
     }
 
     /// <summary>
     /// Sets the Quaternion from the given rotation matrix, which must not contain scaling.
     /// </summary>
-    public Quaternion SetFromMatrix( Matrix4x4 matrix )
+    public Quaternion SetFromMatrix( Matrix4 matrix )
     {
         return SetFromMatrix( false, matrix );
     }

@@ -1118,7 +1118,7 @@ public class Intersector
     /// <param name="bounds"></param>
     /// <param name="matrix"> The orientation of the bounding box </param>
     /// <returns> Whether the ray and the oriented bounding box intersect. </returns>
-    public static bool IntersectRayOrientedBoundsFast( Ray ray, BoundingBox bounds, Matrix4x4 matrix )
+    public static bool IntersectRayOrientedBoundsFast( Ray ray, BoundingBox bounds, Matrix4 matrix )
     {
         var   tMin = 0.0f;
         var   tMax = float.MaxValue;
@@ -1130,7 +1130,7 @@ public class Intersector
         // Test intersection with the 2 planes perpendicular to the OBB's X axis
         var xaxis = _tmp1;
 
-        _tmp1.Set( matrix.Val[ Matrix4x4.M00 ], matrix.Val[ Matrix4x4.M10 ], matrix.Val[ Matrix4x4.M20 ] );
+        _tmp1.Set( matrix.Val[ Matrix4.M00 ], matrix.Val[ Matrix4.M10 ], matrix.Val[ Matrix4.M20 ] );
 
         var e = xaxis.Dot( delta );
         var f = ray.Direction.Dot( xaxis );
@@ -1180,7 +1180,7 @@ public class Intersector
         // Test intersection with the 2 planes perpendicular to the OBB's Y axis
         // Exactly the same thing than above.
         var yaxis = _tmp2;
-        _tmp2.Set( matrix.Val[ Matrix4x4.M01 ], matrix.Val[ Matrix4x4.M11 ], matrix.Val[ Matrix4x4.M21 ] );
+        _tmp2.Set( matrix.Val[ Matrix4.M01 ], matrix.Val[ Matrix4.M11 ], matrix.Val[ Matrix4.M21 ] );
 
         e = yaxis.Dot( delta );
         f = ray.Direction.Dot( yaxis );
@@ -1218,7 +1218,7 @@ public class Intersector
         // Test intersection with the 2 planes perpendicular to the OBB's Z axis
         // Exactly the same thing than above.
         var zaxis = _tmp3;
-        _tmp3.Set( matrix.Val[ Matrix4x4.M02 ], matrix.Val[ Matrix4x4.M12 ], matrix.Val[ Matrix4x4.M22 ] );
+        _tmp3.Set( matrix.Val[ Matrix4.M02 ], matrix.Val[ Matrix4.M12 ], matrix.Val[ Matrix4.M22 ] );
 
         e = zaxis.Dot( delta );
         f = ray.Direction.Dot( zaxis );

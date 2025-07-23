@@ -30,7 +30,7 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils.Collections;
 
-using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
+
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D;
@@ -48,8 +48,8 @@ public class Group : Actor, ICullable
 {
     // ========================================================================
 
-    private readonly Matrix4x4                    _computedTransform = new();
-    private readonly Matrix4x4                    _oldTransform      = new();
+    private readonly Matrix4                    _computedTransform = new();
+    private readonly Matrix4                    _oldTransform      = new();
     private readonly Vector2                    _tmp               = new();
     private readonly Affine2                    _worldTransform    = new();
     public           SnapshotArrayList< Actor > Children { get; set; } = new( 4 );
@@ -87,7 +87,7 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Draws the group and its children.
     /// <para>
-    /// The default implementation calls <see cref="ApplyTransform(IBatch, Matrix4x4)" /> if needed,
+    /// The default implementation calls <see cref="ApplyTransform(IBatch, Matrix4)" /> if needed,
     /// then <see cref="DrawChildren(IBatch, float)" />, then <see cref="ResetTransform(IBatch)" />
     /// if needed.
     /// </para>
@@ -112,7 +112,7 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Draws all children.
     /// <para>
-    /// <see cref="ApplyTransform(IBatch, Matrix4x4)" /> should be called before and
+    /// <see cref="ApplyTransform(IBatch, Matrix4)" /> should be called before and
     /// <see cref="ResetTransform(IBatch)" /> after this method if <see cref="Transform" />
     /// is true.
     /// </para>
@@ -274,7 +274,7 @@ public class Group : Actor, ICullable
     }
 
     /// <summary>
-    /// Draws all children. <see cref="ApplyTransform(IBatch, Matrix4x4)" /> should be
+    /// Draws all children. <see cref="ApplyTransform(IBatch, Matrix4)" /> should be
     /// called before and <see cref="ResetTransform(IBatch)" /> after this method if
     /// <see cref="Transform" /> is true.
     /// <para>
@@ -363,7 +363,7 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Returns the transform for this group's coordinate system.
     /// </summary>
-    protected Matrix4x4 ComputeTransform()
+    protected Matrix4 ComputeTransform()
     {
         _worldTransform.SetToTrnRotScl( X + OriginX, Y + OriginY, Rotation, ScaleX, ScaleY );
 
@@ -402,7 +402,7 @@ public class Group : Actor, ICullable
     /// <see cref="ResetTransform(IBatch)" /> will restore the transform
     /// to what it was before this call.
     /// </summary>
-    protected void ApplyTransform( IBatch batch, Matrix4x4 transform )
+    protected void ApplyTransform( IBatch batch, Matrix4 transform )
     {
         _oldTransform.Set( batch.TransformMatrix );
 
@@ -411,7 +411,7 @@ public class Group : Actor, ICullable
 
     /// <summary>
     /// Restores the batch transform to what it was before
-    /// <see cref="ApplyTransform(IBatch, Matrix4x4)" />.
+    /// <see cref="ApplyTransform(IBatch, Matrix4)" />.
     /// Note this causes the batch to be flushed.
     /// </summary>
     protected void ResetTransform( IBatch batch )
@@ -428,7 +428,7 @@ public class Group : Actor, ICullable
     /// to what it was before this call.
     /// </para>
     /// </summary>
-    protected void ApplyTransform( ShapeRenderer shapes, Matrix4x4 transform )
+    protected void ApplyTransform( ShapeRenderer shapes, Matrix4 transform )
     {
         _oldTransform.Set( shapes.TransformMatrix );
 
@@ -438,7 +438,7 @@ public class Group : Actor, ICullable
 
     /// <summary>
     /// Restores the shape renderer transform to what it was before
-    /// <see cref="ApplyTransform(IBatch, Matrix4x4)" />.
+    /// <see cref="ApplyTransform(IBatch, Matrix4)" />.
     /// Note this causes the shape renderer to be flushed.
     /// </summary>
     protected void ResetTransform( ShapeRenderer shapes )

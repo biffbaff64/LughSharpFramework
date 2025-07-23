@@ -33,7 +33,6 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using GLuint = uint;
-using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -342,7 +341,7 @@ public class ShaderProgram : IDisposable
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix  </param>
-    public virtual void SetUniformMatrix( string name, Matrix4x4 matrix )
+    public virtual void SetUniformMatrix( string name, Matrix4 matrix )
     {
         SetUniformMatrix( name, matrix, false );
     }
@@ -354,7 +353,7 @@ public class ShaderProgram : IDisposable
     /// <param name="name"> the name of the uniform </param>
     /// <param name="matrix"> the matrix </param>
     /// <param name="transpose"> whether the matrix should be transposed  </param>
-    public virtual void SetUniformMatrix( string name, Matrix4x4 matrix, bool transpose )
+    public virtual void SetUniformMatrix( string name, Matrix4 matrix, bool transpose )
     {
         LogInvalidMatrix( matrix.Values );
 
@@ -375,7 +374,7 @@ public class ShaderProgram : IDisposable
     /// </summary>
     /// <param name="location"></param>
     /// <param name="matrix"></param>
-    public virtual void SetUniformMatrix( int location, Matrix4x4 matrix )
+    public virtual void SetUniformMatrix( int location, Matrix4 matrix )
     {
         LogInvalidMatrix( matrix.Values );
 
@@ -395,7 +394,7 @@ public class ShaderProgram : IDisposable
     /// <param name="location"></param>
     /// <param name="matrix"></param>
     /// <param name="transpose"></param>
-    public virtual void SetUniformMatrix( int location, Matrix4x4 matrix, bool transpose )
+    public virtual void SetUniformMatrix( int location, Matrix4 matrix, bool transpose )
     {
         LogInvalidMatrix( matrix.Values );
 

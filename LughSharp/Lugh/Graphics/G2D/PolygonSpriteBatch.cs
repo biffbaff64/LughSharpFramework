@@ -30,8 +30,6 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
-
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
@@ -76,7 +74,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     // ========================================================================
 
     private readonly Color          _color          = new( 1, 1, 1, 1 );
-    private readonly Matrix4x4        _combinedMatrix = new();
+    private readonly Matrix4        _combinedMatrix = new();
     private readonly Mesh           _mesh;
     private readonly bool           _ownsShader;
     private readonly ShaderProgram? _shader;
@@ -183,8 +181,8 @@ public class PolygonSpriteBatch : IPolygonBatch
     public int     BlendDstFunc      { get; private set; } = IGL.GL_ONE_MINUS_SRC_ALPHA;
     public int     BlendSrcFuncAlpha { get; private set; } = IGL.GL_SRC_ALPHA;
     public int     BlendDstFuncAlpha { get; private set; } = IGL.GL_ONE_MINUS_SRC_ALPHA;
-    public Matrix4x4 ProjectionMatrix  { get; set; }         = new();
-    public Matrix4x4 TransformMatrix   { get; set; }         = new();
+    public Matrix4 ProjectionMatrix  { get; set; }         = new();
+    public Matrix4 TransformMatrix   { get; set; }         = new();
     public bool    IsDrawing         { get; set; }
 
     public void Begin( bool depthMaskEnabled = false )
@@ -1459,7 +1457,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
-    public void SetProjectionMatrix( Matrix4x4 projection )
+    public void SetProjectionMatrix( Matrix4 projection )
     {
         if ( IsDrawing )
         {
@@ -1474,7 +1472,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
-    public void SetTransformMatrix( Matrix4x4 transform )
+    public void SetTransformMatrix( Matrix4 transform )
     {
         if ( IsDrawing )
         {

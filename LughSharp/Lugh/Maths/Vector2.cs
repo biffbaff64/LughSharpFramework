@@ -488,7 +488,7 @@ public class Vector2 : IVector< Vector2 >
         throw new GdxRuntimeException( "Malformed Vector2: " + v );
     }
 
-    public Vector2 Mul( Matrix3x3 mat )
+    public Vector2 Mul( Matrix3 mat )
     {
         var x = ( X * mat.Val[ 0 ] ) + ( Y * mat.Val[ 3 ] ) + mat.Val[ 6 ];
         var y = ( X * mat.Val[ 1 ] ) + ( Y * mat.Val[ 4 ] ) + mat.Val[ 7 ];

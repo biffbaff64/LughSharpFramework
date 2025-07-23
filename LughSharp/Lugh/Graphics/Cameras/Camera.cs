@@ -27,7 +27,6 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils;
 
-using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 using Quaternion = LughSharp.Lugh.Maths.Quaternion;
 
 namespace LughSharp.Lugh.Graphics.Cameras;
@@ -42,10 +41,10 @@ public abstract class Camera
     public Vector3 Direction { get; set; } = new( 0, 0, -1 ); // the unit length direction vector of the camera
     public Vector3 Up        { get; set; } = new( 0, 1, 0 );  // the unit length up vector of the camera
 
-    public Matrix4x4 ProjectionMatrix  { get; set; }
-    public Matrix4x4 ViewMatrix        { get; set; }
-    public Matrix4x4 Combined          { get; set; }
-    public Matrix4x4 InvProjectionView { get; set; }
+    public Matrix4 ProjectionMatrix  { get; set; }
+    public Matrix4 ViewMatrix        { get; set; }
+    public Matrix4 Combined          { get; set; }
+    public Matrix4 InvProjectionView { get; set; }
 
     public float ViewportWidth  { get; set; }
     public float ViewportHeight { get; set; }
@@ -89,10 +88,10 @@ public abstract class Camera
     {
         Logger.Checkpoint();
         
-        ProjectionMatrix  = new Matrix4x4();
-        ViewMatrix        = new Matrix4x4();
-        Combined          = new Matrix4x4();
-        InvProjectionView = new Matrix4x4();
+        ProjectionMatrix  = new Matrix4();
+        ViewMatrix        = new Matrix4();
+        Combined          = new Matrix4();
+        InvProjectionView = new Matrix4();
 
 //        Debug();
     }
@@ -188,7 +187,7 @@ public abstract class Camera
     /// matrix. The direction and up vector will not be orthogonalized.
     /// </summary>
     /// <param name="transform"> The rotation matrix  </param>
-    protected void Rotate( Matrix4x4 transform )
+    protected void Rotate( Matrix4 transform )
     {
         Direction.Rot( transform );
         Up.Rot( transform );
@@ -230,7 +229,7 @@ public abstract class Camera
     /// Transform the position, direction and up vector by the given matrix
     /// </summary>
     /// <param name="transform"> The transform matrix</param>
-    public void Transform( Matrix4x4 transform )
+    public void Transform( Matrix4 transform )
     {
         Position.Mul( transform );
         Rotate( transform );

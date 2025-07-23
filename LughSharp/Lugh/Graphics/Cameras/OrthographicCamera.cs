@@ -24,8 +24,6 @@
 
 using LughSharp.Lugh.Utils;
 
-using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
-
 namespace LughSharp.Lugh.Graphics.Cameras;
 
 /// <summary>
@@ -129,12 +127,12 @@ public class OrthographicCamera : Camera
 
         ViewMatrix.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
         Combined.Set( ProjectionMatrix );
-        Matrix4x4.Mul( Combined.Val, ViewMatrix.Val );
+        Matrix4.Mul( Combined.Val, ViewMatrix.Val );
 
         if ( updateFrustrum )
         {
             InvProjectionView.Set( Combined );
-            Matrix4x4.Invert( InvProjectionView.Val );
+            Matrix4.Invert( InvProjectionView.Val );
             Frustrum.Update( InvProjectionView );
 
 //            Api.Graphics.UpdateViewport( ( int )Position.X,

@@ -139,7 +139,7 @@ public class SpriteBatchTests
     {
         Logger.Checkpoint();
 
-        var projection = new Matrix4x4();
+        var projection = new Matrix4();
         projection.SetToOrtho2D( 0, 0, 800, 600 );
 
         Assert.Multiple( () =>

@@ -105,11 +105,11 @@ public class Frustrum
     /// or <see cref="PerspectiveCamera" />.
     /// </summary>
     /// <param name="inverseProjectionView">The combined projection and view matrices.</param>
-    public virtual void Update( Matrix4x4 inverseProjectionView )
+    public virtual void Update( Matrix4 inverseProjectionView )
     {
         Array.Copy( ClipSpacePlanePointsArray, 0, PlanePointsArray, 0, ClipSpacePlanePointsArray.Length );
 
-        Matrix4x4.Prj( inverseProjectionView.Val, PlanePointsArray, 0, 8, 3 );
+        Matrix4.Prj( inverseProjectionView.Val, PlanePointsArray, 0, 8, 3 );
 
         for ( int i = 0, j = 0; i < 8; i++ )
         {

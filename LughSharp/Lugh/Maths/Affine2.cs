@@ -127,16 +127,16 @@ public class Affine2
     /// This matrix will not be modified.
     /// </param>
     /// <returns>This matrix for the purpose of chaining operations.</returns>
-    public Affine2 SetFrom( Matrix4x4 matrix )
+    public Affine2 SetFrom( Matrix4 matrix )
     {
         var other = matrix.Val;
 
-        M00 = other[ Matrix4x4.M00 ];
-        M01 = other[ Matrix4x4.M01 ];
-        M02 = other[ Matrix4x4.M03 ];
-        M10 = other[ Matrix4x4.M10 ];
-        M11 = other[ Matrix4x4.M11 ];
-        M12 = other[ Matrix4x4.M13 ];
+        M00 = other[ Matrix4.M00 ];
+        M01 = other[ Matrix4.M01 ];
+        M02 = other[ Matrix4.M03 ];
+        M10 = other[ Matrix4.M10 ];
+        M11 = other[ Matrix4.M11 ];
+        M12 = other[ Matrix4.M13 ];
 
         return this;
     }

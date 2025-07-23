@@ -29,8 +29,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Maths;
 
 [PublicAPI]
-[SuppressMessage( "ReSharper", "InconsistentNaming" )]
-public class Matrix3x3
+public class Matrix3
 {
     public const int M00 = 0;
     public const int M01 = 3;
@@ -48,12 +47,12 @@ public class Matrix3x3
 
     // ========================================================================
 
-    public Matrix3x3()
+    public Matrix3()
     {
         Idt();
     }
 
-    public Matrix3x3( Matrix3x3 matrix )
+    public Matrix3( Matrix3x3 matrix )
     {
         Set( matrix );
     }
@@ -67,7 +66,7 @@ public class Matrix3x3
     /// <a href="http://en.wikipedia.org/wiki/Row-major_order#Column-major_order"> column major </a>
     /// order. (The float array is not modified.)
     /// </param>
-    public Matrix3x3( float[] values )
+    public Matrix3( float[] values )
     {
         Set( values );
     }
@@ -393,17 +392,17 @@ public class Matrix3x3
     /// The matrix whose top left corner will be copied. This matrix will not be modified.
     /// </param>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3x3 Set( Matrix4x4 mat )
+    public Matrix3x3 Set( Matrix4 mat )
     {
-        Val[ M00 ] = mat.Val[ Matrix4x4.M00 ];
-        Val[ M10 ] = mat.Val[ Matrix4x4.M10 ];
-        Val[ M20 ] = mat.Val[ Matrix4x4.M20 ];
-        Val[ M01 ] = mat.Val[ Matrix4x4.M01 ];
-        Val[ M11 ] = mat.Val[ Matrix4x4.M11 ];
-        Val[ M21 ] = mat.Val[ Matrix4x4.M21 ];
-        Val[ M02 ] = mat.Val[ Matrix4x4.M02 ];
-        Val[ M12 ] = mat.Val[ Matrix4x4.M12 ];
-        Val[ M22 ] = mat.Val[ Matrix4x4.M22 ];
+        Val[ M00 ] = mat.Val[ Matrix4.M00 ];
+        Val[ M10 ] = mat.Val[ Matrix4.M10 ];
+        Val[ M20 ] = mat.Val[ Matrix4.M20 ];
+        Val[ M01 ] = mat.Val[ Matrix4.M01 ];
+        Val[ M11 ] = mat.Val[ Matrix4.M11 ];
+        Val[ M21 ] = mat.Val[ Matrix4.M21 ];
+        Val[ M02 ] = mat.Val[ Matrix4.M02 ];
+        Val[ M12 ] = mat.Val[ Matrix4.M12 ];
+        Val[ M22 ] = mat.Val[ Matrix4.M22 ];
 
         return this;
     }

@@ -23,11 +23,12 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Color = LughSharp.Lugh.Graphics.Color;
-using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
+
 
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
 
@@ -40,8 +41,8 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
     private readonly Vector3  _screenPos = new();
     private readonly Vector2  _topLeft   = new();
     private readonly Vector2  _topRight  = new();
-    private          Matrix4x4? _invIsotransform;
-    private          Matrix4x4? _isoTransform;
+    private          Matrix4? _invIsotransform;
+    private          Matrix4? _isoTransform;
 
     public IsometricTiledMapRenderer( TiledMap map )
         : base( map )
@@ -70,7 +71,7 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
     private void Init()
     {
         // create the isometric transform
-        _isoTransform = new Matrix4x4();
+        _isoTransform = new Matrix4();
         _isoTransform.ToIdentity();
 
         // isoTransform.translate(0, 32, 0);
@@ -83,7 +84,7 @@ public class IsometricTiledMapRenderer : BatchTileMapRenderer
         _isoTransform.Rotate( 0.0f, 0.0f, 1.0f, -45 );
 
         // ... and the inverse matrix
-        _invIsotransform = new Matrix4x4( _isoTransform );
+        _invIsotransform = new Matrix4( _isoTransform );
         _invIsotransform.Invert();
     }
 

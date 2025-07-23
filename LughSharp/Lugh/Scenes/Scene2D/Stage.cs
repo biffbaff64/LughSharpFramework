@@ -31,7 +31,6 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Graphics.Viewports;
 using LughSharp.Lugh.Input;
-using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
 using LughSharp.Lugh.Utils;
@@ -40,7 +39,6 @@ using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Pooling;
 
 using Color = LughSharp.Lugh.Graphics.Color;
-using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
 using Platform = LughSharp.Lugh.Core.Platform;
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
@@ -1228,7 +1226,7 @@ public class Stage : InputAdapter, IDisposable
     /// during <see cref="Actor.Draw(IBatch, float)" />.
     /// </summary>
     /// <see cref="Actor.LocalToStageCoordinates(Vector2)" />
-    public virtual Vector2 ToScreenCoordinates( Vector2 coords, Matrix4x4 transformMatrix )
+    public virtual Vector2 ToScreenCoordinates( Vector2 coords, Matrix4 transformMatrix )
     {
         return Viewport.ToScreenCoordinates( coords, transformMatrix );
     }
@@ -1239,7 +1237,7 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     public virtual void CalculateScissors( Rectangle localRect, Rectangle scissorRect )
     {
-        Matrix4x4 transformMatrix;
+        Matrix4 transformMatrix;
 
         if ( ( _debugShapes != null ) && _debugShapes.IsDrawing() )
         {

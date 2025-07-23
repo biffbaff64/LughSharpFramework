@@ -29,7 +29,7 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Color = LughSharp.Lugh.Graphics.Color;
-using Matrix4x4 = LughSharp.Lugh.Maths.Matrix4x4;
+
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
@@ -114,7 +114,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
         }
     }
 
-    public void SetView( Matrix4x4 projection, float x, float y, float width, float height )
+    public void SetView( Matrix4 projection, float x, float y, float width, float height )
     {
         GdxRuntimeException.ThrowIfNull( SpriteCache );
 
