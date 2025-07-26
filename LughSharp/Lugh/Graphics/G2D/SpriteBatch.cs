@@ -33,6 +33,7 @@ using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
+using DebugSeverity = LughSharp.Lugh.Graphics.OpenGL.Enums.DebugSeverity;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.G2D;
@@ -46,19 +47,19 @@ namespace LughSharp.Lugh.Graphics.G2D;
 [PublicAPI]
 public partial class SpriteBatch : IBatch, IDisposable
 {
-    public bool      BlendingDisabled  { get; set; }         = false;
-    public float     InvTexHeight      { get; set; }         = 0;
-    public float     InvTexWidth       { get; set; }         = 0;
+    public bool    BlendingDisabled  { get; set; }         = false;
+    public float   InvTexHeight      { get; set; }         = 0;
+    public float   InvTexWidth       { get; set; }         = 0;
     public Matrix4 CombinedMatrix    { get; set; }         = new();
     public Matrix4 ProjectionMatrix  { get; set; }         = new();
     public Matrix4 TransformMatrix   { get; set; }         = new();
-    public int       RenderCalls       { get; set; }         = 0; // Number of render calls since the last call to Begin()
-    public long      TotalRenderCalls  { get; set; }         = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
-    public int       MaxSpritesInBatch { get; set; }         = 0; // The maximum number of sprites rendered in one batch so far.
-    public int       BlendSrcFunc      { get; private set; } = ( int )BlendMode.SrcColor;
-    public int       BlendDstFunc      { get; private set; } = ( int )BlendMode.DstColor;
-    public int       BlendSrcFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusSrcAlpha;
-    public int       BlendDstFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusDstAlpha;
+    public int     RenderCalls       { get; set; }         = 0; // Number of render calls since the last call to Begin()
+    public long    TotalRenderCalls  { get; set; }         = 0; // Number of rendering calls, ever. Will not be reset unless set manually.
+    public int     MaxSpritesInBatch { get; set; }         = 0; // The maximum number of sprites rendered in one batch so far.
+    public int     BlendSrcFunc      { get; private set; } = ( int )BlendMode.SrcColor;
+    public int     BlendDstFunc      { get; private set; } = ( int )BlendMode.DstColor;
+    public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusSrcAlpha;
+    public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusDstAlpha;
 
     public bool IsDrawing => CurrentBatchState == BatchState.Drawing;
 
@@ -504,6 +505,8 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="projection">The new projection matrix to be applied.</param>
     public void SetProjectionMatrix( Matrix4 projection )
     {
+        projection.DebugPrint( "Projection Matrix received by SpriteBatch" );
+
         if ( !projection.IsValidViewMatrix() )
         {
             throw new ArgumentException( "Invalid projection matrix provided to SpriteBatch" );
@@ -517,7 +520,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         }
 
         ProjectionMatrix.Set( projection );
-        
+
         if ( CurrentBatchState == BatchState.Drawing )
         {
             SetupMatrices();
@@ -812,9 +815,14 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public virtual void SetupMatrices()
     {
+        TransformMatrix.DebugPrint( "Transform Matrix" );
+        ProjectionMatrix.DebugPrint( "Projection Matrix" );
+
         // Note: Do not use the property 'SHADER' here as its getter calls
         // this method, which would cause an infinite loop.
-        CombinedMatrix.Set( ProjectionMatrix ).Mul( TransformMatrix );
+        CombinedMatrix = ProjectionMatrix.Mul( TransformMatrix );
+
+        CombinedMatrix.DebugPrint( "Combined Matrix" );
 
         if ( _shader != null )
         {
@@ -1762,9 +1770,9 @@ public partial class SpriteBatch : IBatch, IDisposable
     [PublicAPI]
     public record struct RenderState
     {
-        public Texture?  CurrentTexture  { get; set; }
-        public int       VertexCount     { get; set; }
-        public Matrix4 TransformMatrix { get; set; }
+        public Texture? CurrentTexture  { get; set; }
+        public int      VertexCount     { get; set; }
+        public Matrix4  TransformMatrix { get; set; }
 
         /// <summary>
         /// Represents the rendering state within a sprite batch, including texture information,

@@ -49,7 +49,7 @@ public partial class DesktopGLWindow : IDisposable
     public IDesktopGLInput                   Input               { get; set; } = null!;
     public DesktopGLApplicationConfiguration AppConfig           { get; set; }
     public DesktopGLGraphics                 Graphics            { get; set; } = null!;
-    public IDesktopGLApplicationBase         Application         { get; set; }
+    public DesktopGLApplication              Application         { get; set; }
     public bool                              ListenerInitialised { get; set; } = false;
 
     // ========================================================================
@@ -67,11 +67,11 @@ public partial class DesktopGLWindow : IDisposable
     /// <summary>
     /// Creates a new DesktopGLWindow instance, using the given <see cref="IApplicationListener" />,
     /// <see cref="DesktopGLApplicationConfiguration" />, and attaching it to the given
-    /// <see cref="IDesktopGLApplicationBase" />.
+    /// <see cref="DesktopGLApplication" />.
     /// </summary>
     public DesktopGLWindow( IApplicationListener listener,
                             DesktopGLApplicationConfiguration config,
-                            IDesktopGLApplicationBase application )
+                            DesktopGLApplication application )
     {
         ApplicationListener = listener;
         WindowListener      = config.WindowListener;

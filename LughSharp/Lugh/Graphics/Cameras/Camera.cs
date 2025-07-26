@@ -92,8 +92,6 @@ public abstract class Camera
         ViewMatrix        = new Matrix4();
         Combined          = new Matrix4();
         InvProjectionView = new Matrix4();
-
-//        Debug();
     }
 
     /// <summary>
@@ -428,9 +426,11 @@ public abstract class Camera
         Logger.Debug( $"Viewport: {ViewportWidth}x{ViewportHeight}" );
         Logger.Debug( $"Direction: X:{Direction.X}, Y:{Direction.Y}, Z:{Direction.Z}" );
         Logger.Debug( $"Up: X:{Up.X}, Y:{Up.Y}, Z:{Up.Z}" );
-        Logger.Debug( $"Projection: {ProjectionMatrix.ToString()}" );
-        Logger.Debug( $"View: {ViewMatrix.ToString()}" );
-        Logger.Debug( $"Combined: {Combined.ToString()}" );
+        Logger.Debug( $"Near: {Near}" );
+        Logger.Debug( $"Far: {Far}" );
+        Logger.Debug( $"Projection Matrix:\n {ProjectionMatrix.ToString()}" );
+        Logger.Debug( $"View Matrix:\n {ViewMatrix.ToString()}" );
+        Logger.Debug( $"Combined Matrix:\n {Combined.ToString()}" );
     }
     #endif
 }

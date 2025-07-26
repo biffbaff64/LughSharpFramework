@@ -591,31 +591,31 @@ public class Vector3 : IVector< Vector3 >
                   );
     }
 
-    public Vector3 Mul( Matrix3x3 matrix )
+    public Vector3 Mul( Matrix3 matrix )
     {
         var lMat = matrix.Val;
 
         return Set(
-                   ( X * lMat[ Matrix3x3.M00 ] ) + ( Y * lMat[ Matrix3x3.M01 ] ) + ( Z * lMat[ Matrix3x3.M02 ] ),
-                   ( X * lMat[ Matrix3x3.M10 ] )
+                   ( X * lMat[ Matrix3.M00 ] ) + ( Y * lMat[ Matrix3.M01 ] ) + ( Z * lMat[ Matrix3.M02 ] ),
+                   ( X * lMat[ Matrix3.M10 ] )
                    + ( Y
-                       * lMat[ Matrix3x3.M11 ] )
-                   + ( Z * lMat[ Matrix3x3.M12 ] ),
-                   ( X * lMat[ Matrix3x3.M20 ] ) + ( Y * lMat[ Matrix3x3.M21 ] ) + ( Z * lMat[ Matrix3x3.M22 ] )
+                       * lMat[ Matrix3.M11 ] )
+                   + ( Z * lMat[ Matrix3.M12 ] ),
+                   ( X * lMat[ Matrix3.M20 ] ) + ( Y * lMat[ Matrix3.M21 ] ) + ( Z * lMat[ Matrix3.M22 ] )
                   );
     }
 
-    public Vector3 TraMul( Matrix3x3 matrix )
+    public Vector3 TraMul( Matrix3 matrix )
     {
         var lMat = matrix.Val;
 
         return Set(
-                   ( X * lMat[ Matrix3x3.M00 ] ) + ( Y * lMat[ Matrix3x3.M10 ] ) + ( Z * lMat[ Matrix3x3.M20 ] ),
-                   ( X * lMat[ Matrix3x3.M01 ] )
+                   ( X * lMat[ Matrix3.M00 ] ) + ( Y * lMat[ Matrix3.M10 ] ) + ( Z * lMat[ Matrix3.M20 ] ),
+                   ( X * lMat[ Matrix3.M01 ] )
                    + ( Y
-                       * lMat[ Matrix3x3.M11 ] )
-                   + ( Z * lMat[ Matrix3x3.M21 ] ),
-                   ( X * lMat[ Matrix3x3.M02 ] ) + ( Y * lMat[ Matrix3x3.M12 ] ) + ( Z * lMat[ Matrix3x3.M22 ] )
+                       * lMat[ Matrix3.M11 ] )
+                   + ( Z * lMat[ Matrix3.M21 ] ),
+                   ( X * lMat[ Matrix3.M02 ] ) + ( Y * lMat[ Matrix3.M12 ] ) + ( Z * lMat[ Matrix3.M22 ] )
                   );
     }
 

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils;
-
 namespace LughSharp.Lugh.Graphics.Cameras;
 
 /// <summary>
@@ -48,8 +46,8 @@ public class OrthographicCamera : Camera
     /// </summary>
     public OrthographicCamera() : base()
     {
-        Near = 0;
-        Far  = 1;
+        Near = 0f;
+        Far  = 1f;
         Zoom = DEFAULT_ZOOM;
     }
 
@@ -68,8 +66,8 @@ public class OrthographicCamera : Camera
     {
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
-        Near           = 0;
-        Far            = 1;
+        Near           = 0f;
+        Far            = 1f;
         Zoom           = DEFAULT_ZOOM;
     }
 
@@ -96,9 +94,9 @@ public class OrthographicCamera : Camera
     /// <param name="yDown">whether y should be pointing down.</param>
     public void SetToOrtho( float viewportWidth, float viewportHeight, bool yDown )
     {
-        Up.Set( 0, yDown ? -1 : 1, 0 );
-        Direction.Set( 0, 0, yDown ? 1 : -1 );
-        Position.Set( ( Zoom * viewportWidth ) / 2.0f, ( Zoom * viewportHeight ) / 2.0f, 0 );
+        Up.Set( 0f, yDown ? -1f : 1f, 0 );
+        Direction.Set( 0f, 0f, yDown ? 1f : -1f );
+        Position.Set( ( Zoom * viewportWidth ) / 2.0f, ( Zoom * viewportHeight ) / 2.0f, 0f );
 
         ViewportWidth  = viewportWidth;
         ViewportHeight = viewportHeight;
@@ -118,13 +116,12 @@ public class OrthographicCamera : Camera
     /// </param>
     public override void Update( bool updateFrustrum = true )
     {
-        ProjectionMatrix.SetToOrtho( ( Zoom * -ViewportWidth ) / 2,
-                                     Zoom * ( ViewportWidth / 2 ),
-                                     Zoom * -( ViewportHeight / 2 ),
-                                     ( Zoom * ViewportHeight ) / 2,
-                                     Near,
-                                     Far );
+        var left   = (Zoom * -ViewportWidth) / 2f;
+        var right  = Zoom * (ViewportWidth / 2f);
+        var bottom = Zoom * -(ViewportHeight / 2f);
+        var top    = (Zoom * ViewportHeight) / 2f;
 
+        ProjectionMatrix.SetToOrtho(left, right, bottom, top, Near, Far);
         ViewMatrix.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
         Combined.Set( ProjectionMatrix );
         Matrix4.Mul( Combined.Val, ViewMatrix.Val );
@@ -134,12 +131,6 @@ public class OrthographicCamera : Camera
             InvProjectionView.Set( Combined );
             Matrix4.Invert( InvProjectionView.Val );
             Frustrum.Update( InvProjectionView );
-
-//            Api.Graphics.UpdateViewport( ( int )Position.X,
-//                                           ( int )Position.Y,
-//                                           ( int )ViewportWidth,
-//                                           ( int )ViewportHeight,
-//                                           2 );
         }
     }
 
@@ -160,7 +151,7 @@ public class OrthographicCamera : Camera
     /// <param name="y"> the displacement on the y-axis </param>
     public void Translate( float x, float y )
     {
-        Translate( x, y, 0 );
+        Translate( x, y, 0f );
     }
 
     /// <summary>
@@ -169,7 +160,7 @@ public class OrthographicCamera : Camera
     /// <param name="vec">the displacement vector</param>
     public void Translate( Vector2 vec )
     {
-        Translate( vec.X, vec.Y, 0 );
+        Translate( vec.X, vec.Y, 0f );
     }
 
     /// <summary>
@@ -194,19 +185,7 @@ public class OrthographicCamera : Camera
         }
         set => _zoom = value;
     }
-
-    public void DebugMatrices()
-    {
-        Logger.Divider();
-        Logger.Divider();
-        Logger.Debug( "First" );
-        Logger.Debug( "ProjectionMatrix" );
-        ProjectionMatrix.Debug();
-        Logger.Debug( "ViewMatrix" );
-        ViewMatrix.Debug();
-        Logger.Debug( "Combined" );
-        Combined.Debug();
-        Logger.Divider();
-        Logger.Divider();
-    }
 }
+
+// ============================================================================
+// ============================================================================

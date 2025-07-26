@@ -1549,7 +1549,7 @@ public class Mesh : IDisposable
     /// use with care. It will also create a temporary float[] which will be garbage collected.
     /// </summary>
     /// <param name="matrix"> the transformation matrix  </param>
-    public void TransformUV( in Matrix3x3 matrix )
+    public void TransformUV( in Matrix3 matrix )
     {
         TransformUV( matrix, 0, NumVertices );
     }
@@ -1561,7 +1561,7 @@ public class Mesh : IDisposable
     /// <param name="matrix">The transformation matrix to apply to the UV coordinates.</param>
     /// <param name="start">The index of the first vertex to transform.</param>
     /// <param name="count">The number of vertices to transform.</param>
-    protected void TransformUV( in Matrix3x3 matrix, int start, int count )
+    protected void TransformUV( in Matrix3 matrix, int start, int count )
     {
         var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES );
 
@@ -1601,7 +1601,7 @@ public class Mesh : IDisposable
     /// <param name="offset"> the offset within a vertex to the texture location </param>
     /// <param name="start"> the vertex to start with </param>
     /// <param name="count"> the amount of vertices to transform  </param>
-    public static void TransformUV( in Matrix3x3 matrix,
+    public static void TransformUV( in Matrix3 matrix,
                                     in float[] vertices,
                                     int vertexSize,
                                     int offset,

@@ -33,8 +33,13 @@ using Exception = System.Exception;
 namespace DesktopGLBackend.Audio;
 
 [PublicAPI]
-public class OpenALAudio : IGLAudio
+public class OpenALAudio : IAudio
 {
+    public bool                NoDevice { get; set; } = false;
+    public List< OpenALMusic > Music    { get; set; } = new( 1 );
+
+    // ========================================================================
+    
     private readonly uint[]?                    _allSources;
     private readonly IntPtr                     _context;
     private readonly IntPtr                     _device;
@@ -65,12 +70,13 @@ public class OpenALAudio : IGLAudio
         _deviceBufferSize  = deviceBufferSize;
         _deviceBufferCount = deviceBufferCount;
 
-        RegisterSound( "ogg", typeof( Ogg.Sound ) );
         RegisterMusic( "ogg", typeof( Ogg.Music ) );
-        RegisterSound( "wav", typeof( Wav.Sound ) );
         RegisterMusic( "wav", typeof( Wav.Music ) );
-        RegisterSound( "mp3", typeof( Mp3.Sound ) );
         RegisterMusic( "mp3", typeof( Mp3.Music ) );
+
+        RegisterSound( "ogg", typeof( Ogg.Sound ) );
+        RegisterSound( "wav", typeof( Wav.Sound ) );
+        RegisterSound( "mp3", typeof( Mp3.Sound ) );
 
         _device = ALC.OpenDevice( "" ); //TODO: Find which value to use for default device
 
@@ -115,9 +121,6 @@ public class OpenALAudio : IGLAudio
 
         _recentSounds = new OpenALSound[ simultaneousSources ];
     }
-
-    public bool                NoDevice { get; set; } = false;
-    public List< OpenALMusic > Music    { get; set; } = new( 1 );
 
     /// <summary>
     /// </summary>

@@ -27,7 +27,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace LughSharp.Lugh.Audio;
 
 [PublicAPI]
-public interface IAudio
+public interface IAudio : IDisposable
 {
     /// <summary>
     /// Creates a new <see cref="IAudioDevice" /> either in mono or stereo mode.
@@ -73,4 +73,9 @@ public interface IAudio
     /// <return>the new Music or null if the Music could not be loaded.</return>
     /// <exception cref="GdxRuntimeException">in case the music could not be loaded.</exception>
     IMusic NewMusic( FileInfo? file );
+
+    /// <summary>
+    /// 
+    /// </summary>
+    void Update();
 }

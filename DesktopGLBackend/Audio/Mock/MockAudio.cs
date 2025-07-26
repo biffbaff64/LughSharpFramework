@@ -30,7 +30,7 @@ namespace DesktopGLBackend.Audio.Mock;
 /// Audio stubs for use when Audio is disabled, or when Audio failed to initialise.
 /// </summary>
 [PublicAPI]
-public class MockAudio : IGLAudio
+public class MockAudio : IAudio
 {
     /// <inheritdoc />
     public IAudioDevice NewAudioDevice( int samplingRate, bool isMono )

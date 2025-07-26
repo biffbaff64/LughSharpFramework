@@ -52,7 +52,7 @@ public class Matrix3
         Idt();
     }
 
-    public Matrix3( Matrix3x3 matrix )
+    public Matrix3( Matrix3 matrix )
     {
         Set( matrix );
     }
@@ -75,7 +75,7 @@ public class Matrix3
     /// Sets this matrix to the identity matrix
     /// </summary>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3x3 Idt()
+    public Matrix3 Idt()
     {
         Val[ M00 ] = 1;
         Val[ M10 ] = 0;
@@ -99,7 +99,7 @@ public class Matrix3
     /// </summary>
     /// <param name="m"> Matrix to multiply by. </param>
     /// <returns> This matrix for chaining operations together. </returns>
-    public Matrix3x3 Mul( Matrix3x3 m )
+    public Matrix3 Mul( Matrix3 m )
     {
         var v00 = ( Val[ M00 ] * m.Val[ M00 ] ) + ( Val[ M01 ] * m.Val[ M10 ] ) + ( Val[ M02 ] * m.Val[ M20 ] );
         var v01 = ( Val[ M00 ] * m.Val[ M01 ] ) + ( Val[ M01 ] * m.Val[ M11 ] ) + ( Val[ M02 ] * m.Val[ M21 ] );
@@ -135,7 +135,7 @@ public class Matrix3
     /// </summary>
     /// <param name="m"> The other Matrix to multiply by </param>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3x3 MulLeft( Matrix3x3 m )
+    public Matrix3 MulLeft( Matrix3 m )
     {
         var v00 = ( m.Val[ M00 ] * Val[ M00 ] ) + ( m.Val[ M01 ] * Val[ M10 ] ) + ( m.Val[ M02 ] * Val[ M20 ] );
         var v01 = ( m.Val[ M00 ] * Val[ M01 ] ) + ( m.Val[ M01 ] * Val[ M11 ] ) + ( m.Val[ M02 ] * Val[ M21 ] );
@@ -168,7 +168,7 @@ public class Matrix3
     /// </summary>
     /// <param name="degrees"> the angle in degrees.</param>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3x3 SetToRotation( float degrees )
+    public Matrix3 SetToRotation( float degrees )
     {
         return SetToRotationRad( MathUtils.DEGREES_TO_RADIANS * degrees );
     }
@@ -179,7 +179,7 @@ public class Matrix3
     /// </summary>
     /// <param name="radians"> the angle in radians.</param>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3x3 SetToRotationRad( float radians )
+    public Matrix3 SetToRotationRad( float radians )
     {
         var cos = ( float )Math.Cos( radians );
         var sin = ( float )Math.Sin( radians );
@@ -199,12 +199,12 @@ public class Matrix3
         return this;
     }
 
-    public Matrix3x3 SetToRotation( Vector3 axis, float degrees )
+    public Matrix3 SetToRotation( Vector3 axis, float degrees )
     {
         return SetToRotation( axis, MathUtils.CosDeg( degrees ), MathUtils.SinDeg( degrees ) );
     }
 
-    public Matrix3x3 SetToRotation( Vector3 axis, float cos, float sin )
+    public Matrix3 SetToRotation( Vector3 axis, float cos, float sin )
     {
         var oc = 1.0f - cos;
 
@@ -225,7 +225,7 @@ public class Matrix3
     /// <param name="x"> the translation in x</param>
     /// <param name="y"> the translation in y</param>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3x3 SetToTranslation( float x, float y )
+    public Matrix3 SetToTranslation( float x, float y )
     {
         Val[ M00 ] = 1;
         Val[ M10 ] = 0;
@@ -245,7 +245,7 @@ public class Matrix3
     /// Sets this matrix to a translation matrix.
     /// <param name="translation"> The translation vector.</param>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3x3 SetToTranslation( Vector2 translation )
+    public Matrix3 SetToTranslation( Vector2 translation )
     {
         Val[ M00 ] = 1;
         Val[ M10 ] = 0;
@@ -266,7 +266,7 @@ public class Matrix3
     /// <param name="scaleX"> the scale in x </param>
     /// <param name="scaleY"> the scale in y </param>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3x3 SetToScaling( float scaleX, float scaleY )
+    public Matrix3 SetToScaling( float scaleX, float scaleY )
     {
         Val[ M00 ] = scaleX;
         Val[ M10 ] = 0;
@@ -284,7 +284,7 @@ public class Matrix3
     /// Sets this matrix to a scaling matrix.
     /// <param name="scale"> The scale vector. </param>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3x3 SetToScaling( Vector2 scale )
+    public Matrix3 SetToScaling( Vector2 scale )
     {
         Val[ M00 ] = scale.X;
         Val[ M10 ] = 0;
@@ -322,7 +322,7 @@ public class Matrix3
     /// </summary>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
     /// <exception cref="GdxRuntimeException"> if the matrix is singular (not invertible) </exception>
-    public Matrix3x3 Inv()
+    public Matrix3 Inv()
     {
         var det = Det();
 
@@ -359,7 +359,7 @@ public class Matrix3
     /// Copies the values from the provided matrix to this matrix.
     /// <param name="mat"> The matrix to copy. </param>
     /// <returns> This matrix for the purposes of chaining. </returns>
-    public Matrix3x3 Set( Matrix3x3 mat )
+    public Matrix3 Set( Matrix3 mat )
     {
         Array.Copy( mat.Val, 0, Val, 0, Val.Length );
 
@@ -372,7 +372,7 @@ public class Matrix3
     /// </summary>
     /// <param name="affine"> The affine matrix to copy. </param>
     /// <returns> This matrix for the purposes of chaining. </returns>
-    public Matrix3x3 Set( Affine2 affine )
+    public Matrix3 Set( Affine2 affine )
     {
         Val[ M00 ] = affine.M00;
         Val[ M10 ] = affine.M10;
@@ -392,7 +392,7 @@ public class Matrix3
     /// The matrix whose top left corner will be copied. This matrix will not be modified.
     /// </param>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3x3 Set( Matrix4 mat )
+    public Matrix3 Set( Matrix4 mat )
     {
         Val[ M00 ] = mat.Val[ Matrix4.M00 ];
         Val[ M10 ] = mat.Val[ Matrix4.M10 ];
@@ -417,7 +417,7 @@ public class Matrix3
     /// order.
     /// </param>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>
-    public Matrix3x3 Set( float[] values )
+    public Matrix3 Set( float[] values )
     {
         Array.Copy( values, 0, Val, 0, Val.Length );
 
@@ -460,7 +460,7 @@ public class Matrix3
     /// </summary>
     /// <param name="vector"> The translation vector. </param>
     /// <returns> This matrix for the purpose of chaining. </returns>
-    public Matrix3x3 Trn( Vector2 vector )
+    public Matrix3 Trn( Vector2 vector )
     {
         Val[ M02 ] += vector.X;
         Val[ M12 ] += vector.Y;
@@ -474,7 +474,7 @@ public class Matrix3
     /// <param name="x"> The x-component of the translation vector. </param>
     /// <param name="y"> The y-component of the translation vector. </param>
     /// <returns> This matrix for the purpose of chaining. </returns>
-    public Matrix3x3 Trn( float x, float y )
+    public Matrix3 Trn( float x, float y )
     {
         Val[ M02 ] += x;
         Val[ M12 ] += y;
@@ -489,7 +489,7 @@ public class Matrix3
     /// The translation vector. (The z-component of the vector is ignored because this is a 3x3 matrix)
     /// </param>
     /// <returns> This matrix for the purpose of chaining. </returns>
-    public Matrix3x3 Trn( Vector3 vector )
+    public Matrix3 Trn( Vector3 vector )
     {
         Val[ M02 ] += vector.X;
         Val[ M12 ] += vector.Y;
@@ -504,7 +504,7 @@ public class Matrix3
     /// <param name="x"> The x-component of the translation vector. </param>
     /// <param name="y"> The y-component of the translation vector. </param>
     /// <returns> This matrix for the purpose of chaining. </returns>
-    public Matrix3x3 Translate( float x, float y )
+    public Matrix3 Translate( float x, float y )
     {
         _tmp[ M00 ] = 1;
         _tmp[ M10 ] = 0;
@@ -529,7 +529,7 @@ public class Matrix3
     /// </summary>
     /// <param name="translation"> The translation vector. </param>
     /// <returns> This matrix for the purpose of chaining. </returns>
-    public Matrix3x3 Translate( Vector2 translation )
+    public Matrix3 Translate( Vector2 translation )
     {
         _tmp[ M00 ] = 1;
         _tmp[ M10 ] = 0;
@@ -555,7 +555,7 @@ public class Matrix3
     /// </summary>
     /// <param name="degrees"> The angle in degrees </param>
     /// <returns> This matrix for the purpose of chaining. </returns>
-    public Matrix3x3 Rotate( float degrees )
+    public Matrix3 Rotate( float degrees )
     {
         return RotateRad( MathUtils.DEGREES_TO_RADIANS * degrees );
     }
@@ -566,7 +566,7 @@ public class Matrix3
     /// </summary>
     /// <param name="radians"> The angle in radians </param>
     /// <returns> This matrix for the purpose of chaining. </returns>
-    public Matrix3x3 RotateRad( float radians )
+    public Matrix3 RotateRad( float radians )
     {
         if ( radians == 0 )
         {
@@ -600,7 +600,7 @@ public class Matrix3
     /// <param name="scaleX"> The scale in the x-axis. </param>
     /// <param name="scaleY"> The scale in the y-axis. </param>
     /// <returns> This matrix for the purpose of chaining. </returns>
-    public Matrix3x3 Scale( float scaleX, float scaleY )
+    public Matrix3 Scale( float scaleX, float scaleY )
     {
         _tmp[ M00 ] = scaleX;
         _tmp[ M10 ] = 0;
@@ -623,7 +623,7 @@ public class Matrix3
     /// </summary>
     /// <param name="scale"> The vector to scale the matrix by. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Matrix3x3 Scale( Vector2 scale )
+    public Matrix3 Scale( Vector2 scale )
     {
         _tmp[ M00 ] = scale.X;
         _tmp[ M10 ] = 0;
@@ -684,7 +684,7 @@ public class Matrix3
     /// </summary>
     /// <param name="scale"> The single value that will be used to scale both the x and y components. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix3x3 Scl( float scale )
+    public Matrix3 Scl( float scale )
     {
         Val[ M00 ] *= scale;
         Val[ M11 ] *= scale;
@@ -698,7 +698,7 @@ public class Matrix3
     /// </summary>
     /// <param name="scale"> The <see cref="Vector3" /> to use to scale this matrix. </param>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>
-    public Matrix3x3 Scl( Vector2 scale )
+    public Matrix3 Scl( Vector2 scale )
     {
         Val[ M00 ] *= scale.X;
         Val[ M11 ] *= scale.Y;
@@ -715,7 +715,7 @@ public class Matrix3
     /// The z component will be ignored.
     /// </param>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>
-    public Matrix3x3 Scl( Vector3 scale )
+    public Matrix3 Scl( Vector3 scale )
     {
         Val[ M00 ] *= scale.X;
         Val[ M11 ] *= scale.Y;
@@ -727,7 +727,7 @@ public class Matrix3
     /// Transposes the current matrix.
     /// </summary>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>
-    public Matrix3x3 Transpose()
+    public Matrix3 Transpose()
     {
         ( Val[ M01 ], Val[ M10 ] ) = ( Val[ M10 ], Val[ M01 ] );
         ( Val[ M02 ], Val[ M20 ] ) = ( Val[ M20 ], Val[ M02 ] );

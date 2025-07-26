@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using DesktopGLBackend.Audio;
-using DesktopGLBackend.Audio.Mock;
 using DesktopGLBackend.Input;
 using DesktopGLBackend.Utils;
 using DesktopGLBackend.Window;
@@ -43,17 +42,33 @@ namespace DesktopGLBackend.Core;
 /// Creates, and manages, an application to for Windows OpenGL backends.
 /// </summary>
 [PublicAPI]
-public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
+public class DesktopGLApplication : IApplication, IDisposable
 {
-    public Dictionary< string, IPreferences > Preferences        { get; set; } = [ ];
-    public List< DesktopGLWindow >            Windows            { get; set; } = [ ];
-    public List< IRunnable.Runnable >         Runnables          { get; set; } = [ ];
-    public List< IRunnable.Runnable >         ExecutedRunnables  { get; set; } = [ ];
-    public List< ILifecycleListener >         LifecycleListeners { get; set; } = [ ];
-    public DesktopGLApplicationConfiguration? Config             { get; set; }
+    /// <summary>
+    /// Pewrsistant properties manager instance.
+    /// </summary>
+    public Dictionary< string, IPreferences > Preferences { get; set; } = [ ];
+
+    /// <summary>
+    /// Container for the list of available DesktopGLWindows used by the application.
+    /// </summary>
+    public List< DesktopGLWindow > Windows { get; set; } = [ ];
+
+    /// <summary>
+    /// Holds a list of LifeCycle listeners to process while the application
+    /// is active.
+    /// </summary>
+    public List< ILifecycleListener > LifecycleListeners { get; set; } = [ ];
+
+    /// <summary>
+    /// Application Configuration Settings
+    /// </summary>
+    public DesktopGLApplicationConfiguration? Config { get; set; }
+
+    public List< IRunnable.Runnable > Runnables         { get; set; } = [ ];
+    public List< IRunnable.Runnable > ExecutedRunnables { get; set; } = [ ];
 
     public IClipboard?      Clipboard     { get; set; }
-    public IGLAudio?        Audio         { get; set; }
     public GLVersion?       GLVersion     { get; set; }
     public OpenGLProfile    OGLProfile    { get; set; }
     public DesktopGLWindow? CurrentWindow { get; set; }
@@ -88,9 +103,11 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // This MUST be the first call, so that the Logger and Engine.App global are
         // initialised correctly.
         Engine.Api.Initialise( this );
+
         // ====================================================================
         // ====================================================================
 
+        // Enable GLProfiling in preferences
         _prefs = GetPreferences( "desktopgl.lugh.engine.preferences" );
         _prefs.PutBool( "profiling", config.GLProfilingEnabled );
         _prefs.Flush();
@@ -109,13 +126,12 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         // and are used in backend code only.
         // Note: Engine.Graphics is set later, during window creation as each window that
         // is created will have its own IGraphics instance.
-        Audio     = CreateAudio( Config );
-        Clipboard = new DesktopGLClipboard();
-
+        Engine.Api.Audio = AudioManager.CreateAudio( Config );
         Engine.Api.Files = new LughSharp.Lugh.Files.Files();
         Engine.Api.Net   = new DesktopGLNet( Config );
 
-        _sync = new Sync();
+        Clipboard = new DesktopGLClipboard();
+        _sync     = new Sync();
 
         InitialiseGlfw();
 
@@ -269,7 +285,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
                 _sync?.SyncFrameRate( targetFramerate );
             }
 
-            Audio?.Update();
+            Engine.Api.Audio?.Update();
 
             // Glfw.SwapBuffers is called in window.Update().
             Glfw.PollEvents();
@@ -324,6 +340,8 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
                     Logger.Debug( $"Failed to initialise Glfw: {error}" );
 
+                    Glfw.Terminate();
+                    
                     Environment.Exit( 1 );
                 }
 
@@ -336,6 +354,9 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private static void ErrorCallback()
     {
         _errorCallback = ( error, description ) =>
@@ -344,6 +365,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
             if ( error == ErrorCode.InvalidEnum )
             {
+                Logger.Warning( "Invalid Error!!" );
             }
         };
     }
@@ -368,36 +390,6 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
         }
 
         Windows.Clear();
-    }
-
-    /// <inheritdoc />
-    public IGLAudio CreateAudio( DesktopGLApplicationConfiguration config )
-    {
-        IGLAudio audio;
-
-        if ( !config.DisableAudio )
-        {
-            try
-            {
-                audio = new OpenALAudio( config.AudioDeviceSimultaneousSources,
-                                         config.AudioDeviceBufferCount,
-                                         config.AudioDeviceBufferSize );
-            }
-            catch ( Exception e )
-            {
-                Logger.Debug( $"Couldn't initialize audio, disabling audio: {e}" );
-
-                audio = new MockAudio();
-            }
-        }
-        else
-        {
-            Logger.Debug( "Audio is disabled in Config, using MockAudio instead." );
-
-            audio = new MockAudio();
-        }
-
-        return audio;
     }
 
     /// <summary>
@@ -426,8 +418,24 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
 
         OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
 
-        Glfw.WindowHint( GLFW.WindowHint.ContextVersionMajor, config.GLContextMajorVersion );
-        Glfw.WindowHint( GLFW.WindowHint.ContextVersionMinor, config.GLContextMinorVersion );
+        if ( config.GLContextMajorVersion is > 0 )
+        {
+            Glfw.WindowHint( GLFW.WindowHint.ContextVersionMajor, ( int )config.GLContextMajorVersion );
+        }
+        else
+        {
+            Glfw.WindowHint( GLFW.WindowHint.ContextVersionMajor, GLUtils.DEFAULT_GL_MAJOR );
+        }
+
+        if ( config.GLContextMinorVersion is > 0 )
+        {
+            Glfw.WindowHint( GLFW.WindowHint.ContextVersionMinor, ( int )config.GLContextMinorVersion );
+        }
+        else
+        {
+            Glfw.WindowHint( GLFW.WindowHint.ContextVersionMinor, GLUtils.DEFAULT_GL_MINOR );
+        }
+        
         Glfw.WindowHint( GLFW.WindowHint.OpenGLForwardCompat, GLUtils.DEFAULT_OPENGL_FORWARDCOMPAT );
         Glfw.WindowHint( GLFW.WindowHint.OpenGLProfile, OGLProfile );
         Glfw.WindowHint( GLFW.WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
@@ -531,7 +539,7 @@ public class DesktopGLApplication : IDesktopGLApplicationBase, IDisposable
     {
         DesktopGLCursor.DisposeSystemCursors();
 
-        Audio?.Dispose();
+        Engine.Api.Audio.Dispose();
 
         _errorCallback = null;
 

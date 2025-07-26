@@ -631,26 +631,24 @@ public class Quaternion
     /// <summary>
     /// Sets the Quaternion from the given matrix, optionally removing any scaling.
     /// </summary>
-    public Quaternion SetFromMatrix( bool normalizeAxes, Matrix3x3 matrix )
+    public Quaternion SetFromMatrix( bool normalizeAxes, Matrix3 matrix )
     {
-        return SetFromAxes(
-                           normalizeAxes,
-                           matrix.Val[ Matrix3x3.M00 ],
-                           matrix.Val[ Matrix3x3.M01 ],
-                           matrix.Val[ Matrix3x3.M02 ],
-                           matrix.Val[ Matrix3x3.M10 ],
-                           matrix.Val[ Matrix3x3.M11 ],
-                           matrix.Val[ Matrix3x3.M12 ],
-                           matrix.Val[ Matrix3x3.M20 ],
-                           matrix.Val[ Matrix3x3.M21 ],
-                           matrix.Val[ Matrix3x3.M22 ]
-                          );
+        return SetFromAxes( normalizeAxes,
+                            matrix.Val[ Matrix3.M00 ],
+                            matrix.Val[ Matrix3.M01 ],
+                            matrix.Val[ Matrix3.M02 ],
+                            matrix.Val[ Matrix3.M10 ],
+                            matrix.Val[ Matrix3.M11 ],
+                            matrix.Val[ Matrix3.M12 ],
+                            matrix.Val[ Matrix3.M20 ],
+                            matrix.Val[ Matrix3.M21 ],
+                            matrix.Val[ Matrix3.M22 ] );
     }
 
     /// <summary>
     /// Sets the Quaternion from the given rotation matrix, which must not contain scaling.
     /// </summary>
-    public Quaternion SetFromMatrix( Matrix3x3 matrix )
+    public Quaternion SetFromMatrix( Matrix3 matrix )
     {
         return SetFromMatrix( false, matrix );
     }

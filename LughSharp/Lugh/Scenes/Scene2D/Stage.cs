@@ -31,6 +31,7 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Graphics.Viewports;
 using LughSharp.Lugh.Input;
+using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
 using LughSharp.Lugh.Utils;

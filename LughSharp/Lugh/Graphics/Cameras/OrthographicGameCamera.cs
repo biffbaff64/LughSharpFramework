@@ -97,8 +97,6 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
                                    float ppm = CameraData.DEFAULT_PPM,
                                    string name = "" )
     {
-        Logger.Debug( $"OrthographicGameCamera: Scene: {sceneWidth}x{sceneHeight}, PPM: {ppm}, Name: {name}" );
-
         Name             = name;
         IsInUse          = true;
         IsLerpingEnabled = false;
@@ -148,6 +146,9 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
             default:
                 throw new GdxRuntimeException( $"Unknown Viewport Type: {viewportType}" );
         }
+        
+        Logger.Checkpoint();
+        Camera.Debug();
     }
 
     // ========================================================================
