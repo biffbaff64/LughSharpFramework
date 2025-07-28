@@ -26,7 +26,6 @@ using System.Text;
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;

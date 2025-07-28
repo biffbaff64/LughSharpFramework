@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;

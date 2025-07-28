@@ -24,7 +24,6 @@
 
 using System.Diagnostics;
 
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 

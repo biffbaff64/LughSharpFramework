@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
-
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Maths;
@@ -41,15 +39,19 @@ public class Matrix3
     public const int M21 = 5;
     public const int M22 = 8;
 
-    private readonly float[] _tmp = new float[ 9 ];
-
+    // ========================================================================
+    
     public readonly float[] Val = new float[ 9 ];
 
     // ========================================================================
 
+    private readonly float[] _tmp = new float[ 9 ];
+
+    // ========================================================================
+    
     public Matrix3()
     {
-        Idt();
+        ToIdentity();
     }
 
     public Matrix3( Matrix3 matrix )
@@ -75,7 +77,7 @@ public class Matrix3
     /// Sets this matrix to the identity matrix
     /// </summary>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
-    public Matrix3 Idt()
+    public Matrix3 ToIdentity()
     {
         Val[ M00 ] = 1;
         Val[ M10 ] = 0;
@@ -394,15 +396,15 @@ public class Matrix3
     /// <returns> This matrix for the purpose of chaining operations. </returns>
     public Matrix3 Set( Matrix4 mat )
     {
-        Val[ M00 ] = mat.Val[ Matrix4.M00 ];
-        Val[ M10 ] = mat.Val[ Matrix4.M10 ];
-        Val[ M20 ] = mat.Val[ Matrix4.M20 ];
-        Val[ M01 ] = mat.Val[ Matrix4.M01 ];
-        Val[ M11 ] = mat.Val[ Matrix4.M11 ];
-        Val[ M21 ] = mat.Val[ Matrix4.M21 ];
-        Val[ M02 ] = mat.Val[ Matrix4.M02 ];
-        Val[ M12 ] = mat.Val[ Matrix4.M12 ];
-        Val[ M22 ] = mat.Val[ Matrix4.M22 ];
+        Val[ M00 ] = mat.Val[ Matrix4.M00_0 ];
+        Val[ M10 ] = mat.Val[ Matrix4.M10_1 ];
+        Val[ M20 ] = mat.Val[ Matrix4.M20_2 ];
+        Val[ M01 ] = mat.Val[ Matrix4.M01_4 ];
+        Val[ M11 ] = mat.Val[ Matrix4.M11_5 ];
+        Val[ M21 ] = mat.Val[ Matrix4.M21_6 ];
+        Val[ M02 ] = mat.Val[ Matrix4.M02_8 ];
+        Val[ M12 ] = mat.Val[ Matrix4.M12_9 ];
+        Val[ M22 ] = mat.Val[ Matrix4.M22_10 ];
 
         return this;
     }

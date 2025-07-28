@@ -24,7 +24,6 @@
 
 using System.Diagnostics;
 
-using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Scenes.Scene2D.Actions;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Utils;

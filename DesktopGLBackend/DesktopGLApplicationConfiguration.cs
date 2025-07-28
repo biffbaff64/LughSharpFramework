@@ -26,8 +26,9 @@ using DesktopGLBackend.Graphics;
 
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics;
+using LughSharp.Lugh.Utils;
 
-namespace DesktopGLBackend.Core;
+namespace DesktopGLBackend;
 
 /// <summary>
 /// Configuration data and methods for the Desktop OpenGL backend.
@@ -35,18 +36,51 @@ namespace DesktopGLBackend.Core;
 [PublicAPI]
 public class DesktopGLApplicationConfiguration : ApplicationConfiguration
 {
+    public static DesktopGLApplicationConfiguration Instance { get; } = new();
+    
+    // ========================================================================
+
+    public DesktopGLGraphics.DesktopGLMonitor? MaximizedMonitor { get; set; }
+
+    /// <summary>
+    /// Sets the <see cref="IDesktopGLWindowListener" /> which will be informed about
+    /// iconficiation, focus loss and window close events.
+    /// </summary>
+    public IDesktopGLWindowListener? WindowListener { get; set; }
+
+    /// <summary>
+    /// Sets the app to use fullscreen mode.
+    /// <para>
+    /// Use the static methods like <see cref="GetDisplayMode" />
+    /// on this class to enumerate connected monitors and their fullscreen display modes.
+    /// </para>
+    /// </summary>
+    public DesktopGLGraphics.DesktopGLDisplayMode? FullscreenMode { get; set; }
+
+    public bool IsFullscreenMode => FullscreenMode != null;
+
+    // ========================================================================
+
+    public DesktopGLApplicationConfiguration()
+    {
+        Logger.Checkpoint();
+    }
+    
     /// <summary>
     /// Creates, and returns, a new DesktopApplicationConfiguration, using settings
     /// from the supplied DesktopApplicationConfiguratrion object.
     /// </summary>
     public static DesktopGLApplicationConfiguration Copy( DesktopGLApplicationConfiguration config )
     {
-        return ApplicationConfiguration.Copy( config ) as DesktopGLApplicationConfiguration
-               ?? throw new InvalidOperationException();
+        var copy = new DesktopGLApplicationConfiguration();
+        
+        copy.Set( config );
+        
+        return copy;
     }
-    
+
     /// <inheritdoc />
-    public override IGraphicsDevice.DisplayMode GetDisplayMode( GLFW.Monitor monitor )`
+    public override IGraphicsDevice.DisplayMode GetDisplayMode( GLFW.Monitor monitor )
     {
         var videoMode = Glfw.GetVideoMode( monitor );
 
@@ -83,20 +117,35 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
     {
         var videoModes = Glfw.GetVideoModes( monitor );
 
-        var result = new IGraphicsDevice.DisplayMode[ videoModes.Length ];
+        var vmode = new IGraphicsDevice.DisplayMode[ videoModes.Length ];
 
-        for ( var i = 0; i < result.Length; i++ )
+        for ( var i = 0; i < vmode.Length; i++ )
         {
             var videoMode = videoModes[ i ];
 
-            result[ i ] = new DesktopGLGraphics.DesktopGLDisplayMode( monitor,
-                                                                      videoMode.Width,
-                                                                      videoMode.Height,
-                                                                      videoMode.RefreshRate,
-                                                                      videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits );
+            vmode[ i ] = new DesktopGLGraphics.DesktopGLDisplayMode( monitor,
+                                                                     videoMode.Width,
+                                                                     videoMode.Height,
+                                                                     videoMode.RefreshRate,
+                                                                     videoMode.RedBits + videoMode.GreenBits + videoMode.BlueBits );
         }
 
-        return result;
+        return vmode;
+    }
+
+    /// <summary>
+    /// Sets this windows configuration settings.
+    /// </summary>
+    /// <param name="config">
+    /// The window configuration data from which to initialise this window config.
+    /// </param>
+    public void SetWindowConfiguration( DesktopGLApplicationConfiguration config )
+    {
+        base.SetWindowConfiguration( config );
+        
+        MaximizedMonitor = config.MaximizedMonitor;
+        WindowListener   = config.WindowListener;
+        FullscreenMode   = config.FullscreenMode;
     }
 }
 

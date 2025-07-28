@@ -1130,7 +1130,7 @@ public class Intersector
         // Test intersection with the 2 planes perpendicular to the OBB's X axis
         var xaxis = _tmp1;
 
-        _tmp1.Set( matrix.Val[ Matrix4.M00 ], matrix.Val[ Matrix4.M10 ], matrix.Val[ Matrix4.M20 ] );
+        _tmp1.Set( matrix.Val[ Matrix4.M00_0 ], matrix.Val[ Matrix4.M10_1 ], matrix.Val[ Matrix4.M20_2 ] );
 
         var e = xaxis.Dot( delta );
         var f = ray.Direction.Dot( xaxis );
@@ -1180,7 +1180,7 @@ public class Intersector
         // Test intersection with the 2 planes perpendicular to the OBB's Y axis
         // Exactly the same thing than above.
         var yaxis = _tmp2;
-        _tmp2.Set( matrix.Val[ Matrix4.M01 ], matrix.Val[ Matrix4.M11 ], matrix.Val[ Matrix4.M21 ] );
+        _tmp2.Set( matrix.Val[ Matrix4.M01_4 ], matrix.Val[ Matrix4.M11_5 ], matrix.Val[ Matrix4.M21_6 ] );
 
         e = yaxis.Dot( delta );
         f = ray.Direction.Dot( yaxis );
@@ -1218,7 +1218,7 @@ public class Intersector
         // Test intersection with the 2 planes perpendicular to the OBB's Z axis
         // Exactly the same thing than above.
         var zaxis = _tmp3;
-        _tmp3.Set( matrix.Val[ Matrix4.M02 ], matrix.Val[ Matrix4.M12 ], matrix.Val[ Matrix4.M22 ] );
+        _tmp3.Set( matrix.Val[ Matrix4.M02_8 ], matrix.Val[ Matrix4.M12_9 ], matrix.Val[ Matrix4.M22_10 ] );
 
         e = zaxis.Dot( delta );
         f = ray.Direction.Dot( zaxis );

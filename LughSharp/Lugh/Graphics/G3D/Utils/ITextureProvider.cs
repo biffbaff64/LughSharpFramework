@@ -25,7 +25,6 @@
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Graphics.G3D.Models.Data;
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Lugh.Graphics.G3D.Utils;
 

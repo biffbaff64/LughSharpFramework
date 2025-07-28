@@ -490,22 +490,22 @@ public class Quaternion
         var zw = Z * W;
 
         // Set matrix from quaternion
-        matrix[ Matrix4.M00 ] = 1 - ( 2 * ( yy + zz ) );
-        matrix[ Matrix4.M01 ] = 2 * ( xy - zw );
-        matrix[ Matrix4.M02 ] = 2 * ( xz + yw );
-        matrix[ Matrix4.M03 ] = 0;
-        matrix[ Matrix4.M10 ] = 2 * ( xy + zw );
-        matrix[ Matrix4.M11 ] = 1 - ( 2 * ( xx + zz ) );
-        matrix[ Matrix4.M12 ] = 2 * ( yz - xw );
-        matrix[ Matrix4.M13 ] = 0;
-        matrix[ Matrix4.M20 ] = 2 * ( xz - yw );
-        matrix[ Matrix4.M21 ] = 2 * ( yz + xw );
-        matrix[ Matrix4.M22 ] = 1 - ( 2 * ( xx + yy ) );
-        matrix[ Matrix4.M23 ] = 0;
-        matrix[ Matrix4.M30 ] = 0;
-        matrix[ Matrix4.M31 ] = 0;
-        matrix[ Matrix4.M32 ] = 0;
-        matrix[ Matrix4.M33 ] = 1;
+        matrix[ Matrix4.M00_0 ] = 1 - ( 2 * ( yy + zz ) );
+        matrix[ Matrix4.M01_4 ] = 2 * ( xy - zw );
+        matrix[ Matrix4.M02_8 ] = 2 * ( xz + yw );
+        matrix[ Matrix4.M03_12 ] = 0;
+        matrix[ Matrix4.M10_1 ] = 2 * ( xy + zw );
+        matrix[ Matrix4.M11_5 ] = 1 - ( 2 * ( xx + zz ) );
+        matrix[ Matrix4.M12_9 ] = 2 * ( yz - xw );
+        matrix[ Matrix4.M13_13 ] = 0;
+        matrix[ Matrix4.M20_2 ] = 2 * ( xz - yw );
+        matrix[ Matrix4.M21_6 ] = 2 * ( yz + xw );
+        matrix[ Matrix4.M22_10 ] = 1 - ( 2 * ( xx + yy ) );
+        matrix[ Matrix4.M23_14 ] = 0;
+        matrix[ Matrix4.M30_3 ] = 0;
+        matrix[ Matrix4.M31_7 ] = 0;
+        matrix[ Matrix4.M32_11 ] = 0;
+        matrix[ Matrix4.M33_15 ] = 1;
     }
 
     /// <summary>
@@ -608,15 +608,15 @@ public class Quaternion
     {
         return SetFromAxes(
                            normalizeAxes,
-                           matrix.Val[ Matrix4.M00 ],
-                           matrix.Val[ Matrix4.M01 ],
-                           matrix.Val[ Matrix4.M02 ],
-                           matrix.Val[ Matrix4.M10 ],
-                           matrix.Val[ Matrix4.M11 ],
-                           matrix.Val[ Matrix4.M12 ],
-                           matrix.Val[ Matrix4.M20 ],
-                           matrix.Val[ Matrix4.M21 ],
-                           matrix.Val[ Matrix4.M22 ]
+                           matrix.Val[ Matrix4.M00_0 ],
+                           matrix.Val[ Matrix4.M01_4 ],
+                           matrix.Val[ Matrix4.M02_8 ],
+                           matrix.Val[ Matrix4.M10_1 ],
+                           matrix.Val[ Matrix4.M11_5 ],
+                           matrix.Val[ Matrix4.M12_9 ],
+                           matrix.Val[ Matrix4.M20_2 ],
+                           matrix.Val[ Matrix4.M21_6 ],
+                           matrix.Val[ Matrix4.M22_10 ]
                           );
     }
 

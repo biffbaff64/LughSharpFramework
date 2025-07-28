@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils;
 
@@ -86,8 +85,6 @@ public abstract class Camera
     /// </summary>
     protected Camera()
     {
-        Logger.Checkpoint();
-        
         ProjectionMatrix  = new Matrix4();
         ViewMatrix        = new Matrix4();
         Combined          = new Matrix4();
@@ -434,3 +431,6 @@ public abstract class Camera
     }
     #endif
 }
+
+// ============================================================================
+// ============================================================================

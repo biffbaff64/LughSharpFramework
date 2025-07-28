@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils;
 
-namespace DesktopGLBackend.Core;
+namespace DesktopGLBackend;
 
 [PublicAPI]
 public class DesktopGLNativesLoader

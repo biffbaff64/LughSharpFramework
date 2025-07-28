@@ -233,6 +233,7 @@ CORE
     CODE   DOCUMENT
     ----   --------
     - DONE - DONE - ApplicationAdapter
+    - DONE - DONE - ApplicationConfiguration
     - DONE - DONE - Engine
     - DONE - DONE - Game
     - DONE - DONE - GameTime

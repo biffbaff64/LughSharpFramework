@@ -22,18 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Numerics;
-
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
 using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using DebugSeverity = LughSharp.Lugh.Graphics.OpenGL.Enums.DebugSeverity;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.G2D;
@@ -505,13 +499,6 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="projection">The new projection matrix to be applied.</param>
     public void SetProjectionMatrix( Matrix4 projection )
     {
-        projection.DebugPrint( "Projection Matrix received by SpriteBatch" );
-
-        if ( !projection.IsValidViewMatrix() )
-        {
-            throw new ArgumentException( "Invalid projection matrix provided to SpriteBatch" );
-        }
-
         if ( ( CurrentBatchState == BatchState.Drawing ) && ( Idx > 0 ) )
         {
             // Necessary call to Flush() to ensure projection matrix
@@ -815,14 +802,9 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public virtual void SetupMatrices()
     {
-        TransformMatrix.DebugPrint( "Transform Matrix" );
-        ProjectionMatrix.DebugPrint( "Projection Matrix" );
-
-        // Note: Do not use the property 'SHADER' here as its getter calls
+        // Note: Do not use the property 'Shader' here as its setter calls
         // this method, which would cause an infinite loop.
         CombinedMatrix = ProjectionMatrix.Mul( TransformMatrix );
-
-        CombinedMatrix.DebugPrint( "Combined Matrix" );
 
         if ( _shader != null )
         {
@@ -904,51 +886,6 @@ public partial class SpriteBatch : IBatch, IDisposable
                 SetupMatrices();
             }
         }
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public void Dispose()
-    {
-        Dispose( true );
-        GC.SuppressFinalize( this );
-    }
-
-    protected void Dispose( bool disposing )
-    {
-        if ( !_disposed )
-        {
-            if ( disposing )
-            {
-                UnbindBuffers();
-
-                _mesh?.Dispose();
-
-                if ( _ownsShader && ( _shader != null ) )
-                {
-                    _shader.Dispose();
-                }
-
-                _mesh   = null;
-                _shader = null;
-            }
-
-            _disposed = true;
-        }
-    }
-
-    private void ThrowIfDisposed()
-    {
-        if ( _disposed )
-        {
-            throw new ObjectDisposedException( nameof( SpriteBatch ) );
-        }
-    }
-
-    ~SpriteBatch()
-    {
-        Dispose( false );
     }
 
     // ========================================================================
@@ -1746,6 +1683,51 @@ public partial class SpriteBatch : IBatch, IDisposable
     }
 
     #endregion Color handling
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+
+    protected void Dispose( bool disposing )
+    {
+        if ( !_disposed )
+        {
+            if ( disposing )
+            {
+                UnbindBuffers();
+
+                _mesh?.Dispose();
+
+                if ( _ownsShader && ( _shader != null ) )
+                {
+                    _shader.Dispose();
+                }
+
+                _mesh   = null;
+                _shader = null;
+            }
+
+            _disposed = true;
+        }
+    }
+
+    private void ThrowIfDisposed()
+    {
+        if ( _disposed )
+        {
+            throw new ObjectDisposedException( nameof( SpriteBatch ) );
+        }
+    }
+
+    ~SpriteBatch()
+    {
+        Dispose( false );
+    }
 
     // ========================================================================
 

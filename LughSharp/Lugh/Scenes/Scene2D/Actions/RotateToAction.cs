@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;

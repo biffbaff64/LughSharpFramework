@@ -23,10 +23,6 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
-using LughSharp.Lugh.Maths;
-
-
 
 namespace LughSharp.Lugh.Graphics.Utils;
 

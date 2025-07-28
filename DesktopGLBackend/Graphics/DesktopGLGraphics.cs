@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Core;
-using DesktopGLBackend.Utils;
-using DesktopGLBackend.Window;
-
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Images;
@@ -358,25 +354,25 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
-        return DesktopGLApplicationConfiguration.GetDisplayModes( Glfw.GetPrimaryMonitor() );
+        return DesktopGLApplicationConfiguration.Instance.GetDisplayModes( Glfw.GetPrimaryMonitor() );
     }
 
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
     {
-        return DesktopGLApplicationConfiguration.GetDisplayModes( monitor );
+        return DesktopGLApplicationConfiguration.Instance.GetDisplayModes( monitor );
     }
 
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode GetDisplayMode()
     {
-        return DesktopGLApplicationConfiguration.GetDisplayMode( Glfw.GetPrimaryMonitor() );
+        return DesktopGLApplicationConfiguration.Instance.GetDisplayMode( Glfw.GetPrimaryMonitor() );
     }
 
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode GetDisplayMode( GLFW.Monitor monitor )
     {
-        return DesktopGLApplicationConfiguration.GetDisplayMode( monitor );
+        return DesktopGLApplicationConfiguration.Instance.GetDisplayMode( monitor );
     }
 
     /// <inheritdoc />

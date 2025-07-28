@@ -24,7 +24,7 @@
 
 using System.Diagnostics;
 
-namespace DesktopGLBackend.Core;
+namespace DesktopGLBackend;
 
 // Use Stopwatch for high-resolution timing
 

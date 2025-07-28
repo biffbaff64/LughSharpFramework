@@ -34,7 +34,6 @@ using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Maps.Objects;
 using LughSharp.Lugh.Maps.Tiled.Objects;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
-using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Color = LughSharp.Lugh.Graphics.Color;

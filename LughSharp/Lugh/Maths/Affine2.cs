@@ -117,8 +117,8 @@ public class Affine2
     /// Copies the 2D transformation components from the provided 4x4 matrix.
     /// The values are mapped as follows:
     /// <pre>
-    /// [  M00  M01  M03  ]
-    /// [  M10  M11  M13  ]
+    /// [  M00  M01  M03_12  ]
+    /// [  M10_1  M11_5  M13_13  ]
     /// [   0    0    1   ]
     /// </pre>
     /// </summary>
@@ -131,12 +131,12 @@ public class Affine2
     {
         var other = matrix.Val;
 
-        M00 = other[ Matrix4.M00 ];
-        M01 = other[ Matrix4.M01 ];
-        M02 = other[ Matrix4.M03 ];
-        M10 = other[ Matrix4.M10 ];
-        M11 = other[ Matrix4.M11 ];
-        M12 = other[ Matrix4.M13 ];
+        M00 = other[ Matrix4.M00_0 ];
+        M01 = other[ Matrix4.M01_4 ];
+        M02 = other[ Matrix4.M03_12 ];
+        M10 = other[ Matrix4.M10_1 ];
+        M11 = other[ Matrix4.M11_5 ];
+        M12 = other[ Matrix4.M13_13 ];
 
         return this;
     }

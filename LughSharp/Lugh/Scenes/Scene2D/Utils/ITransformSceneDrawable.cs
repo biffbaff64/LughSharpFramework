@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Maths;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 

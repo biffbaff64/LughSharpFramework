@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.G2D;
@@ -981,12 +980,12 @@ public class CpuSpriteBatch : SpriteBatch
         }
 
         // matrices are assumed to be 2D transformations
-        return a.Val[ Matrix4.M00 ].Equals( b.Val[ Matrix4.M00 ] )
-               && a.Val[ Matrix4.M10 ].Equals( b.Val[ Matrix4.M10 ] )
-               && a.Val[ Matrix4.M01 ].Equals( b.Val[ Matrix4.M01 ] )
-               && a.Val[ Matrix4.M11 ].Equals( b.Val[ Matrix4.M11 ] )
-               && a.Val[ Matrix4.M03 ].Equals( b.Val[ Matrix4.M03 ] )
-               && a.Val[ Matrix4.M13 ].Equals( b.Val[ Matrix4.M13 ] );
+        return a.Val[ Matrix4.M00_0 ].Equals( b.Val[ Matrix4.M00_0 ] )
+               && a.Val[ Matrix4.M10_1 ].Equals( b.Val[ Matrix4.M10_1 ] )
+               && a.Val[ Matrix4.M01_4 ].Equals( b.Val[ Matrix4.M01_4 ] )
+               && a.Val[ Matrix4.M11_5 ].Equals( b.Val[ Matrix4.M11_5 ] )
+               && a.Val[ Matrix4.M03_12 ].Equals( b.Val[ Matrix4.M03_12 ] )
+               && a.Val[ Matrix4.M13_13 ].Equals( b.Val[ Matrix4.M13_13 ] );
     }
 
     private static bool CheckEqual( Matrix4 matrix, Affine2 affine )
@@ -994,12 +993,12 @@ public class CpuSpriteBatch : SpriteBatch
         var val = matrix.Values;
 
         // matrix is assumed to be 2D transformation
-        return val[ Matrix4.M00 ].Equals( affine.M00 )
-               && val[ Matrix4.M10 ].Equals( affine.M10 )
-               && val[ Matrix4.M01 ].Equals( affine.M01 )
-               && val[ Matrix4.M11 ].Equals( affine.M11 )
-               && val[ Matrix4.M03 ].Equals( affine.M02 )
-               && val[ Matrix4.M13 ].Equals( affine.M12 );
+        return val[ Matrix4.M00_0 ].Equals( affine.M00 )
+               && val[ Matrix4.M10_1 ].Equals( affine.M10 )
+               && val[ Matrix4.M01_4 ].Equals( affine.M01 )
+               && val[ Matrix4.M11_5 ].Equals( affine.M11 )
+               && val[ Matrix4.M03_12 ].Equals( affine.M02 )
+               && val[ Matrix4.M13_13 ].Equals( affine.M12 );
     }
 
     private static bool CheckIdt( Matrix4 matrix )
@@ -1007,11 +1006,11 @@ public class CpuSpriteBatch : SpriteBatch
         var val = matrix.Values;
 
         // matrix is assumed to be 2D transformation
-        return val[ Matrix4.M00 ] is 1
-               && val[ Matrix4.M10 ] is 0
-               && val[ Matrix4.M01 ] is 0
-               && val[ Matrix4.M11 ] is 1
-               && val[ Matrix4.M03 ] is 0
-               && val[ Matrix4.M13 ] is 0;
+        return val[ Matrix4.M00_0 ] is 1
+               && val[ Matrix4.M10_1 ] is 0
+               && val[ Matrix4.M01_4 ] is 0
+               && val[ Matrix4.M11_5 ] is 1
+               && val[ Matrix4.M03_12 ] is 0
+               && val[ Matrix4.M13_13 ] is 0;
     }
 }

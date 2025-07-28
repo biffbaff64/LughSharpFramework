@@ -25,7 +25,6 @@
 using System.IO.Compression;
 
 using LughSharp.Lugh.Graphics.Images;
-using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 

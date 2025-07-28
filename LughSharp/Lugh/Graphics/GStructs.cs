@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>

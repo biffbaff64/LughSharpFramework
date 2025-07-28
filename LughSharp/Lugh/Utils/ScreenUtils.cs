@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Buffers;
 
 using Color = LughSharp.Lugh.Graphics.Color;

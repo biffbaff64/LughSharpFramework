@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.CompilerServices;
-
 using LughSharp.Lugh.Utils.Buffers;
 
 namespace LughSharp.Lugh.Graphics.Utils;

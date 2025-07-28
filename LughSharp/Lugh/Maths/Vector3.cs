@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.CompilerServices;
-
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Exception = System.Exception;
@@ -558,17 +556,17 @@ public class Vector3 : IVector< Vector3 >
         var lMat = matrix.Val;
 
         return Set(
-                   ( X * lMat[ Matrix4.M00 ] ) + ( Y * lMat[ Matrix4.M01 ] ) + ( Z * lMat[ Matrix4.M02 ] ) + lMat[ Matrix4.M03 ],
+                   ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M01_4 ] ) + ( Z * lMat[ Matrix4.M02_8 ] ) + lMat[ Matrix4.M03_12 ],
                    ( X
-                     * lMat[ Matrix4.M10 ] )
-                   + ( Y * lMat[ Matrix4.M11 ] )
-                   + ( Z * lMat[ Matrix4.M12 ] )
-                   + lMat[ Matrix4.M13 ],
-                   ( X * lMat[ Matrix4.M20 ] )
+                     * lMat[ Matrix4.M10_1 ] )
+                   + ( Y * lMat[ Matrix4.M11_5 ] )
+                   + ( Z * lMat[ Matrix4.M12_9 ] )
+                   + lMat[ Matrix4.M13_13 ],
+                   ( X * lMat[ Matrix4.M20_2 ] )
                    + ( Y
-                       * lMat[ Matrix4.M21 ] )
-                   + ( Z * lMat[ Matrix4.M22 ] )
-                   + lMat[ Matrix4.M23 ]
+                       * lMat[ Matrix4.M21_6 ] )
+                   + ( Z * lMat[ Matrix4.M22_10 ] )
+                   + lMat[ Matrix4.M23_14 ]
                   );
     }
 
@@ -577,17 +575,17 @@ public class Vector3 : IVector< Vector3 >
         var lMat = matrix.Val;
 
         return Set(
-                   ( X * lMat[ Matrix4.M00 ] ) + ( Y * lMat[ Matrix4.M10 ] ) + ( Z * lMat[ Matrix4.M20 ] ) + lMat[ Matrix4.M30 ],
+                   ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M10_1 ] ) + ( Z * lMat[ Matrix4.M20_2 ] ) + lMat[ Matrix4.M30_3 ],
                    ( X
-                     * lMat[ Matrix4.M01 ] )
-                   + ( Y * lMat[ Matrix4.M11 ] )
-                   + ( Z * lMat[ Matrix4.M21 ] )
-                   + lMat[ Matrix4.M31 ],
-                   ( X * lMat[ Matrix4.M02 ] )
+                     * lMat[ Matrix4.M01_4 ] )
+                   + ( Y * lMat[ Matrix4.M11_5 ] )
+                   + ( Z * lMat[ Matrix4.M21_6 ] )
+                   + lMat[ Matrix4.M31_7 ],
+                   ( X * lMat[ Matrix4.M02_8 ] )
                    + ( Y
-                       * lMat[ Matrix4.M12 ] )
-                   + ( Z * lMat[ Matrix4.M22 ] )
-                   + lMat[ Matrix4.M32 ]
+                       * lMat[ Matrix4.M12_9 ] )
+                   + ( Z * lMat[ Matrix4.M22_10 ] )
+                   + lMat[ Matrix4.M32_11 ]
                   );
     }
 
@@ -627,17 +625,17 @@ public class Vector3 : IVector< Vector3 >
     public Vector3 Prj( Matrix4 matrix )
     {
         var lMat = matrix.Val;
-        var lW   = 1f / ( ( X * lMat[ Matrix4.M30 ] ) + ( Y * lMat[ Matrix4.M31 ] ) + ( Z * lMat[ Matrix4.M32 ] ) + lMat[ Matrix4.M33 ] );
+        var lW   = 1f / ( ( X * lMat[ Matrix4.M30_3 ] ) + ( Y * lMat[ Matrix4.M31_7 ] ) + ( Z * lMat[ Matrix4.M32_11 ] ) + lMat[ Matrix4.M33_15 ] );
 
         return Set(
-                   ( ( X * lMat[ Matrix4.M00 ] ) + ( Y * lMat[ Matrix4.M01 ] ) + ( Z * lMat[ Matrix4.M02 ] ) + lMat[ Matrix4.M03 ] ) * lW,
+                   ( ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M01_4 ] ) + ( Z * lMat[ Matrix4.M02_8 ] ) + lMat[ Matrix4.M03_12 ] ) * lW,
                    ( ( X
-                       * lMat[ Matrix4.M10 ] )
-                     + ( Y * lMat[ Matrix4.M11 ] )
-                     + ( Z * lMat[ Matrix4.M12 ] )
-                     + lMat[ Matrix4.M13 ] )
+                       * lMat[ Matrix4.M10_1 ] )
+                     + ( Y * lMat[ Matrix4.M11_5 ] )
+                     + ( Z * lMat[ Matrix4.M12_9 ] )
+                     + lMat[ Matrix4.M13_13 ] )
                    * lW,
-                   ( ( X * lMat[ Matrix4.M20 ] ) + ( Y * lMat[ Matrix4.M21 ] ) + ( Z * lMat[ Matrix4.M22 ] ) + lMat[ Matrix4.M23 ] ) * lW
+                   ( ( X * lMat[ Matrix4.M20_2 ] ) + ( Y * lMat[ Matrix4.M21_6 ] ) + ( Z * lMat[ Matrix4.M22_10 ] ) + lMat[ Matrix4.M23_14 ] ) * lW
                   );
     }
 
@@ -646,12 +644,12 @@ public class Vector3 : IVector< Vector3 >
         var lMat = matrix.Val;
 
         return Set(
-                   ( X * lMat[ Matrix4.M00 ] ) + ( Y * lMat[ Matrix4.M01 ] ) + ( Z * lMat[ Matrix4.M02 ] ),
-                   ( X * lMat[ Matrix4.M10 ] )
+                   ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M01_4 ] ) + ( Z * lMat[ Matrix4.M02_8 ] ),
+                   ( X * lMat[ Matrix4.M10_1 ] )
                    + ( Y
-                       * lMat[ Matrix4.M11 ] )
-                   + ( Z * lMat[ Matrix4.M12 ] ),
-                   ( X * lMat[ Matrix4.M20 ] ) + ( Y * lMat[ Matrix4.M21 ] ) + ( Z * lMat[ Matrix4.M22 ] )
+                       * lMat[ Matrix4.M11_5 ] )
+                   + ( Z * lMat[ Matrix4.M12_9 ] ),
+                   ( X * lMat[ Matrix4.M20_2 ] ) + ( Y * lMat[ Matrix4.M21_6 ] ) + ( Z * lMat[ Matrix4.M22_10 ] )
                   );
     }
 
@@ -660,12 +658,12 @@ public class Vector3 : IVector< Vector3 >
         var lMat = matrix.Val;
 
         return Set(
-                   ( X * lMat[ Matrix4.M00 ] ) + ( Y * lMat[ Matrix4.M10 ] ) + ( Z * lMat[ Matrix4.M20 ] ),
-                   ( X * lMat[ Matrix4.M01 ] )
+                   ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M10_1 ] ) + ( Z * lMat[ Matrix4.M20_2 ] ),
+                   ( X * lMat[ Matrix4.M01_4 ] )
                    + ( Y
-                       * lMat[ Matrix4.M11 ] )
-                   + ( Z * lMat[ Matrix4.M21 ] ),
-                   ( X * lMat[ Matrix4.M02 ] ) + ( Y * lMat[ Matrix4.M12 ] ) + ( Z * lMat[ Matrix4.M22 ] )
+                       * lMat[ Matrix4.M11_5 ] )
+                   + ( Z * lMat[ Matrix4.M21_6 ] ),
+                   ( X * lMat[ Matrix4.M02_8 ] ) + ( Y * lMat[ Matrix4.M12_9 ] ) + ( Z * lMat[ Matrix4.M22_10 ] )
                   );
     }
 
@@ -673,17 +671,17 @@ public class Vector3 : IVector< Vector3 >
     {
         var lMat = matrix.Val;
 
-        X -= lMat[ Matrix4.M03 ];
-        Y -= lMat[ Matrix4.M03 ];
-        Z -= lMat[ Matrix4.M03 ];
+        X -= lMat[ Matrix4.M03_12 ];
+        Y -= lMat[ Matrix4.M03_12 ];
+        Z -= lMat[ Matrix4.M03_12 ];
 
         return Set(
-                   ( X * lMat[ Matrix4.M00 ] ) + ( Y * lMat[ Matrix4.M10 ] ) + ( Z * lMat[ Matrix4.M20 ] ),
-                   ( X * lMat[ Matrix4.M01 ] )
+                   ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M10_1 ] ) + ( Z * lMat[ Matrix4.M20_2 ] ),
+                   ( X * lMat[ Matrix4.M01_4 ] )
                    + ( Y
-                       * lMat[ Matrix4.M11 ] )
-                   + ( Z * lMat[ Matrix4.M21 ] ),
-                   ( X * lMat[ Matrix4.M02 ] ) + ( Y * lMat[ Matrix4.M12 ] ) + ( Z * lMat[ Matrix4.M22 ] )
+                       * lMat[ Matrix4.M11_5 ] )
+                   + ( Z * lMat[ Matrix4.M21_6 ] ),
+                   ( X * lMat[ Matrix4.M02_8 ] ) + ( Y * lMat[ Matrix4.M12_9 ] ) + ( Z * lMat[ Matrix4.M22_10 ] )
                   );
     }
 

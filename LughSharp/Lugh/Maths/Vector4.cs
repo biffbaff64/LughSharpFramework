@@ -22,10 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
-using LughSharp.Lugh.Utils.Exceptions;
-
 namespace LughSharp.Lugh.Maths;
 
 [PublicAPI]

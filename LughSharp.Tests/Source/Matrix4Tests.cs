@@ -41,24 +41,24 @@ public class Matrix4Tests
         Assert.Multiple( () =>
         {
             // Check diagonal elements are 1
-            Assert.That( matrix.Val[ Matrix4.M00 ], Is.EqualTo( 1f ) );
-            Assert.That( matrix.Val[ Matrix4.M11 ], Is.EqualTo( 1f ) );
-            Assert.That( matrix.Val[ Matrix4.M22 ], Is.EqualTo( 1f ) );
-            Assert.That( matrix.Val[ Matrix4.M33 ], Is.EqualTo( 1f ) );
+            Assert.That( matrix.Val[ Matrix4.M00_0 ], Is.EqualTo( 1f ) );
+            Assert.That( matrix.Val[ Matrix4.M11_5 ], Is.EqualTo( 1f ) );
+            Assert.That( matrix.Val[ Matrix4.M22_10 ], Is.EqualTo( 1f ) );
+            Assert.That( matrix.Val[ Matrix4.M33_15 ], Is.EqualTo( 1f ) );
 
             // Check non-diagonal elements are 0
-            Assert.That( matrix.Val[ Matrix4.M01 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M02 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M03 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M10 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M12 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M13 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M20 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M21 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M23 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M30 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M31 ], Is.EqualTo( 0f ) );
-            Assert.That( matrix.Val[ Matrix4.M32 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M01_4 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M02_8 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M03_12 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M10_1 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M12_9 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M13_13 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M20_2 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M21_6 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M23_14 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M30_3 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M31_7 ], Is.EqualTo( 0f ) );
+            Assert.That( matrix.Val[ Matrix4.M32_11 ], Is.EqualTo( 0f ) );
         } );
     }
 
@@ -80,11 +80,11 @@ public class Matrix4Tests
         // Translation Y = -(top + bottom)/(top - bottom)
         Assert.Multiple( () =>
         {
-            Assert.That( matrix.Val[ Matrix4.M00 ], Is.EqualTo( 2f / width ) );
-            Assert.That( matrix.Val[ Matrix4.M11 ], Is.EqualTo( 2f / height ) );
-            Assert.That( matrix.Val[ Matrix4.M22 ], Is.EqualTo( -2f ) ); // -2/(far-near) where far-near = 1
-            Assert.That( matrix.Val[ Matrix4.M23 ], Is.EqualTo( -1f ) ); // -(far+near)/(far-near)
-            Assert.That( matrix.Val[ Matrix4.M33 ], Is.EqualTo( 1f ) );
+            Assert.That( matrix.Val[ Matrix4.M00_0 ], Is.EqualTo( 2f / width ) );
+            Assert.That( matrix.Val[ Matrix4.M11_5 ], Is.EqualTo( 2f / height ) );
+            Assert.That( matrix.Val[ Matrix4.M22_10 ], Is.EqualTo( -2f ) ); // -2/(far-near) where far-near = 1
+            Assert.That( matrix.Val[ Matrix4.M23_14 ], Is.EqualTo( -1f ) ); // -(far+near)/(far-near)
+            Assert.That( matrix.Val[ Matrix4.M33_15 ], Is.EqualTo( 1f ) );
         } );
     }
 
@@ -100,9 +100,9 @@ public class Matrix4Tests
 
         Assert.Multiple( () =>
         {
-            Assert.That( matrix.Val[ Matrix4.M03 ], Is.EqualTo( tx ) );
-            Assert.That( matrix.Val[ Matrix4.M13 ], Is.EqualTo( ty ) );
-            Assert.That( matrix.Val[ Matrix4.M23 ], Is.EqualTo( tz ) );
+            Assert.That( matrix.Val[ Matrix4.M03_12 ], Is.EqualTo( tx ) );
+            Assert.That( matrix.Val[ Matrix4.M13_13 ], Is.EqualTo( ty ) );
+            Assert.That( matrix.Val[ Matrix4.M23_14 ], Is.EqualTo( tz ) );
         } );
     }
 
@@ -137,9 +137,9 @@ public class Matrix4Tests
         // The translation components should add
         Assert.Multiple( () =>
         {
-            Assert.That( result.Val[ Matrix4.M03 ], Is.EqualTo( 5f ).Within( EPSILON ) ); // 1 + 4
-            Assert.That( result.Val[ Matrix4.M13 ], Is.EqualTo( 7f ).Within( EPSILON ) ); // 2 + 5
-            Assert.That( result.Val[ Matrix4.M23 ], Is.EqualTo( 9f ).Within( EPSILON ) ); // 3 + 6
+            Assert.That( result.Val[ Matrix4.M03_12 ], Is.EqualTo( 5f ).Within( EPSILON ) ); // 1 + 4
+            Assert.That( result.Val[ Matrix4.M13_13 ], Is.EqualTo( 7f ).Within( EPSILON ) ); // 2 + 5
+            Assert.That( result.Val[ Matrix4.M23_14 ], Is.EqualTo( 9f ).Within( EPSILON ) ); // 3 + 6
         } );
     }
 
@@ -153,9 +153,9 @@ public class Matrix4Tests
 
         Assert.Multiple( () =>
         {
-            Assert.That( matrix.Val[ Matrix4.M03 ], Is.EqualTo( -2f ).Within( EPSILON ) );
-            Assert.That( matrix.Val[ Matrix4.M13 ], Is.EqualTo( -3f ).Within( EPSILON ) );
-            Assert.That( matrix.Val[ Matrix4.M23 ], Is.EqualTo( -4f ).Within( EPSILON ) );
+            Assert.That( matrix.Val[ Matrix4.M03_12 ], Is.EqualTo( -2f ).Within( EPSILON ) );
+            Assert.That( matrix.Val[ Matrix4.M13_13 ], Is.EqualTo( -3f ).Within( EPSILON ) );
+            Assert.That( matrix.Val[ Matrix4.M23_14 ], Is.EqualTo( -4f ).Within( EPSILON ) );
         } );
     }
 
@@ -168,10 +168,10 @@ public class Matrix4Tests
         Assert.Multiple( () =>
         {
             // For orthographic projection with these parameters:
-            // M22 = -2/(far-near) = -2/99 ≈ -0.0202020202
-            // M23 = -(far+near)/(far-near) = -(101/99) ≈ -1.0202020202
-            Assert.That( matrix.Val[ Matrix4.M22 ], Is.EqualTo( -0.0202020202f ).Within( EPSILON ) );
-            Assert.That( matrix.Val[ Matrix4.M23 ], Is.EqualTo( -1.0202020202f ).Within( EPSILON ) );
+            // M22_10 = -2/(far-near) = -2/99 ≈ -0.0202020202
+            // M23_14 = -(far+near)/(far-near) = -(101/99) ≈ -1.0202020202
+            Assert.That( matrix.Val[ Matrix4.M22_10 ], Is.EqualTo( -0.0202020202f ).Within( EPSILON ) );
+            Assert.That( matrix.Val[ Matrix4.M23_14 ], Is.EqualTo( -1.0202020202f ).Within( EPSILON ) );
         } );
     }
 
@@ -195,8 +195,8 @@ public class Matrix4Tests
         // In normalized device coordinates (NDC):
         // x goes from -1 (left) to 1 (right)
         // y goes from -1 (bottom) to 1 (top)
-        var x = matrix.Val[ Matrix4.M03 ]; // Translation X after projection
-        var y = matrix.Val[ Matrix4.M13 ]; // Translation Y after projection
+        var x = matrix.Val[ Matrix4.M03_12 ]; // Translation X after projection
+        var y = matrix.Val[ Matrix4.M13_13 ]; // Translation Y after projection
 
         Assert.Multiple( () =>
         {
@@ -223,14 +223,14 @@ public class Matrix4Tests
         // Check translation is set
         Assert.Multiple( () =>
         {
-            Assert.That( matrix.Val[ Matrix4.M03 ], Is.EqualTo( 10f ).Within( EPSILON ) );
-            Assert.That( matrix.Val[ Matrix4.M13 ], Is.EqualTo( 20f ).Within( EPSILON ) );
-            Assert.That( matrix.Val[ Matrix4.M23 ], Is.EqualTo( 30f ).Within( EPSILON ) );
+            Assert.That( matrix.Val[ Matrix4.M03_12 ], Is.EqualTo( 10f ).Within( EPSILON ) );
+            Assert.That( matrix.Val[ Matrix4.M13_13 ], Is.EqualTo( 20f ).Within( EPSILON ) );
+            Assert.That( matrix.Val[ Matrix4.M23_14 ], Is.EqualTo( 30f ).Within( EPSILON ) );
 
             // Verify scale wasn't affected (length of basis vectors)
-            Assert.That( Math.Sqrt( ( matrix.Val[ Matrix4.M00 ] * matrix.Val[ Matrix4.M00 ] ) +
-                                    ( matrix.Val[ Matrix4.M01 ] * matrix.Val[ Matrix4.M01 ] ) +
-                                    ( matrix.Val[ Matrix4.M02 ] * matrix.Val[ Matrix4.M02 ] ) ),
+            Assert.That( Math.Sqrt( ( matrix.Val[ Matrix4.M00_0 ] * matrix.Val[ Matrix4.M00_0 ] ) +
+                                    ( matrix.Val[ Matrix4.M01_4 ] * matrix.Val[ Matrix4.M01_4 ] ) +
+                                    ( matrix.Val[ Matrix4.M02_8 ] * matrix.Val[ Matrix4.M02_8 ] ) ),
                          Is.EqualTo( 2f ).Within( EPSILON ) );
         } );
     }

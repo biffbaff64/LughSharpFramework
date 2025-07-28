@@ -22,11 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using DesktopGLBackend.Audio;
-using DesktopGLBackend.Input;
-using DesktopGLBackend.Utils;
-using DesktopGLBackend.Window;
-
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
@@ -36,7 +31,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 using Platform = LughSharp.Lugh.Core.Platform;
 
-namespace DesktopGLBackend.Core;
+namespace DesktopGLBackend;
 
 /// <summary>
 /// Creates, and manages, an application to for Windows OpenGL backends.
@@ -63,8 +58,8 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// <summary>
     /// Application Configuration Settings
     /// </summary>
-    public DesktopGLApplicationConfiguration? Config { get; set; }
-
+    public DesktopGLApplicationConfiguration? AppConfig { get; set; }
+    
     public List< IRunnable.Runnable > Runnables         { get; set; } = [ ];
     public List< IRunnable.Runnable > ExecutedRunnables { get; set; } = [ ];
 
@@ -114,8 +109,8 @@ public class DesktopGLApplication : IApplication, IDisposable
 
         // Config.Title becomes the name of the ApplicationListener
         // if it has no value at this point.
-        Config       =   DesktopGLApplicationConfiguration.Copy( config );
-        Config.Title ??= listener.GetType().Name;
+        AppConfig    = DesktopGLApplicationConfiguration.Copy( config );
+        AppConfig.Title ??= listener.GetType().Name;
 
         // ====================================================================
 
@@ -126,16 +121,16 @@ public class DesktopGLApplication : IApplication, IDisposable
         // and are used in backend code only.
         // Note: Engine.Graphics is set later, during window creation as each window that
         // is created will have its own IGraphics instance.
-        Engine.Api.Audio = AudioManager.CreateAudio( Config );
+        Engine.Api.Audio = AudioManager.CreateAudio( AppConfig );
         Engine.Api.Files = new LughSharp.Lugh.Files.Files();
-        Engine.Api.Net   = new DesktopGLNet( Config );
+        Engine.Api.Net   = new DesktopGLNet( AppConfig );
 
         Clipboard = new DesktopGLClipboard();
         _sync     = new Sync();
 
         InitialiseGlfw();
 
-        Windows.Add( CreateWindow( Config, listener, 0 ) );
+        Windows.Add( CreateWindow( AppConfig, listener, 0 ) );
     }
 
     // ========================================================================
@@ -272,7 +267,7 @@ public class DesktopGLApplication : IApplication, IDisposable
                 // with continuous rendering disabled.
                 try
                 {
-                    Thread.Sleep( 1000 / Config!.IdleFPS );
+                    Thread.Sleep( 1000 / AppConfig!.IdleFPS );
                 }
                 catch ( ThreadInterruptedException )
                 {
@@ -575,7 +570,7 @@ public class DesktopGLApplication : IApplication, IDisposable
 
     /// <summary>
     /// Creates a new <see cref="DesktopGLWindow" /> using the provided listener and
-    /// <see cref="DesktopGLWindowConfiguration" />.
+    /// <see cref="DesktopGLApplicationConfiguration" />.
     /// <para>
     /// This function only instantiates a <see cref="DesktopGLWindow" /> and
     /// returns immediately. The actual window creation is postponed with
@@ -583,13 +578,13 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// existing windows are updated.
     /// </para>
     /// </summary>
-    public DesktopGLWindow NewWindow( IApplicationListener listener, DesktopGLWindowConfiguration windowConfig )
+    public DesktopGLWindow NewWindow( IApplicationListener listener, DesktopGLApplicationConfiguration windowConfig )
     {
-        GdxRuntimeException.ThrowIfNull( Config );
+        GdxRuntimeException.ThrowIfNull( AppConfig );
 
-        Config.SetWindowConfiguration( windowConfig );
+        AppConfig.SetWindowConfiguration( windowConfig );
 
-        return CreateWindow( Config, listener, 0 );
+        return CreateWindow( AppConfig, listener, 0 );
     }
 
     /// <summary>
