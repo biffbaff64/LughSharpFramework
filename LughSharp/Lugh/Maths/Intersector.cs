@@ -628,7 +628,7 @@ public class Intersector
     /// the intersection point.
     /// <para>
     /// You can get the intersection point by:
-    /// <code>Vector2 point = direction1.Scl(scalar).Add(start1);</code>
+    /// <code>Vector2 point = direction1.Scale(scalar).Add(start1);</code>
     /// For more information, check:
     /// <a href="http://stackoverflow.com/a/565282/1091440">StackOverflow Post</a>.
     /// </para>

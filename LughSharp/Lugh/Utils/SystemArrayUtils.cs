@@ -30,6 +30,20 @@ using Array = Array;
 public static class SystemArrayUtils
 {
     /// <summary>
+    /// Compares two single-dimensional arrays of floats for equality within a
+    /// specified tolerance.
+    /// </summary>
+    /// <param name="array1">The first array to compare.</param>
+    /// <param name="array2">The second array to compare.</param>
+    /// <param name="epsilon">The maximum allowable difference between corresponding elements for them to be considered equal. Default is 0.0001.</param>
+    /// <returns>True if the arrays have the same length and all corresponding elements differ by less than or equal to the specified tolerance; otherwise, false.</returns>
+    public static bool AreEqual( float[] array1, float[] array2, float epsilon = 0.0001f )
+    {
+        return ( array1.Length == array2.Length )
+               && array1.Zip( array2, ( a, b ) => Math.Abs( a - b ) <= epsilon ).All( x => x );
+    }
+
+    /// <summary>
     /// </summary>
     /// <param name="array1"></param>
     /// <param name="array2"></param>

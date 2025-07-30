@@ -223,7 +223,9 @@ public class Matrix3
         return this;
     }
 
+    /// <summary>
     /// Sets this matrix to a translation matrix.
+    /// </summary>
     /// <param name="x"> the translation in x</param>
     /// <param name="y"> the translation in y</param>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
@@ -309,7 +311,7 @@ public class Matrix3
     }
 
     /// <returns> The determinant of this matrix </returns>
-    public float Det()
+    public float Determinant()
     {
         return ( ( Val[ M00 ] * Val[ M11 ] * Val[ M22 ] )
                  + ( Val[ M01 ] * Val[ M12 ] * Val[ M20 ] )
@@ -324,9 +326,9 @@ public class Matrix3
     /// </summary>
     /// <returns> This matrix for the purpose of chaining operations. </returns>
     /// <exception cref="GdxRuntimeException"> if the matrix is singular (not invertible) </exception>
-    public Matrix3 Inv()
+    public Matrix3 Invert()
     {
-        var det = Det();
+        var det = Determinant();
 
         if ( det == 0 )
         {
@@ -625,7 +627,7 @@ public class Matrix3
     /// </summary>
     /// <param name="scale"> The vector to scale the matrix by. </param>
     /// <returns> This matrix for the purpose of chaining.  </returns>
-    public Matrix3 Scale( Vector2 scale )
+    public Matrix3 PostMultiplyWithScale( Vector2 scale )
     {
         _tmp[ M00 ] = scale.X;
         _tmp[ M10 ] = 0;
@@ -686,7 +688,7 @@ public class Matrix3
     /// </summary>
     /// <param name="scale"> The single value that will be used to scale both the x and y components. </param>
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
-    public Matrix3 Scl( float scale )
+    public Matrix3 Scale( float scale )
     {
         Val[ M00 ] *= scale;
         Val[ M11 ] *= scale;
@@ -700,7 +702,7 @@ public class Matrix3
     /// </summary>
     /// <param name="scale"> The <see cref="Vector3" /> to use to scale this matrix. </param>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>
-    public Matrix3 Scl( Vector2 scale )
+    public Matrix3 Scale( Vector2 scale )
     {
         Val[ M00 ] *= scale.X;
         Val[ M11 ] *= scale.Y;
@@ -717,7 +719,7 @@ public class Matrix3
     /// The z component will be ignored.
     /// </param>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>
-    public Matrix3 Scl( Vector3 scale )
+    public Matrix3 Scale( Vector3 scale )
     {
         Val[ M00 ] *= scale.X;
         Val[ M11 ] *= scale.Y;

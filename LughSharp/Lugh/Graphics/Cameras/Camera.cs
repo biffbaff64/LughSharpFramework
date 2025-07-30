@@ -60,7 +60,7 @@ public abstract class Camera
     /// <summary>
     /// the far clipping plane distance, has to be positive
     /// </summary>
-    protected float Far
+    public float Far
     {
         get => _far;
         set => _far = value > Near ? value : throw new ArgumentException( "Far must be > Near" );
@@ -69,7 +69,7 @@ public abstract class Camera
     /// <summary>
     /// the near clipping plane distance, has to be positive
     /// </summary>
-    protected float Near
+    public float Near
     {
         get => _near;
         set => _near = value >= 0 ? value : throw new ArgumentException( "Near must be >= 0" );
