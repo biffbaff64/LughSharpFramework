@@ -80,3 +80,6 @@ public partial class RegexUtils
     [GeneratedRegex( MATCH_FINAL_FOLDER_PATTERN, RegexOptions.Compiled )]
     public static partial Regex MatchFinalFolderPatternRegex();
 }
+
+// ============================================================================
+// ============================================================================

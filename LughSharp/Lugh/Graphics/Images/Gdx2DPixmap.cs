@@ -197,6 +197,19 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
         PixmapBuffer.PutBytes( _pixmapDataType.Pixels );
     }
 
+    /// <summary>
+    /// Initializes the properties of the Gdx2DPixmap with the specified width,
+    /// height, and bit depth.
+    /// <para>
+    /// Used by constructors that need to reference virtual members, which should not be
+    /// done directly from constructors.
+    /// </para>
+    /// </summary>
+    /// <param name="width">The width of the pixmap in pixels.</param>
+    /// <param name="height">The height of the pixmap in pixels.</param>
+    /// <param name="bitDepth">
+    /// The bit depth representing the number of bits used to store color information per pixel.
+    /// </param>
     private void SafeConstructorInit( int width, int height, int bitDepth )
     {
         Width    = width;
@@ -204,6 +217,17 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
         BitDepth = bitDepth;
     }
 
+    /// <summary>
+    /// Initializes and configures a new instance of <see cref="PixmapDataType"/> with the specified
+    /// dimensions, format, and associated properties for the pixmap.
+    /// <para>
+    /// Used by constructors that need to reference virtual members, which should not be
+    /// done directly from constructors.
+    /// </para>
+    /// </summary>
+    /// <param name="width">The width of the pixmap in pixels.</param>
+    /// <param name="height">The height of the pixmap in pixels.</param>
+    /// <param name="format">The pixel format of the pixmap, defining the color encoding and storage.</param>
     private void SafeInitPixmapDataType( int width, int height, Gdx2DPixmapFormat format )
     {
         var length = width * height * Gdx2dBytesPerPixel( format );
@@ -234,10 +258,8 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
     /// <exception cref="IOException"></exception>
     private ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
-        Logger.Checkpoint();
-
         // Analyse the PNG file the get the properties.
-        Utils.PNGDecoder.AnalysePNG( buffer, false );
+        Utils.PNGDecoder.AnalysePNG( buffer, verbose: false );
 
         var pixmapDef = new PixmapDataType
         {
@@ -333,11 +355,12 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
         };
     }
 
+    // ========================================================================
+
     /// <summary>
     /// Converts this Pixmaps <see cref="ColorType" /> to the requested format.
     /// </summary>
     /// <param name="requestedFormat"> The new Format. </param>
-    //TODO: Get rid...
     private void ConvertPixelFormatTo( Gdx2DPixmapFormat requestedFormat )
     {
         // Double-check conditions
@@ -360,6 +383,9 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
             PixmapBuffer  = pixmap.PixmapBuffer;
         }
     }
+
+    // ========================================================================
+    // ========================================================================
 
     // ========================================================================
     // ========================================================================
@@ -415,6 +441,16 @@ public partial class Gdx2DPixmap : ImageBase, IDisposable
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="srcX"></param>
+    /// <param name="srcY"></param>
+    /// <param name="dstX"></param>
+    /// <param name="dstY"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
     private void BlendPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
         for ( var y = 0; y < height; y++ )

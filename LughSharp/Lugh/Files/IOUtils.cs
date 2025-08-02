@@ -33,24 +33,41 @@ public class IOUtils
 {
     // ========================================================================
 
+    /// <inheritdoc cref="PathTypes.External"/>
     public static string ExternalPath => NormalizePath( $"{Environment.GetFolderPath( Environment.SpecialFolder.UserProfile )}/" );
+
+    /// <inheritdoc cref="PathTypes.Internal"/>
     public static string InternalPath => NormalizePath( $"{Directory.GetCurrentDirectory()}/" );
-    public static string LocalPath    => NormalizePath( "/" );
+
+    /// <inheritdoc cref="PathTypes.Local"/>
+    public static string LocalPath => NormalizePath( "/" );
 
     // ========================================================================
 
-    public static string AssemblyPath      => NormalizePath( Assembly.GetExecutingAssembly().Location );
+    /// <summary>
+    /// Gets the full path of the currently executing assembly. This value is derived
+    /// from the location of the assembly file on disk, provided as a normalized path
+    /// with consistent separators.
+    /// </summary>
+    public static string AssemblyPath => NormalizePath( Assembly.GetExecutingAssembly().Location );
+
+    /// <summary>
+    /// Gets the directory path of the executing assembly, normalized to include a
+    /// trailing directory separator. This value is derived from the location of the
+    /// assembly currently executing.
+    /// </summary>
     public static string AssemblyDirectory => NormalizePath( Path.GetDirectoryName( AssemblyPath ) + "/" );
 
     // ========================================================================
 
-    public static string AssetsRoot           => NormalizePath( $"{AssemblyDirectory}Assets/" );
-    public static string AssetsObjectsPath    => NormalizePath( $"{AssetsRoot}PackedImages/Objects/" );
-    public static string AssetsAnimationsPath => NormalizePath( $"{AssetsRoot}PackedImages/Animations/" );
-    public static string AssetsInputsPath     => NormalizePath( $"{AssetsRoot}PackedImages/Inputs/" );
-    public static string AssetsUIPath         => NormalizePath( $"{AssetsRoot}PackedImages/UI/" );
-    public static string AssetsOutputPath     => NormalizePath( $"{AssetsRoot}PackedImages/Output/" );
-    public static string AssetsTestPath       => NormalizePath( $"{AssetsRoot}PackedImages/Test/" );
+    /// <summary>
+    /// The full path to the applicationsbase assets folder.
+    /// a valid example path is:-
+    /// <code>
+    /// C:\Development\Projects\CSharp\ConsoleApp1\bin\Debug\net8.0\Assets\
+    /// </code>
+    /// </summary>
+    public static string AssetsRoot => NormalizePath( $"{AssemblyDirectory}Assets/" );
 
     // ========================================================================
 
@@ -83,28 +100,6 @@ public class IOUtils
         if ( !path.Contains( AssemblyDirectory ) )
         {
             path = AssemblyDirectory + path;
-        }
-
-        return NormalizePath( path );
-    }
-
-    /// <summary>
-    /// Normalizes and ensures that the given path is correctly prefixed with the Assets
-    /// Output Path if it does not already include it.
-    /// </summary>
-    /// <param name="path">
-    /// The relative or absolute path to normalize and process as part of the Assets
-    /// Output Path.
-    /// </param>
-    /// <returns>
-    /// The fully normalized path with consistent separators, including the Assets Output
-    /// Path prefix if required.
-    /// </returns>
-    public static string NormalizeAssetsOutputPath( string path )
-    {
-        if ( !path.Contains( "/PackedImages/Output" ) )
-        {
-            path = AssetsOutputPath + path;
         }
 
         return NormalizePath( path );
@@ -247,13 +242,9 @@ public class IOUtils
         Logger.Debug( $"AssemblyPath        : {AssemblyPath}" );
         Logger.Debug( $"AssemblyDirectory   : {AssemblyDirectory}" );
         Logger.Debug( $"AssetsPath          : {AssetsRoot}" );
-
-        // --------------------------------------------------------------------
-        Logger.Debug( $"AssetsObjectsPath   : {AssetsObjectsPath}" );
-        Logger.Debug( $"AssetsAnimationsPath: {AssetsAnimationsPath}" );
-        Logger.Debug( $"AssetsInputsPath    : {AssetsInputsPath}" );
-        Logger.Debug( $"AssetsUIPath        : {AssetsUIPath}" );
-        Logger.Debug( $"AssetsTestPath      : {AssetsTestPath}" );
     }
     #endif
 }
+
+// ============================================================================
+// ============================================================================

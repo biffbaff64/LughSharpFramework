@@ -79,6 +79,8 @@ public partial class Gdx2DPixmap
         Array.Copy( _pixmapDataType.Pixels, PixmapBuffer.BackingArray(), _pixmapDataType.Pixels.Length );
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// Clears the pixmap by setting the alpha channel to the specified color's alpha.
     /// </summary>
@@ -383,10 +385,9 @@ public partial class Gdx2DPixmap
     /// </summary>
     public void DrawPixmapNative( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
     {
-        NativeMethods.gdx2d_draw_pixmap(
-                                        src._pixmapDataType, _pixmapDataType,
-                                        srcX, srcY, width, height,
-                                        dstX, dstY, width, height );
+        NativeMethods.gdx2d_draw_pixmap( src._pixmapDataType, _pixmapDataType,
+                                         srcX, srcY, width, height,
+                                         dstX, dstY, width, height );
     }
 
     /// <summary>
@@ -402,6 +403,9 @@ public partial class Gdx2DPixmap
                                          dstX, dstY, dstWidth, dstHeight );
     }
 }
+
+// ============================================================================
+// ============================================================================
 
 /// <summary>
 /// Native method imports for Gdx2DPixmap
@@ -452,6 +456,7 @@ internal static class NativeMethods
 
     // ========================================================================
     // ========================================================================
+
 //TODO: Convert all of these to C#
 
 //    [DllImport( DLL_PATH, SetLastError = true )]
@@ -513,9 +518,6 @@ internal static class NativeMethods
 //                                                  int dstY,
 //                                                  int dstWidth,
 //                                                  int dstHeight );
-
-    // ========================================================================
-    // ========================================================================
 }
 
 // ========================================================================

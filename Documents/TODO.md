@@ -494,8 +494,8 @@ GRAPHICS/TEXT
     - IP   - IP   - FontUtils
     - DONE - IP   - GlyphLayout
     - IP   - IP   - RegexUtils
-    - IP   - IP   - Subset
-    - IP   - IP   - UnicodeBlock
+    - IP   - IP   - Subset            - Why do I have this?
+    - IP   - IP   - UnicodeBlock      - Why do I have this?
 
 GRAPHICS/TEXT/FREETYPE
 ----------------------
