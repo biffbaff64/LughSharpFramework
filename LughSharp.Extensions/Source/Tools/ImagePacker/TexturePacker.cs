@@ -25,7 +25,7 @@
 using Extensions.Source.Drawing;
 
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;

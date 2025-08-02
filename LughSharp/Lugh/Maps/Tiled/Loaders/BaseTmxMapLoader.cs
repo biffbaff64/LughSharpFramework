@@ -30,7 +30,7 @@ using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Maps.Objects;
 using LughSharp.Lugh.Maps.Tiled.Objects;
 using LughSharp.Lugh.Maps.Tiled.Tiles;

@@ -24,8 +24,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-using LughSharp.Lugh.Graphics.Images;
-
 using static LughSharp.Lugh.Graphics.OpenGL.IGL;
 
 using GLfloat = float;
@@ -919,7 +917,7 @@ public partial interface IGLBindings
     /// <param name="name">
     /// Specifies a symbolic constant, one of <see cref="GL_VENDOR" />, <see cref="GL_RENDERER" />,
     /// <see cref="GL_VERSION" />, or <see cref="GL_SHADING_LANGUAGE_VERSION" />. Additionally,
-    /// <see cref="GLBindings.GetStringi" />
+    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.GetStringi" />
     /// accepts <see cref="GL_EXTENSIONS" />.
     /// </param>
     /// <returns>The requested string as a <see cref="byte" /> pointer.</returns>
@@ -931,7 +929,7 @@ public partial interface IGLBindings
     /// <param name="name">
     /// Specifies a symbolic constant, one of <see cref="GL_VENDOR" />, <see cref="GL_RENDERER" />,
     /// <see cref="GL_VERSION" />, or <see cref="GL_SHADING_LANGUAGE_VERSION" />. Additionally,
-    /// <see cref="GLBindings.GetStringi" />
+    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.GetStringi" />
     /// accepts <see cref="GL_EXTENSIONS" />.
     /// </param>
     /// <returns>The requested string as a managed string.</returns>
@@ -2633,8 +2631,8 @@ public partial interface IGLBindings
     /// Delimit the boundaries of a query object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target type of query object established between <see cref="GLBindings.BeginQuery" /> and the
-    /// subsequent <see cref="GLBindings.EndQuery" />. The symbol constant must be one of <see cref="GL_SAMPLES_PASSED" />,
+    /// Specifies the target type of query object established between <see cref="BeginQuery" /> and the
+    /// subsequent <see cref="EndQuery" />. The symbol constant must be one of <see cref="GL_SAMPLES_PASSED" />,
     /// <see cref="GL_ANY_SAMPLES_PASSED" />, <see cref="GL_ANY_SAMPLES_PASSED_CONSERVATIVE" />,
     /// <see cref="GL_PRIMITIVES_GENERATED" />, <see cref="GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN" /> or
     /// <see cref="GL_TIME_ELAPSED" />.
@@ -2646,8 +2644,8 @@ public partial interface IGLBindings
     /// Delimit the boundaries of a query object.
     /// </summary>
     /// <param name="target">
-    /// Specifies the target type of query object established between <see cref="GLBindings.BeginQuery" /> and the
-    /// subsequent <see cref="GLBindings.EndQuery" />. The symbol constant must be one of <see cref="GL_SAMPLES_PASSED" />,
+    /// Specifies the target type of query object established between <see cref="BeginQuery" /> and the
+    /// subsequent <see cref="EndQuery" />. The symbol constant must be one of <see cref="GL_SAMPLES_PASSED" />,
     /// <see cref="GL_ANY_SAMPLES_PASSED" />, <see cref="GL_ANY_SAMPLES_PASSED_CONSERVATIVE" />,
     /// <see cref="GL_PRIMITIVES_GENERATED" />, <see cref="GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN" /> or
     /// <see cref="GL_TIME_ELAPSED" />.
@@ -2812,7 +2810,7 @@ public partial interface IGLBindings
     /// <param name="size">Specifies the size in bytes of the buffer object's new data store.</param>
     /// <param name="data">
     /// Specifies a pointer to data that will be copied into the data store for initialization, or
-    /// <see cref="GLBindings.NULL" /> if no data is to be copied.
+    /// <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.NULL" /> if no data is to be copied.
     /// </param>
     /// <param name="usage">
     /// Specifies the expected usage pattern of the data store. The symbolic constant must be
@@ -2966,7 +2964,7 @@ public partial interface IGLBindings
     /// <returns>
     /// <see langword="true" /> unless the data store contents have become corrupt during the time the data store was
     /// mapped. This can occur for system-specific reasons that affect the availability of graphics memory, such as screen
-    /// mode changes. In such situations, <see cref="GLBindings.UnmapBuffer" /> may return <see langword="false" /> to
+    /// mode changes. In such situations, <see cref="UnmapBuffer" /> may return <see langword="false" /> to
     /// indicate that
     /// the contents of the buffer have become corrupt and should be considered undefined. An application must detect this
     /// rare condition and reinitialize the data store.
@@ -4891,7 +4889,7 @@ public partial interface IGLBindings
     string GetTransformFeedbackVarying( uint program, uint index, int bufSize, out int size, out int type );
 
     /// <summary>
-    /// Specify whether data read via <see cref="GLBindings.ReadPixels" /> should be clamped.
+    /// Specify whether data read via <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings.ReadPixels" /> should be clamped.
     /// </summary>
     /// <param name="target">Specifies the target to be clamped. Must be <see cref="GL_CLAMP_READ_COLOR" />.</param>
     /// <param name="clamp">

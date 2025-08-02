@@ -24,7 +24,7 @@
 
 using System.Runtime.InteropServices;
 
-using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Utils;
 
 using Bitmap = System.Drawing.Bitmap;

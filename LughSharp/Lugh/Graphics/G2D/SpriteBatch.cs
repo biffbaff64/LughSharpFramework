@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
@@ -671,8 +670,22 @@ public partial class SpriteBatch : IBatch, IDisposable
         Vertices[ Idx + 31 ] = v4;
 
         Idx += VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
+
+        if ( _first )
+        {
+            for ( var i = 0; i < 32; i++ )
+            {
+                Logger.Debug( $"Vertices[{i}]: {Vertices[ i ]}" );
+            }
+
+            Logger.Debug( $"Idx: {Idx}" );
+            
+            _first = false;
+        }
     }
 
+    private bool _first = true;
+    
     /// <summary>
     /// Fetches the location of the CombinedMatrix uniform in the shader and
     /// stores it in <see cref="_combinedMatrixLocation" />

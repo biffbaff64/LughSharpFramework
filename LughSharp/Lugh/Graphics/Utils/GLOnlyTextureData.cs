@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.FrameBuffers;
-using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils.Exceptions;
 

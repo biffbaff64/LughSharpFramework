@@ -28,6 +28,7 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
+
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Maps.Objects;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
 

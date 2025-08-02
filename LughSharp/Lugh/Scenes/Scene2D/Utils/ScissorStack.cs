@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 
 /// <summary>
 /// A stack of {@link Rectangle} objects to be used for clipping via
-/// <see cref="Lugh.Graphics.OpenGL.GLBindings.glScissor(int, int, int, int)" />. When a new Rectangle is
+/// <see cref="LughSharp.Lugh.Graphics.OpenGL.Bindings.GLBindings.glScissor(int, int, int, int)" />. When a new Rectangle is
 /// pushed onto the stack, it will be merged with the current top of stack. The
 /// minimum area of overlap is then set as the real top of the stack.
 /// </summary>
@@ -49,7 +49,7 @@ public class ScissorStack
     /// Pushes a new scissor <see cref="System.Drawing.Rectangle" /> onto the stack, merging it with
     /// the current top of the stack. The minimal area of overlap between the top of
     /// stack rectangle and the provided rectangle is pushed onto the stack. This will
-    /// invoke <see cref="Lugh.Graphics.OpenGL.GLBindings.glScissor(int, int, int, int)" /> with the final top of
+    /// invoke <see cref="LughSharp.Lugh.Graphics.OpenGL.Bindings.GLBindings.glScissor(int, int, int, int)" /> with the final top of
     /// stack rectangle. In case no scissor is yet on the stack this will also enable
     /// <see cref="IGL.GL_SCISSOR_TEST" /> automatically.
     /// <para>
@@ -182,7 +182,7 @@ public class ScissorStack
     /// The rectangle will get transformed by the camera and transform matrices and is then
     /// projected to screen coordinates. Note that only axis aligned rectangles will work with
     /// this method. If either the Camera or the Matrix4 have rotational components, the output
-    /// of this method will not be suitable for <see cref="Lugh.Graphics.OpenGL.GLBindings.glScissor(int, int, int, int)" />.
+    /// of this method will not be suitable for <see cref="LughSharp.Lugh.Graphics.OpenGL.Bindings.GLBindings.glScissor(int, int, int, int)" />.
     /// </summary>
     /// <param name="viewportX"></param>
     /// <param name="viewportY"></param>

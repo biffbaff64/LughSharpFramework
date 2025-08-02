@@ -24,7 +24,8 @@
 
 using System.Runtime.InteropServices;
 
-using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics;
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Utils.Buffers;
 
 using Color = LughSharp.Lugh.Graphics.Color;

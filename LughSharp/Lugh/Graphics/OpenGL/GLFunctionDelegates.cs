@@ -24,8 +24,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
 using GLenum = int;
@@ -2971,4 +2969,5 @@ public partial class GLBindings
     // ========================================================================
 }
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+// ============================================================================
+// ============================================================================

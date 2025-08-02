@@ -111,7 +111,7 @@ public class Engine
 
     /// <summary>
     /// Globally accessible instance of classes inheriting from the <see cref="IGLBindings" />
-    /// interface. Initially initialised as an instance of <see cref="GLBindings" />, it can be
+    /// interface. Initially initialised as an instance of <see cref="LughSharp.Lugh.Graphics.OpenGL.GLBindings" />, it can be
     /// modified to reference any class inheriting from IGLBindings.
     /// The property will check internally for null, and initialise itself to reference
     /// GLBindings by default if that is the case.

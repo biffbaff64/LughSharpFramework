@@ -26,7 +26,8 @@ using DesktopGLBackend.Graphics;
 
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
-using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics;
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 
@@ -413,7 +414,7 @@ public partial class DesktopGLWindow : IDisposable
             return;
         }
 
-        List< Image > buffer = new( images.Length );
+        List< GLFW.Image > buffer = new( images.Length );
 
         Pixmap?[] tmpPixmaps = new Pixmap[ images.Length ];
 
@@ -429,7 +430,7 @@ public partial class DesktopGLWindow : IDisposable
                 tmpPixmaps[ i ] = rgba;
             }
 
-            Image icon = new()
+            GLFW.Image icon = new()
             {
                 Width  = images[ i ].Width,
                 Height = images[ i ].Height,

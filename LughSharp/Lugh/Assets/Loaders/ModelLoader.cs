@@ -23,10 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
+using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G3D;
 using LughSharp.Lugh.Graphics.G3D.Models.Data;
 using LughSharp.Lugh.Graphics.G3D.Utils;
-using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils.Collections;
 
 namespace LughSharp.Lugh.Assets.Loaders;

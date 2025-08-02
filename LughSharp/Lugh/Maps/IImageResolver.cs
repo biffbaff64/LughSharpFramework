@@ -23,8 +23,8 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets;
+using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Maps;

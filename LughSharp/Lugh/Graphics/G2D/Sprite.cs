@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Images;
-
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.G2D;

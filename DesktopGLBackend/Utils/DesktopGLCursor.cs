@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace DesktopGLBackend.Utils;
@@ -33,7 +33,7 @@ public class DesktopGLCursor : ICursor, IDisposable
 {
     public DesktopGLWindow Window     { get; set; }
     public Pixmap          PixmapCopy { get; set; }
-    public Image           GlfwImage  { get; set; }
+    public GLFW.Image      GlfwImage  { get; set; }
     public Cursor          GlfwCursor { get; set; }
 
     // ========================================================================
@@ -81,7 +81,7 @@ public class DesktopGLCursor : ICursor, IDisposable
         PixmapCopy.Blending = Pixmap.BlendTypes.None;
         PixmapCopy.DrawPixmap( pixmap, 0, 0 );
 
-        GlfwImage = new Image
+        GlfwImage = new GLFW.Image
         {
             Pixels = PixmapCopy.PixelData,
             Width  = PixmapCopy.Width,

@@ -49,7 +49,6 @@ global using LughSharp.Lugh.Maths;
 // ============================================================================
 
 global using static LughSharp.Lugh.Core.Engine;
-global using static LughSharp.Lugh.Graphics.OpenGL.Stbi.StbImageNative;
 
 // ============================================================================
 

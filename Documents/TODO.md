@@ -271,10 +271,13 @@ GRAPHICS
     CODE   DOCUMENT
     ----   --------
     - DONE - DONE - AbstractGraphics
+    - DONE - DONE - BMPFormatStructs
     - DONE - DONE - Color
     - DONE - DONE - Colors
     - DONE - DONE - Cubemap
     - DONE - DONE - FrameBufferConfig
+    - DONE - IP   - GLTexture
+    - DONE - IP   - GLTextureArray
     - DONE - DONE - GraphicsBackend
     - DONE - DONE - GraphicsDevice
     - DONE - DONE - GraphicsEnums
@@ -284,7 +287,16 @@ GRAPHICS
     - DONE - DONE - IGraphicsDevice
     - DONE - DONE - IGraphicsDevice.DisplayMode
     - DONE - DONE - IGraphicsDevice.Monitor
+    - DONE - DONE - ITextureArrayData
+    - DONE - DONE - ITextureData
+    - IP   - IP   - ManagedTextureHandle
     - DONE - DONE - Mesh
+    - DONE - DONE - Pixmap
+    - DONE - IP   - PixmapFormat
+    - IP   - IP   - PixmapIO
+    - DONE - IP   - Texture
+    - DONE - DONE - TextureDataFactory
+    - DONE - IP   - TextureRegion
     - DONE - DONE - VertexAttribute
     - DONE - DONE - VertexAttributes
 
@@ -334,6 +346,9 @@ GRAPHICS/G2D
     ----   --------
     - DONE - DONE - Animation
     - IP   - IP   - CpuSpriteBatch                  Some methods have too many parameters
+    - DONE - IP   - Gdx2DPixmap
+    - DONE - IP   - Gdx2DPixmapExtensions
+    - DONE - IP   - Gdx2DPixmapUtils
     - DONE - DONE - IBatch
     - DONE - IP   - IPolygonBatch                   Some methods have too many parameters
     - DONE - IP   - NinePatch
@@ -355,29 +370,6 @@ GRAPHICS/G3D
 ------------
 
     See Documents/TODO_G3D.MD
-
-GRAPHICS/IMAGES
----------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - DONE - BMPFormatStructs
-    - DONE - IP   - Gdx2DPixmap
-    - DONE - IP   - Gdx2DPixmapExtensions
-    - DONE - IP   - Gdx2DPixmapUtils
-    - DONE - IP   - GLTexture
-    - DONE - DONE - ITextureArrayData
-    - DONE - DONE - ITextureData
-    - IP   - IP   - ManagedTextureHandle
-    - DONE - IP   - PixelType
-    - DONE - DONE - Pixmap
-    - DONE - IP   - PixmapFormat
-    - IP   - IP   - PixmapIO
-    - DONE - IP   - PNGUtils
-    - DONE - IP   - Texture
-    - DONE - IP   - TextureArray
-    - DONE - DONE - TextureDataFactory
-    - DONE - IP   - TextureRegion
 
 GRAPHICS/OPENGL
 ---------------

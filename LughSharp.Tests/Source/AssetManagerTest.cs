@@ -23,7 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets;
-using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Utils;
 
 using NUnit.Framework;

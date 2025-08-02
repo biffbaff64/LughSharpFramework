@@ -23,7 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
-using LughSharp.Lugh.Graphics.Images;
+using LughSharp.Lugh.Graphics;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 

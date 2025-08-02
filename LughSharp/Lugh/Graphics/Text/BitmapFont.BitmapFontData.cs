@@ -25,7 +25,6 @@
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.Images;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
