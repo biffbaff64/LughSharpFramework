@@ -297,6 +297,23 @@ public class ShaderProgram : IDisposable
     ///
     /// </summary>
     /// <param name="name"></param>
+    /// <returns></returns>
+    public virtual int GetUniformLocation( string name )
+    {
+        var location = GL.GetUniformLocation( ShaderProgramHandle, name );
+
+        if ( location == INVALID )
+        {
+            Logger.Debug( $"***** WARNING, Location is INVALID ( -1 ) for {name} *****" );
+        }
+
+        return location;
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="name"></param>
     /// <param name="value"></param>
     public virtual void SetUniformi( string name, int value )
     {

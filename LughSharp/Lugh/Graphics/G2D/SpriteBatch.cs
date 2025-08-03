@@ -58,7 +58,7 @@ public partial class SpriteBatch : IBatch, IDisposable
 
     // ========================================================================
 
-    protected float[]      Vertices           { get; set; } = [ ];
+    public float[]      Vertices           { get; set; } = [ ];
     protected Texture?     LastTexture        { get; set; } = null;
     protected int          Idx                { get; set; } = 0;
     protected BatchState?  CurrentBatchState  { get; set; }
@@ -356,34 +356,14 @@ public partial class SpriteBatch : IBatch, IDisposable
             return;
         }
 
-        // Bind the texture to the current texture unit.
-        GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
         LastTexture.Bind();
 
-        SetupVertexAttributes( _shader );
+        // Bind the texture to the current texture unit.
+        GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
 
-//        // Ensure that the Vertices array is large enough.
-//        if ( ( Vertices == null ) || ( Vertices.Length < _maxVertices ) )
-//        {
-//            if ( Vertices != null )
-//            {
-//                ArrayPool< float >.Shared.Return( Vertices ); // Return the old array
-//            }
-//
-//            Vertices = ArrayPool< float >.Shared.Rent( _maxVertices ); // Rent a new array
-//        }
-//
-//        // Copy the data from the Vertices array to the pooled Vertices array.
-//        Array.Copy( Vertices, Vertices, Idx );
-
-        if ( _mesh == null )
-        {
-            throw new NullReferenceException( "Mesh is null" );
-        }
-
-        _mesh.SetVertices( Vertices, 0, Idx );
-        _mesh.IndicesBuffer.Position = 0;
-        _mesh.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
+        _mesh?.SetVertices( Vertices, 0, Idx );
+        _mesh!.IndicesBuffer.Position = 0;
+        _mesh!.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
 
         // Set up blending.
         if ( BlendingDisabled )
@@ -428,6 +408,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         }
 
         BlendingDisabled = false;
+        GL.Enable( IGL.GL_BLEND );
     }
 
     /// <summary>
@@ -448,6 +429,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         }
 
         BlendingDisabled = true;
+        GL.Disable( IGL.GL_BLEND );
     }
 
     /// <summary>
@@ -490,6 +472,9 @@ public partial class SpriteBatch : IBatch, IDisposable
         BlendDstFunc      = dstFuncColor;
         BlendSrcFuncAlpha = srcFuncAlpha;
         BlendDstFuncAlpha = dstFuncAlpha;
+
+        // Actually set the OpenGL blend function
+        GL.BlendFuncSeparate(srcFuncColor, dstFuncColor, srcFuncAlpha, dstFuncAlpha);
     }
 
     /// <summary>
@@ -642,32 +627,32 @@ public partial class SpriteBatch : IBatch, IDisposable
         Vertices[ Idx + 6 ] = u1; // Texture U
         Vertices[ Idx + 7 ] = v1; // Texture V
 
-        Vertices[ Idx + 8 ]  = x2;
-        Vertices[ Idx + 9 ]  = y2;
-        Vertices[ Idx + 10 ] = r2;
-        Vertices[ Idx + 11 ] = g2;
-        Vertices[ Idx + 12 ] = b2;
-        Vertices[ Idx + 13 ] = a2;
-        Vertices[ Idx + 14 ] = u2;
-        Vertices[ Idx + 15 ] = v2;
+        Vertices[ Idx + 8 ]  = x2; // X
+        Vertices[ Idx + 9 ]  = y2; // Y
+        Vertices[ Idx + 10 ] = r2; // Store the unpacked red component
+        Vertices[ Idx + 11 ] = g2; // Store the unpacked green component
+        Vertices[ Idx + 12 ] = b2; // Store the unpacked blue component
+        Vertices[ Idx + 13 ] = a2; // Store the unpacked alpha component
+        Vertices[ Idx + 14 ] = u2; // Texture U
+        Vertices[ Idx + 15 ] = v2; // Texture V
 
-        Vertices[ Idx + 16 ] = x3;
-        Vertices[ Idx + 17 ] = y3;
-        Vertices[ Idx + 18 ] = r3;
-        Vertices[ Idx + 19 ] = g3;
-        Vertices[ Idx + 20 ] = b3;
-        Vertices[ Idx + 21 ] = a3;
-        Vertices[ Idx + 22 ] = u3;
-        Vertices[ Idx + 23 ] = v3;
+        Vertices[ Idx + 16 ] = x3; // X
+        Vertices[ Idx + 17 ] = y3; // Y
+        Vertices[ Idx + 18 ] = r3; // Store the unpacked red component
+        Vertices[ Idx + 19 ] = g3; // Store the unpacked green component
+        Vertices[ Idx + 20 ] = b3; // Store the unpacked blue component
+        Vertices[ Idx + 21 ] = a3; // Store the unpacked alpha component
+        Vertices[ Idx + 22 ] = u3; // Texture U
+        Vertices[ Idx + 23 ] = v3; // Texture V
 
-        Vertices[ Idx + 24 ] = x4;
-        Vertices[ Idx + 25 ] = y4;
-        Vertices[ Idx + 26 ] = r4;
-        Vertices[ Idx + 27 ] = g4;
-        Vertices[ Idx + 28 ] = b4;
-        Vertices[ Idx + 29 ] = a4;
-        Vertices[ Idx + 30 ] = u4;
-        Vertices[ Idx + 31 ] = v4;
+        Vertices[ Idx + 24 ] = x4; // X
+        Vertices[ Idx + 25 ] = y4; // Y
+        Vertices[ Idx + 26 ] = r4; // Store the unpacked red component
+        Vertices[ Idx + 27 ] = g4; // Store the unpacked green component
+        Vertices[ Idx + 28 ] = b4; // Store the unpacked blue component
+        Vertices[ Idx + 29 ] = a4; // Store the unpacked alpha component
+        Vertices[ Idx + 30 ] = u4; // Texture U
+        Vertices[ Idx + 31 ] = v4; // Texture V
 
         Idx += VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
 
@@ -1072,7 +1057,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="src">The source rectangle in the texture to be drawn.</param>
     /// <param name="flipX">Indicates whether to flip the texture horizontally.</param>
     /// <param name="flipY">Indicates whether to flip the texture vertically.</param>
-    public virtual void Draw( Texture texture, GRect region, GRect src, bool flipX, bool flipY )
+    public virtual void Draw( Texture texture, GRect region, GRect src, bool flipX = false, bool flipY = false )
     {
         Validate( texture );
 
@@ -1558,65 +1543,6 @@ public partial class SpriteBatch : IBatch, IDisposable
                      x2, y2, Color.R, Color.G, Color.B, Color.A, region.U, region.V,
                      x3, y3, Color.R, Color.G, Color.B, Color.A, region.U2, region.V,
                      x4, y4, Color.R, Color.G, Color.B, Color.A, region.U2, region.V2 );
-    }
-
-    public void Draw( uint? textureId, Rectangle destRect, Color color )
-    {
-        if ( textureId.HasValue )
-        {
-            GL.BindTexture( TextureTarget.Texture2D, textureId.Value );
-        }
-
-        // Set up vertex data for a quad
-        float x      = destRect.X;
-        float y      = destRect.Y;
-        float width  = destRect.Width;
-        float height = destRect.Height;
-
-        // Convert color to normalized float values (0.0 to 1.0)
-        var r = color.R / 255f;
-        var g = color.G / 255f;
-        var b = color.B / 255f;
-        var a = color.A / 255f;
-
-        // Define quad vertices with positions and colors
-        float[] quadVertices =
-        [
-            // Position     // Color
-            x, y, r, g, b, a,                  // Top-left
-            x + width, y, r, g, b, a,          // Top-right
-            x, y + height, r, g, b, a,         // Bottom-left
-            x + width, y + height, r, g, b, a, // Bottom-right
-        ];
-
-        // Update VBO with new vertex data
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-        GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, quadVertices.Length * sizeof( float ), quadVertices );
-
-        // Set up vertex attributes
-        // Update vertex attribute pointers to use VertexConstants
-        GL.VertexAttribPointer( 0, VertexConstants.POSITION_COMPONENTS,
-                                ( int )VertexAttribType.Float, false,
-                                VertexConstants.VERTEX_SIZE_BYTES,
-                                ( uint )VertexConstants.POSITION_OFFSET * sizeof( float ) );
-
-        GL.VertexAttribPointer( 1, VertexConstants.COLOR_COMPONENTS,
-                                ( int )VertexAttribType.Float, false,
-                                VertexConstants.VERTEX_SIZE_BYTES,
-                                ( uint )VertexConstants.COLOR_OFFSET * sizeof( float ) );
-
-        GL.VertexAttribPointer( 2, VertexConstants.TEXCOORD_COMPONENTS,
-                                ( int )VertexAttribType.Float, false,
-                                VertexConstants.VERTEX_SIZE_BYTES,
-                                ( uint )VertexConstants.TEXCOORD_OFFSET * sizeof( float ) );
-
-        // Draw the quad
-        GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo );
-        GL.DrawElements( ( int )PrimitiveType.Triangles, 6, ( int )DrawElementsType.UnsignedInt, 0 );
-
-        // Cleanup
-        GL.DisableVertexAttribArray( 0 );
-        GL.DisableVertexAttribArray( 1 );
     }
 
     #endregion Drawing methods

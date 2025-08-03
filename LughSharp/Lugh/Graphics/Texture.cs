@@ -455,6 +455,11 @@ public class Texture : GLTexture, IManaged
     /// <inheritdoc />
     protected override void Dispose( bool disposing )
     {
+        if ( IsDisposed )
+        {
+            return;
+        }
+        
         if ( disposing )
         {
             // this is a hack.
@@ -474,6 +479,8 @@ public class Texture : GLTexture, IManaged
                 _managedTextures[ Api.App ].Remove( this );
             }
         }
+        
+        IsDisposed = true;
     }
 
     // ========================================================================

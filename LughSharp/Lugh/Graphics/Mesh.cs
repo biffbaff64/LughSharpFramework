@@ -800,10 +800,19 @@ public class Mesh : IDisposable
 
                 var buffer = IndexData.GetBuffer( false );
 
+                var oldPosition = buffer.Position;
+                var oldLimit    = buffer.Limit;
+                
+                buffer.Position = offset;
+                buffer.Limit   = offset + count;
+                
                 fixed ( short* ptr = &buffer.ToArray()[ 0 ] )
                 {
                     GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, new IntPtr( ptr + offset ) );
                 }
+                
+                buffer.Position = oldPosition;
+                buffer.Limit   = oldLimit;
             }
             else
             {
@@ -812,6 +821,8 @@ public class Mesh : IDisposable
         }
         else
         {
+            var numInstances = _instances?.NumInstances ?? 0;
+            
             if ( IndexData.NumIndices > 0 )
             {
                 if ( ( count + offset ) > IndexData.NumMaxIndices )
@@ -821,19 +832,28 @@ public class Mesh : IDisposable
                                                    $"{offset}, max: {IndexData.NumMaxIndices})" );
                 }
 
-                IndexData.Bind();
-
-                var offsetInBytes = offset * sizeof( short ); // Calculate byte offset
-
-                GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offsetInBytes );
-
-                IndexData.Unbind();
+                if ( IsInstanced && ( numInstances > 0 ) )
+                {
+                    GL.DrawElementsInstanced( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offset * 2, numInstances );
+                }
+                else
+                {
+                    GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offset * 2 );
+                }
+                
+//                IndexData.Bind();
+//
+//                var offsetInBytes = offset * sizeof( short ); // Calculate byte offset
+//
+//                GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offsetInBytes );
+//
+//                IndexData.Unbind();
             }
             else
             {
                 if ( IsInstanced )
                 {
-                    GL.DrawArraysInstanced( primitiveType, offset, count, _instances!.NumInstances );
+                    GL.DrawArraysInstanced( primitiveType, offset, count, numInstances );
                 }
                 else
                 {

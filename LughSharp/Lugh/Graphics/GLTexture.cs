@@ -147,7 +147,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
     /// <inheritdoc />
     public bool IsDrawable { get; set; }
-
+    
     // ========================================================================
 
     private static float       _maxAnisotropicFilterLevel = 0;
@@ -663,9 +663,14 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
     protected virtual void Dispose( bool disposing )
     {
-        if ( disposing )
+        if ( !IsDisposed )
         {
-            Delete();
+            if ( disposing )
+            {
+                Delete();
+            }
+            
+            IsDisposed = true;
         }
     }
 

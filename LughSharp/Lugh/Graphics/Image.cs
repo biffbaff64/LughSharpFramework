@@ -40,6 +40,8 @@ public abstract class Image
     public virtual int Height   { get; protected set; }
     public virtual int BitDepth { get; protected set; }
 
+    public bool IsDisposed { get; protected set; }
+    
     // ========================================================================
 
     // Common methods for basic image operations

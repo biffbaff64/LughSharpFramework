@@ -44,6 +44,14 @@ public struct GRect
     public int Y;
     public int Width;
     public int Height;
+
+    public GRect( int x, int y, int width, int height )
+    {
+        X      = x;
+        Y      = y;
+        Width  = width;
+        Height = height;
+    }
 }
 
 /// <summary>
@@ -65,6 +73,12 @@ public struct GPoint
 {
     public int X;
     public int Y;
+
+    public GPoint( int x, int y )
+    {
+        X = x;
+        Y = y;
+    }
 }
 
 /// <summary>
@@ -86,4 +100,10 @@ public struct GSize
 {
     public int Width;
     public int Height;
+
+    public GSize( int width, int height )
+    {
+        Width  = width;
+        Height = height;
+    }
 }
