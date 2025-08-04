@@ -138,11 +138,11 @@ public class SpriteCache
         _mesh = new Mesh( true,
                           size * ( useIndices ? 4 : 6 ),
                           useIndices ? size * 6 : 0,
-                          new VertexAttribute( ( int )VertexConstants.Usage.POSITION, VertexConstants.POSITION_COMPONENTS,
+                          new VertexAttribute( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS,
                                                ShaderProgram.POSITION_ATTRIBUTE ),
-                          new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED, VertexConstants.COLOR_COMPONENTS,
+                          new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked, VertexConstants.COLOR_COMPONENTS,
                                                ShaderProgram.COLOR_ATTRIBUTE ),
-                          new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, VertexConstants.TEXCOORD_COMPONENTS,
+                          new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates, VertexConstants.TEXCOORD_COMPONENTS,
                                                ShaderProgram.TEXCOORD_ATTRIBUTE + "0" ) )
         {
             AutoBind = false,

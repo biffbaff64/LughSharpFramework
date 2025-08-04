@@ -27,8 +27,6 @@ using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-using Rectangle = System.Drawing.Rectangle;
-
 namespace LughSharp.Lugh.Graphics.G2D;
 
 // ============================================================================
@@ -40,7 +38,7 @@ namespace LughSharp.Lugh.Graphics.G2D;
 [PublicAPI]
 public partial class SpriteBatch : IBatch, IDisposable
 {
-    public bool    BlendingDisabled  { get; set; }         = false;
+    public bool    BlendingEnabled   { get; set; }         = false;
     public float   InvTexHeight      { get; set; }         = 0;
     public float   InvTexWidth       { get; set; }         = 0;
     public Matrix4 CombinedMatrix    { get; set; }         = new();
@@ -53,12 +51,12 @@ public partial class SpriteBatch : IBatch, IDisposable
     public int     BlendDstFunc      { get; private set; } = ( int )BlendMode.DstColor;
     public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusSrcAlpha;
     public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusDstAlpha;
+    public float[] Vertices          { get; set; }         = [ ];
 
     public bool IsDrawing => CurrentBatchState == BatchState.Drawing;
 
     // ========================================================================
 
-    public float[]      Vertices           { get; set; } = [ ];
     protected Texture?     LastTexture        { get; set; } = null;
     protected int          Idx                { get; set; } = 0;
     protected BatchState?  CurrentBatchState  { get; set; }
@@ -78,25 +76,27 @@ public partial class SpriteBatch : IBatch, IDisposable
     private readonly object _lockObject = new();
 
     // Prevent reallocation of common vectors
-    private static readonly Vector2 DefaultOrigin = Vector2.Zero;
-    private static readonly Vector2 DefaultScale  = Vector2.One;
+    private static readonly Vector2 _defaultOrigin = Vector2.Zero;
+    private static readonly Vector2 _defaultScale  = Vector2.One;
 
     private Texture?       _lastSuccessfulTexture = null;
     private ShaderProgram? _shader;
     private Mesh?          _mesh;
 
-    private int  _maxTextureUnits;
-    private int  _nullTextureCount    = 0;
-    private int  _currentTextureIndex = 0;
-    private bool _ownsShader;
-    private bool _originalDepthMask;
-    private bool _disposed = false;
-    private int  _maxVertices;
-    private int  _combinedMatrixLocation;
-
     private uint _vao;
     private uint _vbo;
     private uint _ebo;
+
+    private int _nullTextureCount    = 0;
+    private int _currentTextureIndex = 0;
+    private int _maxTextureUnits;
+    private int _maxVertices;
+    private int _combinedMatrixLocation;
+
+    private bool _ownsShader;
+    private bool _originalDepthMask;
+    private bool _disposed = false;
+    private bool _initialBlendingState;
 
     // ========================================================================
 
@@ -195,15 +195,15 @@ public partial class SpriteBatch : IBatch, IDisposable
         // Usage.POSITION: 2 floats for x and y coordinates.
         // Usage.COLOR_PACKED: 4 floats for RGBA color components.
         // Usage.TEXTURE_COORDINATES: 2 floats for texture u and v coordinates.
-        var va1 = new VertexAttribute( ( int )VertexConstants.Usage.POSITION,
+        var va1 = new VertexAttribute( ( int )VertexConstants.Usage.Position,
                                        VertexConstants.POSITION_COMPONENTS,
                                        ShaderProgram.POSITION_ATTRIBUTE );
 
-        var va2 = new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED,
+        var va2 = new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
                                        VertexConstants.COLOR_COMPONENTS,
                                        ShaderProgram.COLOR_ATTRIBUTE );
 
-        var va3 = new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES,
+        var va3 = new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates,
                                        VertexConstants.TEXCOORD_COMPONENTS,
                                        ShaderProgram.TEXCOORD_ATTRIBUTE + "0" );
 
@@ -261,6 +261,8 @@ public partial class SpriteBatch : IBatch, IDisposable
             throw new NullReferenceException( "Shader is null" );
         }
 
+        _initialBlendingState = BlendingEnabled;
+
         CurrentBatchState = BatchState.Drawing;
 
         _originalDepthMask = GL.IsEnabled( ( int )EnableCap.DepthTest );
@@ -297,9 +299,17 @@ public partial class SpriteBatch : IBatch, IDisposable
 
         GL.DepthMask( _originalDepthMask );
 
-        if ( IsBlendingEnabled )
+        // Only modify blending if current state differs from initial state
+        if ( BlendingEnabled != _initialBlendingState )
         {
-            GL.Disable( IGL.GL_BLEND );
+            if ( _initialBlendingState )
+            {
+                GL.Enable( IGL.GL_BLEND );
+            }
+            else
+            {
+                GL.Disable( IGL.GL_BLEND );
+            }
         }
 
         Array.Clear( Vertices, 0, Idx );
@@ -366,11 +376,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         _mesh!.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
 
         // Set up blending.
-        if ( BlendingDisabled )
-        {
-            GL.Disable( IGL.GL_BLEND );
-        }
-        else
+        if ( BlendingEnabled )
         {
             GL.Enable( IGL.GL_BLEND );
 
@@ -379,6 +385,10 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
             }
+        }
+        else
+        {
+            GL.Disable( IGL.GL_BLEND );
         }
 
         // Render the sprites.
@@ -395,7 +405,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public void EnableBlending()
     {
-        if ( !BlendingDisabled )
+        if ( BlendingEnabled )
         {
             return;
         }
@@ -407,8 +417,11 @@ public partial class SpriteBatch : IBatch, IDisposable
             Flush();
         }
 
-        BlendingDisabled = false;
+        BlendingEnabled = true;
         GL.Enable( IGL.GL_BLEND );
+
+        // Restore blend function state
+        GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
     }
 
     /// <summary>
@@ -416,7 +429,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public void DisableBlending()
     {
-        if ( BlendingDisabled )
+        if ( !BlendingEnabled )
         {
             return;
         }
@@ -428,7 +441,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             Flush();
         }
 
-        BlendingDisabled = true;
+        BlendingEnabled = false;
         GL.Disable( IGL.GL_BLEND );
     }
 
@@ -474,7 +487,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         BlendDstFuncAlpha = dstFuncAlpha;
 
         // Actually set the OpenGL blend function
-        GL.BlendFuncSeparate(srcFuncColor, dstFuncColor, srcFuncAlpha, dstFuncAlpha);
+        GL.BlendFuncSeparate( srcFuncColor, dstFuncColor, srcFuncAlpha, dstFuncAlpha );
     }
 
     /// <summary>
@@ -583,94 +596,80 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     /// <param name="x1">The X-coordinate of the first vertex.</param>
     /// <param name="y1">The Y-coordinate of the first vertex.</param>
-    /// <param name="r1">The red component of the color for the first vertex.</param>
-    /// <param name="g1">The green component of the color for the first vertex.</param>
-    /// <param name="b1">The blue component of the color for the first vertex.</param>
-    /// <param name="a1">The alpha component of the color for the first vertex.</param>
+    /// <param name="c1">The color for the first vertex.</param>
     /// <param name="u1">The U texture coordinate for the first vertex.</param>
     /// <param name="v1">The V texture coordinate for the first vertex.</param>
     /// <param name="x2">The X-coordinate of the second vertex.</param>
     /// <param name="y2">The Y-coordinate of the second vertex.</param>
-    /// <param name="r2">The red component of the color for the second vertex.</param>
-    /// <param name="g2">The green component of the color for the second vertex.</param>
-    /// <param name="b2">The blue component of the color for the second vertex.</param>
-    /// <param name="a2">The alpha component of the color for the second vertex.</param>
+    /// <param name="c2">The color for the second vertex.</param>
     /// <param name="u2">The U texture coordinate for the second vertex.</param>
     /// <param name="v2">The V texture coordinate for the second vertex.</param>
     /// <param name="x3">The X-coordinate of the third vertex.</param>
     /// <param name="y3">The Y-coordinate of the third vertex.</param>
-    /// <param name="r3">The red component of the color for the third vertex.</param>
-    /// <param name="g3">The green component of the color for the third vertex.</param>
-    /// <param name="b3">The blue component of the color for the third vertex.</param>
-    /// <param name="a3">The alpha component of the color for the third vertex.</param>
+    /// <param name="c3">The color for the third vertex.</param>
     /// <param name="u3">The U texture coordinate for the third vertex.</param>
     /// <param name="v3">The V texture coordinate for the third vertex.</param>
     /// <param name="x4">The X-coordinate of the fourth vertex.</param>
     /// <param name="y4">The Y-coordinate of the fourth vertex.</param>
-    /// <param name="r4">The red component of the color for the fourth vertex.</param>
-    /// <param name="g4">The green component of the color for the fourth vertex.</param>
-    /// <param name="b4">The blue component of the color for the fourth vertex.</param>
-    /// <param name="a4">The alpha component of the color for the fourth vertex.</param>
+    /// <param name="c4">The color for the fourth vertex.</param>
     /// <param name="u4">The U texture coordinate for the fourth vertex.</param>
     /// <param name="v4">The V texture coordinate for the fourth vertex.</param>
-    private void SetVertices( float x1, float y1, float r1, float g1, float b1, float a1, float u1, float v1,
-                              float x2, float y2, float r2, float g2, float b2, float a2, float u2, float v2,
-                              float x3, float y3, float r3, float g3, float b3, float a3, float u3, float v3,
-                              float x4, float y4, float r4, float g4, float b4, float a4, float u4, float v4 )
+    private void SetVertices( float x1, float y1, float c1, float u1, float v1,
+                              float x2, float y2, float c2, float u2, float v2,
+                              float x3, float y3, float c3, float u3, float v3,
+                              float x4, float y4, float c4, float u4, float v4 )
     {
-        Vertices[ Idx ]     = x1; // X
-        Vertices[ Idx + 1 ] = y1; // Y
-        Vertices[ Idx + 2 ] = r1; // Store the unpacked red component
-        Vertices[ Idx + 3 ] = g1; // Store the unpacked green component
-        Vertices[ Idx + 4 ] = b1; // Store the unpacked blue component
-        Vertices[ Idx + 5 ] = a1; // Store the unpacked alpha component
-        Vertices[ Idx + 6 ] = u1; // Texture U
-        Vertices[ Idx + 7 ] = v1; // Texture V
+        Vertices[ Idx + IBatch.X1 ] = x1; // X
+        Vertices[ Idx + IBatch.Y1 ] = y1; // Y
+        Vertices[ Idx + IBatch.C1 ] = c1; // Color
+        Vertices[ Idx + IBatch.U1 ] = u1; // Texture U
+        Vertices[ Idx + IBatch.V1 ] = v1; // Texture V
 
-        Vertices[ Idx + 8 ]  = x2; // X
-        Vertices[ Idx + 9 ]  = y2; // Y
-        Vertices[ Idx + 10 ] = r2; // Store the unpacked red component
-        Vertices[ Idx + 11 ] = g2; // Store the unpacked green component
-        Vertices[ Idx + 12 ] = b2; // Store the unpacked blue component
-        Vertices[ Idx + 13 ] = a2; // Store the unpacked alpha component
-        Vertices[ Idx + 14 ] = u2; // Texture U
-        Vertices[ Idx + 15 ] = v2; // Texture V
+        Vertices[ Idx + IBatch.X2 ] = x2; // X
+        Vertices[ Idx + IBatch.Y2 ] = y2; // Y
+        Vertices[ Idx + IBatch.C2 ] = c2; // Color
+        Vertices[ Idx + IBatch.U2 ] = u2; // Texture U
+        Vertices[ Idx + IBatch.V2 ] = v2; // Texture V
 
-        Vertices[ Idx + 16 ] = x3; // X
-        Vertices[ Idx + 17 ] = y3; // Y
-        Vertices[ Idx + 18 ] = r3; // Store the unpacked red component
-        Vertices[ Idx + 19 ] = g3; // Store the unpacked green component
-        Vertices[ Idx + 20 ] = b3; // Store the unpacked blue component
-        Vertices[ Idx + 21 ] = a3; // Store the unpacked alpha component
-        Vertices[ Idx + 22 ] = u3; // Texture U
-        Vertices[ Idx + 23 ] = v3; // Texture V
+        Vertices[ Idx + IBatch.X3 ] = x3; // X
+        Vertices[ Idx + IBatch.Y3 ] = y3; // Y
+        Vertices[ Idx + IBatch.C3 ] = c3; // Color
+        Vertices[ Idx + IBatch.U3 ] = u3; // Texture U
+        Vertices[ Idx + IBatch.V3 ] = v3; // Texture V
 
-        Vertices[ Idx + 24 ] = x4; // X
-        Vertices[ Idx + 25 ] = y4; // Y
-        Vertices[ Idx + 26 ] = r4; // Store the unpacked red component
-        Vertices[ Idx + 27 ] = g4; // Store the unpacked green component
-        Vertices[ Idx + 28 ] = b4; // Store the unpacked blue component
-        Vertices[ Idx + 29 ] = a4; // Store the unpacked alpha component
-        Vertices[ Idx + 30 ] = u4; // Texture U
-        Vertices[ Idx + 31 ] = v4; // Texture V
+        Vertices[ Idx + IBatch.X4 ] = x4; // X
+        Vertices[ Idx + IBatch.Y4 ] = y4; // Y
+        Vertices[ Idx + IBatch.C4 ] = c4; // Color
+        Vertices[ Idx + IBatch.U4 ] = u4; // Texture U
+        Vertices[ Idx + IBatch.V4 ] = v4; // Texture V
 
         Idx += VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
+    }
 
-        if ( _first )
+    public void DebugVertices()
+    {
+        for ( var i = 0; i < ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ); i++ )
         {
-            for ( var i = 0; i < 32; i++ )
+            if ( i is 2 or 7 or 12 or 17 )
+            {
+                Logger.Debug( $"Vertices[{i}]: {( uint )Vertices[ i ]:X}" );
+            }
+            else
             {
                 Logger.Debug( $"Vertices[{i}]: {Vertices[ i ]}" );
             }
-
-            Logger.Debug( $"Idx: {Idx}" );
-            
-            _first = false;
         }
+
+        Logger.Debug( $"Idx: {Idx}" );
+
+        // Verify texture coordinates in vertex data
+        Logger.Debug( "Texture coordinates:" );
+        Logger.Debug( $"UV1: ({Vertices[ IBatch.U1 ]}, {Vertices[ IBatch.V1 ]})" );
+        Logger.Debug( $"UV2: ({Vertices[ IBatch.U2 ]}, {Vertices[ IBatch.V2 ]})" );
+        Logger.Debug( $"UV3: ({Vertices[ IBatch.U3 ]}, {Vertices[ IBatch.V3 ]})" );
+        Logger.Debug( $"UV4: ({Vertices[ IBatch.U4 ]}, {Vertices[ IBatch.V4 ]})" );
     }
 
-    private bool _first = true;
-    
     /// <summary>
     /// Fetches the location of the CombinedMatrix uniform in the shader and
     /// stores it in <see cref="_combinedMatrixLocation" />
@@ -855,11 +854,6 @@ public partial class SpriteBatch : IBatch, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Convenience property. Returns TRUE if blending is not disabled.
-    /// </summary>
-    public bool IsBlendingEnabled => !BlendingDisabled;
-
-    /// <summary>
     /// Gets or sets the custom shader used by the SpriteBatch for rendering.
     /// When a custom shader is set, it replaces the default shader provided by
     /// the SpriteBatch. If the custom shader is null, the SpriteBatch falls back
@@ -920,10 +914,10 @@ public partial class SpriteBatch : IBatch, IDisposable
         const float U2 = 1;
         const float V2 = 0;
 
-        SetVertices( posX, posY, Color.R, Color.G, Color.B, Color.A, U, V,
-                     posX, fy2, Color.R, Color.G, Color.B, Color.A, U, V2,
-                     fx2, fy2, Color.R, Color.G, Color.B, Color.A, U2, V2,
-                     fx2, posY, Color.R, Color.G, Color.B, Color.A, U2, V );
+        SetVertices( posX, posY, ColorPackedRGBA, U, V2,
+                     posX, fy2, ColorPackedRGBA, U, V,
+                     fx2, fy2, ColorPackedRGBA, U2, V,
+                     fx2, posY, ColorPackedRGBA, U2, V2 );
     }
 
     /// <summary>
@@ -1043,10 +1037,10 @@ public partial class SpriteBatch : IBatch, IDisposable
             ( v, v2 ) = ( v2, v );
         }
 
-        SetVertices( x1, y1, Color.R, Color.G, Color.B, Color.A, u, v,
-                     x2, y2, Color.R, Color.G, Color.B, Color.A, u, v2,
-                     x3, y3, Color.R, Color.G, Color.B, Color.A, u2, v2,
-                     x4, y4, Color.R, Color.G, Color.B, Color.A, u2, v );
+        SetVertices( x1, y1, ColorPackedRGBA, u, v2,
+                     x2, y2, ColorPackedRGBA, u, v,
+                     x3, y3, ColorPackedRGBA, u2, v,
+                     x4, y4, ColorPackedRGBA, u2, v2 );
     }
 
     /// <summary>
@@ -1087,10 +1081,10 @@ public partial class SpriteBatch : IBatch, IDisposable
             ( v, v2 ) = ( v2, v );
         }
 
-        SetVertices( region.X, region.Y, Color.R, Color.G, Color.B, Color.A, u, v,
-                     region.X, fy2, Color.R, Color.G, Color.B, Color.A, u, v2,
-                     fx2, fy2, Color.R, Color.G, Color.B, Color.A, u2, v2,
-                     fx2, region.Y, Color.R, Color.G, Color.B, Color.A, u2, v );
+        SetVertices( region.X, region.Y, ColorPackedRGBA, u, v2,
+                     region.X, fy2, ColorPackedRGBA, u, v,
+                     fx2, fy2, ColorPackedRGBA, u2, v,
+                     fx2, region.Y, ColorPackedRGBA, u2, v2 );
     }
 
     /// <summary>
@@ -1120,10 +1114,10 @@ public partial class SpriteBatch : IBatch, IDisposable
         var fx2 = x + src.Width;
         var fy2 = y + src.Height;
 
-        SetVertices( x, y, Color.R, Color.G, Color.B, Color.A, u, v,
-                     x, fy2, Color.R, Color.G, Color.B, Color.A, u, v2,
-                     fx2, fy2, Color.R, Color.G, Color.B, Color.A, u2, v2,
-                     fx2, y, Color.R, Color.G, Color.B, Color.A, u2, v );
+        SetVertices( x, y, ColorPackedRGBA, u, v2,
+                     x, fy2, ColorPackedRGBA, u, v,
+                     fx2, fy2, ColorPackedRGBA, u2, v,
+                     fx2, y, ColorPackedRGBA, u2, v2 );
     }
 
     /// <summary>
@@ -1151,10 +1145,10 @@ public partial class SpriteBatch : IBatch, IDisposable
         var fx2 = region.X + region.Width;
         var fy2 = region.Y + region.Height;
 
-        SetVertices( region.X, region.Y, Color.R, Color.G, Color.B, Color.A, u, v,
-                     region.X, fy2, Color.R, Color.G, Color.B, Color.A, u, v2,
-                     fx2, fy2, Color.R, Color.G, Color.B, Color.A, u2, v2,
-                     fx2, region.Y, Color.R, Color.G, Color.B, Color.A, u2, v );
+        SetVertices( region.X, region.Y, ColorPackedRGBA, u, v2,
+                     region.X, fy2, ColorPackedRGBA, u, v,
+                     fx2, fy2, ColorPackedRGBA, u2, v,
+                     fx2, region.Y, ColorPackedRGBA, u2, v2 );
     }
 
     /// <summary>
@@ -1264,10 +1258,10 @@ public partial class SpriteBatch : IBatch, IDisposable
         var u2  = region.U2;
         var v2  = region.V;
 
-        SetVertices( x, y, Color.R, Color.G, Color.B, Color.A, u, v,
-                     x, fy2, Color.R, Color.G, Color.B, Color.A, u, v2,
-                     fx2, fy2, Color.R, Color.G, Color.B, Color.A, u2, v2,
-                     fx2, y, Color.R, Color.G, Color.B, Color.A, u2, v );
+        SetVertices( x, y, ColorPackedRGBA, u, v2,
+                     x, fy2, ColorPackedRGBA, u, v,
+                     fx2, fy2, ColorPackedRGBA, u2, v,
+                     fx2, y, ColorPackedRGBA, u2, v2 );
     }
 
     /// <summary>
@@ -1365,10 +1359,10 @@ public partial class SpriteBatch : IBatch, IDisposable
         x4 += worldOriginX;
         y4 += worldOriginY;
 
-        SetVertices( x1, y1, Color.R, Color.G, Color.B, Color.A, textureRegion.U, textureRegion.V2,
-                     x2, y2, Color.R, Color.G, Color.B, Color.A, textureRegion.U, textureRegion.V,
-                     x3, y3, Color.R, Color.G, Color.B, Color.A, textureRegion.U2, textureRegion.V,
-                     x4, y4, Color.R, Color.G, Color.B, Color.A, textureRegion.U2, textureRegion.V2 );
+        SetVertices( x1, y1, ColorPackedRGBA, textureRegion.U, textureRegion.V2,
+                     x2, y2, ColorPackedRGBA, textureRegion.U, textureRegion.V,
+                     x3, y3, ColorPackedRGBA, textureRegion.U2, textureRegion.V,
+                     x4, y4, ColorPackedRGBA, textureRegion.U2, textureRegion.V2 );
     }
 
     /// <summary>
@@ -1492,7 +1486,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             u4 = textureRegion.U2;
             v4 = textureRegion.V;
         }
-        else
+        else // TODO: Check the orders of V and V2 here
         {
             u1 = textureRegion.U;
             v1 = textureRegion.V;
@@ -1504,10 +1498,10 @@ public partial class SpriteBatch : IBatch, IDisposable
             v4 = textureRegion.V2;
         }
 
-        SetVertices( x1, y1, Color.R, Color.G, Color.B, Color.A, u1, v1,
-                     x2, y2, Color.R, Color.G, Color.B, Color.A, u2, v2,
-                     x3, y3, Color.R, Color.G, Color.B, Color.A, u3, v3,
-                     x4, y4, Color.R, Color.G, Color.B, Color.A, u4, v4 );
+        SetVertices( x1, y1, ColorPackedRGBA, u1, v1,
+                     x2, y2, ColorPackedRGBA, u2, v2,
+                     x3, y3, ColorPackedRGBA, u3, v3,
+                     x4, y4, ColorPackedRGBA, u4, v4 );
     }
 
     /// <summary>
@@ -1539,10 +1533,10 @@ public partial class SpriteBatch : IBatch, IDisposable
         var x4 = ( transform.M00 * width ) + transform.M02;
         var y4 = ( transform.M10 * width ) + transform.M12;
 
-        SetVertices( x1, y1, Color.R, Color.G, Color.B, Color.A, region.U, region.V2,
-                     x2, y2, Color.R, Color.G, Color.B, Color.A, region.U, region.V,
-                     x3, y3, Color.R, Color.G, Color.B, Color.A, region.U2, region.V,
-                     x4, y4, Color.R, Color.G, Color.B, Color.A, region.U2, region.V2 );
+        SetVertices( x1, y1, ColorPackedRGBA, region.U, region.V2,
+                     x2, y2, ColorPackedRGBA, region.U, region.V,
+                     x3, y3, ColorPackedRGBA, region.U2, region.V,
+                     x4, y4, ColorPackedRGBA, region.U2, region.V2 );
     }
 
     #endregion Drawing methods
@@ -1587,6 +1581,15 @@ public partial class SpriteBatch : IBatch, IDisposable
     public float ColorPackedABGR
     {
         get => Color.ToFloatBitsABGR( Color.A, Color.B, Color.G, Color.R );
+        set { }
+    }
+
+    /// <summary>
+    /// This batch's Color packed into a float RGBA format.
+    /// </summary>
+    public float ColorPackedRGBA
+    {
+        get => Color.ToFloatBitsRGBA( Color.R, Color.G, Color.B, Color.A );
         set { }
     }
 

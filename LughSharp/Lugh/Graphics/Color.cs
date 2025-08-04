@@ -906,18 +906,6 @@ public sealed class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Packs the color components into a 32-bit integer with the format ABGR.
-    /// </summary>
-    /// <returns> the packed color as a 32-bit int. </returns>
-    public uint PackedColorABGR()
-    {
-        return ( ( uint )( 255f * A ) << 24 )
-               | ( ( uint )( 255f * B ) << 16 )
-               | ( ( uint )( 255f * G ) << 8 )
-               | ( uint )( 255f * R );
-    }
-
-    /// <summary>
     /// Returns the given seperate colour components as a 32-bit uint in the
     /// following format:-
     /// <li>Bits  0 - 7  : Alpha component</li>
@@ -966,6 +954,18 @@ public sealed class Color : ICloneable, IEquatable< Color >
     public static uint PackedColorABGR( uint a, uint b, uint g, uint r )
     {
         return ( a << 24 ) | ( b << 16 ) | ( g << 8 ) | r;
+    }
+
+    /// <summary>
+    /// Packs the color components into a 32-bit integer with the format ABGR.
+    /// </summary>
+    /// <returns> the packed color as a 32-bit int. </returns>
+    public uint PackedColorABGR()
+    {
+        return ( ( uint )( 255f * A ) << 24 )
+               | ( ( uint )( 255f * B ) << 16 )
+               | ( ( uint )( 255f * G ) << 8 )
+               | ( uint )( 255f * R );
     }
 
     /// <summary>

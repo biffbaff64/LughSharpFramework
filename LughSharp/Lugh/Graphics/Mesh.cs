@@ -936,7 +936,7 @@ public class Mesh : IDisposable
 
         bbox.ToInfinity();
 
-        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
+        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
         var offset     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
         var idx        = offset;
@@ -1036,7 +1036,7 @@ public class Mesh : IDisposable
 
         var verts      = _vertices.GetBuffer( false );
         var index      = IndexData.GetBuffer( false );
-        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
+        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
         var posoff     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
         var end        = offset + count;
@@ -1184,7 +1184,7 @@ public class Mesh : IDisposable
 
         var verts      = _vertices.GetBuffer( false );
         var index      = IndexData.GetBuffer( false );
-        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
+        var posAttrib  = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
         var posoff     = posAttrib!.Offset / 4;
         var vertexSize = _vertices.Attributes.VertexSize / 4;
         var end        = offset + count;
@@ -1400,7 +1400,7 @@ public class Mesh : IDisposable
     /// <param name="scaleZ"> scale on z  </param>
     public void Scale( float scaleX, float scaleY, float scaleZ )
     {
-        var posAttr       = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
+        var posAttr       = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
         var offset        = posAttr!.Offset / 4;
         var numComponents = posAttr.NumComponents;
         var numVertices   = NumVertices;
@@ -1466,7 +1466,7 @@ public class Mesh : IDisposable
     /// <param name="count">The number of vertices to be transformed.</param>
     protected void Transform( in Matrix4 matrix, in int start, in int count )
     {
-        var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.POSITION );
+        var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.Position );
 
         var posOffset     = posAttr!.Offset / 4;
         var stride        = VertexSize / 4;
@@ -1582,7 +1582,7 @@ public class Mesh : IDisposable
     /// <param name="count">The number of vertices to transform.</param>
     protected void TransformUV( in Matrix3 matrix, int start, int count )
     {
-        var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES );
+        var posAttr = GetVertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates );
 
         if ( posAttr == null )
         {

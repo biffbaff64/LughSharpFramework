@@ -145,9 +145,9 @@ public class PolygonSpriteBatch : IPolygonBatch
                           false,
                           maxVertices,
                           maxTriangles * 3,
-                          new VertexAttribute( ( int )VertexConstants.Usage.POSITION, 4, ShaderProgram.POSITION_ATTRIBUTE ),
-                          new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED, 4, ShaderProgram.COLOR_ATTRIBUTE ),
-                          new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES, 2,
+                          new VertexAttribute( ( int )VertexConstants.Usage.Position, 4, ShaderProgram.POSITION_ATTRIBUTE ),
+                          new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE ),
+                          new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates, 2,
                                                ShaderProgram.TEXCOORD_ATTRIBUTE + "0" ) );
 
         _vertices  = new float[ maxVertices * Sprite.VERTEX_SIZE ];
@@ -255,6 +255,18 @@ public class PolygonSpriteBatch : IPolygonBatch
             var color = Color;
 
             Color.ABGR8888ToColor( ref color, value );
+            _colorPacked = value;
+        }
+    }
+
+    public float ColorPackedRGBA
+    {
+        get => _colorPacked;
+        set
+        {
+            var color = Color;
+
+            Color.RGBA8888ToColor( ref color, ( uint )value );
             _colorPacked = value;
         }
     }

@@ -91,8 +91,8 @@ public class VertexAttribute
     public VertexAttribute( int usage, int numComponents, string alias, int unit = 0 )
         : this( usage,
                 numComponents,
-                usage == ( int )VertexConstants.Usage.COLOR_PACKED ? IGL.GL_UNSIGNED_BYTE : IGL.GL_FLOAT,
-                usage == ( int )VertexConstants.Usage.COLOR_PACKED,
+                usage == ( int )VertexConstants.Usage.ColorPacked ? IGL.GL_UNSIGNED_BYTE : IGL.GL_FLOAT,
+                usage == ( int )VertexConstants.Usage.ColorPacked,
                 alias,
                 unit )
     {
@@ -157,7 +157,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Position()
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.POSITION, VertexConstants.POSITION_COMPONENTS, "a_position" );
+        return new VertexAttribute( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS, "a_position" );
     }
 
     /// <summary>
@@ -173,7 +173,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute TexCoords( int unit )
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES,
+        return new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates,
                                     2,
                                     $"a_texCoord{unit}",
                                     unit );
@@ -188,7 +188,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Normal()
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.NORMAL, 3, ShaderProgram.NORMAL_ATTRIBUTE );
+        return new VertexAttribute( ( int )VertexConstants.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE );
     }
 
     /// <summary>
@@ -200,7 +200,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute ColorPacked()
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED,
+        return new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
                                     4,
                                     IGL.GL_UNSIGNED_BYTE,
                                     true,
@@ -217,7 +217,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute ColorUnpacked()
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.COLOR_UNPACKED,
+        return new VertexAttribute( ( int )VertexConstants.Usage.ColorUnpacked,
                                     4,
                                     IGL.GL_FLOAT,
                                     false,
@@ -233,7 +233,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Tangent()
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.TANGENT, 3, "a_tangent" );
+        return new VertexAttribute( ( int )VertexConstants.Usage.Tangent, 3, "a_tangent" );
     }
 
     /// <summary>
@@ -247,7 +247,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Binormal()
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.BI_NORMAL, 3, "a_binormal" );
+        return new VertexAttribute( ( int )VertexConstants.Usage.BiNormal, 3, "a_binormal" );
     }
 
     /// <summary>
@@ -263,7 +263,7 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute BoneWeight( int unit )
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.BONE_WEIGHT,
+        return new VertexAttribute( ( int )VertexConstants.Usage.BoneWeight,
                                     2,
                                     $"a_boneWeight{unit}",
                                     unit );

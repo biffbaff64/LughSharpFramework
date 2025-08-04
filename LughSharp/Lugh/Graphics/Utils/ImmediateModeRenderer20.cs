@@ -120,12 +120,12 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         _vertices   = new float[ maxVertices * ( _mesh.VertexAttributes!.VertexSize / 4 ) ];
         _vertexSize = _mesh.VertexAttributes.VertexSize / 4;
 
-        var attribute = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.NORMAL );
+        var attribute = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.Normal );
 
         _normalOffset       = attribute != null ? attribute.Offset / 4 : 0;
-        attribute           = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED );
+        attribute           = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.ColorPacked );
         _colorOffset        = attribute != null ? attribute.Offset / 4 : 0;
-        attribute           = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES );
+        attribute           = _mesh.GetVertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates );
         _texCoordOffset     = attribute != null ? attribute.Offset / 4 : 0;
         _shaderUniformNames = new string[ numTexCoords ];
 
@@ -257,26 +257,26 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     {
         var attribs = new List< VertexAttribute >
         {
-            new( ( int )VertexConstants.Usage.POSITION, VertexConstants.POSITION_COMPONENTS, ShaderProgram.POSITION_ATTRIBUTE ),
+            new( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS, ShaderProgram.POSITION_ATTRIBUTE ),
         };
 
         if ( hasColor )
         {
-            attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.COLOR_PACKED,
+            attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
                                               VertexConstants.COLOR_COMPONENTS,
                                               ShaderProgram.COLOR_ATTRIBUTE ) );
         }
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
-            attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.TEXTURE_COORDINATES,
+            attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates,
                                               VertexConstants.TEXCOORD_COMPONENTS,
                                               ShaderProgram.TEXCOORD_ATTRIBUTE + $"{i}" ) );
         }
 
         if ( hasNormals )
         {
-            attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.NORMAL,
+            attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.Normal,
                                               VertexConstants.NORMAL_COMPONENTS,
                                               ShaderProgram.NORMAL_ATTRIBUTE ) );
         }

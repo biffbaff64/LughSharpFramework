@@ -161,18 +161,18 @@ public class SpriteBatchTests
 
             // Test blending without Begin/End first
             _spriteBatch!.EnableBlending();
-            Assert.That( _spriteBatch.IsBlendingEnabled );
+            Assert.That( _spriteBatch.BlendingEnabled );
 
             _spriteBatch.DisableBlending();
-            Assert.That( !_spriteBatch.IsBlendingEnabled );
+            Assert.That( !_spriteBatch.BlendingEnabled );
 
             // Now test within Begin/End block
             _spriteBatch.Begin();
             _spriteBatch.EnableBlending();
-            Assert.That( _spriteBatch.IsBlendingEnabled );
+            Assert.That( _spriteBatch.BlendingEnabled );
 
             _spriteBatch.DisableBlending();
-            Assert.That( !_spriteBatch.IsBlendingEnabled );
+            Assert.That( !_spriteBatch.BlendingEnabled );
             _spriteBatch.End();
         } );
 

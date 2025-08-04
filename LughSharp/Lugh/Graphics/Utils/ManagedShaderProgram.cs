@@ -250,7 +250,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"> the name of the uniform </param>
     /// <returns> the location of the uniform or -1.</returns>
-    public int GetUniformLocation( string name )
+    public override int GetUniformLocation( string name )
     {
         return _uniforms.GetValueOrDefault( name, -1 );
     }
