@@ -72,13 +72,18 @@ public class ShaderProgram : IDisposable
     /// <summary>
     /// default name for color attributes
     /// </summary>
-    public const string COLOR_ATTRIBUTE = "a_colorPacked";
+    public const string COLOR_ATTRIBUTE = "a_color";
 
     /// <summary>
     /// default name for texcoords attributes, append texture unit number
     /// </summary>
     public const string TEXCOORD_ATTRIBUTE = "a_texCoord";
 
+    /// <summary>
+    /// Specifies the default shader language version to be used in the shader program.
+    /// </summary>
+    public const string GLSL_VERSION = "#version 450 core";
+    
     // ========================================================================
 
     public bool       IsCompiled             { get; set; }

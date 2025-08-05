@@ -42,6 +42,7 @@ public struct Transform
 }
 
 // Helper struct for integer vectors
+[PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
 public struct Vector2Int
 {
@@ -49,6 +50,7 @@ public struct Vector2Int
     public int Y;
 }
 
+[PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
 public struct Material : IEquatable< Material >
 {
@@ -93,118 +95,124 @@ public struct Material : IEquatable< Material >
 
 public partial class SpriteBatch
 {
-    public const string QUADS_VERTEX_SHADER = "#version 450 core\n" +
-                                              "layout (location = 0) out vec2 textureCoordsOut;\n" +
-                                              "layout (location = 1) out flat int renderOptions;\n" +
-                                              "layout (location = 2) out flat int materialIdx;\n" +
-                                              "layout (std430, binding = 0) buffer TransformSBO\n" +
-                                              "{\n" +
-                                              "  Transform transforms[];\n" +
-                                              "};\n" +
-                                              "uniform vec2 screenSize;\n" +
-                                              "uniform mat4 orthoProjection;\n" +
-                                              "void main()\n" +
-                                              "{\n" +
-                                              "  Transform transform = transforms[gl_InstanceID];\n" +
-                                              "  vec2 vertices[6] =\n" +
-                                              "  {\n" +
-                                              "    transform.pos,\n" +                                     // Top Left
-                                              "    vec2(transform.pos + vec2(0.0, transform.size.y)),\n" + // Bottom Left
-                                              "    vec2(transform.pos + vec2(transform.size.x, 0.0)),\n" + // Top Right
-                                              "    vec2(transform.pos + vec2(transform.size.x, 0.0)),\n" + // Top Right
-                                              "    vec2(transform.pos + vec2(0.0, transform.size.y)),\n" + // Bottom Left
-                                              "    transform.pos + transform.size\n" +                     // Bottom Right
-                                              "  };\n" +
-                                              "  int left = transform.atlasOffset.x;\n" +
-                                              "  int top = transform.atlasOffset.y;\n" +
-                                              "  int right  = transform.atlasOffset.x + transform.spriteSize.x;\n" +
-                                              "  int bottom = transform.atlasOffset.y + transform.spriteSize.y;\n" +
-                                              "  if(bool(transform.renderOptions & RENDERING_OPTION_FLIP_X))\n" +
-                                              "  {\n" +
-                                              "    int tmp = left;\n" +
-                                              "    left = right;\n" +
-                                              "    right = tmp;\n" +
-                                              "  }\n" +
-                                              "  if(bool(transform.renderOptions & RENDERING_OPTION_FLIP_Y))\n" +
-                                              "  {\n" +
-                                              "    int tmp = top;\n" +
-                                              "    top    = bottom;\n" +
-                                              "    bottom = tmp;\n" +
-                                              "  }\n" +
-                                              "  vec2 textureCoords[6] = \n" +
-                                              "  {\n" +
-                                              "    vec2(left, top),\n" +
-                                              "    vec2(left, bottom),\n" +
-                                              "    vec2(right, top),\n" +
-                                              "    vec2(right, top),\n" +
-                                              "    vec2(left, bottom),\n" +
-                                              "    vec2(right, bottom),\n" +
-                                              "  };\n" +
-                                              "  {\n" +
-                                              "    vec2 vertexPos = vertices[gl_VertexID];\n" +
-                                              "    gl_Position = orthoProjection * vec4(vertexPos, transform.layer, 1.0);\n" +
-                                              "  }\n" +
-                                              "  textureCoordsOut = textureCoords[gl_VertexID];\n" +
-                                              "  renderOptions = transform.renderOptions;\n" +
-                                              "  materialIdx = transform.materialIdx;\n" +
-                                              "}\n";
+    public const string QUADS_VERTEX_SHADER =
+        """
+        #version 450 core
+                layout( location = 0 ) out vec2 textureCoordsOut;
+                layout (location = 1) out flat int renderOptions;
+                layout (location = 2) out flat int materialIdx;
+                layout (std430, binding = 0) buffer TransformSBO
+                {
+                  Transform transforms[];
+                };
+                uniform vec2 screenSize;
+                uniform mat4 orthoProjection;
+                void main()
+                {
+                  Transform transform = transforms[gl_InstanceID];
+                  vec2 vertices[6] =
+                  {
+                    transform.pos,
+                    vec2(transform.pos + vec2(0.0, transform.size.y)),
+                    vec2(transform.pos + vec2(transform.size.x, 0.0)),
+                    vec2(transform.pos + vec2(transform.size.x, 0.0)),
+                    vec2(transform.pos + vec2(0.0, transform.size.y)),
+                    transform.pos + transform.size
+                  };
+                  int left = transform.atlasOffset.x;
+                  int top = transform.atlasOffset.y;
+                  int right  = transform.atlasOffset.x + transform.spriteSize.x;
+                  int bottom = transform.atlasOffset.y + transform.spriteSize.y;
+                  if(bool(transform.renderOptions & RENDERING_OPTION_FLIP_X))
+                  {
+                    int tmp = left;
+                    left = right;
+                    right = tmp;
+                  }
+                  if(bool(transform.renderOptions & RENDERING_OPTION_FLIP_Y))
+                  {
+                    int tmp = top;
+                    top    = bottom;
+                    bottom = tmp;
+                  }
+                  vec2 textureCoords[6] = 
+                  {
+                    vec2(left, top),
+                    vec2(left, bottom),
+                    vec2(right, top),
+                    vec2(right, top),
+                    vec2(left, bottom),
+                    vec2(right, bottom),
+                  };
+                  {
+                    vec2 vertexPos = vertices[gl_VertexID];
+                    gl_Position = orthoProjection * vec4(vertexPos, transform.layer, 1.0);
+                  }
+                  textureCoordsOut = textureCoords[gl_VertexID];
+                  renderOptions = transform.renderOptions;
+                  materialIdx = transform.materialIdx;
+                }\n
+        """;
 
-    public const string QUADS_FRAGMENT_SHADER = "#version 450 core\n" +
-                                                "layout (location = 0) in vec2 textureCoordsIn;\n" +
-                                                "layout (location = 1) in flat int renderOptions;\n" +
-                                                "layout (location = 2) in flat int materialIdx;\n" +
-                                                "layout (location = 0) out vec4 fragColor;\n" +
-                                                "layout (binding = 0) uniform sampler2D textureAtlas;\n" +
-                                                "layout (binding = 1) uniform sampler2D fontAtlas;\n" +
-                                                "layout(std430, binding = 1) buffer Materials\n" +
-                                                "{\n" +
-                                                "  Material materials[];\n" +
-                                                "};\n" +
-                                                "void main()\n" +
-                                                "{\n" +
-                                                "  Material material = materials[materialIdx];\n" +
-                                                "  if(bool(renderOptions & RENDERING_OPTION_FONT))\n" +
-                                                "  {\n" +
-                                                "    vec4 textureColor = texelFetch(fontAtlas, ivec2(textureCoordsIn), 0);\n" +
-                                                "    if(textureColor.r == 0.0)\n" +
-                                                "    {\n" +
-                                                "      discard;\n" +
-                                                "    }\n" +
-                                                "    fragColor = textureColor.r * material.color;\n" +
-                                                "  }\n" +
-                                                "  else\n" +
-                                                "  {\n" +
-                                                "    vec4 textureColor = texelFetch(textureAtlas, ivec2(textureCoordsIn), 0);\n" +
-                                                "    if(textureColor.a == 0.0)\n" +
-                                                "    {\n" +
-                                                "      discard;\n" +
-                                                "    }\n" +
-                                                "    fragColor = textureColor * material.color;\n" +
-                                                "  }\n" +
-                                                "}\n";
+    public const string QUADS_FRAGMENT_SHADER =
+        """
+        #version 450 core
+                layout (location = 0) in vec2 textureCoordsIn;
+                layout (location = 1) in flat int renderOptions;
+                layout (location = 2) in flat int materialIdx;
+                layout (location = 0) out vec4 fragColor;
+                layout (binding = 0) uniform sampler2D textureAtlas;
+                layout (binding = 1) uniform sampler2D fontAtlas;
+                layout(std430, binding = 1) buffer Materials
+                {
+                  Material materials[];
+                };
+                void main()
+                {
+                  Material material = materials[materialIdx];
+                  if(bool(renderOptions & RENDERING_OPTION_FONT))
+                  {
+                    vec4 textureColor = texelFetch(fontAtlas, ivec2(textureCoordsIn), 0);
+                    if(textureColor.r == 0.0)
+                    {
+                      discard;
+                    }
+                    fragColor = textureColor.r * material.color;
+                  }
+                  else
+                  {
+                    vec4 textureColor = texelFetch(textureAtlas, ivec2(textureCoordsIn), 0);
+                    if(textureColor.a == 0.0)
+                    {
+                      discard;
+                    }
+                    fragColor = textureColor * material.color;
+                  }
+                }
+        """;
 
     // ========================================================================
 
     public const string DEFAULT_VERTEX_SHADER = "#version 450 core\n" +
-                                                "in vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
-                                                "in vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
-                                                "in vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
+                                                "layout (location = 0) in vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
+                                                "layout (location = 1) in vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
+                                                "layout (location = 2) in vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
                                                 "uniform mat4 u_combinedMatrix;\n" +
-                                                "out vec4 v_colorPacked;\n" +
-                                                "out vec2 v_texCoords;\n" +
+                                                "layout (location = 0) out vec4 v_color;\n" +
+                                                "layout (location = 1) out vec2 v_texCoords;\n" +
                                                 "void main() {\n" +
-                                                "    v_colorPacked = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
+                                                "    v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
                                                 "    v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
                                                 "    gl_Position = u_combinedMatrix * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
                                                 "}\n";
 
     public const string DEFAULT_FRAGMENT_SHADER = "#version 450 core\n" +
-                                                  "layout(location = 0) out vec4 FragColor;\n" +
-                                                  "in vec4 v_colorPacked;\n" +
-                                                  "in vec2 v_texCoords;\n" +
-                                                  "uniform sampler2D u_texture;\n" +
+                                                  "layout (location = 0) in vec4 v_color;\n" +
+                                                  "layout (location = 1) in vec2 v_texCoords;\n" +
+                                                  "layout (location = 0) out vec4 fragColor;\n" +
+                                                  "layout (binding = 1) uniform sampler2D u_texture;\n" +
                                                   "void main() {\n" +
-                                                  "    FragColor = v_colorPacked * texture(u_texture, v_texCoords);\n" +
+                                                  "    fragColor = v_color * texture(u_texture, v_texCoords);\n" +
                                                   "}\n";
 }
 

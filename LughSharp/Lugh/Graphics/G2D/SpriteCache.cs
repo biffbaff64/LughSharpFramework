@@ -1353,7 +1353,7 @@ public class SpriteCache
     /// <summary>
     /// Sets the shader to be used in a GLES 2.0 environment. Vertex position
     /// attribute is called "a_position", the texture coordinates attribute is
-    /// called called "a_texCoords", the color attribute is called "a_colorPacked".
+    /// called called "a_texCoords", the color attribute is called "a_color".
     /// The projection matrix is uploaded via a mat4 uniform called "u_proj",
     /// the transform matrix is uploaded via a uniform called "u_trans", the combined
     /// transform and projection matrx is is uploaded via a mat4 uniform called

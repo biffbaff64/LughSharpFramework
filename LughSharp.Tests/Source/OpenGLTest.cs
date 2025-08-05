@@ -38,9 +38,9 @@ public unsafe class OpenGLTest
 
     private readonly string _fragmentShaderSource =
         "#version 450 core\n" +
-        "out vec4 FragColor;\n" +
+        "out vec4 fragColor;\n" +
         "void main() {\n" +
-        "    FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
+        "    fragColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
         "}\n";
 
     private readonly string _vertexShaderSource =

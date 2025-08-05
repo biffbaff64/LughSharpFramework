@@ -38,6 +38,12 @@ namespace LughSharp.Lugh.Graphics.G2D;
 [PublicAPI]
 public partial class SpriteBatch : IBatch, IDisposable
 {
+    public const int RENDERING_OPTION_FLIP_X = 1 << 0;
+    public const int RENDERING_OPTION_FLIP_Y = 1 << 1;
+    public const int RENDERING_OPTION_FONT   = 1 << 2;
+
+    // ========================================================================
+
     public bool    BlendingEnabled   { get; set; }         = false;
     public float   InvTexHeight      { get; set; }         = 0;
     public float   InvTexWidth       { get; set; }         = 0;
@@ -69,6 +75,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     private const int MAX_VERTEX_INDEX    = 32767; //
     private const int MAX_SPRITES         = 8191;  //
     private const int MAX_QUADS           = 100;   //
+    private const int TEXTURE_UNIT        = 1;
 
     // ========================================================================
 
@@ -268,8 +275,11 @@ public partial class SpriteBatch : IBatch, IDisposable
         _originalDepthMask = GL.IsEnabled( ( int )EnableCap.DepthTest );
         GL.DepthMask( depthMaskEnabled );
 
-        _shader.Bind();
-        SetupMatrices();
+        if ( _shader != null )
+        {
+            _shader.Bind();
+            SetupMatrices();
+        }
 
         RenderCalls = 0;
     }
@@ -709,7 +719,10 @@ public partial class SpriteBatch : IBatch, IDisposable
             // Necessary call to Flush() to ensure texture switching is handled correctly
             Flush();
         }
-
+        
+        GL.ActiveTexture( TextureUnit.Texture0 + TEXTURE_UNIT );
+        texture.Bind();
+        
         LastTexture            = texture;
         _lastSuccessfulTexture = LastTexture;
         InvTexWidth            = 1.0f / texture.Width;
@@ -813,7 +826,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             }
 
             _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix );
-            _shader.SetUniformi( "u_texture", 0 );
+            _shader.SetUniformi( "u_texture", TEXTURE_UNIT );
         }
     }
 
