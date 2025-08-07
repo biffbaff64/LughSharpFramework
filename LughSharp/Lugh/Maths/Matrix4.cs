@@ -175,6 +175,7 @@ public class Matrix4
     public static readonly Vector3    TmpForward = new();
     public static readonly Vector3    TmpUp      = new();
     public static readonly Matrix4    TmpMat     = new();
+    public static readonly Matrix4    Identity   = new();
 
     public float[] Val = new float[ 16 ];
 

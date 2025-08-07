@@ -147,7 +147,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
     /// <inheritdoc />
     public bool IsDrawable { get; set; }
-    
+
     // ========================================================================
 
     private static float       _maxAnisotropicFilterLevel = 0;
@@ -392,6 +392,8 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// <param name="miplevel"></param>
     public void UploadImageData( int target, ITextureData? data, int miplevel = 0 )
     {
+        Logger.Debug( $"Uploading texture data to {GetGLTargetName( target )} target" );
+
         if ( data == null )
         {
             Logger.Warning( "NULL ITextureData supplied!" );
@@ -416,18 +418,12 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
         var pixmap        = data.ConsumePixmap();
         var disposePixmap = data.ShouldDisposePixmap();
 
-        if ( pixmap == null )
+        if ( pixmap?.PixelData == null )
         {
-            throw new GdxRuntimeException( "ConsumePixmap() resulted in a null Pixmap!" );
-        }
+            Logger.Warning( "ConsumePixmap() resulted in a null Pixmap!" );
 
-//        Logger.Debug( $"Pixmap Format: {pixmap.GetColorFormat()}" );
-//        Logger.Debug( $"Pixmap Dimensions: {pixmap.Width}x{pixmap.Height}" );
-//        Logger.Debug( $"Pixmap GL Format: {GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
-//        Logger.Debug( $"Pixmap GL Internal Format: {GetGLPixelFormatName( pixmap.GLInternalPixelFormat )}" );
-//        Logger.Debug( $"Pixmap GL Data Type: {GetGLTypeName( pixmap.GLDataType )}" );
-//        Logger.Debug( $"Pixmap Data Length: {pixmap.PixelData.Length}" );
-//        Logger.Debug( $"Gdx2dPixmap created successfully?: {pixmap.Gdx2DPixmap != null}" );
+            return;
+        }
 
         if ( data.PixelFormat != pixmap.GetColorFormat() )
         {
@@ -471,18 +467,63 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             CheckGLError( "GenerateMipMap" );
         }
 
-        GL.TexImage2D< byte >( target,
-                               miplevel,
-                               pixmap.GLInternalPixelFormat,
-                               pixmap.Width,
-                               pixmap.Height,
-                               0,
-                               pixmap.GLPixelFormat,
-                               pixmap.GLDataType,
-                               pixmap.PixelData,
-                               false );
+        Logger.Debug( $"Uploading texture - Width: {pixmap.Width}, Height: {pixmap.Height}" );
+        Logger.Debug( $"Pixel Format: {pixmap.GLPixelFormat}, Internal Format: {pixmap.GLInternalPixelFormat}" );
+        Logger.Debug( $"Data Type: {pixmap.GLDataType}, Data Length: {pixmap.PixelData.Length}" );
 
-        CheckGLError( "TexImage2D" );
+        Logger.Debug( $"Pixmap Format: {pixmap.GetColorFormat()}" );
+        Logger.Debug( $"Pixmap Dimensions: {pixmap.Width}x{pixmap.Height}" );
+        Logger.Debug( $"Pixmap GL Format: {GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
+        Logger.Debug( $"Pixmap GL Internal Format: {GetGLPixelFormatName( pixmap.GLInternalPixelFormat )}" );
+        Logger.Debug( $"Pixmap GL Data Type: {GetGLTypeName( pixmap.GLDataType )}" );
+        Logger.Debug( $"Pixmap Data Length: {pixmap.PixelData.Length}" );
+        Logger.Debug( $"Gdx2dPixmap created successfully?: {pixmap.Gdx2DPixmap != null}" );
+
+        var boundTexture = new int[ 1 ];
+        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTexture );
+        Logger.Debug( $"Currently bound texture before upload: {boundTexture[ 0 ]}" );
+
+        GL.TexParameteri( target, IGL.GL_TEXTURE_MIN_FILTER, IGL.GL_NEAREST );
+        GL.TexParameteri( target, IGL.GL_TEXTURE_MAG_FILTER, IGL.GL_NEAREST );
+        GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_S, IGL.GL_CLAMP_TO_EDGE );
+        GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_T, IGL.GL_CLAMP_TO_EDGE );
+
+        GL.TexImage2D( target, miplevel, 0, pixmap, false );
+
+//        GL.TexImage2D< byte >( target,
+//                               miplevel,
+//                               pixmap.GLInternalPixelFormat,
+//                               pixmap.Width,
+//                               pixmap.Height,
+//                               0,
+//                               pixmap.GLPixelFormat,
+//                               pixmap.GLDataType,
+//                               pixmap.PixelData,
+//                               false );
+
+        var boundTex = new int[ 1 ];
+        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTex );
+        Logger.Debug( $"Currently bound texture before query: {boundTex[ 0 ]}" );
+
+        if ( boundTex[ 0 ] == 0 )
+        {
+            Logger.Debug( "No texture bound when trying to query dimensions!" );
+
+            return;
+        }
+
+        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTexture );
+        Logger.Debug( $"Currently bound texture after upload: {boundTexture[ 0 ]}" );
+
+        // Get texture parameters to verify the dimensions were set
+        int[] width  = new int[ 1 ];
+        int[] height = new int[ 1 ];
+        GL.GetTexLevelParameteriv( target, 0, IGL.GL_TEXTURE_WIDTH, ref width );
+        GL.GetTexLevelParameteriv( target, 0, IGL.GL_TEXTURE_HEIGHT, ref height );
+        Logger.Debug( $"Texture dimensions immediately after upload: {width[ 0 ]}x{height[ 0 ]}" );
+
+        var error = GL.GetError();
+        Logger.Debug( $"GL Error after TexImage2D: {error}" );
 
         if ( disposePixmap )
         {
@@ -490,6 +531,11 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="operation"></param>
+    /// <exception cref="GdxRuntimeException"></exception>
     private static void CheckGLError( string operation )
     {
         var error = GL.GetError();
@@ -513,6 +559,13 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             IGL.GL_LUMINANCE_ALPHA => "IGL.GL_LUMINANCE_ALPHA",
             IGL.GL_RGB             => "IGL.GL_RGB",
             IGL.GL_RGBA            => "IGL.GL_RGBA",
+            IGL.GL_RGB8            => "IGL.GL_RGB8",
+            IGL.GL_RGBA8           => "IGL.GL_RGBA8",
+            IGL.GL_RGB565          => "IGL.GL_RGB565",
+            IGL.GL_RGBA4           => "IGL.GL_RGBA4",
+            IGL.GL_RGB10           => "IGL.GL_RGB10",
+            IGL.GL_RGB12           => "IGL.GL_RGB12",
+            IGL.GL_RGBA16          => "IGL.GL_RGBA16",
 
             // ----------------------------------
 
@@ -585,13 +638,33 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => IGL.GL_ALPHA,
             Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => IGL.GL_LUMINANCE_ALPHA,
             Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => IGL.GL_RGB,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => IGL.GL_RGB,
             Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => IGL.GL_RGBA,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => IGL.GL_RGB,
             Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => IGL.GL_RGBA,
 
             // ----------------------------------
 
             var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+        };
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public static int GetGLInternalFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
+    {
+        return format switch
+        {
+            Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => IGL.GL_ALPHA,
+            Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => IGL.GL_LUMINANCE_ALPHA,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => IGL.GL_RGB8,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => IGL.GL_RGBA8,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => IGL.GL_RGB565,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => IGL.GL_RGBA4,
+            _                                            => throw new ArgumentException( $"Unsupported format: {format}" )
         };
     }
 
@@ -620,6 +693,12 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
         };
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    /// <exception cref="GdxRuntimeException"></exception>
     public static Gdx2DPixmap.Gdx2DPixmapFormat GdxFormatToPixelTypeFormat( int format )
     {
         return format switch
@@ -652,6 +731,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     }
 
     // ========================================================================
+    // ========================================================================
 
     /// <inheritdoc />
     public void Dispose()
@@ -669,7 +749,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             {
                 Delete();
             }
-            
+
             IsDisposed = true;
         }
     }

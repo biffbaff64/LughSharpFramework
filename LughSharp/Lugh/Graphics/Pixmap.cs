@@ -229,25 +229,14 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Returns the OpenGL internal pixel format of this Pixmap.
     /// </summary>
-    /// <returns> one of GL_RG, GL_RGB, GL_RGBA, GL_RED, GL_DEPTH_COMPONENT, or GL_DEPTH_STENCIL.</returns>
+    /// <returns> one of GL_ALPHA, GL_LUMINANCE_ALPHA, GL_RGB8, GL_RGBA8, GL_RGB565, or GL_RGBA4.</returns>
     public int GLInternalPixelFormat
     {
         get
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            var format = GLTexture.ToGLPixelFormat( Gdx2DPixmap.ColorType );
-
-            if ( ( format != IGL.GL_RG )
-                 && ( format != IGL.GL_RGB )
-                 && ( format != IGL.GL_RGBA )
-                 && ( format != IGL.GL_DEPTH_COMPONENT )
-                 && ( format != IGL.GL_DEPTH_STENCIL ) )
-            {
-                throw new GdxRuntimeException( "Unsupported GLInternalFormat" );
-            }
-
-            return format;
+            return GLTexture.GetGLInternalFormat( Gdx2DPixmap.ColorType );
         }
     }
 

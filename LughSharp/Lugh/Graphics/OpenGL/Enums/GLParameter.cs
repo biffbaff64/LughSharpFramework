@@ -25,7 +25,7 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum GetPName
+public enum GLParameter
 {
     AliasedLineWidthRange = IGL.GL_ALIASED_LINE_WIDTH_RANGE,
     AliasedPointSizeRange = IGL.GL_ALIASED_POINT_SIZE_RANGE,
@@ -39,13 +39,16 @@ public enum GetPName
 
     // ------------------------------------------------------------------------
 
+    Blend                = IGL.GL_BLEND,
     ColorClearValue      = IGL.GL_COLOR_CLEAR_VALUE,
     ColorWriteMask       = IGL.GL_COLOR_WRITEMASK,
     CullFaceMode         = IGL.GL_CULL_FACE_MODE,
+    CurrentProgram       = IGL.GL_CURRENT_PROGRAM,
     DepthBits            = IGL.GL_DEPTH_BITS,
     DepthClearValue      = IGL.GL_DEPTH_CLEAR_VALUE,
     DepthFunc            = IGL.GL_DEPTH_FUNC,
     DepthRange           = IGL.GL_DEPTH_RANGE,
+    DepthTest            = IGL.GL_DEPTH_TEST,
     DepthWriteMask       = IGL.GL_DEPTH_WRITEMASK,
     FrontFace            = IGL.GL_FRONT_FACE,
     LineWidth            = IGL.GL_LINE_WIDTH,

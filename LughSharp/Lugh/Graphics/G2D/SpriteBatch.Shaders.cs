@@ -209,8 +209,8 @@ public partial class SpriteBatch
     public const string DEFAULT_FRAGMENT_SHADER = "#version 450 core\n" +
                                                   "layout (location = 0) in vec4 v_color;\n" +
                                                   "layout (location = 1) in vec2 v_texCoords;\n" +
+                                                  "uniform sampler2D u_texture;\n" +
                                                   "layout (location = 0) out vec4 fragColor;\n" +
-                                                  "layout (binding = 1) uniform sampler2D u_texture;\n" +
                                                   "void main() {\n" +
                                                   "    fragColor = v_color * texture(u_texture, v_texCoords);\n" +
                                                   "}\n";

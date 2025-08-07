@@ -527,14 +527,25 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLGETBOOLEANVPROC >( "glGetBooleanv", out _glGetBooleanv );
 
+        fixed ( GLboolean* p = &data[ 0 ] )
         {
-            fixed ( GLboolean* p = &data[ 0 ] )
-            {
-                _glGetBooleanv( pname, p );
-            }
+            _glGetBooleanv( pname, p );
         }
     }
 
+    /// <inheritdoc />
+    public void GetBooleanv( GLenum pname, out bool data )
+    {
+        // Create a temporary array to hold the result from the underlying OpenGL method.
+        var tempArray = new bool[ 1 ]; 
+    
+        // Call the original method with the temporary array.
+        GetBooleanv( pname, ref tempArray );
+    
+        // Assign the value from the temporary array to the out parameter.
+        data = tempArray[ 0 ];
+    }
+    
     // ========================================================================
 
     /// <inheritdoc />
@@ -550,11 +561,9 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLGETDOUBLEVPROC >( "glGetDoublev", out _glGetDoublev );
 
+        fixed ( GLdouble* p = &data[ 0 ] )
         {
-            fixed ( GLdouble* p = &data[ 0 ] )
-            {
-                _glGetDoublev( pname, p );
-            }
+            _glGetDoublev( pname, p );
         }
     }
 
@@ -573,11 +582,9 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLGETFLOATVPROC >( "glGetFloatv", out _glGetFloatv );
 
+        fixed ( GLfloat* p = &data[ 0 ] )
         {
-            fixed ( GLfloat* p = &data[ 0 ] )
-            {
-                _glGetFloatv( pname, p );
-            }
+            _glGetFloatv( pname, p );
         }
     }
 
@@ -596,11 +603,9 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLGETINTEGERVPROC >( "glGetIntegerv", out _glGetIntegerv );
 
+        fixed ( GLint* p = &data[ 0 ] )
         {
-            fixed ( GLint* p = &data[ 0 ] )
-            {
-                _glGetIntegerv( pname, p );
-            }
+            _glGetIntegerv( pname, p );
         }
     }
 

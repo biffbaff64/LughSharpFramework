@@ -261,6 +261,11 @@ public static class Logger
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
         var str      = CreateMessage( CHECKPOINT_TAG, "< CHECKPOINT >", callerID );
 
+        if ( !str.EndsWith( '\n' ) )
+        {
+            str += Environment.NewLine;
+        }
+
         Console.WriteLine( str );
         WriteToFile( str );
 

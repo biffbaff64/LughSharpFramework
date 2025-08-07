@@ -83,7 +83,7 @@ public class ShaderProgram : IDisposable
     /// Specifies the default shader language version to be used in the shader program.
     /// </summary>
     public const string GLSL_VERSION = "#version 450 core";
-    
+
     // ========================================================================
 
     public bool       IsCompiled             { get; set; }
@@ -109,9 +109,9 @@ public class ShaderProgram : IDisposable
 
     internal const int CACHED_NOT_FOUND = -1;
     internal const int NOT_CACHED       = -2;
+    internal const int INVALID          = -1;
 
-    internal const int INVALID = -1;
-
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -124,11 +124,6 @@ public class ShaderProgram : IDisposable
         FragmentShaderSource = fragmentShader;
 
         CompileShaders( VertexShaderSource, FragmentShaderSource );
-
-        if ( !IsCompiled )
-        {
-            Logger.Debug( $"Shader program {VertexShaderSource} has not been compiled." );
-        }
     }
 
     /// <summary>
@@ -178,6 +173,20 @@ public class ShaderProgram : IDisposable
         GL.DeleteShader( _fragmentShaderHandle );
 
         IsCompiled = ShaderProgramHandle != -1;
+        
+        if ( !IsCompiled )
+        {
+            Logger.Debug( $"Shader program {vertexShaderSource} has not been compiled." );
+        }
+        
+        var texLocation = GetUniformLocation( "u_texture" );
+        
+        if ( texLocation == INVALID )
+        {
+            Logger.Warning( $"Texture uniform not found in shader." );
+            
+            DebugShaderSources();
+        }
     }
 
     /// <summary>

@@ -836,6 +836,13 @@ public partial interface IGLBindings
     void GetBooleanv( int pname, ref bool[] data );
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pname"></param>
+    /// <param name="data"></param>
+    void GetBooleanv( int pname, out bool data );
+    
+    /// <summary>
     /// Return the double value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
