@@ -31,9 +31,10 @@ public abstract class AbstractGraphics : IGraphicsDevice
 {
     public const float DEFAULT_SCREEN_DPI = 160f;
 
-    public FramebufferConfig BufferConfig          { get; set; } = null!;
-    public Window            CurrentContext        { get; set; } = null!;
-    public Color             WindowBackgroundColor { get; set; } = Color.Blue;
+    public FramebufferConfig    BufferConfig          { get; set; } = null!;
+    public Window               CurrentContext        { get; set; } = null!;
+    public Color                WindowBackgroundColor { get; set; } = Color.Blue;
+    public GraphicsCapabilities Capabilities          { get; set; } = null!;
 
     public int LogicalWidth     { get; set; } = 0;
     public int LogicalHeight    { get; set; } = 0;

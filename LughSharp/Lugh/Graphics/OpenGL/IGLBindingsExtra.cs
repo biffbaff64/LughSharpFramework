@@ -296,6 +296,8 @@ public partial interface IGLBindings
 
     unsafe void GetInternalformativ( int target, int internalFormat, int pname, int bufSize, int* parameters );
     void GetInternalformativ( int target, int internalFormat, int pname, int bufSize, ref int[] parameters );
+    void GetInternalformativ( int target, int internalFormat, int pname, int bufSize, out int parameter );
+
     unsafe void GetActiveAtomicCounterBufferiv( uint program, uint bufferIndex, int pname, int* parameters );
     void GetActiveAtomicCounterBufferiv( uint program, uint bufferIndex, int pname, ref int[] parameters );
     void BindImageTexture( uint unit, uint texture, int level, bool layered, int layer, int access, int format );

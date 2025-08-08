@@ -609,6 +609,19 @@ public unsafe partial class GLBindings : IGLBindings
         }
     }
 
+    /// <inheritdoc />
+    public void GetIntegerv( GLenum pname, out int data )
+    {
+        // Create a temporary array to hold the result from the underlying OpenGL method.
+        var tempArray = new int[ 1 ]; 
+    
+        // Call the original method with the temporary array.
+        GetIntegerv( pname, ref tempArray );
+    
+        // Assign the value from the temporary array to the out parameter.
+        data = tempArray[ 0 ];
+    }
+
     // ========================================================================
 
     /// <inheritdoc />
@@ -2017,6 +2030,18 @@ public unsafe partial class GLBindings : IGLBindings
         }
     }
 
+    public void GetInternalformativ( int target, int internalFormat, int pname, int bufSize, out int parameter )
+    {
+        // Create a temporary array to hold the result from the underlying OpenGL method.
+        var tempArray = new int[ 1 ]; 
+    
+        // Call the original method with the temporary array.
+        GetInternalformativ( target, internalFormat, pname, bufSize, ref tempArray );
+    
+        // Assign the value from the temporary array to the out parameter.
+        parameter = tempArray[ 0 ];
+    }
+    
     // ========================================================================
 
     public void GetActiveAtomicCounterBufferiv( GLuint program, GLuint bufferIndex, GLenum pname, GLint* parameters )

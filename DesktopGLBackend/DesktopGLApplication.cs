@@ -129,7 +129,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         _sync     = new Sync();
 
         InitialiseGlfw();
-
+        
         Windows.Add( CreateWindow( AppConfig, listener, 0 ) );
     }
 

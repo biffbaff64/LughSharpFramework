@@ -919,6 +919,13 @@ public partial interface IGLBindings
     void GetIntegerv( int pname, ref int[] data );
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pname"></param>
+    /// <param name="data"></param>
+    void GetIntegerv( int pname, out int data );
+    
+    /// <summary>
     /// Return a string describing the current  connection.
     /// </summary>
     /// <param name="name">

@@ -1,0 +1,427 @@
+﻿A compact allowlist you can ship with today
+- Always include:
+    - GL_R8, GL_RG8, GL_RGB8, GL_RGBA8
+    - GL_SRGB8, GL_SRGB8_ALPHA8
+    - GL_R16F, GL_RG16F, GL_RGBA16F
+    - GL_R32F, GL_RG32F, GL_RGBA32F
+    - GL_R11F_G11F_B10F, GL_RGB9_E5
+    - GL_R8I/GL_R8UI, GL_RG8I/GL_RG8UI, GL_RGBA8I/GL_RGBA8UI
+    - GL_R16I/GL_R16UI, GL_RG16I/GL_RG16UI, GL_RGBA16I/GL_RGBA16UI
+    - GL_R32I/GL_R32UI, GL_RG32I/GL_RG32UI, GL_RGBA32I/GL_RGBA32UI
+    - GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT32F, GL_STENCIL_INDEX8, GL_DEPTH24_STENCIL8, GL_DEPTH32F_STENCIL8
+
+- Enable when present:
+    - S3TC/BC1–BC3: GL_COMPRESSED__S3TC_ (Windows baseline; still check extension)
+    - RGTC/BC4–BC5: GL_COMPRESSED___RGTC_
+    - BPTC/BC6–BC7: GL_COMPRESSED___BPTC_ (prefer for modern desktop)
+    - ETC2/EAC: GL_COMPRESSED_*_ETC2/EAC (useful if you ever run on GL 4.3+ without BCn)
+
+Recommended defaults by usage
+- Albedo/base color: GL_SRGB8_ALPHA8 (sampling in sRGB space)
+- UI/Fonts/Mask: GL_R8 (or GL_RG8 for 2-channel glyph+mask)
+- Normals: BC5 (RGTC) if compressed, else GL_RG8
+- ORM/AO/Metalness/Roughness pack: BC7 if available, else BC3, else GL_RGBA8
+- HDR radiance/lighting buffers: GL_RGBA16F
+- G-buffer depth-stencil: GL_DEPTH24_STENCIL8
+
+Integration tips for your Platform class
+- Keep platform/OS detection separate from GL capability detection. Consider a small GraphicsCapabilities at GL context creation that:
+    - Stores version/extension strings
+    - Fills boolean flags (HasS3TC, HasBPTC, HasETC2, HasFloatColorRenderable, etc.)
+    - Optionally validates your allowlist via GetInternalformativ
+
+- If you want a deterministic behavior across GPUs, prefer a fixed allowlist plus “optional” formats toggled by capabilities above.
+
+
+
+// csharp
+using System;
+using System.Collections.Generic;
+
+public enum TextureUsage
+{
+    ColorLdr,       // Albedo/UI in linear color
+    ColorSrgb,      // Albedo/base color in sRGB
+    NormalMap,      // Tangent-space normals
+    MaskR8,         // Single-channel masks (font atlas, AO, etc.)
+    HdrColor,       // HDR content (environment maps, light buffers, etc.)
+    DepthOnly,
+    DepthStencil
+}
+
+public sealed class GraphicsCapabilities
+{
+    public int Major { get; init; }
+    public int Minor { get; init; }
+
+    public bool HasS3TC { get; init; }   // BC1–BC3
+    public bool HasRGTC { get; init; }   // BC4–BC5
+    public bool HasBPTC { get; init; }   // BC6H–BC7
+    public bool HasETC2 { get; init; }
+    public bool HasInternalFormatQuery { get; init; }
+
+    public static GraphicsCapabilities Detect(IGL gl)
+    {
+        var (major, minor) = (gl.GetInteger(GLConsts.MAJOR_VERSION), gl.GetInteger(GLConsts.MINOR_VERSION));
+
+        bool HasExt(string s)
+        {
+            int n = gl.GetInteger(GLConsts.NUM_EXTENSIONS);
+            for (int i = 0; i < n; i++)
+            {
+                if (string.Equals(gl.GetStringi(GLConsts.EXTENSIONS, i), s, StringComparison.Ordinal))
+                    return true;
+            }
+            return false;
+        }
+
+        bool verAtLeast(int mj, int mn) => (major > mj) || (major == mj && minor >= mn);
+
+        return new GraphicsCapabilities
+        {
+            Major = major,
+            Minor = minor,
+            HasS3TC = HasExt("GL_EXT_texture_compression_s3tc")
+                      || HasExt("GL_ANGLE_texture_compression_dxt1")
+                      || HasExt("GL_EXT_texture_compression_dxt1"),
+            HasRGTC = verAtLeast(3, 0), // Core in 3.0
+            HasBPTC = verAtLeast(4, 2) || HasExt("GL_ARB_texture_compression_bptc"),
+            HasETC2 = verAtLeast(4, 3) || HasExt("GL_ARB_ES3_compatibility"),
+            HasInternalFormatQuery = verAtLeast(4, 2) || HasExt("GL_ARB_internalformat_query2")
+        };
+    }
+}
+
+public sealed class GLFormatChooser
+{
+    private readonly GraphicsCapabilities _caps;
+    private readonly IGL _gl;
+
+    public GLFormatChooser(GraphicsCapabilities caps, IGL gl)
+    {
+        _caps = caps;
+        _gl = gl;
+    }
+
+    public int Choose(
+        TextureUsage usage,
+        bool preferCompressed = true,
+        bool requireFramebufferRenderable = false,
+        bool preferSmallHdr = true) // uses R11F_G11F_B10F for HDR when alpha not required
+    {
+        var candidates = new List<int>();
+
+        switch (usage)
+        {
+            case TextureUsage.ColorSrgb:
+                if (preferCompressed)
+                {
+                    if (_caps.HasBPTC) candidates.Add(GLIF.COMPRESSED_SRGB_ALPHA_BPTC_UNORM); // BC7 sRGB
+                    if (_caps.HasS3TC) candidates.Add(GLIF.COMPRESSED_RGBA_S3TC_DXT5_EXT);    // BC3
+                }
+                candidates.Add(GLIF.SRGB8_ALPHA8);
+                break;
+
+            case TextureUsage.ColorLdr:
+                if (preferCompressed)
+                {
+                    if (_caps.HasBPTC) candidates.Add(GLIF.COMPRESSED_RGBA_BPTC_UNORM); // BC7
+                    if (_caps.HasS3TC) candidates.Add(GLIF.COMPRESSED_RGBA_S3TC_DXT5_EXT); // BC3
+                }
+                candidates.Add(GLIF.RGBA8);
+                break;
+
+            case TextureUsage.NormalMap:
+                if (_caps.HasRGTC) candidates.Add(GLIF.COMPRESSED_RG_RGTC2); // BC5
+                candidates.Add(GLIF.RG8);
+                break;
+
+            case TextureUsage.MaskR8:
+                candidates.Add(GLIF.R8);
+                break;
+
+            case TextureUsage.HdrColor:
+                if (preferCompressed && _caps.HasBPTC)
+                {
+                    // BC6H; great for RGB HDR textures (no alpha). Not renderable.
+                    candidates.Add(GLIF.COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT);
+                }
+                if (preferSmallHdr)
+                    candidates.Add(GLIF.R11F_G11F_B10F); // Filterable HDR-ish (no alpha), widely supported
+                candidates.Add(GLIF.RGBA16F); // Safe HDR with alpha, renderable on most drivers
+                break;
+
+            case TextureUsage.DepthOnly:
+                candidates.Add(GLIF.DEPTH_COMPONENT24);
+                // Consider DEPTH_COMPONENT32F as a fallback
+                break;
+
+            case TextureUsage.DepthStencil:
+                candidates.Add(GLIF.DEPTH24_STENCIL8);
+                // Consider DEPTH32F_STENCIL8 as a fallback
+                break;
+
+            default:
+                candidates.Add(GLIF.RGBA8);
+                break;
+        }
+
+        foreach (var fmt in candidates)
+        {
+            if (!IsSupported(fmt))
+                continue;
+
+            if (requireFramebufferRenderable && !IsFramebufferRenderable(fmt))
+                continue;
+
+            return fmt;
+        }
+
+        // Last-resort fallbacks
+        if (usage == TextureUsage.DepthStencil) return GLIF.DEPTH24_STENCIL8;
+        if (usage == TextureUsage.DepthOnly)    return GLIF.DEPTH_COMPONENT24;
+        if (usage == TextureUsage.MaskR8)       return GLIF.R8;
+
+        return GLIF.RGBA8;
+    }
+
+    private bool IsSupported(int internalFormat)
+    {
+        if (_caps.HasInternalFormatQuery)
+        {
+            int[] v = new int[1];
+            _gl.GetInternalformativ(GLConsts.TEXTURE_2D, internalFormat, GLIFQ.INTERNALFORMAT_SUPPORTED, 1, v);
+            return v[0] != 0;
+        }
+
+        // Conservative fallback: assume core formats are supported; gate compressed by caps.
+        if (IsCoreFormat(internalFormat)) return true;
+        if (IsS3TC(internalFormat)) return _caps.HasS3TC;
+        if (IsRGTC(internalFormat)) return _caps.HasRGTC;
+        if (IsBPTC(internalFormat)) return _caps.HasBPTC;
+        if (IsETC2(internalFormat)) return _caps.HasETC2;
+        return false;
+    }
+
+    private bool IsFramebufferRenderable(int internalFormat)
+    {
+        if (internalFormat == GLIF.COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT) return false; // compressed HDR textures aren't renderable
+        if (!_caps.HasInternalFormatQuery)
+        {
+            // Heuristic: known good color/depth formats
+            return internalFormat is GLIF.RGBA8 or GLIF.SRGB8_ALPHA8 or GLIF.R11F_G11F_B10F or GLIF.RGBA16F
+                or GLIF.DEPTH_COMPONENT24 or GLIF.DEPTH24_STENCIL8;
+        }
+
+        int[] v = new int[1];
+        _gl.GetInternalformativ(GLConsts.TEXTURE_2D, internalFormat, GLIFQ.FRAMEBUFFER_RENDERABLE, 1, v);
+        return v[0] != 0;
+    }
+
+    private static bool IsCoreFormat(int f) =>
+        f is GLIF.R8 or GLIF.RG8 or GLIF.RGBA8 or GLIF.SRGB8_ALPHA8
+          or GLIF.R11F_G11F_B10F or GLIF.RGBA16F
+          or GLIF.DEPTH_COMPONENT24 or GLIF.DEPTH24_STENCIL8;
+
+    private static bool IsS3TC(int f) =>
+        f is GLIF.COMPRESSED_RGB_S3TC_DXT1_EXT or GLIF.COMPRESSED_RGBA_S3TC_DXT1_EXT
+          or GLIF.COMPRESSED_RGBA_S3TC_DXT3_EXT or GLIF.COMPRESSED_RGBA_S3TC_DXT5_EXT;
+
+    private static bool IsRGTC(int f) =>
+        f is GLIF.COMPRESSED_RED_RGTC1 or GLIF.COMPRESSED_RG_RGTC2;
+
+    private static bool IsBPTC(int f) =>
+        f is GLIF.COMPRESSED_RGBA_BPTC_UNORM or GLIF.COMPRESSED_SRGB_ALPHA_BPTC_UNORM
+          or GLIF.COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT or GLIF.COMPRESSED_RGB_BPTC_SIGNED_FLOAT;
+
+    private static bool IsETC2(int f) =>
+        f is GLIF.COMPRESSED_SRGB8_ALPHA8_ETC2 or GLIF.COMPRESSED_RGBA8_ETC2_EAC;
+}
+
+// Minimal GL abstraction to keep this binding-agnostic.
+// Implement these with your GL binding (OpenTK, Silk.NET, etc.).
+public interface IGL
+{
+    int GetInteger(int pname);
+    string GetStringi(int name, int index);
+    void GetInternalformativ(int target, int internalformat, int pname, int bufSize, int[] @params);
+}
+
+// Common constants used by the helper.
+public static class GLConsts
+{
+    public const int TEXTURE_2D     = 0x0DE1;
+    public const int EXTENSIONS     = 0x1F03;
+    public const int MAJOR_VERSION  = 0x821B;
+    public const int MINOR_VERSION  = 0x821C;
+    public const int NUM_EXTENSIONS = 0x821D;
+}
+
+public static class GLIFQ
+{
+    public const int INTERNALFORMAT_SUPPORTED   = 0x826F;
+    public const int FRAMEBUFFER_RENDERABLE     = 0x8289;
+}
+
+// Subset of internal formats used by the chooser.
+// Values match OpenGL enums.
+public static class GLIF
+{
+    // Uncompressed color
+    public const int R8             = 0x8229;
+    public const int RG8            = 0x822B;
+    public const int RGBA8          = 0x8058;
+    public const int SRGB8_ALPHA8   = 0x8C43;
+
+    // Float color
+    public const int R11F_G11F_B10F = 0x8C3A;
+    public const int RGBA16F        = 0x881A;
+
+    // Depth/Stencil
+    public const int DEPTH_COMPONENT24 = 0x81A6;
+    public const int DEPTH24_STENCIL8  = 0x88F0;
+
+    // S3TC (BC1–BC3)
+    public const int COMPRESSED_RGB_S3TC_DXT1_EXT   = 0x83F0;
+    public const int COMPRESSED_RGBA_S3TC_DXT1_EXT  = 0x83F1;
+    public const int COMPRESSED_RGBA_S3TC_DXT3_EXT  = 0x83F2;
+    public const int COMPRESSED_RGBA_S3TC_DXT5_EXT  = 0x83F3;
+
+    // RGTC (BC4–BC5)
+    public const int COMPRESSED_RED_RGTC1 = 0x8DBB;
+    public const int COMPRESSED_RG_RGTC2  = 0x8DBD;
+
+    // BPTC (BC6H–BC7)
+    public const int COMPRESSED_RGBA_BPTC_UNORM         = 0x8E8C;
+    public const int COMPRESSED_SRGB_ALPHA_BPTC_UNORM   = 0x8E8D;
+    public const int COMPRESSED_RGB_BPTC_SIGNED_FLOAT   = 0x8E8E;
+    public const int COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT = 0x8E8F;
+
+    // ETC2 (optional on desktop)
+    public const int COMPRESSED_SRGB8_ALPHA8_ETC2 = 0x9279;
+    public const int COMPRESSED_RGBA8_ETC2_EAC    = 0x9278;
+}
+
+Example usage:
+
+// csharp
+// 1) Build capabilities once after creating your GL context
+var caps = GraphicsCapabilities.Detect(gl);
+
+// 2) Create the chooser
+var chooser = new GLFormatChooser(caps, gl);
+
+// 3) Pick formats for your resources
+int albedoIF   = chooser.Choose(TextureUsage.ColorSrgb, preferCompressed: true);
+int normalIF   = chooser.Choose(TextureUsage.NormalMap);
+int uiMaskIF   = chooser.Choose(TextureUsage.MaskR8);
+int hdrTexIF   = chooser.Choose(TextureUsage.HdrColor, preferCompressed: true, preferSmallHdr: true);
+int gbuf0IF    = chooser.Choose(TextureUsage.ColorLdr, preferCompressed: false, requireFramebufferRenderable: true);
+int depthIF    = chooser.Choose(TextureUsage.DepthStencil, requireFramebufferRenderable: true);
+
+
+## Me
+Do the results of the various chooser.Choose calls, and 'caps' need to be globally accesible? Where would be a good place to store them?
+
+## AI Assistant
+Short answer
+- Don’t make them global statics unless your app is truly single-context.
+- Keep caps and the chooser scoped to your renderer/device (i.e., per OpenGL context).
+- Cache the “chosen formats” in that same place (either precomputed defaults or a small lazy cache).
+
+Why
+- Capabilities are a property of the current GL context/adapter/driver.
+- If you ever run multiple windows/contexts (or hit hybrid-GPU systems), capabilities could differ.
+- Storing caps/chooser with the context avoids accidental cross-context usage and keeps lifecycle clear.
+
+A practical pattern
+- Create a GraphicsDevice (or RenderContext) that owns:
+    - The GL context handle/binding (IGL).
+    - The detected GraphicsCapabilities (readonly).
+    - A GLFormatChooser.
+    - Either a set of pre-picked “default” formats you use often, or a tiny cache for on-demand picks.
+
+Example setup
+
+// csharp
+public sealed class GraphicsDevice : IDisposable
+{
+    public IGL Gl { get; }
+    public GraphicsCapabilities Caps { get; }
+    public GLFormatChooser FormatChooser { get; }
+
+    // Precomputed defaults for common resources in your engine
+    public DefaultsProfile Defaults { get; }
+
+    // Optional: cache for arbitrary choose() calls
+    private readonly Dictionary<(TextureUsage usage, bool comp, bool fbo, bool smallHdr), int> _cache = new();
+
+    public GraphicsDevice(IGL gl)
+    {
+        Gl = gl ?? throw new ArgumentNullException(nameof(gl));
+        // Must be called on the thread where the GL context is current
+        Caps = GraphicsCapabilities.Detect(gl);
+        FormatChooser = new GLFormatChooser(Caps, gl);
+        Defaults = DefaultsProfile.Build(FormatChooser);
+    }
+
+    public int ChooseCached(TextureUsage usage, bool preferCompressed = true,
+                            bool requireFramebufferRenderable = false, bool preferSmallHdr = true)
+    {
+        var key = (usage, preferCompressed, requireFramebufferRenderable, preferSmallHdr);
+        if (_cache.TryGetValue(key, out var fmt)) return fmt;
+        fmt = FormatChooser.Choose(usage, preferCompressed, requireFramebufferRenderable, preferSmallHdr);
+        _cache[key] = fmt;
+        return fmt;
+    }
+
+    public void Dispose()
+    {
+        // Dispose GL resources here if you add any that need cleanup.
+    }
+
+    public sealed record DefaultsProfile(
+        int AlbedoSrgb,
+        int AlbedoLinear,
+        int NormalMap,
+        int MaskR8,
+        int HdrSampled,
+        int ColorRtLdr,
+        int ColorRtHdr,
+        int DepthStencil)
+    {
+        public static DefaultsProfile Build(GLFormatChooser chooser) => new(
+            AlbedoSrgb:   chooser.Choose(TextureUsage.ColorSrgb, preferCompressed: true),
+            AlbedoLinear: chooser.Choose(TextureUsage.ColorLdr,  preferCompressed: true),
+            NormalMap:    chooser.Choose(TextureUsage.NormalMap),
+            MaskR8:       chooser.Choose(TextureUsage.MaskR8),
+            HdrSampled:   chooser.Choose(TextureUsage.HdrColor,  preferCompressed: true, preferSmallHdr: true),
+            ColorRtLdr:   chooser.Choose(TextureUsage.ColorLdr,  preferCompressed: false, requireFramebufferRenderable: true),
+            ColorRtHdr:   chooser.Choose(TextureUsage.HdrColor,  preferCompressed: false, requireFramebufferRenderable: true, preferSmallHdr: false),
+            DepthStencil: chooser.Choose(TextureUsage.DepthStencil, requireFramebufferRenderable: true)
+        );
+    }
+}
+
+Where to store/access it
+- If you have one GL context: keep a single GraphicsDevice instance for the app lifetime and pass it where needed (constructor injection, or register it as a singleton in your DI container).
+- If you have multiple windows/contexts: create one GraphicsDevice per context. Share where appropriate if the contexts share objects and the adapter is guaranteed identical; otherwise keep them separate.
+- Avoid static globals so you don’t accidentally mix contexts, but it’s fine to hold a single app-level reference (e.g., App.Services.GetRequiredService ()). 
+
+Usage
+
+// csharp
+// During initialization (after creating/making-current the GL context)
+var device = new GraphicsDevice(gl);
+
+// Using defaults repeatedly
+var albedoIF = device.Defaults.AlbedoSrgb;
+var gbufferIF = device.Defaults.ColorRtLdr;
+
+// Or choosing on-demand with caching
+var fmt = device.ChooseCached(TextureUsage.HdrColor, preferCompressed: false, requireFramebufferRenderable: true);
+
+Notes
+- Detect caps on the thread where the GL context is current.
+- If the context is lost/recreated, rebuild GraphicsDevice so caps and defaults are refreshed.
+- If you load assets off-thread, avoid calling GL there; just read the prechosen enum values from the device and do the GL uploads on the GL thread.

@@ -48,7 +48,9 @@ public abstract class GraphicsDevice : IGraphicsDevice
     public virtual GraphicsBackend.BackendType GraphicsType        { get; set; }
     public virtual bool                        ContinuousRendering { get; set; } = true;
     public virtual bool                        IsFullscreen        { get; }
-
+    public virtual GraphicsCapabilities        Capabilities        { get; set; } = null!;
+    public virtual GLFormatChooser             FormatChooser       { get; set; } = null!;
+    
     // ========================================================================
 
     /// <summary>
