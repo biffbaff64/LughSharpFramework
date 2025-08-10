@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -2633,21 +2635,23 @@ public class Matrix4
     {
         Logger.Debug( $"\n{name}:" );
 
+        var sb = new StringBuilder();
+        
         for ( var row = 0; row < 4; row++ )
         {
-            Logger.Data( "[", addNewLine: false );
+            sb.Append('[');
 
             for ( var col = 0; col < 4; col++ )
             {
-                Logger.Data( $"{Val[ row + ( col * 4 ) ]:F6}", addNewLine: false );
+                sb.Append( $"{Val[ row + ( col * 4 ) ]:F6}" );
 
                 if ( col < 3 )
                 {
-                    Logger.Data( ", ", addNewLine: false );
+                    sb.Append( ", " );
                 }
             }
 
-            Logger.Data( "]", addNewLine: true );
+            sb.Append( ']' ).AppendLine();
         }
     }
 

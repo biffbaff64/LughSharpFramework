@@ -176,15 +176,15 @@ public static class BMPUtils
             //TODO:
         };
 
-        for ( var i = 0; i < 10; i++ )
-        {
-            for ( var j = 0; j < 10; j++ )
-            {
-                Logger.Data( $"{bmpData[ ( i * 10 ) + j ]:2X},", false );
-            }
+//        for ( var i = 0; i < 10; i++ )
+//        {
+//            for ( var j = 0; j < 10; j++ )
+//            {
+//                Logger.Data( $"{bmpData[ ( i * 10 ) + j ]:2X}," );
+//            }
 
-            Logger.NewLine();
-        }
+//            Logger.NewLine();
+//        }
 
         /*
         try

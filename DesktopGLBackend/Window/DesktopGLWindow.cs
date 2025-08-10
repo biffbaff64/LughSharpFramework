@@ -41,14 +41,64 @@ namespace DesktopGLBackend.Window;
 [PublicAPI]
 public partial class DesktopGLWindow : IDisposable
 {
-    public GLFW.Window?                      GlfwWindow          { get; set; }
-    public IDesktopGLWindowListener?         WindowListener      { get; set; }
-    public IApplicationListener              ApplicationListener { get; set; }
-    public IDesktopGLInput                   Input               { get; set; } = null!;
-    public DesktopGLApplicationConfiguration AppConfig           { get; set; }
-    public DesktopGLGraphics                 Graphics            { get; set; } = null!;
-    public DesktopGLApplication              Application         { get; set; }
-    public bool                              ListenerInitialised { get; set; } = false;
+    /// <summary>
+    /// Represents the underlying GLFW window used by the DesktopGL backend.
+    /// This property provides access to the native GLFW window instance, allowing
+    /// for direct interaction with the GLFW API.
+    /// </summary>
+    public GLFW.Window? GlfwWindow { get; set; }
+
+    /// <summary>
+    /// Represents the listener for window events in the DesktopGL backend.
+    /// This property allows event-driven interaction with the window lifecycle
+    /// through the implementation of the <see cref="IDesktopGLWindowListener"/> interface.
+    /// It provides hooks for handling window creation, focus changes, iconification,
+    /// maximization, close requests, file drops, and refresh requests.
+    /// </summary>
+    public IDesktopGLWindowListener? WindowListener { get; set; }
+
+    /// <summary>
+    /// Represents the main application listener for the DesktopGL backend.
+    /// This property provides access to an implementation of <see cref="IApplicationListener"/>,
+    /// handling core application lifecycle events such as creation, resizing, updating,
+    /// rendering, and pausing/resuming the application.
+    /// </summary>
+    public IApplicationListener ApplicationListener { get; set; }
+
+    /// <summary>
+    /// Represents the input handling system for the DesktopGL backend.
+    /// This property provides access to input-related functionality and allows
+    /// for interaction with devices such as keyboards, mice, and controllers.
+    /// </summary>
+    public IDesktopGLInput Input { get; set; } = null!;
+
+    /// <summary>
+    /// Represents the configuration settings for the DesktopGL application.
+    /// This property allows accessing and modifying application-specific
+    /// configurations, such as rendering settings, window behavior, or high DPI modes.
+    /// </summary>
+    public DesktopGLApplicationConfiguration AppConfig { get; set; }
+
+    /// <summary>
+    /// Provides graphics-related functionality and operations for the DesktopGL backend.
+    /// This property initializes and manages the graphical context, handling rendering
+    /// processes and maintaining compatibility with the application's configuration.
+    /// </summary>
+    public DesktopGLGraphics Graphics { get; set; } = null!;
+
+    /// <summary>
+    /// Represents the application instance associated with the desktop OpenGL backend.
+    /// This property provides access to the application's managing logic, configurations,
+    /// and its lifecycle, facilitating integration with application-specific behavior.
+    /// </summary>
+    public DesktopGLApplication Application { get; set; }
+
+    /// <summary>
+    /// Indicates whether the listener has been successfully initialized.
+    /// This property ensures that the <see cref="IApplicationListener"/> has been
+    /// properly set up prior to performing operations that require it.
+    /// </summary>
+    public bool ListenerInitialised { get; set; } = false;
 
     // ========================================================================
 

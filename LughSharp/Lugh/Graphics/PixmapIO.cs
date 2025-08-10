@@ -176,7 +176,7 @@ public static class PixmapIO
                 var input    = new BinaryReader( new InflaterInputStream( file.OpenRead() ) );
                 var width    = input.Read();
                 var height   = input.Read();
-                var format   = Gdx2DPixmap.PNGColorTypeToPixmapFormat( input.Read() );
+                var format   = PixelFormatUtils.PNGColorTypeToPixmapFormat( input.Read() );
                 var pixmap   = new Pixmap( width, height, format );
                 var pixelBuf = pixmap.ByteBuffer;
 

@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
@@ -699,6 +701,8 @@ public partial class JsonReader
     {
         var index = 0;
 
+        var sb = new StringBuilder();
+        
         for ( var i = 0; i < 10; i++ )
         {
             for ( var j = 0; ( j < 10 ) || ( index >= _parseData.Length ); j++ )
@@ -707,13 +711,15 @@ public partial class JsonReader
 
                 if ( ( i1 >= 0 ) && ( i1 < _parseData.Length ) )
                 {
-                    Logger.Data( $"{_parseData[ i1 ]}", false );
+                    sb.Append( $"{_parseData[ i1 ]}" );
                 }
             }
 
-            Logger.NewLine();
+            sb.AppendLine();
         }
 
-        Logger.NewLine();
+        sb.AppendLine();
+        
+        Logger.Debug( sb.ToString() );
     }
 }

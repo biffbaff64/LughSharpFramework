@@ -280,9 +280,11 @@ public partial class SpriteBatch : IBatch, IDisposable
             _shader.Bind();
             SetupMatrices();
 
+            #if SPRITEBATCH_DEBUG
             var texUnit = new int[ 1 ];
             GL.GetUniformiv( _shader.ShaderProgramHandle, _shader.GetUniformLocation( "u_texture" ), ref texUnit );
             Logger.Debug( $"Texture unit uniform value: {texUnit[ 0 ]}" );
+            #endif
         }
 
         RenderCalls = 0;
@@ -602,9 +604,11 @@ public partial class SpriteBatch : IBatch, IDisposable
                                         TEX_COORD_OFFSET );
         }
 
+        #if SPRITEBATCH_DEBUG
         Logger.Debug( $"Position location: {positionLocation}" );
         Logger.Debug( $"Color location: {colorLocation}" );
         Logger.Debug( $"TexCoord location: {texCoordLocation}" );
+        #endif
     }
 
     // ========================================================================
@@ -731,11 +735,11 @@ public partial class SpriteBatch : IBatch, IDisposable
         GL.ActiveTexture( TextureUnit.Texture0 + TEXTURE_UNIT );
         texture.Bind();
 
-        var width  = new int[ 1 ];
-        var height = new int[ 1 ];
-        GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_WIDTH, ref width );
-        GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_HEIGHT, ref height );
-        Logger.Debug( $"Texture dimensions in GPU: {width[ 0 ]}x{height[ 0 ]}" );
+//        var width  = new int[ 1 ];
+//        var height = new int[ 1 ];
+//        GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_WIDTH, ref width );
+//        GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_HEIGHT, ref height );
+//        Logger.Debug( $"Texture dimensions in GPU: {width[ 0 ]}x{height[ 0 ]}" );
 
         LastTexture            = texture;
         _lastSuccessfulTexture = LastTexture;
@@ -1080,6 +1084,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="flipY">Indicates whether to flip the texture vertically.</param>
     public virtual void Draw( Texture texture, GRect region, GRect src, bool flipX = false, bool flipY = false )
     {
+        #if SPRITEBATCH_DEBUG
         unsafe
         {
             var currentProgram = new int[ 1 ];
@@ -1091,6 +1096,7 @@ public partial class SpriteBatch : IBatch, IDisposable
                 Logger.Debug( $"Our shader program: {Shader?.ShaderProgramHandle}" );
             }
         }
+        #endif
 
         Validate( texture );
 

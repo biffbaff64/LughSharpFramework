@@ -32,25 +32,26 @@ public abstract class GraphicsDevice : IGraphicsDevice
 {
     public FramebufferConfig BufferConfig { get; set; } = null!;
 
-    public int    LogicalWidth          { get; set; } = 0;
-    public int    LogicalHeight         { get; set; } = 0;
-    public Color  WindowBackgroundColor { get; set; } = Color.Blue;
-    public int    BackBufferWidth       { get; set; } = 0;
-    public int    BackBufferHeight      { get; set; } = 0;
-    public Window CurrentContext        { get; set; } = null!;
+    public int   LogicalWidth          { get; set; } = 0;
+    public int   LogicalHeight         { get; set; } = 0;
+    public Color WindowBackgroundColor { get; set; } = Color.Blue;
+    public int   BackBufferWidth       { get; set; } = 0;
+    public int   BackBufferHeight      { get; set; } = 0;
 
     // ========================================================================
 
-    public virtual int                         Width               { get; }
-    public virtual int                         Height              { get; }
-    public virtual float                       DeltaTime           { get; set; }
-    public virtual GLVersion?                  GLVersion           { get; set; } = null!;
-    public virtual GraphicsBackend.BackendType GraphicsType        { get; set; }
-    public virtual bool                        ContinuousRendering { get; set; } = true;
-    public virtual bool                        IsFullscreen        { get; }
-    public virtual GraphicsCapabilities        Capabilities        { get; set; } = null!;
-    public virtual GLFormatChooser             FormatChooser       { get; set; } = null!;
-    
+    public virtual int   Width               { get; }
+    public virtual int   Height              { get; }
+    public virtual float DeltaTime           { get; set; }
+    public virtual bool  ContinuousRendering { get; set; } = true;
+    public virtual bool  IsFullscreen        { get; }
+
+    public virtual GLVersion?                  GLVersion      { get; set; } = null!;
+    public virtual GraphicsBackend.BackendType GraphicsType   { get; set; }
+    public virtual GraphicsCapabilities        Capabilities   { get; set; } = null!;
+    public virtual GLFormatChooser             FormatChooser  { get; set; } = null!;
+    public virtual Window                      CurrentContext { get; set; } = null!;
+
     // ========================================================================
 
     /// <summary>
@@ -74,7 +75,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     }
 
     /// <inheritdoc />
-    public void Update()
+    public virtual void Update()
     {
     }
 

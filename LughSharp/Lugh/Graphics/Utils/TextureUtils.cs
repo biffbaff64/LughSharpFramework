@@ -22,11 +22,58 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils;
+
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
 public class TextureUtils
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="textureId"></param>
+    public static void DebugTexture2D( int textureId )
+    {
+        DebugTexture2D( ( uint )textureId );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="textureId"></param>
+    public static void DebugTexture2D( uint textureId )
+    {
+        // Save state
+        GL.GetIntegerv( ( int )GLParameter.ActiveTexture, out var activeTex );
+        GL.GetIntegerv( ( int )GLParameter.TextureBinding2D, out var prevBinding );
+
+        // Ensure we are inspecting the right object on the active unit
+        GL.BindTexture( TextureTarget.Texture2D, textureId );
+
+        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureWidth, out var w );
+        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureHeight, out var h );
+        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureInternalFormat, out var internalFmt );
+        GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.TextureMaxLevel, out var maxLevel );
+        GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.MinFilter, out var minFilter );
+        GL.GetTexParameteriv( ( int )TextureTarget.Texture2D, ( int )TextureParameter.MagFilter, out var magFilter );
+
+        Logger.Debug( $"[Tex {textureId}] L0 Size: {w}x{h}, InternalFormat: 0x{internalFmt:X}" );
+        Logger.Debug( $"[Tex {textureId}] MinFilter: 0x{minFilter:X}, MagFilter: 0x{magFilter:X}, MaxLevel: {maxLevel}" );
+        Logger.Divider();
+        
+        // Restore state
+        GL.BindTexture( TextureTarget.Texture2D, ( uint )prevBinding );
+        GL.ActiveTexture( ( TextureUnit )activeTex );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="internalFormat"></param>
+    /// <returns></returns>
     public static uint CreateTexture2D( int width, int height, PixelInternalFormat internalFormat )
     {
         var textureHandle = GL.GenTexture();

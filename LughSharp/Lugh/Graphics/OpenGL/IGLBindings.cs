@@ -1138,6 +1138,8 @@ public partial interface IGLBindings
     /// <param name="parameters">A <see langword="ref" /> to an integer array where the values will be returned.</param>
     void GetTexParameteriv( int target, int pname, ref int[] parameters );
 
+    void GetTexParameteriv( int target, int pname, out int data );
+
     /// <summary>
     /// Return texture parameter (float) values for a specific level of detail.
     /// </summary>
@@ -1233,6 +1235,8 @@ public partial interface IGLBindings
     /// <param name="pname"></param>
     /// <param name="parameters">A <see langword="ref" /> to an integer array where the values will be returned.</param>
     void GetTexLevelParameteriv( int target, int level, int pname, ref int[] parameters );
+
+    void GetTexLevelParameteriv( TextureTarget target, int level, TextureParameter pname, out int data );
 
     /// <summary>
     /// Test whether a capability is enabled.

@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -177,7 +178,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
         Blend     = ( uint )Pixmap.BlendTypes.Default;
         Scale     = ( uint )Pixmap.ScaleType.Default;
 
-        var length = width * height * Gdx2dBytesPerPixel( format );
+        var length = width * height * PixelFormatUtils.Gdx2dBytesPerPixel( format );
 
         PixmapBuffer = new ByteBuffer( length );
 
@@ -185,10 +186,10 @@ public partial class Gdx2DPixmap : Image, IDisposable
         {
             throw new GdxRuntimeException( $"Unable to allocate memory for pixmap: "
                                            + $"{width} x {height}: " +
-                                           $"{GetFormatString( format )}" );
+                                           $"{PixelFormatUtils.GetFormatString( format )}" );
         }
 
-        var bitDepth = GetBitDepth( format );
+        var bitDepth = PixelFormatUtils.GetBitDepth( format );
 
         SafeConstructorInit( width, height, bitDepth );
         SafeInitPixmapDataType( width, height, format );
@@ -229,7 +230,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <param name="format">The pixel format of the pixmap, defining the color encoding and storage.</param>
     private void SafeInitPixmapDataType( int width, int height, Gdx2DPixmapFormat format )
     {
-        var length = width * height * Gdx2dBytesPerPixel( format );
+        var length = width * height * PixelFormatUtils.Gdx2dBytesPerPixel( format );
 
         _pixmapDataType = new PixmapDataType
         {
@@ -265,7 +266,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
             Width         = ( int )Utils.PNGDecoder.IHDRchunk.Width,
             Height        = ( int )Utils.PNGDecoder.IHDRchunk.Height,
             BitDepth      = ( int )Utils.PNGDecoder.IHDRchunk.BitDepth,
-            ColorType     = ToGdx2DPixmapFormat( Utils.PNGDecoder.IHDRchunk.ColorType ),
+            ColorType     = PixelFormatUtils.ToGdx2DPixmapFormat( Utils.PNGDecoder.IHDRchunk.ColorType ),
             Blend         = 0,
             Scale         = 0,
             TotalIDATSize = Utils.PNGDecoder.TotalIDATSize,
@@ -279,79 +280,6 @@ public partial class Gdx2DPixmap : Image, IDisposable
         byteBuffer.PutBytes( pixmapDef.Pixels );
 
         return ( byteBuffer, pixmapDef );
-    }
-
-    public Gdx2DPixmapFormat ToGdx2DPixmapFormat( int format )
-    {
-        return format switch
-        {
-            1 => Gdx2DPixmapFormat.Alpha,
-            2 => Gdx2DPixmapFormat.LuminanceAlpha,
-            3 => Gdx2DPixmapFormat.RGB888,
-            4 => Gdx2DPixmapFormat.RGBA8888,
-            5 => Gdx2DPixmapFormat.RGB565,
-            6 => Gdx2DPixmapFormat.RGBA4444,
-
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
-    }
-
-    /// <summary>
-    /// Gets the bit depth corresponding to the provided Gdx2DPixmapFormat.
-    /// </summary>
-    /// <param name="format">The Gdx2DPixmapFormat whose bit depth is to be retrieved.</param>
-    /// <returns>The bit depth associated with the specified format.</returns>
-    /// <exception cref="ArgumentException">Thrown if the provided format is unknown or unsupported.</exception>
-    public static int GetBitDepth( Gdx2DPixmapFormat format )
-    {
-        // Get proper bit depth based on format
-        return format switch
-        {
-            Gdx2DPixmapFormat.Alpha          => 8,
-            Gdx2DPixmapFormat.LuminanceAlpha => 16,
-            Gdx2DPixmapFormat.RGB888         => 24,
-            Gdx2DPixmapFormat.RGBA8888       => 32,
-            Gdx2DPixmapFormat.RGB565         => 16,
-            Gdx2DPixmapFormat.RGBA4444       => 16,
-
-            // ----------------------------------
-
-            var _ => throw new ArgumentException( $"Unknown format: {format}" ),
-        };
-    }
-
-    /// <summary>
-    /// Converts a PNG color type to the corresponding Pixmap pixel format.
-    /// </summary>
-    /// <param name="format">The PNG color type represented as an integer.</param>
-    /// <returns>
-    /// The corresponding Pixmap pixel format as a <see cref="Gdx2DPixmapFormat"/>.
-    /// </returns>
-    /// <exception cref="GdxRuntimeException">
-    /// Thrown if the format is unknown or if the format is an unsupported indexed color.
-    /// </exception>
-    public static Gdx2DPixmapFormat PNGColorTypeToPixmapFormat( int format )
-    {
-        return format switch
-        {
-            0 => Gdx2DPixmapFormat.RGB888,
-            2 => Gdx2DPixmapFormat.RGB888,
-
-            // ----------------------------------
-
-            3 => throw new GdxRuntimeException( "Indexed color not supported yet." ),
-
-            // ----------------------------------
-
-            4 => Gdx2DPixmapFormat.RGBA8888,
-            6 => Gdx2DPixmapFormat.RGBA8888,
-
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
-        };
     }
 
     // ========================================================================
@@ -444,7 +372,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
 //    /// <param name="height">The height of the region to copy, in pixels.</param>
 //    private void BlitPixmap( Gdx2DPixmap src, int srcX, int srcY, int dstX, int dstY, int width, int height )
 //    {
-//        var bytesPerPixel = Gdx2dBytesPerPixel( ColorType );
+//        var bytesPerPixel = PixelFormatUtils.Gdx2dBytesPerPixel( ColorType );
 //
 //        for ( var y = 0; y < height; y++ )
 //        {
@@ -493,7 +421,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
 //            return;
 //        }
 //
-//        var bytesPerPixel = Gdx2dBytesPerPixel( ColorType );
+//        var bytesPerPixel = PixelFormatUtils.Gdx2dBytesPerPixel( ColorType );
 //        var offset        = ( int )( ( ( y * Width ) + x ) * bytesPerPixel );
 //
 //        WritePixel( offset, color );

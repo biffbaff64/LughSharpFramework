@@ -113,29 +113,22 @@ public partial class GLBindings
     /// <inheritdoc />
     public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap, bool enabled = true )
     {
+        Logger.Checkpoint();
+        
         GetDelegateForFunction< OpenGL.GLBindings.PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
         unsafe
         {
             fixed ( byte* p = &pixmap.PixelData[ 0 ] )
             {
-//                Logger.Debug( $"target: {target:X}" );
-//                Logger.Debug( $"level: {level}" );
-//                Logger.Debug( $"pixmap.GLInternalPixelFormat: {pixmap.GLInternalPixelFormat:X}" );
-//                Logger.Debug( $"pixmap.Width: {pixmap.Width}" );
-//                Logger.Debug( $"pixmap.Height: {pixmap.Height}" );
-//                Logger.Debug( $"border: {border}" );
-//                Logger.Debug( $"pixmap.GLPixelFormat: {pixmap.GLPixelFormat:X}" );
-//                Logger.Debug( $"pixmap.GLDataType: {pixmap.GLDataType:X}" );
-
-                for ( var i = 0; i < 20; i++ )
-                {
-                    Logger.Debug( $"p[{i}]: {p[ i ]:X}, " +
-                                  $"*(p+i): {*( p + i ):X}, " +
-                                  $"pixmap.PixelData[ {i} ]: {pixmap.PixelData[ i ]:X}" );
-                }
-
-                Logger.Checkpoint();
+                Logger.Debug( $"target: {PixelFormatUtils.GetGLTargetName( target )}" );
+                Logger.Debug( $"level: {level}" );
+                Logger.Debug( $"pixmap.GLInternalPixelFormat: {PixelFormatUtils.GetGLInternalFormatName( pixmap.GLInternalPixelFormat )}" );
+                Logger.Debug( $"pixmap.Width: {pixmap.Width}" );
+                Logger.Debug( $"pixmap.Height: {pixmap.Height}" );
+                Logger.Debug( $"border: {border}" );
+                Logger.Debug( $"pixmap.GLPixelFormat: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
+                Logger.Debug( $"pixmap.GLDataType: {PixelFormatUtils.GetGLTypeName( pixmap.GLDataType )}" );
 
                 if ( enabled )
                 {
@@ -149,8 +142,6 @@ public partial class GLBindings
                                    pixmap.GLDataType,            // int
                                    *p );                         // nint
                 }
-
-                Logger.Checkpoint();
             }
         }
     }
@@ -880,6 +871,15 @@ public partial class GLBindings
         }
     }
 
+    public void GetTexParameteriv( int target, int pname, out int data )
+    {
+        var tempArray = new int[ 1 ];
+        
+        GetTexParameteriv( ( GLenum )target, ( GLenum )pname, ref tempArray );
+        
+        data = tempArray[ 0 ];
+    }
+
     // ========================================================================
 
     /// <inheritdoc />
@@ -928,6 +928,18 @@ public partial class GLBindings
         }
     }
 
+    public void GetTexLevelParameteriv( TextureTarget target, int level, TextureParameter pname, out int data )
+    {
+        // Create a temporary array to hold the result from the underlying OpenGL method.
+        var tempArray = new int[ 1 ]; 
+    
+        // Call the original method with the temporary array.
+        GetTexLevelParameteriv( ( int )target, level, ( int )pname, ref tempArray );
+    
+        // Assign the value from the temporary array to the out parameter.
+        data = tempArray[ 0 ];
+    }
+    
     // ========================================================================
 
     /// <inheritdoc />

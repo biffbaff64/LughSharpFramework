@@ -392,7 +392,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// <param name="miplevel"></param>
     public void UploadImageData( int target, ITextureData? data, int miplevel = 0 )
     {
-        Logger.Debug( $"Uploading texture data to {GetGLTargetName( target )} target" );
+        Logger.Debug( $"Uploading texture data to {PixelFormatUtils.GetGLTargetName( target )} target" );
 
         if ( data == null )
         {
@@ -473,9 +473,9 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
         Logger.Debug( $"Pixmap Format: {pixmap.GetColorFormat()}" );
         Logger.Debug( $"Pixmap Dimensions: {pixmap.Width}x{pixmap.Height}" );
-        Logger.Debug( $"Pixmap GL Format: {GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
-        Logger.Debug( $"Pixmap GL Internal Format: {GetGLPixelFormatName( pixmap.GLInternalPixelFormat )}" );
-        Logger.Debug( $"Pixmap GL Data Type: {GetGLTypeName( pixmap.GLDataType )}" );
+        Logger.Debug( $"Pixmap GL Format: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
+        Logger.Debug( $"Pixmap GL Internal Format: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLInternalPixelFormat )}" );
+        Logger.Debug( $"Pixmap GL Data Type: {PixelFormatUtils.GetGLTypeName( pixmap.GLDataType )}" );
         Logger.Debug( $"Pixmap Data Length: {pixmap.PixelData.Length}" );
         Logger.Debug( $"Gdx2dPixmap created successfully?: {pixmap.Gdx2DPixmap != null}" );
 
@@ -487,6 +487,18 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
         GL.TexParameteri( target, IGL.GL_TEXTURE_MAG_FILTER, IGL.GL_NEAREST );
         GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_S, IGL.GL_CLAMP_TO_EDGE );
         GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_T, IGL.GL_CLAMP_TO_EDGE );
+
+        GL.GetIntegerv( ( int )GLParameter.ActiveTexture, out var beforeActive );
+        GL.ActiveTexture( TextureUnit.Texture0 ); // pick one explicitly
+        GL.BindTexture( TextureTarget.Texture2D, GLTextureHandle );
+        GL.PixelStorei( ( int )PixelStoreParameter.UnpackAlignment, 1 );
+//        GL.TexImage2D( ( int )TextureTarget.Texture2D, 0, ( int )PixelInternalFormat.Rgba8, 640, 480, 0,
+//                       ( int )PixelFormat.Rgba, ( int )PixelType.UnsignedByte, pixelPtr );
+        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureWidth, out var w );
+        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureHeight, out var h );
+        GL.GetIntegerv( ( int )GLParameter.TextureBinding2D, out var afterBound );
+
+        Logger.Debug( $"Upload: prevActive={beforeActive}, boundAfterUpload={afterBound}, Level0={w}x{h}, err={GL.GetError()}" );
 
         GL.TexImage2D( target, miplevel, 0, pixmap, false );
 
@@ -546,176 +558,6 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
         }
     }
 
-    /// <summary>
-    /// Retrieves the name of the OpenGL pixel format based on the provided format identifier.
-    /// </summary>
-    /// <param name="format">The integer identifier of the OpenGL pixel format.</param>
-    /// <returns>A string representing the name of the corresponding OpenGL pixel format.</returns>
-    public static string GetGLPixelFormatName( int format )
-    {
-        return format switch
-        {
-            IGL.GL_ALPHA           => "IGL.GL_ALPHA",
-            IGL.GL_LUMINANCE_ALPHA => "IGL.GL_LUMINANCE_ALPHA",
-            IGL.GL_RGB             => "IGL.GL_RGB",
-            IGL.GL_RGBA            => "IGL.GL_RGBA",
-            IGL.GL_RGB8            => "IGL.GL_RGB8",
-            IGL.GL_RGBA8           => "IGL.GL_RGBA8",
-            IGL.GL_RGB565          => "IGL.GL_RGB565",
-            IGL.GL_RGBA4           => "IGL.GL_RGBA4",
-            IGL.GL_RGB10           => "IGL.GL_RGB10",
-            IGL.GL_RGB12           => "IGL.GL_RGB12",
-            IGL.GL_RGBA16          => "IGL.GL_RGBA16",
-
-            // ----------------------------------
-
-            var _ => $"Invalid format: {format}",
-        };
-    }
-
-    /// <summary>
-    /// Retrieves the OpenGL data type name corresponding to the given format.
-    /// </summary>
-    /// <param name="format">The OpenGL format represented as an integer.</param>
-    /// <returns>
-    /// A string representing the OpenGL data type name. Returns "Invalid format: {format}"
-    /// if the format is unrecognized.
-    /// </returns>
-    public static string GetGLTypeName( int format )
-    {
-        return format switch
-        {
-            IGL.GL_UNSIGNED_BYTE          => "IGL.GL_UNSIGNED_BYTE",
-            IGL.GL_UNSIGNED_SHORT_5_6_5   => "IGL.GL_UNSIGNED_SHORT_5_6_5",
-            IGL.GL_UNSIGNED_SHORT_4_4_4_4 => "IGL.GL_UNSIGNED_SHORT_4_4_4_4",
-
-            // ----------------------------------
-
-            var _ => $"Invalid format: {format}",
-        };
-    }
-
-    /// <summary>
-    /// Retrieves the OpenGL target name corresponding to the given target integer value.
-    /// </summary>
-    /// <param name="target">The integer value representing the OpenGL target.</param>
-    /// <returns>
-    /// A string representing the name of the OpenGL target, or "UNKNOWN TARGET: {target}" if not recognized.
-    /// </returns>
-    public static string GetGLTargetName( int target )
-    {
-        return target switch
-        {
-            IGL.GL_TEXTURE_1D                   => "IGL.GL_TEXTURE_1D",
-            IGL.GL_TEXTURE_2D                   => "IGL.GL_TEXTURE_2D",
-            IGL.GL_TEXTURE_3D                   => "IGL.GL_TEXTURE_3D",
-            IGL.GL_TEXTURE_CUBE_MAP             => "IGL.GL_TEXTURE_CUBE_MAP",
-            IGL.GL_TEXTURE_RECTANGLE            => "IGL.GL_TEXTURE_RECTANGLE",
-            IGL.GL_TEXTURE_BUFFER               => "IGL.GL_TEXTURE_BUFFER",
-            IGL.GL_TEXTURE_2D_ARRAY             => "IGL.GL_TEXTURE_2D_ARRAY",
-            IGL.GL_TEXTURE_CUBE_MAP_ARRAY       => "IGL.GL_TEXTURE_CUBE_MAP_ARRAY",
-            IGL.GL_TEXTURE_2D_MULTISAMPLE       => "IGL.GL_TEXTURE_2D_MULTISAMPLE",
-            IGL.GL_TEXTURE_2D_MULTISAMPLE_ARRAY => "IGL.GL_TEXTURE_2D_MULTISAMPLE_ARRAY",
-
-            // ----------------------------------
-
-            var _ => $"UNKNOWN TARGET: {target}",
-        };
-    }
-
-    /// <summary>
-    /// Converts a given Gdx2DPixmap format to its corresponding OpenGL pixel format.
-    /// </summary>
-    /// <param name="format">The Gdx2DPixmap format to be converted.</param>
-    /// <returns>The integer value representing the corresponding OpenGL pixel format.</returns>
-    /// <exception cref="GdxRuntimeException">
-    /// Thrown when the provided format is invalid or unrecognized.
-    /// </exception>
-    public static int ToGLPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => IGL.GL_ALPHA,
-            Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => IGL.GL_RGB,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => IGL.GL_RGBA,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => IGL.GL_RGB,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => IGL.GL_RGBA,
-
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
-    public static int GetGLInternalFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => IGL.GL_ALPHA,
-            Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => IGL.GL_RGB8,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => IGL.GL_RGBA8,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => IGL.GL_RGB565,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => IGL.GL_RGBA4,
-            _                                            => throw new ArgumentException( $"Unsupported format: {format}" )
-        };
-    }
-
-    /// <summary>
-    /// Converts a Gdx2DPixmap format to the corresponding OpenGL data type.
-    /// </summary>
-    /// <param name="format">The Gdx2DPixmap format that needs to be converted.</param>
-    /// <returns>The corresponding OpenGL data type as an integer constant.</returns>
-    /// <exception cref="GdxRuntimeException">
-    /// Thrown if the specified format is not valid or recognized.
-    /// </exception>
-    public static int ToGLDataType( Gdx2DPixmap.Gdx2DPixmapFormat format )
-    {
-        return format switch
-        {
-            Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => IGL.GL_UNSIGNED_SHORT_5_6_5,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
-
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
-    public static Gdx2DPixmap.Gdx2DPixmapFormat GdxFormatToPixelTypeFormat( int format )
-    {
-        return format switch
-        {
-            1 => Gdx2DPixmap.Gdx2DPixmapFormat.Alpha,
-            2 => Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha,
-            3 => Gdx2DPixmap.Gdx2DPixmapFormat.RGB888,
-            4 => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888,
-            5 => Gdx2DPixmap.Gdx2DPixmapFormat.RGB565,
-            6 => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444,
-
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
-    }
-
     // ========================================================================
 
     /// <summary>
@@ -769,12 +611,12 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
             Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
             Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap?.ColorType}" );
-            Logger.Debug( $"Pixmap Pixel Format    : {Gdx2DPixmap.GetFormatString( pixmap.Gdx2DPixmap!.ColorType )}" );
+            Logger.Debug( $"Pixmap Pixel Format    : {PixelFormatUtils.GetFormatString( pixmap.Gdx2DPixmap!.ColorType )}" );
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );
-            Logger.Debug( $"pixmap.GLFormat Name   : {GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
+            Logger.Debug( $"pixmap.GLFormat Name   : {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalPixelFormat}" );
             Logger.Debug( $"pixmap.GLType          : {pixmap.GLDataType}" );
-            Logger.Debug( $"pixmap.GLType Name     : {GetGLTypeName( pixmap.GLDataType )}" );
+            Logger.Debug( $"pixmap.GLType Name     : {PixelFormatUtils.GetGLTypeName( pixmap.GLDataType )}" );
             Logger.Debug( $"Number of Pixels       : {pixmap.Width * pixmap.Height}" );
             Logger.Debug( $"pixmap.PixelData.Length: {pixmap.PixelData.Length}" );
 

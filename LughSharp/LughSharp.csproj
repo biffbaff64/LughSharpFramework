@@ -75,28 +75,12 @@
             <Pack>true</Pack>
             <PackagePath>contentFiles\any\any</PackagePath>
         </Content>
-        <None Remove="lib\net9.0\gdx2d.dll" />
-        <Content Include="lib\net9.0\gdx2d.dll">
+        <None Remove="lib\gdx2d.dll" />
+        <Content Include="lib\gdx2d.dll">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="lib\net9.0\freetype.dll" />
-        <Content Include="lib\net9.0\freetype.dll">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\freetype.dll" />
-        <Content Include="lib\net8.0\freetype.dll">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\gdx2d.dll" />
-        <Content Include="lib\net8.0\gdx2d.dll">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net8.0\LughSharpStbImage.dll" />
-        <Content Include="lib\net8.0\LughSharpStbImage.dll">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\net9.0\LughSharpStbImage.dll" />
-        <Content Include="lib\net9.0\LughSharpStbImage.dll">
+        <None Remove="lib\freetype.dll" />
+        <Content Include="lib\freetype.dll">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>

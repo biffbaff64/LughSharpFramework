@@ -45,8 +45,9 @@ public static class Logger
 {
     // ========================================================================
 
-    private static string _debugFilePath = "";
-    private static string _debugFileName = "";
+    private static string        _debugFilePath = "";
+    private static string        _debugFileName = "";
+    private static StreamWriter? _streamWriter;
 
     // ========================================================================
 
@@ -62,6 +63,8 @@ public static class Logger
     private const string CHECKPOINT_TAG         = "[CHECKPOINT]";
     private const string PREFS_FOLDER           = "logs";
     private const string DEFAULT_TRACE_FILENAME = "trace.txt";
+
+    private const string DIVIDER = "-----------------------------------------------------";
 
     #endregion constants
 
@@ -105,14 +108,12 @@ public static class Logger
     /// <param name="boxedDebug">
     /// If TRUE, a dividing line will be written before and after this debug message.
     /// </param>
-    /// <param name="addNewLine"> Adds a NewLine to the message string if TRUE (default). </param>
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
     [Conditional( "DEBUG" )]
     public static void Debug( string message,
                               bool boxedDebug = false,
-                              bool addNewLine = true,
                               [CallerFilePath] string callerFilePath = "",
                               [CallerMemberName] string callerMethod = "",
                               [CallerLineNumber] int callerLine = 0 )
@@ -130,12 +131,7 @@ public static class Logger
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
         var str      = CreateMessage( DEBUG_TAG, message, callerID );
 
-        if ( addNewLine )
-        {
-            str += Environment.NewLine;
-        }
-
-        Console.Write( str );
+        Console.WriteLine( str );
         WriteToFile( str );
 
         if ( boxedDebug )
@@ -145,40 +141,14 @@ public static class Logger
     }
 
     /// <summary>
-    /// Send data to the output window/console/File, without time/data and filestamp information.
-    /// </summary>
-    /// <param name="message"> The message to send. </param>
-    /// <param name="addNewLine"> Adds a NewLine to the message string if TRUE (default). </param>
-    [Conditional( "DEBUG" )]
-    public static void Data( string message, bool addNewLine = true )
-    {
-        if ( !IsEnabled( LOG_DEBUG ) )
-        {
-            return;
-        }
-
-        var str = CreateMessage( null, message, null );
-
-        if ( addNewLine )
-        {
-            str += Environment.NewLine;
-        }
-
-        Console.Write( str );
-        WriteToFile( str );
-    }
-
-    /// <summary>
     /// Send a DEBUG message to output window/console/File.
     /// </summary>
     /// <param name="message"> The message to send. </param>
-    /// <param name="addNewLine"> Adds a NewLine to the message string if TRUE (default). </param>
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
     [Conditional( "DEBUG" )]
     public static void Warning( string message,
-                                bool addNewLine = true,
                                 [CallerFilePath] string callerFilePath = "",
                                 [CallerMemberName] string callerMethod = "",
                                 [CallerLineNumber] int callerLine = 0 )
@@ -189,16 +159,9 @@ public static class Logger
         }
 
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
+        var str      = CreateMessage( ERROR_TAG, message, callerID );
 
-        var str = CreateMessage( ERROR_TAG, message, callerID );
-
-        if ( addNewLine )
-        {
-            str += Environment.NewLine;
-        }
-
-        Console.Write( str );
-
+        Console.WriteLine( str );
         WriteToFile( str );
     }
 
@@ -223,11 +186,9 @@ public static class Logger
         }
 
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-
-        var str = CreateMessage( DEBUG_TAG, message, callerID );
+        var str      = CreateMessage( DEBUG_TAG, message, callerID );
 
         Console.WriteLine( str );
-
         WriteToFile( str );
     }
 
@@ -261,11 +222,6 @@ public static class Logger
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
         var str      = CreateMessage( CHECKPOINT_TAG, "< CHECKPOINT >", callerID );
 
-        if ( !str.EndsWith( '\n' ) )
-        {
-            str += Environment.NewLine;
-        }
-
         Console.WriteLine( str );
         WriteToFile( str );
 
@@ -293,6 +249,7 @@ public static class Logger
         }
 
         Console.WriteLine( sb.ToString() );
+        WriteToFile( sb.ToString() );
     }
 
     /// <summary>
@@ -311,30 +268,16 @@ public static class Logger
     }
 
     /// <summary>
-    /// Outputs a single dot (".") to the console if debug logging is enabled.
-    /// Can be used to indicate progress, or to indicate that a function has
-    /// completed, among other things.
-    /// </summary>
-    public static void Dot()
-    {
-        if ( IsEnabled( LOG_DEBUG ) )
-        {
-            Console.Write( "." );
-        }
-    }
-
-    /// <summary>
     /// Writes an <see cref="Environment.NewLine"/> to console.
-    /// Does NOT create a string holding caller data or timestamp. This is purely for use
-    /// when calling <see cref="Debug"/> or <see cref="Warning"/> with the 'addNewLine'
-    /// flag disabled.
+    /// Does NOT create a string holding caller data or timestamp.
     /// </summary>
     [Conditional( "DEBUG" )]
     public static void NewLine()
     {
         if ( IsEnabled( LOG_DEBUG ) )
         {
-            Console.WriteLine( $"{Environment.NewLine}" );
+            Console.WriteLine( Environment.NewLine );
+            WriteToFile( Environment.NewLine );
         }
     }
 
@@ -342,8 +285,8 @@ public static class Logger
     /// Opens a physical file for writing copies of debug messages to.
     /// </summary>
     /// <param name="fileName">
-    /// The filename. This should be filename only,
-    /// and the file will be created in the working directory.
+    /// The filename. This should be filename only, without path, and the file will
+    /// be created in a 'logs' folder in the working directory.
     /// </param>
     /// <param name="deleteExisting">
     /// True to delete existing copies of the file, False to append to existing file.
@@ -370,17 +313,15 @@ public static class Logger
             _debugFilePath = $"{baseDirectory}logs{Path.DirectorySeparatorChar}";
             _debugFileName = fileName;
 
-            using var fs = File.Create( _debugFilePath + _debugFileName );
+            using ( _streamWriter = new StreamWriter( _debugFilePath + _debugFileName, true ) )
+            {
+                var dateTime = DateTime.Now;
+                var time     = dateTime.ToShortTimeString();
 
-            var dateTime = DateTime.Now;
-            var divider  = new UTF8Encoding( true ).GetBytes( "-----------------------------------------------------" );
-            var time     = new UTF8Encoding( true ).GetBytes( dateTime.ToShortTimeString() );
-
-            fs.Write( divider, 0, divider.Length );
-            fs.Write( time, 0, time.Length );
-            fs.Write( divider, 0, divider.Length );
-
-            fs.Close();
+                _streamWriter.Write( DIVIDER );
+                _streamWriter.Write( time, 0, time.Length );
+                _streamWriter.WriteLine( DIVIDER );
+            }
         }
         catch ( Exception )
         {
@@ -390,6 +331,55 @@ public static class Logger
             _debugFileName    = null!;
             EnableWriteToFile = false;
         }
+    }
+
+    /// <summary>
+    /// Writes text to the logFile, if it exists.
+    /// </summary>
+    /// <param name="text">String holding the text to write.</param>
+    public static void WriteToFile( string text )
+    {
+        var filePath = _debugFilePath + _debugFileName;
+
+        // Check if the file exists before attempting to write
+        if ( File.Exists( filePath ) )
+        {
+            try
+            {
+                // Determine whether to add a new line based on the content itself
+                var contentToWrite = text;
+
+                if ( !text.EndsWith( Environment.NewLine ) )
+                {
+                    contentToWrite += Environment.NewLine;
+                }
+
+                using ( _streamWriter = new StreamWriter( filePath, true ) )
+                {
+                    _streamWriter.Write( contentToWrite );
+                }
+            }
+            catch ( UnauthorizedAccessException ex )
+            {
+                Console.WriteLine( $"Error: Access to the file '{filePath}' is denied. {ex.Message}" );
+            }
+            catch ( Exception ex )
+            {
+                Console.WriteLine( $"An unexpected error occurred while writing to file '{filePath}'. {ex.Message}" );
+            }
+        }
+        else
+        {
+            Console.WriteLine( $"File does not exist at '{filePath}'. Content not written." );
+        }
+    }
+
+    /// <summary>
+    /// Closes the debug file if it is open, releasing any associated resources.
+    /// </summary>
+    public static void CloseDebugFile()
+    {
+        _streamWriter?.Close();
     }
 
     /// <summary>
@@ -498,25 +488,6 @@ public static class Logger
     private static string GetCallerInfo( CallerID cid )
     {
         return $"{cid.FileName}::{cid.MethodName}::{cid.LineNumber}";
-    }
-
-    /// <summary>
-    /// Writes text to the logFile, if it exists.
-    /// </summary>
-    /// <param name="text">String holding the text to write.</param>
-    private static void WriteToFile( string text )
-    {
-        if ( !File.Exists( _debugFilePath + _debugFileName ) )
-        {
-            return;
-        }
-
-        using var fs = File.Open( _debugFilePath + _debugFileName, FileMode.Append );
-
-        var debugLine = new UTF8Encoding( true ).GetBytes( text );
-
-        fs.Write( debugLine, 0, debugLine.Length );
-        fs.Close();
     }
 
     /// <summary>

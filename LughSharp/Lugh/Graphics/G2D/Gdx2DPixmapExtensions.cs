@@ -38,7 +38,7 @@ public partial class Gdx2DPixmap
     {
         var size = ( uint )( _pixmapDataType.Width
                              * _pixmapDataType.Height
-                             * Gdx2dBytesPerPixel( _pixmapDataType.ColorType ) );
+                             * PixelFormatUtils.Gdx2dBytesPerPixel( _pixmapDataType.ColorType ) );
 
         switch ( _pixmapDataType.ColorType )
         {
@@ -91,26 +91,6 @@ public partial class Gdx2DPixmap
     {
         var alpha = ( byte )( color.A * 255 );
         Array.Fill( pd.Pixels, alpha, 0, ( int )( pd.Width * pd.Height ) );
-    }
-
-    /// <summary>
-    /// Gets the number of bytes required for 1 pixel of the specified format.
-    /// </summary>
-    public static int Gdx2dBytesPerPixel( Gdx2DPixmapFormat format )
-    {
-        return format switch
-        {
-            Gdx2DPixmapFormat.Alpha          => 1,
-            Gdx2DPixmapFormat.LuminanceAlpha => 2,
-            Gdx2DPixmapFormat.RGB565         => 2,
-            Gdx2DPixmapFormat.RGBA4444       => 2,
-            Gdx2DPixmapFormat.RGB888         => 3,
-            Gdx2DPixmapFormat.RGBA8888       => 4,
-
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
     }
 
     /// <summary>
@@ -259,28 +239,6 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// Converts a <see cref="Gdx2DPixmapFormat"/> to its string representation.
-    /// </summary>
-    /// <param name="format">The pixmap format to convert.</param>
-    /// <returns>A string representing the given pixmap format.</returns>
-    public static string GetFormatString( Gdx2DPixmapFormat format )
-    {
-        return format switch
-        {
-            Gdx2DPixmapFormat.Alpha          => "ALPHA",
-            Gdx2DPixmapFormat.LuminanceAlpha => "LUMINANCE_ALPHA",
-            Gdx2DPixmapFormat.RGB888         => "RGB888",
-            Gdx2DPixmapFormat.RGBA8888       => "RGBA8888",
-            Gdx2DPixmapFormat.RGB565         => "RGB565",
-            Gdx2DPixmapFormat.RGBA4444       => "RGBA4444",
-
-            // ----------------------------------
-
-            var _ => $"Invalid format: {format}",
-        };
-    }
-
-    /// <summary>
     /// Gets the pixel color at the specified coordinates
     /// </summary>
     /// <param name="x">The x coordinate</param>
@@ -412,7 +370,7 @@ public partial class Gdx2DPixmap
 /// </summary>
 internal static class NativeMethods
 {
-    private const string DLL_PATH = "lib/net8.0/gdx2d.dll";
+    private const string DLL_PATH = "lib/gdx2d.dll";
 
     [DllImport( DLL_PATH, CallingConvention = CallingConvention.Cdecl )]
     internal static extern int gdx2d_get_pixel( PixmapDataType pd, int x, int y );

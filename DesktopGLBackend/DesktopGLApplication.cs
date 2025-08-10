@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Core;
+using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
@@ -59,7 +60,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// Application Configuration Settings
     /// </summary>
     public DesktopGLApplicationConfiguration? AppConfig { get; set; }
-    
+
     public List< IRunnable.Runnable > Runnables         { get; set; } = [ ];
     public List< IRunnable.Runnable > ExecutedRunnables { get; set; } = [ ];
 
@@ -109,7 +110,7 @@ public class DesktopGLApplication : IApplication, IDisposable
 
         // Config.Title becomes the name of the ApplicationListener
         // if it has no value at this point.
-        AppConfig    = DesktopGLApplicationConfiguration.Copy( config );
+        AppConfig       =   DesktopGLApplicationConfiguration.Copy( config );
         AppConfig.Title ??= listener.GetType().Name;
 
         // ====================================================================
@@ -129,7 +130,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         _sync     = new Sync();
 
         InitialiseGlfw();
-        
+
         Windows.Add( CreateWindow( AppConfig, listener, 0 ) );
     }
 
@@ -294,27 +295,6 @@ public class DesktopGLApplication : IApplication, IDisposable
 
     /// <summary>
     /// </summary>
-    /// <param name="windowHandle"></param>
-    private void InitGLVersion( GLFW.Window windowHandle )
-    {
-//        OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
-//
-//        Glfw.GetVersion( out var glMajor, out var glMinor, out var revision );
-//
-//        Logger.Debug( $"OpenGL Version: {glMajor}.{glMinor}.{revision}" );
-//        
-//        Glfw.WindowHint( WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
-//        Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
-//        Glfw.WindowHint( WindowHint.ContextVersionMajor, glMajor );
-//        Glfw.WindowHint( WindowHint.ContextVersionMinor, glMinor );
-
-//        Glfw.MakeContextCurrent( windowHandle );
-
-        GLVersion = new GLVersion( Platform.ApplicationType.WindowsGL );
-    }
-
-    /// <summary>
-    /// </summary>
     /// <exception cref="GdxRuntimeException"></exception>
     public void InitialiseGlfw()
     {
@@ -336,7 +316,7 @@ public class DesktopGLApplication : IApplication, IDisposable
                     Logger.Debug( $"Failed to initialise Glfw: {error}" );
 
                     Glfw.Terminate();
-                    
+
                     Environment.Exit( 1 );
                 }
 
@@ -430,7 +410,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         {
             Glfw.WindowHint( GLFW.WindowHint.ContextVersionMinor, GLUtils.DEFAULT_GL_MINOR );
         }
-        
+
         Glfw.WindowHint( GLFW.WindowHint.OpenGLForwardCompat, GLUtils.DEFAULT_OPENGL_FORWARDCOMPAT );
         Glfw.WindowHint( GLFW.WindowHint.OpenGLProfile, OGLProfile );
         Glfw.WindowHint( GLFW.WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
@@ -635,8 +615,10 @@ public class DesktopGLApplication : IApplication, IDisposable
         dglWindow.Create( windowHandle );
         dglWindow.SetVisible( config.InitialVisibility );
 
+        // Clear the display buffers
         for ( var i = 0; i < 2; i++ )
         {
+            Engine.GL.BindFramebuffer( IGL.GL_FRAMEBUFFER, 0 );
             Engine.GL.ClearColor( config.InitialBackgroundColor.R,
                                   config.InitialBackgroundColor.G,
                                   config.InitialBackgroundColor.B,
@@ -748,8 +730,9 @@ public class DesktopGLApplication : IApplication, IDisposable
 
         Glfw.MakeContextCurrent( windowHandle );
         Glfw.SwapInterval( config.VSyncEnabled ? 1 : 0 );
-        GLUtils.CreateCapabilities(); // Needed??
-        InitGLVersion( windowHandle );
+        GLUtils.CreateCapabilities();
+
+        GLVersion = new GLVersion( Platform.ApplicationType.WindowsGL );
 
         if ( config.Debug )
         {

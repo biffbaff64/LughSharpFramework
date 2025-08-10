@@ -205,6 +205,8 @@ public class Texture : GLTexture, IManaged
 
         UploadImageData( IGL.GL_TEXTURE_2D, data );
 
+//        TextureUtils.DebugTexture2D( GLTextureHandle );
+        
         UnsafeSetFilter( MinFilter, MagFilter, true );
         UnsafeSetWrap( UWrap, VWrap, true );
         UnsafeSetAnisotropicFilter( AnisotropicFilterLevel, true );
@@ -441,7 +443,7 @@ public class Texture : GLTexture, IManaged
         Logger.Debug( $"IsManaged         : {IsManaged}" );
         Logger.Debug( $"NumManagedTextures: {NumManagedTextures}" );
         Logger.Debug( $"Depth             : {Depth}" );
-        Logger.Debug( $"GLTarget          : {GetGLTargetName( GLTarget )}" );
+        Logger.Debug( $"GLTarget          : {PixelFormatUtils.GetGLTargetName( GLTarget )}" );
         Logger.Debug( $"GLTextureHandle   : {GLTextureHandle:X}" );
 
         if ( !TextureData.IsPrepared )

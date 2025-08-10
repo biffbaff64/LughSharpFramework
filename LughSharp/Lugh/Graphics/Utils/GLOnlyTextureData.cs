@@ -82,7 +82,7 @@ public class GLOnlyTextureData : ITextureData
         Height         = height;
         MipLevel       = mipMapLevel;
         InternalFormat = internalFormat;
-        PixelFormat    = GLTexture.GdxFormatToPixelTypeFormat( format );
+        PixelFormat    = PixelFormatUtils.GdxFormatToPixelTypeFormat( format );
         Type           = type;
     }
 

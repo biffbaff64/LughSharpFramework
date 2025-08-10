@@ -65,6 +65,13 @@ public static class GLUtils
             IGL.GL_STACK_OVERFLOW                => "Stack Overflow",
             IGL.GL_STACK_UNDERFLOW               => "Stack Underflow",
             IGL.GL_CONTEXT_LOST                  => "Context Lost",
+
+            // ----------------------------------
+            
+            IGL.GL_NO_ERROR                      => "No Error",
+            
+            // ----------------------------------
+            
             var _                                => $"Unknown GL Error Code: {errorCode}",
         };
     }
@@ -195,11 +202,15 @@ public static class GLUtils
     }
 
     /// <summary>
-    /// 
+    /// Logs the data contained in a specified Vertex Buffer Object (VBO) for debugging purposes.
     /// </summary>
-    /// <param name="vbo"></param>
-    /// <param name="sizeInBytes"></param>
-    /// <param name="vertexSizeInFloats"></param>
+    /// <param name="vbo">
+    /// The ID of the Vertex Buffer Object to retrieve and print data from.
+    /// </param>
+    /// <param name="sizeInBytes"> The size of the data in the VBO, in bytes. </param>
+    /// <param name="vertexSizeInFloats">
+    /// The size of each vertex in the VBO, in terms of the number of floats it contains.
+    /// </param>
     public static void PrintVboData( uint vbo, int sizeInBytes, int vertexSizeInFloats )
     {
         var data = GetVboData( vbo, sizeInBytes, vertexSizeInFloats );
@@ -223,95 +234,7 @@ public static class GLUtils
             }
         }
     }
-
-    /// <summary>
-    /// Gets the number of bytes required for 1 pixel of the specified format.
-    /// </summary>
-    public static int Gdx2dBytesPerPixel( int format )
-    {
-        return format switch
-        {
-            IGL.GL_ALPHA           => 1,
-            IGL.GL_LUMINANCE       => 1,
-            IGL.GL_LUMINANCE_ALPHA => 2,
-            IGL.GL_RGB565          => 2,
-            IGL.GL_RGBA4           => 2,
-            IGL.GL_RGB             => 3,
-            IGL.GL_RGBA            => 4,
-
-            // ----------------------------------
-
-            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
-        };
-    }
-
-    /// <summary>
-    /// Retrieves the name of the OpenGL pixel format based on the provided format identifier.
-    /// </summary>
-    /// <param name="format">The integer identifier of the OpenGL pixel format.</param>
-    /// <returns>A string representing the name of the corresponding OpenGL pixel format.</returns>
-    public static string GetGLPixelFormatName( int format )
-    {
-        return format switch
-        {
-            IGL.GL_ALPHA           => "IGL.GL_ALPHA",
-            IGL.GL_LUMINANCE_ALPHA => "IGL.GL_LUMINANCE_ALPHA",
-            IGL.GL_RGB             => "IGL.GL_RGB",
-            IGL.GL_RGBA            => "IGL.GL_RGBA",
-
-            // ----------------------------------
-
-            var _ => $"Invalid format: {format}",
-        };
-    }
-
-    /// <summary>
-    /// Retrieves the OpenGL data type name corresponding to the given format.
-    /// </summary>
-    /// <param name="format">The OpenGL format represented as an integer.</param>
-    /// <returns>
-    /// A string representing the OpenGL data type name. Returns "Invalid format: {format}"
-    /// if the format is unrecognized.
-    /// </returns>
-    public static string GetGLTypeName( int format )
-    {
-        return format switch
-        {
-            IGL.GL_UNSIGNED_BYTE          => "IGL.GL_UNSIGNED_BYTE",
-            IGL.GL_UNSIGNED_SHORT_5_6_5   => "IGL.GL_UNSIGNED_SHORT_5_6_5",
-            IGL.GL_UNSIGNED_SHORT_4_4_4_4 => "IGL.GL_UNSIGNED_SHORT_4_4_4_4",
-
-            // ----------------------------------
-
-            var _ => $"Invalid format: {format}",
-        };
-    }
-
-    /// <summary>
-    /// Retrieves the OpenGL target name corresponding to the given target integer value.
-    /// </summary>
-    /// <param name="target">The integer value representing the OpenGL target.</param>
-    /// <returns>
-    /// A string representing the name of the OpenGL target, or "UNKNOWN TARGET: {target}" if not recognized.
-    /// </returns>
-    public static string GetGLTargetName( int target )
-    {
-        return target switch
-        {
-            IGL.GL_TEXTURE_1D                   => "IGL.GL_TEXTURE_1D",
-            IGL.GL_TEXTURE_2D                   => "IGL.GL_TEXTURE_2D",
-            IGL.GL_TEXTURE_3D                   => "IGL.GL_TEXTURE_3D",
-            IGL.GL_TEXTURE_CUBE_MAP             => "IGL.GL_TEXTURE_CUBE_MAP",
-            IGL.GL_TEXTURE_RECTANGLE            => "IGL.GL_TEXTURE_RECTANGLE",
-            IGL.GL_TEXTURE_BUFFER               => "IGL.GL_TEXTURE_BUFFER",
-            IGL.GL_TEXTURE_2D_ARRAY             => "IGL.GL_TEXTURE_2D_ARRAY",
-            IGL.GL_TEXTURE_CUBE_MAP_ARRAY       => "IGL.GL_TEXTURE_CUBE_MAP_ARRAY",
-            IGL.GL_TEXTURE_2D_MULTISAMPLE       => "IGL.GL_TEXTURE_2D_MULTISAMPLE",
-            IGL.GL_TEXTURE_2D_MULTISAMPLE_ARRAY => "IGL.GL_TEXTURE_2D_MULTISAMPLE_ARRAY",
-
-            // ----------------------------------
-
-            var _ => $"UNKNOWN TARGET: {target}",
-        };
-    }
 }
+
+// ============================================================================
+// ============================================================================

@@ -36,14 +36,14 @@ public unsafe class OpenGLTest
 {
     private static readonly GLBindings _gl = new();
 
-    private readonly string _fragmentShaderSource =
+    private const string FRAGMENT_SHADER_SOURCE =
         "#version 450 core\n" +
         "out vec4 fragColor;\n" +
         "void main() {\n" +
         "    fragColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
         "}\n";
 
-    private readonly string _vertexShaderSource =
+    private const string VERTEX_SHADER_SOURCE =
         "#version 450 core\n" +
         "layout (location = 0) in vec3 aPosition;\n" +
         "void main() {\n" +
@@ -59,9 +59,8 @@ public unsafe class OpenGLTest
         0.0f, 0.5f, 0.0f,
     ];
 
-    private uint _shaderProgram;
-
-    private uint _vao, _vbo, _ibo;
+//    private uint _shaderProgram;
+//    private uint _vao, _vbo, _ibo;
 
     // ========================================================================
     // ========================================================================

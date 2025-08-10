@@ -222,7 +222,7 @@ public class Pixmap : IDisposable
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            return GLTexture.ToGLPixelFormat( Gdx2DPixmap.ColorType );
+            return PixelFormatUtils.ToGLPixelFormat( Gdx2DPixmap.ColorType );
         }
     }
 
@@ -236,7 +236,7 @@ public class Pixmap : IDisposable
         {
             Guard.ThrowIfNull( Gdx2DPixmap );
 
-            return GLTexture.GetGLInternalFormat( Gdx2DPixmap.ColorType );
+            return PixelFormatUtils.GetGLInternalFormat( Gdx2DPixmap.ColorType );
         }
     }
 
@@ -684,7 +684,7 @@ public class Pixmap : IDisposable
 
             Logger.Debug( $"Width : {Width}, Height: {Height}" );
             Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height}: {Gdx2DPixmap.ColorType}: "
-                          + $"{Gdx2DPixmap.GetFormatString( GetColorFormat() )}" );
+                          + $"{PixelFormatUtils.GetFormatString( GetColorFormat() )}" );
             Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
             var a = Gdx2DPixmap.PixmapBuffer.BackingArray();

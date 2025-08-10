@@ -1,0 +1,124 @@
+﻿What the log says
+- Currently bound texture before upload: 1
+    - Texture object with id 1 was bound on the target you’re using (likely GL_TEXTURE_2D) before the upload call.
+
+- prevActive=33984
+    - 33984 is GL_TEXTURE0. So the active texture unit prior to your code was unit 0.
+
+- boundAfterUpload=1
+    - After the upload, texture id 1 is still bound. Binding/restoration looks fine.
+
+- Level0=0x0
+    - This strongly suggests the base mip level (level 0) has width=0 and height=0. That means no storage or a zero-sized allocation was in place when you uploaded. A 0x0 level 0 makes the texture incomplete, and sampling will result in black (or border color) depending on state. If you expected a real image, this is the core issue.
+
+- err=0
+    - GL_NO_ERROR. Upload didn’t trigger an error, but that doesn’t mean the texture has valid data.
+
+Likely causes
+- The image/texture data is null or decoded with width/height = 0.
+- You’re calling glTexSubImage* without having allocated storage (glTexImage* or glTexStorage*) first.
+- Mismatch between minification filter and mipmap availability (e.g., using mipmap min filter without generating/allocating mipmaps) in combination with a zero-sized level 0.
+- Pixel unpack state misconfiguration causing the upload to be ignored or misinterpreted (less likely if Level0 is actually being queried as 0x0).
+- Upload happening on a context that isn’t current or not sharing objects with the rendering context.
+
+What to verify and fix
+1. Validate source data before upload
+
+- Assert that your ITextureData is not null and has width > 0 and height > 0.
+- Log width/height, channels, internalFormat/format/type before calling the GL upload.
+
+1. Allocate storage properly
+
+- If using glTexSubImage2D, ensure you first allocate storage with glTexImage2D (or immutable storage with glTexStorage2D).
+- If you use mipmaps, either:
+    - Use glTexStorage2D with the full mip level count and upload each level, or
+    - Use glTexImage2D for level 0 and glGenerateMipmap after upload, and ensure min filter does not require mipmaps until they exist.
+
+1. Ensure filter and wrap state are sane
+
+- For testing, set:
+    - GL_TEXTURE_MIN_FILTER = GL_LINEAR
+    - GL_TEXTURE_MAG_FILTER = GL_LINEAR
+    - GL_TEXTURE_WRAP_S/T = GL_CLAMP_TO_EDGE
+
+- After confirming content, switch to mipmaps (and generate them) if desired.
+
+1. Pixel storage
+
+- If your row stride isn’t a multiple of 4 bytes, set:
+    - glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+
+- Reset it back if your code relies on the default later.
+
+1. Confirm the upload actually created level 0
+
+- Immediately after upload, query level 0 width/height. If they’re still 0, storage wasn’t allocated or width/height were zero.
+
+1. Texture unit and binding correctness
+
+- It’s fine that prevActive is GL_TEXTURE0, but also verify at draw time that the sampler uniform points to the texture unit where you bind this texture.
+
+1. Threading and context
+
+- If you upload on a background thread, ensure the correct GL context is current on that thread and shares objects with the render context.
+
+Small helper to verify the texture after upload (OpenTK-style pseudocode; adapt enum names to your binding):
+``` csharp
+// C#
+public static void DebugTexture2D(int textureId)
+{
+    // Save state
+    GL.GetInteger(GetPName.ActiveTexture, out int activeTex);
+    GL.GetInteger(GetPName.TextureBinding2D, out int prevBinding);
+
+    // Ensure we are inspecting the right object on the active unit
+    GL.BindTexture(TextureTarget.Texture2D, textureId);
+
+    GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureWidth, out int w);
+    GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureHeight, out int h);
+    GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureInternalFormat, out int internalFmt);
+    GL.GetTexParameter(TextureTarget.Texture2D, GenerateMipmapTarget.TextureMaxLevel, out int maxLevel);
+    GL.GetTexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, out int minFilter);
+    GL.GetTexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, out int magFilter);
+
+    Console.WriteLine($"[Tex {textureId}] L0 Size: {w}x{h}, InternalFormat: 0x{internalFmt:X}");
+    Console.WriteLine($"[Tex {textureId}] MinFilter: 0x{minFilter:X}, MagFilter: 0x{magFilter:X}, MaxLevel: {maxLevel}");
+
+    // Restore state
+    GL.BindTexture(TextureTarget.Texture2D, prevBinding);
+    GL.ActiveTexture((TextureUnit)activeTex);
+}
+```
+Typical “good” sequence (conceptual)
+``` csharp
+// C#
+int tex = GL.GenTexture();
+GL.BindTexture(TextureTarget.Texture2D, tex);
+
+// Recommended during upload
+GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
+
+// Allocate level 0 and upload pixels
+GL.TexImage2D(TextureTarget.Texture2D, 0,
+    PixelInternalFormat.Rgba8,
+    width, height, 0,
+    PixelFormat.Rgba, PixelType.UnsignedByte, pixels);
+
+// Set simple filters first
+GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
+GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+
+// Generate mipmaps only if you’ll use a mip-filter
+// GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+
+// Restore unpack alignment if needed
+GL.PixelStore(PixelStoreParameter.UnpackAlignment, 4);
+```
+If you run the DebugTexture2D helper after your upload and it still prints L0 Size: 0x0, focus on:
+- The data you pass in (width/height values at call site).
+- Whether you accidentally call only glTexSubImage* on a texture with no allocation yet.
+- Whether the upload path is being skipped due to a null/empty ITextureData.
+
+If you share what you expect the texture size to be and how you’re feeding ITextureData into the upload, I can help pinpoint the exact spot to fix.

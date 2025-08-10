@@ -32,7 +32,7 @@ namespace LughSharp.Lugh.Graphics.Utils;
 public class PixelFormatUtils
 {
     // ----------------------------------------------------
-    // Methods handling pixel format in memory.
+    #region Methods handling pixel format in memory.
     // ----------------------------------------------------
 
     /// <summary>
@@ -120,6 +120,26 @@ public class PixelFormatUtils
     }
 
     /// <summary>
+    /// Gets the number of bytes required for 1 pixel of the specified format.
+    /// </summary>
+    public static int Gdx2dBytesPerPixel( Gdx2DPixmap.Gdx2DPixmapFormat format )
+    {
+        return format switch
+        {
+            Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => 1,
+            Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => 2,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => 2,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => 2,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => 3,
+            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => 4,
+
+            // ----------------------------------
+
+            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+        };
+    }
+
+    /// <summary>
     /// Converts a PNG color type to the corresponding Pixmap pixel format.
     /// </summary>
     /// <param name="format">The PNG color type represented as an integer.</param>
@@ -151,8 +171,10 @@ public class PixelFormatUtils
         };
     }
 
+    #endregion Methods handling pixel format in memory.
+    
     // ----------------------------------------------------
-    // Methods handling pixel format OpenGL expects
+    #region Methods handling pixel format OpenGL expects
     // ----------------------------------------------------
 
     /// <summary>
@@ -225,13 +247,39 @@ public class PixelFormatUtils
         };
     }
 
+    /// <summary>
+    /// Gets the number of bytes required for 1 pixel of the specified format.
+    /// </summary>
+    public static int GLBytesPerPixel( int format )
+    {
+        return format switch
+        {
+            IGL.GL_ALPHA           => 1,
+            IGL.GL_LUMINANCE       => 1,
+            IGL.GL_LUMINANCE_ALPHA => 2,
+            IGL.GL_RGB565          => 2,
+            IGL.GL_RGBA4           => 2,
+            IGL.GL_RGB             => 3,
+            IGL.GL_RGBA            => 4,
+
+            // ----------------------------------
+
+            var _ => throw new GdxRuntimeException( $"Invalid format: {format}" ),
+        };
+    }
+
+    #endregion Methods handling pixel format OpenGL expects
+    
     // ----------------------------------------------------
+    #region Internal pixel format
     // Methods handling the internal pixel format that
     // OpenGL uses to store the pixel data..
     // ----------------------------------------------------
 
+    #endregion Internal pixel format
+    
     // ----------------------------------------------------
-    // Miscellaneous
+    #region Miscellaneous
     // ----------------------------------------------------
 
     /// <summary>
@@ -281,10 +329,14 @@ public class PixelFormatUtils
         }
     }
 
+    #endregion Miscellaneous
+    
     // ========================================================================
     // ========================================================================
     // ========================================================================
 
+    #region Get String methods
+    
     /// <summary>
     /// Converts a <see cref="Gdx2DPixmap.Gdx2DPixmapFormat"/> to its string representation.
     /// </summary>
@@ -334,6 +386,11 @@ public class PixelFormatUtils
         };
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="format"></param>
+    /// <returns></returns>
     public static string GetGLInternalFormatName( int format )
     {
         return format switch
@@ -443,6 +500,8 @@ public class PixelFormatUtils
             var _ => $"UNKNOWN TARGET: {target}",
         };
     }
+    
+    #endregion Get String methods
 }
 
 // ========================================================================

@@ -44,6 +44,7 @@ global using GLFW = DotGLFW;
 
 global using LughSharp.Lugh.Core;
 global using LughSharp.Lugh.Graphics.OpenGL.Enums;
+global using LughSharp.Lugh.Graphics.Utils;
 global using LughSharp.Lugh.Maths;
 
 // ============================================================================

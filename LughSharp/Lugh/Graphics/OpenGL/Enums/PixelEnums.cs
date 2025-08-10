@@ -54,6 +54,7 @@ public enum PixelInternalFormat : int
     Alpha          = IGL.GL_ALPHA,
     Rgb            = IGL.GL_RGB,
     Rgba           = IGL.GL_RGBA,
+    Rgba8          = IGL.GL_RGBA8,
     Luminance      = IGL.GL_LUMINANCE,
     LuminanceAlpha = IGL.GL_LUMINANCE_ALPHA,
 }
