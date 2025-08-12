@@ -32,7 +32,9 @@ namespace LughSharp.Lugh.Graphics.Utils;
 public class PixelFormatUtils
 {
     // ----------------------------------------------------
+
     #region Methods handling pixel format in memory.
+
     // ----------------------------------------------------
 
     /// <summary>
@@ -172,9 +174,11 @@ public class PixelFormatUtils
     }
 
     #endregion Methods handling pixel format in memory.
-    
+
     // ----------------------------------------------------
+
     #region Methods handling pixel format OpenGL expects
+
     // ----------------------------------------------------
 
     /// <summary>
@@ -269,17 +273,21 @@ public class PixelFormatUtils
     }
 
     #endregion Methods handling pixel format OpenGL expects
-    
+
     // ----------------------------------------------------
+
     #region Internal pixel format
+
     // Methods handling the internal pixel format that
     // OpenGL uses to store the pixel data..
     // ----------------------------------------------------
 
     #endregion Internal pixel format
-    
+
     // ----------------------------------------------------
+
     #region Miscellaneous
+
     // ----------------------------------------------------
 
     /// <summary>
@@ -329,14 +337,55 @@ public class PixelFormatUtils
         }
     }
 
-    #endregion Miscellaneous
+    /// <summary>
+    /// Computes the alignment for a given row stride in bytes.
+    /// </summary>
+    /// <param name="rowStrideBytes">The stride of a row in bytes.</param>
+    /// <returns>
+    /// The computed alignment value, which can be 8, 4, 2, or 1 depending on the input.
+    /// </returns>
+    public static int ComputeAlignment( int rowStrideBytes )
+    {
+        if ( ( rowStrideBytes % 8 ) == 0 )
+        {
+            return 8;
+        }
+
+        if ( ( rowStrideBytes % 4 ) == 0 )
+        {
+            return 4;
+        }
+
+        return ( rowStrideBytes % 2 ) == 0 ? 2 : 1;
+    }
+
+    /// <summary>
+    /// Calculates the pixel data alignment value for OpenGL based on the given pixmap and pixel format.
+    /// </summary>
+    /// <param name="pixmap">The pixmap containing information about the pixel format. May be null.</param>
+    /// <returns>The alignment value required for OpenGL pixel data operations.</returns>
+    public static int GetAlignment( Pixmap? pixmap )
+    {
+        return pixmap?.GLPixelFormat switch
+        {
+            IGL.GL_RGB       => 1, // 3 Bpp => use 1 unless you know rowStride % 4 == 0
+            IGL.GL_RGBA      => 4, // 4 Bpp (for UNSIGNED_BYTE); otherwise compute from the actual type
+            IGL.GL_RGBA4     => 2, // 16-bit packed
+            IGL.GL_RGB565    => 2, // 16-bit packed
+            IGL.GL_ALPHA     => 1,
+            IGL.GL_LUMINANCE => 1,
+            var _            => 1,
+        };
+    }
     
+    #endregion Miscellaneous
+
     // ========================================================================
     // ========================================================================
     // ========================================================================
 
     #region Get String methods
-    
+
     /// <summary>
     /// Converts a <see cref="Gdx2DPixmap.Gdx2DPixmapFormat"/> to its string representation.
     /// </summary>
@@ -500,7 +549,7 @@ public class PixelFormatUtils
             var _ => $"UNKNOWN TARGET: {target}",
         };
     }
-    
+
     #endregion Get String methods
 }
 

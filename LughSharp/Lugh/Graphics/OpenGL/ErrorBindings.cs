@@ -33,7 +33,7 @@ public partial class GLBindings
     /// <inheritdoc />
     public GLenum GetError()
     {
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETERRORPROC >( "glGetError", out _glGetError );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETERRORPROC >( "glGetError", out _glGetError );
 
         return _glGetError();
     }
@@ -45,7 +45,7 @@ public partial class GLBindings
     /// </summary>
     public void CheckErrors()
     {
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETERRORPROC >( "glGetError", out _glGetError );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETERRORPROC >( "glGetError", out _glGetError );
 
         var error = _glGetError();
 

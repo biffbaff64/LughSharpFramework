@@ -480,6 +480,12 @@ public unsafe partial class GLBindings : IGLBindings
         _glPixelStorei( pname, param );
     }
 
+    /// <inheritdoc />
+    public void PixelStorei( PixelStoreParameter pname, GLint param )
+    {
+        PixelStorei( ( int )pname, param );
+    }
+
     // ========================================================================
 
     /// <inheritdoc />
@@ -4066,7 +4072,10 @@ public unsafe partial class GLBindings : IGLBindings
     {
         GetDelegateForFunction< PFNGLVERTEXARRAYVERTEXBUFFERPROC >( "glVertexArrayVertexBuffer", out _glVertexArrayVertexBuffer );
 
-        _glVertexArrayVertexBuffers( vaobj, first, count, buffers, offsets, strides );
+        if ( _glVertexArrayVertexBuffers != null )
+        {
+            _glVertexArrayVertexBuffers( vaobj, first, count, buffers, offsets, strides );
+        }
     }
 
     // ========================================================================
@@ -5289,6 +5298,8 @@ public unsafe partial class GLBindings : IGLBindings
 
     public GLuint[] GenFramebuffers( GLsizei n )
     {
+        GetDelegateForFunction< PFNGLGENFRAMEBUFFERSPROC >( "glGenFramebuffers", out _glGenFramebuffers );
+        
         var framebuffers = new GLuint[ n ];
 
         fixed ( GLuint* p = &framebuffers[ 0 ] )
@@ -5621,6 +5632,9 @@ public unsafe partial class GLBindings : IGLBindings
                                                   GLint basevertex )
         where T : unmanaged, IUnsignedNumber< T >
     {
+        GetDelegateForFunction< PFNGLDRAWRANGEELEMENTSBASEVERTEXPROC >( "glDrawRangeElementsBaseVertex",
+                                                                        out _glDrawRangeElementsBaseVertex );
+
         fixed ( void* p = &indices[ 0 ] )
         {
             var dataptr = ( IntPtr )p;

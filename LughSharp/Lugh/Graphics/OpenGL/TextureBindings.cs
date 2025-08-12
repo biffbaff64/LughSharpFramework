@@ -130,6 +130,8 @@ public partial class GLBindings
                 Logger.Debug( $"pixmap.GLPixelFormat: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
                 Logger.Debug( $"pixmap.GLDataType: {PixelFormatUtils.GetGLTypeName( pixmap.GLDataType )}" );
 
+                GL.PixelStorei( PixelStoreParameter.UnpackAlignment, 1 );
+                
                 if ( enabled )
                 {
                     _glTexImage2D( target,                       // int

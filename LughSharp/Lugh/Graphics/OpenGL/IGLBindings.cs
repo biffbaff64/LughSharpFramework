@@ -716,6 +716,8 @@ public partial interface IGLBindings
     /// <param name="param">Specifies the value that <paramref name="pname" /> is set to.</param>
     void PixelStorei( int pname, int param );
 
+    void PixelStorei( PixelStoreParameter pname, int param );
+
     /// <summary>
     /// Select a color buffer source for pixels.
     /// </summary>

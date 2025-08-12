@@ -201,20 +201,20 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// <summary>
     /// Binds this texture. The texture will be bound to the currently active texture unit.
     /// </summary>
-    public void Bind()
-    {
-        ActivateTexture( TextureUnit.Texture0 );
-        GL.BindTexture( GLTarget, GLTextureHandle );
-    }
+    public void Bind() => Bind( 0 );
 
     /// <summary>
     /// Binds the texture to the given texture unit. Sets the currently active texture unit.
     /// </summary>
-    /// <param name="unit"> the unit (0 to MAX_TEXTURE_UNITS).  </param>
+    /// <param name="unit">
+    /// The unit (0 to MAX_TEXTURE_UNITS), which will be added to TextureUnit.Texture0 to
+    /// create the correct texture unit.
+    /// i.e. if unit is 2, TextureUnit.Texture0 + unit is TextureUnit.Texture2.
+    /// </param>
     public void Bind( int unit )
     {
         ActivateTexture( TextureUnit.Texture0 + unit ); // IGL.GL_TEXTURE0 + unit );
-        GL.BindTexture( GLTarget, ( uint )GLTextureHandle );
+        GL.BindTexture( GLTarget, GLTextureHandle );
     }
 
     /// <summary>
@@ -392,8 +392,6 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// <param name="miplevel"></param>
     public void UploadImageData( int target, ITextureData? data, int miplevel = 0 )
     {
-        Logger.Debug( $"Uploading texture data to {PixelFormatUtils.GetGLTargetName( target )} target" );
-
         if ( data == null )
         {
             Logger.Warning( "NULL ITextureData supplied!" );
@@ -427,7 +425,6 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
         if ( data.PixelFormat != pixmap.GetColorFormat() )
         {
-            Logger.Debug( $"Converting pixmap from {pixmap.GetColorFormat()} to {data.PixelFormat}" );
             var tmp = new Pixmap( pixmap.Width, pixmap.Height, data.PixelFormat );
 
             if ( IsDrawable )
@@ -445,60 +442,45 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             disposePixmap = true;
         }
 
-        var alignment = pixmap.GLPixelFormat switch
-        {
-            IGL.GL_RGB       => 4,
-            IGL.GL_RGBA      => 4,
-            IGL.GL_RGBA4     => 4,
-            IGL.GL_RGB565    => 4,
-            IGL.GL_ALPHA     => 1,
-            IGL.GL_LUMINANCE => 1,
-            var _            => 1,
-        };
-
-        GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, alignment );
-
+        GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, PixelFormatUtils.GetAlignment( pixmap ) );
         CheckGLError( "PixelStorei" );
 
         if ( data.UseMipMaps )
         {
             MipMapGenerator.GenerateMipMap( target, pixmap, pixmap.Width, pixmap.Height );
-
             CheckGLError( "GenerateMipMap" );
         }
 
-        Logger.Debug( $"Uploading texture - Width: {pixmap.Width}, Height: {pixmap.Height}" );
-        Logger.Debug( $"Pixel Format: {pixmap.GLPixelFormat}, Internal Format: {pixmap.GLInternalPixelFormat}" );
-        Logger.Debug( $"Data Type: {pixmap.GLDataType}, Data Length: {pixmap.PixelData.Length}" );
-
-        Logger.Debug( $"Pixmap Format: {pixmap.GetColorFormat()}" );
-        Logger.Debug( $"Pixmap Dimensions: {pixmap.Width}x{pixmap.Height}" );
-        Logger.Debug( $"Pixmap GL Format: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
-        Logger.Debug( $"Pixmap GL Internal Format: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLInternalPixelFormat )}" );
-        Logger.Debug( $"Pixmap GL Data Type: {PixelFormatUtils.GetGLTypeName( pixmap.GLDataType )}" );
-        Logger.Debug( $"Pixmap Data Length: {pixmap.PixelData.Length}" );
-        Logger.Debug( $"Gdx2dPixmap created successfully?: {pixmap.Gdx2DPixmap != null}" );
-
-        var boundTexture = new int[ 1 ];
-        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTexture );
-        Logger.Debug( $"Currently bound texture before upload: {boundTexture[ 0 ]}" );
+//        Logger.Debug( $"Uploading texture - Width: {pixmap.Width}, Height: {pixmap.Height}" );
+//        Logger.Debug( $"Pixel Format: {pixmap.GLPixelFormat}, Internal Format: {pixmap.GLInternalPixelFormat}" );
+//        Logger.Debug( $"Data Type: {pixmap.GLDataType}, Data Length: {pixmap.PixelData.Length}" );
+//        Logger.Debug( $"Pixmap Format: {pixmap.GetColorFormat()}" );
+//        Logger.Debug( $"Pixmap Dimensions: {pixmap.Width}x{pixmap.Height}" );
+//        Logger.Debug( $"Pixmap GL Format: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
+//        Logger.Debug( $"Pixmap GL Internal Format: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLInternalPixelFormat )}" );
+//        Logger.Debug( $"Pixmap GL Data Type: {PixelFormatUtils.GetGLTypeName( pixmap.GLDataType )}" );
+//        Logger.Debug( $"Pixmap Data Length: {pixmap.PixelData.Length}" );
+//        Logger.Debug( $"Gdx2dPixmap created successfully?: {pixmap.Gdx2DPixmap != null}" );
+//
+//        var boundTexture = new int[ 1 ];
+//        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTexture );
+//        Logger.Debug( $"Currently bound texture before upload: {boundTexture[ 0 ]}" );
 
         GL.TexParameteri( target, IGL.GL_TEXTURE_MIN_FILTER, IGL.GL_NEAREST );
         GL.TexParameteri( target, IGL.GL_TEXTURE_MAG_FILTER, IGL.GL_NEAREST );
         GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_S, IGL.GL_CLAMP_TO_EDGE );
         GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_T, IGL.GL_CLAMP_TO_EDGE );
 
-        GL.GetIntegerv( ( int )GLParameter.ActiveTexture, out var beforeActive );
-        GL.ActiveTexture( TextureUnit.Texture0 ); // pick one explicitly
-        GL.BindTexture( TextureTarget.Texture2D, GLTextureHandle );
-        GL.PixelStorei( ( int )PixelStoreParameter.UnpackAlignment, 1 );
+//        GL.GetIntegerv( ( int )GLParameter.ActiveTexture, out var beforeActive );
+//        GL.ActiveTexture( TextureUnit.Texture0 );
+//        GL.BindTexture( TextureTarget.Texture2D, GLTextureHandle );
+//        GL.PixelStorei( ( int )PixelStoreParameter.UnpackAlignment, 1 );
 //        GL.TexImage2D( ( int )TextureTarget.Texture2D, 0, ( int )PixelInternalFormat.Rgba8, 640, 480, 0,
 //                       ( int )PixelFormat.Rgba, ( int )PixelType.UnsignedByte, pixelPtr );
-        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureWidth, out var w );
-        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureHeight, out var h );
-        GL.GetIntegerv( ( int )GLParameter.TextureBinding2D, out var afterBound );
-
-        Logger.Debug( $"Upload: prevActive={beforeActive}, boundAfterUpload={afterBound}, Level0={w}x{h}, err={GL.GetError()}" );
+//        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureWidth, out var w );
+//        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureHeight, out var h );
+//        GL.GetIntegerv( ( int )GLParameter.TextureBinding2D, out var afterBound );
+//        Logger.Debug( $"Upload: prevActive={beforeActive}, boundAfterUpload={afterBound}, Level0={w}x{h}, err={GL.GetError()}" );
 
         GL.TexImage2D( target, miplevel, 0, pixmap, false );
 
@@ -513,29 +495,29 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 //                               pixmap.PixelData,
 //                               false );
 
-        var boundTex = new int[ 1 ];
-        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTex );
-        Logger.Debug( $"Currently bound texture before query: {boundTex[ 0 ]}" );
+//        var boundTex = new int[ 1 ];
+//        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTex );
+//        Logger.Debug( $"Currently bound texture before query: {boundTex[ 0 ]}" );
 
-        if ( boundTex[ 0 ] == 0 )
-        {
-            Logger.Debug( "No texture bound when trying to query dimensions!" );
+//        if ( boundTex[ 0 ] == 0 )
+//        {
+//            Logger.Debug( "No texture bound when trying to query dimensions!" );
 
-            return;
-        }
+//            return;
+//        }
 
-        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTexture );
-        Logger.Debug( $"Currently bound texture after upload: {boundTexture[ 0 ]}" );
+//        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTexture );
+//        Logger.Debug( $"Currently bound texture after upload: {boundTexture[ 0 ]}" );
 
         // Get texture parameters to verify the dimensions were set
-        int[] width  = new int[ 1 ];
-        int[] height = new int[ 1 ];
-        GL.GetTexLevelParameteriv( target, 0, IGL.GL_TEXTURE_WIDTH, ref width );
-        GL.GetTexLevelParameteriv( target, 0, IGL.GL_TEXTURE_HEIGHT, ref height );
-        Logger.Debug( $"Texture dimensions immediately after upload: {width[ 0 ]}x{height[ 0 ]}" );
+//        int[] width  = new int[ 1 ];
+//        int[] height = new int[ 1 ];
+//        GL.GetTexLevelParameteriv( target, 0, IGL.GL_TEXTURE_WIDTH, ref width );
+//        GL.GetTexLevelParameteriv( target, 0, IGL.GL_TEXTURE_HEIGHT, ref height );
+//        Logger.Debug( $"Texture dimensions immediately after upload: {width[ 0 ]}x{height[ 0 ]}" );
 
-        var error = GL.GetError();
-        Logger.Debug( $"GL Error after TexImage2D: {error}" );
+//        var error = GL.GetError();
+//        Logger.Debug( $"GL Error after TexImage2D: {error}" );
 
         if ( disposePixmap )
         {

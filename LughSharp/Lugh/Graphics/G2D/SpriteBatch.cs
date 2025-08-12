@@ -58,6 +58,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     public int     BlendSrcFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusSrcAlpha;
     public int     BlendDstFuncAlpha { get; private set; } = ( int )BlendMode.OneMinusDstAlpha;
     public float[] Vertices          { get; set; }         = [ ];
+    public int     TextureOffset     { get; set; }         = 0;
 
     public bool IsDrawing => CurrentBatchState == BatchState.Drawing;
 
@@ -75,7 +76,6 @@ public partial class SpriteBatch : IBatch, IDisposable
     private const int MAX_VERTEX_INDEX    = 32767; //
     private const int MAX_SPRITES         = 8191;  //
     private const int MAX_QUADS           = 100;   //
-    private const int TEXTURE_UNIT        = 1;
 
     // ========================================================================
 
@@ -99,6 +99,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     private int _maxTextureUnits;
     private int _maxVertices;
     private int _combinedMatrixLocation;
+    private int _textureLocation;
 
     private bool _ownsShader;
     private bool _originalDepthMask;
@@ -245,6 +246,8 @@ public partial class SpriteBatch : IBatch, IDisposable
         // Get the location of the combined matrix uniform in the shader program.
         // This uniform will be used to pass the combined transformation matrix to the shader.
         GetCombinedMatrixUniformLocation();
+
+        GetTextureUniformLocation();
     }
 
     /// <summary>
@@ -369,6 +372,8 @@ public partial class SpriteBatch : IBatch, IDisposable
         // Update the maximum number of sprites in a batch.
         MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
 
+        Logger.Debug( $"MaxSpritesInBatch: {MaxSpritesInBatch}" );
+        
         // Check if the texture is null.
         if ( LastTexture == null )
         {
@@ -382,11 +387,11 @@ public partial class SpriteBatch : IBatch, IDisposable
             return;
         }
 
-        LastTexture.Bind();
-
         // Bind the texture to the current texture unit.
         GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
-
+        LastTexture.Bind();
+        GL.Uniform1i( _textureLocation, _currentTextureIndex );
+        
         _mesh?.SetVertices( Vertices, 0, Idx );
         _mesh!.IndicesBuffer.Position = 0;
         _mesh!.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
@@ -411,7 +416,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         _mesh?.Render( _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * VERTICES_PER_SPRITE );
 
         // Update the current texture index.
-        _currentTextureIndex = ( _currentTextureIndex + 1 ) % _maxTextureUnits;
+//        _currentTextureIndex = ( _currentTextureIndex + 1 ) % _maxTextureUnits;
     }
 
     // ========================================================================
@@ -694,7 +699,7 @@ public partial class SpriteBatch : IBatch, IDisposable
 
     /// <summary>
     /// Fetches the location of the CombinedMatrix uniform in the shader and
-    /// stores it in <see cref="_combinedMatrixLocation" />
+    /// stores it in <see cref="_combinedMatrixLocation" /> for subsequent use.
     /// </summary>
     private void GetCombinedMatrixUniformLocation()
     {
@@ -704,6 +709,18 @@ public partial class SpriteBatch : IBatch, IDisposable
                                                          "u_combinedMatrix" );
     }
 
+    /// <summary>
+    /// Retrieves the uniform location of the texture in the shader program and
+    /// stores it in <see cref="_textureLocation"/> for subsequent use.
+    /// </summary>
+    private void GetTextureUniformLocation()
+    {
+        GdxRuntimeException.ThrowIfNull( _shader );
+
+        _textureLocation = GL.GetUniformLocation( _shader.ShaderProgramHandle,
+                                                         "u_texture" );
+    }
+    
     /// <summary>
     /// Returns a new instance of the default shader used by SpriteBatch when
     /// no shader is specified.
@@ -732,14 +749,15 @@ public partial class SpriteBatch : IBatch, IDisposable
             Flush();
         }
 
-        GL.ActiveTexture( TextureUnit.Texture0 + TEXTURE_UNIT );
+        GL.ActiveTexture( TextureUnit.Texture0 + TextureOffset );
         texture.Bind();
+        GL.Uniform1i( _textureLocation, TextureOffset );
 
-//        var width  = new int[ 1 ];
-//        var height = new int[ 1 ];
-//        GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_WIDTH, ref width );
-//        GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_HEIGHT, ref height );
-//        Logger.Debug( $"Texture dimensions in GPU: {width[ 0 ]}x{height[ 0 ]}" );
+        var width  = new int[ 1 ];
+        var height = new int[ 1 ];
+        GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_WIDTH, ref width );
+        GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_HEIGHT, ref height );
+        Logger.Debug( $"Texture dimensions in GPU: {width[ 0 ]}x{height[ 0 ]}" );
 
         LastTexture            = texture;
         _lastSuccessfulTexture = LastTexture;
@@ -844,7 +862,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             }
 
             _shader.SetUniformMatrix( "u_combinedMatrix", CombinedMatrix );
-            _shader.SetUniformi( "u_texture", TEXTURE_UNIT );
+            _shader.SetUniformi( "u_texture", 0 );
         }
     }
 
@@ -1084,20 +1102,6 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="flipY">Indicates whether to flip the texture vertically.</param>
     public virtual void Draw( Texture texture, GRect region, GRect src, bool flipX = false, bool flipY = false )
     {
-        #if SPRITEBATCH_DEBUG
-        unsafe
-        {
-            var currentProgram = new int[ 1 ];
-
-            fixed ( int* program = &currentProgram[ 0 ] )
-            {
-                GL.GetIntegerv( ( int )GLParameter.CurrentProgram, program );
-                Logger.Debug( $"Current shader program: {*program}" );
-                Logger.Debug( $"Our shader program: {Shader?.ShaderProgramHandle}" );
-            }
-        }
-        #endif
-
         Validate( texture );
 
         if ( texture != LastTexture )
@@ -1210,11 +1214,6 @@ public partial class SpriteBatch : IBatch, IDisposable
 
             return;
         }
-
-//        Logger.Debug( $"Drawing texture: {texture.Name}" );
-//        Logger.Debug( $"Texture handle: {texture.GLTextureHandle}" );
-//        Logger.Debug( $"IsDrawing: {IsDrawing}" );
-//        Logger.Debug( $"Current Shader: {Shader?.ShaderProgramHandle ?? 0}" );
 
         Draw( texture, x, y, texture.Width, texture.Height );
     }

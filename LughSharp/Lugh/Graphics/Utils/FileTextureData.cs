@@ -116,7 +116,7 @@ public class FileTextureData : ITextureData
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    public virtual Pixmap? ConsumePixmap()
+    public virtual Pixmap ConsumePixmap()
     {
         if ( !IsPrepared )
         {
