@@ -327,7 +327,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             return AnisotropicFilterLevel;
         }
 
-        GL.TexParameterf( IGL.GL_TEXTURE_2D, IGL.GL_TEXTURE_MAX_ANISOTROPY_EXT, level );
+        GL.TexParameterf( GLTarget, IGL.GL_TEXTURE_MAX_ANISOTROPY_EXT, level );
 
         return AnisotropicFilterLevel = level;
     }
@@ -355,7 +355,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
         Bind();
 
-        GL.TexParameterf( IGL.GL_TEXTURE_2D, IGL.GL_TEXTURE_MAX_ANISOTROPY_EXT, level );
+        GL.TexParameterf( GLTarget, IGL.GL_TEXTURE_MAX_ANISOTROPY_EXT, level );
 
         return AnisotropicFilterLevel = level;
     }
@@ -404,9 +404,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             data.Prepare();
         }
 
-        var type = data.TextureDataType;
-
-        if ( type == ITextureData.TextureType.Custom )
+        if ( data.TextureDataType == ITextureData.TextureType.Custom )
         {
             data.ConsumeCustomData( target );
 
@@ -414,7 +412,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
         }
 
         var pixmap        = data.ConsumePixmap();
-        var disposePixmap = data.ShouldDisposePixmap();
+        var shouldDispose = data.ShouldDisposePixmap();
 
         if ( pixmap?.PixelData == null )
         {
@@ -439,11 +437,11 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             }
 
             pixmap        = tmp;
-            disposePixmap = true;
+            shouldDispose = true;
         }
 
-        GL.PixelStorei( IGL.GL_UNPACK_ALIGNMENT, PixelFormatUtils.GetAlignment( pixmap ) );
-        CheckGLError( "PixelStorei" );
+        GL.SetGLUnpackAlignment( pixmap, PixelFormatUtils.GetAlignment( pixmap ) );
+        CheckGLError( "SetGLUnpackAlignment" );
 
         if ( data.UseMipMaps )
         {
@@ -451,75 +449,14 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             CheckGLError( "GenerateMipMap" );
         }
 
-//        Logger.Debug( $"Uploading texture - Width: {pixmap.Width}, Height: {pixmap.Height}" );
-//        Logger.Debug( $"Pixel Format: {pixmap.GLPixelFormat}, Internal Format: {pixmap.GLInternalPixelFormat}" );
-//        Logger.Debug( $"Data Type: {pixmap.GLDataType}, Data Length: {pixmap.PixelData.Length}" );
-//        Logger.Debug( $"Pixmap Format: {pixmap.GetColorFormat()}" );
-//        Logger.Debug( $"Pixmap Dimensions: {pixmap.Width}x{pixmap.Height}" );
-//        Logger.Debug( $"Pixmap GL Format: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLPixelFormat )}" );
-//        Logger.Debug( $"Pixmap GL Internal Format: {PixelFormatUtils.GetGLPixelFormatName( pixmap.GLInternalPixelFormat )}" );
-//        Logger.Debug( $"Pixmap GL Data Type: {PixelFormatUtils.GetGLTypeName( pixmap.GLDataType )}" );
-//        Logger.Debug( $"Pixmap Data Length: {pixmap.PixelData.Length}" );
-//        Logger.Debug( $"Gdx2dPixmap created successfully?: {pixmap.Gdx2DPixmap != null}" );
-//
-//        var boundTexture = new int[ 1 ];
-//        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTexture );
-//        Logger.Debug( $"Currently bound texture before upload: {boundTexture[ 0 ]}" );
-
         GL.TexParameteri( target, IGL.GL_TEXTURE_MIN_FILTER, IGL.GL_NEAREST );
         GL.TexParameteri( target, IGL.GL_TEXTURE_MAG_FILTER, IGL.GL_NEAREST );
         GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_S, IGL.GL_CLAMP_TO_EDGE );
         GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_T, IGL.GL_CLAMP_TO_EDGE );
 
-//        GL.GetIntegerv( ( int )GLParameter.ActiveTexture, out var beforeActive );
-//        GL.ActiveTexture( TextureUnit.Texture0 );
-//        GL.BindTexture( TextureTarget.Texture2D, GLTextureHandle );
-//        GL.PixelStorei( ( int )PixelStoreParameter.UnpackAlignment, 1 );
-//        GL.TexImage2D( ( int )TextureTarget.Texture2D, 0, ( int )PixelInternalFormat.Rgba8, 640, 480, 0,
-//                       ( int )PixelFormat.Rgba, ( int )PixelType.UnsignedByte, pixelPtr );
-//        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureWidth, out var w );
-//        GL.GetTexLevelParameteriv( TextureTarget.Texture2D, 0, TextureParameter.TextureHeight, out var h );
-//        GL.GetIntegerv( ( int )GLParameter.TextureBinding2D, out var afterBound );
-//        Logger.Debug( $"Upload: prevActive={beforeActive}, boundAfterUpload={afterBound}, Level0={w}x{h}, err={GL.GetError()}" );
-
         GL.TexImage2D( target, miplevel, 0, pixmap, false );
 
-//        GL.TexImage2D< byte >( target,
-//                               miplevel,
-//                               pixmap.GLInternalPixelFormat,
-//                               pixmap.Width,
-//                               pixmap.Height,
-//                               0,
-//                               pixmap.GLPixelFormat,
-//                               pixmap.GLDataType,
-//                               pixmap.PixelData,
-//                               false );
-
-//        var boundTex = new int[ 1 ];
-//        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTex );
-//        Logger.Debug( $"Currently bound texture before query: {boundTex[ 0 ]}" );
-
-//        if ( boundTex[ 0 ] == 0 )
-//        {
-//            Logger.Debug( "No texture bound when trying to query dimensions!" );
-
-//            return;
-//        }
-
-//        GL.GetIntegerv( IGL.GL_TEXTURE_BINDING_2D, ref boundTexture );
-//        Logger.Debug( $"Currently bound texture after upload: {boundTexture[ 0 ]}" );
-
-        // Get texture parameters to verify the dimensions were set
-//        int[] width  = new int[ 1 ];
-//        int[] height = new int[ 1 ];
-//        GL.GetTexLevelParameteriv( target, 0, IGL.GL_TEXTURE_WIDTH, ref width );
-//        GL.GetTexLevelParameteriv( target, 0, IGL.GL_TEXTURE_HEIGHT, ref height );
-//        Logger.Debug( $"Texture dimensions immediately after upload: {width[ 0 ]}x{height[ 0 ]}" );
-
-//        var error = GL.GetError();
-//        Logger.Debug( $"GL Error after TexImage2D: {error}" );
-
-        if ( disposePixmap )
+        if ( shouldDispose )
         {
             pixmap.Dispose();
         }

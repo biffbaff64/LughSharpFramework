@@ -63,6 +63,11 @@ public interface ITextureData : IManaged
     bool IsPrepared { get; set; }
 
     /// <summary>
+    /// 
+    /// </summary>
+    bool IsOwned { get; set; }
+    
+    /// <summary>
     /// Returns whether to generate mipmaps or not.
     /// </summary>
     bool UseMipMaps { get; set; }

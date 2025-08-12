@@ -38,21 +38,22 @@ public class FileTextureData : ITextureData
 {
     public FileInfo File { get; set; }
 
-    /// <returns> the width of the pixel data </returns>
+    /// <inheritdoc/>
     public int Width { get; set; } = 0;
 
-    /// <returns> the height of the pixel data </returns>
+    /// <inheritdoc/>
     public int Height { get; set; } = 0;
 
-    /// <returns> whether the TextureData is prepared or not.</returns>
+    /// <inheritdoc/>
     public bool IsPrepared { get; set; }
 
-    /// <returns> whether to generate mipmaps or not. </returns>
+    /// <inheritdoc />
+    public bool IsOwned { get; set; }
+
+    /// <inheritdoc/>
     public bool UseMipMaps { get; set; }
 
-    /// <summary>
-    /// Returns the <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> of the pixel data.
-    /// </summary>
+    /// <inheritdoc/>
     public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; }
 
     // ========================================================================
@@ -79,7 +80,15 @@ public class FileTextureData : ITextureData
             _pixmap.Dispose();
             _pixmap = newPixmap;
         }
+
+        IsOwned = false;
     }
+
+    /// <inheritdoc />
+    public virtual bool IsManaged => true;
+
+    /// <returns> the <see cref="ITextureData.TextureDataType" /></returns>
+    public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap" /> or
@@ -90,18 +99,40 @@ public class FileTextureData : ITextureData
     {
         if ( IsPrepared )
         {
-            Logger.Warning( "prepare() must not be called on a PixmapTextureData" +
-                            " instance as it is already prepared." );
-
-            return;
+            throw new InvalidOperationException( "Texture is already prepared." );
         }
 
         if ( _pixmap == null )
         {
-            _pixmap = File.Extension.Equals( "cim" ) ? PixmapIO.ReadCIM( File ) : new Pixmap( File );
+            var ext   = File.Extension ?? string.Empty;
+            var isCim = ext.Equals( "cim", StringComparison.OrdinalIgnoreCase );
 
-            Width  = _pixmap.Width;
-            Height = _pixmap.Height;
+            _pixmap = isCim ? PixmapIO.ReadCIM( File ) : new Pixmap( File );
+            IsOwned = true;
+        }
+
+        // Resolve basic metadata from the pixmap
+        Width  = _pixmap.Width;
+        Height = _pixmap.Height;
+
+        if ( ( Width <= 0 ) || ( Height <= 0 ) )
+        {
+            throw new InvalidOperationException( "Pixmap has invalid dimensions." );
+        }
+
+        // Resolve/validate pixel format
+        if ( PixelFormat == Gdx2DPixmap.Gdx2DPixmapFormat.Default )
+        {
+            PixelFormat = _pixmap.GetColorFormat();
+        }
+        else if ( PixelFormat != _pixmap.GetColorFormat() )
+        {
+            Logger.Debug( $"Requested pixel format {PixelFormat} differs from pixmap format {_pixmap.GetColorFormat()}." );
+            Logger.Debug( $"Converting pixmap format from {_pixmap.GetColorFormat()} to {PixelFormat}." );
+            
+            _pixmap.Gdx2DPixmap?.ConvertPixelFormatTo( PixelFormat );
+
+            // or... throw new NotSupportedException( $"Requested pixel format {PixelFormat} differs from pixmap format {_pixmap.GetColorFormat()}." );
         }
 
         IsPrepared = true;
@@ -123,16 +154,17 @@ public class FileTextureData : ITextureData
             throw new GdxRuntimeException( "Call prepare() before calling ConsumePixmap()" );
         }
 
-        IsPrepared = false;
-
         var pixmap = _pixmap;
-        _pixmap = null;
 
         if ( pixmap == null )
         {
             throw new GdxRuntimeException( "ConsumePixmap() resulted in a null Pixmap!" );
         }
 
+        // Transfer ownership to caller and clear internal reference
+        _pixmap = null;
+        IsPrepared = false;
+        
         return pixmap;
     }
 
@@ -142,7 +174,7 @@ public class FileTextureData : ITextureData
     /// </returns>
     public virtual bool ShouldDisposePixmap()
     {
-        return true;
+        return IsOwned;
     }
 
     /// <summary>
@@ -158,10 +190,4 @@ public class FileTextureData : ITextureData
     {
         throw new GdxRuntimeException( "This TextureData implementation does not upload data itself" );
     }
-
-    /// <inheritdoc />
-    public virtual bool IsManaged => true;
-
-    /// <returns> the <see cref="ITextureData.TextureDataType" /></returns>
-    public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
 }

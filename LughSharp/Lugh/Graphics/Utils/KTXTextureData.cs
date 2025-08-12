@@ -60,6 +60,9 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// <returns> whether to generate mipmaps or not. </returns>
     public bool UseMipMaps { get; set; } = useMipMaps;
 
+    /// <inheritdoc />
+    public bool IsOwned { get; set; }
+
     // ========================================================================
     
     private const int GL_TEXTURE_1D           = 0x1234;

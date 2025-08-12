@@ -38,6 +38,9 @@ public class PixmapTextureData : ITextureData
     public bool                          UseMipMaps    { get; set; }
     public bool                          IsPrepared    { get; set; } = true;
 
+    /// <inheritdoc />
+    public bool IsOwned { get; set; }
+
     // ========================================================================
 
     public PixmapTextureData( Pixmap pixmap,

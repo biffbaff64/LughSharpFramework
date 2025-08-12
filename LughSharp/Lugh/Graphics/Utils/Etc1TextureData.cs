@@ -67,6 +67,9 @@ public class Etc1TextureData : ITextureData
     public bool IsPrepared { get; set; }
 
     /// <inheritdoc />
+    public bool IsOwned { get; set; }
+
+    /// <inheritdoc />
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
     /// <inheritdoc />

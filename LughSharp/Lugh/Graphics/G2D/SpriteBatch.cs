@@ -372,8 +372,6 @@ public partial class SpriteBatch : IBatch, IDisposable
         // Update the maximum number of sprites in a batch.
         MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
 
-        Logger.Debug( $"MaxSpritesInBatch: {MaxSpritesInBatch}" );
-        
         // Check if the texture is null.
         if ( LastTexture == null )
         {
@@ -752,12 +750,6 @@ public partial class SpriteBatch : IBatch, IDisposable
         GL.ActiveTexture( TextureUnit.Texture0 + TextureOffset );
         texture.Bind();
         GL.Uniform1i( _textureLocation, TextureOffset );
-
-        var width  = new int[ 1 ];
-        var height = new int[ 1 ];
-        GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_WIDTH, ref width );
-        GL.GetTexLevelParameteriv( IGL.GL_TEXTURE_2D, 0, IGL.GL_TEXTURE_HEIGHT, ref height );
-        Logger.Debug( $"Texture dimensions in GPU: {width[ 0 ]}x{height[ 0 ]}" );
 
         LastTexture            = texture;
         _lastSuccessfulTexture = LastTexture;

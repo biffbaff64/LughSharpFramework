@@ -337,46 +337,46 @@ public static class Logger
     /// Writes text to the logFile, if it exists.
     /// </summary>
     /// <param name="text">String holding the text to write.</param>
+    [Conditional( "DEBUG" )]
     public static void WriteToFile( string text )
     {
         var filePath = _debugFilePath + _debugFileName;
 
         // Check if the file exists before attempting to write
-        if ( File.Exists( filePath ) )
+        if ( !File.Exists( filePath ) )
         {
-            try
-            {
-                // Determine whether to add a new line based on the content itself
-                var contentToWrite = text;
+            OpenDebugFile( filePath, false );
+        }
 
-                if ( !text.EndsWith( Environment.NewLine ) )
-                {
-                    contentToWrite += Environment.NewLine;
-                }
+        try
+        {
+            // Determine whether to add a new line based on the content itself
+            var contentToWrite = text;
 
-                using ( _streamWriter = new StreamWriter( filePath, true ) )
-                {
-                    _streamWriter.Write( contentToWrite );
-                }
-            }
-            catch ( UnauthorizedAccessException ex )
+            if ( !text.EndsWith( Environment.NewLine ) )
             {
-                Console.WriteLine( $"Error: Access to the file '{filePath}' is denied. {ex.Message}" );
+                contentToWrite += Environment.NewLine;
             }
-            catch ( Exception ex )
+
+            using ( _streamWriter = new StreamWriter( filePath, true ) )
             {
-                Console.WriteLine( $"An unexpected error occurred while writing to file '{filePath}'. {ex.Message}" );
+                _streamWriter.Write( contentToWrite );
             }
         }
-        else
+        catch ( UnauthorizedAccessException ex )
         {
-            Console.WriteLine( $"File does not exist at '{filePath}'. Content not written." );
+            Console.WriteLine( $"Error: Access to the file '{filePath}' is denied. {ex.Message}" );
+        }
+        catch ( Exception ex )
+        {
+            Console.WriteLine( $"An unexpected error occurred while writing to file '{filePath}'. {ex.Message}" );
         }
     }
 
     /// <summary>
     /// Closes the debug file if it is open, releasing any associated resources.
     /// </summary>
+    [Conditional( "DEBUG" )]
     public static void CloseDebugFile()
     {
         _streamWriter?.Close();

@@ -39,6 +39,9 @@ public class MipMapTextureData : ITextureData
     public int  Width      { get; set; }
     public int  Height     { get; set; }
 
+    /// <inheritdoc />
+    public bool IsOwned { get; set; }
+
     public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; } = Gdx2DPixmap.Gdx2DPixmapFormat.Alpha;
 
     // ========================================================================

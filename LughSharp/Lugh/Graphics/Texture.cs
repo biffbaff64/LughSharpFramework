@@ -78,6 +78,7 @@ public class Texture : GLTexture, IManaged
     private readonly Dictionary< IApplication, List< Texture > > _managedTextures = [ ];
 
     private string? _name;
+    private bool    _isUploaded = false;
 
     // ========================================================================
     // ========================================================================
@@ -146,8 +147,13 @@ public class Texture : GLTexture, IManaged
     /// <param name="width"> The width in pixels. </param>
     /// <param name="height"> The Height in pixels. </param>
     /// <param name="format"> The pixmap <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> </param>
-    public Texture( int width, int height, Gdx2DPixmap.Gdx2DPixmapFormat format )
-        : this( new PixmapTextureData( new Pixmap( width, height, format ), null, false, true ) )
+    /// <param name="managed"></param>
+    public Texture( int width, int height, Gdx2DPixmap.Gdx2DPixmapFormat format, bool managed = false )
+        : this( new PixmapTextureData( pixmap: new Pixmap( width, height, format ),
+                                       format: null,
+                                       useMipMaps: false,
+                                       disposePixmap: true,
+                                       managed: managed ) )
     {
     }
 
@@ -173,8 +179,6 @@ public class Texture : GLTexture, IManaged
 
         TextureData = data;
 
-        Load( data );
-
         if ( data.IsManaged )
         {
             AddManagedTexture( Api.App, this );
@@ -182,13 +186,45 @@ public class Texture : GLTexture, IManaged
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    public void Upload()
+    {
+        if ( _isUploaded )
+        {
+            return;
+        }
+
+        if ( TextureData is { IsPrepared: false } )
+        {
+            // CPU-side decode (safe if already prepared)
+            TextureData.Prepare();
+        }
+        
+        Load( TextureData );
+        
+        _isUploaded = true;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void EnsureUploaded()
+    {
+        if ( !_isUploaded )
+        {
+            Load( TextureData );
+        }
+    }
+    
+    /// <summary>
     /// Load the given <see cref="ITextureData" /> data into this Texture.
     /// </summary>
     /// <param name="data"></param>
     public void Load( ITextureData data )
     {
         Logger.Checkpoint();
-        
+
         if ( data.IsManaged != TextureData.IsManaged )
         {
             throw new GdxRuntimeException( "New data must have the same managed status as the old data" );
@@ -203,15 +239,11 @@ public class Texture : GLTexture, IManaged
 
         Bind();
 
-        UploadImageData( IGL.GL_TEXTURE_2D, data );
+        UploadImageData( GLTarget, data );
 
-//        TextureUtils.DebugTexture2D( GLTextureHandle );
-        
         UnsafeSetFilter( MinFilter, MagFilter, true );
         UnsafeSetWrap( UWrap, VWrap, true );
         UnsafeSetAnisotropicFilter( AnisotropicFilterLevel, true );
-
-        GL.BindTexture( GLTarget, 0 );
     }
 
     /// <summary>
@@ -455,7 +487,7 @@ public class Texture : GLTexture, IManaged
     }
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     protected override void Dispose( bool disposing )
     {
@@ -463,7 +495,7 @@ public class Texture : GLTexture, IManaged
         {
             return;
         }
-        
+
         if ( disposing )
         {
             // this is a hack.
@@ -483,7 +515,7 @@ public class Texture : GLTexture, IManaged
                 _managedTextures[ Api.App ].Remove( this );
             }
         }
-        
+
         IsDisposed = true;
     }
 

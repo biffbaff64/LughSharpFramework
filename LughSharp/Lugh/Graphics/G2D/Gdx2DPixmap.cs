@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Utils;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -194,6 +195,12 @@ public partial class Gdx2DPixmap : Image, IDisposable
         SafeConstructorInit( width, height, bitDepth );
         SafeInitPixmapDataType( width, height, format );
 
+        Logger.Debug( $"Width: {width}" );
+        Logger.Debug( $"Height: {height}" );
+        Logger.Debug( $"Format: {format}" );
+        Logger.Debug( $"BitDepth: {bitDepth}" );
+        Logger.Debug( $"Pixels data length: {_pixmapDataType.Pixels.Length}" );
+
         PixmapBuffer.PutBytes( _pixmapDataType.Pixels );
     }
 
@@ -288,7 +295,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// Converts this Pixmaps <see cref="ColorType" /> to the requested format.
     /// </summary>
     /// <param name="requestedFormat"> The new Format. </param>
-    private void ConvertPixelFormatTo( Gdx2DPixmapFormat requestedFormat )
+    public void ConvertPixelFormatTo( Gdx2DPixmapFormat requestedFormat )
     {
         // Double-check conditions
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
@@ -322,15 +329,15 @@ public partial class Gdx2DPixmap : Image, IDisposable
     {
         return 0;
     }
-    
+
     public override void SetPixel( int x, int y, Color color )
     {
     }
-    
+
     public override void SetPixel( int x, int y, int color )
     {
     }
-    
+
     // ========================================================================
     // ========================================================================
 

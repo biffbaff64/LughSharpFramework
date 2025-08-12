@@ -47,6 +47,9 @@ public class GLOnlyTextureData : ITextureData
     public bool                           IsPrepared     { get; set; } = false;
     public bool                           UseMipMaps     { get; set; }
 
+    /// <inheritdoc />
+    public bool IsOwned { get; set; }
+
     // ========================================================================
 
     /// <summary>

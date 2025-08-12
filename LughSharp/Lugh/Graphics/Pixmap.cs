@@ -59,6 +59,8 @@ public class Pixmap : IDisposable
     public Color        Color       { get; set; } = Color.Clear; // 
     public Gdx2DPixmap? Gdx2DPixmap { get; set; }                // 
 
+    // ========================================================================
+    
     /// <summary>
     /// Returns the width of the Pixmap in pixels.
     /// </summary>
@@ -117,7 +119,9 @@ public class Pixmap : IDisposable
     {
         Gdx2DPixmap = new Gdx2DPixmap( width, height, format );
 
-        SetColor( Color.Red );
+        SetColor( Color.White );
+        SetAlpha( 1.0f );
+
         FillWithCurrentColor();
     }
 
@@ -365,6 +369,17 @@ public class Pixmap : IDisposable
         Color = new Color( r, g, b, a );
     }
 
+    /// <summary>
+    /// Sets the alpha (transparency) component of the Pixmap's current drawing color.
+    /// </summary>
+    /// <param name="alpha">
+    /// The alpha value to set, ranging from 0.0 (completely transparent) to 1.0 (fully opaque).
+    /// </param>
+    public void SetAlpha( float alpha )
+    {
+        Color = new Color( Color.R, Color.G, Color.B, alpha );
+    }
+    
     /// <summary>
     /// Fills the complete bitmap with the currently set color.
     /// </summary>
