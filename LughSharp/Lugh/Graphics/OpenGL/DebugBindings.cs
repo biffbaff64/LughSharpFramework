@@ -41,14 +41,14 @@ public unsafe partial class GLBindings
 {
     public void DebugMessageControl( GLenum source, GLenum type, GLenum severity, GLsizei count, GLuint* ids, GLboolean enabled )
     {
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGECONTROLPROC >( "glDebugMessageControl", out _glDebugMessageControl );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGECONTROLPROC >( "glDebugMessageControl", out _glDebugMessageControl );
 
         _glDebugMessageControl( source, type, severity, count, ids, enabled );
     }
 
     public void DebugMessageControl( GLenum source, GLenum type, GLenum severity, GLuint[] ids, GLboolean enabled )
     {
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGECONTROLPROC >( "glDebugMessageControl", out _glDebugMessageControl );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGECONTROLPROC >( "glDebugMessageControl", out _glDebugMessageControl );
 
         fixed ( GLuint* pIds = ids )
         {
@@ -60,7 +60,7 @@ public unsafe partial class GLBindings
 
     public void DebugMessageInsert( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar* buf )
     {
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGEINSERTPROC >( "glDebugMessageInsert", out _glDebugMessageInsert );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGEINSERTPROC >( "glDebugMessageInsert", out _glDebugMessageInsert );
 
         _glDebugMessageInsert( source, type, id, severity, length, buf );
     }
@@ -69,7 +69,7 @@ public unsafe partial class GLBindings
     {
         var bufBytes = Encoding.UTF8.GetBytes( buf );
 
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGEINSERTPROC >( "glDebugMessageInsert", out _glDebugMessageInsert );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGEINSERTPROC >( "glDebugMessageInsert", out _glDebugMessageInsert );
 
         fixed ( GLchar* pBufBytes = bufBytes )
         {
@@ -81,20 +81,21 @@ public unsafe partial class GLBindings
 
     public void DebugMessageCallback( GLBindings.GLDEBUGPROC callback, void* userParam )
     {
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGECALLBACKPROC >( "glDebugMessageCallback", out _glDebugMessageCallback );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGECALLBACKPROC >( "glDebugMessageCallback", out _glDebugMessageCallback );
 
         _glDebugMessageCallback( callback, ( IntPtr )userParam );
     }
 
     public void DebugMessageCallback( GLBindings.GLDEBUGPROCSAFE callback, void* userParam )
     {
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGECALLBACKPROC >( "glDebugMessageCallback", out _glDebugMessageCallback );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLDEBUGMESSAGECALLBACKPROC >( "glDebugMessageCallback", out _glDebugMessageCallback );
 
         _glDebugMessageCallback( CallbackUnsafe, ( IntPtr )userParam );
 
         return;
 
-        void CallbackUnsafe( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, GLchar* message, IntPtr param )
+        void CallbackUnsafe( GLenum source, GLenum type, GLuint id, GLenum severity,
+                             GLsizei length, GLchar* message, IntPtr param )
         {
             var messageString = new string( ( GLbyte* )message, 0, length, Encoding.UTF8 );
 
@@ -113,7 +114,7 @@ public unsafe partial class GLBindings
                                       GLsizei* lengths,
                                       GLchar* messageLog )
     {
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETDEBUGMESSAGELOGPROC >( "glGetDebugMessageLog", out _glGetDebugMessageLog );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETDEBUGMESSAGELOGPROC >( "glGetDebugMessageLog", out _glGetDebugMessageLog );
 
         return _glGetDebugMessageLog( count, bufsize, sources, types, ids, severities, lengths, messageLog );
     }
@@ -134,7 +135,7 @@ public unsafe partial class GLBindings
         var messageLogBytes = new GLchar[ bufSize ];
         var lengths         = new GLsizei[ count ];
 
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETDEBUGMESSAGELOGPROC >( "glGetDebugMessageLog", out _glGetDebugMessageLog );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETDEBUGMESSAGELOGPROC >( "glGetDebugMessageLog", out _glGetDebugMessageLog );
 
         fixed ( GLenum* pSources = &sources[ 0 ] )
         fixed ( GLenum* pTypes = &types[ 0 ] )
@@ -168,7 +169,7 @@ public unsafe partial class GLBindings
 
     public void PushDebugGroup( GLenum source, GLuint id, GLsizei length, GLchar* message )
     {
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLPUSHDEBUGGROUPPROC >( "glPushDebugGroup", out _glPushDebugGroup );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLPUSHDEBUGGROUPPROC >( "glPushDebugGroup", out _glPushDebugGroup );
 
         _glPushDebugGroup( source, id, length, message );
     }
@@ -177,7 +178,7 @@ public unsafe partial class GLBindings
     {
         var messageBytes = Encoding.UTF8.GetBytes( message );
 
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLPUSHDEBUGGROUPPROC >( "glPushDebugGroup", out _glPushDebugGroup );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLPUSHDEBUGGROUPPROC >( "glPushDebugGroup", out _glPushDebugGroup );
 
         fixed ( GLchar* pMessageBytes = messageBytes )
         {
@@ -189,7 +190,7 @@ public unsafe partial class GLBindings
 
     public void PopDebugGroup()
     {
-        OpenGL.GLBindings.GetDelegateForFunction< OpenGL.GLBindings.PFNGLPOPDEBUGGROUPPROC >( "glPopDebugGroup", out _glPopDebugGroup );
+        GetDelegateForFunction< OpenGL.GLBindings.PFNGLPOPDEBUGGROUPPROC >( "glPopDebugGroup", out _glPopDebugGroup );
 
         _glPopDebugGroup();
     }

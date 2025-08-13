@@ -193,27 +193,29 @@ public partial class SpriteBatch
 
     // ========================================================================
 
-    public const string DEFAULT_VERTEX_SHADER = "#version 450 core\n" +
-                                                "layout (location = 0) in vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
-                                                "layout (location = 1) in vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
-                                                "layout (location = 2) in vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
-                                                "uniform mat4 u_combinedMatrix;\n" +
-                                                "layout (location = 0) out vec4 v_color;\n" +
-                                                "layout (location = 1) out vec2 v_texCoords;\n" +
-                                                "void main() {\n" +
-                                                "    v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
-                                                "    v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
-                                                "    gl_Position = u_combinedMatrix * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
-                                                "}\n";
+    public const string DEFAULT_VERTEX_SHADER =
+        "#version 450 core\n" +
+        "layout (location = 0) in vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
+        "layout (location = 1) in vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
+        "layout (location = 2) in vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
+        "uniform mat4 u_combinedMatrix;\n" +
+        "layout (location = 0) out vec4 v_color;\n" +
+        "layout (location = 1) out vec2 v_texCoords;\n" +
+        "void main() {\n" +
+        "    v_color = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" +
+        "    v_texCoords = " + ShaderProgram.TEXCOORD_ATTRIBUTE + "0;\n" +
+        "    gl_Position = u_combinedMatrix * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n" +
+        "}\n";
 
-    public const string DEFAULT_FRAGMENT_SHADER = "#version 450 core\n" +
-                                                  "layout (location = 0) in vec4 v_color;\n" +
-                                                  "layout (location = 1) in vec2 v_texCoords;\n" +
-                                                  "uniform sampler2D u_texture;\n" +
-                                                  "layout (location = 0) out vec4 fragColor;\n" +
-                                                  "void main() {\n" +
-                                                  "    fragColor = v_color * texture(u_texture, v_texCoords);\n" +
-                                                  "}\n";
+    public const string DEFAULT_FRAGMENT_SHADER =
+        "#version 450 core\n" +
+        "layout (location = 0) in vec4 v_color;\n" +
+        "layout (location = 1) in vec2 v_texCoords;\n" +
+        "layout (binding = 0) uniform sampler2D u_texture;\n" +
+        "layout (location = 0) out vec4 fragColor;\n" +
+        "void main() {\n" +
+        "    fragColor = v_color * texture(u_texture, v_texCoords);\n" +
+        "}\n";
 }
 
 // ========================================================================

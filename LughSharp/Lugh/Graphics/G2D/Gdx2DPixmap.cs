@@ -263,7 +263,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <param name="len"></param>
     /// <returns></returns>
     /// <exception cref="IOException"></exception>
-    private ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
+    private static ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
         // Analyse the PNG file the get the properties.
         Utils.PNGDecoder.AnalysePNG( buffer, verbose: false );

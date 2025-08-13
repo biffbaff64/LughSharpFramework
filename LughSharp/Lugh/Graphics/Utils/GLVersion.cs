@@ -43,12 +43,12 @@ public class GLVersion
 {
     // ========================================================================
 
-    private int    _majorVersion    = 0;
-    private int    _minorVersion    = 0;
-    private string _renderer        = "";
-    private int    _revisionVersion = 0;
-
-    private string _vendor = "";
+    private int           _majorVersion    = 0;
+    private int           _minorVersion    = 0;
+    private string        _renderer        = "";
+    private int           _revisionVersion = 0;
+    private OpenGLProfile _openGLProfile   = OpenGLProfile.AnyProfile;
+    private string        _vendor          = "";
 
     // ========================================================================
     // ========================================================================
@@ -56,7 +56,7 @@ public class GLVersion
     /// <summary>
     /// </summary>
     /// <param name="appType"></param>
-    public unsafe GLVersion( Platform.ApplicationType appType )
+    public unsafe GLVersion( Platform.ApplicationType appType, OpenGLProfile profile )
     {
         BackendType = appType switch
         {
@@ -73,7 +73,8 @@ public class GLVersion
         _majorVersion    = ( int )char.GetNumericValue( version[ 0 ] );
         _minorVersion    = ( int )char.GetNumericValue( version[ 2 ] );
         _revisionVersion = ( int )char.GetNumericValue( version[ 4 ] );
-
+        _openGLProfile   = profile;
+        
         Logger.Debug( DebugVersionString(), true );
     }
 
@@ -125,8 +126,11 @@ public class GLVersion
     /// </summary>
     public string DebugVersionString()
     {
-        return $"Type: {BackendType} :: Version: {_majorVersion}.{_minorVersion}.{_revisionVersion} :: "
-               + $"Vendor: {VendorString} :: Renderer: {RendererString}";
+        return $"Type: {BackendType} :: "
+               + $"Version: {_majorVersion}.{_minorVersion}.{_revisionVersion} :: "
+               + $"Profile: {_openGLProfile} :: "
+               + $"Vendor: {VendorString} :: "
+               + $"Renderer: {RendererString}";
     }
 
     // ========================================================================

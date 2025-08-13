@@ -199,7 +199,8 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     }
 
     /// <summary>
-    /// Binds this texture. The texture will be bound to the currently active texture unit.
+    /// Binds the texture to the texture unit 0.
+    /// Sets the currently active texture unit to Texture 0.
     /// </summary>
     public void Bind() => Bind( 0 );
 
@@ -211,10 +212,13 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// create the correct texture unit.
     /// i.e. if unit is 2, TextureUnit.Texture0 + unit is TextureUnit.Texture2.
     /// </param>
-    public void Bind( int unit )
+    public void Bind( uint unit )
     {
-        ActivateTexture( TextureUnit.Texture0 + unit ); // IGL.GL_TEXTURE0 + unit );
-        GL.BindTexture( GLTarget, GLTextureHandle );
+        GL.BindTextureUnit( unit, GLTextureHandle );
+
+        // replaces:-
+        // ActivateTexture( TextureUnit.Texture0 + unit );
+        // GL.BindTexture( GLTarget, GLTextureHandle );
     }
 
     /// <summary>
@@ -454,7 +458,31 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
         GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_S, IGL.GL_CLAMP_TO_EDGE );
         GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_T, IGL.GL_CLAMP_TO_EDGE );
 
-        GL.TexImage2D( target, miplevel, 0, pixmap, false );
+//        GL.TexImage2D( target: target,
+//                       level: 0,
+//                       internalFormat: IGL.GL_RGBA8,
+//                       width: pixmap.Width,
+//                       height: pixmap.Height,
+//                       border: 0,
+//                       format: IGL.GL_RGBA,
+//                       type: IGL.GL_UNSIGNED_BYTE,
+//                       pixels: pixmap.PixelData );
+
+        GL.TextureStorage2D( texture: GLTextureHandle,
+                             levels: 1,
+                             internalFormat: IGL.GL_RGBA8,
+                             width: pixmap.Width,
+                             height: pixmap.Height );;
+
+        GL.TextureSubImage2D( texture: GLTextureHandle,
+                              level: 0,
+                              xoffset: 0,
+                              yoffset: 0,
+                              width: pixmap.Width,
+                              height: pixmap.Height,
+                              format: IGL.GL_RGBA,
+                              type: IGL.GL_UNSIGNED_BYTE,
+                              pixels: pixmap.PixelData );
 
         if ( shouldDispose )
         {

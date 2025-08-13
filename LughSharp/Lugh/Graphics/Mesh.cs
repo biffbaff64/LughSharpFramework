@@ -27,10 +27,9 @@ using System.Text;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths.Collision;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
-
-
 
 namespace LughSharp.Lugh.Graphics;
 
@@ -175,6 +174,8 @@ public class Mesh : IDisposable
     /// <param name="attributes">the <see cref="VertexAttributes" />.</param>
     public Mesh( VertexDataType? type, bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
+        Logger.Debug( $"type: {type}, isStatic: {isStatic}, maxVertices: {maxVertices}, maxIndices: {maxIndices}, attributes: {attributes}" );
+        
         switch ( type )
         {
             case VertexDataType.VertexBufferObject:

@@ -93,19 +93,18 @@ public partial class SpriteBatch : IBatch, IDisposable
     private uint _vao;
     private uint _vbo;
     private uint _ebo;
-
-    private int _nullTextureCount    = 0;
-    private int _currentTextureIndex = 0;
-    private int _maxTextureUnits;
-    private int _maxVertices;
-    private int _combinedMatrixLocation;
-    private int _textureLocation;
-
+    private int  _nullTextureCount    = 0;
+    private int  _currentTextureIndex = 0;
+    private int  _maxTextureUnits;
+    private int  _maxVertices;
+    private int  _combinedMatrixLocation;
+    private int  _textureLocation;
     private bool _ownsShader;
     private bool _originalDepthMask;
     private bool _disposed = false;
     private bool _initialBlendingState;
 
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -116,16 +115,21 @@ public partial class SpriteBatch : IBatch, IDisposable
     }
 
     /// <summary>
-    /// Constructs a new SpriteBatch. Sets the projection matrix to an orthographic projection with
-    /// y-axis point upwards, x-axis point to the right and the origin being in the bottom left corner
-    /// of the screen. The projection will be pixel perfect with respect to the current screen resolution.
-    /// The defaultShader specifies the shader to use. Note that the names for uniforms for this default
-    /// shader are different than the ones expect for shaders set with <see cref="Shader" />.
+    /// Constructs a new SpriteBatch. Sets the projection matrix to an orthographic
+    /// projection with y-axis point upwards, x-axis point to the right and the origin
+    /// being in the bottom left corner of the screen. The projection will be pixel
+    /// perfect with respect to the current screen resolution.
+    /// The defaultShader specifies the shader to use. Note that the names for uniforms
+    /// for this default shader are different than the ones expect for shaders set with
+    /// <see cref="Shader" />.
     /// See <see cref="CreateDefaultShader()" />.
     /// </summary>
-    /// <param name="size"> The max number of sprites in a single batch. Max of <see cref="MAX_SPRITES"/>. </param>
+    /// <param name="size">
+    /// The max number of sprites in a single batch. Max of <see cref="MAX_SPRITES"/>.
+    /// </param>
     /// <param name="defaultShader">
-    /// The default shader to use. This is not owned by the SpriteBatch and must be disposed separately.
+    /// The default shader to use. This is not owned by the SpriteBatch and must be disposed
+    /// separately.
     /// </param>
     protected SpriteBatch( int size = MAX_QUADS, ShaderProgram? defaultShader = null )
     {
@@ -147,49 +151,16 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="defaultShader">
     /// The default shader to use. This is not owned by the SpriteBatch and must be disposed separately.
     /// </param>
-    private unsafe void Initialise( int size, ShaderProgram? defaultShader )
+    private void Initialise( int size, ShaderProgram? defaultShader )
     {
         GLUtils.CheckOpenGLContext();
 
         _maxVertices     = size * VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
         _maxTextureUnits = QueryMaxSupportedTextureUnits();
 
-        // Create and bind a Vertex Array Object (VAO) first
-        _vao = GL.GenVertexArray();
-        GL.BindVertexArray( _vao );
-
-        // Create and bind the VBO and allocate initial buffer storage
-        _vbo = GL.GenBuffer();
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
-        Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
-
-        GL.BufferData( ( int )BufferTarget.ArrayBuffer,
-                       Vertices.Length * sizeof( float ),
-                       0,
-                       ( int )BufferUsageHint.DynamicDraw );
-
-        var indices = new uint[ size * INDICES_PER_SPRITE ];
-
-        for ( uint i = 0, vertex = 0; i < indices.Length; i += INDICES_PER_SPRITE, vertex += 4 )
-        {
-            indices[ i + 0 ] = vertex + 0;
-            indices[ i + 1 ] = vertex + 1;
-            indices[ i + 2 ] = vertex + 2;
-            indices[ i + 3 ] = vertex + 2;
-            indices[ i + 4 ] = vertex + 1;
-            indices[ i + 5 ] = vertex + 3;
-        }
-
-        _ebo = GL.GenBuffer();
-        GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo );
-
-        fixed ( uint* ptr = indices )
-        {
-            GL.BufferData( ( int )BufferTarget.ElementArrayBuffer,
-                           indices.Length * sizeof( uint ),
-                           ( IntPtr )ptr,
-                           ( int )BufferUsageHint.StaticDraw );
-        }
+        CreateVao();
+        CreateVbo( size );
+        CreateEbo( size );
 
         // Determine the vertex data type based on OpenGL version.
         // OpenGL 3.0 and later support Vertex Buffer Objects (VBOs) with Vertex Array Objects (VAOs),
@@ -217,7 +188,11 @@ public partial class SpriteBatch : IBatch, IDisposable
 
         // Create the mesh object with the specified vertex attributes and size.
         // The mesh will hold the vertex and index data for rendering.
-        _mesh = new Mesh( vertexDataType, false, size * VERTICES_PER_SPRITE, size * INDICES_PER_SPRITE, va1, va2, va3 );
+        _mesh = new Mesh( vertexDataType,
+                          false,
+                          size * VERTICES_PER_SPRITE,
+                          size * INDICES_PER_SPRITE,
+                          va1, va2, va3 );
 
         // Set up an orthographic projection matrix for 2D rendering.
         // This matrix transforms 2D coordinates into normalized device coordinates (NDC).
@@ -243,10 +218,12 @@ public partial class SpriteBatch : IBatch, IDisposable
             _shader = defaultShader;
         }
 
-        // Get the location of the combined matrix uniform in the shader program.
-        // This uniform will be used to pass the combined transformation matrix to the shader.
+        // Get the location of the combined matrix uniform in the shader
+        // program. This uniform will be used to pass the combined
+        // transformation matrix to the shader.
         GetCombinedMatrixUniformLocation();
 
+        // Get the location of the texture uniform in the shader program.
         GetTextureUniformLocation();
     }
 
@@ -271,26 +248,18 @@ public partial class SpriteBatch : IBatch, IDisposable
             throw new NullReferenceException( "Shader is null" );
         }
 
+        RenderCalls           = 0;
         _initialBlendingState = BlendingEnabled;
+        CurrentBatchState     = BatchState.Drawing;
+        _originalDepthMask    = GL.IsEnabled( ( int )EnableCap.DepthTest );
 
-        CurrentBatchState = BatchState.Drawing;
-
-        _originalDepthMask = GL.IsEnabled( ( int )EnableCap.DepthTest );
         GL.DepthMask( depthMaskEnabled );
 
         if ( _shader != null )
         {
             _shader.Bind();
             SetupMatrices();
-
-            #if SPRITEBATCH_DEBUG
-            var texUnit = new int[ 1 ];
-            GL.GetUniformiv( _shader.ShaderProgramHandle, _shader.GetUniformLocation( "u_texture" ), ref texUnit );
-            Logger.Debug( $"Texture unit uniform value: {texUnit[ 0 ]}" );
-            #endif
         }
-
-        RenderCalls = 0;
     }
 
     /// <summary>
@@ -308,8 +277,8 @@ public partial class SpriteBatch : IBatch, IDisposable
 
         if ( Idx > 0 )
         {
-            // Flush this batch to ensure all pending drawing operations
-            // are completed before ending the batch
+            // Flush this batch to ensure all pending drawing
+            // operations are completed before ending the batch
             Flush();
         }
 
@@ -331,7 +300,6 @@ public partial class SpriteBatch : IBatch, IDisposable
             }
         }
 
-        Array.Clear( Vertices, 0, Idx );
         Idx = 0;
     }
 
@@ -389,7 +357,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
         LastTexture.Bind();
         GL.Uniform1i( _textureLocation, _currentTextureIndex );
-        
+
         _mesh?.SetVertices( Vertices, 0, Idx );
         _mesh!.IndicesBuffer.Position = 0;
         _mesh!.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
@@ -716,9 +684,9 @@ public partial class SpriteBatch : IBatch, IDisposable
         GdxRuntimeException.ThrowIfNull( _shader );
 
         _textureLocation = GL.GetUniformLocation( _shader.ShaderProgramHandle,
-                                                         "u_texture" );
+                                                  "u_texture" );
     }
-    
+
     /// <summary>
     /// Returns a new instance of the default shader used by SpriteBatch when
     /// no shader is specified.
@@ -918,6 +886,64 @@ public partial class SpriteBatch : IBatch, IDisposable
                 _shader?.Bind();
                 SetupMatrices();
             }
+        }
+    }
+
+    /// <summary>
+    /// Creates and binds a new Vertex Array Object (VAO) for OpenGL rendering.
+    /// This method generates a unique VAO handle and binds it as the active VAO
+    /// to configure and manage vertex attribute states efficiently.
+    /// </summary>
+    private void CreateVao()
+    {
+        _vao = GL.GenVertexArray();
+        GL.BindVertexArray( _vao );
+    }
+
+    /// <summary>
+    /// Creates a Vertex Buffer Object (VBO) for dynamic sprite batch rendering.
+    /// </summary>
+    /// <param name="size">The number of sprites that the VBO can accommodate.</param>
+    private void CreateVbo( int size )
+    {
+        _vbo = GL.GenBuffer();
+        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+        Vertices = new float[ size * VERTICES_PER_SPRITE * Sprite.VERTEX_SIZE ];
+
+        GL.BufferData( ( int )BufferTarget.ArrayBuffer,
+                       Vertices.Length * sizeof( float ),
+                       0,
+                       ( int )BufferUsageHint.DynamicDraw );
+    }
+
+    /// <summary>
+    /// Creates and initializes an Element Buffer Object (EBO) using the specified size.
+    /// The EBO is filled with index data used for rendering multiple sprites in a batch.
+    /// </summary>
+    /// <param name="size">The number of sprites to allocate indices for in the EBO.</param>
+    private unsafe void CreateEbo( int size )
+    {
+        var indices = new uint[ size * INDICES_PER_SPRITE ];
+
+        for ( uint i = 0, vertex = 0; i < indices.Length; i += INDICES_PER_SPRITE, vertex += 4 )
+        {
+            indices[ i + 0 ] = vertex + 0;
+            indices[ i + 1 ] = vertex + 1;
+            indices[ i + 2 ] = vertex + 2;
+            indices[ i + 3 ] = vertex + 2;
+            indices[ i + 4 ] = vertex + 1;
+            indices[ i + 5 ] = vertex + 3;
+        }
+
+        _ebo = GL.GenBuffer();
+        GL.BindBuffer( ( int )BufferTarget.ElementArrayBuffer, _ebo );
+
+        fixed ( uint* ptr = indices )
+        {
+            GL.BufferData( ( int )BufferTarget.ElementArrayBuffer,
+                           indices.Length * sizeof( uint ),
+                           ( IntPtr )ptr,
+                           ( int )BufferUsageHint.StaticDraw );
         }
     }
 

@@ -67,12 +67,12 @@ public static class GLUtils
             IGL.GL_CONTEXT_LOST                  => "Context Lost",
 
             // ----------------------------------
-            
-            IGL.GL_NO_ERROR                      => "No Error",
-            
+
+            IGL.GL_NO_ERROR => "No Error",
+
             // ----------------------------------
-            
-            var _                                => $"Unknown GL Error Code: {errorCode}",
+
+            var _ => $"Unknown GL Error Code: {errorCode}",
         };
     }
 
@@ -153,12 +153,7 @@ public static class GLUtils
             {
                 var msg = Marshal.PtrToStringAnsi( ( IntPtr )message, length );
 
-                Logger.Debug( $"\nOpenGL Debug Message:\n" +
-                              $"Source  : 0x{source:X}\n" +
-                              $"Type    : 0x{type:X}\n" +
-                              $"ID      : 0x{id:X}\n" +
-                              $"Severity: 0x{severity:X}\n" +
-                              $"Message : {msg}" );
+                MessageCallback( ( uint )source, ( uint )type, id, ( uint )severity, length, msg, userParam );
 
                 if ( severity == DebugSeverity.DEBUG_SEVERITY_HIGH )
                 {
@@ -170,6 +165,81 @@ public static class GLUtils
             GL.Enable( IGL.GL_DEBUG_OUTPUT );
             GL.Enable( IGL.GL_DEBUG_OUTPUT_SYNCHRONOUS );
         }
+    }
+
+    /// <summary>
+    /// Processes an OpenGL debug message, providing details such as the source, type,
+    /// severity, and description of the message.
+    /// </summary>
+    /// <param name="source">
+    /// An identifier for the origin of the debug message. It determines where the message
+    /// originated, such as API calls or shader compilers.
+    /// </param>
+    /// <param name="type">
+    /// The type of the OpenGL debug message, indicating the nature of the event (e.g.,
+    /// errors, performance warnings).
+    /// </param>
+    /// <param name="id">
+    /// A numeric identifier for the debug message. This can be used to differentiate
+    /// specific events.
+    /// </param>
+    /// <param name="severity">
+    /// Specifies the level of severity of the event, identifying whether the message is
+    /// informational, a warning, or critical.
+    /// </param>
+    /// <param name="length">
+    /// The length of the debug message string, as provided by OpenGL. This parameter
+    /// may be useful for handling the incoming message data.
+    /// </param>
+    /// <param name="message">
+    /// A string describing the debug message. This provides detailed information regarding
+    /// the event or error reported by OpenGL.
+    /// </param>
+    /// <param name="userParam">
+    /// An optional user-defined pointer passed to the callback. This parameter allows for
+    /// additional context or state to be associated with the debug message.
+    /// </param>
+    public static void MessageCallback( uint source,
+                                        uint type,
+                                        uint id,
+                                        uint severity,
+                                        int length,
+                                        string message,
+                                        IntPtr userParam )
+    {
+        var srcStr = source switch
+        {
+            IGL.GL_DEBUG_SOURCE_API             => "API",
+            IGL.GL_DEBUG_SOURCE_WINDOW_SYSTEM   => "WINDOW SYSTEM",
+            IGL.GL_DEBUG_SOURCE_SHADER_COMPILER => "SHADER COMPILER",
+            IGL.GL_DEBUG_SOURCE_THIRD_PARTY     => "THIRD PARTY",
+            IGL.GL_DEBUG_SOURCE_APPLICATION     => "APPLICATION",
+            IGL.GL_DEBUG_SOURCE_OTHER           => "OTHER",
+            var _                               => "UNKNOWN",
+        };
+
+        var typeStr = type switch
+        {
+            IGL.GL_DEBUG_TYPE_ERROR               => "ERROR",
+            IGL.GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR => "DEPRECATED_BEHAVIOR",
+            IGL.GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR  => "UNDEFINED_BEHAVIOR",
+            IGL.GL_DEBUG_TYPE_PORTABILITY         => "PORTABILITY",
+            IGL.GL_DEBUG_TYPE_PERFORMANCE         => "PERFORMANCE",
+            IGL.GL_DEBUG_TYPE_MARKER              => "MARKER",
+            IGL.GL_DEBUG_TYPE_OTHER               => "OTHER",
+            var _                                 => "UNKNOWN",
+        };
+
+        var severityStr = severity switch
+        {
+            IGL.GL_DEBUG_SEVERITY_NOTIFICATION => "NOTIFICATION",
+            IGL.GL_DEBUG_SEVERITY_LOW          => "LOW",
+            IGL.GL_DEBUG_SEVERITY_MEDIUM       => "MEDIUM",
+            IGL.GL_DEBUG_SEVERITY_HIGH         => "HIGH",
+            var _                              => "UNKNOWN",
+        };
+
+        Logger.Warning( $"{srcStr}, {typeStr}, {severityStr}, {id}: {message}" );
     }
 
     /// <summary>

@@ -58,17 +58,6 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
     // ========================================================================
     // ========================================================================
 
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing,
-    /// releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose()
-    {
-        Dispose( true );
-
-        GC.SuppressFinalize( this );
-    }
-
     /// <inheritdoc />
     public override List< AssetDescriptor > GetDependencies< TP >( string filename, FileInfo file, TP? p ) where TP : class
     {
@@ -116,16 +105,14 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         var p       = parameter as TextureLoaderParameters;
         var texture = _loaderInfo.Texture;
 
+        Logger.Debug( $"texture == null?: {texture == null}" );
+
         if ( texture != null )
         {
-            Logger.Checkpoint();
-
             texture.Load( _loaderInfo.Data! );
         }
         else
         {
-            Logger.Checkpoint();
-
             texture = new Texture( _loaderInfo.Data! );
         }
 
@@ -138,6 +125,17 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         }
 
         return texture;
+    }
+
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing,
+    /// releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+
+        GC.SuppressFinalize( this );
     }
 
     /// <summary>

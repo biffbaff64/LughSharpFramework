@@ -521,6 +521,7 @@ public partial interface IGLBindings
     unsafe void CreateTextures( int target, int n, uint* textures );
     uint[] CreateTextures( int target, int n );
     uint CreateTexture( int target );
+    uint CreateTexture( TextureTarget target );
     void TextureBuffer( uint texture, int internalFormat, uint buffer );
     void TextureBufferRange( uint texture, int internalFormat, uint buffer, int offset, int size );
     void TextureStorage1D( uint texture, int levels, int internalFormat, int width );

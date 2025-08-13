@@ -161,7 +161,7 @@ public class Texture : GLTexture, IManaged
     /// Creates a new Texture using the supplied <see cref="ITextureData" />.
     /// </summary>
     public Texture( ITextureData data )
-        : this( IGL.GL_TEXTURE_2D, GL.GenTexture(), data )
+        : this( IGL.GL_TEXTURE_2D, GL.CreateTexture( TextureTarget.Texture2D ), data )
     {
     }
 
@@ -195,6 +195,8 @@ public class Texture : GLTexture, IManaged
             return;
         }
 
+        GLUtils.CheckOpenGLContext();
+        
         if ( TextureData is { IsPrepared: false } )
         {
             // CPU-side decode (safe if already prepared)
@@ -259,7 +261,7 @@ public class Texture : GLTexture, IManaged
 
         GLTextureHandle = GL.GenTexture();
 
-        Load( TextureData );
+        EnsureUploaded();
     }
 
     /// <summary>

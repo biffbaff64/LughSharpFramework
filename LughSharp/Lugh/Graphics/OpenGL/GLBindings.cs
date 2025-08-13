@@ -3498,6 +3498,11 @@ public unsafe partial class GLBindings : IGLBindings
         return CreateTextures( target, 1 )[ 0 ];
     }
 
+    public GLuint CreateTexture( TextureTarget target )
+    {
+        return CreateTextures( ( int )target, 1 )[ 0 ];
+    }
+
     // ========================================================================
 
     public void TextureBuffer( GLuint texture, GLenum internalFormat, GLuint buffer )

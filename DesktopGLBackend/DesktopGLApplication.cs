@@ -732,7 +732,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         Glfw.SwapInterval( config.VSyncEnabled ? 1 : 0 );
         GLUtils.CreateCapabilities();
 
-        GLVersion = new GLVersion( Platform.ApplicationType.WindowsGL );
+        GLVersion = new GLVersion( Platform.ApplicationType.WindowsGL, OGLProfile );
 
         if ( config.Debug )
         {
