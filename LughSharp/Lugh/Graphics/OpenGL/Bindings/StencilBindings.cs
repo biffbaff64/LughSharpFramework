@@ -22,8 +22,34 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+// ============================================================================
 
-public class ContextBindings
+using GLenum = int;
+using GLfloat = float;
+using GLint = int;
+using GLsizei = int;
+using GLbitfield = uint;
+using GLdouble = double;
+using GLuint = uint;
+using GLboolean = bool;
+using GLubyte = byte;
+using GLsizeiptr = int;
+using GLintptr = int;
+using GLshort = short;
+using GLbyte = sbyte;
+using GLushort = ushort;
+using GLchar = byte;
+using GLuint64 = ulong;
+using GLint64 = long;
+
+// ============================================================================
+
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
+
+[PublicAPI]
+public class StencilBindings
 {
 }
+
+// ========================================================================
+// ========================================================================

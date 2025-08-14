@@ -380,15 +380,19 @@ GRAPHICS/OPENGL
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - DebugSeverity
     - DONE - DONE - GLBindings
+    - DONE - DONE - GLBindingsHelpers
     - DONE - DONE - GLBindingsStructs
+    - DONE - DONE - GLConsts
+    - DONE - DONE - GLFormatChooser
     - DONE - DONE - GLFunctionDelegates
     - DONE - DONE - GLFunctionsLoader
+    - DONE - DONE - GLImage
     - DONE - DONE - GLUtils
     - DONE - DONE - IGL
     - DONE - DONE - IGLBindings
     - DONE - DONE - IGLBindingsExtra
+    - IP   - IP   - IGLBindingsHelpers
 
 GRAPHICS/OPENGL/ENUMS
 ---------------------
@@ -446,6 +450,7 @@ GRAPHICS/OPENGL/NEWBINDINGS
     - IP   -      - BufferObjectBindings
     -      -      - ContextBindings
     - IP   -      - DebugBindings
+    - DONE - DONE - DebugSeverity
     -      -      - DrawBindings
     - IP   -      - ErrorBindings
     -      -      - FrameBufferBindings
@@ -457,9 +462,11 @@ GRAPHICS/OPENGL/NEWBINDINGS
     -      -      - StencilBindings
     - IP   -      - TextureBindings
     - IP   -      - TextureSamplerBindings
+    -      -      - TransformBindings
     -      -      - TransformFeedbackBindings
     - IP   -      - UniformBindings
     - IP   -      - VertexArrayBindings
+    - IP   -      - VertexAttribBindings
 
 GRAPHICS/SYSDRAW
 ----------------

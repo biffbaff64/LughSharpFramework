@@ -24,7 +24,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+namespace LughSharp.Lugh.Graphics.OpenGL.Bindings;
 
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial interface IGLBindings

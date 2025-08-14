@@ -24,7 +24,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+// ============================================================================
 
 using GLenum = int;
 using GLfloat = float;
@@ -45,6 +45,8 @@ using GLuint64 = ulong;
 using GLint64 = long;
 
 // ============================================================================
+
+namespace LughSharp.Lugh.Graphics.OpenGL;
 
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial class GLBindings

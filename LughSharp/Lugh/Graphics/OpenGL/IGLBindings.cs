@@ -24,17 +24,33 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-using static LughSharp.Lugh.Graphics.OpenGL.IGL;
+// ============================================================================
 
+using GLenum = int;
 using GLfloat = float;
+using GLint = int;
+using GLsizei = int;
+using GLbitfield = uint;
 using GLdouble = double;
 using GLuint = uint;
 using GLboolean = bool;
+using GLubyte = byte;
+using GLsizeiptr = int;
+using GLintptr = int;
+using GLshort = short;
+using GLbyte = sbyte;
+using GLushort = ushort;
+using GLchar = byte;
+using GLuint64 = ulong;
+using GLint64 = long;
+
+// ============================================================================
+
+using static LughSharp.Lugh.Graphics.OpenGL.IGL;
 
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
 [PublicAPI]
-[SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial interface IGLBindings
 {
     /// <summary>
@@ -57,72 +73,31 @@ public partial interface IGLBindings
                                  IntPtr userParam );
 
     /// <summary>
-    /// Specify whether front- or back-facing facets can be culled
+    /// Disable  capabilities.
     /// </summary>
-    /// <param name="mode">
-    /// Specifies whether front- or back-facing facets are candidates for culling. Symbolic constants
-    /// <see cref="GL_FRONT" />, <see cref="GL_BACK" />, and <see cref="GL_FRONT_AND_BACK" /> are accepted.
-    /// The initial value is <see cref="GL_BACK" />.
+    /// <param name="cap">
+    /// Specifies a symbolic constant indicating a  capability to be disabled. Refer to
+    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible values.
     /// </param>
-    void CullFace( int mode );
+    void Disable( int cap );
 
     /// <summary>
-    /// Define front- and back-facing polygons
+    /// Enable  capabilities.
     /// </summary>
-    /// <param name="mode">
-    /// Specifies the orientation of front-facing polygons. Symbolic constants <see cref="GL_CW" /> and
-    /// <see cref="GL_CCW" /> are accepted. The initial value is <see cref="GL_CCW" />.
+    /// <param name="cap">
+    /// Specifies a symbolic constant indicating a  capability to be enabled. Refer to
+    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible values.
     /// </param>
-    void FrontFace( int mode );
+    void Enable( int cap );
 
     /// <summary>
-    /// Specify implementation-specific hints
+    /// Test whether a capability is enabled.
     /// </summary>
-    /// <param name="target">
-    /// Specifies a symbolic constant indicating the behavior to be controlled.
-    /// <see cref="GL_LINE_SMOOTH_HINT" />, <see cref="GL_POLYGON_SMOOTH_HINT" />,
-    /// <see cref="GL_TEXTURE_COMPRESSION_HINT" />, and <see cref="GL_FRAGMENT_SHADER_DERIVATIVE_HINT" /> are accepted.
+    /// <param name="cap">
+    /// Specifies a symbolic constant indicating a  capability. Refer to
+    /// <see href="https://docs.gl/gl4/glIsEnabled" /> for a list of possible capabilities.
     /// </param>
-    /// <param name="mode">
-    /// Specifies a symbolic constant indicating the desired behavior. <see cref="GL_FASTEST" />,
-    /// <see cref="GL_NICEST" />, and <see cref="GL_DONT_CARE" /> are accepted.
-    /// </param>
-    void Hint( int target, int mode );
-
-    /// <summary>
-    /// Specify the width of rasterized lines
-    /// </summary>
-    /// <param name="width">Specifies the width of rasterized lines. The initial value is 1.0.</param>
-    void LineWidth( GLfloat width );
-
-    /// <summary>
-    /// Specify the diameter of rasterized points
-    /// </summary>
-    /// <param name="size">Specifies the diameter of rasterized points. The initial value is 1.0.</param>
-    void PointSize( GLfloat size );
-
-    /// <summary>
-    /// Select a polygon rasterization mode
-    /// </summary>
-    /// <param name="face">
-    /// Specifies the polygons that mode applies to. Must be <see cref="GL_FRONT_AND_BACK" /> for both
-    /// front- and back-facing polygons.
-    /// </param>
-    /// <param name="mode">
-    /// Specifies how polygons will be rasterized. Accepted values are <see cref="GL_POINT" />,
-    /// <see cref="GL_LINE" />, and <see cref="GL_FILL" />. The initial value is <see cref="GL_FILL" /> for both front- and
-    /// back-facing polygons.
-    /// </param>
-    void PolygonMode( int face, int mode );
-
-    /// <summary>
-    /// Define the scissor box
-    /// </summary>
-    /// <param name="x">Specify the lower left corner of the scissor box. Initially (0, 0).</param>
-    /// <param name="y">Specify the lower left corner of the scissor box. Initially (0, 0).</param>
-    /// <param name="width">Specify the width of the scissor box.</param>
-    /// <param name="height">Specify the height of the scissor box.</param>
-    void Scissor( int x, int y, int width, int height );
+    bool IsEnabled( int cap );
 
     /// <summary>
     /// Set texture parameters
@@ -267,6 +242,74 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="parameters">Specifies the values of pname.</param>
     void TexParameteriv( int target, int pname, int[] parameters );
+
+    /// <summary>
+    /// Specify whether front- or back-facing facets can be culled
+    /// </summary>
+    /// <param name="mode">
+    /// Specifies whether front- or back-facing facets are candidates for culling. Symbolic constants
+    /// <see cref="GL_FRONT" />, <see cref="GL_BACK" />, and <see cref="GL_FRONT_AND_BACK" /> are accepted.
+    /// The initial value is <see cref="GL_BACK" />.
+    /// </param>
+    void CullFace( int mode );
+
+    /// <summary>
+    /// Define front- and back-facing polygons
+    /// </summary>
+    /// <param name="mode">
+    /// Specifies the orientation of front-facing polygons. Symbolic constants <see cref="GL_CW" /> and
+    /// <see cref="GL_CCW" /> are accepted. The initial value is <see cref="GL_CCW" />.
+    /// </param>
+    void FrontFace( int mode );
+
+    /// <summary>
+    /// Specify implementation-specific hints
+    /// </summary>
+    /// <param name="target">
+    /// Specifies a symbolic constant indicating the behavior to be controlled.
+    /// <see cref="GL_LINE_SMOOTH_HINT" />, <see cref="GL_POLYGON_SMOOTH_HINT" />,
+    /// <see cref="GL_TEXTURE_COMPRESSION_HINT" />, and <see cref="GL_FRAGMENT_SHADER_DERIVATIVE_HINT" /> are accepted.
+    /// </param>
+    /// <param name="mode">
+    /// Specifies a symbolic constant indicating the desired behavior. <see cref="GL_FASTEST" />,
+    /// <see cref="GL_NICEST" />, and <see cref="GL_DONT_CARE" /> are accepted.
+    /// </param>
+    void Hint( int target, int mode );
+
+    /// <summary>
+    /// Specify the width of rasterized lines
+    /// </summary>
+    /// <param name="width">Specifies the width of rasterized lines. The initial value is 1.0.</param>
+    void LineWidth( GLfloat width );
+
+    /// <summary>
+    /// Specify the diameter of rasterized points
+    /// </summary>
+    /// <param name="size">Specifies the diameter of rasterized points. The initial value is 1.0.</param>
+    void PointSize( GLfloat size );
+
+    /// <summary>
+    /// Select a polygon rasterization mode
+    /// </summary>
+    /// <param name="face">
+    /// Specifies the polygons that mode applies to. Must be <see cref="GL_FRONT_AND_BACK" /> for both
+    /// front- and back-facing polygons.
+    /// </param>
+    /// <param name="mode">
+    /// Specifies how polygons will be rasterized. Accepted values are <see cref="GL_POINT" />,
+    /// <see cref="GL_LINE" />, and <see cref="GL_FILL" />. The initial value is <see cref="GL_FILL" /> for both front- and
+    /// back-facing polygons.
+    /// </param>
+    void PolygonMode( int face, int mode );
+
+    /// <summary>
+    /// Define the scissor box
+    /// </summary>
+    /// <param name="x">Specify the lower left corner of the scissor box. Initially (0, 0).</param>
+    /// <param name="y">Specify the lower left corner of the scissor box. Initially (0, 0).</param>
+    /// <param name="width">Specify the width of the scissor box.</param>
+    /// <param name="height">Specify the height of the scissor box.</param>
+    void Scissor( int x, int y, int width, int height );
 
     /// <summary>
     /// Specify a one-dimensional texture image
@@ -570,24 +613,6 @@ public partial interface IGLBindings
     void DepthMask( GLboolean flag );
 
     /// <summary>
-    /// Disable  capabilities.
-    /// </summary>
-    /// <param name="cap">
-    /// Specifies a symbolic constant indicating a  capability to be disabled. Refer to
-    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible values.
-    /// </param>
-    void Disable( int cap );
-
-    /// <summary>
-    /// Enable  capabilities.
-    /// </summary>
-    /// <param name="cap">
-    /// Specifies a symbolic constant indicating a  capability to be enabled. Refer to
-    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible values.
-    /// </param>
-    void Enable( int cap );
-
-    /// <summary>
     /// Block until all  execution is complete.
     /// </summary>
     void Finish();
@@ -843,7 +868,7 @@ public partial interface IGLBindings
     /// <param name="pname"></param>
     /// <param name="data"></param>
     void GetBooleanv( int pname, out bool data );
-    
+
     /// <summary>
     /// Return the double value or values of a selected parameter.
     /// </summary>
@@ -921,12 +946,15 @@ public partial interface IGLBindings
     void GetIntegerv( int pname, ref int[] data );
 
     /// <summary>
-    /// 
+    /// Retrieves a specified integer parameter from the OpenGL state machine by using
+    /// the provided parameter name.
     /// </summary>
-    /// <param name="pname"></param>
-    /// <param name="data"></param>
+    /// <param name="pname">The symbolic constant indicating the parameter to query.</param>
+    /// <param name="data">
+    /// When the method returns, contains the integer value associated with the specified parameter.
+    /// </param>
     void GetIntegerv( int pname, out int data );
-    
+
     /// <summary>
     /// Return a string describing the current  connection.
     /// </summary>
@@ -1239,15 +1267,6 @@ public partial interface IGLBindings
     void GetTexLevelParameteriv( int target, int level, int pname, ref int[] parameters );
 
     void GetTexLevelParameteriv( TextureTarget target, int level, TextureParameter pname, out int data );
-
-    /// <summary>
-    /// Test whether a capability is enabled.
-    /// </summary>
-    /// <param name="cap">
-    /// Specifies a symbolic constant indicating a  capability. Refer to
-    /// <see href="https://docs.gl/gl4/glIsEnabled" /> for a list of possible capabilities.
-    /// </param>
-    bool IsEnabled( int cap );
 
     /// <summary>
     /// Specify mapping of depth values from normalized device coordinates to window coordinates.

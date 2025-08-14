@@ -24,9 +24,29 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Graphics.OpenGL;
+// ============================================================================
+
+using GLenum = int;
+using GLfloat = float;
+using GLint = int;
+using GLsizei = int;
+using GLbitfield = uint;
+using GLdouble = double;
+using GLuint = uint;
+using GLboolean = bool;
+using GLubyte = byte;
+using GLsizeiptr = int;
+using GLintptr = int;
+using GLshort = short;
+using GLbyte = sbyte;
+using GLushort = ushort;
+using GLchar = byte;
+using GLuint64 = ulong;
+using GLint64 = long;
 
 // ============================================================================
+
+namespace LughSharp.Lugh.Graphics.OpenGL;
 
 public partial class GLBindings
 {
@@ -40,7 +60,7 @@ public partial class GLBindings
 
     [LibraryImport( "opengl32.dll", EntryPoint = "wglGetProcAddress", StringMarshalling = StringMarshalling.Utf16 )]
     [UnmanagedCallConv( CallConvs = [ typeof( System.Runtime.CompilerServices.CallConvStdcall ) ] )]
-    private static partial IntPtr wglGetProcAddress( string procname );
+    private static partial IntPtr WglGetProcAddress( string procname );
 
     /// <summary>
     /// Gets the delegate for the specified OpenGL function.
@@ -58,7 +78,7 @@ public partial class GLBindings
             return true; // Already loaded
         }
 
-        var functionPtr = wglGetProcAddress( functionName );
+        var functionPtr = WglGetProcAddress( functionName );
 
         if ( functionPtr == IntPtr.Zero )
         {
@@ -89,7 +109,7 @@ public partial class GLBindings
 
     public static T GetDelegateFor< T >( string functionName ) where T : Delegate
     {
-        var functionPtr = wglGetProcAddress( functionName );
+        var functionPtr = WglGetProcAddress( functionName );
 
         if ( functionPtr == IntPtr.Zero )
         {
