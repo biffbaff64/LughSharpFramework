@@ -41,7 +41,11 @@ public class GraphicsBackend
         /// OpenGL graphics backend.
         /// </summary>
         OpenGL,
-        OpenGles,
+        OpenGLCore,
+        OpenGLES,
+        OpenGLES3,
+        OpenGLES31,
+        OpenGLES32,
         WebGL,
 
         /// <summary>
@@ -50,10 +54,25 @@ public class GraphicsBackend
         Vulkan,
 
         /// <summary>
-        /// Microsoft DirectX 11 graphics backend.
+        /// Microsoft DirectX graphics backend.
         /// </summary>
-        DirectX,
+        DirectX11,
         DirectX12,
+        
+        /// <summary>
+        /// Android backends
+        /// </summary>
+        AndroidGL,
+        AndroidGLES,
+        AndroidVulkan,
+        
+        /// <summary>
+        /// iOS backends
+        /// </summary>
+        IOSGL,
+        IOSGLES,
+        IOSMetal,
+        IOSVulkan,
     }
 
     /// <summary>

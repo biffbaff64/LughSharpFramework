@@ -35,11 +35,11 @@ namespace DesktopGLBackend.Graphics;
 /// Represents the graphics system for the DesktopGL backend, handling rendering,
 /// window management,  display modes, and various graphical operations.
 /// <para>
-/// Inherits from <see cref="AbstractGraphics" /> and implements <see cref="IDisposable" />.
+/// Inherits from <see cref="GraphicsDevice" /> and implements <see cref="IDisposable" />.
 /// </para>
 /// </summary>
 [PublicAPI]
-public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
+public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 {
     public DesktopGLWindow? GLWindow { get; set; }
 
@@ -86,6 +86,11 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
         ? BackBufferHeight
         : LogicalHeight;
 
+    /// <inheritdoc />
+    public override GraphicsBackend.BackendType GraphicsType => GraphicsBackend.BackendType.OpenGLES;
+
+    // ========================================================================
+    
     /// <summary>
     /// Whether the app is full screen or not.
     /// </summary>
@@ -98,9 +103,6 @@ public partial class DesktopGLGraphics : AbstractGraphics, IDisposable
             return Glfw.GetWindowMonitor( GLWindow.GlfwWindow ) != null;
         }
     }
-
-    /// <inheritdoc />
-    public override GraphicsBackend.BackendType GraphicsType => GraphicsBackend.BackendType.OpenGL;
 
     /// <inheritdoc />
     public override bool SupportsDisplayModeChange()

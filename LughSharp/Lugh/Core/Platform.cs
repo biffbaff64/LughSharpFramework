@@ -31,6 +31,8 @@ namespace LughSharp.Lugh.Core;
 /// <summary>
 /// Platform specific flags and methods.
 /// </summary>
+/// <seealso cref="LughSharp.Lugh.Graphics.GraphicsBackend"/>
+/// <seealso cref="LughSharp.Lugh.Core.LibraryVersion"/>
 [PublicAPI]
 public static class Platform
 {
@@ -116,6 +118,7 @@ public static class Platform
     /// <summary>
     /// Application type family groups
     /// </summary>
+    [PublicAPI]
     public enum Family : int
     {
         Unknown,
@@ -123,7 +126,7 @@ public static class Platform
         Desktop, // WindowsGL, UWP, WebGL, Linux, MacOS
         Console, // XBox, Playstation, Nintendo
     }
-
+    
     // ========================================================================
 
     private static ApplicationType _targetPlatform;

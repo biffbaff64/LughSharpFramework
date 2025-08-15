@@ -41,14 +41,16 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [DebuggerDisplay( "DebugVersionString" )]
 public class GLVersion
 {
+    public GraphicsBackend.BackendType BackendType { get; set; }
+
     // ========================================================================
 
     private int           _majorVersion    = 0;
     private int           _minorVersion    = 0;
     private string        _renderer        = "";
     private int           _revisionVersion = 0;
-    private OpenGLProfile _openGLProfile   = OpenGLProfile.AnyProfile;
-    private string        _vendor          = "";
+    private OpenGLProfile _openGLProfile;
+    private string        _vendor = "";
 
     // ========================================================================
     // ========================================================================
@@ -56,14 +58,16 @@ public class GLVersion
     /// <summary>
     /// </summary>
     /// <param name="appType"></param>
+    /// <param name="profile"></param>
     public unsafe GLVersion( Platform.ApplicationType appType, OpenGLProfile profile )
     {
         BackendType = appType switch
         {
-            Platform.ApplicationType.Android     => GraphicsBackend.BackendType.OpenGles,
-            Platform.ApplicationType.WindowsGles => GraphicsBackend.BackendType.OpenGles,
+            Platform.ApplicationType.Android     => GraphicsBackend.BackendType.AndroidGLES,
+            Platform.ApplicationType.WindowsGles => GraphicsBackend.BackendType.OpenGLES,
             Platform.ApplicationType.WindowsGL   => GraphicsBackend.BackendType.OpenGL,
             Platform.ApplicationType.WebGL       => GraphicsBackend.BackendType.WebGL,
+            Platform.ApplicationType.IOS         => GraphicsBackend.BackendType.IOSGLES,
 
             var _ => throw new GdxRuntimeException( $"Unknown Platform ApplicationType: {appType}" ),
         };
@@ -74,11 +78,9 @@ public class GLVersion
         _minorVersion    = ( int )char.GetNumericValue( version[ 2 ] );
         _revisionVersion = ( int )char.GetNumericValue( version[ 4 ] );
         _openGLProfile   = profile;
-        
+
         Logger.Debug( DebugVersionString(), true );
     }
-
-    public GraphicsBackend.BackendType BackendType { get; set; }
 
     public unsafe string VendorString
     {

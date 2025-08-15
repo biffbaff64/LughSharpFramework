@@ -26,8 +26,9 @@ using System.Text;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
+
+using static LughSharp.Lugh.Graphics.GraphicsBackend;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 
@@ -44,39 +45,41 @@ public class ApplicationConfiguration
     protected const int DEFAULT_WINDOW_MIN_HEIGHT = 240;
     protected const int DEFAULT_WINDOW_MAX_WIDTH  = 1280;
     protected const int DEFAULT_WINDOW_MAX_HEIGHT = 960;
-    
+
     // ========================================================================
 
     // ========================================================================
     // General Application Configuration
     // ========================================================================
-    
-    public bool            DisableAudio                   { get; set; } = false;
-    public int             AudioDeviceSimultaneousSources { get; set; } = 16;
-    public int             AudioDeviceBufferSize          { get; set; } = 512;
-    public int             AudioDeviceBufferCount         { get; set; } = 9;
-    public bool            Debug                          { get; set; } = false;
-    public StreamWriter    DebugStream                    { get; set; } = new( Console.OpenStandardOutput(), Encoding.UTF8 );
-    public bool            TransparentFramebuffer         { get; set; } = false;
-    public HdpiMode        HdpiMode                       { get; set; } = HdpiMode.Logical;
-    public int             Depth                          { get; set; } = 16;
-    public int             Stencil                        { get; set; } = 0;
-    public int             Samples                        { get; set; } = 0;
-    public int             IdleFPS                        { get; set; } = 60;
-    public int             ForegroundFPS                  { get; set; } = 0;
-    public int?            GLContextMajorVersion          { get; set; } = null!;
-    public int?            GLContextMinorVersion          { get; set; } = null!;
-    public int             GLContextRevision              { get; set; } = 0;
-    public GLEmulationType GLEmulation                    { get; set; } = GLEmulationType.GL20;
-    public int             Red                            { get; set; } = 8;
-    public int             Green                          { get; set; } = 8;
-    public int             Blue                           { get; set; } = 8;
-    public int             Alpha                          { get; set; } = 8;
-    public string          PreferencesDirectory           { get; set; } = ".prefs/";
-    public PathTypes       PreferencesFileType            { get; set; } = PathTypes.External;
-    public bool            PauseWhenLostFocus             { get; set; } = true;
-    public bool            PauseWhenMinimized             { get; set; } = true;
-    public bool            GLProfilingEnabled             { get; set; } = true;
+
+    public BackendType     GraphicsBackend      { get; set; } = BackendType.OpenGL;
+    public StreamWriter    DebugStream          { get; set; } = new( Console.OpenStandardOutput(), Encoding.UTF8 );
+    public HdpiMode        HdpiMode             { get; set; } = HdpiMode.Logical;
+    public GLEmulationType GLEmulation          { get; set; } = GLEmulationType.GL20;
+    public string          PreferencesDirectory { get; set; } = ".prefs/";
+    public PathTypes       PreferencesFileType  { get; set; } = PathTypes.External;
+
+    public bool DisableAudio                   { get; set; } = false;
+    public int  AudioDeviceSimultaneousSources { get; set; } = 16;
+    public int  AudioDeviceBufferSize          { get; set; } = 512;
+    public int  AudioDeviceBufferCount         { get; set; } = 9;
+    public bool Debug                          { get; set; } = false;
+    public bool TransparentFramebuffer         { get; set; } = false;
+    public int  Depth                          { get; set; } = 16;
+    public int  Stencil                        { get; set; } = 0;
+    public int  Samples                        { get; set; } = 0;
+    public int  IdleFPS                        { get; set; } = 60;
+    public int  ForegroundFPS                  { get; set; } = 0;
+    public int? GLContextMajorVersion          { get; set; } = null!;
+    public int? GLContextMinorVersion          { get; set; } = null!;
+    public int  GLContextRevision              { get; set; } = 0;
+    public int  Red                            { get; set; } = 8;
+    public int  Green                          { get; set; } = 8;
+    public int  Blue                           { get; set; } = 8;
+    public int  Alpha                          { get; set; } = 8;
+    public bool PauseWhenLostFocus             { get; set; } = true;
+    public bool PauseWhenMinimized             { get; set; } = true;
+    public bool GLProfilingEnabled             { get; set; } = true;
 
     /// <summary>
     /// The maximum number of threads to use for network requests.
@@ -169,7 +172,7 @@ public class ApplicationConfiguration
     {
         Logger.Checkpoint();
     }
-    
+
     /// <summary>
     /// Creates, and returns, a new ApplicationConfiguration, using settings
     /// from the supplied ApplicationConfiguration object.
@@ -336,7 +339,7 @@ public class ApplicationConfiguration
     {
         throw new NotImplementedException();
     }
-    
+
     // ========================================================================
 
     /// <summary>

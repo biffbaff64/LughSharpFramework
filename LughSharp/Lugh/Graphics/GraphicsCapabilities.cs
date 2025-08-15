@@ -38,7 +38,17 @@ public sealed class GraphicsCapabilities
     public bool HasInternalFormatQuery { get; init; }
 
     // ========================================================================
-    
+
+    /// <summary>
+    /// Detects and retrieves the graphics capabilities supported by the current
+    /// OpenGL context, including version information and support for specific
+    /// extensions and features.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="GraphicsCapabilities"/> object containing the detected graphics
+    /// capabilities, such as OpenGL version, and availability of texture compression
+    /// formats and other advanced features.
+    /// </returns>
     public static unsafe GraphicsCapabilities Detect()
     {
         GL.GetIntegerv( GLConsts.MAJOR_VERSION, out var major );
@@ -48,18 +58,18 @@ public sealed class GraphicsCapabilities
         {
             Major = major,
             Minor = minor,
-            HasS3TC = HasExt( "GL_EXT_texture_compression_s3tc" )
-                      || HasExt( "GL_ANGLE_texture_compression_dxt1" )
-                      || HasExt( "GL_EXT_texture_compression_dxt1" ),
-            HasRGTC                = VerAtLeast( 3, 0 ), // Core in 3.0
-            HasBPTC                = VerAtLeast( 4, 2 ) || HasExt( "GL_ARB_texture_compression_bptc" ),
-            HasETC2                = VerAtLeast( 4, 3 ) || HasExt( "GL_ARB_ES3_compatibility" ),
-            HasInternalFormatQuery = VerAtLeast( 4, 2 ) || HasExt( "GL_ARB_internalformat_query2" )
+            HasS3TC = HasExtension( "GL_EXT_texture_compression_s3tc" )
+                      || HasExtension( "GL_ANGLE_texture_compression_dxt1" )
+                      || HasExtension( "GL_EXT_texture_compression_dxt1" ),
+            HasRGTC                = VersionAtLeast( 3, 0 ), // Core in 3.0
+            HasBPTC                = VersionAtLeast( 4, 2 ) || HasExtension( "GL_ARB_texture_compression_bptc" ),
+            HasETC2                = VersionAtLeast( 4, 3 ) || HasExtension( "GL_ARB_ES3_compatibility" ),
+            HasInternalFormatQuery = VersionAtLeast( 4, 2 ) || HasExtension( "GL_ARB_internalformat_query2" )
         };
 
         // ------------------------------------------------
 
-        static bool HasExt( string s )
+        static bool HasExtension( string s )
         {
             GL.GetIntegerv( GLConsts.NUM_EXTENSIONS, out var n );
 
@@ -73,8 +83,8 @@ public sealed class GraphicsCapabilities
 
             return false;
         }
-
-        bool VerAtLeast( int mj, int mn ) => ( major > mj ) || ( ( major == mj ) && ( minor >= mn ) );
+        
+        bool VersionAtLeast( int mj, int mn ) => ( major > mj ) || ( ( major == mj ) && ( minor >= mn ) );
     }
 }
 

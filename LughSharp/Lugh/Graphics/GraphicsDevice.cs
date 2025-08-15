@@ -133,32 +133,13 @@ public abstract class GraphicsDevice : IGraphicsDevice
     // 
 
     /// <inheritdoc />
-    public bool SupportsExtension( string extension )
-    {
-        return Glfw.ExtensionSupported( extension );
-    }
+    public abstract bool SupportsExtension( string extension );
 
     /// <inheritdoc />
-    public bool SupportsCubeMapSeamless()
-    {
-        return SupportsExtension( "GL_ARB_seamless_cube_map" );
-    }
+    public abstract bool SupportsCubeMapSeamless();
 
     /// <inheritdoc />
-    public void EnableCubeMapSeamless( bool enable )
-    {
-        if ( SupportsCubeMapSeamless() )
-        {
-            if ( enable )
-            {
-                GL.Enable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
-            }
-            else
-            {
-                GL.Disable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
-            }
-        }
-    }
+    public abstract void EnableCubeMapSeamless( bool enable );
 
     /// <inheritdoc />
     public abstract bool SupportsDisplayModeChange();

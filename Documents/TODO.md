@@ -442,7 +442,7 @@ GRAPHICS/OPENGL/GLSL
     - IP   - IP   - Quad.glsl.frag
     - IP   - IP   - Quad.glsl.vert
 
-GRAPHICS/OPENGL/NEWBINDINGS
+GRAPHICS/OPENGL/NEWBINDINGS <= Merge into GRAPHICS/OPENGL
 ---------------------------
 
     CODE   DOCUMENT
@@ -468,19 +468,6 @@ GRAPHICS/OPENGL/NEWBINDINGS
     - IP   -      - VertexArrayBindings
     - IP   -      - VertexAttribBindings
 
-GRAPHICS/SYSDRAW
-----------------
-
-    CODE   DOCUMENT
-    ----   --------
-    -      -      - Bitmap 
-    -      -      - BufferedImage
-    -      -      - Graphics
-    -      -      - Image
-    -      -      - ImageCapabilities
-    -      -      - Pen
-    -      -      - Rectangle
-
 GRAPHICS/TEXT
 -------------
 
@@ -493,8 +480,8 @@ GRAPHICS/TEXT
     - IP   - IP   - FontUtils
     - DONE - IP   - GlyphLayout
     - IP   - IP   - RegexUtils
-    - IP   - IP   - Subset            - Why do I have this?
-    - IP   - IP   - UnicodeBlock      - Why do I have this?
+    - IP   - IP   - Subset
+    - IP   - IP   - UnicodeBlock
 
 GRAPHICS/TEXT/FREETYPE
 ----------------------
