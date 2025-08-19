@@ -353,15 +353,18 @@ public partial class SpriteBatch : IBatch, IDisposable
             return;
         }
 
-        // Bind the texture to the current texture unit.
-        GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
-        LastTexture.Bind();
-        GL.Uniform1i( _textureLocation, _currentTextureIndex );
+        if ( _textureLocation != ShaderProgram.INVALID )
+        {
+            // Bind the texture to the current texture unit.
+            GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
+            LastTexture.Bind();
+            GL.Uniform1i( _textureLocation, _currentTextureIndex );
 
-        _mesh?.SetVertices( Vertices, 0, Idx );
-        _mesh!.IndicesBuffer.Position = 0;
-        _mesh!.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
-
+            _mesh?.SetVertices( Vertices, 0, Idx );
+            _mesh!.IndicesBuffer.Position = 0;
+            _mesh!.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
+        }
+        
         // Set up blending.
         if ( BlendingEnabled )
         {
@@ -380,9 +383,6 @@ public partial class SpriteBatch : IBatch, IDisposable
 
         // Render the sprites.
         _mesh?.Render( _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * VERTICES_PER_SPRITE );
-
-        // Update the current texture index.
-//        _currentTextureIndex = ( _currentTextureIndex + 1 ) % _maxTextureUnits;
     }
 
     // ========================================================================
@@ -693,7 +693,8 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-        return new ShaderProgram( DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER );
+//        return new ShaderProgram( DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER );
+        return new ShaderProgram( SIMPLE_RGBA_VERTEX_SHADER, SIMPLE_RGBA_FRAGMENT_SHADER );
     }
 
     /// <summary>

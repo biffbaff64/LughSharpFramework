@@ -80,7 +80,8 @@ public class DesktopGLApplication : IApplication, IDisposable
     private readonly Sync?              _sync;
     private          bool               _glfwInitialised = false;
     private          IPreferences       _prefs;
-    private          bool               _running = true;
+    private          bool               _running  = true;
+    private          bool               _disposed = false;
 
     // ========================================================================
     // ========================================================================
@@ -165,7 +166,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// </summary>
     protected void Loop()
     {
-        Logger.Debug( "Entering framework loop", true );
+        Logger.Debug( "Entering Framework Loop", boxedDebug: true );
 
         List< DesktopGLWindow > closedWindows = [ ];
 
@@ -285,6 +286,8 @@ public class DesktopGLApplication : IApplication, IDisposable
 
             // Glfw.SwapBuffers is called in window.Update().
             Glfw.PollEvents();
+
+            Exit();
         }
 
         Logger.Debug( "Ending framework loop" );
@@ -343,28 +346,6 @@ public class DesktopGLApplication : IApplication, IDisposable
                 Logger.Warning( "Invalid Error!!" );
             }
         };
-    }
-
-    /// <summary>
-    /// Cleans up, and disposes of, any windows that have been closed.
-    /// </summary>
-    protected void CleanupWindows()
-    {
-        lock ( LifecycleListeners )
-        {
-            foreach ( var lifecycleListener in LifecycleListeners )
-            {
-                lifecycleListener.Pause();
-                lifecycleListener.Dispose();
-            }
-        }
-
-        foreach ( var window in Windows )
-        {
-            window.Dispose();
-        }
-
-        Windows.Clear();
     }
 
     /// <summary>
@@ -506,16 +487,43 @@ public class DesktopGLApplication : IApplication, IDisposable
     }
 
     // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// Cleans up, and disposes of, any windows that have been closed.
+    /// </summary>
+    protected void CleanupWindows()
+    {
+        Logger.Debug( $"LifeCycleListeners count: {LifecycleListeners.Count}" );
+        Logger.Debug( $"Windows count: {Windows.Count}" );
+
+        lock ( LifecycleListeners )
+        {
+            foreach ( var lifecycleListener in LifecycleListeners )
+            {
+                lifecycleListener.Pause();
+                lifecycleListener.Dispose();
+            }
+        }
+
+        foreach ( var window in Windows )
+        {
+            window.Dispose();
+        }
+
+        Windows.Clear();
+    }
+
+    // ========================================================================
 
     /// <summary>
     /// Cleanup everything before shutdown.
     /// </summary>
-    protected void Cleanup()
+    protected static void Cleanup()
     {
         DesktopGLCursor.DisposeSystemCursors();
-
         Engine.Api.Audio.Dispose();
-
         _errorCallback = null;
 
         Glfw.Terminate();
@@ -531,11 +539,20 @@ public class DesktopGLApplication : IApplication, IDisposable
         GC.SuppressFinalize( this );
     }
 
-    public static void Dispose( bool disposing )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="disposing"></param>
+    private void Dispose( bool disposing )
     {
-        if ( disposing )
+        if ( !_disposed )
         {
-            // Release managed resources here
+            if ( disposing )
+            {
+                // Release managed resources here
+            }
+
+            _disposed = true;
         }
     }
 

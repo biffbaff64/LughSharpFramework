@@ -112,7 +112,15 @@ public abstract class Game : IApplicationListener
     /// </summary>
     public virtual void Dispose()
     {
-        Screen?.Hide();
+        Dispose( true );
         GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            Screen?.Hide();
+        }
     }
 }

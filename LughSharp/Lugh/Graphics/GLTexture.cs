@@ -97,7 +97,6 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 
     /// <summary>
     /// Texture depth in computer graphics typically refers to one of two concepts:
-    /// <para>
     /// <li>
     /// For 3D textures: The depth represents the third dimension of the texture. In this
     /// context, a texture is a three-dimensional array of texels (texture elements),
@@ -109,8 +108,6 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// </li>
     /// <para>
     /// 3D textures are used in various graphics applications, such as:
-    /// </para>
-    /// <para>
     /// <li>Volumetric rendering (e.g., for medical imaging or scientific visualization)</li>
     /// <li>Storing precomputed lighting information</li>
     /// <li>Creating complex material effects</li>
@@ -119,11 +116,8 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// along its z-axis. For standard 2D textures, this value would typically be 1 or not used at all.
     /// </para>
     /// </para>
-    /// </para>
     /// </summary>
     public virtual int Depth { get; }
-
-    // ========================================================================
 
     /// <summary>
     /// Returns the <see cref="TextureFilterMode"/> used for minification.
@@ -472,7 +466,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
                              levels: 1,
                              internalFormat: IGL.GL_RGBA8,
                              width: pixmap.Width,
-                             height: pixmap.Height );;
+                             height: pixmap.Height );
 
         GL.TextureSubImage2D( texture: GLTextureHandle,
                               level: 0,

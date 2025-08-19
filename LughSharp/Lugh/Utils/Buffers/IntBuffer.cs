@@ -152,8 +152,14 @@ public class IntBuffer : Buffer, IDisposable
             throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
         }
 
+        Logger.Debug( $"Capacity: {Capacity}, Position: {Position}, Limit: {Limit}, Length: {Length}" );
+        
+        // Check if we have enough capacity to accommodate the integer value
+        Logger.Debug( $"Ensuring capacity for: {Position + sizeof( int )}" );
         EnsureCapacity( Position + sizeof( int ) );
 
+        Logger.Debug( $"Capacity: {Capacity}, Position: {Position}, Limit: {Limit}, Length: {Length}" );
+        
         var intOffset = Position;
 
         if ( ( intOffset + sizeof( int ) ) > Capacity )
@@ -295,27 +301,33 @@ public class IntBuffer : Buffer, IDisposable
     /// <inheritdoc cref="ByteBuffer.Resize(int)" />
     public override void Resize( int extraCapacityInBytes )
     {
-        // **1. Delegate Resize to ByteBuffer**
+        Logger.Debug( $"Capacity: {Capacity}, Position: {Position}, Limit: {Limit}, Length: {Length}" );
+        Logger.Debug( $"Adding {extraCapacityInBytes} bytes" );
+
+        // Delegate Resize to ByteBuffer
         _byteBufferDelegate.Resize( extraCapacityInBytes );
 
-        // **2. Recalculate IntBuffer Capacity in *ints* based on the resized ByteBuffer's byte capacity**
+        Logger.Debug( $"Capacity: {Capacity}, Position: {Position}, Limit: {Limit}, Length: {Length}" );
+        
+        // Recalculate IntBuffer Capacity in *ints* based on the resized ByteBuffer's byte capacity
         Capacity = ( int )Math.Ceiling( ( double )_byteBufferDelegate.Capacity / sizeof( int ) );
 
-        // **3. Adjust Limit if it was originally at Capacity** (Optional, but good practice to maintain Limit if it was at full capacity before resize)
-        if ( Limit == ( Capacity -
-                        ( int )Math.Ceiling( ( double )extraCapacityInBytes / sizeof( int ) ) ) ) // Check if Limit was at old Capacity
+        // Check if Limit was at old Capacity
+        if ( Limit == ( Capacity - ( int )Math.Ceiling( ( double )extraCapacityInBytes / sizeof( int ) ) ) )
         {
             Limit = Capacity; // Reset Limit to the new Capacity if it was at the old Capacity
         }
+        
+        Logger.Debug( $"Capacity: {Capacity}, Position: {Position}, Limit: {Limit}, Length: {Length}" );
     }
 
     /// <inheritdoc cref="ByteBuffer.Clear()" />
     public override void Clear()
     {
         _byteBufferDelegate.Clear(); // Delegate to ByteBuffer's Clear implementation
-        Length   = 0;                // Reset IntBuffer Length
-        Position = 0;                // Reset IntBuffer Position
-        Limit    = Capacity;         // Reset IntBuffer Limit
+        Length   = 0;
+        Position = 0;
+        Limit    = Capacity;
     }
 
     /// <inheritdoc />

@@ -41,6 +41,8 @@ public struct Transform
     public int        Padding; // Padding for alignment purposes
 }
 
+// ========================================================================
+
 // Helper struct for integer vectors
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
@@ -49,6 +51,9 @@ public struct Vector2Int
     public int X;
     public int Y;
 }
+
+// ========================================================================
+// ========================================================================
 
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
@@ -92,6 +97,9 @@ public struct Material : IEquatable< Material >
         return !( left == right );
     }
 }
+
+// ========================================================================
+// ========================================================================
 
 public partial class SpriteBatch
 {
@@ -192,6 +200,7 @@ public partial class SpriteBatch
         """;
 
     // ========================================================================
+    // ========================================================================
 
     public const string DEFAULT_VERTEX_SHADER =
         "#version 450 core\n" +
@@ -216,6 +225,30 @@ public partial class SpriteBatch
         "void main() {\n" +
         "    fragColor = v_color * texture(u_texture, v_texCoords);\n" +
         "}\n";
+
+    // ========================================================================
+    // ========================================================================
+
+    public const string SIMPLE_RGBA_VERTEX_SHADER =
+        """
+        #version 330 core
+        layout (location = 0) in vec3 aPosition;
+        uniform mat4 u_projTrans;
+        void main()
+        {
+            gl_Position = u_projTrans * vec4(aPosition, 1.0);
+        }
+        """;
+
+    public const string SIMPLE_RGBA_FRAGMENT_SHADER =
+        """
+        #version 330 core
+        out vec4 FragColor;
+        void main()
+        {
+            FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+        }
+        """;
 }
 
 // ========================================================================

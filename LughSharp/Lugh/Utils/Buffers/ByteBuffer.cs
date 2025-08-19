@@ -1088,7 +1088,8 @@ public class ByteBuffer : Buffer, IDisposable
         switch ( extraCapacityInBytes )
         {
             case < 0:
-                throw new ArgumentOutOfRangeException( nameof( extraCapacityInBytes ), "Extra capacity must be non-negative." );
+                throw new ArgumentOutOfRangeException( nameof( extraCapacityInBytes ),
+                                                       "Extra capacity must be non-negative." );
 
             case 0:
                 // No resize needed if extraCapacity is 0
@@ -1099,15 +1100,13 @@ public class ByteBuffer : Buffer, IDisposable
 
         if ( newCapacity < 0 ) // Check for integer overflow (if capacity is very large)
         {
-            throw new ArgumentOutOfRangeException( nameof( extraCapacityInBytes ), "Resize would result in capacity overflow." );
+            throw new ArgumentOutOfRangeException( nameof( extraCapacityInBytes ),
+                                                   "Resize would result in capacity overflow." );
         }
 
-        var newBackingArray = new byte[ newCapacity ];
+        Logger.Debug( $"Capacity before Resize: {_backingArray.Length} bytes"  );
+        Array.Resize< byte >( ref _backingArray, newCapacity );
 
-        // Efficiently copy existing data using Array.Copy
-        Array.Copy( _backingArray, newBackingArray, _backingArray.Length );
-
-        _backingArray = newBackingArray;
         _memory       = _backingArray.AsMemory();
         Capacity      = newCapacity;
 
@@ -1116,6 +1115,9 @@ public class ByteBuffer : Buffer, IDisposable
         {
             Position = Capacity; // Clamp position to the new capacity if it was beyond
         }
+        
+        Logger.Debug( $"_backingArray: {_backingArray.Length}, Capacity: {Capacity} bytes"  );
+        Logger.Debug( $"Position after Resize: {Position}"  );
     }
 
     /// <summary>

@@ -1846,16 +1846,23 @@ public class Mesh : IDisposable
     /// </summary>
     public void Dispose()
     {
-        if ( _meshes[ Api.App ] != null )
-        {
-            _meshes[ Api.App ]?.Remove( this );
-        }
-
-        _vertices.Dispose();
-        _instances?.Dispose();
-        IndexData.Dispose();
-
+        Dispose( true );
         GC.SuppressFinalize( this );
+    }
+
+    protected void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            if ( _meshes[ Api.App ] != null )
+            {
+                _meshes[ Api.App ]?.Remove( this );
+            }
+
+            _vertices.Dispose();
+            _instances?.Dispose();
+            IndexData.Dispose();
+        }
     }
 }
 

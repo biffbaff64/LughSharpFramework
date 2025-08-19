@@ -30,6 +30,7 @@ using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Exceptions;
 
 using Platform = LughSharp.Lugh.Core.Platform;
 
@@ -63,7 +64,7 @@ public partial class DesktopGLWindow : IDisposable
     /// handling core application lifecycle events such as creation, resizing, updating,
     /// rendering, and pausing/resuming the application.
     /// </summary>
-    public IApplicationListener ApplicationListener { get; set; }
+    public IApplicationListener? ApplicationListener { get; set; }
 
     /// <summary>
     /// Represents the input handling system for the DesktopGL backend.
@@ -104,10 +105,12 @@ public partial class DesktopGLWindow : IDisposable
 
     private List< IRunnable.Runnable > _executedRunnables = [ ];
     private List< IRunnable.Runnable > _runnables         = [ ];
-    private Vector2                    _tmpV2             = new();
-    private bool                       _focused           = false;
-    private bool                       _iconified         = false;
-    private bool                       _requestRendering  = false;
+
+    private Vector2 _tmpV2            = new();
+    private bool    _focused          = false;
+    private bool    _iconified        = false;
+    private bool    _requestRendering = false;
+    private bool    _disposed         = false;
 
     // ========================================================================
     // ========================================================================
@@ -125,6 +128,16 @@ public partial class DesktopGLWindow : IDisposable
         WindowListener      = config.WindowListener;
         AppConfig           = DesktopGLApplicationConfiguration.Copy( config );
         Application         = application;
+
+        if ( ApplicationListener == null )
+        {
+            Logger.Warning( "Provided ApplicationListener is NULL!" );
+        }
+
+        if ( WindowListener == null )
+        {
+            Logger.Warning( "Provided config.WindowListener is NULL!" );
+        }
     }
 
     /// <summary>
@@ -199,8 +212,8 @@ public partial class DesktopGLWindow : IDisposable
         if ( shouldRender )
         {
             Graphics.Update();
-            ApplicationListener.Update();
-            ApplicationListener.Render();
+            ApplicationListener?.Update();
+            ApplicationListener?.Render();
 
             Glfw.SwapBuffers( GlfwWindow );
         }
@@ -505,8 +518,8 @@ public partial class DesktopGLWindow : IDisposable
     {
         if ( !ListenerInitialised )
         {
-            ApplicationListener.Create();
-            ApplicationListener.Resize( Graphics.Width, Graphics.Height );
+            ApplicationListener?.Create();
+            ApplicationListener?.Resize( Graphics.Width, Graphics.Height );
             ListenerInitialised = true;
         }
     }
@@ -526,20 +539,36 @@ public partial class DesktopGLWindow : IDisposable
 
     protected void Dispose( bool disposing )
     {
-        if ( disposing )
+        if ( !_disposed )
         {
-            ApplicationListener.Pause();
-            ApplicationListener.Dispose();
-            DesktopGLCursor.DisposeGLCursor( this );
-            Graphics.Dispose();
-            Input.Dispose();
+            if ( disposing )
+            {
+                Logger.Checkpoint();
+                ApplicationListener?.Pause();
+                Logger.Checkpoint();
+                ApplicationListener?.Dispose();
+                Logger.Checkpoint();
+                DesktopGLCursor.DisposeGLCursor( this );
+                Logger.Checkpoint();
+                Graphics.Dispose();
+                Logger.Checkpoint();
+                Input.Dispose();
+                Logger.Checkpoint();
 
-            Glfw.SetWindowFocusCallback( GlfwWindow, null );
-            Glfw.SetWindowIconifyCallback( GlfwWindow, null );
-            Glfw.SetWindowCloseCallback( GlfwWindow, null );
-            Glfw.SetDropCallback( GlfwWindow, null );
+                Glfw.SetWindowFocusCallback( GlfwWindow, null );
+                Logger.Checkpoint();
+                Glfw.SetWindowIconifyCallback( GlfwWindow, null );
+                Logger.Checkpoint();
+                Glfw.SetWindowCloseCallback( GlfwWindow, null );
+                Logger.Checkpoint();
+                Glfw.SetDropCallback( GlfwWindow, null );
+                Logger.Checkpoint();
 
-            Glfw.DestroyWindow( GlfwWindow );
+                Glfw.DestroyWindow( GlfwWindow );
+                Logger.Checkpoint();
+            }
+
+            _disposed = true;
         }
     }
 

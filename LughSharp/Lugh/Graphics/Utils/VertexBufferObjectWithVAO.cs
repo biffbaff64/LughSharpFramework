@@ -258,26 +258,6 @@ public class VertexBufferObjectWithVAO : IVertexData
         _isDirty = true;
     }
 
-    /// <summary>
-    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-    /// </summary>
-    public void Dispose()
-    {
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
-        GL.DeleteBuffers( ( uint )_bufferHandle );
-
-        _bufferHandle = 0;
-
-        if ( _ownsBuffer )
-        {
-            _byteBuffer.Dispose();
-        }
-
-        DeleteVAO();
-
-        GC.SuppressFinalize( this );
-    }
-
     private unsafe void BufferChanged()
     {
         if ( _isBound )
@@ -404,16 +384,58 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         if ( _vaoHandle != -1 )
         {
+            Logger.Checkpoint();
+            
             _tmpHandle.Clear();
             _tmpHandle.PutInt( _vaoHandle );
             _tmpHandle.Flip();
 
+            Logger.Checkpoint();
+            
             fixed ( int* intptr = &_tmpHandle.ToArray()[ 0 ] )
             {
                 GL.DeleteVertexArrays( 1, ( uint* )intptr );
             }
 
+            Logger.Checkpoint();
+            
             _vaoHandle = -1;
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+    
+    /// <summary>
+    /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose( true );
+        GC.SuppressFinalize( this );
+    }
+    
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( disposing )
+        {
+            Logger.Checkpoint();
+            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
+            Logger.Checkpoint();
+            GL.DeleteBuffers( ( uint )_bufferHandle );
+            Logger.Checkpoint();
+
+            _bufferHandle = 0;
+
+            if ( _ownsBuffer )
+            {
+                Logger.Checkpoint();
+                _byteBuffer.Dispose();
+            }
+
+            Logger.Checkpoint();
+            DeleteVAO();
+            Logger.Checkpoint();
         }
     }
 }
