@@ -87,7 +87,9 @@ public class FloatBuffer : Buffer, IDisposable
     }
 
     // ========================================================================
-
+    // Get methods
+    // ========================================================================
+    
     /// <inheritdoc cref="ByteBuffer.GetFloat()" />
     public float GetFloat()
     {
@@ -113,6 +115,64 @@ public class FloatBuffer : Buffer, IDisposable
         return _byteBufferDelegate.GetFloat( byteOffset );
     }
 
+    /// <summary>
+    /// Fills the provided array with float values from the buffer.
+    /// </summary>
+    /// <param name="floatArray">
+    /// The float array to be filled with values from the buffer. The array length should be
+    /// less than or equal to the remaining number of floats in the buffer to avoid buffer
+    /// underflow.
+    /// </param>
+    public void GetFloats( float[] floatArray )
+    {
+        _byteBufferDelegate.GetFloats( floatArray );
+    }
+
+    /// <summary>
+    /// Retrieves a sequence of float values from the buffer and stores them into the specified array.
+    /// </summary>
+    /// <param name="dst">
+    /// The destination array where the float values will be stored.
+    /// </param>
+    /// <param name="dstOffset">
+    /// The offset within the destination array at which to begin storing the float values.
+    /// </param>
+    /// <param name="length">
+    /// The number of float values to retrieve and store in the destination array.
+    /// </param>
+    public void GetFloats( float[] dst, int dstOffset, int length )
+    {
+        _byteBufferDelegate.GetFloats( dst, dstOffset, length );
+    }
+
+    /// <inheritdoc />
+    public override byte GetByte()
+    {
+        return _byteBufferDelegate.GetByte();
+    }
+
+    /// <inheritdoc />
+    public override byte GetByte( int index )
+    {
+        return _byteBufferDelegate.GetByte( index );
+    }
+
+    /// <inheritdoc />
+    public override void GetBytes( byte[] result, int offset, int length )
+    {
+        _byteBufferDelegate.GetBytes( result, offset, length );
+    }
+
+    /// <inheritdoc />
+    public override void GetBytes( byte[] byteArray )
+    {
+        _byteBufferDelegate.GetBytes( byteArray );
+    }
+
+    // ========================================================================
+    // Put methods
+    // ========================================================================
+    
     /// <inheritdoc cref="ByteBuffer.PutFloat(float)" />
     public void PutFloat( float value )
     {
@@ -166,38 +226,6 @@ public class FloatBuffer : Buffer, IDisposable
         }
     }
 
-    // ----- Bulk Get/Put operations -----
-
-    /// <summary>
-    /// Fills the provided array with float values from the buffer.
-    /// </summary>
-    /// <param name="floatArray">
-    /// The float array to be filled with values from the buffer. The array length should be
-    /// less than or equal to the remaining number of floats in the buffer to avoid buffer
-    /// underflow.
-    /// </param>
-    public void GetFloats( float[] floatArray )
-    {
-        _byteBufferDelegate.GetFloats( floatArray );
-    }
-
-    /// <summary>
-    /// Retrieves a sequence of float values from the buffer and stores them into the specified array.
-    /// </summary>
-    /// <param name="dst">
-    /// The destination array where the float values will be stored.
-    /// </param>
-    /// <param name="dstOffset">
-    /// The offset within the destination array at which to begin storing the float values.
-    /// </param>
-    /// <param name="length">
-    /// The number of float values to retrieve and store in the destination array.
-    /// </param>
-    public void GetFloats( float[] dst, int dstOffset, int length )
-    {
-        _byteBufferDelegate.GetFloats( dst, dstOffset, length );
-    }
-
     /// <summary>
     /// Adds the contents of the provided float array to this buffer, staring at
     /// index <see cref="Buffer.Position" />
@@ -225,6 +253,42 @@ public class FloatBuffer : Buffer, IDisposable
         _byteBufferDelegate.PutFloats( src, srcOffset, length );
     }
 
+    /// <inheritdoc />
+    public override void PutByte( byte value )
+    {
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
+
+        _byteBufferDelegate.PutByte( value );
+    }
+
+    /// <inheritdoc />
+    public override void PutByte( int index, byte value )
+    {
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
+
+        _byteBufferDelegate.PutByte( index, value );
+    }
+
+    /// <inheritdoc />
+    public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int length )
+    {
+        _byteBufferDelegate.PutBytes( src, srcOffset, dstOffset, length );
+    }
+
+    /// <inheritdoc />
+    public override void PutBytes( byte[] byteArray )
+    {
+        _byteBufferDelegate.PutBytes( byteArray );
+    }
+
+    // ========================================================================
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -245,6 +309,8 @@ public class FloatBuffer : Buffer, IDisposable
     /// <inheritdoc cref="ByteBuffer.Resize(int)" />
     public override void Resize( int extraCapacityInBytes )
     {
+        Logger.Debug( $"Resize: {extraCapacityInBytes}" );
+
         _byteBufferDelegate.Resize( extraCapacityInBytes );
         Capacity = ( int )Math.Ceiling( ( double )_byteBufferDelegate.Capacity / sizeof( float ) );
     }
@@ -268,68 +334,6 @@ public class FloatBuffer : Buffer, IDisposable
     public override void Compact()
     {
         _byteBufferDelegate.Compact();
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public override byte GetByte()
-    {
-        return _byteBufferDelegate.GetByte();
-    }
-
-    /// <inheritdoc />
-    public override byte GetByte( int index )
-    {
-        return _byteBufferDelegate.GetByte( index );
-    }
-
-    /// <inheritdoc />
-    public override void PutByte( byte value )
-    {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        }
-
-        _byteBufferDelegate.PutByte( value );
-    }
-
-    /// <inheritdoc />
-    public override void PutByte( int index, byte value )
-    {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        }
-
-        _byteBufferDelegate.PutByte( index, value );
-    }
-
-    // ----- Bulk Get/Put operations -----
-
-    /// <inheritdoc />
-    public override void GetBytes( byte[] result, int offset, int length )
-    {
-        _byteBufferDelegate.GetBytes( result, offset, length );
-    }
-
-    /// <inheritdoc />
-    public override void GetBytes( byte[] byteArray )
-    {
-        _byteBufferDelegate.GetBytes( byteArray );
-    }
-
-    /// <inheritdoc />
-    public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int length )
-    {
-        _byteBufferDelegate.PutBytes( src, srcOffset, dstOffset, length );
-    }
-
-    /// <inheritdoc />
-    public override void PutBytes( byte[] byteArray )
-    {
-        _byteBufferDelegate.PutBytes( byteArray );
     }
 
     // ========================================================================

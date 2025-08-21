@@ -61,7 +61,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DeleteBuffers( GLsizei n, GLuint* buffers )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLDELETEBUFFERSPROC >( "glDeleteBuffers", out _glDeleteBuffers );
+        GetDelegateForFunction< GLBindings.PFNGLDELETEBUFFERSPROC >( "glDeleteBuffers", out _glDeleteBuffers );
 
         _glDeleteBuffers( n, buffers );
     }
@@ -69,7 +69,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DeleteBuffers( params GLuint[] buffers )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLDELETEBUFFERSPROC >( "glDeleteBuffers", out _glDeleteBuffers );
+        GetDelegateForFunction< GLBindings.PFNGLDELETEBUFFERSPROC >( "glDeleteBuffers", out _glDeleteBuffers );
 
         fixed ( GLuint* p = &buffers[ 0 ] )
         {
@@ -82,7 +82,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GenBuffers( GLsizei n, GLuint* buffers )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGENBUFFERSPROC >( "glGenBuffers", out _glGenBuffers );
+        GetDelegateForFunction< GLBindings.PFNGLGENBUFFERSPROC >( "glGenBuffers", out _glGenBuffers );
 
         _glGenBuffers( n, buffers );
     }
@@ -90,7 +90,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLuint[] GenBuffers( GLsizei n )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGENBUFFERSPROC >( "glGenBuffers", out _glGenBuffers );
+        GetDelegateForFunction< GLBindings.PFNGLGENBUFFERSPROC >( "glGenBuffers", out _glGenBuffers );
 
         var ret = new GLuint[ n ];
 
@@ -113,7 +113,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLboolean IsBuffer( GLuint buffer )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLISBUFFERPROC >( "glIsBuffer", out _glIsBuffer );
+        GetDelegateForFunction< GLBindings.PFNGLISBUFFERPROC >( "glIsBuffer", out _glIsBuffer );
 
         return _glIsBuffer( buffer );
     }
@@ -123,7 +123,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BufferData( GLenum target, GLsizeiptr size, IntPtr data, GLenum usage )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
+        GetDelegateForFunction< GLBindings.PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
 
         _glBufferData( target, size, data, usage );
 
@@ -133,7 +133,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BufferData< T >( GLenum target, T[] data, GLenum usage ) where T : unmanaged
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
+        GetDelegateForFunction< GLBindings.PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
 
         fixed ( T* p = &data[ 0 ] )
         {
@@ -146,7 +146,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BufferSubData( GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLBUFFERSUBDATAPROC >( "glBufferSubData", out _glBufferSubData );
+        GetDelegateForFunction< GLBindings.PFNGLBUFFERSUBDATAPROC >( "glBufferSubData", out _glBufferSubData );
 
         _glBufferSubData( target, offset, size, data );
     }
@@ -154,7 +154,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BufferSubData< T >( GLenum target, GLintptr offsetCount, T[] data ) where T : unmanaged
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLBUFFERSUBDATAPROC >( "glBufferSubData", out _glBufferSubData );
+        GetDelegateForFunction< GLBindings.PFNGLBUFFERSUBDATAPROC >( "glBufferSubData", out _glBufferSubData );
 
         fixed ( T* p = &data[ 0 ] )
         {
@@ -167,7 +167,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetBufferSubData( GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETBUFFERSUBDATAPROC >( "glGetBufferSubData", out _glGetBufferSubData );
+        GetDelegateForFunction< GLBindings.PFNGLGETBUFFERSUBDATAPROC >( "glGetBufferSubData", out _glGetBufferSubData );
 
         _glGetBufferSubData( target, offset, size, data );
     }
@@ -175,7 +175,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetBufferSubData< T >( GLenum target, GLintptr offsetCount, GLsizei count, ref T[] data ) where T : unmanaged
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETBUFFERSUBDATAPROC >( "glGetBufferSubData", out _glGetBufferSubData );
+        GetDelegateForFunction< GLBindings.PFNGLGETBUFFERSUBDATAPROC >( "glGetBufferSubData", out _glGetBufferSubData );
 
         fixed ( T* p = &data[ 0 ] )
         {
@@ -188,7 +188,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public IntPtr MapBuffer( GLenum target, GLenum access )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLMAPBUFFERPROC >( "glMapBuffer", out _glMapBuffer );
+        GetDelegateForFunction< GLBindings.PFNGLMAPBUFFERPROC >( "glMapBuffer", out _glMapBuffer );
 
         return _glMapBuffer( target, access );
     }
@@ -198,11 +198,11 @@ public unsafe partial class GLBindings
     {
         GLint size;
 
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETBUFFERPARAMETERIVPROC >( "glGetBufferParameteriv", out _glGetBufferParameteriv );
+        GetDelegateForFunction< GLBindings.PFNGLGETBUFFERPARAMETERIVPROC >( "glGetBufferParameteriv", out _glGetBufferParameteriv );
 
         _glGetBufferParameteriv( target, IGL.GL_BUFFER_SIZE, &size );
 
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLMAPBUFFERPROC >( "glMapBuffer", out _glMapBuffer );
+        GetDelegateForFunction< GLBindings.PFNGLMAPBUFFERPROC >( "glMapBuffer", out _glMapBuffer );
 
         var ret = _glMapBuffer( target, access );
 
@@ -214,7 +214,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLboolean UnmapBuffer( GLenum target )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLUNMAPBUFFERPROC >( "glUnmapBuffer", out _glUnmapBuffer );
+        GetDelegateForFunction< GLBindings.PFNGLUNMAPBUFFERPROC >( "glUnmapBuffer", out _glUnmapBuffer );
 
         return _glUnmapBuffer( target );
     }
@@ -224,7 +224,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetBufferParameteriv( GLenum target, GLenum pname, GLint* parameters )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETBUFFERPARAMETERIVPROC >( "glGetBufferParameteriv", out _glGetBufferParameteriv );
+        GetDelegateForFunction< GLBindings.PFNGLGETBUFFERPARAMETERIVPROC >( "glGetBufferParameteriv", out _glGetBufferParameteriv );
 
         _glGetBufferParameteriv( target, pname, parameters );
     }
@@ -232,7 +232,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetBufferParameteriv( GLenum target, GLenum pname, ref GLint[] parameters )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETBUFFERPARAMETERIVPROC >( "glGetBufferParameteriv", out _glGetBufferParameteriv );
+        GetDelegateForFunction< GLBindings.PFNGLGETBUFFERPARAMETERIVPROC >( "glGetBufferParameteriv", out _glGetBufferParameteriv );
 
         fixed ( GLint* p = &parameters[ 0 ] )
         {
@@ -245,7 +245,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetBufferPointerv( GLenum target, GLenum pname, IntPtr* parameters )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETBUFFERPOINTERVPROC >( "glGetBufferPointerv", out _glGetBufferPointerv );
+        GetDelegateForFunction< GLBindings.PFNGLGETBUFFERPOINTERVPROC >( "glGetBufferPointerv", out _glGetBufferPointerv );
 
         _glGetBufferPointerv( target, pname, parameters );
     }
@@ -253,7 +253,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetBufferPointerv( GLenum target, GLenum pname, ref IntPtr[] parameters )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETBUFFERPOINTERVPROC >( "glGetBufferPointerv", out _glGetBufferPointerv );
+        GetDelegateForFunction< GLBindings.PFNGLGETBUFFERPOINTERVPROC >( "glGetBufferPointerv", out _glGetBufferPointerv );
 
         fixed ( IntPtr* p = &parameters[ 0 ] )
         {
@@ -266,7 +266,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DrawBuffers( GLsizei n, GLenum* bufs )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLDRAWBUFFERSPROC >( "glDrawBuffers", out _glDrawBuffers );
+        GetDelegateForFunction< GLBindings.PFNGLDRAWBUFFERSPROC >( "glDrawBuffers", out _glDrawBuffers );
 
         _glDrawBuffers( n, bufs );
     }
@@ -274,7 +274,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DrawBuffers( params GLenum[] bufs )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLDRAWBUFFERSPROC >( "glDrawBuffers", out _glDrawBuffers );
+        GetDelegateForFunction< GLBindings.PFNGLDRAWBUFFERSPROC >( "glDrawBuffers", out _glDrawBuffers );
 
         fixed ( GLenum* pbufs = &bufs[ 0 ] )
         {
@@ -287,7 +287,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BindBufferRange( GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLBINDBUFFERRANGEPROC >( "glBindBufferRange", out _glBindBufferRange );
+        GetDelegateForFunction< GLBindings.PFNGLBINDBUFFERRANGEPROC >( "glBindBufferRange", out _glBindBufferRange );
 
         _glBindBufferRange( target, index, buffer, offset, size );
     }
@@ -297,7 +297,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BindBufferBase( GLenum target, GLuint index, GLuint buffer )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLBINDBUFFERBASEPROC >( "glBindBufferBase", out _glBindBufferBase );
+        GetDelegateForFunction< GLBindings.PFNGLBINDBUFFERBASEPROC >( "glBindBufferBase", out _glBindBufferBase );
 
         _glBindBufferBase( target, index, buffer );
     }
@@ -307,7 +307,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetBufferParameteri64v( GLenum target, GLenum pname, GLint64* parameters )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETBUFFERPARAMETERI64VPROC >( "glGetBufferParameteri64v", out _glGetBufferParameteri64v );
+        GetDelegateForFunction< GLBindings.PFNGLGETBUFFERPARAMETERI64VPROC >( "glGetBufferParameteri64v", out _glGetBufferParameteri64v );
 
         _glGetBufferParameteri64v( target, pname, parameters );
     }
@@ -315,7 +315,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetBufferParameteri64v( GLenum target, GLenum pname, ref GLint64[] parameters )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLGETBUFFERPARAMETERI64VPROC >( "glGetBufferParameteri64v", out _glGetBufferParameteri64v );
+        GetDelegateForFunction< GLBindings.PFNGLGETBUFFERPARAMETERI64VPROC >( "glGetBufferParameteri64v", out _glGetBufferParameteri64v );
 
         {
             fixed ( GLint64* dp = &parameters[ 0 ] )
@@ -329,14 +329,14 @@ public unsafe partial class GLBindings
 
     public void ClearBufferData( GLenum target, GLenum internalFormat, GLenum format, GLenum type, IntPtr data )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERDATAPROC >( "glClearBufferData", out _glClearBufferData );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERDATAPROC >( "glClearBufferData", out _glClearBufferData );
 
         _glClearBufferData( target, internalFormat, format, type, data );
     }
 
     public void ClearBufferData< T >( GLenum target, GLenum internalFormat, GLenum format, GLenum type, T[] data ) where T : unmanaged
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERDATAPROC >( "glClearBufferData", out _glClearBufferData );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERDATAPROC >( "glClearBufferData", out _glClearBufferData );
 
         fixed ( T* t = &data[ 0 ] )
         {
@@ -349,7 +349,7 @@ public unsafe partial class GLBindings
     public void ClearBufferSubData( GLenum target, GLenum internalFormat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type,
                                     IntPtr data )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERSUBDATAPROC >( "glClearBufferSubData", out _glClearBufferSubData );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERSUBDATAPROC >( "glClearBufferSubData", out _glClearBufferSubData );
 
         _glClearBufferSubData( target, internalFormat, offset, size, format, type, data );
     }
@@ -357,7 +357,7 @@ public unsafe partial class GLBindings
     public void ClearBufferSubData< T >( GLenum target, GLenum internalFormat, GLintptr offset, GLsizeiptr size, GLenum format, GLenum type,
                                          T[] data ) where T : unmanaged
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERSUBDATAPROC >( "glClearBufferSubData", out _glClearBufferSubData );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERSUBDATAPROC >( "glClearBufferSubData", out _glClearBufferSubData );
 
         fixed ( T* t = &data[ 0 ] )
         {
@@ -369,7 +369,7 @@ public unsafe partial class GLBindings
 
     public void InvalidateBufferSubData( GLuint buffer, GLintptr offset, GLsizeiptr length )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLINVALIDATEBUFFERSUBDATAPROC >( "glInvalidateBufferSubData", out _glInvalidateBufferSubData );
+        GetDelegateForFunction< GLBindings.PFNGLINVALIDATEBUFFERSUBDATAPROC >( "glInvalidateBufferSubData", out _glInvalidateBufferSubData );
 
         _glInvalidateBufferSubData( buffer, offset, length );
     }
@@ -378,7 +378,7 @@ public unsafe partial class GLBindings
 
     public void InvalidateBufferData( GLuint buffer )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLINVALIDATEBUFFERDATAPROC >( "glInvalidateBufferData", out _glInvalidateBufferData );
+        GetDelegateForFunction< GLBindings.PFNGLINVALIDATEBUFFERDATAPROC >( "glInvalidateBufferData", out _glInvalidateBufferData );
 
         _glInvalidateBufferData( buffer );
     }
@@ -387,14 +387,14 @@ public unsafe partial class GLBindings
 
     public void ClearBufferiv( GLenum buffer, GLint drawbuffer, GLint* value )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERIVPROC >( "glClearBufferiv", out _glClearBufferiv );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERIVPROC >( "glClearBufferiv", out _glClearBufferiv );
 
         _glClearBufferiv( buffer, drawbuffer, value );
     }
 
     public void ClearBufferiv( GLenum buffer, GLint drawbuffer, GLint[] value )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERIVPROC >( "glClearBufferiv", out _glClearBufferiv );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERIVPROC >( "glClearBufferiv", out _glClearBufferiv );
 
         fixed ( GLint* p = &value[ 0 ] )
         {
@@ -406,14 +406,14 @@ public unsafe partial class GLBindings
 
     public void ClearBufferuiv( GLenum buffer, GLint drawbuffer, GLuint* value )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERUIVPROC >( "glClearBufferuiv", out _glClearBufferuiv );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERUIVPROC >( "glClearBufferuiv", out _glClearBufferuiv );
 
         _glClearBufferuiv( buffer, drawbuffer, value );
     }
 
     public void ClearBufferuiv( GLenum buffer, GLint drawbuffer, GLuint[] value )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERUIVPROC >( "glClearBufferuiv", out _glClearBufferuiv );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERUIVPROC >( "glClearBufferuiv", out _glClearBufferuiv );
 
         fixed ( GLuint* p = &value[ 0 ] )
         {
@@ -425,14 +425,14 @@ public unsafe partial class GLBindings
 
     public void ClearBufferfv( GLenum buffer, GLint drawbuffer, GLfloat* value )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERFVPROC >( "glClearBufferfv", out _glClearBufferfv );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERFVPROC >( "glClearBufferfv", out _glClearBufferfv );
 
         _glClearBufferfv( buffer, drawbuffer, value );
     }
 
     public void ClearBufferfv( GLenum buffer, GLint drawbuffer, GLfloat[] value )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERFVPROC >( "glClearBufferfv", out _glClearBufferfv );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERFVPROC >( "glClearBufferfv", out _glClearBufferfv );
 
         fixed ( GLfloat* p = &value[ 0 ] )
         {
@@ -444,7 +444,7 @@ public unsafe partial class GLBindings
 
     public void ClearBufferfi( GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil )
     {
-        GetDelegateForFunction< OpenGL.GLBindings.PFNGLCLEARBUFFERFIPROC >( "glClearBufferfi", out _glClearBufferfi );
+        GetDelegateForFunction< GLBindings.PFNGLCLEARBUFFERFIPROC >( "glClearBufferfi", out _glClearBufferfi );
 
         _glClearBufferfi( buffer, drawbuffer, depth, stencil );
     }

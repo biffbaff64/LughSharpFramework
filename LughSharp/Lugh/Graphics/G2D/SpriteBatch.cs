@@ -693,8 +693,8 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-//        return new ShaderProgram( DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER );
-        return new ShaderProgram( SIMPLE_RGBA_VERTEX_SHADER, SIMPLE_RGBA_FRAGMENT_SHADER );
+        return new ShaderProgram( DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER );
+//        return new ShaderProgram( SIMPLE_RGBA_VERTEX_SHADER, SIMPLE_RGBA_FRAGMENT_SHADER );
     }
 
     /// <summary>

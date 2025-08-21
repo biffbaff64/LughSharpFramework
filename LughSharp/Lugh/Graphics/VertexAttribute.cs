@@ -157,7 +157,9 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Position()
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS, "a_position" );
+        return new VertexAttribute( ( int )VertexConstants.Usage.Position,
+                                    VertexConstants.POSITION_COMPONENTS,
+                                    "a_position" );
     }
 
     /// <summary>

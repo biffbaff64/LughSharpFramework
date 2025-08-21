@@ -87,7 +87,9 @@ public class IntBuffer : Buffer, IDisposable
     }
 
     // ========================================================================
-
+    // Get methods
+    // ========================================================================
+    
     /// <summary>
     /// Retrieves the next Int32 value from the current position of the buffer and
     /// advances the position by the size of an Int32.
@@ -131,6 +133,67 @@ public class IntBuffer : Buffer, IDisposable
 
         return _byteBufferDelegate.GetInt( byteOffset );
     }
+
+    /// <summary>
+    /// Populates the provided array with integers from the buffer.
+    /// </summary>
+    /// <param name="intArray">
+    /// Array that will be filled with integer values read from the buffer. The size of the array
+    /// determines the number of integers retrieved.
+    /// </param>
+    public void GetInts( int[] intArray )
+    {
+        _byteBufferDelegate.GetInts( intArray );
+    }
+
+    /// <summary>
+    /// Reads a sequence of integers from the buffer into the specified array starting at the given offset.
+    /// </summary>
+    /// <param name="dst">
+    /// The destination array where the integers will be stored. This array must have sufficient
+    /// capacity to accommodate the number of integers specified by the length parameter, starting from the
+    /// specified offset.
+    /// </param>
+    /// <param name="dstOffset">
+    /// The starting offset in the destination array where the integers will begin to be written.
+    /// This value must be equal to or greater than zero.
+    /// </param>
+    /// <param name="length">
+    /// The number of integers to read from the buffer. This value must be equal to or greater than zero
+    /// and must not exceed the remaining capacity of the buffer.
+    /// </param>
+    public void GetInts( int[] dst, int dstOffset, int length )
+    {
+        _byteBufferDelegate.GetInts( dst, dstOffset, length );
+    }
+
+    /// <inheritdoc />
+    public override byte GetByte()
+    {
+        return _byteBufferDelegate.GetByte();
+    }
+
+    /// <inheritdoc />
+    public override byte GetByte( int index )
+    {
+        return _byteBufferDelegate.GetByte( index );
+    }
+
+    /// <inheritdoc />
+    public override void GetBytes( byte[] result, int offset, int length )
+    {
+        _byteBufferDelegate.GetBytes( result, offset, length );
+    }
+
+    /// <inheritdoc />
+    public override void GetBytes( byte[] byteArray )
+    {
+        _byteBufferDelegate.GetBytes( byteArray );
+    }
+
+    // ========================================================================
+    // Put methods
+    // ========================================================================
 
     /// <summary>
     /// Inserts an integer value into the buffer at the current position and advances the
@@ -201,7 +264,7 @@ public class IntBuffer : Buffer, IDisposable
             throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
         }
 
-        EnsureCapacity( index + sizeof( int ) );
+        EnsureCapacity( ( index + 1 ) + sizeof( int ) );
 
         var byteOffset = index * sizeof( int );
 
@@ -216,41 +279,6 @@ public class IntBuffer : Buffer, IDisposable
         {
             Length = index + 1;
         }
-    }
-
-    // ----- Bulk Get/Put operations -----
-
-    /// <summary>
-    /// Populates the provided array with integers from the buffer.
-    /// </summary>
-    /// <param name="intArray">
-    /// Array that will be filled with integer values read from the buffer. The size of the array
-    /// determines the number of integers retrieved.
-    /// </param>
-    public void GetInts( int[] intArray )
-    {
-        _byteBufferDelegate.GetInts( intArray );
-    }
-
-    /// <summary>
-    /// Reads a sequence of integers from the buffer into the specified array starting at the given offset.
-    /// </summary>
-    /// <param name="dst">
-    /// The destination array where the integers will be stored. This array must have sufficient
-    /// capacity to accommodate the number of integers specified by the length parameter, starting from the
-    /// specified offset.
-    /// </param>
-    /// <param name="dstOffset">
-    /// The starting offset in the destination array where the integers will begin to be written.
-    /// This value must be equal to or greater than zero.
-    /// </param>
-    /// <param name="length">
-    /// The number of integers to read from the buffer. This value must be equal to or greater than zero
-    /// and must not exceed the remaining capacity of the buffer.
-    /// </param>
-    public void GetInts( int[] dst, int dstOffset, int length )
-    {
-        _byteBufferDelegate.GetInts( dst, dstOffset, length );
     }
 
     /// <summary>
@@ -281,81 +309,6 @@ public class IntBuffer : Buffer, IDisposable
         _byteBufferDelegate.PutInts( src, srcOffset, length );
     }
 
-    // ========================================================================
-
-    /// <summary>
-    /// Returns the backing array as a int[].
-    /// </summary>
-    /// <returns></returns>
-    public new int[] ToArray()
-    {
-        var tmpArray = new int[ Length ];
-
-        _byteBufferDelegate.GetInts( tmpArray );
-
-        return tmpArray;
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc cref="ByteBuffer.Resize(int)" />
-    public override void Resize( int extraCapacityInBytes )
-    {
-        Logger.Debug( $"Capacity: {Capacity}, Position: {Position}, Limit: {Limit}, Length: {Length}" );
-        Logger.Debug( $"Adding {extraCapacityInBytes} bytes" );
-
-        // Delegate Resize to ByteBuffer
-        _byteBufferDelegate.Resize( extraCapacityInBytes );
-
-        Logger.Debug( $"Capacity: {Capacity}, Position: {Position}, Limit: {Limit}, Length: {Length}" );
-        
-        // Recalculate IntBuffer Capacity in *ints* based on the resized ByteBuffer's byte capacity
-        Capacity = ( int )Math.Ceiling( ( double )_byteBufferDelegate.Capacity / sizeof( int ) );
-
-        // Check if Limit was at old Capacity
-        if ( Limit == ( Capacity - ( int )Math.Ceiling( ( double )extraCapacityInBytes / sizeof( int ) ) ) )
-        {
-            Limit = Capacity; // Reset Limit to the new Capacity if it was at the old Capacity
-        }
-        
-        Logger.Debug( $"Capacity: {Capacity}, Position: {Position}, Limit: {Limit}, Length: {Length}" );
-    }
-
-    /// <inheritdoc cref="ByteBuffer.Clear()" />
-    public override void Clear()
-    {
-        _byteBufferDelegate.Clear(); // Delegate to ByteBuffer's Clear implementation
-        Length   = 0;
-        Position = 0;
-        Limit    = Capacity;
-    }
-
-    /// <inheritdoc />
-    public override int Remaining()
-    {
-        return ( Limit - Position ) / sizeof( int );
-    }
-
-    /// <inheritdoc />
-    public override void Compact()
-    {
-        _byteBufferDelegate.Compact();
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public override byte GetByte()
-    {
-        return _byteBufferDelegate.GetByte();
-    }
-
-    /// <inheritdoc />
-    public override byte GetByte( int index )
-    {
-        return _byteBufferDelegate.GetByte( index );
-    }
-
     /// <inheritdoc />
     public override void PutByte( byte value )
     {
@@ -378,20 +331,6 @@ public class IntBuffer : Buffer, IDisposable
         _byteBufferDelegate.PutByte( index, value );
     }
 
-    // ----- Bulk Get/Put operations -----
-
-    /// <inheritdoc />
-    public override void GetBytes( byte[] result, int offset, int length )
-    {
-        _byteBufferDelegate.GetBytes( result, offset, length );
-    }
-
-    /// <inheritdoc />
-    public override void GetBytes( byte[] byteArray )
-    {
-        _byteBufferDelegate.GetBytes( byteArray );
-    }
-
     /// <inheritdoc />
     public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int length )
     {
@@ -402,6 +341,65 @@ public class IntBuffer : Buffer, IDisposable
     public override void PutBytes( byte[] byteArray )
     {
         _byteBufferDelegate.PutBytes( byteArray );
+    }
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// Returns the backing array as a int[].
+    /// </summary>
+    /// <returns></returns>
+    public new int[] ToArray()
+    {
+        var tmpArray = new int[ Length ];
+
+        _byteBufferDelegate.GetInts( tmpArray );
+
+        return tmpArray;
+    }
+
+    // ========================================================================
+
+    /// <inheritdoc cref="ByteBuffer.Resize(int)" />
+    public override void Resize( int extraCapacityInBytes )
+    {
+        Logger.Debug( $"Resize: {extraCapacityInBytes}" );
+
+        var oldCapacityInInts = Capacity;
+        
+        // Delegate Resize to ByteBuffer
+        _byteBufferDelegate.Resize( extraCapacityInBytes );
+        
+        // Convert ByteBuffer's byte capacity back to int capacity
+        Capacity = _byteBufferDelegate.Capacity / sizeof( int );
+
+        if ( Limit == oldCapacityInInts )
+        {
+            Limit = Capacity; // Reset Limit to the new Capacity if it was at the old Capacity
+        }
+    }
+
+    /// <inheritdoc cref="ByteBuffer.Clear()" />
+    public override void Clear()
+    {
+        _byteBufferDelegate.Clear(); // Delegate to ByteBuffer's Clear implementation
+        Length   = 0;
+        Position = 0;
+        Limit    = Capacity;
+    }
+
+    /// <inheritdoc />
+    public override int Remaining()
+    {
+        return ( Limit - Position ) / sizeof( int );
+    }
+
+    /// <inheritdoc />
+    public override void Compact()
+    {
+        _byteBufferDelegate.Compact();
     }
 
     // ========================================================================

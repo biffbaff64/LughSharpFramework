@@ -165,8 +165,8 @@ public class InstanceBufferObject : IInstanceData
     }
 
     /// <summary>
-    /// Binds this InstanceBufferObject for rendering via
-    /// GLDrawArraysInstanced or GLDrawElementsInstanced
+    /// Binds this InstanceBufferObject for rendering via GLDrawArraysInstanced
+    /// or GLDrawElementsInstanced
     /// </summary>
     public unsafe void Bind( ShaderProgram shader, int[]? locations = null )
     {

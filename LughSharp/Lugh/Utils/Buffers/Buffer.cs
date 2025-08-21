@@ -41,6 +41,12 @@ public abstract class Buffer : IDisposable
     public const bool NOT_DIRECT = false;
 
     // ( MAC = Max Allowed Capacity )
+    public const int DEFAULT_MAC_500_K  = 500 * 1024;
+    public const int DEFAULT_MAC_1_MB   = 1 * 1024 * 1024;
+    public const int DEFAULT_MAC_5_MB   = 5 * 1024 * 1024;
+    public const int DEFAULT_MAC_10_MB  = 10 * 1024 * 1024;
+    public const int DEFAULT_MAC_25_MB  = 25 * 1024 * 1024;
+    public const int DEFAULT_MAC_50_MB  = 50 * 1024 * 1024;
     public const int DEFAULT_MAC_100_MB = 100 * 1024 * 1024;
     public const int DEFAULT_MAC_500_MB = 500 * 1024 * 1024;
     public const int DEFAULT_MAC_1_GB   = 1000 * 1024 * 1024;
@@ -65,7 +71,7 @@ public abstract class Buffer : IDisposable
     // ========================================================================
 
     private int _markPosition       = -1;
-    private int _maxAllowedCapacity = DEFAULT_MAC_1_GB;
+    private int _maxAllowedCapacity = DEFAULT_MAC_1_MB;
 
     // ========================================================================
 
@@ -337,6 +343,7 @@ public abstract class Buffer : IDisposable
     /// </summary>
     public virtual void Shrink()
     {
+        //TODO:
         // Default implementation - potentially shrink to Limit?
         // Or leave empty and make subclasses override?
 
@@ -420,6 +427,17 @@ public abstract class Buffer : IDisposable
         IsDirect   = direct;
     }
 
+    // ========================================================================
+
+    public virtual void Debug()
+    {
+        Logger.Debug( $"Buffer: {this.GetType().Name}" );
+        Logger.Debug( $"Capacity: {Capacity}, Position: {Position}, Limit: {Limit}, Length: {Length}" );
+        Logger.Debug( $"IsReadOnly: {IsReadOnly}, IsDirect: {IsDirect}, IsBigEndian: {IsBigEndian}" );
+        Logger.Debug( $"AutoResizeEnabled: {AutoResizeEnabled}, MarkPosition: {_markPosition}" );
+        Logger.Debug( $"MaxAllowedCapacity: {MaxAllowedCapacity}" );
+    }
+    
     // ========================================================================
 
     /// <inheritdoc />

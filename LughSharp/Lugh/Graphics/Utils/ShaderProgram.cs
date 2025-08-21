@@ -232,7 +232,7 @@ public class ShaderProgram : IDisposable
 
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
+            Logger.Debug( "***** Cannot perform action, Location is INVALID ( -1 ) *****" );
 
             return;
         }
@@ -249,14 +249,14 @@ public class ShaderProgram : IDisposable
     /// Indicates whether the matrix should be transposed before being sent to the shader.
     /// </param>
     /// <typeparam name="T">The type of the matrix, which must be an unmanaged type.</typeparam>
-    public virtual unsafe void SetUniformMatrix< T >( int location, ref T matrix, bool transpose = false )
+    public virtual unsafe void SetUniformMatrix< T >( int name, ref T matrix, bool transpose = false )
         where T : unmanaged
     {
-        const int MAT4X4 = 16;
-        const int MAT3X3 = 9;
-        const int MAT2X2 = 4;
+        const int MAT44 = 16;
+        const int MAT33 = 9;
+        const int MAT22 = 4;
 
-        if ( location == INVALID )
+        if ( name == INVALID )
         {
             Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
 
@@ -269,18 +269,18 @@ public class ShaderProgram : IDisposable
         {
             switch ( matrixSize )
             {
-                case MAT4X4:
-                    GL.UniformMatrix4fv( location, 1, transpose, ( float* )ptr );
+                case MAT44:
+                    GL.UniformMatrix4fv( name, 1, transpose, ( float* )ptr );
 
                     break;
 
-                case MAT3X3:
-                    GL.UniformMatrix3fv( location, 1, transpose, ( float* )ptr );
+                case MAT33:
+                    GL.UniformMatrix3fv( name, 1, transpose, ( float* )ptr );
 
                     break;
 
-                case MAT2X2:
-                    GL.UniformMatrix2fv( location, 1, transpose, ( float* )ptr );
+                case MAT22:
+                    GL.UniformMatrix2fv( name, 1, transpose, ( float* )ptr );
 
                     break;
 
@@ -331,7 +331,7 @@ public class ShaderProgram : IDisposable
     /// <param name="value"></param>
     public virtual void SetUniformi( string name, int value )
     {
-        var location = FetchUniformLocation( name );
+        var location = GetUniformLocation( name );
 
         if ( location == INVALID )
         {
@@ -350,7 +350,7 @@ public class ShaderProgram : IDisposable
     /// <param name="value"></param>
     public virtual void SetUniformf( string name, float value )
     {
-        var location = FetchUniformLocation( name );
+        var location = GetUniformLocation( name );
 
         if ( location == INVALID )
         {
@@ -384,7 +384,7 @@ public class ShaderProgram : IDisposable
     {
         LogInvalidMatrix( matrix.Values );
 
-        var location = FetchUniformLocation( name );
+        var location = GetUniformLocation( name );
 
         if ( location == INVALID )
         {
@@ -438,40 +438,6 @@ public class ShaderProgram : IDisposable
     /// <summary>
     ///
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
-    public virtual int FetchUniformLocation( string name )
-    {
-        var location = GL.GetUniformLocation( ShaderProgramHandle, name );
-
-        if ( location == INVALID )
-        {
-            Logger.Debug( $"***** Location is INVALID ( -1 ) for {name} *****" );
-        }
-
-        return location;
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
-    public virtual int FetchAttributeLocation( string name )
-    {
-        var location = GL.GetAttribLocation( ShaderProgramHandle, name );
-
-        if ( location == INVALID )
-        {
-            Logger.Debug( $"***** Location is INVALID ( -1 ) for {name} *****" );
-        }
-
-        return location;
-    }
-
-    /// <summary>
-    ///
-    /// </summary>
     /// <param name="location"></param>
     public virtual void EnableVertexAttribute( int location )
     {
@@ -518,7 +484,7 @@ public class ShaderProgram : IDisposable
     /// <param name="values"></param>
     public virtual void SetUniformMatrix4Fv( string name, params float[] values )
     {
-        var location = FetchUniformLocation( name );
+        var location = GetUniformLocation( name );
 
         if ( location == INVALID )
         {
@@ -569,7 +535,7 @@ public class ShaderProgram : IDisposable
     /// <param name="name"></param>
     public virtual void DisableVertexAttribute( string name )
     {
-        var location = FetchAttributeLocation( name );
+        var location = GetAttributeLocation( name );
 
         if ( location == INVALID )
         {

@@ -46,14 +46,18 @@ public class ByteBuffer : Buffer, IDisposable
     /// to false.
     /// </param>
     /// <param name="maxCapacity">
-    /// The value at which to set the maximum allowed buffer capacity. The default for this is 1GB, and
+    /// The value at which to set the maximum allowed buffer capacity. The default for this is 100MB, and
     /// can be changed to whatever the user requires.
     /// </param>
-    public ByteBuffer( int capacityInBytes, bool allowAutoResize = true, int maxCapacity = DEFAULT_MAC_1_GB )
+    public ByteBuffer( int capacityInBytes, bool allowAutoResize = true, int maxCapacity = DEFAULT_MAC_1_MB )
         : base( capacityInBytes )
     {
+        Logger.Debug( $"capacityInBytes: {capacityInBytes}, allowAutoResize: {allowAutoResize}, maxCapacity: {maxCapacity}" );
+        
         _backingArray = new byte[ capacityInBytes ];
         _memory       = _backingArray.AsMemory();
+        
+        // Length, Limit, Position, Capacity are set in base constructor
     }
 
     /// <summary>
@@ -62,7 +66,7 @@ public class ByteBuffer : Buffer, IDisposable
     /// </summary>
     /// <param name="memory">The Memory&lt;byte&gt; to use as the backing store.</param>
     /// <param name="isBigEndian">Indicates whether the buffer should use big-endian byte order.</param>
-    internal ByteBuffer( Memory< byte > memory, bool isBigEndian )
+    public ByteBuffer( Memory< byte > memory, bool isBigEndian )
     {
         if ( memory.IsEmpty ) // Check if Memory<byte> is valid (not empty)
         {
@@ -74,12 +78,13 @@ public class ByteBuffer : Buffer, IDisposable
         _backingArray = memory.ToArray();
         IsBigEndian   = isBigEndian;
         Capacity      = memory.Length; // Capacity is now derived from the provided Memory<byte>.Length
-        Length        = 0;             // Initially Length is 0 for a new view
         Limit         = Capacity;      // Initially Limit is Capacity for a new view
+        Length        = 0;             // Initially Length is 0 for a new view
+        Position      = 0;             // Initially Position is 0 for a new view
     }
 
     // ========================================================================
-    // Byte Type handling methods
+    // Get methods
     // ========================================================================
 
     /// <summary>
@@ -112,54 +117,6 @@ public class ByteBuffer : Buffer, IDisposable
 
         return _memory.Span[ index ];
     }
-
-    /// <summary>
-    /// Puts the provided Byte into the backing array at the current <see cref="Buffer.Position" />.
-    /// Position is then updated.
-    /// </summary>
-    /// <param name="value"> The value to put. </param>
-    public override void PutByte( byte value )
-    {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        }
-
-        EnsureCapacity( Position + 1 );
-
-        _memory.Span[ Position ] = value;
-        Position++; // Increment position AFTER write
-        Length = Position;
-    }
-
-    /// <summary>
-    /// Puts the provided Byte into the backing array at the specified index.
-    /// </summary>
-    /// <param name="index"> The position in the buffer at which to put the byte value. </param>
-    /// <param name="value"> The value to put. </param>
-    public override void PutByte( int index, byte value )
-    {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        }
-
-        EnsureCapacity( index + 1 );
-
-        if ( ( index < 0 ) || ( index >= Capacity ) )
-        {
-            throw new IndexOutOfRangeException( "Index out of range." );
-        }
-
-        _memory.Span[ index ] = value;
-
-        if ( index > Length )
-        {
-            Length = index + 1;
-        }
-    }
-
-    // ----- Bulk Get/Put operations -----
 
     /// <summary>
     /// Transfers the entire contents of this buffer into the provided destination
@@ -225,82 +182,6 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    /// Transfers the entire content of the given source byte array into this buffer.
-    /// An invocation of this method with the source byte array <paramref name="src" />
-    /// behaves in exactly the same way as invoking <c>dst.PutBytes(src, 0, src.Length)</c>.
-    /// </summary>
-    /// <param name="src">The source byte array.</param>
-    /// <exception cref="ArgumentNullException"> If <paramref name="src" /> is null.</exception>
-    public override void PutBytes( byte[] src )
-    {
-        // Does not need a call to EnsureCapacity as it will be called
-        // from PutBytes(byte[],int,int,int).
-        PutBytes( src, 0, 0, src.Length );
-    }
-
-    /// <summary>
-    /// Puts bytes from the source byte array 'src' into this buffer, starting at the current
-    /// <see cref="Buffer.Position" /> and writing 'length' bytes. The writing starts at a
-    /// destination offset within the buffer, specified by 'offset'. Also updates the
-    /// <see cref="Buffer.Position" /> by the number of bytes written.
-    /// </summary>
-    /// <param name="src"> The source byte array to get bytes from. </param>
-    /// <param name="srcOffset"> The starting offset within the source array to read from. </param>
-    /// <param name="dstOffset"> The starting offset within *this buffer* (the destination) to write to. </param>
-    /// <param name="length"> The number of bytes to put. </param>
-    /// <exception cref="IndexOutOfRangeException">
-    /// If there is not enough space remaining in the buffer or if srcOffset and length cause overflow in src.
-    /// </exception>
-    /// <exception cref="ArgumentNullException"> If <paramref name="src" /> is null.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    /// If <paramref name="srcOffset" />, <paramref name="dstOffset" /> or <paramref name="length" /> is negative.
-    /// </exception>
-    public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int length )
-    {
-        ArgumentNullException.ThrowIfNull( src );
-
-        EnsureCapacity( dstOffset + length );
-
-        if ( srcOffset < 0 )
-        {
-            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset cannot be negative." );
-        }
-
-        if ( dstOffset < 0 )
-        {
-            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
-        }
-
-        if ( length < 0 )
-        {
-            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
-        }
-
-        if ( ( srcOffset + length ) > src.Length )
-        {
-            throw new ArgumentOutOfRangeException( nameof( length ), "Length and source offset exceed source array bounds." );
-        }
-
-        // Check for space in destination buffer using dstOffset
-        if ( ( dstOffset + length ) > Capacity )
-        {
-            throw new IndexOutOfRangeException( "Not enough space in buffer to put the requested length at the given destination offset." );
-        }
-
-        // Copy from src to buffer at dstOffset
-        src.AsSpan( srcOffset, length ).CopyTo( _memory.Span.Slice( dstOffset, length ) );
-
-        if ( ( dstOffset + length ) > Position )
-        {
-            Position = dstOffset + length;
-        }
-    }
-
-    // ========================================================================
-    // Short Type handling methods
-    // ========================================================================
-
-    /// <summary>
     /// Gets a Short value from the backing array at the current <see cref="Buffer.Position" />.
     /// </summary>
     public short GetShort()
@@ -330,63 +211,6 @@ public class ByteBuffer : Buffer, IDisposable
             ? BinaryPrimitives.ReadInt16BigEndian( source )
             : BinaryPrimitives.ReadInt16LittleEndian( source );
     }
-
-    /// <summary>
-    /// Puts the provided Short value into the backing array at the current <see cref="Buffer.Position" />.
-    /// </summary>
-    /// <param name="value"> The value to put. </param>
-    public void PutShort( short value )
-    {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        }
-
-        EnsureCapacity( Position + sizeof( short ) );
-
-        if ( IsBigEndian )
-        {
-            BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( Position ), value );
-        }
-        else
-        {
-            BinaryPrimitives.WriteInt16LittleEndian( _memory.Span.Slice( Position ), value );
-        }
-
-        Position += sizeof( short );
-        Length   =  Position;
-    }
-
-    /// <summary>
-    /// Puts the provided Short value into the backing array at the specified index.
-    /// </summary>
-    /// <param name="index"> The index. </param>
-    /// <param name="value"> The value to put. </param>
-    public void PutShort( int index, short value )
-    {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        }
-
-        EnsureCapacity( index + sizeof( short ) );
-
-        if ( IsBigEndian )
-        {
-            BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( index ), value );
-        }
-        else
-        {
-            BinaryPrimitives.WriteInt16LittleEndian( _memory.Span.Slice( index ), value );
-        }
-
-        if ( index >= Position )
-        {
-            Length = index + 1;
-        }
-    }
-
-    // ----- Bulk Get/Put operations -----
 
     /// <summary>
     /// Reads a sequence of short values from the buffer into the specified destination array.
@@ -446,74 +270,6 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     /// <summary>
-    /// Writes an array of short values into the buffer.
-    /// </summary>
-    /// <param name="src">An array of short values to be written to the buffer.</param>
-    public void PutShorts( short[] src )
-    {
-        PutShorts( src, 0, src.Length );
-    }
-
-    /// <summary>
-    /// Writes a subset of shorts from the specified source array into the buffer.
-    /// </summary>
-    /// <param name="src">The source array containing the short values to be written.</param>
-    /// <param name="srcOffset">The zero-based offset in the source array to start reading shorts from.</param>
-    /// <param name="length">The number of shorts to write from the source array into the buffer.</param>
-    /// <exception cref="ArgumentNullException">Thrown when the source array is null.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    /// Thrown when the source offset or length is negative or when their sum exceeds the bounds of the source array.
-    /// </exception>
-    /// <exception cref="BufferOverflowException">
-    /// Thrown when there is not enough remaining space in the buffer to accommodate the specified number of shorts.
-    /// </exception>
-    public void PutShorts( short[] src, int srcOffset, int length )
-    {
-        ArgumentNullException.ThrowIfNull( src, nameof( src ) );
-
-        if ( srcOffset < 0 )
-        {
-            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset cannot be negative." );
-        }
-
-        if ( length < 0 )
-        {
-            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
-        }
-
-        if ( ( srcOffset + length ) > src.Length )
-        {
-            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Length and source offset exceed source array bounds." );
-        }
-
-        var bytesToWrite   = length * sizeof( short );
-        var bytesRemaining = Capacity - Position; // Space remaining from Position to Capacity
-
-        if ( bytesToWrite > bytesRemaining )
-        {
-            throw new BufferOverflowException( $"Not enough space remaining in buffer to write {length} shorts. " +
-                                               $"Remaining space: {bytesRemaining}" );
-        }
-
-        System.Buffer.BlockCopy( src,
-                                 srcOffset * sizeof( short ), // Source offset in bytes for short[]
-                                 _backingArray,
-                                 Position,
-                                 bytesToWrite );
-
-        Position += bytesToWrite;
-
-        if ( Position > Length )
-        {
-            Length = Position;
-        }
-    }
-
-    // ========================================================================
-    // Int Type handling methods
-    // ========================================================================
-
-    /// <summary>
     /// Gets an Int32 value from the backing array at the current <see cref="Buffer.Position" />.
     /// </summary>
     public int GetInt()
@@ -532,61 +288,6 @@ public class ByteBuffer : Buffer, IDisposable
             ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( index ) )
             : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( index ) );
     }
-
-    /// <summary>
-    /// Puts the provided Int32 value into the backing array at the current <see cref="Buffer.Position" />.
-    /// </summary>
-    /// <param name="value"> The value to put. </param>
-    public void PutInt( int value )
-    {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        }
-
-        EnsureCapacity( Position + sizeof( int ) );
-
-        if ( IsBigEndian )
-        {
-            BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( Position ), value );
-        }
-        else
-        {
-            BinaryPrimitives.WriteInt32LittleEndian( _memory.Span.Slice( Position ), value );
-        }
-
-        Position += sizeof( int );
-        Length   =  Position;
-    }
-
-    /// <summary>
-    /// Represents a signed 32-bit integer value.
-    /// </summary>
-    public void PutInt( int index, int value )
-    {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        }
-
-        EnsureCapacity( index + sizeof( int ) );
-
-        if ( IsBigEndian )
-        {
-            BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( index ), value );
-        }
-        else
-        {
-            BinaryPrimitives.WriteInt32LittleEndian( _memory.Span.Slice( index ), value );
-        }
-
-        if ( index >= Position )
-        {
-            Length = index + 1;
-        }
-    }
-
-    // ----- Bulk Get/Put operations -----
 
     /// <summary>
     /// Retrieves a sequence of integers from the buffer and stores them into the specified array.
@@ -649,6 +350,397 @@ public class ByteBuffer : Buffer, IDisposable
                                  bytesToRead );
 
         Position += bytesToRead;
+    }
+
+    /// <summary>
+    /// Gets a Float value from the backing array at the current <see cref="Buffer.Position" />.
+    /// </summary>
+    public float GetFloat()
+    {
+        return IsBigEndian
+            ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( Position ) )
+            : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( Position ) );
+    }
+
+    /// <summary>
+    /// Gets a Float value from the backing array at the specified index.
+    /// </summary>
+    public float GetFloat( int index )
+    {
+        return IsBigEndian
+            ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( index ) )
+            : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( index ) );
+    }
+
+    /// <summary>
+    /// Copies a sequence of float values from the buffer into the specified array.
+    /// </summary>
+    /// <param name="dst">
+    /// The array into which the float values are copied. The size of the array must be sufficient to
+    /// accommodate the values being copied, starting from the first element.
+    /// </param>
+    public void GetFloats( float[] dst )
+    {
+        GetFloats( dst, 0, dst.Length );
+    }
+
+    /// <summary>
+    /// Reads a specified number of float values from the buffer into the destination array.
+    /// </summary>
+    /// <param name="dst">The destination array where the float values will be stored.</param>
+    /// <param name="dstOffset">The starting offset in the destination array at which the float values will be written.</param>
+    /// <param name="length">The number of float values to read from the buffer.</param>
+    /// <exception cref="ArgumentNullException">Thrown if <paramref name="dst"/> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if <paramref name="dstOffset"/> is negative,
+    /// or if <paramref name="length"/> is negative,
+    /// or if the combination of <paramref name="dstOffset"/> and <paramref name="length"/> exceeds the bounds of the destination array.
+    /// </exception>
+    /// <exception cref="IndexOutOfRangeException">Thrown if there are not enough remaining bytes in the buffer to read the specified number of floats.</exception>
+    public void GetFloats( float[] dst, int dstOffset, int length )
+    {
+        ArgumentNullException.ThrowIfNull( dst, nameof( dst ) );
+
+        if ( dstOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+        }
+
+        if ( length < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
+        }
+
+        if ( ( dstOffset + length ) > dst.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Length and destination offset exceed destination array bounds." );
+        }
+
+        var bytesToRead    = length * sizeof( float );
+        var bytesRemaining = Remaining();
+
+        if ( bytesToRead > bytesRemaining )
+        {
+            throw new IndexOutOfRangeException( $"Not enough remaining bytes in buffer to read {length} floats. " +
+                                                $"Remaining bytes: {bytesRemaining}" );
+        }
+
+        System.Buffer.BlockCopy( _backingArray,
+                                 Position,
+                                 dst,
+                                 dstOffset * sizeof( float ), // Destination offset in bytes for float[]
+                                 bytesToRead );
+
+        Position += bytesToRead;
+    }
+
+    // ========================================================================
+    // Put methods
+    // ========================================================================
+
+    /// <summary>
+    /// Puts the provided Byte into the backing array at the current <see cref="Buffer.Position" />.
+    /// Position is then updated.
+    /// </summary>
+    /// <param name="value"> The value to put. </param>
+    public override void PutByte( byte value )
+    {
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
+
+        EnsureCapacity( Position + 1 );
+
+        _memory.Span[ Position ] = value;
+        Position++; // Increment position AFTER write
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
+    }
+
+    /// <summary>
+    /// Puts the provided Byte into the backing array at the specified index.
+    /// </summary>
+    /// <param name="index"> The position in the buffer at which to put the byte value. </param>
+    /// <param name="value"> The value to put. </param>
+    public override void PutByte( int index, byte value )
+    {
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
+
+        EnsureCapacity( index + 1 );
+
+        if ( ( index < 0 ) || ( index >= Capacity ) )
+        {
+            throw new IndexOutOfRangeException( "Index out of range." );
+        }
+
+        _memory.Span[ index ] = value;
+
+        if ( index > Length )
+        {
+            Length = index + 1;
+        }
+    }
+
+    /// <summary>
+    /// Transfers the entire content of the given source byte array into this buffer.
+    /// An invocation of this method with the source byte array <paramref name="src" />
+    /// behaves in exactly the same way as invoking <c>dst.PutBytes(src, 0, src.Length)</c>.
+    /// </summary>
+    /// <param name="src">The source byte array.</param>
+    /// <exception cref="ArgumentNullException"> If <paramref name="src" /> is null.</exception>
+    public override void PutBytes( byte[] src )
+    {
+        // Does not need a call to EnsureCapacity as it will be called
+        // from PutBytes(byte[],int,int,int).
+        PutBytes( src, 0, 0, src.Length );
+    }
+
+    /// <summary>
+    /// Puts bytes from the source byte array 'src' into this buffer, starting at the current
+    /// <see cref="Buffer.Position" /> and writing 'length' bytes. The writing starts at a
+    /// destination offset within the buffer, specified by 'offset'. Also updates the
+    /// <see cref="Buffer.Position" /> by the number of bytes written.
+    /// </summary>
+    /// <param name="src"> The source byte array to get bytes from. </param>
+    /// <param name="srcOffset"> The starting offset within the source array to read from. </param>
+    /// <param name="dstOffset"> The starting offset within *this buffer* (the destination) to write to. </param>
+    /// <param name="numBytes"> The number of bytes to put. </param>
+    /// <exception cref="IndexOutOfRangeException">
+    /// If there is not enough space remaining in the buffer or if srcOffset and length cause overflow in src.
+    /// </exception>
+    /// <exception cref="ArgumentNullException"> If <paramref name="src" /> is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// If <paramref name="srcOffset" />, <paramref name="dstOffset" /> or <paramref name="numBytes" /> is negative.
+    /// </exception>
+    public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int numBytes )
+    {
+        ArgumentNullException.ThrowIfNull( src );
+
+        EnsureCapacity( ( dstOffset + 1 ) + numBytes );
+
+        if ( srcOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset cannot be negative." );
+        }
+
+        if ( dstOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+        }
+
+        if ( numBytes < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( numBytes ), "numBytes cannot be negative." );
+        }
+
+        if ( ( srcOffset + numBytes ) > src.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( numBytes ), "Length and source offset exceed source array bounds." );
+        }
+
+        // Check for space in destination buffer using dstOffset
+        if ( ( dstOffset + numBytes ) > Capacity )
+        {
+            throw new IndexOutOfRangeException( "Not enough space in buffer to put the requested length at the given destination offset." );
+        }
+
+        // Copy from src to buffer at dstOffset
+        src.AsSpan( srcOffset, numBytes ).CopyTo( _memory.Span.Slice( dstOffset, numBytes ) );
+
+        if ( ( dstOffset + numBytes ) > Position )
+        {
+            Position = dstOffset + numBytes;
+        }
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
+    }
+
+    /// <summary>
+    /// Puts the provided Short value into the backing array at the current <see cref="Buffer.Position" />.
+    /// </summary>
+    /// <param name="value"> The value to put. </param>
+    public void PutShort( short value )
+    {
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
+
+        EnsureCapacity( Position + sizeof( short ) );
+
+        if ( IsBigEndian )
+        {
+            BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( Position ), value );
+        }
+        else
+        {
+            BinaryPrimitives.WriteInt16LittleEndian( _memory.Span.Slice( Position ), value );
+        }
+
+        Position += sizeof( short );
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
+    }
+
+    /// <summary>
+    /// Puts the provided Short value into the backing array at the specified index.
+    /// </summary>
+    /// <param name="index"> The index. </param>
+    /// <param name="value"> The value to put. </param>
+    public void PutShort( int index, short value )
+    {
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
+
+        EnsureCapacity( ( index + 1 ) + sizeof( short ) );
+
+        if ( IsBigEndian )
+        {
+            BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( index ), value );
+        }
+        else
+        {
+            BinaryPrimitives.WriteInt16LittleEndian( _memory.Span.Slice( index ), value );
+        }
+
+        if ( index >= Position )
+        {
+            Length = index + 1;
+        }
+    }
+
+    /// <summary>
+    /// Writes an array of short values into the buffer.
+    /// </summary>
+    /// <param name="src">An array of short values to be written to the buffer.</param>
+    public void PutShorts( short[] src )
+    {
+        PutShorts( src, 0, src.Length );
+    }
+
+    /// <summary>
+    /// Writes a subset of shorts from the specified source array into the buffer.
+    /// </summary>
+    /// <param name="src">The source array containing the short values to be written.</param>
+    /// <param name="srcOffset">The zero-based offset in the source array to start reading shorts from.</param>
+    /// <param name="length">The number of shorts to write from the source array into the buffer.</param>
+    /// <exception cref="ArgumentNullException">Thrown when the source array is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown when the source offset or length is negative or when their sum exceeds the bounds of the source array.
+    /// </exception>
+    /// <exception cref="BufferOverflowException">
+    /// Thrown when there is not enough remaining space in the buffer to accommodate the specified number of shorts.
+    /// </exception>
+    public void PutShorts( short[] src, int srcOffset, int length )
+    {
+        ArgumentNullException.ThrowIfNull( src, nameof( src ) );
+
+        if ( srcOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset cannot be negative." );
+        }
+
+        if ( length < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
+        }
+
+        if ( ( srcOffset + length ) > src.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Length and source offset exceed source array bounds." );
+        }
+
+        var bytesToWrite   = length * sizeof( short );
+        var bytesRemaining = Capacity - Position; // Space remaining from Position to Capacity
+
+        if ( bytesToWrite > bytesRemaining )
+        {
+            throw new BufferOverflowException( $"Not enough space remaining in buffer to write {length} shorts. " +
+                                               $"Remaining space: {bytesRemaining}" );
+        }
+
+        System.Buffer.BlockCopy( src,
+                                 srcOffset * sizeof( short ), // Source offset in bytes for short[]
+                                 _backingArray,
+                                 Position,
+                                 bytesToWrite );
+
+        Position += bytesToWrite;
+        Length   =  Position;
+    }
+
+    /// <summary>
+    /// Puts the provided Int32 value into the backing array at the current <see cref="Buffer.Position" />.
+    /// </summary>
+    /// <param name="value"> The value to put. </param>
+    public void PutInt( int value )
+    {
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
+
+        EnsureCapacity( Position + sizeof( int ) );
+
+        if ( IsBigEndian )
+        {
+            BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( Position ), value );
+        }
+        else
+        {
+            BinaryPrimitives.WriteInt32LittleEndian( _memory.Span.Slice( Position ), value );
+        }
+
+        Position += sizeof( int );
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
+    }
+
+    /// <summary>
+    /// Represents a signed 32-bit integer value.
+    /// </summary>
+    public void PutInt( int index, int value )
+    {
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
+
+        EnsureCapacity( ( index + 1 ) + sizeof( int ) );
+
+        if ( IsBigEndian )
+        {
+            BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( index ), value );
+        }
+        else
+        {
+            BinaryPrimitives.WriteInt32LittleEndian( _memory.Span.Slice( index ), value );
+        }
+
+        Position += sizeof( int );
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
     }
 
     /// <summary>
@@ -724,30 +816,6 @@ public class ByteBuffer : Buffer, IDisposable
         }
     }
 
-    // ========================================================================
-    // Float Type handling methods
-    // ========================================================================
-
-    /// <summary>
-    /// Gets a Float value from the backing array at the current <see cref="Buffer.Position" />.
-    /// </summary>
-    public float GetFloat()
-    {
-        return IsBigEndian
-            ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( Position ) )
-            : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( Position ) );
-    }
-
-    /// <summary>
-    /// Gets a Float value from the backing array at the specified index.
-    /// </summary>
-    public float GetFloat( int index )
-    {
-        return IsBigEndian
-            ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( index ) )
-            : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( index ) );
-    }
-
     /// <summary>
     /// Puts the provided Float into the backing array at the current <see cref="Buffer.Position" />.
     /// </summary>
@@ -771,7 +839,11 @@ public class ByteBuffer : Buffer, IDisposable
         }
 
         Position += sizeof( float );
-        Length   =  Position;
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
     }
 
     /// <summary>
@@ -786,7 +858,7 @@ public class ByteBuffer : Buffer, IDisposable
             throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
         }
 
-        EnsureCapacity( index + sizeof( float ) );
+        EnsureCapacity( ( index + 1 ) + sizeof( float ) );
 
         if ( IsBigEndian )
         {
@@ -801,70 +873,6 @@ public class ByteBuffer : Buffer, IDisposable
         {
             Length = index + 1;
         }
-    }
-
-    // ----- Bulk Get/Put operations -----
-
-    /// <summary>
-    /// Copies a sequence of float values from the buffer into the specified array.
-    /// </summary>
-    /// <param name="dst">
-    /// The array into which the float values are copied. The size of the array must be sufficient to
-    /// accommodate the values being copied, starting from the first element.
-    /// </param>
-    public void GetFloats( float[] dst )
-    {
-        GetFloats( dst, 0, dst.Length );
-    }
-
-    /// <summary>
-    /// Reads a specified number of float values from the buffer into the destination array.
-    /// </summary>
-    /// <param name="dst">The destination array where the float values will be stored.</param>
-    /// <param name="dstOffset">The starting offset in the destination array at which the float values will be written.</param>
-    /// <param name="length">The number of float values to read from the buffer.</param>
-    /// <exception cref="ArgumentNullException">Thrown if <paramref name="dst"/> is null.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">
-    /// Thrown if <paramref name="dstOffset"/> is negative,
-    /// or if <paramref name="length"/> is negative,
-    /// or if the combination of <paramref name="dstOffset"/> and <paramref name="length"/> exceeds the bounds of the destination array.
-    /// </exception>
-    /// <exception cref="IndexOutOfRangeException">Thrown if there are not enough remaining bytes in the buffer to read the specified number of floats.</exception>
-    public void GetFloats( float[] dst, int dstOffset, int length )
-    {
-        ArgumentNullException.ThrowIfNull( dst, nameof( dst ) );
-
-        if ( dstOffset < 0 )
-        {
-            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
-        }
-
-        if ( length < 0 )
-        {
-            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
-        }
-
-        if ( ( dstOffset + length ) > dst.Length )
-        {
-            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Length and destination offset exceed destination array bounds." );
-        }
-
-        var bytesToRead    = length * sizeof( float );
-        var bytesRemaining = Remaining();
-
-        if ( bytesToRead > bytesRemaining )
-        {
-            throw new IndexOutOfRangeException( $"Not enough remaining bytes in buffer to read {length} floats. " +
-                                                $"Remaining bytes: {bytesRemaining}" );
-        }
-
-        System.Buffer.BlockCopy( _backingArray,
-                                 Position,
-                                 dst,
-                                 dstOffset * sizeof( float ), // Destination offset in bytes for float[]
-                                 bytesToRead );
-
-        Position += bytesToRead;
     }
 
     /// <summary>
@@ -933,14 +941,8 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     // ========================================================================
-
-    /// <inheritdoc />
-    public override ByteBuffer Order( ByteOrder order )
-    {
-        base.Order( order );
-
-        return this;
-    }
+    // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// Retrieves the underlying array that backs this byte buffer.
@@ -949,6 +951,14 @@ public class ByteBuffer : Buffer, IDisposable
     public byte[] BackingArray()
     {
         return _backingArray;
+    }
+
+    /// <inheritdoc />
+    public override ByteBuffer Order( ByteOrder order )
+    {
+        base.Order( order );
+
+        return this;
     }
 
     /// <summary>
@@ -978,7 +988,6 @@ public class ByteBuffer : Buffer, IDisposable
             }
 
             _backingArray[ index ] = value;
-            _backingArray[ index ] = value;
         }
     }
 
@@ -998,6 +1007,9 @@ public class ByteBuffer : Buffer, IDisposable
         return new ByteBuffer( capacityInBytes );
     }
 
+    // ========================================================================
+    // ========================================================================
+    
     /// <summary>
     /// Creates a new IntBuffer whose content is a shared subsequence of this ByteBuffer's content.
     /// Changes to this ByteBuffer's content will be visible in the returned IntBuffer, and vice-versa.
@@ -1047,6 +1059,7 @@ public class ByteBuffer : Buffer, IDisposable
     }
 
     // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// Copies a range of elements from this buffer to a destination array.
@@ -1085,6 +1098,12 @@ public class ByteBuffer : Buffer, IDisposable
     /// <inheritdoc />
     public override void Resize( int extraCapacityInBytes )
     {
+        Logger.Divider();
+        Logger.Debug( $"_backingArray.Length: {_backingArray.Length}, " +
+                      $"Capacity: {Capacity}, " +
+                      $"Position: {Position}, " +
+                      $"extraCapacityInBytes: {extraCapacityInBytes}" );
+        
         switch ( extraCapacityInBytes )
         {
             case < 0:
@@ -1104,19 +1123,21 @@ public class ByteBuffer : Buffer, IDisposable
                                                    "Resize would result in capacity overflow." );
         }
 
-        Logger.Debug( $"Capacity before Resize: {_backingArray.Length} bytes"  );
+        Logger.Debug( $"Capacity before Resize: {_backingArray.Length}, Capacity: {Capacity}" );
+        Logger.Debug( $"Position before Resize: {Position}"  );
+
         Array.Resize< byte >( ref _backingArray, newCapacity );
 
         _memory       = _backingArray.AsMemory();
         Capacity      = newCapacity;
 
-        // **Position Handling:** Keep position within the new bounds.
+        // Keep position within the new bounds.
         if ( Position > Capacity )
         {
             Position = Capacity; // Clamp position to the new capacity if it was beyond
         }
         
-        Logger.Debug( $"_backingArray: {_backingArray.Length}, Capacity: {Capacity} bytes"  );
+        Logger.Debug( $"_backingArray: {_backingArray.Length}, Capacity: {Capacity} bytes" );
         Logger.Debug( $"Position after Resize: {Position}"  );
     }
 

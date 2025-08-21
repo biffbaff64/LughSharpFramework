@@ -543,29 +543,18 @@ public partial class DesktopGLWindow : IDisposable
         {
             if ( disposing )
             {
-                Logger.Checkpoint();
                 ApplicationListener?.Pause();
-                Logger.Checkpoint();
                 ApplicationListener?.Dispose();
-                Logger.Checkpoint();
                 DesktopGLCursor.DisposeGLCursor( this );
-                Logger.Checkpoint();
                 Graphics.Dispose();
-                Logger.Checkpoint();
                 Input.Dispose();
-                Logger.Checkpoint();
 
-                Glfw.SetWindowFocusCallback( GlfwWindow, null );
-                Logger.Checkpoint();
-                Glfw.SetWindowIconifyCallback( GlfwWindow, null );
-                Logger.Checkpoint();
-                Glfw.SetWindowCloseCallback( GlfwWindow, null );
-                Logger.Checkpoint();
-                Glfw.SetDropCallback( GlfwWindow, null );
-                Logger.Checkpoint();
-
+                
+//                Glfw.SetWindowFocusCallback( GlfwWindow, null );
+//                Glfw.SetWindowIconifyCallback( GlfwWindow, null );
+//                Glfw.SetWindowCloseCallback( GlfwWindow, null );
+//                Glfw.SetDropCallback( GlfwWindow, null );
                 Glfw.DestroyWindow( GlfwWindow );
-                Logger.Checkpoint();
             }
 
             _disposed = true;

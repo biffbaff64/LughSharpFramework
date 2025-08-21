@@ -90,7 +90,9 @@ public class ShortBuffer : Buffer, IDisposable
     }
 
     // ========================================================================
-
+    // Get methods
+    // ========================================================================
+    
     /// <summary>
     /// Reads a 16-bit integer (short) from the current position of the buffer and advances
     /// the position by the size of a short.
@@ -132,6 +134,64 @@ public class ShortBuffer : Buffer, IDisposable
         return _byteBufferDelegate.GetShort( byteOffset );
     }
 
+    /// <summary>
+    /// Reads a sequence of shorts from the buffer into the specified array.
+    /// </summary>
+    /// <param name="shortArray">
+    /// The array into which the shorts will be written. The number of shorts read
+    /// will be equal to the length of the array.
+    /// </param>
+    public void GetShorts( short[] shortArray )
+    {
+        _byteBufferDelegate.GetShorts( shortArray );
+    }
+
+    /// <summary>
+    /// Reads a sequence of short values from this buffer and transfers them into the specified
+    /// array starting at the given offset.
+    /// </summary>
+    /// <param name="dst">
+    /// The destination array into which the short values from the buffer are copied.
+    /// </param>
+    /// <param name="dstOffset">
+    /// The starting offset in the destination array where short values will be written.
+    /// </param>
+    /// <param name="length">
+    /// The number of short values to transfer from the buffer to the destination array.
+    /// </param>
+    public void GetShorts( short[] dst, int dstOffset, int length )
+    {
+        _byteBufferDelegate.GetShorts( dst, dstOffset, length );
+    }
+
+    /// <inheritdoc />
+    public override byte GetByte()
+    {
+        return _byteBufferDelegate.GetByte();
+    }
+
+    /// <inheritdoc />
+    public override byte GetByte( int index )
+    {
+        return _byteBufferDelegate.GetByte( index );
+    }
+
+    /// <inheritdoc />
+    public override void GetBytes( byte[] result, int offset, int length )
+    {
+        _byteBufferDelegate.GetBytes( result, offset, length );
+    }
+
+    /// <inheritdoc />
+    public override void GetBytes( byte[] byteArray )
+    {
+        _byteBufferDelegate.GetBytes( byteArray );
+    }
+
+    // ========================================================================
+    // Put methods
+    // ========================================================================
+    
     /// <summary>
     /// Inserts a short value into the buffer at the current position, advancing the position
     /// by the size of a short.
@@ -192,7 +252,7 @@ public class ShortBuffer : Buffer, IDisposable
             throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
         }
 
-        EnsureCapacity( index + sizeof( short ) );
+        EnsureCapacity( ( index + 1 ) + sizeof( short ) );
 
         var byteOffset = index * sizeof( short );
 
@@ -209,38 +269,6 @@ public class ShortBuffer : Buffer, IDisposable
         {
             Length = shortIndex;
         }
-    }
-
-    // ----- Bulk Get/Put operations -----
-
-    /// <summary>
-    /// Reads a sequence of shorts from the buffer into the specified array.
-    /// </summary>
-    /// <param name="shortArray">
-    /// The array into which the shorts will be written. The number of shorts read
-    /// will be equal to the length of the array.
-    /// </param>
-    public void GetShorts( short[] shortArray )
-    {
-        _byteBufferDelegate.GetShorts( shortArray );
-    }
-
-    /// <summary>
-    /// Reads a sequence of short values from this buffer and transfers them into the specified
-    /// array starting at the given offset.
-    /// </summary>
-    /// <param name="dst">
-    /// The destination array into which the short values from the buffer are copied.
-    /// </param>
-    /// <param name="dstOffset">
-    /// The starting offset in the destination array where short values will be written.
-    /// </param>
-    /// <param name="length">
-    /// The number of short values to transfer from the buffer to the destination array.
-    /// </param>
-    public void GetShorts( short[] dst, int dstOffset, int length )
-    {
-        _byteBufferDelegate.GetShorts( dst, dstOffset, length );
     }
 
     /// <summary>
@@ -270,6 +298,42 @@ public class ShortBuffer : Buffer, IDisposable
         _byteBufferDelegate.PutShorts( src, srcOffset, length );
     }
 
+    /// <inheritdoc />
+    public override void PutByte( byte value )
+    {
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
+
+        _byteBufferDelegate.PutByte( value );
+    }
+
+    /// <inheritdoc />
+    public override void PutByte( int index, byte value )
+    {
+        if ( IsReadOnly )
+        {
+            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
+        }
+
+        _byteBufferDelegate.PutByte( index, value );
+    }
+
+    /// <inheritdoc />
+    public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int length )
+    {
+        _byteBufferDelegate.PutBytes( src, srcOffset, dstOffset, length );
+    }
+
+    /// <inheritdoc />
+    public override void PutBytes( byte[] byteArray )
+    {
+        _byteBufferDelegate.PutBytes( byteArray );
+    }
+
+    // ========================================================================
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -290,6 +354,8 @@ public class ShortBuffer : Buffer, IDisposable
     /// <inheritdoc cref="ByteBuffer.Resize(int)" />
     public override void Resize( int extraCapacityInBytes )
     {
+        Logger.Debug( $"Resize: {extraCapacityInBytes}" );
+
         // **1. Delegate Resize to ByteBuffer**
         _byteBufferDelegate.Resize( extraCapacityInBytes );
 
@@ -323,68 +389,6 @@ public class ShortBuffer : Buffer, IDisposable
     public override void Compact()
     {
         _byteBufferDelegate.Compact();
-    }
-
-    // ========================================================================
-
-    /// <inheritdoc />
-    public override byte GetByte()
-    {
-        return _byteBufferDelegate.GetByte();
-    }
-
-    /// <inheritdoc />
-    public override byte GetByte( int index )
-    {
-        return _byteBufferDelegate.GetByte( index );
-    }
-
-    /// <inheritdoc />
-    public override void PutByte( byte value )
-    {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        }
-
-        _byteBufferDelegate.PutByte( value );
-    }
-
-    /// <inheritdoc />
-    public override void PutByte( int index, byte value )
-    {
-        if ( IsReadOnly )
-        {
-            throw new GdxRuntimeException( "Cannot write to a read-only buffer." );
-        }
-
-        _byteBufferDelegate.PutByte( index, value );
-    }
-
-    // ----- Bulk Get/Put operations -----
-
-    /// <inheritdoc />
-    public override void GetBytes( byte[] result, int offset, int length )
-    {
-        _byteBufferDelegate.GetBytes( result, offset, length );
-    }
-
-    /// <inheritdoc />
-    public override void GetBytes( byte[] byteArray )
-    {
-        _byteBufferDelegate.GetBytes( byteArray );
-    }
-
-    /// <inheritdoc />
-    public override void PutBytes( byte[] src, int srcOffset, int dstOffset, int length )
-    {
-        _byteBufferDelegate.PutBytes( src, srcOffset, dstOffset, length );
-    }
-
-    /// <inheritdoc />
-    public override void PutBytes( byte[] byteArray )
-    {
-        _byteBufferDelegate.PutBytes( byteArray );
     }
 
     // ========================================================================

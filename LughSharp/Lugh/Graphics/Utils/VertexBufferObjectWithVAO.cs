@@ -33,6 +33,10 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class VertexBufferObjectWithVAO : IVertexData
 {
+    public VertexAttributes Attributes { get; set; }
+
+    // ========================================================================
+    
     private static readonly IntBuffer _tmpHandle = new( 1 );
 
     private readonly FloatBuffer _buffer;
@@ -106,8 +110,6 @@ public class VertexBufferObjectWithVAO : IVertexData
 
         CreateVAO();
     }
-
-    public VertexAttributes Attributes { get; set; }
 
     /// <summary>
     /// Gets the number of vertices contained in the vertex buffer.

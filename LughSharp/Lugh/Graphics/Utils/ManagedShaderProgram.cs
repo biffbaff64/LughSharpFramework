@@ -268,7 +268,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public override int FetchUniformLocation( string name )
+    public int FetchUniformLocation( string name )
     {
         return FetchUniformLocation( name, Pedantic );
     }
@@ -277,7 +277,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public override int FetchAttributeLocation( string name )
+    public int FetchAttributeLocation( string name )
     {
         // -2 == not yet cached
         // -1 == cached but not found
