@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -45,8 +46,8 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class IndexBufferObject : IIndexData
 {
-    private readonly ShortBuffer _buffer;
-    private readonly ByteBuffer  _byteBuffer;
+    private readonly Buffer< short > _buffer;
+    private readonly Buffer< byte >  _byteBuffer;
     private readonly bool        _empty;
     private readonly bool        _ownsBuffer;
     private readonly int         _usage;
@@ -85,7 +86,7 @@ public class IndexBufferObject : IIndexData
         }
 
         // Create a new byte buffer to hold the indices. Each index is a short (2 bytes).
-        _byteBuffer = new ByteBuffer( maxIndices * 2 );
+        _byteBuffer = new Buffer< byte >( maxIndices * 2 );
 
         // Create a view of the byte buffer as a short buffer.
         _buffer = _byteBuffer.AsShortBuffer();
@@ -136,7 +137,7 @@ public class IndexBufferObject : IIndexData
     }
 
     /// <inheritdoc />
-    public unsafe void SetIndices( ShortBuffer indices )
+    public unsafe void SetIndices( Buffer< short > indices )
     {
         _isDirty = true;
 
@@ -188,7 +189,7 @@ public class IndexBufferObject : IIndexData
     }
 
     /// <inheritdoc />
-    public ShortBuffer GetBuffer( bool forWriting )
+    public Buffer< short > GetBuffer( bool forWriting )
     {
         _isDirty = forWriting;
 

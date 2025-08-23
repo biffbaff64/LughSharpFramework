@@ -25,7 +25,7 @@
 using System.Text;
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -58,27 +58,6 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     public const int GL_DEPTH24_STENCIL8_OES = 0x88F0;
 
     // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Creates a new GLFrameBuffer. No <see cref="GLFrameBufferBuilder{TU}" /> specifications
-    /// are provided for construction so information will need to be provided.
-    /// </summary>
-    protected GLFrameBuffer()
-    {
-        BufferBuilder = null!;
-    }
-
-    /// <summary>
-    /// Creates a GLFrameBuffer from the specifications provided
-    /// by bufferBuilder.
-    /// </summary>
-    protected GLFrameBuffer( GLFrameBufferBuilder< GLFrameBuffer< GLTexture > > bufferBuilder )
-    {
-        BufferBuilder = bufferBuilder;
-
-        BuildBuffer();
-    }
 
     public int  FramebufferHandle              { get; set; }
     public int  DepthbufferHandle              { get; set; }
@@ -102,6 +81,27 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     protected GLFrameBufferBuilder< GLFrameBuffer< GLTexture > > BufferBuilder { get; set; }
 
     // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// Creates a new GLFrameBuffer. No <see cref="GLFrameBufferBuilder{TU}" /> specifications
+    /// are provided for construction so information will need to be provided.
+    /// </summary>
+    protected GLFrameBuffer()
+    {
+        BufferBuilder = null!;
+    }
+
+    /// <summary>
+    /// Creates a GLFrameBuffer from the specifications provided
+    /// by bufferBuilder.
+    /// </summary>
+    protected GLFrameBuffer( GLFrameBufferBuilder< GLFrameBuffer< GLTexture > > bufferBuilder )
+    {
+        BufferBuilder = bufferBuilder;
+
+        BuildBuffer();
+    }
 
     /// <summary>
     /// Releases all resources associated with the FrameBuffer.
@@ -136,6 +136,8 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
         {
             Buffers[ Api.App ]?.Remove( this );
         }
+        
+        GC.SuppressFinalize( this );
     }
 
     // ========================================================================
@@ -355,11 +357,11 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
         // Set the draw buffers for multiple color attachments
         if ( HasMultipleTexturesPresent )
         {
-            var buffer = new IntBuffer( colorTextureCounter );
+            var buffer = new Buffer< int >( colorTextureCounter );
 
             for ( var i = 0; i < colorTextureCounter; i++ )
             {
-                buffer.PutInt( IGL.GL_COLOR_ATTACHMENT0 + i );
+                buffer.Put( IGL.GL_COLOR_ATTACHMENT0 + i );
             }
 
             buffer.Position = 0;
@@ -413,6 +415,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
             // Create a new packed depth-stencil buffer
             DepthStencilPackedBufferHandle = ( int )GL.GenRenderbuffer();
             HasDepthStencilPackedBuffer    = true;
+            
             GL.BindRenderbuffer( IGL.GL_RENDERBUFFER, ( uint )DepthStencilPackedBufferHandle );
             GL.RenderbufferStorage( IGL.GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height );
             GL.BindRenderbuffer( IGL.GL_RENDERBUFFER, 0 );
@@ -493,25 +496,26 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
 
     /// <summary>
     /// </summary>
-    private unsafe void InitialiseFrameBufferHandle()
+    private void InitialiseFrameBufferHandle()
     {
         if ( !DefaultFramebufferHandleInitialized )
         {
             DefaultFramebufferHandleInitialized = true;
 
-            if ( Api.App.AppType == Platform.ApplicationType.IOS )
-            {
-                var intbuf = ByteBuffer.Allocate
-                    ( ( 16 * sizeof( int ) ) / 8 ).Order( ByteOrder.NativeOrder ).AsIntBuffer();
-
-                fixed ( int* ptr = &intbuf.ToArray()[ 0 ] )
-                {
-                    GL.GetIntegerv( IGL.GL_FRAMEBUFFER_BINDING, ptr );
-                }
-
-                DefaultFramebufferHandle = intbuf.GetInt( 0 );
-            }
-            else
+            //TODO: Add Allocate to Buffer<> for this
+//            if ( Api.App.AppType == Platform.ApplicationType.IOS )
+//            {
+//                var intbuf = Buffer< byte >.Allocate
+//                    ( ( 16 * sizeof( int ) ) / 8 ).Order( ByteOrder.NativeOrder ).AsIntBuffer();
+//
+//                fixed ( int* ptr = &intbuf.ToArray()[ 0 ] )
+//                {
+//                    GL.GetIntegerv( IGL.GL_FRAMEBUFFER_BINDING, ptr );
+//                }
+//
+//                DefaultFramebufferHandle = intbuf.GetInt( 0 );
+//            }
+//            else
             {
                 DefaultFramebufferHandle = 0;
             }

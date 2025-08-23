@@ -47,9 +47,9 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class VertexBufferObject : IVertexData
 {
-    private FloatBuffer? _buffer;
+    private Buffer< float >? _buffer;
     private int          _bufferHandle;
-    private ByteBuffer?  _byteBuffer;
+    private Buffer< byte >?  _byteBuffer;
     private bool         _isBound = false;
     private bool         _isDirty = true;
     private bool         _ownsBuffer;
@@ -78,7 +78,7 @@ public class VertexBufferObject : IVertexData
     public VertexBufferObject( bool isStatic, int numVertices, VertexAttributes attributes )
     {
         _bufferHandle = ( int )GL.GenBuffer();
-        _byteBuffer   = new ByteBuffer( attributes.VertexSize * numVertices );
+        _byteBuffer   = new Buffer< byte >( attributes.VertexSize * numVertices );
         Attributes    = attributes;
 
         SetBuffer( _byteBuffer, true, attributes );
@@ -97,7 +97,7 @@ public class VertexBufferObject : IVertexData
     /// <param name="data">The byte buffer containing the vertex data.</param>
     /// <param name="ownsBuffer">Indicates whether this object should take ownership of the buffer.</param>
     /// <param name="attributes">The vertex attributes that define the structure of the vertex data.</param>
-    public VertexBufferObject( int usage, ByteBuffer data, bool ownsBuffer, VertexAttributes attributes )
+    public VertexBufferObject( int usage, Buffer< byte > data, bool ownsBuffer, VertexAttributes attributes )
     {
         // Generate a new buffer handle using OpenGL and assign it to _bufferHandle.
         _bufferHandle = ( int )GL.GenBuffer();
@@ -144,13 +144,13 @@ public class VertexBufferObject : IVertexData
     public VertexAttributes Attributes { get; set; }
 
     /// <summary>
-    /// Returns the underlying FloatBuffer and marks it as dirty, causing the buffer
+    /// Returns the underlying Buffer< float > and marks it as dirty, causing the buffer
     /// contents to be uploaded on the next call to bind. If you need immediate
     /// uploading use <see cref="SetVertices" />; Any modifications made to the Buffer
     /// after* the call to bind will not automatically be uploaded.
     /// </summary>
-    /// <returns> the underlying FloatBuffer holding the vertex data.  </returns>
-    public FloatBuffer GetBuffer( bool forWriting )
+    /// <returns> the underlying Buffer< float > holding the vertex data.  </returns>
+    public Buffer< float > GetBuffer( bool forWriting )
     {
         _isDirty |= forWriting;
 
@@ -369,13 +369,13 @@ public class VertexBufferObject : IVertexData
 
         Attributes = value;
 
-        if ( data is ByteBuffer buffer )
+        if ( data is Buffer< byte > buffer )
         {
             _byteBuffer = buffer;
         }
         else
         {
-            throw new GdxRuntimeException( "Only ByteBuffer is currently supported" );
+            throw new GdxRuntimeException( "Only Buffer< byte > is currently supported" );
         }
 
         var lim = _byteBuffer.Limit;

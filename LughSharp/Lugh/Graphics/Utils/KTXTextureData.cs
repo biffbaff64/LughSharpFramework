@@ -71,7 +71,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     private const int GL_TEXTURE_2D_ARRAY_EXT = 0x1234;
 
     // KTX image data (only available after preparing and before consuming)
-    private ByteBuffer? _compressedData;
+    private Buffer< byte >? _compressedData;
     private int         _glBaseInternalFormat;
     private int         _glFormat;
     private int         _glInternalFormat;
@@ -148,7 +148,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
                 var fileSize = dataInputStream.ReadInt32();
 
-                _compressedData = new ByteBuffer( fileSize );
+                _compressedData = new Buffer< byte >( fileSize );
 
                 int readBytes;
 
@@ -171,7 +171,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         }
         else
         {
-            _compressedData = ByteBuffer.Wrap( File.ReadAllBytes( file.Name ) );
+            _compressedData = Buffer< byte >.Wrap( File.ReadAllBytes( file.Name ) );
         }
 
         if ( ( _compressedData.GetByte() != 0x0AB )
@@ -243,7 +243,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
             _compressedData.Limit    = pos;
             _compressedData.Position = 0;
 
-            var directBuffer = new ByteBuffer( pos );
+            var directBuffer = new Buffer< byte >( pos );
             directBuffer.Order( _compressedData.Order() );
             directBuffer.PutBytes( _compressedData.BackingArray() );
 
@@ -290,7 +290,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
             throw new GdxRuntimeException( "Call prepare() before calling consumeCompressedData()" );
         }
 
-        var buffer = new IntBuffer( 16 );
+        var buffer = new Buffer< int >( 16 );
 
         // Check OpenGL type and format, detect compressed data format (no type & format)
         var compressed = false;
@@ -464,7 +464,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
                                 unsafe
                                 {
-                                    fixed ( void* ptr = &pixmap.ByteBuffer.BackingArray()[ 0 ] )
+                                    fixed ( void* ptr = &pixmap.Buffer< byte >.BackingArray()[ 0 ] )
                                     {
                                         GL.TexImage2D( target + face,
                                                        level,

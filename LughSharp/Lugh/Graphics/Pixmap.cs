@@ -25,7 +25,6 @@
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Exception = System.Exception;
@@ -147,17 +146,17 @@ public class Pixmap : IDisposable
     /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded
     /// as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
     /// </summary>
-    /// <param name="buffer"> A ByteBuffer holding the encoded data. </param>
+    /// <param name="buffer"> A Buffer{T} holding the encoded data. </param>
     /// <param name="offset"> The position in the data to start copying from. </param>
     /// <param name="len"> The size of data to copy. </param>
     /// <exception cref="GdxRuntimeException"></exception>
-    public Pixmap( ByteBuffer buffer, int offset, int len )
+    public Pixmap( Buffer< byte > buffer, int offset, int len )
     {
         ArgumentNullException.ThrowIfNull( buffer );
 
         if ( !buffer.IsDirect )
         {
-            throw new GdxRuntimeException( "Couldn't load pixmap from non-direct ByteBuffer" );
+            throw new GdxRuntimeException( "Couldn't load pixmap from non-direct Buffer< byte >" );
         }
 
         try
@@ -173,8 +172,8 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Creates a new Pixmap from the supplied encoded data.
     /// </summary>
-    /// <param name="buffer"> A ByteBuffer holding the encoded data. </param>
-    public Pixmap( ByteBuffer buffer )
+    /// <param name="buffer"> A Buffer{T} holding the encoded data. </param>
+    public Pixmap( Buffer< byte > buffer )
         : this( buffer, buffer.Position, buffer.Remaining() )
     {
     }
@@ -282,7 +281,7 @@ public class Pixmap : IDisposable
     /// machine dependent order.
     /// </para>
     /// </summary>
-    public ByteBuffer ByteBuffer
+    public Buffer< byte > ByteBuffer
     {
         get
         {

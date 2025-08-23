@@ -22,9 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.G2D;
@@ -60,7 +58,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
 
     // ========================================================================
 
-    public ByteBuffer        PixmapBuffer  { get; set; }
+    public Buffer< byte >    PixmapBuffer  { get; set; }
     public Gdx2DPixmapFormat ColorType     { get; set; }
     public uint              Blend         { get; set; }
     public uint              Scale         { get; set; }
@@ -82,7 +80,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// pixel operations and transformations. It is designed for efficient
     /// image processing and rendering in 2D graphics.
     /// </remarks>
-    public Gdx2DPixmap( ByteBuffer buffer, int offset, int len, Gdx2DPixmapFormat requestedFormat )
+    public Gdx2DPixmap( Buffer< byte > buffer, int offset, int len, Gdx2DPixmapFormat requestedFormat )
         : this( buffer.BackingArray(), offset, len, requestedFormat )
     {
     }
@@ -115,9 +113,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
         Blend     = _pixmapDataType.Blend;
         Scale     = _pixmapDataType.Scale;
 
-        SafeConstructorInit( _pixmapDataType.Width,
-                             _pixmapDataType.Height,
-                             _pixmapDataType.BitDepth );
+        SafeConstructorInit( _pixmapDataType.Width, _pixmapDataType.Height, _pixmapDataType.BitDepth );
     }
 
     /// <summary>
@@ -181,7 +177,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
 
         var length = width * height * PixelFormatUtils.Gdx2dBytesPerPixel( format );
 
-        PixmapBuffer = new ByteBuffer( length );
+        PixmapBuffer = new Buffer< byte >( length );
 
         if ( PixmapBuffer == null )
         {
@@ -201,7 +197,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
         Logger.Debug( $"BitDepth: {bitDepth}" );
         Logger.Debug( $"Pixels data length: {_pixmapDataType.Pixels.Length}" );
 
-        PixmapBuffer.PutBytes( _pixmapDataType.Pixels );
+        PixmapBuffer.Put( _pixmapDataType.Pixels );
     }
 
     /// <summary>
@@ -263,7 +259,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <param name="len"></param>
     /// <returns></returns>
     /// <exception cref="IOException"></exception>
-    private static ( ByteBuffer, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
+    private static ( Buffer< byte >, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
         // Analyse the PNG file the get the properties.
         Utils.PNGDecoder.AnalysePNG( buffer, verbose: false );
@@ -283,8 +279,8 @@ public partial class Gdx2DPixmap : Image, IDisposable
         Array.Copy( buffer, Utils.PNGDecoder.IDAT_DATA_OFFSET,
                     pixmapDef.Pixels, 0, Utils.PNGDecoder.IDATchunk.ChunkSize );
 
-        var byteBuffer = new ByteBuffer( pixmapDef.Pixels.Length );
-        byteBuffer.PutBytes( pixmapDef.Pixels );
+        var byteBuffer = new Buffer< byte >( pixmapDef.Pixels.Length );
+        byteBuffer.Put( pixmapDef.Pixels );
 
         return ( byteBuffer, pixmapDef );
     }

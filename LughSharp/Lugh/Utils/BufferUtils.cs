@@ -22,9 +22,12 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace LughSharp.Lugh.Utils.Buffers;
+using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
+
+namespace LughSharp.Lugh.Utils;
 
 [PublicAPI]
 public class BufferUtils
@@ -115,7 +118,7 @@ public class BufferUtils
     /// <param name="length"></param>
     /// <param name="destination"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public static void Copy( byte[] source, int sourceOffset, int length, ByteBuffer destination )
+    public static void Copy( byte[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
         ArgumentNullException.ThrowIfNull( source );
         ArgumentNullException.ThrowIfNull( destination );
@@ -141,7 +144,7 @@ public class BufferUtils
     /// <param name="length"></param>
     /// <param name="destination"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public static void Copy( short[] source, int sourceOffset, int length, ByteBuffer destination )
+    public static void Copy( short[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
         ArgumentNullException.ThrowIfNull( source );
         ArgumentNullException.ThrowIfNull( destination );
@@ -167,7 +170,7 @@ public class BufferUtils
     /// <param name="length"></param>
     /// <param name="destination"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public static void Copy( float[] source, int sourceOffset, int length, ByteBuffer destination )
+    public static void Copy( float[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
         ArgumentNullException.ThrowIfNull( source );
         ArgumentNullException.ThrowIfNull( destination );

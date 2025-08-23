@@ -938,12 +938,12 @@ UTILS/BUFFERS
 
      CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - Buffer
-    - DONE - IP   - BufferUtils
-    - DONE - DONE - ByteBuffer
-    - DONE - DONE - FloatBuffer
-    - DONE - DONE - IntBuffer
-    - DONE - DONE - ShortBuffer
+    - IP   - IP   - Buffer
+    - IP   - IP   - BufferUtils
+    - IP   - IP   - ByteBuffer
+    - IP   - IP   - FloatBuffer
+    - IP   - IP   - IntBuffer
+    - IP   - IP   - ShortBuffer
 
 UTILS/COLLECTIONS
 -----------------

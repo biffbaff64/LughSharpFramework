@@ -87,7 +87,7 @@ public interface IInstanceData : IDisposable
     /// </summary>
     /// <param name="data">  the instance data </param>
     /// <param name="count"> the number of floats to copy </param>
-    void SetInstanceData( FloatBuffer data, int count );
+    void SetInstanceData( Buffer< float > data, int count );
 
     /// <summary>
     /// Update (a portion of) the vertices. Does not resize the backing buffer.
@@ -96,17 +96,17 @@ public interface IInstanceData : IDisposable
     /// <param name="data"> the vertex data </param>
     /// <param name="sourceOffset"> the offset to start copying the data from </param>
     /// <param name="count">  the number of floats to copy </param>
-    void UpdateInstanceData( int targetOffset, FloatBuffer data, int sourceOffset, int count );
+    void UpdateInstanceData( int targetOffset, Buffer< float > data, int sourceOffset, int count );
 
     /// <summary>
-    /// Returns the underlying FloatBuffer and marks it as dirty, causing the buffer
+    /// Returns the underlying Buffer< float > and marks it as dirty, causing the buffer
     /// contents to be uploaded on the next call to bind. If you need immediate
     /// uploading use <see cref="SetInstanceData(float[], int, int)" />;
     /// Any modifications made to the Buffer *after* the call to bind will not
     /// automatically be uploaded.
     /// </summary>
-    /// <returns> the underlying FloatBuffer holding the vertex data. </returns>
-    FloatBuffer GetBuffer( bool forWriting );
+    /// <returns> the underlying Buffer< float > holding the vertex data. </returns>
+    Buffer< float > GetBuffer( bool forWriting );
 
     /// <summary>
     /// Binds this InstanceData for rendering via glDrawArraysInstanced or glDrawElementsInstanced.

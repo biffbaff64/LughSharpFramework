@@ -25,6 +25,7 @@
 using System.Diagnostics;
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -43,7 +44,7 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class VertexBufferObjectSubData : IVertexData
 {
-    private readonly FloatBuffer _buffer;
+    private readonly Buffer< float > _buffer;
     private readonly bool        _isDirect;
     private readonly int         _usage;
 
@@ -76,19 +77,19 @@ public class VertexBufferObjectSubData : IVertexData
         _isStatic  = isStatic;
         Attributes = attributes;
 
-        ByteBuffer = new ByteBuffer( Attributes.VertexSize * numVertices );
+        Buffer< byte > = new Buffer< byte >( Attributes.VertexSize * numVertices );
         _isDirect  = true;
 
         _usage  = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
-        _buffer = ByteBuffer.AsFloatBuffer();
+        _buffer = Buffer< byte >.AsFloatBuffer();
 
         _bufferHandle = CreateBufferObject();
 
         _buffer.Flip();
-        ByteBuffer.Flip();
+        Buffer< byte >.Flip();
     }
 
-    public ByteBuffer       ByteBuffer { get; set; }
+    public Buffer< byte >       Buffer< byte > { get; set; }
     public VertexAttributes Attributes { get; set; }
 
     /// <summary>
@@ -99,7 +100,7 @@ public class VertexBufferObjectSubData : IVertexData
     /// <summary>
     /// Returns the maximum number of vertices this VertedData can store.
     /// </summary>
-    public int NumMaxVertices => ByteBuffer.Capacity / Attributes.VertexSize;
+    public int NumMaxVertices => Buffer< byte >.Capacity / Attributes.VertexSize;
 
     /// <summary>
     /// Sets the vertices of this VertexData, discarding the old vertex data. The
@@ -121,7 +122,7 @@ public class VertexBufferObjectSubData : IVertexData
         if ( _isDirect )
         {
             //TODO: Check against LibGDX
-            ByteBuffer.PutFloats( vertices, offset, count );
+            Buffer< byte >.PutFloats( vertices, offset, count );
 
             _buffer.Position = 0;
             _buffer.Limit    = count;
@@ -132,8 +133,8 @@ public class VertexBufferObjectSubData : IVertexData
             _buffer.PutFloats( vertices, offset, count );
 
             _buffer.Flip();
-            ByteBuffer.Position = 0;
-            ByteBuffer.Limit    = _buffer.Limit << 2;
+            Buffer< byte >.Position = 0;
+            Buffer< byte >.Limit    = _buffer.Limit << 2;
         }
 
         BufferChanged();
@@ -152,11 +153,11 @@ public class VertexBufferObjectSubData : IVertexData
 
         if ( _isDirect )
         {
-            var pos = ByteBuffer.Position;
+            var pos = Buffer< byte >.Position;
 
-            ByteBuffer.Position = targetOffset * 4;
-            BufferUtils.Copy( vertices, sourceOffset, count, ByteBuffer );
-            ByteBuffer.Position = pos;
+            Buffer< byte >.Position = targetOffset * 4;
+            BufferUtils.Copy( vertices, sourceOffset, count, Buffer< byte > );
+            Buffer< byte >.Position = pos;
         }
         else
         {
@@ -167,13 +168,13 @@ public class VertexBufferObjectSubData : IVertexData
     }
 
     /// <summary>
-    /// Returns the underlying FloatBuffer and marks it as dirty, causing the buffer
+    /// Returns the underlying Buffer< float > and marks it as dirty, causing the buffer
     /// contents to be uploaded on the next call to bind. If you need immediate
     /// uploading use <see cref="IVertexData.SetVertices" />; Any modifications made
     /// to the Buffer after the call to bind will not automatically be uploaded.
     /// </summary>
-    /// <returns> the underlying <see cref="FloatBuffer" /> holding the vertex data. </returns>
-    public FloatBuffer GetBuffer( bool forWriting )
+    /// <returns> the underlying <see cref="Buffer< float >" /> holding the vertex data. </returns>
+    public Buffer< float > GetBuffer( bool forWriting )
     {
         _isDirty |= forWriting;
 
@@ -191,11 +192,11 @@ public class VertexBufferObjectSubData : IVertexData
 
         if ( _isDirty )
         {
-            ByteBuffer.Limit = _buffer.Limit * 4;
+            Buffer< byte >.Limit = _buffer.Limit * 4;
 
-            fixed ( void* ptr = &ByteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &Buffer< byte >.BackingArray()[ 0 ] )
             {
-                GL.BufferData( ( int )BufferTarget.ArrayBuffer, ByteBuffer.Limit, ( IntPtr )ptr, _usage );
+                GL.BufferData( ( int )BufferTarget.ArrayBuffer, Buffer< byte >.Limit, ( IntPtr )ptr, _usage );
             }
 
             _isDirty = false;
@@ -314,7 +315,7 @@ public class VertexBufferObjectSubData : IVertexData
         var result = GL.GenBuffer();
 
         GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, result );
-        GL.BufferData( ( int )BufferTarget.ArrayBuffer, ByteBuffer.Capacity, 0, _usage );
+        GL.BufferData( ( int )BufferTarget.ArrayBuffer, Buffer< byte >.Capacity, 0, _usage );
         GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
 
         return ( int )result;
@@ -324,9 +325,9 @@ public class VertexBufferObjectSubData : IVertexData
     {
         if ( _isBound )
         {
-            fixed ( void* ptr = &ByteBuffer.BackingArray()[ 0 ] )
+            fixed ( void* ptr = &Buffer< byte >.BackingArray()[ 0 ] )
             {
-                GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, ByteBuffer.Limit, ( IntPtr )ptr );
+                GL.BufferSubData( ( int )BufferTarget.ArrayBuffer, 0, Buffer< byte >.Limit, ( IntPtr )ptr );
             }
 
             _isDirty = false;

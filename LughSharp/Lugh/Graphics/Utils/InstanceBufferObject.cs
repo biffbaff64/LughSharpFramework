@@ -25,6 +25,7 @@
 using System.Diagnostics;
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -37,9 +38,9 @@ public class InstanceBufferObject : IInstanceData
 {
     // ========================================================================
 
-    private FloatBuffer _buffer = null!;
+    private Buffer< float > _buffer = null!;
     private int         _bufferHandle;
-    private ByteBuffer? _byteBuffer;
+    private Buffer< byte >? _byteBuffer;
     private bool        _isBound = false;
     private bool        _isDirty = false;
     private bool        _ownsBuffer;
@@ -56,7 +57,7 @@ public class InstanceBufferObject : IInstanceData
     {
         _bufferHandle = ( int )GL.GenBuffer();
 
-        var data = new ByteBuffer( instanceAttributes.VertexSize * numVertices )
+        var data = new Buffer< byte >( instanceAttributes.VertexSize * numVertices )
         {
             Limit = 0,
         };
@@ -89,7 +90,7 @@ public class InstanceBufferObject : IInstanceData
     public int NumInstances    => ( _buffer.Limit * 4 ) / Attributes.VertexSize;
     public int NumMaxInstances => _byteBuffer!.Capacity / Attributes.VertexSize;
 
-    public FloatBuffer GetBuffer( bool forWriting = true )
+    public Buffer< float > GetBuffer( bool forWriting = true )
     {
         _isDirty |= forWriting;
 
@@ -110,9 +111,9 @@ public class InstanceBufferObject : IInstanceData
         BufferChanged();
     }
 
-    public void SetInstanceData( FloatBuffer data, int count )
+    public void SetInstanceData( Buffer< float > data, int count )
     {
-        Debug.Assert( _byteBuffer != null, "SetInstanceData(FloatBuffer, int) fail: _byteBuffer is NULL" );
+        Debug.Assert( _byteBuffer != null, "SetInstanceData(Buffer< float >, int) fail: _byteBuffer is NULL" );
 
         _isDirty = true;
 
@@ -145,7 +146,7 @@ public class InstanceBufferObject : IInstanceData
         BufferChanged();
     }
 
-    public void UpdateInstanceData( int targetOffset, FloatBuffer data, int sourceOffset, int count )
+    public void UpdateInstanceData( int targetOffset, Buffer< float > data, int sourceOffset, int count )
     {
         GdxRuntimeException.ThrowIfNull( _byteBuffer );
 
@@ -331,13 +332,13 @@ public class InstanceBufferObject : IInstanceData
 
         Attributes = value;
 
-        if ( data is ByteBuffer buffer )
+        if ( data is Buffer< byte > buffer )
         {
             _byteBuffer = buffer;
         }
         else
         {
-            throw new GdxRuntimeException( "Only ByteBuffer is currently supported" );
+            throw new GdxRuntimeException( "Only Buffer< byte > is currently supported" );
         }
 
         _ownsBuffer = ownsBuffer;

@@ -828,7 +828,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// <param name="buffer">buffer containing the matrix data </param>
     /// <param name="count"></param>
     /// <param name="transpose">whether the uniform matrix should be transposed  </param>
-    public unsafe void SetUniformMatrix3Fv( string name, FloatBuffer buffer, int count, bool transpose )
+    public unsafe void SetUniformMatrix3Fv( string name, Buffer< float > buffer, int count, bool transpose )
     {
         CheckManaged();
         buffer.Position = 0;
@@ -847,7 +847,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// <param name="buffer"> buffer containing the matrix data </param>
     /// <param name="count"></param>
     /// <param name="transpose"> whether the uniform matrix should be transposed  </param>
-    public unsafe void SetUniformMatrix4Fv( string name, FloatBuffer buffer, int count, bool transpose )
+    public unsafe void SetUniformMatrix4Fv( string name, Buffer< float > buffer, int count, bool transpose )
     {
         ArgumentNullException.ThrowIfNull( buffer );
 

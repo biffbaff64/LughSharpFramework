@@ -37,10 +37,10 @@ public class VertexBufferObjectWithVAO : IVertexData
 
     // ========================================================================
     
-    private static readonly IntBuffer _tmpHandle = new( 1 );
+    private static readonly Buffer< int > _tmpHandle = new( 1 );
 
-    private readonly FloatBuffer _buffer;
-    private readonly ByteBuffer  _byteBuffer;
+    private readonly Buffer< float > _buffer;
+    private readonly Buffer< byte >  _byteBuffer;
     private readonly List< int > _cachedLocations = [ ];
     private readonly bool        _ownsBuffer;
     private readonly int         _usage;
@@ -75,7 +75,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         _isStatic   = isStatic;
         Attributes  = attributes;
-        _byteBuffer = new ByteBuffer( Attributes.VertexSize * numVertices );
+        _byteBuffer = new Buffer< byte >( Attributes.VertexSize * numVertices );
         _buffer     = _byteBuffer.AsFloatBuffer();
         _ownsBuffer = true;
 
@@ -94,7 +94,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// <param name="isStatic">Indicates whether the vertex data is static.</param>
     /// <param name="unmanagedBuffer">The unmanaged byte buffer to store vertex data.</param>
     /// <param name="attributes">The vertex attributes associated with this buffer.</param>
-    public VertexBufferObjectWithVAO( bool isStatic, ByteBuffer unmanagedBuffer, VertexAttributes attributes )
+    public VertexBufferObjectWithVAO( bool isStatic, Buffer< byte > unmanagedBuffer, VertexAttributes attributes )
     {
         _isStatic   = isStatic;
         Attributes  = attributes;
@@ -203,7 +203,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
     /// <summary>
     /// <para>
-    /// Returns the underlying FloatBuffer and marks it as dirty, causing the buffer contents to be
+    /// Returns the underlying Buffer< float > and marks it as dirty, causing the buffer contents to be
     /// uploaded on the next call to <see cref="Bind"/>.
     /// </para>
     /// <para>
@@ -214,8 +214,8 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// be uploaded.
     /// </para>
     /// </summary>
-    /// <returns> the underlying FloatBuffer holding the vertex data.  </returns>
-    public FloatBuffer GetBuffer( bool forWriting )
+    /// <returns> the underlying Buffer< float > holding the vertex data.  </returns>
+    public Buffer< float > GetBuffer( bool forWriting )
     {
         _isDirty |= forWriting;
 

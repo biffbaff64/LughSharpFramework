@@ -25,7 +25,7 @@
 using System.IO.Compression;
 
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Exception = System.Exception;
@@ -56,7 +56,7 @@ public class ETC1
     public ETC1Data EncodeImage( Pixmap pixmap )
     {
         var pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
-        var compressedData = EncodeImage( pixmap.ByteBuffer!, 0, pixmap.Width, pixmap.Height, pixelSize );
+        var compressedData = EncodeImage( pixmap.ByteBuffer, 0, pixmap.Width, pixmap.Height, pixelSize );
 
 //        BufferUtils.NewUnsafeByteBuffer( compressedData );
 
@@ -83,7 +83,7 @@ public class ETC1
     /// <summary>
     /// Takes ETC1 compressed image data and converts it to a <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> or
     /// <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" /> <see cref="Pixmap" />.
-    /// Does not modify the ByteBuffer's position or limit.
+    /// Does not modify the Buffer's position or limit.
     /// </summary>
     /// <param name="etc1Data"> the <see cref="ETC1Data" /> instance </param>
     /// <param name="format"> either <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> or <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" /> </param>
@@ -112,7 +112,7 @@ public class ETC1
         var pixelSize = GetPixelSize( format );
         var pixmap    = new Pixmap( width, height, format );
 
-        DecodeImage( etc1Data.CompressedData, dataOffset, pixmap.ByteBuffer!, 0, width, height, pixelSize );
+        DecodeImage( etc1Data.CompressedData, dataOffset, pixmap.ByteBuffer, 0, width, height, pixelSize );
 
         return pixmap;
     }
@@ -154,14 +154,14 @@ public class ETC1
 //    }
 
     /// <summary>
-    /// Writes a PKM header to the <see cref="ByteBuffer" />. Does not modify the
-    /// position or limit of the ByteBuffer.
+    /// Writes a PKM header to the Buffer. Does not modify the position or limit of
+    /// the Buffer{T}.
     /// </summary>
-    /// <param name="header"> the direct native order <see cref="ByteBuffer" /> </param>
+    /// <param name="header"> the direct native order Buffer </param>
     /// <param name="offset"> the offset to the header in bytes</param>
     /// <param name="width"> the width in pixels </param>
     /// <param name="height"> the height in pixels </param>
-    public virtual void FormatHeader( ByteBuffer header, int offset, int width, int height )
+    public virtual void FormatHeader( Buffer< byte > header, int offset, int width, int height )
     {
         throw new NotImplementedException();
     }
@@ -173,13 +173,11 @@ public class ETC1
     /// <summary>
     /// Returns the width stored in the PKM header.
     /// </summary>
-    /// <param name="header">
-    /// direct native order <see cref="ByteBuffer" /> holding the PKM header
-    /// </param>
+    /// <param name="header"> direct native order Buffer holding the PKM header. </param>
     /// <param name="offset">
     /// the offset in bytes to the PKM header from the ByteBuffer's start
     /// </param>
-    public virtual int GetWidthPKM( ByteBuffer? header, int offset )
+    public virtual int GetWidthPKM( Buffer< byte >? header, int offset )
     {
         throw new NotImplementedException();
     }
@@ -191,9 +189,9 @@ public class ETC1
     /// <summary>
     /// Returns the height stored in the PKM header
     /// </summary>
-    /// <param name="header"> direct native order {@link ByteBuffer} holding the PKM header </param>
-    /// <param name="offset"> the offset in bytes to the PKM header from the ByteBuffer's start </param>
-    public virtual int GetHeightPKM( ByteBuffer? header, int offset )
+    /// <param name="header"> direct native order Buffer holding the PKM header </param>
+    /// <param name="offset"> the offset in bytes to the PKM header from the Buffer's start </param>
+    public virtual int GetHeightPKM( Buffer< byte >? header, int offset )
     {
         throw new NotImplementedException();
     }
@@ -205,9 +203,9 @@ public class ETC1
     /// <summary>
     /// Returns <b>true</b> if the header if valid PKM.
     /// </summary>
-    /// <param name="header"> direct native order <see cref="ByteBuffer" /> holding the PKM header. </param>
-    /// <param name="offset"> the offset in bytes to the PKM header from the ByteBuffer's start. </param>
-    public virtual bool IsValidPKM( ByteBuffer header, int offset )
+    /// <param name="header"> direct native order Buffer holding the PKM header. </param>
+    /// <param name="offset"> the offset in bytes to the PKM header from the Buffer's start. </param>
+    public virtual bool IsValidPKM( Buffer< byte > header, int offset )
     {
         throw new NotImplementedException();
     }
@@ -218,22 +216,22 @@ public class ETC1
 
     /// <summary>
     /// Decodes the compressed image data to RGB565 or RGB888 pixel data. Does not
-    /// modify the position or limit of the <see cref="ByteBuffer" /> instances.
+    /// modify the position or limit of the Buffer instances.
     /// </summary>
     /// <param name="compressedData">
-    /// the compressed image data in a direct native order {@link ByteBuffer}
+    /// the compressed image data in a direct native order buffer.
     /// </param>
     /// <param name="offset"> the offset in bytes to the image data from the start of the buffer </param>
     /// <param name="decodedData">
-    /// the decoded data in a direct native order ByteBuffer, must hold width * height * pixelSize bytes.
+    /// the decoded data in a direct native order Buffer, must hold width * height * pixelSize bytes.
     /// </param>
     /// <param name="offsetDec"> the offset in bytes to the decoded image data. </param>
     /// <param name="width"> the width in pixels </param>
     /// <param name="height"> the height in pixels </param>
     /// <param name="pixelSize"> the pixel size, either 2 (RBG565) or 3 (RGB888) </param>
-    public virtual void DecodeImage( ByteBuffer? compressedData,
+    public virtual void DecodeImage( Buffer< byte >? compressedData,
                                      int offset,
-                                     ByteBuffer decodedData,
+                                     Buffer< byte > decodedData,
                                      int offsetDec,
                                      int width,
                                      int height,
@@ -248,15 +246,15 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image data given as RGB565 or RGB888. Does not modify the
-    /// position or limit of the <see cref="ByteBuffer" />.
+    /// position or limit of the Buffer.
     /// </summary>
-    /// <param name="imageData"> the image data in a direct native order <see cref="ByteBuffer" /> </param>
+    /// <param name="imageData"> the image data in a direct native order Buffer </param>
     /// <param name="offset"> the offset in bytes to the image data from the start of the buffer </param>
     /// <param name="width"> the width in pixels </param>
     /// <param name="height"> the height in pixels </param>
     /// <param name="pixelSize"> the pixel size, either 2 (RGB565) or 3 (RGB888) </param>
-    /// <returns> a new direct native order ByteBuffer containing the compressed image data </returns>
-    public virtual ByteBuffer EncodeImage( ByteBuffer imageData, int offset, int width, int height, int pixelSize )
+    /// <returns> a new direct native order Buffer containing the compressed image data </returns>
+    public virtual Buffer< byte > EncodeImage( Buffer< byte > imageData, int offset, int width, int height, int pixelSize )
     {
         throw new NotImplementedException();
     }
@@ -270,15 +268,15 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image data given as RGB565 or RGB888. Does not modify
-    /// the position or limit of the <see cref="ByteBuffer" />.
+    /// the position or limit of the Buffer.
     /// </summary>
-    /// <param name="imageData"> the image data in a direct native order <see cref="ByteBuffer" /> </param>
+    /// <param name="imageData"> the image data in a direct native order Buffer </param>
     /// <param name="offset"> the offset in bytes to the image data from the start of the buffer </param>
     /// <param name="width"> the width in pixels </param>
     /// <param name="height"> the height in pixels </param>
     /// <param name="pixelSize"> the pixel size, either 2 (RGB565) or 3 (RGB888) </param>
-    /// <returns> a new direct native order ByteBuffer containing the compressed image data </returns>
-    public virtual ByteBuffer EncodeImagePKM( ByteBuffer? imageData, int offset, int width, int height, int pixelSize )
+    /// <returns> a new direct native order Buffer containing the compressed image data </returns>
+    public virtual Buffer< byte > EncodeImagePKM( Buffer< byte >? imageData, int offset, int width, int height, int pixelSize )
     {
         throw new NotImplementedException();
     }
@@ -294,7 +292,7 @@ public class ETC1
     {
         private readonly ETC1 _etc1;
 
-        public ETC1Data( int width, int height, ByteBuffer compressedData, int dataOffset, ETC1 etc1 )
+        public ETC1Data( int width, int height, Buffer< byte > compressedData, int dataOffset, ETC1 etc1 )
         {
             _etc1          = etc1;
             Width          = width;
@@ -321,13 +319,13 @@ public class ETC1
 
                 var fileSize = input.ReadInt32();
 
-                CompressedData = new ByteBuffer( fileSize );
+                CompressedData = new Buffer< byte >( fileSize );
 
                 int readBytes;
 
                 while ( ( readBytes = input.Read( buffer ) ) != -1 )
                 {
-                    CompressedData.PutBytes( buffer, 0, 0, readBytes );
+                    CompressedData.Put( buffer, 0, 0, readBytes );
                 }
 
                 CompressedData.Position = 0;
@@ -363,7 +361,7 @@ public class ETC1
         /// <summary>
         /// the optional PKM header and compressed image data.
         /// </summary>
-        public ByteBuffer CompressedData { get; set; }
+        public Buffer< byte > CompressedData { get; set; }
 
         /// <summary>
         /// the offset in bytes to the actual compressed data.

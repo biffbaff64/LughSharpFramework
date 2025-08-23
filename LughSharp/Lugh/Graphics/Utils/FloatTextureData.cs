@@ -41,7 +41,7 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class FloatTextureData : ITextureData
 {
-    public FloatBuffer Buffer     { get; private set; } = null!;
+    public Buffer< float > Buffer     { get; private set; } = null!;
     public int         Width      { get; set; }         = 0;
     public int         Height     { get; set; }         = 0;
     public bool        IsPrepared { get; set; }         = false;
@@ -103,7 +103,7 @@ public class FloatTextureData : ITextureData
                 }
             }
 
-            Buffer = new FloatBuffer( Width * Height * amountOfFloats );
+            Buffer = new Buffer< float >( Width * Height * amountOfFloats );
         }
 
         IsPrepared = true;

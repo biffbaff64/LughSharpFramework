@@ -29,8 +29,8 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class VertexArray : IVertexData
 {
-    private readonly FloatBuffer _buffer;
-    private readonly ByteBuffer  _byteBuffer;
+    private readonly Buffer< float > _buffer;
+    private readonly Buffer< byte >  _byteBuffer;
 
     // ========================================================================
     // ========================================================================
@@ -53,7 +53,7 @@ public class VertexArray : IVertexData
     public VertexArray( int numVertices, VertexAttributes attributes )
     {
         Attributes  = attributes;
-        _byteBuffer = new ByteBuffer( Attributes.VertexSize * numVertices );
+        _byteBuffer = new Buffer< byte >( Attributes.VertexSize * numVertices );
         _buffer     = _byteBuffer.AsFloatBuffer();
     }
 
@@ -73,13 +73,13 @@ public class VertexArray : IVertexData
     public VertexAttributes Attributes { get; set; }
 
     /// <summary>
-    /// Returns the underlying FloatBuffer and marks it as dirty, causing the buffer
+    /// Returns the underlying Buffer< float > and marks it as dirty, causing the buffer
     /// contents to be uploaded on the next call to bind. If you need immediate
     /// uploading use <see cref="IVertexData.SetVertices" />; Any modifications made to the Buffer
     /// after* the call to bind will not automatically be uploaded.
     /// </summary>
-    /// <returns> the underlying FloatBuffer holding the vertex data.</returns>
-    public FloatBuffer GetBuffer( bool forWriting )
+    /// <returns> the underlying Buffer< float > holding the vertex data.</returns>
+    public Buffer< float > GetBuffer( bool forWriting )
     {
         return _buffer;
     }

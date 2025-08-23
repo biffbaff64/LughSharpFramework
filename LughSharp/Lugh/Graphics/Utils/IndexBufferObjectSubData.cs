@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -44,8 +45,8 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class IndexBufferObjectSubData : IIndexData
 {
-    private readonly ShortBuffer _buffer;
-    private readonly ByteBuffer  _byteBuffer;
+    private readonly Buffer< short > _buffer;
+    private readonly Buffer< byte >  _byteBuffer;
     private readonly int         _usage;
     private          int         _bufferHandle;
     private          bool        _isBound = false;
@@ -60,7 +61,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( bool isStatic, int maxIndices )
     {
-        _byteBuffer = new ByteBuffer( maxIndices * 2 );
+        _byteBuffer = new Buffer< byte >( maxIndices * 2 );
 
         _usage  = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
         _buffer = _byteBuffer.AsShortBuffer();
@@ -77,7 +78,7 @@ public class IndexBufferObjectSubData : IIndexData
     /// <param name="maxIndices"> the maximum number of indices this buffer can hold </param>
     public IndexBufferObjectSubData( int maxIndices )
     {
-        _byteBuffer = new ByteBuffer( maxIndices * 2 );
+        _byteBuffer = new Buffer< byte >( maxIndices * 2 );
 
         _usage  = IGL.GL_STATIC_DRAW;
         _buffer = _byteBuffer.AsShortBuffer();
@@ -120,7 +121,7 @@ public class IndexBufferObjectSubData : IIndexData
     }
 
     /// <inheritdoc />
-    public unsafe void SetIndices( ShortBuffer indices )
+    public unsafe void SetIndices( Buffer< short > indices )
     {
         var pos = indices.Position;
 
@@ -172,7 +173,7 @@ public class IndexBufferObjectSubData : IIndexData
     }
 
     /// <inheritdoc />
-    public ShortBuffer GetBuffer( bool forWriting )
+    public Buffer< short > GetBuffer( bool forWriting )
     {
         _isDirty |= forWriting;
 

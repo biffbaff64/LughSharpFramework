@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -30,8 +31,8 @@ namespace LughSharp.Lugh.Graphics.Utils;
 public class IndexArray : IIndexData
 {
     private readonly bool        _empty;
-    private          ShortBuffer _buffer;
-    private          ByteBuffer  _byteBuffer;
+    private          Buffer< short > _buffer;
+    private          Buffer< byte >  _byteBuffer;
 
     // ========================================================================
     // ========================================================================
@@ -49,7 +50,7 @@ public class IndexArray : IIndexData
             maxIndices = 1;
         }
 
-        _byteBuffer = new ByteBuffer( maxIndices * 2 );
+        _byteBuffer = new Buffer< byte >( maxIndices * 2 );
 
         _buffer = _byteBuffer.AsShortBuffer();
         _buffer.Flip();
@@ -91,7 +92,7 @@ public class IndexArray : IIndexData
     /// <summary>
     /// </summary>
     /// <param name="indices"></param>
-    public void SetIndices( ShortBuffer indices )
+    public void SetIndices( Buffer< short > indices )
     {
         var pos = indices.Position;
 
@@ -124,12 +125,12 @@ public class IndexArray : IIndexData
     }
 
     /// <summary>
-    /// Returns the underlying ShortBuffer. If you modify the buffer contents
+    /// Returns the underlying Buffer< short >. If you modify the buffer contents
     /// they wil be uploaded on the call to <see cref="Bind()" />.
     /// If you need immediate uploading use <see cref="SetIndices(short[], int, int)" />.
     /// </summary>
     /// <returns> the underlying short buffer. </returns>
-    public virtual ShortBuffer GetBuffer( bool forWriting )
+    public virtual Buffer< short > GetBuffer( bool forWriting )
     {
         return _buffer;
     }

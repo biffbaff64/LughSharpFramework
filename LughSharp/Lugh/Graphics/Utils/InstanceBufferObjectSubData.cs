@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -36,8 +37,8 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class InstanceBufferObjectSubData : IInstanceData
 {
-    private readonly FloatBuffer _buffer;
-    private readonly ByteBuffer  _byteBuffer;
+    private readonly Buffer< float > _buffer;
+    private readonly Buffer< byte >  _byteBuffer;
     private readonly bool        _isDirect;
 
     private readonly int  _usage;
@@ -70,7 +71,7 @@ public class InstanceBufferObjectSubData : IInstanceData
     {
         _isStatic   = isStatic;
         Attributes  = instanceAttributes;
-        _byteBuffer = new ByteBuffer( Attributes.VertexSize * numInstances );
+        _byteBuffer = new Buffer< byte >( Attributes.VertexSize * numInstances );
         _isDirect   = true;
 
         _usage       = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
@@ -94,7 +95,7 @@ public class InstanceBufferObjectSubData : IInstanceData
     /// </summary>
     public int NumMaxInstances => _byteBuffer.Capacity / Attributes.VertexSize;
 
-    public FloatBuffer GetBuffer( bool forWriting )
+    public Buffer< float > GetBuffer( bool forWriting )
     {
         _isDirty |= forWriting; //TODO: ???
 
@@ -126,7 +127,7 @@ public class InstanceBufferObjectSubData : IInstanceData
         BufferChanged();
     }
 
-    public void SetInstanceData( FloatBuffer data, int count )
+    public void SetInstanceData( Buffer< float > data, int count )
     {
         _isDirty = true;
 
@@ -173,7 +174,7 @@ public class InstanceBufferObjectSubData : IInstanceData
         BufferChanged();
     }
 
-    public void UpdateInstanceData( int targetOffset, FloatBuffer data, int sourceOffset, int count )
+    public void UpdateInstanceData( int targetOffset, Buffer< float > data, int sourceOffset, int count )
     {
         _isDirty = true;
 

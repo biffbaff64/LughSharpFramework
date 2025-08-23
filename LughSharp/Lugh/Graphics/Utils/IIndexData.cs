@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -57,13 +57,13 @@ public interface IIndexData : IDisposable
     /// <summary>
     /// Copies the specified indices to the indices of this IndexBufferObject,
     /// discarding the old indices. Copying start at the current
-    /// <see cref="ShortBuffer.Position()" /> of the specified buffer and copied
-    /// the <see cref="ShortBuffer.Remaining()" /> amount of indices. This can be
+    /// <see cref="Buffer{T}.Position()" /> of the specified buffer and copied
+    /// the <see cref="Buffer{T}.Remaining()" /> amount of indices. This can be
     /// called in between calls to <see cref="Bind()" /> and <see cref="Unbind()" />.
     /// The index data will be updated instantly.
     /// </summary>
     /// <param name="indices"> the index data to copy  </param>
-    void SetIndices( ShortBuffer indices );
+    void SetIndices( Buffer< short > indices );
 
     /// <summary>
     /// Update (a portion of) the indices.
@@ -75,12 +75,12 @@ public interface IIndexData : IDisposable
     void UpdateIndices( int targetOffset, short[] indices, int offset, int count );
 
     /// <summary>
-    /// Returns the underlying ShortBuffer. If you modify the buffer contents they
+    /// Returns the underlying Buffer{T}. If you modify the buffer contents they
     /// wil be uploaded on the call to <see cref="Bind()" />. If you need immediate
     /// uploading use <see cref="SetIndices(short[], int, int)" />.
     /// </summary>
     /// <returns> the underlying short buffer. </returns>
-    ShortBuffer GetBuffer( bool forWriting );
+    Buffer< short > GetBuffer( bool forWriting );
 
     /// <summary>
     /// Binds this IndexBufferObject for rendering with glDrawElements.

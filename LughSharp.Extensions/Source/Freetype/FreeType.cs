@@ -26,7 +26,7 @@ using System.Runtime.InteropServices;
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 
@@ -191,7 +191,7 @@ namespace Extensions.Source.Freetype;
 //            // that FreeType might take ownership/reference the memory.
 //            // If FreeType truly needs the buffer for the lifetime of the Face, we need to keep it pinned,
 //            // or ensure it's a "native" buffer. The original `fontData.put(face, buffer)` suggests
-//            // the Java `ByteBuffer` is managed by the `Library` and disposed later.
+//            // the Java `Buffer< byte >` is managed by the `Library` and disposed later.
 //            // For direct `byte[]` in C#, it's usually safest to copy to unmanaged memory if FreeType keeps a pointer.
 //            // For simplicity here, let's assume FreeType makes an internal copy or the managed byte[] must stay.
 //            // The original code uses `BufferUtils.newUnsafeByteBuffer`, which suggests unmanaged memory.
@@ -703,8 +703,8 @@ namespace Extensions.Source.Freetype;
 //                var srcRow = new byte[ rowBytes ];
 //                var  dstRow = new int[ width ];
 //
-//                // Directly access Pixmap's pixel buffer, assuming it's a ByteBuffer or similar
-//                // and can be wrapped by an IntBuffer for efficiency.
+//                // Directly access Pixmap's pixel buffer, assuming it's a Buffer< byte > or similar
+//                // and can be wrapped by an Buffer< int > for efficiency.
 //                // For direct access and potentially better performance, you might need unsafe code
 //                // or a Pixmap method that accepts an int[] directly.
 //                // Here, we'll assume a method to write a row of int[] to the Pixmap.
@@ -970,13 +970,13 @@ public partial class FreeType
         {
         }
 
-        public Dictionary< long, ByteBuffer > FontData { get; private set; } = [ ];
+        public Dictionary< long, Buffer< byte > > FontData { get; private set; } = [ ];
 
         public Face NewFace( FileInfo fontFile, int faceIndex )
         {
             throw new NotImplementedException();
 
-//            ByteBuffer? buffer = null;
+//            Buffer< byte >? buffer = null;
 //
 //            try
 //            {
@@ -1025,13 +1025,13 @@ public partial class FreeType
 
         public Face NewMemoryFace( byte[] data, int dataSize, int faceIndex )
         {
-            var buffer = new ByteBuffer( data.Length );
+            var buffer = new Buffer< byte >( data.Length );
             BufferUtils.Copy( data, 0, data.Length, buffer );
 
             return NewMemoryFace( buffer, faceIndex );
         }
 
-        public Face NewMemoryFace( ByteBuffer buffer, int faceIndex )
+        public Face NewMemoryFace( Buffer< byte > buffer, int faceIndex )
         {
             throw new NotImplementedException();
 
@@ -1085,7 +1085,7 @@ public partial class FreeType
         // ====================================================================
 
 //        private static extern void _doneFreeType( long library );
-//        private static extern long _newMemoryFace( long library, ByteBuffer data, int dataSize, int faceIndex );
+//        private static extern long _newMemoryFace( long library, Buffer< byte > data, int dataSize, int faceIndex );
 //        private static extern long _strokerNew( long library );
     }
 
@@ -1336,7 +1336,7 @@ public partial class FreeType
             throw new NotImplementedException();
         }
 
-        public ByteBuffer GetBuffer()
+        public Buffer< byte > GetBuffer()
         {
             throw new NotImplementedException();
         }

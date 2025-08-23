@@ -190,7 +190,7 @@ public static class ScreenUtils
 
         GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
-        var pixels = new ByteBuffer( numBytes );
+        var pixels = new Buffer< byte >( numBytes );
 
         fixed ( void* ptr = &pixels.BackingArray()[ 0 ] )
         {
