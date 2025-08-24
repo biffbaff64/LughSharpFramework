@@ -25,7 +25,6 @@
 using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Audio.OpenAL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
 
 namespace DesktopGLBackend.Audio;
 
@@ -246,7 +245,7 @@ public class OpenALSound( OpenALAudio audio ) : ISound
 
         var buffer = Buffer< byte >.Allocate( bytes );
 
-        buffer.Order( ByteOrder.NativeOrder );
+        buffer.SetOrder( ByteOrder.NativeOrder );
         buffer.PutBytes( pcm, 0, 0, bytes );
         buffer.Flip();
 

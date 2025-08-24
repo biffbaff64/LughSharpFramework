@@ -22,10 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
-
-using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
 
 namespace LughSharp.Lugh.Utils;
 
@@ -39,7 +36,7 @@ public class BufferUtils
     /// <param name="destination">The destination buffer to copy to.</param>
     /// <exception cref="ArgumentNullException">If <paramref name="source" /> or <paramref name="destination" /> is null.</exception>
     /// <exception cref="ArgumentException">If buffers are incompatible or destination is too small.</exception>
-    public static void Copy( Buffer source, Buffer destination )
+    public static void Copy< T >( Buffer< T > source, Buffer< T > destination ) where T : unmanaged
     {
         ArgumentNullException.ThrowIfNull( source );
         ArgumentNullException.ThrowIfNull( destination );
@@ -72,7 +69,11 @@ public class BufferUtils
     /// <param name="length">The number of bytes to copy.</param>
 
     // ... (Overload with offsets and length for more control) ...
-    public static void Copy( Buffer source, int sourceOffset, Buffer destination, int destinationOffset, int length )
+    public static void Copy< T >( Buffer< T > source,
+                                  int sourceOffset,
+                                  Buffer< T > destination,
+                                  int destinationOffset,
+                                  int length ) where T : unmanaged
     {
         ArgumentNullException.ThrowIfNull( source );
         ArgumentNullException.ThrowIfNull( destination );
@@ -96,7 +97,6 @@ public class BufferUtils
             throw new GdxRuntimeException( "Offsets and length must be non-negative." );
         }
 
-        //TODO: Update to take into account the type of buffer (float, short, int, etc. )
         destination.EnsureCapacity( destinationOffset + length );
 
         if ( ( sourceOffset + length ) > source.Capacity )

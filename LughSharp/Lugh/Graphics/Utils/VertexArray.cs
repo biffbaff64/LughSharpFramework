@@ -22,13 +22,20 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
 public class VertexArray : IVertexData
 {
+    /// <summary>
+    /// Returns the <see cref="VertexAttributes" /> as specified during construction.
+    /// </summary>
+    public VertexAttributes Attributes { get; set; }
+
+    // ========================================================================
+    
     private readonly Buffer< float > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
 
@@ -68,17 +75,12 @@ public class VertexArray : IVertexData
     public int NumMaxVertices => _byteBuffer.Capacity / Attributes.VertexSize;
 
     /// <summary>
-    /// Returns the <see cref="VertexAttributes" /> as specified during construction.
-    /// </summary>
-    public VertexAttributes Attributes { get; set; }
-
-    /// <summary>
-    /// Returns the underlying Buffer< float > and marks it as dirty, causing the buffer
+    /// Returns the underlying Buffer and marks it as dirty, causing the buffer
     /// contents to be uploaded on the next call to bind. If you need immediate
     /// uploading use <see cref="IVertexData.SetVertices" />; Any modifications made to the Buffer
     /// after* the call to bind will not automatically be uploaded.
     /// </summary>
-    /// <returns> the underlying Buffer< float > holding the vertex data.</returns>
+    /// <returns> the underlying Buffer holding the vertex data.</returns>
     public Buffer< float > GetBuffer( bool forWriting )
     {
         return _buffer;

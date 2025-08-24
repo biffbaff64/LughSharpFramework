@@ -90,7 +90,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     public override GraphicsBackend.BackendType GraphicsType => GraphicsBackend.BackendType.OpenGLES;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Whether the app is full screen or not.
     /// </summary>
@@ -355,25 +355,33 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
-        return DesktopGLApplicationConfiguration.Instance.GetDisplayModes( Glfw.GetPrimaryMonitor() );
+        Guard.ThrowIfNull( GLWindow );
+
+        return GLWindow.AppConfig.GetDisplayModes( Glfw.GetPrimaryMonitor() );
     }
 
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes( GLFW.Monitor monitor )
     {
-        return DesktopGLApplicationConfiguration.Instance.GetDisplayModes( monitor );
+        Guard.ThrowIfNull( GLWindow );
+
+        return GLWindow.AppConfig.GetDisplayModes( monitor );
     }
 
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode GetDisplayMode()
     {
-        return DesktopGLApplicationConfiguration.Instance.GetDisplayMode( Glfw.GetPrimaryMonitor() );
+        Guard.ThrowIfNull( GLWindow );
+
+        return GLWindow.AppConfig.GetDisplayMode( Glfw.GetPrimaryMonitor() );
     }
 
     /// <inheritdoc />
     public override IGraphicsDevice.DisplayMode GetDisplayMode( GLFW.Monitor monitor )
     {
-        return DesktopGLApplicationConfiguration.Instance.GetDisplayMode( monitor );
+        Guard.ThrowIfNull( GLWindow );
+
+        return GLWindow.AppConfig.GetDisplayMode( monitor );
     }
 
     /// <inheritdoc />
@@ -381,7 +389,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     {
         return GLWindow?.AppConfig.HdpiMode;
     }
-    
+
     /// <inheritdoc />
     public override bool SetFullscreenMode( IGraphicsDevice.DisplayMode displayMode )
     {
@@ -461,6 +469,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
                             + $"\nActual: [{viewport[ 0 ]}, {viewport[ 1 ]}, "
                             + $"{viewport[ 2 ]}, {viewport[ 3 ]}]" );
         }
+
         // --------------------------------------------------------------------
     }
 

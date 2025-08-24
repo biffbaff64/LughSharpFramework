@@ -177,7 +177,7 @@ public class Mesh : IDisposable
                       $"maxVertices: {maxVertices},\n" +
                       $"maxIndices: {maxIndices},\n" +
                       $"attributes: {attributes}\n" );
-        
+
         switch ( type )
         {
             case VertexDataType.VertexBufferObject:
@@ -801,21 +801,20 @@ public class Mesh : IDisposable
                                                         $"max: {IndexData.NumMaxIndices})" );
                 }
 
-                var buffer = IndexData.GetBuffer( false );
-
+                var buffer      = IndexData.GetBuffer( false );
                 var oldPosition = buffer.Position;
                 var oldLimit    = buffer.Limit;
-                
+
                 buffer.Position = offset;
-                buffer.Limit   = offset + count;
-                
+                buffer.Limit    = offset + count;
+
                 fixed ( short* ptr = &buffer.ToArray()[ 0 ] )
                 {
                     GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, new IntPtr( ptr + offset ) );
                 }
-                
+
                 buffer.Position = oldPosition;
-                buffer.Limit   = oldLimit;
+                buffer.Limit    = oldLimit;
             }
             else
             {
@@ -825,7 +824,7 @@ public class Mesh : IDisposable
         else
         {
             var numInstances = _instances?.NumInstances ?? 0;
-            
+
             if ( IndexData.NumIndices > 0 )
             {
                 if ( ( count + offset ) > IndexData.NumMaxIndices )
@@ -843,7 +842,7 @@ public class Mesh : IDisposable
                 {
                     GL.DrawElements( primitiveType, count, IGL.GL_UNSIGNED_SHORT, offset * 2 );
                 }
-                
+
 //                IndexData.Bind();
 //
 //                var offsetInBytes = offset * sizeof( short ); // Calculate byte offset

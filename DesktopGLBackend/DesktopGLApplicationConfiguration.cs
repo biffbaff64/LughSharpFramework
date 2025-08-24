@@ -36,10 +36,6 @@ namespace DesktopGLBackend;
 [PublicAPI]
 public class DesktopGLApplicationConfiguration : ApplicationConfiguration
 {
-    public static DesktopGLApplicationConfiguration Instance { get; } = new();
-    
-    // ========================================================================
-
     public DesktopGLGraphics.DesktopGLMonitor? MaximizedMonitor { get; set; }
 
     /// <summary>
@@ -61,11 +57,6 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
 
     // ========================================================================
 
-    public DesktopGLApplicationConfiguration()
-    {
-        Logger.Checkpoint();
-    }
-    
     /// <summary>
     /// Creates, and returns, a new DesktopApplicationConfiguration, using settings
     /// from the supplied DesktopApplicationConfiguratrion object.

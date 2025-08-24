@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
@@ -693,8 +694,10 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-        return new ShaderProgram( DEFAULT_VERTEX_SHADER, DEFAULT_FRAGMENT_SHADER );
-//        return new ShaderProgram( SIMPLE_RGBA_VERTEX_SHADER, SIMPLE_RGBA_FRAGMENT_SHADER );
+        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.vert" );
+        var fragShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.frag" );
+        
+        return new ShaderProgram( vertexShader, fragShader );
     }
 
     /// <summary>

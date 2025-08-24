@@ -26,7 +26,7 @@ using System.IO.Compression;
 
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using ByteOrder = LughSharp.Lugh.Utils.ByteOrder;
@@ -64,7 +64,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     public bool IsOwned { get; set; }
 
     // ========================================================================
-    
+
     private const int GL_TEXTURE_1D           = 0x1234;
     private const int GL_TEXTURE_3D           = 0x1234;
     private const int GL_TEXTURE_1D_ARRAY_EXT = 0x1234;
@@ -72,9 +72,9 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
     // KTX image data (only available after preparing and before consuming)
     private Buffer< byte >? _compressedData;
-    private int         _glBaseInternalFormat;
-    private int         _glFormat;
-    private int         _glInternalFormat;
+    private int             _glBaseInternalFormat;
+    private int             _glFormat;
+    private int             _glInternalFormat;
 
     // KTX header (only available after preparing)
     private int _glType;
@@ -199,12 +199,9 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         if ( endianTag != 0x04030201 )
         {
-            _compressedData.Order
-                (
-                 _compressedData.Order() == ByteOrder.BigEndian
-                     ? ByteOrder.LittleEndian
-                     : ByteOrder.BigEndian
-                );
+            _compressedData.SetOrder( _compressedData.GetOrder() == ByteOrder.BigEndian
+                                          ? ByteOrder.LittleEndian
+                                          : ByteOrder.BigEndian );
         }
 
         _glType                = _compressedData.GetInt();
@@ -244,7 +241,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
             _compressedData.Position = 0;
 
             var directBuffer = new Buffer< byte >( pos );
-            directBuffer.Order( _compressedData.Order() );
+            directBuffer.SetOrder( _compressedData.GetOrder() );
             directBuffer.PutBytes( _compressedData.BackingArray() );
 
             _compressedData = directBuffer;
@@ -464,7 +461,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
                                 unsafe
                                 {
-                                    fixed ( void* ptr = &pixmap.Buffer< byte >.BackingArray()[ 0 ] )
+                                    fixed ( void* ptr = &pixmap.ByteBuffer.BackingArray()[ 0 ] )
                                     {
                                         GL.TexImage2D( target + face,
                                                        level,

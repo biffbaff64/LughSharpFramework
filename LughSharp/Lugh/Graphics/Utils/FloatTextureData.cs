@@ -26,8 +26,7 @@
 
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.OpenGL;
-
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Platform = LughSharp.Lugh.Core.Platform;
@@ -42,10 +41,10 @@ namespace LughSharp.Lugh.Graphics.Utils;
 public class FloatTextureData : ITextureData
 {
     public Buffer< float > Buffer     { get; private set; } = null!;
-    public int         Width      { get; set; }         = 0;
-    public int         Height     { get; set; }         = 0;
-    public bool        IsPrepared { get; set; }         = false;
-    public bool        UseMipMaps { get; set; }
+    public int             Width      { get; set; }         = 0;
+    public int             Height     { get; set; }         = 0;
+    public bool            IsPrepared { get; set; }         = false;
+    public bool            UseMipMaps { get; set; }
 
     /// <inheritdoc />
     public bool IsOwned { get; set; }

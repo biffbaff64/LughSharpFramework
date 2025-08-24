@@ -23,14 +23,13 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
 public class IndexArray : IIndexData
 {
-    private readonly bool        _empty;
+    private readonly bool            _empty;
     private          Buffer< short > _buffer;
     private          Buffer< byte >  _byteBuffer;
 
@@ -125,7 +124,7 @@ public class IndexArray : IIndexData
     }
 
     /// <summary>
-    /// Returns the underlying Buffer< short >. If you modify the buffer contents
+    /// Returns the underlying Buffer. If you modify the buffer contents
     /// they wil be uploaded on the call to <see cref="Bind()" />.
     /// If you need immediate uploading use <see cref="SetIndices(short[], int, int)" />.
     /// </summary>

@@ -70,7 +70,6 @@ public static class TextureDataFactory
             ".ktx" or ".zktx" => new KtxTextureData( file, useMipMaps ),
 
             // Other supported image file formats, PNG, BMP
-            // Unsure about JPG/JPEG and TGA
             var _ => new FileTextureData( file, new Pixmap( file ), format, useMipMaps ),
         };
 

@@ -24,10 +24,7 @@
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
-
-using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -47,13 +44,30 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class VertexBufferObject : IVertexData
 {
-    private Buffer< float >? _buffer;
-    private int          _bufferHandle;
+    /// <summary>
+    /// Returns the number of vertices this VertexData stores.
+    /// </summary>
+    public int NumVertices { get; set; }
+
+    /// <summary>
+    /// Returns the number of vertices this VertedData can store.
+    /// </summary>
+    public int NumMaxVertices { get; set; }
+
+    /// <summary>
+    /// Returns the <see cref="VertexAttributes" /> as specified during construction.
+    /// </summary>
+    public VertexAttributes Attributes { get; set; }
+
+    // ========================================================================
+
+    private Buffer< float >? _floatBuffer;
+    private int              _bufferHandle;
     private Buffer< byte >?  _byteBuffer;
-    private bool         _isBound = false;
-    private bool         _isDirty = true;
-    private bool         _ownsBuffer;
-    private int          _usage;
+    private bool             _isBound = false;
+    private bool             _isDirty = true;
+    private bool             _ownsBuffer;
+    private int              _usage;
 
     // ========================================================================
     // ========================================================================
@@ -129,32 +143,17 @@ public class VertexBufferObject : IVertexData
     }
 
     /// <summary>
-    /// Returns the number of vertices this VertexData stores.
-    /// </summary>
-    public int NumVertices { get; set; }
-
-    /// <summary>
-    /// Returns the number of vertices this VertedData can store.
-    /// </summary>
-    public int NumMaxVertices { get; set; }
-
-    /// <summary>
-    /// Returns the <see cref="VertexAttributes" /> as specified during construction.
-    /// </summary>
-    public VertexAttributes Attributes { get; set; }
-
-    /// <summary>
-    /// Returns the underlying Buffer< float > and marks it as dirty, causing the buffer
+    /// Returns the underlying Buffer and marks it as dirty, causing the buffer
     /// contents to be uploaded on the next call to bind. If you need immediate
     /// uploading use <see cref="SetVertices" />; Any modifications made to the Buffer
     /// after* the call to bind will not automatically be uploaded.
     /// </summary>
-    /// <returns> the underlying Buffer< float > holding the vertex data.  </returns>
+    /// <returns> the underlying Buffer holding the vertex data.  </returns>
     public Buffer< float > GetBuffer( bool forWriting )
     {
         _isDirty |= forWriting;
 
-        return _buffer ?? throw new GdxRuntimeException( "_buffer is null" );
+        return _floatBuffer ?? throw new GdxRuntimeException( "_buffer is null" );
     }
 
     /// <summary>
@@ -173,14 +172,14 @@ public class VertexBufferObject : IVertexData
     public void SetVertices( float[] vertices, int offset, int count )
     {
         GdxRuntimeException.ThrowIfNull( _byteBuffer );
-        GdxRuntimeException.ThrowIfNull( _buffer );
+        GdxRuntimeException.ThrowIfNull( _floatBuffer );
 
         _isDirty = true;
 
         _byteBuffer.PutFloats( vertices, offset, count );
 
-        _buffer.Position = 0;
-        _buffer.Limit    = count;
+        _floatBuffer.Position = 0;
+        _floatBuffer.Limit    = count;
 
         BufferChanged();
     }
@@ -218,7 +217,7 @@ public class VertexBufferObject : IVertexData
         _byteBuffer.Position = pos;
 
         // Reset the main buffer's position to the beginning.
-        _buffer!.Position = 0;
+        _floatBuffer!.Position = 0;
 
         // Signal that the buffer has changed.
         BufferChanged();
@@ -235,14 +234,14 @@ public class VertexBufferObject : IVertexData
 
         if ( _isDirty )
         {
-            if ( ( _byteBuffer == null ) || ( _buffer == null ) )
+            if ( ( _byteBuffer == null ) || ( _floatBuffer == null ) )
             {
                 throw new NullReferenceException();
             }
 
             unsafe
             {
-                _byteBuffer.Limit = _buffer.Limit * 4;
+                _byteBuffer.Limit = _floatBuffer.Limit * 4;
 
                 fixed ( void* ptr = &_byteBuffer.BackingArray()[ 0 ] )
                 {
@@ -355,7 +354,7 @@ public class VertexBufferObject : IVertexData
     /// Low level method to reset the buffer and attributes to the specified values.
     /// Use with care!
     /// </summary>
-    public void SetBuffer( Buffer data, bool ownsBuffer, VertexAttributes value )
+    public void SetBuffer( Buffer< byte >? data, bool ownsBuffer, VertexAttributes value )
     {
         if ( _isBound )
         {
@@ -369,9 +368,9 @@ public class VertexBufferObject : IVertexData
 
         Attributes = value;
 
-        if ( data is Buffer< byte > buffer )
+        if ( data != null )
         {
-            _byteBuffer = buffer;
+            _byteBuffer = data;
         }
         else
         {
@@ -380,11 +379,11 @@ public class VertexBufferObject : IVertexData
 
         var lim = _byteBuffer.Limit;
 
-        _ownsBuffer       = ownsBuffer;
-        _byteBuffer.Limit = _byteBuffer.Capacity;
-        _buffer           = _byteBuffer.AsFloatBuffer();
-        _byteBuffer.Limit = lim;
-        _buffer.Limit     = lim / 4;
+        _ownsBuffer        = ownsBuffer;
+        _byteBuffer.Limit  = _byteBuffer.Capacity;
+        _floatBuffer       = _byteBuffer.AsFloatBuffer();
+        _byteBuffer.Limit  = lim;
+        _floatBuffer.Limit = lim / 4;
     }
 
     /// <summary>

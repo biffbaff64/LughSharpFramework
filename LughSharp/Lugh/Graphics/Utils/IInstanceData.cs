@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Buffers;
+using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -99,13 +99,13 @@ public interface IInstanceData : IDisposable
     void UpdateInstanceData( int targetOffset, Buffer< float > data, int sourceOffset, int count );
 
     /// <summary>
-    /// Returns the underlying Buffer< float > and marks it as dirty, causing the buffer
+    /// Returns the underlying Buffer and marks it as dirty, causing the buffer
     /// contents to be uploaded on the next call to bind. If you need immediate
     /// uploading use <see cref="SetInstanceData(float[], int, int)" />;
     /// Any modifications made to the Buffer *after* the call to bind will not
     /// automatically be uploaded.
     /// </summary>
-    /// <returns> the underlying Buffer< float > holding the vertex data. </returns>
+    /// <returns> the underlying Buffer holding the vertex data. </returns>
     Buffer< float > GetBuffer( bool forWriting );
 
     /// <summary>

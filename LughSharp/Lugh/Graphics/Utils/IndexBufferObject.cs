@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -46,13 +45,17 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class IndexBufferObject : IIndexData
 {
+    public int BufferID { get; private set; }
+
+    // ========================================================================
+    
     private readonly Buffer< short > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
-    private readonly bool        _empty;
-    private readonly bool        _ownsBuffer;
-    private readonly int         _usage;
-    private          bool        _isBound = false;
-    private          bool        _isDirty = true;
+    private readonly bool            _empty;
+    private readonly bool            _ownsBuffer;
+    private readonly int             _usage;
+    private          bool            _isBound = false;
+    private          bool            _isDirty = true;
 
     // ========================================================================
 
@@ -104,8 +107,6 @@ public class IndexBufferObject : IIndexData
         // Set the usage flag for the buffer based on whether it is static or dynamic.
         _usage = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
     }
-
-    public int BufferID { get; private set; }
 
     /// <inheritdoc />
     public int NumIndices => _empty ? 0 : _buffer.Limit;

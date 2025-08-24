@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 
@@ -197,10 +196,10 @@ public class SpriteCache
         }
     }
 
+    /// <summary>
     /// Sets the color used to tint images when they are added to the
-    /// SpriteCache. Default is
-    /// <see cref="Graphics.Color.White" />
-    /// .
+    /// SpriteCache. Default is <see cref="Lugh.Graphics.Color.White" />
+    /// </summary>
     public void SetColor( Color tint )
     {
         Color.Set( tint );
@@ -383,7 +382,10 @@ public class SpriteCache
             _counts[ lastIndex ] += count;
         }
 
-        _mesh.GetVerticesBuffer().PutFloats( vertices, offset, length );
+        _mesh.GetVerticesBuffer().PutFloats( vertices,
+                                             offset,
+                                             _mesh.GetVerticesBuffer().Position,
+                                             length );
     }
 
     /// <summary>

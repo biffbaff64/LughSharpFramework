@@ -101,8 +101,102 @@ public class Buffer< T > : IDisposable where T : unmanaged
         Position      = 0;             // Initially Position is 0 for a new view
     }
 
+//    // ========================================================================
+//    // ========================================================================
+//    
+//    /// <summary>
+//    /// Creates a new IntBuffer whose content is a shared subsequence of this
+//    /// ByteBuffer's content. Changes to this ByteBuffer's content will be visible in
+//    /// the returned IntBuffer, and vice-versa. The position, limit, and mark of the
+//    /// new buffer will be independent of this buffer.
+//    /// </summary>
+//    /// <returns>A new IntBuffer instance.</returns>
+//    public Buffer< int > AsIntBuffer()
+//    {
+//        // Calculate capacity in ints based on ByteBuffer's byte capacity
+//        // Floor to avoid partial ints at the end
+//        var capacityInInts = ( int )Math.Floor( ( double )Capacity / sizeof( int ) );
+//
+//        // Create a new IntBuffer, sharing the _byteBuffer array
+//        return new Buffer< int >( _backingArray, 0, capacityInInts, IsBigEndian );
+//    }
+//
+//    /// <summary>
+//    /// Creates a new ShortBuffer whose content is a shared subsequence of this
+//    /// ByteBuffer's content. Changes to this ByteBuffer's content will be visible in
+//    /// the returned ShortBuffer, and vice-versa. The position, limit, and mark of the
+//    /// new buffer will be independent of this buffer.
+//    /// </summary>
+//    /// <returns>A new ShortBuffer instance.</returns>
+//    public Buffer< short > AsShortBuffer()
+//    {
+//        // Calculate capacity in shorts based on ByteBuffer's byte capacity
+//        // Floor to avoid partial shorts at the end
+//        var capacityInShorts = ( int )Math.Floor( ( double )Capacity / sizeof( short ) );
+//
+//        // Create a new ShortBuffer, sharing the _byteBuffer array
+//        return new Buffer< short >( _backingArray, 0, capacityInShorts, IsBigEndian );
+//    }
+//
+//    /// <summary>
+//    /// Creates a new FloatBuffer whose content is a shared subsequence of this
+//    /// ByteBuffer's content. Changes to this ByteBuffer's content will be visible in
+//    /// the returned FloatBuffer, and vice-versa. The position, limit, and mark of the
+//    /// new buffer will be independent of this buffer.
+//    /// </summary>
+//    /// <returns>A new FloatBuffer instance.</returns>
+//    public Buffer< float > AsFloatBuffer()
+//    {
+//        // Calculate capacity in floats based on ByteBuffer's byte capacity
+//        // Floor to avoid partial floats at the end
+//        var capacityInFloats = ( int )Math.Floor( ( double )Capacity / sizeof( float ) );
+//
+//        // Create a new FloatBuffer, sharing the _byteBuffer array
+//        return new Buffer< float >( _backingArray, 0, capacityInFloats, IsBigEndian );
+//    }
+
     // ========================================================================
+
+    /// <summary>
+    /// Creates a Buffer that shares the same underlying memory as this buffer.
+    /// Changes to one buffer will be reflected in the other.
+    /// </summary>
+    /// <typeparam name="Tview">The target element type (must be unmanaged)</typeparam>
+    /// <returns>A new buffer view with the specified element type</returns>
+    public Buffer< Tview > AsBuffer< Tview >() where Tview : unmanaged
+    {
+        var viewElementSize = Unsafe.SizeOf< Tview >();
+
+        // Ensure the conversion makes sense (capacity should be divisible by target element size)
+        if ( Length % viewElementSize != 0 )
+        {
+            throw new InvalidOperationException( $"Cannot create Buffer<{typeof( Tview ).Name}> " +
+                                                 $"view: current length ({Length} bytes) is not " +
+                                                 $"divisible by target element size ({viewElementSize} bytes)" );
+        }
+
+        var viewBuffer = new Buffer< Tview >( _memory, IsBigEndian )
+        {
+            Position   = Position,
+            Limit      = Limit,
+            Length     = Length,
+            IsReadOnly = IsReadOnly,
+            IsDirect   = IsDirect,
+        };
+
+        return viewBuffer;
+    }
+
+    // Convenience methods for common conversions
+    public Buffer< float > AsFloatBuffer() => AsBuffer< float >();
+    public Buffer< int > AsIntBuffer() => AsBuffer< int >();
+    public Buffer< short > AsShortBuffer() => AsBuffer< short >();
+    public Buffer< byte > AsByteBuffer() => AsBuffer< byte >();
+
+    // ========================================================================
+
     #region Get Methods
+
     // ========================================================================
 
     // Generic Get/Put methods
@@ -151,9 +245,11 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     #endregion Get Methods
-    
+
     // ========================================================================
+
     #region Put Methods
+
     // ========================================================================
 
     public void Put( T value )
@@ -225,273 +321,288 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     #endregion Put Methods
-    
+
     // ========================================================================
+
     #region Typed Get Methods
+
     // ========================================================================
 
     public byte GetByte()
     {
-        if (Position + 1 > Limit)
+        if ( Position + 1 > Limit )
         {
             throw new IndexOutOfRangeException();
         }
 
-        var value = _memory.Span[Position];
+        var value = _memory.Span[ Position ];
         Position += 1;
+
         return value;
     }
 
-    public byte GetByte(int byteIndex)
+    public byte GetByte( int byteIndex )
     {
-        if ((byteIndex < 0) || (byteIndex >= Capacity))
+        if ( ( byteIndex < 0 ) || ( byteIndex >= Capacity ) )
         {
             throw new IndexOutOfRangeException();
         }
 
-        return _memory.Span[byteIndex];
+        return _memory.Span[ byteIndex ];
     }
 
     public short GetShort()
     {
-        if (Position + 2 > Limit)
+        if ( Position + 2 > Limit )
         {
             throw new IndexOutOfRangeException();
         }
 
         var value = IsBigEndian
-            ? BinaryPrimitives.ReadInt16BigEndian(_memory.Span.Slice(Position))
-            : BinaryPrimitives.ReadInt16LittleEndian(_memory.Span.Slice(Position));
+            ? BinaryPrimitives.ReadInt16BigEndian( _memory.Span.Slice( Position ) )
+            : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( Position ) );
 
         Position += 2;
+
         return value;
     }
 
-    public short GetShort(int byteIndex)
+    public short GetShort( int byteIndex )
     {
-        if ((byteIndex < 0) || (byteIndex + 2 > Capacity))
+        if ( ( byteIndex < 0 ) || ( byteIndex + 2 > Capacity ) )
         {
             throw new IndexOutOfRangeException();
         }
 
         return IsBigEndian
-            ? BinaryPrimitives.ReadInt16BigEndian(_memory.Span.Slice(byteIndex))
-            : BinaryPrimitives.ReadInt16LittleEndian(_memory.Span.Slice(byteIndex));
+            ? BinaryPrimitives.ReadInt16BigEndian( _memory.Span.Slice( byteIndex ) )
+            : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( byteIndex ) );
     }
 
     public int GetInt()
     {
-        if (Position + 4 > Limit)
+        if ( Position + 4 > Limit )
         {
             throw new IndexOutOfRangeException();
         }
 
         var value = IsBigEndian
-            ? BinaryPrimitives.ReadInt32BigEndian(_memory.Span.Slice(Position))
-            : BinaryPrimitives.ReadInt32LittleEndian(_memory.Span.Slice(Position));
+            ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( Position ) )
+            : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( Position ) );
 
         Position += 4;
+
         return value;
     }
 
-    public int GetInt(int byteIndex)
+    public int GetInt( int byteIndex )
     {
-        if ((byteIndex < 0) || (byteIndex + 4 > Capacity))
+        if ( ( byteIndex < 0 ) || ( byteIndex + 4 > Capacity ) )
         {
             throw new IndexOutOfRangeException();
         }
 
         return IsBigEndian
-            ? BinaryPrimitives.ReadInt32BigEndian(_memory.Span.Slice(byteIndex))
-            : BinaryPrimitives.ReadInt32LittleEndian(_memory.Span.Slice(byteIndex));
+            ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( byteIndex ) )
+            : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( byteIndex ) );
     }
 
     public float GetFloat()
     {
-        if (Position + 4 > Limit)
+        if ( Position + 4 > Limit )
         {
             throw new IndexOutOfRangeException();
         }
 
         var value = IsBigEndian
-            ? BinaryPrimitives.ReadSingleBigEndian(_memory.Span.Slice(Position))
-            : BinaryPrimitives.ReadSingleLittleEndian(_memory.Span.Slice(Position));
+            ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( Position ) )
+            : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( Position ) );
 
         Position += 4;
+
         return value;
     }
 
-    public float GetFloat(int byteIndex)
+    public float GetFloat( int byteIndex )
     {
-        if ((byteIndex < 0) || (byteIndex + 4 > Capacity))
+        if ( ( byteIndex < 0 ) || ( byteIndex + 4 > Capacity ) )
         {
             throw new IndexOutOfRangeException();
         }
 
         return IsBigEndian
-            ? BinaryPrimitives.ReadSingleBigEndian(_memory.Span.Slice(byteIndex))
-            : BinaryPrimitives.ReadSingleLittleEndian(_memory.Span.Slice(byteIndex));
+            ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( byteIndex ) )
+            : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( byteIndex ) );
     }
 
     #endregion Typed Get Methods
-    
+
     // ========================================================================
+
     #region Typed Put Methods
+
     // ========================================================================
 
-    public void PutByte(byte value)
+    public void PutByte( byte value )
     {
-        EnsureCapacity(Position + 1);
+        EnsureCapacity( Position + 1 );
 
-        _memory.Span[Position] = value;
-        Position += 1;
+        _memory.Span[ Position ] =  value;
+        Position                 += 1;
 
-        if (Position > Length)
+        if ( Position > Length )
         {
             Length = Position;
         }
     }
 
-    public void PutByte(int byteIndex, byte value)
+    public void PutByte( int byteIndex, byte value )
     {
-        if ((byteIndex < 0) || (byteIndex >= Capacity))
+        if ( ( byteIndex < 0 ) || ( byteIndex >= Capacity ) )
         {
-            EnsureCapacity(byteIndex + 1);
+            EnsureCapacity( byteIndex + 1 );
         }
 
-        _memory.Span[byteIndex] = value;
+        _memory.Span[ byteIndex ] = value;
 
-        if (byteIndex + 1 > Length)
+        if ( byteIndex + 1 > Length )
         {
             Length = byteIndex + 1;
         }
     }
 
-    public void PutShort(short value)
+    public void PutShort( short value )
     {
-        EnsureCapacity(Position + 2);
+        EnsureCapacity( Position + 2 );
 
-        if (IsBigEndian)
+        if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteInt16BigEndian(_memory.Span.Slice(Position), value);
+            BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( Position ), value );
         }
         else
         {
-            BinaryPrimitives.WriteInt16LittleEndian(_memory.Span.Slice(Position), value);
+            BinaryPrimitives.WriteInt16LittleEndian( _memory.Span.Slice( Position ), value );
         }
 
         Position += 2;
 
-        if (Position > Length)
+        if ( Position > Length )
         {
             Length = Position;
         }
     }
 
-    public void PutShort(int byteIndex, short value)
+    public void PutShort( int byteIndex, short value )
     {
-        EnsureCapacity(byteIndex + 2);
+        EnsureCapacity( byteIndex + 2 );
 
-        if (IsBigEndian)
+        if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteInt16BigEndian(_memory.Span.Slice(byteIndex), value);
+            BinaryPrimitives.WriteInt16BigEndian( _memory.Span.Slice( byteIndex ), value );
         }
         else
         {
-            BinaryPrimitives.WriteInt16LittleEndian(_memory.Span.Slice(byteIndex), value);
+            BinaryPrimitives.WriteInt16LittleEndian( _memory.Span.Slice( byteIndex ), value );
         }
 
-        if (byteIndex + 2 > Length)
+        if ( byteIndex + 2 > Length )
         {
             Length = byteIndex + 2;
         }
     }
 
-    public void PutInt(int value)
+    public void PutInt( int value )
     {
-        EnsureCapacity(Position + 4);
+        EnsureCapacity( Position + 4 );
 
-        if (IsBigEndian)
+        if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteInt32BigEndian(_memory.Span.Slice(Position), value);
+            BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( Position ), value );
         }
         else
         {
-            BinaryPrimitives.WriteInt32LittleEndian(_memory.Span.Slice(Position), value);
+            BinaryPrimitives.WriteInt32LittleEndian( _memory.Span.Slice( Position ), value );
         }
 
         Position += 4;
 
-        if (Position > Length)
+        if ( Position > Length )
         {
             Length = Position;
         }
     }
 
-    public void PutInt(int byteIndex, int value)
+    public void PutInt( int byteIndex, int value )
     {
-        EnsureCapacity(byteIndex + 4);
+        EnsureCapacity( byteIndex + 4 );
 
-        if (IsBigEndian)
+        if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteInt32BigEndian(_memory.Span.Slice(byteIndex), value);
+            BinaryPrimitives.WriteInt32BigEndian( _memory.Span.Slice( byteIndex ), value );
         }
         else
         {
-            BinaryPrimitives.WriteInt32LittleEndian(_memory.Span.Slice(byteIndex), value);
+            BinaryPrimitives.WriteInt32LittleEndian( _memory.Span.Slice( byteIndex ), value );
         }
 
-        if (byteIndex + 4 > Length)
+        if ( byteIndex + 4 > Length )
         {
             Length = byteIndex + 4;
         }
     }
 
-    public void PutFloat(float value)
+    public void PutFloat( float value )
     {
-        EnsureCapacity(Position + 4);
+        EnsureCapacity( Position + 4 );
 
-        if (IsBigEndian)
+        if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteSingleBigEndian(_memory.Span.Slice(Position), value);
+            BinaryPrimitives.WriteSingleBigEndian( _memory.Span.Slice( Position ), value );
         }
         else
         {
-            BinaryPrimitives.WriteSingleLittleEndian(_memory.Span.Slice(Position), value);
+            BinaryPrimitives.WriteSingleLittleEndian( _memory.Span.Slice( Position ), value );
         }
 
         Position += 4;
 
-        if (Position > Length)
+        if ( Position > Length )
         {
             Length = Position;
         }
     }
 
-    public void PutFloat(int byteIndex, float value)
+    public void PutFloat( int byteIndex, float value )
     {
-        EnsureCapacity(byteIndex + 4);
+        EnsureCapacity( byteIndex + 4 );
 
-        if (IsBigEndian)
+        if ( IsBigEndian )
         {
-            BinaryPrimitives.WriteSingleBigEndian(_memory.Span.Slice(byteIndex), value);
+            BinaryPrimitives.WriteSingleBigEndian( _memory.Span.Slice( byteIndex ), value );
         }
         else
         {
-            BinaryPrimitives.WriteSingleLittleEndian(_memory.Span.Slice(byteIndex), value);
+            BinaryPrimitives.WriteSingleLittleEndian( _memory.Span.Slice( byteIndex ), value );
         }
 
-        if (byteIndex + 4 > Length)
+        if ( byteIndex + 4 > Length )
         {
             Length = byteIndex + 4;
         }
     }
-    
+
     #endregion Typed Put Methods
-    
+
     // ========================================================================
+
     #region Bulk Get Methods
+
     // ========================================================================
+
+    public void GetBytes( byte[] dst ) => GetBytes( dst, 0, dst.Length );
+    public void GetInts( int[] dst ) => GetInts( dst, 0, dst.Length );
+    public void GetShorts( short[] dst ) => GetShorts( dst, 0, dst.Length );
+    public void GetFloats( float[] dst ) => GetFloats( dst, 0, dst.Length );
 
     public void GetBytes( byte[] dst, int dstOffset, int length )
     {
@@ -530,7 +641,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
     {
         //TODO:
     }
-    
+
     public void GetShorts( short[] dst, int dstOffset, int length )
     {
         //TODO:
@@ -542,10 +653,19 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     #endregion Bulk Get Methods
-    
+
     // ========================================================================
+
     #region Bulk Put Methods
+
     // ========================================================================
+
+    public void PutBytes( byte[] src ) => PutBytes( src, 0, 0, src.Length );
+
+    public void PutBytes( byte[] src, int srcOffset, int numBytes )
+    {
+        PutBytes( src, srcOffset, Position, numBytes );
+    }
 
     public void PutBytes( byte[] src, int srcOffset, int dstOffset, int numBytes )
     {
@@ -593,23 +713,124 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    public void PutInts( int[] src ) => PutInts( src, 0, 0, src.Length );
+
+    public void PutInts( int[] src, int srcOffset, int numBytes )
+    {
+        PutInts( src, srcOffset, Position, numBytes );
+    }
+
     public void PutInts( int[] src, int srcOffset, int dstOffset, int numBytes )
     {
         //TODO:
     }
-    
+
+    public void PutShorts( short[] src ) => PutShorts( src, 0, 0, src.Length );
+
+    public void PutShorts( short[] src, int srcOffset, int numBytes )
+    {
+        PutShorts( src, srcOffset, Position, numBytes );
+    }
+
     public void PutShorts( short[] src, int srcOffset, int dstOffset, int numBytes )
     {
         //TODO:
     }
-    
+
+    public void PutFloats( float[] src ) => PutFloats( src, 0, 0, src.Length );
+
+    public void PutFloats( float[] src, int srcOffset, int numBytes )
+    {
+        PutFloats( src, srcOffset, Position, numBytes );
+    }
+
     public void PutFloats( float[] src, int srcOffset, int dstOffset, int numBytes )
     {
         //TODO:
     }
-    
+
     #endregion Bulk Put Methods
-    
+
+    // ========================================================================
+
+    /// <summary>
+    /// Wraps a byte array into a buffer.
+    /// <para>
+    /// The new buffer will be backed by the given byte array; that is, modifications
+    /// to the buffer will cause the array to be modified and vice versa. The new buffer's
+    /// capacity will be <c>array.length</c>, its position will be <c>offset</c>, its
+    /// limit will be <c>offset + length</c>, and its mark will be undefined. Its
+    /// backing array will be the given array.
+    /// </para>
+    /// </summary>
+    /// <param name="array"> The array that will back the new buffer </param>
+    /// <param name="offset">
+    /// The offset of the subarray to be used; must be non-negative and no larger
+    /// than <c>array.length</c>. The new buffer's position will be set to this value.
+    /// </param>
+    /// <param name="length">
+    /// The length of the subarray to be used; must be non-negative and no larger
+    /// than <c>array.length - offset</c>. The new buffer's limit will be set to
+    /// <c>offset + length</c>.
+    /// </param>
+    /// <returns> The new byte buffer </returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// If the preconditions on the <c>offset</c> and <c>length</c> parameters do not hold
+    /// </exception>
+    public static Buffer< byte > Wrap( byte[] array, int offset, int length )
+    {
+        try
+        {
+            ArgumentNullException.ThrowIfNull( array );
+
+            var buffer = new Buffer< byte >( length );
+            buffer.PutBytes( array, offset, 0, length );
+
+            return buffer;
+        }
+        catch ( ArgumentException )
+        {
+            throw new IndexOutOfRangeException();
+        }
+    }
+
+    /// <summary>
+    /// Wraps a byte array into a buffer.
+    /// <para>
+    /// The new buffer will be backed by the given byte array; that is, modifications
+    /// to the buffer will cause the array to be modified and vice versa. The new buffer's
+    /// capacity will be <c>array.length</c>, its position will be <c>offset</c>, its
+    /// limit will be <c>offset + length</c>, and its mark will be undefined. Its
+    /// backing array will be the given array.
+    /// </para>
+    /// </summary>
+    /// <param name="array"> The array that will back the new buffer </param>
+    /// <returns> The new byte buffer </returns>
+    public static Buffer< byte > Wrap( byte[] array )
+    {
+        ArgumentNullException.ThrowIfNull( array );
+
+        return Wrap( array, 0, array.Length );
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Allocates a new ByteBuffer with the specified capacity (in bytes).
+    /// </summary>
+    /// <param name="capacityInBytes">The desired capacity of the ByteBuffer in bytes.</param>
+    /// <returns>A new ByteBuffer instance.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="capacityInBytes" /> is negative.</exception>
+    public static Buffer< byte > Allocate( int capacityInBytes )
+    {
+        if ( capacityInBytes < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( capacityInBytes ), "Capacity cannot be negative." );
+        }
+
+        return new Buffer< byte >( capacityInBytes );
+    }
+
     // ========================================================================
 
     public void Resize( int extraCapacityInBytes )
@@ -632,7 +853,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
         Capacity = newCapacity;
     }
 
-    private void EnsureCapacity( int requiredBytes )
+    public void EnsureCapacity( int requiredBytes )
     {
         if ( Capacity < requiredBytes )
         {
@@ -641,6 +862,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     public byte[] BackingArray() => _backingArray;
+
+    public Memory< byte > Memory() => _memory;
 
     public T[] ToArray()
     {
@@ -817,6 +1040,16 @@ public class Buffer< T > : IDisposable where T : unmanaged
     public ByteOrder GetOrder()
     {
         return IsBigEndian ? ByteOrder.BigEndian : ByteOrder.LittleEndian;
+    }
+
+    /// <summary>
+    /// Sets the byte order of the buffer.
+    /// </summary>
+    /// <param name="order">The byte order to apply to the buffer.</param>
+    /// <returns>The buffer instance with the updated byte order.</returns>
+    public void SetOrder( ByteOrder order )
+    {
+        IsBigEndian = order == ByteOrder.BigEndian;
     }
 
     /// <summary>

@@ -225,8 +225,6 @@ public class Texture : GLTexture, IManaged
     /// <param name="data"></param>
     public void Load( ITextureData data )
     {
-        Logger.Checkpoint();
-
         if ( data.IsManaged != TextureData.IsManaged )
         {
             throw new GdxRuntimeException( "New data must have the same managed status as the old data" );

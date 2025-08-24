@@ -294,6 +294,7 @@ GRAPHICS
     - DONE - DONE - Pixmap
     - DONE - IP   - PixmapFormat
     - IP   - IP   - PixmapIO
+    - DONE - DONE - ShaderLoader
     - DONE - IP   - Texture
     - DONE - DONE - TextureDataFactory
     - DONE - IP   - TextureRegion
@@ -894,6 +895,8 @@ UTILS
     - IP   - IP   - BaseClassFactory
     - DONE - DONE - BinaryHeap
     - DONE - DONE - Bits
+    - IP   - IP   - Buffer<T>
+    - IP   - IP   - BufferUtils
     - DONE - DONE - ByteOrder
     - DONE - DONE - BytePointerToString
     - IP   - IP   - CaseInsensitiveEnumArrayConverterFactory
@@ -932,18 +935,6 @@ UTILS
     - DONE - IP   - Timer
     - DONE - DONE - TimeUtils
     - DONE - IP   - TimSort
-
-UTILS/BUFFERS
--------------
-
-     CODE   DOCUMENT
-    ----   --------
-    - IP   - IP   - Buffer
-    - IP   - IP   - BufferUtils
-    - IP   - IP   - ByteBuffer
-    - IP   - IP   - FloatBuffer
-    - IP   - IP   - IntBuffer
-    - IP   - IP   - ShortBuffer
 
 UTILS/COLLECTIONS
 -----------------

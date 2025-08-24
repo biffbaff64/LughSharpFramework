@@ -1,5 +1,5 @@
 ﻿
-"// Input
+// Input
 
 // Output
 layout (location = 0) out vec2 textureCoordsOut;
@@ -76,4 +76,4 @@ void main()
   textureCoordsOut = textureCoords[gl_VertexID];
   renderOptions = transform.renderOptions;
   materialIdx = transform.materialIdx;
-}"
+}

@@ -26,10 +26,7 @@ using System.Diagnostics;
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
-
-using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -39,12 +36,13 @@ public class InstanceBufferObject : IInstanceData
     // ========================================================================
 
     private Buffer< float > _buffer = null!;
-    private int         _bufferHandle;
     private Buffer< byte >? _byteBuffer;
-    private bool        _isBound = false;
-    private bool        _isDirty = false;
-    private bool        _ownsBuffer;
-    private int         _usage;
+
+    private int  _bufferHandle;
+    private bool _isBound = false;
+    private bool _isDirty = false;
+    private bool _ownsBuffer;
+    private int  _usage;
 
     // ========================================================================
 
@@ -318,7 +316,7 @@ public class InstanceBufferObject : IInstanceData
     /// Low level method to reset the _buffer and _attributes to
     /// the specified values. Use with care!
     /// </summary>
-    protected void SetBuffer( Buffer data, bool ownsBuffer, VertexAttributes value )
+    protected void SetBuffer( Buffer< byte >? data, bool ownsBuffer, VertexAttributes value )
     {
         if ( _isBound )
         {
@@ -332,9 +330,9 @@ public class InstanceBufferObject : IInstanceData
 
         Attributes = value;
 
-        if ( data is Buffer< byte > buffer )
+        if ( data != null )
         {
-            _byteBuffer = buffer;
+            _byteBuffer = data;
         }
         else
         {

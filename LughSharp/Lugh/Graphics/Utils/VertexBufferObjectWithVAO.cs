@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
 
 namespace LughSharp.Lugh.Graphics.Utils;
 
@@ -36,14 +35,14 @@ public class VertexBufferObjectWithVAO : IVertexData
     public VertexAttributes Attributes { get; set; }
 
     // ========================================================================
-    
+
     private static readonly Buffer< int > _tmpHandle = new( 1 );
 
     private readonly Buffer< float > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
-    private readonly List< int > _cachedLocations = [ ];
-    private readonly bool        _ownsBuffer;
-    private readonly int         _usage;
+    private readonly List< int >     _cachedLocations = [ ];
+    private readonly bool            _ownsBuffer;
+    private readonly int             _usage;
 
     private int  _bufferHandle;
     private bool _isBound = false;
@@ -76,6 +75,7 @@ public class VertexBufferObjectWithVAO : IVertexData
         _isStatic   = isStatic;
         Attributes  = attributes;
         _byteBuffer = new Buffer< byte >( Attributes.VertexSize * numVertices );
+
         _buffer     = _byteBuffer.AsFloatBuffer();
         _ownsBuffer = true;
 
@@ -203,7 +203,7 @@ public class VertexBufferObjectWithVAO : IVertexData
 
     /// <summary>
     /// <para>
-    /// Returns the underlying Buffer< float > and marks it as dirty, causing the buffer contents to be
+    /// Returns the underlying Buffer and marks it as dirty, causing the buffer contents to be
     /// uploaded on the next call to <see cref="Bind"/>.
     /// </para>
     /// <para>
@@ -214,7 +214,7 @@ public class VertexBufferObjectWithVAO : IVertexData
     /// be uploaded.
     /// </para>
     /// </summary>
-    /// <returns> the underlying Buffer< float > holding the vertex data.  </returns>
+    /// <returns> the underlying Buffer holding the vertex data.  </returns>
     public Buffer< float > GetBuffer( bool forWriting )
     {
         _isDirty |= forWriting;
@@ -386,28 +386,22 @@ public class VertexBufferObjectWithVAO : IVertexData
     {
         if ( _vaoHandle != -1 )
         {
-            Logger.Checkpoint();
-            
             _tmpHandle.Clear();
             _tmpHandle.PutInt( _vaoHandle );
             _tmpHandle.Flip();
 
-            Logger.Checkpoint();
-            
             fixed ( int* intptr = &_tmpHandle.ToArray()[ 0 ] )
             {
                 GL.DeleteVertexArrays( 1, ( uint* )intptr );
             }
 
-            Logger.Checkpoint();
-            
             _vaoHandle = -1;
         }
     }
 
     // ========================================================================
     // ========================================================================
-    
+
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     /// </summary>
@@ -416,28 +410,22 @@ public class VertexBufferObjectWithVAO : IVertexData
         Dispose( true );
         GC.SuppressFinalize( this );
     }
-    
+
     protected virtual void Dispose( bool disposing )
     {
         if ( disposing )
         {
-            Logger.Checkpoint();
             GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, 0 );
-            Logger.Checkpoint();
             GL.DeleteBuffers( ( uint )_bufferHandle );
-            Logger.Checkpoint();
 
             _bufferHandle = 0;
 
             if ( _ownsBuffer )
             {
-                Logger.Checkpoint();
                 _byteBuffer.Dispose();
             }
 
-            Logger.Checkpoint();
             DeleteVAO();
-            Logger.Checkpoint();
         }
     }
 }

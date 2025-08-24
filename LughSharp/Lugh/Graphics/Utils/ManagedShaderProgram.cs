@@ -28,10 +28,7 @@ using System.Text;
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Collections;
-
-using Buffer = LughSharp.Lugh.Utils.Buffers.Buffer;
 
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -525,7 +522,7 @@ public class ManagedShaderProgram : ShaderProgram
     /// <param name="normalize"> Whether fixed point data should be normalized. Will not work on the desktop. </param>
     /// <param name="stride">The stride in bytes between successive attributes.</param>
     /// <param name="buffer">The buffer containing the vertex attributes.</param>
-    public unsafe void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, Buffer buffer )
+    public unsafe void SetVertexAttribute( string name, int size, int type, bool normalize, int stride, Buffer< int > buffer )
     {
         CheckManaged();
 
@@ -536,7 +533,7 @@ public class ManagedShaderProgram : ShaderProgram
             return;
         }
 
-        fixed ( void* ptr = &buffer.ToArray()[ 0 ] )
+        fixed ( void* ptr = &buffer.BackingArray()[ 0 ] )
         {
             GL.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( IntPtr )ptr );
         }
@@ -550,11 +547,11 @@ public class ManagedShaderProgram : ShaderProgram
     /// <param name="normalize"></param>
     /// <param name="stride"></param>
     /// <param name="buffer"></param>
-    public unsafe void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, Buffer buffer )
+    public unsafe void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, Buffer< int > buffer )
     {
         CheckManaged();
 
-        fixed ( void* ptr = &buffer.ToArray()[ 0 ] )
+        fixed ( void* ptr = &buffer.BackingArray()[ 0 ] )
         {
             GL.VertexAttribPointer( ( uint )location, size, type, normalize, stride, ( IntPtr )ptr );
         }

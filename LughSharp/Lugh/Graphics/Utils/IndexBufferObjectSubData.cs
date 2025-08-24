@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Buffers;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -47,10 +46,10 @@ public class IndexBufferObjectSubData : IIndexData
 {
     private readonly Buffer< short > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
-    private readonly int         _usage;
-    private          int         _bufferHandle;
-    private          bool        _isBound = false;
-    private          bool        _isDirty = true;
+    private readonly int             _usage;
+    private          int             _bufferHandle;
+    private          bool            _isBound = false;
+    private          bool            _isDirty = true;
 
     // ========================================================================
 
@@ -62,9 +61,8 @@ public class IndexBufferObjectSubData : IIndexData
     public IndexBufferObjectSubData( bool isStatic, int maxIndices )
     {
         _byteBuffer = new Buffer< byte >( maxIndices * 2 );
-
-        _usage  = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
-        _buffer = _byteBuffer.AsShortBuffer();
+        _usage      = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
+        _buffer     = _byteBuffer.AsShortBuffer();
 
         _buffer.Flip();
         _byteBuffer.Flip();
@@ -79,9 +77,8 @@ public class IndexBufferObjectSubData : IIndexData
     public IndexBufferObjectSubData( int maxIndices )
     {
         _byteBuffer = new Buffer< byte >( maxIndices * 2 );
-
-        _usage  = IGL.GL_STATIC_DRAW;
-        _buffer = _byteBuffer.AsShortBuffer();
+        _usage      = IGL.GL_STATIC_DRAW;
+        _buffer     = _byteBuffer.AsShortBuffer();
 
         _buffer.Flip();
         _byteBuffer.Flip();
