@@ -177,15 +177,13 @@ public partial class SpriteBatch : IBatch, IDisposable
         // Usage.TEXTURE_COORDINATES: 2 floats for texture u and v coordinates.
         var va1 = new VertexAttribute( ( int )VertexConstants.Usage.Position,
                                        VertexConstants.POSITION_COMPONENTS,
-                                       ShaderProgram.POSITION_ATTRIBUTE );
+                                       "a_position" );
 
-        var va2 = new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
-                                       VertexConstants.COLOR_COMPONENTS,
-                                       ShaderProgram.COLOR_ATTRIBUTE );
+        var va2 = VertexAttribute.ColorPacked( components: 1, type: IGL.GL_FLOAT, normalized: false );
 
         var va3 = new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates,
                                        VertexConstants.TEXCOORD_COMPONENTS,
-                                       ShaderProgram.TEXCOORD_ATTRIBUTE + "0" );
+                                       "a_texCoord0" );
 
         // Create the mesh object with the specified vertex attributes and size.
         // The mesh will hold the vertex and index data for rendering.
@@ -260,6 +258,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         {
             _shader.Bind();
             SetupMatrices();
+            SetupVertexAttributes( _shader );
         }
     }
 
@@ -365,7 +364,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             _mesh!.IndicesBuffer.Position = 0;
             _mesh!.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
         }
-        
+
         // Set up blending.
         if ( BlendingEnabled )
         {
@@ -383,7 +382,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         }
 
         // Render the sprites.
-        _mesh?.Render( _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * VERTICES_PER_SPRITE );
+        _mesh?.Render( _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
     }
 
     // ========================================================================
@@ -535,7 +534,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         const int TEX_COORD_OFFSET = VertexConstants.TEXCOORD_OFFSET * sizeof( float );
 
         // Position Attribute
-        var positionLocation = program.GetAttributeLocation( ShaderProgram.POSITION_ATTRIBUTE );
+        var positionLocation = program.GetAttributeLocation( "a_position" );
 
         if ( positionLocation >= 0 )
         {
@@ -549,7 +548,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         }
 
         // Color Attribute
-        var colorLocation = program.GetAttributeLocation( ShaderProgram.COLOR_ATTRIBUTE );
+        var colorLocation = program.GetAttributeLocation( "a_color" );
 
         if ( colorLocation >= 0 )
         {
@@ -563,7 +562,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         }
 
         // Texture Coordinates Attribute
-        var texCoordLocation = program.GetAttributeLocation( ShaderProgram.TEXCOORD_ATTRIBUTE + "0" );
+        var texCoordLocation = program.GetAttributeLocation( "a_texCoord0" );
 
         if ( texCoordLocation >= 0 )
         {
@@ -575,12 +574,6 @@ public partial class SpriteBatch : IBatch, IDisposable
                                         STRIDE,
                                         TEX_COORD_OFFSET );
         }
-
-        #if SPRITEBATCH_DEBUG
-        Logger.Debug( $"Position location: {positionLocation}" );
-        Logger.Debug( $"Color location: {colorLocation}" );
-        Logger.Debug( $"TexCoord location: {texCoordLocation}" );
-        #endif
     }
 
     // ========================================================================
@@ -695,8 +688,8 @@ public partial class SpriteBatch : IBatch, IDisposable
     public static ShaderProgram CreateDefaultShader()
     {
         var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.vert" );
-        var fragShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.frag" );
-        
+        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.frag" );
+
         return new ShaderProgram( vertexShader, fragShader );
     }
 

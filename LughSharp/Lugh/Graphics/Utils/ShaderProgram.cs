@@ -35,9 +35,17 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public struct ShaderData
 {
-    public int Program;
-    public int VertexShader;
-    public int FragmentShader;
+    public int    ProgHandle;
+    public string VertexShaderSrc;
+    public string FragmentShaderSrc;
+}
+
+[PublicAPI]
+public enum ShaderProgramID
+{
+    None            = -1,
+    VertexShader    = 1,
+    FragementShader = 2,
 }
 
 /// <summary>
@@ -59,33 +67,6 @@ public struct ShaderData
 [PublicAPI]
 public class ShaderProgram : IDisposable
 {
-    /// <summary>
-    /// default name for position attributes
-    /// </summary>
-    public const string POSITION_ATTRIBUTE = "a_position";
-
-    /// <summary>
-    /// default name for normal attributes
-    /// </summary>
-    public const string NORMAL_ATTRIBUTE = "a_normal";
-
-    /// <summary>
-    /// default name for color attributes
-    /// </summary>
-    public const string COLOR_ATTRIBUTE = "a_color";
-
-    /// <summary>
-    /// default name for texcoords attributes, append texture unit number
-    /// </summary>
-    public const string TEXCOORD_ATTRIBUTE = "a_texCoord";
-
-    /// <summary>
-    /// Specifies the default shader language version to be used in the shader program.
-    /// </summary>
-    public const string GLSL_VERSION = "#version 450 core";
-
-    // ========================================================================
-
     public bool       IsCompiled             { get; set; }
     public string     VertexShaderSource     { get; }
     public string     FragmentShaderSource   { get; }
@@ -156,35 +137,36 @@ public class ShaderProgram : IDisposable
         GL.CompileShader( _fragmentShaderHandle );
         CheckShaderLoadError( _fragmentShaderHandle, ( int )ShaderType.FragmentShader );
 
+        // Create the shader program and link the shaders
         ShaderProgramHandle = ( int )GL.CreateProgram();
         GL.AttachShader( ShaderProgramHandle, _vertexShaderHandle );
         GL.AttachShader( ShaderProgramHandle, _fragmentShaderHandle );
         GL.LinkProgram( ShaderProgramHandle );
 
-        // preserve handles for reference
+        IsCompiled = ShaderProgramHandle != -1;
+
+        if ( !IsCompiled )
+        {
+            Logger.Debug( $"Shader program {vertexShaderSource} has not been compiled." );
+        }
+
+        // Store the program handle and shader sources.
         ShaderData = new ShaderData
         {
-            Program        = ShaderProgramHandle,
-            VertexShader   = _vertexShaderHandle,
-            FragmentShader = _fragmentShaderHandle,
+            ProgHandle        = ShaderProgramHandle,
+            VertexShaderSrc   = vertexShaderSource,
+            FragmentShaderSrc = fragmentShaderSource,
         };
 
         GL.DeleteShader( _vertexShaderHandle );
         GL.DeleteShader( _fragmentShaderHandle );
 
-        IsCompiled = ShaderProgramHandle != -1;
-        
-        if ( !IsCompiled )
-        {
-            Logger.Debug( $"Shader program {vertexShaderSource} has not been compiled." );
-        }
-        
         var texLocation = GetUniformLocation( "u_texture" );
-        
+
         if ( texLocation == INVALID )
         {
             Logger.Warning( $"Texture uniform not found in shader." );
-            
+
             DebugShaderSources();
         }
     }
@@ -452,14 +434,14 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    ///
+    /// Configures the vertex attribute parameters for a specified data location, enabling shader operations on vertex data.
     /// </summary>
-    /// <param name="location"></param>
-    /// <param name="size"></param>
-    /// <param name="type"></param>
-    /// <param name="normalize"></param>
-    /// <param name="stride"></param>
-    /// <param name="offset"></param>
+    /// <param name="location">The location of the vertex attribute within the shader program.</param>
+    /// <param name="size">The number of components in the vertex attribute (e.g., 1 for scalar, 2 for vectors, etc.).</param>
+    /// <param name="type">The data type of each component in the attribute (e.g., float, int).</param>
+    /// <param name="normalize">Indicates whether fixed-point data values should be normalized or converted directly as fixed-point values.</param>
+    /// <param name="stride">The byte offset between consecutive vertex attributes.</param>
+    /// <param name="offset">The offset of the first element within the vertex data structure.</param>
     public virtual void SetVertexAttribute( int location, int size, int type, bool normalize, int stride, int offset )
     {
         if ( location == INVALID )
@@ -660,8 +642,8 @@ public class ShaderProgram : IDisposable
     #if DEBUG
     internal void DebugShaderSources()
     {
-        Logger.Debug( $"vertex shader: {GL.GetShaderSource( ShaderData.VertexShader )}" );
-        Logger.Debug( $"fragment shader: {GL.GetShaderSource( ShaderData.FragmentShader )}" );
+        Logger.Debug( $"vertex shader: {ShaderData.VertexShaderSrc}" );
+        Logger.Debug( $"fragment shader: {ShaderData.FragmentShaderSrc}" );
     }
     #endif
 

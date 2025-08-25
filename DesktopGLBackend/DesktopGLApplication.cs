@@ -286,6 +286,8 @@ public class DesktopGLApplication : IApplication, IDisposable
 
             // Glfw.SwapBuffers is called in window.Update().
             Glfw.PollEvents();
+
+            Exit();
         }
 
         Logger.Debug( "Ending framework loop" );

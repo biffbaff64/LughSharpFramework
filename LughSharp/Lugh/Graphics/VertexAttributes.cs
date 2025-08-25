@@ -30,6 +30,13 @@ namespace LughSharp.Lugh.Graphics;
 public class VertexAttributes
 {
     /// <summary>
+    /// the size of a single vertex in bytes
+    /// </summary>
+    public int VertexSize { get; private set; }
+
+    // ========================================================================
+    
+    /// <summary>
     /// the attributes in the order they were specified
     /// </summary>
     private readonly VertexAttribute[] _attributes;
@@ -64,11 +71,6 @@ public class VertexAttributes
     }
 
     // ========================================================================
-
-    /// <summary>
-    /// the size of a single vertex in bytes
-    /// </summary>
-    public int VertexSize { get; private set; }
 
     /// <summary>
     /// Gets the number of attributes.

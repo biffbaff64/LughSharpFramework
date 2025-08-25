@@ -519,7 +519,6 @@ GRAPHICS/UTILS
     - IP   - IP   - InstanceBufferObjectSubData
     - DONE - DONE - IVertexData
     - DONE - IP   - KTXTTextureData
-    - DONE - IP   - ManagedShaderProgram
     - DONE - IP   - MipMapGenerator
     - DONE - IP   - MipMapTextureData
     - DONE - IP   - PixmapTextureData

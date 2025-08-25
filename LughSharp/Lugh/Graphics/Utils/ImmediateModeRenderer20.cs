@@ -257,28 +257,28 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     {
         var attribs = new List< VertexAttribute >
         {
-            new( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS, ShaderProgram.POSITION_ATTRIBUTE ),
+            new( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS, "a_position" ),
         };
 
         if ( hasColor )
         {
             attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
                                               VertexConstants.COLOR_COMPONENTS,
-                                              ShaderProgram.COLOR_ATTRIBUTE ) );
+                                              "a_color" ) );
         }
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
             attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates,
                                               VertexConstants.TEXCOORD_COMPONENTS,
-                                              ShaderProgram.TEXCOORD_ATTRIBUTE + $"{i}" ) );
+                                              "a_texCoord" + $"{i}" ) );
         }
 
         if ( hasNormals )
         {
             attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.Normal,
                                               VertexConstants.NORMAL_COMPONENTS,
-                                              ShaderProgram.NORMAL_ATTRIBUTE ) );
+                                              "a_normal" ) );
         }
 
         var array = new VertexAttribute[ attribs.Count ];
@@ -299,13 +299,13 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// <returns></returns>
     private static string CreateVertexShader( bool hasNormals, bool hasColors, int numTexCoords )
     {
-        var shader = "in vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
-                     + ( hasColors ? "in vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n" : "" )
-                     + ( hasNormals ? "in vec3 " + ShaderProgram.NORMAL_ATTRIBUTE + ";\n" : "" );
+        var shader = "in vec4 " + "a_position" + ";\n"
+                     + ( hasColors ? "in vec4 " + "a_color" + ";\n" : "" )
+                     + ( hasNormals ? "in vec3 " + "a_normal" + ";\n" : "" );
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
-            shader += "in vec2 " + ShaderProgram.TEXCOORD_ATTRIBUTE + i + ";\n";
+            shader += "in vec2 " + "a_texCoord" + i + ";\n";
         }
 
         shader += "uniform mat4 u_projModelView;\n" + ( hasColors ? "out vec4 v_col;\n" : "" );
@@ -316,17 +316,17 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         }
 
         shader += "void main() {\n"
-                  + "   gl_Position = u_projModelView * " + ShaderProgram.POSITION_ATTRIBUTE + ";\n";
+                  + "   gl_Position = u_projModelView * " + "a_position" + ";\n";
 
         if ( hasColors )
         {
-            shader += "   v_col = " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
+            shader += "   v_col = " + "a_color" + ";\n"
                       + "   v_col.a *= 255.0 / 254.0;\n";
         }
 
         for ( var i = 0; i < numTexCoords; i++ )
         {
-            shader += "   v_tex" + i + " = " + ShaderProgram.TEXCOORD_ATTRIBUTE + i + ";\n";
+            shader += "   v_tex" + i + " = " + "a_texCoord" + i + ";\n";
         }
 
         shader += "   gl_PointSize = 1.0;\n"

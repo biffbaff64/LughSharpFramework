@@ -46,10 +46,10 @@ public class VertexConstants
         BiNormal           = 256,
     }
 
-    public const int POSITION_COMPONENTS = 2;
-    public const int COLOR_COMPONENTS    = 1;
-    public const int TEXCOORD_COMPONENTS = 2;
-    public const int NORMAL_COMPONENTS   = 3;
+    public const int POSITION_COMPONENTS       = 2;
+    public const int COLOR_COMPONENTS          = 1;
+    public const int TEXCOORD_COMPONENTS       = 2;
+    public const int NORMAL_COMPONENTS         = 3;
 
     // Number of floats per vertex (x, y, color, u, v)
     public const int VERTEX_SIZE = POSITION_COMPONENTS + COLOR_COMPONENTS + TEXCOORD_COMPONENTS;

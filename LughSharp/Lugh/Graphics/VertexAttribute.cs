@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
+using LughSharp.Lugh.Utils;
 
 namespace LughSharp.Lugh.Graphics;
 
@@ -38,6 +39,11 @@ namespace LughSharp.Lugh.Graphics;
 [PublicAPI]
 public class VertexAttribute
 {
+    /// <summary>
+    /// the offset of this attribute in bytes, don't change this!
+    /// </summary>
+    public int Offset { get; set; }
+
     // ========================================================================
 
     private readonly int _usageIndex;
@@ -133,11 +139,6 @@ public class VertexAttribute
         _usageIndex = int.TrailingZeroCount( usage );
     }
 
-    /// <summary>
-    /// the offset of this attribute in bytes, don't change this!
-    /// </summary>
-    public int Offset { get; set; }
-
     /// <returns>
     /// A copy of this VertexAttribute with the same parameters. The <see cref="Offset" /> is not copied
     /// and must be recalculated, as is typically done by the <see cref="VertexAttributes" /> that owns
@@ -190,7 +191,9 @@ public class VertexAttribute
     /// </returns>
     public static VertexAttribute Normal()
     {
-        return new VertexAttribute( ( int )VertexConstants.Usage.Normal, 3, ShaderProgram.NORMAL_ATTRIBUTE );
+        return new VertexAttribute( ( int )VertexConstants.Usage.Normal,
+                                    3,
+                                    "a_normal" );
     }
 
     /// <summary>
@@ -200,13 +203,15 @@ public class VertexAttribute
     /// A VertexAttribute with four components, associated with the color attribute in shaders,
     /// using the unsigned byte OpenGL data type and normalized.
     /// </returns>
-    public static VertexAttribute ColorPacked()
+    public static VertexAttribute ColorPacked( int components = 1,
+                                               int type = IGL.GL_UNSIGNED_BYTE,
+                                               bool normalized = true )
     {
         return new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
-                                    4,
-                                    IGL.GL_UNSIGNED_BYTE,
-                                    true,
-                                    ShaderProgram.COLOR_ATTRIBUTE );
+                                    components,
+                                    type,
+                                    normalized,
+                                    "a_color" );
     }
 
     /// <summary>
@@ -223,7 +228,7 @@ public class VertexAttribute
                                     4,
                                     IGL.GL_FLOAT,
                                     false,
-                                    ShaderProgram.COLOR_ATTRIBUTE );
+                                    "a_color" );
     }
 
     /// <summary>
@@ -343,5 +348,16 @@ public class VertexAttribute
         result = ( 541 * result ) + ( Alias.Length * Unit );
 
         return result;
+    }
+
+    public void Debug()
+    {
+        Logger.Divider();
+        Logger.Debug( $"Usage: {Usage}" );
+        Logger.Debug( $"NumComponents: {NumComponents}" );
+        Logger.Debug( $"ComponentType: {ComponentType}" );
+        Logger.Debug( $"Normalized: {Normalized}" );
+        Logger.Debug( $"Alias: {Alias}" );
+        Logger.Debug( $"Unit: {Unit}" );
     }
 }

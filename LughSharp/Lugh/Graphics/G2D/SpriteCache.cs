@@ -138,11 +138,11 @@ public class SpriteCache
                           size * ( useIndices ? 4 : 6 ),
                           useIndices ? size * 6 : 0,
                           new VertexAttribute( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS,
-                                               ShaderProgram.POSITION_ATTRIBUTE ),
+                                               "a_position" ),
                           new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked, VertexConstants.COLOR_COMPONENTS,
-                                               ShaderProgram.COLOR_ATTRIBUTE ),
+                                               "a_color" ),
                           new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates, VertexConstants.TEXCOORD_COMPONENTS,
-                                               ShaderProgram.TEXCOORD_ATTRIBUTE + "0" ) )
+                                               "a_texCoord0" ) )
         {
             AutoBind = false,
         };
@@ -1307,7 +1307,7 @@ public class SpriteCache
                                      + "a_position"
                                      + ";\n" //
                                      + "in vec4 "
-                                     + ShaderProgram.COLOR_ATTRIBUTE
+                                     + "a_color"
                                      + ";\n" //
                                      + "in vec2 "
                                      + "u_texCoord" + "0;\n"                    //
@@ -1318,7 +1318,7 @@ public class SpriteCache
                                      + "void main()\n"                          //
                                      + "{\n"                                    //
                                      + "   v_color = "
-                                     + ShaderProgram.COLOR_ATTRIBUTE
+                                     + "a_color"
                                      + ";\n"                                         //
                                      + "   v_color.a = v_color.a * (255.0/254.0);\n" //
                                      + "   v_texCoords = "

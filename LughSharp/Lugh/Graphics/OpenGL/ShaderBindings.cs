@@ -25,6 +25,7 @@
 using System.Text;
 
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
 
@@ -1239,19 +1240,19 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, IntPtr pointer )
+    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uint pointer )
     {
-        GetDelegateForFunction< PFNGLVERTEXATTRIBPOINTERPROC >( "glVertexAttribPointer", out _glVertexAttribPointer );
-
-        _glVertexAttribPointer( index, size, type, normalized, stride, pointer );
+        VertexAttribPointer( index, size, type, normalized, stride, (IntPtr)pointer );
     }
 
     /// <inheritdoc />
-    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uint pointer )
+    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, IntPtr pointer )
     {
+        Logger.Debug( $"index: {index}, size: {size}, type: {type}, normalized: {normalized}, stride: {stride}, pointer: {pointer} )" );
+        
         GetDelegateForFunction< PFNGLVERTEXATTRIBPOINTERPROC >( "glVertexAttribPointer", out _glVertexAttribPointer );
 
-        _glVertexAttribPointer( index, size, type, normalized, stride, ( IntPtr )pointer );
+        _glVertexAttribPointer( index, size, type, normalized, stride, pointer );
     }
 
     // ========================================================================
