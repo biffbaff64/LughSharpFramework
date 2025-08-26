@@ -50,7 +50,7 @@ public class FloatTextureData : ITextureData
     public bool IsOwned { get; set; }
 
     // ========================================================================
-    
+
     private readonly int  _format;
     private readonly int  _internalFormat;
     private readonly bool _isGpuOnly;

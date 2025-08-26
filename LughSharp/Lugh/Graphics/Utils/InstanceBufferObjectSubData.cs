@@ -38,7 +38,7 @@ public class InstanceBufferObjectSubData : IInstanceData
 {
     private readonly Buffer< float > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
-    private readonly bool        _isDirect;
+    private readonly bool            _isDirect;
 
     private readonly int  _usage;
     private          bool _isBound = false;

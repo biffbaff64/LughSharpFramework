@@ -59,7 +59,7 @@ public class Pixmap : IDisposable
     public Gdx2DPixmap? Gdx2DPixmap { get; set; }                // 
 
     // ========================================================================
-    
+
     /// <summary>
     /// Returns the width of the Pixmap in pixels.
     /// </summary>
@@ -378,7 +378,7 @@ public class Pixmap : IDisposable
     {
         Color = new Color( Color.R, Color.G, Color.B, alpha );
     }
-    
+
     /// <summary>
     /// Fills the complete bitmap with the currently set color.
     /// </summary>
@@ -631,6 +631,11 @@ public class Pixmap : IDisposable
         return pixmap;
     }
 
+    public static Pixmap FromFile( FileInfo file )
+    {
+        return PixmapIO.ReadCIM( file );
+    }
+    
     /// <summary>
     /// Saves the specified pixmap to a file in PNG format.
     /// </summary>

@@ -40,7 +40,7 @@ public class Matrix3
     public const int M22 = 8;
 
     // ========================================================================
-    
+
     public readonly float[] Val = new float[ 9 ];
 
     // ========================================================================
@@ -48,7 +48,7 @@ public class Matrix3
     private readonly float[] _tmp = new float[ 9 ];
 
     // ========================================================================
-    
+
     public Matrix3()
     {
         ToIdentity();

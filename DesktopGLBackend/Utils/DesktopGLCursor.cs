@@ -37,7 +37,7 @@ public class DesktopGLCursor : ICursor, IDisposable
     public Cursor          GlfwCursor { get; set; }
 
     // ========================================================================
-    
+
     public static readonly List< DesktopGLCursor >                    Cursors       = [ ];
     public static readonly Dictionary< ICursor.SystemCursor, Cursor > SystemCursors = [ ];
 
@@ -145,7 +145,7 @@ public class DesktopGLCursor : ICursor, IDisposable
             Glfw.DestroyCursor( GlfwCursor );
         }
     }
-    
+
     public static void DisposeGLCursor( DesktopGLWindow glWindow )
     {
         for ( var i = Cursors.Count - 1; i >= 0; i-- )

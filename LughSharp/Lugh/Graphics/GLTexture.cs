@@ -196,7 +196,10 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// Binds the texture to the texture unit 0.
     /// Sets the currently active texture unit to Texture 0.
     /// </summary>
-    public void Bind() => Bind( 0 );
+    public void Bind()
+    {
+        Bind( 0 );
+    }
 
     /// <summary>
     /// Binds the texture to the given texture unit. Sets the currently active texture unit.
@@ -462,21 +465,21 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
 //                       type: IGL.GL_UNSIGNED_BYTE,
 //                       pixels: pixmap.PixelData );
 
-        GL.TextureStorage2D( texture: GLTextureHandle,
-                             levels: 1,
-                             internalFormat: IGL.GL_RGBA8,
-                             width: pixmap.Width,
-                             height: pixmap.Height );
+        GL.TextureStorage2D( GLTextureHandle,
+                             1,
+                             IGL.GL_RGBA8,
+                             pixmap.Width,
+                             pixmap.Height );
 
-        GL.TextureSubImage2D( texture: GLTextureHandle,
-                              level: 0,
-                              xoffset: 0,
-                              yoffset: 0,
-                              width: pixmap.Width,
-                              height: pixmap.Height,
-                              format: IGL.GL_RGBA,
-                              type: IGL.GL_UNSIGNED_BYTE,
-                              pixels: pixmap.PixelData );
+        GL.TextureSubImage2D( GLTextureHandle,
+                              0,
+                              0,
+                              0,
+                              pixmap.Width,
+                              pixmap.Height,
+                              IGL.GL_RGBA,
+                              IGL.GL_UNSIGNED_BYTE,
+                              pixmap.PixelData );
 
         if ( shouldDispose )
         {

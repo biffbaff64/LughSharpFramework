@@ -32,7 +32,6 @@ using Bitmap = System.Drawing.Bitmap;
 namespace Extensions.Source.Drawing.Utils;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public static class BMPUtils
 {
     public static BitmapFileHeader     BitmapFileHeader     { get; private set; }

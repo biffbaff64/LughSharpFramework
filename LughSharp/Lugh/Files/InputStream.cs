@@ -31,7 +31,7 @@ public class InputStream : Stream
     private const int DEFAULT_BUFFER_SIZE  = 8192;
 
     // ========================================================================
-    
+
     /// <inheritdoc />
     public override bool CanRead { get; }
 

@@ -43,7 +43,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     private int _currentSide;
 
     // ========================================================================
-    
+
     public FrameBufferCubemap()
     {
     }

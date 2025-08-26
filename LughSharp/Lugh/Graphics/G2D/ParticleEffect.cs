@@ -36,7 +36,7 @@ public class ParticleEffect : IDisposable
     public float MotionScale { get; set; } = 1f;
 
     // ========================================================================
-    
+
     private const int DEFAULT_EMITTERS_SIZE = 8;
 
     private readonly List< ParticleEmitter > _emitters;
@@ -44,7 +44,7 @@ public class ParticleEffect : IDisposable
     private          bool                    _ownsTexture;
 
     // ========================================================================
-    
+
     public ParticleEffect()
     {
         _emitters = new List< ParticleEmitter >( DEFAULT_EMITTERS_SIZE );
@@ -59,7 +59,7 @@ public class ParticleEffect : IDisposable
             _emitters.Add( NewEmitter( effect._emitters[ i ] ) );
         }
     }
-    
+
     public void Start()
     {
         for ( int i = 0, n = _emitters.Count; i < n; i++ )

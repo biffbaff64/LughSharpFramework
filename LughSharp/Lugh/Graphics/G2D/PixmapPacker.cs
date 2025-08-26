@@ -1012,10 +1012,10 @@ public class PixmapPacker : IDisposable
         [PublicAPI]
         public class Node
         {
-            public Node?          LeftChild  { get; set; } = null;
-            public Node?          RightChild { get; set; } = null;
+            public Node?     LeftChild  { get; set; } = null;
+            public Node?     RightChild { get; set; } = null;
             public Rectangle Rect       { get; set; } = new();
-            public bool           Full       { get; set; } = false;
+            public bool      Full       { get; set; } = false;
         }
 
         [PublicAPI]

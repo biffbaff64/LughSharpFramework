@@ -36,8 +36,8 @@ public class SplitPane : WidgetGroup
 {
     private readonly Rectangle _firstWidgetBounds  = new();
     private readonly Rectangle _handleBounds       = new();
-    private readonly Vector2        _handlePosition     = new();
-    private readonly Vector2        _lastPoint          = new();
+    private readonly Vector2   _handlePosition     = new();
+    private readonly Vector2   _lastPoint          = new();
     private readonly Rectangle _secondWidgetBounds = new();
     private readonly Rectangle _tempScissors       = new();
 

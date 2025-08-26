@@ -27,7 +27,6 @@ using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
 
 using Color = LughSharp.Lugh.Graphics.Color;
-
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
@@ -77,14 +76,14 @@ public class BatchTileMapRenderer : ITiledMapRenderer
         OwnsBatch  = ownsBatch;
     }
 
-    public TiledMap       TiledMap    { get; set; }
-    public bool           OwnsBatch   { get; set; }
+    public TiledMap  TiledMap    { get; set; }
+    public bool      OwnsBatch   { get; set; }
     public Rectangle ImageBounds { get; set; } = new();
 
-    protected IBatch         Batch      { get; set; }
+    protected IBatch    Batch      { get; set; }
     protected Rectangle ViewBounds { get; set; }
-    protected float          UnitScale  { get; set; }
-    protected float[]        Vertices   { get; set; } = new float[ NUM_VERTICES ];
+    protected float     UnitScale  { get; set; }
+    protected float[]   Vertices   { get; set; } = new float[ NUM_VERTICES ];
 
     /// <summary>
     /// Draws all layers in the default <see cref="TiledMap" />.

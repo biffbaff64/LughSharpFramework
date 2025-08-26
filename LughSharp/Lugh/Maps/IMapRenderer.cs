@@ -24,8 +24,6 @@
 
 using LughSharp.Lugh.Graphics.Cameras;
 
-
-
 namespace LughSharp.Lugh.Maps;
 
 [PublicAPI]

@@ -53,7 +53,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DotGLFW" Version="1.2.0" />
+        <PackageReference Include="DotGLFW" Version="1.2.0"/>
         <PackageReference Include="JetBrains.Annotations" Version="2024.3.0"/>
         <PackageReference Include="RestSharp" Version="112.1.0"/>
         <PackageReference Include="SharpZipLib" Version="1.4.2"/>
@@ -75,37 +75,37 @@
             <Pack>true</Pack>
             <PackagePath>contentFiles\any\any</PackagePath>
         </Content>
-        <None Remove="lib\gdx2d.dll" />
+        <None Remove="lib\gdx2d.dll"/>
         <Content Include="lib\gdx2d.dll">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="lib\freetype.dll" />
+        <None Remove="lib\freetype.dll"/>
         <Content Include="lib\freetype.dll">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\ColorTest.glsl.frag" />
+        <None Remove="Assets\Shaders\ColorTest.glsl.frag"/>
         <Content Include="Assets\Shaders\ColorTest.glsl.frag">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\ColorTest.glsl.vert" />
+        <None Remove="Assets\Shaders\ColorTest.glsl.vert"/>
         <Content Include="Assets\Shaders\ColorTest.glsl.vert">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\Default.glsl.frag" />
+        <None Remove="Assets\Shaders\Default.glsl.frag"/>
         <Content Include="Assets\Shaders\Default.glsl.frag">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\Default.glsl.vert" />
+        <None Remove="Assets\Shaders\Default.glsl.vert"/>
         <Content Include="Assets\Shaders\Default.glsl.vert">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\Quad.frag" />
+        <None Remove="Assets\Shaders\Quad.frag"/>
         <Content Include="Assets\Shaders\Quad.frag">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\Quad.vert" />
+        <None Remove="Assets\Shaders\Quad.vert"/>
         <Content Include="Assets\Shaders\Quad.vert">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 

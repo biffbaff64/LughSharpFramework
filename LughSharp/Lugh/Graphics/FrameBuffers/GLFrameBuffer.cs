@@ -136,7 +136,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
         {
             Buffers[ Api.App ]?.Remove( this );
         }
-        
+
         GC.SuppressFinalize( this );
     }
 
@@ -415,7 +415,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
             // Create a new packed depth-stencil buffer
             DepthStencilPackedBufferHandle = ( int )GL.GenRenderbuffer();
             HasDepthStencilPackedBuffer    = true;
-            
+
             GL.BindRenderbuffer( IGL.GL_RENDERBUFFER, ( uint )DepthStencilPackedBufferHandle );
             GL.RenderbufferStorage( IGL.GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height );
             GL.BindRenderbuffer( IGL.GL_RENDERBUFFER, 0 );

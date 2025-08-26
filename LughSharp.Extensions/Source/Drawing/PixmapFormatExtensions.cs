@@ -28,7 +28,6 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace Extensions.Source.Drawing;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public static class PixmapFormatExtensions
 {
     /// <summary>
@@ -63,7 +62,7 @@ public static class PixmapFormatExtensions
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
-    public static System.Drawing.Imaging.PixelFormat ToSystemPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
+    public static PixelFormat ToSystemPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
     {
         return format switch
         {

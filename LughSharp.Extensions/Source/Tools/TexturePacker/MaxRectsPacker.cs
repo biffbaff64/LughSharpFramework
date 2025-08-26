@@ -25,15 +25,14 @@
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public partial class MaxRectsPacker : TexturePacker.IPacker
 {
-    private static   TexturePacker.Settings    _settings = null!;
-    private readonly FreeRectChoiceHeuristic[] _methods;
-    private readonly MaxRects                  _maxRects = new();
+    private static   TexturePacker.Settings _settings = null!;
+    private readonly FreeRectChoiceHeuristic[]    _methods;
+    private readonly MaxRects                     _maxRects = new();
 
     // ========================================================================
 
@@ -272,9 +271,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// If no suitable configuration is found, returns null.
     /// </returns>
     private TexturePacker.Page GetMinimalPageSize( int minWidth, int minHeight,
-                                                   int adjustX, int adjustY,
-                                                   int paddingX, int paddingY,
-                                                   List< TexturePacker.Rect > inputRects )
+                                                         int adjustX, int adjustY,
+                                                         int paddingX, int paddingY,
+                                                         List< TexturePacker.Rect > inputRects )
     {
         Logger.Debug( $"minWidth: {minWidth}, minHeight: {minHeight}" );
         Logger.Debug( $"adjustX: {adjustX}, adjustY: {adjustY}" );

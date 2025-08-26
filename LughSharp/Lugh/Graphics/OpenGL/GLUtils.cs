@@ -135,7 +135,7 @@ public static class GLUtils
             throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
         }
     }
-    
+
     /// <summary>
     /// Sets up OpenGL's debug message callback and enables debug output. This helps capture and log
     /// OpenGL debug messages during runtime, providing details about issues such as errors, warnings,

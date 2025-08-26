@@ -173,13 +173,13 @@ public partial class SpriteBatch : IBatch, IDisposable
         // Define the vertex attributes for the mesh.
         // These attributes specify the layout of vertex data in the VBO.
         // Usage.POSITION: 2 floats for x and y coordinates.
-        // Usage.COLOR_PACKED: 4 floats for RGBA color components.
+        // Usage.COLOR_PACKED: 1 floats for packed RGBA color component.
         // Usage.TEXTURE_COORDINATES: 2 floats for texture u and v coordinates.
         var va1 = new VertexAttribute( ( int )VertexConstants.Usage.Position,
                                        VertexConstants.POSITION_COMPONENTS,
                                        "a_position" );
 
-        var va2 = VertexAttribute.ColorPacked( components: 1, type: IGL.GL_FLOAT, normalized: false );
+        var va2 = VertexAttribute.ColorPacked( VertexConstants.COLOR_COMPONENTS, IGL.GL_FLOAT, false );
 
         var va3 = new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates,
                                        VertexConstants.TEXCOORD_COMPONENTS,
@@ -1763,12 +1763,12 @@ public partial class SpriteBatch : IBatch, IDisposable
         /// </summary>
         public RenderState( Texture? currentTexture, int vertexCount, Matrix4 transformMatrix )
         {
-            this.CurrentTexture  = currentTexture;
-            this.VertexCount     = vertexCount;
-            this.TransformMatrix = transformMatrix;
+            CurrentTexture  = currentTexture;
+            VertexCount     = vertexCount;
+            TransformMatrix = transformMatrix;
         }
 
-        void Deconstruct( out Texture? texture, out int vertexCount, out Matrix4 transformMatrix )
+        private void Deconstruct( out Texture? texture, out int vertexCount, out Matrix4 transformMatrix )
         {
             texture         = CurrentTexture;
             vertexCount     = VertexCount;

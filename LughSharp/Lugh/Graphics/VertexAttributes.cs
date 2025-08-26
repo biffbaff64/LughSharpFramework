@@ -35,7 +35,7 @@ public class VertexAttributes
     public int VertexSize { get; private set; }
 
     // ========================================================================
-    
+
     /// <summary>
     /// the attributes in the order they were specified
     /// </summary>

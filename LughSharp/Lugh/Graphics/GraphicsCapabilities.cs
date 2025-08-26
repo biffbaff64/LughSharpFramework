@@ -64,7 +64,7 @@ public sealed class GraphicsCapabilities
             HasRGTC                = VersionAtLeast( 3, 0 ), // Core in 3.0
             HasBPTC                = VersionAtLeast( 4, 2 ) || HasExtension( "GL_ARB_texture_compression_bptc" ),
             HasETC2                = VersionAtLeast( 4, 3 ) || HasExtension( "GL_ARB_ES3_compatibility" ),
-            HasInternalFormatQuery = VersionAtLeast( 4, 2 ) || HasExtension( "GL_ARB_internalformat_query2" )
+            HasInternalFormatQuery = VersionAtLeast( 4, 2 ) || HasExtension( "GL_ARB_internalformat_query2" ),
         };
 
         // ------------------------------------------------
@@ -83,8 +83,11 @@ public sealed class GraphicsCapabilities
 
             return false;
         }
-        
-        bool VersionAtLeast( int mj, int mn ) => ( major > mj ) || ( ( major == mj ) && ( minor >= mn ) );
+
+        bool VersionAtLeast( int mj, int mn )
+        {
+            return ( major > mj ) || ( ( major == mj ) && ( minor >= mn ) );
+        }
     }
 }
 

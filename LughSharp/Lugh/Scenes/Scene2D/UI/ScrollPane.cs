@@ -35,13 +35,13 @@ namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 public partial class ScrollPane : WidgetGroup
 {
     private readonly ActorGestureListener _flickScrollListener;
-    private readonly Rectangle       _hKnobBounds       = new();
-    private readonly Rectangle       _hScrollBounds     = new();
+    private readonly Rectangle            _hKnobBounds       = new();
+    private readonly Rectangle            _hScrollBounds     = new();
     private readonly Vector2              _lastPoint         = new();
-    private readonly Rectangle       _vKnobBounds       = new();
-    private readonly Rectangle       _vScrollBounds     = new();
-    private readonly Rectangle       _widgetArea        = new();
-    private readonly Rectangle       _widgetCullingArea = new();
+    private readonly Rectangle            _vKnobBounds       = new();
+    private readonly Rectangle            _vScrollBounds     = new();
+    private readonly Rectangle            _widgetArea        = new();
+    private readonly Rectangle            _widgetCullingArea = new();
 
     private int    _draggingPointer = -1;
     private float  _fadeAlpha;

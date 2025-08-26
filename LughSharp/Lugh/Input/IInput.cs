@@ -151,17 +151,17 @@ public interface IInput
     [PublicAPI]
     public static class Keys
     {
-        public const int NUM_0               = 7;
-        public const int NUM_1               = 8;
-        public const int NUM_2               = 9;
-        public const int NUM_3               = 10;
-        public const int NUM_4               = 11;
-        public const int NUM_5               = 12;
-        public const int NUM_6               = 13;
-        public const int NUM_7               = 14;
-        public const int NUM_8               = 15;
-        public const int NUM_9               = 16;
-        
+        public const int NUM_0 = 7;
+        public const int NUM_1 = 8;
+        public const int NUM_2 = 9;
+        public const int NUM_3 = 10;
+        public const int NUM_4 = 11;
+        public const int NUM_5 = 12;
+        public const int NUM_6 = 13;
+        public const int NUM_7 = 14;
+        public const int NUM_8 = 15;
+        public const int NUM_9 = 16;
+
         public const int A = 29;
         public const int B = 30;
         public const int C = 31;
@@ -188,38 +188,38 @@ public interface IInput
         public const int X = 52;
         public const int Y = 53;
         public const int Z = 54;
-        
-        public const int ALT_LEFT            = 57;
-        public const int ALT_RIGHT           = 58;
-        public const int APOSTROPHE          = 75;
-        public const int AT                  = 77;
-        public const int BACK                = 4;
-        public const int BACKSLASH           = 73;
-        
-        public const int CALL                = 5;
-        public const int CAMERA              = 27;
-        public const int ENDCALL             = 6;
-        
-        public const int CAPS_LOCK           = 115;
-        public const int CLEAR               = 28;
-        public const int COMMA               = 55;
-        
-        public const int DEL                 = 67;
-        public const int BACKSPACE           = 67;
-        public const int FORWARD_DEL         = 112;
-        
-        public const int DPAD_CENTER         = 23;
-        public const int DPAD_DOWN           = 20;
-        public const int DPAD_LEFT           = 21;
-        public const int DPAD_RIGHT          = 22;
-        public const int DPAD_UP             = 19;
-        
-        public const int CENTER              = 23;
-        public const int DOWN                = 20;
-        public const int LEFT                = 21;
-        public const int RIGHT               = 22;
-        public const int UP                  = 19;
-        
+
+        public const int ALT_LEFT   = 57;
+        public const int ALT_RIGHT  = 58;
+        public const int APOSTROPHE = 75;
+        public const int AT         = 77;
+        public const int BACK       = 4;
+        public const int BACKSLASH  = 73;
+
+        public const int CALL    = 5;
+        public const int CAMERA  = 27;
+        public const int ENDCALL = 6;
+
+        public const int CAPS_LOCK = 115;
+        public const int CLEAR     = 28;
+        public const int COMMA     = 55;
+
+        public const int DEL         = 67;
+        public const int BACKSPACE   = 67;
+        public const int FORWARD_DEL = 112;
+
+        public const int DPAD_CENTER = 23;
+        public const int DPAD_DOWN   = 20;
+        public const int DPAD_LEFT   = 21;
+        public const int DPAD_RIGHT  = 22;
+        public const int DPAD_UP     = 19;
+
+        public const int CENTER = 23;
+        public const int DOWN   = 20;
+        public const int LEFT   = 21;
+        public const int RIGHT  = 22;
+        public const int UP     = 19;
+
         public const int ENTER               = 66;
         public const int ENVELOPE            = 65;
         public const int EQUALS_SIGN         = 70;

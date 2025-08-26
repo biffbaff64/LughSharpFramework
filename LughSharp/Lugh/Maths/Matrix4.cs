@@ -559,25 +559,25 @@ public class Matrix4
     /// <returns> This matrix for the purpose of chaining methods together.  </returns>
     public Matrix4 Transpose()
     {
-        var m01 = this.Val[ M01_4 ];
-        var m02 = this.Val[ M02_8 ];
-        var m03 = this.Val[ M03_12 ];
-        var m12 = this.Val[ M12_9 ];
-        var m13 = this.Val[ M13_13 ];
-        var m23 = this.Val[ M23_14 ];
+        var m01 = Val[ M01_4 ];
+        var m02 = Val[ M02_8 ];
+        var m03 = Val[ M03_12 ];
+        var m12 = Val[ M12_9 ];
+        var m13 = Val[ M13_13 ];
+        var m23 = Val[ M23_14 ];
 
-        this.Val[ M01_4 ]  = this.Val[ M10_1 ];
-        this.Val[ M02_8 ]  = this.Val[ M20_2 ];
-        this.Val[ M03_12 ] = this.Val[ M30_3 ];
-        this.Val[ M10_1 ]  = m01;
-        this.Val[ M12_9 ]  = this.Val[ M21_6 ];
-        this.Val[ M13_13 ] = this.Val[ M31_7 ];
-        this.Val[ M20_2 ]  = m02;
-        this.Val[ M21_6 ]  = m12;
-        this.Val[ M23_14 ] = this.Val[ M32_11 ];
-        this.Val[ M30_3 ]  = m03;
-        this.Val[ M31_7 ]  = m13;
-        this.Val[ M32_11 ] = m23;
+        Val[ M01_4 ]  = Val[ M10_1 ];
+        Val[ M02_8 ]  = Val[ M20_2 ];
+        Val[ M03_12 ] = Val[ M30_3 ];
+        Val[ M10_1 ]  = m01;
+        Val[ M12_9 ]  = Val[ M21_6 ];
+        Val[ M13_13 ] = Val[ M31_7 ];
+        Val[ M20_2 ]  = m02;
+        Val[ M21_6 ]  = m12;
+        Val[ M23_14 ] = Val[ M32_11 ];
+        Val[ M30_3 ]  = m03;
+        Val[ M31_7 ]  = m13;
+        Val[ M32_11 ] = m23;
 
 //        Array.Copy( Val, 0, TmpMat.Val, 0, Val.Length );
 //
@@ -881,9 +881,9 @@ public class Matrix4
     {
         ToIdentity();
 
-        float lfd = ( float )( ( double )1.0f / Math.Tan( ( double )( fovy * ( Math.PI / 1800 ) ) / ( double )2.0f ) );
-        float la1 = ( far + near ) / ( near - far );
-        float la2 = ( 2.0f * far * near ) / ( near - far );
+        var lfd = ( float )( ( double )1.0f / Math.Tan( ( double )( fovy * ( Math.PI / 1800 ) ) / ( double )2.0f ) );
+        var la1 = ( far + near ) / ( near - far );
+        var la2 = ( 2.0f * far * near ) / ( near - far );
 
         Val[ M00_0 ] = lfd / aspectRatio;
         Val[ M10_1 ] = 0;
@@ -958,8 +958,8 @@ public class Matrix4
     public Matrix4 SetToOrtho2D( float x, float y, float width, float height )
     {
 //        Logger.Checkpoint();
-        
-        SetToOrtho( x, x + width, y, y + height, near: 0f, far: 1f );
+
+        SetToOrtho( x, x + width, y, y + height, 0f, 1f );
 
         return this;
     }
@@ -1030,7 +1030,7 @@ public class Matrix4
 
 //        Logger.Debug( $"xOrth: {xOrth}, yOrth: {yOrth}, zOrth: {zOrth}" );
 //        Logger.Debug( $"tx: {tx}, ty: {ty}, tz: {tz}" );
-        
+
         // Column 1
         Val[ M00_0 ] = xOrth;
         Val[ M10_1 ] = 0;
@@ -2636,10 +2636,10 @@ public class Matrix4
         Logger.Debug( $"\n{name}:" );
 
         var sb = new StringBuilder();
-        
+
         for ( var row = 0; row < 4; row++ )
         {
-            sb.Append('[');
+            sb.Append( '[' );
 
             for ( var col = 0; col < 4; col++ )
             {

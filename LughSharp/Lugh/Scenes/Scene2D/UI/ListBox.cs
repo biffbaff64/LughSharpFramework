@@ -90,7 +90,7 @@ public class ListBox< T > : Widget
         Create( style );
     }
 
-    public Rectangle?     CullingArea  { get; set; }
+    public Rectangle?          CullingArea  { get; set; }
     public InputListener?      KeyListener  { get; set; }
     public ArraySelection< T > Selection    { get; set; } = null!;
     public List< T >           Items        { get; set; } = new();

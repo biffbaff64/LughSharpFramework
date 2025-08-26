@@ -39,12 +39,12 @@ public interface IVertexData : IDisposable
     public VertexAttributes Attributes { get; set; }
 
     /// <summary>
-    /// Returns the underlying Buffer< float > and marks it as dirty, causing the buffer
+    /// Returns the underlying Buffer and marks it as dirty, causing the buffer
     /// contents to be uploaded on the next call to bind. If you need immediate
     /// uploading use <see cref="SetVertices" />; Any modifications made to the Buffer
     /// after* the call to bind will not automatically be uploaded.
     /// </summary>
-    /// <returns> the underlying Buffer< float > holding the vertex data.  </returns>
+    /// <returns> the underlying Buffer holding the vertex data.  </returns>
     public Buffer< float > GetBuffer( bool forWriting );
 
     /// <summary>

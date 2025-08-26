@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
 public enum Resampling
@@ -34,7 +34,6 @@ public enum Resampling
 }
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public static class ResamplingExtensions
 {
     public static InterpolationMode ToInterpolationMode( this Resampling resampling )

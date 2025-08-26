@@ -714,10 +714,10 @@ public class Sprite : TextureRegion
     private readonly Color _color = new( 1, 1, 1, 1 );
 
     private Rectangle? _bounds;
-    private float           _x;
-    private float           _y;
-    private float           _rotation;
-    private bool            _dirty = true;
+    private float      _x;
+    private float      _y;
+    private float      _rotation;
+    private bool       _dirty = true;
 
     #endregion
 

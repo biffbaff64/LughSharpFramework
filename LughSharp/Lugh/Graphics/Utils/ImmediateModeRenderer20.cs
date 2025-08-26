@@ -24,8 +24,6 @@
 
 using LughSharp.Lugh.Utils.Exceptions;
 
-
-
 namespace LughSharp.Lugh.Graphics.Utils;
 
 /// <summary>

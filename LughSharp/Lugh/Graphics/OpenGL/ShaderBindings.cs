@@ -28,7 +28,6 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
-
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -1242,14 +1241,12 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uint pointer )
     {
-        VertexAttribPointer( index, size, type, normalized, stride, (IntPtr)pointer );
+        VertexAttribPointer( index, size, type, normalized, stride, ( IntPtr )pointer );
     }
 
     /// <inheritdoc />
     public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, IntPtr pointer )
     {
-        Logger.Debug( $"index: {index}, size: {size}, type: {type}, normalized: {normalized}, stride: {stride}, pointer: {pointer} )" );
-        
         GetDelegateForFunction< PFNGLVERTEXATTRIBPOINTERPROC >( "glVertexAttribPointer", out _glVertexAttribPointer );
 
         _glVertexAttribPointer( index, size, type, normalized, stride, pointer );

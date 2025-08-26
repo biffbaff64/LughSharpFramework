@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Maths;
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 public partial class MaxRectsPacker
 {

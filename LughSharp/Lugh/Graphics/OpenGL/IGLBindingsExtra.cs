@@ -374,12 +374,13 @@ public partial interface IGLBindings
     void VertexAttribLFormat( uint attribindex, int size, int type, uint relativeoffset );
     void VertexAttribBinding( uint attribindex, uint bindingindex );
     void VertexBindingDivisor( uint bindingindex, uint divisor );
-    
+
     // ========================================================================
     // Debug bindings
     unsafe void DebugMessageControl( int source, int type, int severity, int count, uint* ids, bool enabled );
     unsafe void DebugMessageInsert( int source, int type, uint id, int severity, int length, byte* buf );
     unsafe void DebugMessageCallback( GLBindings.GLDEBUGPROC callback, void* userParam );
+
     unsafe uint GetDebugMessageLog( uint count,
                                     int bufsize,
                                     int* sources,
@@ -388,8 +389,10 @@ public partial interface IGLBindings
                                     int* severities,
                                     int* lengths,
                                     byte* messageLog );
+
     unsafe void PushDebugGroup( int source, uint id, int length, byte* message );
     void PopDebugGroup();
+
     // ========================================================================
 
     unsafe void ObjectLabel( int identifier, uint name, int length, byte* label );

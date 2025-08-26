@@ -129,7 +129,7 @@ public class FileTextureData : ITextureData
         {
             Logger.Debug( $"Requested pixel format {PixelFormat} differs from pixmap format {_pixmap.GetColorFormat()}." );
             Logger.Debug( $"Converting pixmap format from {_pixmap.GetColorFormat()} to {PixelFormat}." );
-            
+
             _pixmap.Gdx2DPixmap?.ConvertPixelFormatTo( PixelFormat );
 
             // or... throw new NotSupportedException( $"Requested pixel format {PixelFormat} differs from pixmap format {_pixmap.GetColorFormat()}." );
@@ -162,9 +162,9 @@ public class FileTextureData : ITextureData
         }
 
         // Transfer ownership to caller and clear internal reference
-        _pixmap = null;
+        _pixmap    = null;
         IsPrepared = false;
-        
+
         return pixmap;
     }
 

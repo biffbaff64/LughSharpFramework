@@ -32,33 +32,28 @@ global using System.Threading;
 global using System.Threading.Tasks;
 
 // ============================================================================
-
 global using JetBrains.Annotations;
 
 // ============================================================================
-
 global using DotGLFW;
+
 global using GLFW = DotGLFW;
 
 // ============================================================================
-
 global using LughSharp.Lugh.Core;
 global using LughSharp.Lugh.Graphics.OpenGL.Enums;
 global using LughSharp.Lugh.Graphics.Utils;
 global using LughSharp.Lugh.Maths;
 
 // ============================================================================
-
 global using static LughSharp.Lugh.Core.Engine;
 
 // ============================================================================
-
 global using Vector2 = LughSharp.Lugh.Maths.Vector2;
 global using Vector3 = LughSharp.Lugh.Maths.Vector3;
 global using Vector4 = LughSharp.Lugh.Maths.Vector4;
 
 // ============================================================================
-
 global using SerializationException = LughSharp.Lugh.Utils.Exceptions.SerializationException;
 
 // ============================================================================

@@ -25,7 +25,6 @@
 using System.Diagnostics.CodeAnalysis;
 
 // ============================================================================
-
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -45,7 +44,6 @@ using GLuint64 = ulong;
 using GLint64 = long;
 
 // ============================================================================
-
 using static LughSharp.Lugh.Graphics.OpenGL.IGL;
 
 namespace LughSharp.Lugh.Graphics.OpenGL;

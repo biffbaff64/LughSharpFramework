@@ -48,7 +48,7 @@ public class IndexBufferObject : IIndexData
     public int BufferID { get; private set; }
 
     // ========================================================================
-    
+
     private readonly Buffer< short > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
     private readonly bool            _empty;

@@ -25,7 +25,6 @@
 using System.Diagnostics.CodeAnalysis;
 
 // ============================================================================
-
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -51,10 +50,10 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
 public partial class GLBindings
 {
-    private PFNGLACTIVESHADERPROGRAMPROC?                        _glActiveShaderProgram;
-    private PFNGLACTIVETEXTUREPROC?                              _glActiveTexture;
-    private PFNGLATTACHSHADERPROC?                               _glAttachShader;
-    private PFNGLBEGINCONDITIONALRENDERPROC?                     _glBeginConditionalRender;
+    private PFNGLACTIVESHADERPROGRAMPROC?                         _glActiveShaderProgram;
+    private PFNGLACTIVETEXTUREPROC?                               _glActiveTexture;
+    private PFNGLATTACHSHADERPROC?                                _glAttachShader;
+    private PFNGLBEGINCONDITIONALRENDERPROC?                      _glBeginConditionalRender;
     private PFNGLBEGINQUERYPROC?                                  _glBeginQuery;
     private PFNGLBEGINQUERYINDEXEDPROC?                           _glBeginQueryIndexed;
     private PFNGLBEGINTRANSFORMFEEDBACKPROC?                      _glBeginTransformFeedback;

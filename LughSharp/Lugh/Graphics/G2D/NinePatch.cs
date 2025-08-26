@@ -55,7 +55,7 @@ public class NinePatch
     public const int BOTTOM_RIGHT  = 8;
 
     // ========================================================================
-    
+
     public float[]  Vertices     { get; set; } = new float[ 9 * 4 * 5 ];
     public Color    Color        { get; set; } = new( Color.White );
     public Texture? Texture      { get; set; }
@@ -105,7 +105,7 @@ public class NinePatch
     }
 
     // ========================================================================
-    
+
     private const float TOLERANCE = 0.1f;
 
     private static readonly Color _tmpDrawColor = new();

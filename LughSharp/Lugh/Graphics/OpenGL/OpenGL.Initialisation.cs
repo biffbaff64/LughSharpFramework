@@ -68,12 +68,12 @@ public static partial class OpenGL
             // with native GPU enabled - so try to account for that case.
             if ( Capabilities.IsGLES )
             {
-                if ( TryParseOpenGLVersionFromString( GL.GetString( IGL.GL_VERSION )->ToString(),
+                if ( TryParseOpenGLVersionFromString( GL.GetString( IGL.GL_VERSION ) -> ToString(),
                                                       out var glesMajorVersion,
                                                       out var glesMinorVersion ) )
                 {
-                    if ( glesMajorVersion != Capabilities.MajorVersion
-                         || glesMinorVersion != Capabilities.MinorVersion )
+                    if ( ( glesMajorVersion != Capabilities.MajorVersion )
+                         || ( glesMinorVersion != Capabilities.MinorVersion ) )
                     {
                         Capabilities.IsEmulated   = true;
                         Capabilities.MajorVersion = glesMajorVersion;
@@ -96,7 +96,7 @@ public static partial class OpenGL
 
         var components = str.Split( [ ' ', '.' ], StringSplitOptions.RemoveEmptyEntries );
 
-        if ( components.Length < 2
+        if ( ( components.Length < 2 )
              || !int.TryParse( components[ 0 ], out major )
              || !int.TryParse( components[ 1 ], out minor ) )
         {

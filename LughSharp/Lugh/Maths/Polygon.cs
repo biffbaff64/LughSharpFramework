@@ -41,9 +41,9 @@ public class Polygon : IShape2D
     // ========================================================================
 
     private Rectangle? _bounds;
-    private bool            _dirty = true;
-    private float[]?        _localVertices;
-    private float[]?        _worldVertices;
+    private bool       _dirty = true;
+    private float[]?   _localVertices;
+    private float[]?   _worldVertices;
 
     // ========================================================================
 

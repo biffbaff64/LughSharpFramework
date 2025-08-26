@@ -66,7 +66,7 @@ public interface ITextureData : IManaged
     /// 
     /// </summary>
     bool IsOwned { get; set; }
-    
+
     /// <summary>
     /// Returns whether to generate mipmaps or not.
     /// </summary>

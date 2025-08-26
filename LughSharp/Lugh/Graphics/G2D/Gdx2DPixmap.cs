@@ -262,22 +262,22 @@ public partial class Gdx2DPixmap : Image, IDisposable
     private static ( Buffer< byte >, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
         // Analyse the PNG file the get the properties.
-        Utils.PNGDecoder.AnalysePNG( buffer, verbose: false );
+        PNGDecoder.AnalysePNG( buffer, false );
 
         var pixmapDef = new PixmapDataType
         {
-            Width         = ( int )Utils.PNGDecoder.IHDRchunk.Width,
-            Height        = ( int )Utils.PNGDecoder.IHDRchunk.Height,
-            BitDepth      = ( int )Utils.PNGDecoder.IHDRchunk.BitDepth,
-            ColorType     = PixelFormatUtils.ToGdx2DPixmapFormat( Utils.PNGDecoder.IHDRchunk.ColorType ),
+            Width         = ( int )PNGDecoder.IHDRchunk.Width,
+            Height        = ( int )PNGDecoder.IHDRchunk.Height,
+            BitDepth      = ( int )PNGDecoder.IHDRchunk.BitDepth,
+            ColorType     = PixelFormatUtils.ToGdx2DPixmapFormat( PNGDecoder.IHDRchunk.ColorType ),
             Blend         = 0,
             Scale         = 0,
-            TotalIDATSize = Utils.PNGDecoder.TotalIDATSize,
-            Pixels        = new byte[ Utils.PNGDecoder.IDATchunk.ChunkSize ],
+            TotalIDATSize = PNGDecoder.TotalIDATSize,
+            Pixels        = new byte[ PNGDecoder.IDATchunk.ChunkSize ],
         };
 
-        Array.Copy( buffer, Utils.PNGDecoder.IDAT_DATA_OFFSET,
-                    pixmapDef.Pixels, 0, Utils.PNGDecoder.IDATchunk.ChunkSize );
+        Array.Copy( buffer, PNGDecoder.IDAT_DATA_OFFSET,
+                    pixmapDef.Pixels, 0, PNGDecoder.IDATchunk.ChunkSize );
 
         var byteBuffer = new Buffer< byte >( pixmapDef.Pixels.Length );
         byteBuffer.Put( pixmapDef.Pixels );

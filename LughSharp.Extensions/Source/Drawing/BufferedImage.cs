@@ -22,38 +22,61 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
+namespace Extensions.Source.Drawing;
 
-namespace DesktopGLBackend.Graphics;
-
-public partial class DesktopGLGraphics
+[PublicAPI]
+public class BufferedImage : IWriteableRenderedImage, ITransparency
 {
-    /// <summary>
-    /// Describes a Display Mode for a <see cref="GLFW.Monitor" />
-    /// </summary>
-    [PublicAPI]
-    public class DesktopGLDisplayMode : IGraphicsDevice.DisplayMode
+    /// <inheritdoc />
+    public void AddTileObserver( TileObserver to )
     {
-        /// <summary>
-        /// The <see cref="GLFW.Monitor" /> this <see cref="IGraphicsDevice.DisplayMode" /> applies to.
-        /// </summary>
-        public GLFW.Monitor MonitorHandle { get; set; }
+    }
 
-        /// <summary>
-        /// Creates a new Display Mode and its properties.
-        /// </summary>
-        /// <param name="monitor"> The target monitor. </param>
-        /// <param name="width"> Monitor display width. </param>
-        /// <param name="height"> Monior display height. </param>
-        /// <param name="refreshRate"> The refresh rate. </param>
-        /// <param name="bitsPerPixel"> The bits per pixel. </param>
-        public DesktopGLDisplayMode( GLFW.Monitor monitor, int width, int height, int refreshRate, int bitsPerPixel )
-            : base( width, height, refreshRate, bitsPerPixel )
-        {
-            MonitorHandle = monitor;
-        }
+    /// <inheritdoc />
+    public void RemoveTileObserver( TileObserver to )
+    {
+    }
+
+    /// <inheritdoc />
+    public WritableRaster? GetWritableTile( int tileX, int tileY )
+    {
+        return null;
+    }
+
+    /// <inheritdoc />
+    public void ReleaseWritableTile( int tileX, int tileY )
+    {
+    }
+
+    /// <inheritdoc />
+    public bool IsTileWritable( int tileX, int tileY )
+    {
+        return false;
+    }
+
+    /// <inheritdoc />
+    public Point[] GetWritableTileIndices()
+    {
+        return [ ];
+    }
+
+    /// <inheritdoc />
+    public bool HasTileWriters()
+    {
+        return false;
+    }
+
+    /// <inheritdoc />
+    public void SetData( Raster r )
+    {
+    }
+
+    /// <inheritdoc />
+    public int GetTransparency()
+    {
+        return 0;
     }
 }
 
-// ============================================================================
-// ============================================================================
+// ========================================================================
+// ========================================================================

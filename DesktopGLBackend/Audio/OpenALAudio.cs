@@ -39,7 +39,7 @@ public class OpenALAudio : IAudio
     public List< OpenALMusic > Music    { get; set; } = new( 1 );
 
     // ========================================================================
-    
+
     private readonly uint[]?                    _allSources;
     private readonly IntPtr                     _context;
     private readonly IntPtr                     _device;

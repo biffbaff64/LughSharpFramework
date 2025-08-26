@@ -149,11 +149,11 @@ public class Texture : GLTexture, IManaged
     /// <param name="format"> The pixmap <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> </param>
     /// <param name="managed"></param>
     public Texture( int width, int height, Gdx2DPixmap.Gdx2DPixmapFormat format, bool managed = false )
-        : this( new PixmapTextureData( pixmap: new Pixmap( width, height, format ),
-                                       format: null,
-                                       useMipMaps: false,
-                                       disposePixmap: true,
-                                       managed: managed ) )
+        : this( new PixmapTextureData( new Pixmap( width, height, format ),
+                                       null,
+                                       false,
+                                       true,
+                                       managed ) )
     {
     }
 
@@ -196,15 +196,15 @@ public class Texture : GLTexture, IManaged
         }
 
         GLUtils.CheckOpenGLContext();
-        
+
         if ( TextureData is { IsPrepared: false } )
         {
             // CPU-side decode (safe if already prepared)
             TextureData.Prepare();
         }
-        
+
         Load( TextureData );
-        
+
         _isUploaded = true;
     }
 
@@ -218,7 +218,7 @@ public class Texture : GLTexture, IManaged
             Load( TextureData );
         }
     }
-    
+
     /// <summary>
     /// Load the given <see cref="ITextureData" /> data into this Texture.
     /// </summary>

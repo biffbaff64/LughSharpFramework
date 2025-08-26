@@ -166,7 +166,7 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// </summary>
     protected void Loop()
     {
-        Logger.Debug( "Entering Framework Loop", boxedDebug: true );
+        Logger.Debug( "Entering Framework Loop", true );
 
         List< DesktopGLWindow > closedWindows = [ ];
 
@@ -286,8 +286,6 @@ public class DesktopGLApplication : IApplication, IDisposable
 
             // Glfw.SwapBuffers is called in window.Update().
             Glfw.PollEvents();
-
-            Exit();
         }
 
         Logger.Debug( "Ending framework loop" );
@@ -358,54 +356,54 @@ public class DesktopGLApplication : IApplication, IDisposable
 
         Glfw.DefaultWindowHints();
 
-        Glfw.WindowHint( GLFW.WindowHint.Visible, config.InitialVisibility );
-        Glfw.WindowHint( GLFW.WindowHint.Resizable, config.WindowResizable );
-        Glfw.WindowHint( GLFW.WindowHint.Maximized, config.WindowMaximized );
-        Glfw.WindowHint( GLFW.WindowHint.AutoIconify, config.AutoIconify );
-        Glfw.WindowHint( GLFW.WindowHint.Decorated, config.WindowDecorated );
+        Glfw.WindowHint( WindowHint.Visible, config.InitialVisibility );
+        Glfw.WindowHint( WindowHint.Resizable, config.WindowResizable );
+        Glfw.WindowHint( WindowHint.Maximized, config.WindowMaximized );
+        Glfw.WindowHint( WindowHint.AutoIconify, config.AutoIconify );
+        Glfw.WindowHint( WindowHint.Decorated, config.WindowDecorated );
 
-        Glfw.WindowHint( GLFW.WindowHint.RedBits, config.Red );
-        Glfw.WindowHint( GLFW.WindowHint.GreenBits, config.Green );
-        Glfw.WindowHint( GLFW.WindowHint.BlueBits, config.Blue );
-        Glfw.WindowHint( GLFW.WindowHint.AlphaBits, config.Alpha );
-        Glfw.WindowHint( GLFW.WindowHint.StencilBits, config.Stencil );
-        Glfw.WindowHint( GLFW.WindowHint.DepthBits, config.Depth );
-        Glfw.WindowHint( GLFW.WindowHint.Samples, config.Samples );
+        Glfw.WindowHint( WindowHint.RedBits, config.Red );
+        Glfw.WindowHint( WindowHint.GreenBits, config.Green );
+        Glfw.WindowHint( WindowHint.BlueBits, config.Blue );
+        Glfw.WindowHint( WindowHint.AlphaBits, config.Alpha );
+        Glfw.WindowHint( WindowHint.StencilBits, config.Stencil );
+        Glfw.WindowHint( WindowHint.DepthBits, config.Depth );
+        Glfw.WindowHint( WindowHint.Samples, config.Samples );
 
         OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
 
         if ( config.GLContextMajorVersion is > 0 )
         {
-            Glfw.WindowHint( GLFW.WindowHint.ContextVersionMajor, ( int )config.GLContextMajorVersion );
+            Glfw.WindowHint( WindowHint.ContextVersionMajor, ( int )config.GLContextMajorVersion );
         }
         else
         {
-            Glfw.WindowHint( GLFW.WindowHint.ContextVersionMajor, GLUtils.DEFAULT_GL_MAJOR );
+            Glfw.WindowHint( WindowHint.ContextVersionMajor, GLUtils.DEFAULT_GL_MAJOR );
         }
 
         if ( config.GLContextMinorVersion is > 0 )
         {
-            Glfw.WindowHint( GLFW.WindowHint.ContextVersionMinor, ( int )config.GLContextMinorVersion );
+            Glfw.WindowHint( WindowHint.ContextVersionMinor, ( int )config.GLContextMinorVersion );
         }
         else
         {
-            Glfw.WindowHint( GLFW.WindowHint.ContextVersionMinor, GLUtils.DEFAULT_GL_MINOR );
+            Glfw.WindowHint( WindowHint.ContextVersionMinor, GLUtils.DEFAULT_GL_MINOR );
         }
 
-        Glfw.WindowHint( GLFW.WindowHint.OpenGLForwardCompat, GLUtils.DEFAULT_OPENGL_FORWARDCOMPAT );
-        Glfw.WindowHint( GLFW.WindowHint.OpenGLProfile, OGLProfile );
-        Glfw.WindowHint( GLFW.WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
+        Glfw.WindowHint( WindowHint.OpenGLForwardCompat, GLUtils.DEFAULT_OPENGL_FORWARDCOMPAT );
+        Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
+        Glfw.WindowHint( WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
 
-        Glfw.WindowHint( GLFW.WindowHint.DoubleBuffer, true );
+        Glfw.WindowHint( WindowHint.DoubleBuffer, true );
 
         if ( config.TransparentFramebuffer )
         {
-            Glfw.WindowHint( GLFW.WindowHint.TransparentFramebuffer, true );
+            Glfw.WindowHint( WindowHint.TransparentFramebuffer, true );
         }
 
         if ( config.Debug )
         {
-            Glfw.WindowHint( GLFW.WindowHint.OpenGLDebugContext, true );
+            Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );
         }
     }
 
@@ -669,7 +667,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         {
             // Create a fullscreen window
 
-            Glfw.WindowHint( GLFW.WindowHint.RefreshRate, config.FullscreenMode.RefreshRate );
+            Glfw.WindowHint( WindowHint.RefreshRate, config.FullscreenMode.RefreshRate );
 
             windowHandle = Glfw.CreateWindow( config.FullscreenMode.Width,
                                               config.FullscreenMode.Height,

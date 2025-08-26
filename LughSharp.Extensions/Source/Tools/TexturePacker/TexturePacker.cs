@@ -35,7 +35,7 @@ using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
 using Pen = System.Drawing.Pen;
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 /// <summary>
 /// TexturePacker can pack all images for an application in one shot. Given a directory, it
@@ -127,7 +127,6 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// </para>
 /// </summary>
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public partial class TexturePacker
 {
     public string?                   RootPath         { get; set; }
@@ -429,7 +428,7 @@ public partial class TexturePacker
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <param name="argb"></param>
-    private static void Plot( Bitmap dst, int x, int y, System.Drawing.Color argb )
+    private static void Plot( Bitmap dst, int x, int y, Color argb )
     {
         if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) )
         {
@@ -579,7 +578,7 @@ public partial class TexturePacker
             Logger.Debug( $"outputFile: {outputFile}" );
 
             var canvas = new Bitmap( width, height, PixmapFormatExtensions.ToSystemPixelFormat( _settings.Format ) );
-            var g      = System.Drawing.Graphics.FromImage( canvas );
+            var g      = Graphics.FromImage( canvas );
 
             if ( !_settings.Silent )
             {
@@ -680,7 +679,7 @@ public partial class TexturePacker
 
                     if ( _settings.Debug )
                     {
-                        using ( var pen = new Pen( System.Drawing.Color.Magenta ) )
+                        using ( var pen = new Pen( Color.Magenta ) )
                         {
                             g.DrawRectangle( pen, rectX, rectY,
                                              rect.Width - _settings.PaddingX - 1,
@@ -704,12 +703,12 @@ public partial class TexturePacker
                 canvas = new ColorBleedEffect().ProcessImage( canvas, _settings.BleedIterations );
 
                 g.Dispose(); // Dispose of previous Graphics object
-                g = System.Drawing.Graphics.FromImage( canvas );
+                g = Graphics.FromImage( canvas );
             }
 
             if ( _settings.Debug )
             {
-                var pen = new Pen( System.Drawing.Color.Magenta );
+                var pen = new Pen( Color.Magenta );
                 g.DrawRectangle( pen, 0, 0, width - 1, height - 1 );
             }
 
@@ -719,7 +718,7 @@ public partial class TexturePacker
                      _settings.OutputFormat.Equals( "jpeg", StringComparison.OrdinalIgnoreCase ) )
                 {
                     using ( var newImage = new Bitmap( canvas.Width, canvas.Height, PixelFormat.Format24bppRgb ) )
-                    using ( var newGraphics = System.Drawing.Graphics.FromImage( newImage ) )
+                    using ( var newGraphics = Graphics.FromImage( newImage ) )
                     {
                         newGraphics.DrawImage( canvas, 0, 0 );
 
@@ -747,7 +746,7 @@ public partial class TexturePacker
                                 var green = ( int )( color.G * alpha );
                                 var blue  = ( int )( color.B * alpha );
 
-                                canvas.SetPixel( x, y, System.Drawing.Color.FromArgb( color.A, red, green, blue ) );
+                                canvas.SetPixel( x, y, Color.FromArgb( color.A, red, green, blue ) );
                             }
                         }
                     }

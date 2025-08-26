@@ -1493,6 +1493,6 @@ public interface IGL
     const int GL_UNSIGNED_INT_ATOMIC_COUNTER                                = 0x92DB;
     const int GL_ALL_BARRIER_BITS                                           = unchecked( ( int )0xFFFFFFFF );
     const int GL_ALL_SHADER_BITS                                            = unchecked( ( int )0xFFFFFFFF );
-    
+
     // ========================================================================
 }

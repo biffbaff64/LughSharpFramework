@@ -28,7 +28,7 @@ using System.Text.Json.Serialization;
 
 using LughSharp.Lugh.Graphics.G2D;
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 public partial class TexturePacker
 {

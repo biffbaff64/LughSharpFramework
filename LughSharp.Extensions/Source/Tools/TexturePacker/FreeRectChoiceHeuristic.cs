@@ -22,38 +22,36 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
+namespace Extensions.Source.Tools.TexturePacker;
 
-namespace DesktopGLBackend.Graphics;
-
-public partial class DesktopGLGraphics
+[PublicAPI]
+public enum FreeRectChoiceHeuristic
 {
     /// <summary>
-    /// Describes a Display Mode for a <see cref="GLFW.Monitor" />
+    /// BSSF: Positions the rectangle against the short side of a free rectangle into
+    /// which it fits the best.
     /// </summary>
-    [PublicAPI]
-    public class DesktopGLDisplayMode : IGraphicsDevice.DisplayMode
-    {
-        /// <summary>
-        /// The <see cref="GLFW.Monitor" /> this <see cref="IGraphicsDevice.DisplayMode" /> applies to.
-        /// </summary>
-        public GLFW.Monitor MonitorHandle { get; set; }
+    BestShortSideFit,
 
-        /// <summary>
-        /// Creates a new Display Mode and its properties.
-        /// </summary>
-        /// <param name="monitor"> The target monitor. </param>
-        /// <param name="width"> Monitor display width. </param>
-        /// <param name="height"> Monior display height. </param>
-        /// <param name="refreshRate"> The refresh rate. </param>
-        /// <param name="bitsPerPixel"> The bits per pixel. </param>
-        public DesktopGLDisplayMode( GLFW.Monitor monitor, int width, int height, int refreshRate, int bitsPerPixel )
-            : base( width, height, refreshRate, bitsPerPixel )
-        {
-            MonitorHandle = monitor;
-        }
-    }
+    /// <summary>
+    /// BLSF: Positions the rectangle against the long side of a free rectangle into
+    /// which it fits the best.
+    /// </summary>
+    BestLongSideFit,
+
+    /// <summary>
+    /// BAF: Positions the rectangle into the smallest free rect into which it fits.
+    /// </summary>
+    BestAreaFit,
+
+    /// <summary>
+    /// BL: Does the Tetris placement.
+    /// </summary>
+    BottomLeftRule,
+
+    /// <summary>
+    /// CP: Choosest the placement where the rectangle touches other rects as much
+    /// as possible.
+    /// </summary>
+    ContactPointRule,
 }
-
-// ============================================================================
-// ============================================================================

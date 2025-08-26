@@ -51,7 +51,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetMultisamplefv( GLenum pname, GLuint index, GLfloat* val )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETMULTISAMPLEFVPROC >( "glGetMultisamplefv", out _glGetMultisamplefv );
+        GetDelegateForFunction< PFNGLGETMULTISAMPLEFVPROC >( "glGetMultisamplefv", out _glGetMultisamplefv );
 
         _glGetMultisamplefv( pname, index, val );
     }
@@ -59,7 +59,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetMultisamplefvSafe( GLenum pname, GLuint index, ref GLfloat[] val )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETMULTISAMPLEFVPROC >( "glGetMultisamplefv", out _glGetMultisamplefv );
+        GetDelegateForFunction< PFNGLGETMULTISAMPLEFVPROC >( "glGetMultisamplefv", out _glGetMultisamplefv );
 
         {
             fixed ( GLfloat* dp = &val[ 0 ] )
@@ -74,7 +74,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SampleMaski( GLuint maskNumber, GLbitfield mask )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLEMASKIPROC >( "glSampleMaski", out _glSampleMaski );
+        GetDelegateForFunction< PFNGLSAMPLEMASKIPROC >( "glSampleMaski", out _glSampleMaski );
 
         _glSampleMaski( maskNumber, mask );
     }
@@ -84,7 +84,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SampleCoverage( GLfloat value, GLboolean invert )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLECOVERAGEPROC >( "glSampleCoverage", out _glSampleCoverage );
+        GetDelegateForFunction< PFNGLSAMPLECOVERAGEPROC >( "glSampleCoverage", out _glSampleCoverage );
 
         _glSampleCoverage( value, invert );
     }
@@ -93,7 +93,7 @@ public unsafe partial class GLBindings
 
     public void GenSamplers( GLsizei count, GLuint* samplers )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGENSAMPLERSPROC >( "glGenSamplers", out _glGenSamplers );
+        GetDelegateForFunction< PFNGLGENSAMPLERSPROC >( "glGenSamplers", out _glGenSamplers );
 
         _glGenSamplers( count, samplers );
     }
@@ -103,7 +103,7 @@ public unsafe partial class GLBindings
     {
         var result = new GLuint[ count ];
 
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGENSAMPLERSPROC >( "glGenSamplers", out _glGenSamplers );
+        GetDelegateForFunction< PFNGLGENSAMPLERSPROC >( "glGenSamplers", out _glGenSamplers );
 
         fixed ( GLuint* dp = &result[ 0 ] )
         {
@@ -124,7 +124,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DeleteSamplers( GLsizei count, GLuint* samplers )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLDELETESAMPLERSPROC >( "glDeleteSamplers", out _glDeleteSamplers );
+        GetDelegateForFunction< PFNGLDELETESAMPLERSPROC >( "glDeleteSamplers", out _glDeleteSamplers );
 
         _glDeleteSamplers( count, samplers );
     }
@@ -132,7 +132,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DeleteSamplers( params GLuint[] samplers )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLDELETESAMPLERSPROC >( "glDeleteSamplers", out _glDeleteSamplers );
+        GetDelegateForFunction< PFNGLDELETESAMPLERSPROC >( "glDeleteSamplers", out _glDeleteSamplers );
 
         fixed ( GLuint* dp = &samplers[ 0 ] )
         {
@@ -145,7 +145,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLboolean IsSampler( GLuint sampler )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLISSAMPLERPROC >( "glIsSampler", out _glIsSampler );
+        GetDelegateForFunction< PFNGLISSAMPLERPROC >( "glIsSampler", out _glIsSampler );
 
         return _glIsSampler( sampler );
     }
@@ -155,7 +155,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BindSampler( GLuint unit, GLuint sampler )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLBINDSAMPLERPROC >( "glBindSampler", out _glBindSampler );
+        GetDelegateForFunction< PFNGLBINDSAMPLERPROC >( "glBindSampler", out _glBindSampler );
 
         _glBindSampler( unit, sampler );
     }
@@ -165,7 +165,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SamplerParameteri( GLuint sampler, GLenum pname, GLint param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLERPARAMETERIPROC >( "glSamplerParameteri", out _glSamplerParameteri );
+        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIPROC >( "glSamplerParameteri", out _glSamplerParameteri );
 
         _glSamplerParameteri( sampler, pname, param );
     }
@@ -175,7 +175,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SamplerParameteriv( GLuint sampler, GLenum pname, GLint* param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLERPARAMETERIVPROC >( "glSamplerParameteriv", out _glSamplerParameteriv );
+        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIVPROC >( "glSamplerParameteriv", out _glSamplerParameteriv );
 
         _glSamplerParameteriv( sampler, pname, param );
     }
@@ -183,7 +183,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SamplerParameteriv( GLuint sampler, GLenum pname, GLint[] param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLERPARAMETERIVPROC >( "glSamplerParameteriv", out _glSamplerParameteriv );
+        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIVPROC >( "glSamplerParameteriv", out _glSamplerParameteriv );
 
         {
             fixed ( GLint* dp = &param[ 0 ] )
@@ -198,7 +198,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SamplerParameterf( GLuint sampler, GLenum pname, GLfloat param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLERPARAMETERFPROC >( "glSamplerParameterf", out _glSamplerParameterf );
+        GetDelegateForFunction< PFNGLSAMPLERPARAMETERFPROC >( "glSamplerParameterf", out _glSamplerParameterf );
 
         _glSamplerParameterf( sampler, pname, param );
     }
@@ -208,7 +208,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SamplerParameterfv( GLuint sampler, GLenum pname, GLfloat* param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLERPARAMETERFVPROC >( "glSamplerParameterfv", out _glSamplerParameterfv );
+        GetDelegateForFunction< PFNGLSAMPLERPARAMETERFVPROC >( "glSamplerParameterfv", out _glSamplerParameterfv );
 
         _glSamplerParameterfv( sampler, pname, param );
     }
@@ -216,7 +216,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SamplerParameterfv( GLuint sampler, GLenum pname, GLfloat[] param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLERPARAMETERFVPROC >( "glSamplerParameterfv", out _glSamplerParameterfv );
+        GetDelegateForFunction< PFNGLSAMPLERPARAMETERFVPROC >( "glSamplerParameterfv", out _glSamplerParameterfv );
 
         fixed ( GLfloat* dp = &param[ 0 ] )
         {
@@ -229,7 +229,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SamplerParameterIiv( GLuint sampler, GLenum pname, GLint* param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLERPARAMETERIIVPROC >( "glSamplerParameterIiv", out _glSamplerParameterIiv );
+        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIIVPROC >( "glSamplerParameterIiv", out _glSamplerParameterIiv );
 
         _glSamplerParameterIiv( sampler, pname, param );
     }
@@ -237,7 +237,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SamplerParameterIiv( GLuint sampler, GLenum pname, GLint[] param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLERPARAMETERIIVPROC >( "glSamplerParameterIiv", out _glSamplerParameterIiv );
+        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIIVPROC >( "glSamplerParameterIiv", out _glSamplerParameterIiv );
 
         fixed ( GLint* dp = &param[ 0 ] )
         {
@@ -250,7 +250,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SamplerParameterIuiv( GLuint sampler, GLenum pname, GLuint* param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLERPARAMETERIUIVPROC >( "glSamplerParameterIuiv", out _glSamplerParameterIuiv );
+        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIUIVPROC >( "glSamplerParameterIuiv", out _glSamplerParameterIuiv );
 
         _glSamplerParameterIuiv( sampler, pname, param );
     }
@@ -258,7 +258,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void SamplerParameterIuiv( GLuint sampler, GLenum pname, GLuint[] param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLSAMPLERPARAMETERIUIVPROC >( "glSamplerParameterIuiv", out _glSamplerParameterIuiv );
+        GetDelegateForFunction< PFNGLSAMPLERPARAMETERIUIVPROC >( "glSamplerParameterIuiv", out _glSamplerParameterIuiv );
 
         fixed ( GLuint* dp = &param[ 0 ] )
         {
@@ -271,7 +271,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetSamplerParameteriv( GLuint sampler, GLenum pname, GLint* param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETSAMPLERPARAMETERIVPROC >( "glGetSamplerParameteriv", out _glGetSamplerParameteriv );
+        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIVPROC >( "glGetSamplerParameteriv", out _glGetSamplerParameteriv );
 
         _glGetSamplerParameteriv( sampler, pname, param );
     }
@@ -279,7 +279,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetSamplerParameteriv( GLuint sampler, GLenum pname, ref GLint[] param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETSAMPLERPARAMETERIVPROC >( "glGetSamplerParameteriv", out _glGetSamplerParameteriv );
+        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIVPROC >( "glGetSamplerParameteriv", out _glGetSamplerParameteriv );
 
         fixed ( GLint* dp = &param[ 0 ] )
         {
@@ -292,7 +292,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetSamplerParameterIiv( GLuint sampler, GLenum pname, GLint* param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETSAMPLERPARAMETERIIVPROC >( "glGetSamplerParameterIiv", out _glGetSamplerParameterIiv );
+        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIIVPROC >( "glGetSamplerParameterIiv", out _glGetSamplerParameterIiv );
 
         _glGetSamplerParameterIiv( sampler, pname, param );
     }
@@ -300,7 +300,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetSamplerParameterIiv( GLuint sampler, GLenum pname, ref GLint[] param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETSAMPLERPARAMETERIIVPROC >( "glGetSamplerParameterIiv", out _glGetSamplerParameterIiv );
+        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIIVPROC >( "glGetSamplerParameterIiv", out _glGetSamplerParameterIiv );
 
         fixed ( GLint* dp = &param[ 0 ] )
         {
@@ -313,7 +313,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetSamplerParameterfv( GLuint sampler, GLenum pname, GLfloat* param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETSAMPLERPARAMETERFVPROC >( "glGetSamplerParameterfv", out _glGetSamplerParameterfv );
+        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERFVPROC >( "glGetSamplerParameterfv", out _glGetSamplerParameterfv );
 
         _glGetSamplerParameterfv( sampler, pname, param );
     }
@@ -321,7 +321,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetSamplerParameterfv( GLuint sampler, GLenum pname, ref GLfloat[] param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETSAMPLERPARAMETERFVPROC >( "glGetSamplerParameterfv", out _glGetSamplerParameterfv );
+        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERFVPROC >( "glGetSamplerParameterfv", out _glGetSamplerParameterfv );
 
         fixed ( GLfloat* dp = &param[ 0 ] )
         {
@@ -334,7 +334,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetSamplerParameterIuiv( GLuint sampler, GLenum pname, GLuint* param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETSAMPLERPARAMETERIUIVPROC >( "glGetSamplerParameterIuiv", out _glGetSamplerParameterIuiv );
+        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIUIVPROC >( "glGetSamplerParameterIuiv", out _glGetSamplerParameterIuiv );
 
         _glGetSamplerParameterIuiv( sampler, pname, param );
     }
@@ -342,7 +342,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetSamplerParameterIuiv( GLuint sampler, GLenum pname, ref GLuint[] param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETSAMPLERPARAMETERIUIVPROC >( "glGetSamplerParameterIuiv", out _glGetSamplerParameterIuiv );
+        GetDelegateForFunction< PFNGLGETSAMPLERPARAMETERIUIVPROC >( "glGetSamplerParameterIuiv", out _glGetSamplerParameterIuiv );
 
         fixed ( GLuint* dp = &param[ 0 ] )
         {
@@ -355,7 +355,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void MinSampleShading( GLfloat value )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLMINSAMPLESHADINGPROC >( "glMinSampleShading", out _glMinSampleShading );
+        GetDelegateForFunction< PFNGLMINSAMPLESHADINGPROC >( "glMinSampleShading", out _glMinSampleShading );
 
         _glMinSampleShading( value );
     }
@@ -364,14 +364,14 @@ public unsafe partial class GLBindings
 
     public void BindSamplers( GLuint first, GLsizei count, GLuint* samplers )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLBINDSAMPLERSPROC >( "glBindSamplers", out _glBindSamplers );
+        GetDelegateForFunction< PFNGLBINDSAMPLERSPROC >( "glBindSamplers", out _glBindSamplers );
 
         _glBindSamplers( first, count, samplers );
     }
 
     public void BindSamplers( GLuint first, GLuint[] samplers )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLBINDSAMPLERSPROC >( "glBindSamplers", out _glBindSamplers );
+        GetDelegateForFunction< PFNGLBINDSAMPLERSPROC >( "glBindSamplers", out _glBindSamplers );
 
         fixed ( GLuint* pSamplers = &samplers[ 0 ] )
         {
@@ -383,7 +383,7 @@ public unsafe partial class GLBindings
 
     public void CreateSamplers( GLsizei n, GLuint* samplers )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLCREATESAMPLERSPROC >( "glCreateSamplers", out _glCreateSamplers );
+        GetDelegateForFunction< PFNGLCREATESAMPLERSPROC >( "glCreateSamplers", out _glCreateSamplers );
 
         _glCreateSamplers( n, samplers );
     }
@@ -392,7 +392,7 @@ public unsafe partial class GLBindings
     {
         var samplers = new GLuint[ n ];
 
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLCREATESAMPLERSPROC >( "glCreateSamplers", out _glCreateSamplers );
+        GetDelegateForFunction< PFNGLCREATESAMPLERSPROC >( "glCreateSamplers", out _glCreateSamplers );
 
         fixed ( GLuint* ptrSamplers = &samplers[ 0 ] )
         {

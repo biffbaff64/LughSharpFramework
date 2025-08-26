@@ -80,7 +80,7 @@ public partial class Gdx2DPixmap
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Clears the pixmap by setting the alpha channel to the specified color's alpha.
     /// </summary>

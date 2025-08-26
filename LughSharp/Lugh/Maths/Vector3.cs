@@ -625,17 +625,20 @@ public class Vector3 : IVector< Vector3 >
     public Vector3 Prj( Matrix4 matrix )
     {
         var lMat = matrix.Val;
-        var lW   = 1f / ( ( X * lMat[ Matrix4.M30_3 ] ) + ( Y * lMat[ Matrix4.M31_7 ] ) + ( Z * lMat[ Matrix4.M32_11 ] ) + lMat[ Matrix4.M33_15 ] );
+        var lW = 1f / ( ( X * lMat[ Matrix4.M30_3 ] ) + ( Y * lMat[ Matrix4.M31_7 ] ) + ( Z * lMat[ Matrix4.M32_11 ] ) +
+                        lMat[ Matrix4.M33_15 ] );
 
         return Set(
-                   ( ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M01_4 ] ) + ( Z * lMat[ Matrix4.M02_8 ] ) + lMat[ Matrix4.M03_12 ] ) * lW,
+                   ( ( X * lMat[ Matrix4.M00_0 ] ) + ( Y * lMat[ Matrix4.M01_4 ] ) + ( Z * lMat[ Matrix4.M02_8 ] ) +
+                     lMat[ Matrix4.M03_12 ] ) * lW,
                    ( ( X
                        * lMat[ Matrix4.M10_1 ] )
                      + ( Y * lMat[ Matrix4.M11_5 ] )
                      + ( Z * lMat[ Matrix4.M12_9 ] )
                      + lMat[ Matrix4.M13_13 ] )
                    * lW,
-                   ( ( X * lMat[ Matrix4.M20_2 ] ) + ( Y * lMat[ Matrix4.M21_6 ] ) + ( Z * lMat[ Matrix4.M22_10 ] ) + lMat[ Matrix4.M23_14 ] ) * lW
+                   ( ( X * lMat[ Matrix4.M20_2 ] ) + ( Y * lMat[ Matrix4.M21_6 ] ) + ( Z * lMat[ Matrix4.M22_10 ] ) +
+                     lMat[ Matrix4.M23_14 ] ) * lW
                   );
     }
 
@@ -868,7 +871,7 @@ public class Vector3 : IVector< Vector3 >
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static Vector3 operator /( Vector3 value1, float value2 )
     {
-        return ( value1 / new Vector3( value2 ) );
+        return value1 / new Vector3( value2 );
     }
 
     /// <summary>Returns a value that indicates whether each pair of elements in two specified vectors is equal.</summary>

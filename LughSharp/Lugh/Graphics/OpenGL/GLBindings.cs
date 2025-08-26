@@ -28,7 +28,6 @@ using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
-
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -513,15 +512,15 @@ public unsafe partial class GLBindings : IGLBindings
     public void GetBooleanv( GLenum pname, out bool data )
     {
         // Create a temporary array to hold the result from the underlying OpenGL method.
-        var tempArray = new bool[ 1 ]; 
-    
+        var tempArray = new bool[ 1 ];
+
         // Call the original method with the temporary array.
         GetBooleanv( pname, ref tempArray );
-    
+
         // Assign the value from the temporary array to the out parameter.
         data = tempArray[ 0 ];
     }
-    
+
     // ========================================================================
 
     /// <inheritdoc />
@@ -589,11 +588,11 @@ public unsafe partial class GLBindings : IGLBindings
     public void GetIntegerv( GLenum pname, out int data )
     {
         // Create a temporary array to hold the result from the underlying OpenGL method.
-        var tempArray = new int[ 1 ]; 
-    
+        var tempArray = new int[ 1 ];
+
         // Call the original method with the temporary array.
         GetIntegerv( pname, ref tempArray );
-    
+
         // Assign the value from the temporary array to the out parameter.
         data = tempArray[ 0 ];
     }
@@ -1606,15 +1605,15 @@ public unsafe partial class GLBindings : IGLBindings
     public void GetInternalformativ( int target, int internalFormat, int pname, int bufSize, out int parameter )
     {
         // Create a temporary array to hold the result from the underlying OpenGL method.
-        var tempArray = new int[ 1 ]; 
-    
+        var tempArray = new int[ 1 ];
+
         // Call the original method with the temporary array.
         GetInternalformativ( target, internalFormat, pname, bufSize, ref tempArray );
-    
+
         // Assign the value from the temporary array to the out parameter.
         parameter = tempArray[ 0 ];
     }
-    
+
     // ========================================================================
 
     public void GetActiveAtomicCounterBufferiv( GLuint program, GLuint bufferIndex, GLenum pname, GLint* parameters )
@@ -4071,7 +4070,7 @@ public unsafe partial class GLBindings : IGLBindings
     public GLuint[] GenFramebuffers( GLsizei n )
     {
         GetDelegateForFunction< PFNGLGENFRAMEBUFFERSPROC >( "glGenFramebuffers", out _glGenFramebuffers );
-        
+
         var framebuffers = new GLuint[ n ];
 
         fixed ( GLuint* p = &framebuffers[ 0 ] )

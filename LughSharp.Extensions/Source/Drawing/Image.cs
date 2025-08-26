@@ -22,36 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Drawing;
 
 [PublicAPI]
-public enum FreeRectChoiceHeuristic
+public class Image
 {
-    /// <summary>
-    /// BSSF: Positions the rectangle against the short side of a free rectangle into
-    /// which it fits the best.
-    /// </summary>
-    BestShortSideFit,
-
-    /// <summary>
-    /// BLSF: Positions the rectangle against the long side of a free rectangle into
-    /// which it fits the best.
-    /// </summary>
-    BestLongSideFit,
-
-    /// <summary>
-    /// BAF: Positions the rectangle into the smallest free rect into which it fits.
-    /// </summary>
-    BestAreaFit,
-
-    /// <summary>
-    /// BL: Does the Tetris placement.
-    /// </summary>
-    BottomLeftRule,
-
-    /// <summary>
-    /// CP: Choosest the placement where the rectangle touches other rects as much
-    /// as possible.
-    /// </summary>
-    ContactPointRule,
+    
 }
+
+// ========================================================================
+// ========================================================================

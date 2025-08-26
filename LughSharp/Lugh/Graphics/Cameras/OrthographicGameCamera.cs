@@ -432,7 +432,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// Resets the camera's position and zoom to their default values, ensuring the
     /// camera is centered and updated to reflect these changes. This operation sets
@@ -474,7 +474,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         CameraZoom   = zoom;
         _defaultZoom = zoom;
     }
-    
+
     // ========================================================================
 
     /// <inheritdoc />

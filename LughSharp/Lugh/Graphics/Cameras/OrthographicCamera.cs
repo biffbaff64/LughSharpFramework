@@ -118,12 +118,12 @@ public class OrthographicCamera : Camera
     /// </param>
     public override void Update( bool updateFrustrum = true )
     {
-        var left   = (Zoom * -ViewportWidth) / 2f;
-        var right  = Zoom * (ViewportWidth / 2f);
-        var bottom = Zoom * -(ViewportHeight / 2f);
-        var top    = (Zoom * ViewportHeight) / 2f;
+        var left   = ( Zoom * -ViewportWidth ) / 2f;
+        var right  = Zoom * ( ViewportWidth / 2f );
+        var bottom = Zoom * -( ViewportHeight / 2f );
+        var top    = ( Zoom * ViewportHeight ) / 2f;
 
-        ProjectionMatrix.SetToOrtho(left, right, bottom, top, Near, Far);
+        ProjectionMatrix.SetToOrtho( left, right, bottom, top, Near, Far );
         ViewMatrix.SetToLookAt( Position, _tmp.Set( Position ).Add( Direction ), Up );
         Combined.Set( ProjectionMatrix );
         Matrix4.Mul( Combined.Val, ViewMatrix.Val );
@@ -191,4 +191,3 @@ public class OrthographicCamera : Camera
 
 // ============================================================================
 // ============================================================================
-

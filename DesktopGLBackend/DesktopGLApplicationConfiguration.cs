@@ -64,9 +64,9 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
     public static DesktopGLApplicationConfiguration Copy( DesktopGLApplicationConfiguration config )
     {
         var copy = new DesktopGLApplicationConfiguration();
-        
+
         copy.Set( config );
-        
+
         return copy;
     }
 
@@ -133,7 +133,7 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
     public void SetWindowConfiguration( DesktopGLApplicationConfiguration config )
     {
         base.SetWindowConfiguration( config );
-        
+
         MaximizedMonitor = config.MaximizedMonitor;
         WindowListener   = config.WindowListener;
         FullscreenMode   = config.FullscreenMode;

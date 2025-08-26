@@ -25,7 +25,6 @@
 using System.Text;
 
 // ============================================================================
-
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -69,7 +68,7 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
-    
+
     public void BindTransformFeedback( GLenum target, GLuint id )
     {
         GetDelegateForFunction< PFNGLBINDTRANSFORMFEEDBACKPROC >( "glBindTransformFeedback", out _glBindTransformFeedback );
@@ -171,7 +170,7 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
-    
+
     public void DrawTransformFeedbackInstanced( GLenum mode, GLuint id, GLsizei instancecount )
     {
         GetDelegateForFunction< PFNGLDRAWTRANSFORMFEEDBACKINSTANCEDPROC >( "glDrawTransformFeedbackInstanced",
@@ -191,7 +190,7 @@ public unsafe partial class GLBindings
     }
 
     // ========================================================================
-    
+
     public void CreateTransformFeedbacks( GLsizei n, GLuint* ids )
     {
         GetDelegateForFunction< PFNGLCREATETRANSFORMFEEDBACKSPROC >( "glCreateTransformFeedbacks", out _glCreateTransformFeedbacks );

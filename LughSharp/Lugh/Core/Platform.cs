@@ -126,7 +126,7 @@ public static class Platform
         Desktop, // WindowsGL, UWP, WebGL, Linux, MacOS
         Console, // XBox, Playstation, Nintendo
     }
-    
+
     // ========================================================================
 
     private static ApplicationType _targetPlatform;
@@ -214,9 +214,9 @@ public static class Platform
         {
             Architecture.Arm   => true,
             Architecture.Arm64 => true,
-            
+
             // ----------------------------------
-            
+
             var _ => false,
         };
     }

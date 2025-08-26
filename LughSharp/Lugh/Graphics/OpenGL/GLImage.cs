@@ -37,7 +37,7 @@ public unsafe struct GLImage
     /// <param name="width">The width of the image in pixels.</param>
     /// <param name="height">The height of the image in pixels.</param>
     /// <param name="pixels"><see cref="IntPtr"/> pointing to the RGBA pixel data of the image.</param>
-    public GLImage(int width, int height, byte* pixels)
+    public GLImage( int width, int height, byte* pixels )
     {
         Width  = width;
         Height = height;

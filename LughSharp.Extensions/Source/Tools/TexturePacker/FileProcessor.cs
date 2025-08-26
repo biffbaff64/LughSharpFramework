@@ -31,7 +31,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 using DirectoryInfo = System.IO.DirectoryInfo;
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
 public class FileProcessor

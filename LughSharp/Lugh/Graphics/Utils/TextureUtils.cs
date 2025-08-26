@@ -61,7 +61,7 @@ public class TextureUtils
         Logger.Debug( $"[Tex {textureId}] L0 Size: {w}x{h}, InternalFormat: 0x{internalFmt:X}" );
         Logger.Debug( $"[Tex {textureId}] MinFilter: 0x{minFilter:X}, MagFilter: 0x{magFilter:X}, MaxLevel: {maxLevel}" );
         Logger.Divider();
-        
+
         // Restore state
         GL.BindTexture( TextureTarget.Texture2D, ( uint )prevBinding );
         GL.ActiveTexture( ( TextureUnit )activeTex );
@@ -93,7 +93,7 @@ public class TextureUtils
                            width,
                            height,
                            0,
-                           ( int )OpenGL.Enums.PixelFormat.Rgba,
+                           ( int )PixelFormat.Rgba,
                            ( int )PixelType.UnsignedByte,
                            0 );
         }

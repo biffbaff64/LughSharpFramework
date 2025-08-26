@@ -1014,7 +1014,7 @@ public class TextField : Widget
         Text = newText;
 
         var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
-        
+
         if ( changeEvent == null )
         {
             return false;

@@ -28,7 +28,6 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Utils.Exceptions;
 
 using Color = LughSharp.Lugh.Graphics.Color;
-
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Maps.Tiled.Renderers;
@@ -42,25 +41,25 @@ namespace LughSharp.Lugh.Maps.Tiled.Renderers;
 [PublicAPI]
 public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 {
-    private const    int            DEFAULT_CACHE_SIZE = 2000;
-    private static   float          _tolerance         = 0.00001f;
-    protected static int            NumVertices        = 20;
-    protected        bool           Blending;
+    private const    int       DEFAULT_CACHE_SIZE = 2000;
+    private static   float     _tolerance         = 0.00001f;
+    protected static int       NumVertices        = 20;
+    protected        bool      Blending;
     protected        Rectangle CacheBounds = new();
-    protected        bool           Cached;
-    protected        bool           CanCacheMoreE;
-    protected        bool           CanCacheMoreN;
-    protected        bool           CanCacheMoreS;
-    protected        bool           CanCacheMoreW;
-    protected        int            Count;
+    protected        bool      Cached;
+    protected        bool      CanCacheMoreE;
+    protected        bool      CanCacheMoreN;
+    protected        bool      CanCacheMoreS;
+    protected        bool      CanCacheMoreW;
+    protected        int       Count;
 
-    protected TiledMap?      Map;
-    protected float          MaxTileHeight;
-    protected float          MaxTileWidth;
-    protected SpriteCache?   SpriteCache;
-    protected float          UnitScale;
-    protected float[]        Vertices   = new float[ 20 ];
-    protected Rectangle ViewBounds = new();
+    protected TiledMap?    Map;
+    protected float        MaxTileHeight;
+    protected float        MaxTileWidth;
+    protected SpriteCache? SpriteCache;
+    protected float        UnitScale;
+    protected float[]      Vertices   = new float[ 20 ];
+    protected Rectangle    ViewBounds = new();
 
     // ========================================================================
 

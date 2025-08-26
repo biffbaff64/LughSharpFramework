@@ -51,7 +51,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GenQueries( GLsizei n, GLuint* ids )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGENQUERIESPROC >( "glGenQueries", out _glGenQueries );
+        GetDelegateForFunction< PFNGLGENQUERIESPROC >( "glGenQueries", out _glGenQueries );
 
         _glGenQueries( n, ids );
     }
@@ -59,7 +59,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLuint[] GenQueries( GLsizei n )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGENQUERIESPROC >( "glGenQueries", out _glGenQueries );
+        GetDelegateForFunction< PFNGLGENQUERIESPROC >( "glGenQueries", out _glGenQueries );
 
         var ret = new GLuint[ n ];
 
@@ -84,7 +84,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DeleteQueries( GLsizei n, GLuint* ids )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLDELETEQUERIESPROC >( "glDeleteQueries", out _glDeleteQueries );
+        GetDelegateForFunction< PFNGLDELETEQUERIESPROC >( "glDeleteQueries", out _glDeleteQueries );
 
         _glDeleteQueries( n, ids );
     }
@@ -92,7 +92,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void DeleteQueries( params GLuint[] ids )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLDELETEQUERIESPROC >( "glDeleteQueries", out _glDeleteQueries );
+        GetDelegateForFunction< PFNGLDELETEQUERIESPROC >( "glDeleteQueries", out _glDeleteQueries );
 
         {
             fixed ( GLuint* p = &ids[ 0 ] )
@@ -107,7 +107,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public GLboolean IsQuery( GLuint id )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLISQUERYPROC >( "glIsQuery", out _glIsQuery );
+        GetDelegateForFunction< PFNGLISQUERYPROC >( "glIsQuery", out _glIsQuery );
 
         return _glIsQuery( id );
     }
@@ -117,7 +117,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void BeginQuery( GLenum target, GLuint id )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLBEGINQUERYPROC >( "glBeginQuery", out _glBeginQuery );
+        GetDelegateForFunction< PFNGLBEGINQUERYPROC >( "glBeginQuery", out _glBeginQuery );
 
         _glBeginQuery( target, id );
     }
@@ -127,7 +127,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void EndQuery( GLenum target )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLENDQUERYPROC >( "glEndQuery", out _glEndQuery );
+        GetDelegateForFunction< PFNGLENDQUERYPROC >( "glEndQuery", out _glEndQuery );
 
         _glEndQuery( target );
     }
@@ -137,7 +137,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetQueryiv( GLenum target, GLenum pname, GLint* parameters )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYIVPROC >( "glGetQueryiv", out _glGetQueryiv );
+        GetDelegateForFunction< PFNGLGETQUERYIVPROC >( "glGetQueryiv", out _glGetQueryiv );
 
         _glGetQueryiv( target, pname, parameters );
     }
@@ -145,7 +145,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetQueryiv( GLenum target, GLenum pname, ref GLint[] parameters )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYIVPROC >( "glGetQueryiv", out _glGetQueryiv );
+        GetDelegateForFunction< PFNGLGETQUERYIVPROC >( "glGetQueryiv", out _glGetQueryiv );
 
         {
             fixed ( GLint* p = &parameters[ 0 ] )
@@ -160,7 +160,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetQueryObjectiv( GLuint id, GLenum pname, GLint* parameters )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYOBJECTIVPROC >( "glGetQueryObjectiv", out _glGetQueryObjectiv );
+        GetDelegateForFunction< PFNGLGETQUERYOBJECTIVPROC >( "glGetQueryObjectiv", out _glGetQueryObjectiv );
 
         _glGetQueryObjectiv( id, pname, parameters );
     }
@@ -168,7 +168,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetQueryObjectiv( GLuint id, GLenum pname, ref GLint[] parameters )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYOBJECTIVPROC >( "glGetQueryObjectiv", out _glGetQueryObjectiv );
+        GetDelegateForFunction< PFNGLGETQUERYOBJECTIVPROC >( "glGetQueryObjectiv", out _glGetQueryObjectiv );
 
         {
             fixed ( GLint* p = &parameters[ 0 ] )
@@ -183,7 +183,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetQueryObjectuiv( GLuint id, GLenum pname, GLuint* parameters )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYOBJECTUIVPROC >( "glGetQueryObjectuiv", out _glGetQueryObjectuiv );
+        GetDelegateForFunction< PFNGLGETQUERYOBJECTUIVPROC >( "glGetQueryObjectuiv", out _glGetQueryObjectuiv );
 
         _glGetQueryObjectuiv( id, pname, parameters );
     }
@@ -191,7 +191,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetQueryObjectuiv( GLuint id, GLenum pname, ref GLuint[] parameters )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYOBJECTUIVPROC >( "glGetQueryObjectuiv", out _glGetQueryObjectuiv );
+        GetDelegateForFunction< PFNGLGETQUERYOBJECTUIVPROC >( "glGetQueryObjectuiv", out _glGetQueryObjectuiv );
 
         {
             fixed ( GLuint* p = &parameters[ 0 ] )
@@ -205,7 +205,7 @@ public unsafe partial class GLBindings
 
     public void CreateQueries( GLenum target, GLsizei n, GLuint* ids )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLCREATEQUERIESPROC >( "glCreateQueries", out _glCreateQueries );
+        GetDelegateForFunction< PFNGLCREATEQUERIESPROC >( "glCreateQueries", out _glCreateQueries );
 
         _glCreateQueries( target, n, ids );
     }
@@ -214,7 +214,7 @@ public unsafe partial class GLBindings
     {
         var ids = new GLuint[ n ];
 
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLCREATEQUERIESPROC >( "glCreateQueries", out _glCreateQueries );
+        GetDelegateForFunction< PFNGLCREATEQUERIESPROC >( "glCreateQueries", out _glCreateQueries );
 
         fixed ( GLuint* ptrIds = &ids[ 0 ] )
         {
@@ -235,7 +235,7 @@ public unsafe partial class GLBindings
 
     public void GetQueryBufferObjecti64v( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYBUFFEROBJECTI64VPROC >( "glGetQueryBufferObjecti64v", out _glGetQueryBufferObjecti64v );
+        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTI64VPROC >( "glGetQueryBufferObjecti64v", out _glGetQueryBufferObjecti64v );
 
         _glGetQueryBufferObjecti64v( id, buffer, pname, offset );
     }
@@ -244,7 +244,7 @@ public unsafe partial class GLBindings
 
     public void GetQueryBufferObjectiv( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYBUFFEROBJECTIVPROC >( "glGetQueryBufferObjectiv", out _glGetQueryBufferObjectiv );
+        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTIVPROC >( "glGetQueryBufferObjectiv", out _glGetQueryBufferObjectiv );
 
         _glGetQueryBufferObjectiv( id, buffer, pname, offset );
     }
@@ -253,7 +253,7 @@ public unsafe partial class GLBindings
 
     public void GetQueryBufferObjectui64v( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYBUFFEROBJECTUI64VPROC >( "glGetQueryBufferObjectui64v", out _glGetQueryBufferObjectui64v );
+        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTUI64VPROC >( "glGetQueryBufferObjectui64v", out _glGetQueryBufferObjectui64v );
 
         _glGetQueryBufferObjectui64v( id, buffer, pname, offset );
     }
@@ -262,7 +262,7 @@ public unsafe partial class GLBindings
 
     public void GetQueryBufferObjectuiv( GLuint id, GLuint buffer, GLenum pname, GLintptr offset )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYBUFFEROBJECTUIVPROC >( "glGetQueryBufferObjectuiv", out _glGetQueryBufferObjectuiv );
+        GetDelegateForFunction< PFNGLGETQUERYBUFFEROBJECTUIVPROC >( "glGetQueryBufferObjectuiv", out _glGetQueryBufferObjectuiv );
 
         _glGetQueryBufferObjectuiv( id, buffer, pname, offset );
     }
@@ -273,7 +273,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void QueryCounter( GLuint id, GLenum target )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLQUERYCOUNTERPROC >( "glQueryCounter", out _glQueryCounter );
+        GetDelegateForFunction< PFNGLQUERYCOUNTERPROC >( "glQueryCounter", out _glQueryCounter );
 
         _glQueryCounter( id, target );
     }
@@ -283,7 +283,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetQueryObjecti64v( GLuint id, GLenum pname, GLint64* param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYOBJECTI64VPROC >( "glGetQueryObjecti64v", out _glGetQueryObjecti64v );
+        GetDelegateForFunction< PFNGLGETQUERYOBJECTI64VPROC >( "glGetQueryObjecti64v", out _glGetQueryObjecti64v );
 
         _glGetQueryObjecti64v( id, pname, param );
     }
@@ -291,7 +291,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetQueryObjecti64v( GLuint id, GLenum pname, ref GLint64[] param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYOBJECTI64VPROC >( "glGetQueryObjecti64v", out _glGetQueryObjecti64v );
+        GetDelegateForFunction< PFNGLGETQUERYOBJECTI64VPROC >( "glGetQueryObjecti64v", out _glGetQueryObjecti64v );
 
         fixed ( GLint64* dp = &param[ 0 ] )
         {
@@ -304,7 +304,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetQueryObjectui64v( GLuint id, GLenum pname, GLuint64* param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYOBJECTUI64VPROC >( "glGetQueryObjectui64v", out _glGetQueryObjectui64v );
+        GetDelegateForFunction< PFNGLGETQUERYOBJECTUI64VPROC >( "glGetQueryObjectui64v", out _glGetQueryObjectui64v );
 
         _glGetQueryObjectui64v( id, pname, param );
     }
@@ -312,7 +312,7 @@ public unsafe partial class GLBindings
     /// <inheritdoc />
     public void GetQueryObjectui64v( GLuint id, GLenum pname, ref GLuint64[] param )
     {
-        GLBindings.GetDelegateForFunction< GLBindings.PFNGLGETQUERYOBJECTUI64VPROC >( "glGetQueryObjectui64v", out _glGetQueryObjectui64v );
+        GetDelegateForFunction< PFNGLGETQUERYOBJECTUI64VPROC >( "glGetQueryObjectui64v", out _glGetQueryObjectui64v );
 
         fixed ( GLuint64* dp = &param[ 0 ] )
         {

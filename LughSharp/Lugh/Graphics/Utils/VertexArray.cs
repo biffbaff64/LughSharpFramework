@@ -35,7 +35,7 @@ public class VertexArray : IVertexData
     public VertexAttributes Attributes { get; set; }
 
     // ========================================================================
-    
+
     private readonly Buffer< float > _buffer;
     private readonly Buffer< byte >  _byteBuffer;
 

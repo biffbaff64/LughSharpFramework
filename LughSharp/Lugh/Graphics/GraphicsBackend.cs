@@ -58,14 +58,14 @@ public class GraphicsBackend
         /// </summary>
         DirectX11,
         DirectX12,
-        
+
         /// <summary>
         /// Android backends
         /// </summary>
         AndroidGL,
         AndroidGLES,
         AndroidVulkan,
-        
+
         /// <summary>
         /// iOS backends
         /// </summary>

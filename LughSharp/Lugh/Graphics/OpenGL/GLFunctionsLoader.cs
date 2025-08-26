@@ -25,7 +25,6 @@
 using LughSharp.Lugh.Utils.Exceptions;
 
 // ============================================================================
-
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
@@ -59,7 +58,7 @@ public partial class GLBindings
     // ========================================================================
 
     [LibraryImport( "opengl32.dll", EntryPoint = "wglGetProcAddress", StringMarshalling = StringMarshalling.Utf16 )]
-    [UnmanagedCallConv( CallConvs = [ typeof( System.Runtime.CompilerServices.CallConvStdcall ) ] )]
+    [UnmanagedCallConv( CallConvs = [ typeof( CallConvStdcall ) ] )]
     private static partial IntPtr WglGetProcAddress( string procname );
 
     /// <summary>

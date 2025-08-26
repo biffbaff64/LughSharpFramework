@@ -490,20 +490,20 @@ public class Quaternion
         var zw = Z * W;
 
         // Set matrix from quaternion
-        matrix[ Matrix4.M00_0 ] = 1 - ( 2 * ( yy + zz ) );
-        matrix[ Matrix4.M01_4 ] = 2 * ( xy - zw );
-        matrix[ Matrix4.M02_8 ] = 2 * ( xz + yw );
+        matrix[ Matrix4.M00_0 ]  = 1 - ( 2 * ( yy + zz ) );
+        matrix[ Matrix4.M01_4 ]  = 2 * ( xy - zw );
+        matrix[ Matrix4.M02_8 ]  = 2 * ( xz + yw );
         matrix[ Matrix4.M03_12 ] = 0;
-        matrix[ Matrix4.M10_1 ] = 2 * ( xy + zw );
-        matrix[ Matrix4.M11_5 ] = 1 - ( 2 * ( xx + zz ) );
-        matrix[ Matrix4.M12_9 ] = 2 * ( yz - xw );
+        matrix[ Matrix4.M10_1 ]  = 2 * ( xy + zw );
+        matrix[ Matrix4.M11_5 ]  = 1 - ( 2 * ( xx + zz ) );
+        matrix[ Matrix4.M12_9 ]  = 2 * ( yz - xw );
         matrix[ Matrix4.M13_13 ] = 0;
-        matrix[ Matrix4.M20_2 ] = 2 * ( xz - yw );
-        matrix[ Matrix4.M21_6 ] = 2 * ( yz + xw );
+        matrix[ Matrix4.M20_2 ]  = 2 * ( xz - yw );
+        matrix[ Matrix4.M21_6 ]  = 2 * ( yz + xw );
         matrix[ Matrix4.M22_10 ] = 1 - ( 2 * ( xx + yy ) );
         matrix[ Matrix4.M23_14 ] = 0;
-        matrix[ Matrix4.M30_3 ] = 0;
-        matrix[ Matrix4.M31_7 ] = 0;
+        matrix[ Matrix4.M30_3 ]  = 0;
+        matrix[ Matrix4.M31_7 ]  = 0;
         matrix[ Matrix4.M32_11 ] = 0;
         matrix[ Matrix4.M33_15 ] = 1;
     }

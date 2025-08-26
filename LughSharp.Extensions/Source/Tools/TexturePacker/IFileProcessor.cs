@@ -24,7 +24,7 @@
 
 using System.Text.RegularExpressions;
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
 public interface IFileProcessor

@@ -37,10 +37,9 @@ using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
 using Rectangle = System.Drawing.Rectangle;
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class ImageProcessor
 {
     public float                      Scale      { get; set; }

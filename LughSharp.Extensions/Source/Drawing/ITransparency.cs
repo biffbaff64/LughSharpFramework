@@ -22,38 +22,39 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics;
+namespace Extensions.Source.Drawing;
 
-namespace DesktopGLBackend.Graphics;
-
-public partial class DesktopGLGraphics
+[PublicAPI]
+public interface ITransparency
 {
     /// <summary>
-    /// Describes a Display Mode for a <see cref="GLFW.Monitor" />
+    /// Represents image data that is guaranteed to be completely opaque,
+    /// meaning that all pixels have an alpha value of 1.0.
     /// </summary>
-    [PublicAPI]
-    public class DesktopGLDisplayMode : IGraphicsDevice.DisplayMode
-    {
-        /// <summary>
-        /// The <see cref="GLFW.Monitor" /> this <see cref="IGraphicsDevice.DisplayMode" /> applies to.
-        /// </summary>
-        public GLFW.Monitor MonitorHandle { get; set; }
+    const int OPAQUE = 1;
 
-        /// <summary>
-        /// Creates a new Display Mode and its properties.
-        /// </summary>
-        /// <param name="monitor"> The target monitor. </param>
-        /// <param name="width"> Monitor display width. </param>
-        /// <param name="height"> Monior display height. </param>
-        /// <param name="refreshRate"> The refresh rate. </param>
-        /// <param name="bitsPerPixel"> The bits per pixel. </param>
-        public DesktopGLDisplayMode( GLFW.Monitor monitor, int width, int height, int refreshRate, int bitsPerPixel )
-            : base( width, height, refreshRate, bitsPerPixel )
-        {
-            MonitorHandle = monitor;
-        }
-    }
+    /// <summary>
+    /// Represents image data that is guaranteed to be either completely
+    /// opaque, with an alpha value of 1.0, or completely transparent,
+    /// with an alpha value of 0.0.
+    /// </summary>
+    const int BITMASK = 2;
+
+    /// <summary>
+    /// Represents image data that contains or might contain arbitrary
+    /// alpha values between and including 0.0 and 1.0.
+    /// </summary>
+    const int TRANSLUCENT = 3;
+
+    /// <summary>
+    /// Returns the type of this <c>Transparency</c>.
+    /// <returns>
+    /// The field type of this <c>Transparency</c>, which is either OPAQUE,
+    /// BITMASK or TRANSLUCENT.
+    /// </returns>
+    /// </summary>
+    public int GetTransparency();
 }
 
-// ============================================================================
-// ============================================================================
+// ========================================================================
+// ========================================================================

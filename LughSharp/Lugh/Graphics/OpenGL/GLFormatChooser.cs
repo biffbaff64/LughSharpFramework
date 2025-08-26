@@ -71,7 +71,7 @@ public sealed class GLFormatChooser
 
                     if ( _caps.HasS3TC )
                     {
-                        candidates.Add( GLIF.COMPRESSED_RGBA_S3TC_DXT5_EXT );    // BC3
+                        candidates.Add( GLIF.COMPRESSED_RGBA_S3TC_DXT5_EXT ); // BC3
                     }
                 }
 
@@ -84,7 +84,7 @@ public sealed class GLFormatChooser
                 {
                     if ( _caps.HasBPTC )
                     {
-                        candidates.Add( GLIF.COMPRESSED_RGBA_BPTC_UNORM );    // BC7
+                        candidates.Add( GLIF.COMPRESSED_RGBA_BPTC_UNORM ); // BC7
                     }
 
                     if ( _caps.HasS3TC )
@@ -124,7 +124,7 @@ public sealed class GLFormatChooser
                     candidates.Add( GLIF.R11F_G11F_B10F ); // Filterable HDR-ish (no alpha), widely supported
                 }
 
-                candidates.Add( GLIF.RGBA16F );            // Safe HDR with alpha, renderable on most drivers
+                candidates.Add( GLIF.RGBA16F ); // Safe HDR with alpha, renderable on most drivers
 
                 break;
 
@@ -242,46 +242,57 @@ public sealed class GLFormatChooser
     /// </summary>
     /// <param name="f"></param>
     /// <returns></returns>
-    private static bool IsCoreFormat( int f ) =>
-        f is GLIF.R8 or GLIF.RG8 or GLIF.RGBA8 or GLIF.SRGB8_ALPHA8
-             or GLIF.R11F_G11F_B10F or GLIF.RGBA16F
-             or GLIF.DEPTH_COMPONENT24 or GLIF.DEPTH24_STENCIL8;
+    private static bool IsCoreFormat( int f )
+    {
+        return f is GLIF.R8 or GLIF.RG8 or GLIF.RGBA8 or GLIF.SRGB8_ALPHA8
+                    or GLIF.R11F_G11F_B10F or GLIF.RGBA16F
+                    or GLIF.DEPTH_COMPONENT24 or GLIF.DEPTH24_STENCIL8;
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="f"></param>
     /// <returns></returns>
-    private static bool IsS3TC( int f ) =>
-        f is GLIF.COMPRESSED_RGB_S3TC_DXT1_EXT or GLIF.COMPRESSED_RGBA_S3TC_DXT1_EXT
-                                               or GLIF.COMPRESSED_RGBA_S3TC_DXT3_EXT
-                                               or GLIF.COMPRESSED_RGBA_S3TC_DXT5_EXT;
+    private static bool IsS3TC( int f )
+    {
+        return f is GLIF.COMPRESSED_RGB_S3TC_DXT1_EXT or GLIF.COMPRESSED_RGBA_S3TC_DXT1_EXT
+                                                      or GLIF.COMPRESSED_RGBA_S3TC_DXT3_EXT
+                                                      or GLIF.COMPRESSED_RGBA_S3TC_DXT5_EXT;
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="f"></param>
     /// <returns></returns>
-    private static bool IsRGTC( int f ) =>
-        f is GLIF.COMPRESSED_RED_RGTC1 or GLIF.COMPRESSED_RG_RGTC2;
+    private static bool IsRGTC( int f )
+    {
+        return f is GLIF.COMPRESSED_RED_RGTC1 or GLIF.COMPRESSED_RG_RGTC2;
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="f"></param>
     /// <returns></returns>
-    private static bool IsBPTC( int f ) =>
-        f is GLIF.COMPRESSED_RGBA_BPTC_UNORM or GLIF.COMPRESSED_SRGB_ALPHA_BPTC_UNORM
-                                             or GLIF.COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT
-                                             or GLIF.COMPRESSED_RGB_BPTC_SIGNED_FLOAT;
+    private static bool IsBPTC( int f )
+    {
+        return f is GLIF.COMPRESSED_RGBA_BPTC_UNORM or GLIF.COMPRESSED_SRGB_ALPHA_BPTC_UNORM
+                                                    or GLIF.COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT
+                                                    or GLIF.COMPRESSED_RGB_BPTC_SIGNED_FLOAT;
+    }
 
     /// <summary>
     /// 
     /// </summary>
     /// <param name="f"></param>
     /// <returns></returns>
-    private static bool IsETC2( int f ) => f is GLIF.COMPRESSED_SRGB8_ALPHA8_ETC2
-                                                or GLIF.COMPRESSED_RGBA8_ETC2_EAC;
+    private static bool IsETC2( int f )
+    {
+        return f is GLIF.COMPRESSED_SRGB8_ALPHA8_ETC2
+                    or GLIF.COMPRESSED_RGBA8_ETC2_EAC;
+    }
 }
 
 // ============================================================================

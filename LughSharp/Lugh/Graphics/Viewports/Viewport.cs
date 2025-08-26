@@ -28,7 +28,6 @@ using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
 
-
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Graphics.Viewports;
@@ -53,7 +52,7 @@ public abstract class Viewport
     }
 
     // ========================================================================
-    
+
     public Camera? Camera       { get; set; }
     public int     ScreenX      { get; private set; }
     public int     ScreenY      { get; private set; }

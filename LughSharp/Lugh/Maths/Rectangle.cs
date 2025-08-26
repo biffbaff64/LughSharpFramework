@@ -37,7 +37,7 @@ namespace LughSharp.Lugh.Maths;
 [PublicAPI]
 public class Rectangle : IShape2D, IEquatable< Rectangle >
 {
-    public static readonly Rectangle  Tmp = new();
+    public static readonly Rectangle Tmp = new();
 
     // ========================================================================
 
@@ -48,10 +48,10 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
 
     // ========================================================================
 
-    private static readonly Rectangle _empty = new();    // Do Not Modifiy contents
+    private static readonly Rectangle _empty = new(); // Do Not Modifiy contents
 
     // ========================================================================
-    
+
     /// <summary>
     /// Constructs a new rectangle with all values set to zero
     /// </summary>
@@ -237,13 +237,19 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// Determines if the specified point is contained within the rectangular region defined by this
     /// <see cref='Rectangle'/> .
     /// </summary>
-    public bool Contains( int x, int y ) => ( X <= x ) && ( x < ( X + Width ) ) && ( Y <= y ) && ( y < ( Y + Height ) );
+    public bool Contains( int x, int y )
+    {
+        return ( X <= x ) && ( x < ( X + Width ) ) && ( Y <= y ) && ( y < ( Y + Height ) );
+    }
 
     /// <summary>
     /// Determines if the specified point is contained within the rectangular region defined by this
     /// <see cref='Rectangle'/> .
     /// </summary>
-    public bool Contains( Point pt ) => Contains( pt.X, pt.Y );
+    public bool Contains( Point pt )
+    {
+        return Contains( pt.X, pt.Y );
+    }
 
     // ========================================================================
 
@@ -265,7 +271,10 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <summary>
     /// Inflates this <see cref='Rectangle'/> by the specified amount.
     /// </summary>
-    public void Inflate( Size size ) => Inflate( size.Width, size.Height );
+    public void Inflate( Size size )
+    {
+        Inflate( size.Width, size.Height );
+    }
 
     /// <summary>
     /// Creates a <see cref='Rectangle'/> that is inflated by the specified amount.
@@ -354,7 +363,10 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
     /// <summary>
     /// Adjusts the location of this rectangle by the specified amount.
     /// </summary>
-    public void AdjustLocation( Point pos ) => AdjustLocation( pos.X, pos.Y );
+    public void AdjustLocation( Point pos )
+    {
+        AdjustLocation( pos.X, pos.Y );
+    }
 
     /// <summary>
     /// Adjusts the location of this rectangle by the specified amount.

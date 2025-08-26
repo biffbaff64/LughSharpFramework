@@ -52,9 +52,9 @@ public class Buffer< T > : IDisposable where T : unmanaged
     // ========================================================================
 
     // Convenience properties for element-based operations
-    public int ElementCapacity => ( Capacity / _elementSize );
-    public int ElementPosition => ( Position / _elementSize );
-    public int ElementLength   => ( Length / _elementSize );
+    public int ElementCapacity => Capacity / _elementSize;
+    public int ElementPosition => Position / _elementSize;
+    public int ElementLength   => Length / _elementSize;
 
     // ========================================================================
 
@@ -168,7 +168,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
         var viewElementSize = Unsafe.SizeOf< Tview >();
 
         // Ensure the conversion makes sense (capacity should be divisible by target element size)
-        if ( Length % viewElementSize != 0 )
+        if ( ( Length % viewElementSize ) != 0 )
         {
             throw new InvalidOperationException( $"Cannot create Buffer<{typeof( Tview ).Name}> " +
                                                  $"view: current length ({Length} bytes) is not " +
@@ -188,10 +188,25 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     // Convenience methods for common conversions
-    public Buffer< float > AsFloatBuffer() => AsBuffer< float >();
-    public Buffer< int > AsIntBuffer() => AsBuffer< int >();
-    public Buffer< short > AsShortBuffer() => AsBuffer< short >();
-    public Buffer< byte > AsByteBuffer() => AsBuffer< byte >();
+    public Buffer< float > AsFloatBuffer()
+    {
+        return AsBuffer< float >();
+    }
+
+    public Buffer< int > AsIntBuffer()
+    {
+        return AsBuffer< int >();
+    }
+
+    public Buffer< short > AsShortBuffer()
+    {
+        return AsBuffer< short >();
+    }
+
+    public Buffer< byte > AsByteBuffer()
+    {
+        return AsBuffer< byte >();
+    }
 
     // ========================================================================
 
@@ -202,7 +217,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
     // Generic Get/Put methods
     public T Get()
     {
-        if ( Position + _elementSize > Limit )
+        if ( ( Position + _elementSize ) > Limit )
         {
             throw new IndexOutOfRangeException();
         }
@@ -222,18 +237,21 @@ public class Buffer< T > : IDisposable where T : unmanaged
             throw new IndexOutOfRangeException();
         }
 
-        return byteIndex + _elementSize > Capacity
+        return ( byteIndex + _elementSize ) > Capacity
             ? throw new IndexOutOfRangeException()
             : MemoryMarshal.Read< T >( _memory.Span.Slice( byteIndex ) );
     }
 
-    public void Get( T[] array ) => Get( array, 0, array.Length );
+    public void Get( T[] array )
+    {
+        Get( array, 0, array.Length );
+    }
 
     public void Get( T[] array, int offset, int count )
     {
         var bytesToRead = count * _elementSize;
 
-        if ( Position + bytesToRead > Limit )
+        if ( ( Position + bytesToRead ) > Limit )
         {
             throw new IndexOutOfRangeException();
         }
@@ -277,13 +295,16 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
         MemoryMarshal.Write( _memory.Span.Slice( byteIndex ), in value );
 
-        if ( byteIndex + _elementSize > Length )
+        if ( ( byteIndex + _elementSize ) > Length )
         {
             Length = byteIndex + _elementSize;
         }
     }
 
-    public void Put( T[] array ) => Put( array, 0, array.Length );
+    public void Put( T[] array )
+    {
+        Put( array, 0, array.Length );
+    }
 
     public void Put( T[] array, int offset, int count )
     {
@@ -294,7 +315,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
     {
         Guard.ThrowIfNull( array );
 
-        if ( ( srcOffset < 0 ) || ( srcOffset + count > array.Length ) )
+        if ( ( srcOffset < 0 ) || ( ( srcOffset + count ) > array.Length ) )
         {
             throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset is out of range." );
         }
@@ -314,7 +335,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
         array.AsSpan( srcOffset, count )
              .CopyTo( MemoryMarshal.Cast< byte, T >( _memory.Span.Slice( dstByteOffset ) ) );
 
-        if ( dstByteOffset + bytesToWrite > Length )
+        if ( ( dstByteOffset + bytesToWrite ) > Length )
         {
             Length = dstByteOffset + bytesToWrite;
         }
@@ -330,7 +351,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     public byte GetByte()
     {
-        if ( Position + 1 > Limit )
+        if ( ( Position + 1 ) > Limit )
         {
             throw new IndexOutOfRangeException();
         }
@@ -353,7 +374,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     public short GetShort()
     {
-        if ( Position + 2 > Limit )
+        if ( ( Position + 2 ) > Limit )
         {
             throw new IndexOutOfRangeException();
         }
@@ -369,7 +390,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     public short GetShort( int byteIndex )
     {
-        if ( ( byteIndex < 0 ) || ( byteIndex + 2 > Capacity ) )
+        if ( ( byteIndex < 0 ) || ( ( byteIndex + 2 ) > Capacity ) )
         {
             throw new IndexOutOfRangeException();
         }
@@ -381,7 +402,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     public int GetInt()
     {
-        if ( Position + 4 > Limit )
+        if ( ( Position + 4 ) > Limit )
         {
             throw new IndexOutOfRangeException();
         }
@@ -397,7 +418,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     public int GetInt( int byteIndex )
     {
-        if ( ( byteIndex < 0 ) || ( byteIndex + 4 > Capacity ) )
+        if ( ( byteIndex < 0 ) || ( ( byteIndex + 4 ) > Capacity ) )
         {
             throw new IndexOutOfRangeException();
         }
@@ -409,7 +430,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     public float GetFloat()
     {
-        if ( Position + 4 > Limit )
+        if ( ( Position + 4 ) > Limit )
         {
             throw new IndexOutOfRangeException();
         }
@@ -425,7 +446,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     public float GetFloat( int byteIndex )
     {
-        if ( ( byteIndex < 0 ) || ( byteIndex + 4 > Capacity ) )
+        if ( ( byteIndex < 0 ) || ( ( byteIndex + 4 ) > Capacity ) )
         {
             throw new IndexOutOfRangeException();
         }
@@ -465,7 +486,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
         _memory.Span[ byteIndex ] = value;
 
-        if ( byteIndex + 1 > Length )
+        if ( ( byteIndex + 1 ) > Length )
         {
             Length = byteIndex + 1;
         }
@@ -505,7 +526,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
             BinaryPrimitives.WriteInt16LittleEndian( _memory.Span.Slice( byteIndex ), value );
         }
 
-        if ( byteIndex + 2 > Length )
+        if ( ( byteIndex + 2 ) > Length )
         {
             Length = byteIndex + 2;
         }
@@ -545,7 +566,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
             BinaryPrimitives.WriteInt32LittleEndian( _memory.Span.Slice( byteIndex ), value );
         }
 
-        if ( byteIndex + 4 > Length )
+        if ( ( byteIndex + 4 ) > Length )
         {
             Length = byteIndex + 4;
         }
@@ -585,7 +606,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
             BinaryPrimitives.WriteSingleLittleEndian( _memory.Span.Slice( byteIndex ), value );
         }
 
-        if ( byteIndex + 4 > Length )
+        if ( ( byteIndex + 4 ) > Length )
         {
             Length = byteIndex + 4;
         }
@@ -599,10 +620,25 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     // ========================================================================
 
-    public void GetBytes( byte[] dst ) => GetBytes( dst, 0, dst.Length );
-    public void GetInts( int[] dst ) => GetInts( dst, 0, dst.Length );
-    public void GetShorts( short[] dst ) => GetShorts( dst, 0, dst.Length );
-    public void GetFloats( float[] dst ) => GetFloats( dst, 0, dst.Length );
+    public void GetBytes( byte[] dst )
+    {
+        GetBytes( dst, 0, dst.Length );
+    }
+
+    public void GetInts( int[] dst )
+    {
+        GetInts( dst, 0, dst.Length );
+    }
+
+    public void GetShorts( short[] dst )
+    {
+        GetShorts( dst, 0, dst.Length );
+    }
+
+    public void GetFloats( float[] dst )
+    {
+        GetFloats( dst, 0, dst.Length );
+    }
 
     public void GetBytes( byte[] dst, int dstOffset, int length )
     {
@@ -660,7 +696,10 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     // ========================================================================
 
-    public void PutBytes( byte[] src ) => PutBytes( src, 0, 0, src.Length );
+    public void PutBytes( byte[] src )
+    {
+        PutBytes( src, 0, 0, src.Length );
+    }
 
     public void PutBytes( byte[] src, int srcOffset, int numBytes )
     {
@@ -671,7 +710,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
     {
         ArgumentNullException.ThrowIfNull( src );
 
-        EnsureCapacity( ( dstOffset + 1 ) + numBytes );
+        EnsureCapacity( dstOffset + 1 + numBytes );
 
         if ( srcOffset < 0 )
         {
@@ -713,7 +752,10 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
-    public void PutInts( int[] src ) => PutInts( src, 0, 0, src.Length );
+    public void PutInts( int[] src )
+    {
+        PutInts( src, 0, 0, src.Length );
+    }
 
     public void PutInts( int[] src, int srcOffset, int numBytes )
     {
@@ -725,7 +767,10 @@ public class Buffer< T > : IDisposable where T : unmanaged
         //TODO:
     }
 
-    public void PutShorts( short[] src ) => PutShorts( src, 0, 0, src.Length );
+    public void PutShorts( short[] src )
+    {
+        PutShorts( src, 0, 0, src.Length );
+    }
 
     public void PutShorts( short[] src, int srcOffset, int numBytes )
     {
@@ -737,7 +782,10 @@ public class Buffer< T > : IDisposable where T : unmanaged
         //TODO:
     }
 
-    public void PutFloats( float[] src ) => PutFloats( src, 0, 0, src.Length );
+    public void PutFloats( float[] src )
+    {
+        PutFloats( src, 0, 0, src.Length );
+    }
 
     public void PutFloats( float[] src, int srcOffset, int numBytes )
     {
@@ -861,9 +909,15 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
-    public byte[] BackingArray() => _backingArray;
+    public byte[] BackingArray()
+    {
+        return _backingArray;
+    }
 
-    public Memory< byte > Memory() => _memory;
+    public Memory< byte > Memory()
+    {
+        return _memory;
+    }
 
     public T[] ToArray()
     {
@@ -963,7 +1017,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
             throw new IndexOutOfRangeException( $"toElementIndex out of range: {toElementIndex}" );
         }
 
-        var sliceMemory = _memory.Slice( fromElementIndex * _elementSize, ( toElementIndex - fromElementIndex + 1 ) * _elementSize );
+        var sliceMemory = _memory.Slice( fromElementIndex * _elementSize, ( ( toElementIndex - fromElementIndex ) + 1 ) * _elementSize );
         var sliceBuffer = new Buffer< T >( sliceMemory, IsBigEndian );
 
         if ( IsReadOnly )
@@ -1020,7 +1074,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
     /// <returns>True if there are elements remaining; otherwise, false.</returns>
     public bool HasRemaining()
     {
-        return ( Position < Limit );
+        return Position < Limit;
     }
 
     /// <summary>

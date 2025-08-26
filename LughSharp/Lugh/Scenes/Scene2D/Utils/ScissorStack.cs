@@ -27,7 +27,6 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils.Collections;
 
-
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
@@ -42,7 +41,7 @@ namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 public class ScissorStack
 {
     private static readonly List< Rectangle > _scissors = [ ];
-    private static readonly Vector3                _tmp      = new();
+    private static readonly Vector3           _tmp      = new();
     private static readonly Rectangle         _viewport = new();
 
     /// <summary>

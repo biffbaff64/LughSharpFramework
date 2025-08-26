@@ -38,14 +38,14 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class GLOnlyTextureData : ITextureData
 {
-    public int                            MipLevel       { get; set; } = 0;
-    public int                            InternalFormat { get; set; }
-    public int                            Type           { get; set; }
+    public int                           MipLevel       { get; set; } = 0;
+    public int                           InternalFormat { get; set; }
+    public int                           Type           { get; set; }
     public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat    { get; set; }
-    public int                            Width          { get; set; } = 0;
-    public int                            Height         { get; set; } = 0;
-    public bool                           IsPrepared     { get; set; } = false;
-    public bool                           UseMipMaps     { get; set; }
+    public int                           Width          { get; set; } = 0;
+    public int                           Height         { get; set; } = 0;
+    public bool                          IsPrepared     { get; set; } = false;
+    public bool                          UseMipMaps     { get; set; }
 
     /// <inheritdoc />
     public bool IsOwned { get; set; }

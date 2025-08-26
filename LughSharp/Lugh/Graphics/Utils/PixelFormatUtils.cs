@@ -247,7 +247,7 @@ public class PixelFormatUtils
             Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => IGL.GL_RGBA8,
             Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => IGL.GL_RGB565,
             Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => IGL.GL_RGBA4,
-            var _                                        => throw new ArgumentException( $"Unsupported format: {format}" )
+            var _                                        => throw new ArgumentException( $"Unsupported format: {format}" ),
         };
     }
 
@@ -377,7 +377,7 @@ public class PixelFormatUtils
             var _            => 1,
         };
     }
-    
+
     #endregion Miscellaneous
 
     // ========================================================================

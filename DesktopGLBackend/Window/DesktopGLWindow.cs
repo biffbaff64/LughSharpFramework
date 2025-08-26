@@ -549,7 +549,6 @@ public partial class DesktopGLWindow : IDisposable
                 Graphics.Dispose();
                 Input.Dispose();
 
-                
 //                Glfw.SetWindowFocusCallback( GlfwWindow, null );
 //                Glfw.SetWindowIconifyCallback( GlfwWindow, null );
 //                Glfw.SetWindowCloseCallback( GlfwWindow, null );

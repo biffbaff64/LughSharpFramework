@@ -24,7 +24,7 @@
 
 using LughSharp.Lugh.Utils;
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 /// <summary>
 /// File processing information, detauiling:-

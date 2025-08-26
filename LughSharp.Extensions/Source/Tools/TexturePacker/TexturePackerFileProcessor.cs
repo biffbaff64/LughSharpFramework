@@ -29,10 +29,9 @@ using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class TexturePackerFileProcessor //: IFileProcessor
 {
     public const string DEFAULT_PACKFILE_NAME = "pack.atlas";

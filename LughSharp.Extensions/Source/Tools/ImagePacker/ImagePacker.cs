@@ -77,7 +77,6 @@ namespace Extensions.Source.Tools.ImagePacker;
 /// </para>
 /// </summary>
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class ImagePacker
 {
     public Bitmap                          Image { get; }

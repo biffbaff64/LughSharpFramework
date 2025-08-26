@@ -25,17 +25,17 @@
 namespace LughSharp.Lugh.Maths;
 
 [PublicAPI]
-[StructLayout(LayoutKind.Sequential)]
-public struct Vector4 : IEquatable<Vector4>
+[StructLayout( LayoutKind.Sequential )]
+public struct Vector4 : IEquatable< Vector4 >
 {
     public float X;
     public float Y;
     public float Z;
     public float W;
 
-    public static Vector4 One => new(1f, 1f, 1f, 1f);
+    public static Vector4 One => new( 1f, 1f, 1f, 1f );
 
-    public Vector4(float x, float y, float z, float w)
+    public Vector4( float x, float y, float z, float w )
     {
         X = x;
         Y = y;
@@ -44,32 +44,32 @@ public struct Vector4 : IEquatable<Vector4>
     }
 
     // For shader interop, we need to be able to compare vectors
-    public bool Equals(Vector4 other)
+    public bool Equals( Vector4 other )
     {
-        return X.Equals(other.X) 
-            && Y.Equals(other.Y) 
-            && Z.Equals(other.Z) 
-            && W.Equals(other.W);
+        return X.Equals( other.X )
+               && Y.Equals( other.Y )
+               && Z.Equals( other.Z )
+               && W.Equals( other.W );
     }
 
-    public override bool Equals(object? obj)
+    public override bool Equals( object? obj )
     {
-        return obj is Vector4 other && Equals(other);
+        return obj is Vector4 other && Equals( other );
     }
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(X, Y, Z, W);
+        return HashCode.Combine( X, Y, Z, W );
     }
 
-    public static bool operator ==(Vector4 left, Vector4 right)
+    public static bool operator ==( Vector4 left, Vector4 right )
     {
-        return left.Equals(right);
+        return left.Equals( right );
     }
 
-    public static bool operator !=(Vector4 left, Vector4 right)
+    public static bool operator !=( Vector4 left, Vector4 right )
     {
-        return !left.Equals(right);
+        return !left.Equals( right );
     }
 }
 

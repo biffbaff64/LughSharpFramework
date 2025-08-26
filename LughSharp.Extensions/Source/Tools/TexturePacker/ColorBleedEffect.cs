@@ -24,10 +24,12 @@
 
 using System.Runtime.InteropServices;
 
-namespace Extensions.Source.Tools.ImagePacker;
+using LughSharp.Lugh.Graphics;
+
+namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
+[SupportedOSPlatform( "windows") ]
 public class ColorBleedEffect
 {
     private static readonly int[] _offsets = [ -1, -1, 0, -1, 1, -1, -1, 0, 1, 0, -1, 1, 0, 1, 1, 1 ];

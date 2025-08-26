@@ -38,24 +38,24 @@ public class ShapeRenderer : IDisposable
     }
 
     // ========================================================================
-    
+
     public IImmediateModeRenderer Renderer      { get; set; }
     public ShapeTypes?            ShapeType     { get; set; }
     public bool                   AutoShapeType { get; set; }
 
     // ========================================================================
-    
-    private readonly Color     _color                = new( 1, 1, 1, 1 );
-    private readonly Matrix4 _combinedMatrix       = new();
-    private readonly float     _defaultRectLineWidth = 0.75f;
-    private readonly Vector2   _tmp                  = new();
 
-    private bool      _matrixDirty      = false;
+    private readonly Color   _color                = new( 1, 1, 1, 1 );
+    private readonly Matrix4 _combinedMatrix       = new();
+    private readonly float   _defaultRectLineWidth = 0.75f;
+    private readonly Vector2 _tmp                  = new();
+
+    private bool    _matrixDirty      = false;
     private Matrix4 _projectionMatrix = new();
     private Matrix4 _transformMatrix  = new();
 
     // ========================================================================
-    
+
     public ShapeRenderer( int maxVertices = 5000, ShaderProgram? defaultShader = null )
     {
         Renderer = defaultShader == null

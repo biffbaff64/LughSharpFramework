@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
 public class PackingSettingsProcessor : FileProcessor
@@ -56,7 +56,6 @@ public class DeleteProcessor : FileProcessor
 // ============================================================================
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
 public class SettingsCombiningProcessor : FileProcessor
 {
     public TexturePackerEntry? EntryDir { get; set; }

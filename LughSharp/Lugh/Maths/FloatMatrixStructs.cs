@@ -36,9 +36,16 @@ public struct Matrix2F( float m11, float m12, float m21, float m22 )
 
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
-public struct Matrix3F( float m11, float m12, float m13,
-                        float m21, float m22, float m23,
-                        float m31, float m32, float m33 )
+public struct Matrix3F(
+    float m11,
+    float m12,
+    float m13,
+    float m21,
+    float m22,
+    float m23,
+    float m31,
+    float m32,
+    float m33 )
 {
     public float M11 = m11;
     public float M12 = m12;
@@ -53,10 +60,23 @@ public struct Matrix3F( float m11, float m12, float m13,
 
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
-public struct Matrix4F( float m11, float m12, float m13, float m14,
-                        float m21, float m22, float m23, float m24,
-                        float m31, float m32, float m33, float m34,
-                        float m41, float m42, float m43, float m44 )
+public struct Matrix4F(
+    float m11,
+    float m12,
+    float m13,
+    float m14,
+    float m21,
+    float m22,
+    float m23,
+    float m24,
+    float m31,
+    float m32,
+    float m33,
+    float m34,
+    float m41,
+    float m42,
+    float m43,
+    float m44 )
 {
     public float M11 = m11;
     public float M12 = m12;

@@ -377,7 +377,7 @@ public class PolygonSprite
         {
             return;
         }
-        
+
         spriteBatch.Draw( Region.Region.Texture,
                           GetVertices()!,
                           0,

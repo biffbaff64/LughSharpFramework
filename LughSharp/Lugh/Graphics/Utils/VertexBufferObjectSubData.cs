@@ -48,10 +48,10 @@ public class VertexBufferObjectSubData : IVertexData
 
     // ========================================================================
 
-    private readonly Buffer< float >  _floatBuffer;
-    private readonly bool             _isDirect;
-    private readonly int              _usage;
-    private readonly bool             _isStatic;
+    private readonly Buffer< float > _floatBuffer;
+    private readonly bool            _isDirect;
+    private readonly int             _usage;
+    private readonly bool            _isStatic;
 
     private int  _bufferHandle;
     private bool _isDirty = false;
@@ -84,7 +84,7 @@ public class VertexBufferObjectSubData : IVertexData
         ByteBuffer = new Buffer< byte >( Attributes.VertexSize * numVertices );
         _isDirect  = true;
 
-        _usage      = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
+        _usage       = isStatic ? IGL.GL_STATIC_DRAW : IGL.GL_DYNAMIC_DRAW;
         _floatBuffer = ByteBuffer.AsFloatBuffer();
 
         _bufferHandle = CreateBufferObject();
