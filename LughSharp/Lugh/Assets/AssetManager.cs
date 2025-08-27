@@ -94,7 +94,7 @@ public partial class AssetManager
     {
         if ( defaultLoaders )
         {
-            Logger.Debug( "Setting default loaders..." );
+            Logger.Debug( "Setting Default Asset Loaders..." );
 
             SetLoader( typeof( BitmapFont ), new BitmapFontLoader( resolver ) );
             SetLoader( typeof( IMusic ), new MusicLoader( resolver ) );
@@ -113,8 +113,6 @@ public partial class AssetManager
             // .g3dj loader here...
             // .g3db loader here...
             // .obj loader here...
-
-            Logger.Debug( "Default loaders set." );
         }
 
         FileHandleResolver = resolver;
@@ -127,9 +125,7 @@ public partial class AssetManager
     /// Updates the asset manager, loading new assets and processing asset loading tasks.
     /// Returns true if all assets are loaded, otherwise false.
     /// </summary>
-    /// <returns>
-    /// A boolean value indicating whether all assets are loaded.
-    /// </returns>
+    /// <returns> A boolean value indicating whether all assets are loaded.</returns>
     public bool Update()
     {
         try

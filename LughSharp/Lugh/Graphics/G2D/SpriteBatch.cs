@@ -175,16 +175,13 @@ public partial class SpriteBatch : IBatch, IDisposable
         // Usage.POSITION: 2 floats for x and y coordinates.
         // Usage.COLOR_PACKED: 1 floats for packed RGBA color component.
         // Usage.TEXTURE_COORDINATES: 2 floats for texture u and v coordinates.
-        var va1 = new VertexAttribute( ( int )VertexConstants.Usage.Position,
-                                       VertexConstants.POSITION_COMPONENTS,
-                                       "a_position" );
 
+        var va1 = VertexAttribute.Position( VertexConstants.POSITION_COMPONENTS, IGL.GL_FLOAT, false );;
+        
         var va2 = VertexAttribute.ColorPacked( VertexConstants.COLOR_COMPONENTS, IGL.GL_FLOAT, false );
 
-        var va3 = new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates,
-                                       VertexConstants.TEXCOORD_COMPONENTS,
-                                       "a_texCoord0" );
-
+        var va3 = VertexAttribute.TexCoords( 0, VertexConstants.TEXCOORD_COMPONENTS, IGL.GL_FLOAT, false );
+        
         // Create the mesh object with the specified vertex attributes and size.
         // The mesh will hold the vertex and index data for rendering.
         _mesh = new Mesh( vertexDataType,
@@ -665,8 +662,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     {
         GdxRuntimeException.ThrowIfNull( _shader );
 
-        _combinedMatrixLocation = GL.GetUniformLocation( _shader.ShaderProgramHandle,
-                                                         "u_combinedMatrix" );
+        _combinedMatrixLocation = GL.GetUniformLocation( _shader.ShaderProgramHandle, "u_combinedMatrix" );
     }
 
     /// <summary>
@@ -687,8 +683,11 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public static ShaderProgram CreateDefaultShader()
     {
-        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.vert" );
-        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.frag" );
+//        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.vert" );
+//        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/default.glsl.frag" );
+
+        var vertexShader = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/Simple.glsl.vert" );
+        var fragShader   = ShaderLoader.Load( IOUtils.AssetsRoot + "shaders/Simple.glsl.frag" );
 
         return new ShaderProgram( vertexShader, fragShader );
     }

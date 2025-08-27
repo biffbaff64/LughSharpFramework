@@ -166,8 +166,13 @@ public class DesktopGLApplication : IApplication, IDisposable
     /// </summary>
     protected void Loop()
     {
+        Logger.Divider();
         Logger.Debug( "Entering Framework Loop", true );
+        Logger.Divider();
+        Logger.Divider();
 
+        // ====================================================================
+        
         List< DesktopGLWindow > closedWindows = [ ];
 
         while ( _running && ( Windows.Count > 0 ) )

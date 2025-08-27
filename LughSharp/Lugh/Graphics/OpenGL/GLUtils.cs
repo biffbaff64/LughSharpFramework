@@ -149,21 +149,33 @@ public static class GLUtils
         {
             Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );
 
-            var debugProc = new GLBindings.GLDEBUGPROC( ( source, type, id, severity, length, message, userParam ) =>
+//            var debugProc = new GLBindings.GLDEBUGPROC( ( source, type, id, severity, length, message, userParam ) =>
+//            {
+//                GL.MessageCallback( source, type, id, severity, length, message, userParam );
+
+//                if ( severity == DebugSeverity.DEBUG_SEVERITY_HIGH )
+//                {
+//                    Debugger.Break();
+//                }
+//            } );
+
+            GL.Enable( ( int )EnableCap.DebugOutput );
+            GL.Enable( ( int )EnableCap.DebugOutputSynchronous );
+            GL.DebugMessageCallback( GL.MessageCallback, null );
+
+            var array = new uint[ 1 ];
+
+            fixed ( uint* ptr = &array[ 0 ] )
             {
-                GL.MessageCallback( source, type, id, severity, length, message, userParam );
-
-                if ( severity == DebugSeverity.DEBUG_SEVERITY_HIGH )
-                {
-                    Debugger.Break();
-                }
-            } );
-
-            GL.DebugMessageCallback( debugProc, null );
-            GL.Enable( IGL.GL_DEBUG_OUTPUT );
-            GL.Enable( IGL.GL_DEBUG_OUTPUT_SYNCHRONOUS );
+                GL.DebugMessageControl( ( int )DebugSourceControl.DontCare,
+                                        ( int )DebugTypeControl.DontCare,
+                                        ( int )DebugSeverityControl.DontCare, 0,
+                                        ptr,
+                                        true );
+            }
         }
     }
+    
 
     /// <summary>
     /// 

@@ -25,16 +25,17 @@
 namespace LughSharp.Lugh.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum DebugSeverity
+public enum DebugSeverityControl
 {
     High         = IGL.GL_DEBUG_SEVERITY_HIGH,
     Medium       = IGL.GL_DEBUG_SEVERITY_MEDIUM,
     Low          = IGL.GL_DEBUG_SEVERITY_LOW,
     Notification = IGL.GL_DEBUG_SEVERITY_NOTIFICATION,
+    DontCare     = IGL.GL_DONT_CARE,
 }
 
 [PublicAPI]
-public enum DebugSource
+public enum DebugSourceControl
 {
     Api            = IGL.GL_DEBUG_SOURCE_API,
     WindowSystem   = IGL.GL_DEBUG_SOURCE_WINDOW_SYSTEM,
@@ -42,10 +43,11 @@ public enum DebugSource
     ThirdParty     = IGL.GL_DEBUG_SOURCE_THIRD_PARTY,
     Application    = IGL.GL_DEBUG_SOURCE_APPLICATION,
     Other          = IGL.GL_DEBUG_SOURCE_OTHER,
+    DontCare       = IGL.GL_DONT_CARE,
 }
 
 [PublicAPI]
-public enum DebugType
+public enum DebugTypeControl
 {
     Error              = IGL.GL_DEBUG_TYPE_ERROR,
     DeprecatedBehavior = IGL.GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR,
@@ -54,6 +56,7 @@ public enum DebugType
     Performance        = IGL.GL_DEBUG_TYPE_PERFORMANCE,
     Marker             = IGL.GL_DEBUG_TYPE_MARKER,
     Other              = IGL.GL_DEBUG_TYPE_OTHER,
+    DontCare           = IGL.GL_DONT_CARE,
 }
 
 // ========================================================================

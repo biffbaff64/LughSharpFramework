@@ -163,6 +163,54 @@ public class VertexAttribute
                                     "a_position" );
     }
 
+    public static VertexAttribute Position( int numComponents,
+                                            int type = IGL.GL_FLOAT,
+                                            bool normalized = false,
+                                            string alias = "a_position" )
+    {
+        return new VertexAttribute( ( int )VertexConstants.Usage.Position,
+                                    numComponents,
+                                    type,
+                                    normalized,
+                                    alias );
+    }
+
+    /// <summary>
+    /// Creates and returns a predefined VertexAttribute configured for use with packed color data.
+    /// </summary>
+    /// <returns>
+    /// A VertexAttribute with four components, associated with the color attribute in shaders,
+    /// using the unsigned byte OpenGL data type and normalized.
+    /// </returns>
+    public static VertexAttribute ColorPacked( int components,
+                                               int type = IGL.GL_UNSIGNED_BYTE,
+                                               bool normalized = true,
+                                               string alias = "a_color" )
+    {
+        return new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
+                                    components,
+                                    type,
+                                    normalized,
+                                    alias );
+    }
+
+    /// <summary>
+    /// Creates and returns a new VertexAttribute instance configured for unpacked color data.
+    /// </summary>
+    /// <returns>
+    /// A VertexAttribute instance with the usage set to color unpacked, 4 components,
+    /// type set to GL_FLOAT, not normalized, and with the alias set to the color attribute
+    /// used in shader programs.
+    /// </returns>
+    public static VertexAttribute ColorUnpacked()
+    {
+        return new VertexAttribute( ( int )VertexConstants.Usage.ColorUnpacked,
+                                    4,
+                                    IGL.GL_FLOAT,
+                                    false,
+                                    "a_color" );
+    }
+
     /// <summary>
     /// Creates a VertexAttribute for texture coordinates.
     /// </summary>
@@ -183,6 +231,29 @@ public class VertexAttribute
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="unit"></param>
+    /// <param name="numComponents"></param>
+    /// <param name="type"></param>
+    /// <param name="normalized"></param>
+    /// <param name="alias"></param>
+    /// <returns></returns>
+    public static VertexAttribute TexCoords( int unit,
+                                             int numComponents,
+                                             int type = IGL.GL_FLOAT,
+                                             bool normalized = false,
+                                             string alias = "a_texCoord" )
+    {
+        return new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates,
+                                    numComponents,
+                                    type,
+                                    normalized,
+                                    alias,
+                                    unit );
+    }
+
+    /// <summary>
     /// Creates a VertexAttribute configured for normals.
     /// The attribute uses the NORMAL usage type, with 3 components, and a predefined alias.
     /// </summary>
@@ -194,41 +265,6 @@ public class VertexAttribute
         return new VertexAttribute( ( int )VertexConstants.Usage.Normal,
                                     3,
                                     "a_normal" );
-    }
-
-    /// <summary>
-    /// Creates and returns a predefined VertexAttribute configured for use with packed color data.
-    /// </summary>
-    /// <returns>
-    /// A VertexAttribute with four components, associated with the color attribute in shaders,
-    /// using the unsigned byte OpenGL data type and normalized.
-    /// </returns>
-    public static VertexAttribute ColorPacked( int components = 1,
-                                               int type = IGL.GL_UNSIGNED_BYTE,
-                                               bool normalized = true )
-    {
-        return new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
-                                    components,
-                                    type,
-                                    normalized,
-                                    "a_color" );
-    }
-
-    /// <summary>
-    /// Creates and returns a new VertexAttribute instance configured for unpacked color data.
-    /// </summary>
-    /// <returns>
-    /// A VertexAttribute instance with the usage set to color unpacked, 4 components,
-    /// type set to GL_FLOAT, not normalized, and with the alias set to the color attribute
-    /// used in shader programs.
-    /// </returns>
-    public static VertexAttribute ColorUnpacked()
-    {
-        return new VertexAttribute( ( int )VertexConstants.Usage.ColorUnpacked,
-                                    4,
-                                    IGL.GL_FLOAT,
-                                    false,
-                                    "a_color" );
     }
 
     /// <summary>

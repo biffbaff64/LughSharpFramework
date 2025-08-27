@@ -77,6 +77,9 @@ public class ShaderProgram : IDisposable
 
     // ========================================================================
 
+    private Dictionary< string, int > _attributeLocations = [ ];
+    private Dictionary< string, int > _uniformLocations   = [ ];
+
     /// <summary>
     /// Flag indicating whether attributes & uniforms must be present at all times.
     /// </summary>
@@ -160,15 +163,13 @@ public class ShaderProgram : IDisposable
 
         GL.DeleteShader( _vertexShaderHandle );
         GL.DeleteShader( _fragmentShaderHandle );
-
-        var texLocation = GetUniformLocation( "u_texture" );
-
-        if ( texLocation == INVALID )
-        {
-            Logger.Warning( $"Texture uniform not found in shader." );
-
-            DebugShaderSources();
-        }
+        
+        CacheAttribute( "a_position" );
+        CacheAttribute( "a_color" );
+        CacheAttribute( "a_texCoord0" );
+        
+        CacheUniform( "u_combinedMatrix" );
+        CacheUniform( "u_texture" );
     }
 
     /// <summary>
@@ -210,16 +211,14 @@ public class ShaderProgram : IDisposable
     public virtual void SetUniformMatrix< T >( string name, ref T matrix, bool transpose = false )
         where T : unmanaged
     {
-        var location = GL.GetUniformLocation( ShaderProgramHandle, name );
-
-        if ( location == INVALID )
+        if ( _uniformLocations.TryGetValue( name, out var location ) )
         {
-            Logger.Debug( "***** Cannot perform action, Location is INVALID ( -1 ) *****" );
-
-            return;
+            SetUniformMatrix( location, ref matrix, transpose );
         }
-
-        SetUniformMatrix( location, ref matrix, transpose );
+        else
+        {
+            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
+        }
     }
 
     /// <summary>
@@ -238,10 +237,8 @@ public class ShaderProgram : IDisposable
         const int MAT33 = 9;
         const int MAT22 = 4;
 
-        if ( name == INVALID )
+        if ( !_uniformLocations.ContainsValue( name ) )
         {
-            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
-
             return;
         }
 
@@ -281,11 +278,6 @@ public class ShaderProgram : IDisposable
     {
         var location = GL.GetAttribLocation( ShaderProgramHandle, name );
 
-        if ( location == INVALID )
-        {
-            Logger.Debug( $"***** WARNING, Location is INVALID ( -1 ) for {name} *****" );
-        }
-
         return location;
     }
 
@@ -297,11 +289,6 @@ public class ShaderProgram : IDisposable
     public virtual int GetUniformLocation( string name )
     {
         var location = GL.GetUniformLocation( ShaderProgramHandle, name );
-
-        if ( location == INVALID )
-        {
-            Logger.Debug( $"***** WARNING, Location is INVALID ( -1 ) for {name} *****" );
-        }
 
         return location;
     }
@@ -317,8 +304,6 @@ public class ShaderProgram : IDisposable
 
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) for {name} *****" );
-
             return;
         }
 
@@ -336,8 +321,6 @@ public class ShaderProgram : IDisposable
 
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) for {name} *****" );
-
             return;
         }
 
@@ -370,8 +353,6 @@ public class ShaderProgram : IDisposable
 
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) for {name} *****" );
-
             return;
         }
 
@@ -389,8 +370,6 @@ public class ShaderProgram : IDisposable
 
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
-
             return;
         }
 
@@ -409,8 +388,6 @@ public class ShaderProgram : IDisposable
 
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
-
             return;
         }
 
@@ -425,8 +402,6 @@ public class ShaderProgram : IDisposable
     {
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Cannot perform action, Location is INVALID ( -1 ) *****" );
-
             return;
         }
 
@@ -446,8 +421,6 @@ public class ShaderProgram : IDisposable
     {
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) *****" );
-
             return;
         }
 
@@ -470,8 +443,6 @@ public class ShaderProgram : IDisposable
 
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) for {name} *****" );
-
             return;
         }
 
@@ -487,8 +458,6 @@ public class ShaderProgram : IDisposable
     {
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) *****" );
-
             return;
         }
 
@@ -503,8 +472,6 @@ public class ShaderProgram : IDisposable
     {
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) *****" );
-
             return;
         }
 
@@ -521,8 +488,6 @@ public class ShaderProgram : IDisposable
 
         if ( location == INVALID )
         {
-            Logger.Debug( $"***** Action cannot be performed, Location is INVALID ( -1 ) for {name} *****" );
-
             return;
         }
 
@@ -546,6 +511,25 @@ public class ShaderProgram : IDisposable
     public virtual void Unbind()
     {
         GL.UseProgram( 0 );
+    }
+
+    // ========================================================================
+
+    public void Use() => GL.UseProgram( ShaderProgramHandle );
+
+    public bool HasUniform( string name ) => _uniformLocations.ContainsKey( name );
+    public bool HasAttribute( string name ) => _attributeLocations.ContainsKey( name );
+
+    private void CacheUniform( string name )
+    {
+        var location = GL.GetUniformLocation( ShaderProgramHandle, name );
+        _uniformLocations[ name ] = location;
+    }
+
+    private void CacheAttribute( string name )
+    {
+        var location = GL.GetAttribLocation( ShaderProgramHandle, name );
+        _attributeLocations[ name ] = location;
     }
 
     // ========================================================================

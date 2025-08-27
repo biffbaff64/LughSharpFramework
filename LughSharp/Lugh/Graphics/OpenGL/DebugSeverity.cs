@@ -65,4 +65,5 @@ public class DebugSeverity
     public const int PROGRAM_PIPELINE                 = 33508;
     public const int SAMPLER                          = 33510;
     public const int DISPLAY_LIST                     = 33511;
+    public const int DONT_CARE                        = -1;
 }

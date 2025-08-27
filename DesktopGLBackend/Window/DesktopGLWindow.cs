@@ -128,16 +128,6 @@ public partial class DesktopGLWindow : IDisposable
         WindowListener      = config.WindowListener;
         AppConfig           = DesktopGLApplicationConfiguration.Copy( config );
         Application         = application;
-
-        if ( ApplicationListener == null )
-        {
-            Logger.Warning( "Provided ApplicationListener is NULL!" );
-        }
-
-        if ( WindowListener == null )
-        {
-            Logger.Warning( "Provided config.WindowListener is NULL!" );
-        }
     }
 
     /// <summary>

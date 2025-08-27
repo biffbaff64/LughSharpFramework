@@ -107,6 +107,14 @@
         <Content Include="Assets\Shaders\Quad.vert">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <None Remove="Assets\Shaders\Simple.glsl.frag"/>
+        <Content Include="Assets\Shaders\Simple.glsl.frag">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Assets\Shaders\Simple.glsl.vert"/>
+        <Content Include="Assets\Shaders\Simple.glsl.vert">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>

@@ -172,11 +172,11 @@ public class Mesh : IDisposable
     /// <param name="attributes">the <see cref="VertexAttributes" />.</param>
     public Mesh( VertexDataType? type, bool isStatic, int maxVertices, int maxIndices, VertexAttributes attributes )
     {
-        Logger.Debug( $"\ntype: {type},\n" +
-                      $"isStatic: {isStatic},\n" +
-                      $"maxVertices: {maxVertices},\n" +
-                      $"maxIndices: {maxIndices},\n" +
-                      $"attributes: {attributes}\n" );
+//        Logger.Debug( $"\ntype: {type},\n" +
+//                      $"isStatic: {isStatic},\n" +
+//                      $"maxVertices: {maxVertices},\n" +
+//                      $"maxIndices: {maxIndices},\n" +
+//                      $"attributes: {attributes}\n" );
 
         switch ( type )
         {

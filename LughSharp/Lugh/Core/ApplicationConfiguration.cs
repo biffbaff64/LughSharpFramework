@@ -90,6 +90,7 @@ public class ApplicationConfiguration
     // ========================================================================
     // Window Specific Configuration
     // ========================================================================
+
     public int       WindowX            { get; set; } = DEFAULT_WINDOW_X;
     public int       WindowY            { get; set; } = DEFAULT_WINDOW_Y;
     public int       WindowWidth        { get; set; } = DEFAULT_WINDOW_WIDTH;
@@ -214,6 +215,27 @@ public class ApplicationConfiguration
         Alpha                          = config.Alpha;
         PreferencesDirectory           = config.PreferencesDirectory;
         PreferencesFileType            = config.PreferencesFileType;
+        GLEmulation                    = config.GLEmulation;
+        WindowX                        = config.WindowX;
+        WindowY                        = config.WindowY;
+        WindowWidth                    = config.WindowWidth;
+        WindowHeight                   = config.WindowHeight;
+        WindowMinWidth                 = config.WindowMinWidth;
+        WindowMinHeight                = config.WindowMinHeight;
+        WindowMaxWidth                 = config.WindowMaxWidth;
+        WindowMaxHeight                = config.WindowMaxHeight;
+        WindowIconFileType             = config.WindowIconFileType;
+        WindowIconPaths                = config.WindowIconPaths;
+        InitialVisibility              = config.InitialVisibility;
+        VSyncEnabled                   = config.VSyncEnabled;
+        WindowResizable                = config.WindowResizable;
+        WindowDecorated                = config.WindowDecorated;
+        WindowMaximized                = config.WindowMaximized;
+        AutoIconify                    = config.AutoIconify;
+        InitialBackgroundColor         = config.InitialBackgroundColor;
+        Title                          = config.Title;
+        GLProfilingEnabled             = config.GLProfilingEnabled;
+        MaxNetThreads                  = config.MaxNetThreads;
     }
 
     /// <summary>
