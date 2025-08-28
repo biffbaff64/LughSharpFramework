@@ -236,10 +236,6 @@ public partial class TexturePacker
                          Settings settings,
                          AbstractProgressListener? progressListener = null )
     {
-        Logger.Debug( $"inputFolder: {inputFolder}" );
-        Logger.Debug( $"outputFolder: {outputFolder}" );
-        Logger.Debug( $"packFileName: {packFileName}" );
-
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
@@ -257,8 +253,6 @@ public partial class TexturePacker
     /// <param name="file"></param>
     public void AddImage( FileInfo file )
     {
-        Logger.Debug( $"Adding Image: {file.FullName}" );
-
         var inputImage = new InputImage
         {
             FileInfo = file,
@@ -276,8 +270,6 @@ public partial class TexturePacker
     /// <param name="name"></param>
     public void AddImage( Bitmap image, string name )
     {
-        Logger.Debug( $"Adding Image: {name}" );
-
         var inputImage = new InputImage
         {
             Image = image,
@@ -295,15 +287,10 @@ public partial class TexturePacker
     /// <param name="packFileName"> The name for the resulting TextureAtlas. </param>
     public void Pack( DirectoryInfo outputDir, string packFileName )
     {
-        Logger.Checkpoint();
-        Logger.Debug( $"outputDir: {outputDir.FullName}" );
-
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
             packFileName = packFileName.Substring( 0, packFileName.Length - _settings.AtlasExtension.Length );
         }
-
-        Logger.Debug( $"packFileName: {packFileName}" );
 
         // Remove the output directory, if it exists, and create
         // a new fresh output folder.
@@ -319,15 +306,11 @@ public partial class TexturePacker
 
         var n = _settings.Scale.Length;
 
-        Logger.Debug( $"_settings.Scale.Length: {_settings.Scale.Length}" );
-
         for ( var i = 0; i < n; i++ )
         {
             ProgressListener.Start( 1f / n );
 
             _imageProcessor.Scale = _settings.Scale[ i ];
-
-            Logger.Debug( $"_imageProcessor.Scale: {_imageProcessor.Scale}" );
 
             if ( ( _settings.ScaleResampling != null )
                  && ( _settings.ScaleResampling.Count > i )
@@ -336,22 +319,13 @@ public partial class TexturePacker
                 _imageProcessor.Resampling = _settings.ScaleResampling[ i ];
             }
 
-            Logger.Debug( $"_imageProcessor.Resampling: {_imageProcessor.Resampling}" );
-
             ProgressListener.Start( 0.35f );
             ProgressListener.Count = 0;
             ProgressListener.Total = _inputImages.Count;
 
-            Logger.Debug( $"_inputImages.Count: {_inputImages.Count}" );
-            Logger.Debug( $"_imageProcessor.ImageRects.Count: {_imageProcessor.ImageRects.Count}" );
-
             for ( int ii = 0, nn = _inputImages.Count; ii < nn; ii++, ProgressListener.Count++ )
             {
-                Logger.Debug( $"ii: {ii}, nn: {nn}, ProgressListener.Count: {ProgressListener.Count}" );
-
                 var inputImage = _inputImages[ ii ];
-
-                Logger.Debug( $"inputImage.Name: {inputImage.Name}" );
 
                 if ( inputImage.FileInfo != null )
                 {
@@ -378,13 +352,6 @@ public partial class TexturePacker
             ProgressListener.Count = 0;
             ProgressListener.Total = _imageProcessor.ImageRects.Count;
 
-            Logger.Debug( $"_imageProcessor.ImageRects.Count: {_imageProcessor.ImageRects.Count}" );
-
-            foreach ( var rect in _imageProcessor.ImageRects )
-            {
-                Logger.Debug( rect.ToString() );
-            }
-
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
             ProgressListener.End();
@@ -393,8 +360,6 @@ public partial class TexturePacker
             ProgressListener.Total = pages.Count;
 
             var scaledPackFileName = _settings.GetScaledPackFileName( packFileName, i );
-
-            Logger.Debug( $"scaledPackFileName: {scaledPackFileName}" );
 
             WriteImages( outputDir.FullName, scaledPackFileName, pages );
 
@@ -476,18 +441,9 @@ public partial class TexturePacker
     /// <exception cref="Exception"></exception>
     private void WriteImages( string outputDir, string scaledPackFileName, List< Page > pages )
     {
-        Logger.Debug( "Writing images..." );
-        Logger.Debug( $"outputDir: {outputDir}" );
-        Logger.Debug( $"scaledPackFileName: {scaledPackFileName}" );
-        Logger.Debug( $"pages.Count: {pages.Count}" );
-
         var packFileNoExt = Path.Combine( outputDir, scaledPackFileName );
         var packDir       = Path.GetDirectoryName( packFileNoExt );
         var imageName     = Path.GetFileName( packFileNoExt );
-
-        Logger.Debug( $"packFileNoExt: {packFileNoExt}" );
-        Logger.Debug( $"packDir: {packDir}" );
-        Logger.Debug( $"imageName: {imageName}" );
 
         if ( packDir == null )
         {
@@ -574,16 +530,8 @@ public partial class TexturePacker
 
             page.ImageName = Path.GetFileName( outputFile );
 
-            page.Debug();
-            Logger.Debug( $"outputFile: {outputFile}" );
-
             var canvas = new Bitmap( width, height, PixmapFormatExtensions.ToSystemPixelFormat( _settings.Format ) );
             var g      = Graphics.FromImage( canvas );
-
-            if ( !_settings.Silent )
-            {
-                Logger.Debug( $"Writing {canvas.Width}x{canvas.Height}: {outputFile}" );
-            }
 
             if ( page.OutputRects == null )
             {
@@ -602,10 +550,6 @@ public partial class TexturePacker
                     var ih    = image.Height;
                     var rectX = page.X + rect.X;
                     var rectY = ( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY );
-
-                    Logger.Debug( $"iw: {iw}, ih: {ih}" );
-                    Logger.Debug( $"rectX: {rectX}, rectY: {rectY}" );
-                    Logger.Debug( $"_settings.DuplicatePadding: {_settings.DuplicatePadding}" );
 
                     if ( _settings.DuplicatePadding )
                     {

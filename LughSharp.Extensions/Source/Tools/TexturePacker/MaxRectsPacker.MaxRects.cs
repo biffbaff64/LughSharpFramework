@@ -206,8 +206,8 @@ public partial class MaxRectsPacker
         {
             var width         = rect.Width;
             var height        = rect.Height;
-            var rotatedWidth  = ( height - _settings.PaddingY ) + _settings.PaddingX;
-            var rotatedHeight = ( width - _settings.PaddingX ) + _settings.PaddingY;
+            var rotatedWidth  = height - _settings.PaddingY + _settings.PaddingX;
+            var rotatedHeight = width - _settings.PaddingX + _settings.PaddingY;
             var rotate        = rect.CanRotate && _settings.Rotation;
 
             TexturePacker.Rect? newNode;

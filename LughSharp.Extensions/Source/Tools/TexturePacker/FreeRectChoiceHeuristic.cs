@@ -50,7 +50,7 @@ public enum FreeRectChoiceHeuristic
     BottomLeftRule,
 
     /// <summary>
-    /// CP: Choosest the placement where the rectangle touches other rects as much
+    /// CP: Chooses the placement where the rectangle touches other rects as much
     /// as possible.
     /// </summary>
     ContactPointRule,

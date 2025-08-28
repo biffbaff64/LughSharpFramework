@@ -43,14 +43,6 @@ namespace LughSharp.Lugh.Utils;
 [PublicAPI]
 public static class Logger
 {
-    // ========================================================================
-
-    private static string        _debugFilePath = "";
-    private static string        _debugFileName = "";
-    private static StreamWriter? _streamWriter;
-
-    // ========================================================================
-
     #region constants
 
     // Enable / Disable flags.
@@ -74,9 +66,17 @@ public static class Logger
 
     public static bool EnableWriteToFile { get; set; } = false;
     public static int  TraceLevel        { get; set; } = LOG_NONE;
+    public static bool IsMinimal         { get; set; } = false;
 
     #endregion properties
 
+    // ========================================================================
+
+    private static string        _debugFilePath = "";
+    private static string        _debugFileName = "";
+    private static StreamWriter? _streamWriter;
+
+    // ========================================================================
     // ========================================================================
 
     #region public methods
@@ -94,6 +94,7 @@ public static class Logger
     {
         TraceLevel        = logLevel;
         EnableWriteToFile = enableWriteToFile;
+        IsMinimal         = false;
 
         if ( EnableWriteToFile )
         {
@@ -128,9 +129,18 @@ public static class Logger
             Divider();
         }
 
-        var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-        var str      = CreateMessage( DEBUG_TAG, message, callerID );
-
+        string str;
+        
+        if ( IsMinimal )
+        {
+            str = CreateMessage( null, message, null );
+        }
+        else
+        {
+            var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
+            str      = CreateMessage( DEBUG_TAG, message, callerID );
+        }
+        
         Console.WriteLine( str );
         WriteToFile( str );
 
@@ -158,8 +168,17 @@ public static class Logger
             return;
         }
 
-        var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-        var str      = CreateMessage( ERROR_TAG, message, callerID );
+        string str;
+        
+        if ( IsMinimal )
+        {
+            str = CreateMessage( ERROR_TAG, message, null );
+        }
+        else
+        {
+            var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
+            str      = CreateMessage( ERROR_TAG, message, callerID );
+        }
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -219,8 +238,17 @@ public static class Logger
             Divider();
         }
 
-        var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-        var str      = CreateMessage( CHECKPOINT_TAG, "< CHECKPOINT >", callerID );
+        string str;
+        
+        if ( IsMinimal )
+        {
+            str = CreateMessage( CHECKPOINT_TAG, "< CHECKPOINT >", null );
+        }
+        else
+        {
+            var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
+            str      = CreateMessage( CHECKPOINT_TAG, "< CHECKPOINT >", callerID );
+        }
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -301,17 +329,17 @@ public static class Logger
                 fileName = DEFAULT_TRACE_FILENAME;
             }
 
-            if ( File.Exists( fileName ) && deleteExisting )
-            {
-                File.Delete( fileName );
-            }
-
             // Get the base directory
             var baseDirectory = AppContext.BaseDirectory;
 
             // Construct the log directory path
             _debugFilePath = $"{baseDirectory}logs{Path.DirectorySeparatorChar}";
             _debugFileName = fileName;
+
+            if ( File.Exists( _debugFilePath + _debugFileName ) && deleteExisting )
+            {
+                File.Delete( _debugFilePath + _debugFileName );
+            }
 
             using ( _streamWriter = new StreamWriter( _debugFilePath + _debugFileName, true ) )
             {
@@ -345,7 +373,7 @@ public static class Logger
         // Check if the file exists before attempting to write
         if ( !File.Exists( filePath ) )
         {
-            OpenDebugFile( filePath, false );
+            OpenDebugFile( filePath, true );
         }
 
         try

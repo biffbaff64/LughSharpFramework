@@ -121,14 +121,10 @@ public class FileProcessor
 
         if ( IOUtils.IsFile( inputFileOrDir ) )
         {
-            Logger.Debug( $"Processing file: {inputFileOrDir.FullName}" );
-
             retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
         }
         else
         {
-            Logger.Debug( $"Processing directory: {inputFileOrDir.FullName}" );
-
             var files = new DirectoryInfo( inputFileOrDir.FullName )
                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
 
@@ -147,12 +143,8 @@ public class FileProcessor
     /// <exception cref="Exception"></exception>
     public virtual List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
-        Logger.Checkpoint();
-
         if ( outputRoot == null )
         {
-            Logger.Debug( $"Setting outputRoot to InternalPath: {IOUtils.InternalPath}" );
-
             outputRoot = new DirectoryInfo( IOUtils.InternalPath );
         }
 
@@ -357,28 +349,53 @@ public class FileProcessor
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                                  Dictionary< string, List< TexturePackerEntry > > stringToEntries, int depth )
     {
+        Logger.Debug($"=== FileProcessor.Process called ===");
+        Logger.Debug($"Files to process: {files.Length}");
+        Logger.Debug($"Depth: {depth}");
+        Logger.Debug($"OutputRoot: {outputRoot.FullName}");
+        Logger.Debug($"OutputDir: {outputDir.FullName}");
+
         foreach ( var file in files )
         {
+            Logger.Debug($"Checking file: {file.FullName}");
+            Logger.Debug($"File attributes: {file.Attributes}");
+            Logger.Debug($"Is directory: {(file.Attributes & FileAttributes.Directory) != 0}");
+
             if ( ( file.Attributes & FileAttributes.Directory ) == 0 )
             {
+                // POINT 2: Debug InputRegex filtering
+                Logger.Debug($"Processing regular file: {file.Name}");
+                Logger.Debug($"InputRegex.Count: {InputRegex.Count}");
+
                 if ( InputRegex.Count > 0 )
                 {
                     var found = false;
 
                     foreach ( var pattern in InputRegex )
                     {
+                        Logger.Debug($"Testing regex pattern: {pattern}");
+                        
                         if ( pattern.IsMatch( file.Name ) )
                         {
                             found = true;
-
+                            Logger.Debug($"✓ File {file.Name} MATCHES regex: {pattern}");
                             break;
+                        }
+                        else
+                        {
+                            Logger.Debug($"✗ File {file.Name} does NOT match regex: {pattern}");
                         }
                     }
 
                     if ( !found )
                     {
+                        Logger.Debug($"⚠️ File {file.Name} REJECTED by regex filtering");
                         continue;
                     }
+                }
+                else
+                {
+                    Logger.Debug($"No regex filters active, file accepted: {file.Name}");
                 }
 
                 if ( file.DirectoryName == null )
@@ -386,10 +403,18 @@ public class FileProcessor
                     Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
                 }
 
+                // POINT 2: Debug FilenameFilterDelegate
                 if ( ( FilenameFilterDelegate != null ) && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
                 {
+                    Logger.Debug($"⚠️ File {file.Name} REJECTED by FilenameFilterDelegate");
                     continue;
                 }
+                else if (FilenameFilterDelegate != null)
+                {
+                    Logger.Debug($"✓ File {file.Name} ACCEPTED by FilenameFilterDelegate");
+                }
+
+                Logger.Debug($"✅ File {file.Name} proceeding to entry creation");
 
                 var outputName = file.Name;
 

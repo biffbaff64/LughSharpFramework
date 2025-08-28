@@ -63,7 +63,17 @@ public class TexturePackerTest
             PowerOfTwo = true,
             Debug      = DRAW_DEBUG_LINES,
             IsAlias    = KEEP_DUPLICATE_IMAGES,
-            Silent     = false,
+            Silent     = true,
+            
+            // Fix the padding issues
+            PaddingX         = 4,     // Increase padding
+            PaddingY         = 4,     // Increase padding
+            EdgePadding      = false, // Disable edge padding initially
+            DuplicatePadding = false, // Disable duplicate padding
+            
+            // Ensure minimum sizes are reasonable
+            MinWidth  = 64,
+            MinHeight = 64,
         };
 
         // Build the Atlases from the specified parameters :-
@@ -75,15 +85,10 @@ public class TexturePackerTest
         var outputFolder     = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
         var settingsFilePath = Path.Combine( outputFolder, "TexturePackerTestSettings.json" );
 
-        Logger.Debug( $"Input folder: {inputFolder}" );
-        Logger.Debug( $"Output folder: {outputFolder}" );
-        Logger.Debug( $"Settings file path: {settingsFilePath}" );
-
-//        settings.WriteToJsonFile( settingsFilePath );
+        settings.WriteToJsonFile( settingsFilePath );
 
         var packer = new TexturePacker();
-
-//        packer.Process( inputFolder, outputFolder, "objects", settings );
+        packer.Process( inputFolder, outputFolder, "objects", settings );
     }
 
     [TearDown]

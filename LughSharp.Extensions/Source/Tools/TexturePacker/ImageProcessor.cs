@@ -75,16 +75,11 @@ public class ImageProcessor
     /// </param>
     public TexturePacker.Rect? AddImage( FileInfo? file, string? rootPath )
     {
-        Logger.Checkpoint();
-
         ArgumentNullException.ThrowIfNull( file );
 
         rootPath = IOUtils.NormalizePath( rootPath );
 
         Bitmap? image;
-
-        Logger.Debug( $"file: {file.FullName}" );
-        Logger.Debug( $"rootPath: {rootPath}" );
 
         try
         {

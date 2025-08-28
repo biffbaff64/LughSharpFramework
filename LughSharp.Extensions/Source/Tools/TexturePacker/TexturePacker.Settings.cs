@@ -27,6 +27,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 
 using LughSharp.Lugh.Graphics.G2D;
+using LughSharp.Lugh.Utils;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
@@ -435,6 +436,13 @@ public partial class TexturePacker
 
             if ( writeableString.Length > 0 )
             {
+                // Ensure the directory exists before creating the file
+                var directoryPath = Path.GetDirectoryName(fileName);
+                if (!string.IsNullOrEmpty(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+                
                 using var fs = File.Create( fileName );
 
                 fs.Write( writeableString );

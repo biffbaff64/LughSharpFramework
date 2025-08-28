@@ -106,6 +106,23 @@ public class IOUtils
     }
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
+    public static FileStream CreateFileWithDirectories(string filePath)
+    {
+        string? directoryPath = Path.GetDirectoryName(filePath);
+    
+        if (!string.IsNullOrEmpty(directoryPath))
+        {
+            Directory.CreateDirectory(directoryPath);
+        }
+    
+        return File.Create(filePath);
+    }
+    
+    /// <summary>
     /// Determines whether the specified <see cref="FileSystemInfo"/> represents a directory.
     /// </summary>
     /// <param name="inputFileOrDir">The <see cref="FileSystemInfo"/> to evaluate.</param>
