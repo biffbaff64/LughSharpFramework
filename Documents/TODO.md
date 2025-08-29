@@ -270,7 +270,6 @@ GRAPHICS
 
     CODE   DOCUMENT
     ----   --------
-    - DONE - DONE - AbstractGraphics
     - DONE - DONE - BMPFormatStructs
     - DONE - DONE - Color
     - DONE - DONE - Colors
@@ -279,6 +278,7 @@ GRAPHICS
     - DONE - IP   - GLTexture
     - DONE - IP   - GLTextureArray
     - DONE - DONE - GraphicsBackend
+    - DONE - DONE - GraphicsCapabilities
     - DONE - DONE - GraphicsDevice
     - DONE - DONE - GraphicsEnums
     - DONE - DONE - GStructs
@@ -287,13 +287,15 @@ GRAPHICS
     - DONE - DONE - IGraphicsDevice
     - DONE - DONE - IGraphicsDevice.DisplayMode
     - DONE - DONE - IGraphicsDevice.Monitor
+    - IP   - IP   - Image
     - DONE - DONE - ITextureArrayData
     - DONE - DONE - ITextureData
     - IP   - IP   - ManagedTextureHandle
     - DONE - DONE - Mesh
     - DONE - DONE - Pixmap
-    - DONE - IP   - PixmapFormat
+    - DONE - IP   - PixmapDataType
     - IP   - IP   - PixmapIO
+    - IP   - IP   - PNGFormatStructs
     - DONE - DONE - ShaderLoader
     - DONE - IP   - Texture
     - DONE - DONE - TextureDataFactory
@@ -381,10 +383,17 @@ GRAPHICS/OPENGL
 
     CODE   DOCUMENT
     ----   --------
+    - IP   -      - BufferObjectBindings
+    - IP   -      - DebugBindings
+    - DONE - DONE - DebugSeverity
+    -      -      - DrawBindings
+    - IP   -      - ErrorBindings
+    -      -      - FrameBufferBindings
     - DONE - DONE - GLBindings
     - DONE - DONE - GLBindingsHelpers
     - DONE - DONE - GLBindingsStructs
     - DONE - DONE - GLConsts
+    - DONE - DONE - GLDebugControl
     - DONE - DONE - GLFormatChooser
     - DONE - DONE - GLFunctionDelegates
     - DONE - DONE - GLFunctionsLoader
@@ -393,68 +402,9 @@ GRAPHICS/OPENGL
     - DONE - DONE - IGL
     - DONE - DONE - IGLBindings
     - DONE - DONE - IGLBindingsExtra
+    - IP   - IP   - OpenGL.Capabilities
+    - IP   - IP   - OpenGL.Initialisation
     - IP   - IP   - IGLBindingsHelpers
-
-GRAPHICS/OPENGL/ENUMS
----------------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - IP   - IP   - BlendMode
-    - IP   - IP   - BufferEnums
-    - IP   - IP   - ClearBufferMask
-    - IP   - IP   - CompareFunction
-    - IP   - IP   - CullFaceMode
-    - IP   - IP   - DataType
-    - IP   - IP   - DebugEnums
-    - IP   - IP   - DrawElementsType
-    - IP   - IP   - EnableCap
-    - IP   - IP   - FrameBufferEnums
-    - IP   - IP   - GetPName
-    - IP   - IP   - LogicOp
-    - IP   - IP   - MatrixMode
-    - IP   - IP   - PixelEnums
-    - IP   - IP   - PolygonMode
-    - IP   - IP   - PrimitiveType
-    - IP   - IP   - ProgramParameter
-    - IP   - IP   - QueryTarget
-    - IP   - IP   - ShaderEnums
-    - IP   - IP   - StencilEnums
-    - IP   - IP   - StringName
-    - IP   - IP   - TextureFilterMode
-    - IP   - IP   - TextureFormat
-    - IP   - IP   - TextureLimits
-    - IP   - IP   - TextureParameterName
-    - IP   - IP   - TextureTarget
-    - IP   - IP   - TextureUnit
-    - IP   - IP   - TextureWrapMode
-    - IP   - IP   - VertexAttribParameter
-    - IP   - IP   - VertexAttribType
-
-GRAPHICS/OPENGL/GLSL
---------------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - IP   - IP   - ColorTest.glsl.frag
-    - IP   - IP   - ColorTest.glsl.vert
-    - IP   - IP   - Default.glsl.frag
-    - IP   - IP   - Default.glsl.vert
-    - IP   - IP   - Quad.glsl.frag
-    - IP   - IP   - Quad.glsl.vert
-
-GRAPHICS/OPENGL/NEWBINDINGS <= Merge into GRAPHICS/OPENGL
----------------------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - IP   -      - BufferObjectBindings
-    -      -      - ContextBindings
-    - IP   -      - DebugBindings
-    - DONE - DONE - DebugSeverity
-    -      -      - DrawBindings
-    - IP   -      - ErrorBindings
-    -      -      - FrameBufferBindings
     - IP   -      - ProgramBindings
     - IP   -      - QueryBindings
     -      -      - RenderBufferBindings
@@ -469,12 +419,53 @@ GRAPHICS/OPENGL/NEWBINDINGS <= Merge into GRAPHICS/OPENGL
     - IP   -      - VertexArrayBindings
     - IP   -      - VertexAttribBindings
 
+GRAPHICS/OPENGL/ENUMS
+---------------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - IP   - IP   - BlendMode
+    - IP   - IP   - BufferEnums
+    - IP   - IP   - ClearBufferMask
+    - IP   - IP   - ClientApi
+    - IP   - IP   - CompareFunction
+    - IP   - IP   - ContextApi
+    - IP   - IP   - CullFaceMode
+    - IP   - IP   - DataType
+    - IP   - IP   - DebugEnums
+    - IP   - IP   - DrawElementsType
+    - IP   - IP   - EnableCap
+    - IP   - IP   - FrameBufferEnums
+    - IP   - IP   - GLParameter
+    - IP   - IP   - JoystickHats
+    - IP   - IP   - LogicOp
+    - IP   - IP   - MatrixMode
+    - IP   - IP   - PixelEnums
+    - IP   - IP   - PolygonMode
+    - IP   - IP   - PrimitiveType
+    - IP   - IP   - ProgramParameter
+    - IP   - IP   - QueryTarget
+    - IP   - IP   - ShaderEnums
+    - IP   - IP   - StencilEnums
+    - IP   - IP   - StringName
+    - IP   - IP   - TextureFilterMode
+    - IP   - IP   - TextureFormat
+    - IP   - IP   - TextureLimits
+    - IP   - IP   - TextureParameter
+    - IP   - IP   - TextureTarget
+    - IP   - IP   - TextureUnit
+    - IP   - IP   - TextureUsage
+    - IP   - IP   - TextureWrapMode
+    - IP   - IP   - VertexAttribParameter
+    - IP   - IP   - VertexAttribType
+
 GRAPHICS/TEXT
 -------------
 
     CODE   DOCUMENT
     ----   --------
     - IP   - IP   - BitmapFont
+    - IP   - IP   - BitmapFont.BitmapFontData
     - IP   - IP   - BitmapFontCache
     - DONE - DONE - CharacterUtils
     - DONE - IP   - DistanceFieldFont
@@ -483,17 +474,6 @@ GRAPHICS/TEXT
     - IP   - IP   - RegexUtils
     - IP   - IP   - Subset
     - IP   - IP   - UnicodeBlock
-
-GRAPHICS/TEXT/FREETYPE
-----------------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - IP   - IP   - FreeType
-    - IP   - IP   - FreeTypeConstants
-    - IP   - IP   - FreeTypeFontGenerator
-    - IP   - IP   - FreeTypeFontGeneratorLoader
-    - IP   - IP   - FreeTypeFontLoader
 
 GRAPHICS/UTILS
 --------------
@@ -508,10 +488,11 @@ GRAPHICS/UTILS
     - DONE - IP   - FloatTextureData
     - DONE - IP   - GLOnlyTextureData
     - DONE - IP   - GLVersion
-    - DONE - DONE - HdpiMode
     - DONE - DONE - HdpiUtils
+    - DONE - DONE - IImmediateModeRenderer
     - DONE - DONE - IIndexData
     - DONE - IP   - IInstanceData
+    - DONE - DONE - ImmediateModeRenderer
     - DONE - IP   - IndexArray
     - DONE - DONE - IndexBufferObject
     - IP   - IP   - IndexBufferObjectSubData

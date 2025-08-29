@@ -121,63 +121,6 @@ public static class GLUtils
     }
 
     /// <summary>
-    /// Checks for OpenGL errors after a given stage of rendering or processing.
-    /// Throws an <see cref="InvalidOperationException" /> if an OpenGL error is detected.
-    /// </summary>
-    /// <param name="stage">The description of the stage at which the error occurred.</param>
-    /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>
-    public static void CheckGLError( string stage )
-    {
-        var error = GL.GetError();
-
-        if ( error != ( int )ErrorCode.NoError )
-        {
-            throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
-        }
-    }
-
-    /// <summary>
-    /// Sets up OpenGL's debug message callback and enables debug output. This helps capture and log
-    /// OpenGL debug messages during runtime, providing details about issues such as errors, warnings,
-    /// or performance bottlenecks in OpenGL operations.
-    /// </summary>
-    public static void GLDebug()
-    {
-        Logger.Debug( "********** SETTING UP GL DEBUG **********" );
-
-        unsafe
-        {
-            Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );
-
-//            var debugProc = new GLBindings.GLDEBUGPROC( ( source, type, id, severity, length, message, userParam ) =>
-//            {
-//                GL.MessageCallback( source, type, id, severity, length, message, userParam );
-
-//                if ( severity == DebugSeverity.DEBUG_SEVERITY_HIGH )
-//                {
-//                    Debugger.Break();
-//                }
-//            } );
-
-            GL.Enable( ( int )EnableCap.DebugOutput );
-            GL.Enable( ( int )EnableCap.DebugOutputSynchronous );
-            GL.DebugMessageCallback( GL.MessageCallback, null );
-
-            var array = new uint[ 1 ];
-
-            fixed ( uint* ptr = &array[ 0 ] )
-            {
-                GL.DebugMessageControl( ( int )DebugSourceControl.DontCare,
-                                        ( int )DebugTypeControl.DontCare,
-                                        ( int )DebugSeverityControl.DontCare, 0,
-                                        ptr,
-                                        true );
-            }
-        }
-    }
-    
-
-    /// <summary>
     /// 
     /// </summary>
     /// <param name="vbo"></param>

@@ -51,16 +51,16 @@ public class CaseInsensitiveEnumArrayConverterFactory : JsonConverterFactory
 }
 
 [PublicAPI]
-public class CaseInsensitiveEnumArrayConverter< TEnum > : JsonConverter< TEnum[] > where TEnum : struct, Enum
+public class CaseInsensitiveEnumArrayConverter< Tenum > : JsonConverter< Tenum[] > where Tenum : struct, Enum
 {
-    public override TEnum[] Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
+    public override Tenum[] Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
     {
         if ( reader.TokenType != JsonTokenType.StartArray )
         {
             throw new JsonException( "Expected start of array." );
         }
 
-        var list = new List< TEnum >();
+        var list = new List< Tenum >();
 
         while ( reader.Read() )
         {
@@ -73,13 +73,13 @@ public class CaseInsensitiveEnumArrayConverter< TEnum > : JsonConverter< TEnum[]
             {
                 var stringValue = reader.GetString();
 
-                if ( Enum.TryParse< TEnum >( stringValue, true, out var enumValue ) ) // Case-insensitive parse
+                if ( Enum.TryParse< Tenum >( stringValue, true, out var enumValue ) ) // Case-insensitive parse
                 {
                     list.Add( enumValue );
                 }
                 else
                 {
-                    throw new JsonException( $"Unable to convert '{stringValue}' to enum '{typeof( TEnum ).Name}'." );
+                    throw new JsonException( $"Unable to convert '{stringValue}' to enum '{typeof( Tenum ).Name}'." );
                 }
             }
             else
@@ -91,7 +91,7 @@ public class CaseInsensitiveEnumArrayConverter< TEnum > : JsonConverter< TEnum[]
         return list.ToArray();
     }
 
-    public override void Write( Utf8JsonWriter writer, TEnum[] value, JsonSerializerOptions options )
+    public override void Write( Utf8JsonWriter writer, Tenum[] value, JsonSerializerOptions options )
     {
         writer.WriteStartArray();
 

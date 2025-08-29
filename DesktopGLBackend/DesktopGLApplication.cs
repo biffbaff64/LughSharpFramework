@@ -756,7 +756,7 @@ public class DesktopGLApplication : IApplication, IDisposable
 
         if ( config.Debug )
         {
-            GLUtils.GLDebug();
+            GLDebugControl.EnableGLDebugOutput();
         }
 
         return windowHandle;

@@ -37,27 +37,18 @@ namespace LughSharp.Lugh.Core;
 [PublicAPI]
 public class ApplicationConfiguration
 {
-    protected const int DEFAULT_WINDOW_WIDTH      = 640;
-    protected const int DEFAULT_WINDOW_HEIGHT     = 480;
-    protected const int DEFAULT_WINDOW_X          = 80;
-    protected const int DEFAULT_WINDOW_Y          = 80;
-    protected const int DEFAULT_WINDOW_MIN_WIDTH  = 320;
-    protected const int DEFAULT_WINDOW_MIN_HEIGHT = 240;
-    protected const int DEFAULT_WINDOW_MAX_WIDTH  = 1280;
-    protected const int DEFAULT_WINDOW_MAX_HEIGHT = 960;
-
-    // ========================================================================
-
     // ========================================================================
     // General Application Configuration
     // ========================================================================
-
+    
     public BackendType     GraphicsBackend      { get; set; } = BackendType.OpenGL;
-    public StreamWriter    DebugStream          { get; set; } = new( Console.OpenStandardOutput(), Encoding.UTF8 );
     public HdpiMode        HdpiMode             { get; set; } = HdpiMode.Logical;
     public GLEmulationType GLEmulation          { get; set; } = GLEmulationType.GL20;
     public string          PreferencesDirectory { get; set; } = ".prefs/";
     public PathTypes       PreferencesFileType  { get; set; } = PathTypes.External;
+
+    [Obsolete( "To be removed" )]
+    public StreamWriter    DebugStream          { get; set; } = new( Console.OpenStandardOutput(), Encoding.UTF8 );
 
     public bool DisableAudio                   { get; set; } = false;
     public int  AudioDeviceSimultaneousSources { get; set; } = 16;
@@ -91,6 +82,17 @@ public class ApplicationConfiguration
     // Window Specific Configuration
     // ========================================================================
 
+    protected const int DEFAULT_WINDOW_WIDTH      = 640;
+    protected const int DEFAULT_WINDOW_HEIGHT     = 480;
+    protected const int DEFAULT_WINDOW_X          = 80;
+    protected const int DEFAULT_WINDOW_Y          = 80;
+    protected const int DEFAULT_WINDOW_MIN_WIDTH  = 320;
+    protected const int DEFAULT_WINDOW_MIN_HEIGHT = 240;
+    protected const int DEFAULT_WINDOW_MAX_WIDTH  = 1280;
+    protected const int DEFAULT_WINDOW_MAX_HEIGHT = 960;
+
+    // ========================================================================
+
     public int       WindowX            { get; set; } = DEFAULT_WINDOW_X;
     public int       WindowY            { get; set; } = DEFAULT_WINDOW_Y;
     public int       WindowWidth        { get; set; } = DEFAULT_WINDOW_WIDTH;
@@ -103,12 +105,12 @@ public class ApplicationConfiguration
     public string[]? WindowIconPaths    { get; set; }
 
     /// <summary>
-    /// whether the window will be visible on creation. (default true)
+    /// Whether the window will be visible on creation. (default true)
     /// </summary>
     public bool InitialVisibility { get; set; } = true;
 
     /// <summary>
-    /// Sets whether to use vsync.
+    /// Sets whether to use VSync.
     /// <para>
     /// This setting can be changed anytime at runtime via <see cref="IGraphicsDevice.SetVSync(bool)" />.
     /// </para>
@@ -121,33 +123,33 @@ public class ApplicationConfiguration
     public bool VSyncEnabled { get; set; } = true;
 
     /// <summary>
-    /// whether the windowed mode window is resizable (default true)
+    /// Whether the windowed mode window is resizable (default true)
     /// </summary>
     public bool WindowResizable { get; set; } = true;
 
     /// <summary>
-    /// whether the windowed mode window is decorated, i.e. displaying the title bars.
+    /// Whether the windowed mode window is decorated, i.e. displaying the title bars.
     /// (default true)
     /// </summary>
     public bool WindowDecorated { get; set; } = true;
 
     /// <summary>
-    /// whether the window starts maximized. Ignored if the window is full screen.
+    /// Whether the window starts maximized. Ignored if the window is full screen.
     /// (default false)
     /// </summary>
     public bool WindowMaximized { get; set; } = false;
 
     /// <summary>
-    /// whether the window should automatically iconify and restore previous video mode
+    /// Whether the window should automatically iconify and restore previous video mode
     /// on input focus loss. (default false). Does nothing in windowed mode.
     /// (default false)
     /// </summary>
     public bool AutoIconify { get; set; } = false;
 
     /// <summary>
-    /// Sets the initial background color. Defaults to black.
+    /// The initial window background color. Defaults to blue.
     /// </summary>
-    public Color InitialBackgroundColor { get; set; } = Color.Black;
+    public Color InitialBackgroundColor { get; set; } = Color.Blue;
 
     /// <summary>
     /// Sets the window title. Defaults to empty string.
@@ -168,11 +170,6 @@ public class ApplicationConfiguration
 
     // ========================================================================
     // ========================================================================
-
-    public ApplicationConfiguration()
-    {
-        Logger.Checkpoint();
-    }
 
     /// <summary>
     /// Creates, and returns, a new ApplicationConfiguration, using settings
@@ -310,7 +307,7 @@ public class ApplicationConfiguration
 
     /// <summary>
     /// Sets the correct values for <see cref="GLContextMajorVersion" /> and
-    /// <see cref="GLContextMinorVersion" />. Defaults to 4 (major) and 5 (minor)
+    /// <see cref="GLContextMinorVersion" />.
     /// </summary>
     public void SetGLContextVersion( int major, int minor )
     {
@@ -324,6 +321,7 @@ public class ApplicationConfiguration
     /// if available. By default, debug messages with NOTIFICATION severity are disabled to
     /// avoid log spam.
     /// </summary>
+    [Obsolete( "Use ./GLDebugControl.EnableDebugOutput() instead" )]
     public void EnableGLDebugOutput( bool enable, StreamWriter debugOutputStream )
     {
         Debug       = enable;

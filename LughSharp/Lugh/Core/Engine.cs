@@ -184,17 +184,18 @@ public class Engine
     }
 
     /// <summary>
-    /// Checks for any OpenGL errors using the current bindings and logs them as warnings
-    /// if errors are detected. This method is for debugging purposes and ensures that
-    /// OpenGL calls are correctly executed without issues.
+    /// Checks for OpenGL errors after a given stage of rendering or processing.
+    /// Throws an <see cref="InvalidOperationException" /> if an OpenGL error is detected.
     /// </summary>
-    public void GLErrorCheck()
+    /// <param name="stage">The description of the stage at which the error occurred.</param>
+    /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>
+    public void GLErrorCheck( string stage )
     {
-        int error;
+        var error = GL.GetError();
 
-        if ( ( error = Bindings.GetError() ) != IGL.GL_NO_ERROR )
+        if ( error != ( int )ErrorCode.NoError )
         {
-            Logger.Warning( $"GL Error: {error}" );
+            throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
         }
     }
 
@@ -211,11 +212,10 @@ public class Engine
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Performs Engine Shutdown operations.
+    /// </summary>
     public static void Shutdown()
-    {
-    }
-
-    ~Engine()
     {
     }
 
@@ -237,9 +237,6 @@ public class Engine
     // ========================================================================
     // ========================================================================
 
-    /// <summary>
-    /// Love and Light Blessings.
-    /// </summary>
     private const string A_PRAYER_TO_THE_GODDESS =
         "Oh Blessed Goddess, enlighten what is dark in me. "
         + "Strengthen what is weak in me. "
@@ -247,4 +244,7 @@ public class Engine
         + "Bind what is bruised in me. "
         + "Heal what is sick in me. "
         + "Revive whatever peace & love has died in me.";
+
+    // ========================================================================
+    // ========================================================================
 }
