@@ -267,7 +267,7 @@ public partial class TextureAtlasData
         {
             var line = reader.ReadLine();
 
-//            Logger.Debug( $"line: {line}" );
+            Logger.Debug( $"line: {line}" );
 
             return line;
         }
@@ -323,6 +323,7 @@ public partial class TextureAtlasData
     }
 
     // ========================================================================
+    // ========================================================================
 
     [PublicAPI]
     protected interface IField< in T >
@@ -358,6 +359,9 @@ public partial class TextureAtlasData
         public bool                          PreMultipliedAlpha { get; set; }
     }
 
+    // ========================================================================
+    // ========================================================================
+    
     [PublicAPI]
     public class Region
     {
@@ -395,3 +399,6 @@ public partial class TextureAtlasData
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

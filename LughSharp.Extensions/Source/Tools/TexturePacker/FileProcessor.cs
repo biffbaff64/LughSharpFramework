@@ -117,6 +117,8 @@ public class FileProcessor
                                          $"exist: {inputFileOrDir?.FullName}" );
         }
 
+        IOUtils.ListFiles( inputFileOrDir.FullName );
+        
         List< TexturePackerEntry > retval;
 
         if ( IOUtils.IsFile( inputFileOrDir ) )
@@ -143,10 +145,7 @@ public class FileProcessor
     /// <exception cref="Exception"></exception>
     public virtual List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
-        if ( outputRoot == null )
-        {
-            outputRoot = new DirectoryInfo( IOUtils.InternalPath );
-        }
+        outputRoot ??= new DirectoryInfo( IOUtils.InternalPath );
 
         OutputFilesList.Clear();
 
@@ -349,73 +348,35 @@ public class FileProcessor
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                                  Dictionary< string, List< TexturePackerEntry > > stringToEntries, int depth )
     {
-        Logger.Debug($"=== FileProcessor.Process called ===");
-        Logger.Debug($"Files to process: {files.Length}");
-        Logger.Debug($"Depth: {depth}");
-        Logger.Debug($"OutputRoot: {outputRoot.FullName}");
-        Logger.Debug($"OutputDir: {outputDir.FullName}");
-
         foreach ( var file in files )
         {
-            Logger.Debug($"Checking file: {file.FullName}");
-            Logger.Debug($"File attributes: {file.Attributes}");
-            Logger.Debug($"Is directory: {(file.Attributes & FileAttributes.Directory) != 0}");
-
             if ( ( file.Attributes & FileAttributes.Directory ) == 0 )
             {
-                // POINT 2: Debug InputRegex filtering
-                Logger.Debug($"Processing regular file: {file.Name}");
-                Logger.Debug($"InputRegex.Count: {InputRegex.Count}");
-
                 if ( InputRegex.Count > 0 )
                 {
                     var found = false;
 
                     foreach ( var pattern in InputRegex )
                     {
-                        Logger.Debug($"Testing regex pattern: {pattern}");
-                        
                         if ( pattern.IsMatch( file.Name ) )
                         {
                             found = true;
-                            Logger.Debug($"✓ File {file.Name} MATCHES regex: {pattern}");
                             break;
-                        }
-                        else
-                        {
-                            Logger.Debug($"✗ File {file.Name} does NOT match regex: {pattern}");
                         }
                     }
 
                     if ( !found )
                     {
-                        Logger.Debug($"⚠️ File {file.Name} REJECTED by regex filtering");
                         continue;
                     }
                 }
-                else
-                {
-                    Logger.Debug($"No regex filters active, file accepted: {file.Name}");
-                }
 
-                if ( file.DirectoryName == null )
+                if ( ( FilenameFilterDelegate != null )
+                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
                 {
-                    Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
-                }
-
-                // POINT 2: Debug FilenameFilterDelegate
-                if ( ( FilenameFilterDelegate != null ) && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
-                {
-                    Logger.Debug($"⚠️ File {file.Name} REJECTED by FilenameFilterDelegate");
                     continue;
                 }
-                else if (FilenameFilterDelegate != null)
-                {
-                    Logger.Debug($"✓ File {file.Name} ACCEPTED by FilenameFilterDelegate");
-                }
-
-                Logger.Debug($"✅ File {file.Name} proceeding to entry creation");
-
+                
                 var outputName = file.Name;
 
                 if ( OutputSuffix != null )
@@ -497,11 +458,11 @@ public class FileProcessor
         OutputFilesList.Add( entry );
     }
 
-    // ========================================================================
-
     /// <summary>
+    /// Adds a regex filter, or group of filters, to the <see cref="InputRegex"/>
+    /// list of filters.
     /// </summary>
-    /// <param name="regexes"></param>
+    /// <param name="regexes"> One or more Regex strings. </param>
     /// <returns> This IFileProcessor for chaining. </returns>
     public virtual FileProcessor AddInputRegex( params string[] regexes )
     {
@@ -509,7 +470,10 @@ public class FileProcessor
         {
             InputRegex.Add( new Regex( regex ) );
         }
-
+        
         return this;
     }
 }
+
+// ============================================================================
+// ============================================================================

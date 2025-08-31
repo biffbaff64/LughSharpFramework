@@ -125,4 +125,10 @@ public interface IApplication
     /// </para>
     /// </summary>
     void Exit();
+
+    /// <summary>
+    /// Cleanup everything before shutdown.
+    /// </summary>
+    void Cleanup();
 }
+

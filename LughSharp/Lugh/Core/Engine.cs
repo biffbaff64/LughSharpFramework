@@ -247,4 +247,17 @@ public class Engine
 
     // ========================================================================
     // ========================================================================
+
+    #if DEBUG
+    public static void SettingsCheck( int num )
+    {
+        var outputFolder     = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
+        var settingsFilePath = Path.Combine( outputFolder, "TexturePackerTestSettings.pack.json" );
+
+        Logger.Debug( $"Settings file exists: {File.Exists( settingsFilePath )}, :: {num} :: {settingsFilePath}" );
+    }
+    #endif
 }
+
+// ============================================================================
+// ============================================================================

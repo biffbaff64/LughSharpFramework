@@ -45,7 +45,7 @@ public class ImageProcessor
     public float                      Scale      { get; set; }
     public Resampling                 Resampling { get; set; } = Resampling.Bicubic;
     public List< TexturePacker.Rect > ImageRects { get; set; } = [ ];
-    public TexturePacker.Settings     Settings   { get; }
+    public TexturePackerSettings     Settings   { get; }
 
     // ========================================================================
 
@@ -59,7 +59,7 @@ public class ImageProcessor
     // ========================================================================
     // ========================================================================
 
-    public ImageProcessor( TexturePacker.Settings settings )
+    public ImageProcessor( TexturePackerSettings settings )
     {
         Settings = settings;
     }
@@ -67,7 +67,7 @@ public class ImageProcessor
     /// <summary>
     /// Gets the image from the specified path and adds it to the list of images.
     /// The resolved image will not be kept in-memory during packing if
-    /// <see cref="TexturePacker.Settings.LimitMemory"/> is true.
+    /// <see cref="TexturePackerSettings.LimitMemory"/> is true.
     /// </summary>
     /// <param name="file"> The path to the image file. </param>
     /// <param name="rootPath">
@@ -130,11 +130,8 @@ public class ImageProcessor
 
         if ( rect == null )
         {
-            if ( !Settings.Silent )
-            {
-                Logger.Debug( "Returning early: Rect is null" );
-                Logger.Debug( $"Ignoring blank input image: {name}" );
-            }
+            Logger.Debug( "Returning early: Rect is null" );
+            Logger.Debug( $"Ignoring blank input image: {name}" );
 
             return null;
         }

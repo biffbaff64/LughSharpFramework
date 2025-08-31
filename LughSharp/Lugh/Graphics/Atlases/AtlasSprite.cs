@@ -33,7 +33,24 @@ namespace LughSharp.Lugh.Graphics.Atlases;
 [PublicAPI]
 public class AtlasSprite : Sprite
 {
-    // ========================================================================
+    public AtlasRegion Region          { get; set; }
+    public float       OriginalOffsetX { get; set; }
+    public float       OriginalOffsetY { get; set; }
+
+    /// <inheritdoc />
+    public override float X
+    {
+        get => base.X - Region.OffsetX;
+        set => base.X = value + Region.OffsetX;
+    }
+
+    /// <inheritdoc />
+    public override float Y
+    {
+        get => base.Y - Region.OffsetY;
+        set => base.Y = value + Region.OffsetY;
+    }
+
     // ========================================================================
 
     /// <summary>
@@ -57,24 +74,6 @@ public class AtlasSprite : Sprite
         Region = new AtlasRegion( region );
 
         Init( region );
-    }
-
-    public AtlasRegion Region          { get; set; }
-    public float       OriginalOffsetX { get; set; }
-    public float       OriginalOffsetY { get; set; }
-
-    /// <inheritdoc />
-    public override float X
-    {
-        get => base.X - Region.OffsetX;
-        set => base.X = value + Region.OffsetX;
-    }
-
-    /// <inheritdoc />
-    public override float Y
-    {
-        get => base.Y - Region.OffsetY;
-        set => base.Y = value + Region.OffsetY;
     }
 
     /// <summary>

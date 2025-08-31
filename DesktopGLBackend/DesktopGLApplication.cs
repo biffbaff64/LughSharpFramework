@@ -520,10 +520,8 @@ public class DesktopGLApplication : IApplication, IDisposable
 
     // ========================================================================
 
-    /// <summary>
-    /// Cleanup everything before shutdown.
-    /// </summary>
-    protected static void Cleanup()
+    /// <inheritdoc />
+    public void Cleanup()
     {
         DesktopGLCursor.DisposeSystemCursors();
         Engine.Api.Audio.Dispose();

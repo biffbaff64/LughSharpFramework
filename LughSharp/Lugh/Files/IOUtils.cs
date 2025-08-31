@@ -110,18 +110,18 @@ public class IOUtils
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
-    public static FileStream CreateFileWithDirectories(string filePath)
+    public static FileStream CreateFileWithDirectories( string filePath )
     {
-        string? directoryPath = Path.GetDirectoryName(filePath);
-    
-        if (!string.IsNullOrEmpty(directoryPath))
+        string? directoryPath = Path.GetDirectoryName( filePath );
+
+        if ( !string.IsNullOrEmpty( directoryPath ) )
         {
-            Directory.CreateDirectory(directoryPath);
+            Directory.CreateDirectory( directoryPath );
         }
-    
-        return File.Create(filePath);
+
+        return File.Create( filePath );
     }
-    
+
     /// <summary>
     /// Determines whether the specified <see cref="FileSystemInfo"/> represents a directory.
     /// </summary>
@@ -228,20 +228,44 @@ public class IOUtils
         return path.Substring( position, path.Length - position );
     }
 
+    public static void MonitorFileDeletion( string file )
+    {
+        var fileInfo      = new FileInfo( file );
+        var directoryPath = fileInfo.Directory?.FullName ?? string.Empty;
+        var fileName      = fileInfo.Name;
+
+        using ( var watcher = new FileSystemWatcher( directoryPath ) )
+        {
+            watcher.Filter              =  fileName;
+            watcher.NotifyFilter        =  NotifyFilters.FileName | NotifyFilters.LastWrite;
+            watcher.Deleted             += OnDeleted;
+            watcher.EnableRaisingEvents =  true;
+
+            Logger.Debug( $"Monitoring for deletion of {fileName}..." );
+        }
+    }
+
+    private static void OnDeleted( object sender, FileSystemEventArgs e )
+    {
+        // A breakpoint here will stop execution when the file is deleted.
+        Logger.Warning( $"File deleted at: {e.FullPath}" );
+
+        // You can also add more logging or an exception to break execution.
+        throw new Exception( "File was deleted!" );
+    }
+
     // ========================================================================
 
     #if DEBUG
     /// <summary>
     /// Writes a list of all files in the supplied directory path to console.
     /// </summary>
-    public static void DebugFileList( string directoryPath )
+    public static void ListFiles( string directoryPath )
     {
-        var filesList = Directory.GetFiles( directoryPath );
+        Logger.Debug( $"Listing files in directory: {directoryPath}" );
+        Logger.Debug( "--------------------------------" );
 
-        foreach ( var f in filesList )
-        {
-            Logger.Debug( f );
-        }
+        Directory.GetFiles( directoryPath ).ToList().ForEach( f => Logger.Debug( f ) );
     }
 
     /// <summary>

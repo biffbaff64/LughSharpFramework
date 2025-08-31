@@ -88,8 +88,6 @@ public class TextureAtlas : IDisposable
     /// where 0,0 is the upper left corner.
     /// </param>
     public TextureAtlas( FileInfo packFile, DirectoryInfo? imagesDir, bool flip = false )
-
-//        : this( new TextureAtlasData( packFile, imagesDir, flip ) )
     {
         Logger.Debug( $"packFile Name: {packFile.FullName}" );
         Logger.Debug( $"imagesDir Name: {imagesDir?.FullName}" );
@@ -294,12 +292,11 @@ public class TextureAtlas : IDisposable
     }
 
     /// <summary>
-    /// Returns the first region found with the specified name as a sprite.
-    /// If whitespace was stripped from the region when it was packed, the
-    /// sprite is automatically positioned as if whitespace had not been
-    /// stripped. This method uses string comparison to find the region and
-    /// constructs a new sprite, so the result should be cached rather than
-    /// calling this method multiple times.
+    /// Returns the first region found with the specified name as a sprite. If whitespace
+    /// was stripped from the region when it was packed, the sprite is automatically
+    /// positioned as if whitespace had not been stripped. This method uses string comparison
+    /// to find the region and constructs a new sprite, so the result should be cached rather
+    /// than calling this method multiple times.
     /// </summary>
     public Sprite? CreateSprite( string name )
     {
@@ -315,10 +312,9 @@ public class TextureAtlas : IDisposable
     }
 
     /// <summary>
-    /// Returns the first region found with the specified name and index as a
-    /// sprite. This method uses string comparison to find the region and
-    /// constructs a new sprite, so the result should be cached rather than
-    /// calling this method multiple times.
+    /// Returns the first region found with the specified name and index as a sprite.
+    /// This method uses string comparison to find the region and constructs a new sprite,
+    /// so the result should be cached rather than calling this method multiple times.
     /// </summary>
     public Sprite? CreateSprite( string name, int index )
     {
@@ -391,10 +387,9 @@ public class TextureAtlas : IDisposable
     }
 
     /// <summary>
-    /// Returns the first region found with the specified name as
-    /// a <see cref="NinePatch" />. The region must have been packed with
-    /// ninepatch splits. This method uses string comparison to find the region
-    /// and constructs a new ninepatch, so the result should
+    /// Returns the first region found with the specified name as a <see cref="NinePatch"/>.
+    /// The region must have been packed with ninepatch splits. This method uses string
+    /// comparison to find the region and constructs a new ninepatch, so the result should
     /// be cached rather than calling this method multiple times.
     /// </summary>
     public NinePatch? CreateNinePatch( string name )
@@ -413,8 +408,7 @@ public class TextureAtlas : IDisposable
                 }
 
                 var patch = new NinePatch( region, splits[ 0 ], splits[ 1 ], splits[ 2 ], splits[ 3 ] );
-
-                var pads = region.FindValue( "pad" );
+                var pads  = region.FindValue( "pad" );
 
                 if ( pads != null )
                 {
@@ -430,11 +424,7 @@ public class TextureAtlas : IDisposable
 
     // ========================================================================
 
-    /// <summary>
-    /// Releases all resources associated with this TextureAtlas instance.
-    /// This releases all the textures backing all TextureRegions and Sprites,
-    /// which should no longer be used after calling dispose.
-    /// </summary>
+    /// <inheritdoc />
     public void Dispose()
     {
         Dispose( true );
@@ -442,9 +432,12 @@ public class TextureAtlas : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Releases all resources used by the AssetManager.
     /// </summary>
-    /// <param name="disposing"></param>
+    /// <param name="disposing">
+    /// Indicates whether the method call comes from a Dispose method (true) or
+    /// from a finalizer (false).
+    /// </param>
     protected void Dispose( bool disposing )
     {
         if ( disposing )

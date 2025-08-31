@@ -24,11 +24,11 @@
 
 using System.Runtime.Versioning;
 
-using Extensions.Source.Tools.ImagePacker;
 using Extensions.Source.Tools.TexturePacker;
 
 using JetBrains.Annotations;
 
+using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils;
 
@@ -38,6 +38,7 @@ namespace LughSharp.Tests.Source;
 
 [TestFixture]
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class TexturePackerTest
 {
     private const bool REMOVE_DUPLICATE_IMAGES = true;
@@ -56,24 +57,20 @@ public class TexturePackerTest
     {
         Logger.Checkpoint();
 
-        var settings = new TexturePacker.Settings
+        var settings = new TexturePackerSettings
         {
-            MaxWidth   = 2048, // Maximum Width of final atlas image
-            MaxHeight  = 2048, // Maximum Height of final atlas image
-            PowerOfTwo = true,
-            Debug      = DRAW_DEBUG_LINES,
-            IsAlias    = KEEP_DUPLICATE_IMAGES,
-            Silent     = true,
-            
-            // Fix the padding issues
-            PaddingX         = 4,     // Increase padding
-            PaddingY         = 4,     // Increase padding
-            EdgePadding      = false, // Disable edge padding initially
-            DuplicatePadding = false, // Disable duplicate padding
-            
-            // Ensure minimum sizes are reasonable
-            MinWidth  = 64,
-            MinHeight = 64,
+            MaxWidth         = 2048,                  // Maximum Width of final atlas image
+            MaxHeight        = 2048,                  // Maximum Height of final atlas image
+            PowerOfTwo       = true,                  // 
+            Debug            = DRAW_DEBUG_LINES,      // 
+            IsAlias          = KEEP_DUPLICATE_IMAGES, // 
+            Silent           = false,                 // 
+            PaddingX         = 2,                     // Increase padding
+            PaddingY         = 2,                     // Increase padding
+            EdgePadding      = true,                  // Disable edge padding initially
+            DuplicatePadding = false,                 // Disable duplicate padding
+            MinWidth         = 16,                    // 
+            MinHeight        = 16,                    // 
         };
 
         // Build the Atlases from the specified parameters :-
@@ -83,12 +80,11 @@ public class TexturePackerTest
         // - name of atlas, without extension (the extension '.atlas' will be added automatically)
         var inputFolder      = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\objects" );
         var outputFolder     = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
-        var settingsFilePath = Path.Combine( outputFolder, "TexturePackerTestSettings.json" );
+        var settingsFilePath = Path.Combine( outputFolder, "PackSettings.json" );
 
         settings.WriteToJsonFile( settingsFilePath );
 
-        var packer = new TexturePacker();
-        packer.Process( inputFolder, outputFolder, "objects", settings );
+        TexturePacker.Process( inputFolder, outputFolder, "objects", settings );
     }
 
     [TearDown]

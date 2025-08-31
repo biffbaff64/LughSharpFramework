@@ -28,9 +28,10 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public partial class MaxRectsPacker : TexturePacker.IPacker
 {
-    private static   TexturePacker.Settings _settings = null!;
+    private static   TexturePackerSettings _settings = null!;
     private readonly FreeRectChoiceHeuristic[]    _methods;
     private readonly MaxRects                     _maxRects = new();
 
@@ -43,7 +44,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
     // ========================================================================
 
-    public MaxRectsPacker( TexturePacker.Settings settings )
+    public MaxRectsPacker( TexturePackerSettings settings )
     {
         _settings = settings;
         _methods  = Enum.GetValues< FreeRectChoiceHeuristic >();
@@ -78,7 +79,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <param name="inputRects"></param>
     /// <returns></returns>
     /// <exception cref="NullReferenceException"></exception>
-    public List< TexturePacker.Page > Pack( TexturePacker.AbstractProgressListener? progress, List< TexturePacker.Rect > inputRects )
+    public List< TexturePacker.Page > Pack( TexturePacker.AbstractProgressListener? progress,
+                                            List< TexturePacker.Rect > inputRects )
     {
         var n = inputRects.Count;
 
@@ -131,12 +133,12 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
 
             var result = PackPage( inputRects );
-
+            
             pages.Add( result );
 
             inputRects = result.RemainingRects ?? throw new NullReferenceException();
         }
-
+        
         return pages;
     }
 
@@ -241,10 +243,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
         }
 
-        if ( !_settings.Silent )
-        {
-            Logger.Debug( "Packing" );
-        }
+        Logger.Debug( "Packing" );
 
         var bestResult = GetMinimalPageSize( minWidth, minHeight, adjustX, adjustY, paddingX, paddingY, inputRects );
 
@@ -359,10 +358,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                 width = widthSearch.Reset();
             }
 
-            if ( !_settings.Silent )
-            {
-                Logger.NewLine();
-            }
+            Logger.NewLine();
 
             if ( bestResult == null )
             {

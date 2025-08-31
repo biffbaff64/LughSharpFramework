@@ -32,6 +32,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class TexturePackerFileProcessor : IFileProcessor
 {
     public const string DEFAULT_PACKFILE_NAME = "pack.atlas";
@@ -80,9 +81,9 @@ public class TexturePackerFileProcessor : IFileProcessor
 
     // ========================================================================
 
-    private readonly TexturePacker.Settings _defaultSettings;
+    private readonly TexturePackerSettings _defaultSettings;
 
-    private Dictionary< DirectoryInfo, TexturePacker.Settings > _dirToSettings = [ ]; //TODO: Rename
+    private Dictionary< DirectoryInfo, TexturePackerSettings > _dirToSettings = [ ]; //TODO: Rename
 
     private int           _packCount;
     private DirectoryInfo _rootDirectory = null!;
@@ -94,18 +95,18 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// and the default packfile name ( "pack.atlas" ).
     /// </summary>
     public TexturePackerFileProcessor()
-        : this( new TexturePacker.Settings(), DEFAULT_PACKFILE_NAME )
+        : this( new TexturePackerSettings(), DEFAULT_PACKFILE_NAME )
     {
     }
 
     /// <summary>
     /// Constructs a new TexturePackerFileProcessor object, using the supplied
-    /// <see cref="TexturePacker.Settings"/>.
+    /// <see cref="TexturePackerSettings"/>.
     /// </summary>
     /// <param name="packerSettings"> The Settings to use. </param>
     /// <param name="packFileName"> The name of the final packed file. </param>
     /// <param name="progress"> The ProgressListener to use. Can be null. </param>
-    public TexturePackerFileProcessor( TexturePacker.Settings? packerSettings,
+    public TexturePackerFileProcessor( TexturePackerSettings? packerSettings,
                                        string packFileName,
                                        TexturePacker.AbstractProgressListener? progress = null )
     {
@@ -114,7 +115,7 @@ public class TexturePackerFileProcessor : IFileProcessor
         OutputSuffix     = string.Empty;
         FlattenOutput    = false;
         Recursive        = true;
-        _defaultSettings = packerSettings ?? new TexturePacker.Settings();
+        _defaultSettings = packerSettings ?? new TexturePackerSettings();
         ProgressListener = progress;
 
         // Strip off the .atlas extension name from the packfile if it has been pre-added.
@@ -149,8 +150,10 @@ public class TexturePackerFileProcessor : IFileProcessor
 
         // -----------------------------------------------------
         // Collect any pack.json setting files present in the folder.
+        
         var settingsProcessor = new PackingSettingsProcessor();
-        _ = settingsProcessor.AddInputRegex( "pack\\.json" ).Process( inputRoot, outputRoot );
+        _ = settingsProcessor.AddInputRegex( ".json", ".pack" )
+                             .Process( inputRoot, outputRoot );
 
         // -----------------------------------------------------
 
@@ -160,6 +163,8 @@ public class TexturePackerFileProcessor : IFileProcessor
 
         if ( settingsFiles.Count > 0 )
         {
+            Logger.Debug( "Processing Settings files" );
+
             // Sort parent first.
             settingsFiles.Sort( ( file1, file2 ) => file1.ToString().Length - file2.ToString().Length );
 
@@ -167,7 +172,7 @@ public class TexturePackerFileProcessor : IFileProcessor
             foreach ( var settingsFile in settingsFiles )
             {
                 // Find first parent with settings, or use defaults.
-                TexturePacker.Settings? settings = null;
+                TexturePackerSettings? settings = null;
 
                 var parent  = settingsFile.Directory;
                 var current = parent;
@@ -598,30 +603,31 @@ public class TexturePackerFileProcessor : IFileProcessor
             // Get the directory properly from FileSystemInfo
             DirectoryInfo? parentDirectory = null;
 
-            if (entry.InputFile is FileInfo fileInfo)
+            if ( entry.InputFile is FileInfo fileInfo )
             {
                 parentDirectory = fileInfo.Directory;
             }
-            else if (entry.InputFile is DirectoryInfo dirInfo)
+            else if ( entry.InputFile is DirectoryInfo dirInfo )
             {
                 parentDirectory = dirInfo.Parent;
             }
             else
             {
                 // Fallback: get directory from the full path
-                var parentPath = Path.GetDirectoryName(entry.InputFile.FullName);
-                if (!string.IsNullOrEmpty(parentPath))
+                var parentPath = Path.GetDirectoryName( entry.InputFile.FullName );
+
+                if ( !string.IsNullOrEmpty( parentPath ) )
                 {
-                    parentDirectory = new DirectoryInfo(parentPath);
+                    parentDirectory = new DirectoryInfo( parentPath );
                 }
             }
 
-            var settings = parentDirectory != null 
-                ? _dirToSettings.GetValueOrDefault(parentDirectory, _defaultSettings)
+            var settings = parentDirectory != null
+                ? _dirToSettings.GetValueOrDefault( parentDirectory, _defaultSettings )
                 : _defaultSettings;
-            
+
             var packer = NewTexturePacker( _rootDirectory, settings );
-            
+
             Pack( packer, entry );
         }
 
@@ -641,13 +647,14 @@ public class TexturePackerFileProcessor : IFileProcessor
         }
 
         // Find first parent with settings, or use defaults.
-        TexturePacker.Settings? settings = null;
+        TexturePackerSettings? settings = null;
 
         var parent = ( DirectoryInfo? )inputDir.InputFile;
 
-        for ( ; ( parent != null )
-                && !_dirToSettings.TryGetValue( parent, out settings )
-                && !parent.Equals( _rootDirectory );
+        for ( ;
+             ( parent != null )
+             && !_dirToSettings.TryGetValue( parent, out settings )
+             && !parent.Equals( _rootDirectory );
              parent = parent.Parent )
         {
             // The loop continues as long as 'parent' is not null,
@@ -753,16 +760,13 @@ public class TexturePackerFileProcessor : IFileProcessor
         } );
 
         // Pack.
-        if ( !settings.Silent )
+        try
         {
-            try
-            {
-                Logger.Debug( $"Reading: {inputDir.InputFile?.FullName}" );
-            }
-            catch ( IOException )
-            {
-                Logger.Debug( $"Reading: {inputDir.InputFile?.FullName} ( IOException )" );
-            }
+            Logger.Debug( $"Reading: {inputDir.InputFile?.FullName}" );
+        }
+        catch ( IOException )
+        {
+            Logger.Debug( $"Reading: {inputDir.InputFile?.FullName} ( IOException )" );
         }
 
         if ( ProgressListener != null )
@@ -824,7 +828,7 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// <param name="settings"></param>
     /// <param name="settingsFile"></param>
     /// <exception cref="Exception"></exception>
-    public static TexturePacker.Settings MergeSettings( TexturePacker.Settings settings, FileInfo settingsFile )
+    public static TexturePackerSettings MergeSettings( TexturePackerSettings settings, FileInfo settingsFile )
     {
         try
         {
@@ -900,7 +904,7 @@ public class TexturePackerFileProcessor : IFileProcessor
         {
             packer.AddImage( file );
         }
-        
+
         packer.Pack( ( DirectoryInfo )texturePackerEntry.OutputDirectory!, PackFileName );
     }
 
@@ -957,7 +961,7 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// <param name="root"></param>
     /// <param name="settings"></param>
     /// <returns></returns>
-    public virtual TexturePacker NewTexturePacker( DirectoryInfo? root, TexturePacker.Settings settings )
+    public virtual TexturePacker NewTexturePacker( DirectoryInfo? root, TexturePackerSettings settings )
     {
         var packer = new TexturePacker( root, settings )
         {
@@ -971,8 +975,8 @@ public class TexturePackerFileProcessor : IFileProcessor
     /// </summary>
     /// <param name="settings"></param>
     /// <returns></returns>
-    public virtual TexturePacker.Settings NewSettings( TexturePacker.Settings settings )
+    public virtual TexturePackerSettings NewSettings( TexturePackerSettings settings )
     {
-        return new TexturePacker.Settings( settings );
+        return new TexturePackerSettings( settings );
     }
 }

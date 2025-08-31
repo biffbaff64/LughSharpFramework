@@ -30,11 +30,11 @@ namespace Extensions.Source.Tools.TexturePacker;
 [PublicAPI]
 public class GridPacker : TexturePacker.IPacker
 {
-    private readonly TexturePacker.Settings _settings;
+    private readonly TexturePackerSettings _settings;
 
     // ========================================================================
 
-    public GridPacker( TexturePacker.Settings settings )
+    public GridPacker( TexturePackerSettings settings )
     {
         _settings = settings;
     }
@@ -59,10 +59,7 @@ public class GridPacker : TexturePacker.IPacker
     {
         ArgumentNullException.ThrowIfNull( progress );
 
-        if ( !_settings.Silent )
-        {
-            Logger.Debug( "Packing" );
-        }
+        Logger.Debug( "Packing" );
 
         // Rects are packed with right and top padding, so the max size is increased
         // to match. After packing the padding is subtracted from the page size.

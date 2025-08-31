@@ -129,18 +129,12 @@ public static class Logger
             Divider();
         }
 
-        string str;
-        
-        if ( IsMinimal )
-        {
-            str = CreateMessage( null, message, null );
-        }
-        else
-        {
-            var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-            str      = CreateMessage( DEBUG_TAG, message, callerID );
-        }
-        
+        CallerID? callerID = IsMinimal
+            ? null
+            : MakeCallerID( callerFilePath, callerMethod, callerLine );
+
+        var str = CreateMessage( ERROR_TAG, message, callerID );
+
         Console.WriteLine( str );
         WriteToFile( str );
 
@@ -168,17 +162,11 @@ public static class Logger
             return;
         }
 
-        string str;
-        
-        if ( IsMinimal )
-        {
-            str = CreateMessage( ERROR_TAG, message, null );
-        }
-        else
-        {
-            var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-            str      = CreateMessage( ERROR_TAG, message, callerID );
-        }
+        CallerID? callerID = IsMinimal
+            ? null
+            : MakeCallerID( callerFilePath, callerMethod, callerLine );
+
+        var str = CreateMessage( ERROR_TAG, message, callerID );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -238,17 +226,11 @@ public static class Logger
             Divider();
         }
 
-        string str;
-        
-        if ( IsMinimal )
-        {
-            str = CreateMessage( CHECKPOINT_TAG, "< CHECKPOINT >", null );
-        }
-        else
-        {
-            var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-            str      = CreateMessage( CHECKPOINT_TAG, "< CHECKPOINT >", callerID );
-        }
+        CallerID? callerID = IsMinimal
+            ? null
+            : MakeCallerID( callerFilePath, callerMethod, callerLine );
+
+        var str = CreateMessage( CHECKPOINT_TAG, "<Checkpoint>", callerID );
 
         Console.WriteLine( str );
         WriteToFile( str );

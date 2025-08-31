@@ -70,7 +70,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 /// </para>
 /// <para>
 /// Each directory may contain a “pack.json” file, which is a JSON representation of the
-/// <see cref="TexturePacker.Settings"/> class. Each subdirectory inherits all the settings from
+/// <see cref="TexturePackerSettings"/> class. Each subdirectory inherits all the settings from
 /// its parent directory. Any settings set in the subdirectory override those set in the parent
 /// directory.
 /// </para>
@@ -127,6 +127,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 /// </para>
 /// </summary>
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public partial class TexturePacker
 {
     public string?                   RootPath         { get; set; }
@@ -135,9 +136,9 @@ public partial class TexturePacker
 
     // ========================================================================
 
-    private Settings           _settings;
-    private ImageProcessor     _imageProcessor;
-    private List< InputImage > _inputImages = [ ];
+    private TexturePackerSettings _settings;
+    private ImageProcessor                 _imageProcessor;
+    private List< InputImage >             _inputImages;
 
     // ========================================================================
     // ========================================================================
@@ -150,17 +151,27 @@ public partial class TexturePacker
         Packer          = null!;
         _settings       = null!;
         _imageProcessor = null!;
+        _inputImages    = [ ];
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="settings"></param>
+    public TexturePacker( TexturePackerSettings settings )
+        : this( null, settings )
+    {
     }
 
     /// <summary>
     /// Creates a new TexturePacker object.
     /// </summary>
     /// <param name="rootDir"> The root folder of the source textures. </param>
-    /// <param name="settings"> The <see cref="Settings"/> to use when packing. </param>
+    /// <param name="settings"> The <see cref="TexturePackerSettings"/> to use when packing. </param>
     /// <exception cref="GdxRuntimeException"></exception>
-    public TexturePacker( DirectoryInfo? rootDir, Settings settings )
+    public TexturePacker( DirectoryInfo? rootDir, TexturePackerSettings settings )
     {
-        _settings = settings;
+        _inputImages = [ ];
+        _settings    = settings;
 
         if ( settings.PowerOfTwo )
         {
@@ -199,22 +210,26 @@ public partial class TexturePacker
         SetRootDir( rootDir );
     }
 
-    /// <summary>
-    /// </summary>
-    /// <param name="settings"></param>
-    public TexturePacker( Settings settings )
-        : this( null, settings )
-    {
-    }
-
     // ========================================================================
 
     /// <summary>
     /// Packs using defaults settings.
     /// </summary>
-    public void Process( string input, string output, string packFileName )
+    public static void Process( string input, string output, string packFileName )
     {
-        Process( input, output, packFileName, new Settings() );
+        Process( input, output, packFileName, new TexturePackerSettings() );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="settings"></param>
+    /// <param name="input"></param>
+    /// <param name="output"></param>
+    /// <param name="packFileName"></param>
+    public static void Process( TexturePackerSettings settings, string input, string output, string packFileName )
+    {
+        Process( input, output, packFileName, settings, null );
     }
 
     /// <summary>
@@ -228,13 +243,13 @@ public partial class TexturePacker
     /// be cleared before processing.
     /// </param>
     /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
-    /// <param name="settings"> The <see cref="TexturePacker.Settings"/> to use. </param>
+    /// <param name="settings"> The <see cref="TexturePackerSettings"/> to use. </param>
     /// <param name="progressListener"> Could be null. </param>
-    public void Process( string inputFolder,
-                         string outputFolder,
-                         string packFileName,
-                         Settings settings,
-                         AbstractProgressListener? progressListener = null )
+    public static void Process( string inputFolder,
+                                string outputFolder,
+                                string packFileName,
+                                TexturePackerSettings settings,
+                                AbstractProgressListener? progressListener = null )
     {
         try
         {
@@ -244,6 +259,27 @@ public partial class TexturePacker
         catch ( Exception ex )
         {
             throw new GdxRuntimeException( "Error packing images.", ex );
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="rootDir"></param>
+    public void SetRootDir( DirectoryInfo? rootDir )
+    {
+        if ( rootDir == null )
+        {
+            RootPath = null;
+
+            return;
+        }
+
+        RootPath = Path.GetFullPath( rootDir.FullName );
+        RootPath = RootPath!.Replace( '\\', '/' );
+
+        if ( !RootPath!.EndsWith( '/' ) )
+        {
+            RootPath += "/";
         }
     }
 
@@ -385,50 +421,6 @@ public partial class TexturePacker
         }
 
         ProgressListener.End();
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="dst"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="argb"></param>
-    private static void Plot( Bitmap dst, int x, int y, Color argb )
-    {
-        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) )
-        {
-            dst.SetPixel( x, y, argb );
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="src"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="w"></param>
-    /// <param name="h"></param>
-    /// <param name="dst"></param>
-    /// <param name="dx"></param>
-    /// <param name="dy"></param>
-    /// <param name="rotated"></param>
-    private static void Copy( Bitmap src, int x, int y, int w, int h, Bitmap dst, int dx, int dy, bool rotated )
-    {
-        for ( var i = 0; i < w; i++ )
-        {
-            for ( var j = 0; j < h; j++ )
-            {
-                if ( rotated )
-                {
-                    Plot( dst, dx + j, ( dy + w ) - i - 1, src.GetPixel( x + i, y + j ) );
-                }
-                else
-                {
-                    Plot( dst, dx + i, dy + j, src.GetPixel( x + i, y + j ) );
-                }
-            }
-        }
     }
 
     /// <summary>
@@ -709,6 +701,50 @@ public partial class TexturePacker
             }
 
             ProgressListener.Count++;
+        }
+    }
+
+    /// <summary>
+    /// </summary>
+    /// <param name="dst"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="argb"></param>
+    private static void Plot( Bitmap dst, int x, int y, Color argb )
+    {
+        if ( ( 0 <= x ) && ( x < dst.Width ) && ( 0 <= y ) && ( y < dst.Height ) )
+        {
+            dst.SetPixel( x, y, argb );
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="src"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="w"></param>
+    /// <param name="h"></param>
+    /// <param name="dst"></param>
+    /// <param name="dx"></param>
+    /// <param name="dy"></param>
+    /// <param name="rotated"></param>
+    private static void Copy( Bitmap src, int x, int y, int w, int h, Bitmap dst, int dx, int dy, bool rotated )
+    {
+        for ( var i = 0; i < w; i++ )
+        {
+            for ( var j = 0; j < h; j++ )
+            {
+                if ( rotated )
+                {
+                    Plot( dst, dx + j, ( dy + w ) - i - 1, src.GetPixel( x + i, y + j ) );
+                }
+                else
+                {
+                    Plot( dst, dx + i, dy + j, src.GetPixel( x + i, y + j ) );
+                }
+            }
         }
     }
 
@@ -1019,13 +1055,13 @@ public partial class TexturePacker
     /// Returns true if the output file does not yet exist or its last modification date
     /// is before the last modification date of the input file
     /// </summary>
-    public static bool IsModified( string input, string output, string packFileName, Settings settings )
+    public static bool IsModified( string input, string output, string packFileName, TexturePackerSettings settings )
     {
         var packFullFileName = output;
 
-        if ( !packFullFileName.EndsWith( '/' ) )
+        if ( !output.EndsWith( '/' ) )
         {
-            packFullFileName += "/";
+            packFullFileName = output + "/";
         }
 
         packFullFileName += packFileName;
@@ -1092,25 +1128,30 @@ public partial class TexturePacker
         }
     }
 
-    /// <summary>
-    /// </summary>
-    /// <param name="rootDir"></param>
-    public void SetRootDir( DirectoryInfo? rootDir )
+    public static bool ProcessIfModified( string input, string output, string packFileName )
     {
-        if ( rootDir == null )
-        {
-            RootPath = null;
+        var settings = new TexturePackerSettings();
 
-            return;
+        if ( IsModified( input, output, packFileName, settings ) )
+        {
+            Process( settings, input, output, packFileName );
+
+            return true;
         }
 
-        RootPath = Path.GetFullPath( rootDir.FullName );
-        RootPath = RootPath!.Replace( '\\', '/' );
+        return false;
+    }
 
-        if ( !RootPath!.EndsWith( '/' ) )
+    public static bool ProcessIfModified( TexturePackerSettings settings, string input, string output, string packFileName )
+    {
+        if ( IsModified( input, output, packFileName, settings ) )
         {
-            RootPath += "/";
+            Process( settings, input, output, packFileName );
+
+            return true;
         }
+
+        return false;
     }
 
     // ========================================================================

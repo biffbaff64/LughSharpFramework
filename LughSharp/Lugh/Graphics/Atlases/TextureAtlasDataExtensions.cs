@@ -26,13 +26,8 @@ using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.Atlases;
 
-// ============================================================================
-// ============================================================================
-
 public partial class TextureAtlasData
 {
-    // ========================================================================
-
     public class PageFieldSize : IField< Page >
     {
         public void Parse( Page page, params string[] entry )
