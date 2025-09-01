@@ -32,6 +32,7 @@ using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Lugh.Assets;
 

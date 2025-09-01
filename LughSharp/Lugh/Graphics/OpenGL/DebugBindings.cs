@@ -27,6 +27,7 @@
 using System.Text;
 
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Logging;
 
 // ============================================================================
 using GLenum = int;

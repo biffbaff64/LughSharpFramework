@@ -25,6 +25,7 @@
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Logging;
 
 using NUnit.Framework;
 

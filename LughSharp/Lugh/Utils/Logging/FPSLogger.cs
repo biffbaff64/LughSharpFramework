@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Utils;
+namespace LughSharp.Lugh.Utils.Logging;
 
 /// <summary>
 /// A simple helper class to log the frames per seconds achieved. Just invoke the

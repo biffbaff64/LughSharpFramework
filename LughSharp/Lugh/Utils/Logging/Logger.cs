@@ -28,7 +28,7 @@ using System.Text;
 
 using Environment = System.Environment;
 
-namespace LughSharp.Lugh.Utils;
+namespace LughSharp.Lugh.Utils.Logging;
 
 /// <summary>
 /// A class to write debug messages to console and a text file. Primarily intended for flow

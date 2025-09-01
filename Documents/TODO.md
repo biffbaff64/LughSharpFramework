@@ -240,7 +240,6 @@ CORE
     - DONE - DONE - IApplication
     - DONE - DONE - IApplicationListener
     - DONE - DONE - ILifecycleListener
-    - DONE - DONE - IPreferences
     - DONE - DONE - IScreen
     - DONE - DONE - LibraryVersion
     - DONE - DONE - Platform
@@ -393,6 +392,7 @@ GRAPHICS/OPENGL
     - DONE - DONE - GLBindingsHelpers
     - DONE - DONE - GLBindingsStructs
     - DONE - DONE - GLConsts
+    - IP   - IP   - GLData
     - DONE - DONE - GLDebugControl
     - DONE - DONE - GLFormatChooser
     - DONE - DONE - GLFunctionDelegates
@@ -885,7 +885,6 @@ UTILS
     - DONE - IP   - DataInput
     - DONE - IP   - DataOutput
     - DONE - DONE - DataUtils
-    - DONE - DONE - FPSLogger
     - DONE - IP   - GCSuppressor
     - DONE - IP   - GdxNativesLoader
     - IP   - IP   - HashHelpers
@@ -897,7 +896,6 @@ UTILS
     - DONE - DONE - IReadable
     - DONE - DONE - IResetable
     - DONE - DONE - IRunnable
-    - DONE - DONE - Logger
     - IP   - IP   - LughTestAdapter
     - DONE - DONE - PerformanceCounter
     - DONE - IP   - PerformanceCounters
@@ -948,6 +946,16 @@ UTILS/EXCEPTIONS
     - DONE - DONE - ReadOnlyBufferException
     - DONE - DONE - SerializationException
     - DONE - DONE - SpriteBatchException
+
+UTILS/LOGGING
+-------------
+
+    CODE   DOCUMENT
+    ----   --------
+    - DONE - DONE - FPSLogger
+    - DONE - DONE - IPreferences
+    - DONE - DONE - Logger
+    - IP   - IP   - Stats
 
 UTILS/POOLING
 -------------

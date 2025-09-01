@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Core;
+namespace LughSharp.Lugh.Utils.Logging;
 
 /// <summary>
 /// A Preference instance is a hash map holding different values. It is stored
@@ -34,6 +34,11 @@ namespace LughSharp.Lugh.Core;
 [PublicAPI]
 public interface IPreferences
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    int Count { get; }
+    
     // ------------------------------------------------------------------------
 
     /// <summary>
@@ -162,7 +167,7 @@ public interface IPreferences
     /// <summary>
     /// Returns the preferences list as a Dictionary{string,object}.
     /// </summary>
-    Dictionary< string, object > Get();
+    Dictionary< string, object > ToDictionary();
 
     // ------------------------------------------------------------------------
 

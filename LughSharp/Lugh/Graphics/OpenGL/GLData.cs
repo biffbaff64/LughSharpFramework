@@ -22,40 +22,15 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Logging;
-
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
 [PublicAPI]
-public class GLDebugControl
+public class GLData
 {
     /// <summary>
-    /// Sets up OpenGL's debug message callback and enables debug output. This helps capture and log
-    /// OpenGL debug messages during runtime, providing details about issues such as errors, warnings,
-    /// or performance bottlenecks in OpenGL operations.
+    /// As named, this is the currently bound FBO, used to keep track.
     /// </summary>
-    public static unsafe void EnableGLDebugOutput()
-    {
-        Logger.Debug( "********** SETTING UP GL DEBUG **********" );
-
-        Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );
-
-        GL.Enable( ( int )EnableCap.DebugOutput );
-        GL.Enable( ( int )EnableCap.DebugOutputSynchronous );
-        GL.DebugMessageCallback( GL.MessageCallback, null );
-
-        var array = new uint[ 1 ];
-
-        fixed ( uint* ptr = &array[ 0 ] )
-        {
-            GL.DebugMessageControl( ( int )DebugSourceControl.DontCare,
-                                    ( int )DebugTypeControl.DontCare,
-                                    ( int )DebugSeverityControl.DontCare, 0,
-                                    ptr,
-                                    true );
-        }
-    }
+    public static uint CurrentBoundFBO { get; set; } = 255;
 }
 
 // ========================================================================

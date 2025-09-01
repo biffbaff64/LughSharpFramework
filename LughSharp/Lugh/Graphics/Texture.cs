@@ -32,6 +32,7 @@ using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Lugh.Graphics;
 

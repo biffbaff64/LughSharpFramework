@@ -27,6 +27,7 @@ using System.Text;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Logging;
 
 using static LughSharp.Lugh.Graphics.GraphicsBackend;
 

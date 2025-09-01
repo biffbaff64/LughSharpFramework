@@ -32,6 +32,7 @@ using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Logging;
 
 using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;

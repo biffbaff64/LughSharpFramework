@@ -31,6 +31,7 @@ using JetBrains.Annotations;
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Logging;
 
 using NUnit.Framework;
 

@@ -28,6 +28,7 @@ using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 

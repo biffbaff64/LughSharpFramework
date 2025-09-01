@@ -26,6 +26,7 @@ using System.Text;
 
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Logging;
 
 // ============================================================================
 using GLenum = int;
@@ -4034,9 +4035,18 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void BindFramebuffer( GLenum target, GLuint framebuffer )
     {
+        if ( framebuffer == GLData.CurrentBoundFBO )
+        {
+            Stats.IncMeter( "BindFramebuffer" );
+            
+            return;
+        }
+        
         GetDelegateForFunction< PFNGLBINDFRAMEBUFFERPROC >( "glBindFramebuffer", out _glBindFramebuffer );
 
         _glBindFramebuffer( target, framebuffer );
+        
+        GLData.CurrentBoundFBO = framebuffer;
     }
 
     // ========================================================================

@@ -24,6 +24,8 @@
 
 using System.Text;
 
+using LughSharp.Lugh.Utils.Logging;
+
 namespace LughSharp.Lugh.Utils;
 
 /// <summary>

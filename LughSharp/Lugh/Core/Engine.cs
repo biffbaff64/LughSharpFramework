@@ -29,6 +29,7 @@ using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Network;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Logging;
 
 using GLBindings = LughSharp.Lugh.Graphics.OpenGL.GLBindings;
 
@@ -121,7 +122,7 @@ public class Engine
         get => _glBindings ??= new GLBindings();
         set => _glBindings = value;
     }
-
+    
     /// <summary>
     /// Performs essential tasks, which MUST be performed to allow the
     /// framework to work correctly.

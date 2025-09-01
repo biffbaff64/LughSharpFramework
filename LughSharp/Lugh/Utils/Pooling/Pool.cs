@@ -24,6 +24,8 @@
 
 using System.Collections.Concurrent;
 
+using LughSharp.Lugh.Utils.Logging;
+
 namespace LughSharp.Lugh.Utils.Pooling;
 
 /// <summary>

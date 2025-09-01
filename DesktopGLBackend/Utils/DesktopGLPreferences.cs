@@ -28,6 +28,7 @@ using System.Xml.Linq;
 using LughSharp.Lugh.Core;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Logging;
 
 namespace DesktopGLBackend.Utils;
 
@@ -295,7 +296,7 @@ public class DesktopGLPreferences : IPreferences
     /// Gets all properties in the preferences.
     /// </summary>
     /// <returns> A dictionary of all properties. </returns>
-    public Dictionary< string, object > Get()
+    public Dictionary< string, object > ToDictionary()
     {
         return _properties;
     }
@@ -315,7 +316,10 @@ public class DesktopGLPreferences : IPreferences
     /// </summary>
     public void Clear()
     {
-        _properties.Clear();
+        foreach ( var property in _properties )
+        {
+            _put( property.Key, "" );
+        }
     }
 
     /// <summary>
@@ -359,6 +363,13 @@ public class DesktopGLPreferences : IPreferences
         }
     }
 
+    /// <summary>
+    /// Returns the number of entries in the preferences.
+    /// </summary>
+    public int Count => _properties.Count;
+    
+    // ========================================================================
+    
     private IPreferences _put( string key, string value )
     {
         _properties[ key ] = value.ToLower();

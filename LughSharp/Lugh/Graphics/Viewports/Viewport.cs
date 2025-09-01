@@ -27,6 +27,7 @@ using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Logging;
 
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
