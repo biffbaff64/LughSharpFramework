@@ -4038,15 +4038,16 @@ public unsafe partial class GLBindings : IGLBindings
         if ( framebuffer == GLData.CurrentBoundFBO )
         {
             Stats.IncMeter( "BindFramebuffer" );
-            
+
             return;
         }
-        
+
         GetDelegateForFunction< PFNGLBINDFRAMEBUFFERPROC >( "glBindFramebuffer", out _glBindFramebuffer );
 
         _glBindFramebuffer( target, framebuffer );
-        
-        GLData.CurrentBoundFBO = framebuffer;
+
+        GL.GetIntegerv( ( int )BufferBindings.FramebufferBinding, out var binding );
+        GLData.CurrentBoundFBO = ( uint )binding;
     }
 
     // ========================================================================

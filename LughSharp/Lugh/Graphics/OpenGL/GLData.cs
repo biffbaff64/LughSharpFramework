@@ -30,7 +30,7 @@ public class GLData
     /// <summary>
     /// As named, this is the currently bound FBO, used to keep track.
     /// </summary>
-    public static uint CurrentBoundFBO { get; set; } = 255;
+    public static uint CurrentBoundFBO { get; set; } = 0;
 }
 
 // ========================================================================

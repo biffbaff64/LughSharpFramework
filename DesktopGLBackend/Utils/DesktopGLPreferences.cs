@@ -25,8 +25,6 @@
 using System.Globalization;
 using System.Xml.Linq;
 
-using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
 
@@ -61,14 +59,19 @@ public class DesktopGLPreferences : IPreferences
             Directory.CreateDirectory( _filePath );
         }
 
-        if ( !File.Exists( _filePath + _propertiesFile ) )
+        var fullPath = _filePath + _propertiesFile;
+
+        if ( !File.Exists( fullPath ) )
         {
-            File.Create( _filePath + _propertiesFile ).Dispose();
+            // Create the file and write the initial XML structure immediately.
+            var initialDoc = new XDocument( new XDeclaration( "1.0", "utf-8", "yes" ),
+                                            new XElement( "properties" ) );
+            initialDoc.Save( fullPath );
         }
 
         try
         {
-            _xDocument = XDocument.Load( _filePath + _propertiesFile );
+            _xDocument = XDocument.Load( fullPath );
 
             if ( _xDocument.Root?.Name == "properties" )
             {
@@ -367,9 +370,9 @@ public class DesktopGLPreferences : IPreferences
     /// Returns the number of entries in the preferences.
     /// </summary>
     public int Count => _properties.Count;
-    
+
     // ========================================================================
-    
+
     private IPreferences _put( string key, string value )
     {
         _properties[ key ] = value.ToLower();

@@ -150,8 +150,8 @@ public class TexturePackerFileProcessor : IFileProcessor
         _rootDirectory = inputRoot;
 
         // -----------------------------------------------------
-        // Collect any pack.json setting files present in the folder.
-        
+        // Collect any pack.json setting files present in the input folder.
+
         var settingsProcessor = new PackingSettingsProcessor();
         _ = settingsProcessor.AddInputRegex( ".json", ".pack" )
                              .Process( inputRoot, outputRoot );
@@ -164,8 +164,6 @@ public class TexturePackerFileProcessor : IFileProcessor
 
         if ( settingsFiles.Count > 0 )
         {
-            Logger.Debug( "Processing Settings files" );
-
             // Sort parent first.
             settingsFiles.Sort( ( file1, file2 ) => file1.ToString().Length - file2.ToString().Length );
 

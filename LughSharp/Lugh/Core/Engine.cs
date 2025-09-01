@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Text;
+
 using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
@@ -250,12 +252,21 @@ public class Engine
     // ========================================================================
 
     #if DEBUG
-    public static void SettingsCheck( int num )
+    public static void SettingsCheck( int num = 0 )
     {
-        var outputFolder     = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
-        var settingsFilePath = Path.Combine( outputFolder, "TexturePackerTestSettings.pack.json" );
+        var outputFolder     = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\objects" );
+        var settingsFilePath = Path.Combine( outputFolder, "PackSettings.json" );
 
-        Logger.Debug( $"Settings file exists: {File.Exists( settingsFilePath )}, :: {num} :: {settingsFilePath}" );
+        var sb = new StringBuilder( $"Settings file exists: {File.Exists( settingsFilePath )}" );
+        
+        if ( num > 0 )
+        {
+            sb.Append( $" :: {num}" );
+        }
+
+        sb.Append( $" :: {settingsFilePath}" );
+        
+        Logger.Debug( sb.ToString() );
     }
     #endif
 }

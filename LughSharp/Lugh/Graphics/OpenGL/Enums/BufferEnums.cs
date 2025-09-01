@@ -71,6 +71,7 @@ public enum BufferBindings : int
     DynamicDraw                    = IGL.GL_DYNAMIC_DRAW,
     ElementArrayBuffer             = IGL.GL_ELEMENT_ARRAY_BUFFER,
     ElementArrayBufferBinding      = IGL.GL_ELEMENT_ARRAY_BUFFER_BINDING,
+    FramebufferBinding             = IGL.GL_FRAMEBUFFER_BINDING,
     NormalArrayBufferBinding       = IGL.GL_NORMAL_ARRAY_BUFFER_BINDING,
     StaticDraw                     = IGL.GL_STATIC_DRAW,
     TextureCoordArrayBufferBinding = IGL.GL_TEXTURE_COORD_ARRAY_BUFFER_BINDING,

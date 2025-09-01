@@ -133,7 +133,7 @@ public static class Logger
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        var str = CreateMessage( ERROR_TAG, message, callerID );
+        var str = CreateMessage( DEBUG_TAG, message, callerID );
 
         Console.WriteLine( str );
         WriteToFile( str );

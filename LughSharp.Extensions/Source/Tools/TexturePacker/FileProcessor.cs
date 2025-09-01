@@ -118,8 +118,6 @@ public class FileProcessor
                                          $"exist: {inputFileOrDir?.FullName}" );
         }
 
-        IOUtils.ListFiles( inputFileOrDir.FullName );
-        
         List< TexturePackerEntry > retval;
 
         if ( IOUtils.IsFile( inputFileOrDir ) )
@@ -226,12 +224,27 @@ public class FileProcessor
     }
 
     /// <summary>
+    /// Processes the given array of files starting from a specific output directory
+    /// and populates a mapping of directories to their corresponding entries. Handles
+    /// recursive traversal and processing based on the specified depth.
     /// </summary>
-    /// <param name="files"></param>
-    /// <param name="outputRoot"></param>
-    /// <param name="outputDir"></param>
-    /// <param name="dirToEntries"></param>
-    /// <param name="depth"></param>
+    /// <param name="files">
+    /// An array of <see cref="FileInfo"/> objects representing the files to be processed.
+    /// </param>
+    /// <param name="outputRoot">
+    /// The root output directory where the processed files will be stored.
+    /// </param>
+    /// <param name="outputDir">
+    /// The currently targeted output directory during the processing operation.
+    /// </param>
+    /// <param name="dirToEntries">
+    /// A dictionary mapping each discovered directory to a list of associated
+    /// <see cref="TexturePackerEntry"/> objects.
+    /// </param>
+    /// <param name="depth">
+    /// The current recursion depth during processing, used to manage directory
+    /// hierarchy and traversal.
+    /// </param>
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                                  Dictionary< DirectoryInfo, List< TexturePackerEntry >? > dirToEntries, int depth )
     {
@@ -252,13 +265,13 @@ public class FileProcessor
                 // Handle the case where a file has no parent directory (e.g., root level)
                 // Either log a warning, throw an exception, or handle it differently
                 // ( Logging a warning for now... )
-                Logger.Warning( $"WARNING: File '{file.FullName}' has no parent directory." );
+                Logger.Warning( $"File '{file.FullName}' has no parent directory." );
             }
         }
 
         foreach ( var file in files )
         {
-            if ( !IOUtils.IsDirectory( file ) )
+            if ( IOUtils.IsFile( file ) )
             {
                 if ( InputRegex.Count > 0 )
                 {
@@ -310,20 +323,7 @@ public class FileProcessor
 
                 var dir = file.Directory!;
 
-                if ( !dirToEntries.TryGetValue( dir, out var value ) )
-                {
-                    value?.Add( entry );
-                }
-                else
-                {
-                    // This should ideally not happen if the first loop worked correctly.
-                    // You might want to log a warning here for unexpected cases.
-
-                    Logger.Warning( $"Directory '{dir.FullName}' not found in dirToEntries during file processing." );
-
-                    // Create a new list here as fallback
-                    dirToEntries[ dir ] = [ entry ];
-                }
+                dirToEntries.Add( dir, [ entry ] );
             }
 
             if ( Recursive && IOUtils.IsDirectory( file ) )
@@ -362,6 +362,7 @@ public class FileProcessor
                         if ( pattern.IsMatch( file.Name ) )
                         {
                             found = true;
+
                             break;
                         }
                     }
@@ -377,7 +378,7 @@ public class FileProcessor
                 {
                     continue;
                 }
-                
+
                 var outputName = file.Name;
 
                 if ( OutputSuffix != null )
@@ -471,7 +472,7 @@ public class FileProcessor
         {
             InputRegex.Add( new Regex( regex ) );
         }
-        
+
         return this;
     }
 }
