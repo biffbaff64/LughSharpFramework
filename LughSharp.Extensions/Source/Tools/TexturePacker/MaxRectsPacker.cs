@@ -80,17 +80,17 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <param name="inputRects"></param>
     /// <returns></returns>
     /// <exception cref="NullReferenceException"></exception>
-    public List< TexturePacker.Page > Pack( TexturePacker.AbstractProgressListener? progress,
+    public List< TexturePacker.Page > Pack( TexturePacker.TexturePackerProgressListener? progress,
                                             List< TexturePacker.Rect > inputRects )
     {
         var n = inputRects.Count;
 
-//        for ( var i = 0; i < n; i++ )
-//        {
-//            var rect = inputRects[ i ];
-//            rect.Width  += _settings.PaddingX;
-//            rect.Height += _settings.PaddingY;
-//        }
+        for ( var i = 0; i < n; i++ )
+        {
+            var rect = inputRects[ i ];
+            rect.Width  += _settings.PaddingX;
+            rect.Height += _settings.PaddingY;
+        }
 
         if ( _settings.Fast )
         {
@@ -151,6 +151,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <exception cref="GdxRuntimeException"></exception>
     private TexturePacker.Page PackPage( List< TexturePacker.Rect > inputRects )
     {
+        Logger.Checkpoint();
+        
         var paddingX  = _settings.PaddingX;
         var paddingY  = _settings.PaddingY;
         var maxWidth  = ( float )_settings.MaxWidth;
@@ -179,6 +181,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         var minWidth  = int.MaxValue;
         var minHeight = int.MaxValue;
 
+        //TODO: Debug inputRects here...
+        
         for ( int i = 0, nn = inputRects.Count; i < nn; i++ )
         {
             var rect   = inputRects[ i ];
@@ -225,6 +229,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         minWidth  = Math.Max( minWidth, _settings.MinWidth );
         minHeight = Math.Max( minHeight, _settings.MinHeight );
 
+        Logger.Debug( $"min width: {minWidth}, min height: {minHeight}" );
+        Logger.Debug( $"max width: {maxWidth}, max height: {maxHeight}" );
+        
         // BinarySearch uses the max size. Rects are packed with right and top padding, so the max
         // size is increased to match. After packing the padding is subtracted from the page size.
         var adjustX = paddingX;

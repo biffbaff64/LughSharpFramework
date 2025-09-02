@@ -466,14 +466,12 @@ public class FileProcessor
     /// </summary>
     /// <param name="regexes"> One or more Regex strings. </param>
     /// <returns> This IFileProcessor for chaining. </returns>
-    public virtual FileProcessor AddInputRegex( params string[] regexes )
+    public virtual void AddInputRegex( params string[] regexes )
     {
         foreach ( var regex in regexes )
         {
             InputRegex.Add( new Regex( regex ) );
         }
-
-        return this;
     }
 }
 

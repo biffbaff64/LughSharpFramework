@@ -27,7 +27,6 @@ using Extensions.Source.Drawing;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
@@ -129,17 +128,17 @@ namespace Extensions.Source.Tools.TexturePacker;
 /// </summary>
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public partial class TexturePacker
+public class TexturePacker
 {
-    public string?                   RootPath         { get; set; }
-    public IPacker                   Packer           { get; set; }
-    public AbstractProgressListener? ProgressListener { get; set; }
+    public string?                        RootPath         { get; set; }
+    public IPacker                        Packer           { get; set; }
+    public TexturePackerProgressListener? ProgressListener { get; set; }
 
     // ========================================================================
 
     private TexturePackerSettings _settings;
-    private ImageProcessor                 _imageProcessor;
-    private List< InputImage >             _inputImages;
+    private ImageProcessor        _imageProcessor;
+    private List< InputImage >    _inputImages;
 
     // ========================================================================
     // ========================================================================
@@ -213,21 +212,11 @@ public partial class TexturePacker
 
     // ========================================================================
 
-    /// <summary>
-    /// Packs using defaults settings.
-    /// </summary>
     public static void Process( string input, string output, string packFileName )
     {
         Process( input, output, packFileName, new TexturePackerSettings() );
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="settings"></param>
-    /// <param name="input"></param>
-    /// <param name="output"></param>
-    /// <param name="packFileName"></param>
     public static void Process( TexturePackerSettings settings, string input, string output, string packFileName )
     {
         Process( input, output, packFileName, settings, null );
@@ -250,7 +239,7 @@ public partial class TexturePacker
                                 string outputFolder,
                                 string packFileName,
                                 TexturePackerSettings settings,
-                                AbstractProgressListener? progressListener = null )
+                                TexturePackerProgressListener? progressListener = null )
     {
         try
         {
@@ -263,6 +252,8 @@ public partial class TexturePacker
         }
     }
 
+    // ========================================================================
+    
     /// <summary>
     /// </summary>
     /// <param name="rootDir"></param>
@@ -338,7 +329,7 @@ public partial class TexturePacker
 
         Directory.CreateDirectory( outputDir.FullName );
 
-        ProgressListener ??= new AbstractProgressListenerImpl();
+        ProgressListener ??= new TexturePackerProgressListener();
         ProgressListener.Start( 1 );
 
         var n = _settings.Scale.Length;
@@ -389,8 +380,12 @@ public partial class TexturePacker
             ProgressListener.Count = 0;
             ProgressListener.Total = _imageProcessor.ImageRects.Count;
 
+            Logger.Checkpoint();
+            
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
+            Logger.Checkpoint();
+            
             ProgressListener.End();
             ProgressListener.Start( 0.29f );
             ProgressListener.Count = 0;
@@ -1446,7 +1441,7 @@ public partial class TexturePacker
     public interface IPacker
     {
         public List< Page > Pack( List< Rect > inputRects );
-        public List< Page > Pack( AbstractProgressListener progressListener, List< Rect > inputRects );
+        public List< Page > Pack( TexturePackerProgressListener progressListener, List< Rect > inputRects );
     }
 
     // ========================================================================
@@ -1472,19 +1467,7 @@ public partial class TexturePacker
     // ========================================================================
 
     [PublicAPI]
-    public class AbstractProgressListenerImpl : AbstractProgressListener
-    {
-        /// <inheritdoc />
-        protected override void Progress( float progress )
-        {
-        }
-    }
-
-    // ========================================================================
-    // ========================================================================
-
-    [PublicAPI]
-    public abstract class AbstractProgressListener
+    public class TexturePackerProgressListener
     {
         public int  Count    { get; set; }
         public int  Total    { get; set; }
@@ -1560,7 +1543,9 @@ public partial class TexturePacker
             }
         }
 
-        protected abstract void Progress( float progress );
+        protected virtual void Progress( float progress )
+        {
+        }
     }
 
     // ========================================================================
