@@ -147,6 +147,30 @@ public class IOUtils
     }
 
     /// <summary>
+    /// Creates a directory if it does not exist or clears all files if the
+    /// directory already exists.
+    /// </summary>
+    /// <param name="dir"> The directory to create or empty. </param>
+    public static void CreateOrEmptyFolder( DirectoryInfo dir )
+    {
+        // If the directory does not exist, create it.
+        if ( !Directory.Exists( dir.FullName ) )
+        {
+            Directory.CreateDirectory( dir.FullName );
+        }
+        else
+        {
+            // If the directory exists, remove all files in it.
+            var files = dir.GetFiles( "*" );
+            
+            foreach ( var file in files )
+            {
+                file.Delete();
+            }
+        }
+    }
+
+    /// <summary>
     /// Determines the type of a given path, identifying whether it is a file, a directory,
     /// does not exist, or is invalid.
     /// </summary>

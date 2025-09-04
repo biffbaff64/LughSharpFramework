@@ -27,6 +27,7 @@ using System.Text.RegularExpressions;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
 
@@ -104,6 +105,8 @@ public class FileProcessor
 
     // ========================================================================
 
+    #region process methods
+
     /// <summary>
     /// Processes the specified input file or directory.
     /// </summary>
@@ -148,10 +151,10 @@ public class FileProcessor
 
         OutputFilesList.Clear();
 
-        var stringToEntries = new Dictionary< DirectoryInfo, List< TexturePackerEntry > >();
+        var stringToEntries = new Dictionary< string, List< TexturePackerEntry > >();
         var allEntries      = new List< TexturePackerEntry >();
 
-        Process( files, outputRoot, outputRoot, stringToEntries!, 0 );
+        Process( files, outputRoot, outputRoot, stringToEntries, 0 );
 
         foreach ( var (inputDir, dirEntries) in stringToEntries )
         {
@@ -171,16 +174,21 @@ public class FileProcessor
                 newOutputDir = dirEntries[ 0 ].OutputDirectory;
             }
 
-            var outputName = inputDir.Name;
+            var outputName = inputDir;
 
             if ( OutputSuffix != null )
             {
-                outputName = RegexUtils.FileNameWithoutExtensionRegex().Match( outputName ) + OutputSuffix;
+                var match = RegexUtils.MatchFinalFolderPatternRegex().Match( outputName );
+
+                if ( match.Success )
+                {
+                    outputName = match.Groups[ 1 ].Value + OutputSuffix;
+                }
             }
 
             var entry = new TexturePackerEntry
             {
-                InputFile       = inputDir,
+                InputFile       = new DirectoryInfo( inputDir ),
                 OutputDirectory = newOutputDir!,
             };
 
@@ -193,7 +201,7 @@ public class FileProcessor
 
             try
             {
-                ProcessDirDelegate?.Invoke( entry, dirEntries );
+                ProcessDir( entry, dirEntries );
             }
             catch ( Exception ex )
             {
@@ -444,6 +452,10 @@ public class FileProcessor
     public virtual void ProcessDir( TexturePackerEntry entryDir, List< TexturePackerEntry > files )
     {
     }
+
+    #endregion process methods
+
+    // ========================================================================
 
     /// <summary>
     /// Adds a processed <see cref="TexturePackerEntry"/> to the <see cref="OutputFilesList"/>.

@@ -24,6 +24,7 @@
 
 using Extensions.Source.Drawing;
 
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
@@ -294,8 +295,8 @@ public class TexturePacker
     /// <summary>
     /// Adds an image to the list of Input Images.
     /// </summary>
-    /// <param name="image"></param>
-    /// <param name="name"></param>
+    /// <param name="image"> The <see cref="Bitmap"/> image.</param>
+    /// <param name="name"> The name for this image. </param>
     public void AddImage( Bitmap image, string name )
     {
         var inputImage = new InputImage
@@ -315,25 +316,38 @@ public class TexturePacker
     /// <param name="packFileName"> The name for the resulting TextureAtlas. </param>
     public void Pack( DirectoryInfo outputDir, string packFileName )
     {
+        Logger.Divider( '=', 80 );
+        Logger.Checkpoint();
+        Logger.Divider( '=', 80 );
+
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
-            packFileName = packFileName.Substring( 0, packFileName.Length - _settings.AtlasExtension.Length );
+            packFileName = Path.GetFileNameWithoutExtension( packFileName );
         }
 
-        // Remove the output directory, if it exists, and create
-        // a new fresh output folder.
-        if ( Directory.Exists( outputDir.FullName ) )
+        // If the output directory does not exist, create it.
+        if ( !Directory.Exists( outputDir.FullName ) )
         {
-            Directory.Delete( outputDir.FullName, true );
+            Directory.CreateDirectory( outputDir.FullName );
         }
-
-        Directory.CreateDirectory( outputDir.FullName );
-
+        else
+        {
+            // If the output directory exists, remove all files in it.
+            var files = outputDir.GetFiles( "*" );
+            
+            foreach ( var file in files )
+            {
+                file.Delete();
+            }
+        }
+        
         ProgressListener ??= new TexturePackerProgressListener();
         ProgressListener.Start( 1 );
 
         var n = _settings.Scale.Length;
 
+        Logger.Debug( $"_settings.Scale.Length: {n}" );
+        
         for ( var i = 0; i < n; i++ )
         {
             ProgressListener.Start( 1f / n );

@@ -26,6 +26,7 @@ using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
+using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
 
@@ -122,7 +123,7 @@ public class TexturePackerFileProcessor : FileProcessor
         var settingsFiles = settingsProcessor.SettingsFiles;
 
         // -----------------------------------------------------
-        
+
         if ( settingsFiles.Count > 0 )
         {
             // Sort parent first.
@@ -134,15 +135,15 @@ public class TexturePackerFileProcessor : FileProcessor
                 // Find first parent with settings, or use defaults.
                 TexturePackerSettings? settings = null;
 
-                var parent  = settingsFile.Directory;
+                var parent = settingsFile.Directory;
 
                 while ( ( parent != null ) && !parent.Equals( _rootDirectory ) )
                 {
                     Guard.ThrowIfNull( parent.Parent );
-                    
+
                     parent   = parent.Parent;
                     settings = ( TexturePackerSettings? )_dirToSettings[ parent ];
-                    
+
                     if ( settings != null )
                     {
                         settings = NewSettings( settings );
@@ -161,7 +162,7 @@ public class TexturePackerFileProcessor : FileProcessor
         // Count the number of texture packer invocations for the
         // ProgressListener to use.
         CountOnly = true;
-        _ = base.Process( inputRoot, outputRoot );
+        _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
 
         // Do actual processing.
@@ -214,12 +215,12 @@ public class TexturePackerFileProcessor : FileProcessor
 
         OutputFilesList.Clear();
 
-        var stringToEntries = new Dictionary< string, List< TexturePackerEntry > >();
-        var allEntries      = new List< TexturePackerEntry >();
+        var dirToEntries = new Dictionary< DirectoryInfo, List< TexturePackerEntry > >();
+        var allEntries   = new List< TexturePackerEntry >();
 
-        Process( files, outputRoot, outputRoot, stringToEntries, 0 );
+        Process( files, outputRoot, outputRoot, dirToEntries!, 0 );
 
-        foreach ( var (inputDir, dirEntries) in stringToEntries )
+        foreach ( var (inputDir, dirEntries) in dirToEntries )
         {
             if ( Comparator != null )
             {
@@ -237,7 +238,7 @@ public class TexturePackerFileProcessor : FileProcessor
                 newOutputDir = dirEntries[ 0 ].OutputDirectory;
             }
 
-            var outputName = inputDir;
+            var outputName = inputDir.Name;
 
             if ( OutputSuffix != null )
             {
@@ -251,7 +252,7 @@ public class TexturePackerFileProcessor : FileProcessor
 
             var entry = new TexturePackerEntry
             {
-                InputFile       = new DirectoryInfo( inputDir ),
+                InputFile       = inputDir,
                 OutputDirectory = newOutputDir!,
             };
 
@@ -494,7 +495,7 @@ public class TexturePackerFileProcessor : FileProcessor
 
                     Logger.Warning( $"Directory '{dir}' not found in dirToEntries during file processing." );
 
-                    // Potentially create a new list here if there is a specific fallback behavior:
+                    // TODO: Potentially create a new list here if there is a specific fallback behavior:
                     // dirToEntries[dir] = new List<TexturePackerEntry> { entry };
                 }
             }
@@ -511,6 +512,8 @@ public class TexturePackerFileProcessor : FileProcessor
             }
         }
     }
+
+    // ========================================================================
 
     /// <summary>
     /// </summary>
@@ -548,6 +551,8 @@ public class TexturePackerFileProcessor : FileProcessor
                 : _defaultSettings;
 
             var packer = NewTexturePacker( _rootDirectory, settings );
+
+            Logger.Debug( $"Pack( packer, entry )" );
 
             Pack( packer, entry );
         }
@@ -731,18 +736,19 @@ public class TexturePackerFileProcessor : FileProcessor
 
         foreach ( var file in files )
         {
-            if ( file.InputFile == null )
+            if ( file.InputFile != null )
             {
-                continue;
+                packer.AddImage( ( FileInfo )file.InputFile );
             }
-
-            packer.AddImage( ( FileInfo )file.InputFile );
         }
 
-        Pack( packer, inputDir );
+        Logger.Debug( $"Pack( packer, inputDir )" );
 
+        Pack( packer, inputDir );
         ProgressListener?.End();
     }
+
+    // ========================================================================
 
     /// <summary>
     /// </summary>

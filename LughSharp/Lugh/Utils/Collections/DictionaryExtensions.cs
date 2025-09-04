@@ -125,4 +125,15 @@ public static class DictionaryExtension
             self.Put( keyTable[ i ], valueTable[ i ] );
         }
     }
+
+    public static void DebugPrint< TK, TV >( this Dictionary< TK, TV > self ) where TK : notnull
+    {
+        var keyTable   = self.Keys.ToArray();
+        var valueTable = self.Values.ToArray();
+
+        for ( var i = 0; i < keyTable.Length; i++ )
+        {
+            Console.WriteLine( $"Key: {keyTable[ i ]}, Value: {valueTable[ i ]}" );
+        }
+    }
 }
