@@ -41,12 +41,13 @@ using Rectangle = System.Drawing.Rectangle;
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class ImageProcessor
 {
     public float                      Scale      { get; set; }
     public Resampling                 Resampling { get; set; } = Resampling.Bicubic;
     public List< TexturePacker.Rect > ImageRects { get; set; } = [ ];
-    public TexturePackerSettings     Settings   { get; }
+    public TexturePackerSettings      Settings   { get; }
 
     // ========================================================================
 
@@ -77,6 +78,8 @@ public class ImageProcessor
     public TexturePacker.Rect? AddImage( FileInfo? file, string? rootPath )
     {
         ArgumentNullException.ThrowIfNull( file );
+
+        Logger.Checkpoint();
 
         rootPath = IOUtils.NormalizePath( rootPath );
 
@@ -116,6 +119,9 @@ public class ImageProcessor
             rect.UnloadImage( file );
         }
 
+        Logger.Debug( $"rect: {rect?.ToString()}" );
+        Logger.Debug( $"name: {name}" );
+        
         return rect;
     }
 
@@ -127,6 +133,8 @@ public class ImageProcessor
     /// <returns></returns>
     public TexturePacker.Rect? AddImage( Bitmap image, string? name )
     {
+        Logger.Checkpoint();
+        
         var rect = ProcessImage( image, name );
 
         if ( rect == null )

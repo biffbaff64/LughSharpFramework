@@ -343,11 +343,10 @@ public class TexturePacker
         
         ProgressListener ??= new TexturePackerProgressListener();
         ProgressListener.Start( 1 );
-
+        
+        // Performs the process once for each scale factor.
         var n = _settings.Scale.Length;
 
-        Logger.Debug( $"_settings.Scale.Length: {n}" );
-        
         for ( var i = 0; i < n; i++ )
         {
             ProgressListener.Start( 1f / n );
@@ -365,6 +364,8 @@ public class TexturePacker
             ProgressListener.Count = 0;
             ProgressListener.Total = _inputImages.Count;
 
+            Logger.Debug( $"_inputImages.Count: {_inputImages.Count}" );
+            
             for ( int ii = 0, nn = _inputImages.Count; ii < nn; ii++, ProgressListener.Count++ )
             {
                 var inputImage = _inputImages[ ii ];

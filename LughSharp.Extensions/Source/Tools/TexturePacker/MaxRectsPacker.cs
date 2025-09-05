@@ -83,6 +83,8 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     public List< TexturePacker.Page > Pack( TexturePacker.TexturePackerProgressListener? progress,
                                             List< TexturePacker.Rect > inputRects )
     {
+        Logger.Debug( $"inputRects: {inputRects.Count}" );
+        
         var n = inputRects.Count;
 
         for ( var i = 0; i < n; i++ )
@@ -97,15 +99,11 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             if ( _settings.Rotation )
             {
                 // Sort by longest side if rotation is enabled.
-                inputRects.Sort( CompareRectsByMaxDimensionDescending );
-
-                static int CompareRectsByMaxDimensionDescending( TexturePacker.Rect o1, TexturePacker.Rect o2 )
-                {
+                SortUtils.Sort(inputRects, (o1, o2) => {
                     var n1 = o1.Width > o1.Height ? o1.Width : o1.Height;
                     var n2 = o2.Width > o2.Height ? o2.Width : o2.Height;
-
                     return n2 - n1;
-                }
+                });
             }
             else
             {
@@ -144,15 +142,31 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     }
 
     /// <summary>
-    /// 
+    /// Packs a list of rectangles into a new TexturePacker.Page instance while considering
+    /// the specified packing settings.
     /// </summary>
-    /// <param name="inputRects"></param>
-    /// <returns></returns>
-    /// <exception cref="GdxRuntimeException"></exception>
+    /// <param name="inputRects">The list of rectangles to be packed into a page.</param>
+    /// <returns>
+    /// Returns a TexturePacker.Page instance containing the packed rectangles.
+    /// If the packing fails, a fallback empty page may be created and returned.
+    /// </returns>
+    /// <exception cref="GdxRuntimeException">
+    /// Thrown when an error occurs during the packing process, such as invalid settings
+    /// or input data.
+    /// </exception>
     private TexturePacker.Page? PackPage( List< TexturePacker.Rect > inputRects )
     {
-        Logger.Checkpoint();
+        // --------------------------------------------------------------------
 
+        Logger.Debug( $"inputRects: {inputRects.Count}" );
+
+        foreach ( var rect in inputRects )
+        {
+            Logger.Debug( $"rect: {rect.Name} {rect.Width}x{rect.Height}" );
+        }
+
+        // --------------------------------------------------------------------
+        
         var paddingX  = _settings.PaddingX;
         var paddingY  = _settings.PaddingY;
         var maxWidth  = ( float )_settings.MaxWidth;
@@ -180,15 +194,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         // Find min size.
         var minWidth  = int.MaxValue;
         var minHeight = int.MaxValue;
+        var i         = 0;
 
-        Logger.Debug( $"inputRects: {inputRects.Count}" );
-
-        foreach ( var rect in inputRects )
-        {
-            Logger.Debug( $"rect: {rect.Name} {rect.Width}x{rect.Height}" );
-        }
-
-        for ( int i = 0, nn = inputRects.Count; i < nn; i++ )
+        for ( var nn = inputRects.Count; i < nn; ++i )
         {
             var rect   = inputRects[ i ];
             var width  = rect.Width - paddingX;
@@ -233,25 +241,26 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
         minWidth  = Math.Max( minWidth, _settings.MinWidth );
         minHeight = Math.Max( minHeight, _settings.MinHeight );
+        i         = paddingX;
+        var adjustY = paddingY;
+
+        // BinarySearch uses the max size. Rects are packed with right
+        // and top padding, so the max size is increased to match. After
+        // packing the padding is subtracted from the page size.
 
         Logger.Debug( $"min width: {minWidth}, min height: {minHeight}" );
         Logger.Debug( $"max width: {maxWidth}, max height: {maxHeight}" );
-
-        // BinarySearch uses the max size. Rects are packed with right and top padding, so the max
-        // size is increased to match. After packing the padding is subtracted from the page size.
-        var adjustX = paddingX;
-        var adjustY = paddingY;
 
         if ( _settings.EdgePadding )
         {
             if ( _settings.DuplicatePadding )
             {
-                adjustX = paddingX - paddingX;
+                i       = paddingX - paddingX;
                 adjustY = paddingX - paddingX;
             }
             else
             {
-                adjustX = paddingX - paddingX * 2;
+                i       = paddingX - paddingX * 2;
                 adjustY = paddingX - paddingX * 2;
             }
         }
@@ -261,8 +270,6 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             Console.Write( "Packing" );
         }
 
-//        var bestResult = GetMinimalPageSize( minWidth, minHeight, adjustX, adjustY, paddingX, paddingY, inputRects );
-
         // --------------------------------------------------------------------
         // Find the minimal page size that fits all rects.
         TexturePacker.Page? bestResult = null;
@@ -281,15 +288,15 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             TexturePacker.Page? result;
 
-            for ( var i = 0; size != -1; size = sizeSearch.Next( result == null ) )
+            for ( var ii = 0; size != -1; size = sizeSearch.Next( result == null ) )
             {
-                result = PackAtSize( true, size + i, size + adjustY, inputRects );
+                result = PackAtSize( true, size + ii, size + adjustY, inputRects );
 
                 if ( !_settings.Silent )
                 {
-                    ++i;
+                    ++ii;
 
-                    if ( i % 70 == 0 )
+                    if ( ii % 70 == 0 )
                     {
                         Console.WriteLine();
                     }
@@ -304,20 +311,13 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             {
                 Console.WriteLine();
             }
-            
+
             // Rects don't fit on one page. Fill a whole page and return.
-            if ( bestResult == null )
-            {
-                bestResult = PackAtSize( false, maxSize + adjustX, maxSize + adjustY, inputRects );
-            }
+            bestResult ??= PackAtSize( false, maxSize + i, maxSize + adjustY, inputRects );
 
             bestResult?.OutputRects?.Sort( _rectComparator );
-
-            if ( bestResult != null )
-            {
-                bestResult.Width  = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingX;
-                bestResult.Height = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingY;
-            }
+            bestResult!.Width = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingX;
+            bestResult.Height = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingY;
         }
         else
         {
@@ -335,7 +335,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             var width  = widthSearch.Reset();
             var height = _settings.Square ? width : heightSearch.Reset();
-            var i      = 0;
+            var ix     = 0;
 
             while ( true )
             {
@@ -343,13 +343,13 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
                 while ( width != -1 )
                 {
-                    var result = PackAtSize( true, width + i, height + adjustY, inputRects );
+                    var result = PackAtSize( true, width + ix, height + adjustY, inputRects );
 
                     if ( !_settings.Silent )
                     {
-                        ++i;
+                        ++ix;
 
-                        if ( i % 70 == 0 )
+                        if ( ix % 70 == 0 )
                         {
                             Console.WriteLine();
                         }
@@ -389,249 +389,57 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             if ( bestResult == null )
             {
                 bestResult = PackAtSize( false,
-                                         _settings.MaxWidth + adjustX,
+                                         _settings.MaxWidth + ix, // Should this be i?
                                          _settings.MaxHeight + adjustY,
                                          inputRects );
             }
-            
+
             bestResult?.OutputRects?.Sort( _rectComparator );
-
-            if ( bestResult != null )
-            {
-                bestResult.Width  -= paddingX;
-                bestResult.Height -= paddingY;
-            }
-        }
-
-        if ( bestResult == null )
-        {
-            bestResult = PackAtSize( false, _settings.MaxWidth + adjustX, _settings.MaxHeight + adjustY, inputRects );
-
-            if ( bestResult == null )
-            {
-                // Create a fallback empty page
-                bestResult = new TexturePacker.Page
-                {
-                    Width          = _settings.MinWidth,
-                    Height         = _settings.MinHeight,
-                    OutputRects    = [ ],
-                    RemainingRects = [ ..inputRects ],
-                };
-            }
-        }
-
-        bestResult.OutputRects?.Sort( _rectComparator );
-
-        // Don't subtract padding if the result is invalid
-        if ( bestResult.Width > paddingX && bestResult.Height > paddingY )
-        {
-            bestResult.Width  -= paddingX;
+            bestResult!.Width -= paddingX;
             bestResult.Height -= paddingY;
         }
-        else
-        {
-            bestResult.Width  = Math.Max( _settings.MinWidth, bestResult.Width );
-            bestResult.Height = Math.Max( _settings.MinHeight, bestResult.Height );
-        }
+
         // --------------------------------------------------------------------
 
-        Logger.Debug( $"bestResult: {bestResult?.Width}x{bestResult?.Height}" );
+        // This is showing bestResult.Width and bestResult.Height as -2 x -2,
+        // which is incorrect.
+        Logger.Debug( $"bestResult: {bestResult.Width} x {bestResult.Height}" );
 
         return bestResult;
     }
 
-    /// <summary>
-    /// Determines the minimal page size required to accommodate all given rectangles,
-    /// considering the specified minimum dimensions and adjustments.
-    /// </summary>
-    /// <param name="minWidth">The minimum allowable width for the page.</param>
-    /// <param name="minHeight">The minimum allowable height for the page.</param>
-    /// <param name="adjustX">The horizontal adjustment to apply to the page dimensions.</param>
-    /// <param name="adjustY">The vertical adjustment to apply to the page dimensions.</param>
-    /// <param name="inputRects">A list of rectangles that need to fit within the page.</param>
-    /// <param name="paddingX"></param>
-    /// <param name="paddingY"></param>
-    /// <returns>
-    /// A TexturePacker.Page representing the minimal dimensions that can contain all rectangles.
-    /// If no suitable configuration is found, returns null.
-    /// </returns>
-    private TexturePacker.Page? GetMinimalPageSize( int minWidth, int minHeight,
-                                                    int adjustX, int adjustY,
-                                                    int paddingX, int paddingY,
-                                                    List< TexturePacker.Rect > inputRects )
-    {
-        // Find the minimal page size that fits all rects.
-        TexturePacker.Page? bestResult = null;
+//        if ( bestResult == null )
+//        {
+//            bestResult = PackAtSize( false, _settings.MaxWidth + i, _settings.MaxHeight + adjustY, inputRects );
+//
+//            if ( bestResult == null )
+//            {
+//                // Create a fallback empty page
+//                bestResult = new TexturePacker.Page
+//                {
+//                    Width          = _settings.MinWidth,
+//                    Height         = _settings.MinHeight,
+//                    OutputRects    = [ ],
+//                    RemainingRects = [ ..inputRects ],
+//                };
+//            }
+//        }
 
-        if ( _settings.Square )
-        {
-            var minSize = Math.Max( minWidth, minHeight );
-            var maxSize = Math.Min( _settings.MaxWidth, _settings.MaxHeight );
-            var sizeSearch = new BinarySearch( minSize,
-                                               maxSize,
-                                               _settings.Fast ? 25 : 15,
-                                               _settings.PowerOfTwo,
-                                               _settings.MultipleOfFour );
-
-            var size = sizeSearch.Reset();
-
-            TexturePacker.Page? result;
-
-            for ( var i = 0; size != -1; size = sizeSearch.Next( result == null ) )
-            {
-                result = PackAtSize( true, size + i, size + adjustY, inputRects );
-
-                if ( !_settings.Silent )
-                {
-                    ++i;
-
-                    if ( i % 70 == 0 )
-                    {
-                        Console.WriteLine();
-                    }
-
-                    Console.Write( "." );
-                }
-
-                bestResult = GetBest( bestResult, result );
-            }
-
-            if ( !_settings.Silent )
-            {
-                Console.WriteLine();
-            }
-            
-            // Rects don't fit on one page. Fill a whole page and return.
-            if ( bestResult == null )
-            {
-                bestResult = PackAtSize( false, maxSize + adjustX, maxSize + adjustY, inputRects );
-            }
-
-            bestResult?.OutputRects?.Sort( _rectComparator );
-
-            if ( bestResult != null )
-            {
-                bestResult.Width  = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingX;
-                bestResult.Height = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingY;
-            }
-        }
-        else
-        {
-            var widthSearch = new BinarySearch( minWidth,
-                                                _settings.MaxWidth,
-                                                _settings.Fast ? 25 : 15,
-                                                _settings.PowerOfTwo,
-                                                _settings.MultipleOfFour );
-
-            var heightSearch = new BinarySearch( minHeight,
-                                                 _settings.MaxHeight,
-                                                 _settings.Fast ? 25 : 15,
-                                                 _settings.PowerOfTwo,
-                                                 _settings.MultipleOfFour );
-
-            var width  = widthSearch.Reset();
-            var height = _settings.Square ? width : heightSearch.Reset();
-            var i      = 0;
-
-            while ( true )
-            {
-                TexturePacker.Page? bestWidthResult = null;
-
-                while ( width != -1 )
-                {
-                    var result = PackAtSize( true, width + i, height + adjustY, inputRects );
-
-                    if ( !_settings.Silent )
-                    {
-                        ++i;
-
-                        if ( i % 70 == 0 )
-                        {
-                            Console.WriteLine();
-                        }
-
-                        Console.Write( "." );
-                    }
-
-                    bestWidthResult = GetBest( bestWidthResult, result );
-                    width           = widthSearch.Next( result == null );
-
-                    if ( _settings.Square )
-                    {
-                        height = width;
-                    }
-                }
-
-                bestResult = GetBest( bestResult, bestWidthResult );
-
-                if ( _settings.Square )
-                {
-                    break;
-                }
-
-                if ( ( height = heightSearch.Next( bestWidthResult == null ) ) == -1 )
-                {
-                    break;
-                }
-
-                width = widthSearch.Reset();
-            }
-
-            if ( !_settings.Silent )
-            {
-                Console.WriteLine();
-            }
-
-            if ( bestResult == null )
-            {
-                bestResult = PackAtSize( false,
-                                         _settings.MaxWidth + adjustX,
-                                         _settings.MaxHeight + adjustY,
-                                         inputRects );
-            }
-            
-            bestResult?.OutputRects?.Sort( _rectComparator );
-
-            if ( bestResult != null )
-            {
-                bestResult.Width  -= paddingX;
-                bestResult.Height -= paddingY;
-            }
-        }
-
-        if ( bestResult == null )
-        {
-            bestResult = PackAtSize( false, _settings.MaxWidth + adjustX, _settings.MaxHeight + adjustY, inputRects );
-
-            if ( bestResult == null )
-            {
-                // Create a fallback empty page
-                bestResult = new TexturePacker.Page
-                {
-                    Width          = _settings.MinWidth,
-                    Height         = _settings.MinHeight,
-                    OutputRects    = [ ],
-                    RemainingRects = [ ..inputRects ],
-                };
-            }
-        }
-
-        bestResult.OutputRects?.Sort( _rectComparator );
-
-        // Don't subtract padding if the result is invalid
-        if ( bestResult.Width > paddingX && bestResult.Height > paddingY )
-        {
-            bestResult.Width  -= paddingX;
-            bestResult.Height -= paddingY;
-        }
-        else
-        {
-            bestResult.Width  = Math.Max( _settings.MinWidth, bestResult.Width );
-            bestResult.Height = Math.Max( _settings.MinHeight, bestResult.Height );
-        }
-
-        return bestResult;
-    }
+//        Logger.Debug( $"bestResult: {bestResult.Width} x {bestResult.Height}" );
+//
+//        bestResult.OutputRects?.Sort( _rectComparator );
+//
+//        // Don't subtract padding if the result is invalid
+//        if ( bestResult.Width > paddingX && bestResult.Height > paddingY )
+//        {
+//            bestResult.Width  -= paddingX;
+//            bestResult.Height -= paddingY;
+//        }
+//        else
+//        {
+//            bestResult.Width  = Math.Max( _settings.MinWidth, bestResult.Width );
+//            bestResult.Height = Math.Max( _settings.MinHeight, bestResult.Height );
+//        }
 
     /// <summary>
     /// </summary>
@@ -717,6 +525,204 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
         // return the result with the higher occupancy value.
         return result1.Occupancy > result2.Occupancy ? result1 : result2;
+    }
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    
+    /// <summary>
+    /// Determines the minimal page size required to accommodate all given rectangles,
+    /// considering the specified minimum dimensions and adjustments.
+    /// </summary>
+    /// <param name="minWidth">The minimum allowable width for the page.</param>
+    /// <param name="minHeight">The minimum allowable height for the page.</param>
+    /// <param name="adjustX">The horizontal adjustment to apply to the page dimensions.</param>
+    /// <param name="adjustY">The vertical adjustment to apply to the page dimensions.</param>
+    /// <param name="inputRects">A list of rectangles that need to fit within the page.</param>
+    /// <param name="paddingX"></param>
+    /// <param name="paddingY"></param>
+    /// <returns>
+    /// A TexturePacker.Page representing the minimal dimensions that can contain all rectangles.
+    /// If no suitable configuration is found, returns null.
+    /// </returns>
+    [Obsolete]
+    private TexturePacker.Page GetMinimalPageSize( int minWidth, int minHeight,
+                                                    int adjustX, int adjustY,
+                                                    int paddingX, int paddingY,
+                                                    List< TexturePacker.Rect > inputRects )
+    {
+        // Find the minimal page size that fits all rects.
+        TexturePacker.Page? bestResult = null;
+
+        if ( _settings.Square )
+        {
+            var minSize = Math.Max( minWidth, minHeight );
+            var maxSize = Math.Min( _settings.MaxWidth, _settings.MaxHeight );
+            var sizeSearch = new BinarySearch( minSize,
+                                               maxSize,
+                                               _settings.Fast ? 25 : 15,
+                                               _settings.PowerOfTwo,
+                                               _settings.MultipleOfFour );
+
+            var size = sizeSearch.Reset();
+
+            TexturePacker.Page? result;
+
+            for ( var i = 0; size != -1; size = sizeSearch.Next( result == null ) )
+            {
+                result = PackAtSize( true, size + i, size + adjustY, inputRects );
+
+                if ( !_settings.Silent )
+                {
+                    ++i;
+
+                    if ( i % 70 == 0 )
+                    {
+                        Console.WriteLine();
+                    }
+
+                    Console.Write( "." );
+                }
+
+                bestResult = GetBest( bestResult, result );
+            }
+
+            if ( !_settings.Silent )
+            {
+                Console.WriteLine();
+            }
+
+            // Rects don't fit on one page. Fill a whole page and return.
+            if ( bestResult == null )
+            {
+                bestResult = PackAtSize( false, maxSize + adjustX, maxSize + adjustY, inputRects );
+            }
+
+            bestResult?.OutputRects?.Sort( _rectComparator );
+
+            if ( bestResult != null )
+            {
+                bestResult.Width  = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingX;
+                bestResult.Height = Math.Max( bestResult.Width, bestResult.Height ) - _settings.PaddingY;
+            }
+        }
+        else
+        {
+            var widthSearch = new BinarySearch( minWidth,
+                                                _settings.MaxWidth,
+                                                _settings.Fast ? 25 : 15,
+                                                _settings.PowerOfTwo,
+                                                _settings.MultipleOfFour );
+
+            var heightSearch = new BinarySearch( minHeight,
+                                                 _settings.MaxHeight,
+                                                 _settings.Fast ? 25 : 15,
+                                                 _settings.PowerOfTwo,
+                                                 _settings.MultipleOfFour );
+
+            var width  = widthSearch.Reset();
+            var height = _settings.Square ? width : heightSearch.Reset();
+            var i      = 0;
+
+            while ( true )
+            {
+                TexturePacker.Page? bestWidthResult = null;
+
+                while ( width != -1 )
+                {
+                    var result = PackAtSize( true, width + i, height + adjustY, inputRects );
+
+                    if ( !_settings.Silent )
+                    {
+                        ++i;
+
+                        if ( i % 70 == 0 )
+                        {
+                            Console.WriteLine();
+                        }
+
+                        Console.Write( "." );
+                    }
+
+                    bestWidthResult = GetBest( bestWidthResult, result );
+                    width           = widthSearch.Next( result == null );
+
+                    if ( _settings.Square )
+                    {
+                        height = width;
+                    }
+                }
+
+                bestResult = GetBest( bestResult, bestWidthResult );
+
+                if ( _settings.Square )
+                {
+                    break;
+                }
+
+                if ( ( height = heightSearch.Next( bestWidthResult == null ) ) == -1 )
+                {
+                    break;
+                }
+
+                width = widthSearch.Reset();
+            }
+
+            if ( !_settings.Silent )
+            {
+                Console.WriteLine();
+            }
+
+            if ( bestResult == null )
+            {
+                bestResult = PackAtSize( false,
+                                         _settings.MaxWidth + adjustX,
+                                         _settings.MaxHeight + adjustY,
+                                         inputRects );
+            }
+
+            bestResult?.OutputRects?.Sort( _rectComparator );
+
+            if ( bestResult != null )
+            {
+                bestResult.Width  -= paddingX;
+                bestResult.Height -= paddingY;
+            }
+        }
+
+        if ( bestResult == null )
+        {
+            bestResult = PackAtSize( false, _settings.MaxWidth + adjustX, _settings.MaxHeight + adjustY, inputRects );
+
+            if ( bestResult == null )
+            {
+                // Create a fallback empty page
+                bestResult = new TexturePacker.Page
+                {
+                    Width          = _settings.MinWidth,
+                    Height         = _settings.MinHeight,
+                    OutputRects    = [ ],
+                    RemainingRects = [ ..inputRects ],
+                };
+            }
+        }
+
+        bestResult.OutputRects?.Sort( _rectComparator );
+
+        // Don't subtract padding if the result is invalid
+        if ( bestResult.Width > paddingX && bestResult.Height > paddingY )
+        {
+            bestResult.Width  -= paddingX;
+            bestResult.Height -= paddingY;
+        }
+        else
+        {
+            bestResult.Width  = Math.Max( _settings.MinWidth, bestResult.Width );
+            bestResult.Height = Math.Max( _settings.MinHeight, bestResult.Height );
+        }
+
+        return bestResult;
     }
 
     // ========================================================================
