@@ -70,6 +70,7 @@ namespace LughSharp.Lugh.Core;
 /// facilities.
 /// </summary>
 ///////////////////////////////////////////////////////////////////////////////
+
 [PublicAPI]
 public interface IApplication
 {

@@ -193,13 +193,13 @@ public class TexturePacker
         {
             if ( ( settings.MaxWidth % 4 ) != 0 )
             {
-                throw new GdxRuntimeException( $"If mod4 is true, maxWidth must be evenly "
+                throw new GdxRuntimeException( $"If MultipleOfFour is true, maxWidth must be evenly "
                                                + $"divisible by 4: {settings.MaxWidth}" );
             }
 
             if ( ( settings.MaxHeight % 4 ) != 0 )
             {
-                throw new GdxRuntimeException( $"If mod4 is true, maxHeight must be evenly "
+                throw new GdxRuntimeException( $"If MultipleOfFour is true, maxHeight must be evenly "
                                                + $"divisible by 4: {settings.MaxHeight}" );
             }
         }
@@ -254,7 +254,7 @@ public class TexturePacker
     }
 
     // ========================================================================
-    
+
     /// <summary>
     /// </summary>
     /// <param name="rootDir"></param>
@@ -334,16 +334,16 @@ public class TexturePacker
         {
             // If the output directory exists, remove all files in it.
             var files = outputDir.GetFiles( "*" );
-            
+
             foreach ( var file in files )
             {
                 file.Delete();
             }
         }
-        
+
         ProgressListener ??= new TexturePackerProgressListener();
         ProgressListener.Start( 1 );
-        
+
         // Performs the process once for each scale factor.
         var n = _settings.Scale.Length;
 
@@ -365,7 +365,7 @@ public class TexturePacker
             ProgressListener.Total = _inputImages.Count;
 
             Logger.Debug( $"_inputImages.Count: {_inputImages.Count}" );
-            
+
             for ( int ii = 0, nn = _inputImages.Count; ii < nn; ii++, ProgressListener.Count++ )
             {
                 var inputImage = _inputImages[ ii ];
@@ -396,11 +396,11 @@ public class TexturePacker
             ProgressListener.Total = _imageProcessor.ImageRects.Count;
 
             Logger.Checkpoint();
-            
+
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
 
             Logger.Checkpoint();
-            
+
             ProgressListener.End();
             ProgressListener.Start( 0.29f );
             ProgressListener.Count = 0;

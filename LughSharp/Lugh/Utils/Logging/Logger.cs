@@ -133,7 +133,7 @@ public static class Logger
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        var str = CreateMessage( DEBUG_TAG, message, callerID );
+        var str = CreateMessage( DEBUG_TAG, callerID, message );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -166,7 +166,7 @@ public static class Logger
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        var str = CreateMessage( ERROR_TAG, message, callerID );
+        var str = CreateMessage( ERROR_TAG, callerID, message );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -193,7 +193,7 @@ public static class Logger
         }
 
         var callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-        var str      = CreateMessage( DEBUG_TAG, message, callerID );
+        var str      = CreateMessage( DEBUG_TAG, callerID, message );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -230,7 +230,7 @@ public static class Logger
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        var str = CreateMessage( CHECKPOINT_TAG, "<Checkpoint>", callerID );
+        var str = CreateMessage( CHECKPOINT_TAG, callerID, "<Checkpoint>" );
 
         Console.WriteLine( str );
         WriteToFile( str );
@@ -441,7 +441,7 @@ public static class Logger
     /// <param name="formatString">The base message</param>
     /// <param name="cid">Stack trace info from the calling method/file.</param>
     /// <returns></returns>
-    private static string CreateMessage( string? tag, string formatString, CallerID? cid )
+    private static string CreateMessage( string? tag, CallerID? cid, string formatString )
     {
         var sb = new StringBuilder( tag ?? "" );
 

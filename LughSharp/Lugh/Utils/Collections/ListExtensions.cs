@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Lugh.Utils.Collections;
 
@@ -39,8 +40,7 @@ public static class ListExtensions
     }
 
     /// <summary>
-    /// Returns the element found at a random position
-    /// within the list.
+    /// Returns the element found at a random position within the list.
     /// </summary>
     /// <param name="list"> This list </param>
     /// <typeparam name="T"> This list type </typeparam>
@@ -55,6 +55,8 @@ public static class ListExtensions
     /// </summary>
     public static List< T > New< T >( T t )
     {
+        //TODO: Is this right? Test it!
+        
         return [ t ];
     }
 
@@ -184,5 +186,21 @@ public static class ListExtensions
         list.RemoveAt( index );
 
         return value;
+    }
+
+    /// <summary>
+    /// Logs each string entry in the list using debug-level logging.
+    /// </summary>
+    /// <param name="list">The list of strings to be logged.</param>
+    public static void DebugPrint< T >( this List< T > list )
+    {
+        Logger.Debug( "" );
+
+        Logger.IsMinimal = true;
+        foreach( var entry in list )
+        {
+            Logger.Debug( $"{entry}" );
+        }
+        Logger.IsMinimal = false;
     }
 }

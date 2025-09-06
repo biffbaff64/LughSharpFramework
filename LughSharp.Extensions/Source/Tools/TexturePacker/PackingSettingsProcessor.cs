@@ -30,7 +30,7 @@ public class PackingSettingsProcessor : FileProcessor
     public List< FileInfo > SettingsFiles { get; private set; } = [ ];
 
     /// <inheritdoc/>
-    public override void ProcessFile( TexturePackerEntry entry )
+    public override void ProcessFile( Entry entry )
     {
         if ( entry.InputFile is FileInfo file )
         {
@@ -46,7 +46,7 @@ public class PackingSettingsProcessor : FileProcessor
 public class DeleteProcessor : FileProcessor
 {
     /// <inheritdoc />
-    public override void ProcessFile( TexturePackerEntry inputFile )
+    public override void ProcessFile( Entry inputFile )
     {
         inputFile.InputFile?.Delete();
     }
@@ -59,23 +59,23 @@ public class DeleteProcessor : FileProcessor
 [SupportedOSPlatform( "windows" )]
 public class SettingsCombiningProcessor : FileProcessor
 {
-    public TexturePackerEntry? EntryDir { get; set; }
+    public Entry? EntryDir { get; set; }
 
     // ========================================================================
 
-    private readonly TexturePackerEntry         _entryDir;
+    private readonly Entry         _entryDir;
     private readonly TexturePackerFileProcessor _fileProcessor;
 
     // ========================================================================
 
-    public SettingsCombiningProcessor( TexturePackerEntry entryDir, TexturePackerFileProcessor fileProcessor )
+    public SettingsCombiningProcessor( Entry entryDir, TexturePackerFileProcessor fileProcessor )
     {
         _entryDir      = entryDir;
         _fileProcessor = fileProcessor;
     }
 
     /// <inheritdoc />
-    public override void ProcessDir( TexturePackerEntry inputDir, List< TexturePackerEntry > files )
+    public override void ProcessDir( Entry inputDir, List< Entry > files )
     {
         for ( var file = ( DirectoryInfo? )_entryDir.InputFile;
              ( file != null ) && !file.Equals( inputDir.InputFile );

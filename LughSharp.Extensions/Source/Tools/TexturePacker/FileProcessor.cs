@@ -36,7 +36,7 @@ using DirectoryInfo = System.IO.DirectoryInfo;
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
-public class FileProcessor
+public partial class FileProcessor
 {
     public const string DEFAULT_PACKFILE_NAME = "pack.atlas";
 
@@ -47,25 +47,25 @@ public class FileProcessor
     public virtual Action< FileSystemInfo >? FileProcessedDelegate { get; set; }
 
     // Delegate to process a file
-    public Action< TexturePackerEntry >? ProcessFileDelegate { get; set; }
+    public Action< Entry >? ProcessFileDelegate { get; set; }
 
     // Delegate to process a directory
-    public Action< TexturePackerEntry, List< TexturePackerEntry > >? ProcessDirDelegate { get; set; }
+    public Action< Entry, List< Entry > >? ProcessDirDelegate { get; set; }
 
     // ========================================================================
 
-    public List< Regex >              InputRegex      { get; set; }
-    public List< TexturePackerEntry > OutputFilesList { get; set; }
-    public string                     OutputSuffix    { get; set; }
-    public bool                       Recursive       { get; set; }
-    public bool                       FlattenOutput   { get; set; }
+    public List< Regex > InputRegex      { get; set; }
+    public List< Entry > OutputFilesList { get; set; }
+    public string        OutputSuffix    { get; set; }
+    public bool          Recursive       { get; set; }
+    public bool          FlattenOutput   { get; set; }
 
     // ========================================================================
 
     public Comparison< FileInfo > Comparator { get; set; } = ( o1, o2 ) =>
         string.Compare( o1.Name, o2.Name, StringComparison.Ordinal );
 
-    public Comparison< TexturePackerEntry > EntryComparator
+    public Comparison< Entry > EntryComparator
     {
         get =>
             ( o1, o2 ) =>
@@ -112,16 +112,15 @@ public class FileProcessor
     /// </summary>
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
-    /// <returns> the processed files added with <see cref="AddProcessedFile(TexturePackerEntry)"/>. </returns>
-    public virtual List< TexturePackerEntry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot )
+    /// <returns> the processed files added with <see cref="AddProcessedFile(Entry)"/>. </returns>
+    public virtual List< Entry > Process( FileSystemInfo? inputFileOrDir, DirectoryInfo? outputRoot )
     {
         if ( inputFileOrDir is not { Exists: true } )
         {
-            throw new ArgumentException( $"IFileProcessor#Process: Input file/dir does not " +
-                                         $"exist: {inputFileOrDir?.FullName}" );
+            throw new ArgumentException( $"Input file/dir does not exist: {inputFileOrDir?.FullName}" );
         }
 
-        List< TexturePackerEntry > retval;
+        List< Entry > retval;
 
         if ( IOUtils.IsFile( inputFileOrDir ) )
         {
@@ -145,14 +144,14 @@ public class FileProcessor
     /// <param name="outputRoot"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public virtual List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
+    public virtual List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
         outputRoot ??= new DirectoryInfo( IOUtils.InternalPath );
 
         OutputFilesList.Clear();
 
-        var stringToEntries = new Dictionary< string, List< TexturePackerEntry > >();
-        var allEntries      = new List< TexturePackerEntry >();
+        var stringToEntries = new Dictionary< string, List< Entry > >();
+        var allEntries      = new List< Entry >();
 
         Process( files, outputRoot, outputRoot, stringToEntries, 0 );
 
@@ -186,7 +185,7 @@ public class FileProcessor
                 }
             }
 
-            var entry = new TexturePackerEntry
+            var entry = new Entry
             {
                 InputFile       = new DirectoryInfo( inputDir ),
                 OutputDirectory = newOutputDir!,
@@ -247,14 +246,14 @@ public class FileProcessor
     /// </param>
     /// <param name="dirToEntries">
     /// A dictionary mapping each discovered directory to a list of associated
-    /// <see cref="TexturePackerEntry"/> objects.
+    /// <see cref="Entry"/> objects.
     /// </param>
     /// <param name="depth">
     /// The current recursion depth during processing, used to manage directory
     /// hierarchy and traversal.
     /// </param>
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                                 Dictionary< DirectoryInfo, List< TexturePackerEntry >? > dirToEntries, int depth )
+                                 Dictionary< DirectoryInfo, List< Entry >? > dirToEntries, int depth )
     {
         foreach ( var file in files )
         {
@@ -319,7 +318,7 @@ public class FileProcessor
                     outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
                 }
 
-                var entry = new TexturePackerEntry
+                var entry = new Entry
                 {
                     Depth           = depth,
                     InputFile       = file,
@@ -355,7 +354,7 @@ public class FileProcessor
     /// <param name="stringToEntries"></param>
     /// <param name="depth"></param>
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                                 Dictionary< string, List< TexturePackerEntry > > stringToEntries, int depth )
+                                 Dictionary< string, List< Entry > > stringToEntries, int depth )
     {
         foreach ( var file in files )
         {
@@ -394,7 +393,7 @@ public class FileProcessor
                     outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
                 }
 
-                var entry = new TexturePackerEntry
+                var entry = new Entry
                 {
                     Depth           = depth,
                     InputFile       = file,
@@ -430,14 +429,14 @@ public class FileProcessor
         }
 
         // Note:
-        // To get the count of files stores in the List< TexturePackerEntry >, use something like:-
+        // To get the count of files stores in the List< Entry >, use something like:-
         // var totalEntries = stringToEntries.Values.Sum(list => list.Count);
     }
 
     /// <summary>
     /// </summary>
     /// <param name="entry"></param>
-    public virtual void ProcessFile( TexturePackerEntry entry )
+    public virtual void ProcessFile( Entry entry )
     {
         Guard.ThrowIfNull( entry.InputFile );
 
@@ -449,7 +448,7 @@ public class FileProcessor
     /// </summary>
     /// <param name="entryDir"></param>
     /// <param name="files"></param>
-    public virtual void ProcessDir( TexturePackerEntry entryDir, List< TexturePackerEntry > files )
+    public virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
     }
 
@@ -458,16 +457,16 @@ public class FileProcessor
     // ========================================================================
 
     /// <summary>
-    /// Adds a processed <see cref="TexturePackerEntry"/> to the <see cref="OutputFilesList"/>.
+    /// Adds a processed <see cref="Entry"/> to the <see cref="OutputFilesList"/>.
     /// This method should be called by:-
-    /// <li><see cref="ProcessFile(TexturePackerEntry)"/> or,</li>
-    /// <li><see cref="ProcessDir(TexturePackerEntry, List{TexturePackerEntry})"/></li>
+    /// <li><see cref="ProcessFile(Entry)"/> or,</li>
+    /// <li><see cref="ProcessDir(Entry, List{Entry})"/></li>
     /// if the return value of <see cref="Process(FileSystemInfo, DirectoryInfo)"/> or
     /// <see cref="Process(FileInfo[], DirectoryInfo)"/> should return all the processed
     /// files.
     /// </summary>
     /// <param name="entry"></param>
-    public virtual void AddProcessedFile( TexturePackerEntry entry )
+    public virtual void AddProcessedFile( Entry entry )
     {
         OutputFilesList.Add( entry );
     }

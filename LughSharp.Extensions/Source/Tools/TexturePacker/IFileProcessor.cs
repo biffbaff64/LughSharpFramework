@@ -29,15 +29,15 @@ namespace Extensions.Source.Tools.TexturePacker;
 [PublicAPI]
 public interface IFileProcessor
 {
-    List< Regex >                    InputRegex      { get; set; }
-    List< TexturePackerEntry >       OutputFilesList { get; set; }
-    string                           OutputSuffix    { get; set; }
-    bool                             Recursive       { get; set; }
-    bool                             FlattenOutput   { get; set; }
-    Comparison< FileInfo >           Comparator      { get; set; }
-    Comparison< TexturePackerEntry > EntryComparator { get; set; }
-    bool                             CountOnly       { get; set; }
-    List< DirectoryInfo >            DirsToIgnore    { get; set; }
+    List< Regex >                     InputRegex      { get; set; }
+    List< FileProcessor.Entry >       OutputFilesList { get; set; }
+    string                            OutputSuffix    { get; set; }
+    bool                              Recursive       { get; set; }
+    bool                              FlattenOutput   { get; set; }
+    Comparison< FileInfo >            Comparator      { get; set; }
+    Comparison< FileProcessor.Entry > EntryComparator { get; set; }
+    bool                              CountOnly       { get; set; }
+    List< DirectoryInfo >             DirsToIgnore    { get; set; }
 
     // ========================================================================
 
@@ -46,7 +46,7 @@ public interface IFileProcessor
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"></param>
     /// <returns></returns>
-    List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot );
+    List< FileProcessor.Entry > Process( string inputFileOrDir, string? outputRoot );
 
     /// <summary>
     /// Processes the specified input file or directory, as specified by the provided
@@ -55,7 +55,7 @@ public interface IFileProcessor
     /// <param name="inputFileOrDir"></param>
     /// <param name="outputRoot"> May be null if there is no output from processing the files. </param>
     /// <returns> the processed files added with <see cref="AddProcessedFile"/>. </returns>
-    List< TexturePackerEntry > Process( DirectoryInfo? inputFileOrDir, DirectoryInfo? outputRoot );
+    List< FileProcessor.Entry > Process( DirectoryInfo? inputFileOrDir, DirectoryInfo? outputRoot );
 
     /// <summary>
     /// Processes a collection of files for sending to the output folder.
@@ -64,7 +64,7 @@ public interface IFileProcessor
     /// <param name="outputRoot"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot );
+    List< FileProcessor.Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot );
 
     /// <summary>
     /// </summary>
@@ -74,7 +74,7 @@ public interface IFileProcessor
     /// <param name="dirToEntries"></param>
     /// <param name="depth"></param>
     void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                  Dictionary< DirectoryInfo, List< TexturePackerEntry >? > dirToEntries, int depth );
+                  Dictionary< DirectoryInfo, List< FileProcessor.Entry >? > dirToEntries, int depth );
 
     /// <summary>
     /// </summary>
@@ -84,21 +84,21 @@ public interface IFileProcessor
     /// <param name="stringToEntries"></param>
     /// <param name="depth"></param>
     void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                  Dictionary< string, List< TexturePackerEntry > > stringToEntries, int depth );
+                  Dictionary< string, List< FileProcessor.Entry > > stringToEntries, int depth );
 
     /// <summary>
     /// </summary>
     /// <param name="entry"></param>
-    void ProcessFile( TexturePackerEntry entry );
+    void ProcessFile( FileProcessor.Entry entry );
 
     /// <summary>
     /// </summary>
     /// <param name="entryDir"></param>
     /// <param name="files"></param>
-    void ProcessDir( TexturePackerEntry entryDir, List< TexturePackerEntry > files );
+    void ProcessDir( FileProcessor.Entry entryDir, List< FileProcessor.Entry > files );
 
     /// <summary>
-    /// Adds a processed <see cref="TexturePackerEntry"/> to the <see cref="OutputFilesList"/>.
+    /// Adds a processed <see cref="FileProcessor.Entry"/> to the <see cref="OutputFilesList"/>.
     /// This method should be called by:-
     /// <li><see cref="ProcessFile"/> or,</li>
     /// <li><see cref="ProcessDir"/></li>
@@ -107,7 +107,7 @@ public interface IFileProcessor
     /// files.
     /// </summary>
     /// <param name="entry"></param>
-    void AddProcessedFile( TexturePackerEntry entry );
+    void AddProcessedFile( FileProcessor.Entry entry );
 
     /// <summary>
     /// </summary>

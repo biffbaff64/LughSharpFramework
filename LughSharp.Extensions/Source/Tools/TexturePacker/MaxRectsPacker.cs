@@ -408,39 +408,6 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
         return bestResult;
     }
 
-//        if ( bestResult == null )
-//        {
-//            bestResult = PackAtSize( false, _settings.MaxWidth + i, _settings.MaxHeight + adjustY, inputRects );
-//
-//            if ( bestResult == null )
-//            {
-//                // Create a fallback empty page
-//                bestResult = new TexturePacker.Page
-//                {
-//                    Width          = _settings.MinWidth,
-//                    Height         = _settings.MinHeight,
-//                    OutputRects    = [ ],
-//                    RemainingRects = [ ..inputRects ],
-//                };
-//            }
-//        }
-
-//        Logger.Debug( $"bestResult: {bestResult.Width} x {bestResult.Height}" );
-//
-//        bestResult.OutputRects?.Sort( _rectComparator );
-//
-//        // Don't subtract padding if the result is invalid
-//        if ( bestResult.Width > paddingX && bestResult.Height > paddingY )
-//        {
-//            bestResult.Width  -= paddingX;
-//            bestResult.Height -= paddingY;
-//        }
-//        else
-//        {
-//            bestResult.Width  = Math.Max( _settings.MinWidth, bestResult.Width );
-//            bestResult.Height = Math.Max( _settings.MinHeight, bestResult.Height );
-//        }
-
     /// <summary>
     /// </summary>
     /// <param name="fully">

@@ -26,7 +26,6 @@ using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
-using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
 
@@ -38,7 +37,7 @@ public class TexturePackerFileProcessor : FileProcessor
 {
     public TexturePacker.TexturePackerProgressListener? ProgressListener { get; set; }
 
-    public List< DirectoryInfo > DirsToIgnore { get; set; } = [ ];
+    public List< DirectoryInfo > DirsToIgnore { get; set; }
     public bool                  CountOnly    { get; set; }
     public string                PackFileName { get; set; }
 
@@ -46,7 +45,7 @@ public class TexturePackerFileProcessor : FileProcessor
 
     private readonly TexturePackerSettings _defaultSettings;
 
-    private Dictionary< DirectoryInfo, TexturePackerSettings > _dirToSettings = [ ]; //TODO: Rename
+    private Dictionary< DirectoryInfo, TexturePackerSettings > _dirToSettings; //TODO: Rename
 
     private int           _packCount;
     private DirectoryInfo _rootDirectory = null!;
@@ -75,17 +74,20 @@ public class TexturePackerFileProcessor : FileProcessor
     {
         InputRegex       = [ ];
         OutputFilesList  = [ ];
+        DirsToIgnore     = [ ];
+        _dirToSettings   = [ ];
+        _packCount       = 0;
+        CountOnly        = false;
+        PackFileName     = string.Empty;
         OutputSuffix     = string.Empty;
         FlattenOutput    = false;
         Recursive        = true;
+        FlattenOutput    = true;
         _defaultSettings = packerSettings ?? new TexturePackerSettings();
         ProgressListener = progress;
 
         // Strip off the .atlas extension name from the packfile if it has been pre-added.
-        packFileName = IOUtils.StripExtension( packFileName, _defaultSettings.AtlasExtension );
-
-        PackFileName  = packFileName;
-        FlattenOutput = true;
+        PackFileName = Path.GetFileNameWithoutExtension( packFileName );
 
         // Set the default file extensions for processable images.
         AddInputSuffix( ".png", ".jpg", ".jpeg", ".bmp" );
@@ -100,16 +102,22 @@ public class TexturePackerFileProcessor : FileProcessor
     // ========================================================================
 
     /// <summary>
+    /// Processes texture packing by analyzing input and output directories, generating
+    /// packed texture files and associated data, and returning the results.
     /// </summary>
-    /// <param name="inputRoot"> Directory containing individual images to be packed. </param>
-    /// <param name="outputRoot"> Directory where the pack file and page images will be written. </param>
-    /// <returns></returns>
-    public virtual List< TexturePackerEntry > Process( DirectoryInfo? inputRoot,
+    /// <param name="inputRoot">
+    /// The directory containing the images or assets that will be packed.
+    /// </param>
+    /// <param name="outputRoot">
+    /// The directory where the packed texture files and metadata will be saved.
+    /// </param>
+    /// <returns>
+    /// A list of <see cref="TexturePackerEntry"/> objects representing the processed entries.
+    /// </returns>
+    public virtual List< Entry > Process( DirectoryInfo? inputRoot,
                                                        DirectoryInfo? outputRoot )
     {
-        Guard.ThrowIfNull( inputRoot );
-
-        _rootDirectory = inputRoot;
+        _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
 
         // -----------------------------------------------------
         // Collect any pack.json setting files present in the input folder.
@@ -124,7 +132,12 @@ public class TexturePackerFileProcessor : FileProcessor
 
         // -----------------------------------------------------
 
-        if ( settingsFiles.Count > 0 )
+        if ( settingsFiles.Count == 0 )
+        {
+            // No settings files found.
+            Logger.Debug( "No settings files found." );
+        }
+        else
         {
             // Sort parent first.
             settingsFiles.Sort( ( file1, file2 ) => file1.ToString().Length - file2.ToString().Length );
@@ -162,7 +175,7 @@ public class TexturePackerFileProcessor : FileProcessor
         // Count the number of texture packer invocations for the
         // ProgressListener to use.
         CountOnly = true;
-        _         = base.Process( inputRoot, outputRoot );
+        _ = base.Process( inputRoot, outputRoot );
         CountOnly = false;
 
         // Do actual processing.
@@ -174,11 +187,16 @@ public class TexturePackerFileProcessor : FileProcessor
     }
 
     /// <summary>
+    /// Processes texture packing based on the specified input and output parameters.
     /// </summary>
-    /// <param name="inputFileOrDir"></param>
-    /// <param name="outputRoot"></param>
-    /// <returns></returns>
-    public virtual List< TexturePackerEntry > Process( string inputFileOrDir, string? outputRoot )
+    /// <param name="inputFileOrDir">The input file or directory to be processed.</param>
+    /// <param name="outputRoot">
+    /// The root output directory where the results will be saved. Can be null.
+    /// </param>
+    /// <returns>
+    /// A list of <see cref="TexturePackerEntry"/> representing the processed textures or files.
+    /// </returns>
+    public virtual List< Entry > Process( string inputFileOrDir, string? outputRoot )
     {
         return Process( new DirectoryInfo( inputFileOrDir ),
                         outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
@@ -189,7 +207,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="files"></param>
     /// <param name="outputRoot"></param>
     /// <returns></returns>
-    public virtual List< TexturePackerEntry > Process( FileInfo[] files, FileInfo? outputRoot )
+    public virtual List< Entry > Process( FileInfo[] files, FileInfo? outputRoot )
     {
         Guard.ThrowIfNull( outputRoot );
 
@@ -209,14 +227,14 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <param name="outputRoot"></param>
     /// <returns></returns>
     /// <exception cref="Exception"></exception>
-    public override List< TexturePackerEntry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
+    public override List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
     {
         outputRoot ??= new DirectoryInfo( IOUtils.InternalPath );
 
         OutputFilesList.Clear();
 
-        var dirToEntries = new Dictionary< DirectoryInfo, List< TexturePackerEntry > >();
-        var allEntries   = new List< TexturePackerEntry >();
+        var dirToEntries = new Dictionary< DirectoryInfo, List< Entry > >();
+        var allEntries   = new List< Entry >();
 
         Process( files, outputRoot, outputRoot, dirToEntries!, 0 );
 
@@ -250,7 +268,7 @@ public class TexturePackerFileProcessor : FileProcessor
                 }
             }
 
-            var entry = new TexturePackerEntry
+            var entry = new Entry
             {
                 InputFile       = inputDir,
                 OutputDirectory = newOutputDir!,
@@ -295,112 +313,6 @@ public class TexturePackerFileProcessor : FileProcessor
         return OutputFilesList;
     }
 
-//    [Obsolete( "Use Process( FileInfo[], DirectoryInfo, DirectoryInfo, Dictionary<string, List<TexturePackerEntry>>, int ) instead" )]
-//    public virtual void Process( FileInfo[] files,
-//                                 DirectoryInfo outputRoot,
-//                                 DirectoryInfo outputDir,
-//                                 Dictionary< DirectoryInfo, List< TexturePackerEntry >? > dirToEntries,
-//                                 int depth )
-//    {
-//        foreach ( var file in files )
-//        {
-//            var dir = file.Directory;
-//
-//            if ( dir != null )
-//            {
-//                if ( !dirToEntries.ContainsKey( dir ) )
-//                {
-//                    // If the directory is not already a key in the dictionary, add it
-//                    dirToEntries[ dir ] = [ ];
-//                }
-//            }
-//            else
-//            {
-//                // Handle the case where a file has no parent directory (e.g., root level)
-//                // Either log a warning, throw an exception, or handle it differently
-//                // ( Logging a warning for now... )
-//                Logger.Warning( $"WARNING: File '{file.FullName}' has no parent directory." );
-//            }
-//        }
-//
-//        foreach ( var file in files )
-//        {
-//            if ( IOUtils.IsFile( file ) )
-//            {
-//                if ( InputRegex.Count > 0 )
-//                {
-//                    var found = false;
-//
-//                    foreach ( var pattern in InputRegex )
-//                    {
-//                        if ( pattern.IsMatch( file.Name ) )
-//                        {
-//                            found = true;
-//
-//                            break;
-//                        }
-//                    }
-//
-//                    if ( !found )
-//                    {
-//                        continue;
-//                    }
-//                }
-//
-//                if ( ( FilenameFilterDelegate != null )
-//                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
-//                {
-//                    continue;
-//                }
-//
-//                var outputName = file.Name;
-//
-//                if ( OutputSuffix != null )
-//                {
-//                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" )
-//                                 + OutputSuffix;
-//                }
-//
-//                var entry = new TexturePackerEntry
-//                {
-//                    Depth           = depth,
-//                    InputFile       = file,
-//                    OutputDirectory = outputDir,
-//                    OutputFileName = FlattenOutput
-//                        ? Path.Combine( outputRoot.FullName, outputName )
-//                        : Path.Combine( outputDir.FullName, outputName ),
-//                };
-//
-//                var dir = file.Directory!;
-//
-//                if ( !dirToEntries.TryGetValue( dir, out var value ) )
-//                {
-//                    value?.Add( entry );
-//                }
-//                else
-//                {
-//                    // This should ideally not happen if the first loop worked correctly.
-//
-//                    Logger.Warning( $"Directory '{dir.FullName}' not found in dirToEntries during file processing." );
-//
-//                    // Potentially create a new list here if there is a specific fallback behavior:
-//                    // dirToEntries[dir] = new List<TexturePackerEntry> { entry };
-//                }
-//            }
-//
-//            if ( Recursive && IOUtils.IsDirectory( file ) )
-//            {
-//                var subdir = outputDir.FullName.Length == 0
-//                    ? new DirectoryInfo( file.Name )
-//                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
-//
-//                Process( new DirectoryInfo( file.FullName )
-//                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
-//                         outputRoot, subdir, dirToEntries, depth + 1 );
-//            }
-//        }
-//    }
-
     /// <summary>
     /// </summary>
     /// <param name="files"></param>
@@ -411,7 +323,7 @@ public class TexturePackerFileProcessor : FileProcessor
     public override void Process( FileInfo[] files,
                                   DirectoryInfo outputRoot,
                                   DirectoryInfo outputDir,
-                                  Dictionary< string, List< TexturePackerEntry > > dirToEntries,
+                                  Dictionary< string, List< Entry > > dirToEntries,
                                   int depth )
     {
         foreach ( var file in files )
@@ -473,7 +385,7 @@ public class TexturePackerFileProcessor : FileProcessor
                                  + OutputSuffix;
                 }
 
-                var entry = new TexturePackerEntry
+                var entry = new Entry
                 {
                     Depth           = depth,
                     InputFile       = file,
@@ -496,7 +408,7 @@ public class TexturePackerFileProcessor : FileProcessor
                     Logger.Warning( $"Directory '{dir}' not found in dirToEntries during file processing." );
 
                     // TODO: Potentially create a new list here if there is a specific fallback behavior:
-                    // dirToEntries[dir] = new List<TexturePackerEntry> { entry };
+                    // dirToEntries[dir] = new List<Entry> { entry };
                 }
             }
 
@@ -518,7 +430,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <summary>
     /// </summary>
     /// <param name="entry"></param>
-    public override void ProcessFile( TexturePackerEntry entry )
+    public override void ProcessFile( Entry entry )
     {
         Guard.ThrowIfNull( entry.InputFile );
 
@@ -564,7 +476,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// </summary>
     /// <param name="inputDir"></param>
     /// <param name="files"></param>
-    public override void ProcessDir( TexturePackerEntry inputDir, List< TexturePackerEntry > files )
+    public override void ProcessDir( Entry inputDir, List< Entry > files )
     {
         // Do not proceed if this dir is one of those to ignore
         if ( DirsToIgnore.Contains( inputDir.InputFile ) )
@@ -772,8 +684,12 @@ public class TexturePackerFileProcessor : FileProcessor
     }
 
     /// <summary>
+    /// Deletes the output files and directories related to the given root file,
+    /// based on the texture packing settings and associated patterns.
     /// </summary>
-    /// <param name="outputRoot"></param>
+    /// <param name="outputRoot">
+    /// The root file where the output files and directories to be deleted are located.
+    /// </param>
     public virtual void DeleteOutput( FileInfo outputRoot )
     {
         // Load root settings to get scale.
@@ -824,15 +740,15 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <summary>
     /// </summary>
     /// <param name="packer"></param>
-    /// <param name="texturePackerEntry"></param>
-    public virtual void Pack( TexturePacker packer, TexturePackerEntry texturePackerEntry )
+    /// <param name="entry"></param>
+    public virtual void Pack( TexturePacker packer, Entry entry )
     {
-        if ( texturePackerEntry.InputFile is FileInfo file )
+        if ( entry.InputFile is FileInfo file )
         {
             packer.AddImage( file );
         }
 
-        packer.Pack( ( DirectoryInfo )texturePackerEntry.OutputDirectory!, PackFileName );
+        packer.Pack( ( DirectoryInfo )entry.OutputDirectory!, PackFileName );
     }
 
     /// <summary>
@@ -845,7 +761,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// files.
     /// </summary>
     /// <param name="entry"></param>
-    public override void AddProcessedFile( TexturePackerEntry entry )
+    public override void AddProcessedFile( Entry entry )
     {
         OutputFilesList.Add( entry );
     }
