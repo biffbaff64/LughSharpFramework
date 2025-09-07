@@ -112,10 +112,10 @@ public class TexturePackerFileProcessor : FileProcessor
     /// The directory where the packed texture files and metadata will be saved.
     /// </param>
     /// <returns>
-    /// A list of <see cref="TexturePackerEntry"/> objects representing the processed entries.
+    /// A list of <see cref="FileProcessor.Entry"/> objects representing the processed entries.
     /// </returns>
     public virtual List< Entry > Process( DirectoryInfo? inputRoot,
-                                                       DirectoryInfo? outputRoot )
+                                          DirectoryInfo? outputRoot )
     {
         _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
 
@@ -146,20 +146,21 @@ public class TexturePackerFileProcessor : FileProcessor
             foreach ( var settingsFile in settingsFiles )
             {
                 // Find first parent with settings, or use defaults.
-                TexturePackerSettings? settings = null;
-
-                var parent = settingsFile.Directory;
+                var settings = default( TexturePackerSettings );
+                var parent   = settingsFile.Directory;
 
                 while ( ( parent != null ) && !parent.Equals( _rootDirectory ) )
                 {
-                    Guard.ThrowIfNull( parent.Parent );
+                    parent = parent.Parent;
 
-                    parent   = parent.Parent;
-                    settings = ( TexturePackerSettings? )_dirToSettings[ parent ];
-
-                    if ( settings != null )
+                    if ( parent != null )
                     {
-                        settings = NewSettings( settings );
+                        _dirToSettings.TryGetValue( parent, out settings );
+
+                        if ( settings != null )
+                        {
+                            settings = NewSettings( settings );
+                        }
                     }
                 }
 
@@ -172,10 +173,10 @@ public class TexturePackerFileProcessor : FileProcessor
             }
         }
 
-        // Count the number of texture packer invocations for the
-        // ProgressListener to use.
+        // Count the number of texture packer invocations for the ProgressListener to use.
+        // ( Currently, the result is discarded. )
         CountOnly = true;
-        _ = base.Process( inputRoot, outputRoot );
+        _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
 
         // Do actual processing.
@@ -194,7 +195,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// The root output directory where the results will be saved. Can be null.
     /// </param>
     /// <returns>
-    /// A list of <see cref="TexturePackerEntry"/> representing the processed textures or files.
+    /// A list of <see cref="FileProcessor.Entry"/> representing the processed textures or files.
     /// </returns>
     public virtual List< Entry > Process( string inputFileOrDir, string? outputRoot )
     {
@@ -752,10 +753,10 @@ public class TexturePackerFileProcessor : FileProcessor
     }
 
     /// <summary>
-    /// Adds a processed <see cref="TexturePackerEntry"/> to the <see cref="FileProcessor.OutputFilesList"/>.
+    /// Adds a processed <see cref="FileProcessor.Entry"/> to the <see cref="FileProcessor.OutputFilesList"/>.
     /// This method should be called by:-
-    /// <li><see cref="ProcessFile(TexturePackerEntry)"/> or,</li>
-    /// <li><see cref="ProcessDir(TexturePackerEntry, List{TexturePackerEntry})"/></li>
+    /// <li><see cref="ProcessFile(FileProcessor.Entry)"/> or,</li>
+    /// <li><see cref="ProcessDir(FileProcessor.Entry, List{FileProcessor.Entry})"/></li>
     /// if the return value of <see cref="Process(DirectoryInfo, DirectoryInfo)"/> or
     /// <see cref="Process(FileInfo[], DirectoryInfo)"/> should return all the processed
     /// files.

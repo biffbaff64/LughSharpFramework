@@ -1171,22 +1171,22 @@ public class TexturePacker
     [PublicAPI]
     public class Page
     {
-        public string?       ImageName      { get; set; } = "";
-        public List< Rect >? OutputRects    { get; set; } = [ ];
-        public List< Rect >? RemainingRects { get; set; } = [ ];
-        public float         Occupancy      { get; set; } = 0;
-        public int           X              { get; set; } = 0;
-        public int           Y              { get; set; } = 0;
-        public int           Width          { get; set; } = 0;
-        public int           Height         { get; set; } = 0;
-        public int           ImageWidth     { get; set; } = 0;
-        public int           ImageHeight    { get; set; } = 0;
+        public string?      ImageName      { get; set; } = "";
+        public List< Rect > OutputRects    { get; set; } = [ ];
+        public List< Rect > RemainingRects { get; set; } = [ ];
+        public float        Occupancy      { get; set; } = 0;
+        public int          X              { get; set; } = 0;
+        public int          Y              { get; set; } = 0;
+        public int          Width          { get; set; } = 0;
+        public int          Height         { get; set; } = 0;
+        public int          ImageWidth     { get; set; } = 0;
+        public int          ImageHeight    { get; set; } = 0;
 
         public void Debug()
         {
             Logger.Debug( $"ImageName: {ImageName}" );
-            Logger.Debug( $"OutputRects: {OutputRects?.Count}" );
-            Logger.Debug( $"RemainingRects: {RemainingRects?.Count}" );
+            Logger.Debug( $"OutputRects: {OutputRects.Count}" );
+            Logger.Debug( $"RemainingRects: {RemainingRects.Count}" );
             Logger.Debug( $"Occupancy: {Occupancy}" );
             Logger.Debug( $"X: {X}" );
             Logger.Debug( $"Y: {Y}" );

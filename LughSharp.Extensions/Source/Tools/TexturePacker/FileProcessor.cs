@@ -31,8 +31,6 @@ using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
 
-using DirectoryInfo = System.IO.DirectoryInfo;
-
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
@@ -128,10 +126,16 @@ public partial class FileProcessor
         }
         else
         {
-            var files = new DirectoryInfo( inputFileOrDir.FullName )
-                        .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray();
-
-            retval = Process( files, outputRoot );
+//            // Get all files in the directory as FileInfo objects
+//            var files = new DirectoryInfo( inputFileOrDir.FullName )
+//                        .GetFileSystemInfos()
+//                        .Select( f => new FileInfo( f.FullName ) ).ToArray();
+//
+//            retval = Process( files, outputRoot );
+            
+            var directory = new DirectoryInfo( inputFileOrDir.FullName );
+            
+            retval = Process( directory.GetFiles(), outputRoot  );
         }
 
         return retval;
