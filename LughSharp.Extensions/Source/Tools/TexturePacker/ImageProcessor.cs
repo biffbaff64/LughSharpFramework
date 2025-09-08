@@ -79,8 +79,6 @@ public class ImageProcessor
     {
         ArgumentNullException.ThrowIfNull( file );
 
-        Logger.Checkpoint();
-
         rootPath = IOUtils.NormalizePath( rootPath );
 
         Bitmap? image;
@@ -133,8 +131,6 @@ public class ImageProcessor
     /// <returns></returns>
     public TexturePacker.Rect? AddImage( Bitmap image, string? name )
     {
-        Logger.Checkpoint();
-        
         var rect = ProcessImage( image, name );
 
         if ( rect == null )
@@ -205,10 +201,7 @@ public class ImageProcessor
         {
             image = new Bitmap( width, height, PixelFormat.Format32bppArgb );
 
-            using ( var g = Graphics.FromImage( image ) )
-            {
-                g.DrawImage( image, 0, 0, width, height );
-            }
+            Graphics.FromImage( image ).DrawImage( image, 0, 0, width, height );
         }
 
         var    isPatch = name.EndsWith( ".9" );
@@ -231,16 +224,13 @@ public class ImageProcessor
 
             image = new Bitmap( width, height, PixelFormat.Format32bppArgb );
 
-            using ( var g = Graphics.FromImage( image ) )
-            {
-                g.DrawImage( image,
-                             new Rectangle( 1, 1, width + 1, height + 1 ),
-                             0,
-                             0,
-                             width,
-                             height,
-                             GraphicsUnit.Pixel );
-            }
+            Graphics.FromImage( image ).DrawImage( image,
+                                                   new Rectangle( 1, 1, width + 1, height + 1 ),
+                                                   0,
+                                                   0,
+                                                   width,
+                                                   height,
+                                                   GraphicsUnit.Pixel );
         }
 
         // Scale image.
@@ -254,23 +244,19 @@ public class ImageProcessor
             if ( _scale < 1 )
             {
                 // Scaling down: Use HighQualityBicubic for good quality downscaling
-                using ( var g = Graphics.FromImage( newImage ) )
-                {
-                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    g.DrawImage( image, 0, 0, width, height );
-                }
+                var g = Graphics.FromImage( newImage );
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.DrawImage( image, 0, 0, width, height );
+                g.Dispose();
             }
             else
             {
                 // Scaling up or no scaling: Apply rendering hints
-                using ( var g = Graphics.FromImage( newImage ) )
-                {
-                    g.CompositingQuality = CompositingQuality.HighQuality;   // VALUE_RENDER_QUALITY
-                    g.InterpolationMode  = Resampling.ToInterpolationMode(); // Map resampling value
-
-                    // Draw the image
-                    g.DrawImage( image, 0, 0, width, height );
-                }
+                var g = Graphics.FromImage( newImage );
+                g.CompositingQuality = CompositingQuality.HighQuality;   // VALUE_RENDER_QUALITY
+                g.InterpolationMode  = Resampling.ToInterpolationMode(); // Map resampling value
+                g.DrawImage( image, 0, 0, width, height );
+                g.Dispose();
             }
         }
 

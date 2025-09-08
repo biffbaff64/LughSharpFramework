@@ -80,7 +80,9 @@ public class GLVersion
         _revisionVersion = ( int )char.GetNumericValue( version[ 4 ] );
         _openGLProfile   = profile;
 
-        Logger.Debug( DebugVersionString(), true );
+        Logger.Divider();
+        DebugPrint();
+        Logger.Divider();
     }
 
     public unsafe string VendorString
@@ -122,6 +124,17 @@ public class GLVersion
     {
         return ( _majorVersion > testMajorVersion )
                || ( ( _majorVersion == testMajorVersion ) && ( _minorVersion >= testMinorVersion ) );
+    }
+
+    /// <summary>
+    /// </summary>
+    public void DebugPrint()
+    {
+        Logger.Debug( $"BackendType : {BackendType}" );
+        Logger.Debug( $"Version     : {_majorVersion}.{_minorVersion}.{_revisionVersion}" );
+        Logger.Debug( $"Profile     : {_openGLProfile}" );
+        Logger.Debug( $"Vendor      : {VendorString}" );
+        Logger.Debug( $"Renderer    : {RendererString}" );
     }
 
     /// <summary>

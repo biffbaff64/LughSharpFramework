@@ -126,13 +126,6 @@ public partial class FileProcessor
         }
         else
         {
-//            // Get all files in the directory as FileInfo objects
-//            var files = new DirectoryInfo( inputFileOrDir.FullName )
-//                        .GetFileSystemInfos()
-//                        .Select( f => new FileInfo( f.FullName ) ).ToArray();
-//
-//            retval = Process( files, outputRoot );
-            
             var directory = new DirectoryInfo( inputFileOrDir.FullName );
             
             retval = Process( directory.GetFiles(), outputRoot  );

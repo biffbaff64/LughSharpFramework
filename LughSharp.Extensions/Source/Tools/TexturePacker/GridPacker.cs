@@ -22,13 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class GridPacker : TexturePacker.IPacker
 {
     private readonly TexturePackerSettings _settings;
@@ -56,7 +56,8 @@ public class GridPacker : TexturePacker.IPacker
     /// <param name="progress"></param>
     /// <param name="inputRects"></param>
     /// <returns></returns>
-    public List< TexturePacker.Page > Pack( TexturePacker.TexturePackerProgressListener? progress, List< TexturePacker.Rect > inputRects )
+    public List< TexturePacker.Page > Pack( TexturePacker.TexturePackerProgressListener? progress,
+                                            List< TexturePacker.Rect > inputRects )
     {
         ArgumentNullException.ThrowIfNull( progress );
 
@@ -131,7 +132,11 @@ public class GridPacker : TexturePacker.IPacker
     /// <param name="maxWidth"></param>
     /// <param name="maxHeight"></param>
     /// <returns></returns>
-    private TexturePacker.Page PackPage( List< TexturePacker.Rect > inputRects, int cellWidth, int cellHeight, int maxWidth, int maxHeight )
+    private TexturePacker.Page PackPage( List< TexturePacker.Rect > inputRects,
+                                         int cellWidth,
+                                         int cellHeight,
+                                         int maxWidth,
+                                         int maxHeight )
     {
         TexturePacker.Page page = new()
         {

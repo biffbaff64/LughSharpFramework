@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
+using LughSharp.Lugh.Utils.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
@@ -75,9 +76,7 @@ public partial class MaxRectsPacker
         {
             var newNode = ScoreRect( rect, method );
 
-            Guard.ThrowIfNull( newNode );
-
-            if ( newNode.Height == 0 )
+            if ( newNode == null || newNode.Height == 0 )
             {
                 return null;
             }
@@ -162,25 +161,29 @@ public partial class MaxRectsPacker
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public TexturePacker.Page GetResult()
         {
-            int w = 0, h = 0;
+            var width  = 0;
+            var height = 0;
 
+            // Find the largest rectangle
             foreach ( var rect in _usedRectangles )
             {
-                w = Math.Max( w, rect.X + rect.Width );
-                h = Math.Max( h, rect.Y + rect.Height );
+                width  = Math.Max( width, rect.X + rect.Width );
+                height = Math.Max( height, rect.Y + rect.Height );
             }
 
-            var result = new TexturePacker.Page
+            return new TexturePacker.Page
             {
-                OutputRects = [ ],
-                Occupancy   = GetOccupancy(),
-                Width       = w,
-                Height      = h,
+                OutputRects = [ .._usedRectangles ],
+                Occupancy   = GetOccupancyRatio(),
+                Width       = width,
+                Height      = height,
             };
-
-            return result;
         }
 
         private void PlaceRect( TexturePacker.Rect node )
@@ -256,8 +259,10 @@ public partial class MaxRectsPacker
             return newNode;
         }
 
-        // / Computes the ratio of used surface area.
-        private float GetOccupancy()
+        /// <summary>
+        /// Computes the ratio of used surface area.
+        /// </summary>
+        private float GetOccupancyRatio()
         {
             var usedSurfaceArea = 0;
 
@@ -270,10 +275,10 @@ public partial class MaxRectsPacker
         }
 
         private TexturePacker.Rect FindPositionForNewNodeBottomLeft( int width,
-                                                                           int height,
-                                                                           int rotatedWidth,
-                                                                           int rotatedHeight,
-                                                                           bool rotate )
+                                                                     int height,
+                                                                     int rotatedWidth,
+                                                                     int rotatedHeight,
+                                                                     bool rotate )
         {
             var bestNode = new TexturePacker.Rect
             {
@@ -322,10 +327,10 @@ public partial class MaxRectsPacker
         }
 
         private TexturePacker.Rect FindPositionForNewNodeBestShortSideFit( int width,
-                                                                                 int height,
-                                                                                 int rotatedWidth,
-                                                                                 int rotatedHeight,
-                                                                                 bool rotate )
+                                                                           int height,
+                                                                           int rotatedWidth,
+                                                                           int rotatedHeight,
+                                                                           bool rotate )
         {
             var bestNode = new TexturePacker.Rect
             {
@@ -388,10 +393,10 @@ public partial class MaxRectsPacker
         /// <param name="rotate"></param>
         /// <returns></returns>
         private TexturePacker.Rect FindPositionForNewNodeBestLongSideFit( int width,
-                                                                                int height,
-                                                                                int rotatedWidth,
-                                                                                int rotatedHeight,
-                                                                                bool rotate )
+                                                                          int height,
+                                                                          int rotatedWidth,
+                                                                          int rotatedHeight,
+                                                                          bool rotate )
         {
             var bestNode = new TexturePacker.Rect
             {
@@ -454,10 +459,10 @@ public partial class MaxRectsPacker
         /// <param name="rotate"></param>
         /// <returns></returns>
         private TexturePacker.Rect FindPositionForNewNodeBestAreaFit( int width,
-                                                                            int height,
-                                                                            int rotatedWidth,
-                                                                            int rotatedHeight,
-                                                                            bool rotate )
+                                                                      int height,
+                                                                      int rotatedWidth,
+                                                                      int rotatedHeight,
+                                                                      bool rotate )
         {
             var bestNode = new TexturePacker.Rect
             {
@@ -557,10 +562,10 @@ public partial class MaxRectsPacker
         }
 
         private TexturePacker.Rect FindPositionForNewNodeContactPoint( int width,
-                                                                             int height,
-                                                                             int rotatedWidth,
-                                                                             int rotatedHeight,
-                                                                             bool rotate )
+                                                                       int height,
+                                                                       int rotatedWidth,
+                                                                       int rotatedHeight,
+                                                                       bool rotate )
         {
             var bestNode = new TexturePacker.Rect
             {

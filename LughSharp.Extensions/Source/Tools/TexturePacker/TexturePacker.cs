@@ -242,6 +242,13 @@ public class TexturePacker
                                 TexturePackerSettings settings,
                                 TexturePackerProgressListener? progressListener = null )
     {
+        #if DEBUG
+        Logger.Divider('*');
+        Logger.Divider('*');
+        Logger.Divider('*');
+        Logger.Divider('*');
+        #endif
+        
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
@@ -251,6 +258,13 @@ public class TexturePacker
         {
             throw new GdxRuntimeException( "Error packing images.", ex );
         }
+        
+        #if DEBUG
+        Logger.Divider('*');
+        Logger.Divider('*');
+        Logger.Divider('*');
+        Logger.Divider('*');
+        #endif
     }
 
     // ========================================================================
@@ -316,10 +330,6 @@ public class TexturePacker
     /// <param name="packFileName"> The name for the resulting TextureAtlas. </param>
     public void Pack( DirectoryInfo outputDir, string packFileName )
     {
-        Logger.Divider( '=', 80 );
-        Logger.Checkpoint();
-        Logger.Divider( '=', 80 );
-
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
             packFileName = Path.GetFileNameWithoutExtension( packFileName );
@@ -395,11 +405,7 @@ public class TexturePacker
             ProgressListener.Count = 0;
             ProgressListener.Total = _imageProcessor.ImageRects.Count;
 
-            Logger.Checkpoint();
-
             var pages = Packer.Pack( ProgressListener, _imageProcessor.ImageRects );
-
-            Logger.Checkpoint();
 
             ProgressListener.End();
             ProgressListener.Start( 0.29f );
@@ -1271,9 +1277,9 @@ public class TexturePacker
 
         // ====================================================================
 
-        private Bitmap?  _bufferedImage = null;
-        private FileInfo _file          = null!;
-        private bool     _isPatch       = false;
+        private Bitmap?  _image   = null;
+        private FileInfo _file    = null!;
+        private bool     _isPatch = false;
 
         // ====================================================================
 
@@ -1296,8 +1302,8 @@ public class TexturePacker
 
         public Rect( Bitmap source, int left, int top, int newWidth, int newHeight, bool isPatch )
         {
-            _bufferedImage = new Bitmap( newWidth, newHeight, source.PixelFormat );
-            _isPatch       = isPatch;
+            _image   = new Bitmap( newWidth, newHeight, source.PixelFormat );
+            _isPatch = isPatch;
 
             OffsetX        = left;
             OffsetY        = top;
@@ -1313,55 +1319,50 @@ public class TexturePacker
         {
             _file = fileInfo;
 
-            _bufferedImage = null;
+            _image = null;
         }
 
-        public Bitmap GetImage( ImageProcessor? imageProcessor )
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="imageProcessor"></param>
+        /// <returns></returns>
+        /// <exception cref="GdxRuntimeException"></exception>
+        public Bitmap GetImage( ImageProcessor imageProcessor )
         {
-            ArgumentNullException.ThrowIfNull( imageProcessor );
-
-            if ( _bufferedImage != null )
+            if ( _image != null )
             {
-                return _bufferedImage;
+                return _image;
             }
 
-            Bitmap image;
+            Bitmap bitmap;
 
             try
             {
-                image = ( Bitmap )Image.FromFile( _file.Name );
+                bitmap = new Bitmap( Image.FromFile( _file.FullName ) );
             }
             catch ( IOException ex )
             {
-                throw new GdxRuntimeException( $"Error reading image: {_file}", ex );
+                throw new GdxRuntimeException( $"Error reading image: {_file.FullName}", ex );
             }
 
-            if ( image == null )
+            if ( bitmap == null )
             {
-                throw new GdxRuntimeException( $"Unable to read image: {_file}" );
+                throw new GdxRuntimeException( $"Unable to read image: {_file.FullName}" );
             }
 
-            var name = Name;
+            var name = _isPatch ? $"{Name}.9" : Name;
+            var rect = imageProcessor.ProcessImage( bitmap, name );
 
-            if ( _isPatch )
-            {
-                name += ".9";
-            }
-
-            var rect = imageProcessor.ProcessImage( image, name );
-
-            if ( rect == null )
-            {
-                throw new GdxRuntimeException( "ProcessImage returned null" );
-            }
-
-            return rect.GetImage( null );
+            return rect == null
+                ? throw new GdxRuntimeException( "ProcessImage returned null" )
+                : rect.GetImage( imageProcessor );
         }
 
         public void Set( Rect rect )
         {
             Name           = rect.Name;
-            _bufferedImage = rect._bufferedImage;
+            _image         = rect._image;
             OffsetX        = rect.OffsetX;
             OffsetY        = rect.OffsetY;
             RegionWidth    = rect.RegionWidth;

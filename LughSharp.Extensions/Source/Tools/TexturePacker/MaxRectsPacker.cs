@@ -127,7 +127,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             {
                 progress.Count = ( n - inputRects.Count ) + 1;
 
-                if ( ( bool )progress.Update( progress.Count, n ) )
+                if ( progress.Update( progress.Count, n ) )
                 {
                     break;
                 }
@@ -323,13 +323,18 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             var width  = widthSearch.Reset();
             var height = _settings.Square ? width : heightSearch.Reset();
+            
+            Logger.Debug( $"width: {width}, height: {height}" );
 
             while ( true )
             {
-                TexturePacker.Page? bestWidthResult = null;
+                var bestWidthResult = new TexturePacker.Page();
 
                 while ( width != -1 )
                 {
+                    Logger.Debug( $"width: {width}, height: {height}" );
+                    Logger.Debug( $"adjustX: {adjustX}, adjustY: {adjustY}" );
+                    
                     var result = PackAtSize( true, width + adjustX, height + adjustY, inputRects );
 
                     bestWidthResult = GetBest( bestWidthResult, result );
@@ -343,8 +348,11 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
                 bestResult = GetBest( bestResult, bestWidthResult );
 
-                Logger.Debug( $"bestResult: {bestResult?.Width} x {bestResult?.Height}" );
-                Logger.Debug( $"bestWidthResult: {bestWidthResult?.Width} x {bestWidthResult?.Height}" );
+                if ( bestResult != null && bestWidthResult != null )
+                {
+                    Logger.Debug( $"bestResult: {bestResult.Width} x {bestResult.Height}" );
+                    Logger.Debug( $"bestWidthResult: {bestWidthResult.Width} x {bestWidthResult.Height}" );
+                }
 
                 if ( _settings.Square )
                 {
@@ -399,6 +407,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     {
         var bestResult = new TexturePacker.Page();
 
+        Logger.Debug( $"_methods.Length: {_methods.Length}" );
+        Logger.Debug( $"_settings.Fast: {_settings.Fast}" );
+        
         for ( int i = 0, numMethods = _methods.Length; i < numMethods; i++ )
         {
             _maxRects.Init( width, height );
@@ -430,6 +441,10 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
                 result.RemainingRects = remaining;
             }
 
+            Logger.Debug( $"i: {i}, result: {result.Width} x {result.Height}" );
+            Logger.Debug( $"result.OutputRects.Count: {result.OutputRects.Count}" );
+            Logger.Debug( $"result.RemainingRects.Count: {result.RemainingRects.Count}" );
+            
             if ( ( fully && ( result.RemainingRects.Count > 0 ) )
                  || ( result.OutputRects.Count == 0 ) )
             {
@@ -454,6 +469,9 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// </returns>
     private static TexturePacker.Page? GetBest( TexturePacker.Page? result1, TexturePacker.Page? result2 )
     {
+        Logger.Debug( $"result1: {result1?.Width} x {result1?.Height}" );
+        Logger.Debug( $"result2: {result2?.Width} x {result2?.Height}" );
+        
         // return null if both are null, or returns a non-null result2 if
         // result1 is null and result2 is not null.
         if ( result1 == null )

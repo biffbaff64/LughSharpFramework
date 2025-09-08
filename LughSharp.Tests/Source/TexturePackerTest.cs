@@ -82,7 +82,7 @@ public class TexturePackerTest
         var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
 
         settings.WriteToJsonFile( settingsFilePath );
-        
+
         TexturePacker.Process( inputFolder, outputFolder, "objects", settings );
     }
 

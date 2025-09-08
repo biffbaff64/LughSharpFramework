@@ -37,8 +37,6 @@ public class GLDebugControl
     /// </summary>
     public static unsafe void EnableGLDebugOutput()
     {
-        Logger.Debug( "********** SETTING UP GL DEBUG **********" );
-
         Glfw.WindowHint( WindowHint.OpenGLDebugContext, true );
 
         GL.Enable( ( int )EnableCap.DebugOutput );
@@ -55,6 +53,8 @@ public class GLDebugControl
                                     ptr,
                                     true );
         }
+        
+        Logger.Debug( "GL Debug output enabled" );
     }
 }
 

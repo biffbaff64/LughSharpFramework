@@ -101,6 +101,8 @@ public class TexturePackerFileProcessor : FileProcessor
     // ========================================================================
     // ========================================================================
 
+    #region Process methods
+    
     /// <summary>
     /// Processes texture packing by analyzing input and output directories, generating
     /// packed texture files and associated data, and returning the results.
@@ -173,6 +175,8 @@ public class TexturePackerFileProcessor : FileProcessor
             }
         }
 
+        //TODO: Change to use calls to local Process method instead of base.Process.
+        
         // Count the number of texture packer invocations for the ProgressListener to use.
         // ( Currently, the result is discarded. )
         CountOnly = true;
@@ -426,8 +430,6 @@ public class TexturePackerFileProcessor : FileProcessor
         }
     }
 
-    // ========================================================================
-
     /// <summary>
     /// </summary>
     /// <param name="entry"></param>
@@ -464,8 +466,6 @@ public class TexturePackerFileProcessor : FileProcessor
                 : _defaultSettings;
 
             var packer = NewTexturePacker( _rootDirectory, settings );
-
-            Logger.Debug( $"Pack( packer, entry )" );
 
             Pack( packer, entry );
         }
@@ -655,12 +655,13 @@ public class TexturePackerFileProcessor : FileProcessor
             }
         }
 
-        Logger.Debug( $"Pack( packer, inputDir )" );
-
         Pack( packer, inputDir );
         ProgressListener?.End();
     }
 
+    #endregion Process methods
+    
+    // ========================================================================
     // ========================================================================
 
     /// <summary>

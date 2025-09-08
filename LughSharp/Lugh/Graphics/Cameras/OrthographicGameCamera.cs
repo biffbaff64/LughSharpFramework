@@ -51,7 +51,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     // ========================================================================
 
     private float _defaultZoom;
-    private Shake _shake = new();
+    private Shake _shake    = new();
+    private bool  _disposed = false;
 
     // ========================================================================
 
@@ -338,7 +339,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </summary>
     public void SetStretchViewport()
     {
-        Logger.Debug( $"SetStretchViewport: PPM: {PPM}, "
+        Logger.Debug( $"PPM: {PPM}, "
                       + $"Camera: X:{Camera.Position.X}, Y:{Camera.Position.Y}, Z:{Camera.Position.Z},"
                       + $" {Camera.ViewportWidth * PPM}x{Camera.ViewportHeight * PPM}"
                       + $" ( {Camera.ViewportWidth}x{Camera.ViewportHeight} Units )" );
@@ -481,13 +482,25 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        //TODO:
-        Camera     = null!;
-        Viewport   = null;
-        LerpVector = null!;
-        Name       = null!;
-
+        Dispose( true );
         GC.SuppressFinalize( this );
+    }
+
+    protected virtual void Dispose( bool disposing )
+    {
+        if ( !_disposed )
+        {
+            if ( disposing )
+            {
+                //TODO:
+                Camera     = null!;
+                Viewport   = null;
+                LerpVector = null!;
+                Name       = null!;
+            }
+
+            _disposed = true;
+        }
     }
 }
 

@@ -31,7 +31,7 @@ public class Stats
 
     static Stats()
     {
-        _prefs = Api.App.GetPreferences( "FrameworkMeters.stats" );
+        _prefs = Api.App.GetPreferences( "frameworkmeters.stats" );
     }
 
     public static int GetMeter( string meter )
