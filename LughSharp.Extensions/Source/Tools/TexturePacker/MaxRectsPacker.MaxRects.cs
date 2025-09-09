@@ -23,8 +23,6 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
@@ -274,6 +272,15 @@ public partial class MaxRectsPacker
             return ( float )usedSurfaceArea / ( _binWidth * _binHeight );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="rotatedWidth"></param>
+        /// <param name="rotatedHeight"></param>
+        /// <param name="rotate"></param>
+        /// <returns></returns>
         private TexturePacker.Rect FindPositionForNewNodeBottomLeft( int width,
                                                                      int height,
                                                                      int rotatedWidth,
@@ -326,6 +333,15 @@ public partial class MaxRectsPacker
             return bestNode;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="rotatedWidth"></param>
+        /// <param name="rotatedHeight"></param>
+        /// <param name="rotate"></param>
+        /// <returns></returns>
         private TexturePacker.Rect FindPositionForNewNodeBestShortSideFit( int width,
                                                                            int height,
                                                                            int rotatedWidth,
@@ -517,7 +533,8 @@ public partial class MaxRectsPacker
         }
 
         /// <summary>
-        /// Returns 0 if the two intervals i1 and i2 are disjoint, or the length of their overlap otherwise.
+        /// Returns 0 if the two intervals i1 and i2 are disjoint, or the length
+        /// of their overlap otherwise.
         /// </summary>
         private static int CommonIntervalLength( int i1Start, int i1End, int i2Start, int i2End )
         {
@@ -529,6 +546,14 @@ public partial class MaxRectsPacker
             return Math.Min( i1End, i2End ) - Math.Max( i1Start, i2Start );
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
         private int ContactPointScoreNode( int x, int y, int width, int height )
         {
             var score = 0;
@@ -561,6 +586,15 @@ public partial class MaxRectsPacker
             return score;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="rotatedWidth"></param>
+        /// <param name="rotatedHeight"></param>
+        /// <param name="rotate"></param>
+        /// <returns></returns>
         private TexturePacker.Rect FindPositionForNewNodeContactPoint( int width,
                                                                        int height,
                                                                        int rotatedWidth,
@@ -611,6 +645,12 @@ public partial class MaxRectsPacker
             return bestNode;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="freeNode"></param>
+        /// <param name="usedNode"></param>
+        /// <returns></returns>
         private bool SplitFreeNode( TexturePacker.Rect freeNode, TexturePacker.Rect? usedNode )
         {
             // Test with SAT if the rectangles even intersect.
@@ -673,6 +713,9 @@ public partial class MaxRectsPacker
             return true;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void PruneFreeList()
         {
             // Go through each pair and remove any rectangle that is redundant.

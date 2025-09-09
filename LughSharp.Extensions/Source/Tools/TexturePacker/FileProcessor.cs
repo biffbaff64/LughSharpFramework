@@ -106,6 +106,22 @@ public partial class FileProcessor
     #region process methods
 
     /// <summary>
+    /// Processes texture packing based on the specified input and output parameters.
+    /// </summary>
+    /// <param name="inputFileOrDir">The input file or directory to be processed.</param>
+    /// <param name="outputRoot">
+    /// The root output directory where the results will be saved. Can be null.
+    /// </param>
+    /// <returns>
+    /// A list of <see cref="FileProcessor.Entry"/> representing the processed textures or files.
+    /// </returns>
+    public virtual List< Entry > Process( string inputFileOrDir, string? outputRoot )
+    {
+        return Process( new DirectoryInfo( inputFileOrDir ),
+                        outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
+    }
+
+    /// <summary>
     /// Processes the specified input file or directory.
     /// </summary>
     /// <param name="inputFileOrDir"></param>
@@ -430,9 +446,6 @@ public partial class FileProcessor
         // var totalEntries = stringToEntries.Values.Sum(list => list.Count);
     }
 
-    /// <summary>
-    /// </summary>
-    /// <param name="entry"></param>
     public virtual void ProcessFile( Entry entry )
     {
         Guard.ThrowIfNull( entry.InputFile );
@@ -441,10 +454,6 @@ public partial class FileProcessor
         ProcessFileDelegate?.Invoke( entry );
     }
 
-    /// <summary>
-    /// </summary>
-    /// <param name="entryDir"></param>
-    /// <param name="files"></param>
     public virtual void ProcessDir( Entry entryDir, List< Entry > files )
     {
     }

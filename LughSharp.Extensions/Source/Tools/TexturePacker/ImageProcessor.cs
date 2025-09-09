@@ -105,8 +105,6 @@ public class ImageProcessor
             throw new GdxRuntimeException( $"Path '{name}' does not start with root: {rootPath}" );
         }
 
-        name = name.Substring( rootPath.Length );
-
         // Strip extension.
         name = Path.GetFileNameWithoutExtension( name );
 
@@ -116,9 +114,6 @@ public class ImageProcessor
         {
             rect.UnloadImage( file );
         }
-
-        Logger.Debug( $"rect: {rect?.ToString()}" );
-        Logger.Debug( $"name: {name}" );
         
         return rect;
     }

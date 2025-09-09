@@ -116,8 +116,7 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <returns>
     /// A list of <see cref="FileProcessor.Entry"/> objects representing the processed entries.
     /// </returns>
-    public virtual List< Entry > Process( DirectoryInfo? inputRoot,
-                                          DirectoryInfo? outputRoot )
+    public virtual List< Entry > Process( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
     {
         _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
 
@@ -175,8 +174,6 @@ public class TexturePackerFileProcessor : FileProcessor
             }
         }
 
-        //TODO: Change to use calls to local Process method instead of base.Process.
-        
         // Count the number of texture packer invocations for the ProgressListener to use.
         // ( Currently, the result is discarded. )
         CountOnly = true;
@@ -191,27 +188,6 @@ public class TexturePackerFileProcessor : FileProcessor
         return result;
     }
 
-    /// <summary>
-    /// Processes texture packing based on the specified input and output parameters.
-    /// </summary>
-    /// <param name="inputFileOrDir">The input file or directory to be processed.</param>
-    /// <param name="outputRoot">
-    /// The root output directory where the results will be saved. Can be null.
-    /// </param>
-    /// <returns>
-    /// A list of <see cref="FileProcessor.Entry"/> representing the processed textures or files.
-    /// </returns>
-    public virtual List< Entry > Process( string inputFileOrDir, string? outputRoot )
-    {
-        return Process( new DirectoryInfo( inputFileOrDir ),
-                        outputRoot == null ? null : new DirectoryInfo( outputRoot ) );
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="files"></param>
-    /// <param name="outputRoot"></param>
-    /// <returns></returns>
     public virtual List< Entry > Process( FileInfo[] files, FileInfo? outputRoot )
     {
         Guard.ThrowIfNull( outputRoot );
@@ -222,7 +198,7 @@ public class TexturePackerFileProcessor : FileProcessor
             DeleteOutput( outputRoot );
         }
 
-        return Process( files, outputRoot.Directory );
+        return base.Process( files, outputRoot.Directory );
     }
 
     /// <summary>
@@ -316,6 +292,123 @@ public class TexturePackerFileProcessor : FileProcessor
         }
 
         return OutputFilesList;
+    }
+
+    /// <summary>
+    /// Processes the given array of files starting from a specific output directory
+    /// and populates a mapping of directories to their corresponding entries. Handles
+    /// recursive traversal and processing based on the specified depth.
+    /// </summary>
+    /// <param name="files">
+    /// An array of <see cref="FileInfo"/> objects representing the files to be processed.
+    /// </param>
+    /// <param name="outputRoot">
+    /// The root output directory where the processed files will be stored.
+    /// </param>
+    /// <param name="outputDir">
+    /// The currently targeted output directory during the processing operation.
+    /// </param>
+    /// <param name="dirToEntries">
+    /// A dictionary mapping each discovered directory to a list of associated
+    /// <see cref="FileProcessor.Entry"/> objects.
+    /// </param>
+    /// <param name="depth">
+    /// The current recursion depth during processing, used to manage directory
+    /// hierarchy and traversal.
+    /// </param>
+    public override void Process( FileInfo[] files,
+                                  DirectoryInfo outputRoot, DirectoryInfo outputDir,
+                                 Dictionary< DirectoryInfo, List< Entry >? > dirToEntries, int depth )
+    {
+        foreach ( var file in files )
+        {
+            var dir = file.Directory;
+
+            if ( dir != null )
+            {
+                if ( !dirToEntries.ContainsKey( dir ) )
+                {
+                    // If the directory is not already a key in the dictionary, add it
+                    dirToEntries[ dir ] = [ ];
+                }
+            }
+            else
+            {
+                // Handle the case where a file has no parent directory (e.g., root level)
+                // Either log a warning, throw an exception, or handle it differently
+                // ( Logging a warning for now... )
+                Logger.Warning( $"File '{file.FullName}' has no parent directory." );
+            }
+        }
+
+        foreach ( var file in files )
+        {
+            if ( IOUtils.IsFile( file ) )
+            {
+                if ( InputRegex.Count > 0 )
+                {
+                    var found = false;
+
+                    foreach ( var pattern in InputRegex )
+                    {
+                        if ( pattern.IsMatch( file.Name ) )
+                        {
+                            found = true;
+
+                            break;
+                        }
+                    }
+
+                    if ( !found )
+                    {
+                        continue;
+                    }
+                }
+
+                if ( file.DirectoryName == null )
+                {
+                    Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
+                }
+
+                if ( ( FilenameFilterDelegate != null )
+                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
+                {
+                    continue;
+                }
+
+                var outputName = file.Name;
+
+                if ( OutputSuffix != null )
+                {
+                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
+                }
+
+                var entry = new Entry
+                {
+                    Depth           = depth,
+                    InputFile       = file,
+                    OutputDirectory = outputDir,
+                    OutputFileName = FlattenOutput
+                        ? Path.Combine( outputRoot.FullName, outputName )
+                        : Path.Combine( outputDir.FullName, outputName ),
+                };
+
+                var dir = file.Directory!;
+
+                dirToEntries.Add( dir, [ entry ] );
+            }
+
+            if ( Recursive && IOUtils.IsDirectory( file ) )
+            {
+                var subdir = outputDir.FullName.Length == 0
+                    ? new DirectoryInfo( file.Name )
+                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
+
+                Process( new DirectoryInfo( file.FullName )
+                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
+                         outputRoot, subdir, dirToEntries, depth + 1 );
+            }
+        }
     }
 
     /// <summary>
@@ -598,14 +691,17 @@ public class TexturePackerFileProcessor : FileProcessor
             return num1 - num2;
         } );
 
+        var sourceString = inputDir.InputFile?.FullName.Substring( IOUtils.AssetsRoot.Length );
+
         // Pack.
         try
         {
-            Logger.Debug( $"Reading: {inputDir.InputFile?.FullName}" );
+            Logger.Debug( $"Reading: {sourceString}" );
         }
-        catch ( IOException )
+        catch ( IOException ioe )
         {
-            Logger.Debug( $"Reading: {inputDir.InputFile?.FullName} ( IOException )" );
+            Logger.Debug( $"Reading: {sourceString} ( IOException )" );
+            Logger.Warning( $"IOException while reading: {ioe.Message}" );
         }
 
         if ( ProgressListener != null )

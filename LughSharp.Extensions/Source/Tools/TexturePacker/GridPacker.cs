@@ -61,8 +61,6 @@ public class GridPacker : TexturePacker.IPacker
     {
         ArgumentNullException.ThrowIfNull( progress );
 
-        Logger.Debug( "Packing" );
-
         // Rects are packed with right and top padding, so the max size is increased
         // to match. After packing the padding is subtracted from the page size.
         var paddingX = _settings.PaddingX;

@@ -243,12 +243,12 @@ public class TexturePacker
                                 TexturePackerProgressListener? progressListener = null )
     {
         #if DEBUG
-        Logger.Divider('*');
-        Logger.Divider('*');
-        Logger.Divider('*');
-        Logger.Divider('*');
+        Logger.Divider( '*' );
+        Logger.Divider( '*' );
+        Logger.Divider( '*' );
+        Logger.Divider( '*' );
         #endif
-        
+
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
@@ -258,12 +258,12 @@ public class TexturePacker
         {
             throw new GdxRuntimeException( "Error packing images.", ex );
         }
-        
+
         #if DEBUG
-        Logger.Divider('*');
-        Logger.Divider('*');
-        Logger.Divider('*');
-        Logger.Divider('*');
+        Logger.Divider( '*' );
+        Logger.Divider( '*' );
+        Logger.Divider( '*' );
+        Logger.Divider( '*' );
         #endif
     }
 
@@ -373,8 +373,6 @@ public class TexturePacker
             ProgressListener.Start( 0.35f );
             ProgressListener.Count = 0;
             ProgressListener.Total = _inputImages.Count;
-
-            Logger.Debug( $"_inputImages.Count: {_inputImages.Count}" );
 
             for ( int ii = 0, nn = _inputImages.Count; ii < nn; ii++, ProgressListener.Count++ )
             {
@@ -817,18 +815,24 @@ public class TexturePacker
 //            comma = ", ";
 //        }
 
-        var appending = packFile.Exists;
+        Logger.Debug( $"packFile.FullName: {packFile.FullName}"  );
+        Logger.Debug( $"packFile.Exists: {File.Exists( packFile.FullName )}"  );
+        
+        //TODO: It seems that 'packFile' doesn't exist at this point.
+        //      This is setting 'appending' to false, causing the atlas file
+        //      to be overwritten for each image.
+        
+        var appending = File.Exists( packFile.FullName );
 
         using ( var writer = new StreamWriter( packFile.FullName, appending, System.Text.Encoding.UTF8 ) )
         {
+            Logger.Debug( $"pages.Count: {pages.Count}" );
+
             for ( var i = 0; i < pages.Count; i++ )
             {
                 var page = pages[ i ];
 
-                if ( page.OutputRects == null )
-                {
-                    throw new NullReferenceException();
-                }
+                Guard.ThrowIfNull( page.OutputRects );
 
                 if ( _settings.LegacyOutput )
                 {
@@ -904,16 +908,21 @@ public class TexturePacker
             comma = ", ";
         }
 
+        Console.WriteLine( $"{page.ImageName}" );
+        Console.WriteLine( $"{tab}size{colon}{page.ImageWidth}{comma}{page.ImageHeight}" );
+
         writer.WriteLine( page.ImageName );
         writer.WriteLine( $"{tab}size{colon}{page.ImageWidth}{comma}{page.ImageHeight}" );
 
         if ( PixmapFormatExtensions.ToSystemPixelFormat( _settings.Format ) != PixelFormat.Format32bppArgb )
         {
+            Console.WriteLine( $"{tab}format{colon}{_settings.Format}" );
             writer.WriteLine( $"{tab}format{colon}{_settings.Format}" );
         }
 
         if ( ( _settings.FilterMin != TextureFilterMode.Nearest ) || ( _settings.FilterMag != TextureFilterMode.Nearest ) )
         {
+            Console.WriteLine( $"{tab}filter{colon}{_settings.FilterMin}{comma}{_settings.FilterMag}" );
             writer.WriteLine( $"{tab}filter{colon}{_settings.FilterMin}{comma}{_settings.FilterMag}" );
         }
 
@@ -921,11 +930,13 @@ public class TexturePacker
 
         if ( repeatValue != null )
         {
+            Console.WriteLine( $"{tab}repeat{colon}{repeatValue}" );
             writer.WriteLine( $"{tab}repeat{colon}{repeatValue}" );
         }
 
         if ( _settings.PremultiplyAlpha )
         {
+            Console.WriteLine( $"{tab}pma{colon}true" );
             writer.WriteLine( $"{tab}pma{colon}true" );
         }
     }
@@ -943,13 +954,16 @@ public class TexturePacker
             comma = ", ";
         }
 
+        Console.WriteLine( Rect.GetAtlasName( name, _settings.FlattenPaths ) );
         writer.WriteLine( Rect.GetAtlasName( name, _settings.FlattenPaths ) );
 
         if ( rect.Index != -1 )
         {
+            Console.WriteLine( $"{tab}index{colon}{rect.Index}" );
             writer.WriteLine( $"{tab}index{colon}{rect.Index}" );
         }
 
+        Console.WriteLine( $"{tab}bounds{colon}{page.X + rect.X}{comma}{( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY )}{comma}{rect.RegionWidth}{comma}{rect.RegionHeight}" );
         writer.WriteLine( $"{tab}bounds{colon}{page.X + rect.X}{comma}{( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY )}{comma}{rect.RegionWidth}{comma}{rect.RegionHeight}" );
 
         var offsetY = rect.OriginalHeight - rect.RegionHeight - rect.OffsetY;
@@ -957,16 +971,19 @@ public class TexturePacker
         if ( ( rect.OffsetX != 0 ) || ( offsetY != 0 ) || ( rect.OriginalWidth != rect.RegionWidth ) ||
              ( rect.OriginalHeight != rect.RegionHeight ) )
         {
+            Console.WriteLine( $"{tab}offsets{colon}{rect.OffsetX}{comma}{offsetY}{comma}{rect.OriginalWidth}{comma}{rect.OriginalHeight}" );
             writer.WriteLine( $"{tab}offsets{colon}{rect.OffsetX}{comma}{offsetY}{comma}{rect.OriginalWidth}{comma}{rect.OriginalHeight}" );
         }
 
         if ( rect.Rotated )
         {
+            Console.WriteLine( $"{tab}rotate{colon}{rect.Rotated}" );
             writer.WriteLine( $"{tab}rotate{colon}{rect.Rotated}" );
         }
 
         if ( rect.Splits != null )
         {
+            Console.WriteLine( $"{tab}split{colon}{rect.Splits[ 0 ]}{comma}{rect.Splits[ 1 ]}{comma}{rect.Splits[ 2 ]}{comma}{rect.Splits[ 3 ]}" );
             writer.WriteLine( $"{tab}split{colon}{rect.Splits[ 0 ]}{comma}{rect.Splits[ 1 ]}{comma}{rect.Splits[ 2 ]}{comma}{rect.Splits[ 3 ]}" );
         }
 
@@ -974,15 +991,26 @@ public class TexturePacker
         {
             if ( rect.Splits == null )
             {
+                Console.WriteLine( $"{tab}split{colon}0{comma}0{comma}0{comma}0" );
                 writer.WriteLine( $"{tab}split{colon}0{comma}0{comma}0{comma}0" );
             }
 
+            Console.WriteLine( $"{tab}pad{colon}{rect.Pads[ 0 ]}{comma}{rect.Pads[ 1 ]}{comma}{rect.Pads[ 2 ]}{comma}{rect.Pads[ 3 ]}" );
             writer.WriteLine( $"{tab}pad{colon}{rect.Pads[ 0 ]}{comma}{rect.Pads[ 1 ]}{comma}{rect.Pads[ 2 ]}{comma}{rect.Pads[ 3 ]}" );
         }
     }
 
+    /// <summary>
+    /// Writes the header details for the atlas.
+    /// </summary>
     private void WritePageLegacy( TextWriter writer, Page page )
     {
+        Console.WriteLine();
+        Console.WriteLine( page.ImageName );
+        Console.WriteLine( $"size: {page.ImageWidth}, {page.ImageHeight}" );
+        Console.WriteLine( $"format: {_settings.Format}" );
+        Console.WriteLine( $"filter: {_settings.FilterMin}, {_settings.FilterMag}" );
+
         writer.WriteLine();
         writer.WriteLine( page.ImageName );
         writer.WriteLine( $"size: {page.ImageWidth}, {page.ImageHeight}" );
@@ -990,11 +1018,20 @@ public class TexturePacker
         writer.WriteLine( $"filter: {_settings.FilterMin}, {_settings.FilterMag}" );
 
         var repeatValue = GetRepeatValue();
+        Console.WriteLine( $"repeat: {repeatValue ?? "none"}" );
         writer.WriteLine( $"repeat: {repeatValue ?? "none"}" );
     }
 
+    /// <summary>
+    /// Writes the details for a single packed image to the atlas.
+    /// </summary>
     private void WriteRectLegacy( TextWriter writer, Page page, Rect rect, string name )
     {
+        Console.WriteLine( Rect.GetAtlasName( name, _settings.FlattenPaths ) );
+        Console.WriteLine( $"  rotate: {rect.Rotated}" );
+        Console.WriteLine( $"  xy: {page.X + rect.X}, {( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY )}" );
+        Console.WriteLine( $"  size: {rect.RegionWidth}, {rect.RegionHeight}" );
+
         writer.WriteLine( Rect.GetAtlasName( name, _settings.FlattenPaths ) );
         writer.WriteLine( $"  rotate: {rect.Rotated}" );
         writer.WriteLine( $"  xy: {page.X + rect.X}, {( page.Y + page.Height ) - rect.Y - ( rect.Height - _settings.PaddingY )}" );
@@ -1002,6 +1039,7 @@ public class TexturePacker
 
         if ( rect.Splits != null )
         {
+            Console.WriteLine( $"  split: {rect.Splits[ 0 ]}, {rect.Splits[ 1 ]}, {rect.Splits[ 2 ]}, {rect.Splits[ 3 ]}" );
             writer.WriteLine( $"  split: {rect.Splits[ 0 ]}, {rect.Splits[ 1 ]}, {rect.Splits[ 2 ]}, {rect.Splits[ 3 ]}" );
         }
 
@@ -1009,11 +1047,17 @@ public class TexturePacker
         {
             if ( rect.Splits == null )
             {
+                Console.WriteLine( "  split: 0, 0, 0, 0" );
                 writer.WriteLine( "  split: 0, 0, 0, 0" );
             }
 
+            Console.WriteLine( $"  pad: {rect.Pads[ 0 ]}, {rect.Pads[ 1 ]}, {rect.Pads[ 2 ]}, {rect.Pads[ 3 ]}" );
             writer.WriteLine( $"  pad: {rect.Pads[ 0 ]}, {rect.Pads[ 1 ]}, {rect.Pads[ 2 ]}, {rect.Pads[ 3 ]}" );
         }
+
+        Console.WriteLine( $"  orig: {rect.OriginalWidth}, {rect.OriginalHeight}" );
+        Console.WriteLine( $"  offset: {rect.OffsetX}, {rect.OriginalHeight - rect.RegionHeight - rect.OffsetY}" );
+        Console.WriteLine( $"  index: {rect.Index}" );
 
         writer.WriteLine( $"  orig: {rect.OriginalWidth}, {rect.OriginalHeight}" );
         writer.WriteLine( $"  offset: {rect.OffsetX}, {rect.OriginalHeight - rect.RegionHeight - rect.OffsetY}" );
@@ -1159,7 +1203,10 @@ public class TexturePacker
         return false;
     }
 
-    public static bool ProcessIfModified( TexturePackerSettings settings, string input, string output, string packFileName )
+    public static bool ProcessIfModified( TexturePackerSettings settings,
+                                          string input,
+                                          string output,
+                                          string packFileName )
     {
         if ( IsModified( input, output, packFileName, settings ) )
         {
@@ -1318,7 +1365,6 @@ public class TexturePacker
         public void UnloadImage( FileInfo fileInfo )
         {
             _file = fileInfo;
-
             _image = null;
         }
 
@@ -1456,8 +1502,10 @@ public class TexturePacker
     [PublicAPI]
     public interface IPacker
     {
-        public List< Page > Pack( List< Rect > inputRects );
-        public List< Page > Pack( TexturePackerProgressListener progressListener, List< Rect > inputRects );
+        List< Page > Pack( List< Rect > inputRects );
+
+        List< Page > Pack( TexturePackerProgressListener progressListener,
+                           List< Rect > inputRects );
     }
 
     // ========================================================================
@@ -1522,7 +1570,8 @@ public class TexturePacker
 
         public void Update( float percent )
         {
-            _lastUpdate = _portions[ _portions.Count - 3 ] + ( _portions[ _portions.Count - 2 ] * percent );
+            _lastUpdate = _portions[ _portions.Count - 3 ]
+                          + ( _portions[ _portions.Count - 2 ] * percent );
 
             Progress( _lastUpdate );
         }
@@ -1567,3 +1616,6 @@ public class TexturePacker
     // ========================================================================
     // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================
