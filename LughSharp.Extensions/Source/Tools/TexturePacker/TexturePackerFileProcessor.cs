@@ -122,11 +122,13 @@ public class TexturePackerFileProcessor : FileProcessor
     public virtual List< Entry > Process( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
     {
         _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
-
+        
         CollectSettingsFiles( inputRoot, outputRoot );
 
         // Count the number of texture packer invocations for the ProgressListener
-        // to use. Currently, the result is discarded.
+        // to use. This is done by a dry run with CountOnly = true, and will set the
+        // _packCount variable to the number of packer invocations.
+        // The result from the base.Process method is discarded.
         CountOnly = true;
         _         = base.Process( inputRoot, outputRoot );
         CountOnly = false;
@@ -161,8 +163,8 @@ public class TexturePackerFileProcessor : FileProcessor
     /// <summary>
     /// </summary>
     /// <param name="inputDir"></param>
-    /// <param name="files"></param>
-    public override void ProcessDir( Entry inputDir, List< Entry > files )
+    /// <param name="entryList"></param>
+    public override void ProcessDir( Entry inputDir, List< Entry > entryList )
     {
         // Do not proceed if this dir is one of those to ignore
         if ( DirsToIgnore.Contains( inputDir.InputFile ) )
@@ -204,10 +206,10 @@ public class TexturePackerFileProcessor : FileProcessor
             // must use the settings of the parent directory.
             var combiningProcessor = new CombineSettingsProcessor( inputDir, this );
 
-            files = combiningProcessor.Process( ( DirectoryInfo? )inputDir.InputFile, null ).ToList();
+            entryList = combiningProcessor.Process( ( DirectoryInfo? )inputDir.InputFile, null ).ToList();
         }
 
-        if ( files.Count == 0 )
+        if ( entryList.Count == 0 )
         {
             return;
         }
@@ -220,7 +222,7 @@ public class TexturePackerFileProcessor : FileProcessor
         }
 
         // Sort by name using numeric suffix, then alpha.
-        files.Sort( ( entry1, entry2 ) =>
+        entryList.Sort( ( entry1, entry2 ) =>
         {
             var full1    = entry1.InputFile?.Name;
             var dotIndex = full1?.LastIndexOf( '.' );
@@ -298,6 +300,8 @@ public class TexturePackerFileProcessor : FileProcessor
 
         if ( ProgressListener != null )
         {
+            Logger.Debug( "Starting ProgressListener" );
+            
             ProgressListener.Start( 1f / _packCount );
 
             string? inputPath = null;
@@ -335,7 +339,7 @@ public class TexturePackerFileProcessor : FileProcessor
 
         var packer = NewTexturePacker( _rootDirectory, settings );
 
-        foreach ( var file in files )
+        foreach ( var file in entryList )
         {
             if ( file.InputFile != null )
             {
@@ -344,6 +348,7 @@ public class TexturePackerFileProcessor : FileProcessor
         }
 
         Pack( packer, inputDir );
+        
         ProgressListener?.End();
     }
     
@@ -734,6 +739,15 @@ public class TexturePackerFileProcessor : FileProcessor
     // ========================================================================
 
     /// <summary>
+    /// </summary>
+    /// <param name="packer"></param>
+    /// <param name="entry"></param>
+    public virtual void Pack( TexturePacker packer, Entry entry )
+    {
+        packer.Pack( entry.OutputDirectory!, PackFileName );
+    }
+
+    /// <summary>
     /// Collect any pack.json setting files present in the input folder.
     /// </summary>
     /// <param name="inputRoot">
@@ -868,60 +882,6 @@ public class TexturePackerFileProcessor : FileProcessor
             {
                 deleteProcessor.Process( new DirectoryInfo( Path.Combine( outputRoot.FullName, dir ) ), null );
             }
-        }
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="packer"></param>
-    /// <param name="entry"></param>
-    public virtual void Pack( TexturePacker packer, Entry entry )
-    {
-        if ( entry.InputFile is FileInfo file )
-        {
-            packer.AddImage( file );
-        }
-
-        packer.Pack( ( DirectoryInfo )entry.OutputDirectory!, PackFileName );
-    }
-
-    /// <summary>
-    /// Adds a processed <see cref="FileProcessor.Entry"/> to the <see cref="FileProcessor.OutputFilesList"/>.
-    /// This method should be called by:-
-    /// <li><see cref="ProcessFile(FileProcessor.Entry)"/> or,</li>
-    /// <li><see cref="ProcessDir(FileProcessor.Entry, List{FileProcessor.Entry})"/></li>
-    /// if the return value of <see cref="Process(DirectoryInfo, DirectoryInfo)"/> or
-    /// <see cref="Process(FileInfo[], DirectoryInfo)"/> should return all the processed
-    /// files.
-    /// </summary>
-    /// <param name="entry"></param>
-    public override void AddProcessedFile( Entry entry )
-    {
-        OutputFilesList.Add( entry );
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// </summary>
-    /// <param name="regexes"></param>
-    public override void AddInputRegex( params string[] regexes )
-    {
-        foreach ( var regex in regexes )
-        {
-            InputRegex.Add( new Regex( regex ) );
-        }
-    }
-
-    /// <summary>
-    /// Adds a case insensitive suffix for matching input files.
-    /// </summary>
-    /// <param name="suffixes"></param>
-    public void AddInputSuffix( params string[] suffixes )
-    {
-        foreach ( var suffix in suffixes )
-        {
-            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
         }
     }
 

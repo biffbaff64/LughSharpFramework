@@ -260,12 +260,6 @@ public partial class TexturePacker
         Logger.Divider( '*' );
         Logger.Divider( '*' );
         Logger.Divider( '*' );
-
-        if ( settings.CleanAtStart )
-        {
-            Logger.Debug( $"Cleaning output folder '{outputFolder}'..." );
-            Directory.Delete( outputFolder, true );
-        }
         #endif
 
         try
@@ -400,8 +394,7 @@ public partial class TexturePacker
             return;
         }
 
-        RootPath = Path.GetFullPath( rootDir.FullName );
-        RootPath = RootPath!.Replace( '\\', '/' );
+        RootPath = IOUtils.NormalizePath( Path.GetFullPath( rootDir.FullName ) );
 
         if ( !RootPath!.EndsWith( '/' ) )
         {

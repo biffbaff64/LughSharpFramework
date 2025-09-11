@@ -70,25 +70,22 @@ public class TexturePackerTest
             DuplicatePadding = false,                 // Disable duplicate padding
             MinWidth         = 16,                    // 
             MinHeight        = 16,                    // 
-            
-            #if DEBUG
-            CleanAtStart = true,
-            #endif
         };
 
         // Build the Atlases from the specified parameters :-
-        // - configuration settings
-        // - source folder
-        // - destination folder
-        // - name of atlas, without extension (the extension '.atlas' will be added automatically)
-        var inputFolder      = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\objects" );
-        var outputFolder     = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
-        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
+        // 1. source folder
+        // 2. destination folder
+        // 3. name of atlas, without extension (the extension '.atlas' will be added automatically)
+        //    If an extension is specified, it will be removed.
+        // 4. configuration settings
+        var inputFolder  = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\objects" );
+        var outputFolder = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
 
         #if DEBUG
-        settings.WriteToJsonFile( settingsFilePath );
+//        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
+//        settings.WriteToJsonFile( settingsFilePath );
         #endif
-        
+
         TexturePacker.Process( inputFolder, outputFolder, "objects", settings );
     }
 

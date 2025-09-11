@@ -134,20 +134,15 @@ public partial class FileProcessor
             throw new ArgumentException( $"Input file/dir does not exist: {inputFileOrDir?.FullName}" );
         }
 
-        List< Entry > retval;
-
         if ( IOUtils.IsFile( inputFileOrDir ) )
         {
-            retval = Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
-        }
-        else
-        {
-            var directory = new DirectoryInfo( inputFileOrDir.FullName );
-            
-            retval = Process( directory.GetFiles(), outputRoot  );
+            return Process( [ ( FileInfo )inputFileOrDir ], outputRoot );
         }
 
-        return retval;
+        // Not a File, must be a Directory
+        var directory = new DirectoryInfo( inputFileOrDir.FullName );
+            
+        return Process( directory.GetFiles(), outputRoot  );
     }
 
     /// <summary>
@@ -240,6 +235,8 @@ public partial class FileProcessor
             }
         }
 
+        OutputFilesList.DebugPrint();
+        
         return OutputFilesList;
     }
 
@@ -441,6 +438,8 @@ public partial class FileProcessor
                     ? new DirectoryInfo( file.Name )
                     : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
 
+                Logger.Debug( $"Recursive call :: subdir: {subdir.FullName}" );
+
                 Process( new DirectoryInfo( file.FullName )
                          .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
                          outputRoot, subdir, stringToEntries, depth + 1 );
@@ -480,6 +479,8 @@ public partial class FileProcessor
     /// <param name="entry"></param>
     public virtual void AddProcessedFile( Entry entry )
     {
+        Logger.Debug( $"{entry.InputFile?.Name}" );
+        
         OutputFilesList.Add( entry );
     }
 
@@ -494,6 +495,18 @@ public partial class FileProcessor
         foreach ( var regex in regexes )
         {
             InputRegex.Add( new Regex( regex ) );
+        }
+    }
+
+    /// <summary>
+    /// Adds a case insensitive suffix for matching input files.
+    /// </summary>
+    /// <param name="suffixes"></param>
+    public void AddInputSuffix( params string[] suffixes )
+    {
+        foreach ( var suffix in suffixes )
+        {
+            AddInputRegex( $"(?i).*{Regex.Escape( suffix )}" );
         }
     }
 }

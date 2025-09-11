@@ -194,7 +194,7 @@ public static class ListExtensions
     /// <param name="list">The list of strings to be logged.</param>
     public static void DebugPrint< T >( this List< T > list )
     {
-        Logger.Debug( "" );
+        Logger.Debug( $"{list.Count} items in list {nameof( list )}" );
 
         Logger.IsMinimal = true;
         foreach( var entry in list )

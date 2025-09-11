@@ -335,7 +335,7 @@ public partial class TexturePacker
         public string?   Name     { get; set; } = null;
         public Bitmap?   Image    { get; set; } = null;
 
-        public void Debug()
+        public void DebugPrint()
         {
             Logger.Debug( $"FileInfo: {FileInfo?.FullName}" );
             Logger.Debug( $"RootPath: {RootPath}" );

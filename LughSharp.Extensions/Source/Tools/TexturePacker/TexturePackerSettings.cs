@@ -125,7 +125,7 @@ public class TexturePackerSettings
 
     /// <summary>
     /// The image type for output pages, “png” or “jpg”.
-    /// ".bmp" is planned.
+    /// "bmp" is planned.
     /// </summary>
     public string OutputFormat { get; set; }
 
