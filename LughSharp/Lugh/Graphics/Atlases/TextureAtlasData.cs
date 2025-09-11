@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
@@ -55,9 +54,6 @@ public partial class TextureAtlasData
     {
         if ( packFile != null )
         {
-            Logger.Debug( $"packFile FullName: {packFile.FullName}" );
-            Logger.Debug( $"imagesDir FullName: {imagesDir?.FullName}" );
-
             Load( packFile, imagesDir, flip );
         }
     }
@@ -100,12 +96,12 @@ public partial class TextureAtlasData
 
         try
         {
-            var line = ReadLine();
+            var line = reader.ReadLine();
 
             // Ignore empty lines before first entry.
             while ( ( line != null ) && ( line.Trim().Length == 0 ) )
             {
-                line = ReadLine();
+                line = reader.ReadLine();
             }
 
             // Header entries.
@@ -121,16 +117,13 @@ public partial class TextureAtlasData
                     break; // Silently ignore all header fields.
                 }
 
-                line = ReadLine();
+                line = reader.ReadLine();
             }
 
             // Page and region entries.
             Page?           page   = null;
             List< string >? names  = null;
             List< int[] >?  values = null;
-
-            Logger.Debug( $"Packfile: {packFile.FullName}" );
-            Logger.Debug( $"Packfile Dir: {packFile.Directory?.FullName}" );
 
             while ( true )
             {
@@ -142,7 +135,7 @@ public partial class TextureAtlasData
                 if ( line.Trim().Length == 0 )
                 {
                     page = null;
-                    line = ReadLine();
+                    line = reader.ReadLine();
                 }
                 else if ( page == null )
                 {
@@ -157,7 +150,7 @@ public partial class TextureAtlasData
 
                     while ( true )
                     {
-                        if ( ReadEntry( line = ReadLine() ) == 0 )
+                        if ( ReadEntry( line = reader.ReadLine() ) == 0 )
                         {
                             break;
                         }
@@ -184,7 +177,7 @@ public partial class TextureAtlasData
 
                     while ( true )
                     {
-                        var count = ReadEntry( line = ReadLine() );
+                        var count = ReadEntry( line = reader.ReadLine() );
 
                         if ( count == 0 )
                         {
@@ -259,19 +252,6 @@ public partial class TextureAtlasData
         }
 
         return;
-
-        // --------------------------------------------------------------------
-        //TODO: When testing is complete, remove this and replace calls
-        // with reader.ReadLine()
-        //
-        string? ReadLine()
-        {
-            var line = reader.ReadLine();
-
-            Logger.Debug( $"line: {line}" );
-
-            return line;
-        }
     }
 
     /// <summary>

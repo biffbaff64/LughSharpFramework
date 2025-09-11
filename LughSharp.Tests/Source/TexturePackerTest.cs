@@ -70,6 +70,10 @@ public class TexturePackerTest
             DuplicatePadding = false,                 // Disable duplicate padding
             MinWidth         = 16,                    // 
             MinHeight        = 16,                    // 
+            
+            #if DEBUG
+            CleanAtStart = true,
+            #endif
         };
 
         // Build the Atlases from the specified parameters :-
@@ -81,8 +85,10 @@ public class TexturePackerTest
         var outputFolder     = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
         var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
 
+        #if DEBUG
         settings.WriteToJsonFile( settingsFilePath );
-
+        #endif
+        
         TexturePacker.Process( inputFolder, outputFolder, "objects", settings );
     }
 

@@ -343,7 +343,13 @@ public partial class FileProcessor
 
                 var dir = file.Directory!;
 
-                dirToEntries.Add( dir, [ entry ] );
+                if ( !dirToEntries.TryGetValue( dir, out var dirList ) )
+                {
+                    dirList             = [ ];
+                    dirToEntries[ dir ] = dirList;
+                }
+                
+                dirList?.Add( entry );
             }
 
             if ( Recursive && IOUtils.IsDirectory( file ) )
@@ -423,7 +429,7 @@ public partial class FileProcessor
                 if ( !stringToEntries.TryGetValue( dir, out var value ) )
                 {
                     value = [ ];
-                    stringToEntries.Add( dir, value );
+                    stringToEntries[ dir ] = value;
                 }
 
                 value.Add( entry );

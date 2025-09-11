@@ -57,7 +57,7 @@ public class DeleteProcessor : FileProcessor
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]
-public class SettingsCombiningProcessor : FileProcessor
+public class CombineSettingsProcessor : FileProcessor
 {
     public Entry? EntryDir { get; set; }
 
@@ -68,7 +68,7 @@ public class SettingsCombiningProcessor : FileProcessor
 
     // ========================================================================
 
-    public SettingsCombiningProcessor( Entry entryDir, TexturePackerFileProcessor fileProcessor )
+    public CombineSettingsProcessor( Entry entryDir, TexturePackerFileProcessor fileProcessor )
     {
         _entryDir      = entryDir;
         _fileProcessor = fileProcessor;

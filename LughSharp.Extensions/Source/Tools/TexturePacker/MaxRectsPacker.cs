@@ -74,7 +74,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// </summary>
     /// <param name="inputRects"></param>
     /// <returns></returns>
-    public List< TexturePacker.Page > Pack( List< TexturePacker.Rect > inputRects )
+    public List< TexturePacker.Page? > Pack( List< TexturePacker.Rect > inputRects )
     {
         return Pack( null, inputRects );
     }
@@ -86,16 +86,22 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <param name="inputRects"></param>
     /// <returns></returns>
     /// <exception cref="NullReferenceException"></exception>
-    public List< TexturePacker.Page > Pack( TexturePacker.TexturePackerProgressListener? progress,
-                                            List< TexturePacker.Rect > inputRects )
+    public List< TexturePacker.Page? > Pack( TexturePacker.TexturePackerProgressListener? progress,
+                                             List< TexturePacker.Rect > inputRects )
     {
         var n = inputRects.Count;
 
         for ( var i = 0; i < n; i++ )
         {
             var rect = inputRects[ i ];
-            rect.Width  += _settings.PaddingX;
-            rect.Height += _settings.PaddingY;
+            
+            if ( !rect.IsPadded )
+            {
+                rect.Width  += _settings.PaddingX;
+                rect.Height += _settings.PaddingY;
+                
+                rect.IsPadded = true;
+            }
         }
 
         if ( _settings.Fast )
@@ -123,7 +129,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
         }
 
-        List< TexturePacker.Page > pages = [ ];
+        List< TexturePacker.Page? > pages = [ ];
 
         while ( inputRects.Count > 0 )
         {
@@ -139,7 +145,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             var result = PackPage( inputRects );
 
-            if ( result != null )
+//            if ( result != null )
             {
                 pages.Add( result );
             }
@@ -401,10 +407,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
                     if ( _maxRects.Insert( rect, _methods[ i ] ) == null )
                     {
-                        while ( j < nn )
-                        {
-                            remaining.Add( inputRects[ j++ ] );
-                        }
+                        remaining.Add( rect );
                     }
                 }
 

@@ -124,7 +124,7 @@ public class ImageProcessor
     /// <param name="image"> The Image. </param>
     /// <param name="name"> The Image name, without patch or extension! </param>
     /// <returns></returns>
-    public TexturePacker.Rect? AddImage( Bitmap image, string? name )
+    public TexturePacker.Rect? AddImage( Bitmap? image, string? name )
     {
         var rect = ProcessImage( image, name );
 
@@ -180,13 +180,17 @@ public class ImageProcessor
     /// Returns a rect for the image describing the texture region to be packed,
     /// or null if the image should not be packed.
     /// </summary>
-    public TexturePacker.Rect? ProcessImage( Bitmap image, string? name )
+    public TexturePacker.Rect? ProcessImage( Bitmap? image, string? name )
     {
         if ( _scale <= 0 )
         {
             throw new GdxRuntimeException( $"scale cannot be <= 0: {_scale}" );
         }
 
+        if ( image == null )
+        {
+            throw new GdxRuntimeException( $"Unable to read image: {name}" );
+        }
         name ??= string.Empty;
 
         var width  = image.Width;

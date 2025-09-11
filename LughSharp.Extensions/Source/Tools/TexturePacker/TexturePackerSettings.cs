@@ -240,6 +240,14 @@ public class TexturePackerSettings
     /// </summary>
     public bool LegacyOutput { get; set; }
 
+    /// <summary>
+    /// If true, texture packer will clear out the output folder before processing.
+    /// This is a DEBUG setting only.
+    /// </summary>
+    #if DEBUG
+    public bool CleanAtStart { get; set; }
+    #endif
+    
     // ====================================================================
 
     private JsonSerializerOptions _defaultJsonSerializerOptions = new()
@@ -301,6 +309,10 @@ public class TexturePackerSettings
         Scale                 = [ 1.0f ];
         ScaleSuffix           = [ "" ];
         ScaleResampling       = [ Resampling.Bicubic ];
+        
+        #if DEBUG
+        CleanAtStart = false;
+        #endif
     }
 
     public TexturePackerSettings( TexturePackerSettings settings )
@@ -347,6 +359,10 @@ public class TexturePackerSettings
         Scale                 = [ 1.0f ];
         ScaleSuffix           = [ "" ];
         ScaleResampling       = [ Resampling.Bicubic ];
+        
+        #if DEBUG
+        CleanAtStart = false;
+        #endif
     }
 
     // ====================================================================
@@ -400,6 +416,10 @@ public class TexturePackerSettings
         settings.Scale.CopyTo( Scale, 0 );
         settings.ScaleSuffix.CopyTo( ScaleSuffix, 0 );
         ScaleResampling = settings.ScaleResampling.ToList();
+        
+        #if DEBUG
+        CleanAtStart = false;
+        #endif
     }
 
     /// <summary>

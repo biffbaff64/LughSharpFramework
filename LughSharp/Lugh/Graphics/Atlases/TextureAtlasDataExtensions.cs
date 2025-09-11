@@ -73,12 +73,14 @@ public partial class TextureAtlasData
         {
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry ) );
 
-            if ( entry[ 1 ].Contains( 'x' ) )
+            var value = entry[ 1 ].ToLower();
+            
+            if ( value.Contains( 'x' ) )
             {
                 page.UWrap = TextureWrapMode.Repeat;
             }
 
-            if ( entry[ 1 ].Contains( 'y' ) )
+            if ( value.Contains( 'y' ) )
             {
                 page.VWrap = TextureWrapMode.Repeat;
             }
@@ -187,7 +189,7 @@ public partial class TextureAtlasData
         {
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry ) );
 
-            var value = entry[ 1 ];
+            var value = entry[ 1 ].ToLower();
 
             if ( value.Equals( "true" ) )
             {
