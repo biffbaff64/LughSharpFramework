@@ -46,20 +46,20 @@ public interface INet
     /// </summary>
     /// <param name="httpRequest">The HTTP request to be sent.</param>
     /// <param name="httpResponseListener">The listener to handle the HTTP response.</param>
-    public void SendHttpRequest( HttpRequest httpRequest, IHttpResponseListener httpResponseListener );
+    void SendHttpRequest( HttpRequest httpRequest, IHttpResponseListener httpResponseListener );
 
     /// <summary>
     /// Cancels an HTTP request.
     /// </summary>
     /// <param name="httpRequest">The HTTP request to be cancelled.</param>
-    public void CancelHttpRequest( HttpRequest httpRequest );
+    void CancelHttpRequest( HttpRequest httpRequest );
 
     /// <summary>
     /// Opens a URI.
     /// </summary>
     /// <param name="uri">The URI to be opened.</param>
     /// <returns>True if the URI was successfully opened; otherwise, false.</returns>
-    public bool OpenUri( string uri );
+    bool OpenUri( string uri );
 
     /// <summary>
     /// Creates a new server socket.
@@ -69,7 +69,7 @@ public interface INet
     /// <param name="port">The port to bind the server socket to.</param>
     /// <param name="hints">Hints to customize the server socket behavior.</param>
     /// <returns>A new server socket, or null if the creation failed.</returns>
-    public IServerSocket? NewServerSocket( Protocol protocol, string hostname, int port, ServerSocketHints hints );
+    IServerSocket? NewServerSocket( Protocol protocol, string hostname, int port, ServerSocketHints hints );
 
     /// <summary>
     /// Creates a new server socket.
@@ -78,7 +78,7 @@ public interface INet
     /// <param name="port">The port to bind the server socket to.</param>
     /// <param name="hints">Hints to customize the server socket behavior.</param>
     /// <returns>A new server socket, or null if the creation failed.</returns>
-    public IServerSocket? NewServerSocket( Protocol protocol, int port, ServerSocketHints hints );
+    IServerSocket? NewServerSocket( Protocol protocol, int port, ServerSocketHints hints );
 
     /// <summary>
     /// Creates a new client socket.
@@ -88,7 +88,7 @@ public interface INet
     /// <param name="port">The port to connect to.</param>
     /// <param name="hints">Hints to customize the client socket behavior.</param>
     /// <returns>A new client socket, or null if the creation failed.</returns>
-    public ISocket? NewClientSocket( Protocol protocol, string host, int port, SocketHints hints );
+    ISocket? NewClientSocket( Protocol protocol, string host, int port, SocketHints hints );
 
     // ========================================================================
     // ========================================================================
@@ -146,12 +146,12 @@ public interface INet
     [PublicAPI]
     public interface IHttpMethods
     {
-        public const string HEAD   = "HEAD";
-        public const string GET    = "GET";
-        public const string POST   = "POST";
-        public const string PUT    = "PUT";
-        public const string PATCH  = "PATCH";
-        public const string DELETE = "DELETE";
+        const string HEAD   = "HEAD";
+        const string GET    = "GET";
+        const string POST   = "POST";
+        const string PUT    = "PUT";
+        const string PATCH  = "PATCH";
+        const string DELETE = "DELETE";
     }
 
     // ========================================================================
@@ -296,3 +296,6 @@ public interface INet
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

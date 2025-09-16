@@ -212,11 +212,10 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     /// </param>
     public void Bind( uint unit )
     {
-        GL.BindTextureUnit( unit, GLTextureHandle );
-
-        // replaces:-
-        // ActivateTexture( TextureUnit.Texture0 + unit );
-        // GL.BindTexture( GLTarget, GLTextureHandle );
+        //TODO: This NEEDS some safety checks and validation that the result
+        //      is a valid texture unit.
+        ActivateTexture( (TextureUnit)( ( int ) TextureUnit.Texture0 + unit ) );
+        GL.BindTexture( GLTarget, GLTextureHandle );
     }
 
     /// <summary>

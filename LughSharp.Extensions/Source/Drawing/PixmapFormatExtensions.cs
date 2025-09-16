@@ -28,6 +28,7 @@ using LughSharp.Lugh.Utils.Exceptions;
 namespace Extensions.Source.Drawing;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public static class PixmapFormatExtensions
 {
     /// <summary>

@@ -27,36 +27,42 @@ using LughSharp.Lugh.Network;
 namespace DesktopGLBackend;
 
 [PublicAPI]
-public class DesktopGLNet : INet
+public class DesktopGLNet : NetHandler
 {
     public DesktopGLNet( DesktopGLApplicationConfiguration config )
     {
     }
 
-    public void SendHttpRequest( INet.HttpRequest httpRequest, INet.IHttpResponseListener httpResponseListener )
+    /// <inheritdoc />
+    public override void SendHttpRequest( INet.HttpRequest httpRequest, INet.IHttpResponseListener httpResponseListener )
     {
     }
 
-    public void CancelHttpRequest( INet.HttpRequest httpRequest )
+    /// <inheritdoc />
+    public override void CancelHttpRequest( INet.HttpRequest httpRequest )
     {
     }
 
-    public IServerSocket? NewServerSocket( INet.Protocol protocol, string hostname, int port, ServerSocketHints hints )
-    {
-        return null;
-    }
-
-    public IServerSocket? NewServerSocket( INet.Protocol protocol, int port, ServerSocketHints hints )
+    /// <inheritdoc />
+    public override IServerSocket? NewServerSocket( INet.Protocol protocol, string hostname, int port, ServerSocketHints hints )
     {
         return null;
     }
 
-    public ISocket? NewClientSocket( INet.Protocol protocol, string host, int port, SocketHints hints )
+    /// <inheritdoc />
+    public override IServerSocket? NewServerSocket( INet.Protocol protocol, int port, ServerSocketHints hints )
     {
         return null;
     }
 
-    public bool OpenUri( string uri )
+    /// <inheritdoc />
+    public override ISocket? NewClientSocket( INet.Protocol protocol, string host, int port, SocketHints hints )
+    {
+        return null;
+    }
+
+    /// <inheritdoc />
+    public override bool OpenUri( string uri )
     {
 //        if ( SharedLibraryLoader.IsMac )
 //        {

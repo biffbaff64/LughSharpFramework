@@ -29,7 +29,13 @@ namespace Extensions.Source.Json;
 [PublicAPI]
 public interface IJsonReader
 {
+    /// <summary>
+    /// Parse the input from an <see cref="InputStream"/> and return the root value.
+    /// </summary>
     JsonValue? Parse( InputStream input );
 
+    /// <summary>
+    /// Parse the input from a <see cref="FileInfo"/> and return the root value.
+    /// </summary>
     JsonValue? Parse( FileInfo file );
 }

@@ -33,15 +33,10 @@ using Color = LughSharp.Lugh.Graphics.Color;
 namespace Extensions.Source.Freetype;
 
 [PublicAPI]
+public partial class FreeType
+{
+    private const string NATIVE_LIB = "lib/net8.0/freetype.dll";
 
-//public partial class FreeType
-//{
-//    // Name of your native FreeType library.
-//    // On Windows: "gdx-freetype.dll"
-//    // On Linux:   "libgdx-freetype.so"
-//    // On macOS:  "libgdx-freetype.dylib"
-//    private const string NativeLib = "lib/net8.0/freetype.dll";
-//
 //    private static int _lastError = 0;
 //
 //    /// <summary>
@@ -903,14 +898,14 @@ namespace Extensions.Source.Freetype;
 //    {
 //        return ( ( value + 63 ) & -64 ) >> 6;
 //    }
-//}
+}
 
 // ============================================================================
 // ============================================================================
 // ============================================================================
 public partial class FreeType
 {
-    private const string DLL_PATH = "lib/net8.0/freetype.dll";
+    private const string FREETYPE_DLL_PATH = "lib/net8.0/freetype.dll";
 
     public static Library InitFreeType()
     {
@@ -942,7 +937,7 @@ public partial class FreeType
     {
         return _getLastErrorCode();
 
-        [DllImport( DLL_PATH, EntryPoint = "getLastErrorCode" )]
+        [DllImport( FREETYPE_DLL_PATH, EntryPoint = "getLastErrorCode" )]
         static extern int _getLastErrorCode();
     }
 

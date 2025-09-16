@@ -342,12 +342,12 @@ public partial class TextureAtlasData
 
     // ========================================================================
     // ========================================================================
-    
+
     [PublicAPI]
     public class Region
     {
         public Page?     Page           { get; init; }
-        public string?   Name           { get; init; }
+        public string    Name           { get; init; } = string.Empty;
         public int       Left           { get; set; }
         public int       Top            { get; set; }
         public int       Width          { get; set; }

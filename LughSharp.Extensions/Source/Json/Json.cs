@@ -106,9 +106,8 @@ public partial class Json
 
     // ========================================================================
 
-    public Json()
+    public Json() : this( JsonOutputType.Minimal )
     {
-        OutputType = JsonOutputType.Minimal;
     }
 
     public Json( JsonOutputType outputType )

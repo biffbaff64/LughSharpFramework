@@ -27,66 +27,33 @@ using static LughSharp.Lugh.Network.INet;
 namespace LughSharp.Lugh.Network;
 
 [PublicAPI]
-public class Net : INet
+public abstract class NetHandler : INet
 {
-    public Net( ApplicationConfiguration config )
-    {
-    }
+    /// <inheritdoc />
+    public abstract void SendHttpRequest( HttpRequest httpRequest,
+                                          IHttpResponseListener httpResponseListener );
 
-    public void SendHttpRequest( HttpRequest httpRequest, IHttpResponseListener httpResponseListener )
-    {
-    }
+    /// <inheritdoc />
+    public abstract void CancelHttpRequest( HttpRequest httpRequest );
 
-    public void CancelHttpRequest( HttpRequest httpRequest )
-    {
-    }
+    /// <inheritdoc />
+    public abstract IServerSocket? NewServerSocket( Protocol protocol,
+                                                    string hostname,
+                                                    int port, ServerSocketHints hints );
 
-    public IServerSocket? NewServerSocket( Protocol protocol, string hostname, int port, ServerSocketHints hints )
-    {
-        return null;
-    }
+    /// <inheritdoc />
+    public abstract IServerSocket? NewServerSocket( Protocol protocol,
+                                                    int port,
+                                                    ServerSocketHints hints );
 
-    public IServerSocket? NewServerSocket( Protocol protocol, int port, ServerSocketHints hints )
-    {
-        return null;
-    }
+    /// <inheritdoc />
+    public abstract ISocket? NewClientSocket( Protocol protocol,
+                                              string host,
+                                              int port,
+                                              SocketHints hints );
 
-    public ISocket? NewClientSocket( Protocol protocol, string host, int port, SocketHints hints )
-    {
-        return null;
-    }
-
-    public bool OpenUri( string uri )
-    {
-//        if ( SharedLibraryLoader.IsMac )
-//        {
-//            try
-//            {
-//                FileManager.OpenURL( uri );
-//
-//                return true;
-//            }
-//            catch ( IOException e )
-//            {
-//                return false;
-//            }
-//        }
-//        else
-//        {
-//            try
-//            {
-//                Desktop.GetDesktop().Browse( new URI( uri ) );
-//
-//                return true;
-//            }
-//            catch ( System.Exception )
-//            {
-//                return false;
-//            }
-//        }
-
-        return false;
-    }
+    /// <inheritdoc />
+    public abstract bool OpenUri( string uri );
 }
 
 // ========================================================================

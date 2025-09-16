@@ -62,7 +62,12 @@ public partial class TexturePacker
             throw new GdxRuntimeException( "Error creating pack directory." );
         }
 
-        var fileIndex = 0;
+        var fileIndex = 1;
+
+        Logger.Debug( $"packFileNoExt: {packFileNoExt}" );
+        Logger.Debug( $"packDir: {packDir}" );
+        Logger.Debug( $"imageName: {imageName}" );
+        Logger.Debug( $"pages.Count: {pages.Count}" );
 
         for ( var p = 0; p < pages.Count; p++ )
         {
@@ -107,11 +112,14 @@ public partial class TexturePacker
 
             string outputFile;
 
+            Logger.Debug( $"page.ImageWidth: {page.ImageWidth}" );
+            Logger.Debug( $"page.ImageHeight: {page.ImageHeight}" );
+
             while ( true )
             {
                 var name = imageName;
 
-                if ( fileIndex > 0 )
+                if ( fileIndex > 1 )
                 {
                     var last = name[ name.Length - 1 ];
 
@@ -123,8 +131,10 @@ public partial class TexturePacker
                         name += "-";
                     }
 
-                    name += ( fileIndex + 1 );
+                    name += fileIndex;
                 }
+
+                fileIndex++;
 
                 outputFile = Path.Combine( packDir, name + "." + _settings.OutputFormat );
 
@@ -132,11 +142,9 @@ public partial class TexturePacker
                 {
                     break;
                 }
-
-                fileIndex++;
             }
 
-            fileIndex++;
+            Logger.Debug( $"outputFile: {outputFile}" );
 
             // Create output directories
             Directory.CreateDirectory( Path.GetDirectoryName( outputFile )
@@ -382,7 +390,7 @@ public partial class TexturePacker
     {
         Logger.Checkpoint();
 
-        var packFile = new FileInfo( Path.Combine( outputDir.FullName, scaledPackFileName + _settings.AtlasExtension ) );
+        var packFile = new FileInfo( Path.Combine( outputDir.FullName,scaledPackFileName + _settings.AtlasExtension ) );
         var packDir  = packFile.Directory;
 
         packDir?.Create();
@@ -413,17 +421,6 @@ public partial class TexturePacker
                 }
             }
         }
-
-//        var tab   = "";
-//        var colon = ":";
-//        var comma = ",";
-
-//        if ( _settings.PrettyPrint )
-//        {
-//            tab   = "\t";
-//            colon = ": ";
-//            comma = ", ";
-//        }
 
         Logger.Debug( $"packFile.FullName: {packFile.FullName}" );
         Logger.Debug( $"packFile.Exists: {File.Exists( packFile.FullName )}" );

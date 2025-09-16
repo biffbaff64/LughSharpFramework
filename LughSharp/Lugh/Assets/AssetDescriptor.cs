@@ -31,6 +31,26 @@ namespace LughSharp.Lugh.Assets;
 [PublicAPI]
 public class AssetDescriptor
 {
+    /// <summary>
+    /// The Type of asset ( Texture, Pixmap, Audio, Atlas etc ).
+    /// </summary>
+    public Type AssetType { get; set; }
+
+    /// <summary>
+    /// The asset name.
+    /// </summary>
+    public string AssetName { get; set; }
+
+    /// <summary>
+    /// Optional parameters for the asset loader.
+    /// </summary>
+    public AssetLoaderParameters? Parameters { get; set; }
+
+    /// <summary>
+    /// The file information for the asset.
+    /// </summary>
+    public FileInfo File { get; set; }
+
     // ========================================================================
     // ========================================================================
 
@@ -80,32 +100,12 @@ public class AssetDescriptor
         AssetName  = IOUtils.NormalizePath( file.FullName );
     }
 
-    public void Debug()
+    public void DebugPrint()
     {
         Logger.Debug( $"AssetName: {AssetName}" );
         Logger.Debug( $"Path: {File.FullName}" );
         Logger.Debug( $"{IOUtils.StripAssetsPath( File.FullName )}" );
     }
-
-    /// <summary>
-    /// The Type of asset ( Texture, Pixmap, Audio, Atlas etc ).
-    /// </summary>
-    public Type AssetType { get; set; }
-
-    /// <summary>
-    /// The asset name.
-    /// </summary>
-    public string AssetName { get; set; }
-
-    /// <summary>
-    /// Optional parameters for the asset loader.
-    /// </summary>
-    public AssetLoaderParameters? Parameters { get; set; }
-
-    /// <summary>
-    /// The file information for the asset.
-    /// </summary>
-    public FileInfo File { get; set; }
 
     /// <inheritdoc />
     public override string ToString()

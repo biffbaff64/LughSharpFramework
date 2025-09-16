@@ -357,333 +357,240 @@ public class TexturePackerFileProcessor : FileProcessor
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
 
-    /// <summary>
-    /// Processes a collection of files for sending to the output folder.
-    /// </summary>
-    /// <param name="files"></param>
-    /// <param name="outputRoot"></param>
-    /// <returns></returns>
-    /// <exception cref="Exception"></exception>
-    public override List< Entry > Process( FileInfo[] files, DirectoryInfo? outputRoot )
-    {
-        outputRoot ??= new DirectoryInfo( IOUtils.InternalPath );
+//    /// <summary>
+//    /// Processes the given array of files starting from a specific output directory
+//    /// and populates a mapping of directories to their corresponding entries. Handles
+//    /// recursive traversal and processing based on the specified depth.
+//    /// </summary>
+//    /// <param name="files">
+//    /// An array of <see cref="FileInfo"/> objects representing the files to be processed.
+//    /// </param>
+//    /// <param name="outputRoot">
+//    /// The root output directory where the processed files will be stored.
+//    /// </param>
+//    /// <param name="outputDir">
+//    /// The currently targeted output directory during the processing operation.
+//    /// </param>
+//    /// <param name="dirToEntries">
+//    /// A dictionary mapping each discovered directory to a list of associated
+//    /// <see cref="FileProcessor.Entry"/> objects.
+//    /// </param>
+//    /// <param name="depth">
+//    /// The current recursion depth during processing, used to manage directory
+//    /// hierarchy and traversal.
+//    /// </param>
+//    public override void Process( FileInfo[] files,
+//                                  DirectoryInfo outputRoot, DirectoryInfo outputDir,
+//                                 Dictionary< DirectoryInfo, List< Entry >? > dirToEntries, int depth )
+//    {
+//        foreach ( var file in files )
+//        {
+//            var dir = file.Directory;
+//
+//            if ( dir != null )
+//            {
+//                if ( !dirToEntries.ContainsKey( dir ) )
+//                {
+//                    // If the directory is not already a key in the dictionary, add it
+//                    dirToEntries[ dir ] = [ ];
+//                }
+//            }
+//            else
+//            {
+//                // Handle the case where a file has no parent directory (e.g., root level)
+//                // Either log a warning, throw an exception, or handle it differently
+//                // ( Logging a warning for now... )
+//                Logger.Warning( $"File '{file.FullName}' has no parent directory." );
+//            }
+//        }
+//
+//        foreach ( var file in files )
+//        {
+//            if ( IOUtils.IsFile( file ) )
+//            {
+//                if ( InputRegex.Count > 0 )
+//                {
+//                    var found = false;
+//
+//                    foreach ( var pattern in InputRegex )
+//                    {
+//                        if ( pattern.IsMatch( file.Name ) )
+//                        {
+//                            found = true;
+//
+//                            break;
+//                        }
+//                    }
+//
+//                    if ( !found )
+//                    {
+//                        continue;
+//                    }
+//                }
+//
+//                if ( file.DirectoryName == null )
+//                {
+//                    Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
+//                }
+//
+//                if ( ( FilenameFilterDelegate != null )
+//                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
+//                {
+//                    continue;
+//                }
+//
+//                var outputName = file.Name;
+//
+//                if ( OutputSuffix != null )
+//                {
+//                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
+//                }
+//
+//                var entry = new Entry
+//                {
+//                    Depth           = depth,
+//                    InputFile       = file,
+//                    OutputDirectory = outputDir,
+//                    OutputFileName = FlattenOutput
+//                        ? Path.Combine( outputRoot.FullName, outputName )
+//                        : Path.Combine( outputDir.FullName, outputName ),
+//                };
+//
+//                var dir = file.Directory!;
+//
+//                if ( !dirToEntries.TryGetValue( dir, out var dirList ) )
+//                {
+//                    dirList             = [ ];
+//                    dirToEntries[ dir ] = dirList;
+//                }
+//                
+//                dirList?.Add( entry );
+//            }
+//
+//            if ( Recursive && IOUtils.IsDirectory( file ) )
+//            {
+//                var subdir = outputDir.FullName.Length == 0
+//                    ? new DirectoryInfo( file.Name )
+//                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
+//
+//                Process( new DirectoryInfo( file.FullName )
+//                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
+//                         outputRoot, subdir, dirToEntries, depth + 1 );
+//            }
+//        }
+//    }
 
-        OutputFilesList.Clear();
-
-        var dirToEntries = new Dictionary< DirectoryInfo, List< Entry > >();
-        var allEntries   = new List< Entry >();
-
-        Process( files, outputRoot, outputRoot, dirToEntries!, 0 );
-
-        foreach ( var (inputDir, dirEntries) in dirToEntries )
-        {
-            if ( Comparator != null )
-            {
-                dirEntries.Sort( EntryComparator );
-            }
-
-            DirectoryInfo? newOutputDir = null;
-
-            if ( FlattenOutput )
-            {
-                newOutputDir = outputRoot;
-            }
-            else if ( dirEntries.Count > 0 )
-            {
-                newOutputDir = dirEntries[ 0 ].OutputDirectory;
-            }
-
-            var outputName = inputDir.Name;
-
-            if ( OutputSuffix != null )
-            {
-                var match = RegexUtils.MatchFinalFolderPatternRegex().Match( outputName );
-
-                if ( match.Success )
-                {
-                    outputName = match.Groups[ 1 ].Value + OutputSuffix;
-                }
-            }
-
-            var entry = new Entry
-            {
-                InputFile       = inputDir,
-                OutputDirectory = newOutputDir!,
-            };
-
-            if ( newOutputDir != null )
-            {
-                entry.OutputFileName = newOutputDir.FullName.Length == 0
-                    ? outputName
-                    : Path.Combine( newOutputDir.FullName, outputName );
-            }
-
-            try
-            {
-                ProcessDir( entry, dirEntries );
-            }
-            catch ( Exception ex )
-            {
-                throw new Exception( $"Error processing directory: {entry.InputFile?.FullName}", ex );
-            }
-
-            allEntries.AddRange( dirEntries );
-        }
-
-        if ( Comparator != null )
-        {
-            allEntries.Sort( EntryComparator );
-        }
-
-        foreach ( var entry in allEntries )
-        {
-            try
-            {
-                ProcessFile( entry );
-            }
-            catch ( Exception ex )
-            {
-                throw new Exception( $"Error processing file: {entry.InputFile?.FullName}", ex );
-            }
-        }
-
-        return OutputFilesList;
-    }
-
-    /// <summary>
-    /// Processes the given array of files starting from a specific output directory
-    /// and populates a mapping of directories to their corresponding entries. Handles
-    /// recursive traversal and processing based on the specified depth.
-    /// </summary>
-    /// <param name="files">
-    /// An array of <see cref="FileInfo"/> objects representing the files to be processed.
-    /// </param>
-    /// <param name="outputRoot">
-    /// The root output directory where the processed files will be stored.
-    /// </param>
-    /// <param name="outputDir">
-    /// The currently targeted output directory during the processing operation.
-    /// </param>
-    /// <param name="dirToEntries">
-    /// A dictionary mapping each discovered directory to a list of associated
-    /// <see cref="FileProcessor.Entry"/> objects.
-    /// </param>
-    /// <param name="depth">
-    /// The current recursion depth during processing, used to manage directory
-    /// hierarchy and traversal.
-    /// </param>
-    public override void Process( FileInfo[] files,
-                                  DirectoryInfo outputRoot, DirectoryInfo outputDir,
-                                 Dictionary< DirectoryInfo, List< Entry >? > dirToEntries, int depth )
-    {
-        foreach ( var file in files )
-        {
-            var dir = file.Directory;
-
-            if ( dir != null )
-            {
-                if ( !dirToEntries.ContainsKey( dir ) )
-                {
-                    // If the directory is not already a key in the dictionary, add it
-                    dirToEntries[ dir ] = [ ];
-                }
-            }
-            else
-            {
-                // Handle the case where a file has no parent directory (e.g., root level)
-                // Either log a warning, throw an exception, or handle it differently
-                // ( Logging a warning for now... )
-                Logger.Warning( $"File '{file.FullName}' has no parent directory." );
-            }
-        }
-
-        foreach ( var file in files )
-        {
-            if ( IOUtils.IsFile( file ) )
-            {
-                if ( InputRegex.Count > 0 )
-                {
-                    var found = false;
-
-                    foreach ( var pattern in InputRegex )
-                    {
-                        if ( pattern.IsMatch( file.Name ) )
-                        {
-                            found = true;
-
-                            break;
-                        }
-                    }
-
-                    if ( !found )
-                    {
-                        continue;
-                    }
-                }
-
-                if ( file.DirectoryName == null )
-                {
-                    Logger.Debug( $"file.DirectoryName is null: {file.FullName}" );
-                }
-
-                if ( ( FilenameFilterDelegate != null )
-                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
-                {
-                    continue;
-                }
-
-                var outputName = file.Name;
-
-                if ( OutputSuffix != null )
-                {
-                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" ) + OutputSuffix;
-                }
-
-                var entry = new Entry
-                {
-                    Depth           = depth,
-                    InputFile       = file,
-                    OutputDirectory = outputDir,
-                    OutputFileName = FlattenOutput
-                        ? Path.Combine( outputRoot.FullName, outputName )
-                        : Path.Combine( outputDir.FullName, outputName ),
-                };
-
-                var dir = file.Directory!;
-
-                if ( !dirToEntries.TryGetValue( dir, out var dirList ) )
-                {
-                    dirList             = [ ];
-                    dirToEntries[ dir ] = dirList;
-                }
-                
-                dirList?.Add( entry );
-            }
-
-            if ( Recursive && IOUtils.IsDirectory( file ) )
-            {
-                var subdir = outputDir.FullName.Length == 0
-                    ? new DirectoryInfo( file.Name )
-                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
-
-                Process( new DirectoryInfo( file.FullName )
-                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
-                         outputRoot, subdir, dirToEntries, depth + 1 );
-            }
-        }
-    }
-
-    /// <summary>
-    /// </summary>
-    /// <param name="files"></param>
-    /// <param name="outputRoot"></param>
-    /// <param name="outputDir"></param>
-    /// <param name="dirToEntries"></param>
-    /// <param name="depth"></param>
-    public override void Process( FileInfo[] files,
-                                  DirectoryInfo outputRoot,
-                                  DirectoryInfo outputDir,
-                                  Dictionary< string, List< Entry > > dirToEntries,
-                                  int depth )
-    {
-        foreach ( var file in files )
-        {
-            var dir = file.Directory;
-
-            if ( dir != null )
-            {
-                if ( !dirToEntries.ContainsKey( dir.FullName ) )
-                {
-                    // If the directory is not already a key in the dictionary, add it
-                    dirToEntries[ dir.FullName ] = [ ];
-                }
-            }
-            else
-            {
-                // Handle the case where a file has no parent directory (e.g., root level)
-                // Either log a warning, throw an exception, or handle it differently
-                // ( Logging a warning for now... )
-                Logger.Warning( $"WARNING: File '{file.FullName}' has no parent directory." );
-            }
-        }
-
-        foreach ( var file in files )
-        {
-            if ( IOUtils.IsFile( file ) )
-            {
-                if ( InputRegex.Count > 0 )
-                {
-                    var found = false;
-
-                    foreach ( var pattern in InputRegex )
-                    {
-                        if ( pattern.IsMatch( file.Name ) )
-                        {
-                            found = true;
-
-                            break;
-                        }
-                    }
-
-                    if ( !found )
-                    {
-                        continue;
-                    }
-                }
-
-                if ( ( FilenameFilterDelegate != null )
-                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
-                {
-                    continue;
-                }
-
-                var outputName = file.Name;
-
-                if ( OutputSuffix != null )
-                {
-                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" )
-                                 + OutputSuffix;
-                }
-
-                var entry = new Entry
-                {
-                    Depth           = depth,
-                    InputFile       = file,
-                    OutputDirectory = outputDir,
-                    OutputFileName = FlattenOutput
-                        ? Path.Combine( outputRoot.FullName, outputName )
-                        : Path.Combine( outputDir.FullName, outputName ),
-                };
-
-                var dir = file.Directory!.FullName;
-
-                if ( dirToEntries.TryGetValue( dir, out var value ) )
-                {
-                    value.Add( entry );
-                }
-                else
-                {
-                    // This should ideally not happen if the first loop worked correctly.
-
-                    Logger.Warning( $"Directory '{dir}' not found in dirToEntries during file processing." );
-
-                    // TODO: Potentially create a new list here if there is a specific fallback behavior:
-                    // dirToEntries[dir] = new List<Entry> { entry };
-                }
-            }
-
-            if ( Recursive && IOUtils.IsDirectory( file ) )
-            {
-                var subdir = outputDir.FullName.Length == 0
-                    ? new DirectoryInfo( file.Name )
-                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
-
-                Process( new DirectoryInfo( file.FullName )
-                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
-                         outputRoot, subdir, dirToEntries, depth + 1 );
-            }
-        }
-    }
+//    /// <summary>
+//    /// </summary>
+//    /// <param name="files"></param>
+//    /// <param name="outputRoot"></param>
+//    /// <param name="outputDir"></param>
+//    /// <param name="dirToEntries"></param>
+//    /// <param name="depth"></param>
+//    public override void Process( FileInfo[] files,
+//                                  DirectoryInfo outputRoot,
+//                                  DirectoryInfo outputDir,
+//                                  Dictionary< string, List< Entry > > dirToEntries,
+//                                  int depth )
+//    {
+//        foreach ( var file in files )
+//        {
+//            var dir = file.Directory;
+//
+//            if ( dir != null )
+//            {
+//                if ( !dirToEntries.ContainsKey( dir.FullName ) )
+//                {
+//                    // If the directory is not already a key in the dictionary, add it
+//                    dirToEntries[ dir.FullName ] = [ ];
+//                }
+//            }
+//            else
+//            {
+//                // Handle the case where a file has no parent directory (e.g., root level)
+//                // Either log a warning, throw an exception, or handle it differently
+//                // ( Logging a warning for now... )
+//                Logger.Warning( $"WARNING: File '{file.FullName}' has no parent directory." );
+//            }
+//        }
+//
+//        foreach ( var file in files )
+//        {
+//            if ( IOUtils.IsFile( file ) )
+//            {
+//                if ( InputRegex.Count > 0 )
+//                {
+//                    var found = false;
+//
+//                    foreach ( var pattern in InputRegex )
+//                    {
+//                        if ( pattern.IsMatch( file.Name ) )
+//                        {
+//                            found = true;
+//
+//                            break;
+//                        }
+//                    }
+//
+//                    if ( !found )
+//                    {
+//                        continue;
+//                    }
+//                }
+//
+//                if ( ( FilenameFilterDelegate != null )
+//                     && !FilenameFilterDelegate( file.Directory!.FullName, file.Name ) )
+//                {
+//                    continue;
+//                }
+//
+//                var outputName = file.Name;
+//
+//                if ( OutputSuffix != null )
+//                {
+//                    outputName = RegexUtils.FileNameWithoutExtensionRegex().Replace( outputName, "$1" )
+//                                 + OutputSuffix;
+//                }
+//
+//                var entry = new Entry
+//                {
+//                    Depth           = depth,
+//                    InputFile       = file,
+//                    OutputDirectory = outputDir,
+//                    OutputFileName = FlattenOutput
+//                        ? Path.Combine( outputRoot.FullName, outputName )
+//                        : Path.Combine( outputDir.FullName, outputName ),
+//                };
+//
+//                var dir = file.Directory!.FullName;
+//
+//                if ( dirToEntries.TryGetValue( dir, out var value ) )
+//                {
+//                    value.Add( entry );
+//                }
+//                else
+//                {
+//                    // This should ideally not happen if the first loop worked correctly.
+//
+//                    Logger.Warning( $"Directory '{dir}' not found in dirToEntries during file processing." );
+//
+//                    // TODO: Potentially create a new list here if there is a specific fallback behavior:
+//                    // dirToEntries[dir] = new List<Entry> { entry };
+//                }
+//            }
+//
+//            if ( Recursive && IOUtils.IsDirectory( file ) )
+//            {
+//                var subdir = outputDir.FullName.Length == 0
+//                    ? new DirectoryInfo( file.Name )
+//                    : new DirectoryInfo( Path.Combine( outputDir.FullName, file.Name ) );
+//
+//                Process( new DirectoryInfo( file.FullName )
+//                         .GetFileSystemInfos().Select( f => new FileInfo( f.FullName ) ).ToArray(),
+//                         outputRoot, subdir, dirToEntries, depth + 1 );
+//            }
+//        }
+//    }
 
     /// <summary>
     /// </summary>

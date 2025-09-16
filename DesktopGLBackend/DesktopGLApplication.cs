@@ -42,7 +42,7 @@ namespace DesktopGLBackend;
 public class DesktopGLApplication : IApplication, IDisposable
 {
     /// <summary>
-    /// Pewrsistant properties manager instance.
+    /// Persistant properties manager instance.
     /// </summary>
     public Dictionary< string, IPreferences > Preferences { get; set; } = [ ];
 

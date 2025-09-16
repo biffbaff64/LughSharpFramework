@@ -57,7 +57,7 @@ public partial class FileProcessor
         /// <summary>
         /// The nesting depth of the folder.
         /// </summary>
-        public int Depth { get; set; }
+        public int Depth { get; set; } = 0;
 
         // ====================================================================
 
@@ -71,7 +71,7 @@ public partial class FileProcessor
         /// (string, string), (string, FileInfo), and (string, DirectoryInfo). If no
         /// arguments are provided, the default debug information is logged.
         /// </param>
-        public virtual void Debug( params object?[]? args )
+        public virtual void DebugPrint( params object?[]? args )
         {
             if ( args is { Length: > 0 } )
             {
@@ -105,9 +105,9 @@ public partial class FileProcessor
                 }
             }
 
-            Logger.Debug( $"InputFile      : {InputFile?.FullName}" );
-            Logger.Debug( $"OutputFile     : {OutputFileName}" );
-            Logger.Debug( $"OutputDirectory: {OutputDirectory?.FullName}" );
+            Logger.Debug( $"InputFile      : {InputFile?.FullName ?? "null"}" );
+            Logger.Debug( $"OutputFileName : {OutputFileName ?? "null"}" );
+            Logger.Debug( $"OutputDirectory: {OutputDirectory?.FullName ?? "null"}" );
             Logger.Debug( $"Depth          : {Depth}" );
         }
         #endif

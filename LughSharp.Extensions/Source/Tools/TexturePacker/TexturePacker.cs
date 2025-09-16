@@ -156,8 +156,9 @@ public partial class TexturePacker
     }
 
     /// <summary>
+    /// Creates a new TexturePacker object, using the supplied settings.
     /// </summary>
-    /// <param name="settings"></param>
+    /// <param name="settings"> The TexturePackerSettings instance to use. </param>
     public TexturePacker( TexturePackerSettings settings )
         : this( null, settings )
     {
@@ -213,24 +214,36 @@ public partial class TexturePacker
 
     // ========================================================================
 
+    #region process methods
+    
     /// <summary>
-    /// 
+    /// Packs the images in the supplied input folder into a texture atlas.
+    /// This method does not perform any modifications to the provided paths. It is
+    /// essential to provide the correct paths, optherwise processing will fail.
     /// </summary>
-    /// <param name="input"></param>
-    /// <param name="output"></param>
-    /// <param name="packFileName"></param>
+    /// <param name="input"> Directory holding the images to be packed. </param>
+    /// <param name="output">
+    /// Directory where the pack file and page images will be written. This folder will
+    /// be cleared before processing.
+    /// </param>
+    /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
     public static void Process( string input, string output, string packFileName )
     {
         Process( input, output, packFileName, new TexturePackerSettings() );
     }
 
     /// <summary>
-    /// 
+    /// Packs the images in the supplied input folder into a texture atlas.
+    /// This method does not perform any modifications to the provided paths. It is
+    /// essential to provide the correct paths, optherwise processing will fail.
     /// </summary>
-    /// <param name="settings"></param>
-    /// <param name="input"></param>
-    /// <param name="output"></param>
-    /// <param name="packFileName"></param>
+    /// <param name="settings"> The <see cref="TexturePackerSettings"/> to use. </param>
+    /// <param name="input"> Directory holding the images to be packed. </param>
+    /// <param name="output">
+    /// Directory where the pack file and page images will be written. This folder will
+    /// be cleared before processing.
+    /// </param>
+    /// <param name="packFileName"> The name of the pack file. Also used to name the page images. </param>
     public static void Process( TexturePackerSettings settings, string input, string output, string packFileName )
     {
         Process( input, output, packFileName, settings, null );
@@ -255,13 +268,6 @@ public partial class TexturePacker
                                 TexturePackerSettings settings,
                                 TexturePackerProgressListener? progressListener = null )
     {
-        #if DEBUG
-        Logger.Divider( '*' );
-        Logger.Divider( '*' );
-        Logger.Divider( '*' );
-        Logger.Divider( '*' );
-        #endif
-
         try
         {
             var processor = new TexturePackerFileProcessor( settings, packFileName, progressListener );
@@ -271,15 +277,10 @@ public partial class TexturePacker
         {
             throw new GdxRuntimeException( "Error packing images.", ex );
         }
-
-        #if DEBUG
-        Logger.Divider( '*' );
-        Logger.Divider( '*' );
-        Logger.Divider( '*' );
-        Logger.Divider( '*' );
-        #endif
     }
 
+    #endregion process methods
+    
     /// <summary>
     /// Packs processed images into a <see cref="TextureAtlas"/> with the
     /// provided filename. The atlas will be stored in the destination directory.
@@ -295,9 +296,8 @@ public partial class TexturePacker
             packFileName = Path.GetFileNameWithoutExtension( packFileName );
         }
 
-        // If the output directory does not exist, create it.
-        Directory.CreateDirectory( outputDir.FullName );
-
+        // Initialize the progress listener, which can be used to report progress
+        // in the form of a progress bar or console output.
         ProgressListener ??= new TexturePackerProgressListener();
         ProgressListener.Start( 1 );
 
@@ -378,6 +378,34 @@ public partial class TexturePacker
         }
 
         ProgressListener.End();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="outputDir"></param>
+    private static void HandleFolders( DirectoryInfo outputDir )
+    {
+        Logger.Checkpoint();
+        
+        // If the output directory does not exist, create it.
+        Directory.CreateDirectory( outputDir.FullName );
+
+        // Clear the output directory.
+        var outputDirFiles = outputDir.GetFiles( "*" );
+
+        foreach ( var file in outputDirFiles )
+        {
+            file.Delete();
+        }
+        
+        // Clear any subdirectories.
+        var outputDirDirs = outputDir.GetDirectories( "*" );
+
+        foreach ( var dir in outputDirDirs )
+        {
+            dir.Delete( true );
+        }
     }
 
     // ========================================================================

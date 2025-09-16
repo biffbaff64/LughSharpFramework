@@ -67,7 +67,7 @@ public class BufferedImage : IWriteableRenderedImage, ITransparency
     }
 
     /// <inheritdoc />
-    public void SetData( Raster r )
+    public void SetData( Raster raster )
     {
     }
 
