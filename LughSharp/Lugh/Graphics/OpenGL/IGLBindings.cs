@@ -89,6 +89,16 @@ public partial interface IGLBindings
     void Enable( int cap );
 
     /// <summary>
+    /// Wrapper method for <see cref="Enable" /> and <see cref="Disable" />.
+    /// </summary>
+    /// <param name="cap">
+    /// Specifies a symbolic constant indicating a  capability to be enabled or disabled. Refer to
+    /// <see href="https://docs.gl/gl4/glEnable" /> for a list of possible values.
+    /// </param>
+    /// <param name="enable"> True or false as appropriate. </param>
+    void EnableOrDisable( int cap, GLboolean enable );
+    
+    /// <summary>
     /// Test whether a capability is enabled.
     /// </summary>
     /// <param name="cap">

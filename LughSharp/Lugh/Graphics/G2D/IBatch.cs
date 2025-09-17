@@ -125,12 +125,12 @@ public interface IBatch
     /// <returns>
     /// the rendering color of this Batch in vertex format (alpha compressed to 0-254)
     /// </returns>
-    float ColorPackedABGR { get; set; }
+    float ColorPackedABGR { get; }
 
     /// <returns>
     /// the rendering color of this Batch in vertex format (alpha compressed to 0-254)
     /// </returns>
-    float ColorPackedRGBA { get; set; }
+    float ColorPackedRGBA { get; }
 
     int BlendSrcFunc      { get; }
     int BlendDstFunc      { get; }

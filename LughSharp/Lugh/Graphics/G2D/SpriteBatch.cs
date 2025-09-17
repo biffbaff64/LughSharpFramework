@@ -233,30 +233,33 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </param>
     public void Begin( bool depthMaskEnabled = false )
     {
-        ThrowIfDisposed();
-
-        if ( CurrentBatchState == BatchState.Drawing )
+        lock( _lockObject )
         {
-            throw new InvalidOperationException( "End() must be called before Begin()" );
-        }
+            ThrowIfDisposed();
 
-        if ( _shader == null )
-        {
-            throw new NullReferenceException( "Shader is null" );
-        }
+            if ( CurrentBatchState == BatchState.Drawing )
+            {
+                throw new InvalidOperationException( "End() must be called before Begin()" );
+            }
 
-        RenderCalls           = 0;
-        _initialBlendingState = BlendingEnabled;
-        CurrentBatchState     = BatchState.Drawing;
-        _originalDepthMask    = GL.IsEnabled( ( int )EnableCap.DepthTest );
+            if ( _shader == null )
+            {
+                throw new NullReferenceException( "Shader is null" );
+            }
 
-        GL.DepthMask( depthMaskEnabled );
+            RenderCalls           = 0;
+            _initialBlendingState = BlendingEnabled;
+            CurrentBatchState     = BatchState.Drawing;
+            _originalDepthMask    = GL.IsEnabled( ( int )EnableCap.DepthTest );
 
-        if ( _shader != null )
-        {
-            _shader.Bind();
-            SetupMatrices();
-            SetupVertexAttributes( _shader );
+            GL.DepthMask( depthMaskEnabled );
+
+            if ( _shader != null )
+            {
+                _shader.Bind();
+                SetupMatrices();
+                SetupVertexAttributes( _shader );
+            }
         }
     }
 
@@ -268,37 +271,33 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </exception>
     public void End()
     {
-        if ( CurrentBatchState != BatchState.Drawing )
+        lock ( _lockObject )
         {
-            throw new InvalidOperationException( "SpriteBatch.begin must be called before end." );
-        }
-
-        if ( Idx > 0 )
-        {
-            // Flush this batch to ensure all pending drawing
-            // operations are completed before ending the batch
-            Flush();
-        }
-
-        LastTexture       = null;
-        CurrentBatchState = BatchState.Ready;
-
-        GL.DepthMask( _originalDepthMask );
-
-        // Only modify blending if current state differs from initial state
-        if ( BlendingEnabled != _initialBlendingState )
-        {
-            if ( _initialBlendingState )
+            if ( CurrentBatchState != BatchState.Drawing )
             {
-                GL.Enable( IGL.GL_BLEND );
+                throw new InvalidOperationException( "SpriteBatch.begin must be called before end." );
             }
-            else
-            {
-                GL.Disable( IGL.GL_BLEND );
-            }
-        }
 
-        Idx = 0;
+            if ( Idx > 0 )
+            {
+                // Flush this batch to ensure all pending drawing
+                // operations are completed before ending the batch
+                Flush();
+            }
+
+            LastTexture       = null;
+            CurrentBatchState = BatchState.Ready;
+
+            GL.DepthMask( _originalDepthMask );
+
+            // Only modify blending if current state differs from initial state
+            if ( BlendingEnabled != _initialBlendingState )
+            {
+                GL.EnableOrDisable( IGL.GL_BLEND, _initialBlendingState );
+            }
+
+            Idx = 0;
+        }
     }
 
     /// <summary>
@@ -312,75 +311,78 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </exception>
     public void Flush()
     {
-        GLUtils.CheckOpenGLContext();
-
-        // Check if there is any data to flush.
-        if ( Idx <= 0 )
+        lock ( _lockObject )
         {
-            Logger.Warning( $"Flush cancelled: Idx: {Idx}" );
+            GLUtils.CheckOpenGLContext();
 
-            // Ensure that Idx is reset to zero.
-            Idx = 0;
-
-            return;
-        }
-
-        // Increment render call counters.
-        RenderCalls++;
-        TotalRenderCalls++;
-
-        // Calculate the number of sprites in the current batch.
-        // Idx represents the number of floats in the Vertices array.
-        // VERTICES_PER_SPRITE is the number of vertices per sprite (4).
-        // VertexConstants.VERTEX_SIZE is the number of floats per vertex.
-        var spritesInBatch = ( int )( Idx / ( long )( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) );
-
-        // Update the maximum number of sprites in a batch.
-        MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
-
-        // Check if the texture is null.
-        if ( LastTexture == null )
-        {
-            Idx = 0;
-            _nullTextureCount++;
-
-            Logger.Warning( $"Attempt to flush with null texture. This batch will be skipped. " +
-                            $"Null texture count: {_nullTextureCount}. " +
-                            $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
-
-            return;
-        }
-
-        if ( _textureLocation != ShaderProgram.INVALID )
-        {
-            // Bind the texture to the current texture unit.
-            GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
-            LastTexture.Bind();
-            GL.Uniform1i( _textureLocation, _currentTextureIndex );
-
-            _mesh?.SetVertices( Vertices, 0, Idx );
-            _mesh!.IndicesBuffer.Position = 0;
-            _mesh!.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
-        }
-
-        // Set up blending.
-        if ( BlendingEnabled )
-        {
-            GL.Enable( IGL.GL_BLEND );
-
-            // Set the blend function if specified.
-            if ( BlendSrcFunc != -1 )
+            // Check if there is any data to flush.
+            if ( Idx <= 0 )
             {
-                GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
-            }
-        }
-        else
-        {
-            GL.Disable( IGL.GL_BLEND );
-        }
+                Logger.Warning( $"Flush cancelled: Idx: {Idx}" );
 
-        // Render the sprites.
-        _mesh?.Render( _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
+                // Ensure that Idx is reset to zero.
+                Idx = 0;
+
+                return;
+            }
+
+            // Increment render call counters.
+            RenderCalls++;
+            TotalRenderCalls++;
+
+            // Calculate the number of sprites in the current batch.
+            // Idx represents the number of floats in the Vertices array.
+            // VERTICES_PER_SPRITE is the number of vertices per sprite (4).
+            // VertexConstants.VERTEX_SIZE is the number of floats per vertex.
+            var spritesInBatch = ( int )( Idx / ( long )( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) );
+
+            // Update the maximum number of sprites in a batch.
+            MaxSpritesInBatch = Math.Max( MaxSpritesInBatch, spritesInBatch );
+
+            // Check if the texture is null.
+            if ( LastTexture == null )
+            {
+                Idx = 0;
+                _nullTextureCount++;
+
+                Logger.Warning( $"Attempt to flush with null texture. This batch will be skipped. " +
+                                $"Null texture count: {_nullTextureCount}. " +
+                                $"Last successful texture: {_lastSuccessfulTexture?.ToString() ?? "None"}" );
+
+                return;
+            }
+
+            if ( _textureLocation != ShaderProgram.INVALID )
+            {
+                // Bind the texture to the current texture unit.
+                GL.ActiveTexture( TextureUnit.Texture0 + _currentTextureIndex );
+                LastTexture.Bind();
+                GL.Uniform1i( _textureLocation, _currentTextureIndex );
+
+                _mesh?.SetVertices( Vertices, 0, Idx );
+                _mesh!.IndicesBuffer.Position = 0;
+                _mesh!.IndicesBuffer.Limit    = spritesInBatch * INDICES_PER_SPRITE;
+            }
+
+            // Set up blending.
+            if ( BlendingEnabled )
+            {
+                GL.Enable( IGL.GL_BLEND );
+
+                // Set the blend function if specified.
+                if ( BlendSrcFunc != -1 )
+                {
+                    GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
+                }
+            }
+            else
+            {
+                GL.Disable( IGL.GL_BLEND );
+            }
+
+            // Render the sprites.
+            _mesh?.Render( _shader, IGL.GL_TRIANGLES, 0, spritesInBatch * INDICES_PER_SPRITE );
+        }
     }
 
     // ========================================================================
@@ -390,23 +392,26 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public void EnableBlending()
     {
-        if ( BlendingEnabled )
+        lock ( _lockObject )
         {
-            return;
+            if ( BlendingEnabled )
+            {
+                return;
+            }
+
+            if ( Idx > 0 )
+            {
+                // Necessary call to Flush() to ensure blending state
+                // changes are handled correctly
+                Flush();
+            }
+
+            BlendingEnabled = true;
+            GL.Enable( IGL.GL_BLEND );
+
+            // Restore blend function state
+            GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
         }
-
-        if ( Idx > 0 )
-        {
-            // Necessary call to Flush() to ensure blending state
-            // changes are handled correctly
-            Flush();
-        }
-
-        BlendingEnabled = true;
-        GL.Enable( IGL.GL_BLEND );
-
-        // Restore blend function state
-        GL.BlendFuncSeparate( BlendSrcFunc, BlendDstFunc, BlendSrcFuncAlpha, BlendDstFuncAlpha );
     }
 
     /// <summary>
@@ -414,20 +419,23 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public void DisableBlending()
     {
-        if ( !BlendingEnabled )
+        lock ( _lockObject )
         {
-            return;
-        }
+            if ( !BlendingEnabled )
+            {
+                return;
+            }
 
-        if ( Idx > 0 )
-        {
-            // Necessary call to Flush() to ensure blending state
-            // changes are handled correctly
-            Flush();
-        }
+            if ( Idx > 0 )
+            {
+                // Necessary call to Flush() to ensure blending state
+                // changes are handled correctly
+                Flush();
+            }
 
-        BlendingEnabled = false;
-        GL.Disable( IGL.GL_BLEND );
+            BlendingEnabled = false;
+            GL.Disable( IGL.GL_BLEND );
+        }
     }
 
     /// <summary>
@@ -501,76 +509,79 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public void SetupVertexAttributes( ShaderProgram? program )
     {
-        GLUtils.CheckOpenGLContext();
-
-        // --------------------------------------------------------------------
-
-        if ( ( program == null ) || ( _mesh == null ) )
+        lock ( _lockObject )
         {
-            throw new NullReferenceException( "program and _mesh cannot be null!" );
-        }
+            GLUtils.CheckOpenGLContext();
 
-        // --------------------------------------------------------------------
+            // --------------------------------------------------------------------
 
-        var currentProgram = new int[ 1 ];
+            if ( ( program == null ) || ( _mesh == null ) )
+            {
+                throw new NullReferenceException( "program and _mesh cannot be null!" );
+            }
 
-        GL.GetIntegerv( IGL.GL_CURRENT_PROGRAM, ref currentProgram );
+            // --------------------------------------------------------------------
 
-        if ( currentProgram[ 0 ] != _shader?.ShaderProgramHandle )
-        {
-            throw new GdxRuntimeException( "***** Shader program is unbound *****" );
-        }
+            var currentProgram = new int[ 1 ];
 
-        // --------------------------------------------------------------------
+            GL.GetIntegerv( IGL.GL_CURRENT_PROGRAM, ref currentProgram );
 
-        GL.BindVertexArray( _vao );
-        GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
+            if ( currentProgram[ 0 ] != _shader?.ShaderProgramHandle )
+            {
+                throw new GdxRuntimeException( "***** Shader program is unbound *****" );
+            }
 
-        const int STRIDE           = VertexConstants.VERTEX_SIZE_BYTES;
-        const int POSITION_OFFSET  = VertexConstants.POSITION_OFFSET;
-        const int COLOR_OFFSET     = VertexConstants.COLOR_OFFSET * sizeof( float );
-        const int TEX_COORD_OFFSET = VertexConstants.TEXCOORD_OFFSET * sizeof( float );
+            // --------------------------------------------------------------------
 
-        // Position Attribute
-        var positionLocation = program.GetAttributeLocation( "a_position" );
+            GL.BindVertexArray( _vao );
+            GL.BindBuffer( ( int )BufferTarget.ArrayBuffer, _vbo );
 
-        if ( positionLocation >= 0 )
-        {
-            program.EnableVertexAttribute( positionLocation );
-            program.SetVertexAttribute( positionLocation,
-                                        VertexConstants.POSITION_COMPONENTS,
-                                        IGL.GL_FLOAT,
-                                        false,
-                                        STRIDE,
-                                        POSITION_OFFSET );
-        }
+            const int STRIDE           = VertexConstants.VERTEX_SIZE_BYTES;
+            const int POSITION_OFFSET  = VertexConstants.POSITION_OFFSET;
+            const int COLOR_OFFSET     = VertexConstants.COLOR_OFFSET * sizeof( float );
+            const int TEX_COORD_OFFSET = VertexConstants.TEXCOORD_OFFSET * sizeof( float );
 
-        // Color Attribute
-        var colorLocation = program.GetAttributeLocation( "a_color" );
+            // Position Attribute
+            var positionLocation = program.GetAttributeLocation( "a_position" );
 
-        if ( colorLocation >= 0 )
-        {
-            program.EnableVertexAttribute( colorLocation );
-            program.SetVertexAttribute( colorLocation,
-                                        VertexConstants.COLOR_COMPONENTS,
-                                        IGL.GL_FLOAT,
-                                        false,
-                                        STRIDE,
-                                        COLOR_OFFSET );
-        }
+            if ( positionLocation >= 0 )
+            {
+                program.EnableVertexAttribute( positionLocation );
+                program.SetVertexAttribute( positionLocation,
+                                            VertexConstants.POSITION_COMPONENTS,
+                                            IGL.GL_FLOAT,
+                                            false,
+                                            STRIDE,
+                                            POSITION_OFFSET );
+            }
 
-        // Texture Coordinates Attribute
-        var texCoordLocation = program.GetAttributeLocation( "a_texCoord0" );
+            // Color Attribute
+            var colorLocation = program.GetAttributeLocation( "a_color" );
 
-        if ( texCoordLocation >= 0 )
-        {
-            program.EnableVertexAttribute( texCoordLocation );
-            program.SetVertexAttribute( texCoordLocation,
-                                        VertexConstants.TEXCOORD_COMPONENTS,
-                                        IGL.GL_FLOAT,
-                                        false,
-                                        STRIDE,
-                                        TEX_COORD_OFFSET );
+            if ( colorLocation >= 0 )
+            {
+                program.EnableVertexAttribute( colorLocation );
+                program.SetVertexAttribute( colorLocation,
+                                            VertexConstants.COLOR_COMPONENTS,
+                                            IGL.GL_FLOAT,
+                                            false,
+                                            STRIDE,
+                                            COLOR_OFFSET );
+            }
+
+            // Texture Coordinates Attribute
+            var texCoordLocation = program.GetAttributeLocation( "a_texCoord0" );
+
+            if ( texCoordLocation >= 0 )
+            {
+                program.EnableVertexAttribute( texCoordLocation );
+                program.SetVertexAttribute( texCoordLocation,
+                                            VertexConstants.TEXCOORD_COMPONENTS,
+                                            IGL.GL_FLOAT,
+                                            false,
+                                            STRIDE,
+                                            TEX_COORD_OFFSET );
+            }
         }
     }
 
@@ -631,30 +642,6 @@ public partial class SpriteBatch : IBatch, IDisposable
         Idx += VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE;
     }
 
-    public void DebugVertices()
-    {
-        for ( var i = 0; i < ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ); i++ )
-        {
-            if ( i is 2 or 7 or 12 or 17 )
-            {
-                Logger.Debug( $"Vertices[{i}]: {( uint )Vertices[ i ]:X}" );
-            }
-            else
-            {
-                Logger.Debug( $"Vertices[{i}]: {Vertices[ i ]}" );
-            }
-        }
-
-        Logger.Debug( $"Idx: {Idx}" );
-
-        // Verify texture coordinates in vertex data
-        Logger.Debug( "Texture coordinates:" );
-        Logger.Debug( $"UV1: ({Vertices[ IBatch.U1 ]}, {Vertices[ IBatch.V1 ]})" );
-        Logger.Debug( $"UV2: ({Vertices[ IBatch.U2 ]}, {Vertices[ IBatch.V2 ]})" );
-        Logger.Debug( $"UV3: ({Vertices[ IBatch.U3 ]}, {Vertices[ IBatch.V3 ]})" );
-        Logger.Debug( $"UV4: ({Vertices[ IBatch.U4 ]}, {Vertices[ IBatch.V4 ]})" );
-    }
-
     /// <summary>
     /// Fetches the location of the CombinedMatrix uniform in the shader and
     /// stores it in <see cref="_combinedMatrixLocation" /> for subsequent use.
@@ -703,6 +690,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     {
         if ( texture == null )
         {
+            Logger.Debug( "NULL Texture passed to SwitchTexture" );
             return;
         }
 
@@ -959,29 +947,32 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="height"> Height of Texture in pixerls. </param>
     public virtual void Draw( Texture texture, float posX, float posY, float width, float height )
     {
-        Validate( texture );
-
-        if ( texture != LastTexture )
+        lock ( _lockObject )
         {
-            SwitchTexture( texture );
+            Validate( texture );
+
+            if ( texture != LastTexture )
+            {
+                SwitchTexture( texture );
+            }
+            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            {
+                Flush();
+            }
+
+            var fx2 = posX + width;
+            var fy2 = posY + height;
+
+            const float U  = 0;
+            const float V  = 1;
+            const float U2 = 1;
+            const float V2 = 0;
+
+            SetVertices( posX, posY, ColorPackedRGBA, U, V2,
+                         posX, fy2, ColorPackedRGBA, U, V,
+                         fx2, fy2, ColorPackedRGBA, U2, V,
+                         fx2, posY, ColorPackedRGBA, U2, V2 );
         }
-        else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
-        {
-            Flush();
-        }
-
-        var fx2 = posX + width;
-        var fy2 = posY + height;
-
-        const float U  = 0;
-        const float V  = 1;
-        const float U2 = 1;
-        const float V2 = 0;
-
-        SetVertices( posX, posY, ColorPackedRGBA, U, V2,
-                     posX, fy2, ColorPackedRGBA, U, V,
-                     fx2, fy2, ColorPackedRGBA, U2, V,
-                     fx2, posY, ColorPackedRGBA, U2, V2 );
     }
 
     /// <summary>
@@ -1004,107 +995,111 @@ public partial class SpriteBatch : IBatch, IDisposable
                               bool flipX,
                               bool flipY )
     {
-        Validate( texture );
-
-        if ( texture != LastTexture )
+        lock ( _lockObject )
         {
-            SwitchTexture( texture );
+            Validate( texture );
+
+            if ( texture != LastTexture )
+            {
+                SwitchTexture( texture );
+            }
+//            else if ( Idx > Vertices.Length )
+            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            {
+                Flush();
+            }
+
+            // bottom left and top right corner points relative to origin
+            var worldOriginX = region.X + origin.X;
+            var worldOriginY = region.Y + origin.Y;
+            var fx           = -origin.X;
+            var fy           = -origin.Y;
+            var fx2          = region.Width - origin.X;
+            var fy2          = region.Height - origin.Y;
+
+            // scale
+            if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
+            {
+                fx  *= scale.X;
+                fy  *= scale.Y;
+                fx2 *= scale.X;
+                fy2 *= scale.Y;
+            }
+
+            // construct corner points, start from top left and go counter clockwise
+            var p1X = fx;
+            var p1Y = fy;
+            var p2X = fx;
+            var p2Y = fy2;
+            var p3X = fx2;
+            var p3Y = fy2;
+            var p4X = fx2;
+            var p4Y = fy;
+
+            float x1, y1, x2, y2, x3, y3, x4, y4;
+
+            // rotate
+            if ( rotation != 0 )
+            {
+                var cos = MathUtils.CosDeg( rotation );
+                var sin = MathUtils.SinDeg( rotation );
+
+                x1 = ( cos * p1X ) - ( sin * p1Y );
+                y1 = ( sin * p1X ) + ( cos * p1Y );
+
+                x2 = ( cos * p2X ) - ( sin * p2Y );
+                y2 = ( sin * p2X ) + ( cos * p2Y );
+
+                x3 = ( cos * p3X ) - ( sin * p3Y );
+                y3 = ( sin * p3X ) + ( cos * p3Y );
+
+                x4 = x1 + ( x3 - x2 );
+                y4 = y3 - ( y2 - y1 );
+            }
+            else
+            {
+                x1 = p1X;
+                y1 = p1Y;
+
+                x2 = p2X;
+                y2 = p2Y;
+
+                x3 = p3X;
+                y3 = p3Y;
+
+                x4 = p4X;
+                y4 = p4Y;
+            }
+
+            x1 += worldOriginX;
+            y1 += worldOriginY;
+            x2 += worldOriginX;
+            y2 += worldOriginY;
+            x3 += worldOriginX;
+            y3 += worldOriginY;
+            x4 += worldOriginX;
+            y4 += worldOriginY;
+
+            var u  = src.X * InvTexWidth;
+            var v  = ( src.Y + src.Height ) * InvTexHeight;
+            var u2 = ( src.X + src.Width ) * InvTexWidth;
+            var v2 = src.Y * InvTexHeight;
+
+            if ( flipX )
+            {
+                ( u, u2 ) = ( u2, u );
+            }
+
+            if ( flipY )
+            {
+                ( v, v2 ) = ( v2, v );
+            }
+
+            SetVertices( x1, y1, ColorPackedRGBA, u, v2,
+                         x2, y2, ColorPackedRGBA, u, v,
+                         x3, y3, ColorPackedRGBA, u2, v,
+                         x4, y4, ColorPackedRGBA, u2, v2 );
         }
-        else if ( Idx == Vertices.Length )
-        {
-            Flush();
-        }
-
-        // bottom left and top right corner points relative to origin
-        var worldOriginX = region.X + origin.X;
-        var worldOriginY = region.Y + origin.Y;
-        var fx           = -origin.X;
-        var fy           = -origin.Y;
-        var fx2          = region.Width - origin.X;
-        var fy2          = region.Height - origin.Y;
-
-        // scale
-        if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
-        {
-            fx  *= scale.X;
-            fy  *= scale.Y;
-            fx2 *= scale.X;
-            fy2 *= scale.Y;
-        }
-
-        // construct corner points, start from top left and go counter clockwise
-        var p1X = fx;
-        var p1Y = fy;
-        var p2X = fx;
-        var p2Y = fy2;
-        var p3X = fx2;
-        var p3Y = fy2;
-        var p4X = fx2;
-        var p4Y = fy;
-
-        float x1, y1, x2, y2, x3, y3, x4, y4;
-
-        // rotate
-        if ( rotation != 0 )
-        {
-            var cos = MathUtils.CosDeg( rotation );
-            var sin = MathUtils.SinDeg( rotation );
-
-            x1 = ( cos * p1X ) - ( sin * p1Y );
-            y1 = ( sin * p1X ) + ( cos * p1Y );
-
-            x2 = ( cos * p2X ) - ( sin * p2Y );
-            y2 = ( sin * p2X ) + ( cos * p2Y );
-
-            x3 = ( cos * p3X ) - ( sin * p3Y );
-            y3 = ( sin * p3X ) + ( cos * p3Y );
-
-            x4 = x1 + ( x3 - x2 );
-            y4 = y3 - ( y2 - y1 );
-        }
-        else
-        {
-            x1 = p1X;
-            y1 = p1Y;
-
-            x2 = p2X;
-            y2 = p2Y;
-
-            x3 = p3X;
-            y3 = p3Y;
-
-            x4 = p4X;
-            y4 = p4Y;
-        }
-
-        x1 += worldOriginX;
-        y1 += worldOriginY;
-        x2 += worldOriginX;
-        y2 += worldOriginY;
-        x3 += worldOriginX;
-        y3 += worldOriginY;
-        x4 += worldOriginX;
-        y4 += worldOriginY;
-
-        var u  = src.X * InvTexWidth;
-        var v  = ( src.Y + src.Height ) * InvTexHeight;
-        var u2 = ( src.X + src.Width ) * InvTexWidth;
-        var v2 = src.Y * InvTexHeight;
-
-        if ( flipX )
-        {
-            ( u, u2 ) = ( u2, u );
-        }
-
-        if ( flipY )
-        {
-            ( v, v2 ) = ( v2, v );
-        }
-
-        SetVertices( x1, y1, ColorPackedRGBA, u, v2,
-                     x2, y2, ColorPackedRGBA, u, v,
-                     x3, y3, ColorPackedRGBA, u2, v,
-                     x4, y4, ColorPackedRGBA, u2, v2 );
     }
 
     /// <summary>
@@ -1117,38 +1112,42 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="flipY">Indicates whether to flip the texture vertically.</param>
     public virtual void Draw( Texture texture, GRect region, GRect src, bool flipX = false, bool flipY = false )
     {
-        Validate( texture );
-
-        if ( texture != LastTexture )
+        lock ( _lockObject )
         {
-            SwitchTexture( texture );
-        }
-        else if ( Idx == Vertices.Length )
-        {
-            Flush();
-        }
+            Validate( texture );
 
-        var u   = src.X * InvTexWidth;
-        var v   = ( src.Y + src.Height ) * InvTexHeight;
-        var u2  = ( src.X + src.Width ) * InvTexWidth;
-        var v2  = src.Y * InvTexHeight;
-        var fx2 = region.X + region.Width;
-        var fy2 = region.Y + region.Height;
+            if ( texture != LastTexture )
+            {
+                SwitchTexture( texture );
+            }
+//            else if ( Idx > Vertices.Length )
+            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            {
+                Flush();
+            }
 
-        if ( flipX )
-        {
-            ( u, u2 ) = ( u2, u );
+            var u   = src.X * InvTexWidth;
+            var v   = ( src.Y + src.Height ) * InvTexHeight;
+            var u2  = ( src.X + src.Width ) * InvTexWidth;
+            var v2  = src.Y * InvTexHeight;
+            var fx2 = region.X + region.Width;
+            var fy2 = region.Y + region.Height;
+
+            if ( flipX )
+            {
+                ( u, u2 ) = ( u2, u );
+            }
+
+            if ( flipY )
+            {
+                ( v, v2 ) = ( v2, v );
+            }
+
+            SetVertices( region.X, region.Y, ColorPackedRGBA, u, v2,
+                         region.X, fy2, ColorPackedRGBA, u, v,
+                         fx2, fy2, ColorPackedRGBA, u2, v,
+                         fx2, region.Y, ColorPackedRGBA, u2, v2 );
         }
-
-        if ( flipY )
-        {
-            ( v, v2 ) = ( v2, v );
-        }
-
-        SetVertices( region.X, region.Y, ColorPackedRGBA, u, v2,
-                     region.X, fy2, ColorPackedRGBA, u, v,
-                     fx2, fy2, ColorPackedRGBA, u2, v,
-                     fx2, region.Y, ColorPackedRGBA, u2, v2 );
     }
 
     /// <summary>
@@ -1160,28 +1159,32 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="src">The source rectangle portion of the texture to be drawn.</param>
     public virtual void Draw( Texture texture, float x, float y, GRect src )
     {
-        Validate( texture );
-
-        if ( texture != LastTexture )
+        lock ( _lockObject )
         {
-            SwitchTexture( texture );
-        }
-        else if ( Idx == Vertices.Length )
-        {
-            Flush();
-        }
+            Validate( texture );
 
-        var u   = src.X * InvTexWidth;
-        var v   = ( src.Y + src.Height ) * InvTexHeight;
-        var u2  = ( src.X + src.Width ) * InvTexWidth;
-        var v2  = src.Y * InvTexHeight;
-        var fx2 = x + src.Width;
-        var fy2 = y + src.Height;
+            if ( texture != LastTexture )
+            {
+                SwitchTexture( texture );
+            }
+//            else if ( Idx > Vertices.Length )
+            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            {
+                Flush();
+            }
 
-        SetVertices( x, y, ColorPackedRGBA, u, v2,
-                     x, fy2, ColorPackedRGBA, u, v,
-                     fx2, fy2, ColorPackedRGBA, u2, v,
-                     fx2, y, ColorPackedRGBA, u2, v2 );
+            var u   = src.X * InvTexWidth;
+            var v   = ( src.Y + src.Height ) * InvTexHeight;
+            var u2  = ( src.X + src.Width ) * InvTexWidth;
+            var v2  = src.Y * InvTexHeight;
+            var fx2 = x + src.Width;
+            var fy2 = y + src.Height;
+
+            SetVertices( x, y, ColorPackedRGBA, u, v2,
+                         x, fy2, ColorPackedRGBA, u, v,
+                         fx2, fy2, ColorPackedRGBA, u2, v,
+                         fx2, y, ColorPackedRGBA, u2, v2 );
+        }
     }
 
     /// <summary>
@@ -1195,24 +1198,28 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="v2">The V coordinate of the texture's bottom-right corner.</param>
     public virtual void Draw( Texture texture, GRect region, float u, float v, float u2, float v2 )
     {
-        Validate( texture );
-
-        if ( texture != LastTexture )
+        lock ( _lockObject )
         {
-            SwitchTexture( texture );
-        }
-        else if ( Idx == Vertices.Length )
-        {
-            Flush();
-        }
+            Validate( texture );
 
-        var fx2 = region.X + region.Width;
-        var fy2 = region.Y + region.Height;
+            if ( texture != LastTexture )
+            {
+                SwitchTexture( texture );
+            }
+//            else if ( Idx > Vertices.Length )
+            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            {
+                Flush();
+            }
 
-        SetVertices( region.X, region.Y, ColorPackedRGBA, u, v2,
-                     region.X, fy2, ColorPackedRGBA, u, v,
-                     fx2, fy2, ColorPackedRGBA, u2, v,
-                     fx2, region.Y, ColorPackedRGBA, u2, v2 );
+            var fx2 = region.X + region.Width;
+            var fy2 = region.Y + region.Height;
+
+            SetVertices( region.X, region.Y, ColorPackedRGBA, u, v2,
+                         region.X, fy2, ColorPackedRGBA, u, v,
+                         fx2, fy2, ColorPackedRGBA, u2, v,
+                         fx2, region.Y, ColorPackedRGBA, u2, v2 );
+        }
     }
 
     /// <summary>
@@ -1223,14 +1230,17 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="y"> Y coordinate in pixels. </param>
     public virtual void Draw( Texture? texture, float x, float y )
     {
-        if ( texture is null )
+        lock ( _lockObject )
         {
-            Logger.Debug( "Draw called with null texture" );
+            if ( texture is null )
+            {
+                Logger.Debug( "Draw called with null texture" );
 
-            return;
+                return;
+            }
+
+            Draw( texture, x, y, texture.Width, texture.Height );
         }
-
-        Draw( texture, x, y, texture.Width, texture.Height );
     }
 
     /// <summary>
@@ -1242,34 +1252,37 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="count">The number of vertices to process starting from the specified offset.</param>
     public virtual void Draw( Texture? texture, float[] spriteVertices, int offset, int count )
     {
-        Validate( texture );
-
-        var verticesLength    = Vertices.Length;
-        var remainingVertices = verticesLength;
-
-        if ( texture != LastTexture )
+        lock ( _lockObject )
         {
-            SwitchTexture( texture );
-        }
-        else if ( remainingVertices == 0 )
-        {
-            Flush();
-            remainingVertices = verticesLength;
-        }
+            Validate( texture );
 
-        while ( count > 0 )
-        {
-            var copyCount = Math.Min( remainingVertices, count );
-            Array.Copy( spriteVertices, offset, Vertices, Idx, copyCount );
+            var verticesLength    = Vertices.Length;
+            var remainingVertices = verticesLength;
 
-            Idx    += copyCount;
-            count  -= copyCount;
-            offset += copyCount;
-
-            if ( count > 0 )
+            if ( texture != LastTexture )
+            {
+                SwitchTexture( texture );
+            }
+            else if ( remainingVertices == 0 )
             {
                 Flush();
                 remainingVertices = verticesLength;
+            }
+
+            while ( count > 0 )
+            {
+                var copyCount = Math.Min( remainingVertices, count );
+                Array.Copy( spriteVertices, offset, Vertices, Idx, copyCount );
+
+                Idx    += copyCount;
+                count  -= copyCount;
+                offset += copyCount;
+
+                if ( count > 0 )
+                {
+                    Flush();
+                    remainingVertices = verticesLength;
+                }
             }
         }
     }
@@ -1282,9 +1295,12 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="y">The y-coordinate of the position to draw the texture.</param>
     public virtual void Draw( TextureRegion? region, float x, float y )
     {
-        Validate( region );
+        lock ( _lockObject )
+        {
+            Validate( region );
 
-        Draw( region, x, y, region!.RegionWidth, region.RegionHeight );
+            Draw( region, x, y, region!.RegionWidth, region.RegionHeight );
+        }
     }
 
     /// <summary>
@@ -1297,30 +1313,34 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="height">The height of the texture region to be drawn.</param>
     public virtual void Draw( TextureRegion? region, float x, float y, float width, float height )
     {
-        Validate( region );
-
-        var texture = region!.Texture;
-
-        if ( texture != LastTexture )
+        lock ( _lockObject )
         {
-            SwitchTexture( texture );
-        }
-        else if ( Idx == Vertices.Length )
-        {
-            Flush();
-        }
+            Validate( region );
 
-        var fx2 = x + width;
-        var fy2 = y + height;
-        var u   = region.U;
-        var v   = region.V2;
-        var u2  = region.U2;
-        var v2  = region.V;
+            var texture = region!.Texture;
 
-        SetVertices( x, y, ColorPackedRGBA, u, v2,
-                     x, fy2, ColorPackedRGBA, u, v,
-                     fx2, fy2, ColorPackedRGBA, u2, v,
-                     fx2, y, ColorPackedRGBA, u2, v2 );
+            if ( texture != LastTexture )
+            {
+                SwitchTexture( texture );
+            }
+//            else if ( Idx > Vertices.Length )
+            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            {
+                Flush();
+            }
+
+            var fx2 = x + width;
+            var fy2 = y + height;
+            var u   = region.U;
+            var v   = region.V2;
+            var u2  = region.U2;
+            var v2  = region.V;
+
+            SetVertices( x, y, ColorPackedRGBA, u, v2,
+                         x, fy2, ColorPackedRGBA, u, v,
+                         fx2, fy2, ColorPackedRGBA, u2, v,
+                         fx2, y, ColorPackedRGBA, u2, v2 );
+        }
     }
 
     /// <summary>
@@ -1334,94 +1354,98 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="rotation">The rotation angle in radians to be applied to the texture region.</param>
     public virtual void Draw( TextureRegion? textureRegion, GRect region, Point2D origin, Point2D scale, float rotation )
     {
-        Validate( textureRegion );
-
-        var texture = textureRegion!.Texture;
-
-        if ( texture != LastTexture )
+        lock ( _lockObject )
         {
-            SwitchTexture( texture );
+            Validate( textureRegion );
+
+            var texture = textureRegion!.Texture;
+
+            if ( texture != LastTexture )
+            {
+                SwitchTexture( texture );
+            }
+//            else if ( Idx > Vertices.Length )
+            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            {
+                Flush();
+            }
+
+            // bottom left and top right corner points relative to origin
+            var worldOriginX = region.X + origin.X;
+            var worldOriginY = region.Y + origin.Y;
+            var fx           = -origin.X;
+            var fy           = -origin.Y;
+            var fx2          = region.Width - origin.X;
+            var fy2          = region.Height - origin.Y;
+
+            // scale
+            if ( ( Math.Abs( scale.X - 1 ) > 0 ) || ( Math.Abs( scale.Y - 1 ) > 0 ) )
+            {
+                fx  *= scale.X;
+                fy  *= scale.Y;
+                fx2 *= scale.X;
+                fy2 *= scale.Y;
+            }
+
+            // construct corner points, start from top left and go counter clockwise
+            var p1X = fx;
+            var p1Y = fy;
+            var p2X = fx;
+            var p2Y = fy2;
+            var p3X = fx2;
+            var p3Y = fy2;
+            var p4X = fx2;
+            var p4Y = fy;
+
+            float x1, y1, x2, y2, x3, y3, x4, y4;
+
+            // rotate
+            if ( rotation != 0 )
+            {
+                var cos = MathUtils.CosDeg( rotation );
+                var sin = MathUtils.SinDeg( rotation );
+
+                x1 = ( cos * p1X ) - ( sin * p1Y );
+                y1 = ( sin * p1X ) + ( cos * p1Y );
+
+                x2 = ( cos * p2X ) - ( sin * p2Y );
+                y2 = ( sin * p2X ) + ( cos * p2Y );
+
+                x3 = ( cos * p3X ) - ( sin * p3Y );
+                y3 = ( sin * p3X ) + ( cos * p3Y );
+
+                x4 = x1 + ( x3 - x2 );
+                y4 = y3 - ( y2 - y1 );
+            }
+            else
+            {
+                x1 = p1X;
+                y1 = p1Y;
+
+                x2 = p2X;
+                y2 = p2Y;
+
+                x3 = p3X;
+                y3 = p3Y;
+
+                x4 = p4X;
+                y4 = p4Y;
+            }
+
+            x1 += worldOriginX;
+            y1 += worldOriginY;
+            x2 += worldOriginX;
+            y2 += worldOriginY;
+            x3 += worldOriginX;
+            y3 += worldOriginY;
+            x4 += worldOriginX;
+            y4 += worldOriginY;
+
+            SetVertices( x1, y1, ColorPackedRGBA, textureRegion.U, textureRegion.V2,
+                         x2, y2, ColorPackedRGBA, textureRegion.U, textureRegion.V,
+                         x3, y3, ColorPackedRGBA, textureRegion.U2, textureRegion.V,
+                         x4, y4, ColorPackedRGBA, textureRegion.U2, textureRegion.V2 );
         }
-        else if ( Idx == Vertices.Length )
-        {
-            Flush();
-        }
-
-        // bottom left and top right corner points relative to origin
-        var worldOriginX = region.X + origin.X;
-        var worldOriginY = region.Y + origin.Y;
-        var fx           = -origin.X;
-        var fy           = -origin.Y;
-        var fx2          = region.Width - origin.X;
-        var fy2          = region.Height - origin.Y;
-
-        // scale
-        if ( ( Math.Abs( scale.X - 1 ) > 0 ) || ( Math.Abs( scale.Y - 1 ) > 0 ) )
-        {
-            fx  *= scale.X;
-            fy  *= scale.Y;
-            fx2 *= scale.X;
-            fy2 *= scale.Y;
-        }
-
-        // construct corner points, start from top left and go counter clockwise
-        var p1X = fx;
-        var p1Y = fy;
-        var p2X = fx;
-        var p2Y = fy2;
-        var p3X = fx2;
-        var p3Y = fy2;
-        var p4X = fx2;
-        var p4Y = fy;
-
-        float x1, y1, x2, y2, x3, y3, x4, y4;
-
-        // rotate
-        if ( rotation != 0 )
-        {
-            var cos = MathUtils.CosDeg( rotation );
-            var sin = MathUtils.SinDeg( rotation );
-
-            x1 = ( cos * p1X ) - ( sin * p1Y );
-            y1 = ( sin * p1X ) + ( cos * p1Y );
-
-            x2 = ( cos * p2X ) - ( sin * p2Y );
-            y2 = ( sin * p2X ) + ( cos * p2Y );
-
-            x3 = ( cos * p3X ) - ( sin * p3Y );
-            y3 = ( sin * p3X ) + ( cos * p3Y );
-
-            x4 = x1 + ( x3 - x2 );
-            y4 = y3 - ( y2 - y1 );
-        }
-        else
-        {
-            x1 = p1X;
-            y1 = p1Y;
-
-            x2 = p2X;
-            y2 = p2Y;
-
-            x3 = p3X;
-            y3 = p3Y;
-
-            x4 = p4X;
-            y4 = p4Y;
-        }
-
-        x1 += worldOriginX;
-        y1 += worldOriginY;
-        x2 += worldOriginX;
-        y2 += worldOriginY;
-        x3 += worldOriginX;
-        y3 += worldOriginY;
-        x4 += worldOriginX;
-        y4 += worldOriginY;
-
-        SetVertices( x1, y1, ColorPackedRGBA, textureRegion.U, textureRegion.V2,
-                     x2, y2, ColorPackedRGBA, textureRegion.U, textureRegion.V,
-                     x3, y3, ColorPackedRGBA, textureRegion.U2, textureRegion.V,
-                     x4, y4, ColorPackedRGBA, textureRegion.U2, textureRegion.V2 );
     }
 
     /// <summary>
@@ -1439,128 +1463,132 @@ public partial class SpriteBatch : IBatch, IDisposable
                               float rotation,
                               bool clockwise )
     {
-        Validate( textureRegion );
-
-        var texture = textureRegion.Texture;
-
-        if ( texture != LastTexture )
+        lock ( _lockObject )
         {
-            SwitchTexture( texture );
+            Validate( textureRegion );
+
+            var texture = textureRegion.Texture;
+
+            if ( texture != LastTexture )
+            {
+                SwitchTexture( texture );
+            }
+//            else if ( Idx > Vertices.Length )
+            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            {
+                Flush();
+            }
+
+            // bottom left and top right corner points relative to origin
+            var worldOriginX = region.X + origin.X;
+            var worldOriginY = region.Y + origin.Y;
+            var fx           = -origin.X;
+            var fy           = -origin.Y;
+            var fx2          = region.Width - origin.X;
+            var fy2          = region.Height - origin.Y;
+
+            // scale
+            if ( ( Math.Abs( scale.X - 1 ) > 0 ) || ( Math.Abs( scale.Y - 1 ) > 0 ) )
+            {
+                fx  *= scale.X;
+                fy  *= scale.Y;
+                fx2 *= scale.X;
+                fy2 *= scale.Y;
+            }
+
+            // construct corner points.
+            // start from top left and go counter clockwise
+
+            // -- Top left --
+            var p1X = fx;
+            var p1Y = fy;
+
+            // -- Bottom left --
+            var p2X = fx;
+            var p2Y = fy2;
+
+            // -- Bottom right --
+            var p3X = fx2;
+            var p3Y = fy2;
+
+            // -- Top right --
+            var p4X = fx2;
+            var p4Y = fy;
+
+            float x1, y1, x2, y2, x3, y3, x4, y4;
+
+            // rotate
+            if ( rotation != 0 )
+            {
+                var cos = MathUtils.CosDeg( rotation );
+                var sin = MathUtils.SinDeg( rotation );
+
+                x1 = ( cos * p1X ) - ( sin * p1Y );
+                y1 = ( sin * p1X ) + ( cos * p1Y );
+
+                x2 = ( cos * p2X ) - ( sin * p2Y );
+                y2 = ( sin * p2X ) + ( cos * p2Y );
+
+                x3 = ( cos * p3X ) - ( sin * p3Y );
+                y3 = ( sin * p3X ) + ( cos * p3Y );
+
+                x4 = x1 + ( x3 - x2 );
+                y4 = y3 - ( y2 - y1 );
+            }
+            else
+            {
+                x1 = p1X;
+                y1 = p1Y;
+
+                x2 = p2X;
+                y2 = p2Y;
+
+                x3 = p3X;
+                y3 = p3Y;
+
+                x4 = p4X;
+                y4 = p4Y;
+            }
+
+            x1 += worldOriginX;
+            y1 += worldOriginY;
+            x2 += worldOriginX;
+            y2 += worldOriginY;
+            x3 += worldOriginX;
+            y3 += worldOriginY;
+            x4 += worldOriginX;
+            y4 += worldOriginY;
+
+            float u1, v1, u2, v2, u3, v3, u4, v4;
+
+            if ( clockwise )
+            {
+                u1 = textureRegion.U2;
+                v1 = textureRegion.V2;
+                u2 = textureRegion.U;
+                v2 = textureRegion.V2;
+                u3 = textureRegion.U;
+                v3 = textureRegion.V;
+                u4 = textureRegion.U2;
+                v4 = textureRegion.V;
+            }
+            else // TODO: Check the orders of V and V2 here
+            {
+                u1 = textureRegion.U;
+                v1 = textureRegion.V;
+                u2 = textureRegion.U2;
+                v2 = textureRegion.V;
+                u3 = textureRegion.U2;
+                v3 = textureRegion.V2;
+                u4 = textureRegion.U;
+                v4 = textureRegion.V2;
+            }
+
+            SetVertices( x1, y1, ColorPackedRGBA, u1, v1,
+                         x2, y2, ColorPackedRGBA, u2, v2,
+                         x3, y3, ColorPackedRGBA, u3, v3,
+                         x4, y4, ColorPackedRGBA, u4, v4 );
         }
-        else if ( Idx == Vertices.Length )
-        {
-            Flush();
-        }
-
-        // bottom left and top right corner points relative to origin
-        var worldOriginX = region.X + origin.X;
-        var worldOriginY = region.Y + origin.Y;
-        var fx           = -origin.X;
-        var fy           = -origin.Y;
-        var fx2          = region.Width - origin.X;
-        var fy2          = region.Height - origin.Y;
-
-        // scale
-        if ( ( Math.Abs( scale.X - 1 ) > 0 ) || ( Math.Abs( scale.Y - 1 ) > 0 ) )
-        {
-            fx  *= scale.X;
-            fy  *= scale.Y;
-            fx2 *= scale.X;
-            fy2 *= scale.Y;
-        }
-
-        // construct corner points.
-        // start from top left and go counter clockwise
-
-        // -- Top left --
-        var p1X = fx;
-        var p1Y = fy;
-
-        // -- Bottom left --
-        var p2X = fx;
-        var p2Y = fy2;
-
-        // -- Bottom right --
-        var p3X = fx2;
-        var p3Y = fy2;
-
-        // -- Top right --
-        var p4X = fx2;
-        var p4Y = fy;
-
-        float x1, y1, x2, y2, x3, y3, x4, y4;
-
-        // rotate
-        if ( rotation != 0 )
-        {
-            var cos = MathUtils.CosDeg( rotation );
-            var sin = MathUtils.SinDeg( rotation );
-
-            x1 = ( cos * p1X ) - ( sin * p1Y );
-            y1 = ( sin * p1X ) + ( cos * p1Y );
-
-            x2 = ( cos * p2X ) - ( sin * p2Y );
-            y2 = ( sin * p2X ) + ( cos * p2Y );
-
-            x3 = ( cos * p3X ) - ( sin * p3Y );
-            y3 = ( sin * p3X ) + ( cos * p3Y );
-
-            x4 = x1 + ( x3 - x2 );
-            y4 = y3 - ( y2 - y1 );
-        }
-        else
-        {
-            x1 = p1X;
-            y1 = p1Y;
-
-            x2 = p2X;
-            y2 = p2Y;
-
-            x3 = p3X;
-            y3 = p3Y;
-
-            x4 = p4X;
-            y4 = p4Y;
-        }
-
-        x1 += worldOriginX;
-        y1 += worldOriginY;
-        x2 += worldOriginX;
-        y2 += worldOriginY;
-        x3 += worldOriginX;
-        y3 += worldOriginY;
-        x4 += worldOriginX;
-        y4 += worldOriginY;
-
-        float u1, v1, u2, v2, u3, v3, u4, v4;
-
-        if ( clockwise )
-        {
-            u1 = textureRegion.U2;
-            v1 = textureRegion.V2;
-            u2 = textureRegion.U;
-            v2 = textureRegion.V2;
-            u3 = textureRegion.U;
-            v3 = textureRegion.V;
-            u4 = textureRegion.U2;
-            v4 = textureRegion.V;
-        }
-        else // TODO: Check the orders of V and V2 here
-        {
-            u1 = textureRegion.U;
-            v1 = textureRegion.V;
-            u2 = textureRegion.U2;
-            v2 = textureRegion.V;
-            u3 = textureRegion.U2;
-            v3 = textureRegion.V2;
-            u4 = textureRegion.U;
-            v4 = textureRegion.V2;
-        }
-
-        SetVertices( x1, y1, ColorPackedRGBA, u1, v1,
-                     x2, y2, ColorPackedRGBA, u2, v2,
-                     x3, y3, ColorPackedRGBA, u3, v3,
-                     x4, y4, ColorPackedRGBA, u4, v4 );
     }
 
     /// <summary>
@@ -1571,31 +1599,35 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <param name="transform"></param>
     public virtual void Draw( TextureRegion region, float width, float height, Affine2 transform )
     {
-        Validate( region );
-
-        if ( region.Texture != LastTexture )
+        lock ( _lockObject )
         {
-            SwitchTexture( region.Texture );
-        }
-        else if ( Idx == Vertices.Length )
-        {
-            Flush();
-        }
+            Validate( region );
 
-        // construct corner points
-        var x1 = transform.M02;
-        var y1 = transform.M12;
-        var x2 = ( transform.M01 * height ) + transform.M02;
-        var y2 = ( transform.M11 * height ) + transform.M12;
-        var x3 = ( transform.M00 * width ) + ( transform.M01 * height ) + transform.M02;
-        var y3 = ( transform.M10 * width ) + ( transform.M11 * height ) + transform.M12;
-        var x4 = ( transform.M00 * width ) + transform.M02;
-        var y4 = ( transform.M10 * width ) + transform.M12;
+            if ( region.Texture != LastTexture )
+            {
+                SwitchTexture( region.Texture );
+            }
+//            else if ( Idx > Vertices.Length )
+            else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
+            {
+                Flush();
+            }
 
-        SetVertices( x1, y1, ColorPackedRGBA, region.U, region.V2,
-                     x2, y2, ColorPackedRGBA, region.U, region.V,
-                     x3, y3, ColorPackedRGBA, region.U2, region.V,
-                     x4, y4, ColorPackedRGBA, region.U2, region.V2 );
+            // construct corner points
+            var x1 = transform.M02;
+            var y1 = transform.M12;
+            var x2 = ( transform.M01 * height ) + transform.M02;
+            var y2 = ( transform.M11 * height ) + transform.M12;
+            var x3 = ( transform.M00 * width ) + ( transform.M01 * height ) + transform.M02;
+            var y3 = ( transform.M10 * width ) + ( transform.M11 * height ) + transform.M12;
+            var x4 = ( transform.M00 * width ) + transform.M02;
+            var y4 = ( transform.M10 * width ) + transform.M12;
+
+            SetVertices( x1, y1, ColorPackedRGBA, region.U, region.V2,
+                         x2, y2, ColorPackedRGBA, region.U, region.V,
+                         x3, y3, ColorPackedRGBA, region.U2, region.V,
+                         x4, y4, ColorPackedRGBA, region.U2, region.V2 );
+        }
     }
 
     #endregion Drawing methods
@@ -1637,19 +1669,36 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <summary>
     /// This batch's Color packed into a float ABGR format.
     /// </summary>
-    public float ColorPackedABGR
-    {
-        get => Color.ToFloatBitsABGR( Color.A, Color.B, Color.G, Color.R );
-        set { }
-    }
+    public float ColorPackedABGR => Color.ToFloatBitsABGR( Color.A, Color.B, Color.G, Color.R );
 
     /// <summary>
     /// This batch's Color packed into a float RGBA format.
     /// </summary>
-    public float ColorPackedRGBA
+    public float ColorPackedRGBA => Color.ToFloatBitsRGBA( Color.R, Color.G, Color.B, Color.A );
+
+    
+    public void DebugVertices()
     {
-        get => Color.ToFloatBitsRGBA( Color.R, Color.G, Color.B, Color.A );
-        set { }
+        for ( var i = 0; i < ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ); i++ )
+        {
+            if ( i is 2 or 7 or 12 or 17 )
+            {
+                Logger.Debug( $"Vertices[{i}]: {( uint )Vertices[ i ]:X}" );
+            }
+            else
+            {
+                Logger.Debug( $"Vertices[{i}]: {Vertices[ i ]}" );
+            }
+        }
+
+        Logger.Debug( $"Idx: {Idx}" );
+
+        // Verify texture coordinates in vertex data
+        Logger.Debug( "Texture coordinates:" );
+        Logger.Debug( $"UV1: ({Vertices[ IBatch.U1 ]}, {Vertices[ IBatch.V1 ]})" );
+        Logger.Debug( $"UV2: ({Vertices[ IBatch.U2 ]}, {Vertices[ IBatch.V2 ]})" );
+        Logger.Debug( $"UV3: ({Vertices[ IBatch.U3 ]}, {Vertices[ IBatch.V3 ]})" );
+        Logger.Debug( $"UV4: ({Vertices[ IBatch.U4 ]}, {Vertices[ IBatch.V4 ]})" );
     }
 
     /// <summary>
@@ -1690,8 +1739,11 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
-        Dispose( true );
-        GC.SuppressFinalize( this );
+        lock ( _lockObject )
+        {
+            Dispose( true );
+            GC.SuppressFinalize( this );
+        }
     }
 
     protected void Dispose( bool disposing )

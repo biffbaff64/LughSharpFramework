@@ -203,6 +203,21 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
+    public void EnableOrDisable( int cap, GLboolean enable )
+    {
+        if ( enable )
+        {
+            Enable( cap );
+        }
+        else
+        {
+            Disable( cap );
+        }
+    }
+    
+    // ========================================================================
+
+    /// <inheritdoc />
     public void LogicOp( GLenum opcode )
     {
         GetDelegateForFunction< PFNGLLOGICOPPROC >( "glLogicOp", out _glLogicOp );
