@@ -85,7 +85,7 @@ public class PNGDecoder
     public static PNGFormatStructs.IHDRChunk    IHDRchunk     { get; private set; }
     public static PNGFormatStructs.IDATChunk    IDATchunk     { get; private set; }
     public static long                          TotalIDATSize { get; private set; } = 0;
-    public static int                           PixelFormat   { get; private set; }
+    public static Gdx2DPixmap.Gdx2dPixelFormat  PixelFormat   { get; private set; }
 
     public static byte BitDepth    => IHDRchunk.BitDepth;
     public static uint Width       => IHDRchunk.Width;
@@ -209,7 +209,7 @@ public class PNGDecoder
             Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
             Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
             Logger.Debug( $"- ColorType     : {ColorTypeName( IHDRchunk.ColorType )}::{IHDRchunk.ColorType}" );
-            Logger.Debug( $"- PixelFormat   : {PixelFormatUtils.GetFormatString( PixelFormat )}::{PixelFormat}" );
+            Logger.Debug( $"- PixelFormat   : {PixelFormat.ToString()}::{PixelFormat}" );
             Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
             Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
             Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );
@@ -466,7 +466,7 @@ public class PNGDecoder
     /// <returns>
     /// A Gdx2DPixmapFormat enum value representing the pixel format of the PNG image.
     /// </returns>
-    public static int GetFormatFromPngHeader( Stream pngStream )
+    public static Gdx2DPixmap.Gdx2dPixelFormat GetFormatFromPngHeader( Stream pngStream )
     {
         // Read PNG signature (8 bytes)
         var signature = new byte[ 8 ];
@@ -492,36 +492,20 @@ public class PNGDecoder
         var colorType = ihdr[ 9 ];
 
         // Map PNG color type and bit depth to the format
-        var format = ( colorType, bitDepth ) switch
-        {
-            (6, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,        // Truecolor with alpha, 8 bits
-            (2, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,          // Truecolor, 8 bits
-            (0, 8) => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,           // Grayscale, 8 bits
-            (4, 8) => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
-            (2, 5) => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,          // Not standard, but you can add logic for 16-bit
+//        var format = ( colorType, bitDepth ) switch
+//        {
+//            (6, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,        // Truecolor with alpha, 8 bits
+//            (2, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,          // Truecolor, 8 bits
+//            (0, 8) => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,           // Grayscale, 8 bits
+//            (4, 8) => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
+//            (2, 5) => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,          // Not standard, but logic can be added for 16-bit
+//
+//            // Add more mappings as needed
+//            var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
+//        };
 
-            // Add more mappings as needed
-            var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
-        };
-
-        return format;
-    }
-
-    public static int DeterminePixelFormatFromBitDepth( byte colorType, byte bitDepth )
-    {
-        // Map PNG color type and bit depth to the format
-        var format = ( colorType, bitDepth ) switch
-        {
-            (6, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,        // Truecolor with alpha, 8 bits
-            (2, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,          // Truecolor, 8 bits
-            (0, 8) => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,           // Grayscale, 8 bits
-            (4, 8) => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
-            (2, 5) => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,          // Not standard, but you can add logic for 16-bit
-
-            // Add more mappings as needed
-            var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
-        };
-
+        var format = PixelFormatUtils.DeterminePixelFormatFromBitDepth( colorType, bitDepth );
+        
         return format;
     }
 

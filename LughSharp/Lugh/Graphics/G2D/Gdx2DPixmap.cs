@@ -32,15 +32,20 @@ public partial class Gdx2DPixmap : Image, IDisposable
     [PublicAPI]
     public enum Gdx2dPixelFormat : int
     {
-        GrayScale      = 0,
-        TrueColor      = 2,
+        Alpha          = 0,
+        RGB            = 2,
         IndexedColor   = 3,
-        GrayScaleAlpha = 4,
-        TrueColorAlpha = 6,
-        
+        LuminanceAlpha = 4,
+        RGBA           = 6,
+
         // ----------------------------
-        
-        Default = TrueColorAlpha,
+
+        RGB565   = 10,
+        RGBA4444 = 11,
+
+        // ----------------------------
+
+        Default = RGBA,
     };
 
 //    public const byte GDX_2D_FORMAT_ALPHA           = 1;

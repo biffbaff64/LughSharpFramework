@@ -109,21 +109,38 @@ public class PixelFormatUtils
         };
     }
 
-    public static byte PixmapFormatToPNGColorType( int format )
+    public static byte PixmapFormatToPNGColorType( Gdx2DPixmap.Gdx2dPixelFormat format )
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => 0,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => 4,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => 6,
+            Gdx2DPixmap.Gdx2dPixelFormat.Alpha          => 0,
+            Gdx2DPixmap.Gdx2dPixelFormat.LuminanceAlpha => 4,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB565         => 2,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA4444       => 2,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB            => 2,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA           => 6,
 
             // ----------------------------------
 
             var _ => throw new GdxRuntimeException( $"unknown format: {format}" ),
         };
+    }
+
+    public static Gdx2DPixmap.Gdx2dPixelFormat DeterminePixelFormatFromBitDepth( byte colorType, byte bitDepth )
+    {
+        // Map PNG color type and bit depth to the format
+        var format = ( colorType, bitDepth ) switch
+        {
+            (6, 8) => Gdx2DPixmap.Gdx2dPixelFormat.RGBA,           // Truecolor with alpha, 8 bits
+            (2, 8) => Gdx2DPixmap.Gdx2dPixelFormat.RGB,            // Truecolor, 8 bits
+            (0, 8) => Gdx2DPixmap.Gdx2dPixelFormat.Alpha,          // Grayscale, 8 bits
+            (4, 8) => Gdx2DPixmap.Gdx2dPixelFormat.LuminanceAlpha, // Grayscale with alpha, 8 bits
+
+            // Add more mappings as needed
+            var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
+        };
+
+        return format;
     }
 
     #endregion Methods handling pixel format in memory.
@@ -140,16 +157,16 @@ public class PixelFormatUtils
     /// <exception cref="GdxRuntimeException">
     /// Thrown when the provided format is invalid or unrecognized.
     /// </exception>
-    public static int ToGLPixelFormat( int format )
+    public static int ToGLPixelFormat( Gdx2DPixmap.Gdx2dPixelFormat format )
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
+            Gdx2DPixmap.Gdx2dPixelFormat.Alpha          => IGL.GL_ALPHA,
+            Gdx2DPixmap.Gdx2dPixelFormat.LuminanceAlpha => IGL.GL_LUMINANCE_ALPHA,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB            => IGL.GL_RGB,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA           => IGL.GL_RGBA,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB565         => IGL.GL_RGB,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA4444       => IGL.GL_RGBA,
 
             // ----------------------------------
 
@@ -165,16 +182,16 @@ public class PixelFormatUtils
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the specified format is not valid or recognized.
     /// </exception>
-    public static int ToGLDataType( int format )
+    public static int ToGLDataType( Gdx2DPixmap.Gdx2dPixelFormat format )
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_BYTE,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_SHORT_5_6_5,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+            Gdx2DPixmap.Gdx2dPixelFormat.Alpha          => IGL.GL_UNSIGNED_BYTE,
+            Gdx2DPixmap.Gdx2dPixelFormat.LuminanceAlpha => IGL.GL_UNSIGNED_BYTE,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB            => IGL.GL_UNSIGNED_BYTE,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA           => IGL.GL_UNSIGNED_BYTE,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB565         => IGL.GL_UNSIGNED_SHORT_5_6_5,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA4444       => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
 
             // ----------------------------------
 
@@ -188,16 +205,16 @@ public class PixelFormatUtils
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
-    public static int GetGLInternalFormat( int format )
+    public static int GetGLInternalFormat( Gdx2DPixmap.Gdx2dPixelFormat format )
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_RGB8,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA8,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB565,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA4,
+            Gdx2DPixmap.Gdx2dPixelFormat.Alpha          => IGL.GL_ALPHA,
+            Gdx2DPixmap.Gdx2dPixelFormat.LuminanceAlpha => IGL.GL_LUMINANCE_ALPHA,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB            => IGL.GL_RGB8,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA           => IGL.GL_RGBA8,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB565         => IGL.GL_RGB565,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA4444       => IGL.GL_RGBA4,
 
             // ----------------------------------
 
@@ -235,16 +252,16 @@ public class PixelFormatUtils
     /// <summary>
     /// Gets the number of bytes required for 1 pixel of the specified format.
     /// </summary>
-    public static int Gdx2dBytesPerPixel( int format )
+    public static int Gdx2dBytesPerPixel( Gdx2DPixmap.Gdx2dPixelFormat format )
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => 1,
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => 3,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => 4,
+            Gdx2DPixmap.Gdx2dPixelFormat.Alpha          => 1,
+            Gdx2DPixmap.Gdx2dPixelFormat.LuminanceAlpha => 2,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB565         => 2,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA4444       => 2,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB            => 3,
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA           => 4,
 
             // ----------------------------------
 
@@ -261,16 +278,16 @@ public class PixelFormatUtils
     /// <summary>
     /// Converts a color to the specified pixel format
     /// </summary>
-    public static uint ToPixelFormat( int requestedFormat, uint color )
+    public static uint ToPixelFormat( Gdx2DPixmap.Gdx2dPixelFormat requestedFormat, uint color )
     {
         uint r, g, b, a;
 
         switch ( requestedFormat )
         {
-            case Gdx2DPixmap.GDX_2D_FORMAT_ALPHA:
+            case Gdx2DPixmap.Gdx2dPixelFormat.Alpha:
                 return color & 0xff;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA:
+            case Gdx2DPixmap.Gdx2dPixelFormat.LuminanceAlpha:
                 r = ( color & 0xff000000 ) >> 24;
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
@@ -279,20 +296,20 @@ public class PixelFormatUtils
 
                 return ( l & 0xffffff00 ) | a;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGB888:
+            case Gdx2DPixmap.Gdx2dPixelFormat.RGB:
                 return color >> 8;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888:
+            case Gdx2DPixmap.Gdx2dPixelFormat.RGBA:
                 return color;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGB565:
+            case Gdx2DPixmap.Gdx2dPixelFormat.RGB565:
                 r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
                 g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
                 b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
 
                 return r | g | b;
 
-            case Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444:
+            case Gdx2DPixmap.Gdx2dPixelFormat.RGBA4444:
                 r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
                 g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
                 b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;
@@ -361,20 +378,20 @@ public class PixelFormatUtils
     #region Get String methods
 
     /// <summary>
-    /// Converts a <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> to its string representation.
+    /// Converts a <c>Gdx2DPixmap.Gdx2dPixelFormat</c> format to its string representation.
     /// </summary>
     /// <param name="format">The pixmap format to convert.</param>
     /// <returns>A string representing the given pixmap format.</returns>
-    public static string GetFormatString( int format )
+    public static string GetFormatString( Gdx2DPixmap.Gdx2dPixelFormat format )
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => "Alpha",
-            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => "LuminanceAlpha",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => "RGB888",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => "RGBA8888",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => "RGB565",
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => "RGBA4444",
+            Gdx2DPixmap.Gdx2dPixelFormat.Alpha          => "Alpha",
+            Gdx2DPixmap.Gdx2dPixelFormat.LuminanceAlpha => "LuminanceAlpha",
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB            => "RGB888",
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA           => "RGBA8888",
+            Gdx2DPixmap.Gdx2dPixelFormat.RGB565         => "RGB565",
+            Gdx2DPixmap.Gdx2dPixelFormat.RGBA4444       => "RGBA4444",
 
             // ----------------------------------
 
