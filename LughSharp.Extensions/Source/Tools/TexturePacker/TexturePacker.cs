@@ -215,7 +215,7 @@ public partial class TexturePacker
     // ========================================================================
 
     #region process methods
-    
+
     /// <summary>
     /// Packs the images in the supplied input folder into a texture atlas.
     /// This method does not perform any modifications to the provided paths. It is
@@ -280,7 +280,7 @@ public partial class TexturePacker
     }
 
     #endregion process methods
-    
+
     /// <summary>
     /// Packs processed images into a <see cref="TextureAtlas"/> with the
     /// provided filename. The atlas will be stored in the destination directory.
@@ -290,7 +290,7 @@ public partial class TexturePacker
     public void Pack( DirectoryInfo outputDir, string packFileName )
     {
         Logger.Checkpoint();
-        
+
         if ( packFileName.EndsWith( _settings.AtlasExtension ) )
         {
             packFileName = Path.GetFileNameWithoutExtension( packFileName );
@@ -387,7 +387,7 @@ public partial class TexturePacker
     private static void HandleFolders( DirectoryInfo outputDir )
     {
         Logger.Checkpoint();
-        
+
         // If the output directory does not exist, create it.
         Directory.CreateDirectory( outputDir.FullName );
 
@@ -398,7 +398,7 @@ public partial class TexturePacker
         {
             file.Delete();
         }
-        
+
         // Clear any subdirectories.
         var outputDirDirs = outputDir.GetDirectories( "*" );
 

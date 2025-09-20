@@ -105,7 +105,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <param name="useMipMaps"></param>
     /// <param name="files"></param>
     public GLTextureArray( bool useMipMaps, params FileInfo[] files )
-        : this( useMipMaps, Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888, files )
+        : this( useMipMaps, Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888, files )
     {
     }
 
@@ -114,7 +114,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// <param name="useMipMaps"></param>
     /// <param name="format"></param>
     /// <param name="files"></param>
-    public GLTextureArray( bool useMipMaps, Gdx2DPixmap.Gdx2DPixmapFormat format, params FileInfo[] files )
+    public GLTextureArray( bool useMipMaps, int format, params FileInfo[] files )
         : this( TextureArrayDataFactory.LoadFromFiles( format, useMipMaps, files ) )
     {
     }

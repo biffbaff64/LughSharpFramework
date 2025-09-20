@@ -44,7 +44,6 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
     private TextureLoaderInfo _loaderInfo;
 
     // ========================================================================
-    // ========================================================================
 
     /// <summary>
     /// Creates a new TextureLoader using the specified <see cref="IFileHandleResolver" />.
@@ -56,7 +55,6 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         _loaderInfo = new TextureLoaderInfo();
     }
 
-    // ========================================================================
     // ========================================================================
 
     /// <inheritdoc />
@@ -74,7 +72,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
         if ( p?.TextureData == null )
         {
-            var format     = Gdx2DPixmap.Gdx2DPixmapFormat.Default;
+            int format     = Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT;
             var genMipMaps = false;
 
             _loaderInfo.Texture = null;
@@ -211,7 +209,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         /// <summary>
         /// Gets or sets the format of the final texture. Uses the source image's format if null.
         /// </summary>
-        public Gdx2DPixmap.Gdx2DPixmapFormat Format { get; set; }
+        public int Format { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to generate mipmaps for the texture.

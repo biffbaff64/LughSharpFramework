@@ -163,7 +163,7 @@ public class TiledSceneDrawable : TextureRegionSceneDrawable
                     x += regionWidth;
                 }
             }
-            
+
 //TODO: batch.ColorPackedABGR has no setter. Fix this.
 //            batch.ColorPackedABGR = oldColor;
         }

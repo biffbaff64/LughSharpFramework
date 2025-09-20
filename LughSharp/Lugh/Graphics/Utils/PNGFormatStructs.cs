@@ -22,7 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Lugh.Graphics;
+namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
 public class PNGFormatStructs

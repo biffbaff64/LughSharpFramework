@@ -47,7 +47,11 @@ public partial class DesktopGLGraphics
         /// <param name="height"> Monior display height. </param>
         /// <param name="refreshRate"> The refresh rate. </param>
         /// <param name="bitsPerPixel"> The bits per pixel. </param>
-        public DesktopGLDisplayMode( GLFW.Monitor monitor, int width, int height, int refreshRate, int bitsPerPixel )
+        public DesktopGLDisplayMode( GLFW.Monitor monitor,
+                                     int width,
+                                     int height,
+                                     int refreshRate,
+                                     int bitsPerPixel )
             : base( width, height, refreshRate, bitsPerPixel )
         {
             MonitorHandle = monitor;

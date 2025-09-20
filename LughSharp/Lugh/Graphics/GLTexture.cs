@@ -22,15 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
-
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
@@ -214,7 +205,7 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
     {
         //TODO: This NEEDS some safety checks and validation that the result
         //      is a valid texture unit.
-        ActivateTexture( (TextureUnit)( ( int ) TextureUnit.Texture0 + unit ) );
+        ActivateTexture( ( TextureUnit )( ( int )TextureUnit.Texture0 + unit ) );
         GL.BindTexture( GLTarget, GLTextureHandle );
     }
 

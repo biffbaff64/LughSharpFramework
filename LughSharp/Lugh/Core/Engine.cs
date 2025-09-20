@@ -124,7 +124,7 @@ public class Engine
         get => _glBindings ??= new GLBindings();
         set => _glBindings = value;
     }
-    
+
     /// <summary>
     /// Performs essential tasks, which MUST be performed to allow the
     /// framework to work correctly.
@@ -141,6 +141,10 @@ public class Engine
         Colors.Reset();
 
         Bindings = new GLBindings();
+
+        // Generate the shader constants header. This is required for any shaders
+        // defined in .glsl files to be parsed correctly.
+        ShaderConstants.ParseGLSLHeader();
     }
 
     /// <summary>
@@ -258,14 +262,14 @@ public class Engine
         var settingsFilePath = Path.Combine( outputFolder, "pack.json" );
 
         var sb = new StringBuilder( $"Settings file exists: {File.Exists( settingsFilePath )}" );
-        
+
         if ( num > 0 )
         {
             sb.Append( $" :: {num}" );
         }
 
         sb.Append( $" :: {settingsFilePath}" );
-        
+
         Logger.Debug( sb.ToString() );
     }
     #endif

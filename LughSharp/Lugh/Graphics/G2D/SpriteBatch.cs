@@ -177,12 +177,13 @@ public partial class SpriteBatch : IBatch, IDisposable
         // Usage.COLOR_PACKED: 1 floats for packed RGBA color component.
         // Usage.TEXTURE_COORDINATES: 2 floats for texture u and v coordinates.
 
-        var va1 = VertexAttribute.Position( VertexConstants.POSITION_COMPONENTS, IGL.GL_FLOAT, false );;
-        
+        var va1 = VertexAttribute.Position( VertexConstants.POSITION_COMPONENTS, IGL.GL_FLOAT, false );
+        ;
+
         var va2 = VertexAttribute.ColorPacked( VertexConstants.COLOR_COMPONENTS, IGL.GL_FLOAT, false );
 
         var va3 = VertexAttribute.TexCoords( 0, VertexConstants.TEXCOORD_COMPONENTS, IGL.GL_FLOAT, false );
-        
+
         // Create the mesh object with the specified vertex attributes and size.
         // The mesh will hold the vertex and index data for rendering.
         _mesh = new Mesh( vertexDataType,
@@ -233,7 +234,7 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </param>
     public void Begin( bool depthMaskEnabled = false )
     {
-        lock( _lockObject )
+        lock ( _lockObject )
         {
             ThrowIfDisposed();
 
@@ -556,7 +557,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             }
 
             // Color Attribute
-            var colorLocation = program.GetAttributeLocation( "a_color" );
+            var colorLocation = program.GetAttributeLocation( ShaderConstants.A_COLOR );
 
             if ( colorLocation >= 0 )
             {
@@ -691,6 +692,7 @@ public partial class SpriteBatch : IBatch, IDisposable
         if ( texture == null )
         {
             Logger.Debug( "NULL Texture passed to SwitchTexture" );
+
             return;
         }
 
@@ -1003,6 +1005,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
+
 //            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
@@ -1120,6 +1123,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
+
 //            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
@@ -1167,6 +1171,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
+
 //            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
@@ -1206,6 +1211,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
+
 //            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
@@ -1323,6 +1329,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
+
 //            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
@@ -1364,6 +1371,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
+
 //            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
@@ -1473,6 +1481,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( texture );
             }
+
 //            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
@@ -1607,6 +1616,7 @@ public partial class SpriteBatch : IBatch, IDisposable
             {
                 SwitchTexture( region.Texture );
             }
+
 //            else if ( Idx > Vertices.Length )
             else if ( Idx > ( Vertices.Length - ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ) ) )
             {
@@ -1676,7 +1686,6 @@ public partial class SpriteBatch : IBatch, IDisposable
     /// </summary>
     public float ColorPackedRGBA => Color.ToFloatBitsRGBA( Color.R, Color.G, Color.B, Color.A );
 
-    
     public void DebugVertices()
     {
         for ( var i = 0; i < ( VERTICES_PER_SPRITE * VertexConstants.VERTEX_SIZE ); i++ )

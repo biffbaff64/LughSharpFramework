@@ -48,7 +48,7 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> and <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" />
+    /// Only <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565" /> and <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888" />
     /// are supported.
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap" /> </param>
@@ -65,7 +65,7 @@ public class ETC1
 
     /// <summary>
     /// Encodes the image via the ETC1 compression scheme.
-    /// Only <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> and <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" /> are supported.
+    /// Only <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565" /> and <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888" /> are supported.
     /// Adds a PKM header in front of the compressed image data.
     /// </summary>
     /// <param name="pixmap"> the <see cref="Pixmap" /> </param>
@@ -81,14 +81,14 @@ public class ETC1
     }
 
     /// <summary>
-    /// Takes ETC1 compressed image data and converts it to a <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> or
-    /// <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" /> <see cref="Pixmap" />.
+    /// Takes ETC1 compressed image data and converts it to a <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565" /> or
+    /// <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888" /> <see cref="Pixmap" />.
     /// Does not modify the Buffer's position or limit.
     /// </summary>
     /// <param name="etc1Data"> the <see cref="ETC1Data" /> instance </param>
-    /// <param name="format"> either <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> or <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" /> </param>
+    /// <param name="format"> either <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565" /> or <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888" /> </param>
     /// <returns> the Pixmap </returns>
-    public Pixmap DecodeImage( ETC1Data? etc1Data, Gdx2DPixmap.Gdx2DPixmapFormat format )
+    public Pixmap DecodeImage( ETC1Data? etc1Data, int format )
     {
         ArgumentNullException.ThrowIfNull( etc1Data );
 
@@ -118,22 +118,22 @@ public class ETC1
     }
 
     /// <summary>
-    /// Gets the pixel size for the given <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" />, which must be
-    /// one of <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB565" /> or <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGB888" />.
+    /// Gets the pixel size for the given <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>, which must be
+    /// one of <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB565" /> or <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGB888" />.
     /// </summary>
-    private int GetPixelSize( Gdx2DPixmap.Gdx2DPixmapFormat? format )
+    private int GetPixelSize( int format )
     {
-        if ( format == Gdx2DPixmap.Gdx2DPixmapFormat.RGB565 )
+        if ( format == Gdx2DPixmap.GDX_2D_FORMAT_RGB565 )
         {
             return RGB565_PIXEL_SIZE;
         }
 
-        if ( format == Gdx2DPixmap.Gdx2DPixmapFormat.RGB888 )
+        if ( format == Gdx2DPixmap.GDX_2D_FORMAT_RGB888 )
         {
             return RGB888_PIXEL_SIZE;
         }
 
-        throw new GdxRuntimeException( "Can only handle RGB565 or RGB888 images" );
+        throw new GdxRuntimeException( "Can only handle RGB565 or GDX_2D_FORMAT_RGB888 images" );
     }
 
     // ========================================================================
@@ -215,7 +215,7 @@ public class ETC1
 //    }
 
     /// <summary>
-    /// Decodes the compressed image data to RGB565 or RGB888 pixel data. Does not
+    /// Decodes the compressed image data to RGB565 or GDX_2D_FORMAT_RGB888 pixel data. Does not
     /// modify the position or limit of the Buffer instances.
     /// </summary>
     /// <param name="compressedData">
@@ -228,7 +228,7 @@ public class ETC1
     /// <param name="offsetDec"> the offset in bytes to the decoded image data. </param>
     /// <param name="width"> the width in pixels </param>
     /// <param name="height"> the height in pixels </param>
-    /// <param name="pixelSize"> the pixel size, either 2 (RBG565) or 3 (RGB888) </param>
+    /// <param name="pixelSize"> the pixel size, either 2 (RBG565) or 3 (GDX_2D_FORMAT_RGB888) </param>
     public virtual void DecodeImage( Buffer< byte >? compressedData,
                                      int offset,
                                      Buffer< byte > decodedData,
@@ -245,14 +245,14 @@ public class ETC1
 //    }
 
     /// <summary>
-    /// Encodes the image data given as RGB565 or RGB888. Does not modify the
+    /// Encodes the image data given as RGB565 or GDX_2D_FORMAT_RGB888. Does not modify the
     /// position or limit of the Buffer.
     /// </summary>
     /// <param name="imageData"> the image data in a direct native order Buffer </param>
     /// <param name="offset"> the offset in bytes to the image data from the start of the buffer </param>
     /// <param name="width"> the width in pixels </param>
     /// <param name="height"> the height in pixels </param>
-    /// <param name="pixelSize"> the pixel size, either 2 (RGB565) or 3 (RGB888) </param>
+    /// <param name="pixelSize"> the pixel size, either 2 (RGB565) or 3 (GDX_2D_FORMAT_RGB888) </param>
     /// <returns> a new direct native order Buffer containing the compressed image data </returns>
     public virtual Buffer< byte > EncodeImage( Buffer< byte > imageData, int offset, int width, int height, int pixelSize )
     {
@@ -267,14 +267,14 @@ public class ETC1
 //    }
 
     /// <summary>
-    /// Encodes the image data given as RGB565 or RGB888. Does not modify
+    /// Encodes the image data given as RGB565 or GDX_2D_FORMAT_RGB888. Does not modify
     /// the position or limit of the Buffer.
     /// </summary>
     /// <param name="imageData"> the image data in a direct native order Buffer </param>
     /// <param name="offset"> the offset in bytes to the image data from the start of the buffer </param>
     /// <param name="width"> the width in pixels </param>
     /// <param name="height"> the height in pixels </param>
-    /// <param name="pixelSize"> the pixel size, either 2 (RGB565) or 3 (RGB888) </param>
+    /// <param name="pixelSize"> the pixel size, either 2 (RGB565) or 3 (GDX_2D_FORMAT_RGB888) </param>
     /// <returns> a new direct native order Buffer containing the compressed image data </returns>
     public virtual Buffer< byte > EncodeImagePKM( Buffer< byte >? imageData, int offset, int width, int height, int pixelSize )
     {

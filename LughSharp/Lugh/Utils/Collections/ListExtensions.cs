@@ -56,7 +56,7 @@ public static class ListExtensions
     public static List< T > New< T >( T t )
     {
         //TODO: Is this right? Test it!
-        
+
         return [ t ];
     }
 
@@ -197,10 +197,12 @@ public static class ListExtensions
         Logger.Debug( $"{list.Count} items in list {nameof( list )}" );
 
         Logger.IsMinimal = true;
-        foreach( var entry in list )
+
+        foreach ( var entry in list )
         {
             Logger.Debug( $"{entry}" );
         }
+
         Logger.IsMinimal = false;
     }
 }

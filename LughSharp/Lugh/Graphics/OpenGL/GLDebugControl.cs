@@ -53,7 +53,7 @@ public class GLDebugControl
                                     ptr,
                                     true );
         }
-        
+
         Logger.Debug( "GL Debug output enabled" );
     }
 }

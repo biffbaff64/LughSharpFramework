@@ -74,7 +74,7 @@ public partial class TextureAtlasData
             Guard.ThrowIfNullOrEmpty( entry, nameof( entry ) );
 
             var value = entry[ 1 ].ToLower();
-            
+
             if ( value.Contains( 'x' ) )
             {
                 page.UWrap = TextureWrapMode.Repeat;

@@ -390,7 +390,7 @@ public partial class TexturePacker
     {
         Logger.Checkpoint();
 
-        var packFile = new FileInfo( Path.Combine( outputDir.FullName,scaledPackFileName + _settings.AtlasExtension ) );
+        var packFile = new FileInfo( Path.Combine( outputDir.FullName, scaledPackFileName + _settings.AtlasExtension ) );
         var packDir  = packFile.Directory;
 
         packDir?.Create();

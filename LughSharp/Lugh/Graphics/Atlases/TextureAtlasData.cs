@@ -250,8 +250,6 @@ public partial class TextureAtlasData
         {
             Regions.Sort( new ComparatorAnonymousInnerClass( this ) );
         }
-
-        return;
     }
 
     /// <summary>
@@ -329,15 +327,15 @@ public partial class TextureAtlasData
         /// </summary>
         public FileInfo? TextureFile { get; set; }
 
-        public bool                          UseMipMaps         { get; set; }
-        public Gdx2DPixmap.Gdx2DPixmapFormat Format             { get; set; } = Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888;
-        public TextureFilterMode             MinFilter          { get; set; } = TextureFilterMode.Nearest;
-        public TextureFilterMode             MagFilter          { get; set; } = TextureFilterMode.Nearest;
-        public TextureWrapMode               UWrap              { get; set; } = TextureWrapMode.ClampToEdge;
-        public TextureWrapMode               VWrap              { get; set; } = TextureWrapMode.ClampToEdge;
-        public float                         Width              { get; set; }
-        public float                         Height             { get; set; }
-        public bool                          PreMultipliedAlpha { get; set; }
+        public bool              UseMipMaps         { get; set; }
+        public int               Format             { get; set; } = Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888;
+        public TextureFilterMode MinFilter          { get; set; } = TextureFilterMode.Nearest;
+        public TextureFilterMode MagFilter          { get; set; } = TextureFilterMode.Nearest;
+        public TextureWrapMode   UWrap              { get; set; } = TextureWrapMode.ClampToEdge;
+        public TextureWrapMode   VWrap              { get; set; } = TextureWrapMode.ClampToEdge;
+        public float             Width              { get; set; }
+        public float             Height             { get; set; }
+        public bool              PreMultipliedAlpha { get; set; }
     }
 
     // ========================================================================

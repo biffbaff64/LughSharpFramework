@@ -24,6 +24,7 @@
 
 using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Utils;
+using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Lugh.Graphics;
 
@@ -43,7 +44,7 @@ public static class TextureDataFactory
     /// <exception cref="ArgumentNullException">Thrown when the file parameter is null.</exception>
     public static ITextureData LoadFromFile( FileInfo file, bool useMipMaps = true )
     {
-        return LoadFromFile( file, Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888, useMipMaps );
+        return LoadFromFile( file, Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888, useMipMaps );
     }
 
     /// <summary>
@@ -54,8 +55,10 @@ public static class TextureDataFactory
     /// <param name="useMipMaps">Specifies whether to use mipmaps.</param>
     /// <returns>The loaded texture data.</returns>
     /// <exception cref="ArgumentNullException">Thrown when the file parameter is null.</exception>
-    public static ITextureData LoadFromFile( FileInfo file, Gdx2DPixmap.Gdx2DPixmapFormat format, bool useMipMaps = true )
+    public static ITextureData LoadFromFile( FileInfo file, int format, bool useMipMaps = true )
     {
+        Logger.Checkpoint();
+
         ArgumentNullException.ThrowIfNull( file );
 
         ITextureData data = file.Extension.ToLower() switch
@@ -72,7 +75,10 @@ public static class TextureDataFactory
             // Other supported image file formats, PNG, BMP
             var _ => new FileTextureData( file, new Pixmap( file ), format, useMipMaps ),
         };
-
+        
         return data;
     }
 }
+
+// ============================================================================
+// ============================================================================

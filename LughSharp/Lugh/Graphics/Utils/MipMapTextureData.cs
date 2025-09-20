@@ -42,7 +42,7 @@ public class MipMapTextureData : ITextureData
     /// <inheritdoc />
     public bool IsOwned { get; set; }
 
-    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; } = Gdx2DPixmap.Gdx2DPixmapFormat.Alpha;
+    public int PixelFormat { get; set; } = Gdx2DPixmap.GDX_2D_FORMAT_ALPHA;
 
     // ========================================================================
 
@@ -110,6 +110,11 @@ public class MipMapTextureData : ITextureData
         }
     }
 
+    /// <inheritdoc />
+    public void DebugPrint()
+    {
+    }
+
     //TODO: This is a hack to get around the fact that GLTexture is not abstract. This should be fixed.
     private class DerivedGLTexture : GLTexture
     {
@@ -140,3 +145,6 @@ public class MipMapTextureData : ITextureData
         }
     }
 }
+
+// ============================================================================
+// ============================================================================

@@ -72,7 +72,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the FrameBuffer could not be created
     /// </exception>
-    public FrameBufferCubemap( Gdx2DPixmap.Gdx2DPixmapFormat format,
+    public FrameBufferCubemap( int format,
                                int width,
                                int height,
                                bool hasDepth,

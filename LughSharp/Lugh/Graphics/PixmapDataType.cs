@@ -34,12 +34,12 @@ namespace LughSharp.Lugh.Graphics;
 [StructLayout( LayoutKind.Sequential )]
 public struct PixmapDataType()
 {
-    public int                           Width         { get; set; } = 0;
-    public int                           Height        { get; set; } = 0;
-    public int                           BitDepth      { get; set; } = 0;
-    public Gdx2DPixmap.Gdx2DPixmapFormat ColorType     { get; set; } = 0;
-    public uint                          Blend         { get; set; } = 0;
-    public uint                          Scale         { get; set; } = 0;
-    public byte[]                        Pixels        { get; set; } = [ ];
-    public long                          TotalIDATSize { get; set; } = 0;
+    public int    Width         { get; set; } = 0;
+    public int    Height        { get; set; } = 0;
+    public byte   BitDepth      { get; set; } = 0;
+    public int    ColorType     { get; set; } = 0;
+    public uint   Blend         { get; set; } = 0;
+    public uint   Scale         { get; set; } = 0;
+    public byte[] Pixels        { get; set; } = [ ];
+    public long   TotalIDATSize { get; set; } = 0;
 }

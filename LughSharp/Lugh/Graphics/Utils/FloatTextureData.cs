@@ -49,6 +49,11 @@ public class FloatTextureData : ITextureData
     /// <inheritdoc />
     public bool IsOwned { get; set; }
 
+    /// <summary>
+    /// FloatTextureData objects are Managed.
+    /// </summary>
+    public bool IsManaged => true;
+
     // ========================================================================
 
     private readonly int  _format;
@@ -164,17 +169,17 @@ public class FloatTextureData : ITextureData
         }
     }
 
+    /// <inheritdoc />
+    public void DebugPrint()
+    {
+    }
+
     public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
-    /// <summary>
-    /// FloatTextureData objects are Managed.
-    /// </summary>
-    public bool IsManaged => true;
-
     // ========================================================================
     // ========================================================================
 
-    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat
+    public int PixelFormat
     {
         get => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
         set => throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
@@ -190,3 +195,6 @@ public class FloatTextureData : ITextureData
         throw new GdxRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 }
+
+// ============================================================================
+// ============================================================================

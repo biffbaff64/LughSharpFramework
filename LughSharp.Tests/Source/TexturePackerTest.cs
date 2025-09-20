@@ -82,6 +82,7 @@ public class TexturePackerTest
         var outputFolder = IOUtils.NormalizeAssetPath( @"\Assets\PackedImages\output" );
 
         #if DEBUG
+
 //        var settingsFilePath = Path.Combine( inputFolder, "pack.json" );
 //        settings.WriteToJsonFile( settingsFilePath );
         #endif

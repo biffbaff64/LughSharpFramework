@@ -35,19 +35,19 @@ public static class PixmapFormatExtensions
     /// Converts a Pixmap pixel format to the corresponding PixelType format.
     /// </summary>
     /// <param name="format">The Pixmap pixel format to be converted.</param>
-    /// <returns>The corresponding <see cref="Gdx2DPixmap.Gdx2DPixmapFormat"/> for the given Pixmap pixel format.</returns>
+    /// <returns>The corresponding <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> for the given Pixmap pixel format.</returns>
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided Pixmap pixel format is invalid or not supported.
     /// </exception>
-    public static Gdx2DPixmap.Gdx2DPixmapFormat SystemPixelFormatToGdx2DFormat( PixelFormat format )
+    public static int SystemPixelFormatToGdx2DFormat( PixelFormat format )
     {
         return format switch
         {
-            PixelFormat.Alpha                => Gdx2DPixmap.Gdx2DPixmapFormat.Alpha,
-            PixelFormat.Format24bppRgb       => Gdx2DPixmap.Gdx2DPixmapFormat.RGB888,
-            PixelFormat.Format32bppArgb      => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888,
-            PixelFormat.Format16bppRgb565    => Gdx2DPixmap.Gdx2DPixmapFormat.RGB565,
-            PixelFormat.Format16bppGrayScale => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444,
+            PixelFormat.Alpha                => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+            PixelFormat.Format24bppRgb       => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+            PixelFormat.Format32bppArgb      => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+            PixelFormat.Format16bppRgb565    => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
+            PixelFormat.Format16bppGrayScale => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
 
             // ----------------------------------
 
@@ -56,23 +56,23 @@ public static class PixmapFormatExtensions
     }
 
     /// <summary>
-    /// Converts a <see cref="Gdx2DPixmap.Gdx2DPixmapFormat"/> to the corresponding System.Drawing.Imaging.PixelFormat.
+    /// Converts a <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX<c/> to the corresponding System.Drawing.Imaging.PixelFormat.
     /// </summary>
-    /// <param name="format">The pixel format of type <see cref="Gdx2DPixmap.Gdx2DPixmapFormat"/>.</param>
+    /// <param name="format">The pixel format of type <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX<c/>.</param>
     /// <returns>The corresponding <see cref="System.Drawing.Imaging.PixelFormat"/>.</returns>
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
-    public static PixelFormat ToSystemPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
+    public static PixelFormat ToSystemPixelFormat( int format )
     {
         return format switch
         {
-            Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => PixelFormat.Alpha,
-            Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => PixelFormat.Alpha,
+            Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => PixelFormat.Alpha,             // IGL.GL_LUMINANCE_ALPHA,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => PixelFormat.Format32bppRgb,    // IGL.GL_RGB,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => PixelFormat.Format16bppRgb565, // IGL.GL_RGB,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => PixelFormat.Format32bppArgb,   // IGL.GL_RGBA,
 
             // ----------------------------------
 

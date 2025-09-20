@@ -22,13 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils.Exceptions;
-
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
@@ -45,7 +38,7 @@ public class FileTextureArrayData : ITextureArrayData
     /// <param name="pixelFormat"></param>
     /// <param name="useMipMaps"></param>
     /// <param name="files"></param>
-    public FileTextureArrayData( Gdx2DPixmap.Gdx2DPixmapFormat pixelFormat, bool useMipMaps, FileInfo[] files )
+    public FileTextureArrayData( int pixelFormat, bool useMipMaps, FileInfo[] files )
     {
         PixelFormat  = pixelFormat;
         _useMipMaps  = useMipMaps;
@@ -58,7 +51,7 @@ public class FileTextureArrayData : ITextureArrayData
         }
     }
 
-    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; }
+    public int PixelFormat { get; set; }
 
     [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
     public bool IsManaged

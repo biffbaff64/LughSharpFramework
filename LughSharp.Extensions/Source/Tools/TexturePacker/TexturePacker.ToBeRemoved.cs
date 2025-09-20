@@ -152,17 +152,17 @@ public partial class TexturePacker
     /// <param name="format"></param>
     /// <returns></returns>
     /// <exception cref="GdxRuntimeException"></exception>
-    private PixelFormat GetPixelFormat( Gdx2DPixmap.Gdx2DPixmapFormat format )
+    private PixelFormat GetPixelFormat( int format )
     {
         return format switch
         {
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888
-                or Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444 => PixelFormat.Format32bppArgb,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888
+                or Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444 => PixelFormat.Format32bppArgb,
 
-            Gdx2DPixmap.Gdx2DPixmapFormat.RGB565
-                or Gdx2DPixmap.Gdx2DPixmapFormat.RGB888 => PixelFormat.Format32bppRgb,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB565
+                or Gdx2DPixmap.GDX_2D_FORMAT_RGB888 => PixelFormat.Format32bppRgb,
 
-            Gdx2DPixmap.Gdx2DPixmapFormat.Alpha => PixelFormat.Alpha,
+            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA => PixelFormat.Alpha,
 
             var _ => throw new GdxRuntimeException( $"Unsupported format: {_settings.Format}" ),
         };

@@ -41,7 +41,7 @@ public class ApplicationConfiguration
     // ========================================================================
     // General Application Configuration
     // ========================================================================
-    
+
     public BackendType     GraphicsBackend      { get; set; } = BackendType.OpenGL;
     public HdpiMode        HdpiMode             { get; set; } = HdpiMode.Logical;
     public GLEmulationType GLEmulation          { get; set; } = GLEmulationType.GL20;
@@ -49,7 +49,7 @@ public class ApplicationConfiguration
     public PathTypes       PreferencesFileType  { get; set; } = PathTypes.External;
 
     [Obsolete( "To be removed" )]
-    public StreamWriter    DebugStream          { get; set; } = new( Console.OpenStandardOutput(), Encoding.UTF8 );
+    public StreamWriter DebugStream { get; set; } = new( Console.OpenStandardOutput(), Encoding.UTF8 );
 
     public bool DisableAudio                   { get; set; } = false;
     public int  AudioDeviceSimultaneousSources { get; set; } = 16;

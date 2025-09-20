@@ -27,11 +27,8 @@ using System.Text;
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Lugh.Graphics;
@@ -85,9 +82,12 @@ public class Texture : GLTexture, IManaged
     // ========================================================================
 
     /// <summary>
-    /// Create a new Texture from the file at the given path.
+    /// Create a new Texture from the file at the given internal path.
     /// </summary>
-    /// <param name="internalPath"></param>
+    /// <param name="internalPath">
+    /// The internal path to the file. For an explanation of internal paths see
+    /// <see cref="LughSharp.Lugh.Files.PathTypes.Internal" />.
+    /// </param>
     public Texture( string internalPath )
         : this( Api.Files.Internal( internalPath ), false )
     {
@@ -97,10 +97,10 @@ public class Texture : GLTexture, IManaged
     /// <summary>
     /// Create a new Texture from the file described by the given <see cref="FileInfo" />
     /// </summary>
-    /// <param name="file"></param>
+    /// <param name="file"> The file to load. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file, bool useMipMaps )
-        : this( file, Gdx2DPixmap.Gdx2DPixmapFormat.Default, useMipMaps )
+        : this( file, Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT, useMipMaps )
     {
         Name = Path.GetFileNameWithoutExtension( file.Name );
     }
@@ -108,13 +108,13 @@ public class Texture : GLTexture, IManaged
     /// <summary>
     /// Create a new Texture from the file specified in the given <see cref="FileInfo" />.
     /// The Texture pixmap format will be set to the given format, which defaults to
-    /// <see cref="Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888" />.
+    /// <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888" />.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file,
-                    Gdx2DPixmap.Gdx2DPixmapFormat format = Gdx2DPixmap.Gdx2DPixmapFormat.Default,
+                    int format = Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT,
                     bool useMipMaps = false )
         : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
     {
@@ -127,17 +127,17 @@ public class Texture : GLTexture, IManaged
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( Pixmap pixmap, bool useMipMaps = false )
-        : this( new PixmapTextureData( pixmap, null, useMipMaps, false ) )
+        : this( new PixmapTextureData( pixmap, 0, useMipMaps, false ) )
     {
     }
 
     /// <summary>
-    /// Creates a new Texture from the supplied <see cref="Pixmap" /> and <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" />
+    /// Creates a new Texture from the supplied <see cref="Pixmap" /> and <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>
     /// </summary>
     /// <param name="pixmap"> The pixmap to use. </param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
-    public Texture( Pixmap pixmap, Gdx2DPixmap.Gdx2DPixmapFormat format, bool useMipMaps = false )
+    public Texture( Pixmap pixmap, int format, bool useMipMaps = false )
         : this( new PixmapTextureData( pixmap, format, useMipMaps, false ) )
     {
     }
@@ -147,11 +147,11 @@ public class Texture : GLTexture, IManaged
     /// </summary>
     /// <param name="width"> The width in pixels. </param>
     /// <param name="height"> The Height in pixels. </param>
-    /// <param name="format"> The pixmap <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> </param>
+    /// <param name="format"> The pixmap <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> </param>
     /// <param name="managed"></param>
-    public Texture( int width, int height, Gdx2DPixmap.Gdx2DPixmapFormat format, bool managed = false )
+    public Texture( int width, int height, int format, bool managed = false )
         : this( new PixmapTextureData( new Pixmap( width, height, format ),
-                                       null,
+                                       0,
                                        false,
                                        true,
                                        managed ) )

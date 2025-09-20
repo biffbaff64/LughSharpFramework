@@ -27,7 +27,6 @@ namespace Extensions.Source.Drawing;
 [PublicAPI]
 public class Raster
 {
-    
 }
 
 // ========================================================================

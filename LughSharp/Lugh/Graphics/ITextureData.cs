@@ -83,9 +83,9 @@ public interface ITextureData : IManaged
     int Height { get; set; }
 
     /// <summary>
-    /// Returns the <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> of the pixel data.
+    /// Returns the <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> of the pixel data.
     /// </summary>
-    Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; }
+    int PixelFormat { get; set; }
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ConsumePixmap()" /> or
@@ -121,4 +121,9 @@ public interface ITextureData : IManaged
     /// </para>
     /// </summary>
     void ConsumeCustomData( int target );
+    
+    /// <summary>
+    /// Dumps the internal state of the TextureData to the log.
+    /// </summary>
+    void DebugPrint();
 }

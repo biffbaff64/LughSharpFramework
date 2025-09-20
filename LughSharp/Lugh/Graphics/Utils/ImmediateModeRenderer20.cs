@@ -262,7 +262,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
         {
             attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
                                               VertexConstants.COLOR_COMPONENTS,
-                                              "a_color" ) );
+                                              ShaderConstants.A_COLOR ) );
         }
 
         for ( var i = 0; i < numTexCoords; i++ )
@@ -298,7 +298,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     private static string CreateVertexShader( bool hasNormals, bool hasColors, int numTexCoords )
     {
         var shader = "in vec4 " + "a_position" + ";\n"
-                     + ( hasColors ? "in vec4 " + "a_color" + ";\n" : "" )
+                     + ( hasColors ? "in vec4 " + ShaderConstants.A_COLOR + ";\n" : "" )
                      + ( hasNormals ? "in vec3 " + "a_normal" + ";\n" : "" );
 
         for ( var i = 0; i < numTexCoords; i++ )
@@ -318,7 +318,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
 
         if ( hasColors )
         {
-            shader += "   v_col = " + "a_color" + ";\n"
+            shader += "   v_col = " + ShaderConstants.A_COLOR + ";\n"
                       + "   v_col.a *= 255.0 / 254.0;\n";
         }
 

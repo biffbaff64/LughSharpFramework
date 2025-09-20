@@ -214,7 +214,7 @@ public unsafe partial class GLBindings : IGLBindings
             Disable( cap );
         }
     }
-    
+
     // ========================================================================
 
     /// <inheritdoc />

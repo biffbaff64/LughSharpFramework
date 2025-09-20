@@ -22,13 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.IO.Compression;
-
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-
 using ByteOrder = LughSharp.Lugh.Utils.ByteOrder;
 using Exception = System.Exception;
 
@@ -54,8 +47,8 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// <returns> the height of the pixel data </returns>
     public int Height { get; set; }
 
-    /// <returns> the <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> of the pixel data </returns>
-    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; } = Gdx2DPixmap.Gdx2DPixmapFormat.Alpha;
+    /// <returns> the <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> of the pixel data </returns>
+    public int PixelFormat { get; set; } = Gdx2DPixmap.GDX_2D_FORMAT_ALPHA;
 
     /// <returns> whether to generate mipmaps or not. </returns>
     public bool UseMipMaps { get; set; } = useMipMaps;
@@ -457,7 +450,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                             {
                                 ETC1 etc1    = new();
                                 var  etcData = new ETC1.ETC1Data( pixelWidth, pixelHeight, data, 0, etc1 );
-                                var  pixmap  = etc1.DecodeImage( etcData, Gdx2DPixmap.Gdx2DPixmapFormat.RGB888 );
+                                var  pixmap  = etc1.DecodeImage( etcData, Gdx2DPixmap.GDX_2D_FORMAT_RGB888 );
 
                                 unsafe
                                 {
@@ -569,4 +562,12 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         _compressedData?.Dispose();
         _compressedData = null;
     }
+
+    /// <inheritdoc />
+    public void DebugPrint()
+    {
+    }
 }
+
+// ============================================================================
+// ============================================================================

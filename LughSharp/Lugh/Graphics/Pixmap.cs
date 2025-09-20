@@ -34,7 +34,7 @@ namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
 /// A Pixmap represents an image in memory. It has a width and height expressed
-/// in pixels as well as a <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> specifying the number and order
+/// in pixels as well as a <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> specifying the number and order
 /// of color components per pixel.
 /// <para>
 /// Coordinates of pixels are specified with respect to the top left corner of
@@ -114,9 +114,11 @@ public class Pixmap : IDisposable
     /// </summary>
     /// <param name="width">The width in pixels.</param>
     /// <param name="height">The height in pixels.</param>
-    /// <param name="format">The <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /></param>
-    public Pixmap( int width, int height, Gdx2DPixmap.Gdx2DPixmapFormat format )
+    /// <param name="format">The <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c></param>
+    public Pixmap( int width, int height, int format )
     {
+        Logger.Checkpoint();
+
         Gdx2DPixmap = new Gdx2DPixmap( width, height, format );
 
         SetColor( Color.White );
@@ -144,42 +146,6 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded
-    /// as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
-    /// </summary>
-    /// <param name="buffer"> A Buffer{T} holding the encoded data. </param>
-    /// <param name="offset"> The position in the data to start copying from. </param>
-    /// <param name="len"> The size of data to copy. </param>
-    /// <exception cref="GdxRuntimeException"></exception>
-    public Pixmap( Buffer< byte > buffer, int offset, int len )
-    {
-        ArgumentNullException.ThrowIfNull( buffer );
-
-        if ( !buffer.IsDirect )
-        {
-            throw new GdxRuntimeException( "Couldn't load pixmap from non-direct Buffer< byte >" );
-        }
-
-        try
-        {
-            Gdx2DPixmap = new Gdx2DPixmap( buffer, offset, len, 0 );
-        }
-        catch ( IOException e )
-        {
-            throw new GdxRuntimeException( "Couldn't load pixmap from image data", e );
-        }
-    }
-
-    /// <summary>
-    /// Creates a new Pixmap from the supplied encoded data.
-    /// </summary>
-    /// <param name="buffer"> A Buffer{T} holding the encoded data. </param>
-    public Pixmap( Buffer< byte > buffer )
-        : this( buffer, buffer.Position, buffer.Remaining() )
-    {
-    }
-
-    /// <summary>
     /// Creates a new Pixmap instance from the given file. The file must be a Png,
     /// Jpeg or Bitmap. Paletted formats are not supported.
     /// </summary>
@@ -191,7 +157,7 @@ public class Pixmap : IDisposable
     {
         ArgumentNullException.ThrowIfNull( file );
 
-        Logger.Debug( $"Creating Pixmap from file: {file.Name}" );
+        Logger.Checkpoint();
 
         try
         {
@@ -205,13 +171,25 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Creates a new Pixmap object from the supplied <see cref="Gdx2DPixmap" />.
+    /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded
+    /// as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
     /// </summary>
-    public Pixmap( Gdx2DPixmap gdx2DPixmap )
+    /// <param name="buffer"> A Buffer{T} holding the encoded data. </param>
+    /// <param name="offset"> The position in the data to start copying from. </param>
+    /// <param name="len"> The size of data to copy. </param>
+    /// <exception cref="GdxRuntimeException"></exception>
+    public Pixmap( Buffer< byte > buffer, int offset, int len )
+        : this( buffer.BackingArray(), offset, len )
     {
-        ArgumentNullException.ThrowIfNull( gdx2DPixmap );
+    }
 
-        Gdx2DPixmap = gdx2DPixmap;
+    /// <summary>
+    /// Creates a new Pixmap from the supplied encoded data.
+    /// </summary>
+    /// <param name="buffer"> A Buffer{T} holding the encoded data. </param>
+    public Pixmap( Buffer< byte > buffer )
+        : this( buffer, buffer.Position, buffer.Remaining() )
+    {
     }
 
     // ========================================================================
@@ -254,12 +232,12 @@ public class Pixmap : IDisposable
         {
             return Gdx2DPixmap?.ColorType switch
             {
-                Gdx2DPixmap.Gdx2DPixmapFormat.Alpha          => IGL.GL_UNSIGNED_BYTE,
-                Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha => IGL.GL_UNSIGNED_BYTE,
-                Gdx2DPixmap.Gdx2DPixmapFormat.RGB888         => IGL.GL_UNSIGNED_BYTE,
-                Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888       => IGL.GL_UNSIGNED_BYTE,
-                Gdx2DPixmap.Gdx2DPixmapFormat.RGB565         => IGL.GL_UNSIGNED_SHORT_5_6_5,
-                Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444       => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+                Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => IGL.GL_UNSIGNED_BYTE,
+                Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => IGL.GL_UNSIGNED_BYTE,
+                Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => IGL.GL_UNSIGNED_BYTE,
+                Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
+                Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
+                Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
 
                 var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap?.ColorType}" ),
             };
@@ -397,9 +375,9 @@ public class Pixmap : IDisposable
     }
 
     /// <summary>
-    /// Returns the <see cref="Gdx2DPixmap.Gdx2DPixmapFormat" /> of this Pixmap.
+    /// Returns the <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> of this Pixmap.
     /// </summary>
-    public Gdx2DPixmap.Gdx2DPixmapFormat GetColorFormat()
+    public int GetColorFormat()
     {
         Guard.ThrowIfNull( Gdx2DPixmap, nameof( Gdx2DPixmap ) );
 
@@ -622,7 +600,7 @@ public class Pixmap : IDisposable
     {
         GL.PixelStorei( IGL.GL_PACK_ALIGNMENT, 1 );
 
-        Pixmap pixmap = new( width, height, Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888 );
+        Pixmap pixmap = new( width, height, Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888 );
 
         fixed ( void* ptr = &pixmap.PixelData[ 0 ] )
         {
@@ -636,7 +614,7 @@ public class Pixmap : IDisposable
     {
         return PixmapIO.ReadCIM( file );
     }
-    
+
     /// <summary>
     /// Saves the specified pixmap to a file in PNG format.
     /// </summary>
@@ -671,18 +649,18 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Returns the pixel format from a valid named string.
     /// </summary>
-    public static Gdx2DPixmap.Gdx2DPixmapFormat GetFormatFromString( string str )
+    public static int GetFormatFromString( string str )
     {
         str = str.ToLower();
 
         return str switch
         {
-            "alpha"          => Gdx2DPixmap.Gdx2DPixmapFormat.Alpha,
-            "luminancealpha" => Gdx2DPixmap.Gdx2DPixmapFormat.LuminanceAlpha,
-            "rgb565"         => Gdx2DPixmap.Gdx2DPixmapFormat.RGB565,
-            "rgba4444"       => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA4444,
-            "rgb888"         => Gdx2DPixmap.Gdx2DPixmapFormat.RGB888,
-            "rgba8888"       => Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888,
+            "alpha"          => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,
+            "luminancealpha" => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA,
+            "rgb565"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
+            "rgba4444"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
+            "rgb888"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
+            "rgba8888"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
 
             var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
         };

@@ -22,10 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace Extensions.Source.Drawing;
+namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
-public class TileObserver
+public class ImageUtils
 {
 }
 

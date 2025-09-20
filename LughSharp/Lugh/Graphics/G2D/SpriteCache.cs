@@ -140,7 +140,7 @@ public class SpriteCache
                           new VertexAttribute( ( int )VertexConstants.Usage.Position, VertexConstants.POSITION_COMPONENTS,
                                                "a_position" ),
                           new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked, VertexConstants.COLOR_COMPONENTS,
-                                               "a_color" ),
+                                               ShaderConstants.A_COLOR ),
                           new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates, VertexConstants.TEXCOORD_COMPONENTS,
                                                "a_texCoord0" ) )
         {

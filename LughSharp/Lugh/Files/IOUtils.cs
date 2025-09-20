@@ -113,7 +113,7 @@ public class IOUtils
     /// <returns></returns>
     public static FileStream CreateFileWithDirectories( string filePath )
     {
-        string? directoryPath = Path.GetDirectoryName( filePath );
+        var directoryPath = Path.GetDirectoryName( filePath );
 
         if ( !string.IsNullOrEmpty( directoryPath ) )
         {
@@ -162,7 +162,7 @@ public class IOUtils
         {
             // If the directory exists, remove all files in it.
             var files = dir.GetFiles( "*" );
-            
+
             foreach ( var file in files )
             {
                 file.Delete();

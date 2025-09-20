@@ -49,7 +49,7 @@ public class TexturePackerFileProcessor : FileProcessor
 
     private int           _packCount;
     private DirectoryInfo _rootDirectory = null!;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -77,23 +77,23 @@ public class TexturePackerFileProcessor : FileProcessor
 
         if ( packFileName.ToLower().EndsWith( _defaultSettings.AtlasExtension.ToLower() ) )
         {
-            packFileName = packFileName.Substring(0, packFileName.Length - _defaultSettings.AtlasExtension.Length);
+            packFileName = packFileName.Substring( 0, packFileName.Length - _defaultSettings.AtlasExtension.Length );
         }
-        
-        PackFileName     = packFileName;
-        FlattenOutput    = true;
+
+        PackFileName  = packFileName;
+        FlattenOutput = true;
 
         // Set the default file extensions for processable images.
         AddInputSuffix( ".png", ".jpg", ".jpeg" );
 
-        InputRegex       = [ ];
-        OutputFilesList  = [ ];
-        DirsToIgnore     = [ ];
-        _dirToSettings   = [ ];
-        _packCount       = 0;
-        CountOnly        = false;
-        OutputSuffix     = string.Empty;
-        Recursive        = true;
+        InputRegex      = [ ];
+        OutputFilesList = [ ];
+        DirsToIgnore    = [ ];
+        _dirToSettings  = [ ];
+        _packCount      = 0;
+        CountOnly       = false;
+        OutputSuffix    = string.Empty;
+        Recursive       = true;
 
         // Sort input files by name to avoid platform-dependent atlas output changes.
         Comparator = ( file1, file2 ) => string.Compare( file1.Name,
@@ -122,7 +122,7 @@ public class TexturePackerFileProcessor : FileProcessor
     public virtual List< Entry > Process( DirectoryInfo? inputRoot, DirectoryInfo? outputRoot )
     {
         _rootDirectory = inputRoot ?? throw new ArgumentNullException( nameof( inputRoot ) );
-        
+
         CollectSettingsFiles( inputRoot, outputRoot );
 
         // Count the number of texture packer invocations for the ProgressListener
@@ -159,7 +159,7 @@ public class TexturePackerFileProcessor : FileProcessor
 
         return base.Process( files, outputRoot.Directory );
     }
-    
+
     /// <summary>
     /// </summary>
     /// <param name="inputDir"></param>
@@ -301,7 +301,7 @@ public class TexturePackerFileProcessor : FileProcessor
         if ( ProgressListener != null )
         {
             Logger.Debug( "Starting ProgressListener" );
-            
+
             ProgressListener.Start( 1f / _packCount );
 
             string? inputPath = null;
@@ -348,10 +348,10 @@ public class TexturePackerFileProcessor : FileProcessor
         }
 
         Pack( packer, inputDir );
-        
+
         ProgressListener?.End();
     }
-    
+
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
     // ------------------------------------------------------------------------
@@ -641,7 +641,7 @@ public class TexturePackerFileProcessor : FileProcessor
     // ------------------------------------------------------------------------
 
     #endregion Process methods
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -716,7 +716,7 @@ public class TexturePackerFileProcessor : FileProcessor
             }
         }
     }
-    
+
     /// <summary>
     /// </summary>
     /// <param name="settings"></param>

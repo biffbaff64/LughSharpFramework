@@ -42,32 +42,32 @@ public partial class Gdx2DPixmap
 
         switch ( _pixmapDataType.ColorType )
         {
-            case Gdx2DPixmapFormat.Alpha:
+            case GDX_2D_FORMAT_ALPHA:
                 ClearAlpha( _pixmapDataType, color, size );
 
                 break;
 
-            case Gdx2DPixmapFormat.LuminanceAlpha:
+            case GDX_2D_FORMAT_LUMINANCE_ALPHA:
                 ClearLuminanceAlpha( _pixmapDataType, color, size );
 
                 break;
 
-            case Gdx2DPixmapFormat.RGB888:
+            case GDX_2D_FORMAT_RGB888:
                 ClearRGB888( _pixmapDataType, color, size );
 
                 break;
 
-            case Gdx2DPixmapFormat.RGBA8888:
+            case GDX_2D_FORMAT_RGBA8888:
                 ClearRGBA8888( _pixmapDataType, color, size );
 
                 break;
 
-            case Gdx2DPixmapFormat.RGB565:
+            case GDX_2D_FORMAT_RGB565:
                 ClearRGB565( _pixmapDataType, color, size );
 
                 break;
 
-            case Gdx2DPixmapFormat.RGBA4444:
+            case GDX_2D_FORMAT_RGBA4444:
                 ClearRGBA4444( _pixmapDataType, color, size );
 
                 break;
@@ -76,7 +76,9 @@ public partial class Gdx2DPixmap
                 throw new GdxRuntimeException( "Unknown color type" );
         }
 
-        Array.Copy( _pixmapDataType.Pixels, PixmapBuffer.BackingArray(), _pixmapDataType.Pixels.Length );
+        Array.Copy( _pixmapDataType.Pixels,
+                    PixmapBuffer.BackingArray(),
+                    _pixmapDataType.Pixels.Length );
     }
 
     // ========================================================================
@@ -89,8 +91,7 @@ public partial class Gdx2DPixmap
     /// <param name="size">The total size of the pixmap in bytes.</param>
     private static void ClearAlpha( PixmapDataType pd, Color color, uint size )
     {
-        var alpha = ( byte )( color.A * 255 );
-        Array.Fill( pd.Pixels, alpha, 0, ( int )( pd.Width * pd.Height ) );
+        Array.Fill( pd.Pixels, ( byte )( color.A * 255 ), 0, ( int )( pd.Width * pd.Height ) );
     }
 
     /// <summary>
@@ -114,7 +115,7 @@ public partial class Gdx2DPixmap
     }
 
     /// <summary>
-    /// Clears the pixmap data in the RGB888 format with the specified color.
+    /// Clears the pixmap data in the GDX_2D_FORMAT_RGB888 format with the specified color.
     /// </summary>
     /// <param name="pd">The pixmap data type containing the pixel data and metadata.</param>
     /// <param name="color">The color used to clear the pixmap, specified in the ARGB color format.</param>
@@ -194,16 +195,16 @@ public partial class Gdx2DPixmap
     /// <summary>
     /// Converts a color to the specified pixel format
     /// </summary>
-    public static uint ToPixelFormat( Gdx2DPixmapFormat format, uint color )
+    public static uint ToPixelFormat( int format, uint color )
     {
         uint r, g, b, a;
 
         switch ( format )
         {
-            case Gdx2DPixmapFormat.Alpha:
+            case GDX_2D_FORMAT_ALPHA:
                 return color & 0xff;
 
-            case Gdx2DPixmapFormat.LuminanceAlpha:
+            case GDX_2D_FORMAT_LUMINANCE_ALPHA:
                 r = ( color & 0xff000000 ) >> 24;
                 g = ( color & 0xff0000 ) >> 16;
                 b = ( color & 0xff00 ) >> 8;
@@ -212,20 +213,20 @@ public partial class Gdx2DPixmap
 
                 return ( l & 0xffffff00 ) | a;
 
-            case Gdx2DPixmapFormat.RGB888:
+            case GDX_2D_FORMAT_RGB888:
                 return color >> 8;
 
-            case Gdx2DPixmapFormat.RGBA8888:
+            case GDX_2D_FORMAT_RGBA8888:
                 return color;
 
-            case Gdx2DPixmapFormat.RGB565:
+            case GDX_2D_FORMAT_RGB565:
                 r = ( ( ( color & 0xff000000 ) >> 27 ) << 11 ) & 0xf800;
                 g = ( ( ( color & 0xff0000 ) >> 18 ) << 5 ) & 0x7e0;
                 b = ( ( color & 0xff00 ) >> 11 ) & 0x1f;
 
                 return r | g | b;
 
-            case Gdx2DPixmapFormat.RGBA4444:
+            case GDX_2D_FORMAT_RGBA4444:
                 r = ( ( ( color & 0xff000000 ) >> 28 ) << 12 ) & 0xf000;
                 g = ( ( ( color & 0xff0000 ) >> 20 ) << 8 ) & 0xf00;
                 b = ( ( ( color & 0xff00 ) >> 12 ) << 4 ) & 0xf0;
@@ -368,7 +369,7 @@ public partial class Gdx2DPixmap
 /// <summary>
 /// Native method imports for Gdx2DPixmap
 /// </summary>
-internal static class NativeMethods
+file static class NativeMethods
 {
     private const string DLL_PATH = "lib/gdx2d.dll";
 

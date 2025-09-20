@@ -63,7 +63,7 @@ public class CombineSettingsProcessor : FileProcessor
 
     // ========================================================================
 
-    private readonly Entry         _entryDir;
+    private readonly Entry                      _entryDir;
     private readonly TexturePackerFileProcessor _fileProcessor;
 
     // ========================================================================
@@ -98,4 +98,3 @@ public class CombineSettingsProcessor : FileProcessor
 
 // ============================================================================
 // ============================================================================
-

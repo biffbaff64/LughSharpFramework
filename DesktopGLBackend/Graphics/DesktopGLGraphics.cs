@@ -108,6 +108,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// <inheritdoc />
     public override bool SupportsDisplayModeChange()
     {
+        // Display mode change is enabled by default on Windows Desktop.
         return true;
     }
 
@@ -202,14 +203,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     {
         if ( SupportsCubeMapSeamless() )
         {
-            if ( enable )
-            {
-                Engine.GL.Enable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
-            }
-            else
-            {
-                Engine.GL.Disable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS );
-            }
+            Engine.GL.EnableOrDisable( IGL.GL_TEXTURE_CUBE_MAP_SEAMLESS, enable );
         }
     }
 
@@ -492,7 +486,7 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
     // ========================================================================
     // ========================================================================
 
-    private void RenderWindow( GLFW.Window windowHandle, int width, int height )
+    public override void RenderWindow( GLFW.Window? windowHandle, int width, int height )
     {
         UpdateFramebufferInfo();
 
@@ -505,9 +499,9 @@ public partial class DesktopGLGraphics : GraphicsDevice, IDisposable
 
         UpdateViewport( 0, 0, BackBufferWidth, BackBufferHeight, 1 );
 
-        GLWindow.ApplicationListener.Resize( Width, Height );
-        GLWindow.ApplicationListener.Update();
-        GLWindow.ApplicationListener.Render();
+        GLWindow.ApplicationListener?.Resize( Width, Height );
+        GLWindow.ApplicationListener?.Update();
+        GLWindow.ApplicationListener?.Render();
 
         Glfw.SwapBuffers( windowHandle );
     }

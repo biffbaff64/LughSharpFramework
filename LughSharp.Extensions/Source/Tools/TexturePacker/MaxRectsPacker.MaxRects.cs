@@ -74,7 +74,7 @@ public partial class MaxRectsPacker
         {
             var newNode = ScoreRect( rect, method );
 
-            if ( newNode == null || newNode.Height == 0 )
+            if ( ( newNode == null ) || ( newNode.Height == 0 ) )
             {
                 return null;
             }
@@ -207,8 +207,8 @@ public partial class MaxRectsPacker
         {
             var width         = rect.Width;
             var height        = rect.Height;
-            var rotatedWidth  = height - _settings.PaddingY + _settings.PaddingX;
-            var rotatedHeight = width - _settings.PaddingX + _settings.PaddingY;
+            var rotatedWidth  = ( height - _settings.PaddingY ) + _settings.PaddingX;
+            var rotatedHeight = ( width - _settings.PaddingX ) + _settings.PaddingY;
             var rotate        = rect.CanRotate && _settings.Rotation;
 
             TexturePacker.Rect? newNode;

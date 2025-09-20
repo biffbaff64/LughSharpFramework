@@ -350,7 +350,7 @@ public static class PixmapIO
             _lastLineLen = lineLen;
 
             var oldPosition = pixmap.ByteBuffer.Position;
-            var isRgba8888  = pixmap.GetColorFormat() == Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888;
+            var isRgba8888  = pixmap.GetColorFormat() == Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888;
 
             for ( int y = 0, h = pixmap.Height; y < h; y++ )
             {

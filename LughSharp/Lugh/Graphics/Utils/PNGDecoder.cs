@@ -24,8 +24,6 @@
 
 using System.Text;
 
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -87,6 +85,15 @@ public class PNGDecoder
     public static PNGFormatStructs.IHDRChunk    IHDRchunk     { get; private set; }
     public static PNGFormatStructs.IDATChunk    IDATchunk     { get; private set; }
     public static long                          TotalIDATSize { get; private set; } = 0;
+    public static int                           PixelFormat   { get; private set; }
+
+    public static byte BitDepth    => IHDRchunk.BitDepth;
+    public static uint Width       => IHDRchunk.Width;
+    public static uint Height      => IHDRchunk.Height;
+    public static byte ColorType   => IHDRchunk.ColorType;
+    public static byte Compression => IHDRchunk.Compression;
+    public static byte Filter      => IHDRchunk.Filter;
+    public static byte Interlace   => IHDRchunk.Interlace;
 
     // ========================================================================
 
@@ -104,9 +111,7 @@ public class PNGDecoder
     {
         Logger.Checkpoint();
 
-        var data = File.ReadAllBytes( filename );
-
-        AnalysePNG( data, verbose );
+        AnalysePNG( File.ReadAllBytes( filename ), verbose );
     }
 
     /// <summary>
@@ -123,6 +128,8 @@ public class PNGDecoder
     /// </exception>
     public static void AnalysePNG( byte[] pngData, bool verbose = false )
     {
+        Logger.Checkpoint();
+
         if ( ( pngData == null ) || ( pngData.Length == 0 ) )
         {
             throw new ArgumentException( "Invalid PNG Data" );
@@ -137,7 +144,7 @@ public class PNGDecoder
 
         Array.Copy( pngData, 0, PngSignature.Signature, 0, SIGNATURE_LENGTH );
 
-        if ( !PngSignature.Signature.SequenceEqual( new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 } ) )
+        if ( !PngSignature.Signature.SequenceEqual( new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A } ) )
         {
             Logger.Warning( "Not a valid PNG file, Signature is incorrect" );
 
@@ -188,26 +195,30 @@ public class PNGDecoder
 
         TotalIDATSize = CalculateTotalIDATSize( pngData );
 
+        // Pixel Format
+        PixelFormat = GetFormatFromPngHeader( new MemoryStream( pngData ) );
+
         if ( verbose )
         {
             Logger.Debug( $"PNG Signature   : {BitConverter.ToString( PngSignature.Signature ).Replace( "-", " " )}" );
-            Logger.Debug( "" );
+            Logger.Debug( "-----------------------------" );
             Logger.Debug( $"IHDR            : {BitConverter.ToString( IHDRchunk.Ihdr ).Replace( "-", " " )}" );
             Logger.Debug( $"IHDR TYPE       : {BitConverter.ToString( IHDRchunk.IhdrType ).Replace( "-", " " )}" );
-            Logger.Debug( "" );
+            Logger.Debug( "-----------------------------" );
             Logger.Debug( $"- Width         : {IHDRchunk.Width}" );
             Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
             Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
-            Logger.Debug( $"- ColorType     : {ColorTypeName( IHDRchunk.ColorType )}" );
+            Logger.Debug( $"- ColorType     : {ColorTypeName( IHDRchunk.ColorType )}::{IHDRchunk.ColorType}" );
+            Logger.Debug( $"- PixelFormat   : {PixelFormatUtils.GetFormatString( PixelFormat )}::{PixelFormat}" );
             Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
             Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
             Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );
             Logger.Debug( $"- Checksum      : 0x{ReadBigEndianUInt32( IHDRchunk.Crc, 4 ):X}" );
-            Logger.Debug( "" );
+            Logger.Debug( "-----------------------------" );
 
 //            Logger.Debug( $"- IHDR/IDAT Data: {BitConverter.ToString( pngData ).Replace( "-", " " )}" );
             Logger.Debug( $"- TotalIDATSize : 0x{TotalIDATSize:X}" );
-            Logger.Debug( "" );
+            Logger.Debug( "-----------------------------" );
         }
     }
 
@@ -245,6 +256,45 @@ public class PNGDecoder
         }
 
         return totalIDATSize;
+    }
+
+    /// <summary>
+    /// Parses the provided byte array containing IHDR chunk data to extract information such
+    /// as image dimensions, bit depth, color type, compression method, filter method, and
+    /// interlace method. The extracted details are logged for debugging purposes.
+    /// </summary>
+    /// <param name="data">
+    /// The byte array containing the IHDR chunk data. Expected to be 13 bytes in length.
+    /// </param>
+    /// <param name="verbose"></param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the provided byte array is not the correct length.
+    /// </exception>
+    private static void ParseIHDR( byte[] data, bool verbose = false )
+    {
+        if ( data.Length != IHDR_DATA_SIZE )
+        {
+            Logger.Warning( "IHDR chunk is an unexpected size" );
+
+            return;
+        }
+
+        if ( verbose )
+        {
+            var bitDepth    = data[ BITDEPTH_OFFSET ];
+            var colorType   = data[ COLORTYPE_OFFSET ];
+            var colorFormat = DetermineColorFormat( ColorType, bitDepth );
+
+            Logger.Debug( "IHDR Data Breakdown:" );
+            Logger.Debug( $"Width: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Take( 4 ).ToArray() ) ) )} pixels" );
+            Logger.Debug( $"Height: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Skip( 4 ).Take( 4 ).ToArray() ) ) )} pixels" );
+            Logger.Debug( $"Bit Depth: {data[ BITDEPTH_OFFSET ]}" );
+            Logger.Debug( $"Color Type: {colorType}, {ColorTypeName( colorType )}" );
+            Logger.Debug( $"Color Format: {colorFormat}" );
+            Logger.Debug( $"Compression Method: {data[ COMPRESSION_OFFSET ]}" );
+            Logger.Debug( $"Filter Method: {data[ FILTER_OFFSET ]}" );
+            Logger.Debug( $"Interlace Method: {data[ INTERLACE_OFFSET ]}" );
+        }
     }
 
     /// <summary>
@@ -370,43 +420,6 @@ public class PNGDecoder
     }
 
     /// <summary>
-    /// Parses the provided byte array containing IHDR chunk data to extract information such
-    /// as image dimensions, bit depth, color type, compression method, filter method, and
-    /// interlace method. The extracted details are logged for debugging purposes.
-    /// </summary>
-    /// <param name="data">
-    /// The byte array containing the IHDR chunk data. Expected to be 13 bytes in length.
-    /// </param>
-    /// <exception cref="ArgumentException">
-    /// Thrown if the provided byte array is not the correct length.
-    /// </exception>
-    private static void ParseIHDR( byte[] data )
-    {
-        if ( data.Length != IHDR_DATA_SIZE )
-        {
-            Logger.Warning( "IHDR chunk is an unexpected size" );
-
-            return;
-        }
-
-        var bitDepth  = data[ BITDEPTH_OFFSET ];
-        var colorType = data[ COLORTYPE_OFFSET ];
-
-        Logger.Debug( "IHDR Data Breakdown:" );
-        Logger.Debug( $"Width: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Take( 4 ).ToArray() ) ) )} pixels" );
-        Logger.Debug( $"Height: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Skip( 4 ).Take( 4 ).ToArray() ) ) )} pixels" );
-        Logger.Debug( $"Bit Depth: {bitDepth}" );
-        Logger.Debug( $"Color Type: {colorType}, {ColorTypeName( colorType )}" );
-
-        var colorFormat = DetermineColorFormat( colorType, bitDepth );
-
-        Logger.Debug( "Color Format: " + colorFormat );
-        Logger.Debug( $"Compression Method: {data[ COMPRESSION_OFFSET ]}" );
-        Logger.Debug( $"Filter Method: {data[ FILTER_OFFSET ]}" );
-        Logger.Debug( $"Interlace Method: {data[ INTERLACE_OFFSET ]}" );
-    }
-
-    /// <summary>
     /// Calculates the number of bytes per pixel for a given PNG color type and bit depth.
     /// </summary>
     /// <param name="colorType">
@@ -443,6 +456,73 @@ public class PNGDecoder
 
             var _ => -1,
         };
+    }
+
+    /// <summary>
+    /// Gets the pixel format ( RGBA8888, RGB565, etc. ) from the provided
+    /// PNG image data.
+    /// </summary>
+    /// <param name="pngStream"> A Stream with which to access the data. </param>
+    /// <returns>
+    /// A Gdx2DPixmapFormat enum value representing the pixel format of the PNG image.
+    /// </returns>
+    public static int GetFormatFromPngHeader( Stream pngStream )
+    {
+        // Read PNG signature (8 bytes)
+        var signature = new byte[ 8 ];
+
+        pngStream.ReadExactly( signature, 0, 8 );
+
+        // Read IHDR chunk length (4 bytes) and type (4 bytes)
+        pngStream.ReadExactly( new byte[ 4 ], 0, 4 ); // length
+        var type = new byte[ 4 ];
+        pngStream.ReadExactly( type, 0, 4 );
+
+        // Ensure it's IHDR
+        if ( Encoding.ASCII.GetString( type ) != "IHDR" )
+        {
+            throw new Exception( "Invalid PNG: Missing IHDR" );
+        }
+
+        // Read IHDR data (13 bytes)
+        var ihdr = new byte[ 13 ];
+        pngStream.ReadExactly( ihdr, 0, 13 );
+
+        var bitDepth  = ihdr[ 8 ];
+        var colorType = ihdr[ 9 ];
+
+        // Map PNG color type and bit depth to the format
+        var format = ( colorType, bitDepth ) switch
+        {
+            (6, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,        // Truecolor with alpha, 8 bits
+            (2, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,          // Truecolor, 8 bits
+            (0, 8) => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,           // Grayscale, 8 bits
+            (4, 8) => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
+            (2, 5) => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,          // Not standard, but you can add logic for 16-bit
+
+            // Add more mappings as needed
+            var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
+        };
+
+        return format;
+    }
+
+    public static int DeterminePixelFormatFromBitDepth( byte colorType, byte bitDepth )
+    {
+        // Map PNG color type and bit depth to the format
+        var format = ( colorType, bitDepth ) switch
+        {
+            (6, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,        // Truecolor with alpha, 8 bits
+            (2, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,          // Truecolor, 8 bits
+            (0, 8) => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,           // Grayscale, 8 bits
+            (4, 8) => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
+            (2, 5) => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,          // Not standard, but you can add logic for 16-bit
+
+            // Add more mappings as needed
+            var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
+        };
+
+        return format;
     }
 
     /// <summary>
@@ -541,5 +621,154 @@ public class PNGDecoder
             BitConverter.ToInt32( heightbytes, 0 ) );
     }
 
-    // ========================================================================
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="rawRgba"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="format"></param>
+    /// <returns></returns>
+    public static byte[] CreatePNGFromRawRGBA( byte[] rawRgba,
+                                               int width,
+                                               int height,
+                                               int format )
+    {
+        ArgumentNullException.ThrowIfNull( rawRgba );
+
+        if ( rawRgba.Length != ( width * height * 4 ) )
+        {
+            throw new ArgumentException( "Input data size does not match width*height*4" );
+        }
+
+        using var ms = new MemoryStream();
+
+        // PNG signature
+        ms.Write( [ 137, 80, 78, 71, 13, 10, 26, 10 ] );
+
+        // IHDR chunk
+        using ( var ihdr = new MemoryStream() )
+        {
+            WriteBigEndian( ihdr, width );
+            WriteBigEndian( ihdr, height );
+
+            var colorType = PixelFormatUtils.PixmapFormatToPNGColorType( format );
+
+            ihdr.WriteByte( 8 );         // bit depth
+            ihdr.WriteByte( colorType ); // color type: RGBA
+            ihdr.WriteByte( 0 );         // compression
+            ihdr.WriteByte( 0 );         // filter
+            ihdr.WriteByte( 0 );         // interlace
+
+            WriteChunk( ms, "IHDR", ihdr.ToArray() );
+        }
+
+        // Prepare image data with filter bytes
+        var scanlineLen = ( width * 4 ) + 1;
+        var imageData   = new byte[ scanlineLen * height ];
+
+        for ( var y = 0; y < height; y++ )
+        {
+            imageData[ y * scanlineLen ] = 0; // filter type 0 (None)
+            Buffer.BlockCopy( rawRgba, y * width * 4, imageData, ( y * scanlineLen ) + 1, width * 4 );
+        }
+
+        // Compress image data (zlib)
+        byte[] compressed;
+
+        using ( var comp = new MemoryStream() )
+        {
+            using ( var deflate = new ZLibStream( comp, CompressionLevel.Optimal, true ) )
+            {
+                deflate.Write( imageData, 0, imageData.Length );
+            }
+
+            compressed = comp.ToArray();
+        }
+
+        // IDAT chunk
+        WriteChunk( ms, "IDAT", compressed );
+
+        // IEND chunk
+        WriteChunk( ms, "IEND", [ ] );
+
+        return ms.ToArray();
+
+        // --- Local helpers ---
+        static void WriteBigEndian( Stream s, int v )
+        {
+            s.WriteByte( ( byte )( ( v >> 24 ) & 0xFF ) );
+            s.WriteByte( ( byte )( ( v >> 16 ) & 0xFF ) );
+            s.WriteByte( ( byte )( ( v >> 8 ) & 0xFF ) );
+            s.WriteByte( ( byte )( v & 0xFF ) );
+        }
+
+        static void WriteChunk( Stream s, string type, byte[] data )
+        {
+            WriteBigEndian( s, data.Length );
+            var typeBytes = Encoding.ASCII.GetBytes( type );
+            s.Write( typeBytes, 0, 4 );
+            s.Write( data, 0, data.Length );
+
+            // CRC
+            using var crc32 = new Crc32();
+            crc32.TransformBlock( typeBytes, 0, 4, null, 0 );
+            crc32.TransformBlock( data, 0, data.Length, null, 0 );
+            crc32.TransformFinalBlock( [ ], 0, 0 );
+
+            if ( crc32.Hash != null )
+            {
+                WriteBigEndian( s, BitConverter.ToInt32( crc32.Hash.Reverse().ToArray(), 0 ) );
+            }
+        }
+    }
+
+    /// <summary>
+    /// CRC32 implementation (minimal)
+    /// </summary>
+    public class Crc32 : HashAlgorithm
+    {
+        public override int  HashSize => 32;
+        private         uint _crc = 0xFFFFFFFF;
+
+        private static readonly uint[] _table = Enumerable.Range( 0, 256 ).Select( i =>
+        {
+            var c = ( uint )i;
+
+            for ( var k = 0; k < 8; k++ )
+            {
+                c = ( c & 1 ) != 0 ? 0xEDB88320 ^ ( c >> 1 ) : c >> 1;
+            }
+
+            return c;
+        } ).ToArray();
+
+        public override void Initialize()
+        {
+            _crc = 0xFFFFFFFF;
+        }
+
+        protected override void HashCore( byte[] array, int ibStart, int cbSize )
+        {
+            for ( var i = ibStart; i < ( ibStart + cbSize ); i++ )
+            {
+                _crc = _table[ ( byte )( _crc ^ array[ i ] ) ] ^ ( _crc >> 8 );
+            }
+        }
+
+        protected override byte[] HashFinal()
+        {
+            var hash = BitConverter.GetBytes( ~_crc );
+
+            if ( BitConverter.IsLittleEndian )
+            {
+                Array.Reverse( hash );
+            }
+
+            return hash;
+        }
+    }
 }
+
+// ============================================================================
+// ============================================================================

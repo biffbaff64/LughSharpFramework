@@ -67,11 +67,11 @@ public partial class DesktopGLWindow
 
         if ( iconified )
         {
-            ApplicationListener.Pause();
+            ApplicationListener?.Pause();
         }
         else
         {
-            ApplicationListener.Resume();
+            ApplicationListener?.Resume();
         }
     }
 

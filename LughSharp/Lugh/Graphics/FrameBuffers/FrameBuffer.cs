@@ -22,15 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.FrameBuffers;
 
 /// <summary>
-/// Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper class which should
+/// Encapsulates OpenGL frame buffer objects. This is a simple helper class which should
 /// cover most FBO uses. It will automatically create a texture for the color attachment and a
 /// renderbuffer for the depth buffer.
 /// You can get a hold of the texture by <see cref="GLFrameBuffer{T}.GetColorBufferTexture" />.
@@ -72,7 +70,7 @@ public class FrameBuffer : GLFrameBuffer< Texture >
     /// <param name="hasDepth"> whether to attach a depth buffer </param>
     /// <param name="hasStencil"></param>
     /// <exception cref="GdxRuntimeException"> in case the FrameBuffer could not be created  </exception>
-    public FrameBuffer( Gdx2DPixmap.Gdx2DPixmapFormat format, int width, int height, bool hasDepth, bool hasStencil = false )
+    public FrameBuffer( int format, int width, int height, bool hasDepth, bool hasStencil = false )
     {
         var frameBufferBuilder = new FrameBufferBuilder( width, height );
 

@@ -36,10 +36,10 @@ namespace LughSharp.Lugh.Graphics;
 public abstract class Image
 {
     // Common properties
-    public virtual int Width    { get; protected set; }
-    public virtual int Height   { get; protected set; }
-    public virtual int BitDepth { get; protected set; }
+    public virtual int Width  { get; protected set; }
+    public virtual int Height { get; protected set; }
 
+    public byte BitDepth   { get; protected set; }
     public bool IsDisposed { get; protected set; }
 
     // ========================================================================

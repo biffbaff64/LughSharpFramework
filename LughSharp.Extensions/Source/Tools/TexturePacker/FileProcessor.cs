@@ -217,9 +217,9 @@ public partial class FileProcessor
             {
                 ProcessDir( entry, dirEntries );
             }
-            catch ( System.Exception ex )
+            catch ( Exception ex )
             {
-                throw new System.Exception( $"Error processing directory: {entry.InputFile.FullName}", ex );
+                throw new Exception( $"Error processing directory: {entry.InputFile.FullName}", ex );
             }
 
             allEntries.AddRange( dirEntries );
@@ -236,9 +236,9 @@ public partial class FileProcessor
             {
                 ProcessFile( entry );
             }
-            catch ( System.Exception ex )
+            catch ( Exception ex )
             {
-                throw new System.Exception( $"Error processing file: {entry.InputFile?.FullName}", ex );
+                throw new Exception( $"Error processing file: {entry.InputFile?.FullName}", ex );
             }
         }
 
@@ -267,6 +267,7 @@ public partial class FileProcessor
     /// The current recursion depth during processing, used to manage directory
     /// hierarchy and traversal.
     /// </param>
+
 //    public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
 //                                 Dictionary< DirectoryInfo, List< Entry > > dirToEntries, int depth )
 //    {
@@ -376,7 +377,6 @@ public partial class FileProcessor
 //            }
 //        }
 //    }
-
     public virtual void Process( FileInfo[] files, DirectoryInfo outputRoot, DirectoryInfo outputDir,
                                  Dictionary< DirectoryInfo, List< Entry >? > dirToEntries, int depth )
     {

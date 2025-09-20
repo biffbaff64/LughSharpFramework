@@ -32,12 +32,12 @@ namespace LughSharp.Lugh.Graphics.Utils;
 [PublicAPI]
 public class PixmapTextureData : ITextureData
 {
-    public Pixmap                        Pixmap        { get; set; }
-    public bool                          DisposePixmap { get; set; }
-    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat   { get; set; }
-    public bool                          IsManaged     { get; set; }
-    public bool                          UseMipMaps    { get; set; }
-    public bool                          IsPrepared    { get; set; } = true;
+    public Pixmap Pixmap        { get; set; }
+    public bool   DisposePixmap { get; set; }
+    public int    PixelFormat   { get; set; }
+    public bool   IsManaged     { get; set; }
+    public bool   UseMipMaps    { get; set; }
+    public bool   IsPrepared    { get; set; } = true;
 
     /// <inheritdoc />
     public bool IsOwned { get; set; }
@@ -45,14 +45,14 @@ public class PixmapTextureData : ITextureData
     // ========================================================================
 
     public PixmapTextureData( Pixmap pixmap,
-                              Gdx2DPixmap.Gdx2DPixmapFormat? format,
+                              int format,
                               bool useMipMaps,
                               bool disposePixmap,
                               bool managed = false )
     {
         Pixmap        = pixmap;
         DisposePixmap = disposePixmap;
-        PixelFormat   = format ?? Gdx2DPixmap.Gdx2DPixmapFormat.Default;
+        PixelFormat   = format;
         IsManaged     = managed;
         UseMipMaps    = useMipMaps;
     }
@@ -85,6 +85,11 @@ public class PixmapTextureData : ITextureData
         set { }
     }
 
+    /// <inheritdoc />
+    public void DebugPrint()
+    {
+    }
+
     // ========================================================================
 
     public void ConsumeCustomData( int target )
@@ -98,3 +103,6 @@ public class PixmapTextureData : ITextureData
                         " instance as it is already prepared." );
     }
 }
+
+// ============================================================================
+// ============================================================================

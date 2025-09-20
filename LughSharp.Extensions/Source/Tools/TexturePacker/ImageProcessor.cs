@@ -114,7 +114,7 @@ public class ImageProcessor
         {
             rect.UnloadImage( file );
         }
-        
+
         return rect;
     }
 
@@ -191,6 +191,7 @@ public class ImageProcessor
         {
             throw new GdxRuntimeException( $"Unable to read image: {name}" );
         }
+
         name ??= string.Empty;
 
         var width  = image.Width;

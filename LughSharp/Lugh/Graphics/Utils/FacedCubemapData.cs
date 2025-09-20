@@ -22,12 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
-
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils.Exceptions;
-
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
@@ -72,25 +66,25 @@ public class FacedCubemapData : ICubemapData
                              Pixmap? positiveZ,
                              Pixmap? negativeZ,
                              bool useMipMaps = false )
-        : this( positiveX == null ? null : new PixmapTextureData( positiveX, null, useMipMaps, false ),
-                negativeX == null ? null : new PixmapTextureData( negativeX, null, useMipMaps, false ),
-                positiveY == null ? null : new PixmapTextureData( positiveY, null, useMipMaps, false ),
-                negativeY == null ? null : new PixmapTextureData( negativeY, null, useMipMaps, false ),
-                positiveZ == null ? null : new PixmapTextureData( positiveZ, null, useMipMaps, false ),
-                negativeZ == null ? null : new PixmapTextureData( negativeZ, null, useMipMaps, false ) )
+        : this( positiveX == null ? null : new PixmapTextureData( positiveX, 0, useMipMaps, false ),
+                negativeX == null ? null : new PixmapTextureData( negativeX, 0, useMipMaps, false ),
+                positiveY == null ? null : new PixmapTextureData( positiveY, 0, useMipMaps, false ),
+                negativeY == null ? null : new PixmapTextureData( negativeY, 0, useMipMaps, false ),
+                positiveZ == null ? null : new PixmapTextureData( positiveZ, 0, useMipMaps, false ),
+                negativeZ == null ? null : new PixmapTextureData( negativeZ, 0, useMipMaps, false ) )
     {
     }
 
     /// <summary>
     /// Construct a Cubemap with <see cref="Pixmap" />s for each side of the specified size.
     /// </summary>
-    public FacedCubemapData( int width, int height, int depth, Gdx2DPixmap.Gdx2DPixmapFormat format )
-        : this( new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
-                new PixmapTextureData( new Pixmap( depth, height, format ), null, false, true ),
-                new PixmapTextureData( new Pixmap( width, depth, format ), null, false, true ),
-                new PixmapTextureData( new Pixmap( width, depth, format ), null, false, true ),
-                new PixmapTextureData( new Pixmap( width, height, format ), null, false, true ),
-                new PixmapTextureData( new Pixmap( width, height, format ), null, false, true ) )
+    public FacedCubemapData( int width, int height, int depth, int format )
+        : this( new PixmapTextureData( new Pixmap( depth, height, format ), 0, false, true ),
+                new PixmapTextureData( new Pixmap( depth, height, format ), 0, false, true ),
+                new PixmapTextureData( new Pixmap( width, depth, format ), 0, false, true ),
+                new PixmapTextureData( new Pixmap( width, depth, format ), 0, false, true ),
+                new PixmapTextureData( new Pixmap( width, height, format ), 0, false, true ),
+                new PixmapTextureData( new Pixmap( width, height, format ), 0, false, true ) )
     {
     }
 
@@ -332,7 +326,7 @@ public class FacedCubemapData : ICubemapData
             throw new GdxRuntimeException( "Cannot load pixmap, _data is null!" );
         }
 
-        _data[ side.Index ] = ( pixmap == null ? null : new PixmapTextureData( pixmap, null, false, false ) )
+        _data[ side.Index ] = ( pixmap == null ? null : new PixmapTextureData( pixmap, 0, false, false ) )
                               ?? throw new GdxRuntimeException( "Error loadin pixmap" );
     }
 

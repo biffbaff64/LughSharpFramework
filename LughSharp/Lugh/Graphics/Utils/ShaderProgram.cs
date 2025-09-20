@@ -164,11 +164,11 @@ public class ShaderProgram : IDisposable
 
         GL.DeleteShader( _vertexShaderHandle );
         GL.DeleteShader( _fragmentShaderHandle );
-        
+
         CacheAttribute( "a_position" );
-        CacheAttribute( "a_color" );
+        CacheAttribute( ShaderConstants.A_COLOR );
         CacheAttribute( "a_texCoord0" );
-        
+
         CacheUniform( "u_combinedMatrix" );
         CacheUniform( "u_texture" );
     }
@@ -516,10 +516,20 @@ public class ShaderProgram : IDisposable
 
     // ========================================================================
 
-    public void Use() => GL.UseProgram( ShaderProgramHandle );
+    public void Use()
+    {
+        GL.UseProgram( ShaderProgramHandle );
+    }
 
-    public bool HasUniform( string name ) => _uniformLocations.ContainsKey( name );
-    public bool HasAttribute( string name ) => _attributeLocations.ContainsKey( name );
+    public bool HasUniform( string name )
+    {
+        return _uniformLocations.ContainsKey( name );
+    }
+
+    public bool HasAttribute( string name )
+    {
+        return _attributeLocations.ContainsKey( name );
+    }
 
     private void CacheUniform( string name )
     {

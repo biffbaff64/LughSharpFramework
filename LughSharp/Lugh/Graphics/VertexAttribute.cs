@@ -186,7 +186,7 @@ public class VertexAttribute
     public static VertexAttribute ColorPacked( int components,
                                                int type = IGL.GL_UNSIGNED_BYTE,
                                                bool normalized = true,
-                                               string alias = "a_color" )
+                                               string alias = ShaderConstants.A_COLOR )
     {
         return new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
                                     components,
@@ -209,7 +209,7 @@ public class VertexAttribute
                                     4,
                                     IGL.GL_FLOAT,
                                     false,
-                                    "a_color" );
+                                    ShaderConstants.A_COLOR );
     }
 
     /// <summary>

@@ -55,7 +55,7 @@ public class FileTextureData : ITextureData
     public bool UseMipMaps { get; set; }
 
     /// <inheritdoc/>
-    public Gdx2DPixmap.Gdx2DPixmapFormat PixelFormat { get; set; }
+    public int PixelFormat { get; set; }
 
     // ========================================================================
 
@@ -64,8 +64,10 @@ public class FileTextureData : ITextureData
     // ========================================================================
     // ========================================================================
 
-    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, Gdx2DPixmap.Gdx2DPixmapFormat format, bool useMipMaps )
+    public FileTextureData( FileInfo file, Pixmap preloadedPixmap, int format, bool useMipMaps )
     {
+        Logger.Checkpoint();
+        
         File        = file;
         _pixmap     = preloadedPixmap;
         PixelFormat = format;
@@ -76,10 +78,7 @@ public class FileTextureData : ITextureData
         // If the pixmap format doesn't match our desired format, convert it
         if ( _pixmap.GetColorFormat() != format )
         {
-            var newPixmap = new Pixmap( _pixmap.Width, _pixmap.Height, format );
-            newPixmap.DrawPixmap( _pixmap, 0, 0 );
-            _pixmap.Dispose();
-            _pixmap = newPixmap;
+            _pixmap.Gdx2DPixmap?.ConvertPixelFormatTo( format );
         }
 
         IsOwned = false;
@@ -105,7 +104,7 @@ public class FileTextureData : ITextureData
 
         if ( _pixmap == null )
         {
-            var ext   = File.Extension ?? string.Empty;
+            var ext   = File.Extension;
             var isCim = ext.Equals( "cim", StringComparison.OrdinalIgnoreCase );
 
             _pixmap = isCim ? PixmapIO.ReadCIM( File ) : new Pixmap( File );
@@ -122,18 +121,13 @@ public class FileTextureData : ITextureData
         }
 
         // Resolve/validate pixel format
-        if ( PixelFormat == Gdx2DPixmap.Gdx2DPixmapFormat.Default )
+        if ( PixelFormat == Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT )
         {
             PixelFormat = _pixmap.GetColorFormat();
         }
         else if ( PixelFormat != _pixmap.GetColorFormat() )
         {
-            Logger.Debug( $"Requested pixel format {PixelFormat} differs from pixmap format {_pixmap.GetColorFormat()}." );
-            Logger.Debug( $"Converting pixmap format from {_pixmap.GetColorFormat()} to {PixelFormat}." );
-
             _pixmap.Gdx2DPixmap?.ConvertPixelFormatTo( PixelFormat );
-
-            // or... throw new NotSupportedException( $"Requested pixel format {PixelFormat} differs from pixmap format {_pixmap.GetColorFormat()}." );
         }
 
         IsPrepared = true;
@@ -183,7 +177,7 @@ public class FileTextureData : ITextureData
     /// OpenGL ES texture. A call to <see cref="ITextureData.Prepare" /> must preceed a call
     /// to this method.
     /// <para>
-    /// Any internal data structures created in <see cref="ITextureData.Prepare" /> should be
+    /// Any internal data struct.ures created in <see cref="ITextureData.Prepare" /> should be
     /// disposed of here.
     /// </para>
     /// </summary>
@@ -191,4 +185,18 @@ public class FileTextureData : ITextureData
     {
         throw new GdxRuntimeException( "This TextureData implementation does not upload data itself" );
     }
+
+    /// <inheritdoc />
+    public void DebugPrint()
+    {
+        Logger.Debug( $"FileTextureData: {File.Name}" );
+        Logger.Debug( $"Size           : {Width} x {Height}" );
+        Logger.Debug( $"IsPrepared     : {IsPrepared}" );
+        Logger.Debug( $"IsOwned        : {IsOwned}" );
+        Logger.Debug( $"UseMipMaps     : {UseMipMaps}" );
+        Logger.Debug( $"PixelFormat    : {PixelFormatUtils.GetFormatString( PixelFormat )}" );
+    }
 }
+
+// ============================================================================
+// ============================================================================

@@ -114,9 +114,9 @@ public class TexturePackerSettings
     public TextureWrapMode WrapY { get; set; }
 
     /// <summary>
-    /// The <see cref="Gdx2DPixmap.Gdx2DPixmapFormat"/> the texture will use in-memory.
+    /// The <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX<c/> the texture will use in-memory.
     /// </summary>
-    public Gdx2DPixmap.Gdx2DPixmapFormat Format { get; set; }
+    public int Format { get; set; }
 
     /// <summary>
     /// If true, two images that are pixel for pixel the same will only be packed once.
@@ -247,7 +247,7 @@ public class TexturePackerSettings
     #if DEBUG
     public bool CleanAtStart { get; set; }
     #endif
-    
+
     // ====================================================================
 
     private JsonSerializerOptions _defaultJsonSerializerOptions = new()
@@ -284,7 +284,7 @@ public class TexturePackerSettings
         StripWhitespaceX      = false;
         StripWhitespaceY      = false;
         IsAlias               = true;
-        Format                = Gdx2DPixmap.Gdx2DPixmapFormat.RGBA8888;
+        Format                = Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888;
         JpegQuality           = 1.0f;
         OutputFormat          = "png";
         FilterMin             = TextureFilterMode.Nearest;
@@ -309,7 +309,7 @@ public class TexturePackerSettings
         Scale                 = [ 1.0f ];
         ScaleSuffix           = [ "" ];
         ScaleResampling       = [ Resampling.Bicubic ];
-        
+
         #if DEBUG
         CleanAtStart = false;
         #endif
@@ -359,7 +359,7 @@ public class TexturePackerSettings
         Scale                 = [ 1.0f ];
         ScaleSuffix           = [ "" ];
         ScaleResampling       = [ Resampling.Bicubic ];
-        
+
         #if DEBUG
         CleanAtStart = false;
         #endif
@@ -416,7 +416,7 @@ public class TexturePackerSettings
         settings.Scale.CopyTo( Scale, 0 );
         settings.ScaleSuffix.CopyTo( ScaleSuffix, 0 );
         ScaleResampling = settings.ScaleResampling.ToList();
-        
+
         #if DEBUG
         CleanAtStart = false;
         #endif

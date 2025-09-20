@@ -97,7 +97,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="enable"> True or false as appropriate. </param>
     void EnableOrDisable( int cap, GLboolean enable );
-    
+
     /// <summary>
     /// Test whether a capability is enabled.
     /// </summary>

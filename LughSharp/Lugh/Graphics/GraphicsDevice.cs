@@ -87,7 +87,8 @@ public abstract class GraphicsDevice : IGraphicsDevice
     }
 
     // ========================================================================
-    // 
+
+    public abstract void RenderWindow( Window windowHandle, int width, int height );
 
     /// <inheritdoc />
     public abstract void UpdateViewport( int x, int y, int width, int height, int source = 0 );
@@ -129,7 +130,6 @@ public abstract class GraphicsDevice : IGraphicsDevice
     public abstract bool SetFullscreenMode( IGraphicsDevice.DisplayMode displayMode );
 
     // ========================================================================
-    // 
 
     /// <inheritdoc />
     public abstract bool SupportsExtension( string extension );

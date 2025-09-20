@@ -105,7 +105,7 @@ public interface ITextureArrayData
 [PublicAPI]
 public class TextureArrayDataFactory
 {
-    public static ITextureArrayData LoadFromFiles( Gdx2DPixmap.Gdx2DPixmapFormat format,
+    public static ITextureArrayData LoadFromFiles( int format,
                                                    bool useMipMaps,
                                                    params FileInfo[] files )
     {
