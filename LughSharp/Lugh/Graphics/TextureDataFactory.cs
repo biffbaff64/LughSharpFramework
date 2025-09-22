@@ -22,10 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Utils.Logging;
-
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
@@ -55,27 +51,49 @@ public static class TextureDataFactory
     /// <param name="useMipMaps">Specifies whether to use mipmaps.</param>
     /// <returns>The loaded texture data.</returns>
     /// <exception cref="ArgumentNullException">Thrown when the file parameter is null.</exception>
-    public static ITextureData LoadFromFile( FileInfo file, int format, bool useMipMaps = true )
+    public static ITextureData LoadFromFile( FileInfo file,
+                                             int format,
+                                             bool useMipMaps = true )
     {
         Logger.Checkpoint();
 
         ArgumentNullException.ThrowIfNull( file );
 
-        ITextureData data = file.Extension.ToLower() switch
+        ITextureData data;
+
+        switch ( file.Extension.ToLower() )
         {
             // Common Information Model image file format.
-            ".cim" => new FileTextureData( file, PixmapIO.ReadCIM( file ), format, useMipMaps ),
+            case ".cim":
+                data = new FileTextureData( file, PixmapIO.ReadCIM( file ), format, useMipMaps );
+
+                break;
 
             // Compressed Texture format for WebGL and OpenGL ES.
-            ".etc1" => new Etc1TextureData( file, useMipMaps ),
+            case ".etc1":
+                data = new Etc1TextureData( file, useMipMaps );
+
+                break;
 
             // Kronos TeXture image file format for OpenGL and OpenGL ES.
-            ".ktx" or ".zktx" => new KtxTextureData( file, useMipMaps ),
+            case ".ktx" or ".zktx":
+                data = new KtxTextureData( file, useMipMaps );
+
+                break;
 
             // Other supported image file formats, PNG, BMP
-            var _ => new FileTextureData( file, new Pixmap( file ), format, useMipMaps ),
-        };
-        
+            case var _:
+                var pixmap = new Pixmap( file );
+                
+                Logger.Checkpoint();
+                pixmap.Debug();
+
+                Logger.Checkpoint();
+                data = new FileTextureData( file, pixmap, format, useMipMaps );
+
+                break;
+        }
+
         return data;
     }
 }

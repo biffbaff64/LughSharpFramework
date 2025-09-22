@@ -22,15 +22,17 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
-using LughSharp.Lugh.Utils.Logging;
-
 namespace LughSharp.Lugh.Graphics.Utils;
 
 [PublicAPI]
 public class PNGDecoder
 {
+    public static readonly byte[] StandardPNGSignature =
+    [
+        // DO NOT CHANGE THESE VALUES!
+        0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A,
+    ];
+
     public const int SIGNATURE_LENGTH       = 8;
     public const int IHDR_START             = 8;
     public const int IHDR_SIZE              = 4;
@@ -85,7 +87,7 @@ public class PNGDecoder
     public static PNGFormatStructs.IHDRChunk    IHDRchunk     { get; private set; }
     public static PNGFormatStructs.IDATChunk    IDATchunk     { get; private set; }
     public static long                          TotalIDATSize { get; private set; } = 0;
-    public static Gdx2DPixmap.Gdx2dPixelFormat  PixelFormat   { get; private set; }
+    public static int                           PixelFormat   { get; private set; }
 
     public static byte BitDepth    => IHDRchunk.BitDepth;
     public static uint Width       => IHDRchunk.Width;
@@ -144,7 +146,7 @@ public class PNGDecoder
 
         Array.Copy( pngData, 0, PngSignature.Signature, 0, SIGNATURE_LENGTH );
 
-        if ( !PngSignature.Signature.SequenceEqual( new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A } ) )
+        if ( !PngSignature.Signature.SequenceEqual( StandardPNGSignature ) )
         {
             Logger.Warning( "Not a valid PNG file, Signature is incorrect" );
 
@@ -208,8 +210,8 @@ public class PNGDecoder
             Logger.Debug( $"- Width         : {IHDRchunk.Width}" );
             Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
             Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
-            Logger.Debug( $"- ColorType     : {ColorTypeName( IHDRchunk.ColorType )}::{IHDRchunk.ColorType}" );
-            Logger.Debug( $"- PixelFormat   : {PixelFormat.ToString()}::{PixelFormat}" );
+            Logger.Debug( $"- ColorType     : {ColorTypeName( IHDRchunk.ColorType )} :: ( {IHDRchunk.ColorType} )" );
+            Logger.Debug( $"- PixelFormat   : {PixelFormatUtils.GetFormatString( PixelFormat )} :: ( {PixelFormat} )" );
             Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
             Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );
             Logger.Debug( $"- Interlace     : {IHDRchunk.Interlace}" );
@@ -466,7 +468,7 @@ public class PNGDecoder
     /// <returns>
     /// A Gdx2DPixmapFormat enum value representing the pixel format of the PNG image.
     /// </returns>
-    public static Gdx2DPixmap.Gdx2dPixelFormat GetFormatFromPngHeader( Stream pngStream )
+    public static int GetFormatFromPngHeader( Stream pngStream )
     {
         // Read PNG signature (8 bytes)
         var signature = new byte[ 8 ];
@@ -505,7 +507,7 @@ public class PNGDecoder
 //        };
 
         var format = PixelFormatUtils.DeterminePixelFormatFromBitDepth( colorType, bitDepth );
-        
+
         return format;
     }
 
@@ -628,7 +630,7 @@ public class PNGDecoder
         using var ms = new MemoryStream();
 
         // PNG signature
-        ms.Write( [ 137, 80, 78, 71, 13, 10, 26, 10 ] );
+        ms.Write( StandardPNGSignature );
 
         // IHDR chunk
         using ( var ihdr = new MemoryStream() )
@@ -636,7 +638,7 @@ public class PNGDecoder
             WriteBigEndian( ihdr, width );
             WriteBigEndian( ihdr, height );
 
-            var colorType = PixelFormatUtils.PixmapFormatToPNGColorType( format );
+            var colorType = ( byte )format;
 
             ihdr.WriteByte( 8 );         // bit depth
             ihdr.WriteByte( colorType ); // color type: RGBA
@@ -696,6 +698,7 @@ public class PNGDecoder
 
             // CRC
             using var crc32 = new Crc32();
+            
             crc32.TransformBlock( typeBytes, 0, 4, null, 0 );
             crc32.TransformBlock( data, 0, data.Length, null, 0 );
             crc32.TransformFinalBlock( [ ], 0, 0 );
@@ -710,10 +713,10 @@ public class PNGDecoder
     /// <summary>
     /// CRC32 implementation (minimal)
     /// </summary>
+    [PublicAPI]
     public class Crc32 : HashAlgorithm
     {
-        public override int  HashSize => 32;
-        private         uint _crc = 0xFFFFFFFF;
+        private uint _crc = 0xFFFFFFFF;
 
         private static readonly uint[] _table = Enumerable.Range( 0, 256 ).Select( i =>
         {
@@ -731,6 +734,8 @@ public class PNGDecoder
         {
             _crc = 0xFFFFFFFF;
         }
+
+        public override int HashSize => 32;
 
         protected override void HashCore( byte[] array, int ibStart, int cbSize )
         {

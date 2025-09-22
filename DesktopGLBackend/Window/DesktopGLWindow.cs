@@ -338,7 +338,7 @@ public partial class DesktopGLWindow : IDisposable
     /// </summary>
     /// <param name="images">
     /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Gdx2DPixmap.Gdx2dPixelFormat.RGBA" />
+    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888" />
     /// is preferred so the images will not have to be copied and converted.
     /// <b>
     /// The chosen image
@@ -454,7 +454,7 @@ public partial class DesktopGLWindow : IDisposable
     /// <param name="window"> The applicable window. </param>
     /// <param name="images">
     /// One or more images. The one closest to the system's desired size will be scaled.
-    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Gdx2DPixmap.Gdx2dPixelFormat.RGBA" />
+    /// Good sizes include 16x16, 32x32 and 48x48. Pixmap format <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888" />
     /// is preferred so the images will not have to be copied and converted.
     /// <b>
     /// The chosen image

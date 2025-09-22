@@ -112,6 +112,7 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void Debug( string message,
                               bool boxedDebug = false,
@@ -151,6 +152,7 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void Warning( string message,
                                 [CallerFilePath] string callerFilePath = "",
@@ -180,6 +182,7 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void DebugCondition( string message,
                                        bool condition = false,
@@ -209,6 +212,7 @@ public static class Logger
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void Checkpoint( bool lineBefore = false,
                                    bool lineAfter = false,
@@ -246,6 +250,7 @@ public static class Logger
     /// </summary>
     /// <param name="ch"> The character to use, default is '-' </param>
     /// <param name="length"> The line length, default is 80. </param>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void Divider( char ch = '-', int length = 80 )
     {
@@ -268,6 +273,7 @@ public static class Logger
     /// <param name="condition"> The condition. </param>
     /// <param name="ch"> The character to use, default is '-' </param>
     /// <param name="length"> The line length, default is 80. </param>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void DividerConditional( bool condition, char ch = '-', int length = 80 )
     {
@@ -281,6 +287,7 @@ public static class Logger
     /// Writes an <see cref="Environment.NewLine"/> to console.
     /// Does NOT create a string holding caller data or timestamp.
     /// </summary>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void NewLine()
     {
@@ -301,6 +308,7 @@ public static class Logger
     /// <param name="deleteExisting">
     /// True to delete existing copies of the file, False to append to existing file.
     /// </param>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void OpenDebugFile( string fileName, bool deleteExisting )
     {
@@ -347,6 +355,7 @@ public static class Logger
     /// Writes text to the logFile, if it exists.
     /// </summary>
     /// <param name="text">String holding the text to write.</param>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void WriteToFile( string text )
     {
@@ -386,6 +395,7 @@ public static class Logger
     /// <summary>
     /// Closes the debug file if it is open, releasing any associated resources.
     /// </summary>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void CloseDebugFile()
     {
@@ -395,6 +405,7 @@ public static class Logger
     /// <summary>
     /// Disables DEBUG Log messages without affecting other types.
     /// </summary>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void DisableDebugLogging()
     {
@@ -404,6 +415,7 @@ public static class Logger
     /// <summary>
     /// Disables Error Log messages without affecting other types.
     /// </summary>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void DisableErrorLogging()
     {
@@ -413,6 +425,7 @@ public static class Logger
     /// <summary>
     /// Enables DEBUG Log messages without affecting other types.
     /// </summary>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void EnableDebugLogging()
     {
@@ -422,6 +435,7 @@ public static class Logger
     /// <summary>
     /// Enables ERROR Log messages without affecting other types.
     /// </summary>
+    /// <remarks> This method works in DEBUG mode only. </remarks>
     [Conditional( "DEBUG" )]
     public static void EnableErrorLogging()
     {

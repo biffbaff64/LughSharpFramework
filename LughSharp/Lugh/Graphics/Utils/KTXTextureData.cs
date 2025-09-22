@@ -450,7 +450,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
                             {
                                 ETC1 etc1    = new();
                                 var  etcData = new ETC1.ETC1Data( pixelWidth, pixelHeight, data, 0, etc1 );
-                                var  pixmap  = etc1.DecodeImage( etcData, Gdx2DPixmap.GDX_2D_FORMAT_RGB888 );
+                                var  pixmap  = etc1.DecodeImage( etcData, Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888 );
 
                                 unsafe
                                 {

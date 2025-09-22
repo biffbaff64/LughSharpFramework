@@ -29,32 +29,28 @@ namespace LughSharp.Lugh.Graphics.G2D;
 [PublicAPI]
 public partial class Gdx2DPixmap : Image, IDisposable
 {
-    [PublicAPI]
-    public enum Gdx2dPixelFormat : int
-    {
-        Alpha          = 0,
-        RGB            = 2,
-        IndexedColor   = 3,
-        LuminanceAlpha = 4,
-        RGBA           = 6,
+//    [PublicAPI]
+//    public enum Gdx2dPixelFormat : int
+//    {
+//        Alpha          = 1,
+//        LuminanceAlpha = 2,
+//        RGB888         = 3,
+//        RGBA8888       = 4,
+//        RGB565         = 5,
+//        RGBA4444       = 6,
+//
+//        // ----------------------------
+//
+//        Default = RGBA8888,
+//    };
 
-        // ----------------------------
-
-        RGB565   = 10,
-        RGBA4444 = 11,
-
-        // ----------------------------
-
-        Default = RGBA,
-    };
-
-//    public const byte GDX_2D_FORMAT_ALPHA           = 1;
-//    public const byte GDX_2D_FORMAT_LUMINANCE_ALPHA = 2;
-//    public const byte GDX_2D_FORMAT_RGB888          = 3;
-//    public const byte GDX_2D_FORMAT_RGBA8888        = 4;
-//    public const byte GDX_2D_FORMAT_RGB565          = 5;
-//    public const byte GDX_2D_FORMAT_RGBA4444        = 6;
-//    public const byte GDX_2D_FORMAT_DEFAULT         = 4;
+    public const int GDX_2D_FORMAT_ALPHA           = 1;
+    public const int GDX_2D_FORMAT_LUMINANCE_ALPHA = 2;
+    public const int GDX_2D_FORMAT_RGB888          = 3;
+    public const int GDX_2D_FORMAT_RGBA8888        = 4;
+    public const int GDX_2D_FORMAT_RGB565          = 5;
+    public const int GDX_2D_FORMAT_RGBA4444        = 6;
+    public const int GDX_2D_FORMAT_DEFAULT         = 4;
 
     // ========================================================================
 
@@ -95,9 +91,11 @@ public partial class Gdx2DPixmap : Image, IDisposable
     public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
         Logger.Checkpoint();
-
+        
         ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, offset, len );
 
+        Logger.Debug( $"PixmapBuffer Length: {_pixmapDataType.Pixels.Length}" );
+        
         if ( ( requestedFormat != 0 ) && ( requestedFormat != _pixmapDataType.ColorType ) )
         {
             ConvertPixelFormatTo( requestedFormat );
@@ -113,6 +111,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
         Scale     = _pixmapDataType.Scale;
         BitDepth  = _pixmapDataType.BitDepth;
 
+        // TODO: I don't like this anymore, find a way to do this differently.
         SafeConstructorInit( _pixmapDataType.Width, _pixmapDataType.Height );
     }
 
@@ -158,6 +157,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
         Scale     = _pixmapDataType.Scale;
         BitDepth  = _pixmapDataType.BitDepth;
 
+        // TODO: I don't like this anymore, find a way to do this differently.
         SafeConstructorInit( _pixmapDataType.Width, _pixmapDataType.Height );
     }
 
@@ -182,12 +182,13 @@ public partial class Gdx2DPixmap : Image, IDisposable
         PixmapBuffer.PutBytes( PNGDecoder.CreatePNGFromRawRGBA( PixmapBuffer.BackingArray(),
                                                                 width,
                                                                 height,
-                                                                format ) );
+                                                                PixelFormatUtils.PixmapFormatToPNGColorType( format ) ) );
 
         PNGDecoder.AnalysePNG( PixmapBuffer.BackingArray(), true );
 
         BitDepth = PNGDecoder.BitDepth;
 
+        // TODO: I don't like this anymore, find a way to do this differently.
         SafeConstructorInit( width, height );
         SafeInitPixmapDataType( width, height, format );
 
@@ -247,7 +248,9 @@ public partial class Gdx2DPixmap : Image, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Loads the data in the supplied byte array into a <see cref="PixmapDataType" />
+    /// Loads the data in the supplied byte array into a <see cref="PixmapDataType" />.
+    /// This method also calls the <see cref="PNGDecoder.AnalysePNG(byte[], bool)" /> method,
+    /// with verbose set to false, to extract PNG properties for later use.
     /// </summary>
     /// <param name="buffer"></param>
     /// <param name="offset"></param>
@@ -256,6 +259,8 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <exception cref="IOException"></exception>
     private static ( Buffer< byte >, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
+        Logger.Debug( $"buffer length: {buffer.Length}, offset: {offset}, len: {len}" );
+
         // Analyse the PNG file the get the properties. Do this with
         // verbose set to false, as we don't need the full analysis report.
         PNGDecoder.AnalysePNG( buffer, false );
@@ -265,12 +270,14 @@ public partial class Gdx2DPixmap : Image, IDisposable
             Width         = ( int )PNGDecoder.IHDRchunk.Width,
             Height        = ( int )PNGDecoder.IHDRchunk.Height,
             BitDepth      = PNGDecoder.IHDRchunk.BitDepth,
-            ColorType     = PNGDecoder.IHDRchunk.ColorType,
+            ColorType     = PixelFormatUtils.PNGColorTypeToPixmapFormat( PNGDecoder.IHDRchunk.ColorType ),
             Blend         = 0,
             Scale         = 0,
             TotalIDATSize = PNGDecoder.TotalIDATSize,
             Pixels        = new byte[ PNGDecoder.IDATchunk.ChunkSize ],
         };
+        
+        pixmapDef.DebugPrint();
 
         Array.Copy( buffer, PNGDecoder.IDAT_DATA_OFFSET,
                     pixmapDef.Pixels, 0, PNGDecoder.IDATchunk.ChunkSize );
@@ -289,7 +296,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <param name="requestedFormat"> The new Format. </param>
     public void ConvertPixelFormatTo( int requestedFormat )
     {
-        Logger.Checkpoint();
+        Logger.Debug( $"requestedFormat: {PixelFormatUtils.GetFormatString( requestedFormat )}" );
 
         // Double-check conditions
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
@@ -302,8 +309,6 @@ public partial class Gdx2DPixmap : Image, IDisposable
             pixmap.Blend = GDX_2D_BLEND_NONE;
             pixmap.DrawPixmap( this, 0, 0, 0, 0, ( int )Width, ( int )Height );
 
-            Dispose();
-
             Width         = pixmap.Width;
             Height        = pixmap.Height;
             ColorType     = pixmap.ColorType;
@@ -312,6 +317,8 @@ public partial class Gdx2DPixmap : Image, IDisposable
             Scale         = pixmap.Scale;
             TotalIDATSize = pixmap.TotalIDATSize;
             PixmapBuffer  = pixmap.PixmapBuffer;
+
+            pixmap.Dispose();
         }
     }
 

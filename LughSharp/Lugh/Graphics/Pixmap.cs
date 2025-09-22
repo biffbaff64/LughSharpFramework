@@ -22,12 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
-
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Graphics;
@@ -157,12 +151,18 @@ public class Pixmap : IDisposable
     {
         ArgumentNullException.ThrowIfNull( file );
 
-        Logger.Checkpoint();
-
         try
         {
+            // Read the file into a byte array.
             var data = File.ReadAllBytes( file.FullName );
+
+            Logger.Debug( $"data.Length: {data.Length}" );
+
+            // Create a new Pixmap instance from the data.
             Gdx2DPixmap = new Gdx2DPixmap( data, 0, data.Length, 0 );
+            
+            Logger.Debug( $"Loaded file: {file.Name}, size: {data.Length} bytes" );
+            Logger.Debug( $"Gdx2DPixmap: {Gdx2DPixmap.PixmapBuffer.Length}" );
         }
         catch ( Exception e )
         {
@@ -681,12 +681,17 @@ public class Pixmap : IDisposable
             }
 
             Logger.Debug( $"Width : {Width}, Height: {Height}" );
-            Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height}: {Gdx2DPixmap.ColorType}: "
+            Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height} "
+                          + $"{Width} x {Height} : {Gdx2DPixmap.ColorType}: "
                           + $"{PixelFormatUtils.GetFormatString( GetColorFormat() )}" );
             Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
             var a = Gdx2DPixmap.PixmapBuffer.BackingArray();
 
+            Guard.ThrowIfNull( a );
+            
+            Logger.Debug( $"Buffer Length : {a.Length}" );
+            
             for ( var i = 0; i < 100; i += 10 )
             {
                 Logger.Debug( $"{a[ i + 0 ]},{a[ i + 1 ]},{a[ i + 2 ]},{a[ i + 3 ]},"

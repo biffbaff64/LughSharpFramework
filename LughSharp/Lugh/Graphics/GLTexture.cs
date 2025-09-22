@@ -403,7 +403,12 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             return;
         }
 
-        var pixmap        = data.ConsumePixmap();
+        var pixmap = data.ConsumePixmap();
+
+        Guard.ThrowIfNull( pixmap );
+        
+        Logger.Debug( $"PixelData.Lewngth: {pixmap.PixelData.Length}" );
+        
         var shouldDispose = data.ShouldDisposePixmap();
 
         if ( pixmap?.PixelData == null )
@@ -413,8 +418,11 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
             return;
         }
 
+        Logger.Debug( $"PixelData.Lewngth: {pixmap.PixelData.Length}" );
+        
         if ( data.PixelFormat != pixmap.GetColorFormat() )
         {
+            Logger.Checkpoint();
             var tmp = new Pixmap( pixmap.Width, pixmap.Height, data.PixelFormat );
 
             if ( IsDrawable )
@@ -435,33 +443,31 @@ public abstract class GLTexture : Image, IDrawable, IDisposable
         GL.SetGLUnpackAlignment( pixmap, PixelFormatUtils.GetAlignment( pixmap ) );
         CheckGLError( "SetGLUnpackAlignment" );
 
+        Logger.Debug( $"PixelData.Lewngth: {pixmap.PixelData.Length}" );
+        
         if ( data.UseMipMaps )
         {
             MipMapGenerator.GenerateMipMap( target, pixmap, pixmap.Width, pixmap.Height );
             CheckGLError( "GenerateMipMap" );
         }
 
+        Logger.Debug( $"PixelData.Lewngth: {pixmap.PixelData.Length}" );
+        
         GL.TexParameteri( target, IGL.GL_TEXTURE_MIN_FILTER, IGL.GL_NEAREST );
         GL.TexParameteri( target, IGL.GL_TEXTURE_MAG_FILTER, IGL.GL_NEAREST );
         GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_S, IGL.GL_CLAMP_TO_EDGE );
         GL.TexParameteri( target, IGL.GL_TEXTURE_WRAP_T, IGL.GL_CLAMP_TO_EDGE );
 
-//        GL.TexImage2D( target: target,
-//                       level: 0,
-//                       internalFormat: IGL.GL_RGBA8,
-//                       width: pixmap.Width,
-//                       height: pixmap.Height,
-//                       border: 0,
-//                       format: IGL.GL_RGBA,
-//                       type: IGL.GL_UNSIGNED_BYTE,
-//                       pixels: pixmap.PixelData );
-
+        Logger.Debug( $"PixelData.Lewngth: {pixmap.PixelData.Length}" );
+        
         GL.TextureStorage2D( GLTextureHandle,
                              1,
                              IGL.GL_RGBA8,
                              pixmap.Width,
                              pixmap.Height );
 
+        Logger.Debug( $"PixelData.Lewngth: {pixmap.PixelData.Length}" );
+        
         GL.TextureSubImage2D( GLTextureHandle,
                               0,
                               0,

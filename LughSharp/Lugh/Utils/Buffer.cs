@@ -881,6 +881,13 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     // ========================================================================
 
+    /// <summary>
+    /// Resize the buffer so that it can hold the additional capacity
+    /// specified by <paramref name="extraCapacityInBytes"/>.
+    /// </summary>
+    /// <param name="extraCapacityInBytes">
+    /// The number of bytes to expand the buffer capacity by.
+    /// </param>
     public void Resize( int extraCapacityInBytes )
     {
         switch ( extraCapacityInBytes )

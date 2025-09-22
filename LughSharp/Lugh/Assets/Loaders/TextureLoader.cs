@@ -72,7 +72,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
         if ( p?.TextureData == null )
         {
-            int format     = Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT;
+            var format     = Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT;
             var genMipMaps = false;
 
             _loaderInfo.Texture = null;

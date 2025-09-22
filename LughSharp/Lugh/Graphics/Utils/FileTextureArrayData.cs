@@ -34,44 +34,9 @@ public class FileTextureArrayData : ITextureArrayData
     // ========================================================================
 
     /// <summary>
+    /// 
     /// </summary>
-    /// <param name="pixelFormat"></param>
-    /// <param name="useMipMaps"></param>
-    /// <param name="files"></param>
-    public FileTextureArrayData( int pixelFormat, bool useMipMaps, FileInfo[] files )
-    {
-        PixelFormat  = pixelFormat;
-        _useMipMaps  = useMipMaps;
-        _depth       = files.Length;
-        _textureData = new ITextureData?[ files.Length ];
-
-        for ( var i = 0; i < files.Length; i++ )
-        {
-            _textureData[ i ] = TextureDataFactory.LoadFromFile( files[ i ], pixelFormat, useMipMaps );
-        }
-    }
-
     public int PixelFormat { get; set; }
-
-    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
-    public bool IsManaged
-    {
-        get
-        {
-            foreach ( var data in _textureData )
-            {
-                if ( data is { IsManaged: false } )
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-        set { }
-    }
-
-    // ========================================================================
 
     /// <summary>
     /// whether the TextureArrayData is prepared or not.
@@ -111,7 +76,25 @@ public class FileTextureArrayData : ITextureArrayData
     // ========================================================================
 
     /// <summary>
-    /// Prepares the TextureArrayData for a call to <see cref="ITextureArrayData.ConsumeTextureArrayData" />.
+    /// </summary>
+    /// <param name="pixelFormat"></param>
+    /// <param name="useMipMaps"></param>
+    /// <param name="files"></param>
+    public FileTextureArrayData( int pixelFormat, bool useMipMaps, FileInfo[] files )
+    {
+        PixelFormat  = pixelFormat;
+        _useMipMaps  = useMipMaps;
+        _depth       = files.Length;
+        _textureData = new ITextureData?[ files.Length ];
+
+        for ( var i = 0; i < files.Length; i++ )
+        {
+            _textureData[ i ] = TextureDataFactory.LoadFromFile( files[ i ], pixelFormat, useMipMaps );
+        }
+    }
+
+    /// <summary>
+    /// Prepares the TextureArrayData for a call to <see cref="ConsumeTextureArrayData" />.
     /// This method can be called from a non OpenGL thread and should thus not interact
     /// with OpenGL.
     /// </summary>
@@ -222,4 +205,27 @@ public class FileTextureArrayData : ITextureArrayData
             }
         }
     }
+
+    // ========================================================================
+
+    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
+    public bool IsManaged
+    {
+        get
+        {
+            foreach ( var data in _textureData )
+            {
+                if ( data is { IsManaged: false } )
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        set { }
+    }
 }
+
+// ============================================================================
+// ============================================================================

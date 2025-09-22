@@ -25,9 +25,7 @@
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
 
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;
 
@@ -97,15 +95,14 @@ namespace LughSharp.Lugh.Graphics.G2D;
 [PublicAPI]
 public class PixmapPacker : IDisposable
 {
-    public int PageWidth  { get; set; }
-    public int PageHeight { get; set; }
-    public int PageFormat { get; set; }
-
+    public int          PageWidth        { get; set; }
+    public int          PageHeight       { get; set; }
+    public int          PageFormat       { get; set; }
+    public List< Page > Pages            { get; set; } = [ ];
     public Color        TransparentColor { get; set; } = new( 0f, 0f, 0f, 0f );
     public bool         PackToTexture    { get; set; }
     public bool         DuplicateBorder  { get; set; }
     public int          Padding          { get; set; }
-    public List< Page > Pages            { get; set; } = [ ];
     public int          AlphaThreshold   { get; set; }
 
     // ========================================================================
@@ -134,7 +131,11 @@ public class PixmapPacker : IDisposable
     /// If TRUE, duplicate the border pixels of the inserted images to avoid
     /// seams when rendering with bi-linear filtering on.
     /// </param>
-    public PixmapPacker( int pageWidth, int pageHeight, int pageFormat, int padding, bool duplicateBorder )
+    public PixmapPacker( int pageWidth,
+                         int pageHeight,
+                         int pageFormat,
+                         int padding,
+                         bool duplicateBorder )
         : this( pageWidth, pageHeight, pageFormat, padding, duplicateBorder, false, false, new GuillotineStrategy() )
     {
     }
@@ -409,7 +410,7 @@ public class PixmapPacker : IDisposable
         var rectWidth  = ( int )rect.Width;
         var rectHeight = ( int )rect.Height;
 
-        if ( PackToTexture && !DuplicateBorder && page is { Texture: not null, Dirty: false } )
+        if ( PackToTexture && !DuplicateBorder && page is { Texture: not null, IsDirty: false } )
         {
             page.Texture?.Bind();
 
@@ -429,7 +430,7 @@ public class PixmapPacker : IDisposable
         }
         else
         {
-            page.Dirty = true;
+            page.IsDirty = true;
         }
 
         page.Image.DrawPixmap( image, rectX, rectY );
@@ -832,6 +833,13 @@ public class PixmapPacker : IDisposable
     [PublicAPI]
     public class Page
     {
+        public Pixmap         Image      { get; set; }
+        public Texture?       Texture    { get; set; }
+        public List< string > AddedRects { get; set; } = [ ];
+        public bool           IsDirty    { get; set; }
+
+        public Dictionary< string, PixmapPackerRectangle? > Rects { get; set; } = new();
+
         /// <summary>
         /// Creates a new page filled with the color provided by the
         /// <see cref="PixmapPacker.TransparentColor" />"
@@ -845,13 +853,6 @@ public class PixmapPacker : IDisposable
             Image.FillWithCurrentColor();
         }
 
-        public Pixmap         Image      { get; set; }
-        public Texture?       Texture    { get; set; }
-        public List< string > AddedRects { get; set; } = [ ];
-        public bool           Dirty      { get; set; }
-
-        public Dictionary< string, PixmapPackerRectangle? > Rects { get; set; } = new();
-
         /// <summary>
         /// Creates the texture if it has not been created, else reuploads the
         /// entire page pixmap to the texture if the pixmap has changed since
@@ -862,7 +863,7 @@ public class PixmapPacker : IDisposable
         {
             if ( Texture != null )
             {
-                if ( !Dirty )
+                if ( !IsDirty )
                 {
                     return false;
                 }
@@ -876,7 +877,7 @@ public class PixmapPacker : IDisposable
                 Texture.SetFilter( minFilter, magFilter );
             }
 
-            Dirty = false;
+            IsDirty = false;
 
             return true;
         }
@@ -1184,7 +1185,7 @@ public class PixmapPacker : IDisposable
             {
             }
 
-            internal record RowSpec
+            internal sealed record RowSpec
             {
                 internal int Height = 0;
                 internal int X      = 0;

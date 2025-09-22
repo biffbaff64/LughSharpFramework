@@ -42,4 +42,20 @@ public struct PixmapDataType()
     public uint   Scale         { get; set; } = 0;
     public byte[] Pixels        { get; set; } = [ ];
     public long   TotalIDATSize { get; set; } = 0;
+
+    // ========================================================================
+    
+    public void DebugPrint()
+    {
+        Logger.Debug( $"Width: {Width}" );
+        Logger.Debug( $"Height: {Height}" );
+        Logger.Debug( $"BitDepth: {BitDepth}" );
+        Logger.Debug( $"ColorType: {ColorType}" );
+        Logger.Debug( $"Blend: {Blend}" );
+        Logger.Debug( $"Scale: {Scale}" );
+        Logger.Debug( $"TotalIDATSize: {TotalIDATSize}" );
+    }
 }
+
+// ============================================================================
+// ============================================================================

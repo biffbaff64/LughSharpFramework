@@ -56,9 +56,9 @@ public static class PixmapFormatExtensions
     }
 
     /// <summary>
-    /// Converts a <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX<c/> to the corresponding System.Drawing.Imaging.PixelFormat.
+    /// Converts a <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> to the corresponding System.Drawing.Imaging.PixelFormat.
     /// </summary>
-    /// <param name="format">The pixel format of type <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX<c/>.</param>
+    /// <param name="format">The pixel format of type <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c>.</param>
     /// <returns>The corresponding <see cref="System.Drawing.Imaging.PixelFormat"/>.</returns>
     /// <exception cref="GdxRuntimeException">
     /// Thrown if the provided format is invalid or unsupported.

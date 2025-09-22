@@ -100,7 +100,7 @@ public class Texture : GLTexture, IManaged
     /// <param name="file"> The file to load. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file, bool useMipMaps )
-        : this( file, Gdx2DPixmap.Gdx2dPixelFormat.Default, useMipMaps )
+        : this( file, Gdx2DPixmap.GDX_2D_FORMAT_DEFAULT, useMipMaps )
     {
         Name = Path.GetFileNameWithoutExtension( file.Name );
     }
@@ -108,13 +108,13 @@ public class Texture : GLTexture, IManaged
     /// <summary>
     /// Create a new Texture from the file specified in the given <see cref="FileInfo" />.
     /// The Texture pixmap format will be set to the given format, which defaults to
-    /// <see cref="Gdx2DPixmap.Gdx2dPixelFormat.RGBA" />.
+    /// <see cref="Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888" />.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="format"> The pixmap format to use. </param>
     /// <param name="useMipMaps"> Whether or not to generate MipMaps. Default is false. </param>
     public Texture( FileInfo file,
-                    Gdx2DPixmap.Gdx2dPixelFormat format = Gdx2DPixmap.Gdx2dPixelFormat.Default,
+                    int format = Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
                     bool useMipMaps = false )
         : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
     {
@@ -204,7 +204,9 @@ public class Texture : GLTexture, IManaged
             TextureData.Prepare();
         }
 
+        Logger.Checkpoint();
         Load( TextureData );
+        Logger.Checkpoint();
 
         _isUploaded = true;
     }

@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Logging;
 
@@ -61,7 +63,6 @@ public partial class FileProcessor
 
         // ====================================================================
 
-        #if DEBUG
         /// <summary>
         /// Logs debugging information. Handles different parameter types and outputs
         /// their details to the debug logger.
@@ -110,7 +111,6 @@ public partial class FileProcessor
             Logger.Debug( $"OutputDirectory: {OutputDirectory?.FullName ?? "null"}" );
             Logger.Debug( $"Depth          : {Depth}" );
         }
-        #endif
     }
 }
 

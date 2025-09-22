@@ -22,12 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.IO.Compression;
-
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-
 using Exception = System.Exception;
 
 namespace LughSharp.Lugh.Graphics.Utils;
@@ -123,17 +117,15 @@ public class ETC1
     /// </summary>
     private int GetPixelSize( int format )
     {
-        if ( format == Gdx2DPixmap.GDX_2D_FORMAT_RGB565 )
+        return format switch
         {
-            return RGB565_PIXEL_SIZE;
-        }
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB565   => RGB565_PIXEL_SIZE,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888 => RGB888_PIXEL_SIZE,
 
-        if ( format == Gdx2DPixmap.GDX_2D_FORMAT_RGB888 )
-        {
-            return RGB888_PIXEL_SIZE;
-        }
+            // ----------------------------------
 
-        throw new GdxRuntimeException( "Can only handle RGB565 or GDX_2D_FORMAT_RGB888 images" );
+            var _ => throw new GdxRuntimeException( "Can only handle RGB565 or GDX_2D_FORMAT_RGB888 images" )
+        };
     }
 
     // ========================================================================

@@ -3,7 +3,6 @@ using System.Text;
 using System.Text.Json.Serialization;
 
 using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Utils;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
@@ -114,7 +113,7 @@ public class TexturePackerSettings
     public TextureWrapMode WrapY { get; set; }
 
     /// <summary>
-    /// The <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX<c/> the texture will use in-memory.
+    /// The <c>Gdx2DPixmap.GDX_2D_FORMAT_XXX</c> the texture will use in-memory.
     /// </summary>
     public int Format { get; set; }
 

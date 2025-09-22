@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Utils.Exceptions;
-
 namespace LughSharp.Lugh.Graphics.Utils;
 
 /// <summary>
@@ -38,10 +35,7 @@ public class MipMapTextureData : ITextureData
     public bool UseMipMaps { get; set; }
     public int  Width      { get; set; }
     public int  Height     { get; set; }
-
-    /// <inheritdoc />
-    public bool IsOwned { get; set; }
-
+    public bool IsOwned    { get; set; }
     public int PixelFormat { get; set; } = Gdx2DPixmap.GDX_2D_FORMAT_ALPHA;
 
     // ========================================================================
@@ -114,6 +108,8 @@ public class MipMapTextureData : ITextureData
     public void DebugPrint()
     {
     }
+
+    // ========================================================================
 
     //TODO: This is a hack to get around the fact that GLTexture is not abstract. This should be fixed.
     private class DerivedGLTexture : GLTexture
