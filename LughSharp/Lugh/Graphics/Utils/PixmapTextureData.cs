@@ -33,8 +33,6 @@ public class PixmapTextureData : ITextureData
     public bool   IsManaged     { get; set; }
     public bool   UseMipMaps    { get; set; }
     public bool   IsPrepared    { get; set; } = true;
-
-    /// <inheritdoc />
     public bool IsOwned { get; set; }
 
     // ========================================================================
@@ -58,15 +56,10 @@ public class PixmapTextureData : ITextureData
     /// whether the caller of <see cref="ITextureData.ConsumePixmap" /> should dispose the
     /// Pixmap returned by <see cref="ITextureData.ConsumePixmap" />
     /// </returns>
-    bool ITextureData.ShouldDisposePixmap()
-    {
-        return DisposePixmap;
-    }
+    public bool ShouldDisposePixmap() => DisposePixmap;
 
-    Pixmap ITextureData.ConsumePixmap()
-    {
-        return Pixmap;
-    }
+    /// <inheritdoc />
+    public Pixmap ConsumePixmap() => Pixmap;
 
     public int Width
     {

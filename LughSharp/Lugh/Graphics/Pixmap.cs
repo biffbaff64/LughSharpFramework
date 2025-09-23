@@ -113,25 +113,33 @@ public class Pixmap : IDisposable
     {
         Logger.Checkpoint();
 
-        Gdx2DPixmap = new Gdx2DPixmap( width, height, format );
+        try
+        {
+            Gdx2DPixmap = new Gdx2DPixmap( width, height, format );
+        }
+        catch ( Exception e )
+        {
+            throw new GdxRuntimeException( $"Couldn't create pixmap with width: {width}, " +
+                                           $"height: {height}, format: {format}", e );
+        }
 
         SetColor( Color.White );
         SetAlpha( 1.0f );
-
         FillWithCurrentColor();
     }
 
     /// <summary>
-    /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded
-    /// as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
+    /// Creates a new Pixmap instance from the given encoded image data. The image can
+    /// be encoded as JPEG, PNG or BMP. The size of data used is <b>length</b>, starting
+    /// from <b>offset</b>.
     /// </summary>
-    public Pixmap( byte[] encodedData, int offset, int len )
+    public Pixmap( byte[] encodedData, int offset, int length )
     {
         ArgumentException.ThrowIfNullOrEmpty( nameof( encodedData ) );
 
         try
         {
-            Gdx2DPixmap = new Gdx2DPixmap( encodedData, offset, len, 0 );
+            Gdx2DPixmap = new Gdx2DPixmap( encodedData, offset, length, 0 );
         }
         catch ( IOException e )
         {
@@ -149,6 +157,8 @@ public class Pixmap : IDisposable
     /// </exception>
     public Pixmap( FileInfo file )
     {
+        Logger.Checkpoint();
+        
         ArgumentNullException.ThrowIfNull( file );
 
         try
@@ -156,13 +166,8 @@ public class Pixmap : IDisposable
             // Read the file into a byte array.
             var data = File.ReadAllBytes( file.FullName );
 
-            Logger.Debug( $"data.Length: {data.Length}" );
-
             // Create a new Pixmap instance from the data.
             Gdx2DPixmap = new Gdx2DPixmap( data, 0, data.Length, 0 );
-            
-            Logger.Debug( $"Loaded file: {file.Name}, size: {data.Length} bytes" );
-            Logger.Debug( $"Gdx2DPixmap: {Gdx2DPixmap.PixmapBuffer.Length}" );
         }
         catch ( Exception e )
         {
@@ -172,7 +177,7 @@ public class Pixmap : IDisposable
 
     /// <summary>
     /// Creates a new Pixmap instance from the given encoded image data. The image can be encoded
-    /// as JPEG, PNG or BMP. The size of data used is <b>len</b>, starting from <b>offset</b>.
+    /// as JPEG, PNG or BMP. The size of data used is <b>length</b>, starting from <b>offset</b>.
     /// </summary>
     /// <param name="buffer"> A Buffer{T} holding the encoded data. </param>
     /// <param name="offset"> The position in the data to start copying from. </param>
@@ -669,7 +674,7 @@ public class Pixmap : IDisposable
     /// <summary>
     /// Dump Pixmap debug info to console.
     /// </summary>
-    public void Debug()
+    public void DebugPrint()
     {
         if ( Api.DevMode )
         {

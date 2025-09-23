@@ -32,27 +32,31 @@ namespace LughSharp.Lugh.Graphics;
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
+
+//TODO: Rename this struct, changing 'Type' to something better
 public struct PixmapDataType()
 {
     public int    Width         { get; set; } = 0;
     public int    Height        { get; set; } = 0;
     public byte   BitDepth      { get; set; } = 0;
     public int    ColorType     { get; set; } = 0;
+    public int    BytesPerPixel { get; set; } = 0;
     public uint   Blend         { get; set; } = 0;
     public uint   Scale         { get; set; } = 0;
     public byte[] Pixels        { get; set; } = [ ];
     public long   TotalIDATSize { get; set; } = 0;
 
     // ========================================================================
-    
+
     public void DebugPrint()
     {
-        Logger.Debug( $"Width: {Width}" );
-        Logger.Debug( $"Height: {Height}" );
-        Logger.Debug( $"BitDepth: {BitDepth}" );
-        Logger.Debug( $"ColorType: {ColorType}" );
-        Logger.Debug( $"Blend: {Blend}" );
-        Logger.Debug( $"Scale: {Scale}" );
+        Logger.Debug( $"Width        : {Width}" );
+        Logger.Debug( $"Height       : {Height}" );
+        Logger.Debug( $"BitDepth     : {BitDepth}" );
+        Logger.Debug( $"ColorType    : {ColorType}" );
+        Logger.Debug( $"BytesPerPixel: {BytesPerPixel}" );
+        Logger.Debug( $"Blend        : {Blend}" );
+        Logger.Debug( $"Scale        : {Scale}" );
         Logger.Debug( $"TotalIDATSize: {TotalIDATSize}" );
     }
 }

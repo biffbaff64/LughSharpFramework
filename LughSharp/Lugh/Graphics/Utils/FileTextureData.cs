@@ -144,6 +144,8 @@ public class FileTextureData : ITextureData
     /// <returns> the pixmap.</returns>
     public virtual Pixmap ConsumePixmap()
     {
+        Logger.Checkpoint();
+        
         if ( !IsPrepared )
         {
             throw new GdxRuntimeException( "Call prepare() before calling ConsumePixmap()" );

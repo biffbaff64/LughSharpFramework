@@ -253,12 +253,12 @@ public class PixelFormatUtils
     {
         return format switch
         {
-            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA          => 1,
+            Gdx2DPixmap.GDX_2D_FORMAT_ALPHA           => 1,
             Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB565         => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444       => 2,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGB888            => 3,
-            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888           => 4,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => 2,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => 2,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => 3,
+            Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => 4,
 
             // ----------------------------------
 

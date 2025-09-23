@@ -25,6 +25,13 @@
 namespace LughSharp.Lugh.Graphics.G2D;
 
 /// <summary>
+/// Provides functionality for managing and manipulating 2D pixel maps with various
+/// color formats, blending modes, and scaling options.
+/// Gdx2DPixmap is designed to handle image processing and manipulation at the
+/// pixel level. It supports multiple color formats, allows drawing operations,
+/// and facilitates scaling and format conversion for efficient rendering in 2D
+/// graphics. The class also allows management of associated buffer data and
+/// provides constructors for different initialization scenarios.
 /// </summary>
 [PublicAPI]
 public partial class Gdx2DPixmap : Image, IDisposable
@@ -91,39 +98,35 @@ public partial class Gdx2DPixmap : Image, IDisposable
     public Gdx2DPixmap( byte[] buffer, int offset, int len, int requestedFormat )
     {
         Logger.Checkpoint();
-        
+
         ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, offset, len );
 
-        Logger.Debug( $"PixmapBuffer Length: {_pixmapDataType.Pixels.Length}" );
-        
         if ( ( requestedFormat != 0 ) && ( requestedFormat != _pixmapDataType.ColorType ) )
         {
             ConvertPixelFormatTo( requestedFormat );
         }
 
-        if ( PixmapBuffer == null )
-        {
-            throw new GdxRuntimeException( "Failed to create PixmapDef object." );
-        }
+        Guard.ThrowIfNull( PixmapBuffer );
 
-        ColorType = _pixmapDataType.ColorType;
-        Blend     = _pixmapDataType.Blend;
-        Scale     = _pixmapDataType.Scale;
-        BitDepth  = _pixmapDataType.BitDepth;
-
-        // TODO: I don't like this anymore, find a way to do this differently.
-        SafeConstructorInit( _pixmapDataType.Width, _pixmapDataType.Height );
+        CommonConstructorInit( _pixmapDataType );
     }
 
     /// <summary>
-    /// Provides functionality for managing and manipulating 2D pixel maps with various
-    /// color formats, blending modes, and scaling options.
-    /// Gdx2DPixmap is designed to handle image processing and manipulation at the
-    /// pixel level. It supports multiple color formats, allows drawing operations,
-    /// and facilitates scaling and format conversion for efficient rendering in 2D
-    /// graphics. The class also allows management of associated buffer data and
-    /// provides constructors for different initialization scenarios.
+    /// Initializes a new instance of the <see cref="Gdx2DPixmap"/> class by loading
+    /// image data from a stream.
+    /// <param>
+    /// This constructor reads all data from <paramref name="inStream"/> into an in-memory
+    /// buffer, determines the image type, and then loads the pixmap.
+    /// If <paramref name="requestedFormat"/> is specified and differs from the image's
+    /// original format, the pixmap's pixel format will be converted.
+    /// </param>
     /// </summary>
+    /// <param name="inStream">
+    /// The <see cref="StreamReader"/> containing the raw image data.
+    /// </param>
+    /// <param name="requestedFormat">
+    /// The desired pixel format for the pixmap. Use 0 to keep the original format.
+    /// </param>
     public Gdx2DPixmap( StreamReader inStream, int requestedFormat )
     {
         Logger.Checkpoint();
@@ -147,18 +150,25 @@ public partial class Gdx2DPixmap : Image, IDisposable
             ConvertPixelFormatTo( requestedFormat );
         }
 
-        if ( PixmapBuffer == null )
-        {
-            throw new GdxRuntimeException( "Failed to create PixmapDef object." );
-        }
+        Guard.ThrowIfNull( PixmapBuffer );
 
-        ColorType = _pixmapDataType.ColorType;
-        Blend     = _pixmapDataType.Blend;
-        Scale     = _pixmapDataType.Scale;
-        BitDepth  = _pixmapDataType.BitDepth;
+        CommonConstructorInit( _pixmapDataType );
+    }
 
-        // TODO: I don't like this anymore, find a way to do this differently.
-        SafeConstructorInit( _pixmapDataType.Width, _pixmapDataType.Height );
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="buffer"></param>
+    /// <exception cref="GdxRuntimeException"></exception>
+    public Gdx2DPixmap( byte[] buffer )
+    {
+        Logger.Checkpoint();
+
+        ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, 0, buffer.Length );
+
+        Guard.ThrowIfNull( PixmapBuffer );
+
+        CommonConstructorInit( _pixmapDataType );
     }
 
     /// <summary>
@@ -179,26 +189,36 @@ public partial class Gdx2DPixmap : Image, IDisposable
         var length = width * height * PixelFormatUtils.Gdx2dBytesPerPixel( format );
 
         PixmapBuffer = new Buffer< byte >( length );
-        PixmapBuffer.PutBytes( PNGDecoder.CreatePNGFromRawRGBA( PixmapBuffer.BackingArray(),
-                                                                width,
-                                                                height,
-                                                                PixelFormatUtils.PixmapFormatToPNGColorType( format ) ) );
+        var data = PNGDecoder.CreatePNGFromRawRGBA( PixmapBuffer.BackingArray(),
+                                                    width,
+                                                    height,
+                                                    PixelFormatUtils.PixmapFormatToPNGColorType( format ) );
+        PixmapBuffer.PutBytes( data );
 
-        PNGDecoder.AnalysePNG( PixmapBuffer.BackingArray(), true );
+        PNGDecoder.AnalysePNG( PixmapBuffer.BackingArray(), false );
 
         BitDepth = PNGDecoder.BitDepth;
 
-        // TODO: I don't like this anymore, find a way to do this differently.
         SafeConstructorInit( width, height );
         SafeInitPixmapDataType( width, height, format );
 
-        Logger.Debug( $"Width: {width}" );
-        Logger.Debug( $"Height: {height}" );
-        Logger.Debug( $"Format: {PixelFormatUtils.GetFormatString( format )}" );
-        Logger.Debug( $"BitDepth: {BitDepth}" );
-        Logger.Debug( $"Pixels data length: {_pixmapDataType.Pixels.Length}" );
-
         PixmapBuffer.Put( _pixmapDataType.Pixels );
+    }
+
+    /// <summary>
+    /// Common initialisation code for all constructors, to cut down on code duplication.
+    /// </summary>
+    /// <param name="pixmapDataType">
+    /// The PixmapDataType instance containing the initialisation data.
+    /// </param>
+    private void CommonConstructorInit( PixmapDataType pixmapDataType )
+    {
+        ColorType = pixmapDataType.ColorType;
+        BitDepth  = pixmapDataType.BitDepth;
+        Blend     = pixmapDataType.Blend;
+        Scale     = pixmapDataType.Scale;
+        Width     = pixmapDataType.Width;
+        Height    = pixmapDataType.Height;
     }
 
     /// <summary>
@@ -246,11 +266,12 @@ public partial class Gdx2DPixmap : Image, IDisposable
     }
 
     // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// Loads the data in the supplied byte array into a <see cref="PixmapDataType" />.
-    /// This method also calls the <see cref="PNGDecoder.AnalysePNG(byte[], bool)" /> method,
-    /// with verbose set to false, to extract PNG properties for later use.
+    /// This method also calls the <see cref="PNGDecoder.AnalysePNG(byte[], bool)" />
+    /// method, with verbose set to false, to extract PNG properties for later use.
     /// </summary>
     /// <param name="buffer"></param>
     /// <param name="offset"></param>
@@ -263,20 +284,27 @@ public partial class Gdx2DPixmap : Image, IDisposable
 
         // Analyse the PNG file the get the properties. Do this with
         // verbose set to false, as we don't need the full analysis report.
+        // Decoded properties will be held statically in the PNGDecoder class. 
         PNGDecoder.AnalysePNG( buffer, false );
+
+        var colorType = PixelFormatUtils.PNGColorTypeToPixmapFormat( PNGDecoder.IHDRchunk.ColorType );
+        var width     = ( int )PNGDecoder.IHDRchunk.Width;
+        var height    = ( int )PNGDecoder.IHDRchunk.Height;
+        var bufLength = width * height * PNGDecoder.BytesPerPixel;
 
         var pixmapDef = new PixmapDataType
         {
-            Width         = ( int )PNGDecoder.IHDRchunk.Width,
-            Height        = ( int )PNGDecoder.IHDRchunk.Height,
+            Width         = width,
+            Height        = height,
             BitDepth      = PNGDecoder.IHDRchunk.BitDepth,
-            ColorType     = PixelFormatUtils.PNGColorTypeToPixmapFormat( PNGDecoder.IHDRchunk.ColorType ),
+            ColorType     = colorType,
+            BytesPerPixel = PNGDecoder.BytesPerPixel,
             Blend         = 0,
             Scale         = 0,
             TotalIDATSize = PNGDecoder.TotalIDATSize,
-            Pixels        = new byte[ PNGDecoder.IDATchunk.ChunkSize ],
+            Pixels        = new byte[ bufLength ],
         };
-        
+
         pixmapDef.DebugPrint();
 
         Array.Copy( buffer, PNGDecoder.IDAT_DATA_OFFSET,

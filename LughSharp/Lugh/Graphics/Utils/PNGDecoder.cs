@@ -88,6 +88,7 @@ public class PNGDecoder
     public static PNGFormatStructs.IDATChunk    IDATchunk     { get; private set; }
     public static long                          TotalIDATSize { get; private set; } = 0;
     public static int                           PixelFormat   { get; private set; }
+    public static int                           BytesPerPixel { get; private set; }
 
     public static byte BitDepth    => IHDRchunk.BitDepth;
     public static uint Width       => IHDRchunk.Width;
@@ -199,6 +200,9 @@ public class PNGDecoder
 
         // Pixel Format
         PixelFormat = GetFormatFromPngHeader( new MemoryStream( pngData ) );
+
+        // Bytes Per Pixel
+        BytesPerPixel = GetBytesPerPixel( IHDRchunk.ColorType, IHDRchunk.BitDepth );
 
         if ( verbose )
         {
@@ -698,7 +702,7 @@ public class PNGDecoder
 
             // CRC
             using var crc32 = new Crc32();
-            
+
             crc32.TransformBlock( typeBytes, 0, 4, null, 0 );
             crc32.TransformBlock( data, 0, data.Length, null, 0 );
             crc32.TransformFinalBlock( [ ], 0, 0 );

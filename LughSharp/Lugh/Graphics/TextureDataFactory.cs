@@ -85,10 +85,8 @@ public static class TextureDataFactory
             case var _:
                 var pixmap = new Pixmap( file );
                 
-                Logger.Checkpoint();
-                pixmap.Debug();
+                pixmap.DebugPrint();
 
-                Logger.Checkpoint();
                 data = new FileTextureData( file, pixmap, format, useMipMaps );
 
                 break;
