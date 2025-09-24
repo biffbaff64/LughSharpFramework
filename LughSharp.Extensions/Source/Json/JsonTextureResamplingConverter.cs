@@ -24,7 +24,6 @@
 
 using System.Text.Json.Serialization;
 
-using Extensions.Source.Tools.ImagePacker;
 using Extensions.Source.Tools.TexturePacker;
 
 namespace Extensions.Source.Json;

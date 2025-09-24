@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.G2D;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Utils;
 

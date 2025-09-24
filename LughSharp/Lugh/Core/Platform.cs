@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Exceptions;
-
 using Environment = System.Environment;
 
 namespace LughSharp.Lugh.Core;

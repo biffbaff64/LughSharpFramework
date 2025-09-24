@@ -24,8 +24,6 @@
 
 using System.Runtime.InteropServices;
 
-using LughSharp.Lugh.Graphics;
-
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]

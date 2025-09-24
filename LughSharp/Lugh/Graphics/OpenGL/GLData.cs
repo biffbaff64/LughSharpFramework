@@ -27,6 +27,20 @@ namespace LughSharp.Lugh.Graphics.OpenGL;
 [PublicAPI]
 public class GLData
 {
+    public const int           DEFAULT_GL_MAJOR             = 3;
+    public const int           DEFAULT_GL_MINOR             = 2;
+    public const ClientAPI     DEFAULT_CLIENT_API           = ClientAPI.OpenGLAPI;
+    public const OpenGLProfile DEFAULT_OPENGL_PROFILE       = OpenGLProfile.CoreProfile;
+    public const bool          DEFAULT_OPENGL_FORWARDCOMPAT = true;
+
+    public const int TEXTURE_2D     = 0x0DE1;
+    public const int EXTENSIONS     = 0x1F03;
+    public const int MAJOR_VERSION  = 0x821B;
+    public const int MINOR_VERSION  = 0x821C;
+    public const int NUM_EXTENSIONS = 0x821D;
+
+    // ========================================================================
+    
     /// <summary>
     /// As named, this is the currently bound FBO, used to keep track.
     /// </summary>

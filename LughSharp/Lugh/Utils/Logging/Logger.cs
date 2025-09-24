@@ -22,9 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
 using System.Globalization;
-using System.Text;
 
 using Environment = System.Environment;
 

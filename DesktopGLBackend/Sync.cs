@@ -42,6 +42,17 @@ public class Sync
 
     // ========================================================================
 
+    private void Initialise()
+    {
+        _initialised = true;
+        _stopwatch.Start();
+        _nextFrame = _stopwatch.ElapsedTicks * ( NANOS_IN_SECOND / Stopwatch.Frequency );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="fps"></param>
     public void SyncFrameRate( int fps )
     {
         if ( fps <= 0 )
@@ -76,13 +87,6 @@ public class Sync
 
         currentTime = _stopwatch.ElapsedTicks * ( NANOS_IN_SECOND / Stopwatch.Frequency );
         _nextFrame  = Math.Max( targetTime + ( NANOS_IN_SECOND / fps ), currentTime );
-    }
-
-    private void Initialise()
-    {
-        _initialised = true;
-        _stopwatch.Start();
-        _nextFrame = _stopwatch.ElapsedTicks * ( NANOS_IN_SECOND / Stopwatch.Frequency );
     }
 }
 

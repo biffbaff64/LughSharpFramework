@@ -22,12 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
-
 // ============================================================================
 using GLenum = int;
 using GLfloat = float;
@@ -40,9 +34,7 @@ using GLboolean = bool;
 using GLubyte = byte;
 using GLsizeiptr = int;
 using GLintptr = int;
-using GLshort = short;
 using GLbyte = sbyte;
-using GLushort = ushort;
 using GLchar = byte;
 using GLuint64 = ulong;
 using GLint64 = long;

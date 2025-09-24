@@ -22,12 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Logging;
 
 using static LughSharp.Lugh.Graphics.GraphicsBackend;
 
@@ -42,36 +38,32 @@ public class ApplicationConfiguration
     // General Application Configuration
     // ========================================================================
 
-    public BackendType     GraphicsBackend      { get; set; } = BackendType.OpenGL;
-    public HdpiMode        HdpiMode             { get; set; } = HdpiMode.Logical;
-    public GLEmulationType GLEmulation          { get; set; } = GLEmulationType.GL20;
-    public string          PreferencesDirectory { get; set; } = ".prefs/";
-    public PathTypes       PreferencesFileType  { get; set; } = PathTypes.External;
-
-    [Obsolete( "To be removed" )]
-    public StreamWriter DebugStream { get; set; } = new( Console.OpenStandardOutput(), Encoding.UTF8 );
-
-    public bool DisableAudio                   { get; set; } = false;
-    public int  AudioDeviceSimultaneousSources { get; set; } = 16;
-    public int  AudioDeviceBufferSize          { get; set; } = 512;
-    public int  AudioDeviceBufferCount         { get; set; } = 9;
-    public bool Debug                          { get; set; } = false;
-    public bool TransparentFramebuffer         { get; set; } = false;
-    public int  Depth                          { get; set; } = 16;
-    public int  Stencil                        { get; set; } = 0;
-    public int  Samples                        { get; set; } = 0;
-    public int  IdleFPS                        { get; set; } = 60;
-    public int  ForegroundFPS                  { get; set; } = 0;
-    public int? GLContextMajorVersion          { get; set; } = null!;
-    public int? GLContextMinorVersion          { get; set; } = null!;
-    public int  GLContextRevision              { get; set; } = 0;
-    public int  Red                            { get; set; } = 8;
-    public int  Green                          { get; set; } = 8;
-    public int  Blue                           { get; set; } = 8;
-    public int  Alpha                          { get; set; } = 8;
-    public bool PauseWhenLostFocus             { get; set; } = true;
-    public bool PauseWhenMinimized             { get; set; } = true;
-    public bool GLProfilingEnabled             { get; set; } = true;
+    public BackendType     GraphicsBackend                { get; set; } = BackendType.OpenGL;
+    public HdpiMode        HdpiMode                       { get; set; } = HdpiMode.Logical;
+    public GLEmulationType GLEmulation                    { get; set; } = GLEmulationType.GL20;
+    public string          PreferencesDirectory           { get; set; } = ".prefs/";
+    public PathTypes       PreferencesFileType            { get; set; } = PathTypes.External;
+    public bool            DisableAudio                   { get; set; } = false;
+    public int             AudioDeviceSimultaneousSources { get; set; } = 16;
+    public int             AudioDeviceBufferSize          { get; set; } = 512;
+    public int             AudioDeviceBufferCount         { get; set; } = 9;
+    public bool            Debug                          { get; set; } = false;
+    public bool            TransparentFramebuffer         { get; set; } = false;
+    public int             Depth                          { get; set; } = 16;
+    public int             Stencil                        { get; set; } = 0;
+    public int             Samples                        { get; set; } = 0;
+    public int             IdleFPS                        { get; set; } = 60;
+    public int             ForegroundFPS                  { get; set; } = 0;
+    public int?            GLContextMajorVersion          { get; set; } = null!;
+    public int?            GLContextMinorVersion          { get; set; } = null!;
+    public int             GLContextRevision              { get; set; } = 0;
+    public int             Red                            { get; set; } = 8;
+    public int             Green                          { get; set; } = 8;
+    public int             Blue                           { get; set; } = 8;
+    public int             Alpha                          { get; set; } = 8;
+    public bool            PauseWhenLostFocus             { get; set; } = true;
+    public bool            PauseWhenMinimized             { get; set; } = true;
+    public bool            GLProfilingEnabled             { get; set; } = true;
 
     /// <summary>
     /// The maximum number of threads to use for network requests.
@@ -196,7 +188,6 @@ public class ApplicationConfiguration
         AudioDeviceBufferSize          = config.AudioDeviceBufferSize;
         AudioDeviceBufferCount         = config.AudioDeviceBufferCount;
         Debug                          = config.Debug;
-        DebugStream                    = config.DebugStream;
         TransparentFramebuffer         = config.TransparentFramebuffer;
         HdpiMode                       = config.HdpiMode;
         Depth                          = config.Depth;
@@ -314,19 +305,6 @@ public class ApplicationConfiguration
     {
         GLContextMajorVersion = major;
         GLContextMinorVersion = minor;
-    }
-
-    /// <summary>
-    /// Enables use of OpenGL debug message callbacks. If not supported by the core
-    /// GL driver (since GL 4.3), this uses the KHR_debug, ARB_debug_output or AMD_debug_output extension
-    /// if available. By default, debug messages with NOTIFICATION severity are disabled to
-    /// avoid log spam.
-    /// </summary>
-    [Obsolete( "Use ./GLDebugControl.EnableDebugOutput() instead" )]
-    public void EnableGLDebugOutput( bool enable, StreamWriter debugOutputStream )
-    {
-        Debug       = enable;
-        DebugStream = debugOutputStream;
     }
 
     /// <summary>

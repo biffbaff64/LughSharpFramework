@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Maths.Collision;
 using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Maths;
 

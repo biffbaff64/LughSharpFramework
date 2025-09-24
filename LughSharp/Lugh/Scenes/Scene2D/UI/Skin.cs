@@ -26,11 +26,9 @@ using System.Reflection;
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
 using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 using Exception = System.Exception;

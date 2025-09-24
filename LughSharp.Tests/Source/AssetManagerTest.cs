@@ -23,8 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Assets;
+using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Utils;
+using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils.Logging;
 
 using NUnit.Framework;
@@ -49,15 +50,37 @@ public class AssetManagerTest
         Logger.Debug( "Loading assets...", true );
         Logger.Divider();
 
-        _assetManager?.Load( "libgdx.png", typeof( Texture ) );
-        _assetManager?.Load( "biffbaff.png", typeof( Texture ) );
-        _assetManager?.Load( "red7logo_small.png", typeof( Texture ) );
+        if ( _assetManager == null )
+        {
+            return;
+        }
 
-        Logger.Debug( "All assets queued for loading.", true );
+        var file1 = Path.Combine( IOUtils.AssetsRoot, "PackedImages/Objects/libgdx.png" );
+        var file2 = Path.Combine( IOUtils.AssetsRoot, "PackedImages/Objects/rover_wheel.png" );
+        var file3 = Path.Combine( IOUtils.AssetsRoot, "PackedImages/Objects/red7logo_small.png" );
 
-        _assetManager?.GetDiagnostics();
+        _assetManager.Load( file1, typeof( Texture ) );
+        _assetManager.Load( file2, typeof( Texture ) );
+        _assetManager.Load( file3, typeof( Texture ) );
+        _assetManager.FinishLoading();
 
-        Task.Run( () => { _assetManager?.FinishLoading(); } );
+        if ( !_assetManager.Contains( file1 ) )
+        {
+            Logger.Warning( $"AssetManager does not contain {file1}" );
+
+            return;
+        }
+
+        var data1 = _assetManager.Get< Texture >( file1 )?.GetImageData();
+
+        if ( data1 == null )
+        {
+            Logger.Warning( $"Failed to load image data: {file1}" );
+        }
+        else
+        {
+            PNGDecoder.AnalysePNG( data1, true );
+        }
 
         Logger.Debug( "Finished!", true );
     }

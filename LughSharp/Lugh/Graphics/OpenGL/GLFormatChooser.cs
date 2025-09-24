@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
 [PublicAPI]
@@ -184,7 +182,7 @@ public sealed class GLFormatChooser
     {
         if ( _caps.HasInternalFormatQuery )
         {
-            _gl.GetInternalformativ( GLConsts.TEXTURE_2D, internalFormat, GLIFQ.INTERNALFORMAT_SUPPORTED, 1, out var v );
+            _gl.GetInternalformativ( GLData.TEXTURE_2D, internalFormat, GLIFQ.INTERNALFORMAT_SUPPORTED, 1, out var v );
 
             return v != 0;
         }
@@ -232,7 +230,7 @@ public sealed class GLFormatChooser
                                      or GLIF.DEPTH_COMPONENT24 or GLIF.DEPTH24_STENCIL8;
         }
 
-        _gl.GetInternalformativ( GLConsts.TEXTURE_2D, internalFormat, GLIFQ.FRAMEBUFFER_RENDERABLE, 1, out var v );
+        _gl.GetInternalformativ( GLData.TEXTURE_2D, internalFormat, GLIFQ.FRAMEBUFFER_RENDERABLE, 1, out var v );
 
         return v != 0;
     }

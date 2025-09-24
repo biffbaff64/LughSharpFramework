@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
-using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 

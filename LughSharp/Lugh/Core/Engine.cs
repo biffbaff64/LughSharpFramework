@@ -22,16 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
 using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Input;
 using LughSharp.Lugh.Network;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Logging;
 
 using GLBindings = LughSharp.Lugh.Graphics.OpenGL.GLBindings;
 

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-
 using LughSharp.Lugh.Maths;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
@@ -320,9 +318,9 @@ public partial class TexturePacker
     [PublicAPI]
     public interface IPacker
     {
-        List< Page? > Pack( List< Rect > inputRects );
+        List< Page > Pack( List< Rect > inputRects );
 
-        List< Page? > Pack( TexturePackerProgressListener progressListener,
+        List< Page > Pack( TexturePackerProgressListener progressListener,
                             List< Rect > inputRects );
     }
 

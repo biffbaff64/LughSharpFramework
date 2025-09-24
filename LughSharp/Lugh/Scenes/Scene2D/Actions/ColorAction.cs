@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Exceptions;
-
 using Color = LughSharp.Lugh.Graphics.Color;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.Actions;

@@ -23,13 +23,13 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public class TextureUnpacker
 {
     public bool Quiet { get; set; }

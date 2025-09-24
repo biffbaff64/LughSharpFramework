@@ -22,12 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
-
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace LughSharp.Lugh.Graphics.Utils;

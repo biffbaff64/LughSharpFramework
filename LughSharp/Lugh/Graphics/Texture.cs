@@ -22,14 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
 using LughSharp.Lugh.Assets;
 using LughSharp.Lugh.Assets.Loaders;
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Lugh.Graphics;
 

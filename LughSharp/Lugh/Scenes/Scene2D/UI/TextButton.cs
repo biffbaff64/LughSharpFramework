@@ -22,12 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
-using LughSharp.Lugh.Utils;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 

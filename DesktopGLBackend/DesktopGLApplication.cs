@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.OpenGL;
 using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Utils;
@@ -375,7 +374,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         Glfw.WindowHint( WindowHint.DepthBits, config.Depth );
         Glfw.WindowHint( WindowHint.Samples, config.Samples );
 
-        OGLProfile = GLUtils.DEFAULT_OPENGL_PROFILE;
+        OGLProfile = GLData.DEFAULT_OPENGL_PROFILE;
 
         if ( config.GLContextMajorVersion is > 0 )
         {
@@ -383,7 +382,7 @@ public class DesktopGLApplication : IApplication, IDisposable
         }
         else
         {
-            Glfw.WindowHint( WindowHint.ContextVersionMajor, GLUtils.DEFAULT_GL_MAJOR );
+            Glfw.WindowHint( WindowHint.ContextVersionMajor, GLData.DEFAULT_GL_MAJOR );
         }
 
         if ( config.GLContextMinorVersion is > 0 )
@@ -392,12 +391,12 @@ public class DesktopGLApplication : IApplication, IDisposable
         }
         else
         {
-            Glfw.WindowHint( WindowHint.ContextVersionMinor, GLUtils.DEFAULT_GL_MINOR );
+            Glfw.WindowHint( WindowHint.ContextVersionMinor, GLData.DEFAULT_GL_MINOR );
         }
 
-        Glfw.WindowHint( WindowHint.OpenGLForwardCompat, GLUtils.DEFAULT_OPENGL_FORWARDCOMPAT );
+        Glfw.WindowHint( WindowHint.OpenGLForwardCompat, GLData.DEFAULT_OPENGL_FORWARDCOMPAT );
         Glfw.WindowHint( WindowHint.OpenGLProfile, OGLProfile );
-        Glfw.WindowHint( WindowHint.ClientAPI, GLUtils.DEFAULT_CLIENT_API );
+        Glfw.WindowHint( WindowHint.ClientAPI, GLData.DEFAULT_CLIENT_API );
 
         Glfw.WindowHint( WindowHint.DoubleBuffer, true );
 

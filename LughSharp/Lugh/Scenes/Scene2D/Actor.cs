@@ -22,11 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
 using LughSharp.Lugh.Scenes.Scene2D.Utils;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Pooling;
 

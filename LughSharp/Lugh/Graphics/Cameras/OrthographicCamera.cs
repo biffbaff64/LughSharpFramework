@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils;
-
 namespace LughSharp.Lugh.Graphics.Cameras;
 
 /// <summary>

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils.Exceptions;
-
 namespace LughSharp.Lugh.Graphics.Atlases;
 
 public partial class TextureAtlasData

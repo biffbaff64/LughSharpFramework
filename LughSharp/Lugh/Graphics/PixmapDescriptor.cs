@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
-
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>
@@ -32,19 +30,17 @@ namespace LughSharp.Lugh.Graphics;
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
-
-//TODO: Rename this struct, changing 'Type' to something better
-public struct PixmapDataType()
+public struct PixmapDescriptor()
 {
-    public int    Width         { get; set; } = 0;
-    public int    Height        { get; set; } = 0;
-    public byte   BitDepth      { get; set; } = 0;
-    public int    ColorType     { get; set; } = 0;
-    public int    BytesPerPixel { get; set; } = 0;
-    public uint   Blend         { get; set; } = 0;
-    public uint   Scale         { get; set; } = 0;
-    public byte[] Pixels        { get; set; } = [ ];
-    public long   TotalIDATSize { get; set; } = 0;
+    public int    Width         { get; set; } = 0;   // Width of the pixmap in pixels.
+    public int    Height        { get; set; } = 0;   // Height of the pixmap in pixels.
+    public byte   BitDepth      { get; set; } = 0;   // Number of bits per pixel.
+    public int    ColorType     { get; set; } = 0;   // Color type of the pixmap.
+    public int    BytesPerPixel { get; set; } = 0;   // Number of bytes per pixel.
+    public uint   Blend         { get; set; } = 0;   // Blend mode.
+    public uint   Scale         { get; set; } = 0;   // Scale mode.
+    public byte[] Pixels        { get; set; } = [ ]; // Pixel data.
+    public long   TotalIDATSize { get; set; } = 0;   // Total size of the IDAT data.
 
     // ========================================================================
 

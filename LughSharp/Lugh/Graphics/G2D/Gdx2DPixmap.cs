@@ -57,6 +57,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     public const int GDX_2D_FORMAT_RGBA8888        = 4;
     public const int GDX_2D_FORMAT_RGB565          = 5;
     public const int GDX_2D_FORMAT_RGBA4444        = 6;
+    public const int GDX_2D_FORMAT_INDEXED         = 7;
     public const int GDX_2D_FORMAT_DEFAULT         = 4;
 
     // ========================================================================
@@ -80,7 +81,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
 
     // ========================================================================
 
-    private PixmapDataType _pixmapDataType;
+    private PixmapDescriptor _pixmapDescriptor;
 
     // ========================================================================
     // ========================================================================
@@ -99,16 +100,16 @@ public partial class Gdx2DPixmap : Image, IDisposable
     {
         Logger.Checkpoint();
 
-        ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, offset, len );
+        ( PixmapBuffer, _pixmapDescriptor ) = LoadPixmapDataType( buffer, offset, len );
 
-        if ( ( requestedFormat != 0 ) && ( requestedFormat != _pixmapDataType.ColorType ) )
+        if ( ( requestedFormat != 0 ) && ( requestedFormat != _pixmapDescriptor.ColorType ) )
         {
             ConvertPixelFormatTo( requestedFormat );
         }
 
         Guard.ThrowIfNull( PixmapBuffer );
 
-        CommonConstructorInit( _pixmapDataType );
+        CommonConstructorInit( _pixmapDescriptor );
     }
 
     /// <summary>
@@ -143,7 +144,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
 
         var buffer = memoryStream.ToArray();
 
-        ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, 0, buffer.Length );
+        ( PixmapBuffer, _pixmapDescriptor ) = LoadPixmapDataType( buffer, 0, buffer.Length );
 
         if ( ( requestedFormat != 0 ) && ( requestedFormat != ColorType ) )
         {
@@ -152,7 +153,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
 
         Guard.ThrowIfNull( PixmapBuffer );
 
-        CommonConstructorInit( _pixmapDataType );
+        CommonConstructorInit( _pixmapDescriptor );
     }
 
     /// <summary>
@@ -164,11 +165,11 @@ public partial class Gdx2DPixmap : Image, IDisposable
     {
         Logger.Checkpoint();
 
-        ( PixmapBuffer, _pixmapDataType ) = LoadPixmapDataType( buffer, 0, buffer.Length );
+        ( PixmapBuffer, _pixmapDescriptor ) = LoadPixmapDataType( buffer, 0, buffer.Length );
 
         Guard.ThrowIfNull( PixmapBuffer );
 
-        CommonConstructorInit( _pixmapDataType );
+        CommonConstructorInit( _pixmapDescriptor );
     }
 
     /// <summary>
@@ -202,23 +203,23 @@ public partial class Gdx2DPixmap : Image, IDisposable
         SafeConstructorInit( width, height );
         SafeInitPixmapDataType( width, height, format );
 
-        PixmapBuffer.Put( _pixmapDataType.Pixels );
+        PixmapBuffer.Put( _pixmapDescriptor.Pixels );
     }
 
     /// <summary>
     /// Common initialisation code for all constructors, to cut down on code duplication.
     /// </summary>
-    /// <param name="pixmapDataType">
-    /// The PixmapDataType instance containing the initialisation data.
+    /// <param name="pixmapDescriptor">
+    /// The PixmapDescriptor instance containing the initialisation data.
     /// </param>
-    private void CommonConstructorInit( PixmapDataType pixmapDataType )
+    private void CommonConstructorInit( PixmapDescriptor pixmapDescriptor )
     {
-        ColorType = pixmapDataType.ColorType;
-        BitDepth  = pixmapDataType.BitDepth;
-        Blend     = pixmapDataType.Blend;
-        Scale     = pixmapDataType.Scale;
-        Width     = pixmapDataType.Width;
-        Height    = pixmapDataType.Height;
+        ColorType = pixmapDescriptor.ColorType;
+        BitDepth  = pixmapDescriptor.BitDepth;
+        Blend     = pixmapDescriptor.Blend;
+        Scale     = pixmapDescriptor.Scale;
+        Width     = pixmapDescriptor.Width;
+        Height    = pixmapDescriptor.Height;
     }
 
     /// <summary>
@@ -238,7 +239,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     }
 
     /// <summary>
-    /// Initializes and configures a new instance of <see cref="PixmapDataType"/> with the specified
+    /// Initializes and configures a new instance of <see cref="PixmapDescriptor"/> with the specified
     /// dimensions, format, and associated properties for the pixmap.
     /// <para>
     /// Used by constructors that need to reference virtual members, which should not be
@@ -252,7 +253,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     {
         var length = width * height * PixelFormatUtils.Gdx2dBytesPerPixel( format );
 
-        _pixmapDataType = new PixmapDataType
+        _pixmapDescriptor = new PixmapDescriptor
         {
             Width         = Width,
             Height        = Height,
@@ -269,7 +270,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     // ========================================================================
 
     /// <summary>
-    /// Loads the data in the supplied byte array into a <see cref="PixmapDataType" />.
+    /// Loads the data in the supplied byte array into a <see cref="PixmapDescriptor" />.
     /// This method also calls the <see cref="PNGDecoder.AnalysePNG(byte[], bool)" />
     /// method, with verbose set to false, to extract PNG properties for later use.
     /// </summary>
@@ -278,7 +279,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
     /// <param name="len"></param>
     /// <returns></returns>
     /// <exception cref="IOException"></exception>
-    private static ( Buffer< byte >, PixmapDataType ) LoadPixmapDataType( byte[] buffer, int offset, int len )
+    private static ( Buffer< byte >, PixmapDescriptor ) LoadPixmapDataType( byte[] buffer, int offset, int len )
     {
         Logger.Debug( $"buffer length: {buffer.Length}, offset: {offset}, len: {len}" );
 
@@ -292,7 +293,7 @@ public partial class Gdx2DPixmap : Image, IDisposable
         var height    = ( int )PNGDecoder.IHDRchunk.Height;
         var bufLength = width * height * PNGDecoder.BytesPerPixel;
 
-        var pixmapDef = new PixmapDataType
+        var pixmapDef = new PixmapDescriptor
         {
             Width         = width,
             Height        = height,

@@ -24,16 +24,12 @@
 
 using Extensions.Source.Drawing;
 
-using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths;
-using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
 
 using Bitmap = System.Drawing.Bitmap;
-using Image = System.Drawing.Image;
 using Pen = System.Drawing.Pen;
 
 namespace Extensions.Source.Tools.TexturePacker;

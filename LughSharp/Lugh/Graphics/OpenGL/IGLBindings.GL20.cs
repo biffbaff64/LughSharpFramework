@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / Red 7 Projects
+//  Copyright (c) 2024 Richard Ikin.
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,9 @@
 
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
-/// <summary>
-/// Common constants used by the <see cref="GLFormatChooser"/> and others.
-/// </summary>
-[PublicAPI]
-public static class GLConsts
+public partial interface IGLBindings
 {
-    public const int TEXTURE_2D     = 0x0DE1;
-    public const int EXTENSIONS     = 0x1F03;
-    public const int MAJOR_VERSION  = 0x821B;
-    public const int MINOR_VERSION  = 0x821C;
-    public const int NUM_EXTENSIONS = 0x821D;
 }
 
-// ========================================================================
-// ========================================================================
+// ============================================================================
+// ============================================================================

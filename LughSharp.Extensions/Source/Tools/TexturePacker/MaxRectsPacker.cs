@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
 
 namespace Extensions.Source.Tools.TexturePacker;
 
@@ -74,7 +73,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// </summary>
     /// <param name="inputRects"></param>
     /// <returns></returns>
-    public List< TexturePacker.Page? > Pack( List< TexturePacker.Rect > inputRects )
+    public List< TexturePacker.Page > Pack( List< TexturePacker.Rect > inputRects )
     {
         return Pack( null, inputRects );
     }
@@ -86,7 +85,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
     /// <param name="inputRects"></param>
     /// <returns></returns>
     /// <exception cref="NullReferenceException"></exception>
-    public List< TexturePacker.Page? > Pack( TexturePacker.TexturePackerProgressListener? progress,
+    public List< TexturePacker.Page > Pack( TexturePacker.TexturePackerProgressListener? progress,
                                              List< TexturePacker.Rect > inputRects )
     {
         var n = inputRects.Count;
@@ -129,7 +128,51 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
             }
         }
 
-        List< TexturePacker.Page? > pages = [ ];
+/*
+LughSharpFramework
+    - Solution Items
+    - ConsoleApp1
+        - Dependencies
+        - Assets
+        - Source
+        .gitignore
+        global.json
+        README.md
+    - DesktopGLBackend
+        - Dependencies
+        - Audio
+        - Graphics
+        - Input
+        - Utils
+        - Window
+        DesktopApplication.cs
+        DesktopApplicationConfiguration.cs
+        DesktopGKLNativesLoader.cs
+        GlobalUsings.cs
+        Sync.cs
+        TODO.md
+    - LughSharp
+        - Dependencies
+        - Assets
+        - lib
+        - Lugh
+            - Assets
+            - Audio
+            - Core
+            - Files
+            - Graphics
+            - Input
+            - Maps
+            - Maths
+            - Network
+            - Scenes
+            - Utils
+        GlobalUsings.cs
+        README.md
+    - LughSharp.Extensions
+    - LughSharp.Tests
+ */
+        List< TexturePacker.Page > pages = [ ];
 
         while ( inputRects.Count > 0 )
         {
@@ -145,7 +188,7 @@ public partial class MaxRectsPacker : TexturePacker.IPacker
 
             var result = PackPage( inputRects );
 
-//            if ( result != null )
+            if ( result != null )
             {
                 pages.Add( result );
             }

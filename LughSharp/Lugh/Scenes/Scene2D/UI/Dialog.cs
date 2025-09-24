@@ -22,12 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-
 using LughSharp.Lugh.Scenes.Scene2D.Actions;
 using LughSharp.Lugh.Scenes.Scene2D.Listeners;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Lugh.Scenes.Scene2D.UI;
 

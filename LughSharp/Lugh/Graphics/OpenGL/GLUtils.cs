@@ -22,28 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
-
 namespace LughSharp.Lugh.Graphics.OpenGL;
 
 [PublicAPI]
 public static class GLUtils
 {
-    public const int           DEFAULT_GL_MAJOR             = 4;
-    public const int           DEFAULT_GL_MINOR             = 5;
-    public const ClientAPI     DEFAULT_CLIENT_API           = ClientAPI.OpenGLAPI;
-    public const OpenGLProfile DEFAULT_OPENGL_PROFILE       = OpenGLProfile.CoreProfile;
-    public const bool          DEFAULT_OPENGL_FORWARDCOMPAT = true;
-
-    // ========================================================================
-
-    // ========================================================================
-    // ========================================================================
-
     /// <summary>
     /// Converts a specified OpenGL error code into a corresponding descriptive error string.
     /// </summary>
@@ -81,6 +64,7 @@ public static class GLUtils
     /// </summary>
     public static void CreateCapabilities()
     {
+//        OpenGL.Initialisation.LoadVersion();
     }
 
     /// <summary>

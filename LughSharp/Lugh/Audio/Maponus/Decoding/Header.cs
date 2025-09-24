@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
 using LughSharp.Lugh.Audio.Maponus.Support;
 
 namespace LughSharp.Lugh.Audio.Maponus.Decoding;

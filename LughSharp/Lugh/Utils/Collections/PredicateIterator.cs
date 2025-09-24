@@ -24,8 +24,6 @@
 
 using System.Collections;
 
-using LughSharp.Lugh.Utils.Exceptions;
-
 namespace LughSharp.Lugh.Utils.Collections;
 
 [PublicAPI]

@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.IO.Compression;
 using System.Xml;
 
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
@@ -34,7 +33,6 @@ using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Maps.Objects;
 using LughSharp.Lugh.Maps.Tiled.Objects;
 using LughSharp.Lugh.Maps.Tiled.Tiles;
-using LughSharp.Lugh.Utils.Exceptions;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 

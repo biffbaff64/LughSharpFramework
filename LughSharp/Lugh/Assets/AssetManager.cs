@@ -28,14 +28,9 @@ using LughSharp.Lugh.Audio;
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Graphics.Text;
-using LughSharp.Lugh.Graphics.Utils;
 using LughSharp.Lugh.Scenes.Scene2D.UI;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Collections;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Lugh.Assets;
 
@@ -434,12 +429,9 @@ public partial class AssetManager
         {
             name = IOUtils.NormalizePath( name );
 
-            if ( !_assetTypes.TryGetValue( name, out var _ ) )
-            {
-                throw new GdxRuntimeException( $"_assetTypes does not contain {name}" );
-            }
-
-            return _assetTypes[ name ];
+            return !_assetTypes.TryGetValue( name, out var _ )
+                ? throw new GdxRuntimeException( $"Assets Container does not hold {name}" )
+                : _assetTypes[ name ];
         }
     }
 
@@ -457,6 +449,20 @@ public partial class AssetManager
         }
     }
 
+    /// <summary>
+    /// Retrieves an asset of the specified type by its name.
+    /// </summary>
+    /// <param name="name">The name of the asset to retrieve.</param>
+    /// <returns>The asset of the specified type.</returns>
+    /// <exception cref="GdxRuntimeException">Thrown if the asset is not loaded.</exception>
+    public T? Get< T >( string name )
+    {
+        lock ( this )
+        {
+            return ( T? )Get( name, typeof( T ), true );
+        }
+    }
+    
     /// <summary>
     /// Retrieves an asset by name, throwing an exception if the asset is not found and required.
     /// </summary>

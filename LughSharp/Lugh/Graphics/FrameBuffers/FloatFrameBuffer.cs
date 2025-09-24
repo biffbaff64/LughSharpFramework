@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-
 using Platform = LughSharp.Lugh.Core.Platform;
 
 namespace LughSharp.Lugh.Graphics.FrameBuffers;

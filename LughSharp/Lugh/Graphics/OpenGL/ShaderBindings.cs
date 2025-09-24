@@ -22,30 +22,19 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-using LughSharp.Lugh.Utils.Logging;
-
 // ============================================================================
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;
 using GLsizei = int;
-using GLbitfield = uint;
 using GLdouble = double;
 using GLuint = uint;
 using GLboolean = bool;
 using GLubyte = byte;
-using GLsizeiptr = int;
-using GLintptr = int;
 using GLshort = short;
 using GLbyte = sbyte;
 using GLushort = ushort;
 using GLchar = byte;
-using GLuint64 = ulong;
-using GLint64 = long;
 
 // ============================================================================
 
@@ -69,13 +58,13 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLATTACHSHADERPROC >( "glAttachShader", out _glAttachShader );
 
-        _glAttachShader( ( uint )program, ( uint )shader );
+        _glAttachShader( ( GLuint )program, ( GLuint )shader );
     }
 
     // ========================================================================
 
     /// <inheritdoc />
-    public void BindAttribLocation( GLint program, uint index, byte* name )
+    public void BindAttribLocation( GLint program, GLuint index, byte* name )
     {
         if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
@@ -85,11 +74,11 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLBINDATTRIBLOCATIONPROC >( "glBindAttribLocation", out _glBindAttribLocation );
 
-        _glBindAttribLocation( ( uint )program, index, name );
+        _glBindAttribLocation( ( GLuint )program, index, name );
     }
 
     /// <inheritdoc />
-    public void BindAttribLocation( int program, uint index, string name )
+    public void BindAttribLocation( int program, GLuint index, string name )
     {
         if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
@@ -103,7 +92,7 @@ public unsafe partial class GLBindings
 
         fixed ( byte* putf8 = &utf8[ 0 ] )
         {
-            _glBindAttribLocation( ( uint )program, index, putf8 );
+            _glBindAttribLocation( ( GLuint )program, index, putf8 );
         }
     }
 
@@ -120,7 +109,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLCOMPILESHADERPROC >( "glCompileShader", out _glCompileShader );
 
-        _glCompileShader( ( uint )shader );
+        _glCompileShader( ( GLuint )shader );
     }
 
     // ========================================================================
@@ -129,8 +118,6 @@ public unsafe partial class GLBindings
     public GLuint CreateShader( GLenum type )
     {
         GetDelegateForFunction< PFNGLCREATESHADERPROC >( "glCreateShader", out _glCreateShader );
-
-        //TODO: Error checking here
 
         return _glCreateShader( type );
     }
@@ -150,7 +137,7 @@ public unsafe partial class GLBindings
         {
             GetDelegateForFunction< PFNGLDELETEPROGRAMPROC >( "glDeleteProgram", out _glDeleteProgram );
 
-            _glDeleteProgram( ( uint )program );
+            _glDeleteProgram( ( GLuint )program );
         }
     }
 
@@ -167,7 +154,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLDELETESHADERPROC >( "glDeleteShader", out _glDeleteShader );
 
-        _glDeleteShader( ( uint )shader );
+        _glDeleteShader( ( GLuint )shader );
     }
 
     // ========================================================================
@@ -188,7 +175,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLDETACHSHADERPROC >( "glDetachShader", out _glDetachShader );
 
-        _glDetachShader( ( uint )program, ( uint )shader );
+        _glDetachShader( ( GLuint )program, ( GLuint )shader );
     }
 
     // ========================================================================
@@ -224,7 +211,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETACTIVEATTRIBPROC >( "glGetActiveAttrib", out _glGetActiveAttrib );
 
-        _glGetActiveAttrib( ( uint )program, index, bufSize, length, size, type, name );
+        _glGetActiveAttrib( ( GLuint )program, index, bufSize, length, size, type, name );
     }
 
     /// <inheritdoc />
@@ -245,7 +232,7 @@ public unsafe partial class GLBindings
         {
             fixed ( GLint* psize = &size )
             {
-                _glGetActiveAttrib( ( uint )program, index, bufSize, &len, psize, ptype, name );
+                _glGetActiveAttrib( ( GLuint )program, index, bufSize, &len, psize, ptype, name );
             }
         }
 
@@ -265,7 +252,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETACTIVEUNIFORMPROC >( "glGetActiveUniform", out _glGetActiveUniform );
 
-        _glGetActiveUniform( ( uint )program, index, bufSize, length, size, type, name );
+        _glGetActiveUniform( ( GLuint )program, index, bufSize, length, size, type, name );
     }
 
     /// <inheritdoc />
@@ -286,7 +273,7 @@ public unsafe partial class GLBindings
         {
             fixed ( GLint* psize = &size )
             {
-                _glGetActiveUniform( ( uint )program, index, bufSize, &len, psize, ptype, name );
+                _glGetActiveUniform( ( GLuint )program, index, bufSize, &len, psize, ptype, name );
             }
         }
 
@@ -296,7 +283,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetAttachedShaders( int program, int maxCount, int* count, uint* shaders )
+    public void GetAttachedShaders( int program, int maxCount, int* count, GLuint* shaders )
     {
         if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
@@ -306,11 +293,11 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETATTACHEDSHADERSPROC >( "glGetAttachedShaders", out _glGetAttachedShaders );
 
-        _glGetAttachedShaders( ( uint )program, maxCount, count, shaders );
+        _glGetAttachedShaders( ( GLuint )program, maxCount, count, shaders );
     }
 
     /// <inheritdoc />
-    public uint[] GetAttachedShaders( int program, int maxCount )
+    public GLuint[] GetAttachedShaders( int program, int maxCount )
     {
         if ( !GL.IsProgram( program ) || ( program == INVALID_SHADER_PROGRAM ) )
         {
@@ -325,7 +312,7 @@ public unsafe partial class GLBindings
 
         fixed ( GLuint* pshaders = &shaders[ 0 ] )
         {
-            _glGetAttachedShaders( ( uint )program, maxCount, &count, pshaders );
+            _glGetAttachedShaders( ( GLuint )program, maxCount, &count, pshaders );
         }
 
         Array.Resize( ref shaders, count );
@@ -346,7 +333,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETATTRIBLOCATIONPROC >( "glGetAttribLocation", out _glGetAttribLocation );
 
-        return _glGetAttribLocation( ( uint )program, name );
+        return _glGetAttribLocation( ( GLuint )program, name );
     }
 
     /// <inheritdoc />
@@ -362,7 +349,7 @@ public unsafe partial class GLBindings
 
         fixed ( GLchar* pname = Encoding.UTF8.GetBytes( name ) )
         {
-            return _glGetAttribLocation( ( uint )program, pname );
+            return _glGetAttribLocation( ( GLuint )program, pname );
         }
     }
 
@@ -379,7 +366,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETSHADERIVPROC >( "glGetShaderiv", out _glGetShaderiv );
 
-        _glGetShaderiv( ( uint )shader, pname, parameters );
+        _glGetShaderiv( ( GLuint )shader, pname, parameters );
     }
 
     /// <inheritdoc />
@@ -395,7 +382,7 @@ public unsafe partial class GLBindings
 
         fixed ( GLint* pparams = &parameters[ 0 ] )
         {
-            _glGetShaderiv( ( uint )shader, pname, pparams );
+            _glGetShaderiv( ( GLuint )shader, pname, pparams );
         }
     }
 
@@ -412,7 +399,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETSHADERINFOLOGPROC >( "glGetShaderInfoLog", out _glGetShaderInfoLog );
 
-        _glGetShaderInfoLog( ( uint )shader, bufSize, length, infoLog );
+        _glGetShaderInfoLog( ( GLuint )shader, bufSize, length, infoLog );
     }
 
     /// <inheritdoc />
@@ -429,7 +416,7 @@ public unsafe partial class GLBindings
 
         GetDelegateForFunction< PFNGLGETSHADERINFOLOGPROC >( "glGetShaderInfoLog", out _glGetShaderInfoLog );
 
-        _glGetShaderInfoLog( ( uint )shader, bufSize, &len, infoLog );
+        _glGetShaderInfoLog( ( GLuint )shader, bufSize, &len, infoLog );
 
         return new string( ( GLbyte* )infoLog, 0, len, Encoding.UTF8 );
     }
@@ -447,7 +434,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLGETSHADERSOURCEPROC >( "glGetShaderSource", out _glGetShaderSource );
 
-        _glGetShaderSource( ( uint )shader, bufSize, length, source );
+        _glGetShaderSource( ( GLuint )shader, bufSize, length, source );
     }
 
     /// <inheritdoc />
@@ -464,7 +451,7 @@ public unsafe partial class GLBindings
 
         GetDelegateForFunction< PFNGLGETSHADERSOURCEPROC >( "glGetShaderSource", out _glGetShaderSource );
 
-        _glGetShaderSource( ( uint )shader, bufSize, &len, source );
+        _glGetShaderSource( ( GLuint )shader, bufSize, &len, source );
 
         return new string( ( GLbyte* )source, 0, len, Encoding.UTF8 );
     }
@@ -543,7 +530,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void GetVertexAttribPointerv( GLuint index, GLenum pname, ref uint[] pointer )
+    public void GetVertexAttribPointerv( GLuint index, GLenum pname, ref GLuint[] pointer )
     {
         var ptr = new void*[ pointer.Length ];
 
@@ -556,7 +543,7 @@ public unsafe partial class GLBindings
 
         for ( var i = 0; i < pointer.Length; i++ )
         {
-            pointer[ i ] = ( uint )ptr[ i ];
+            pointer[ i ] = ( GLuint )ptr[ i ];
         }
     }
 
@@ -568,7 +555,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLISSHADERPROC >( "glIsShader", out _glIsShader );
 
-        return _glIsShader( ( uint )shader );
+        return _glIsShader( ( GLuint )shader );
     }
 
     // ========================================================================
@@ -584,7 +571,7 @@ public unsafe partial class GLBindings
         // Error checking is done internal to GetDelegateForFunction.
         GetDelegateForFunction< PFNGLSHADERSOURCEPROC >( "glShaderSource", out _glShaderSource );
 
-        _glShaderSource( ( uint )shader, count, str, length );
+        _glShaderSource( ( GLuint )shader, count, str, length );
     }
 
     /// <inheritdoc />
@@ -621,7 +608,7 @@ public unsafe partial class GLBindings
 
         GetDelegateForFunction< PFNGLSHADERSOURCEPROC >( "glShaderSource", out _glShaderSource );
 
-        _glShaderSource( ( uint )shader, count, pstring, length );
+        _glShaderSource( ( GLuint )shader, count, pstring, length );
     }
 
     // ========================================================================
@@ -1240,7 +1227,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uint pointer )
+    public void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, GLuint pointer )
     {
         VertexAttribPointer( index, size, type, normalized, stride, ( IntPtr )pointer );
     }

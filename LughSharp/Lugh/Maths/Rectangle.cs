@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 

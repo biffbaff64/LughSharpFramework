@@ -68,6 +68,8 @@
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="lib\net8.0\gdx2d.dll" Pack="true" PackagePath="lib\net8.0\" />
+        <None Include="lib\net8.0\freetype.dll" Pack="true" PackagePath="lib\net8.0\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -75,47 +77,42 @@
             <Pack>true</Pack>
             <PackagePath>contentFiles\any\any</PackagePath>
         </Content>
-        <None Remove="lib\gdx2d.dll"/>
-        <Content Include="lib\gdx2d.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="lib\freetype.dll"/>
-        <Content Include="lib\freetype.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="Assets\Shaders\ColorTest.glsl.frag"/>
         <Content Include="Assets\Shaders\ColorTest.glsl.frag">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\ColorTest.glsl.vert"/>
         <Content Include="Assets\Shaders\ColorTest.glsl.vert">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\Default.glsl.frag"/>
         <Content Include="Assets\Shaders\Default.glsl.frag">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\Default.glsl.vert"/>
         <Content Include="Assets\Shaders\Default.glsl.vert">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\Quad.frag"/>
         <Content Include="Assets\Shaders\Quad.frag">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\Quad.vert"/>
         <Content Include="Assets\Shaders\Quad.vert">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\Simple.glsl.frag"/>
         <Content Include="Assets\Shaders\Simple.glsl.frag">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <None Remove="Assets\Shaders\Simple.glsl.vert"/>
         <Content Include="Assets\Shaders\Simple.glsl.vert">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
+<!--    <ItemGroup>-->
+<!--        <None Remove="lib\net8.0\freetype.dll" />-->
+<!--        <Content Include="lib\net8.0\freetype.dll">-->
+<!--          <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
+<!--        </Content>-->
+<!--        <None Remove="lib\net8.0\gdx2d.dll" />-->
+<!--        <Content Include="lib\net8.0\gdx2d.dll">-->
+<!--          <CopyToOutputDirectory>Always</CopyToOutputDirectory>-->
+<!--        </Content>-->
+<!--    </ItemGroup>-->
 
     <ItemGroup>
         <Content Include="runtimes\**\*.*">

@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics.Atlases;
 using LughSharp.Lugh.Maths.Collision;
-using LughSharp.Lugh.Utils.Exceptions;
 
 namespace LughSharp.Lugh.Graphics.G2D;
 

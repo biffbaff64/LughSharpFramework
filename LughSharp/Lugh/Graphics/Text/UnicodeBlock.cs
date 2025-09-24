@@ -24,8 +24,6 @@
 
 using System.Globalization;
 
-using LughSharp.Lugh.Utils.Exceptions;
-
 namespace LughSharp.Lugh.Graphics.Text;
 
 /// <summary>

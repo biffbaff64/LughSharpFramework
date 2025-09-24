@@ -35,9 +35,8 @@ public partial class OpenGL
         public static bool IsEmulated          { get; set; }
         public static bool IsCoreProfile       { get; set; }
         public static bool IsForwardCompatible { get; set; }
-
-        public static int MajorVersion { get; set; }
-        public static int MinorVersion { get; set; }
+        public static int  MajorVersion        { get; set; }
+        public static int  MinorVersion        { get; set; }
     }
 }
 

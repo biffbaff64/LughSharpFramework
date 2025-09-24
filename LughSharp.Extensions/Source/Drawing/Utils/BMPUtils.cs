@@ -25,7 +25,6 @@
 using System.Runtime.InteropServices;
 
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Logging;
 
 using Bitmap = System.Drawing.Bitmap;
@@ -33,6 +32,7 @@ using Bitmap = System.Drawing.Bitmap;
 namespace Extensions.Source.Drawing.Utils;
 
 [PublicAPI]
+[SupportedOSPlatform( "windows" )]
 public static class BMPUtils
 {
     public static BitmapFileHeader     BitmapFileHeader     { get; private set; }

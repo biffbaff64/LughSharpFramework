@@ -27,7 +27,6 @@ using JetBrains.Annotations;
 using NUnit.Framework;
 
 using LughSharp.Lugh.Core;
-using LughSharp.Lugh.Utils;
 using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Tests.Source;

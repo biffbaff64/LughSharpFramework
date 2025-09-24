@@ -22,12 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.OpenGL;
-
 namespace LughSharp.Lugh.Graphics;
 
 [PublicAPI]
-public sealed class GraphicsCapabilities
+public sealed unsafe class GraphicsCapabilities
 {
     public int  Major                  { get; init; }
     public int  Minor                  { get; init; }
@@ -49,10 +47,10 @@ public sealed class GraphicsCapabilities
     /// capabilities, such as OpenGL version, and availability of texture compression
     /// formats and other advanced features.
     /// </returns>
-    public static unsafe GraphicsCapabilities Detect()
+    public static GraphicsCapabilities Detect()
     {
-        GL.GetIntegerv( GLConsts.MAJOR_VERSION, out var major );
-        GL.GetIntegerv( GLConsts.MINOR_VERSION, out var minor );
+        GL.GetIntegerv( GLData.MAJOR_VERSION, out var major );
+        GL.GetIntegerv( GLData.MINOR_VERSION, out var minor );
 
         return new GraphicsCapabilities
         {
@@ -61,33 +59,33 @@ public sealed class GraphicsCapabilities
             HasS3TC = HasExtension( "GL_EXT_texture_compression_s3tc" )
                       || HasExtension( "GL_ANGLE_texture_compression_dxt1" )
                       || HasExtension( "GL_EXT_texture_compression_dxt1" ),
-            HasRGTC                = VersionAtLeast( 3, 0 ), // Core in 3.0
-            HasBPTC                = VersionAtLeast( 4, 2 ) || HasExtension( "GL_ARB_texture_compression_bptc" ),
-            HasETC2                = VersionAtLeast( 4, 3 ) || HasExtension( "GL_ARB_ES3_compatibility" ),
-            HasInternalFormatQuery = VersionAtLeast( 4, 2 ) || HasExtension( "GL_ARB_internalformat_query2" ),
+            HasRGTC                = VersionAtLeast( 3, 0, major, minor ), // Core in 3.0
+            HasBPTC                = VersionAtLeast( 4, 2, major, minor ) || HasExtension( "GL_ARB_texture_compression_bptc" ),
+            HasETC2                = VersionAtLeast( 4, 3, major, minor ) || HasExtension( "GL_ARB_ES3_compatibility" ),
+            HasInternalFormatQuery = VersionAtLeast( 4, 2, major, minor ) || HasExtension( "GL_ARB_internalformat_query2" ),
         };
+    }
 
-        // ------------------------------------------------
+    // ------------------------------------------------
 
-        static bool HasExtension( string s )
+    private static bool HasExtension( string s )
+    {
+        GL.GetIntegerv( GLData.NUM_EXTENSIONS, out var n );
+
+        for ( uint i = 0; i < n; i++ )
         {
-            GL.GetIntegerv( GLConsts.NUM_EXTENSIONS, out var n );
-
-            for ( uint i = 0; i < n; i++ )
+            if ( string.Equals( GL.GetStringi( GLData.EXTENSIONS, i ) -> ToString(), s, StringComparison.Ordinal ) )
             {
-                if ( string.Equals( GL.GetStringi( GLConsts.EXTENSIONS, i ) -> ToString(), s, StringComparison.Ordinal ) )
-                {
-                    return true;
-                }
+                return true;
             }
-
-            return false;
         }
 
-        bool VersionAtLeast( int mj, int mn )
-        {
-            return ( major > mj ) || ( ( major == mj ) && ( minor >= mn ) );
-        }
+        return false;
+    }
+
+    private static bool VersionAtLeast( int mj, int mn, int major, int minor )
+    {
+        return ( major > mj ) || ( ( major == mj ) && ( minor >= mn ) );
     }
 }
 

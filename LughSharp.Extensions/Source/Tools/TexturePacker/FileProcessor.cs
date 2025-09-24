@@ -22,13 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Collections;
 using System.Text.RegularExpressions;
 
 using LughSharp.Lugh.Files;
 using LughSharp.Lugh.Graphics.Text;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Collections;
 using LughSharp.Lugh.Utils.Exceptions;
 using LughSharp.Lugh.Utils.Logging;
 
@@ -161,7 +158,7 @@ public partial class FileProcessor
 
         OutputFilesList.Clear();
 
-        var dirToEntries = new Dictionary< DirectoryInfo, List< Entry > >();
+        var dirToEntries = new Dictionary< DirectoryInfo, List< Entry >? >();
 
         Process( files, outputRoot, outputRoot, dirToEntries, 0 );
 
@@ -171,19 +168,26 @@ public partial class FileProcessor
         {
             var dirEntries = mapEntry.Value;
 
+            if ( dirEntries == null )
+            {
+                Logger.Debug( $"dirEntries is null: {mapEntry.Key.FullName}" );
+
+                continue;
+            }
+
             if ( Comparator != null )
             {
                 dirEntries.Sort( EntryComparator );
             }
 
-            var            inputDir     = mapEntry.Key;
-            DirectoryInfo? newOutputDir = null;
+            var inputDir     = mapEntry.Key;
+            var newOutputDir = default( DirectoryInfo? );
 
             if ( FlattenOutput )
             {
                 newOutputDir = outputRoot;
             }
-            else if ( dirEntries.Any() )
+            else if ( dirEntries.Count != 0)
             {
                 newOutputDir = dirEntries.First().OutputDirectory;
             }

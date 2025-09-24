@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
-
 using Exception = System.Exception;
 using NotNull = System.Diagnostics.CodeAnalysis.NotNullAttribute;
 

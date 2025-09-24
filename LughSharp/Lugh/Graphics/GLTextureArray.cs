@@ -22,14 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
-
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Exceptions;
-
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>

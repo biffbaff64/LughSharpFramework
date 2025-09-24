@@ -47,6 +47,7 @@ public class PixelFormatUtils
             IGL.GL_RGBA            => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
             IGL.GL_RGB565          => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
             IGL.GL_RGBA4           => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
+            IGL.GL_COLOR_INDEX     => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,
 
             // ----------------------------------
 
@@ -69,6 +70,7 @@ public class PixelFormatUtils
             "RGBA4444"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444,
             "RGB888"         => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,
             "RGBA8888"       => Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888,
+            "IndexedColor"   => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,
 
             var _ => throw new GdxRuntimeException( $"Unknown Format: {str}" ),
         };
@@ -92,7 +94,7 @@ public class PixelFormatUtils
 
             // ----------------------------------
 
-            3 => throw new GdxRuntimeException( "Indexed color not supported yet." ),
+            3 => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,
 
             // ----------------------------------
 
@@ -115,6 +117,7 @@ public class PixelFormatUtils
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => 2,
             Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => 2,
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => 6,
+            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => 3,
 
             // ----------------------------------
 
@@ -131,7 +134,8 @@ public class PixelFormatUtils
             (2, 8) => Gdx2DPixmap.GDX_2D_FORMAT_RGB888,          // Truecolor, 8 bits
             (0, 8) => Gdx2DPixmap.GDX_2D_FORMAT_ALPHA,           // Grayscale, 8 bits
             (4, 8) => Gdx2DPixmap.GDX_2D_FORMAT_LUMINANCE_ALPHA, // Grayscale with alpha, 8 bits
-            (2, 5) => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,
+            (2, 5) => Gdx2DPixmap.GDX_2D_FORMAT_RGB565,          // Truecolor, 5 bits per channel
+            (3, 8) => Gdx2DPixmap.GDX_2D_FORMAT_INDEXED,         // Indexed color, 8 bits
 
             // Add more mappings as needed
             var _ => throw new Exception( $"Unsupported PNG colorType {colorType} and bitDepth {bitDepth}" ),
@@ -164,6 +168,7 @@ public class PixelFormatUtils
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA,
             Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB,
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA,
+            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => IGL.GL_COLOR_INDEX,
 
             // ----------------------------------
 
@@ -189,6 +194,7 @@ public class PixelFormatUtils
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_UNSIGNED_BYTE,
             Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_UNSIGNED_SHORT_5_6_5,
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_UNSIGNED_SHORT_4_4_4_4,
+            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => IGL.GL_UNSIGNED_BYTE,
 
             // ----------------------------------
 
@@ -212,6 +218,7 @@ public class PixelFormatUtils
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => IGL.GL_RGBA8,
             Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => IGL.GL_RGB565,
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => IGL.GL_RGBA4,
+            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => IGL.GL_RGB8,
 
             // ----------------------------------
 
@@ -239,6 +246,7 @@ public class PixelFormatUtils
             IGL.GL_RGBA4           => 2,
             IGL.GL_RGB             => 3,
             IGL.GL_RGBA            => 4,
+            IGL.GL_COLOR_INDEX     => 1,
 
             // ----------------------------------
 
@@ -259,6 +267,7 @@ public class PixelFormatUtils
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => 2,
             Gdx2DPixmap.GDX_2D_FORMAT_RGB888          => 3,
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => 4,
+            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => 1,
 
             // ----------------------------------
 
@@ -314,6 +323,9 @@ public class PixelFormatUtils
 
                 return r | g | b | a;
 
+            case Gdx2DPixmap.GDX_2D_FORMAT_INDEXED:
+                return color;
+
             default:
                 return 0;
         }
@@ -355,12 +367,13 @@ public class PixelFormatUtils
 
         return pixmap.GLPixelFormat switch
         {
-            IGL.GL_RGB       => 1, // 3 Bpp => use 1 unless you know rowStride % 4 == 0
-            IGL.GL_RGBA      => 4, // 4 Bpp (for UNSIGNED_BYTE); otherwise compute from the actual type
-            IGL.GL_RGBA4     => 2, // 16-bit packed
-            IGL.GL_RGB565    => 2, // 16-bit packed
-            IGL.GL_ALPHA     => 1,
-            IGL.GL_LUMINANCE => 1,
+            IGL.GL_RGB         => 1, // 3 Bpp => use 1 unless you know rowStride % 4 == 0
+            IGL.GL_RGBA        => 4, // 4 Bpp (for UNSIGNED_BYTE); otherwise compute from the actual type
+            IGL.GL_RGBA4       => 2, // 16-bit packed
+            IGL.GL_RGB565      => 2, // 16-bit packed
+            IGL.GL_ALPHA       => 1,
+            IGL.GL_LUMINANCE   => 1,
+            IGL.GL_COLOR_INDEX => 1,
 
             // ----------------------------------
 
@@ -389,6 +402,7 @@ public class PixelFormatUtils
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA8888        => "RGBA8888",
             Gdx2DPixmap.GDX_2D_FORMAT_RGB565          => "RGB565",
             Gdx2DPixmap.GDX_2D_FORMAT_RGBA4444        => "RGBA4444",
+            Gdx2DPixmap.GDX_2D_FORMAT_INDEXED         => "Indexed",
 
             // ----------------------------------
 
@@ -416,6 +430,7 @@ public class PixelFormatUtils
             IGL.GL_RGB10           => "IGL.GL_RGB10",
             IGL.GL_RGB12           => "IGL.GL_RGB12",
             IGL.GL_RGBA16          => "IGL.GL_RGBA16",
+            IGL.GL_COLOR_INDEX     => "IGL.GL_COLOR_INDEX",
 
             // ----------------------------------
 
@@ -481,6 +496,7 @@ public class PixelFormatUtils
             IGL.GL_STENCIL_INDEX8      => "IGL.GL_STENCIL_INDEX8",
             IGL.GL_DEPTH24_STENCIL8    => "IGL.GL_DEPTH24_STENCIL8",
             IGL.GL_DEPTH32_F_STENCIL8  => "IGL.GL_DEPTH32F_STENCIL8",
+            IGL.GL_COLOR_INDEX         => "IGL.GL_COLOR_INDEX",
 
             // ----------------------------------
 

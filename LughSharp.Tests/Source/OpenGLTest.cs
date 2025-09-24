@@ -24,9 +24,6 @@
 
 using JetBrains.Annotations;
 
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.OpenGL.Enums;
-
 using GLBindings = LughSharp.Lugh.Graphics.OpenGL.GLBindings;
 
 namespace LughSharp.Tests.Source;

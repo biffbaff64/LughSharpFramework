@@ -23,9 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics.Cameras;
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Utils.Exceptions;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 using Rectangle = LughSharp.Lugh.Maths.Rectangle;

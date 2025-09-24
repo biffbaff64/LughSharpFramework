@@ -22,11 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.OpenGL;
-using LughSharp.Lugh.Graphics.Utils;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Logging;
-
 namespace LughSharp.Lugh.Graphics;
 
 /// <summary>

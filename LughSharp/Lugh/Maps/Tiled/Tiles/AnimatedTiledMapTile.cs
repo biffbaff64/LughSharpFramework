@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Utils.Exceptions;
 
 using Blendmode = LughSharp.Lugh.Maps.Tiled.ITiledMapTile.Blendmode;
 

@@ -24,9 +24,6 @@
 
 using LughSharp.Lugh.Assets.Loaders.Resolvers;
 using LughSharp.Lugh.Graphics;
-using LughSharp.Lugh.Graphics.G2D;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Logging;
 
 namespace LughSharp.Lugh.Assets.Loaders;
 
@@ -104,8 +101,6 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         var p       = parameter as TextureLoaderParameters;
         var texture = _loaderInfo.Texture;
 
-        Logger.Debug( $"texture == null?: {texture == null}" );
-
         if ( texture != null )
         {
             texture.Load( _loaderInfo.Data! );
@@ -114,8 +109,6 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
         {
             texture = new Texture( _loaderInfo.Data! );
         }
-
-        Logger.Checkpoint();
 
         if ( parameter != null )
         {
@@ -229,6 +222,5 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
     }
 }
 
-// ====================================================================--------
 // ====================================================================--------
 // ====================================================================--------

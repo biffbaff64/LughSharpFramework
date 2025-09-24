@@ -24,7 +24,6 @@
 
 using LughSharp.Lugh.Graphics;
 using LughSharp.Lugh.Graphics.Atlases;
-using LughSharp.Lugh.Graphics.G2D;
 
 using Color = LughSharp.Lugh.Graphics.Color;
 

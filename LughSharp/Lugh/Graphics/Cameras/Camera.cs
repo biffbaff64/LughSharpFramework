@@ -22,10 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Lugh.Graphics.G2D;
 using LughSharp.Lugh.Maths.Collision;
-using LughSharp.Lugh.Utils;
-using LughSharp.Lugh.Utils.Logging;
 
 using Quaternion = LughSharp.Lugh.Maths.Quaternion;
 
